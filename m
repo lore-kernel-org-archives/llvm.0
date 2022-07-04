@@ -1,49 +1,43 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43F946A3
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 14:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1T6SVyyOJpN9/GWpMLEq69oLc1h5UxF4v7bv25UoGhs=; b=uppmf7BIrnYV3iMe75idjW/LOU
-	I3VPn7L/oZPOqnGb/94W4U/NMq3zD/SH7ecWMnFZbuvF9xjt/X1xja4Cw8V0AxDYN4qaB/Nd07KT6
-	ZdkeIMyyMZU/8jd5ZVHsxvlIAKoGWhMP9knmHSSyZv5zYdpDyRG7nrsBuQHP9rAE0NB8UbxRiwV8y
-	LjPtthp8jZIJH4dcnsCHWZnMevofqlomb3dfy9GRzKmrGfB6fG0GttcX4LoNRg9fvgl6v80pv5qYO
-	kQyXWnuLtpz8Xc/tdtCEzhA75gB18DxLcB7zIBzdzGCpMo8stq28TxwbbJuNUR/y8lC7ZdArMfrxe
-	xXo1Bggg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1o8MfD-00HLfn-VJ; Mon, 04 Jul 2022 14:03:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7AC20980057; Mon,  4 Jul 2022 16:03:00 +0200 (CEST)
-Date: Mon, 4 Jul 2022 16:03:00 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Fangrui Song <maskray@google.com>
-Cc: Bill Wendling <morbo@google.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
-	Ruud van der Pas <ruud.vanderpas@oracle.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-	Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	linux-toolchains <linux-toolchains@vger.kernel.org>,
-	elena.zannoni@oracle.com
-Subject: Re: plumbers session on profiling?
-Message-ID: <YsLzFAoWz1mykLmy@worktop.programming.kicks-ass.net>
-References: <87mtf7z0rt.fsf@gnu.org>
- <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
- <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
- <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
- <878rpgpvfj.fsf@gnu.org>
- <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
- <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
- <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
- <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
- <20220701193409.p4ejod7olx7ngl5m@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA8B46A3
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 14:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656943948; x=1688479948;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iTfge1bjaB6ZO22Lq31dNi7X9YXPs5dQDbpaZVGHC9Q=;
+  b=EjxqVoBikw9Vf4r8EzLP9YHRpQzF/eyvKu/tyKBT40waNkR8OJt0Yajv
+   tGDiq5kXmUQ9V9CISgUmQ5+D6ZMuZRXwHf0vxcjA2tCSei6DPXR748EPE
+   t97OArlzgnu6kjkAP0nGfj1FpgJQZa9xL5eOoA+u9Jua6E3R2XUJ4v95R
+   7rLkXx1d5RxUvrRtP+nhM3bpQmJBttHWiSw6+ghtmMWXSg40dwPCKAXBr
+   D5WiIBDHq7o3/riXzNLgRKcUkxdu/jlESS/ZdXlXOC1tqMmq0ICc/aF8s
+   f/45gwD90Db+Ui8JT7Q/ln/lFwfYsFkWnykrn6qtS9MeurI+jeuIO0Woa
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="283868456"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="283868456"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:12:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="919376269"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Jul 2022 07:12:19 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o8MoF-000Hvj-2Q;
+	Mon, 04 Jul 2022 14:12:19 +0000
+Date: Mon, 4 Jul 2022 22:11:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
+Subject: [lee-mfd:for-mfd-next 25/34] drivers/mfd/axp20x.c:634:3: error:
+ field designator 'get_irq_reg' does not refer to any field in type 'const
+ struct regmap_irq_chip'
+Message-ID: <202207042221.MARNUo8r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,14 +46,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701193409.p4ejod7olx7ngl5m@google.com>
 
-On Fri, Jul 01, 2022 at 12:34:09PM -0700, Fangrui Song wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+head:   e0d1c4b1c0a80d4ae9f9bfcc15d048629f096928
+commit: 8c7d8aa029a3cac42a468cd458adde840d2c5a06 [25/34] mfd: axp20x: Add support for AXP192
+config: hexagon-randconfig-r045-20220703 (https://download.01.org/0day-ci/archive/20220704/202207042221.MARNUo8r-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=8c7d8aa029a3cac42a468cd458adde840d2c5a06
+        git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
+        git fetch --no-tags lee-mfd for-mfd-next
+        git checkout 8c7d8aa029a3cac42a468cd458adde840d2c5a06
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
 
-> Instrumentation based PGO has the nice property that it works with all
-> architectures (the compiler supports) and does not rely on hardware
-> support. In addition, it collects indirect call targets and string
-> operation sizes which are very difficult/impossible for sample based
-> PGO.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-LBR samples should provide the indirect call targets just fine.
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/axp20x.c:634:3: error: field designator 'get_irq_reg' does not refer to any field in type 'const struct regmap_irq_chip'
+           .get_irq_reg            = axp192_get_irq_reg,
+            ^
+   1 error generated.
+
+
+vim +634 drivers/mfd/axp20x.c
+
+   623	
+   624	static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+   625		.name			= "axp192_irq_chip",
+   626		.status_base		= AXP192_IRQ1_STATE,
+   627		.ack_base		= AXP192_IRQ1_STATE,
+   628		.mask_base		= AXP192_IRQ1_EN,
+   629		.mask_invert		= true,
+   630		.init_ack_masked	= true,
+   631		.irqs			= axp192_regmap_irqs,
+   632		.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+   633		.num_regs		= 5,
+ > 634		.get_irq_reg		= axp192_get_irq_reg,
+   635	};
+   636	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
