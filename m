@@ -1,45 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9617E
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 05:51:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D477A15A3
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 07:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656913893;
+	s=mimecast20190719; t=1656918694;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=UXfFyoJ3xDKZzYCNKZvsJ71yrEMXeUNrt0KGXjWU+ls=;
-	b=K9GBETVCm0aVrkwGC6+J81HdloV/Es5IeueE+xxQm3A5LUfUeBplT8XQ2nQLoMpW9vg27N
-	j9tDgNHb9Xwi+dd9vYB+kXqQsSZpBXSjeiax/2hybQu1fQxQRsZyfjXInazyM6r4Ov53Y0
-	S+kl9qqGmKidJRPdEaaoVpGkRjwNGRQ=
+	bh=/ENO206wwk03Z6CUfkRpQcWla8AhOEVc0NdMm5Fhen0=;
+	b=g/ArhK4Mo25GPI5CnRXF6wS5m/7Tm2rHpjsa/bUBOh50RasHff5HLYbyOTgsXDHFDtUB9Z
+	I+lFdzqopnTxK+ZHrjdtQxt8WrSk4v2AkfA1Uku3YQA9+buwcDYPc3mThdDycwsEC/VBg3
+	rqAL+FJXM/6ELWPzmWIU9uMQPGgjseY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-yeNd3uZaP5qDG3DXasXUrA-1; Mon, 04 Jul 2022 01:51:30 -0400
-X-MC-Unique: yeNd3uZaP5qDG3DXasXUrA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-394-B7BymWLbMfqdrPGYRqvIAA-1; Mon, 04 Jul 2022 03:11:32 -0400
+X-MC-Unique: B7BymWLbMfqdrPGYRqvIAA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D87429AB41E
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 05:51:30 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8DDA299E773
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 07:11:31 +0000 (UTC)
 Received: from [172.64.0.111] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 64F9640C1241;
-	Mon,  4 Jul 2022 05:51:30 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BA799C28100;
+	Mon,  4 Jul 2022 07:11:31 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 20855e4c
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for b8d5109f
  (mainline.kernel.org-clang)
-Date: Mon, 04 Jul 2022 05:51:30 -0000
-CC: liwang@redhat.com, bgoncalv@redhat.com, mm-qe@redhat.com,
- jstancek@redhat.com, xzhou@redhat.com
+Date: Mon, 04 Jul 2022 07:11:31 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <18634.122070401513000351@us-mta-262.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <88564.122070403113200298@us-mta-394.us.mimecast.lan>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -52,11 +50,11 @@ Hi, we tested your kernel and here are the results:
     Overall result: FAILED
              Merge: OK
            Compile: OK
-              Test: FAILED
+              Test: OK
 
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/46874
+    https://datawarehouse.cki-project.org/kcidb/checkouts/46875
 
 One or more kernel tests failed:
     =E2=9D=97 Regression(s) detected:
@@ -65,37 +63,31 @@ One or more kernel tests failed:
                           https://datawarehouse.cki-project.org/kcidb/tests=
 /2472230
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4199170
+4200562
            s390x - LTP - commands
                    Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
                           https://datawarehouse.cki-project.org/kcidb/tests=
 /2472230
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4199274
-
-    Unrecognized or new issues:
-         ppc64le - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4199044
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4199028
+4200838
 
     We also see the following known issues which are not related to your ch=
 anges:
          aarch64 - Boot test
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
- filename '/devices/mc0'
-                          http://lists.infradead.org/pipermail/linux-arm-ke=
-rnel/2022-June/750380.html
+                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
+ht-etm4x: probe of ARMHC500:20 failed with error -17
+                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
+BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+         aarch64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
          aarch64 - Storage - blktests - nvmeof-mp
-                   Issue: Storage blktests - nvmeof-mp: Timeout
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D201=
-4813
+                   Issue: Storage blktests - nvmeof-mp: FAIL: Configured NV=
+Me target driver
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1168
          aarch64 - Networking cki netfilter test
                    Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
 m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
@@ -161,54 +153,31 @@ nel/kernel-tests/-/issues/1235
 mdadm
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         aarch64 - xfstests - btrfs
+                   Issue: xfstests - _check_xfs_filesystem: filesystem on /=
+dev/nvme0n1p4 is inconsistent (r)
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+9409
          ppc64le - LTP - syscalls
-                   Issue: LTP - syscalls: fanotify10.c:538: TFAIL: group 0 =
-(4) with FAN_MARK_FILESYSTEM did not get event
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1239
-         ppc64le - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         ppc64le - trace: ftrace/tracer
-                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
-error: No such device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/803
-         ppc64le - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         ppc64le - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         ppc64le - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
          ppc64le - selinux-policy: serge-testsuite
                    Issue: selinux-policy: serge-testsuite: Failed test at p=
 erf_event/test line 88, 104, 109, 115
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/814
-           s390x - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
+           s390x - stress: stress-ng - memory
+                   Issue: stress: stress-ng - memory: ERROR: Aborting curre=
+nt task: Aborting due to system crash and reboot
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1236
            s390x - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
@@ -259,25 +228,32 @@ nel/kernel-tests/-/issues/1222
 =80=98-Qunused-arguments=E2=80=99
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/513
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
+          x86_64 - Boot test
+                   Issue: IBM System X3250 M4 - kernel: irq 16: nobody care=
+d (try booting with the "irqpoll" option)
+                          https://redhat.service-now.com/surl.do?n=3DRITM12=
+02693
+          x86_64 - LTP - cve
+                   Issue: Bug 210831 - LTP cve-2017-18075 (pcrypt_aead01) t=
+riggers pdecrypt_parallel padata_parallel_worker panic on s390x
+                          https://bugzilla.kernel.org/show_bug.cgi?id=3D210=
+831
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+          x86_64 - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
           x86_64 - Storage - block - storage fio numa
                    Issue: Storage block - storage fio numa: Performance com=
 parison: min:40535 * 1.15 < max:81259
@@ -311,11 +287,6 @@ nel/kernel-tests/-/issues/513
 untime not found
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1235
-          x86_64 - Boot test
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
           x86_64 - xfstests - nfsv4.2
                    Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
 m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
