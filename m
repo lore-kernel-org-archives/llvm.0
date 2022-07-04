@@ -1,58 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99847E
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 12:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A4BC385A5
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 12:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656937700;
-	bh=yQ5mAGdXNAnpq8SFpGC2WWB3XiOgrqUrNVMcn0hvwRE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SsiSe/NgXMl8kYo6lD+/wqnajBJhuZ+P9syws5D1c93fUnNzb5/1LJ3PY18AIwLlW
-	 NttPZK0dVnP/Hc+AIulYF8q+NVA3v2a+4flAgXg0mgKz1knerTOea1MKaQGEQhUxdf
-	 wO0zt7/tHNTnyG6uKyeaEMHSAq6DEldpmMJ68vewXoFQxGaKFoUinSy41JevdShZ13
-	 i1m3aakHP7a5G2jOLq7qmU72nHoMFPaxG+BBSuasoX3TT1iLd9YrNAZcaWikpbz3mm
-	 GbRl2F1nRJKjHXHOrpmrU5OdJdS8GI++Qbg8L0zRwQLQx90nidRLbRmJHdwL7DMMY3
-	 v5DUputjAPAcw==
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31cac89d8d6so10923687b3.2
-        for <llvm@lists.linux.dev>; Mon, 04 Jul 2022 05:28:20 -0700 (PDT)
-X-Gm-Message-State: AJIora8Xsbod21RjkEFj48tFOtSFnTLc2+z3Vx3TG8h/Y5qpIL2xW0ml
-	H36nSPUsO1QHCX1/Do2u8DKLhAN0VOkBAoYQwL4=
-X-Google-Smtp-Source: AGRyM1tYCIBxSqSTZRTIEwFGAVCtaVjM9UD/AlGpmHN9furm1OWL9aIe4iZUqSP2k5UTc7TGZN3LNzjHXw5LeYkjKo4=
-X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
- i15-20020a0ddf0f000000b0031be0007942mr30962907ywe.320.1656937699632; Mon, 04
- Jul 2022 05:28:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D139F33C4
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 13:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656939941; x=1688475941;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=ueQU69LnbdXVvK2KioJk6aBCBfBxt67ZPvzTXXRdHGI=;
+  b=GY5wWGR5VRGrFYOwrlVz1BXS2a8RWnd26m0Kl2CX1+ZKVa/4CnZiVFny
+   Oo/ebAli0iF1ASDeLOO3k0XBTtMjv1dnvMiXjmo2KHOadyc7Uxu9pIqxH
+   k1XYRA1p9z5f2wZqUVnGxdyQtpQvUfO/Si51glQe5RsC8YBkw5PgaATY6
+   Nuo+dG4DP+HJ4eptFG5a/pRBn9SrHhc3H2/QwesHhE1YNMXpHmZqSOsQ4
+   BTeNKohEmNIu7wApSvV/pRegJcko2OlfvFjd/rsBUWUGsnDAFeRlQYkRI
+   Mc+l1+UwQLnm/CUvz6Sv01N+P++AwaUkY3PHGU64F9g/Mq0/xStJKcP/t
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="284234766"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="284234766"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 06:05:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="619287221"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Jul 2022 06:05:30 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o8Lla-000Htj-2R;
+	Mon, 04 Jul 2022 13:05:30 +0000
+Date: Mon, 4 Jul 2022 21:05:22 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [stable:linux-5.15.y 972/8135] fs/reiserfs/ibalance.o: warning:
+ objtool: internal_delete_pointers_items()+0x576: stack state mismatch:
+ cfa1=4+144 cfa2=4+152
+Message-ID: <202207042016.F9az6QLD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220316213118.2352683-1-morbo@google.com> <20220321174912.164113-1-morbo@google.com>
- <Ypp3MA9s01bWrm2i@penguin> <CAKwvOdnwCVFpMgOih4bf1RAzb6n0Q0+AqaHZxGfnafT+XzAL4A@mail.gmail.com>
-In-Reply-To: <CAKwvOdnwCVFpMgOih4bf1RAzb6n0Q0+AqaHZxGfnafT+XzAL4A@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 4 Jul 2022 14:28:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0ZDRzWeo3hQGnsQsU3h6Sz5JfY7-N0BNZJ=diSdLrurg@mail.gmail.com>
-Message-ID: <CAK8P3a0ZDRzWeo3hQGnsQsU3h6Sz5JfY7-N0BNZJ=diSdLrurg@mail.gmail.com>
-Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Justin Stitt <jstitt007@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Jul 2, 2022 at 12:05 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Hi Arnd,
-> Would you be able to merge this patch through the arm-soc tree? The
-> maintainers appear to be MIA here.
-> https://lore.kernel.org/lkml/20220321174912.164113-1-morbo@google.com/
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Kees Cook <keescook@chromium.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 
-Applied with minor conflict resolution.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   545aecd229613138d6db54fb2b5221faca10137f
+commit: 8d0956438eecfafbefb7cd15b7773087549b38d4 [972/8135] fortify: Explicitly disable Clang support
+config: x86_64-randconfig-a011-20220704 (https://download.01.org/0day-ci/archive/20220704/202207042016.F9az6QLD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8d0956438eecfafbefb7cd15b7773087549b38d4
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 8d0956438eecfafbefb7cd15b7773087549b38d4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-       Arnd
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/reiserfs/ibalance.o: warning: objtool: internal_move_pointers_items()+0x746: stack state mismatch: cfa1=4+208 cfa2=4+200
+>> fs/reiserfs/ibalance.o: warning: objtool: internal_delete_pointers_items()+0x576: stack state mismatch: cfa1=4+144 cfa2=4+152
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
