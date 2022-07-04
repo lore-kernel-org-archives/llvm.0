@@ -1,79 +1,124 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4C94A18
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 21:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656970313; x=1688506313;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=rdN2rqoZBWLk3LC4FYIloZc57dlbIsEWo1uPTODC4W4=;
-  b=fHRUzbtQnw1kDloyVkQfmOmAVMSQQZuh8jG/nPJKcgLa1xVxZ0KobSs2
-   DjD691IRrsPIN0TM3m7Q96mLPM1abB3V0MJJZr8/EktYUMSNoidCesEFP
-   Z6GKXIp/AxaW2Q29a6cXohevnmf/wca9mz3EfHtXzGuv4DvdbPeRt9bpp
-   exzuz4UbLi858AiogtoBZwtqSEGnrOQaM6pgyyR2RcChlMYLOghqZ1tAD
-   RQscCuPnQI7GLu7VBV57HHQKELvGSY/OpWhI6Q24lexhOTcR6LPNUMLLD
-   2+ZlufBT3w6g3QpmE4I2zTJHGRma/Y9Gc/pwxvF6ILlM3njSuN9aHmmBL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="281957881"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281957881"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 14:31:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="619512148"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jul 2022 14:31:51 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o8Tfa-000ICD-Vu;
-	Mon, 04 Jul 2022 21:31:50 +0000
-Date: Tue, 5 Jul 2022 05:31:09 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:linux-5.10.y 2114/6854]
- drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.o: warning: objtool:
- komeda_fb_check_src_coords() falls through to next function
- komeda_fb_get_pixel_addr()
-Message-ID: <202207050545.BlC2E8Bd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66D84A18
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 21:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1656970353;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+CZe8Sqi7DtJlbJu8xa2TOlRoA4m6XJLDJlm9ljsZMU=;
+	b=eoEQH1QW+GLlBWMmSlKVhJoSFBY3kaDBzBl0JzmQqXVQlxjgQJXLe7LG9yvFjS2d5rKGwu
+	k2bx1qxV6rMgUSHKLa6e58ZugXXz3rsIu2psNECOS/ExCE1EkvxBYfubPhGZz+7RnlD2j1
+	W+Q2nJYOR7P4MWh3d2OZPI/SDR3HosE=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-423-3926euc0PzCdoCaGD83rDw-1; Mon, 04 Jul 2022 17:32:32 -0400
+X-MC-Unique: 3926euc0PzCdoCaGD83rDw-1
+Received: by mail-qt1-f199.google.com with SMTP id e14-20020ac8010e000000b00316edc1a792so7646270qtg.18
+        for <llvm@lists.linux.dev>; Mon, 04 Jul 2022 14:32:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=+CZe8Sqi7DtJlbJu8xa2TOlRoA4m6XJLDJlm9ljsZMU=;
+        b=EYwqCdjNI8ataIpxG4fMWuOXKcZrFgWzCun1iEYBbriiDIwBf4R2VTReUvaqsAILO9
+         dJ44Ls2NNCZ3kWgxXE5RR8FJBI9xkiuf6Qfxy8CD5lAi6FX3wxbva9TijVGeykQNkeQx
+         5n49J2HIxkKojRJyUBlA86HIRkHu2x+UULoJGNRTqdPXJKPtxk7xqzJIJb7zzPxHEqaU
+         pbOzUrvoYQ/DBVDWSPGR48ke9PA9sytzx+fgFTZUe8iiqFL9H7TVU+ZiO2a1UOzP90zL
+         YKYacgrhjEkZUJkvktB0trc39Qg3HslbZYxnXiM8aEr/NyJpMgNnm9num6y/qujcja+F
+         mghg==
+X-Gm-Message-State: AJIora+odZ2xdKCc0q5NPcHxAt74Q1h9IJTaRXLznxVVSQWjLt2bBFgj
+	dmIf0yL+KHBDiY7C5PaUvkjQ3yKkDCRQA6MNXxqdabut2WkDUHHGIm+JIxO85hdZCyeXpw5D4Ht
+	X9EbOjq4p6Mvspw==
+X-Received: by 2002:a05:6214:2a8e:b0:470:911e:9565 with SMTP id jr14-20020a0562142a8e00b00470911e9565mr29602431qvb.37.1656970351712;
+        Mon, 04 Jul 2022 14:32:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sYMDnzTOdu6YjQ9ZTKxQBwIiV3zh8YsFLMwenBFFfbrSK9BSxwAVULZ9blVHT+e6pMwUZk9Q==
+X-Received: by 2002:a05:6214:2a8e:b0:470:911e:9565 with SMTP id jr14-20020a0562142a8e00b00470911e9565mr29602418qvb.37.1656970351439;
+        Mon, 04 Jul 2022 14:32:31 -0700 (PDT)
+Received: from [192.168.57.2] ([172.58.188.184])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006afd667535asm16029818qkp.83.2022.07.04.14.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 14:32:30 -0700 (PDT)
+Message-ID: <91194b7190081545a8eeb10d20e24de864dfe259.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/bios: set info only when the return is not 0
+From: Lyude Paul <lyude@redhat.com>
+To: Tom Rix <trix@redhat.com>, bskeggs@redhat.com, kherbst@redhat.com, 
+ airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
+ ndesaulniers@google.com
+Cc: dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Mon, 04 Jul 2022 17:32:18 -0400
+In-Reply-To: <20220702153904.1696595-1-trix@redhat.com>
+References: <20220702153904.1696595-1-trix@redhat.com>
+Organization: Red Hat Inc.
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=lyude@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   ea86c1430c83aa91f2c4122408922e34a1279775
-commit: eaafc590053b314d4907017044ba2e739893c17c [2114/6854] fortify: Explicitly disable Clang support
-config: x86_64-randconfig-a011-20220704 (https://download.01.org/0day-ci/archive/20220705/202207050545.BlC2E8Bd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=eaafc590053b314d4907017044ba2e739893c17c
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout eaafc590053b314d4907017044ba2e739893c17c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
+Currently on flakey internet in the back of a car, so I probably won't be able
+to push this until I get back tonight or early tomorrow
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.o: warning: objtool: komeda_fb_check_src_coords() falls through to next function komeda_fb_get_pixel_addr()
+On Sat, 2022-07-02 at 11:39 -0400, Tom Rix wrote:
+> clang static analysis reports
+> drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c:68:17: warning: The right
+> operand of '*' is a garbage value [core.UndefinedBinaryOperatorResult]
+>         switch (!!data * *ver) {
+>                        ^ ~~~~
+> A switch statement with only a default should be reduced to an if.
+> 
+> If nvbios_pmuEp() returns 0, via the data variable, the output info
+> parameter
+> is not used.  So set info only when data is not 0.
+> 
+> The struct nvbios_pmuE only has the type and data elements.  Since both of
+> these
+> are explicitly set, memset is not needed.  So remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> index b4a308f3cf7b..49e2664a734c 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+> @@ -64,12 +64,9 @@ nvbios_pmuEp(struct nvkm_bios *bios, int idx, u8 *ver, u8
+> *hdr,
+>              struct nvbios_pmuE *info)
+>  {
+>         u32 data = nvbios_pmuEe(bios, idx, ver, hdr);
+> -       memset(info, 0x00, sizeof(*info));
+> -       switch (!!data * *ver) {
+> -       default:
+> +       if (data) {
+>                 info->type = nvbios_rd08(bios, data + 0x00);
+>                 info->data = nvbios_rd32(bios, data + 0x02);
+> -               break;
+>         }
+>         return data;
+>  }
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+
