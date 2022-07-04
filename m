@@ -1,41 +1,49 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D139F33C4
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 13:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656939941; x=1688475941;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=ueQU69LnbdXVvK2KioJk6aBCBfBxt67ZPvzTXXRdHGI=;
-  b=GY5wWGR5VRGrFYOwrlVz1BXS2a8RWnd26m0Kl2CX1+ZKVa/4CnZiVFny
-   Oo/ebAli0iF1ASDeLOO3k0XBTtMjv1dnvMiXjmo2KHOadyc7Uxu9pIqxH
-   k1XYRA1p9z5f2wZqUVnGxdyQtpQvUfO/Si51glQe5RsC8YBkw5PgaATY6
-   Nuo+dG4DP+HJ4eptFG5a/pRBn9SrHhc3H2/QwesHhE1YNMXpHmZqSOsQ4
-   BTeNKohEmNIu7wApSvV/pRegJcko2OlfvFjd/rsBUWUGsnDAFeRlQYkRI
-   Mc+l1+UwQLnm/CUvz6Sv01N+P++AwaUkY3PHGU64F9g/Mq0/xStJKcP/t
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="284234766"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="284234766"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 06:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="619287221"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jul 2022 06:05:30 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o8Lla-000Htj-2R;
-	Mon, 04 Jul 2022 13:05:30 +0000
-Date: Mon, 4 Jul 2022 21:05:22 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [stable:linux-5.15.y 972/8135] fs/reiserfs/ibalance.o: warning:
- objtool: internal_delete_pointers_items()+0x576: stack state mismatch:
- cfa1=4+144 cfa2=4+152
-Message-ID: <202207042016.F9az6QLD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168BA46A3
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 14:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=piYqBJeFz7D47ap3/7x8Zet4UDXF1mtxAPCnP4s0dzE=; b=GFDrlTaniO6lVyB2FKMvwa+SVf
+	jJ2V9XKZikOZ2YZsn3ZEbSIdq5cxpOfEFF16XlM8t9RImmj5r6dZiu/cJjLtenOaqLWGahIZxOlsY
+	YTFMfgE6avgD+O7TCQt/FEe5nTgRj3z+EMr3ZcmHygQhZVBsEMKzIzS0OhRTva8WoSusU1l0Bq1xb
+	onsQAO+Z8sLNHG24ay/3aYI/5y8lymwSor915ccm7RukhyYdSGzDxMq7qK/crSIHRjrMie4cHiGel
+	M1qqFpyMumUP0YmQKHg+mfEr95KpQ5fTo7UD4pXrT1x4UvN07pQA5x5WUqqRnRtcIRQmtxu2WxFCz
+	fpQuM6RQ==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1o8MdW-00H9PD-J5; Mon, 04 Jul 2022 14:01:15 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 60ADB980057; Mon,  4 Jul 2022 16:01:15 +0200 (CEST)
+Date: Mon, 4 Jul 2022 16:01:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bill Wendling <morbo@google.com>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>,
+	Ruud van der Pas <ruud.vanderpas@oracle.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+	Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	linux-toolchains <linux-toolchains@vger.kernel.org>,
+	elena.zannoni@oracle.com
+Subject: Re: plumbers session on profiling?
+Message-ID: <YsLyq5FUZj9NLy3V@worktop.programming.kicks-ass.net>
+References: <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org>
+ <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
+ <878rpgpvfj.fsf@gnu.org>
+ <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
+ <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
+ <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
+ <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,36 +52,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+On Fri, Jul 01, 2022 at 11:57:25AM -0700, Bill Wendling wrote:
+> On Fri, Jul 1, 2022 at 4:49 AM Peter Zijlstra <peterz@infradead.org> wrote:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   545aecd229613138d6db54fb2b5221faca10137f
-commit: 8d0956438eecfafbefb7cd15b7773087549b38d4 [972/8135] fortify: Explicitly disable Clang support
-config: x86_64-randconfig-a011-20220704 (https://download.01.org/0day-ci/archive/20220704/202207042016.F9az6QLD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8d0956438eecfafbefb7cd15b7773087549b38d4
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 8d0956438eecfafbefb7cd15b7773087549b38d4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+> > IIRC Google has LBR sample driven PGO somewhere as well. ISTR that being
+> > the whole motivation for that gruesome Zen3 BRS hack.
+> >
+> > Google got me this: https://research.google.com/pubs/archive/45290.pdf
+> >
+> Right. However, there's a chicken-and-egg issue with AutoFDO for the
+> production kernel. We can't release a kernel that hasn't been compiled
+> with PGO/FDO. We could only release it in a test environment, in which
+> case we could use AutoFDO. However, the document says that AutoFDO
+> only reaches ~90% of FDO. They list some reasons for this, but
+> nonetheless I suspect that the delta would be too severe for us to
+> release the kernel.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The pertinent question seems to be what's missing? Where does that 10%
+go.
 
-All warnings (new ones prefixed by >>):
+> As for LBR, that will work with Intel/AMD, but I thought that LBR
+> doesn't exist for Arm processors (my knowledge could be out of date on
+> this).
 
-   fs/reiserfs/ibalance.o: warning: objtool: internal_move_pointers_items()+0x746: stack state mismatch: cfa1=4+208 cfa2=4+200
->> fs/reiserfs/ibalance.o: warning: objtool: internal_delete_pointers_items()+0x576: stack state mismatch: cfa1=4+144 cfa2=4+152
+Not totally up to date on the ARM thing either; but I believe you're
+right in that they don't yet have such a feature.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> What would make PGO (sample-based or instrumented) easy enough for you
+> to use? What're the key elements missing?
+
+The key piece missing is how to feed a perf.data file back into the
+compile cycle, something like:
+
+  $ make O=build/ PERF=perf.data -j$lots
+
+would be useful I suppose.
+
