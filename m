@@ -1,119 +1,149 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A1728E1
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 14:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656946289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zFvVKJ1fGrkThPrJCts+OirM91DHRLcTY7JYj4rk62U=;
-	b=NQm5TmGP+3ADPRQ9sx4ypfKRVfl8ORsMPcL8gk2c6AasNKB/RiiPVyIotSWxV/BUoVFI+3
-	thKVxjXutUY8wv2BcIEiclnqlcQ5CQzKplYAyqFKURfupLW5IdtV3d1bGEspBt/TxXEiC2
-	LgLMx381xEKS1E0OyFzzuQjN0ES4Bo0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-zgfpBMu5NXa9ze7mr99ITQ-1; Mon, 04 Jul 2022 10:51:28 -0400
-X-MC-Unique: zgfpBMu5NXa9ze7mr99ITQ-1
-Received: by mail-qt1-f200.google.com with SMTP id bc7-20020a05622a1cc700b0031e7e46e660so977184qtb.10
-        for <llvm@lists.linux.dev>; Mon, 04 Jul 2022 07:51:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zFvVKJ1fGrkThPrJCts+OirM91DHRLcTY7JYj4rk62U=;
-        b=pcU0OSwDgX4oegINrLJ7vmUbMiUNOIbc8jDEuHrdjjirQHjutodtV/yMAhvu51wPBe
-         50kRuVbnMo9MRyBEXkhYJxgOTnD8W+HEUuiLm736Esz2fyMvFSGbBQLO3WwZ+MBFuFJR
-         ZDtpAMG/izqP6IVK8kcWvlA9V2B/u58OM/2lBkZsp3kejIyIeTAvSGT21wUhzaOQ1R0d
-         SaCzBgPUtTDhNx2U0wUygKgaVEFcBgbJREfWY5pq734Xd+vf11izmsKOoWYYOl5IOYgB
-         XgBHoJRWlBT+uTgAmjA7PRoakGFspm23or6o/xY0ZTq85Y3t/VZV+PIDp77elN/1Mgc8
-         mPyw==
-X-Gm-Message-State: AJIora/kVHHqv4uSzpWaNOJpTYXGv48pnJVWrqeTe7vFDHDdELhZg5WW
-	l7V6PhRjOneT4RPtaW/mzL0q4sgVuMhrS6t/iH3aM4RVwI92P19Tm7FTXG2b8IwRL7Ku84wmPZI
-	9L5310pglG+MdcQ==
-X-Received: by 2002:a05:622a:391:b0:31d:2a07:4f41 with SMTP id j17-20020a05622a039100b0031d2a074f41mr21046654qtx.294.1656946288098;
-        Mon, 04 Jul 2022 07:51:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vOvptI4Bharw1kjiR6aB6/HEu3IoshyNYmsXxZb0mtL2gdO0jVvSB0WNMIX3QGj42rlK2jFA==
-X-Received: by 2002:a05:622a:391:b0:31d:2a07:4f41 with SMTP id j17-20020a05622a039100b0031d2a074f41mr21046638qtx.294.1656946287912;
-        Mon, 04 Jul 2022 07:51:27 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id g84-20020a379d57000000b0069c72b41b59sm24603917qke.2.2022.07.04.07.51.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 07:51:27 -0700 (PDT)
-Subject: Re: [PATCH] secretmem: drop unneeded initialization in
- secretmem_file_create()
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Mike Rapoport <rppt@linux.ibm.com>, Andrew Morton
- <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
- kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220704092605.19604-1-lukas.bulwahn@gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <3aff433c-f503-791d-77df-21a962185c54@redhat.com>
-Date: Mon, 4 Jul 2022 07:51:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F2AF28E1
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 14:54:38 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2633123A;
+	Mon,  4 Jul 2022 07:54:38 -0700 (PDT)
+Received: from e124483.cambridge.arm.com (e124483.cambridge.arm.com [10.1.29.145])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E3A633F792;
+	Mon,  4 Jul 2022 07:54:33 -0700 (PDT)
+From: Andrew Kilroy <andrew.kilroy@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	acme@kernel.org
+Cc: Andrew Kilroy <andrew.kilroy@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/8] Perf stack unwinding with pointer authentication
+Date: Mon,  4 Jul 2022 15:53:24 +0100
+Message-Id: <20220704145333.22557-1-andrew.kilroy@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <20220704092605.19604-1-lukas.bulwahn@gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+
+This patch series addresses issues that perf has when attempting to show
+userspace stacks in the presence of pointer authentication on arm64.
+
+Depending on whether libunwind or libdw is used, perf incorrectly
+displays the userspace stack in 'perf report --stdio'.  With libunwind,
+only the leaf function is shown.
+
+            |
+            ---0x200000004005bf
+               0x200000004005bf
+               my_leaf_function
+
+With libdw, only the leaf function is shown even though there are
+callers in the application.
+
+            |
+            ---my_leaf_function
 
 
-On 7/4/22 2:26 AM, Lukas Bulwahn wrote:
-> Drop the unneeded initialization of the local variable file in function
-> secretmem_file_create().
->
-> No functional change and no change in the resulting object code.
->
-> This unneeded initialization was already introduced with the introduction
-> of secretmem in commit 1507f51255c9 ("mm: introduce memfd_secret system
-> call to create "secret" memory areas").
+The reason perf cannot show the stack upon a perf report --stdio is
+because the unwinders are given instruction pointers which contain a
+pointer authentication code (PAC).  For the libraries to correctly
+unwind, they need to know which bits of the instruction pointer to turn
+off.
 
-You may need to be more specific about this commit, the whole function, 
-including this initialization was introduced at this time.
+The kernel exposes the set of PAC bits via the NT_ARM_PAC_MASK regset.
+It is expected that this may vary per-task in future. The kernel also
+exposes which pointer authentication keys are enabled via the
+NT_ARM_PAC_ENABLED_KEYS regset, and this can change dynamically. These
+are per-task state which perf would need to sample.
 
-Otherwise, change looks fine.
+It's not always feasible for perf to acquire these regsets via ptrace.
+When sampling system-wide or with inherited events this may require a
+large volume of ptrace requests, and by the time the perf tool processes
+a sample for a task, that task might already have terminated.
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+Instead, these patches allow this state to be sampled into the perf
+ringbuffer, where it can be consumed more easily by the perf tool.
 
->   This minor code-stylistic issue
-> was discovered as a dead store with clang-analyzer.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Mike, please ack.
->
-> Andrew, please pick this minor stylistic clean-up patch. Thanks.
->
->   mm/secretmem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> index 7584aab54d20..46b431d62761 100644
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@ -171,7 +171,7 @@ static struct vfsmount *secretmem_mnt;
->   
->   static struct file *secretmem_file_create(unsigned long flags)
->   {
-> -	struct file *file = ERR_PTR(-ENOMEM);
-> +	struct file *file;
->   	struct inode *inode;
->   	const char *anon_name = "[secretmem]";
->   	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
+The first patch changes the kernel to send the authentication PAC masks
+to userspace perf via the perf ring buffer.  This is published in the
+sample, using a new sample field PERF_SAMPLE_ARCH_1.
+
+The subsequent patches are changes to userspace perf to
+
+1) request the PERF_SAMPLE_ARCH_1
+2) supply the instruction mask to libunwind
+3) ensure perf can cope with an older kernel that does not know about
+   the PERF_SAMPLE_ARCH_1 sample field.
+4) checks if the version of libunwind has the capability to accept
+   an instruction mask from perf and if so enable the feature.
+
+These changes depend on a change to libunwind, that is yet to be
+released, although the patch has been merged.
+
+  https://github.com/libunwind/libunwind/pull/360
+
+
+Andrew Kilroy (6):
+  perf arm64: Send pointer auth masks to ring buffer
+  perf evsel: Do not request ptrauth sample field if not supported
+  perf tools: arm64: Read ptrauth data from kernel
+  perf libunwind: Feature check for libunwind ptrauth callback
+  perf libunwind: arm64 pointer authentication
+  perf tools: Print ptrauth struct in perf report
+
+German Gomez (2):
+  perf test: Update arm64 tests to expect ptrauth masks
+  perf test arm64: Test unwinding with PACs on gcc & clang compilers
+
+ arch/arm64/include/asm/arch_sample_data.h     |  38 ++++++
+ arch/arm64/kernel/Makefile                    |   2 +-
+ arch/arm64/kernel/arch_sample_data.c          |  37 ++++++
+ include/linux/perf_event.h                    |  24 ++++
+ include/uapi/linux/perf_event.h               |   5 +-
+ kernel/events/core.c                          |  35 ++++++
+ tools/build/Makefile.feature                  |   2 +
+ tools/build/feature/Makefile                  |   4 +
+ tools/build/feature/test-all.c                |   5 +
+ .../feature/test-libunwind-arm64-ptrauth.c    |  26 ++++
+ tools/include/uapi/linux/perf_event.h         |   5 +-
+ tools/perf/Makefile.config                    |  10 ++
+ tools/perf/Makefile.perf                      |   1 +
+ tools/perf/tests/Build                        |   1 +
+ tools/perf/tests/arm_unwind_pac.c             | 113 ++++++++++++++++++
+ tools/perf/tests/arm_unwind_pac.sh            |  57 +++++++++
+ tools/perf/tests/attr/README                  |   1 +
+ .../attr/test-record-graph-default-aarch64    |   3 +-
+ tools/perf/tests/attr/test-record-graph-dwarf |   1 +
+ .../attr/test-record-graph-dwarf-aarch64      |  13 ++
+ .../tests/attr/test-record-graph-fp-aarch64   |   3 +-
+ tools/perf/tests/builtin-test.c               |   1 +
+ tools/perf/tests/sample-parsing.c             |   2 +-
+ tools/perf/tests/tests.h                      |   1 +
+ tools/perf/util/event.h                       |   8 ++
+ tools/perf/util/evsel.c                       |  64 ++++++++++
+ tools/perf/util/evsel.h                       |   1 +
+ tools/perf/util/perf_event_attr_fprintf.c     |   2 +-
+ tools/perf/util/session.c                     |  15 +++
+ tools/perf/util/unwind-libunwind-local.c      |  12 ++
+ 30 files changed, 485 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/include/asm/arch_sample_data.h
+ create mode 100644 arch/arm64/kernel/arch_sample_data.c
+ create mode 100644 tools/build/feature/test-libunwind-arm64-ptrauth.c
+ create mode 100644 tools/perf/tests/arm_unwind_pac.c
+ create mode 100755 tools/perf/tests/arm_unwind_pac.sh
+ create mode 100644 tools/perf/tests/attr/test-record-graph-dwarf-aarch64
+
+-- 
+2.17.1
 
