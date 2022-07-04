@@ -1,112 +1,228 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D456E15A3
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 01:41:11 +0000 (UTC)
-X-UUID: c6278a1998b143c987f8fec368decef3-20220704
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:122888c9-8868-454d-9d76-772178075191,OB:0,LO
-	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:5
-X-CID-META: VersionHash:87442a2,CLOUDID:a5b64b63-0b3f-4b2c-b3a6-ed5c044366a0,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-	,QS:nil,BEC:nil,COL:0
-X-UUID: c6278a1998b143c987f8fec368decef3-20220704
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-	(envelope-from <haibo.li@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1762774237; Mon, 04 Jul 2022 09:40:57 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 4 Jul 2022 09:40:56 +0800
-Received: from mszsdtcf10.gcn.mediatek.inc (10.16.4.60) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 4 Jul 2022 09:40:55 +0800
-From: Haibo Li <haibo.li@mediatek.com>
-To: Sami Tolvanen <samitolvanen@google.com>
-CC: <xiaoming.yu@mediatek.com>, Kees Cook <keescook@chromium.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Peter Zijlstra
-	<peterz@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, =?UTF-8?q?Andr=C3=A9=20Almeida?=
-	<andrealmeid@igalia.com>, Luis Chamberlain <mcgrof@kernel.org>, Juergen Gross
-	<jgross@suse.com>, Haibo Li <haibo.li@mediatek.com>, Tiezhu Yang
-	<yangtiezhu@loongson.cn>, Aaron Tomlin <atomlin@redhat.com>, Dmitry Torokhov
-	<dmitry.torokhov@gmail.com>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Lecopzer Chen
-	<lecopzer.chen@mediatek.com>
-Subject: [PATCH v2 2/2] cfi: free old cfi shadow asynchronously
-Date: Mon, 4 Jul 2022 09:40:46 +0800
-Message-ID: <20220704014046.34596-3-haibo.li@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220704014046.34596-1-haibo.li@mediatek.com>
-References: <20220704014046.34596-1-haibo.li@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AE215A3
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 02:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656900113; x=1688436113;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/TMS7XNA0yhB+IfbHBEwUp2g2vEsD03w9WFWtyG1M00=;
+  b=EdjGsYEIzRAC3zBz5Dszl8Nk69Cd7UL58xSRQxpHtEWd9+5w9evdH4Kj
+   KlPUmVwJ3udFGkgpP/qcywn/3tEE3qh0sqKHxXQ/O5e1CtOE+ZmbcJnHI
+   sNn/wPiGUBg20STxHpIePIm7Yk5+6HkLwDZZZEEQbl+g2uZv+kat+lJf2
+   voPHgC8Tc2hOwsgpBVean3NfXJQcxpaxGghJwUwm3u5BkOhtLJYprY0J7
+   qEe8tyePLvnwVBTU5S2z+wCy0FRTSeNu5hjx1kNhkWdzMZz92skFJLMJ2
+   trUYFKMm2XckfvD0fCByjfX6nqL+IoQzQ4ZcH38AF27nfWVtl/hRFcrDe
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281770631"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="281770631"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 19:01:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="660031141"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2022 19:01:49 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o8BPI-000HKJ-Kv;
+	Mon, 04 Jul 2022 02:01:48 +0000
+Date: Mon, 4 Jul 2022 10:01:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Angel Iglesias <ang.iglesiasg@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Dan Carpenter <error27@gmail.com>,
+	Angel Iglesias <ang.iglesiasg@gmail.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <202207040948.hfArdbs2-lkp@intel.com>
+References: <20220704003219.208409-1-ang.iglesiasg@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704003219.208409-1-ang.iglesiasg@gmail.com>
 
-Currenly, it uses synchronize_rcu() to wait old rcu reader to go away
-in update_shadow.In embedded platform like ARM CA7X,
-load_module blocks 40~50ms in update_shadow.
-When there are more than one hundred kernel modules,
-it blocks several seconds.
+Hi Angel,
 
-To accelerate load_module,change synchronize_rcu to call_rcu.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Haibo Li <haibo.li@mediatek.com>
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
----
- kernel/cfi.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+[auto build test ERROR on 69cb6c6556ad89620547318439d6be8bb1629a5a]
 
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 6c8ae07b5835..f61439392bf8 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -43,6 +43,8 @@ typedef u16 shadow_t;
- struct cfi_shadow {
- 	/* Page index for the beginning of the shadow */
- 	unsigned long base;
-+	/* rcu to free old cfi_shadow asynchronously */
-+	struct rcu_head rcu;
- 	/* An array of __cfi_check locations (as indices to the shadow) */
- 	shadow_t shadow[1];
- } __packed;
-@@ -182,6 +184,13 @@ static void remove_module_from_shadow(struct cfi_shadow *s, struct module *mod,
- 	}
- }
- 
-+static void free_shadow(struct rcu_head *rcu)
-+{
-+	struct cfi_shadow *old = container_of(rcu, struct cfi_shadow, rcu);
-+
-+	vfree(old);
-+}
-+
- typedef void (*update_shadow_fn)(struct cfi_shadow *, struct module *,
- 			unsigned long min_addr, unsigned long max_addr);
- 
-@@ -211,11 +220,10 @@ static void update_shadow(struct module *mod, unsigned long base_addr,
- 
- 	rcu_assign_pointer(cfi_shadow, next);
- 	mutex_unlock(&shadow_update_lock);
--	synchronize_rcu();
- 
- 	if (prev) {
- 		set_memory_rw((unsigned long)prev, SHADOW_PAGES);
--		vfree(prev);
-+		call_rcu(&prev->rcu, free_shadow);
- 	}
- }
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
+base:   69cb6c6556ad89620547318439d6be8bb1629a5a
+config: s390-randconfig-r031-20220703 (https://download.01.org/0day-ci/archive/20220704/202207040948.hfArdbs2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134363208b9272a967c911f7b56c255a72a6f0a0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3003e6a1c75431265ca5bc938166239ce722c2df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220704-083456
+        git checkout 3003e6a1c75431265ca5bc938166239ce722c2df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/iio/pressure/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/iio/pressure/bmp280-core.c:23:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/iio/pressure/bmp280-core.c:23:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/iio/pressure/bmp280-core.c:23:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/iio/pressure/bmp280-core.c:979:5: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   FIELD_PREP(BMP380_MODE_MASK, BMP380_MODE_NORMAL));
+                                   ^
+   12 warnings and 1 error generated.
+
+
+vim +/FIELD_PREP +979 drivers/iio/pressure/bmp280-core.c
+
+   967	
+   968	static int bmp380_chip_config(struct bmp280_data *data)
+   969	{
+   970		u8 osrs;
+   971		unsigned int tmp;
+   972		int ret;
+   973	
+   974		/* configure power control register */
+   975		ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
+   976					BMP380_CTRL_SENSORS_MASK | BMP380_MODE_MASK,
+   977					BMP380_CTRL_SENSORS_PRESS_EN |
+   978					BMP380_CTRL_SENSORS_TEMP_EN |
+ > 979					FIELD_PREP(BMP380_MODE_MASK, BMP380_MODE_NORMAL));
+   980		if (ret < 0) {
+   981			dev_err(data->dev,
+   982				"failed to write operation control register\n");
+   983			return ret;
+   984		}
+   985	
+   986		/* configure oversampling */
+   987		osrs = FIELD_PREP(BMP380_OSRS_TEMP_MASK, data->oversampling_temp) |
+   988		       FIELD_PREP(BMP380_OSRS_PRESS_MASK, data->oversampling_press);
+   989	
+   990		ret = regmap_write_bits(data->regmap, BMP380_REG_OSR,
+   991					BMP380_OSRS_TEMP_MASK | BMP380_OSRS_PRESS_MASK,
+   992					osrs);
+   993		if (ret < 0) {
+   994			dev_err(data->dev, "failed to write oversampling register\n");
+   995			return ret;
+   996		}
+   997	
+   998		/* configure output data rate */
+   999		ret = regmap_write_bits(data->regmap, BMP380_REG_ODR,
+  1000					BMP380_ODRS_MASK, BMP380_ODRS_50HZ);
+  1001		if (ret < 0) {
+  1002			dev_err(data->dev, "failed to write ODR selection register\n");
+  1003			return ret;
+  1004		}
+  1005	
+  1006		/* set filter data */
+  1007		ret = regmap_update_bits(data->regmap, BMP380_REG_CONFIG,
+  1008					 BMP380_FILTER_MASK,
+  1009					 FIELD_PREP(BMP380_FILTER_MASK, BMP380_FILTER_3X));
+  1010		if (ret < 0) {
+  1011			dev_err(data->dev, "failed to write config register\n");
+  1012			return ret;
+  1013		}
+  1014	
+  1015		/* wait startup_time before verifying config changes */
+  1016		usleep_range(data->start_up_time, data->start_up_time + 100);
+  1017	
+  1018		/* check config error flag */
+  1019		ret = regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
+  1020		if (ret < 0) {
+  1021			dev_err(data->dev,
+  1022				"failed to read error register\n");
+  1023			return ret;
+  1024		}
+  1025		if (tmp & BMP380_ERR_CONF_MASK) {
+  1026			dev_warn(data->dev,
+  1027				 "sensor flagged configuration as incompatible\n");
+  1028			return -EINVAL;
+  1029		}
+  1030	
+  1031		return 0;
+  1032	}
+  1033	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
