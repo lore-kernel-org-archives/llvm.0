@@ -1,42 +1,50 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604E315D2
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 18:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4464D17DD
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 21:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656960529; x=1688496529;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RdMa4rIj8dO2qzepSkY2HhppLf6yZXL+PmNJQTQlrUU=;
-  b=e2SAoTwBl7O1SW5cQ4B49prXk2olbkvww/hDnLxDc5hrWeOPXVamjnzf
-   KhWhZy4YMH7hbzCD3HiajYZ77/+9b1jzWwitrQivw8mdSKEsLBzHWZJCO
-   /LY4M+nu9cmgJ/2yciNxywpsgZ9glb7lEkQJq7SnVsUiQP1uoDwv7En52
-   eFhGbORQj9S3BbDvKYhaOi4yVD+L1xz/OGh0wSJM70+CDHfnmFK0D/WYh
-   Fgweu/4N/sJGuWLvdHoPvKQ+41zyOHX/8rrs6U7Gk9eC7bQJwJvRB9j02
-   ZmWK69Ev11eDG6QGtMqP+poe9YJObfJoOQ+U2RlNg6qq4RzhWpvLMw/6K
+  t=1656969714; x=1688505714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zj9zKOViwF87Jpta7XyEh+jsdVWawQj34qnK9rX7MFA=;
+  b=kKDZmnHN9Zn8w/sscSKwKfObpWSh6Il0SOXK+s95K9UM286QEjTaFrB8
+   kMbWccwR1qOuy2BsTjdeWYSPPNuWdVVm+Bb1o8REK7ijN7WZ31QqgLRzo
+   Ckh+CG1KBD0MiQC763YVvWYT3cS0aK8+IXinIBAayB73UiN3sKEObUomY
+   SZcYwoPqaUjsbx8EbN2n1dF5U9V4duWJLd3/oUAlG4K1HLpBGkL4aa0b9
+   HRQIj138K6R5nprzGmpL1dVI0Yoy1KmSXD8DnEQoQ3Ewx0wsEnAntmERH
+   isagAxJsytRa8EgY8y609hB0tn5AbAvx47fTb6wDsrhwDkbuFs+vPAJpN
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263606044"
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263622199"
 X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="263606044"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 11:48:48 -0700
+   d="scan'208";a="263622199"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 14:21:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="734908840"
+   d="scan'208";a="660315704"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jul 2022 11:48:47 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 04 Jul 2022 14:21:50 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o8R7m-000I63-Lo;
-	Mon, 04 Jul 2022 18:48:46 +0000
-Date: Tue, 5 Jul 2022 02:48:17 +0800
+	id 1o8TVt-000IBB-Mt;
+	Mon, 04 Jul 2022 21:21:49 +0000
+Date: Tue, 5 Jul 2022 05:20:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+To: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>, agross@kernel.org,
+	bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: drivers/net/dsa/ocelot/seville_vsc9953.c:1107:34: warning: unused
- variable 'seville_of_match'
-Message-ID: <202207050249.pCWnye1d-lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+	swboyd@chromium.org,
+	Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
+ otherwise could return a sub-optimal clock rate.
+Message-ID: <202207050527.wrtnyin5-lkp@intel.com>
+References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +53,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
 
-Hi Vladimir,
+Hi Vijaya,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c1084b6c5620a743f86947caca66d90f24060f56
-commit: d60bc62de4ae068ed4b215c24cdfdd5035aa986e net: dsa: seville: build as separate module
-date:   1 year, 10 months ago
-config: x86_64-randconfig-a012-20220704 (https://download.01.org/0day-ci/archive/20220705/202207050249.pCWnye1d-lkp@intel.com/config)
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on linus/master v5.19-rc5 next-20220704]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220629-180330
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+config: hexagon-buildonly-randconfig-r006-20220703 (https://download.01.org/0day-ci/archive/20220705/202207050527.wrtnyin5-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d60bc62de4ae068ed4b215c24cdfdd5035aa986e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d60bc62de4ae068ed4b215c24cdfdd5035aa986e
+        # https://github.com/intel-lab-lkp/linux/commit/a70b5a9759aef627b6882576f38399ed8c092b74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220629-180330
+        git checkout a70b5a9759aef627b6882576f38399ed8c092b74
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/hw/vmw_pvrdma/ drivers/net/dsa/ocelot/ fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/ocelot/seville_vsc9953.c:1107:34: warning: unused variable 'seville_of_match' [-Wunused-const-variable]
-   static const struct of_device_id seville_of_match[] = {
-                                    ^
-   1 warning generated.
+>> drivers/tty/serial/qcom_geni_serial.c:1044:56: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                   pr_err("Couldn't find suitable clock rate for %d\n", desired_clk);
+                                                                 ~~     ^~~~~~~~~~~
+                                                                 %lu
+   include/linux/printk.h:523:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:480:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:452:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/tty/serial/qcom_geni_serial.c:1047:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                           desired_clk, ser_clk, *clk_div);
+                           ^~~~~~~~~~~
+   include/linux/printk.h:610:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:480:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:452:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/tty/serial/qcom_geni_serial.c:1047:17: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+                           desired_clk, ser_clk, *clk_div);
+                                        ^~~~~~~
+   include/linux/printk.h:610:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:480:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:452:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +/seville_of_match +1107 drivers/net/dsa/ocelot/seville_vsc9953.c
+vim +1044 drivers/tty/serial/qcom_geni_serial.c
 
-84705fc165526e Maxim Kochetkov 2020-07-13  1106  
-84705fc165526e Maxim Kochetkov 2020-07-13 @1107  static const struct of_device_id seville_of_match[] = {
-84705fc165526e Maxim Kochetkov 2020-07-13  1108  	{ .compatible = "mscc,vsc9953-switch" },
-84705fc165526e Maxim Kochetkov 2020-07-13  1109  	{ },
-84705fc165526e Maxim Kochetkov 2020-07-13  1110  };
-84705fc165526e Maxim Kochetkov 2020-07-13  1111  MODULE_DEVICE_TABLE(of, seville_of_match);
-84705fc165526e Maxim Kochetkov 2020-07-13  1112  
-
-:::::: The code at line 1107 was first introduced by commit
-:::::: 84705fc165526e8e55d208b2b10a48cc720a106a net: dsa: felix: introduce support for Seville VSC9953 switch
-
-:::::: TO: Maxim Kochetkov <fido_max@inbox.ru>
-:::::: CC: David S. Miller <davem@davemloft.net>
+  1021	
+  1022	static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+  1023				unsigned int sampling_rate, unsigned int *clk_div)
+  1024	{
+  1025		unsigned long ser_clk;
+  1026		unsigned long desired_clk;
+  1027	
+  1028		desired_clk = baud * sampling_rate;
+  1029		if (!desired_clk) {
+  1030			pr_err("%s: Invalid frequency\n", __func__);
+  1031			return 0;
+  1032		}
+  1033	
+  1034		ser_clk = 0;
+  1035		/*
+  1036		 * try to find exact clock rate or within 2% tolerance,
+  1037		 * then within 5% tolerance
+  1038		 */
+  1039		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2, true);
+  1040		if (!ser_clk)
+  1041			ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5, false);
+  1042	
+  1043		if (!ser_clk)
+> 1044			pr_err("Couldn't find suitable clock rate for %d\n", desired_clk);
+  1045		else
+  1046			pr_debug("desired_clk-%d, ser_clk-%d, clk_div-%d\n",
+  1047				desired_clk, ser_clk, *clk_div);
+  1048	
+  1049		return ser_clk;
+  1050	}
+  1051	
 
 -- 
 0-DAY CI Kernel Test Service
