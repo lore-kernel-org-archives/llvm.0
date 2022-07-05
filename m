@@ -1,34 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63CB7C
-	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 15:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF75C341C7;
-	Tue,  5 Jul 2022 15:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657035407;
-	bh=jq+RMEhV5F21llTAXKZgHAD0ZXzywB8ulhg1BKIMaVE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DQPrzOUNteU6rzWHw0BnCwMEOGWE7tZenYO6Ey6mlgNC+LH5oAXvVfVAYpv1XkT0k
-	 59n7BRQ0H+FIbKYPoqFADtZ/k/S4RqhYGT+vkvqlJCKmYF+5SR9Zm5ovMpFGUTqlQ6
-	 TKENX6E7GcpAhd6WHX0+STS1NNPhKs7K8Wrty6Fs+hUXtqpBlzMcyOS8h2BFCj1V7O
-	 1LlyICnyGzckaomTAeNFd15xADTSvFkFf1YLoItooZTykJA2czozPjY4237GYS19bs
-	 c/drjp14qNYaXmgoMQiVpKgrG3mnmdyXMRTPKQ+LS7WaheqULbEfl4RSN7eYNp6afZ
-	 Clx2hbvezWBAA==
-Date: Tue, 5 Jul 2022 08:36:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	kernel test robot <lkp@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Daniel Latypov <dlatypov@google.com>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib: overflow: Do not define 64-bit tests on 32-bit
-Message-ID: <YsRajaMsQ5oFFL0l@dev-arch.thelio-3990X>
-References: <20220702004710.2486218-1-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FD333EB
+	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 16:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657039548; x=1688575548;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6dSDS34h0pM2lODMFbi64forCxsiFVDGZK1rQcFQaUU=;
+  b=aer+wAZrZWIX61NZ5rEtIYv+4AIxJ7668tRtz1qL7KBu43yHDasjS5RY
+   +0rs+z5am8iyUbZuWzZQVk27M668YHdvcfWJUXFr4Ifys1BCv05wV0EBI
+   CaBPSzOxfVpdeogQUqb3ldHBUp4HdDJTdx5YBnBQCdwNnH93u7gy/KMIn
+   BesPe0KKyLX+6pIS0pgwRQ5T7m/wqNGi0G3uc/JD3V+n834vrnylEa6c4
+   Qt8Mnm+y5QFyNLe242nvRO2laBwVAx8Hqom/pdT6Ze8FgEKd3fwIr+3cI
+   t6fryLjGdF/LJJ7Ovm8n3w+lFMniHgLoOo//piy34ijejthaSqjc+wmdz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="280955253"
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="280955253"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 09:45:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
+   d="scan'208";a="567686766"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jul 2022 09:45:46 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o8lgH-000JNl-Cy;
+	Tue, 05 Jul 2022 16:45:45 +0000
+Date: Wed, 6 Jul 2022 00:45:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct
+ ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields
+ order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive,
+ consider reordering the fields or addin...
+Message-ID: <202207060054.o8GrfMhS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,115 +47,275 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220702004710.2486218-1-keescook@chromium.org>
 
-On Fri, Jul 01, 2022 at 05:47:10PM -0700, Kees Cook wrote:
-> The 64-bit overflow tests will trigger 64-bit division on 32-bit hosts,
-> which is not currently used anywhere in the kernel, and tickles bugs
-> in at least Clang 13 and earlier:
-> https://github.com/ClangBuiltLinux/linux/issues/1636
-> 
-> In reality, there shouldn't be a reason to not build the 64-bit test
-> cases on 32-bit systems, so these #ifdefs can be removed once the minimum
-> Clang version reaches 13.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c1084b6c5620a743f86947caca66d90f24060f56
+commit: 7bf50a968a1cd02728e9120ad0216dc80f7a6fb0 iio:adc:ad7476: Handle the different regulators used by various parts.
+date:   1 year, 2 months ago
+config: s390-randconfig-c005-20220703 (https://download.01.org/0day-ci/archive/20220706/202207060054.o8GrfMhS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7bf50a968a1cd02728e9120ad0216dc80f7a6fb0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7bf50a968a1cd02728e9120ad0216dc80f7a6fb0
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=s390 clang-analyzer 
 
-                        ^ 14, as clang 13 has the problem too.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> In the meantime, silence W=1 warnings given by the current code:
-> 
-> ../lib/overflow_kunit.c:191:19: warning: 's64_tests' defined but not used [-Wunused-const-variable=]
->   191 | DEFINE_TEST_ARRAY(s64) = {
->       |                   ^~~
-> ../lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
->    24 |         } t ## _tests[]
->       |           ^
-> ../lib/overflow_kunit.c:94:19: warning: 'u64_tests' defined but not used [-Wunused-const-variable=]
->    94 | DEFINE_TEST_ARRAY(u64) = {
->       |                   ^~~
-> ../lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
->    24 |         } t ## _tests[]
->       |           ^
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202205110324.7GrtxG8u-lkp@intel.com
-> Fixes: 455a35a6cdb6 ("lib: add runtime test of check_*_overflow functions")
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Vitor Massaru Iha <vitor@massaru.org>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Tested-by: Daniel Latypov <dlatypov@google.com>
-> Link: https://lore.kernel.org/lkml/CAGS_qxokQAjQRip2vPi80toW7hmBnXf=KMTNT51B1wuDqSZuVQ@mail.gmail.com
-> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-It might be nice to do something like:
+clang-analyzer warnings: (new ones prefixed by >>)
+                                    ^
+   include/linux/spinlock_api_smp.h:161:2: note: Calling 'should_resched'
+           preempt_enable();
+           ^
+   include/linux/preempt.h:195:15: note: expanded from macro 'preempt_enable'
+           if (unlikely(preempt_count_dec_and_test())) \
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/preempt.h:160:27: note: expanded from macro 'preempt_count_dec_and_test'
+           ({ preempt_count_sub(1); should_resched(0); })
+                                    ^~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   arch/s390/include/asm/preempt.h:73:18: note: Left side of '||' is false
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+           ^
+   include/asm-generic/rwonce.h:36:21: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                              ^
+   include/linux/compiler_types.h:290:3: note: expanded from macro '__native_word'
+           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+            ^
+   arch/s390/include/asm/preempt.h:73:18: note: Left side of '||' is false
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+           ^
+   include/asm-generic/rwonce.h:36:21: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                              ^
+   include/linux/compiler_types.h:290:3: note: expanded from macro '__native_word'
+           (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+            ^
+   arch/s390/include/asm/preempt.h:73:18: note: Left side of '||' is true
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+           ^
+   include/asm-generic/rwonce.h:36:21: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+                              ^
+   include/linux/compiler_types.h:291:28: note: expanded from macro '__native_word'
+            sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+                                     ^
+   arch/s390/include/asm/preempt.h:73:18: note: Taking false branch
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+           ^
+   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+           ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:308:3: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ^
+   arch/s390/include/asm/preempt.h:73:18: note: Loop condition is false.  Exiting loop
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:49:2: note: expanded from macro 'READ_ONCE'
+           compiletime_assert_rwonce_type(x);                              \
+           ^
+   include/asm-generic/rwonce.h:36:2: note: expanded from macro 'compiletime_assert_rwonce_type'
+           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+           ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   arch/s390/include/asm/preempt.h:73:18: note: Dereference of null pointer
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+           ^
+   include/asm-generic/rwonce.h:44:24: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                           ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   Suppressed 4 warnings (4 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   21 warnings generated.
+>> drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_chip_info {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:29:8: note: Excessive padding in 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consider reordering the fields or adding explicit padding members
+   struct ad7476_chip_info {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+>> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   drivers/iio/adc/ad7766.c:35:8: warning: Excessive padding in 'struct ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7766 {
+   ~~~~~~~^~~~~~~~
+   drivers/iio/adc/ad7766.c:35:8: note: Excessive padding in 'struct ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7766 {
+   ~~~~~~~^~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   drivers/iio/adc/ad7768-1.c:154:8: warning: Excessive padding in 'struct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, completion, samp_freq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7768_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7768-1.c:154:8: note: Excessive padding in 'struct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, completion, samp_freq, consider reordering the fields or adding explicit padding members
+   struct ad7768_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   Suppressed 20 warnings (8 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   Suppressed 20 warnings (8 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (5 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   18 warnings generated.
+   drivers/i3c/master/mipi-i3c-hci/ext_caps.c:78:7: warning: Value stored to 'mode_entry' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+                   u32 mode_entry = readl(base);
+                       ^~~~~~~~~~
+   drivers/i3c/master/mipi-i3c-hci/ext_caps.c:78:7: note: Value stored to 'mode_entry' during its initialization is never read
+                   u32 mode_entry = readl(base);
+                       ^~~~~~~~~~
+   Suppressed 17 warnings (5 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   19 warnings generated.
+   drivers/s390/cio/qdio_thinint.c:100:17: warning: Dereference of null pointer [clang-analyzer-core.NullDereference]
+           u64 irq_time = S390_lowcore.int_clock;
+                          ^
+   arch/s390/include/asm/lowcore.h:192:22: note: expanded from macro 'S390_lowcore'
+   #define S390_lowcore (*((struct lowcore *) 0))
+                        ^
+   drivers/s390/cio/qdio_thinint.c:100:17: note: Dereference of null pointer
+           u64 irq_time = S390_lowcore.int_clock;
+                          ^
+   arch/s390/include/asm/lowcore.h:192:22: note: expanded from macro 'S390_lowcore'
+   #define S390_lowcore (*((struct lowcore *) 0))
+                        ^
+   Suppressed 18 warnings (6 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   19 warnings generated.
+   arch/s390/include/asm/preempt.h:73:18: warning: Dereference of null pointer [clang-analyzer-core.NullDereference]
+           return unlikely(READ_ONCE(S390_lowcore.preempt_count) ==
+                           ^
+   include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+           ^
+   include/asm-generic/rwonce.h:44:24: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                           ^
+   drivers/s390/cio/qdio_setup.c:495:2: note: Calling 'spin_unlock_irq'
+           spin_unlock_irq(get_ccwdev_lock(cdev));
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:404:2: note: Calling '__raw_spin_unlock_irq'
+           raw_spin_unlock_irq(&lock->rlock);
+           ^
+   include/linux/spinlock.h:285:35: note: expanded from macro 'raw_spin_unlock_irq'
+   #define raw_spin_unlock_irq(lock)       _raw_spin_unlock_irq(lock)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock_api_smp.h:79:36: note: expanded from macro '_raw_spin_unlock_irq'
+   #define _raw_spin_unlock_irq(lock) __raw_spin_unlock_irq(lock)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock_api_smp.h:166:2: note: Loop condition is false.  Exiting loop
+           spin_release(&lock->dep_map, _RET_IP_);
+           ^
+   include/linux/lockdep.h:540:30: note: expanded from macro 'spin_release'
+   #define spin_release(l, i)                      lock_release(l, i)
+                                                   ^
+   include/linux/lockdep.h:360:31: note: expanded from macro 'lock_release'
+   # define lock_release(l, i)                     do { } while (0)
+                                                   ^
+   include/linux/spinlock_api_smp.h:168:2: note: Loop condition is false.  Exiting loop
+           local_irq_enable();
+           ^
+   include/linux/irqflags.h:235:28: note: expanded from macro 'local_irq_enable'
+   #define local_irq_enable()      do { raw_local_irq_enable(); } while (0)
+                                   ^
+   include/linux/spinlock_api_smp.h:169:2: note: Calling 'should_resched'
+           preempt_enable();
 
-/* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
-#if !(defined(CONFIG_CC_IS_GCC) || CONFIG_CLANG_VERSION >= 140000) && BITS_PER_LONG == 32
-#define EXCLUDE_64_BIT_OVERFLOW
-#endif
+vim +29 drivers/iio/adc/ad7476.c
 
-#ifndef EXCLUDE_64_BIT_OVERFLOW
-...
-#endif
+87c5b10fd97937 drivers/iio/adc/ad7476.c         Lars-Peter Clausen 2012-09-17  28  
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @29  struct ad7476_chip_info {
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  30  	unsigned int			int_vref_uv;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  31  	struct iio_chan_spec		channel[2];
+3a6af93dd66eba drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  32  	/* channels used when convst gpio is defined */
+3a6af93dd66eba drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  33  	struct iio_chan_spec		convst_channel[2];
+87c5b10fd97937 drivers/iio/adc/ad7476.c         Lars-Peter Clausen 2012-09-17  34  	void (*reset)(struct ad7476_state *);
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  35  	bool				has_vref;
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  36  	bool				has_vdrive;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  37  };
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  38  
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @39  struct ad7476_state {
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  40  	struct spi_device		*spi;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  41  	const struct ad7476_chip_info	*chip_info;
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  42  	struct regulator		*ref_reg;
+af37e4703d00ce drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  43  	struct gpio_desc		*convst_gpio;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  44  	struct spi_transfer		xfer;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  45  	struct spi_message		msg;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  46  	/*
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  47  	 * DMA (thus cache coherency maintenance) requires the
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  48  	 * transfer buffers to live in their own cache lines.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  49  	 * Make the buffer large enough for one 16 bit sample and one 64 bit
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  50  	 * aligned 64 bit timestamp.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  51  	 */
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  52  	unsigned char data[ALIGN(2, sizeof(s64)) + sizeof(s64)]
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  53  			____cacheline_aligned;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  54  };
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  55  
 
-so that we can easily grep for CLANG_VERSION and clean this up when we
-bump to a minimum version of 14.0.0 and that the scope of the workaround
-is limited to the cases where it is known not to work.
+:::::: The code at line 29 was first introduced by commit
+:::::: 7a28fe3c93d6cd920c84678a1bf45af8b4248577 staging:iio:ad7476: Squash driver into a single file.
 
-However, that is ultimately up to you. Regardless:
+:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
+:::::: CC: Jonathan Cameron <jic23@kernel.org>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  lib/overflow_kunit.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index 475f0c064bf6..7e3e43679b73 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -91,6 +91,7 @@ DEFINE_TEST_ARRAY(u32) = {
->  	{-4U, 5U, 1U, -9U, -20U, true, false, true},
->  };
->  
-> +#if BITS_PER_LONG == 64
->  DEFINE_TEST_ARRAY(u64) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  	{1, 1, 2, 0, 1, false, false, false},
-> @@ -114,6 +115,7 @@ DEFINE_TEST_ARRAY(u64) = {
->  	 false, true, false},
->  	{-15ULL, 10ULL, -5ULL, -25ULL, -150ULL, false, false, true},
->  };
-> +#endif
->  
->  DEFINE_TEST_ARRAY(s8) = {
->  	{0, 0, 0, 0, 0, false, false, false},
-> @@ -188,6 +190,8 @@ DEFINE_TEST_ARRAY(s32) = {
->  	{S32_MIN, S32_MIN, 0, 0, 0, true, false, true},
->  	{S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
->  };
-> +
-> +#if BITS_PER_LONG == 64
->  DEFINE_TEST_ARRAY(s64) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  
-> @@ -216,6 +220,7 @@ DEFINE_TEST_ARRAY(s64) = {
->  	{-128, -1, -129, -127, 128, false, false, false},
->  	{0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
->  };
-> +#endif
->  
->  #define check_one_op(t, fmt, op, sym, a, b, r, of) do {		\
->  	t _r;							\
-> @@ -650,6 +655,7 @@ static struct kunit_case overflow_test_cases[] = {
->  	KUNIT_CASE(s16_overflow_test),
->  	KUNIT_CASE(u32_overflow_test),
->  	KUNIT_CASE(s32_overflow_test),
-> +/* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
->  #if BITS_PER_LONG == 64
->  	KUNIT_CASE(u64_overflow_test),
->  	KUNIT_CASE(s64_overflow_test),
-> -- 
-> 2.32.0
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
