@@ -1,49 +1,29 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149282F56
-	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 12:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zG2nGXxaq7Y3XFLnvZZ3I2cqkxTm504h+OJqSyMVwqo=; b=orBkxc/e9M1r2QILIiagrpcgNg
-	qRNs4ogyMMveieLvAY87iZ7sRl7ggZNP/H+F5AAGUi5uT1cpGIAW8K16q2I6e7Z8GCwtpE1Mwzps+
-	wHFTxPJ6994ioagBLZ9hUP6eEPEry/EOBhsSGldpJtzkFfevtwo1H/PodHvRTMQmbYTEw57xLYaQ9
-	gb0ciA5kG3jgsusSy0xalyZoG5cHCHrUCM1lRFz6Z+v03sv+rsaqbLu//qe87TFpPHBrS/W8aFJwS
-	zv6B6qwHTdFXFnfd54NxR2M6NZ9yskIXxoqrbQbZ/Q9rnnusaJ0GSNo9j1miykdzbG5E0wfShYRTl
-	6ToE0tbQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1o8i7q-000aZI-8f; Tue, 05 Jul 2022 12:57:58 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 35308980060; Tue,  5 Jul 2022 14:57:56 +0200 (CEST)
-Date: Tue, 5 Jul 2022 14:57:56 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Bill Wendling <morbo@google.com>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>,
-	Ruud van der Pas <ruud.vanderpas@oracle.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-	Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	linux-toolchains <linux-toolchains@vger.kernel.org>,
-	elena.zannoni@oracle.com
-Subject: Re: plumbers session on profiling?
-Message-ID: <YsQ1VKODuKztM0ad@worktop.programming.kicks-ass.net>
-References: <87mtf7z0rt.fsf@gnu.org>
- <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
- <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
- <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
- <878rpgpvfj.fsf@gnu.org>
- <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
- <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
- <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
- <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
- <YsLyq5FUZj9NLy3V@worktop.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48DE7C
+	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 15:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13211C341C7;
+	Tue,  5 Jul 2022 15:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657034811;
+	bh=7eBjk9mDSgvIzpkiH7EvCzwk2kRbUpj6AGdrebCGPsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FrJ29z6/8tSoAac0Iw9JLiLKpX+XxqLisd902MEyW70oQCIog8kSErx+FBzVsrEr7
+	 ikicV0YDar37GDPyAMOs6NAITPwJyLBFSSCTipAedm9RVyYpSKtE2DpKQxrDlPHV7j
+	 6euhgqrfmp/Y4w3KfAjYI017mpLtqwnY1Ak1aJxu1InZlhqXVBEMVpqKFzwdDydZ1z
+	 Mns5hBoVdcLaq52ETra9WPNEcsQVleo61PH3Ul8BpnURGU2JxEj78AE+po0EWxIT5Y
+	 9fnY++PexO1rorGyJ/7H6z3krPk24c8/xhDGeuZZzeAmmaGhkbnrRUUVTGV5BCIheE
+	 Kr6f7PWbK98Ow==
+Date: Tue, 5 Jul 2022 08:26:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add a general "kernel hardening" section
+Message-ID: <YsRYORcovwCGvztR@dev-arch.thelio-3990X>
+References: <20220702004638.2486003-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,21 +32,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsLyq5FUZj9NLy3V@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220702004638.2486003-1-keescook@chromium.org>
 
-On Mon, Jul 04, 2022 at 04:01:15PM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 01, 2022 at 11:57:25AM -0700, Bill Wendling wrote:
-
-> > As for LBR, that will work with Intel/AMD, but I thought that LBR
-> > doesn't exist for Arm processors (my knowledge could be out of date on
-> > this).
+On Fri, Jul 01, 2022 at 05:46:38PM -0700, Kees Cook wrote:
+> While many large subsystems related to kernel hardening have their own
+> distinct MAINTAINERS entries, there are some smaller collections that
+> don't, but are maintained/reviewed by linux-hardening@vger.kernel.org.
+> Add a section to capture these, add (or replace defunct) trees that are
+> now all carried in the hardening tree.
 > 
-> Not totally up to date on the ARM thing either; but I believe you're
-> right in that they don't yet have such a feature.
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Just found this in my inbox; I should've seen it before, but it must've
-slipped my mind:
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-  https://lkml.kernel.org/r/20220613100119.684673-1-anshuman.khandual@arm.com
-
-And of course, PowerPC also supports this.
+> ---
+>  MAINTAINERS | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3cf9842d9233..2702b29e922f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4873,7 +4873,7 @@ R:	Nick Desaulniers <ndesaulniers@google.com>
+>  L:	llvm@lists.linux.dev
+>  S:	Supported
+>  B:	https://github.com/ClangBuiltLinux/linux/issues
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/cfi.h
+>  F:	kernel/cfi.c
+>  
+> @@ -7783,6 +7783,7 @@ FORTIFY_SOURCE
+>  M:	Kees Cook <keescook@chromium.org>
+>  L:	linux-hardening@vger.kernel.org
+>  S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/fortify-string.h
+>  F:	lib/test_fortify/*
+>  F:	scripts/test_fortify.sh
+> @@ -8225,6 +8226,7 @@ GCC PLUGINS
+>  M:	Kees Cook <keescook@chromium.org>
+>  L:	linux-hardening@vger.kernel.org
+>  S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/kbuild/gcc-plugins.rst
+>  F:	scripts/Makefile.gcc-plugins
+>  F:	scripts/gcc-plugins/
+> @@ -10742,6 +10744,17 @@ F:	scripts/mk*
+>  F:	scripts/mod/
+>  F:	scripts/package/
+>  
+> +KERNEL HARDENING (not covered by other areas)
+> +M:	Kees Cook <keescook@chromium.org>
+> +L:	linux-hardening@vger.kernel.org
+> +S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+> +F:	include/linux/overflow.h
+> +F:	include/linux/randomize_kstack.h
+> +F:	mm/usercopy.c
+> +K:	\b(add|choose)_random_kstack_offset\b
+> +K:	\b__check_(object_size|heap_object)\b
+> +
+>  KERNEL JANITORS
+>  L:	kernel-janitors@vger.kernel.org
+>  S:	Odd Fixes
+> @@ -11542,7 +11555,7 @@ F:	drivers/media/usb/dvb-usb-v2/lmedm04*
+>  LOADPIN SECURITY MODULE
+>  M:	Kees Cook <keescook@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git lsm/loadpin
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/admin-guide/LSM/LoadPin.rst
+>  F:	security/loadpin/
+>  
+> @@ -17857,7 +17870,7 @@ M:	Kees Cook <keescook@chromium.org>
+>  R:	Andy Lutomirski <luto@amacapital.net>
+>  R:	Will Drewry <wad@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git seccomp
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
+>  F:	Documentation/userspace-api/seccomp_filter.rst
+>  F:	include/linux/seccomp.h
+>  F:	include/uapi/linux/seccomp.h
+> @@ -21993,7 +22006,7 @@ F:	include/linux/yam.h
+>  YAMA SECURITY MODULE
+>  M:	Kees Cook <keescook@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git yama/tip
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/admin-guide/LSM/Yama.rst
+>  F:	security/yama/
+>  
+> -- 
+> 2.32.0
+> 
