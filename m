@@ -1,42 +1,44 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96603182
-	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 00:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDA518E
+	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 03:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656981333; x=1688517333;
+  t=1656991128; x=1688527128;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NYmgvKAhl2k7Tv/SaLxaBcWeFZASdYXW3kUWtebHjrg=;
-  b=TEdCC1meJrfS0DgJQQ0FEVueOg3BlLaLFMNirwc6UVtGoQRfsPNJECxH
-   0CwV+aGxzUzKLoy8J9v7FgghCtP54hCynyrgn8+RARkJxokoQ52/o2dd3
-   nld8fnIN/HgrLkks6qMuOWM0TiwQcvru2D3FqVq4I4W5Nsra0zWj9DfH3
-   V1wAAfT/CDs2eIENA4YjpUuGTmYXy17Nyeda0t798mNIKfn/q5UM752D5
-   RvtoyeBXIG0dFfLHU6zQJZmdx4Mq0/TSZ5V1FfpiULXOEUV6t+ZH068dn
-   IbTam0tiomagZpiNkwKEzGvDxLUIVX2yA2Iqhm57aXwFlZhzaTBIG+VLV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="266241331"
+  bh=Y8/vsJ2akNeG1JxUoeIHqSTZ/tzFxtb2EVBPNYJ85K4=;
+  b=CuX9E6aJvR/WLGS4iIIr9A6g+MOJOpWXgE9VROuKiJgpEvNcbipl2FDP
+   QKt/rNCaFjtMOOUZG9ct7nXdCYemMIy3lGHHybanqzPKwnGCwgMru/y95
+   OBgWRjm3QP5TxQ4omRTm/es7K6TVQfHJzWxcBjKfzp1nwtQ+NbOzCf/vB
+   zhN1OR6KFptC0lp6d7ugPU4U2jjCgKkzgmZFxUYm+AIUloTasJy/G0pFN
+   29cSrSHCpmDa/ReGIrh/Km0FE5eunxY/tI/JhLYiMFmSi2o0Xtv4HLcl3
+   l607Axd/iWCho/JnAiMghf2IGsGUkge61z6pBz4aClxiBvsQ7zcDnoUEu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="272013727"
 X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="266241331"
+   d="scan'208";a="272013727"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 17:35:32 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 20:18:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="919503242"
+   d="scan'208";a="919535162"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jul 2022 17:35:31 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 04 Jul 2022 20:18:45 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o8WXK-000IVF-Tv;
-	Tue, 05 Jul 2022 00:35:30 +0000
-Date: Tue, 5 Jul 2022 08:35:12 +0800
+	id 1o8Z5J-000Ifl-4A;
+	Tue, 05 Jul 2022 03:18:45 +0000
+Date: Tue, 5 Jul 2022 11:18:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oded Gabbay <ogabbay@kernel.org>
+To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [ogabbay:habanalabs-next 52/74] ld.lld: error: undefined symbol:
- __umoddi3
-Message-ID: <202207050806.cPkBIh3x-lkp@intel.com>
+Subject: lib/stackinit_kunit.c:259:8: warning: Excessive padding in 'struct
+ test_big_hole' (124 padding bytes, where 60 is optimal). Optimal fields
+ order: four, one, two, three, consider reordering the fields or adding
+ explicit padding members [clang-analyzer-opti...
+Message-ID: <202207051135.RcGXqwnQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,30 +48,249 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   dd59146d7ce2b160b57e747e6ca70afbcb4b41a5
-commit: c5c630faa00de0cc343fa0e5a236ed117ef454a3 [52/74] habanalabs: add gaudi2 asic-specific code
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220705/202207050806.cPkBIh3x-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c1084b6c5620a743f86947caca66d90f24060f56
+commit: 02788ebcf521fe78c24eb221fd1ed7f86792c330 lib: stackinit: Convert to KUnit
+date:   4 months ago
+config: riscv-randconfig-c006-20220703 (https://download.01.org/0day-ci/archive/20220705/202207051135.RcGXqwnQ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=c5c630faa00de0cc343fa0e5a236ed117ef454a3
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout c5c630faa00de0cc343fa0e5a236ed117ef454a3
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=02788ebcf521fe78c24eb221fd1ed7f86792c330
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 02788ebcf521fe78c24eb221fd1ed7f86792c330
         # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __umoddi3
-   >>> referenced by gaudi2.c
-   >>>               misc/habanalabs/gaudi2/gaudi2.o:(gaudi2_cpucp_info_get) in archive drivers/built-in.a
+clang-analyzer warnings: (new ones prefixed by >>)
+   include/asm-generic/bug.h:161:27: note: expanded from macro 'BUG_ON'
+   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                             ^
+   fs/reiserfs/inode.c:1943:6: note: 'err' is 0
+           if (err)
+               ^~~
+   fs/reiserfs/inode.c:1943:2: note: Taking false branch
+           if (err)
+           ^
+   fs/reiserfs/inode.c:1945:6: note: Assuming field 'i_nlink' is not equal to 0
+           if (!dir->i_nlink) {
+               ^~~~~~~~~~~~~
+   fs/reiserfs/inode.c:1945:2: note: Taking false branch
+           if (!dir->i_nlink) {
+           ^
+   fs/reiserfs/inode.c:1953:6: note: Assuming field 'k_objectid' is not equal to 0
+           if (!ih.ih_key.k_objectid) {
+               ^~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/inode.c:1953:2: note: Taking false branch
+           if (!ih.ih_key.k_objectid) {
+           ^
+   fs/reiserfs/inode.c:1958:6: note: Assuming the condition is false
+           if (old_format_only(sb))
+               ^
+   fs/reiserfs/reiserfs.h:728:29: note: expanded from macro 'old_format_only'
+   #define old_format_only(s) (REISERFS_SB(s)->s_properties & (1 << REISERFS_3_5))
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/inode.c:1958:2: note: Taking false branch
+           if (old_format_only(sb))
+           ^
+   fs/reiserfs/inode.c:1962:3: note: Calling 'make_le_item_head'
+                   make_le_item_head(&ih, NULL, KEY_FORMAT_3_6, SD_OFFSET,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/inode.c:142:6: note: 'key' is null
+           if (key) {
+               ^~~
+   fs/reiserfs/inode.c:142:2: note: Taking false branch
+           if (key) {
+           ^
+   fs/reiserfs/inode.c:147:2: note: Loop condition is false.  Exiting loop
+           put_ih_version(ih, version);
+           ^
+   fs/reiserfs/reiserfs.h:1403:38: note: expanded from macro 'put_ih_version'
+   #define put_ih_version(ih, val)      do { (ih)->ih_version = cpu_to_le16(val); } while (0)
+                                        ^
+   fs/reiserfs/inode.c:148:2: note: Calling 'set_le_ih_k_offset'
+           set_le_ih_k_offset(ih, offset);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/reiserfs.h:1522:2: note: Calling 'set_le_key_k_offset'
+           set_le_key_k_offset(ih_version(ih), &(ih->ih_key), offset);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/reiserfs.h:1502:6: note: 'version' is not equal to KEY_FORMAT_3_5
+           if (version == KEY_FORMAT_3_5)
+               ^~~~~~~
+   fs/reiserfs/reiserfs.h:1502:2: note: Taking false branch
+           if (version == KEY_FORMAT_3_5)
+           ^
+   fs/reiserfs/reiserfs.h:1505:3: note: Calling 'set_offset_v2_k_offset'
+                   set_offset_v2_k_offset(&key->u.k_offset_v2, offset);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/reiserfs/reiserfs.h:1280:17: note: The left operand of '&' is a garbage value
+           v2->v = (v2->v & cpu_to_le64(15ULL << 60)) | cpu_to_le64(offset);
+                    ~~~~~ ^
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 with check filters).
+   1 warning generated.
+   Suppressed 1 warnings (1 with check filters).
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+   Suppressed 4 warnings (2 in non-user code, 2 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   135 warnings generated.
+>> lib/stackinit_kunit.c:259:8: warning: Excessive padding in 'struct test_big_hole' (124 padding bytes, where 60 is optimal). Optimal fields order: four, one, two, three, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct test_big_hole {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:259:8: note: Excessive padding in 'struct test_big_hole' (124 padding bytes, where 60 is optimal). Optimal fields order: four, one, two, three, consider reordering the fields or adding explicit padding members
+   struct test_big_hole {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:333:1: warning: Address of stack memory associated with local variable 'var' is still referred to by the global variable 'fill_start' upon returning to the caller.  This will be a dangling reference [clang-analyzer-core.StackAddressEscape]
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^
+   lib/stackinit_kunit.c:237:2: note: expanded from macro 'DEFINE_TEST'
+           return (int)buf[0] | (int)buf[sizeof(buf) - 1];         \
+           ^
+   lib/stackinit_kunit.c:333:1: note: Taking false branch
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^
+   lib/stackinit_kunit.c:238:10: note: expanded from macro 'DEFINE_TEST'
+   }                                                               \
+                                                                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:346:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:334:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:326:3: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ^
+   lib/stackinit_kunit.c:333:1: note: Loop condition is false.  Exiting loop
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^
+   lib/stackinit_kunit.c:238:10: note: expanded from macro 'DEFINE_TEST'
+   }                                                               \
+                                                                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:346:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:334:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:318:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   lib/stackinit_kunit.c:333:1: note: Calling 'leaf_u8_zero'
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:238:10: note: expanded from macro 'DEFINE_TEST'
+   }                                                               \
+                                                                   ^
+   lib/stackinit_kunit.c:163:12: note: expanded from macro '\
+   DEFINE_TEST_DRIVER'
+           ignored = leaf_ ##name((unsigned long)&ignored, 1,      \
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: expanded from here
+   lib/stackinit_kunit.c:333:1: note: 'fill' is true
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/stackinit_kunit.c:223:6: note: expanded from macro 'DEFINE_TEST'
+           if (fill) {                                             \
+               ^~~~
+   lib/stackinit_kunit.c:333:1: note: Taking true branch
+   DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+   ^
+   lib/stackinit_kunit.c:309:3: note: expanded from macro 'DEFINE_SCALAR_TESTS'
+                   DEFINE_SCALAR_TEST(u8, init, xfail);            \
+                   ^
+   lib/stackinit_kunit.c:305:3: note: expanded from macro 'DEFINE_SCALAR_TEST'
+                   DEFINE_TEST(name ## _ ## init, name, SCALAR,    \
+                   ^
+   lib/stackinit_kunit.c:223:2: note: expanded from macro 'DEFINE_TEST'
+
+vim +259 lib/stackinit_kunit.c
+
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  257  
+f9398f15605a50 lib/test_stackinit.c Kees Cook 2021-07-23  258  /* Trigger unhandled padding in a structure. */
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23 @259  struct test_big_hole {
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  260  	u8 one;
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  261  	u8 two;
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  262  	u8 three;
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  263  	/* 61 byte padding hole here. */
+f9398f15605a50 lib/test_stackinit.c Kees Cook 2021-07-23  264  	u8 four __aligned(64);
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  265  } __aligned(64);
+50ceaa95ea0970 lib/test_stackinit.c Kees Cook 2019-01-23  266  
+
+:::::: The code at line 259 was first introduced by commit
+:::::: 50ceaa95ea09703722b30b4afa617c972071cd7f lib: Introduce test_stackinit module
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service
