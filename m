@@ -1,44 +1,30 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3080C4A3C
-	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 17:06:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657040809; x=1688576809;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BcNobYgcJ8hrerWlwpr0trD3hV3HIbQTtEEdQGBF4Jk=;
-  b=hl0WGgPwgIfN7/5ZXvGqKg0lCakVlPFy8hAPr0A/E+axyXppKCa3hbn/
-   wSRyosX2tLl41O1Cz40qFQYH0bRhOa2HcvBDURyxBufe5zRcwBC+Ck64i
-   +EANBtkZGTsgSy5UOEF3mT0H41o+mV+4AfrVJfrBaCSwMiNhMveFvezJA
-   +SLXQ4k7F7uYaonZFnd9/IGE9TuotCYIuoL9zzQ/F5E808f6B+kUqjcUk
-   bZUx6qAQ0c9wagXbqlxPJK8KjaPnoBkRMobZedk0Zf3p/v/hpiqkUfdhi
-   ikyUHd6+8yUeDtGjnxkD0wDcdQzDydxGMCIL0ukPN+/gtt5f/Ny+d8cp4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="272189371"
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="272189371"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 10:06:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,247,1650956400"; 
-   d="scan'208";a="719799246"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jul 2022 10:06:47 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o8m0c-000JP4-AY;
-	Tue, 05 Jul 2022 17:06:46 +0000
-Date: Wed, 6 Jul 2022 01:06:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:brauner/linux/fs.idmapped.overlay.acl.fix 1/1]
- fs/overlayfs/overlayfs.h:273:58: error: passing 'const void *' to parameter
- of type 'void *' discards qualifiers
-Message-ID: <202207060052.GNVFHePq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE3D6001
+	for <llvm@lists.linux.dev>; Tue,  5 Jul 2022 17:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15B1C341C7;
+	Tue,  5 Jul 2022 17:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657043699;
+	bh=ss/FWSfpRhPy761O/GOGlxFQc7q8ILJU6ePmGBd1zuA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ajkxm9aFdQ+4eDM5fM2/xY0Lfllfb+NOSRNA+Fec2jr2dkPKpuTAewpiKAzK05+MS
+	 WJOdFB/mlYY2/yUgX6Z5FlscEyk3Vxn/u42630GotVSszHd7JrkudM53X/+ca1yI2r
+	 nqlAZRgTFTDXJ3XvdE9Lxzy0d9NoTF5ktZCAJqy3frtkQo1N2QQHaKnizuNtWOZ2rx
+	 dd6Fxqq1xygEPY0/CpdajqKBecBdd6mayrg/gQq3dxKA9lIQshGPbkQNUnBHA4sBcm
+	 wcPgb7z/s/imXIstgCtDino2OqK91FOGWtQdoMARcI+btTUbs/82e+eJcZ05LbVAFq
+	 D5rl4BuEO1HeA==
+Date: Tue, 5 Jul 2022 12:54:53 -0500
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add a general "kernel hardening" section
+Message-ID: <YsR67UJTZvON/6LG@work>
+References: <20220702004638.2486003-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,70 +33,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220702004638.2486003-1-keescook@chromium.org>
 
-tree:   https://github.com/ammarfaizi2/linux-block brauner/linux/fs.idmapped.overlay.acl.fix
-head:   05bde3ad56201ff691db6d95ea1316983ea82a9c
-commit: 05bde3ad56201ff691db6d95ea1316983ea82a9c [1/1] acl: report correct ownership in some ovl use-cases
-config: hexagon-randconfig-r045-20220703 (https://download.01.org/0day-ci/archive/20220706/202207060052.GNVFHePq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 142aca7741d5b06207e87bf4880fbe308c8d6823)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/05bde3ad56201ff691db6d95ea1316983ea82a9c
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block brauner/linux/fs.idmapped.overlay.acl.fix
-        git checkout 05bde3ad56201ff691db6d95ea1316983ea82a9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+On Fri, Jul 01, 2022 at 05:46:38PM -0700, Kees Cook wrote:
+> While many large subsystems related to kernel hardening have their own
+> distinct MAINTAINERS entries, there are some smaller collections that
+> don't, but are maintained/reviewed by linux-hardening@vger.kernel.org.
+> Add a section to capture these, add (or replace defunct) trees that are
+> now all carried in the hardening tree.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/overlayfs/super.c:18:
->> fs/overlayfs/overlayfs.h:273:58: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-                                                                   ^~~~~
-   fs/overlayfs/overlayfs.h:259:31: note: passing argument to parameter 'value' here
-                                     const char *name, void *value,
-                                                             ^
-   1 error generated.
+Thanks
 --
-   In file included from fs/overlayfs/inode.c:17:
->> fs/overlayfs/overlayfs.h:273:58: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-                                                                   ^~~~~
-   fs/overlayfs/overlayfs.h:259:31: note: passing argument to parameter 'value' here
-                                     const char *name, void *value,
-                                                             ^
->> fs/overlayfs/inode.c:378:48: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                   err = ovl_do_setxattr(ofs, realdentry, name, value, size,
-                                                                ^~~~~
-   fs/overlayfs/overlayfs.h:259:31: note: passing argument to parameter 'value' here
-                                     const char *name, void *value,
-                                                             ^
-   2 errors generated.
+Gustavo
 
-
-vim +273 fs/overlayfs/overlayfs.h
-
-c914c0e27eb084 Amir Goldstein 2022-04-04  268  
-c914c0e27eb084 Amir Goldstein 2022-04-04  269  static inline int ovl_setxattr(struct ovl_fs *ofs, struct dentry *dentry,
-43d193f8440d67 Miklos Szeredi 2020-09-02  270  			       enum ovl_xattr ox, const void *value,
-610afc0bd40882 Miklos Szeredi 2020-09-02  271  			       size_t size)
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  272  {
-c914c0e27eb084 Amir Goldstein 2022-04-04 @273  	return ovl_do_setxattr(ofs, dentry, ovl_xattr(ofs, ox), value, size, 0);
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  274  }
-e9be9d5e76e348 Miklos Szeredi 2014-10-24  275  
-
-:::::: The code at line 273 was first introduced by commit
-:::::: c914c0e27eb0843b7cf3bec71d6f34d53a3a671e ovl: use wrappers to all vfs_*xattr() calls
-
-:::::: TO: Amir Goldstein <amir73il@gmail.com>
-:::::: CC: Miklos Szeredi <mszeredi@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  MAINTAINERS | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3cf9842d9233..2702b29e922f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4873,7 +4873,7 @@ R:	Nick Desaulniers <ndesaulniers@google.com>
+>  L:	llvm@lists.linux.dev
+>  S:	Supported
+>  B:	https://github.com/ClangBuiltLinux/linux/issues
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/cfi.h
+>  F:	kernel/cfi.c
+>  
+> @@ -7783,6 +7783,7 @@ FORTIFY_SOURCE
+>  M:	Kees Cook <keescook@chromium.org>
+>  L:	linux-hardening@vger.kernel.org
+>  S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/fortify-string.h
+>  F:	lib/test_fortify/*
+>  F:	scripts/test_fortify.sh
+> @@ -8225,6 +8226,7 @@ GCC PLUGINS
+>  M:	Kees Cook <keescook@chromium.org>
+>  L:	linux-hardening@vger.kernel.org
+>  S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/kbuild/gcc-plugins.rst
+>  F:	scripts/Makefile.gcc-plugins
+>  F:	scripts/gcc-plugins/
+> @@ -10742,6 +10744,17 @@ F:	scripts/mk*
+>  F:	scripts/mod/
+>  F:	scripts/package/
+>  
+> +KERNEL HARDENING (not covered by other areas)
+> +M:	Kees Cook <keescook@chromium.org>
+> +L:	linux-hardening@vger.kernel.org
+> +S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+> +F:	include/linux/overflow.h
+> +F:	include/linux/randomize_kstack.h
+> +F:	mm/usercopy.c
+> +K:	\b(add|choose)_random_kstack_offset\b
+> +K:	\b__check_(object_size|heap_object)\b
+> +
+>  KERNEL JANITORS
+>  L:	kernel-janitors@vger.kernel.org
+>  S:	Odd Fixes
+> @@ -11542,7 +11555,7 @@ F:	drivers/media/usb/dvb-usb-v2/lmedm04*
+>  LOADPIN SECURITY MODULE
+>  M:	Kees Cook <keescook@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git lsm/loadpin
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/admin-guide/LSM/LoadPin.rst
+>  F:	security/loadpin/
+>  
+> @@ -17857,7 +17870,7 @@ M:	Kees Cook <keescook@chromium.org>
+>  R:	Andy Lutomirski <luto@amacapital.net>
+>  R:	Will Drewry <wad@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git seccomp
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
+>  F:	Documentation/userspace-api/seccomp_filter.rst
+>  F:	include/linux/seccomp.h
+>  F:	include/uapi/linux/seccomp.h
+> @@ -21993,7 +22006,7 @@ F:	include/linux/yam.h
+>  YAMA SECURITY MODULE
+>  M:	Kees Cook <keescook@chromium.org>
+>  S:	Supported
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git yama/tip
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	Documentation/admin-guide/LSM/Yama.rst
+>  F:	security/yama/
+>  
+> -- 
+> 2.32.0
+> 
