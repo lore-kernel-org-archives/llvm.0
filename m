@@ -1,42 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2FC20F0
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 03:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5A720EC
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 03:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657076833; x=1688612833;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=V1OYQd01MbSEp9wHG1vov7SEBMz7Hedc8PvBrDU4mKI=;
-  b=aESCnkBDjWC0IfgpyPFK11vwx6Ip/iP5NRpygrslLiWu/qudQKXsCGph
-   o/4tFIctFkSCAVZGqRJofbXXn9KYhu6D1jkny2TxTj1jZWRCGtWJRMt2/
-   RoKMwYiS0N4g20C/ceCm1K/A8HA3Wl6uOHCoYJcTBIktx193wzntI4i+K
-   cC49WmaiE54TlGxSz8bWGYbMiH9H7lwIlhQqloOj17xAk5X76li1dd5tZ
-   w3lj703VRQA2wcujgWtjHciSxU/lXYZweM62jqlhhtZAiMqD/Z7k42saN
-   n+Vv8+nJr8XhzWf+q9gs0rUgyKj1sbJvddG9G98rWuQ4LgepYwO/INIMF
+  t=1657078040; x=1688614040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lGDLONxxNciCtzO6tEgXAoRmBs07JGpgsHtP1EPwKMg=;
+  b=VRAe7tkN6cO/1hlBPVw1hKLYF7rpgGuOzdicHntjQF/i4oYfZr037FA9
+   SS6vUGyRZ5tCn9eY3pnXBZWBo56xBnQE3liTxC2DhJtnYdqrHApgthzZi
+   OBTEeQLILTM0VGQmhW5Gbm3iyGaIFDG6XGFBv8GBnwrbFUVsDQkAL/ONE
+   t6hIk5wdEbw1VclcJBVlX2rvw4cO67qoCd3YqbAPJMRTwEQY49lqR7WkD
+   /bkkuBAMFafcCc8rfJhGtzA9gXL4xTKGuy2+Xs/uNGM1/8gfAntvNeWgP
+   fXmrT/m1mFFB9gc4f+J+LzbA6ryLbOZRky9Nu4C6YR/d7WAhqML6w/qtZ
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="266655864"
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="283655017"
 X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="266655864"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 20:07:12 -0700
+   d="scan'208";a="283655017"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 20:27:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,248,1650956400"; 
-   d="scan'208";a="682742803"
+   d="scan'208";a="735400160"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Jul 2022 20:07:10 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 05 Jul 2022 20:27:18 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o8vNe-000Ju3-7U;
-	Wed, 06 Jul 2022 03:07:10 +0000
-Date: Wed, 6 Jul 2022 11:06:34 +0800
+	id 1o8vh7-000JxD-Qc;
+	Wed, 06 Jul 2022 03:27:17 +0000
+Date: Wed, 6 Jul 2022 11:27:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
+To: Muna Sinada <quic_msinada@quicinc.com>, johannes@sipsolutions.net
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_22 21/21] kernel/bpf/trampoline.c:941:11:
- warning: variable 'id_multi' is uninitialized when used here
-Message-ID: <202207061003.NznoJ2YS-lkp@intel.com>
+	linux-wireless@vger.kernel.org,
+	Muna Sinada <quic_msinada@quicinc.com>
+Subject: Re: [PATCH v2 1/2] mac80211: Add VHT MU-MIMO related flags in
+ ieee80211_bss_conf
+Message-ID: <202207061106.QWMt1tGm-lkp@intel.com>
+References: <1657058586-4621-1-git-send-email-quic_msinada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,113 +48,251 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1657058586-4621-1-git-send-email-quic_msinada@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_22
-head:   1d891c46bb689a24985cea58f4eddb053d6b1331
-commit: 1d891c46bb689a24985cea58f4eddb053d6b1331 [21/21] bpf: Add support to attach multi trampolines
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220706/202207061003.NznoJ2YS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 142aca7741d5b06207e87bf4880fbe308c8d6823)
+Hi Muna,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on wireless/main]
+[also build test ERROR on linus/master v5.19-rc5]
+[cannot apply to wireless-next/main next-20220705]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Muna-Sinada/mac80211-Add-VHT-MU-MIMO-related-flags-in-ieee80211_bss_conf/20220706-060509
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git main
+config: hexagon-randconfig-r045-20220703 (https://download.01.org/0day-ci/archive/20220706/202207061106.QWMt1tGm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1d891c46bb689a24985cea58f4eddb053d6b1331
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tramp_22
-        git checkout 1d891c46bb689a24985cea58f4eddb053d6b1331
+        # https://github.com/intel-lab-lkp/linux/commit/d0909fa7d00b2857a0b258722221e1e94ba9c05e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muna-Sinada/mac80211-Add-VHT-MU-MIMO-related-flags-in-ieee80211_bss_conf/20220706-060509
+        git checkout d0909fa7d00b2857a0b258722221e1e94ba9c05e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/mac80211/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/trampoline.c:941:11: warning: variable 'id_multi' is uninitialized when used here [-Wuninitialized]
-                           id_add(id_multi, id->id[i]);
-                                  ^~~~~~~~
-   kernel/bpf/trampoline.c:924:31: note: initialize the variable 'id_multi' to silence this warning
-           struct bpf_tramp_id *id_multi, *id_singles;
-                                        ^
-                                         = NULL
->> kernel/bpf/trampoline.c:950:10: warning: variable 'id_singles' is uninitialized when used here [-Wuninitialized]
-                   id_add(id_singles, id->id[i]);
-                          ^~~~~~~~~~
-   kernel/bpf/trampoline.c:924:44: note: initialize the variable 'id_singles' to silence this warning
-           struct bpf_tramp_id *id_multi, *id_singles;
-                                                     ^
-                                                      = NULL
-   2 warnings generated.
+>> net/mac80211/cfg.c:1169:13: error: use of undeclared identifier 'ap_vht_cap'
+                          !!(ap_vht_cap->vht_cap_info &
+                             ^
+   net/mac80211/cfg.c:1172:13: error: use of undeclared identifier 'ap_vht_cap'
+                          !!(ap_vht_cap->vht_cap_info &
+                             ^
+   net/mac80211/cfg.c:1175:13: error: use of undeclared identifier 'ap_vht_cap'
+                          !!(ap_vht_cap->vht_cap_info &
+                             ^
+   net/mac80211/cfg.c:1178:13: error: use of undeclared identifier 'ap_vht_cap'
+                          !!(ap_vht_cap->vht_cap_info &
+                             ^
+   4 errors generated.
 
 
-vim +/id_multi +941 kernel/bpf/trampoline.c
+vim +/ap_vht_cap +1169 net/mac80211/cfg.c
 
-   921	
-   922	int bpf_trampoline_multi_attach(struct bpf_tramp_prog *tp, struct bpf_tramp_id *id)
-   923	{
-   924		struct bpf_tramp_id *id_multi, *id_singles;
-   925		struct bpf_trampoline *tr;
-   926		LIST_HEAD(upd);
-   927		int i, err = -EINVAL;
-   928		u64 key;
-   929	
-   930		mutex_lock(&trampoline_mutex);
-   931		list_for_each_entry(tr, &multi_trampolines, multi.list) {
-   932			if (id_and(id, tr->multi.id_multi))
-   933				goto out_unlock;
-   934		}
-   935	
-   936		for (i = 0; i < id->cnt; i++) {
-   937			key = bpf_trampoline_compute_key(tp->prog, tp->prog->aux->attach_btf,
-   938							 id->id[i]);
-   939			tr = __bpf_trampoline_lookup(key);
-   940			if (!tr) {
- > 941				id_add(id_multi, id->id[i]);
-   942				continue;
-   943			}
-   944			mutex_lock(&tr->mutex);
-   945			err = __bpf_trampoline_link_prog(tp, tr, &upd);
-   946			if (err) {
-   947				mutex_unlock(&tr->mutex);
-   948				goto out_rollback;
-   949			}
- > 950			id_add(id_singles, id->id[i]);
-   951		}
-   952	
-   953		tr = bpf_trampoline_alloc();
-   954		if (!tr)
-   955			goto out_rollback;
-   956	
-   957		err = __bpf_trampoline_link_prog(tp, tr, &upd);
-   958		if (err)
-   959			goto out_rollback;
-   960	
-   961		err = bpf_tramp_update_set(&upd);
-   962		if (err)
-   963			goto out_rollback;
-   964	
-   965		tr->multi.id_multi = id_multi;
-   966		tr->multi.id_singles = id_singles;
-   967		list_add_tail(&tr->multi.list, &multi_trampolines);
-   968	
-   969		list_for_each_entry(tr, &upd, update.list) {
-   970			bpf_trampoline_commit(tr);
-   971			mutex_unlock(&tr->mutex);
-   972		}
-   973	
-   974	out_unlock:
-   975		mutex_unlock(&trampoline_mutex);
-   976		return 0;
-   977	out_rollback:
-   978		list_for_each_entry(tr, &upd, update.list) {
-   979			bpf_trampoline_rollback(tr);
-   980			mutex_unlock(&tr->mutex);
-   981			bpf_trampoline_put(tr);
-   982		}
-   983		mutex_unlock(&trampoline_mutex);
-   984		return err;
-   985	}
-   986	
+  1135	
+  1136	static int ieee80211_start_ap(struct wiphy *wiphy, struct net_device *dev,
+  1137				      struct cfg80211_ap_settings *params)
+  1138	{
+  1139		struct ieee80211_sub_if_data *sdata = IEEE80211_DEV_TO_SUB_IF(dev);
+  1140		struct ieee80211_local *local = sdata->local;
+  1141		struct beacon_data *old;
+  1142		struct ieee80211_sub_if_data *vlan;
+  1143		u32 changed = BSS_CHANGED_BEACON_INT |
+  1144			      BSS_CHANGED_BEACON_ENABLED |
+  1145			      BSS_CHANGED_BEACON |
+  1146			      BSS_CHANGED_SSID |
+  1147			      BSS_CHANGED_P2P_PS |
+  1148			      BSS_CHANGED_TXPOWER |
+  1149			      BSS_CHANGED_TWT;
+  1150		int i, err;
+  1151		int prev_beacon_int;
+  1152	
+  1153		old = sdata_dereference(sdata->u.ap.beacon, sdata);
+  1154		if (old)
+  1155			return -EALREADY;
+  1156	
+  1157		if (params->smps_mode != NL80211_SMPS_OFF)
+  1158			return -ENOTSUPP;
+  1159	
+  1160		sdata->smps_mode = IEEE80211_SMPS_OFF;
+  1161	
+  1162		sdata->needed_rx_chains = sdata->local->rx_chains;
+  1163	
+  1164		prev_beacon_int = sdata->vif.bss_conf.beacon_int;
+  1165		sdata->vif.bss_conf.beacon_int = params->beacon_interval;
+  1166	
+  1167		if (params->vht_cap) {
+  1168			sdata->vif.bss_conf.vht_su_beamformer =
+> 1169			       !!(ap_vht_cap->vht_cap_info &
+  1170				  cpu_to_le32(IEEE80211_VHT_CAP_SU_BEAMFORMER_CAPABLE));
+  1171			sdata->vif.bss_conf.vht_su_beamformee =
+  1172			       !!(ap_vht_cap->vht_cap_info &
+  1173				  cpu_to_le32(IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE));
+  1174			sdata->vif.bss_conf.vht_mu_beamformer =
+  1175			       !!(ap_vht_cap->vht_cap_info &
+  1176				  cpu_to_le32(IEEE80211_VHT_CAP_MU_BEAMFORMER_CAPABLE));
+  1177			sdata->vif.bss_conf.vht_mu_beamformee =
+  1178			       !!(ap_vht_cap->vht_cap_info &
+  1179				  cpu_to_le32(IEEE80211_VHT_CAP_MU_BEAMFORMEE_CAPABLE));
+  1180		}
+  1181	
+  1182		if (params->he_cap && params->he_oper) {
+  1183			sdata->vif.bss_conf.he_support = true;
+  1184			sdata->vif.bss_conf.htc_trig_based_pkt_ext =
+  1185				le32_get_bits(params->he_oper->he_oper_params,
+  1186				      IEEE80211_HE_OPERATION_DFLT_PE_DURATION_MASK);
+  1187			sdata->vif.bss_conf.frame_time_rts_th =
+  1188				le32_get_bits(params->he_oper->he_oper_params,
+  1189				      IEEE80211_HE_OPERATION_RTS_THRESHOLD_MASK);
+  1190			changed |= BSS_CHANGED_HE_OBSS_PD;
+  1191	
+  1192			if (params->beacon.he_bss_color.enabled)
+  1193				changed |= BSS_CHANGED_HE_BSS_COLOR;
+  1194		}
+  1195	
+  1196		if (sdata->vif.type == NL80211_IFTYPE_AP &&
+  1197		    params->mbssid_config.tx_wdev) {
+  1198			err = ieee80211_set_ap_mbssid_options(sdata,
+  1199							      params->mbssid_config);
+  1200			if (err)
+  1201				return err;
+  1202		}
+  1203	
+  1204		mutex_lock(&local->mtx);
+  1205		err = ieee80211_vif_use_channel(sdata, &params->chandef,
+  1206						IEEE80211_CHANCTX_SHARED);
+  1207		if (!err)
+  1208			ieee80211_vif_copy_chanctx_to_vlans(sdata, false);
+  1209		mutex_unlock(&local->mtx);
+  1210		if (err) {
+  1211			sdata->vif.bss_conf.beacon_int = prev_beacon_int;
+  1212			return err;
+  1213		}
+  1214	
+  1215		/*
+  1216		 * Apply control port protocol, this allows us to
+  1217		 * not encrypt dynamic WEP control frames.
+  1218		 */
+  1219		sdata->control_port_protocol = params->crypto.control_port_ethertype;
+  1220		sdata->control_port_no_encrypt = params->crypto.control_port_no_encrypt;
+  1221		sdata->control_port_over_nl80211 =
+  1222					params->crypto.control_port_over_nl80211;
+  1223		sdata->control_port_no_preauth =
+  1224					params->crypto.control_port_no_preauth;
+  1225		sdata->encrypt_headroom = ieee80211_cs_headroom(sdata->local,
+  1226								&params->crypto,
+  1227								sdata->vif.type);
+  1228	
+  1229		list_for_each_entry(vlan, &sdata->u.ap.vlans, u.vlan.list) {
+  1230			vlan->control_port_protocol =
+  1231				params->crypto.control_port_ethertype;
+  1232			vlan->control_port_no_encrypt =
+  1233				params->crypto.control_port_no_encrypt;
+  1234			vlan->control_port_over_nl80211 =
+  1235				params->crypto.control_port_over_nl80211;
+  1236			vlan->control_port_no_preauth =
+  1237				params->crypto.control_port_no_preauth;
+  1238			vlan->encrypt_headroom =
+  1239				ieee80211_cs_headroom(sdata->local,
+  1240						      &params->crypto,
+  1241						      vlan->vif.type);
+  1242		}
+  1243	
+  1244		sdata->vif.bss_conf.dtim_period = params->dtim_period;
+  1245		sdata->vif.bss_conf.enable_beacon = true;
+  1246		sdata->vif.bss_conf.allow_p2p_go_ps = sdata->vif.p2p;
+  1247		sdata->vif.bss_conf.twt_responder = params->twt_responder;
+  1248		sdata->vif.bss_conf.he_obss_pd = params->he_obss_pd;
+  1249		sdata->vif.bss_conf.he_bss_color = params->beacon.he_bss_color;
+  1250		sdata->vif.bss_conf.s1g = params->chandef.chan->band ==
+  1251					  NL80211_BAND_S1GHZ;
+  1252	
+  1253		sdata->vif.bss_conf.ssid_len = params->ssid_len;
+  1254		if (params->ssid_len)
+  1255			memcpy(sdata->vif.bss_conf.ssid, params->ssid,
+  1256			       params->ssid_len);
+  1257		sdata->vif.bss_conf.hidden_ssid =
+  1258			(params->hidden_ssid != NL80211_HIDDEN_SSID_NOT_IN_USE);
+  1259	
+  1260		memset(&sdata->vif.bss_conf.p2p_noa_attr, 0,
+  1261		       sizeof(sdata->vif.bss_conf.p2p_noa_attr));
+  1262		sdata->vif.bss_conf.p2p_noa_attr.oppps_ctwindow =
+  1263			params->p2p_ctwindow & IEEE80211_P2P_OPPPS_CTWINDOW_MASK;
+  1264		if (params->p2p_opp_ps)
+  1265			sdata->vif.bss_conf.p2p_noa_attr.oppps_ctwindow |=
+  1266						IEEE80211_P2P_OPPPS_ENABLE_BIT;
+  1267	
+  1268		sdata->beacon_rate_set = false;
+  1269		if (wiphy_ext_feature_isset(local->hw.wiphy,
+  1270					    NL80211_EXT_FEATURE_BEACON_RATE_LEGACY)) {
+  1271			for (i = 0; i < NUM_NL80211_BANDS; i++) {
+  1272				sdata->beacon_rateidx_mask[i] =
+  1273					params->beacon_rate.control[i].legacy;
+  1274				if (sdata->beacon_rateidx_mask[i])
+  1275					sdata->beacon_rate_set = true;
+  1276			}
+  1277		}
+  1278	
+  1279		if (ieee80211_hw_check(&local->hw, HAS_RATE_CONTROL))
+  1280			sdata->vif.bss_conf.beacon_tx_rate = params->beacon_rate;
+  1281	
+  1282		err = ieee80211_assign_beacon(sdata, &params->beacon, NULL, NULL);
+  1283		if (err < 0)
+  1284			goto error;
+  1285		changed |= err;
+  1286	
+  1287		if (params->fils_discovery.max_interval) {
+  1288			err = ieee80211_set_fils_discovery(sdata,
+  1289							   &params->fils_discovery);
+  1290			if (err < 0)
+  1291				goto error;
+  1292			changed |= BSS_CHANGED_FILS_DISCOVERY;
+  1293		}
+  1294	
+  1295		if (params->unsol_bcast_probe_resp.interval) {
+  1296			err = ieee80211_set_unsol_bcast_probe_resp(sdata,
+  1297								   &params->unsol_bcast_probe_resp);
+  1298			if (err < 0)
+  1299				goto error;
+  1300			changed |= BSS_CHANGED_UNSOL_BCAST_PROBE_RESP;
+  1301		}
+  1302	
+  1303		err = drv_start_ap(sdata->local, sdata);
+  1304		if (err) {
+  1305			old = sdata_dereference(sdata->u.ap.beacon, sdata);
+  1306	
+  1307			if (old)
+  1308				kfree_rcu(old, rcu_head);
+  1309			RCU_INIT_POINTER(sdata->u.ap.beacon, NULL);
+  1310			goto error;
+  1311		}
+  1312	
+  1313		ieee80211_recalc_dtim(local, sdata);
+  1314		ieee80211_bss_info_change_notify(sdata, changed);
+  1315	
+  1316		netif_carrier_on(dev);
+  1317		list_for_each_entry(vlan, &sdata->u.ap.vlans, u.vlan.list)
+  1318			netif_carrier_on(vlan->dev);
+  1319	
+  1320		return 0;
+  1321	
+  1322	error:
+  1323		mutex_lock(&local->mtx);
+  1324		ieee80211_vif_release_channel(sdata);
+  1325		mutex_unlock(&local->mtx);
+  1326	
+  1327		return err;
+  1328	}
+  1329	
 
 -- 
 0-DAY CI Kernel Test Service
