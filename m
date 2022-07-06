@@ -1,111 +1,95 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0FA4C81
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 15:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657122013; x=1688658013;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AKh4mr1uPByPYABv1mpl6RRugd2DcaAFD/hiBVNUfF4=;
-  b=eknQLDTilYxpJ24/gFSVMzE+S7aITWmI9Vin2w1Gh14tqhrgoSx0Lm9O
-   Dm9HfsqOfOf9P/1vGtNedQL7ldgGXu2n27IpTpWnPJPSZUy6DBn8f/npl
-   M7rK4w4pR7Hn9wrWfab6rPJQRJBnn1khJrgkVJdh8Km03gs2dN340v/VB
-   E7KruOq++ad8y+lA/nuqTdz9fsqy04gGI3w+zuNxnPBkoU8Mz6flZWbck
-   CWaOrAoWsg/LkGqRTk6F903ul6zRK7A5em2oipvvLMUQGyLkyC21lq3K5
-   Ux4phwGvZIyFf50a8dbRLR6J4d+jjHpLfLBupSSk2OxZ3+ZeCsH+wXZsg
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="264197341"
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="264197341"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 08:40:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="661012580"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2022 08:40:11 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o978M-000KkH-J0;
-	Wed, 06 Jul 2022 15:40:10 +0000
-Date: Wed, 6 Jul 2022 23:39:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin Habets <habetsm.xilinx@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field ip
- within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and
- is usually due to 'struct efx_loopback_payload' being packed, which can lead
- to unaligned accesses
-Message-ID: <202207062332.BG1QJUUo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772815381
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 16:01:17 +0000 (UTC)
+Received: by mail-qt1-f170.google.com with SMTP id h19so18846081qtp.6
+        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 09:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maine.edu; s=google;
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=hXDY2u6jMg7vkEvggtI5AB4RBXe4Hbw6rSIH74WebXE=;
+        b=fFIEN8uCmrBxStKbvR2C6opnu9SDffnpYZ+kJERJiNZersQBDv+uoadi13EglEGxWg
+         HoFTNiT4e6IHnxvBchc3s4ewz2IbR9r7iiFfrVUD52TAoDdPaXCKU+vxV6I/v3ItbvSj
+         spKsCGG/3NLbXVr3k6P9DPEvh5mzv1l0in1zE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=hXDY2u6jMg7vkEvggtI5AB4RBXe4Hbw6rSIH74WebXE=;
+        b=mEnUcaSgXJquxHweFdDZ1fx7EtLBCcQnR93/znYz5E9wtzsbivDHTL1K4Kv5b4HH4b
+         IuXIYiEL6oYtyt6fpXcFedCIW2pGbCM+kz/y45iaJKiVjVAj0pa2/zjWENsn+/e4c4vI
+         GVmOJtPxyeD4h+BR2ovOgrqVNyR7XOIkXi8V0qVh4odNtjhazfvwv0M20ittrONJqxlu
+         O6/a5+cvjkIeTMkXdocMWc3s/pLSth5foPst4PAGAEBt1kfKF5pAPg7aoKhoyntBKXSf
+         awabQqsC+j8QVkQfv4jeVRpuVjGsCGXtERavqblI1JZHC4/Ylb8JFzU6SlEiUxlLvpul
+         poiA==
+X-Gm-Message-State: AJIora8qonnqkVlpu/60hmgZfY7aG17Oy0fxI6uECfVDJrN0KqlHgGco
+	emythY9Igq18gnrZjYnGvKw19w==
+X-Google-Smtp-Source: AGRyM1tbV9pEZEk3QSLJdDZqYDNgt+v0pheI01GB3Bv4jXB/ILGSjVhSfmfEpc4K/E6wOBk9JjZ31Q==
+X-Received: by 2002:a05:6214:1ccd:b0:46e:7427:2626 with SMTP id g13-20020a0562141ccd00b0046e74272626mr38233187qvd.101.1657123275539;
+        Wed, 06 Jul 2022 09:01:15 -0700 (PDT)
+Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
+        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b006a67d257499sm26186666qkb.56.2022.07.06.09.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 09:01:15 -0700 (PDT)
+From: Vince Weaver <vincent.weaver@maine.edu>
+X-Google-Original-From: Vince Weaver <vince@maine.edu>
+Date: Wed, 6 Jul 2022 12:01:11 -0400 (EDT)
+To: Andrew Kilroy <andrew.kilroy@arm.com>
+cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+    acme@kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+    Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+    Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+    Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+    Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
+    Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
+    KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>, 
+    linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, 
+    bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
+ not supported
+In-Reply-To: <20220704145333.22557-3-andrew.kilroy@arm.com>
+Message-ID: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+References: <20220704145333.22557-1-andrew.kilroy@arm.com> <20220704145333.22557-3-andrew.kilroy@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Martin,
+On Mon, 4 Jul 2022, Andrew Kilroy wrote:
 
-First bad commit (maybe != root cause):
+> A subsequent patch alters perf to perf_event_open with the
+> PERF_SAMPLE_ARCH_1 bit on.
+> 
+> This patch deals with the case where the kernel does not know about the
+> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
+> authentication masks.  In this case the perf_event_open system call
+> returns -EINVAL (-22) and perf exits with an error.
+> 
+> This patch causes userspace process to re-attempt the perf_event_open
+> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
+> field, allowing the perf_event_open system call to succeed.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e35e5b6f695d241ffb1d223207da58a1fbcdff4b
-commit: c5a13c319e10e795850b61bc7e3447b08024be2e sfc: Add a basic Siena module
-date:   8 weeks ago
-config: arm-randconfig-r004-20220706 (https://download.01.org/0day-ci/archive/20220706/202207062332.BG1QJUUo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c5a13c319e10e795850b61bc7e3447b08024be2e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c5a13c319e10e795850b61bc7e3447b08024be2e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/sfc/siena/
+So in this case you are leaking ARM64-specific info into the generic 
+perf_event_open() call?  Is there any way the kernel could implement this 
+without userspace having to deal with the issue?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+There are a few recent ARM64 perf_event related patches that are pushing 
+ARM specific interfaces into the generic code, with the apparent 
+assumption that it will just be implemented in the userspace perf tool.  
+However there are a number of outside-the-kernel codebases that also use 
+perf_event_open() and it seems a bit onerous if all of them have to start 
+adding a lot of extra ARM64-specific code, especially because as far as I 
+can tell there haven't been any documentation patches included for the 
+Makefile.
 
-All warnings (new ones prefixed by >>):
+The other recent change that's annoying for userspace is the addition of 
+the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
+functionality found in /sys/devices/cpu/rdpmc
 
->> drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct iphdr ip;
-                        ^
-   1 warning generated.
-
-
-vim +46 drivers/net/ethernet/sfc/siena/selftest.c
-
-d48523cb88e0703 Martin Habets 2022-05-09  37  
-d48523cb88e0703 Martin Habets 2022-05-09  38  /*
-d48523cb88e0703 Martin Habets 2022-05-09  39   * Loopback test packet structure
-d48523cb88e0703 Martin Habets 2022-05-09  40   *
-d48523cb88e0703 Martin Habets 2022-05-09  41   * The self-test should stress every RSS vector, and unfortunately
-d48523cb88e0703 Martin Habets 2022-05-09  42   * Falcon only performs RSS on TCP/UDP packets.
-d48523cb88e0703 Martin Habets 2022-05-09  43   */
-d48523cb88e0703 Martin Habets 2022-05-09  44  struct efx_loopback_payload {
-d48523cb88e0703 Martin Habets 2022-05-09  45  	struct ethhdr header;
-d48523cb88e0703 Martin Habets 2022-05-09 @46  	struct iphdr ip;
-d48523cb88e0703 Martin Habets 2022-05-09  47  	struct udphdr udp;
-d48523cb88e0703 Martin Habets 2022-05-09  48  	__be16 iteration;
-d48523cb88e0703 Martin Habets 2022-05-09  49  	char msg[64];
-d48523cb88e0703 Martin Habets 2022-05-09  50  } __packed;
-d48523cb88e0703 Martin Habets 2022-05-09  51  
-
-:::::: The code at line 46 was first introduced by commit
-:::::: d48523cb88e0703055c1b33e61eb644a7976f92b sfc: Copy shared files needed for Siena (part 2)
-
-:::::: TO: Martin Habets <martinh@xilinx.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Vince Weaver
+vincent.weaver@maine.edu
