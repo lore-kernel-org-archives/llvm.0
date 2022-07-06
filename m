@@ -1,152 +1,119 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8216B2F21
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 20:31:13 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id y16so27758871lfb.9
-        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 13:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sLAB7PPgRJS7FBUcfBXuPogoYxwCOXpRzrraHJLqWfE=;
-        b=YHlBoPSJuPoCecofCvpCH4tmscl+28DBd8wK50hy4bthb6jphDprUKrGdG13GhRe+u
-         X/AfJXnFGGeZhoOHuSQsipNPRMWzx4kR5pABv7w668ayE5GKkdUWl3yvMursxjLsvM8e
-         Y3zMol3FS7vEhujIcXUWqzJwz8fx4PxlMkt6j+Sfb8BptT4P45z0fb594wOqvRYIc2K7
-         AGTT2Xa1k/mXHjlJve+o+IrgXTAJdWOTOa23QcRvUpEVV6OgY31stizTEvIv3fT7j4lE
-         hMAOAY5hzFOL1C4dU0Pg3xrS3CBqrOFLCiorK+3GE1cAscIjpENyCxd/dx9XtJmEhKFz
-         eccw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sLAB7PPgRJS7FBUcfBXuPogoYxwCOXpRzrraHJLqWfE=;
-        b=xHBPwvx0AguVcvnuj5/efUIO39ixwHo2FLFQENOd3qZsvpPiMxigMU8Rb6PmBUYY+T
-         UMuz7Scb0zFTYZgtk3T4dcDKDzBqFri8PjHX6JEr8CFKqJxci1vEprmkECTnbwVTvpgq
-         ppQmqfsqJNhggJ125YnV2XNNt1elrgw7fiE/Q14BrayBFpoFDs9S2HwdvXvGAaG6Bnip
-         yIIzaWxxnP+epxfHyXQepphO6jveZimQ6pYmy9xiwJb66KJofnCXvjhblIZaf3hMJXoh
-         xLfLYRPk20PNk5mdOjwe2ZRAMwuMXTSsEjCFR26IcFBmhTDoqNZg8zTyVDfJWbG1LXIP
-         CwzA==
-X-Gm-Message-State: AJIora9BGQ5vK1WlAu/dNpIY8vE0j4+PRmFE/tyLKxa3xqJPrQ/2d9ES
-	07cqOVOc8zt5quIGNzPfSz3HfvJXBVyagsn48iWuZw==
-X-Google-Smtp-Source: AGRyM1vSDOBH7B9iAAHVjpTbPd3tKPUPLTeCrocbC7VW2zzKMNmJfLigIa8R9o8iO9nBgX/88zOV/6kdmmjeOMD7f3U=
-X-Received: by 2002:a05:6512:1188:b0:481:2eb7:f2 with SMTP id
- g8-20020a056512118800b004812eb700f2mr26513384lfr.401.1657139471312; Wed, 06
- Jul 2022 13:31:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B975387
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 20:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657140867; x=1688676867;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Si73b53CWRzRLHnLQZQCCRSvhNPSk6MH6cvs7vBca2w=;
+  b=dZ/KiLLSabibirj+fCXWrdJ9jk2nsWF8PbAZGWkzChfSb78lRUTiNd9q
+   ON8qNLEgbaAdzQ1ORl1C0Xwa6ZpMe0HX+ymD78eCKS2sZjhnsY52Z7QJM
+   /g6sXQMftxf+WMFo0nruuNACJwh+3Q9IzMGcT629mF9Bp9vimt55POJLa
+   A/EcNH9JDDXNfy5UUkMS+SUPQsEffPatOU2L4d0UjNlet/rQ1SheBW1mq
+   giJoPxO70PuH3Rs3Q7gwcz3T20oELT9pgF1IQf4InCwnHUQD4Sidil0ud
+   RKVPCA8hNquSL7TC2HfxFsLdPslkYrj6BhMGEJD48DRTDGRKZwbsXUFh4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="283892351"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="283892351"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 13:54:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="650839699"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Jul 2022 13:54:25 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9C2T-000L2D-3L;
+	Wed, 06 Jul 2022 20:54:25 +0000
+Date: Thu, 7 Jul 2022 04:54:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: ld.lld: error: section .dynamic file range overlaps with .text
+Message-ID: <202207070418.WugtuACs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207060054.o8GrfMhS-lkp@intel.com> <20220706134523.00000555@Huawei.com>
-In-Reply-To: <20220706134523.00000555@Huawei.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 6 Jul 2022 13:30:59 -0700
-Message-ID: <CAKwvOdm9+UEXCepJGDzjNibYTss5joek-3FMC6K2Z7w1EPLdGQ@mail.gmail.com>
-Subject: Re: drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in
- 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal
- fields order: reset, channel, convst_channel, int_vref_uv, has_vref,
- has_vdrive, consider reordering the fields or addin...
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jul 6, 2022 at 5:45 AM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
->
->
-> >    Use -header-filter=3D.* to display errors from all non-system header=
-s. Use -system-headers to display errors from system headers as well.
-> >    21 warnings generated.
-> > >> drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct=
- ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields o=
-rder: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, co=
-nsider reordering the fields or adding explicit padding members [clang-anal=
-yzer-optin.performance.Padding]
-> >    struct ad7476_chip_info {
-> >    ~~~~~~~^~~~~~~~~~~~~~~~~~
-> >    drivers/iio/adc/ad7476.c:29:8: note: Excessive padding in 'struct ad=
-7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields orde=
-r: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consi=
-der reordering the fields or adding explicit padding members
-> >    struct ad7476_chip_info {
-> >    ~~~~~~~^~~~~~~~~~~~~~~~~~
-> > >> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct=
- ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields or=
-der: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reorde=
-ring the fields or adding explicit padding members [clang-analyzer-optin.pe=
-rformance.Padding]
-> >    struct ad7476_state {
->
-> For this one and I'm guessing some of the other IIO cases, if there is an=
-y way to suppress the warning where we have specific
-> alignments specified then that would be great. These are padded to ensure=
- the buffers are DMA safe.
+Hi Tong,
 
-I didn't see anything during a quick scan of:
-https://github.com/llvm/llvm-project/blob/main/clang/lib/StaticAnalyzer/Che=
-ckers/PaddingChecker.cpp#L73
-to disable this warning when it's a false positive.
+FYI, the error/warning still remains.
 
-Though
-https://clang.llvm.org/extra/clang-tidy/#suppressing-undesired-diagnostics
-mentions NOLINT.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f09069cde34dcd86f5ecf3a3139fd752020812f
+commit: dffe11e280a42c2501e5b0cdebd85a77f539bb05 riscv/vdso: Add support for time namespaces
+date:   9 months ago
+config: riscv-randconfig-r014-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070418.WugtuACs-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dffe11e280a42c2501e5b0cdebd85a77f539bb05
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dffe11e280a42c2501e5b0cdebd85a77f539bb05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
->
-> Thanks,
->
-> Jonathan
->
->
-> >    ~~~~~~~^~~~~~~~~~~~~~
-> >    drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad=
-7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order=
-: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reorderin=
-g the fields or adding explicit padding members
-> >    struct ad7476_state {
-> >    ~~~~~~~^~~~~~~~~~~~~~
-> >    Suppressed 19 warnings (7 in non-user code, 12 with check filters).
-> >    Use -header-filter=3D.* to display errors from all non-system header=
-s. Use -system-headers to display errors from system headers as well.
-> >    20 warnings generated.
-> >    drivers/iio/adc/ad7766.c:35:8: warning: Excessive padding in 'struct=
- ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: d=
-ata, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reorderi=
-ng the fields or adding explicit padding members [clang-analyzer-optin.perf=
-ormance.Padding]
-> >    struct ad7766 {
-> >    ~~~~~~~^~~~~~~~
-> >    drivers/iio/adc/ad7766.c:35:8: note: Excessive padding in 'struct ad=
-7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data=
-, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering =
-the fields or adding explicit padding members
-> >    struct ad7766 {
-> >    ~~~~~~~^~~~~~~~
-> >    Suppressed 19 warnings (7 in non-user code, 12 with check filters).
-> >    Use -header-filter=3D.* to display errors from all non-system header=
-s. Use -system-headers to display errors from system headers as well.
-> >    20 warnings generated.
-> >    drivers/iio/adc/ad7768-1.c:154:8: warning: Excessive padding in 'str=
-uct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields=
- order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock,=
- completion, samp_freq, consider reordering the fields or adding explicit p=
-adding members [clang-analyzer-optin.performance.Padding]
-> >    struct ad7768_state {
-> >    ~~~~~~~^~~~~~~~~~~~~~
-> >    drivers/iio/adc/ad7768-1.c:154:8: note: Excessive padding in 'struct=
- ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields or=
-der: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, co=
-mpletion, samp_freq, consider reordering the fields or adding explicit padd=
-ing members
-> >    struct ad7768_state {
-> >    ~~~~~~~^~~~~~~~~~~~~~
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
---=20
-Thanks,
-~Nick Desaulniers
+>> ld.lld: error: section .dynamic file range overlaps with .text
+   >>> .dynamic range is [0x710, 0x83F]
+   >>> .text range is [0x800, 0x175F]
+--
+>> ld.lld: error: section .text file range overlaps with _ftrace_branch
+   >>> .text range is [0x800, 0x175F]
+   >>> _ftrace_branch range is [0x840, 0x997]
+--
+>> ld.lld: error: section .dynamic virtual address range overlaps with .text
+   >>> .dynamic range is [0x710, 0x83F]
+   >>> .text range is [0x800, 0x175F]
+--
+>> ld.lld: error: section .text virtual address range overlaps with _ftrace_branch
+   >>> .text range is [0x800, 0x175F]
+   >>> _ftrace_branch range is [0x840, 0x997]
+--
+>> ld.lld: error: section .dynamic load address range overlaps with .text
+   >>> .dynamic range is [0x710, 0x83F]
+   >>> .text range is [0x800, 0x175F]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_branch
+   >>> .text range is [0x800, 0x175F]
+   >>> _ftrace_branch range is [0x840, 0x997]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_branch
+   >>> .text range is [0x800, 0x175F]
+   >>> _ftrace_branch range is [0x840, 0x997]
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> ld.lld: error: section .dynamic file range overlaps with .text
+   >>> .dynamic range is [0x710, 0x83F]
+   >>> .text range is [0x800, 0x175F]
+--
+>> ld.lld: error: section .text load address range overlaps with _ftrace_branch
+   >>> .text range is [0x800, 0x175F]
+   >>> _ftrace_branch range is [0x840, 0x997]
+   llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
