@@ -1,129 +1,89 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B99B666C
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 23:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657150705; x=1688686705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QAZsvJf1BerwqsqDWfz9Ex516FwclGK3+0CKzld2eyU=;
-  b=kvEv3/1OOt+k0Z4z5VdISLGb/ZWq7D5PZr7UFdWBNtMGLZhqImNuGjW4
-   CyCK3dJa7eQ8Fz+q4NYzOZ9KpGai1FrG49EQQxZlZI9gWDfZPy352iw7G
-   CZEzcpLwDz7gkmYW59st/pPDFn0Ju0+yzV8jD6uObnQy9NabfYfx37/US
-   J6EWU/4qYsdYfZiDMkHiVLzX5747g4mDHxjkJ/YQg61xDTLeVsRvYgNUE
-   SSQ6LJwmccUW0MfzGg46ZdC/YuF8jllmelYvXPhDbFx2na0FEcdOgyZrI
-   NeNDuixAvxfhY4/ES2zlBerjBQm+ypGhyBKzy26csUEHkC0Go61liNPqn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282643598"
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="282643598"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 16:38:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="593525909"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2022 16:38:15 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9Eb0-000LG5-Nu;
-	Wed, 06 Jul 2022 23:38:14 +0000
-Date: Thu, 7 Jul 2022 07:38:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Conor Dooley <mail@conchuod.ie>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Sudeep Holla <sudeep.holla@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Niklas Cassel <niklas.cassel@wdc.com>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Zong Li <zong.li@sifive.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Changbin Du <changbin.du@intel.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Philipp Tomsich <philipp.tomsich@vrull.eu>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Brice Goglin <Brice.Goglin@inria.fr>
-Subject: Re: [PATCH] riscv: arch-topology: fix default topology reporting
-Message-ID: <202207070728.MiQn5fv0-lkp@intel.com>
-References: <20220706184558.2557301-1-mail@conchuod.ie>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6912B6670
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 23:57:00 +0000 (UTC)
+Received: by mail-pf1-f202.google.com with SMTP id i21-20020aa79095000000b00528bd947f66so1294244pfa.18
+        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 16:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=k9hDQgqSg1c2GNzkRo9fr1J72XmUY4xT6POWi8tSVkY=;
+        b=b+veUf+iMso1W0ftcosbsD8+NgfUr189mS3pBVAnhKIcsdjKd5MsOnAeYW2GWJktDA
+         G8ia/rJSdXr7xfLbaGbUbUdfCLJ0ntBVijcDrT3CQbF5tkoUMYs6+B2A/JhKMH+d0XTq
+         ORmyIyn2MtusUg/rSGYPZmRPd7Pk1z2iVveXM6yq0ItEU4IDD9wqrflC9jXoHkBVRvzM
+         flgOFk0xah1QthCRP4KCx+DXAhj8hdueOKG6jffabcZwDAfsk08IhZVNpm1LouULdMN5
+         b/XVTfXHm3+LJS4tgIfp1FxM0m1t3zW/LIJhBvUi3ew3e7k/9dRl6380lkdDEBMq4bwm
+         BKFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=k9hDQgqSg1c2GNzkRo9fr1J72XmUY4xT6POWi8tSVkY=;
+        b=nLwiL2FVkooB4AHvoc7Yi1OCNoShEf+00TyLBz3/qOg+fwfDIHRV0zpzTU4BK0I8Jg
+         VzRVF01qTHx5WyWy5ix8wRlRzevPytxT3halnvC8+hhnkQjdYTbnixgGscMiGqBEBIlx
+         1OeFTxbPofucq7tPgvfjb/uLG8Dq1K4X3sst6KUDF4ZOGonONep/UBB15HieLerXQ3fE
+         K/CPriiCQSJ9WYjIbmTDVnVcPHVGhwqoUnBVXyQ4uO8Zjc1VgqQ5+waYRfEMDqdOy7HI
+         LORuHJgQvFw2U2dKca5mh+ibmUI3NB1Oj9hE7A15DWbfqCGptZfeKqNGm8w0W0DYe/f8
+         YyWg==
+X-Gm-Message-State: AJIora/A+Gdeg2pEv0Ktzw7R/w6YW+0hHtgZgtELfNz9BtjMKq4XmOnI
+	qikodGS8MzA5jp9FO1CL7sNZ2JE52iOYqOpXdA==
+X-Google-Smtp-Source: AGRyM1vIo1TA1ajKwpu+A4H7vkncJ06KptHjEuCXN0h6KsKXFUR1Mnw+ULsk3fWD1HDKgEsrB91/09YqM3y/Wxf+Tw==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:aab2:e000:4b5a:a767])
+ (user=justinstitt job=sendgmr) by 2002:a17:902:d544:b0:16b:d981:5c2e with
+ SMTP id z4-20020a170902d54400b0016bd9815c2emr23605823plf.22.1657151819813;
+ Wed, 06 Jul 2022 16:56:59 -0700 (PDT)
+Date: Wed,  6 Jul 2022 16:56:48 -0700
+Message-Id: <20220706235648.594609-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706184558.2557301-1-mail@conchuod.ie>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] net: rxrpc: fix clang -Wformat warning
+From: Justin Stitt <justinstitt@google.com>
+To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-afs@lists.infradead.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Conor,
+When building with Clang we encounter this warning:
+| net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
+| but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
+| _leave(" = %d [set %hx]", ret, y);
 
-I love your patch! Yet something to improve:
+y is a u32 but the format specifier is `%hx`. Going from unsigned int to
+short int results in a loss of data. This is surely not intended
+behavior. If it is intended, the warning should be suppressed through
+other means.
 
-[auto build test ERROR on b6f1f2fa2bddd69ff46a190b8120bd440fd50563]
+This patch should get us closer to the goal of enabling the -Wformat
+flag for Clang builds.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
-base:   b6f1f2fa2bddd69ff46a190b8120bd440fd50563
-config: riscv-randconfig-r042-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070728.MiQn5fv0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/824f4c3cb56ada865e6e3b14457c0582fa255cbf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
-        git checkout 824f4c3cb56ada865e6e3b14457c0582fa255cbf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ net/rxrpc/rxkad.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/riscv/kernel/topology.c:17:37: error: use of undeclared identifier 'cpu_topology'
-           struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-                                              ^
->> arch/riscv/kernel/topology.c:31:2: error: call to undeclared function 'update_siblings_masks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           update_siblings_masks(cpuid);
-           ^
-   2 errors generated.
-
-
-vim +/cpu_topology +17 arch/riscv/kernel/topology.c
-
-    14	
-    15	void store_cpu_topology(unsigned int cpuid)
-    16	{
-  > 17		struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-    18	
-    19		if (cpuid_topo->package_id != -1)
-    20			goto topology_populated;
-    21	
-    22		cpuid_topo->thread_id = -1;
-    23		cpuid_topo->core_id = cpuid;
-    24		cpuid_topo->package_id = cpu_to_node(cpuid);
-    25	
-    26		pr_debug("CPU%u: package %d core %d thread %d\n",
-    27			 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
-    28			 cpuid_topo->thread_id);
-    29	
-    30	topology_populated:
-  > 31		update_siblings_masks(cpuid);
-
+diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
+index 08aab5c01437..aa180464ec37 100644
+--- a/net/rxrpc/rxkad.c
++++ b/net/rxrpc/rxkad.c
+@@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call,
+ 		break;
+ 	}
+ 
+-	_leave(" = %d [set %hx]", ret, y);
++	_leave(" = %d [set %u]", ret, y);
+ 	return ret;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+
