@@ -1,87 +1,129 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16196665
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 23:09:14 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id p7-20020a25d807000000b0066e36989a90so7971741ybg.8
-        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 16:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=BL8nemdk5jEzjtFa4MSk1HVUJ0DaNKbCAoFg6fYn++s=;
-        b=bglLJQL0h0LHXKQkfXprS+IpuekCyezknrwX1b1oldcSMzxc5+EEJF3XGtp3A/3t0A
-         n+UK7hqnSo2sXYyAXnzGeqP5+z7VVWjBmiN77PQlDj3puZvNQR2CkJg+FZyoC0dzAQjZ
-         xLBRB1+8NZx7VNI4Jz+h2fcGfm34nzXCE5Q7gzTeFvc4X1LCLceKuet9sGBsWFYPOHKj
-         OpScw7YhRBAsM4+Z7ZZvHau/4fQPGNPWHheGQjbLFXTGAPmrQPmo1gMLc3NVP18LlLIT
-         GSc2YM+56q4+EPWoJ7rw7pUqpPEBwAbjI8S4g4/g52pqsd4QHGppIoZ/4YhFj5OYSTtp
-         cj2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=BL8nemdk5jEzjtFa4MSk1HVUJ0DaNKbCAoFg6fYn++s=;
-        b=TIgEl/rKf2PZy2ZlKbGPVY2++W2IS2X1EVoE4B6M2/cMcRdTooXWzsnGg8c6jQZ2u7
-         2QLCkbCu/7YdKC346J+LAsuQJcWZmShNYxyjIal5kB6M0ckoa4CGVNRie2teRE/yVcP2
-         WXLDeUFh1Rahd3XjSfjfOx6+bmfW7R12h4g1dyVvn5IPM/XWZjNX0RLalqrhLcA3DXTi
-         /hqzQuJDSplINBH4GLw6EOipyiXB7VNrLfx17QItxzu5+FZYuFnzQ5AiK4Lj3SLfrq8P
-         VbF/zZyu6SpSOMWXenR1EB5uBM+ASBCjN2V8X4BggPiPnoFsJOmTTbwETcpsRCBiErFy
-         ZZhQ==
-X-Gm-Message-State: AJIora/3eYKe7lWsVc7tRTSFhYds1Sfc/FzuagAxyo8WuBjxNiguwtQI
-	zv4Hz/KWblSXz1Ie5L7oB8fb0U+WY8TP3JoDVA==
-X-Google-Smtp-Source: AGRyM1txsNJpY89zwG+BQrlq4nx6igRgprquPYja0YIDI7rQxI9toEk3RzABG7zH+vtUrGf6FLMYfUagNFNB7tZ6Kw==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:aab2:e000:4b5a:a767])
- (user=justinstitt job=sendgmr) by 2002:a0d:d387:0:b0:31c:d2e1:9277 with SMTP
- id v129-20020a0dd387000000b0031cd2e19277mr11472480ywd.421.1657148953698; Wed,
- 06 Jul 2022 16:09:13 -0700 (PDT)
-Date: Wed,  6 Jul 2022 16:08:33 -0700
-Message-Id: <20220706230833.535238-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B99B666C
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 23:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657150705; x=1688686705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QAZsvJf1BerwqsqDWfz9Ex516FwclGK3+0CKzld2eyU=;
+  b=kvEv3/1OOt+k0Z4z5VdISLGb/ZWq7D5PZr7UFdWBNtMGLZhqImNuGjW4
+   CyCK3dJa7eQ8Fz+q4NYzOZ9KpGai1FrG49EQQxZlZI9gWDfZPy352iw7G
+   CZEzcpLwDz7gkmYW59st/pPDFn0Ju0+yzV8jD6uObnQy9NabfYfx37/US
+   J6EWU/4qYsdYfZiDMkHiVLzX5747g4mDHxjkJ/YQg61xDTLeVsRvYgNUE
+   SSQ6LJwmccUW0MfzGg46ZdC/YuF8jllmelYvXPhDbFx2na0FEcdOgyZrI
+   NeNDuixAvxfhY4/ES2zlBerjBQm+ypGhyBKzy26csUEHkC0Go61liNPqn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282643598"
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="282643598"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 16:38:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
+   d="scan'208";a="593525909"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2022 16:38:15 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9Eb0-000LG5-Nu;
+	Wed, 06 Jul 2022 23:38:14 +0000
+Date: Thu, 7 Jul 2022 07:38:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Conor Dooley <mail@conchuod.ie>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Niklas Cassel <niklas.cassel@wdc.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Zong Li <zong.li@sifive.com>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Changbin Du <changbin.du@intel.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Philipp Tomsich <philipp.tomsich@vrull.eu>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [PATCH] riscv: arch-topology: fix default topology reporting
+Message-ID: <202207070728.MiQn5fv0-lkp@intel.com>
+References: <20220706184558.2557301-1-mail@conchuod.ie>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] net: l2tp: fix clang -Wformat warning
-From: Justin Stitt <justinstitt@google.com>
-To: James Chapman <jchapman@katalix.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706184558.2557301-1-mail@conchuod.ie>
 
-When building with clang we encounter this warning:
-| net/l2tp/l2tp_ppp.c:1557:6: error: format specifies type 'unsigned
-| short' but the argument has type 'u32' (aka 'unsigned int')
-| [-Werror,-Wformat] session->nr, session->ns,
+Hi Conor,
 
-Both session->nr and session->ns are of type u32. The format specifier
-previously used is `%hu` which would truncate our unsigned integer from
-32 to 16 bits. This doesn't seem like intended behavior, if it is then
-perhaps we need to consider suppressing the warning with pragma clauses.
+I love your patch! Yet something to improve:
 
-This patch should get us closer to the goal of enabling the -Wformat
-flag for Clang builds.
+[auto build test ERROR on b6f1f2fa2bddd69ff46a190b8120bd440fd50563]
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- net/l2tp/l2tp_ppp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
+base:   b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+config: riscv-randconfig-r042-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070728.MiQn5fv0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/824f4c3cb56ada865e6e3b14457c0582fa255cbf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Conor-Dooley/riscv-arch-topology-fix-default-topology-reporting/20220707-024856
+        git checkout 824f4c3cb56ada865e6e3b14457c0582fa255cbf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
-index 8be1fdc68a0b..db2e584c625e 100644
---- a/net/l2tp/l2tp_ppp.c
-+++ b/net/l2tp/l2tp_ppp.c
-@@ -1553,7 +1553,7 @@ static void pppol2tp_seq_session_show(struct seq_file *m, void *v)
- 		   session->lns_mode ? "LNS" : "LAC",
- 		   0,
- 		   jiffies_to_msecs(session->reorder_timeout));
--	seq_printf(m, "   %hu/%hu %ld/%ld/%ld %ld/%ld/%ld\n",
-+	seq_printf(m, "   %u/%u %ld/%ld/%ld %ld/%ld/%ld\n",
- 		   session->nr, session->ns,
- 		   atomic_long_read(&session->stats.tx_packets),
- 		   atomic_long_read(&session->stats.tx_bytes),
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/topology.c:17:37: error: use of undeclared identifier 'cpu_topology'
+           struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+                                              ^
+>> arch/riscv/kernel/topology.c:31:2: error: call to undeclared function 'update_siblings_masks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           update_siblings_masks(cpuid);
+           ^
+   2 errors generated.
+
+
+vim +/cpu_topology +17 arch/riscv/kernel/topology.c
+
+    14	
+    15	void store_cpu_topology(unsigned int cpuid)
+    16	{
+  > 17		struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
+    18	
+    19		if (cpuid_topo->package_id != -1)
+    20			goto topology_populated;
+    21	
+    22		cpuid_topo->thread_id = -1;
+    23		cpuid_topo->core_id = cpuid;
+    24		cpuid_topo->package_id = cpu_to_node(cpuid);
+    25	
+    26		pr_debug("CPU%u: package %d core %d thread %d\n",
+    27			 cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
+    28			 cpuid_topo->thread_id);
+    29	
+    30	topology_populated:
+  > 31		update_siblings_masks(cpuid);
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
