@@ -1,117 +1,193 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8C17C
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 10:09:46 +0000 (UTC)
-Received: by mail-qk1-f176.google.com with SMTP id c137so10657313qkg.5
-        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 03:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kx69JRXRHaP9bPHWeCJjLQ/KjVRjWJF5OqT3P9q0cBs=;
-        b=cN+PTUc1vBsKMPiJWtCXGX+p7d16+K/IdLRsQMRQ4S0EmYNg4OYYM1vYO41oTppJkA
-         Dtvg3BusJhAY9Q1dZDNcqnvEmxOw51jH6qX4bfiQFAurQXc0J/6OwfxT6kneTT0eLNvF
-         +mIIl9F3BUo+/LOGjZEDq2rc/KSkh1myRAzZ5OInrR1EsexjEcs1Xi6arNllgOrHVe6a
-         +D9oI3eKbpNmIhTmKgXkujs1Ynk4DJyL6VS4om8jzqbSdexv5y49ZP3Yjln46kNe58kC
-         F9D1SWhIfh2c4dWfHuXnJKttsues9uOdEzGaDj7pceemt7UFpf/srKib5c9Yoge8Wruj
-         Czsw==
-X-Gm-Message-State: AJIora9uaKXxvDE81oikz3zu6fxpz5JKKVHn5xiLvPIvDr4iIpXSst+Y
-	3XsQheI932JTVExaGLopH4tu4Zc2Uw32PDTT
-X-Google-Smtp-Source: AGRyM1vc16cg9Vrm35VcC/LmyEohvEjabEuy79EcYEsP4sGHWhb8VNKolCLY9D1UhVwd2YQrGkC7Gw==
-X-Received: by 2002:a05:620a:1b83:b0:6af:483d:aed4 with SMTP id dv3-20020a05620a1b8300b006af483daed4mr26860955qkb.5.1657102185143;
-        Wed, 06 Jul 2022 03:09:45 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id v123-20020a379381000000b006a6c230f5e0sm21234359qkd.31.2022.07.06.03.09.44
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 03:09:44 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31bf3656517so134420977b3.12
-        for <llvm@lists.linux.dev>; Wed, 06 Jul 2022 03:09:44 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr10209449ywb.502.1657102184115; Wed, 06
- Jul 2022 03:09:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6C62C9E
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 10:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657104937; x=1688640937;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RqQ3XulD8QWql1k3Di0ZQs3oNyteJnyER/INy0RNQVg=;
+  b=B5r+1kbw/oMmTep0nMnwSMeQcD6xwE7L7fdfP9LbJwF9/8oyjCfbzekO
+   uKGjiLQAlkuYZVRLN1IUKHZKI1Pm7EFqnsRFauBHErhiBGIZ6bj728BYW
+   H7U2IJs+DD3e/nOCk1mi4s3LRSBB+rCl2Dj+IpvU4vSxCscthg+1E0mUC
+   OMSq1nXqov3JFbrpyYF99blYpNb61tzeS7jMZQg1M86w4BWtNk2xapObi
+   ffleelHUCdKaFM00wwcCX7KW2ClMzDrC9u2JRSvD8sPP4Gki1CDgnQkl7
+   WHmNm5ofmDbqnEroIgSs7iWvbcpFYtWufCV7oiSXFu44dF2JT+qcnl49j
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="272501383"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="272501383"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 03:54:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="593289353"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2022 03:53:58 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o92fN-000KTh-Di;
+	Wed, 06 Jul 2022 10:53:57 +0000
+Date: Wed, 6 Jul 2022 18:53:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhongjun Tan <hbut_tan@163.com>, perex@perex.cz, tiwai@suse.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	Zhongjun Tan <tanzhongjun@coolpad.com>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix unsigned expression compared with
+ zero
+Message-ID: <202207061810.ztYTpLH7-lkp@intel.com>
+References: <20220706070627.16764-1-hbut_tan@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com> <20220624121313.2382500-4-alexandr.lobakin@intel.com>
-In-Reply-To: <20220624121313.2382500-4-alexandr.lobakin@intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 6 Jul 2022 12:09:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWB8CjbOarttKSaY2=kASbqU2UBCe9bpU17=MdZP_rGUA@mail.gmail.com>
-Message-ID: <CAMuHMdWB8CjbOarttKSaY2=kASbqU2UBCe9bpU17=MdZP_rGUA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/9] bitops: unify non-atomic bitops prototypes across architectures
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Matt Turner <mattst88@gmail.com>, Brian Cain <bcain@quicinc.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	"David S. Miller" <davem@davemloft.net>, Kees Cook <keescook@chromium.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>, 
-	Tony Luck <tony.luck@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	kernel test robot <lkp@intel.com>, alpha <linux-alpha@vger.kernel.org>, 
-	"open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>, 
-	"linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>, linux-m68k <linux-m68k@lists.linux-m68k.org>, 
-	Linux-sh list <linux-sh@vger.kernel.org>, sparclinux <sparclinux@vger.kernel.org>, 
-	Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706070627.16764-1-hbut_tan@163.com>
 
-On Fri, Jun 24, 2022 at 2:13 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
-> Currently, there is a mess with the prototypes of the non-atomic
-> bitops across the different architectures:
->
-> ret     bool, int, unsigned long
-> nr      int, long, unsigned int, unsigned long
-> addr    volatile unsigned long *, volatile void *
->
-> Thankfully, it doesn't provoke any bugs, but can sometimes make
-> the compiler angry when it's not handy at all.
-> Adjust all the prototypes to the following standard:
->
-> ret     bool                            retval can be only 0 or 1
-> nr      unsigned long                   native; signed makes no sense
-> addr    volatile unsigned long *        bitmaps are arrays of ulongs
->
-> Next, some architectures don't define 'arch_' versions as they don't
-> support instrumentation, others do. To make sure there is always the
-> same set of callables present and to ease any potential future
-> changes, make them all follow the rule:
->  * architecture-specific files define only 'arch_' versions;
->  * non-prefixed versions can be defined only in asm-generic files;
-> and place the non-prefixed definitions into a new file in
-> asm-generic to be included by non-instrumented architectures.
->
-> Finally, add some static assertions in order to prevent people from
-> making a mess in this room again.
-> I also used the %__always_inline attribute consistently, so that
-> they always get resolved to the actual operations.
->
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Zhongjun,
 
->  arch/m68k/include/asm/bitops.h                | 49 ++++++++++-----
+Thank you for the patch! Perhaps something to improve:
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on linus/master v5.19-rc5 next-20220705]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Gr{oetje,eeting}s,
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhongjun-Tan/ALSA-usb-audio-Fix-unsigned-expression-compared-with-zero/20220706-150825
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: hexagon-randconfig-r045-20220703 (https://download.01.org/0day-ci/archive/20220706/202207061810.ztYTpLH7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/10d09dc3ad3a9b823d9097a68058698be90c7a74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhongjun-Tan/ALSA-usb-audio-Fix-unsigned-expression-compared-with-zero/20220706-150825
+        git checkout 10d09dc3ad3a9b823d9097a68058698be90c7a74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/usb/
 
-                        Geert
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+All warnings (new ones prefixed by >>):
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>> sound/usb/pcm.c:782:11: warning: comparison of distinct pointer types ('typeof (rmin) *' (aka 'unsigned int *') and 'typeof (r) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                           rmin = min(rmin, r);
+                                  ^~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> sound/usb/pcm.c:783:11: warning: comparison of distinct pointer types ('typeof (rmax) *' (aka 'unsigned int *') and 'typeof (r) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                           rmax = max(rmax, r);
+                                  ^~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   sound/usb/pcm.c:791:12: warning: comparison of distinct pointer types ('typeof (rmin) *' (aka 'unsigned int *') and 'typeof (r) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                                   rmin = min(rmin, r);
+                                          ^~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   sound/usb/pcm.c:792:12: warning: comparison of distinct pointer types ('typeof (rmax) *' (aka 'unsigned int *') and 'typeof (r) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                                   rmax = max(rmax, r);
+                                          ^~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +782 sound/usb/pcm.c
+
+7726dce14c5e7e Takashi Iwai 2020-11-23  761  
+e5779998bf8b70 Daniel Mack  2010-03-04  762  static int hw_rule_rate(struct snd_pcm_hw_params *params,
+e5779998bf8b70 Daniel Mack  2010-03-04  763  			struct snd_pcm_hw_rule *rule)
+e5779998bf8b70 Daniel Mack  2010-03-04  764  {
+e5779998bf8b70 Daniel Mack  2010-03-04  765  	struct snd_usb_substream *subs = rule->private;
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  766  	struct snd_usb_audio *chip = subs->stream->chip;
+cab941b7e5cf05 Takashi Iwai 2020-11-23  767  	const struct audioformat *fp;
+e5779998bf8b70 Daniel Mack  2010-03-04  768  	struct snd_interval *it = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
+10d09dc3ad3a9b Zhongjun Tan 2022-07-06  769  	unsigned int rmin, rmax;
+10d09dc3ad3a9b Zhongjun Tan 2022-07-06  770  	int i, r;
+e5779998bf8b70 Daniel Mack  2010-03-04  771  
+e5779998bf8b70 Daniel Mack  2010-03-04  772  	hwc_debug("hw_rule_rate: (%d,%d)\n", it->min, it->max);
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  773  	rmin = UINT_MAX;
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  774  	rmax = 0;
+88766f04c4142c Eldad Zack   2013-04-03  775  	list_for_each_entry(fp, &subs->fmt_list, list) {
+e5779998bf8b70 Daniel Mack  2010-03-04  776  		if (!hw_check_valid_format(subs, params, fp))
+e5779998bf8b70 Daniel Mack  2010-03-04  777  			continue;
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  778  		r = snd_usb_endpoint_get_clock_rate(chip, fp->clock);
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  779  		if (r > 0) {
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  780  			if (!snd_interval_test(it, r))
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  781  				continue;
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29 @782  			rmin = min(rmin, r);
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29 @783  			rmax = max(rmax, r);
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  784  			continue;
+4e7cf1fbb34ecb Takashi Iwai 2021-09-29  785  		}
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  786  		if (fp->rate_table && fp->nr_rates) {
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  787  			for (i = 0; i < fp->nr_rates; i++) {
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  788  				r = fp->rate_table[i];
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  789  				if (!snd_interval_test(it, r))
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  790  					continue;
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  791  				rmin = min(rmin, r);
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  792  				rmax = max(rmax, r);
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  793  			}
+e5779998bf8b70 Daniel Mack  2010-03-04  794  		} else {
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  795  			rmin = min(rmin, fp->rate_min);
+bc4e94aa8e72e7 Takashi Iwai 2020-11-23  796  			rmax = max(rmax, fp->rate_max);
+e5779998bf8b70 Daniel Mack  2010-03-04  797  		}
+e5779998bf8b70 Daniel Mack  2010-03-04  798  	}
+e5779998bf8b70 Daniel Mack  2010-03-04  799  
+7726dce14c5e7e Takashi Iwai 2020-11-23  800  	return apply_hw_params_minmax(it, rmin, rmax);
+e5779998bf8b70 Daniel Mack  2010-03-04  801  }
+e5779998bf8b70 Daniel Mack  2010-03-04  802  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
