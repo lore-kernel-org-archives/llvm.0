@@ -1,169 +1,71 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633336641
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 21:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBB66646;
+	Wed,  6 Jul 2022 22:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657143390; x=1688679390;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dLbXioWPHahHmJvm0LlbnXLettEnRRGEgB5M2kkP+hk=;
-  b=hGJtwTepQ09macL22bm9LXNGYYWsERd+ZsA6ZKxyB3LNJPITjj2qrjrQ
-   ni5T/0mFt1Orshm5tN55bZp90UZiFF/zKYhK9Z51GMDDw4r2rHIVf//QL
-   KLg19/v/rlWZ7rSbyYKjXRkGrSYo0hOF4B+VXAtcZmWokgvjgZysQmytj
-   CrKo9lQfxEDffZMBUYAwvZG7DPH6MNxuJlOhfi35tQxfOrYl8cg3stnGn
-   LxC/LXt3EtFMJMnqP6ulsyfHcaWTq1Kujab5rosfQo3A57k13Q+3zqRm8
-   +kZdg0+7tVFtg0VdeTgJXisLV09r6RgbGUMPWuW/y1Ym0tR7n6rk4g1sg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="263659532"
+  t=1657146480; x=1688682480;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Vleb0k6acAvZjo7qEApfQ8FJmwV6hNoP1hTpCH2VGUk=;
+  b=P4tcQC/SuS6YykZByJzTQh9PdHsYugrIYk0xPzs56gdJqYqhNPZHIxXE
+   RZoglXc5mwwZqTciTiOs1yFlLfjS2xLbwZ8TxC5lPaqC0qa06iXUq2Nfp
+   NJcGxK9WT0eXlrRxJmZOfNK0SB4Aq7WhfRwCwYrM1j4puxa5UWE5hexEp
+   d17aXVeJ/Na4SHpKEgiOF97ml2yVVfTl5JMOTPVEhtlWZERVpmLqaebq+
+   mNbCe7+PoWHhsIICGX/erIi0ghpam7xkcojee4stK95NUXD8QXTzGj7HM
+   +LhWnVOR3+VQKyMstaK0DqsX9LjfDwOrOqmWKTaElL0Z3YDcf45kp/SEe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345570819"
 X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="263659532"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 14:36:29 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="345570819"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:27:59 -0700
 X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="620501191"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2022 14:36:26 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9Ch7-000L4A-PV;
-	Wed, 06 Jul 2022 21:36:25 +0000
-Date: Thu, 7 Jul 2022 05:35:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_22 20/21] kernel/bpf/syscall.c:3306:7: error:
- call to undeclared function 'bpf_tramp_id_alloc'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202207070530.sgflrE6n-lkp@intel.com>
+   d="scan'208";a="696286196"
+Received: from ffsotto-mobl.amr.corp.intel.com (HELO [10.209.100.19]) ([10.209.100.19])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 15:27:58 -0700
+Message-ID: <842b718f-8207-1565-3373-61098a4c2d33@intel.com>
+Date: Wed, 6 Jul 2022 15:25:51 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when
+ cross compiling with clang
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Daniel Kolesa <daniel@octaforge.org>, linux-kernel@vger.kernel.org,
+ patches@lists.linux.dev, llvm@lists.linux.dev, stable@vger.kernel.org
+References: <20220617180845.2788442-1-nathan@kernel.org>
+From: Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220617180845.2788442-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_22
-head:   1d891c46bb689a24985cea58f4eddb053d6b1331
-commit: 70d8bfe245ee929757e1dcdf280f9e27786047a9 [20/21] bpf: Add support for tracing multi link
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220707/202207070530.sgflrE6n-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=70d8bfe245ee929757e1dcdf280f9e27786047a9
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tramp_22
-        git checkout 70d8bfe245ee929757e1dcdf280f9e27786047a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 6/17/22 11:08, Nathan Chancellor wrote:
+> When clang is invoked without a '--target' flag, code is generated for
+> the default target, which is usually the host (it is configurable via
+> cmake). As a result, the has-stack-protector scripts will generate code
+> for the default target but check for x86 specific segment registers,
+> which cannot succeed if the default target is not x86.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I guess the real root cause here is the direct use of '$(CC)' without
+any other flags.  Adding '$(CLANG_FLAGS)' seems like a pretty normal
+fix, like in scripts/Kconfig.include.
 
-All errors (new ones prefixed by >>):
+I suspect there's another one of these here:
 
-   kernel/bpf/syscall.c:3128:26: error: field has incomplete type 'struct bpf_tramp_attach'
-           struct bpf_tramp_attach attach;
-                                   ^
-   kernel/bpf/syscall.c:3128:9: note: forward declaration of 'struct bpf_tramp_attach'
-           struct bpf_tramp_attach attach;
-                  ^
-   kernel/bpf/syscall.c:3136:15: error: call to undeclared function 'bpf_trampoline_detach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           WARN_ON_ONCE(bpf_trampoline_detach(&tr_link->attach));
-                        ^
-   kernel/bpf/syscall.c:3136:15: note: did you mean 'bpf_trampoline_get'?
-   include/linux/bpf.h:993:38: note: 'bpf_trampoline_get' declared here
-   static inline struct bpf_trampoline *bpf_trampoline_get(u64 key,
-                                        ^
->> kernel/bpf/syscall.c:3306:7: error: call to undeclared function 'bpf_tramp_id_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           id = bpf_tramp_id_alloc(cnt);
-                ^
-   kernel/bpf/syscall.c:3306:5: warning: incompatible integer to pointer conversion assigning to 'struct bpf_tramp_id *' from 'int' [-Wint-conversion]
-           id = bpf_tramp_id_alloc(cnt);
-              ^ ~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/syscall.c:3347:8: error: call to undeclared function 'bpf_trampoline_attach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = bpf_trampoline_attach(&link->attach);
-                 ^
-   1 warning and 4 errors generated.
+	arch/x86/um/vdso/Makefile:      cmd_vdso = $(CC) -nostdlib -o $@
 
-
-vim +/bpf_tramp_id_alloc +3306 kernel/bpf/syscall.c
-
-  3290	
-  3291	static int bpf_tracing_multi_attach(struct bpf_prog *prog,
-  3292					    const union bpf_attr *attr)
-  3293	{
-  3294		void __user *uids = u64_to_user_ptr(attr->link_create.tracing_multi.btf_ids);
-  3295		u32 cnt_size, cnt = attr->link_create.tracing_multi.btf_ids_cnt;
-  3296		struct bpf_tracing_multi_link *link = NULL;
-  3297		struct bpf_link_primer link_primer;
-  3298		struct bpf_tramp_id *id = NULL;
-  3299		int err = -EINVAL;
-  3300	
-  3301		if (check_multi_prog_type(prog))
-  3302			return -EINVAL;
-  3303		if (!cnt || !uids)
-  3304			return -EINVAL;
-  3305	
-> 3306		id = bpf_tramp_id_alloc(cnt);
-  3307		if (!id)
-  3308			return -ENOMEM;
-  3309	
-  3310		err = -EFAULT;
-  3311		cnt_size = cnt * sizeof(id->id[0]);
-  3312		if (copy_from_user(id->id, uids, cnt_size))
-  3313			goto out_free_id;
-  3314	
-  3315		id->cnt = cnt;
-  3316		id->obj_id = btf_obj_id(prog->aux->attach_btf);
-  3317	
-  3318		/* Sort user provided BTF ids, so we can use memcmp
-  3319		 * and bsearch on top of it later.
-  3320		 */
-  3321		sort(id->id, cnt, sizeof(u32), btf_ids_cmp, NULL);
-  3322	
-  3323		err = bpf_tramp_id_resolve(id, prog);
-  3324		if (err)
-  3325			goto out_free_id;
-  3326	
-  3327		link = kzalloc(sizeof(*link), GFP_KERNEL);
-  3328		if (!link) {
-  3329			err = -ENOMEM;
-  3330			goto out_free_id;
-  3331		}
-  3332	
-  3333		bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING_MULTI,
-  3334			      &bpf_tracing_multi_link_lops, prog);
-  3335		link->attach_type = prog->expected_attach_type;
-  3336	
-  3337		err = bpf_link_prime(&link->link, &link_primer);
-  3338		if (err) {
-  3339			kfree(link);
-  3340			goto out_free_id;
-  3341		}
-  3342	
-  3343		link->attach.id = id;
-  3344		link->attach.tp.cookie = 0;
-  3345		link->attach.tp.prog = prog;
-  3346	
-  3347		err = bpf_trampoline_attach(&link->attach);
-  3348		if (err) {
-  3349			bpf_link_cleanup(&link_primer);
-  3350			goto out_free_id;
-  3351		}
-  3352		return bpf_link_settle(&link_primer);
-  3353	out_free_id:
-  3354		kfree(id);
-  3355		return err;
-  3356	}
-  3357	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+but I wouldn't be surprised if UML doesn't work with clang in the first
+place.
