@@ -1,43 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658E07C
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 20:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657138465; x=1688674465;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y+zu+bNJkg6ERwDMAeYKfWr5BOgucgOXpwz3moCHz0U=;
-  b=A64nGUn9+/L6Nmab2rxe+l7uyU2KzPl6QYn1pf7gRLyZTAGKhKE7UYVJ
-   uP7hjqMeBGvdcvBWbj+i2NYsVVQhGWxs7PZs+h6lIwkBtx4vnvN5/VCYj
-   bcsTU3dv9jfpIhSnNVhFs9I4NaQ3C8Xwwr7xbIG4KqnNbUzyAFkb/kN9W
-   EvP6CKlxOCssZylu5JMDLIXtbRoP3KfbUu3DrOiH31GoZR1dtaqGZVF0g
-   WdEhSnALDYQAsEmhZkt0uyALaQJYWYuMrTiZc7qTR7lRL2uoJGeMVgulr
-   XSQNca3tslpgah+GtgQz44bcyT4kU9AD0RVnP0nguj11Zs8xhyaFkX+wa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282610627"
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="282610627"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 13:14:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
-   d="scan'208";a="696251407"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Jul 2022 13:14:23 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9BPi-000KzJ-MX;
-	Wed, 06 Jul 2022 20:14:22 +0000
-Date: Thu, 7 Jul 2022 04:13:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 26/32] arch/arm64/kvm/mmu.c:789:55:
- warning: incompatible pointer to integer conversion initializing 'gfp_t'
- (aka 'unsigned int') with an expression of type 'void *'
-Message-ID: <202207070443.W7X0K87t-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09BB5386
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 20:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F2AC3411C;
+	Wed,  6 Jul 2022 20:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657139424;
+	bh=+bxEZYRjwCtdjQxlGCPZhasZxgspOrKS4aucMwd9zXA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l7QXGv/2N8Smvz3C+Mf2o9JIBlzd9nokuL/p0cCAQbvYQORQ1Yx9gTMXyNnBEiYSb
+	 Vm/2OCv1W1ptjpn49guZfhuR38fOb0onjFnYB5S0yZLfheZeWAfh92g5rrTByZYiqB
+	 5ABeRnIgauO2rw19gf6UjL0J+a5v/hDRcshn2X2RkhOhmwhtWO1I8H6BBQ8cl3CoVV
+	 ufSDq7kZzCqGfvYso0R/xhKNNvbhq2zWvjIyBIoJxEPNd3WDTkbv+U8O5o/V0Iis4t
+	 w2hXm+CgvhJLy6q+r5DCLHkyHHUeTbl/ukFpXRorZPpruYh7zEf3Y1XFkz3rmgjPWn
+	 +rraPHksubWGg==
+Date: Wed, 6 Jul 2022 13:30:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+	Stylon Wang <stylon.wang@amd.com>, Alan Liu <HaoPing.Liu@amd.com>,
+	"Leo (Sunpeng) Li" <Sunpeng.Li@amd.com>,
+	Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+	Qingqing Zhuo <qingqing.zhuo@amd.com>, llvm@lists.linux.dev,
+	Roman Li <roman.li@amd.com>,
+	amd-gfx list <amd-gfx@lists.freedesktop.org>,
+	Solomon Chiu <solomon.chiu@amd.com>, Jerry Zuo <jerry.zuo@amd.com>,
+	Aurabindo Pillai <Aurabindo.Pillai@amd.com>,
+	Alvin Lee <Alvin.Lee2@amd.com>,
+	"Kotarac, Pavle" <pavle.kotarac@amd.com>,
+	Wayne Lin <wayne.lin@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+	"Wentland, Harry" <Harry.Wentland@amd.com>,
+	"Gutierrez, Agustin" <agustin.gutierrez@amd.com>,
+	"Mahfooz, Hamza" <hamza.mahfooz@amd.com>
+Subject: Re: [PATCH 02/40] drm/amd/display: Add SubVP required code
+Message-ID: <YsXw3a1LP++ESlw/@dev-arch.thelio-3990X>
+References: <20220630191322.909650-1-Rodrigo.Siqueira@amd.com>
+ <20220630191322.909650-3-Rodrigo.Siqueira@amd.com>
+ <YsXNPayfiUGS67i0@dev-arch.thelio-3990X>
+ <CADnq5_OO0m2jP_2EpOfmULM+s-WeWt3ND_Xt+yAOku669rf6pA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,95 +47,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CADnq5_OO0m2jP_2EpOfmULM+s-WeWt3ND_Xt+yAOku669rf6pA@mail.gmail.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   25efea788788c9750502faf4bee88cdd48418ba2
-commit: 7e96535967c074ab03f14be95023f252274c5ee2 [26/32] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-randconfig-r025-20220706 (https://download.01.org/0day-ci/archive/20220707/202207070443.W7X0K87t-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/avpatel/linux/commit/7e96535967c074ab03f14be95023f252274c5ee2
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 7e96535967c074ab03f14be95023f252274c5ee2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+On Wed, Jul 06, 2022 at 03:38:57PM -0400, Alex Deucher wrote:
+> On Wed, Jul 6, 2022 at 1:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 03:12:44PM -0400, Rodrigo Siqueira wrote:
+> > > From: Alvin Lee <Alvin.Lee2@amd.com>
+> > >
+> > > This commit enables the SubVP feature. To achieve that, we need to:
+> > >
+> > > - Don't force p-state disallow on SubVP (can't block dummy p-state)
+> > > - Send calculated watermark to DMCUB for SubVP
+> > > - Adjust CAB mode message to PMFW
+> > > - Add a proper locking sequence for SubVP
+> > > - Various fixes to SubVP static analysis and determining SubVP config
+> > > - Currently SubVP not supported with pipe split so merge all pipes
+> > >   before setting up SubVp
+> > >
+> > > Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+> > > Acked-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> > > Acked-by: Alan Liu <HaoPing.Liu@amd.com>
+> > > Signed-off-by: Alvin Lee <Alvin.Lee2@amd.com>
+> >
+> > This patch is now in linux-next as commit 85f4bc0c333c
+> > ("drm/amd/display: Add SubVP required code"), where it causes build
+> > failures when building for arm64 with both Clang and GCC (see bisect log
+> > below).
+> >
+> > Clang shows errors during modpost:
+> >
+> > ERROR: modpost: "__floatunsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__divdf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "fma" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__adddf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__fixdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__muldf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__floatsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> > ERROR: modpost: "__fixunsdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> >
+> 
+> I think the attached patch may fix this.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Indeed, I tested both arm64 and riscv:
 
-All warnings (new ones prefixed by >>):
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
->> arch/arm64/kvm/mmu.c:789:55: warning: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
-           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-                                                                ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   1 warning generated.
+> > GCC shows errors along the lines of:
+> >
+> > In function 'populate_subvp_cmd_pipe_info',
+> >     inlined from 'dc_dmub_setup_subvp_dmub_command' at /home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:675:5:
+> > /home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:603:91: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
+> >   603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
+> >       |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+> >   604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
+> >       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > /home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:604:63: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
+> >   603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
+> >       |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
+> >       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+> > /home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:602:72: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
+> >   602 |         pipe_data->pipe_config.subvp_data.prefetch_to_mall_start_lines =
+> >       |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+> >   603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
+> >       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
+> >       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   605 |                         (double)phantom_timing->h_total;
+> >       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > I initially reproduced this with Fedora's configuration [1] but it
+> > appears that allmodconfig should show it as well. Our CI also shows
+> > problems for ARCH=riscv allmodconfig [2].
+> >
+> > I am happy to test patches as necessary.
+> >
+> > [1]: https://src.fedoraproject.org/rpms/kernel/raw/rawhide/f/kernel-aarch64-fedora.config
+> > [2]: https://builds.tuxbuild.com/2BZS5HPSuDdoMFw6mxjG2ZmT441/build.log
+> >
+> > Cheers,
+> > Nathan
+> >
+> > # bad: [088b9c375534d905a4d337c78db3b3bfbb52c4a0] Add linux-next specific files for 20220706
+> > # good: [e35e5b6f695d241ffb1d223207da58a1fbcdff4b] Merge tag 'xsa-5.19-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
+> > git bisect start '088b9c375534d905a4d337c78db3b3bfbb52c4a0' 'e35e5b6f695d241ffb1d223207da58a1fbcdff4b'
+> > # good: [1a4255ede07a967e57115b54da5bd4b571d22a8c] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm/drm-misc
+> > git bisect good 1a4255ede07a967e57115b54da5bd4b571d22a8c
+> > # bad: [756b44529e2ab179e4dd6f6358b5c351e1bbe5d3] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+> > git bisect bad 756b44529e2ab179e4dd6f6358b5c351e1bbe5d3
+> > # bad: [f26873a2fc786251765db3e0ced8e1424b862059] next-20220705/sound-asoc
+> > git bisect bad f26873a2fc786251765db3e0ced8e1424b862059
+> > # good: [fc34ece41f7183d522d15dc4189d8df6e8e23737] ASoC: Refactor non_legacy_dai_naming flag
+> > git bisect good fc34ece41f7183d522d15dc4189d8df6e8e23737
+> > # good: [3d313f09f31490cec9d5251b59adeb6542c944cc] drm/fourcc: fix integer type usage in uapi header
+> > git bisect good 3d313f09f31490cec9d5251b59adeb6542c944cc
+> > # bad: [a41afb357f09cde0714db9d590458c7bb6d90ca2] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm-intel
+> > git bisect bad a41afb357f09cde0714db9d590458c7bb6d90ca2
+> > # bad: [88ef4c5bb36bf60b317b74d8652c7766c9272a7e] drm/amd/display: Apply ODM 2:1 policy for single display configuration
+> > git bisect bad 88ef4c5bb36bf60b317b74d8652c7766c9272a7e
+> > # good: [ff15cea338d2c78e0086d55c8a9dd637a5dd3ccc] drm/amd/display: expose additional modifier for DCN32/321
+> > git bisect good ff15cea338d2c78e0086d55c8a9dd637a5dd3ccc
+> > # good: [414e9f520e897818302a6b1729aa2dad8cc928ca] drm/amdkfd: Asynchronously free smi_client
+> > git bisect good 414e9f520e897818302a6b1729aa2dad8cc928ca
+> > # good: [4bdb9d6501763e83bacbf26846754c567773a1fb] drm/amdkfd: simplify vm_validate_pt_pd_bos
+> > git bisect good 4bdb9d6501763e83bacbf26846754c567773a1fb
+> > # good: [e72f03f4bdc4f3a251343cf343bce28c28cbac2a] drm/amd/display: Add missing registers for ACP
+> > git bisect good e72f03f4bdc4f3a251343cf343bce28c28cbac2a
+> > # bad: [90f33674a0756a6f0907b8f6350cec3f7be4032c] drm/amd/display: Prepare for new interfaces
+> > git bisect bad 90f33674a0756a6f0907b8f6350cec3f7be4032c
+> > # bad: [85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1] drm/amd/display: Add SubVP required code
+> > git bisect bad 85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1
+> > # first bad commit: [85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1] drm/amd/display: Add SubVP required code
 
+> From 78730be1522677752ab26f57d6f8c68b96d3966e Mon Sep 17 00:00:00 2001
+> From: Alex Deucher <alexander.deucher@amd.com>
+> Date: Wed, 6 Jul 2022 15:33:01 -0400
+> Subject: [PATCH] drm/amd/display: fix non-x86/PPC64 compilation
+> 
+> Need to protect FP DMCUB code with CONFIG_DRM_AMD_DC_DCN.
+> Fixes build failures like the following on arm64:
+> ERROR: modpost: "__floatunsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__divdf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "fma" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__adddf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__fixdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__muldf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__floatsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "__fixunsdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> 
+> Fixes: 85f4bc0c333c ("drm/amd/display: Add SubVP required code")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c  | 2 ++
+>  drivers/gpu/drm/amd/display/dc/dcn32/Makefile | 1 -
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> index 6a25d64dd15c..6b446ae9e91f 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+> @@ -370,6 +370,7 @@ void dc_dmub_srv_query_caps_cmd(struct dmub_srv *dmub)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_DRM_AMD_DC_DCN
+>  /**
+>   * ***********************************************************************************************
+>   * populate_subvp_cmd_drr_info: Helper to populate DRR pipe info for the DMCUB subvp command
+> @@ -698,6 +699,7 @@ void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+>  	dc_dmub_srv_cmd_execute(dc->ctx->dmub_srv);
+>  	dc_dmub_srv_wait_idle(dc->ctx->dmub_srv);
+>  }
+> +#endif
+>  
+>  bool dc_dmub_srv_get_diagnostic_data(struct dc_dmub_srv *dc_dmub_srv, struct dmub_diagnostic_data *diag_data)
+>  {
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/Makefile b/drivers/gpu/drm/amd/display/dc/dcn32/Makefile
+> index fe29725b4c06..932d85fa4262 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/Makefile
+> @@ -27,7 +27,6 @@ ifdef CONFIG_CC_IS_GCC
+>  ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+>  IS_OLD_GCC = 1
+>  endif
+> -dcn32_ccflags += -mhard-float
+>  endif
+>  
+>  ifdef CONFIG_X86
+> -- 
+> 2.35.3
+> 
 
-vim +789 arch/arm64/kvm/mmu.c
-
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  774  
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  775  /**
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  776   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  777   *
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  778   * @kvm:	The KVM pointer
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  779   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  780   * @pa:		The physical address of the device
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  781   * @size:	The size of the mapping
-c9c0279cc02b4e arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  782   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783   */
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  784  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  785  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  {
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  	phys_addr_t addr;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  788  	int ret = 0;
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @789  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  795  	if (is_protected_kvm_enabled())
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  796  		return -EPERM;
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  797  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  798  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  799  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  800  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  801  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  802  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  803  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  804  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  805  			break;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  806  
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  807  		write_lock(&kvm->mmu_lock);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  808  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  809  					     &cache);
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  810  		write_unlock(&kvm->mmu_lock);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  811  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  812  			break;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  813  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  814  		pa += PAGE_SIZE;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  815  	}
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  816  
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  817  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  818  	return ret;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  819  }
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  820  
-
-:::::: The code at line 789 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
