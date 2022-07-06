@@ -1,35 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34720258B
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 17:58:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EAFC3411C;
-	Wed,  6 Jul 2022 17:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657130303;
-	bh=bqx3+veRRV0NTTNeX3+xgaMUVCqe7pwRf1/yFdXaytw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CpNZi3eXrrN4bU3L52BgBmeCj9LuknwLJdpWzFZrJC7zeUu2wZEER0Ran7FMp/0lT
-	 attw3QRFmI9y1wuk6Sr+RChzKN2DCjqPqSYqoEhrJntCvEkbEXZWI4gcxUO9Jg0wII
-	 BMC5zvsOv3L4guVK3aJOUvna2AI6ezRm5tYJuzPGxR1cvq0XftygzbOhwABklwewDy
-	 02+WjByf0PBdNFyZu2X3FjBmrPV2VvI+GwRtGIuNiNHwbLs3vWrXbpl6PXjqqHVCYL
-	 Xd2FSxhh33L7+6zV13qKAanVpGTJm+d0PXNqAmbPmeRv1zFqGgO9bF+bwH/mMa24t8
-	 TvcqELIbRuyzA==
-Date: Wed, 6 Jul 2022 10:58:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc: amd-gfx@lists.freedesktop.org, stylon.wang@amd.com,
-	Alan Liu <HaoPing.Liu@amd.com>, Sunpeng.Li@amd.com,
-	Harry.Wentland@amd.com, qingqing.zhuo@amd.com, roman.li@amd.com,
-	Alvin Lee <Alvin.Lee2@amd.com>, solomon.chiu@amd.com,
-	jerry.zuo@amd.com, Aurabindo.Pillai@amd.com, hamza.mahfooz@amd.com,
-	wayne.lin@amd.com, Jun Lei <Jun.Lei@amd.com>,
-	Bhawanpreet.Lakha@amd.com, agustin.gutierrez@amd.com,
-	pavle.kotarac@amd.com, llvm@lists.linux.dev
-Subject: Re: [PATCH 02/40] drm/amd/display: Add SubVP required code
-Message-ID: <YsXNPayfiUGS67i0@dev-arch.thelio-3990X>
-References: <20220630191322.909650-1-Rodrigo.Siqueira@amd.com>
- <20220630191322.909650-3-Rodrigo.Siqueira@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBAE7C
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 19:23:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657135404; x=1688671404;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9W5dFEwCL++hgdF4pj9Fp2+eAdDKMsj+bU7iZIeUnl4=;
+  b=YWbkWVKbzza9m624ZwWyLnJZncURox3UqqUJExvpPbStrPeQhPFVzl8K
+   WShPj5EUNN+gtd8jtppLSsv7xVO5kGJXPxCoV2x48Th9BWoz8G7AJB9iT
+   tCjaStUN2ZljptAUTaLM6832H2WUNbihN6vswMPbyfRUpLdiXc227JoVQ
+   /bTjvHiRn9eKEdAn83EoeW3znxgqHG19NZM/R1PCHFHEdyOyQ+WHi3Xak
+   YUzfA1CbJddSwQ2NEolSBxOjHYuZy3mtQ7GExESqkGjb3ozUtpTMObDLG
+   hsPJzKbAGVO+HAiBVhVzAO4HHLaQNHBdLKwBc+gNAI30iXsrKOSvoAgeK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="284588775"
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="284588775"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 12:23:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,250,1650956400"; 
+   d="scan'208";a="626032279"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 06 Jul 2022 12:23:21 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9AcL-000KxF-0k;
+	Wed, 06 Jul 2022 19:23:21 +0000
+Date: Thu, 7 Jul 2022 03:23:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hongchen Zhang <zhanghongchen@loongson.cn>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hongchen Zhang <zhanghongchen@loongson.cn>
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+Message-ID: <202207070340.HGbiEUlO-lkp@intel.com>
+References: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,105 +48,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220630191322.909650-3-Rodrigo.Siqueira@amd.com>
+In-Reply-To: <1657098456-29244-1-git-send-email-zhanghongchen@loongson.cn>
 
-On Thu, Jun 30, 2022 at 03:12:44PM -0400, Rodrigo Siqueira wrote:
-> From: Alvin Lee <Alvin.Lee2@amd.com>
-> 
-> This commit enables the SubVP feature. To achieve that, we need to:
-> 
-> - Don't force p-state disallow on SubVP (can't block dummy p-state)
-> - Send calculated watermark to DMCUB for SubVP
-> - Adjust CAB mode message to PMFW
-> - Add a proper locking sequence for SubVP
-> - Various fixes to SubVP static analysis and determining SubVP config
-> - Currently SubVP not supported with pipe split so merge all pipes
->   before setting up SubVp
-> 
-> Reviewed-by: Jun Lei <Jun.Lei@amd.com>
-> Acked-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> Acked-by: Alan Liu <HaoPing.Liu@amd.com>
-> Signed-off-by: Alvin Lee <Alvin.Lee2@amd.com>
+Hi Hongchen,
 
-This patch is now in linux-next as commit 85f4bc0c333c
-("drm/amd/display: Add SubVP required code"), where it causes build
-failures when building for arm64 with both Clang and GCC (see bisect log
-below).
+Thank you for the patch! Yet something to improve:
 
-Clang shows errors during modpost:
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc5 next-20220706]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-ERROR: modpost: "__floatunsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__divdf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "fma" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__adddf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__fixdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__muldf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__floatsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "__fixunsdfsi" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+url:    https://github.com/intel-lab-lkp/linux/commits/Hongchen-Zhang/MIPS-fix-pmd_mkinvalid/20220706-171327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e35e5b6f695d241ffb1d223207da58a1fbcdff4b
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20220707/202207070340.HGbiEUlO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cc17741b8218515ea05dd64f5db2402a67e7a821
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hongchen-Zhang/MIPS-fix-pmd_mkinvalid/20220706-171327
+        git checkout cc17741b8218515ea05dd64f5db2402a67e7a821
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-GCC shows errors along the lines of:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-In function 'populate_subvp_cmd_pipe_info',
-    inlined from 'dc_dmub_setup_subvp_dmub_command' at /home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:675:5:
-/home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:603:91: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
-  603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
-      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-  604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:604:63: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
-  603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
-      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-/home/nathan/cbl/src/linux-next/drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:602:72: error: '-mgeneral-regs-only' is incompatible with the use of floating-point types
-  602 |         pipe_data->pipe_config.subvp_data.prefetch_to_mall_start_lines =
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-  603 |                         (((double)dc->caps.subvp_prefetch_end_to_mall_start_us / 1000000) *
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  604 |                         (phantom_timing->pix_clk_100hz * 100) + phantom_timing->h_total - 1) /
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  605 |                         (double)phantom_timing->h_total;
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+All errors (new ones prefixed by >>):
 
-I initially reproduced this with Fedora's configuration [1] but it
-appears that allmodconfig should show it as well. Our CI also shows
-problems for ARCH=riscv allmodconfig [2].
+   arch/mips/mm/init.c:60:6: warning: no previous prototype for function 'setup_zero_pages' [-Wmissing-prototypes]
+   void setup_zero_pages(void)
+        ^
+   arch/mips/mm/init.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void setup_zero_pages(void)
+   ^
+   static 
+>> arch/mips/mm/init.c:454:2: error: call to __compiletime_assert_347 declared with 'error' attribute: BUILD_BUG_ON failed: IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT)
+           BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:354:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:342:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:335:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:174:1: note: expanded from here
+   __compiletime_assert_347
+   ^
+   1 warning and 1 error generated.
 
-I am happy to test patches as necessary.
 
-[1]: https://src.fedoraproject.org/rpms/kernel/raw/rawhide/f/kernel-aarch64-fedora.config
-[2]: https://builds.tuxbuild.com/2BZS5HPSuDdoMFw6mxjG2ZmT441/build.log
+vim +/error +454 arch/mips/mm/init.c
 
-Cheers,
-Nathan
+1132137e87898d Jiang Liu   2013-07-03  447  
+1132137e87898d Jiang Liu   2013-07-03  448  void __init mem_init(void)
+1132137e87898d Jiang Liu   2013-07-03  449  {
+05d013a0366d50 Paul Burton 2019-09-18  450  	/*
+05d013a0366d50 Paul Burton 2019-09-18  451  	 * When _PFN_SHIFT is greater than PAGE_SHIFT we won't have enough PTE
+05d013a0366d50 Paul Burton 2019-09-18  452  	 * bits to hold a full 32b physical address on MIPS32 systems.
+05d013a0366d50 Paul Burton 2019-09-18  453  	 */
+05d013a0366d50 Paul Burton 2019-09-18 @454  	BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (_PFN_SHIFT > PAGE_SHIFT));
+05d013a0366d50 Paul Burton 2019-09-18  455  
 
-# bad: [088b9c375534d905a4d337c78db3b3bfbb52c4a0] Add linux-next specific files for 20220706
-# good: [e35e5b6f695d241ffb1d223207da58a1fbcdff4b] Merge tag 'xsa-5.19-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
-git bisect start '088b9c375534d905a4d337c78db3b3bfbb52c4a0' 'e35e5b6f695d241ffb1d223207da58a1fbcdff4b'
-# good: [1a4255ede07a967e57115b54da5bd4b571d22a8c] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm/drm-misc
-git bisect good 1a4255ede07a967e57115b54da5bd4b571d22a8c
-# bad: [756b44529e2ab179e4dd6f6358b5c351e1bbe5d3] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-git bisect bad 756b44529e2ab179e4dd6f6358b5c351e1bbe5d3
-# bad: [f26873a2fc786251765db3e0ced8e1424b862059] next-20220705/sound-asoc
-git bisect bad f26873a2fc786251765db3e0ced8e1424b862059
-# good: [fc34ece41f7183d522d15dc4189d8df6e8e23737] ASoC: Refactor non_legacy_dai_naming flag
-git bisect good fc34ece41f7183d522d15dc4189d8df6e8e23737
-# good: [3d313f09f31490cec9d5251b59adeb6542c944cc] drm/fourcc: fix integer type usage in uapi header
-git bisect good 3d313f09f31490cec9d5251b59adeb6542c944cc
-# bad: [a41afb357f09cde0714db9d590458c7bb6d90ca2] Merge branch 'for-linux-next' of git://anongit.freedesktop.org/drm-intel
-git bisect bad a41afb357f09cde0714db9d590458c7bb6d90ca2
-# bad: [88ef4c5bb36bf60b317b74d8652c7766c9272a7e] drm/amd/display: Apply ODM 2:1 policy for single display configuration
-git bisect bad 88ef4c5bb36bf60b317b74d8652c7766c9272a7e
-# good: [ff15cea338d2c78e0086d55c8a9dd637a5dd3ccc] drm/amd/display: expose additional modifier for DCN32/321
-git bisect good ff15cea338d2c78e0086d55c8a9dd637a5dd3ccc
-# good: [414e9f520e897818302a6b1729aa2dad8cc928ca] drm/amdkfd: Asynchronously free smi_client
-git bisect good 414e9f520e897818302a6b1729aa2dad8cc928ca
-# good: [4bdb9d6501763e83bacbf26846754c567773a1fb] drm/amdkfd: simplify vm_validate_pt_pd_bos
-git bisect good 4bdb9d6501763e83bacbf26846754c567773a1fb
-# good: [e72f03f4bdc4f3a251343cf343bce28c28cbac2a] drm/amd/display: Add missing registers for ACP
-git bisect good e72f03f4bdc4f3a251343cf343bce28c28cbac2a
-# bad: [90f33674a0756a6f0907b8f6350cec3f7be4032c] drm/amd/display: Prepare for new interfaces
-git bisect bad 90f33674a0756a6f0907b8f6350cec3f7be4032c
-# bad: [85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1] drm/amd/display: Add SubVP required code
-git bisect bad 85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1
-# first bad commit: [85f4bc0c333ceed24cbc9f69a2a77fab1ae3d4d1] drm/amd/display: Add SubVP required code
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
