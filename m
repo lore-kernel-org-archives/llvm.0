@@ -1,43 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE992F3A
-	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 11:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B8D46A2
+	for <llvm@lists.linux.dev>; Wed,  6 Jul 2022 12:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657105505; x=1688641505;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U4e6yc60v5HAchm2P66GR8rfC9HjuSPATHuFD2YBwlQ=;
-  b=c6ug73M5p1YlqYOC8Stq9xKccD8aadjmJtgMkzdLvBxQaTKbOSsVAHWB
-   QHJvaQNTYEhYx2FALMDMBAVVRo0oa/Z1OCZYKDocZf8/duzXEEe+1wfFa
-   I1FdhmU1vqQ8JKLAlAI1ksn7L1qdrzpCLtEAY5DdjJj6ow3KPqmNcmQUr
-   W8Jvg7/88PqrSM2XcImS65lK6lNMTkSTQGvcu7dK1rKD7dIEeT4nntSJQ
-   F+Y7fx2xTUKqhx4aD9Uolgtw2if98IqKEUpiVEX218B7ZNK3vOq4n0CaT
-   nO5jvxQGSWJ9BvdgyXH3mnczAYXmKEkKYClw4ydRiy/ke8RtomilZNVXK
+  t=1657109163; x=1688645163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zxL04VaxVE567Eropn8E/Xy28wSTQqFoMmVBALQrmoY=;
+  b=RCmUhbNJVVRGuxoFFxUw9bRpcrr/kVtnJ/BslJpDxEbTPDBCgh3KjEcC
+   PlSpRWs2W0o7rmneM7eSjRmdCyp6wdmzRcwsSfmSTa8U0Y6watS6IMw8t
+   Mp2n3mkWBemJMON2D5XxglfwW4GqSBdFga0SaiPGGEbl+pAnA8gaZJzGW
+   Hpcrp79hS27SihT+H33FgLEw2j6kK+CyVZl3ieBtKXl5/ofptuh8F4oY7
+   lfcmA/1vq8IO89UU2Bj6d12X1NvP6bVHjZAu//anRCQ+z3Ua942lNS47g
+   7ALKA69IxAYsg93uNw2Hy5EWHDZFZk6E4IeF5UdcD5/gdFjs7n3vy94al
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="309265272"
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="266756493"
 X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="309265272"
+   d="scan'208";a="266756493"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 04:05:00 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 05:06:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
-   d="scan'208";a="543355084"
+   d="scan'208";a="543373484"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2022 04:04:59 -0700
+  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2022 05:06:02 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o92q2-000KUZ-Ay;
-	Wed, 06 Jul 2022 11:04:58 +0000
-Date: Wed, 6 Jul 2022 19:04:08 +0800
+	id 1o93n7-000KYS-Ae;
+	Wed, 06 Jul 2022 12:06:01 +0000
+Date: Wed, 6 Jul 2022 20:05:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC net-next 2/5] net: dsa: mv88e6xxx: report the default
- interface mode for the port
-Message-ID: <202207061812.FVnuLMD9-lkp@intel.com>
-References: <E1o8f9s-0059a6-3S@rmk-PC.armlinux.org.uk>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/master 1/1]
+ include/linux/random.h:109:10: fatal error: 'asm/archrandom.h' file not
+ found
+Message-ID: <202207061956.AGbuqVuj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,58 +47,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E1o8f9s-0059a6-3S@rmk-PC.armlinux.org.uk>
 
-Hi "Russell,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-dsa-add-support-for-retrieving-the-interface-mode/20220705-175304
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 874bdbfe624e577687c2053a26aab44715c68453
-config: x86_64-randconfig-a012-20220704 (https://download.01.org/0day-ci/archive/20220706/202207061812.FVnuLMD9-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/master
+head:   b06ae5cc5acfc776074b6fa7580a3e33fd999734
+commit: b06ae5cc5acfc776074b6fa7580a3e33fd999734 [1/1] random: remove CONFIG_ARCH_RANDOM
+config: hexagon-randconfig-r041-20220703 (https://download.01.org/0day-ci/archive/20220706/202207061956.AGbuqVuj-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9423b094f4b1e0c313bbdd0e65cd0824b51e3016
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Russell-King-Oracle/net-dsa-add-support-for-retrieving-the-interface-mode/20220705-175304
-        git checkout 9423b094f4b1e0c313bbdd0e65cd0824b51e3016
+        # https://github.com/ammarfaizi2/linux-block/commit/b06ae5cc5acfc776074b6fa7580a3e33fd999734
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/master
+        git checkout b06ae5cc5acfc776074b6fa7580a3e33fd999734
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/mv88e6xxx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/mv88e6xxx/chip.c:861:5: warning: unused variable 'cmode' [-Wunused-variable]
-           u8 cmode = chip->ports[port].cmode;
-              ^
-   1 warning generated.
+   In file included from drivers/base/core.c:27:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:26:
+   In file included from include/linux/net.h:18:
+>> include/linux/random.h:109:10: fatal error: 'asm/archrandom.h' file not found
+   #include <asm/archrandom.h>
+            ^~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/cmode +861 drivers/net/dsa/mv88e6xxx/chip.c
+vim +109 include/linux/random.h
 
-   855	
-   856	static void mv88e6xxx_get_caps(struct dsa_switch *ds, int port,
-   857				       struct phylink_config *config,
-   858				       phy_interface_t *default_interface)
-   859	{
-   860		struct mv88e6xxx_chip *chip = ds->priv;
- > 861		u8 cmode = chip->ports[port].cmode;
-   862	
-   863		chip->info->ops->phylink_get_caps(chip, port, config,
-   864						  default_interface);
-   865	
-   866		/* Internal ports need GMII for PHYLIB */
-   867		if (mv88e6xxx_phy_is_internal(ds, port))
-   868			__set_bit(PHY_INTERFACE_MODE_GMII,
-   869				  config->supported_interfaces);
-   870	}
-   871	
+5960164fde9bc2 Joe Eykholt        2010-05-26  108  
+63d77173266c17 H. Peter Anvin     2011-07-31 @109  #include <asm/archrandom.h>
+b06ae5cc5acfc7 Jason A. Donenfeld 2022-07-05  110  
+
+:::::: The code at line 109 was first introduced by commit
+:::::: 63d77173266c1791f1553e9e8ccea65dc87c4485 random: Add support for architectural random hooks
+
+:::::: TO: H. Peter Anvin <hpa@zytor.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
 
 -- 
 0-DAY CI Kernel Test Service
