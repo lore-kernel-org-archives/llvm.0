@@ -1,117 +1,143 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F322CA5
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:15:18 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id k13-20020a25240d000000b0066e32c61c25so10178643ybk.3
-        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 15:15:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
-        b=aA00TODOScLx5rfKCpO+pAVqEX73pui8cCx+3XpnCCyru+fT+ofb/Ab2TS9xNDNU99
-         YNKaOBTsA7ff9EZZ8xUcR6VLuO3JXPvfBsrunTIT2rDulAbfyKZPIfD0jv7m8Tno8JXY
-         +T82Ab/D0pYfuaUmvFtngjFXFFMc5T/BVO6ypDoulJZ75kMRvYHKQB86864y10eH2uEw
-         4d3PUryKB7/phRYE0n7zvCY/JzTFCQSei9cMSVgBAyjxLTch+vrSPufB05tcgg9vjG2i
-         vuM1YjWMW1zfvqSXyEnoZLyTtO/m+9YJbYPez+Izg4VE+po1sFIWI3ZbN2N7STiUOkcA
-         SUTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
-        b=27k8qVRJYcE7SP9dlxZsNRb5GwuixpetxeC6BZaW8fTP2r/Wkxe5ffro4rOclaCVPl
-         IBgM8aTmKwPFLWsrxJBTV2aqGiws6cT5zPJPcu0tKVsoU1tJbyVDU4/9OR5HlLklyVkQ
-         Vv8IrwBTO9VMwbKJXRzq9iRgekWRLSqxDRlMn3yMUQlWRV3HVc385eWtykIuIhYBxfbh
-         K37s+qyQvjSd73bW2CycLF7g/tCwk48rHt6c3d7rHdINXTZ6b4laLqhENaZshNeWw0aj
-         2hKdwQVfDLegE8XHqSOFqpPXj+QWbvidfYf1VViV4GKpyY5vR2ho2rxyRdj0y2RINeS2
-         7yxw==
-X-Gm-Message-State: AJIora/yzAxIXKIgmTefBIzO/IHTrdzagrtmAFJu/b1e1s9H/gOcFfDY
-	/oKv2tU0g14AixPHybE7n1Qi06IBMeHf3lu0mg==
-X-Google-Smtp-Source: AGRyM1vsybvdyGETyP8/pCMszh/hivglrkQc+shq/bl09u6ogz5eozWp/OTQeXLsPPeDx31CWy9PP42+u4bdaUY5Ow==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
- (user=justinstitt job=sendgmr) by 2002:a81:1cc:0:b0:317:a0fa:7a61 with SMTP
- id 195-20020a8101cc000000b00317a0fa7a61mr516504ywb.10.1657232117460; Thu, 07
- Jul 2022 15:15:17 -0700 (PDT)
-Date: Thu,  7 Jul 2022 15:14:56 -0700
-Message-Id: <20220707221456.1782048-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456777C
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657233070; x=1688769070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=38Mh6DFaVp8kd4XW3sT6BiNg0fRZtdi1BmkNe5o8GJo=;
+  b=FBZCAnjZyJFGL9zKswnMXjDQ9HQrPXlRLnPVB6ZrRufRuX2Juf/0avVo
+   68gLAQoB+Hneii2GQpyRUniRPExNrZzQ+chNyI+bGZdqYc9HsxFCzL0P8
+   PdTstvWEdXskkkTa9Ev9DX1C8qPLXYKqt3k6jKD7eku8WWm9BrpgE/pcG
+   mR25RIQ9PsaW1y+B6CNjoue01QSXJBcWjCYjte1Zq3DLWqDR9jep6UIzt
+   okdWxJdMgf102BbzBT607h9l6gIO8W+8LwFxtqBPEYPsBKa9RaKAd2JPv
+   pnOAAKGKCtewAbMB8ctCFCkCrOgFcuCw2AHwD7SR2ScmOYkcFGVaaD3YS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345824054"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="345824054"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:31:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="840080638"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2022 15:31:07 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9a1a-000MXW-IF;
+	Thu, 07 Jul 2022 22:31:06 +0000
+Date: Fri, 8 Jul 2022 06:30:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] powerpc: Remove asm/prom.h from asm/mpc52xx.h and
+ asm/pci.h
+Message-ID: <202207080622.VqN3Z1BL-lkp@intel.com>
+References: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
-From: Justin Stitt <justinstitt@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>, 
-	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
 
-When building with Clang we encounter the following warnings:
-| net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
-| short' but the argument has type 'u32' (aka 'unsigned int')
-| [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
-| session->ns);
--
-| net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
-| short' but the argument has type 'int' [-Werror,-Wformat]
-| session->l2specific_type, l2tp_get_l2specific_len(session));
--
-| net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
-| short' but the argument has type 'u32' (aka 'unsigned int')
-| [-Werror,-Wformat] session->nr, session->ns,
+Hi Christophe,
 
-Both session->nr and ->nc are of type `u32`. The currently used format
-specifier is `%hu` which describes a `u16`. My proposed fix is to listen
-to Clang and use the correct format specifier `%u`.
+I love your patch! Perhaps something to improve:
 
-For the warning at line 196, l2tp_get_l2specific_len() returns an int
-and should therefore be using the `%d` format specifier.
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on mkp-scsi/for-next jejb-scsi/for-next linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Related l2tp -Wformat patch:
-https://lore.kernel.org/all/20220706230833.535238-1-justinstitt@google.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220708/202207080622.VqN3Z1BL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
+        git checkout 0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
 
- net/l2tp/l2tp_debugfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/net/l2tp/l2tp_debugfs.c b/net/l2tp/l2tp_debugfs.c
-index 9d1aafe75f92..4595b56d175d 100644
---- a/net/l2tp/l2tp_debugfs.c
-+++ b/net/l2tp/l2tp_debugfs.c
-@@ -184,7 +184,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
- 		   session->pwtype == L2TP_PWTYPE_PPP ? "PPP" :
- 		   "");
- 	if (session->send_seq || session->recv_seq)
--		seq_printf(m, "   nr %hu, ns %hu\n", session->nr, session->ns);
-+		seq_printf(m, "   nr %u, ns %u\n", session->nr, session->ns);
- 	seq_printf(m, "   refcnt %d\n", refcount_read(&session->ref_count));
- 	seq_printf(m, "   config 0/0/%c/%c/-/%s %08x %u\n",
- 		   session->recv_seq ? 'R' : '-',
-@@ -192,7 +192,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
- 		   session->lns_mode ? "LNS" : "LAC",
- 		   0,
- 		   jiffies_to_msecs(session->reorder_timeout));
--	seq_printf(m, "   offset 0 l2specific %hu/%hu\n",
-+	seq_printf(m, "   offset 0 l2specific %hu/%d\n",
- 		   session->l2specific_type, l2tp_get_l2specific_len(session));
- 	if (session->cookie_len) {
- 		seq_printf(m, "   cookie %02x%02x%02x%02x",
-@@ -215,7 +215,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
- 		seq_puts(m, "\n");
- 	}
- 
--	seq_printf(m, "   %hu/%hu tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
-+	seq_printf(m, "   %u/%u tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
- 		   session->nr, session->ns,
- 		   atomic_long_read(&session->stats.tx_packets),
- 		   atomic_long_read(&session->stats.tx_bytes),
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/kernel/prom.c:891:5: warning: no previous prototype for function 'of_get_ibm_chip_id' [-Wmissing-prototypes]
+   int of_get_ibm_chip_id(struct device_node *np)
+       ^
+   arch/powerpc/kernel/prom.c:891:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int of_get_ibm_chip_id(struct device_node *np)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/of_get_ibm_chip_id +891 arch/powerpc/kernel/prom.c
+
+b27652dd2174df1 Kevin Hao              2013-12-24  871  
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  872  /*******
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  873   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  874   * New implementation of the OF "find" APIs, return a refcounted
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  875   * object, call of_node_put() when done.  The device tree and list
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  876   * are protected by a rw_lock.
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  877   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  878   * Note that property management will need some locking as well,
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  879   * this isn't dealt with yet.
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  880   *
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  881   *******/
+9b6b563c0d2d25e Paul Mackerras         2005-10-06  882  
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  883  /**
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  884   * of_get_ibm_chip_id - Returns the IBM "chip-id" of a device
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  885   * @np: device node of the device
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  886   *
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  887   * This looks for a property "ibm,chip-id" in the node or any
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  888   * of its parents and returns its content, or -1 if it cannot
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  889   * be found.
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  890   */
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15 @891  int of_get_ibm_chip_id(struct device_node *np)
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  892  {
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  893  	of_node_get(np);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  894  	while (np) {
+1856f50c66dff0a Christophe Jaillet     2015-10-16  895  		u32 chip_id;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  896  
+1856f50c66dff0a Christophe Jaillet     2015-10-16  897  		/*
+1856f50c66dff0a Christophe Jaillet     2015-10-16  898  		 * Skiboot may produce memory nodes that contain more than one
+1856f50c66dff0a Christophe Jaillet     2015-10-16  899  		 * cell in chip-id, we only read the first one here.
+1856f50c66dff0a Christophe Jaillet     2015-10-16  900  		 */
+1856f50c66dff0a Christophe Jaillet     2015-10-16  901  		if (!of_property_read_u32(np, "ibm,chip-id", &chip_id)) {
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  902  			of_node_put(np);
+1856f50c66dff0a Christophe Jaillet     2015-10-16  903  			return chip_id;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  904  		}
+16c1d606263ea37 Michael Ellerman       2015-10-26  905  
+16c1d606263ea37 Michael Ellerman       2015-10-26  906  		np = of_get_next_parent(np);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  907  	}
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  908  	return -1;
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  909  }
+b130e7c04f1130f Dan Streetman          2015-05-07  910  EXPORT_SYMBOL(of_get_ibm_chip_id);
+b37193b71846858 Benjamin Herrenschmidt 2013-07-15  911  
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
