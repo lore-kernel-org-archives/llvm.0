@@ -1,117 +1,78 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from relay4.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B932563
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 18:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657217818; x=1688753818;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TmlbkCbQTy7/XjAJEoM00FVskphBJaFTjB+AyigPYp8=;
-  b=b28GQ9ugSyGmwm769t7S58NytvajDUIXkxUL9+uFQOIlm0kOSF8FZ6du
-   dilYWIALwPzu1Tt85f+Q0jcE7AgZVxhck2d3gu/tUDzP+Qi/w2yam9V3U
-   U8gEpcniAAJzwbFCFGESudOrh+8QMg0k0QyOi5FmS/QBGlX1tURmR0JH1
-   hAMMyRIkQ5a88ZzddaKhyGUtVAjKfUfEAA757Y58R7GsL2zXJVsgcM/xP
-   SHO0pyJiUL51oBvzkefzzezjmhKxf0ZxYqikrDIZtWQALW42bBmfnlrRd
-   dkMUcEeuE3Sx9FOIxsRJ/BPIsot7ZxVgpsAsP8A2XmHRdboM4aVlzgFHl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="267120860"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="267120860"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 11:16:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="683395001"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2022 11:16:56 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9W3b-000MIQ-KX;
-	Thu, 07 Jul 2022 18:16:55 +0000
-Date: Fri, 8 Jul 2022 02:15:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: arch/powerpc/platforms/52xx/mpc52xx_gpt.c:97: warning: expecting
- prototype for struct mpc52xx_gpt. Prototype was for struct mpc52xx_gpt_priv
- instead
-Message-ID: <202207080223.SK41EJ5h-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66792563
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 18:19:24 +0000 (UTC)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 1E8C4203B6;
+	Thu,  7 Jul 2022 17:40:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 065072002C;
+	Thu,  7 Jul 2022 17:40:29 +0000 (UTC)
+Message-ID: <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
+Subject: Re: [PATCH] net: ipv4: fix clang -Wformat warning
+From: Joe Perches <joe@perches.com>
+To: Justin Stitt <justinstitt@google.com>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S . Miller" <davem@davemloft.net>, Hideaki YOSHIFUJI
+ <yoshfuji@linux-ipv6.org>, David Ahern <dsahern@kernel.org>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ netdev@vger.kernel.org,  linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 07 Jul 2022 10:40:29 -0700
+In-Reply-To: <20220707173040.704116-1-justinstitt@google.com>
+References: <20220707173040.704116-1-justinstitt@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Stat-Signature: x68hfi6hchp93cc8y3oo9c1sywe99651
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 065072002C
+X-Spam-Status: No, score=-0.55
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19a/HDLIuVNWG7/7X2HRQkb389SoTBTrZA=
+X-HE-Tag: 1657215629-849573
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
-commit: 015d98149b326e0f1f02e44413112ca8b4330543 powerpc/barrier: Avoid collision with clang's __lwsync macro
-date:   1 year, 1 month ago
-config: powerpc-randconfig-r001-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080223.SK41EJ5h-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=015d98149b326e0f1f02e44413112ca8b4330543
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 015d98149b326e0f1f02e44413112ca8b4330543
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/52xx/
+On Thu, 2022-07-07 at 10:30 -0700, Justin Stitt wrote:
+> When building with Clang we encounter this warning:
+> > net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
+> > the argument has type 'int' [-Werror,-Wformat]
+> > aalg_desc->uinfo.auth.icv_fullbits / 8);
+>=20
+> `aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
+> argument promotion becomes an int.
+>=20
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends using
+> the promoted-to-type's format flag.
+>=20
+> As per C11 6.3.1.1:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+> can represent all values of the original type ..., the value is
+> converted to an int; otherwise, it is converted to an unsigned int.
+> These are called the integer promotions.` Thus it makes sense to change
+> %hu to %d not only to follow this standard but to suppress the warning
+> as well.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I think it also makes sense to use %u and not %d
+as the original type is unsigned.
 
-All warnings (new ones prefixed by >>):
+> diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
+[]
+> @@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
+> =20
+>  	if (aalg_desc->uinfo.auth.icv_fullbits/8 !=3D
+>  	    crypto_ahash_digestsize(ahash)) {
+> -		pr_info("%s: %s digestsize %u !=3D %hu\n",
+> +		pr_info("%s: %s digestsize %u !=3D %d\n",
+>  			__func__, x->aalg->alg_name,
+>  			crypto_ahash_digestsize(ahash),
+>  			aalg_desc->uinfo.auth.icv_fullbits / 8);
 
->> arch/powerpc/platforms/52xx/mpc52xx_gpt.c:97: warning: expecting prototype for struct mpc52xx_gpt. Prototype was for struct mpc52xx_gpt_priv instead
-
-
-vim +97 arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-
-5496eab2434f2a2 Grant Likely     2009-02-04  73  
-5496eab2434f2a2 Grant Likely     2009-02-04  74  /**
-5496eab2434f2a2 Grant Likely     2009-02-04  75   * struct mpc52xx_gpt - Private data structure for MPC52xx GPT driver
-5496eab2434f2a2 Grant Likely     2009-02-04  76   * @dev: pointer to device structure
-5496eab2434f2a2 Grant Likely     2009-02-04  77   * @regs: virtual address of GPT registers
-5496eab2434f2a2 Grant Likely     2009-02-04  78   * @lock: spinlock to coordinate between different functions.
-a19e3da5bc5fc6c Anton Vorontsov  2010-06-08  79   * @gc: gpio_chip instance structure; used when GPIO is enabled
-bae1d8f19983fbf Grant Likely     2012-02-14  80   * @irqhost: Pointer to irq_domain instance; used when IRQ mode is supported
-eda43d16ef3d0bd Albrecht Dreﬂ    2009-11-13  81   * @wdt_mode: only relevant for gpt0: bit 0 (MPC52xx_GPT_CAN_WDT) indicates
-eda43d16ef3d0bd Albrecht Dreﬂ    2009-11-13  82   *   if the gpt may be used as wdt, bit 1 (MPC52xx_GPT_IS_WDT) indicates
-eda43d16ef3d0bd Albrecht Dreﬂ    2009-11-13  83   *   if the timer is actively used as wdt which blocks gpt functions
-5496eab2434f2a2 Grant Likely     2009-02-04  84   */
-5496eab2434f2a2 Grant Likely     2009-02-04  85  struct mpc52xx_gpt_priv {
-4f59ecfa9b87da0 Grant Likely     2009-11-04  86  	struct list_head list;		/* List of all GPT devices */
-5496eab2434f2a2 Grant Likely     2009-02-04  87  	struct device *dev;
-5496eab2434f2a2 Grant Likely     2009-02-04  88  	struct mpc52xx_gpt __iomem *regs;
-77720c82915a8b7 Julia Cartwright 2017-03-21  89  	raw_spinlock_t lock;
-bae1d8f19983fbf Grant Likely     2012-02-14  90  	struct irq_domain *irqhost;
-4f59ecfa9b87da0 Grant Likely     2009-11-04  91  	u32 ipb_freq;
-eda43d16ef3d0bd Albrecht Dreﬂ    2009-11-13  92  	u8 wdt_mode;
-5496eab2434f2a2 Grant Likely     2009-02-04  93  
-5496eab2434f2a2 Grant Likely     2009-02-04  94  #if defined(CONFIG_GPIOLIB)
-a19e3da5bc5fc6c Anton Vorontsov  2010-06-08  95  	struct gpio_chip gc;
-5496eab2434f2a2 Grant Likely     2009-02-04  96  #endif
-5496eab2434f2a2 Grant Likely     2009-02-04 @97  };
-5496eab2434f2a2 Grant Likely     2009-02-04  98  
-
-:::::: The code at line 97 was first introduced by commit
-:::::: 5496eab2434f2a2dfe0d35496fd9605d548b7fbc powerpc/5200: Rework GPT driver to also be an IRQ controller
-
-:::::: TO: Grant Likely <grant.likely@secretlab.ca>
-:::::: CC: Grant Likely <grant.likely@secretlab.ca>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
