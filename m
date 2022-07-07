@@ -1,86 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C432563
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 17:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D59E9C3411E;
-	Thu,  7 Jul 2022 17:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657216727;
-	bh=iL3xIVjNybuWSiJjZ22VYxa1SB6+T14cOhJZN7GXylI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LDQrMLNrzJ6N5uQHsqODYBfAgEIQ1w+ISzrC5bbPvDpbr2SISXO3U+dJkEYXLD9NI
-	 XePnOs2Zx7ktshBV61vIp6UjBVtCr4FRvRJEwIDt+yLsC6nOQxgNGBLqp8MBLnCQHC
-	 EmNXV/y2HBtC+S64KN8I97tX+RoapjOxA1jU5layGe7ejrTCiXIjsp6bDAZm5IFmrx
-	 tkoJKWxC/gfjGH/gGL+uAg/hb5pE488qNrC3VuV8AE+SivhrvRXbYCmCgifSTO/TEX
-	 XGONNh3hPdOJM+3i/UJhczZgbt8Xgeuo9EkFSfphoDEXVCNYbg95xUqVA1EIJ1e3JE
-	 TfXjIBUtptDOg==
-Date: Thu, 7 Jul 2022 10:58:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D466E2563
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 18:01:33 +0000 (UTC)
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 1B3526101C;
+	Thu,  7 Jul 2022 18:01:31 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id E45E020037;
+	Thu,  7 Jul 2022 18:01:27 +0000 (UTC)
+Message-ID: <da17617717c5f6a79f58cdf4a56cd39e28c53377.camel@perches.com>
+Subject: Re: [PATCH] net: ipv4: fix clang -Wformat warning
+From: Joe Perches <joe@perches.com>
 To: Justin Stitt <justinstitt@google.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Howells <dhowells@redhat.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-afs@lists.infradead.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] net: rxrpc: fix clang -Wformat warning
-Message-ID: <Ysce1Xur72MYp0/d@dev-arch.thelio-3990X>
-References: <20220706235648.594609-1-justinstitt@google.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemloft.net>, 
+ Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>, David Ahern
+ <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>,  Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev
+Date: Thu, 07 Jul 2022 11:01:26 -0700
+In-Reply-To: <CAFhGd8oTybm0aQ_q60e+exf5eFO1kLiNKnmDZfVTyg=BbtgZsw@mail.gmail.com>
+References: <20220707173040.704116-1-justinstitt@google.com>
+	 <6f5a1c04746feb04add15107c70332ac603e4561.camel@perches.com>
+	 <CAFhGd8oTybm0aQ_q60e+exf5eFO1kLiNKnmDZfVTyg=BbtgZsw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706235648.594609-1-justinstitt@google.com>
+X-Spam-Status: No, score=-0.61
+X-Stat-Signature: 9hji8x14hjnfib6t8mqzghy4hgmidssk
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: E45E020037
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+YCj/8yCY3yEUbxnuMVC5Ve/GvPfwKDhc=
+X-HE-Tag: 1657216887-660842
 
-Hi Justin,
+On Thu, 2022-07-07 at 10:47 -0700, Justin Stitt wrote:
+> On Thu, Jul 7, 2022 at 10:40 AM Joe Perches <joe@perches.com> wrote:
+> >=20
+> > On Thu, 2022-07-07 at 10:30 -0700, Justin Stitt wrote:
+> > > When building with Clang we encounter this warning:
+> > > > net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short'=
+ but
+> > > > the argument has type 'int' [-Werror,-Wformat]
+> > > > aalg_desc->uinfo.auth.icv_fullbits / 8);
+> > >=20
+> > > `aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
+> > > argument promotion becomes an int.
+> > >=20
+> > > Variadic functions (printf-like) undergo default argument promotion.
+> > > Documentation/core-api/printk-formats.rst specifically recommends usi=
+ng
+> > > the promoted-to-type's format flag.
+> > >=20
+> > > As per C11 6.3.1.1:
+> > > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an i=
+nt
+> > > can represent all values of the original type ..., the value is
+> > > converted to an int; otherwise, it is converted to an unsigned int.
+> > > These are called the integer promotions.` Thus it makes sense to chan=
+ge
+> > > %hu to %d not only to follow this standard but to suppress the warnin=
+g
+> > > as well.
+> >=20
+> > I think it also makes sense to use %u and not %d
+> > as the original type is unsigned.
+> Yeah, that would also work. An integer (even a signed one) fully
+> encompasses a u16 so it's really a choice of style. Do you think the
+> change to %u warrants a v2 of this patch?
 
-On Wed, Jul 06, 2022 at 04:56:48PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter this warning:
-> | net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
-> | but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-> | _leave(" = %d [set %hx]", ret, y);
-> 
-> y is a u32 but the format specifier is `%hx`. Going from unsigned int to
-> short int results in a loss of data. This is surely not intended
-> behavior. If it is intended, the warning should be suppressed through
-> other means.
-> 
-> This patch should get us closer to the goal of enabling the -Wformat
-> flag for Clang builds.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
->  net/rxrpc/rxkad.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
-> index 08aab5c01437..aa180464ec37 100644
-> --- a/net/rxrpc/rxkad.c
-> +++ b/net/rxrpc/rxkad.c
-> @@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call,
->  		break;
->  	}
->  
-> -	_leave(" = %d [set %hx]", ret, y);
-> +	_leave(" = %d [set %u]", ret, y);
+As it's rather odd output to use '%u !=3D %d', probably.
 
-Should this just become %x to keep printing it as a hexidecimal number?
+Your patch, up to you.
 
-Cheers,
-Nathan
+> >=20
+> > > diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
+> > []
+> > > @@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
+> > >=20
+> > >       if (aalg_desc->uinfo.auth.icv_fullbits/8 !=3D
+> > >           crypto_ahash_digestsize(ahash)) {
+> > > -             pr_info("%s: %s digestsize %u !=3D %hu\n",
+> > > +             pr_info("%s: %s digestsize %u !=3D %d\n",
+> > >                       __func__, x->aalg->alg_name,
+> > >                       crypto_ahash_digestsize(ahash),
+> > >                       aalg_desc->uinfo.auth.icv_fullbits / 8);
+> >=20
 
->  	return ret;
->  }
->  
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
