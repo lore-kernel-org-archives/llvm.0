@@ -1,32 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF10F2563
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 18:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2AAC3411E;
-	Thu,  7 Jul 2022 18:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657218246;
-	bh=linJlkK0HAHLMdjOBvguKF5iShjpB0jbq6MyXKvaFZc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D7htMa30gqLwN5lFj4UQ3gQzBYmSefuAKVWW0S+566czBzSzYGqykYQIN06GHeevb
-	 9DusZE68RJje8w4Q9uDUjmr7C2+ZId96lP/Pwxu20yrP/JtwL5bAukJgqa3HjmjPwy
-	 PrQYi6Y1AZhLD/AacgcQOZ+2P86XP68lu45bUL4gKBM8hHPlmCI7FsXTirjZcYZ5AP
-	 DFCb+7F1Ic5HrITZVHD1xd3dEoE3j2vr3skb+KCY/lp4jiKlvw/REycoBJLd3TrQ4w
-	 9HkQGVlqs94MD29jYTxs1Qmj9UmBM/HNdSfhLIE4xobjyQk2J5+uzB24tQtRVx+c25
-	 EahEvIT50eJ8Q==
-Date: Thu, 7 Jul 2022 11:24:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-	kuba@kernel.org, linux-afs@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	marc.dionne@auristor.com, ndesaulniers@google.com,
-	netdev@vger.kernel.org, pabeni@redhat.com, trix@redhat.com
-Subject: Re: [PATCH v2] net: rxrpc: fix clang -Wformat warning
-Message-ID: <Ysckw9ok670tojo1@dev-arch.thelio-3990X>
-References: <20220706235648.594609-1-justinstitt@google.com>
- <20220707182052.769989-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA262596
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 19:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657221481; x=1688757481;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=up8cq/+G3lZAX2uopGo9w8cQRtyaAUegDJnUV47QUBg=;
+  b=PLY2GjaEIx1Ka8+M0+zwXCOXaM4SIUiSWy8ntneU+J/qsFhd03vl4KSF
+   cpeZeCXKYsyxYeOixAu/8WByy81I4Q8G/hZdegtLLBUEGxj+eXiGpN+0y
+   5w3t9K+Egnpghk8ik2WHVllDKwlF3CjBLnl0y/vLx8hy5WSavoPyrJEus
+   r9XlLZJ/AY3QsRRNqw2QamnBa5K7rvql96VOSmtXimGmLVQ4EB5AdP3dO
+   wWQs6W5tvx8jj72wWqBdeiDczQ+4WESe/La8XkBw79gIh3WW264hnvt1k
+   w4JowirC7emTyY+oUloBXwTRVT8eyJRHuDnBKv3mXWmDyt8J4+ueUKKvq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282857961"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="282857961"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 12:18:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="620919426"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 12:17:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9X0g-000MMM-Dh;
+	Thu, 07 Jul 2022 19:17:58 +0000
+Date: Fri, 8 Jul 2022 03:17:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: ld.lld: error: undefined symbol: omap_set_dma_priority
+Message-ID: <202207080322.DnumSqh8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,47 +44,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707182052.769989-1-justinstitt@google.com>
 
-On Thu, Jul 07, 2022 at 11:20:52AM -0700, Justin Stitt wrote:
-> When building with Clang we encounter this warning:
-> | net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
-> | but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-> | _leave(" = %d [set %hx]", ret, y);
-> 
-> y is a u32 but the format specifier is `%hx`. Going from unsigned int to
-> short int results in a loss of data. This is surely not intended
-> behavior. If it is intended, the warning should be suppressed through
-> other means.
-> 
-> This patch should get us closer to the goal of enabling the -Wformat
-> flag for Clang builds.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   5 weeks ago
+config: arm-randconfig-r035-20220706 (https://download.01.org/0day-ci/archive/20220708/202207080322.DnumSqh8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7036440eab3e2d47a775d4616909f8235488d714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
-> diff from v1 -> v2: 
-> * Change format specifier from %u to %x to properly represent hexadecimal.
-> 
->  net/rxrpc/rxkad.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
-> index 08aab5c01437..258917a714c8 100644
-> --- a/net/rxrpc/rxkad.c
-> +++ b/net/rxrpc/rxkad.c
-> @@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *call,
->  		break;
->  	}
->  
-> -	_leave(" = %d [set %hx]", ret, y);
-> +	_leave(" = %d [set %x]", ret, y);
->  	return ret;
->  }
->  
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: omap_set_dma_priority
+   >>> referenced by omapfb_main.c:1706 (drivers/video/fbdev/omap/omapfb_main.c:1706)
+   >>>               video/fbdev/omap/omapfb_main.o:(omapfb_do_probe) in archive drivers/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
