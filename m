@@ -1,47 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456777C
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF22A7C
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657233070; x=1688769070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=38Mh6DFaVp8kd4XW3sT6BiNg0fRZtdi1BmkNe5o8GJo=;
-  b=FBZCAnjZyJFGL9zKswnMXjDQ9HQrPXlRLnPVB6ZrRufRuX2Juf/0avVo
-   68gLAQoB+Hneii2GQpyRUniRPExNrZzQ+chNyI+bGZdqYc9HsxFCzL0P8
-   PdTstvWEdXskkkTa9Ev9DX1C8qPLXYKqt3k6jKD7eku8WWm9BrpgE/pcG
-   mR25RIQ9PsaW1y+B6CNjoue01QSXJBcWjCYjte1Zq3DLWqDR9jep6UIzt
-   okdWxJdMgf102BbzBT607h9l6gIO8W+8LwFxtqBPEYPsBKa9RaKAd2JPv
-   pnOAAKGKCtewAbMB8ctCFCkCrOgFcuCw2AHwD7SR2ScmOYkcFGVaaD3YS
+  t=1657234330; x=1688770330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BYQxuiqgPa+mfWpwJmnT77GinLD1xG1yjODhgvcPRh8=;
+  b=mBbSHU2fEyZ1OC4W79VsxmIT0sNQbBeZWFrbVp0EDMSKn8a9eQ3agRHQ
+   XKptFZ9r1TWX5xA2k769i6A1ffziACMjc9uQCPo1I+3OKF2CEX5TMPvoO
+   gc2I4MAnQv0uK0P2w9V3lTUsNwfwdJozrRsyBIE/M69BXIZdwG6lx7eE+
+   UjfgShzq4USnWQcqu1alAzimtdsE93FpWdivYCxnfxFAaL/l9k2oCflYN
+   huyMuIgsMc3cSZvsiqvSXATfR7TQR/JpqiqFADnUzbHttr4QiVYckzlvs
+   zrlPU+cE+jAQPkL0JzrxQDYwZr4toBGy4fbjSlktu7iyu3m1o/5egi6jy
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345824054"
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284161259"
 X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="345824054"
+   d="scan'208";a="284161259"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:31:09 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:52:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="840080638"
+   d="scan'208";a="840086652"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2022 15:31:07 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2022 15:52:08 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9a1a-000MXW-IF;
-	Thu, 07 Jul 2022 22:31:06 +0000
-Date: Fri, 8 Jul 2022 06:30:42 +0800
+	id 1o9aLv-000MZ0-KQ;
+	Thu, 07 Jul 2022 22:52:07 +0000
+Date: Fri, 8 Jul 2022 06:51:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	Michael Ellerman <mpe@ellerman.id.au>
+To: Samuel Holland <samuel@sholland.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] powerpc: Remove asm/prom.h from asm/mpc52xx.h and
- asm/pci.h
-Message-ID: <202207080622.VqN3Z1BL-lkp@intel.com>
-References: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
+	linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+	Michael Kelley <mikelley@microsoft.com>
+Subject: [arm-platforms:irq/affinity-nosmp 7/8]
+ drivers/pci/controller/pci-hyperv.c:1654:35: error: passing 'const struct
+ cpumask *' to parameter of type 'struct cpumask *' discards qualifiers
+Message-ID: <202207080612.kREyVtTY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,93 +47,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <22ac0b64b6c6ef6cc6a74739eb213a81372835ed.1657204012.git.christophe.leroy@csgroup.eu>
 
-Hi Christophe,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on mkp-scsi/for-next jejb-scsi/for-next linus/master v5.19-rc5 next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220708/202207080622.VqN3Z1BL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/affinity-nosmp
+head:   aa0813581b8d37bdd91cd40b67ef79ffa45104b2
+commit: 4d0b8298818b623f5fa51d5c49e1a142d3618ac9 [7/8] genirq: Return a const cpumask from irq_data_get_affinity_mask
+config: arm64-buildonly-randconfig-r001-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080612.kREyVtTY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christophe-Leroy/video-fbdev-offb-Include-missing-linux-platform_device-h/20220707-222906
-        git checkout 0e553b9abdcfd7c1f63b072e9d9280ce759c0c3c
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=4d0b8298818b623f5fa51d5c49e1a142d3618ac9
+        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
+        git fetch --no-tags arm-platforms irq/affinity-nosmp
+        git checkout 4d0b8298818b623f5fa51d5c49e1a142d3618ac9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwmon/pmbus/ drivers/pci/controller/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/powerpc/kernel/prom.c:891:5: warning: no previous prototype for function 'of_get_ibm_chip_id' [-Wmissing-prototypes]
-   int of_get_ibm_chip_id(struct device_node *np)
-       ^
-   arch/powerpc/kernel/prom.c:891:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int of_get_ibm_chip_id(struct device_node *np)
-   ^
-   static 
-   1 warning generated.
+>> drivers/pci/controller/pci-hyperv.c:1654:35: error: passing 'const struct cpumask *' to parameter of type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           cpu = hv_compose_msi_req_get_cpu(affinity);
+                                            ^~~~~~~~
+   drivers/pci/controller/pci-hyperv.c:1638:55: note: passing argument to parameter 'affinity' here
+   static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+                                                         ^
+   drivers/pci/controller/pci-hyperv.c:1674:35: error: passing 'const struct cpumask *' to parameter of type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           cpu = hv_compose_msi_req_get_cpu(affinity);
+                                            ^~~~~~~~
+   drivers/pci/controller/pci-hyperv.c:1638:55: note: passing argument to parameter 'affinity' here
+   static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
+                                                         ^
+   2 errors generated.
 
 
-vim +/of_get_ibm_chip_id +891 arch/powerpc/kernel/prom.c
+vim +1654 drivers/pci/controller/pci-hyperv.c
 
-b27652dd2174df1 Kevin Hao              2013-12-24  871  
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  872  /*******
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  873   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  874   * New implementation of the OF "find" APIs, return a refcounted
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  875   * object, call of_node_put() when done.  The device tree and list
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  876   * are protected by a rw_lock.
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  877   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  878   * Note that property management will need some locking as well,
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  879   * this isn't dealt with yet.
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  880   *
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  881   *******/
-9b6b563c0d2d25e Paul Mackerras         2005-10-06  882  
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  883  /**
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  884   * of_get_ibm_chip_id - Returns the IBM "chip-id" of a device
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  885   * @np: device node of the device
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  886   *
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  887   * This looks for a property "ibm,chip-id" in the node or any
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  888   * of its parents and returns its content, or -1 if it cannot
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  889   * be found.
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  890   */
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15 @891  int of_get_ibm_chip_id(struct device_node *np)
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  892  {
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  893  	of_node_get(np);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  894  	while (np) {
-1856f50c66dff0a Christophe Jaillet     2015-10-16  895  		u32 chip_id;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  896  
-1856f50c66dff0a Christophe Jaillet     2015-10-16  897  		/*
-1856f50c66dff0a Christophe Jaillet     2015-10-16  898  		 * Skiboot may produce memory nodes that contain more than one
-1856f50c66dff0a Christophe Jaillet     2015-10-16  899  		 * cell in chip-id, we only read the first one here.
-1856f50c66dff0a Christophe Jaillet     2015-10-16  900  		 */
-1856f50c66dff0a Christophe Jaillet     2015-10-16  901  		if (!of_property_read_u32(np, "ibm,chip-id", &chip_id)) {
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  902  			of_node_put(np);
-1856f50c66dff0a Christophe Jaillet     2015-10-16  903  			return chip_id;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  904  		}
-16c1d606263ea37 Michael Ellerman       2015-10-26  905  
-16c1d606263ea37 Michael Ellerman       2015-10-26  906  		np = of_get_next_parent(np);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  907  	}
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  908  	return -1;
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  909  }
-b130e7c04f1130f Dan Streetman          2015-05-07  910  EXPORT_SYMBOL(of_get_ibm_chip_id);
-b37193b71846858 Benjamin Herrenschmidt 2013-07-15  911  
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1642  
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1643  static u32 hv_compose_msi_req_v2(
+4d0b8298818b623 drivers/pci/controller/pci-hyperv.c Samuel Holland   2022-07-01  1644  	struct pci_create_interrupt2 *int_pkt, const struct cpumask *affinity,
+a2bad844a67b1c7 drivers/pci/controller/pci-hyperv.c Jeffrey Hugo     2022-05-11  1645  	u32 slot, u8 vector, u8 vector_count)
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1646  {
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1647  	int cpu;
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1648  
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1649  	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE2;
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1650  	int_pkt->wslot.slot = slot;
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1651  	int_pkt->int_desc.vector = vector;
+a2bad844a67b1c7 drivers/pci/controller/pci-hyperv.c Jeffrey Hugo     2022-05-11  1652  	int_pkt->int_desc.vector_count = vector_count;
+831c1ae725f7d2f drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2022-01-05  1653  	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12 @1654  	cpu = hv_compose_msi_req_get_cpu(affinity);
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1655  	int_pkt->int_desc.processor_array[0] =
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1656  		hv_cpu_number_to_vp_number(cpu);
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1657  	int_pkt->int_desc.processor_count = 1;
+7dcf90e9e032432 drivers/pci/host/pci-hyperv.c       Jork Loeser      2017-05-24  1658  
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1659  	return sizeof(*int_pkt);
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1660  }
+8f6a6b3c50ce1ca drivers/pci/controller/pci-hyperv.c Sunil Muthuswamy 2021-07-12  1661  
+
+:::::: The code at line 1654 was first introduced by commit
+:::::: 8f6a6b3c50ce1caa81c47bb5855be02050c0eff7 PCI: hv: Support for create interrupt v3
+
+:::::: TO: Sunil Muthuswamy <sunilmut@microsoft.com>
+:::::: CC: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 
 -- 
 0-DAY CI Kernel Test Service
