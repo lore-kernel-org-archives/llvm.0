@@ -1,78 +1,109 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA262596
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 19:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657221481; x=1688757481;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=up8cq/+G3lZAX2uopGo9w8cQRtyaAUegDJnUV47QUBg=;
-  b=PLY2GjaEIx1Ka8+M0+zwXCOXaM4SIUiSWy8ntneU+J/qsFhd03vl4KSF
-   cpeZeCXKYsyxYeOixAu/8WByy81I4Q8G/hZdegtLLBUEGxj+eXiGpN+0y
-   5w3t9K+Egnpghk8ik2WHVllDKwlF3CjBLnl0y/vLx8hy5WSavoPyrJEus
-   r9XlLZJ/AY3QsRRNqw2QamnBa5K7rvql96VOSmtXimGmLVQ4EB5AdP3dO
-   wWQs6W5tvx8jj72wWqBdeiDczQ+4WESe/La8XkBw79gIh3WW264hnvt1k
-   w4JowirC7emTyY+oUloBXwTRVT8eyJRHuDnBKv3mXWmDyt8J4+ueUKKvq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282857961"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="282857961"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 12:18:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="620919426"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 12:17:59 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9X0g-000MMM-Dh;
-	Thu, 07 Jul 2022 19:17:58 +0000
-Date: Fri, 8 Jul 2022 03:17:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: ld.lld: error: undefined symbol: omap_set_dma_priority
-Message-ID: <202207080322.DnumSqh8-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5882596
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 19:18:21 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-31cb93cadf2so66156877b3.11
+        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 12:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tVSk6aDePRlfaMKbBa1wNYKRnA8D6KWXesEA2nPDvx8=;
+        b=rKGylpDT7+YQfH2LTSbtEjJ5z8UmpAYYaiJ3XCVUTC8D6MNAFRsPeXRNLoKi/8qJ1L
+         PbZSRnEFFzX3ICffc8QHxWwNMx5JgiHxbnyKGiRhDjUWrFb4i0jfRESAhKpBgE/ZJs9c
+         SteCEmJF+blqWfdNGvgeUtJqN2lTVF1/zBWz/efTDiQ2KMiYy0CeajTiFiVmkZt0fc+R
+         ny25GCY0WIpHH/Q0jO9EUYjJAVsxcKsBtDG3qaEc4OsinMkHGHOrKjuCK0S5Gcp4/BER
+         aT44115fSbWeQNHRTTv26x4wIzTI7zml1jBo1P9yci2IGTLOdAIGcDIBjpYo6ZP6U/O7
+         FS6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tVSk6aDePRlfaMKbBa1wNYKRnA8D6KWXesEA2nPDvx8=;
+        b=pkyj3l+UeD3+FKMnskHZC66cZq5Ms45qWzCMsD2FSlCHCghhc+E3X3VPxvFYGE4iVb
+         Loh5zqjQREwrqW40ORb3HK/ypbHldU8H+yGrcZr4QyTK8eNOhwjoaCAI8T/TsCehmFws
+         oVj5//TNsPIBa0dWulbPAuWozsAt2HR25soX0rUouR2A4WJftuyucY6QRzy6d9WdgF6H
+         tx0DD/hgt+OcpvY6erTEHQb5nhj/bIsBKsKusMZDFRqGIaAfrnzcV9lZIGYkhqNXTwAt
+         jHuGKulpMxQjc+2v2RZUzZhWYdl/SMpREOWCSYQvtQ3N7C7pEIUT5Lise81Oo4fcXCNI
+         H9Pw==
+X-Gm-Message-State: AJIora86gEl17jjoEpg6nX28xROK6i+6DGpCB7lbqQDftkTBtlBceXYc
+	j1p9ONdS2N7QUle8bB+UE/z2qJFNNuQeE6SCVA==
+X-Google-Smtp-Source: AGRyM1vh2aNec0y0qNtJWHVhMXf3oe7xSDLFg0L29X/v0RrKNisGF3nj4CLEjmRA1x6E5hJB+xQxWYpEpTP2r44U6w==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:1184:b0:66e:756d:3baa with
+ SMTP id m4-20020a056902118400b0066e756d3baamr16339226ybu.533.1657221500162;
+ Thu, 07 Jul 2022 12:18:20 -0700 (PDT)
+Date: Thu,  7 Jul 2022 12:17:45 -0700
+Message-Id: <20220707191745.840590-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
+From: Justin Stitt <justinstitt@google.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
+	Florian Westphal <fw@strlen.de>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
-commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
-date:   5 weeks ago
-config: arm-randconfig-r035-20220706 (https://download.01.org/0day-ci/archive/20220708/202207080322.DnumSqh8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7036440eab3e2d47a775d4616909f8235488d714
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+When building with Clang we encounter these warnings:
+| net/netfilter/xt_TPROXY.c:173:5: error: format specifies type 'unsigned
+| char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+| &iph->saddr, ntohs(hp->source),
+-
+| net/netfilter/xt_TPROXY.c:181:4: error: format specifies type 'unsigned
+| char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+| &iph->saddr, ntohs(hp->source),
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The format specifier `%hhu` refers to a u8 while tproto is an int. In
+this case we weren't losing any data because ipv6_find_hdr returns an
+int but its return value (nexthdr) is a u8. This u8 gets widened to an
+int when returned from ipv6_find_hdr and assigned to tproto. The
+previous format specifier is functionally fine but still produces a
+warning due to a type mismatch.
 
-All errors (new ones prefixed by >>):
+The fix is simply to listen to Clang and change `%hhu` to `%d` for both
+instances of the warning.
 
->> ld.lld: error: undefined symbol: omap_set_dma_priority
-   >>> referenced by omapfb_main.c:1706 (drivers/video/fbdev/omap/omapfb_main.c:1706)
-   >>>               video/fbdev/omap/omapfb_main.o:(omapfb_do_probe) in archive drivers/built-in.a
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+It should be noted that for this entire file to build without -Wformat
+warnings you should apply this `ntohs` patch which fixed many, many
+-Wformat warnings in the kernel.
+https://lore.kernel.org/all/20220608223539.470472-1-justinstitt@google.com/
 
+ net/netfilter/xt_TPROXY.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
+index 459d0696c91a..5d74abffc94f 100644
+--- a/net/netfilter/xt_TPROXY.c
++++ b/net/netfilter/xt_TPROXY.c
+@@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+ 		   targets on the same rule yet */
+ 		skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
+ 
+-		pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
++		pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+ 			 tproto, &iph->saddr, ntohs(hp->source),
+ 			 laddr, ntohs(lport), skb->mark);
+ 
+@@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+ 		return NF_ACCEPT;
+ 	}
+ 
+-	pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
++	pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+ 		 tproto, &iph->saddr, ntohs(hp->source),
+ 		 &iph->daddr, ntohs(hp->dest), skb->mark);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+
