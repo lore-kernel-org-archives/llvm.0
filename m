@@ -1,45 +1,36 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB5F7C
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 16:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657210915; x=1688746915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jfS20c82Owhe4A7rVEXB12ChunYTYMYQMvsGEKbzCF4=;
-  b=AJN/mGlF+BpAs/E2V9EsbQCZpEZ2XxGjmaUrVmENF03KIGQDwjzmiVcY
-   3KHJf5dJ2truODTmLOafmlAy8fflNVBOlW3eetZkwyyC+9Zxb3YJlYeMT
-   7H7OiJJpNHeFM4zSKBAkHEfriAKJxZ+XetR/zZBLZwA9RbTbThKBuAoQM
-   LVpY/tPzHnpXlaLCnClx4xN/T11v6krSBD6lK7cOVcm/2ivbYNmVdAvql
-   lwoIlCl2FE7dGRDFy61L9fsT180iJbvhFPdQDVBGLYYztoaia42HT7yx9
-   3mIkU/wUj0FCJj4IhCXt3C9OjMlsN/zvt/gb354n5kNpPLmW47Ri43GXs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284088950"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="284088950"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 09:21:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="661443939"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2022 09:21:51 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9UGF-000MDE-1m;
-	Thu, 07 Jul 2022 16:21:51 +0000
-Date: Fri, 8 Jul 2022 00:21:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	edumazet@google.com, pabeni@redhat.com, borisp@nvidia.com,
-	john.fastabend@gmail.com, maximmi@nvidia.com, tariqt@nvidia.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next 5/6] tls: create an internal header
-Message-ID: <202207080051.XdhPoIde-lkp@intel.com>
-References: <20220707013510.1372695-6-kuba@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4480B2563;
+	Thu,  7 Jul 2022 17:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE89C3411E;
+	Thu,  7 Jul 2022 17:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657214227;
+	bh=kr28mPaitT2hXZx987lyh9NyAySJXLUdOKVygYD27Oo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LLRdvuDrJUqZukDOtd4VwKGYbJakodGU28aqB7NORti+i68Ni0MSuktfoXMDjgm4A
+	 J4d2qxdecv4ucF3wTGKNSrJ4yBKitwVg9iD/dNHx78NZfAMBo5W3n7ddXm9Duuk9My
+	 GTRlzZKRiLLkthtHbxaKM5hCui7uLCnCte8HvDBa2VATdV/YhOKWAPzNLz1/RzUqyA
+	 uRYJ59NvG2JMQfiRWStd8yK11yWew8tQ18VvID5f1XRA51rHmKRteh6LSOJU4qGm2n
+	 n5fCtIAuDKncVzT2IfxwU5EgsEnMywxktn77JaGrp/VNhnVccJrTCRdKwJ+WN8HDeY
+	 +JRRxlu+LSqQw==
+Date: Thu, 7 Jul 2022 10:17:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Daniel Kolesa <daniel@octaforge.org>,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when
+ cross compiling with clang
+Message-ID: <YscVEIBtyoX2jrBV@dev-arch.thelio-3990X>
+References: <20220617180845.2788442-1-nathan@kernel.org>
+ <842b718f-8207-1565-3373-61098a4c2d33@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,120 +39,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707013510.1372695-6-kuba@kernel.org>
+In-Reply-To: <842b718f-8207-1565-3373-61098a4c2d33@intel.com>
 
-Hi Jakub,
+On Wed, Jul 06, 2022 at 03:25:51PM -0700, Dave Hansen wrote:
+> On 6/17/22 11:08, Nathan Chancellor wrote:
+> > When clang is invoked without a '--target' flag, code is generated for
+> > the default target, which is usually the host (it is configurable via
+> > cmake). As a result, the has-stack-protector scripts will generate code
+> > for the default target but check for x86 specific segment registers,
+> > which cannot succeed if the default target is not x86.
+> 
+> I guess the real root cause here is the direct use of '$(CC)' without
+> any other flags.  Adding '$(CLANG_FLAGS)' seems like a pretty normal
+> fix, like in scripts/Kconfig.include.
 
-I love your patch! Yet something to improve:
+Right, also see the following commits for other areas where this was
+addressed.
 
-[auto build test ERROR on net-next/master]
+58d746c119df ("efi/libstub: Add $(CLANG_FLAGS) to x86 flags")
+d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
+8abe7fc26ad8 ("x86/build: Propagate $(CLANG_FLAGS) to $(REALMODE_FLAGS)")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/tls-pad-strparser-internal-header-decrypt_ctx-etc/20220707-120420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git cd355d0bc60df51266d228c0f69570cdcfa1e6ba
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220708/202207080051.XdhPoIde-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4088937ef16f0f7a85bc39bb89ab75b33d5e8774
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jakub-Kicinski/tls-pad-strparser-internal-header-decrypt_ctx-etc/20220707-120420
-        git checkout 4088937ef16f0f7a85bc39bb89ab75b33d5e8774
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/netronome/nfp/
+> I suspect there's another one of these here:
+> 
+> 	arch/x86/um/vdso/Makefile:      cmd_vdso = $(CC) -nostdlib -o $@
+> 
+> but I wouldn't be surprised if UML doesn't work with clang in the first
+> place.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We have started testing UML with clang and it does work but I suspect
+there is little value to cross compiling a UML kernel, as it has to run
+in an x86 userland anyways, rather than through QEMU or other
+virtualization solutions. That is not something I plan to do anyways.
+If someone does and a fix similar to this one is needed, it can be done
+at that time.
 
-All errors (new ones prefixed by >>):
+Thank you for picking up this change!
 
->> drivers/net/ethernet/netronome/nfp/nfp_net_common.c:636:4: error: call to undeclared function 'tls_offload_tx_resync_request'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           tls_offload_tx_resync_request(nskb->sk, seq,
-                           ^
-   drivers/net/ethernet/netronome/nfp/nfp_net_common.c:636:4: note: did you mean 'tls_offload_rx_resync_request'?
-   include/net/tls.h:420:20: note: 'tls_offload_rx_resync_request' declared here
-   static inline void tls_offload_rx_resync_request(struct sock *sk, __be32 seq)
-                      ^
-   1 error generated.
-
-
-vim +/tls_offload_tx_resync_request +636 drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-
-4c3523623dc0b98 Jakub Kicinski     2015-12-01  585  
-62d033309d62653 Jakub Kicinski     2022-03-21  586  struct sk_buff *
-51a5e563298db5c Jakub Kicinski     2019-06-05  587  nfp_net_tls_tx(struct nfp_net_dp *dp, struct nfp_net_r_vector *r_vec,
-51a5e563298db5c Jakub Kicinski     2019-06-05  588  	       struct sk_buff *skb, u64 *tls_handle, int *nr_frags)
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  589  {
-c8d3928ea7e7e53 Jakub Kicinski     2019-07-08  590  #ifdef CONFIG_TLS_DEVICE
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  591  	struct nfp_net_tls_offload_ctx *ntls;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  592  	struct sk_buff *nskb;
-9ed431c1d7cf8c3 Jakub Kicinski     2019-06-10  593  	bool resync_pending;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  594  	u32 datalen, seq;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  595  
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  596  	if (likely(!dp->ktls_tx))
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  597  		return skb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  598  	if (!skb->sk || !tls_is_sk_tx_device_offloaded(skb->sk))
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  599  		return skb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  600  
-504148fedb85429 Eric Dumazet       2022-06-30  601  	datalen = skb->len - skb_tcp_all_headers(skb);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  602  	seq = ntohl(tcp_hdr(skb)->seq);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  603  	ntls = tls_driver_ctx(skb->sk, TLS_OFFLOAD_CTX_DIR_TX);
-9ed431c1d7cf8c3 Jakub Kicinski     2019-06-10  604  	resync_pending = tls_offload_tx_resync_pending(skb->sk);
-9ed431c1d7cf8c3 Jakub Kicinski     2019-06-10  605  	if (unlikely(resync_pending || ntls->next_seq != seq)) {
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  606  		/* Pure ACK out of order already */
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  607  		if (!datalen)
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  608  			return skb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  609  
-51a5e563298db5c Jakub Kicinski     2019-06-05  610  		u64_stats_update_begin(&r_vec->tx_sync);
-51a5e563298db5c Jakub Kicinski     2019-06-05  611  		r_vec->tls_tx_fallback++;
-51a5e563298db5c Jakub Kicinski     2019-06-05  612  		u64_stats_update_end(&r_vec->tx_sync);
-51a5e563298db5c Jakub Kicinski     2019-06-05  613  
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  614  		nskb = tls_encrypt_skb(skb);
-51a5e563298db5c Jakub Kicinski     2019-06-05  615  		if (!nskb) {
-51a5e563298db5c Jakub Kicinski     2019-06-05  616  			u64_stats_update_begin(&r_vec->tx_sync);
-51a5e563298db5c Jakub Kicinski     2019-06-05  617  			r_vec->tls_tx_no_fallback++;
-51a5e563298db5c Jakub Kicinski     2019-06-05  618  			u64_stats_update_end(&r_vec->tx_sync);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  619  			return NULL;
-51a5e563298db5c Jakub Kicinski     2019-06-05  620  		}
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  621  		/* encryption wasn't necessary */
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  622  		if (nskb == skb)
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  623  			return skb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  624  		/* we don't re-check ring space */
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  625  		if (unlikely(skb_is_nonlinear(nskb))) {
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  626  			nn_dp_warn(dp, "tls_encrypt_skb() produced fragmented frame\n");
-51a5e563298db5c Jakub Kicinski     2019-06-05  627  			u64_stats_update_begin(&r_vec->tx_sync);
-51a5e563298db5c Jakub Kicinski     2019-06-05  628  			r_vec->tx_errors++;
-51a5e563298db5c Jakub Kicinski     2019-06-05  629  			u64_stats_update_end(&r_vec->tx_sync);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  630  			dev_kfree_skb_any(nskb);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  631  			return NULL;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  632  		}
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  633  
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  634  		/* jump forward, a TX may have gotten lost, need to sync TX */
-9ed431c1d7cf8c3 Jakub Kicinski     2019-06-10  635  		if (!resync_pending && seq - ntls->next_seq < U32_MAX / 4)
-8538d29cea9530f Jakub Kicinski     2019-10-04 @636  			tls_offload_tx_resync_request(nskb->sk, seq,
-8538d29cea9530f Jakub Kicinski     2019-10-04  637  						      ntls->next_seq);
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  638  
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  639  		*nr_frags = 0;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  640  		return nskb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  641  	}
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  642  
-51a5e563298db5c Jakub Kicinski     2019-06-05  643  	if (datalen) {
-51a5e563298db5c Jakub Kicinski     2019-06-05  644  		u64_stats_update_begin(&r_vec->tx_sync);
-427545b3046326c Jakub Kicinski     2019-07-08  645  		if (!skb_is_gso(skb))
-51a5e563298db5c Jakub Kicinski     2019-06-05  646  			r_vec->hw_tls_tx++;
-427545b3046326c Jakub Kicinski     2019-07-08  647  		else
-427545b3046326c Jakub Kicinski     2019-07-08  648  			r_vec->hw_tls_tx += skb_shinfo(skb)->gso_segs;
-51a5e563298db5c Jakub Kicinski     2019-06-05  649  		u64_stats_update_end(&r_vec->tx_sync);
-51a5e563298db5c Jakub Kicinski     2019-06-05  650  	}
-51a5e563298db5c Jakub Kicinski     2019-06-05  651  
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  652  	memcpy(tls_handle, ntls->fw_handle, sizeof(ntls->fw_handle));
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  653  	ntls->next_seq += datalen;
-c8d3928ea7e7e53 Jakub Kicinski     2019-07-08  654  #endif
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  655  	return skb;
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  656  }
-c3991d397f2a4d8 Dirk van der Merwe 2019-06-05  657  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
