@@ -1,120 +1,254 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61371362
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 07:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657180259;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+6vKb5qtW2WQk3PF9/RN812iqCXsUylPTfCM4P31gZ0=;
-	b=W8F5QWNa0nBSyhlfKt81XL2p2cU9RrdlWoTZldZHDFF5L9L6p9nM2lNbWepA5q34Zd7+rO
-	OjlNF99EJ8IYDyhVGy+Z4nGP6duCIttt6S4EML3XdK+5x6+fMFcMQ6S7suc8hOIqvuyELc
-	3R6biD4mHgakvHsQStSesI+H1p5/Kgo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-66-XzDAm2DeOaShg64PpEZQ1Q-1; Thu, 07 Jul 2022 03:50:56 -0400
-X-MC-Unique: XzDAm2DeOaShg64PpEZQ1Q-1
-Received: by mail-wm1-f69.google.com with SMTP id o28-20020a05600c511c00b003a04f97f27aso9187528wms.9
-        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 00:50:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+6vKb5qtW2WQk3PF9/RN812iqCXsUylPTfCM4P31gZ0=;
-        b=KNzPtg4fYj8p57Ea4Pc96I94uRA46f/pGPYRrtsxndksE4kUDNiWoqgYM/bBwUm1ZM
-         uABZRNUwU34P5jaeLznlple3/6Fq5shN0XE9FtKKLo0tt+Hm0GOP1ncAP1lXAyDN/UR3
-         MvIzVA1XlSjgWmmElyFoaS9psHdBYZsBfppaNLY3btZsKFceYAJkobRH0v+3hHqa7guq
-         HwmH9GLouNZieHNTQvRx78qisWwP7G1Gg65eBdr6WGSeIBK0Aa+M0W90eqWUH6XsClba
-         COWez5d8QsOe+l8aALkv5+Hk0NtFgHrnojWbV1AxG0kPV1Hopa1/Pg409DpkzMN7RTAi
-         XwaQ==
-X-Gm-Message-State: AJIora9+TvCHmJcNYLh7gg/69es3qmXeXvIABoDwL9Vu8Ie1z76BqbGl
-	5P4WlqOZO+/k1Zi9f2Tr1nIqhq0duFC5AINF+D48xeiQgRpN4lJ8Ru+4PfLcCz7XOnqWEbQZ3Tz
-	tcdOhiv8m6OkxeQ==
-X-Received: by 2002:adf:fa04:0:b0:21d:1864:3172 with SMTP id m4-20020adffa04000000b0021d18643172mr44359079wrr.292.1657180254794;
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s+oP8nKMiKtM5JWiNW2EmP7v5KZWVhT1rv4ikXnOMyupFZ/UG6Ka+8OsYj9pCbnG7pzppYQQ==
-X-Received: by 2002:adf:fa04:0:b0:21d:1864:3172 with SMTP id m4-20020adffa04000000b0021d18643172mr44359057wrr.292.1657180254605;
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-Received: from debian.home (2a01cb058d1194004161f17a6a9ad508.ipv6.abo.wanadoo.fr. [2a01:cb05:8d11:9400:4161:f17a:6a9a:d508])
-        by smtp.gmail.com with ESMTPSA id u6-20020a5d5146000000b0020fcc655e4asm38297650wrt.5.2022.07.07.00.50.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 00:50:54 -0700 (PDT)
-Date: Thu, 7 Jul 2022 09:50:52 +0200
-From: Guillaume Nault <gnault@redhat.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: James Chapman <jchapman@katalix.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] net: l2tp: fix clang -Wformat warning
-Message-ID: <20220707075052.GA3912@debian.home>
-References: <20220706230833.535238-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB1B362
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 08:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657181072; x=1688717072;
+  h=message-id:date:subject:references:in-reply-to:to:cc:
+   from:content-transfer-encoding:mime-version;
+  bh=p89GxWtJ+9SVYpH9DoIi8Xmc2Ha0AzNyqUefbpsVTvc=;
+  b=OWHFtEVAF5fMCHtdOSIsJCMAU5yII7q0jjseyYFTXUCX9fm+w7XyTLVc
+   XrtG+pcA01SpD0fI0sJovkGqf/n1EUjDY9dClq78BrnVJYkqXY5VDrYyc
+   kDIbvB8iGpvVtVI5KnUao5Bh0Y7Lklp6xUMXDS1ZxJ+7Y693/bN0Qqu0o
+   P1M6njReCbm54yKXx74ch8gStXStlBm7wlq5NIUUWWHxDLJMKhbDH3wNL
+   ncyX+6tQfY92GThLtqqUZ4ZNIpSn91t5nkP+1o4FfoJWclDbcV0hIG7CO
+   WR3lBnaDI5zhj+NK/DLQOcAzJwpfwrs1peIcgo9gS0ZqcZ90wVHrGg7Mh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="285086472"
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="285086472"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:04:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
+   d="scan'208";a="696420653"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Jul 2022 01:04:31 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 7 Jul 2022 01:04:31 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 7 Jul 2022 01:04:31 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 7 Jul 2022 01:04:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a3rBtZkIKscJKH3hWNcbi7vJ8AGr5emt9kP0VTot6bPRmaaENYmAW5j/kE/MdHHEQySTuQo7dETimtVLfAUBmMc6k/QSmSaYNv5ZIscRAmBL7hEfYNtONrtWeVYoMyFZkrtjKOg+94MBTr2UdFsANc49RcK20I8T1oVQXESBGi9JDrYQGB+D61pt7B2DC//AxvwTD74tiuz7CLYvLGFhjLCLZQcjes9AeBoYqVgWWcwrUlm3u8dTAJzLYA/yXRFk7ZtR6uiLz1xAwlL/4K0nZVMoMWRyl5Jye3zsFjgrazFzCJbYiqoytW4XNpp0tUNUwP9JFn5ohPc5EYaVoLGNsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pvoCO+k7v48VcHary+QklsTp0+gc/+uqDbHU9WC6lTQ=;
+ b=g8/80YN1eQbOzsKMRcdEZk59aNBzmFt7qq187aiRG4wwXrRa6dGnxp57YigkGMm8cXwQbtH+GL/ljJAfuPnlN1mDFT8CqRQqxBuZZsgEuoWtmtS9G7RI07EbchYWNYgXP1VnPlYCfzJE1AH+Rwt/Wd/UD2TcFMqlPbkbgOhx/tKkW2TqhvVL4tsLUFODmNndHghTxP+fn4sGpLUWgHlQmWhWQihvPlIU06MoiZS0tkPN5rEZLYwh05USwVtS8403TScFZT/VdWqcOHI+2bS2kqFO97iKwKQtIKFVpTVBdiXnHNLF+IEtZB3pAvBm0S7Ujvi2gxcg+Pl+o5jwfqWwGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15)
+ by DM6PR11MB3130.namprd11.prod.outlook.com (2603:10b6:5:67::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.18; Thu, 7 Jul
+ 2022 08:04:28 +0000
+Received: from MW4PR11MB5933.namprd11.prod.outlook.com
+ ([fe80::71d0:716c:7d6d:94c4]) by MW4PR11MB5933.namprd11.prod.outlook.com
+ ([fe80::71d0:716c:7d6d:94c4%3]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
+ 08:04:28 +0000
+Message-ID: <4395b8ae-4cdb-82fd-5c83-1c0af47702db@intel.com>
+Date: Thu, 7 Jul 2022 16:04:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH V8 3/3] rtc: zynqmp: Add calibration set and get support
+References: <202207012151.nYCjgJqj-lkp@intel.com>
+Content-Language: en-US
+In-Reply-To: <202207012151.nYCjgJqj-lkp@intel.com>
+To: Srinivas Neeli <srinivas.neeli@xilinx.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
+From: kernel test robot <yujie.liu@intel.com>
+X-Forwarded-Message-Id: <202207012151.nYCjgJqj-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0008.apcprd02.prod.outlook.com
+ (2603:1096:3:17::20) To MW4PR11MB5933.namprd11.prod.outlook.com
+ (2603:10b6:303:16a::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220706230833.535238-1-justinstitt@google.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=gnault@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6b2db7ce-9034-43e7-eb52-08da5fef50d7
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3130:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ns+5Ve0mBuOpuEe9iw6WYoFR6mBzOD9rVwe0mZKADqNBiAy34o/xNzfwUgiUZmPP/l/LpXcXMmc8iLlV64syHqYTFo2DmUQa74ng69laQx+qpHN3J9W1Oo3IcwXq+mCR7C6QkhKdHOdUkWdo2ogTm9KyDr1uKEipzVrLeMowgBwhhA04H0aRafVB/rPIes5ST4HINGPhSeDYpVluS2OO+igbUJN/W8X2hLFzeFxHLatgIqub6H5K4YrPBK+wB7Hy/PTXacUT5gQpZ0pgxMgwQYD9KsNlG/1Af+9/YNPHC9JAxcw03hrREQJHllanfpO0skm+slVAKRhcUulsqJY7SJrHldhtFtJkXELWvyUMRQ8pWgg5bFnVyo1aGN/EmIGoZ4C1PglFEGbiNDlkJDDu61e5UZTkz7Vw+DXlEddaDf1+kwgzvuurUcRc2xuN1gZMVV/ASAf5CJrcywVvvfk2PImMLNeVHcL7f79orEZ/0XWISaBvI0Ww7RNl9ZdhoRxlhy2Y9az2zO2GKlrDEgl7MlSoGgnsPgmCAqBrEKqJytYRl5UF9LGRNlZkgm59tVLvl2/ebzTvmogM8L3EINK5j69aaDqM7YvgqmMqpz9TaJtlUnTKvNmroBJ9NSLSvEtXUwb7XTpG63BYjP8D4xj3F5JLHatPJkkpIhbsR1pxY6+7JI/Nng84aWpwsAvOd368dCvjI6LXOjTCsyZ6m0T/J1OuvKJ41jD9qRYtLvAdQte9KGnXbhReP1+5tKluiI6BEfH8tFSRQIUcnPo3dsWgrsOYvANZBrek7JcpMvhbATURKseFy7+AyWowUwi5w7yxF85lz1EvXk/C2vtYMReWyc/d1rDCWf/COP0WCtSmf20D4jgtX+W5E8JXusMdXY78KBSHtuehvTvh+EaTwfGcflcR3VDRSIkiqaUI+Zs455o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(346002)(136003)(376002)(366004)(396003)(4326008)(186003)(41300700001)(6666004)(6506007)(26005)(316002)(31686004)(36756003)(6916009)(83380400001)(31696002)(38100700002)(6512007)(2906002)(8676002)(966005)(82960400001)(8936002)(5660300002)(86362001)(2616005)(6486002)(66476007)(478600001)(66556008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q0M2VG1UQU9sSGNLL3NXRlNJMEVSN3lKK2l0VzJlOGptZjIxR3pKbXM5d3gv?=
+ =?utf-8?B?M3Rva0IwditkQ1hKbXlIejhERlNuYVVyYTFGWENpZjlpYjlHYTFuM0x2MkhT?=
+ =?utf-8?B?S3B3aTdLRjFZbjViNXNGcEowcHkyTUwyaEI0Nnh3eS9KU1F6cHNPR1BUb2NM?=
+ =?utf-8?B?TDFNRXBRelJqRFJvbTAyWVhxSUpsbktrTEdCbWF1b2hlWTFKQzlHZzl2WWhT?=
+ =?utf-8?B?T2Nha1JuYzcyU0JPbEtabE02UnRablVuZWFmTGthbHJMSzBrU1ZzMjlzL3VV?=
+ =?utf-8?B?UFpVVEZTSUMxV2NiOHNYVHpmNGxkbWhqRmlSNVFYYUlnZE4wQ0VsVjNlV01R?=
+ =?utf-8?B?dUFBVHplcGN1S0pmbjVRdUREQXdEZ2tXT05Yc21kdzdYNy9IVjlJdk1rVTZk?=
+ =?utf-8?B?UUF6TTQzODNyd2RuN2UvZ0NXZUNKcCtFYUxwTlRyWWJBbU9weGVqd2tSamx1?=
+ =?utf-8?B?TDUyd05BNU14aUhyWVlIMDlscTU4VXMxL2FjcVgrR2NUc0NKWW5oR1ZIeFdZ?=
+ =?utf-8?B?Q3h2VWhwemQyeGI5K0Vpb2FuNlZ4ZlNLQ0RVeTBzNzM0WGxKSlMwekxoUTZJ?=
+ =?utf-8?B?YjdvOEtqdTZZMGsxK0dLTFRYQjdUTlI2OWFZWlczTW80U3BaUEM0M1c4L0Vr?=
+ =?utf-8?B?dzJnNnY5L3Zqb3JGYkkraGJyM1EzT2RnZzBuOVFhMXovK09ocERreVhKTXd1?=
+ =?utf-8?B?MHVrQjRRdS9JY25vdm1ERUpsRGU5eWhsWVMvZElLdHQ3MXpvWng1SHVQbHJh?=
+ =?utf-8?B?dUdWbnJ2MzcxU0Y4VXgvaVROeThoTnFtcmJ4QmY4VkFZaHdESE9sSjBGaUtF?=
+ =?utf-8?B?Nitmc2FhcnVDWUtJdzV6cUFrdlN3NnR1N1Q2b2QrRmtUeWJIck0xUUY4ZXFy?=
+ =?utf-8?B?YnU2a2h3S01JaDcrQmJ0dHFzVXBPYjJ4VWtYS0tFWHBtWEVMTzlLMW9ReTJU?=
+ =?utf-8?B?Ujh4eEs1eHJNaktHVng3V3VuSTRVMHB3QU5Rd2k3KzFRaFFEalA2ZEtHWjJ4?=
+ =?utf-8?B?NWwzd2I4S0t0OWJOc1NnRTlMNTMvZFdaQXAvVm40YVpxM0dwOG5aTEZZaytO?=
+ =?utf-8?B?NEplWXRsdTAwaTkwNWt4UWFueGgrbWlaRDVNbUEwekRlR0FBanIyTzkxNWQ1?=
+ =?utf-8?B?M1NuTWFxWVNQTzNIcVlLSWZRQndMdzM2QlFQYjJlQUdBRFhqeml6WXR6L2VV?=
+ =?utf-8?B?R0lYTnd2bTlGMTRSY05Ec3UrUll3R2lRK0JBM0Rta0hCRE1MWGRiM2ZMaEJX?=
+ =?utf-8?B?a1FzYkFnUDNPWXYxRmVxZkU0ZFVLOXN2L0RqUUdZNDhoaFdrbUJ3RFAyRWtD?=
+ =?utf-8?B?U2k5ZEJlWldVZE15TDJpcnVSUzQrdm95QUlIVlBubXdCdGdQNVNtSC9PcG9C?=
+ =?utf-8?B?NHg5NzRQcXM0c29Tc20xRlpqNWhKTHBEWmN1MXJyRTUwOW0weWtUTFVaTHpP?=
+ =?utf-8?B?eGdhdHZiL3hPM0lYTHI3VGVkQmJHWndCc29yNjNYOFcvZG1VQ2JnS1RTOTNF?=
+ =?utf-8?B?NFBaNHRSc3AzTmtUUU40UjJCTUVkK0dUbVVJZkZ4UlJVQmlIdkczS05wa0JM?=
+ =?utf-8?B?b3BZMlQwR1B6cXVqOTdrcXJvTHhRbWNFdU1hWlNmMzNRR1RaU0cwNjNvcDRs?=
+ =?utf-8?B?ZUNteVpQUHVhRWFrMFNHTzh6ejVUNXk1bC9ibDNLVHZEMWgvaWFXcjJFMFB2?=
+ =?utf-8?B?blByd3JlbzlXcWxSdnZ4bTBXRitGRC9NdmY1OXJwbTJoQWtqK0syOW5pUUlF?=
+ =?utf-8?B?ck04dnJyM2YwWDFneWFpSE1ha3lOYXNWWDJ3M3Z0SUxscmt6UEVzZFRYamw0?=
+ =?utf-8?B?REE2U1B2MDNBbERndmtFT1lhWEtkViszY2QvaTN3bEVTQjVMaTltWlBmV3E3?=
+ =?utf-8?B?UUZqbkNSbU91ZkNnaC8wLys1YzQ5Q1NzbHI3RnAwd0l0Q3ZEVU5DRzFsaUpE?=
+ =?utf-8?B?S3NrdGdKSUdlRlhNeFBaSjJOVTBQOFJiaEd2R2lINVloWTllU1ZiaEFuQzEy?=
+ =?utf-8?B?MG5wQWQxZGRoMVEzeHR3VVgzMk9yUTRJRUp4M25scXNKWkVvUE1ubkNBUjVN?=
+ =?utf-8?B?cDVUNFpFSXR4b05VMjNXM0hnRWJXMFRTY0tpTWViUGxRVis0dkF6bWhRbDdJ?=
+ =?utf-8?Q?kdjijZPsIoT3PRmrY0EtZbdiz?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b2db7ce-9034-43e7-eb52-08da5fef50d7
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5933.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 08:04:28.5590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lgpby6potB0m1VCLNT8cL0F+TFSWcDqW2s/ndH0txbDymVzAwvL21G52WAOMQQswKC276z1A/0S78269M4NbGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3130
+X-OriginatorOrg: intel.com
 
-On Wed, Jul 06, 2022 at 04:08:33PM -0700, Justin Stitt wrote:
-> When building with clang we encounter this warning:
-> | net/l2tp/l2tp_ppp.c:1557:6: error: format specifies type 'unsigned
-> | short' but the argument has type 'u32' (aka 'unsigned int')
-> | [-Werror,-Wformat] session->nr, session->ns,
-> 
-> Both session->nr and session->ns are of type u32. The format specifier
-> previously used is `%hu` which would truncate our unsigned integer from
-> 32 to 16 bits. This doesn't seem like intended behavior, if it is then
-> perhaps we need to consider suppressing the warning with pragma clauses.
+Hi Srinivas,
 
-pppol2tp_seq_session_show() is only called for L2TPv2 sessions, where
-ns and nr are 2 bytes long (L2TPv3 uses 3 bytes, hence the u32 type in
-the generic l2tp_session structure). So %hu shouldn't truncate anything
-here.
+Thanks for your patch! Perhaps something to improve:
 
-However %u doesn't harm and is cleaner than silencing the warning with
-pragma.
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Acked-by: Guillaume Nault <gnault@redhat.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+config: arm-randconfig-c002-20220629 (https://download.01.org/0day-ci/archive/20220701/202207012151.nYCjgJqj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # install arm cross compiling tool for clang build
+         # apt-get install binutils-arm-linux-gnueabi
+         # https://github.com/intel-lab-lkp/linux/commit/2781fd75583878d86f256113b19bb005dc83fb70
+         git remote add linux-review https://github.com/intel-lab-lkp/linux
+         git fetch --no-tags linux-review Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
+         git checkout 2781fd75583878d86f256113b19bb005dc83fb70
+         # save the config file
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
 
-> This patch should get us closer to the goal of enabling the -Wformat
-> flag for Clang builds.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
->  net/l2tp/l2tp_ppp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
-> index 8be1fdc68a0b..db2e584c625e 100644
-> --- a/net/l2tp/l2tp_ppp.c
-> +++ b/net/l2tp/l2tp_ppp.c
-> @@ -1553,7 +1553,7 @@ static void pppol2tp_seq_session_show(struct seq_file *m, void *v)
->  		   session->lns_mode ? "LNS" : "LAC",
->  		   0,
->  		   jiffies_to_msecs(session->reorder_timeout));
-> -	seq_printf(m, "   %hu/%hu %ld/%ld/%ld %ld/%ld/%ld\n",
-> +	seq_printf(m, "   %u/%u %ld/%ld/%ld %ld/%ld/%ld\n",
->  		   session->nr, session->ns,
->  		   atomic_long_read(&session->stats.tx_packets),
->  		   atomic_long_read(&session->stats.tx_bytes),
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
-> 
+clang-analyzer warnings: (new ones prefixed by >>)
 
+ >> drivers/rtc/rtc-zynqmp.c:238:6: warning: Branch condition evaluates to a garbage value [clang-analyzer-core.uninitialized.Branch]
+            if (fract_tick)
+                ^~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:206:2: note: 'fract_tick' declared without an initial value
+            unsigned char fract_tick;
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:211:6: note: Assuming the condition is false
+            if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
+                ^~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:211:6: note: Left side of '||' is false
+    drivers/rtc/rtc-zynqmp.c:211:33: note: Assuming 'offset' is <= RTC_MAX_OFFSET
+            if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:211:2: note: Taking false branch
+            if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
+            ^
+    drivers/rtc/rtc-zynqmp.c:218:6: note: Assuming 'fract_offset' is 0
+            if (fract_offset) {
+                ^~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:218:2: note: Taking false branch
+            if (fract_offset) {
+            ^
+    drivers/rtc/rtc-zynqmp.c:238:6: note: Branch condition evaluates to a garbage value
+            if (fract_tick)
+                ^~~~~~~~~~
+
+vim +238 drivers/rtc/rtc-zynqmp.c
+
+2781fd75583878 Srinivas Neeli  2022-06-13  200
+2781fd75583878 Srinivas Neeli  2022-06-13  201  static int xlnx_rtc_set_offset(struct device *dev, long offset)
+2781fd75583878 Srinivas Neeli  2022-06-13  202  {
+2781fd75583878 Srinivas Neeli  2022-06-13  203  	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
+2781fd75583878 Srinivas Neeli  2022-06-13  204  	unsigned long long rtc_ppb = RTC_PPB;
+2781fd75583878 Srinivas Neeli  2022-06-13  205  	unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
+2781fd75583878 Srinivas Neeli  2022-06-13 @206  	unsigned char fract_tick;
+2781fd75583878 Srinivas Neeli  2022-06-13  207  	unsigned int calibval;
+2781fd75583878 Srinivas Neeli  2022-06-13  208  	short int  max_tick;
+2781fd75583878 Srinivas Neeli  2022-06-13  209  	int fract_offset;
+2781fd75583878 Srinivas Neeli  2022-06-13  210
+2781fd75583878 Srinivas Neeli  2022-06-13  211  	if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
+2781fd75583878 Srinivas Neeli  2022-06-13  212  		return -ERANGE;
+2781fd75583878 Srinivas Neeli  2022-06-13  213
+2781fd75583878 Srinivas Neeli  2022-06-13  214  	/* Number ticks for given offset */
+2781fd75583878 Srinivas Neeli  2022-06-13  215  	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
+2781fd75583878 Srinivas Neeli  2022-06-13  216
+2781fd75583878 Srinivas Neeli  2022-06-13  217  	/* Number fractional ticks for given offset */
+2781fd75583878 Srinivas Neeli  2022-06-13  218  	if (fract_offset) {
+2781fd75583878 Srinivas Neeli  2022-06-13  219  		if (fract_offset < 0) {
+2781fd75583878 Srinivas Neeli  2022-06-13  220  			fract_offset = fract_offset + tick_mult;
+2781fd75583878 Srinivas Neeli  2022-06-13  221  			max_tick--;
+2781fd75583878 Srinivas Neeli  2022-06-13  222  		}
+2781fd75583878 Srinivas Neeli  2022-06-13  223  		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
+2781fd75583878 Srinivas Neeli  2022-06-13  224  			for (fract_tick = 1; fract_tick < 16; fract_tick++) {
+2781fd75583878 Srinivas Neeli  2022-06-13  225  				if (fract_offset <=
+2781fd75583878 Srinivas Neeli  2022-06-13  226  				    (fract_tick *
+2781fd75583878 Srinivas Neeli  2022-06-13  227  				     (tick_mult / RTC_FR_MAX_TICKS)))
+2781fd75583878 Srinivas Neeli  2022-06-13  228  					break;
+2781fd75583878 Srinivas Neeli  2022-06-13  229  			}
+2781fd75583878 Srinivas Neeli  2022-06-13  230  		}
+2781fd75583878 Srinivas Neeli  2022-06-13  231  	}
+2781fd75583878 Srinivas Neeli  2022-06-13  232
+2781fd75583878 Srinivas Neeli  2022-06-13  233  	/* Zynqmp RTC uses second and fractional tick
+2781fd75583878 Srinivas Neeli  2022-06-13  234  	 * counters for compensation
+11143c19eb57a8 Suneel Garapati 2015-08-19  235  	 */
+2781fd75583878 Srinivas Neeli  2022-06-13  236  	calibval = max_tick + RTC_CALIB_DEF;
+2781fd75583878 Srinivas Neeli  2022-06-13  237
+2781fd75583878 Srinivas Neeli  2022-06-13 @238  	if (fract_tick)
+2781fd75583878 Srinivas Neeli  2022-06-13  239  		calibval |= RTC_FR_EN;
+2781fd75583878 Srinivas Neeli  2022-06-13  240
+2781fd75583878 Srinivas Neeli  2022-06-13  241  	calibval |= (fract_tick << RTC_FR_DATSHIFT);
+2781fd75583878 Srinivas Neeli  2022-06-13  242
+2781fd75583878 Srinivas Neeli  2022-06-13  243  	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
+2781fd75583878 Srinivas Neeli  2022-06-13  244
+2781fd75583878 Srinivas Neeli  2022-06-13  245  	return 0;
+11143c19eb57a8 Suneel Garapati 2015-08-19  246  }
+11143c19eb57a8 Suneel Garapati 2015-08-19  247
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
