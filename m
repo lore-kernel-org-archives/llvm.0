@@ -1,109 +1,176 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5882596
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 19:18:21 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-31cb93cadf2so66156877b3.11
-        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 12:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tVSk6aDePRlfaMKbBa1wNYKRnA8D6KWXesEA2nPDvx8=;
-        b=rKGylpDT7+YQfH2LTSbtEjJ5z8UmpAYYaiJ3XCVUTC8D6MNAFRsPeXRNLoKi/8qJ1L
-         PbZSRnEFFzX3ICffc8QHxWwNMx5JgiHxbnyKGiRhDjUWrFb4i0jfRESAhKpBgE/ZJs9c
-         SteCEmJF+blqWfdNGvgeUtJqN2lTVF1/zBWz/efTDiQ2KMiYy0CeajTiFiVmkZt0fc+R
-         ny25GCY0WIpHH/Q0jO9EUYjJAVsxcKsBtDG3qaEc4OsinMkHGHOrKjuCK0S5Gcp4/BER
-         aT44115fSbWeQNHRTTv26x4wIzTI7zml1jBo1P9yci2IGTLOdAIGcDIBjpYo6ZP6U/O7
-         FS6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tVSk6aDePRlfaMKbBa1wNYKRnA8D6KWXesEA2nPDvx8=;
-        b=pkyj3l+UeD3+FKMnskHZC66cZq5Ms45qWzCMsD2FSlCHCghhc+E3X3VPxvFYGE4iVb
-         Loh5zqjQREwrqW40ORb3HK/ypbHldU8H+yGrcZr4QyTK8eNOhwjoaCAI8T/TsCehmFws
-         oVj5//TNsPIBa0dWulbPAuWozsAt2HR25soX0rUouR2A4WJftuyucY6QRzy6d9WdgF6H
-         tx0DD/hgt+OcpvY6erTEHQb5nhj/bIsBKsKusMZDFRqGIaAfrnzcV9lZIGYkhqNXTwAt
-         jHuGKulpMxQjc+2v2RZUzZhWYdl/SMpREOWCSYQvtQ3N7C7pEIUT5Lise81Oo4fcXCNI
-         H9Pw==
-X-Gm-Message-State: AJIora86gEl17jjoEpg6nX28xROK6i+6DGpCB7lbqQDftkTBtlBceXYc
-	j1p9ONdS2N7QUle8bB+UE/z2qJFNNuQeE6SCVA==
-X-Google-Smtp-Source: AGRyM1vh2aNec0y0qNtJWHVhMXf3oe7xSDLFg0L29X/v0RrKNisGF3nj4CLEjmRA1x6E5hJB+xQxWYpEpTP2r44U6w==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
- (user=justinstitt job=sendgmr) by 2002:a05:6902:1184:b0:66e:756d:3baa with
- SMTP id m4-20020a056902118400b0066e756d3baamr16339226ybu.533.1657221500162;
- Thu, 07 Jul 2022 12:18:20 -0700 (PDT)
-Date: Thu,  7 Jul 2022 12:17:45 -0700
-Message-Id: <20220707191745.840590-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F26C28ED
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 21:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657227607; x=1688763607;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rx2ITqrNRMmjvPk/hlZ1eEsRTE15y5KMSLGBZ795f64=;
+  b=e6zVwMt2hasrGutETgkDm1Y7rNKgxA0uF7TTgtKhuSXP4TpA4pdaoe2d
+   7U4Q90/wtE3ZL/XTU90MWYmTXWnjcnHzi48qPxY1BC/Oxme24aGRSYygV
+   DHNHFNTdRm+/Go0vYXYXZdMh9mjmgksvwgVhTuVe8Nwgaif00AwravSYb
+   YgVvVY71wj9THZSJB3fp2buC6sSWTvyz0bD0gEFwybM9zRMgF6MOBTCZa
+   KSIaPpld/pNeHqO5XzHD+Dp4Zbt/CwOuy3Y+szex4/qGR+/iMEv6A/fpu
+   h/j6kPpFSSv5xW3X30tVg2mSLrWCYHmVTHG/Ig0YlETb7vBeKmGdqoSuW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="264534617"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="264534617"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 14:00:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="683437276"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Jul 2022 14:00:05 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9YbU-000MU9-G0;
+	Thu, 07 Jul 2022 21:00:04 +0000
+Date: Fri, 8 Jul 2022 04:59:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-hardening-filter 14/16]
+ drivers/virtio/virtio_mmio.c:578:6: error: call to undeclared function
+ 'cc_platform_has'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202207080447.LxoIupJT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
-From: Justin Stitt <justinstitt@google.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When building with Clang we encounter these warnings:
-| net/netfilter/xt_TPROXY.c:173:5: error: format specifies type 'unsigned
-| char' but the argument has type 'int' [-Werror,-Wformat] tproto,
-| &iph->saddr, ntohs(hp->source),
--
-| net/netfilter/xt_TPROXY.c:181:4: error: format specifies type 'unsigned
-| char' but the argument has type 'int' [-Werror,-Wformat] tproto,
-| &iph->saddr, ntohs(hp->source),
+tree:   https://github.com/intel/tdx.git guest-hardening-filter
+head:   cadf5ac0e49f45fdd2a3828fa625e01ad5fb55e7
+commit: 92e6731960eaf63df4626788d7d302941beaf3dd [14/16] virtio-mmio: Disable in TDX guest
+config: hexagon-randconfig-r045-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080447.LxoIupJT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/92e6731960eaf63df4626788d7d302941beaf3dd
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-filter
+        git checkout 92e6731960eaf63df4626788d7d302941beaf3dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/virtio/
 
-The format specifier `%hhu` refers to a u8 while tproto is an int. In
-this case we weren't losing any data because ipv6_find_hdr returns an
-int but its return value (nexthdr) is a u8. This u8 gets widened to an
-int when returned from ipv6_find_hdr and assigned to tproto. The
-previous format specifier is functionally fine but still produces a
-warning due to a type mismatch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The fix is simply to listen to Clang and change `%hhu` to `%d` for both
-instances of the warning.
+All errors (new ones prefixed by >>):
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-It should be noted that for this entire file to build without -Wformat
-warnings you should apply this `ntohs` patch which fixed many, many
--Wformat warnings in the kernel.
-https://lore.kernel.org/all/20220608223539.470472-1-justinstitt@google.com/
+>> drivers/virtio/virtio_mmio.c:578:6: error: call to undeclared function 'cc_platform_has'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (cc_platform_has(CC_ATTR_GUEST_DEVICE_FILTER))
+               ^
+>> drivers/virtio/virtio_mmio.c:578:22: error: use of undeclared identifier 'CC_ATTR_GUEST_DEVICE_FILTER'
+           if (cc_platform_has(CC_ATTR_GUEST_DEVICE_FILTER))
+                               ^
+   drivers/virtio/virtio_mmio.c:624:33: warning: shift count >= width of type [-Wshift-count-overflow]
+                   rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+                                                 ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   drivers/virtio/virtio_mmio.c:633:46: warning: shift count >= width of type [-Wshift-count-overflow]
+                   rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+                                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   2 warnings and 2 errors generated.
 
- net/netfilter/xt_TPROXY.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
-index 459d0696c91a..5d74abffc94f 100644
---- a/net/netfilter/xt_TPROXY.c
-+++ b/net/netfilter/xt_TPROXY.c
-@@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
- 		   targets on the same rule yet */
- 		skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
- 
--		pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-+		pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
- 			 tproto, &iph->saddr, ntohs(hp->source),
- 			 laddr, ntohs(lport), skb->mark);
- 
-@@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
- 		return NF_ACCEPT;
- 	}
- 
--	pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-+	pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
- 		 tproto, &iph->saddr, ntohs(hp->source),
- 		 &iph->daddr, ntohs(hp->dest), skb->mark);
- 
+vim +/cc_platform_has +578 drivers/virtio/virtio_mmio.c
+
+   571	
+   572	static int virtio_mmio_probe(struct platform_device *pdev)
+   573	{
+   574		struct virtio_mmio_device *vm_dev;
+   575		unsigned long magic;
+   576		int rc;
+   577	
+ > 578		if (cc_platform_has(CC_ATTR_GUEST_DEVICE_FILTER))
+   579			return -ENODEV;
+   580	
+   581		vm_dev = devm_kzalloc(&pdev->dev, sizeof(*vm_dev), GFP_KERNEL);
+   582		if (!vm_dev)
+   583			return -ENOMEM;
+   584	
+   585		vm_dev->vdev.dev.parent = &pdev->dev;
+   586		vm_dev->vdev.dev.release = virtio_mmio_release_dev;
+   587		vm_dev->vdev.config = &virtio_mmio_config_ops;
+   588		vm_dev->pdev = pdev;
+   589		INIT_LIST_HEAD(&vm_dev->virtqueues);
+   590		spin_lock_init(&vm_dev->lock);
+   591	
+   592		vm_dev->base = devm_platform_ioremap_resource(pdev, 0);
+   593		if (IS_ERR(vm_dev->base))
+   594			return PTR_ERR(vm_dev->base);
+   595	
+   596		/* Check magic value */
+   597		magic = readl(vm_dev->base + VIRTIO_MMIO_MAGIC_VALUE);
+   598		if (magic != ('v' | 'i' << 8 | 'r' << 16 | 't' << 24)) {
+   599			dev_warn(&pdev->dev, "Wrong magic value 0x%08lx!\n", magic);
+   600			return -ENODEV;
+   601		}
+   602	
+   603		/* Check device version */
+   604		vm_dev->version = readl(vm_dev->base + VIRTIO_MMIO_VERSION);
+   605		if (vm_dev->version < 1 || vm_dev->version > 2) {
+   606			dev_err(&pdev->dev, "Version %ld not supported!\n",
+   607					vm_dev->version);
+   608			return -ENXIO;
+   609		}
+   610	
+   611		vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
+   612		if (vm_dev->vdev.id.device == 0) {
+   613			/*
+   614			 * virtio-mmio device with an ID 0 is a (dummy) placeholder
+   615			 * with no function. End probing now with no error reported.
+   616			 */
+   617			return -ENODEV;
+   618		}
+   619		vm_dev->vdev.id.vendor = readl(vm_dev->base + VIRTIO_MMIO_VENDOR_ID);
+   620	
+   621		if (vm_dev->version == 1) {
+   622			writel(PAGE_SIZE, vm_dev->base + VIRTIO_MMIO_GUEST_PAGE_SIZE);
+   623	
+   624			rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+   625			/*
+   626			 * In the legacy case, ensure our coherently-allocated virtio
+   627			 * ring will be at an address expressable as a 32-bit PFN.
+   628			 */
+   629			if (!rc)
+   630				dma_set_coherent_mask(&pdev->dev,
+   631						      DMA_BIT_MASK(32 + PAGE_SHIFT));
+   632		} else {
+   633			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+   634		}
+   635		if (rc)
+   636			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+   637		if (rc)
+   638			dev_warn(&pdev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
+   639	
+   640		platform_set_drvdata(pdev, vm_dev);
+   641	
+   642		rc = register_virtio_device(&vm_dev->vdev);
+   643		if (rc)
+   644			put_device(&vm_dev->vdev.dev);
+   645	
+   646		return rc;
+   647	}
+   648	
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
