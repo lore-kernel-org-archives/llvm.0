@@ -1,129 +1,117 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDC42CA5
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657231869; x=1688767869;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0ZyfBP5VbWE199fXScQnBmk8WDKbSp3PmyUauJNuNyU=;
-  b=YqcQGRIjR0u0DYbxny95q2pZpRkR5kdb19uxGtjF/BcudO4D725o1PM7
-   WUQjb9KV+Qzn6yEhw/uiYlI5YMhOcynmIe9o8JQi1/Jv3lHHvgdIRbm1u
-   ygJma1DWOu3ImMDZsIZyOAWGjYisPQGRU9FAPgert5nEMiqljNITmWZoA
-   RYL2DkuZLM+xLt+Sqr2iV4nIFlXFoLntBidBRQv7NM/ihMOtDi+xAbPPi
-   /7uMzwDRfu9ccl+EbPN8SwYii5RoPiJVj+gVZVYqspwGeKy2txQQnfvwu
-   cMuZPeHEfLlXKd2pCiTu4J4COvt8babh2QEdtXWGPeolZosBj/GzJd8Ac
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282884929"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="282884929"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:11:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="736125644"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 15:11:06 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9ZiE-000MWY-2S;
-	Thu, 07 Jul 2022 22:11:06 +0000
-Date: Fri, 8 Jul 2022 06:10:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [arnd-asm-generic:asm-generic-fixes 1/1] drivers/char/mem.c:66:9:
- error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202207080606.J3uB2s10-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F322CA5
+	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 22:15:18 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id k13-20020a25240d000000b0066e32c61c25so10178643ybk.3
+        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 15:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
+        b=aA00TODOScLx5rfKCpO+pAVqEX73pui8cCx+3XpnCCyru+fT+ofb/Ab2TS9xNDNU99
+         YNKaOBTsA7ff9EZZ8xUcR6VLuO3JXPvfBsrunTIT2rDulAbfyKZPIfD0jv7m8Tno8JXY
+         +T82Ab/D0pYfuaUmvFtngjFXFFMc5T/BVO6ypDoulJZ75kMRvYHKQB86864y10eH2uEw
+         4d3PUryKB7/phRYE0n7zvCY/JzTFCQSei9cMSVgBAyjxLTch+vrSPufB05tcgg9vjG2i
+         vuM1YjWMW1zfvqSXyEnoZLyTtO/m+9YJbYPez+Izg4VE+po1sFIWI3ZbN2N7STiUOkcA
+         SUTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=FgNJR3N4HuEzik8BFbsoxsCKMlA6Q79TXfo2nVTvHXw=;
+        b=27k8qVRJYcE7SP9dlxZsNRb5GwuixpetxeC6BZaW8fTP2r/Wkxe5ffro4rOclaCVPl
+         IBgM8aTmKwPFLWsrxJBTV2aqGiws6cT5zPJPcu0tKVsoU1tJbyVDU4/9OR5HlLklyVkQ
+         Vv8IrwBTO9VMwbKJXRzq9iRgekWRLSqxDRlMn3yMUQlWRV3HVc385eWtykIuIhYBxfbh
+         K37s+qyQvjSd73bW2CycLF7g/tCwk48rHt6c3d7rHdINXTZ6b4laLqhENaZshNeWw0aj
+         2hKdwQVfDLegE8XHqSOFqpPXj+QWbvidfYf1VViV4GKpyY5vR2ho2rxyRdj0y2RINeS2
+         7yxw==
+X-Gm-Message-State: AJIora/yzAxIXKIgmTefBIzO/IHTrdzagrtmAFJu/b1e1s9H/gOcFfDY
+	/oKv2tU0g14AixPHybE7n1Qi06IBMeHf3lu0mg==
+X-Google-Smtp-Source: AGRyM1vsybvdyGETyP8/pCMszh/hivglrkQc+shq/bl09u6ogz5eozWp/OTQeXLsPPeDx31CWy9PP42+u4bdaUY5Ow==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4640:519a:f833:9a5])
+ (user=justinstitt job=sendgmr) by 2002:a81:1cc:0:b0:317:a0fa:7a61 with SMTP
+ id 195-20020a8101cc000000b00317a0fa7a61mr516504ywb.10.1657232117460; Thu, 07
+ Jul 2022 15:15:17 -0700 (PDT)
+Date: Thu,  7 Jul 2022 15:14:56 -0700
+Message-Id: <20220707221456.1782048-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
+From: Justin Stitt <justinstitt@google.com>
+To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>, 
+	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
-head:   cdfde8f61a004fa5797d40581077603c142adca1
-commit: cdfde8f61a004fa5797d40581077603c142adca1 [1/1] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
-config: riscv-randconfig-r035-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080606.J3uB2s10-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=cdfde8f61a004fa5797d40581077603c142adca1
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic asm-generic-fixes
-        git checkout cdfde8f61a004fa5797d40581077603c142adca1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/char/ drivers/hwmon/pmbus/
+When building with Clang we encounter the following warnings:
+| net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
+| short' but the argument has type 'u32' (aka 'unsigned int')
+| [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
+| session->ns);
+-
+| net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
+| short' but the argument has type 'int' [-Werror,-Wformat]
+| session->l2specific_type, l2tp_get_l2specific_len(session));
+-
+| net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
+| short' but the argument has type 'u32' (aka 'unsigned int')
+| [-Werror,-Wformat] session->nr, session->ns,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Both session->nr and ->nc are of type `u32`. The currently used format
+specifier is `%hu` which describes a `u16`. My proposed fix is to listen
+to Clang and use the correct format specifier `%u`.
 
-All errors (new ones prefixed by >>):
+For the warning at line 196, l2tp_get_l2specific_len() returns an int
+and should therefore be using the `%d` format specifier.
 
->> drivers/char/mem.c:66:9: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return devmem_is_allowed(pfn);
-                  ^
-   drivers/char/mem.c:66:9: note: did you mean 'page_is_allowed'?
-   drivers/char/mem.c:64:19: note: 'page_is_allowed' declared here
-   static inline int page_is_allowed(unsigned long pfn)
-                     ^
-   drivers/char/mem.c:75:8: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   if (!devmem_is_allowed(pfn))
-                        ^
-   2 errors generated.
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Related l2tp -Wformat patch:
+https://lore.kernel.org/all/20220706230833.535238-1-justinstitt@google.com/
 
+ net/l2tp/l2tp_debugfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-vim +/devmem_is_allowed +66 drivers/char/mem.c
-
-^1da177e4c3f415 Linus Torvalds   2005-04-16  62  
-d092633bff3b19f Ingo Molnar      2008-07-18  63  #ifdef CONFIG_STRICT_DEVMEM
-a4866aa812518ed Kees Cook        2017-04-05  64  static inline int page_is_allowed(unsigned long pfn)
-a4866aa812518ed Kees Cook        2017-04-05  65  {
-a4866aa812518ed Kees Cook        2017-04-05 @66  	return devmem_is_allowed(pfn);
-a4866aa812518ed Kees Cook        2017-04-05  67  }
-e2beb3eae627211 Venki Pallipadi  2008-03-06  68  static inline int range_is_allowed(unsigned long pfn, unsigned long size)
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  69  {
-e2beb3eae627211 Venki Pallipadi  2008-03-06  70  	u64 from = ((u64)pfn) << PAGE_SHIFT;
-e2beb3eae627211 Venki Pallipadi  2008-03-06  71  	u64 to = from + size;
-e2beb3eae627211 Venki Pallipadi  2008-03-06  72  	u64 cursor = from;
-e2beb3eae627211 Venki Pallipadi  2008-03-06  73  
-e2beb3eae627211 Venki Pallipadi  2008-03-06  74  	while (cursor < to) {
-39380b80d727232 Jiri Kosina      2016-07-08  75  		if (!devmem_is_allowed(pfn))
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  76  			return 0;
-e2beb3eae627211 Venki Pallipadi  2008-03-06  77  		cursor += PAGE_SIZE;
-e2beb3eae627211 Venki Pallipadi  2008-03-06  78  		pfn++;
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  79  	}
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  80  	return 1;
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  81  }
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  82  #else
-a4866aa812518ed Kees Cook        2017-04-05  83  static inline int page_is_allowed(unsigned long pfn)
-a4866aa812518ed Kees Cook        2017-04-05  84  {
-a4866aa812518ed Kees Cook        2017-04-05  85  	return 1;
-a4866aa812518ed Kees Cook        2017-04-05  86  }
-e2beb3eae627211 Venki Pallipadi  2008-03-06  87  static inline int range_is_allowed(unsigned long pfn, unsigned long size)
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  88  {
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  89  	return 1;
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  90  }
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  91  #endif
-ae531c26c5c2a28 Arjan van de Ven 2008-04-24  92  
-
-:::::: The code at line 66 was first introduced by commit
-:::::: a4866aa812518ed1a37d8ea0c881dc946409de94 mm: Tighten x86 /dev/mem with zeroing reads
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
+diff --git a/net/l2tp/l2tp_debugfs.c b/net/l2tp/l2tp_debugfs.c
+index 9d1aafe75f92..4595b56d175d 100644
+--- a/net/l2tp/l2tp_debugfs.c
++++ b/net/l2tp/l2tp_debugfs.c
+@@ -184,7 +184,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		   session->pwtype == L2TP_PWTYPE_PPP ? "PPP" :
+ 		   "");
+ 	if (session->send_seq || session->recv_seq)
+-		seq_printf(m, "   nr %hu, ns %hu\n", session->nr, session->ns);
++		seq_printf(m, "   nr %u, ns %u\n", session->nr, session->ns);
+ 	seq_printf(m, "   refcnt %d\n", refcount_read(&session->ref_count));
+ 	seq_printf(m, "   config 0/0/%c/%c/-/%s %08x %u\n",
+ 		   session->recv_seq ? 'R' : '-',
+@@ -192,7 +192,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		   session->lns_mode ? "LNS" : "LAC",
+ 		   0,
+ 		   jiffies_to_msecs(session->reorder_timeout));
+-	seq_printf(m, "   offset 0 l2specific %hu/%hu\n",
++	seq_printf(m, "   offset 0 l2specific %hu/%d\n",
+ 		   session->l2specific_type, l2tp_get_l2specific_len(session));
+ 	if (session->cookie_len) {
+ 		seq_printf(m, "   cookie %02x%02x%02x%02x",
+@@ -215,7 +215,7 @@ static void l2tp_dfs_seq_session_show(struct seq_file *m, void *v)
+ 		seq_puts(m, "\n");
+ 	}
+ 
+-	seq_printf(m, "   %hu/%hu tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
++	seq_printf(m, "   %u/%u tx %ld/%ld/%ld rx %ld/%ld/%ld\n",
+ 		   session->nr, session->ns,
+ 		   atomic_long_read(&session->stats.tx_packets),
+ 		   atomic_long_read(&session->stats.tx_bytes),
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+
