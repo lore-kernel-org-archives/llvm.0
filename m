@@ -1,57 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3583D89
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 20:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20A13D89
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 20:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657312813; x=1688848813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DIVHdvGmcoQvN9wD6lnJmfi5wn5rSahT3GEvClW89ZA=;
-  b=WHsXtL2Tuu0FMg1QQ1AM6uL2d1ZZ6ZAYdUFfu7bXOOOGH3+jF6yBJo0X
-   ZVYo826c/NwkXypg2dYq0uP6MwolSuzabEfYtlcfWi0b1ArlfRNauE2oy
-   SWYfXglhi0k2+t/KHap1ykmKwZl4E4Y9tunPpNQm+JFszEc6+ttorOB0q
-   g/xY6jc/Z5d5qsDHEdFRp5xHpaQvy7vxOXowc5s/qx5q39gVsXZKNvpal
-   SQRQ3rTydWaDPROhDIGoqw9pM9WzsVmak10h3rL/RE70EmEoItvhXLLe9
-   LI7Xm3Dj3xoqwhlHqMiAjZkaizyo+UvShOKLHjE6nWDi+lZjmcQmt2kA/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="309946169"
+  t=1657313409; x=1688849409;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f4+Pv6ztoVQxNmpihMiCo2tCWAEketMWZRexCM0xWHU=;
+  b=ItVIkoN6kZ3S1XaS/P2cJXwMr6Hjfg8tEjLQFvNPTwsiJdF3Ms68HGN3
+   in1EV7fVmkKILd8755+cvM/T8uBbUiBVgiyla09JBdonu0WclKWZrqe2K
+   rUxtoQoJwbODGTRctFwBao2KeAGWJ9QsgacEr9cGz0pJybgWhN2vd8ISq
+   2C4Qq4qa8BkedjbhD8Co1oz5zc8P3WcWiQmY+azIWVD9O54qIEboQbUf/
+   CVaGS3qkdZWdxIDsPwhsgsmrzZrQjmHBylQS2hvpKYoomxkv814alPuko
+   5myer5UnyZ2+2vc6NwzgEYJoYY7B2YQHIzjXrAHEb+rAaXj5WzDwT+Oqr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="370675775"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="309946169"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:40:12 -0700
+   d="scan'208";a="370675775"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:50:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="594244629"
+   d="scan'208";a="921120227"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 08 Jul 2022 13:40:07 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 13:50:07 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9uli-000Nv4-Tb;
-	Fri, 08 Jul 2022 20:40:06 +0000
-Date: Sat, 9 Jul 2022 04:39:43 +0800
+	id 1o9uvP-000NvK-5D;
+	Fri, 08 Jul 2022 20:50:07 +0000
+Date: Sat, 9 Jul 2022 04:49:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
-	kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Hans Schultz <netdev@kapio-technology.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
-	Roopa Prabhu <roopa@nvidia.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-	bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <202207090438.PlGIeA4G-lkp@intel.com>
-References: <20220707152930.1789437-4-netdev@kapio-technology.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:locking/core 2/4] arch/mips/kernel/jump_label.c:93:6: warning:
+ no previous prototype for function 'jump_label_apply_nops'
+Message-ID: <202207090424.PgjCetK5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,58 +45,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707152930.1789437-4-netdev@kapio-technology.com>
 
-Hi Hans,
+Hi Ard,
 
-Thank you for the patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on net/master]
-[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc5]
-[cannot apply to net-next/master next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 07266d066301b97ad56a693f81b29b7ced429b27
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220709/202207090438.PlGIeA4G-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+head:   eae6d58d67d9739be5f7ae2dbead1d0ef6528243
+commit: fdfd42892f311e2b3695852036e5be23661dc590 [2/4] jump_label: mips: move module NOP patching into arch code
+config: mips-randconfig-r035-20220708 (https://download.01.org/0day-ci/archive/20220709/202207090424.PgjCetK5-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ebd598d7ea6c015001489c4293da887763491086
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-        git checkout ebd598d7ea6c015001489c4293da887763491086
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=fdfd42892f311e2b3695852036e5be23661dc590
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip locking/core
+        git checkout fdfd42892f311e2b3695852036e5be23661dc590
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ fs/ksmbd/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/sja1105/sja1105_main.c:1952:58: error: too few arguments to function call, expected 6, have 5
-           return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
-                  ~~~~~~~~~~~~~~~                                  ^
-   drivers/net/dsa/sja1105/sja1105_main.c:1803:12: note: 'sja1105_fdb_add' declared here
-   static int sja1105_fdb_add(struct dsa_switch *ds, int port,
-              ^
-   1 error generated.
+>> arch/mips/kernel/jump_label.c:93:6: warning: no previous prototype for function 'jump_label_apply_nops' [-Wmissing-prototypes]
+   void jump_label_apply_nops(struct module *mod)
+        ^
+   arch/mips/kernel/jump_label.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void jump_label_apply_nops(struct module *mod)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +1952 drivers/net/dsa/sja1105/sja1105_main.c
+vim +/jump_label_apply_nops +93 arch/mips/kernel/jump_label.c
 
-5126ec72a094bd3 Vladimir Oltean 2021-08-08  1947  
-a52b2da778fc93e Vladimir Oltean 2021-01-09  1948  static int sja1105_mdb_add(struct dsa_switch *ds, int port,
-c26933639b5402c Vladimir Oltean 2022-02-25  1949  			   const struct switchdev_obj_port_mdb *mdb,
-c26933639b5402c Vladimir Oltean 2022-02-25  1950  			   struct dsa_db db)
-291d1e72b756424 Vladimir Oltean 2019-05-02  1951  {
-c26933639b5402c Vladimir Oltean 2022-02-25 @1952  	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
-291d1e72b756424 Vladimir Oltean 2019-05-02  1953  }
-291d1e72b756424 Vladimir Oltean 2019-05-02  1954  
+    91	
+    92	#ifdef CONFIG_MODULES
+  > 93	void jump_label_apply_nops(struct module *mod)
 
 -- 
 0-DAY CI Kernel Test Service
