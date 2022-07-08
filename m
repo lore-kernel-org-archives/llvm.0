@@ -1,82 +1,118 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E33033FD
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 20:36:05 +0000 (UTC)
-Received: by mail-pg1-f202.google.com with SMTP id 134-20020a63018c000000b0040cf04213a1so10580263pgb.6
-        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 13:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6l2CjPLXl85Q15DcTvzQiYj2hwKWjzB2O4EVtvxw9k4=;
-        b=BePOGD043IgAR5e+hSZbNy1h9F5Y0m1k7v84h0obB/WrgkLEFoueASGq3zFANmGHOz
-         Fqenh8TRKEczyYt13TyKQ/Ft75B26xUhSuGyvRQ1zAE6itMoB59ht02AEvEnakmLUxo1
-         YrgKYzHPAUKlGfQtuamRhtSX+m7/2OihMg+kF6Vo0qNw8krFAz6tlcVoW3lneuVLIR/h
-         GEyuzB8p4Kl6HFl5aYAKmtmecKC3zCIjOrhRDPP0KBARRNl50UsDmdCI3DwTygCZo8M7
-         b40SJKdfrcVjMe9jgBYSzHx/b6Wb5XtUSgOuz6jyPFwQ9k+6mebwJ2kKzNw9KUQELzMt
-         6jOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6l2CjPLXl85Q15DcTvzQiYj2hwKWjzB2O4EVtvxw9k4=;
-        b=Ws2Agi5ywfOEHUjl0OwzN7od86HXcgrxV1m3IIqtJGAH2ORV2nzQaNEnzIKjbQzXM7
-         7V48WqRGeKSsuhm4oixp2R65u9PIOZFcUnXk9otzOk8cQ2j1wci/l2nG/bV/UGyHflCt
-         ckHZoxwYoUIpLgIbYw3w8gN5U1dupq9+Cezx9yKkcACJ5VkLc9bmObmYmHBLSRGuC0IQ
-         ckMXCs7vG0VeiTZ9uzqpLPJVB9TXeC6roMp5z4nWNZ2+FaS+P1RHv2VE0TcDYTrzxWKa
-         ei+JmOCidDYmmFPGXmdBhdHGaKNdwTqcgCJlW7iOoY+iU8bo/nvkrFRkvQiM5zLciZj7
-         7QrQ==
-X-Gm-Message-State: AJIora9t98d1YZY5UloNIQmp8ISn2FgQWsGm9/GTrWc7sZLQ0QihTHce
-	kxUNMTg1MHPXnCI2OQDbj3Nlg8Uwu6HTpz2A4g==
-X-Google-Smtp-Source: AGRyM1tWj8XkMwJhTmMQrFk7gxtfhZc4z1G9yxzQYISYkgHffEzjFg1VIhwaywiaaEPo5AH9Nu2FnTrjfLxNFc3emA==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
- (user=justinstitt job=sendgmr) by 2002:a05:6a00:8cf:b0:522:93a6:46e9 with
- SMTP id s15-20020a056a0008cf00b0052293a646e9mr5910494pfu.62.1657312564619;
- Fri, 08 Jul 2022 13:36:04 -0700 (PDT)
-Date: Fri,  8 Jul 2022 13:35:49 -0700
-Message-Id: <20220708203549.3834790-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3583D89
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 20:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657312813; x=1688848813;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DIVHdvGmcoQvN9wD6lnJmfi5wn5rSahT3GEvClW89ZA=;
+  b=WHsXtL2Tuu0FMg1QQ1AM6uL2d1ZZ6ZAYdUFfu7bXOOOGH3+jF6yBJo0X
+   ZVYo826c/NwkXypg2dYq0uP6MwolSuzabEfYtlcfWi0b1ArlfRNauE2oy
+   SWYfXglhi0k2+t/KHap1ykmKwZl4E4Y9tunPpNQm+JFszEc6+ttorOB0q
+   g/xY6jc/Z5d5qsDHEdFRp5xHpaQvy7vxOXowc5s/qx5q39gVsXZKNvpal
+   SQRQ3rTydWaDPROhDIGoqw9pM9WzsVmak10h3rL/RE70EmEoItvhXLLe9
+   LI7Xm3Dj3xoqwhlHqMiAjZkaizyo+UvShOKLHjE6nWDi+lZjmcQmt2kA/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="309946169"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="309946169"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 13:40:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="594244629"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 Jul 2022 13:40:07 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9uli-000Nv4-Tb;
+	Fri, 08 Jul 2022 20:40:06 +0000
+Date: Sat, 9 Jul 2022 04:39:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
+	kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	Hans Schultz <netdev@kapio-technology.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
+	Roopa Prabhu <roopa@nvidia.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+	bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <202207090438.PlGIeA4G-lkp@intel.com>
+References: <20220707152930.1789437-4-netdev@kapio-technology.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] mei: me: fix clang -Wformat warning
-From: Justin Stitt <justinstitt@google.com>
-To: Tomas Winkler <tomas.winkler@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707152930.1789437-4-netdev@kapio-technology.com>
 
-When building with Clang we encounter the following warning:
-| drivers/misc/mei/hw-me.c:564:44: error: format specifies type 'unsigned
-| short' but the argument has type 'int' [-Werror,-Wformat]
-| dev_dbg(dev->dev, "empty slots = %hu.\n", empty_slots);
+Hi Hans,
 
-The format specifier used is `%hu` which specifies an unsigned short,
-however, empty_slots is an int -- hence the warning.
+Thank you for the patch! Yet something to improve:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/misc/mei/hw-me.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test ERROR on net/master]
+[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc5]
+[cannot apply to net-next/master next-20220708]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index befa491e3344..3a95fe7d4e33 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -561,7 +561,7 @@ static int mei_me_hbuf_write(struct mei_device *dev,
- 	dev_dbg(dev->dev, MEI_HDR_FMT, MEI_HDR_PRM((struct mei_msg_hdr *)hdr));
- 
- 	empty_slots = mei_hbuf_empty_slots(dev);
--	dev_dbg(dev->dev, "empty slots = %hu.\n", empty_slots);
-+	dev_dbg(dev->dev, "empty slots = %d.\n", empty_slots);
- 
- 	if (empty_slots < 0)
- 		return -EOVERFLOW;
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 07266d066301b97ad56a693f81b29b7ced429b27
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220709/202207090438.PlGIeA4G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ebd598d7ea6c015001489c4293da887763491086
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
+        git checkout ebd598d7ea6c015001489c4293da887763491086
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/dsa/sja1105/sja1105_main.c:1952:58: error: too few arguments to function call, expected 6, have 5
+           return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
+                  ~~~~~~~~~~~~~~~                                  ^
+   drivers/net/dsa/sja1105/sja1105_main.c:1803:12: note: 'sja1105_fdb_add' declared here
+   static int sja1105_fdb_add(struct dsa_switch *ds, int port,
+              ^
+   1 error generated.
+
+
+vim +1952 drivers/net/dsa/sja1105/sja1105_main.c
+
+5126ec72a094bd3 Vladimir Oltean 2021-08-08  1947  
+a52b2da778fc93e Vladimir Oltean 2021-01-09  1948  static int sja1105_mdb_add(struct dsa_switch *ds, int port,
+c26933639b5402c Vladimir Oltean 2022-02-25  1949  			   const struct switchdev_obj_port_mdb *mdb,
+c26933639b5402c Vladimir Oltean 2022-02-25  1950  			   struct dsa_db db)
+291d1e72b756424 Vladimir Oltean 2019-05-02  1951  {
+c26933639b5402c Vladimir Oltean 2022-02-25 @1952  	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, db);
+291d1e72b756424 Vladimir Oltean 2019-05-02  1953  }
+291d1e72b756424 Vladimir Oltean 2019-05-02  1954  
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
