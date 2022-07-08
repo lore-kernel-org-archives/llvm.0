@@ -1,45 +1,45 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5A635
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 03:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA40635
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 04:08:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657252045; x=1688788045;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a6tewsjtZFrx9ugYhZX9sqQNv1Saw6kwS91FeQfudEA=;
-  b=FrmzjBSNBv42JtQPVw7ucUufRZ12gTV1+GYZCOuWG3VVRE8XWSlkQz+o
-   qK/+lxz2+uUgYuOPo0amfHQ29sli8mIUQZo7t/zjieyANzX7DkvN076uh
-   LZiima9QJi5E5Lv4o3dW3iBeuwZFYI3H1Vp+UycQGeU62VxwrllXLWMl2
-   DmrS3STuc+0B7AX9s9UGEaP3TOuq2rpqzyVvBgsTrLLGC/hXDuc5AkxsG
-   0JDr6xO3wYZ+jZxbtUbGpgIjl5Ds5xPdCOaks8FxVYDvx7HNBAqJtvpy/
-   UgxizhOntYRVydL6Db3q/IFptv3/lr+9AEg6ffNCe2OOS49n+ANP8+CVS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345869486"
+  t=1657253306; x=1688789306;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w+a9pw0jGz5UJqQLkFKwzJOSX8nn6ZRwZsIYHTH/MAs=;
+  b=RJXYnItHYsAlAY7+hJZ7wcTJcD9SdHwydCzWntsAMw55tEfvpQ6n+fyw
+   Fp2zXJcgbBgFFyPiefIwYhLWXkYMvkW8d7P7kXDQvidRM7IFCCRIUOQGx
+   xLnaCk6CsAVl1LItBsS8Jo5iLBqwxQI1dsgr+uCHqrzqBiNvI3+Zc8My4
+   Opmh+e5W0NkLW0HRaCwk7UgLv2dV1XncHpftDaGQ7/N5wCh2frn21RRlE
+   y0sqKgRNBIXSk9m/nsFZsPhsITFF9QNhrIpYaXYctBe6dXLttB+83t5wx
+   vSZr+kcFPxwno3Gx3xRxBaR9nabWwtQKiQfikCxaGfrZf03tCvAHYlbzo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284925186"
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="345869486"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:47:24 -0700
+   d="scan'208";a="284925186"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 21:08:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="568778601"
+   d="scan'208";a="661634281"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2022 20:47:22 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2022 21:08:23 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9exe-000MsI-65;
-	Fri, 08 Jul 2022 03:47:22 +0000
-Date: Fri, 8 Jul 2022 11:47:05 +0800
+	id 1o9fHy-000MtG-QC;
+	Fri, 08 Jul 2022 04:08:22 +0000
+Date: Fri, 8 Jul 2022 12:07:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Matthew Auld <matthew.auld@intel.com>, intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 5/8]
- fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types
- ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
- 12)) *' (aka 'unsigned long *'))
-Message-ID: <202207081133.gqSVQ0Ct-lkp@intel.com>
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	dri-devel@lists.freedesktop.org,
+	Nirmoy Das <nirmoy.das@linux.intel.com>
+Subject: Re: [PATCH] drm/i915/ttm: fix sg_table construction
+Message-ID: <202207081158.l1RcEsDh-lkp@intel.com>
+References: <20220707170927.499451-1-matthew.auld@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,141 +48,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220707170927.499451-1-matthew.auld@intel.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
-head:   569e0acf4192ada33675e44b24701e679d87ebc9
-commit: f398cb911105297654980b5973ff230323061fce [5/8] cifs: Change the I/O paths to use an iterator rather than a page list
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220708/202207081133.gqSVQ0Ct-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+Hi Matthew,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-tip/drm-tip drm/drm-next drm-exynos/exynos-drm-next drm-misc/drm-misc-next linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Auld/drm-i915-ttm-fix-sg_table-construction/20220708-011115
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220708/202207081158.l1RcEsDh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f398cb911105297654980b5973ff230323061fce
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
-        git checkout f398cb911105297654980b5973ff230323061fce
+        # https://github.com/intel-lab-lkp/linux/commit/a318752ca76b5fc3e8d9efa87d483c88d177475a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthew-Auld/drm-i915-ttm-fix-sg_table-construction/20220708-011115
+        git checkout a318752ca76b5fc3e8d9efa87d483c88d177475a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                   seg = min(size - copied, PAGE_SIZE);
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                       ^~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:5026:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4994:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4893:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   2 warnings generated.
-
-
-vim +4785 fs/cifs/smb2ops.c
-
-  4735	
-  4736	/*
-  4737	 * This function will initialize new_rq and encrypt the content.
-  4738	 * The first entry, new_rq[0], only contains a single iov which contains
-  4739	 * a smb2_transform_hdr and is pre-allocated by the caller.
-  4740	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
-  4741	 *
-  4742	 * The end result is an array of smb_rqst structures where the first structure
-  4743	 * only contains a single iov for the transform header which we then can pass
-  4744	 * to crypt_message().
-  4745	 *
-  4746	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
-  4747	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
-  4748	 */
-  4749	static int
-  4750	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
-  4751			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
-  4752	{
-  4753		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-  4754		struct page *page;
-  4755		unsigned int orig_len = 0;
-  4756		int i, j;
-  4757		int rc = -ENOMEM;
-  4758	
-  4759		for (i = 1; i < num_rqst; i++) {
-  4760			struct smb_rqst *old = &old_rq[i - 1];
-  4761			struct smb_rqst *new = &new_rq[i];
-  4762			struct xarray *buffer = &new->rq_buffer;
-  4763			unsigned int npages;
-  4764			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
-  4765	
-  4766			xa_init(buffer);
-  4767	
-  4768			if (size > 0) {
-  4769				npages = DIV_ROUND_UP(size, PAGE_SIZE);
-  4770				for (j = 0; j < npages; j++) {
-  4771					void *o;
-  4772	
-  4773					rc = -ENOMEM;
-  4774					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-  4775					if (!page)
-  4776						goto err_free;
-  4777					page->index = j;
-  4778					o = xa_store(buffer, j, page, GFP_KERNEL);
-  4779					if (xa_is_err(o)) {
-  4780						rc = xa_err(o);
-  4781						put_page(page);
-  4782						goto err_free;
-  4783					}
-  4784	
-> 4785					seg = min(size - copied, PAGE_SIZE);
-  4786					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-  4787						rc = -EFAULT;
-  4788						goto err_free;
-  4789					}
-  4790					copied += seg;
-  4791				}
-  4792				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
-  4793						buffer, 0, size);
-  4794			}
-  4795			new->rq_iov = old->rq_iov;
-  4796			new->rq_nvec = old->rq_nvec;
-  4797			orig_len += smb_rqst_len(server, new);
-  4798		}
-  4799	
-  4800		/* fill the 1st iov with a transform header */
-  4801		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
-  4802	
-  4803		rc = crypt_message(server, num_rqst, new_rq, 1);
-  4804		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
-  4805		if (rc)
-  4806			goto err_free;
-  4807	
-  4808		return rc;
-  4809	
-  4810	err_free:
-  4811		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
-  4812		return rc;
-  4813	}
-  4814	
+>> ERROR: modpost: "__umoddi3" [drivers/gpu/drm/i915/i915.ko] undefined!
+>> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/i915/i915.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
