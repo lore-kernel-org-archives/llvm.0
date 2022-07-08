@@ -1,43 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808E7817
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 13:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD93B2563
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 13:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657286032; x=1688822032;
+  t=1657288555; x=1688824555;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Udd/LCsKWROYZpOMU9ODv8sLnUrCHZPCKOTDfx/24+c=;
-  b=NqN178VUvhNIHbFEc2T0Fj9z25dsyAHjHtWPqHGzIaCrs/rkuRfJosYr
-   YsWpo4ZXuCJxglunYoXNeK2G/vEoSg5qX5HLHOc5+irGkLvVAWxIt/fx8
-   3vQeSLpNprxv7jMI0HovwfGJqsZdGyo/mRYajWSL4/MaGcqjbAoCFAM2K
-   Qxi4Lq/bg/HN5QvqjpUibFwA71vTaDI3ZL6F+S9NvVyOKlDpTuqJm2Y2v
-   +jIu+hG39sMO2aqCrsZdIwdsJwytjtB3T7Puf32JgOfnkQ+4QmdNfg4xm
-   Z6FrznbSCZU6ZL+TYvp7ESfiuWBmn0Q2jFrvTeERhm/SkxzMnkZpr4odE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284299196"
+  bh=7vfL1tkg9GNLi/FrDF86Q196uqR6/WOkcm3m0Uop1KU=;
+  b=UymyWoljStH0B+cX9DTIQRGxh+i7qq0g+LdNF89gGq+dbTm++OpTwPRV
+   OiBNCeVnE7wPb6AeGqJ8UfenffiqsK726Y/e4caTkj/+ddnYBDGEMBCq/
+   9NUkh9eTHIMLhCm59eICT+wSli5H46Q4GUJLc2NnqP+ufDelqioOizDpL
+   nr7vMODmY+S0r6SAVvEBhYTNa3iWHGZwTLr4IWmmuxH+Rr1ywjteyI33K
+   LeNvg9z2HcpV7G/Pi3El0ktwyOtdTtBiENJDNdnGW/qtdw/HnczGJ2dLJ
+   xbZDJKFInuZOI6V/j7xClEj5XiTJHGV3YoDlVUHRfd0+T0WlnUfG0Lzct
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="285025726"
 X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="284299196"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:13:51 -0700
+   d="scan'208";a="285025726"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 06:55:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="736334808"
+   d="scan'208";a="921002610"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 06:13:50 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 06:55:52 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9nnp-000NVU-Ca;
-	Fri, 08 Jul 2022 13:13:49 +0000
-Date: Fri, 8 Jul 2022 21:13:11 +0800
+	id 1o9oSV-000NYI-Du;
+	Fri, 08 Jul 2022 13:55:51 +0000
+Date: Fri, 8 Jul 2022 21:55:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Lukas Wunner <lukas@wunner.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: [linux-next:master 8187/8914] lib/bitmap.c:351:6: error: conflicting
- types for '__bitmap_set'
-Message-ID: <202207082141.JR9ENDa5-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: drivers/spi/spi-bcm2835.c:153:8: warning: Excessive padding in
+ 'struct bcm2835_spidev' (112 padding bytes, where 48 is optimal). Optimal
+ fields order: clear_rx_cs, prepare_cs, clear_rx_desc, clear_rx_addr,
+ consider reordering the fields or adding explicit...
+Message-ID: <202207082123.mUdLb6eW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,63 +48,453 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f2528c29385819a84480cacef4886b049761e2c5
-commit: aaa4ab5ec04480fd0c16c7452d28444c862b2b87 [8187/8914] lib/bitmap: Make length parameter `len` unsigned
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220708/202207082141.JR9ENDa5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
+commit: ec679bda639fe84b78d473526ae27c74dea383fb spi: bcm2835: Allow arbitrary number of slaves
+date:   1 year, 1 month ago
+config: arm-randconfig-c002-20220702 (https://download.01.org/0day-ci/archive/20220708/202207082123.mUdLb6eW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout aaa4ab5ec04480fd0c16c7452d28444c862b2b87
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ec679bda639fe84b78d473526ae27c74dea383fb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ec679bda639fe84b78d473526ae27c74dea383fb
         # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the linux-next/master HEAD f2528c29385819a84480cacef4886b049761e2c5 builds fine.
-      It may have been fixed somewhere.
 
-All errors (new ones prefixed by >>):
+clang-analyzer warnings: (new ones prefixed by >>)
+                                       ^
+   include/linux/i2c.h:344:26: note: expanded from macro 'to_i2c_client'
+   #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+                            ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:308:3: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ^
+   drivers/iio/chemical/scd30_i2c.c:41:30: note: Loop condition is false.  Exiting loop
+           struct i2c_client *client = to_i2c_client(state->dev);
+                                       ^
+   include/linux/i2c.h:344:26: note: expanded from macro 'to_i2c_client'
+   #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+                            ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   drivers/iio/chemical/scd30_i2c.c:49:6: note: Assuming 'ret' is >= 0
+           if (ret < 0)
+               ^~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:49:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:51:6: note: Assuming 'ret' is equal to 'txsize'
+           if (ret != txsize)
+               ^~~~~~~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:51:2: note: Taking false branch
+           if (ret != txsize)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:54:7: note: 'rxbuf' is non-null
+           if (!rxbuf)
+                ^~~~~
+   drivers/iio/chemical/scd30_i2c.c:54:2: note: Taking false branch
+           if (!rxbuf)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:58:6: note: Assuming 'ret' is >= 0
+           if (ret < 0)
+               ^~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:58:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:60:6: note: Assuming 'ret' is equal to 'rxsize'
+           if (ret != rxsize)
+               ^~~~~~~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:60:2: note: Taking false branch
+           if (ret != rxsize)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:63:2: note: Returning zero, which participates in a condition later
+           return 0;
+           ^~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:92:8: note: Returning from 'scd30_i2c_xfer'
+           ret = scd30_i2c_xfer(state, buf, i, buf, size);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:93:6: note: 'ret' is 0
+           if (ret)
+               ^~~
+   drivers/iio/chemical/scd30_i2c.c:93:2: note: Taking false branch
+           if (ret)
+           ^
+   drivers/iio/chemical/scd30_i2c.c:97:14: note: Assuming 'i' is < 'size'
+           for (i = 0; i < size; i += 3) {
+                       ^~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:97:2: note: Loop condition is true.  Entering loop body
+           for (i = 0; i < size; i += 3) {
+           ^
+   drivers/iio/chemical/scd30_i2c.c:99:7: note: Assuming the condition is false
+                   if (crc != buf[i + 2]) {
+                       ^~~~~~~~~~~~~~~~~
+   drivers/iio/chemical/scd30_i2c.c:99:3: note: Taking false branch
+                   if (crc != buf[i + 2]) {
+                   ^
+   drivers/iio/chemical/scd30_i2c.c:104:10: note: Dereference of null pointer
+                   *rsp++ = buf[i];
+                   ~~~~~~~^~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/spi/spi-bcm2835.c:153:8: warning: Excessive padding in 'struct bcm2835_spidev' (112 padding bytes, where 48 is optimal). Optimal fields order: clear_rx_cs, prepare_cs, clear_rx_desc, clear_rx_addr, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct bcm2835_spidev {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:153:8: note: Excessive padding in 'struct bcm2835_spidev' (112 padding bytes, where 48 is optimal). Optimal fields order: clear_rx_cs, prepare_cs, clear_rx_desc, clear_rx_addr, consider reordering the fields or adding explicit padding members
+   struct bcm2835_spidev {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1164:20: warning: Access to field 'device' results in a dereference of a null pointer (loaded from field 'dma_rx') [clang-analyzer-core.NullDereference]
+                   dma_unmap_single(ctlr->dma_rx->device->dev,
+                                    ^
+   drivers/spi/spi-bcm2835.c:1213:27: note: Calling 'spi_controller_get_devdata'
+           struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spi/spi.h:675:2: note: Returning without writing to 'ctlr->dma_rx'
+           return dev_get_drvdata(&ctlr->dev);
+           ^
+   drivers/spi/spi-bcm2835.c:1213:27: note: Returning from 'spi_controller_get_devdata'
+           struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1219:6: note: Assuming 'slv' is non-null
+           if (!slv) {
+               ^~~~
+   drivers/spi/spi-bcm2835.c:1219:2: note: Taking false branch
+           if (!slv) {
+           ^
+   drivers/spi/spi-bcm2835.c:1239:6: note: Assuming the condition is false
+           if (spi->mode & SPI_CPOL)
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1239:2: note: Taking false branch
+           if (spi->mode & SPI_CPOL)
+           ^
+   drivers/spi/spi-bcm2835.c:1241:6: note: Assuming the condition is false
+           if (spi->mode & SPI_CPHA)
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1241:2: note: Taking false branch
+           if (spi->mode & SPI_CPHA)
+           ^
+   drivers/spi/spi-bcm2835.c:1249:6: note: Assuming field 'dma_rx' is null
+           if (ctlr->dma_rx) {
+               ^~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1249:2: note: Taking false branch
+           if (ctlr->dma_rx) {
+           ^
+   drivers/spi/spi-bcm2835.c:1262:6: note: Assuming the condition is false
+           if (spi->mode & SPI_NO_CS)
+               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1262:2: note: Taking false branch
+           if (spi->mode & SPI_NO_CS)
+           ^
+   drivers/spi/spi-bcm2835.c:1268:6: note: Assuming field 'cs_gpiod' is null
+           if (spi->cs_gpiod)
+               ^~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1268:2: note: Taking false branch
+           if (spi->cs_gpiod)
+           ^
+   drivers/spi/spi-bcm2835.c:1270:6: note: Assuming field 'chip_select' is <= 1
+           if (spi->chip_select > 1) {
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1270:2: note: Taking false branch
+           if (spi->chip_select > 1) {
+           ^
+   drivers/spi/spi-bcm2835.c:1292:6: note: Assuming 'chip' is non-null
+           if (!chip)
+               ^~~~~
+   drivers/spi/spi-bcm2835.c:1292:2: note: Taking false branch
+           if (!chip)
+           ^
+   drivers/spi/spi-bcm2835.c:1299:2: note: Taking true branch
+           if (IS_ERR(spi->cs_gpiod)) {
+           ^
+   drivers/spi/spi-bcm2835.c:1301:3: note: Control jumps to line 1311
+                   goto err_cleanup;
+                   ^
+   drivers/spi/spi-bcm2835.c:1311:2: note: Calling 'bcm2835_spi_cleanup'
+           bcm2835_spi_cleanup(spi);
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1160:6: note: Assuming field 'clear_rx_desc' is null
+           if (slv->clear_rx_desc)
+               ^~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1160:2: note: Taking false branch
+           if (slv->clear_rx_desc)
+           ^
+   drivers/spi/spi-bcm2835.c:1163:6: note: Assuming field 'clear_rx_addr' is not equal to 0
+           if (slv->clear_rx_addr)
+               ^~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1163:2: note: Taking true branch
+           if (slv->clear_rx_addr)
+           ^
+   drivers/spi/spi-bcm2835.c:1164:20: note: Access to field 'device' results in a dereference of a null pointer (loaded from field 'dma_rx')
+                   dma_unmap_single(ctlr->dma_rx->device->dev,
+                                    ^
+   include/linux/dma-mapping.h:427:61: note: expanded from macro 'dma_unmap_single'
+   #define dma_unmap_single(d, a, s, r) dma_unmap_single_attrs(d, a, s, r, 0)
+                                                               ^
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+--
+               ^~~~~~~
+   drivers/iio/light/veml6030.c:347:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/light/veml6030.c:350:6: note: Assuming 'val' is not equal to 0
+           if (!val) {
+               ^~~~
+   drivers/iio/light/veml6030.c:350:2: note: Taking false branch
+           if (!val) {
+           ^
+   drivers/iio/light/veml6030.c:353:8: note: Assuming 'val' is not equal to 1
+                   if ((val == 1) && (val2 == 600000))
+                        ^~~~~~~~
+   drivers/iio/light/veml6030.c:353:18: note: Left side of '&&' is false
+                   if ((val == 1) && (val2 == 600000))
+                                  ^
+   drivers/iio/light/veml6030.c:355:13: note: Assuming 'val' is equal to 3
+                   else if ((val == 3) && (val2 == 200000))
+                             ^~~~~~~~
+   drivers/iio/light/veml6030.c:355:12: note: Left side of '&&' is true
+                   else if ((val == 3) && (val2 == 200000))
+                            ^
+   drivers/iio/light/veml6030.c:355:27: note: Assuming 'val2' is equal to 200000
+                   else if ((val == 3) && (val2 == 200000))
+                                           ^~~~~~~~~~~~~~
+   drivers/iio/light/veml6030.c:355:8: note: Taking true branch
+                   else if ((val == 3) && (val2 == 200000))
+                        ^
+   drivers/iio/light/veml6030.c:356:21: note: The right operand of '/' is a garbage value
+                           period = 3200000 / y;
+                                            ^ ~
+   drivers/iio/light/veml6030.c:358:21: warning: The right operand of '/' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
+                           period = 6400000 / y;
+                                            ^
+   drivers/iio/light/veml6030.c:611:2: note: Control jumps to 'case IIO_EV_INFO_PERIOD:'  at line 614
+           switch (info) {
+           ^
+   drivers/iio/light/veml6030.c:615:10: note: Calling 'veml6030_write_persistence'
+                   return veml6030_write_persistence(indio_dev, val, val2);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/light/veml6030.c:343:22: note: 'y' declared without an initial value
+           int ret, period, x, y;
+                               ^
+   drivers/iio/light/veml6030.c:346:8: note: Calling 'veml6030_get_intgrn_tm'
+           ret = veml6030_get_intgrn_tm(indio_dev, &x, &y);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/light/veml6030.c:221:6: note: Assuming 'ret' is not equal to 0
+           if (ret) {
+               ^~~
+   drivers/iio/light/veml6030.c:221:2: note: Taking true branch
+           if (ret) {
+           ^
+   drivers/iio/light/veml6030.c:224:3: note: Returning without writing to '*val2'
+                   return ret;
+                   ^
+   drivers/iio/light/veml6030.c:346:8: note: Returning from 'veml6030_get_intgrn_tm'
+           ret = veml6030_get_intgrn_tm(indio_dev, &x, &y);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/light/veml6030.c:347:6: note: Assuming 'ret' is >= 0
+           if (ret < 0)
+               ^~~~~~~
+   drivers/iio/light/veml6030.c:347:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/light/veml6030.c:350:6: note: Assuming 'val' is not equal to 0
+           if (!val) {
+               ^~~~
+   drivers/iio/light/veml6030.c:350:2: note: Taking false branch
+           if (!val) {
+           ^
+   drivers/iio/light/veml6030.c:353:8: note: Assuming 'val' is not equal to 1
+                   if ((val == 1) && (val2 == 600000))
+                        ^~~~~~~~
+   drivers/iio/light/veml6030.c:353:18: note: Left side of '&&' is false
+                   if ((val == 1) && (val2 == 600000))
+                                  ^
+   drivers/iio/light/veml6030.c:355:13: note: Assuming 'val' is not equal to 3
+                   else if ((val == 3) && (val2 == 200000))
+                             ^~~~~~~~
+   drivers/iio/light/veml6030.c:355:23: note: Left side of '&&' is false
+                   else if ((val == 3) && (val2 == 200000))
+                                       ^
+   drivers/iio/light/veml6030.c:357:13: note: Assuming 'val' is equal to 6
+                   else if ((val == 6) && (val2 == 400000))
+                             ^~~~~~~~
+   drivers/iio/light/veml6030.c:357:12: note: Left side of '&&' is true
+                   else if ((val == 6) && (val2 == 400000))
+                            ^
+   drivers/iio/light/veml6030.c:357:27: note: Assuming 'val2' is equal to 400000
+                   else if ((val == 6) && (val2 == 400000))
+                                           ^~~~~~~~~~~~~~
+   drivers/iio/light/veml6030.c:357:8: note: Taking true branch
+                   else if ((val == 6) && (val2 == 400000))
+                        ^
+   drivers/iio/light/veml6030.c:358:21: note: The right operand of '/' is a garbage value
+                           period = 6400000 / y;
+                                            ^ ~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/spi/spi-bcm2835.c:153:8: warning: Excessive padding in 'struct bcm2835_spidev' (112 padding bytes, where 48 is optimal). Optimal fields order: clear_rx_cs, prepare_cs, clear_rx_desc, clear_rx_addr, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct bcm2835_spidev {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:153:8: note: Excessive padding in 'struct bcm2835_spidev' (112 padding bytes, where 48 is optimal). Optimal fields order: clear_rx_cs, prepare_cs, clear_rx_desc, clear_rx_addr, consider reordering the fields or adding explicit padding members
+   struct bcm2835_spidev {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1164:20: warning: Access to field 'device' results in a dereference of a null pointer (loaded from field 'dma_rx') [clang-analyzer-core.NullDereference]
+                   dma_unmap_single(ctlr->dma_rx->device->dev,
+                                    ^
+   drivers/spi/spi-bcm2835.c:1213:27: note: Calling 'spi_controller_get_devdata'
+           struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spi/spi.h:675:2: note: Returning without writing to 'ctlr->dma_rx'
+           return dev_get_drvdata(&ctlr->dev);
+           ^
+   drivers/spi/spi-bcm2835.c:1213:27: note: Returning from 'spi_controller_get_devdata'
+           struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1219:6: note: Assuming 'slv' is non-null
+           if (!slv) {
+               ^~~~
+   drivers/spi/spi-bcm2835.c:1219:2: note: Taking false branch
+           if (!slv) {
+           ^
+   drivers/spi/spi-bcm2835.c:1239:6: note: Assuming the condition is false
+           if (spi->mode & SPI_CPOL)
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1239:2: note: Taking false branch
+           if (spi->mode & SPI_CPOL)
+           ^
+   drivers/spi/spi-bcm2835.c:1241:6: note: Assuming the condition is false
+           if (spi->mode & SPI_CPHA)
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1241:2: note: Taking false branch
+           if (spi->mode & SPI_CPHA)
+           ^
+   drivers/spi/spi-bcm2835.c:1249:6: note: Assuming field 'dma_rx' is null
+           if (ctlr->dma_rx) {
+               ^~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1249:2: note: Taking false branch
+           if (ctlr->dma_rx) {
+           ^
+   drivers/spi/spi-bcm2835.c:1262:6: note: Assuming the condition is false
+           if (spi->mode & SPI_NO_CS)
+               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1262:2: note: Taking false branch
+           if (spi->mode & SPI_NO_CS)
+           ^
+   drivers/spi/spi-bcm2835.c:1268:6: note: Assuming field 'cs_gpiod' is null
+           if (spi->cs_gpiod)
+               ^~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1268:2: note: Taking false branch
+           if (spi->cs_gpiod)
+           ^
+   drivers/spi/spi-bcm2835.c:1270:6: note: Assuming field 'chip_select' is <= 1
+           if (spi->chip_select > 1) {
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1270:2: note: Taking false branch
+           if (spi->chip_select > 1) {
+           ^
+   drivers/spi/spi-bcm2835.c:1292:6: note: Assuming 'chip' is non-null
+           if (!chip)
+               ^~~~~
+   drivers/spi/spi-bcm2835.c:1292:2: note: Taking false branch
+           if (!chip)
+           ^
+   drivers/spi/spi-bcm2835.c:1299:2: note: Taking true branch
+           if (IS_ERR(spi->cs_gpiod)) {
+           ^
+   drivers/spi/spi-bcm2835.c:1301:3: note: Control jumps to line 1311
+                   goto err_cleanup;
+                   ^
+   drivers/spi/spi-bcm2835.c:1311:2: note: Calling 'bcm2835_spi_cleanup'
+           bcm2835_spi_cleanup(spi);
+           ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1160:6: note: Assuming field 'clear_rx_desc' is null
+           if (slv->clear_rx_desc)
+               ^~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1160:2: note: Taking false branch
+           if (slv->clear_rx_desc)
+           ^
+   drivers/spi/spi-bcm2835.c:1163:6: note: Assuming field 'clear_rx_addr' is not equal to 0
+           if (slv->clear_rx_addr)
+               ^~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-bcm2835.c:1163:2: note: Taking true branch
+           if (slv->clear_rx_addr)
+           ^
+   drivers/spi/spi-bcm2835.c:1164:20: note: Access to field 'device' results in a dereference of a null pointer (loaded from field 'dma_rx')
+                   dma_unmap_single(ctlr->dma_rx->device->dev,
+                                    ^
+   include/linux/dma-mapping.h:427:61: note: expanded from macro 'dma_unmap_single'
+   #define dma_unmap_single(d, a, s, r) dma_unmap_single_attrs(d, a, s, r, 0)
+                                                               ^
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   fs/locks.c:2589:3: warning: Value stored to 'cmd' is never read [clang-analyzer-deadcode.DeadStores]
+                   cmd = F_GETLK64;
+                   ^
+   fs/locks.c:2589:3: note: Value stored to 'cmd' is never read
+   Suppressed 16 warnings (16 in non-user code).
 
->> lib/bitmap.c:351:6: error: conflicting types for '__bitmap_set'
-   void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
-        ^
-   include/linux/bitmap.h:167:6: note: previous declaration is here
-   void __bitmap_set(unsigned long *map, unsigned int start, int len);
-        ^
-   1 error generated.
+vim +153 drivers/spi/spi-bcm2835.c
 
-
-vim +/__bitmap_set +351 lib/bitmap.c
-
-   350	
- > 351	void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
-   352	{
-   353		unsigned long *p = map + BIT_WORD(start);
-   354		const unsigned int size = start + len;
-   355		int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
-   356		unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
-   357	
-   358		while (len >= bits_to_set) {
-   359			*p |= mask_to_set;
-   360			len -= bits_to_set;
-   361			bits_to_set = BITS_PER_LONG;
-   362			mask_to_set = ~0UL;
-   363			p++;
-   364		}
-   365		if (len) {
-   366			mask_to_set &= BITMAP_LAST_WORD_MASK(size);
-   367			*p |= mask_to_set;
-   368		}
-   369	}
-   370	EXPORT_SYMBOL(__bitmap_set);
-   371	
+   142	
+   143	/**
+   144	 * struct bcm2835_spidev - BCM2835 SPI slave
+   145	 * @prepare_cs: precalculated CS register value for ->prepare_message()
+   146	 *	(uses slave-specific clock polarity and phase settings)
+   147	 * @clear_rx_desc: preallocated RX DMA descriptor used for TX-only transfers
+   148	 *	(cyclically clears RX FIFO by writing @clear_rx_cs to CS register)
+   149	 * @clear_rx_addr: bus address of @clear_rx_cs
+   150	 * @clear_rx_cs: precalculated CS register value to clear RX FIFO
+   151	 *	(uses slave-specific clock polarity and phase settings)
+   152	 */
+ > 153	struct bcm2835_spidev {
+   154		u32 prepare_cs;
+   155		struct dma_async_tx_descriptor *clear_rx_desc;
+   156		dma_addr_t clear_rx_addr;
+   157		u32 clear_rx_cs ____cacheline_aligned;
+   158	};
+   159	
 
 -- 
 0-DAY CI Kernel Test Service
