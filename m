@@ -1,69 +1,248 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9C1627
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 01:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD73EC341C8;
-	Fri,  8 Jul 2022 01:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657243812;
-	bh=3qsxC2UJHgQdMvNB3J6vTootEZtZA3FgN4B7niAdi+U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=TKLuF6oGwldsso3GxLss9nJe3I6RA8CBIB8JNgPN9B5XHyk4MBYeTlxVfbvB69iZs
-	 6DR41KRFsETZmr2DJu/x2wJaYBX6y7mq0DX2rfYBlhWN3ba+R38jGbQv+oRv5SGCA6
-	 NQL1H/KMj4zDFVfMRcqY1oeYysIRYMh1QhoW3dr2xqtkK2OIXFQCNu8TZUNjHGXFVI
-	 nsdqxE3Ak98OlOL/T9BKFEAPAk6/wsfDQAuQB3UyCoNDIouRaWD5gI0LevrKJv10Q0
-	 KHNWN6keIAsRfvDLvvLhUQpkwd/Oba3TJiOKogF1ZBDewY4FxoiLXF8x4TC8mtI2hW
-	 +6btEJGSeFTxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9CDD5E45BD9;
-	Fri,  8 Jul 2022 01:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFA5627
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 01:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657244119; x=1688780119;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tm/IK85Oh0pUEKR3BZoHT9X0SlIpsexuYWj1KxUMO7I=;
+  b=YFhiVeAcV4NnB3tUWPhG1JGZDPCEkyYZ+WQq8HhucWNXcX5Thq62t6LX
+   w7SyTBsAyf7x/FQGbr9uy87BTBSVFkzGZzs717uSyBBYarqY4FedHLqtF
+   yrgJBn4SLb/RJ7agLrxxdeaVNEt3O6iT3PnGtB+QQnZuFvhGVLwz/Maa4
+   mlpSczXqQq6yEWV/TL4KPZTJ8Dybuzcn/W8d9MfdSwX0Ezj51Sisfa8+t
+   OPl7WgEWLFf+mjpSe9qCwWCTki7nlLSJ9595hHmJgr1pypEAKefDw+CQA
+   bjTSKQg11He/ziz4+6/IhJXlganxN5X19Io2MZuLmKWyujpbV0glph2Tt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348146592"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="348146592"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 18:35:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="661601894"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2022 18:35:16 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9ctn-000Mis-SK;
+	Fri, 08 Jul 2022 01:35:15 +0000
+Date: Fri, 8 Jul 2022 09:34:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 5/8]
+ fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized
+ whenever 'if' condition is false
+Message-ID: <202207080923.s0L0sZLm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: l2tp: fix clang -Wformat warning
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <165724381263.6017.3389511636331557428.git-patchwork-notify@kernel.org>
-Date: Fri, 08 Jul 2022 01:30:12 +0000
-References: <20220706230833.535238-1-justinstitt@google.com>
-In-Reply-To: <20220706230833.535238-1-justinstitt@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
+head:   569e0acf4192ada33675e44b24701e679d87ebc9
+commit: f398cb911105297654980b5973ff230323061fce [5/8] cifs: Change the I/O paths to use an iterator rather than a page list
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220708/202207080923.s0L0sZLm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/f398cb911105297654980b5973ff230323061fce
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
+        git checkout f398cb911105297654980b5973ff230323061fce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed,  6 Jul 2022 16:08:33 -0700 you wrote:
-> When building with clang we encounter this warning:
-> | net/l2tp/l2tp_ppp.c:1557:6: error: format specifies type 'unsigned
-> | short' but the argument has type 'u32' (aka 'unsigned int')
-> | [-Werror,-Wformat] session->nr, session->ns,
-> 
-> Both session->nr and session->ns are of type u32. The format specifier
-> previously used is `%hu` which would truncate our unsigned integer from
-> 32 to 16 bits. This doesn't seem like intended behavior, if it is then
-> perhaps we need to consider suppressing the warning with pragma clauses.
-> 
-> [...]
+All warnings (new ones prefixed by >>):
 
-Here is the summary with links:
-  - net: l2tp: fix clang -Wformat warning
-    https://git.kernel.org/netdev/net-next/c/a2b6111b55f3
+>> fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (rdata->result != 0) {
+                       ^~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:5026:9: note: uninitialized use occurs here
+           return length;
+                  ^~~~~~
+   fs/cifs/smb2ops.c:4994:3: note: remove the 'if' if its condition is always true
+                   if (rdata->result != 0) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4893:12: note: initialize the variable 'length' to silence this warning
+           int length;
+                     ^
+                      = 0
+   1 warning generated.
 
-You are awesome, thank you!
+
+vim +4994 fs/cifs/smb2ops.c
+
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4880  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4881  static int
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4882  handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+f398cb91110529 David Howells      2022-01-24  4883  		 char *buf, unsigned int buf_len, struct xarray *pages,
+f398cb91110529 David Howells      2022-01-24  4884  		 unsigned int pages_len, bool is_offloaded)
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4885  {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4886  	unsigned int data_offset;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4887  	unsigned int data_len;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4888  	unsigned int cur_off;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4889  	unsigned int cur_page_idx;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4890  	unsigned int pad_len;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4891  	struct cifs_readdata *rdata = mid->callback_data;
+0d35e382e4e96a Ronnie Sahlberg    2021-11-05  4892  	struct smb2_hdr *shdr = (struct smb2_hdr *)buf;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4893  	int length;
+74dcf418fe3446 Long Li            2017-11-22  4894  	bool use_rdma_mr = false;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4895  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4896  	if (shdr->Command != SMB2_READ) {
+3175eb9b577e82 Ronnie Sahlberg    2019-09-04  4897  		cifs_server_dbg(VFS, "only big read responses are supported\n");
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4898  		return -ENOTSUPP;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4899  	}
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4900  
+511c54a2f69195 Pavel Shilovsky    2017-07-08  4901  	if (server->ops->is_session_expired &&
+511c54a2f69195 Pavel Shilovsky    2017-07-08  4902  	    server->ops->is_session_expired(buf)) {
+de9ac0a6e9efdf Rohith Surabattula 2020-10-28  4903  		if (!is_offloaded)
+183eea2ee5ba96 Shyam Prasad N     2021-07-19  4904  			cifs_reconnect(server, true);
+511c54a2f69195 Pavel Shilovsky    2017-07-08  4905  		return -1;
+511c54a2f69195 Pavel Shilovsky    2017-07-08  4906  	}
+511c54a2f69195 Pavel Shilovsky    2017-07-08  4907  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4908  	if (server->ops->is_status_pending &&
+66265f134acfb2 Pavel Shilovsky    2019-01-23  4909  			server->ops->is_status_pending(buf, server))
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4910  		return -1;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4911  
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4912  	/* set up first two iov to get credits */
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4913  	rdata->iov[0].iov_base = buf;
+bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4914  	rdata->iov[0].iov_len = 0;
+bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4915  	rdata->iov[1].iov_base = buf;
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4916  	rdata->iov[1].iov_len =
+bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4917  		min_t(unsigned int, buf_len, server->vals->read_rsp_size);
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4918  	cifs_dbg(FYI, "0: iov_base=%p iov_len=%zu\n",
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4919  		 rdata->iov[0].iov_base, rdata->iov[0].iov_len);
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4920  	cifs_dbg(FYI, "1: iov_base=%p iov_len=%zu\n",
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4921  		 rdata->iov[1].iov_base, rdata->iov[1].iov_len);
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4922  
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4923  	rdata->result = server->ops->map_error(buf, true);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4924  	if (rdata->result != 0) {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4925  		cifs_dbg(FYI, "%s: server returned error %d\n",
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4926  			 __func__, rdata->result);
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4927  		/* normal error on read response */
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4928  		if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4929  			mid->mid_state = MID_RESPONSE_RECEIVED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4930  		else
+ec678eae746dd2 Pavel Shilovsky    2019-01-18  4931  			dequeue_mid(mid, false);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4932  		return 0;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4933  	}
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4934  
+1fc6ad2f10ad6f Ronnie Sahlberg    2018-06-01  4935  	data_offset = server->ops->read_data_offset(buf);
+74dcf418fe3446 Long Li            2017-11-22  4936  #ifdef CONFIG_CIFS_SMB_DIRECT
+74dcf418fe3446 Long Li            2017-11-22  4937  	use_rdma_mr = rdata->mr;
+74dcf418fe3446 Long Li            2017-11-22  4938  #endif
+74dcf418fe3446 Long Li            2017-11-22  4939  	data_len = server->ops->read_data_length(buf, use_rdma_mr);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4940  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4941  	if (data_offset < server->vals->read_rsp_size) {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4942  		/*
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4943  		 * win2k8 sometimes sends an offset of 0 when the read
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4944  		 * is beyond the EOF. Treat it as if the data starts just after
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4945  		 * the header.
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4946  		 */
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4947  		cifs_dbg(FYI, "%s: data offset (%u) inside read response header\n",
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4948  			 __func__, data_offset);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4949  		data_offset = server->vals->read_rsp_size;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4950  	} else if (data_offset > MAX_CIFS_SMALL_BUFFER_SIZE) {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4951  		/* data_offset is beyond the end of smallbuf */
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4952  		cifs_dbg(FYI, "%s: data offset (%u) beyond end of smallbuf\n",
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4953  			 __func__, data_offset);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4954  		rdata->result = -EIO;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4955  		if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4956  			mid->mid_state = MID_RESPONSE_MALFORMED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4957  		else
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4958  			dequeue_mid(mid, rdata->result);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4959  		return 0;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4960  	}
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4961  
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4962  	pad_len = data_offset - server->vals->read_rsp_size;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4963  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4964  	if (buf_len <= data_offset) {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4965  		/* read response payload is in pages */
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4966  		cur_page_idx = pad_len / PAGE_SIZE;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4967  		cur_off = pad_len % PAGE_SIZE;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4968  
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4969  		if (cur_page_idx != 0) {
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4970  			/* data offset is beyond the 1st page of response */
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4971  			cifs_dbg(FYI, "%s: data offset (%u) beyond 1st page of response\n",
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4972  				 __func__, data_offset);
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4973  			rdata->result = -EIO;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4974  			if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4975  				mid->mid_state = MID_RESPONSE_MALFORMED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4976  			else
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4977  				dequeue_mid(mid, rdata->result);
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4978  			return 0;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4979  		}
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4980  
+f398cb91110529 David Howells      2022-01-24  4981  		if (data_len > pages_len - pad_len) {
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4982  			/* data_len is corrupt -- discard frame */
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4983  			rdata->result = -EIO;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4984  			if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4985  				mid->mid_state = MID_RESPONSE_MALFORMED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4986  			else
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4987  				dequeue_mid(mid, rdata->result);
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4988  			return 0;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4989  		}
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4990  
+f398cb91110529 David Howells      2022-01-24  4991  		/* Copy the data to the output I/O iterator. */
+f398cb91110529 David Howells      2022-01-24  4992  		rdata->result = cifs_copy_pages_to_iter(pages, pages_len,
+f398cb91110529 David Howells      2022-01-24  4993  							cur_off, &rdata->iter);
+c42a6abe301283 Pavel Shilovsky    2016-11-17 @4994  		if (rdata->result != 0) {
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4995  			if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4996  				mid->mid_state = MID_RESPONSE_MALFORMED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  4997  			else
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4998  				dequeue_mid(mid, rdata->result);
+c42a6abe301283 Pavel Shilovsky    2016-11-17  4999  			return 0;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  5000  		}
+f398cb91110529 David Howells      2022-01-24  5001  		rdata->got_bytes = pages_len;
+c42a6abe301283 Pavel Shilovsky    2016-11-17  5002  
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5003  	} else if (buf_len >= data_offset + data_len) {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5004  		/* read response payload is in buf */
+f398cb91110529 David Howells      2022-01-24  5005  		WARN_ONCE(pages && !xa_empty(pages),
+f398cb91110529 David Howells      2022-01-24  5006  			  "read data can be either in buf or in pages");
+f398cb91110529 David Howells      2022-01-24  5007  		length = copy_to_iter(buf + data_offset, data_len, &rdata->iter);
+f398cb91110529 David Howells      2022-01-24  5008  		if (length < 0)
+f398cb91110529 David Howells      2022-01-24  5009  			return length;
+f398cb91110529 David Howells      2022-01-24  5010  		rdata->got_bytes = data_len;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5011  	} else {
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5012  		/* read response payload cannot be in both buf and pages */
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5013  		WARN_ONCE(1, "buf can not contain only a part of read data");
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5014  		rdata->result = -EIO;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5015  		if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5016  			mid->mid_state = MID_RESPONSE_MALFORMED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5017  		else
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5018  			dequeue_mid(mid, rdata->result);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5019  		return 0;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5020  	}
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5021  
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5022  	if (is_offloaded)
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5023  		mid->mid_state = MID_RESPONSE_RECEIVED;
+ac873aa3dc2170 Rohith Surabattula 2020-10-29  5024  	else
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5025  		dequeue_mid(mid, false);
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5026  	return length;
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5027  }
+4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5028  
+
+:::::: The code at line 4994 was first introduced by commit
+:::::: c42a6abe3012832a68a371dabe17c2ced97e62ad CIFS: Add capability to decrypt big read responses
+
+:::::: TO: Pavel Shilovsky <pshilov@microsoft.com>
+:::::: CC: Steve French <smfrench@gmail.com>
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
