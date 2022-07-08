@@ -1,182 +1,337 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660B47E0
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 05:42:28 +0000 (UTC)
-Received: by mail-wm1-f50.google.com with SMTP id j7so11810644wmp.2
-        for <llvm@lists.linux.dev>; Thu, 07 Jul 2022 22:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:cc:message-id:subject:mime-version:list-id;
-        bh=kAauFpU8DuCxksUHIo00C+eQ3yxOgA7pIDOa9Eb0eJI=;
-        b=uaJag287PTp2CZZ+kBOCRexpjIhGBznrdx8Tm9/MKvjP3bhwHig30x5EDGLMsVkzCh
-         cCLjKB03RpgiCzbT2uwqdOTwGW7Nt9mN+sEJf1xwuEGRsmBzS7t/UT0n+p7iaO4Xrdq/
-         eBjgi+9nBDqri3DkDSJrrR9mk4heQ/JtjVf4l76C6uavHfNFtyDPrY+ZGFkiigC6f9jO
-         Rk25qZS1AFZJV6/ZJeBLeJtK+EY0LrKbDZQ+05fujNBQJEBQJTIvdRFu3ezdU4asBL4A
-         Vk/KbdjrmYZVybI7Td0HrcgwesiA8floHLYYUujmsfjmfaGW0HVsSOKyIqKDaV2WDkCM
-         OeOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
-         :list-id;
-        bh=kAauFpU8DuCxksUHIo00C+eQ3yxOgA7pIDOa9Eb0eJI=;
-        b=ELY/Zr+lQ9Gxl3TFq2iHpDGJn0tS9AJB9PoezY8KBw+amJmpWWnF4pTwu54ER9l4hj
-         z6SKfyw+KPXH8IFakzvuU4idaEJ0WddJ5bO05zRELBQ9Pw5WZ+JGdD89a5/edVktKXng
-         dO7lybgM5uNLiu8poO50rS8zn/FfCIXgzZJTPGls2Wl22ipDWKJkHzSbRHJw7m6dDzs2
-         nlBSFxJUhBiKeBF24QAo/sbqXNtKXMoyHp3e+XTjYL/jTcCVhneN08fmtOeqvzF+Nd87
-         Gdgqoxf1Zf/uWmL3+oPAev4pwut7XT8NWja5mndsoKL+CooZWcE9AxwkD+sXm31G53xz
-         Sb/A==
-X-Gm-Message-State: AJIora8TuqIhV4vJdTY4hoxzvLRDKLRTQ8bcZS/T9j+MVljVORROyA9H
-	oGyTdqkGIcI0ZA28t/7zMGjyuw==
-X-Google-Smtp-Source: AGRyM1t+dmT8f0SUA8hFrI4emcQw4vhVtiXTVnTspVpldICMVOGM5zj46XpDE+7ATegzFwl466jTsg==
-X-Received: by 2002:a7b:c31a:0:b0:39c:4783:385e with SMTP id k26-20020a7bc31a000000b0039c4783385emr8426495wmj.185.1657258946588;
-        Thu, 07 Jul 2022 22:42:26 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id d11-20020a5d6dcb000000b0020e6ce4dabdsm38658005wrz.103.2022.07.07.22.42.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 22:42:26 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 8 Jul 2022 05:42:25 +0000 (UTC)
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <1791141562.180.1657258946129@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by linux: lib/bitmap: Make length
- parameter `len` unsigned
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165A87E0
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 06:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1657260133;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WhQrFxLnTx6GJ5RIgNzSL080TkISF9iNl2Cf2+0CNcg=;
+	b=F3Xb1iDkln+Q4FBsYwAXiAyOypx3WOTbIGZyr+0YAfS6MEipPw0wE7WrHQJHYLxnSCd0Ep
+	UTIxyeeJSkoaC0V+Yy//4AFfgxLnpI/23xukfrlCyYGvTudtVIfcFJ52+QpwfIT50zmc80
+	6DJIvWq8eavp4sodDAtH73fg9ktsPZM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-13-2AdJ9T-kPzCEZNA3YMgexA-1; Fri, 08 Jul 2022 02:02:12 -0400
+X-MC-Unique: 2AdJ9T-kPzCEZNA3YMgexA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7768385A583
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 06:02:12 +0000 (UTC)
+Received: from [172.64.9.29] (unknown [10.30.34.70])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6746940CFD0A;
+	Fri,  8 Jul 2022 06:02:12 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for e8a4e1c1
+ (mainline.kernel.org-clang)
+Date: Fri, 08 Jul 2022 06:02:12 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_179_712606477.1657258945216"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-release-arm-norov-allnoconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <36488.122070802021200335@us-mta-13.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-------=_Part_179_712606477.1657258945216
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi, we tested your kernel and here are the results:
 
-[TCWG CI] Regression caused by linux: lib/bitmap: Make length parameter `len` unsigned:
-commit aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-Author: Paul Menzel <pmenzel@molgen.mpg.de>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-    lib/bitmap: Make length parameter `len` unsigned
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-547
-# First few build errors in logs:
-# 00:01:34 lib/bitmap.c:351:6: error: conflicting types for '__bitmap_set'
-# 00:01:34 make[1]: *** [lib/bitmap.o] Error 1
-# 00:01:37 make: *** [lib] Error 2
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/47281
 
-from
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-564
-# linux build successful:
-all
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+           s390x - LTP - syscalls
+                   Issue: LTP: ioctl_loop05 - TBROK: Cannot find block devi=
+ce for /mnt/testarea/ltp-w7JfbOmzJY/iocfULVTn/test.img
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/674
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4266258
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
+ht-etm4x: probe of ARMHC500:20 failed with error -17
+                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
+BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+         aarch64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         ppc64le - AMTU (Abstract Machine Test Utility)
+                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
+AIL
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1162
+         ppc64le - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         ppc64le - trace: ftrace/tracer
+                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
+error: No such device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/803
+         ppc64le - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         ppc64le - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         ppc64le - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         ppc64le - selinux-policy: serge-testsuite
+                   Issue: selinux-policy: serge-testsuite: Failed test at p=
+erf_event/test line 88, 104, 109, 115
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/814
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - kselftest build - net
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - kselftest build - bpf
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Storage - blktests - blk
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-release-arm-norov-allnoconfig
 
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/build-aaa4ab5ec04480fd0c16c7452d28444c862b2b87/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/build-dc34d5036692c614eef23c1130ee42a201c316bf/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-Reproduce builds:
-<cut>
-mkdir investigate-linux-aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-cd investigate-linux-aaa4ab5ec04480fd0c16c7452d28444c862b2b87
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-# Fetch manifests and test.sh script
-mkdir -p artifacts/manifests
-curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/manifests/build-baseline.sh --fail
-curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/manifests/build-parameters.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allnoconfig/1/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
-
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
-
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
-
-cd linux
-
-# Reproduce first_bad build
-git checkout --detach aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-../artifacts/test.sh
-
-# Reproduce last_good build
-git checkout --detach dc34d5036692c614eef23c1130ee42a201c316bf
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-Author: Paul Menzel <pmenzel@molgen.mpg.de>
-Date:   Thu Jul 7 23:50:52 2022 +0200
-
-    lib/bitmap: Make length parameter `len` unsigned
-    
-    The length is non-negative, so make it unsigned, and adapt while
-    condition accordingly.
-    
-    Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-    Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- lib/bitmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index b18e31ea6e66..0746beb336df 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
- }
- EXPORT_SYMBOL(__bitmap_weight);
- 
--void __bitmap_set(unsigned long *map, unsigned int start, int len)
-+void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
- {
- 	unsigned long *p = map + BIT_WORD(start);
- 	const unsigned int size = start + len;
- 	int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
- 	unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
- 
--	while (len - bits_to_set >= 0) {
-+	while (len >= bits_to_set) {
- 		*p |= mask_to_set;
- 		len -= bits_to_set;
- 		bits_to_set = BITS_PER_LONG;
-</cut>
-------=_Part_179_712606477.1657258945216--
