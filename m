@@ -1,96 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E577A
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 10:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657274932;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
-	b=A8RuLRs2WeW+xuloAq0M+wdqbbic0CP1VXOHD06JWcQjkcyq0yABos+S4i/ZJ8nc4nY9rq
-	iMrRIonCJBnYJotWSCnWeYsLwmet1nkmltBMoZ4n6C8otkFf2eGpnXu+phyjufGXWsMy0M
-	8WHaP+dp2TjS/poZvzY9wcuTv+0rWIE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-nqkLro3zMXWfohlbglub1w-1; Fri, 08 Jul 2022 06:08:50 -0400
-X-MC-Unique: nqkLro3zMXWfohlbglub1w-1
-Received: by mail-wr1-f72.google.com with SMTP id j16-20020adfa550000000b0021d63d200a8so3067363wrb.5
-        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 03:08:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
-        b=wimHuvJdt9sNKI/NRUNl1g/AESHrH86hBtCcxxMtnGcfGdsPEEl9gq9m81r5HH7/Q6
-         4ZmTfX3ELLjPqGV3AddRl7cAtTtVrjwizyqfmVZvD1UKAiNHw4RU5jamdVScE7qgw2X1
-         DkWg2zN6sowjNwpI7LJQt4cVlK8DxNyw7HhCUJAfDJT1Q0kt1I795+o7yv3+U8f6tkVd
-         RSXX9JOiWrhkSPVMZu0QkhRYCWwzCR7D7DmzqCLxYrGm8AKwDPAE/KeMEKFQqGdPwi3d
-         HsaC2KaCsnssa+oZ6OqNOaVuWPASbFtzgUG4+bKITaYLZJWO5KleNvVOV83GNJ2JFSEM
-         eKQQ==
-X-Gm-Message-State: AJIora8GsfAGIbQtcN4YK9yMLHtJCBh8hwuIRu3BI64GMIh0g557g2AQ
-	sXIr9XGBeIak8g2vy4or+tC7R1kkzMUmBbZF8UZk5LHkqSrgyG0CRqDprBPQAa+gsbccX6sbu6Y
-	mO8FbyHATny2hLA==
-X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822305wmq.108.1657274929750;
-        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1syukJVbZC5Q5vHTRyn7SXZAqXHIKjGpeSBXFwl4fsGgBLNx7VcuUla/SxRd4bJfBA7oD8ULA==
-X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822281wmq.108.1657274929580;
-        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
-Received: from debian.home (2a01cb058d1194004161f17a6a9ad508.ipv6.abo.wanadoo.fr. [2a01:cb05:8d11:9400:4161:f17a:6a9a:d508])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1cf40a000000b003a2c7bf0497sm1654705wma.16.2022.07.08.03.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
-Date: Fri, 8 Jul 2022 12:08:47 +0200
-From: Guillaume Nault <gnault@redhat.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
-Message-ID: <20220708100847.GA26192@debian.home>
-References: <20220707221456.1782048-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E94809
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 10:48:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657277326; x=1688813326;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ggtEcwhHADhpXUqxV1M+XvDmWc7qViSugtw86h2y0iw=;
+  b=VeT6wTPLAPWWU0PMtJjXo2McK7HXFwvjZUqChm+nfpaPx5CCdlwnB3PZ
+   SAgz3pWRRzxtpHgJfb/Oim/djwB11OGvrh/C072E42YZ5TxBFucEKxCaL
+   fXgqARmzXWo3LiIfSv5e1xRMulftInI9fPglZz97fUIMEGxPfgjOCkpSd
+   l9fkr6F93KYfBFWXpBCloj7l0e3ApxaBBKivrb5HfqgkaKM93ZE8cEcgX
+   ruVytBNbAOtyyX+cgNLGNoi1UHDB52in1Cf8dZW9imyqlBX9GcuTKvYYB
+   v4FrXLKZK0+PJnjz2ix20i21OIqiM+QGF5naH+IJVORGKJQIAzDZCseST
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="370567261"
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="370567261"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 03:48:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
+   d="scan'208";a="920957156"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 03:48:44 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9lXP-000NMQ-KW;
+	Fri, 08 Jul 2022 10:48:43 +0000
+Date: Fri, 8 Jul 2022 18:48:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [agd5f:drm-next 350/403]
+ drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:273:9: warning: no
+ previous prototype for function 'dc_dmub_srv_get_pipes_for_stream'
+Message-ID: <202207081827.vQ4rn2g8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220707221456.1782048-1-justinstitt@google.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=gnault@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jul 07, 2022 at 03:14:56PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter the following warnings:
-> | net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
-> | short' but the argument has type 'u32' (aka 'unsigned int')
-> | [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
-> | session->ns);
-> -
-> | net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
-> | short' but the argument has type 'int' [-Werror,-Wformat]
-> | session->l2specific_type, l2tp_get_l2specific_len(session));
-> -
-> | net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
-> | short' but the argument has type 'u32' (aka 'unsigned int')
-> | [-Werror,-Wformat] session->nr, session->ns,
-> 
-> Both session->nr and ->nc are of type `u32`. The currently used format
-> specifier is `%hu` which describes a `u16`. My proposed fix is to listen
-> to Clang and use the correct format specifier `%u`.
-> 
-> For the warning at line 196, l2tp_get_l2specific_len() returns an int
-> and should therefore be using the `%d` format specifier.
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   51d10e1a9912e950abf19b6314f3d6f95dd16af3
+commit: 00fa7f031dd4b885175da390e24cb02f6a45977e [350/403] drm/amd/display: Add basic infrastructure for enabling FAMS
+config: riscv-randconfig-r006-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081827.vQ4rn2g8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 00fa7f031dd4b885175da390e24cb02f6a45977e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
 
-Acked-by: Guillaume Nault <gnault@redhat.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:273:9: warning: no previous prototype for function 'dc_dmub_srv_get_pipes_for_stream' [-Wmissing-prototypes]
+   uint8_t dc_dmub_srv_get_pipes_for_stream(struct dc *dc, struct dc_stream_state *stream)
+           ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:273:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   uint8_t dc_dmub_srv_get_pipes_for_stream(struct dc *dc, struct dc_stream_state *stream)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:287:5: warning: no previous prototype for function 'dc_dmub_srv_get_timing_generator_offset' [-Wmissing-prototypes]
+   int dc_dmub_srv_get_timing_generator_offset(struct dc *dc, struct dc_stream_state *stream)
+       ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:287:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dc_dmub_srv_get_timing_generator_offset(struct dc *dc, struct dc_stream_state *stream)
+   ^
+   static 
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:636:6: warning: no previous prototype for function 'dc_dmub_setup_subvp_dmub_command' [-Wmissing-prototypes]
+   void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:636:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dc_dmub_setup_subvp_dmub_command(struct dc *dc,
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/dc_dmub_srv_get_pipes_for_stream +273 drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c
+
+   272	
+ > 273	uint8_t dc_dmub_srv_get_pipes_for_stream(struct dc *dc, struct dc_stream_state *stream)
+   274	{
+   275		uint8_t pipes = 0;
+   276		int i = 0;
+   277	
+   278		for (i = 0; i < MAX_PIPES; i++) {
+   279			struct pipe_ctx *pipe = &dc->current_state->res_ctx.pipe_ctx[i];
+   280	
+   281			if (pipe->stream == stream && pipe->stream_res.tg)
+   282				pipes = i;
+   283		}
+   284		return pipes;
+   285	}
+   286	
+ > 287	int dc_dmub_srv_get_timing_generator_offset(struct dc *dc, struct dc_stream_state *stream)
+   288	{
+   289		int  tg_inst = 0;
+   290		int i = 0;
+   291	
+   292		for (i = 0; i < MAX_PIPES; i++) {
+   293			struct pipe_ctx *pipe = &dc->current_state->res_ctx.pipe_ctx[i];
+   294	
+   295			if (pipe->stream == stream && pipe->stream_res.tg) {
+   296				tg_inst = pipe->stream_res.tg->inst;
+   297				break;
+   298			}
+   299		}
+   300		return tg_inst;
+   301	}
+   302	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
