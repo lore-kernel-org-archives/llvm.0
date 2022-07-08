@@ -1,71 +1,124 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7165D812
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 23:27:30 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id 19so166384ljz.4
-        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 16:27:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127544C72
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 23:33:50 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id e12so139050lfr.6
+        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 16:33:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2Oi60uoXzvamvc3/SFoRIFUoo3eDrzVvDd6TkmxROEc=;
-        b=eLIcA0wmLBrkZp3xFCD89JHRf3MzzY1K5ZOseLf2l7FsxyK5DEZYcIVMeX/d+KpKER
-         RcLpKuJrJQMfTz4LDBMDQMCuZYLw6nfsRCZXgoLtqZn8EoYFiOnEzOEiPe34RdsugaC9
-         DVLlB6vSXVef+DVhAEhpFaI4XSiAeLpIjhibeOYxJdGfRQP3u//Y5/7iw8E3MDi/jZTB
-         HTWyHH0EVqtHdHaJt8xzJXzKX7nonEXKDdbPuT+SFp1c4j12HMZd23G5PLZ6t0nRQvS1
-         dNIdWHL94B6lAEg8zgHC8S+f9q0NxYcNpbjlFQqSMYhWf8jHQdQEHsmMtXIrlLbEeVE4
-         VLjQ==
+        bh=f6TCUIosa5W4/Vb9XWvZYFOtAww3GSDuGtA/pDdfbF4=;
+        b=kLfgt0CyeLHwI1Zct0de1ZglNn4qUt2rr5geGoDsSTgx69fJt12j4VOiv3EMjJhrfP
+         4EfxQ8s9or1yPVXNnB6Nnv+VmaDKbN+Y8QSK1/izwn1niA9dh2Jau5kg1IoqVeJ2zL+/
+         yri/FIwuFlMNvsLB47gk6qvyn8+Hi7j5NeF62JksRYesZuV12v1mWoWdBrJdpgDH47LX
+         7qysqkSMPCfQnvyYybnOBfUTIiRSP67jOamssr8f+Pl0B7zgnLGjBqA617wXrmGj+mub
+         yU1Nn/n/9oKGz3f0hZFQVGZBJ3ZroXY+pe4WZkE4BpigDyIrjeTx/mys2PDNQj/dfO8I
+         3giQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2Oi60uoXzvamvc3/SFoRIFUoo3eDrzVvDd6TkmxROEc=;
-        b=cz4r7J3pKP3J02jra3VmI+qmQsmeHCHAtNzkmTlj7G5bCBU69Kp8UoXIgcA8EI5XKH
-         BIyLGDzB5sImfp7pcA27J6Vs0YJJtOc5lucpCh9U1y5uMbAaQHFodnOhwnVud3aQeVm9
-         yJbPbcEpYqSX5oUw6RJVU3o9Zdp0unhaVUukqyt6lZ4wPi7VcMkRjRum/PRmbCGHPIN5
-         kBZfM1CdB7Wk2kCDMiV5N9qoc4ySu+MHidS1aYwPJrtCiktPmrIDrNo+OBmeETmS7sSF
-         s1MyImGHaL22F5CWTHEn0U7BumlWGXSd/7S2Fb2WUx+0Bt75x7C3WTYMu4ZRVq1F5reQ
-         OH9w==
-X-Gm-Message-State: AJIora9PmV+UHCA4eJtElbfTwmjX0oRQrTxrHZgaFKgGrIAGt1ewXXbn
-	2LH7WCbwDbG6wwxg9qgZW5RDL9Z+W7DNM0L4ZQ7OKQ==
-X-Google-Smtp-Source: AGRyM1sbMd0h5mqMlOe3r5zsM/tg9DtuIaGzYY2PpvqrczlMjK3CvvTTNq4tPC2fb+KpnIF626wm3H/eHrl36HdX56k=
-X-Received: by 2002:a05:651c:2104:b0:25b:f4ed:db93 with SMTP id
- a4-20020a05651c210400b0025bf4eddb93mr3316572ljq.295.1657322848370; Fri, 08
- Jul 2022 16:27:28 -0700 (PDT)
+        bh=f6TCUIosa5W4/Vb9XWvZYFOtAww3GSDuGtA/pDdfbF4=;
+        b=BqvHRQwH3Y9Y3YpKZtsj6CRFAZxtb8m131eeL1eJcRItNz95cwX3fu2OcWL2ilfWVR
+         Mcd3j4uNZyu6bsGxb1vcWRUP8cDLesNSh1PtqmeKiJ1Dw1c385mscWB2OfgpvlGFhgBP
+         AzzG4LVCsWZjKrS7m9Bf538pfCUhksNWa6f816VXRa5NyRovM0NsJQEp73mzmEX7+tfU
+         1lS08B08zVORwphD1CMph0hUivlkhc3DZYlyTTZ4iSojr0ehcLKo7+PbZnSZZH4S5Coa
+         GMnwaFM64a/XdoqTT7EWqbL8mGz2f50AjA2w8fLuioLDTt3QfSNeyL8Ut18p1Yh5tTvf
+         N3JA==
+X-Gm-Message-State: AJIora8X+/dQYqdH94wgKvixKRlh/WdWvYfg2JKq6RKP/bS99yXo1Lmo
+	m5khtmmhupAckwxHTUsi67YCQjxUvOKSq/OHEc0nkQ==
+X-Google-Smtp-Source: AGRyM1sYwzFO76ZbUUlO+uxQCC5vi+M7eJm5XjlDoev9CqoJeGkALjAG+zYM/rC7CZhTfV/eDMYh4GGeHBCX1ORWazI=
+X-Received: by 2002:a05:6512:2623:b0:47d:ace7:c804 with SMTP id
+ bt35-20020a056512262300b0047dace7c804mr3904909lfb.647.1657323228912; Fri, 08
+ Jul 2022 16:33:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220707181532.762452-1-justinstitt@google.com>
-In-Reply-To: <20220707181532.762452-1-justinstitt@google.com>
+References: <20220707191745.840590-1-justinstitt@google.com>
+In-Reply-To: <20220707191745.840590-1-justinstitt@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 8 Jul 2022 16:27:16 -0700
-Message-ID: <CAKwvOd=YiLPPyXq3Xvwh8+hMfSL1Ak_HE14No5YncbMMyM60Rg@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv4: esp4: fix clang -Wformat warning
+Date: Fri, 8 Jul 2022 16:33:37 -0700
+Message-ID: <CAKwvOd=qjQxGmRD29DrFjhEpbrDHyTUhRfHKJGJ2i-oo_RvF_A@mail.gmail.com>
+Subject: Re: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
 To: Justin Stitt <justinstitt@google.com>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S . Miller" <davem@davemloft.net>, Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>, 
-	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
+	Florian Westphal <fw@strlen.de>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Joe Perches <joe@perches.com>
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 7, 2022 at 11:15 AM Justin Stitt <justinstitt@google.com> wrote:
+On Thu, Jul 7, 2022 at 12:18 PM Justin Stitt <justinstitt@google.com> wrote:
 >
-> This is the exact same issue (and fix) as:
-> https://lore.kernel.org/all/20220707173040.704116-1-justinstitt@google.com/
+> When building with Clang we encounter these warnings:
+> | net/netfilter/xt_TPROXY.c:173:5: error: format specifies type 'unsigned
+> | char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+> | &iph->saddr, ntohs(hp->source),
+> -
+> | net/netfilter/xt_TPROXY.c:181:4: error: format specifies type 'unsigned
+> | char' but the argument has type 'int' [-Werror,-Wformat] tproto,
+> | &iph->saddr, ntohs(hp->source),
 >
-> This really should have been a 2-patch series but I've been going
-> through warnings and systematically fixing them whilst submitting
-> patches as I go.
+> The format specifier `%hhu` refers to a u8 while tproto is an int. In
+> this case we weren't losing any data because ipv6_find_hdr returns an
+> int but its return value (nexthdr) is a u8. This u8 gets widened to an
+> int when returned from ipv6_find_hdr and assigned to tproto. The
+> previous format specifier is functionally fine but still produces a
+> warning due to a type mismatch.
+>
+> The fix is simply to listen to Clang and change `%hhu` to `%d` for both
+> instances of the warning.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-In that case, since Joe had feedback on that patch, perhaps you can
-fold this into that patch, and apply Joe's suggestions (sending a v2)?
+Thanks for the patch, this fixes the warning I observe when building
+ARCH=arm64 allmodconfig with -Wno-format removed!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+> It should be noted that for this entire file to build without -Wformat
+> warnings you should apply this `ntohs` patch which fixed many, many
+> -Wformat warnings in the kernel.
+> https://lore.kernel.org/all/20220608223539.470472-1-justinstitt@google.com/
+>
+>  net/netfilter/xt_TPROXY.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
+> index 459d0696c91a..5d74abffc94f 100644
+> --- a/net/netfilter/xt_TPROXY.c
+> +++ b/net/netfilter/xt_TPROXY.c
+> @@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+>                    targets on the same rule yet */
+>                 skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
+>
+> -               pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> +               pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+>                          tproto, &iph->saddr, ntohs(hp->source),
+>                          laddr, ntohs(lport), skb->mark);
+>
+> @@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+>                 return NF_ACCEPT;
+>         }
+>
+> -       pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> +       pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+>                  tproto, &iph->saddr, ntohs(hp->source),
+>                  &iph->daddr, ntohs(hp->dest), skb->mark);
+>
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
+
+
 -- 
 Thanks,
 ~Nick Desaulniers
