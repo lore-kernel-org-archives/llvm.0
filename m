@@ -1,138 +1,96 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4447A
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 09:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657273606; x=1688809606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=58AK5+8PgyaQZBsNdP1u1fcyExfdKZdanD5BE5OQyfM=;
-  b=g2+mzRR4hdTsB+i99GojniC5w0awwihpMC1KG0IhU+/CspeTzpFuxQZT
-   9napFjrZFR2KyCHDDnEVnd1Mz0r+CKtZG3S/vmBK9eWgRpR+30Kbi0/Qr
-   G0HaZD1bz26IKlm4IZg8Ysik9zUxFHYbAf7X6MlrJ1dfPln5XVZxp73B+
-   XXigQZ2KxKp3kJnl7nlYUaksLBDDqQ+aLIIGJBTs3/AvYD1GcXcg0aZio
-   kyM6tAQ0N2URgn9qqTMBfHLLibiJPXzHsHKsEqosWHoWmP1fqEmQpnaLa
-   DcW/6kV9uFh1jWiKmQJzihUGN8HVmFKqCyXNdiETaps8fD0a7sgkCUUAC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="282995820"
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="282995820"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 02:46:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,255,1650956400"; 
-   d="scan'208";a="840253054"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jul 2022 02:46:41 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o9kZM-000NIC-Hr;
-	Fri, 08 Jul 2022 09:46:40 +0000
-Date: Fri, 8 Jul 2022 17:46:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
-	kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Hans Schultz <netdev@kapio-technology.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Ivan Vecera <ivecera@redhat.com>,
-	Roopa Prabhu <roopa@nvidia.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-	bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 5/6] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <202207081751.PPV8GRpf-lkp@intel.com>
-References: <20220707152930.1789437-6-netdev@kapio-technology.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E577A
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 10:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1657274932;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
+	b=A8RuLRs2WeW+xuloAq0M+wdqbbic0CP1VXOHD06JWcQjkcyq0yABos+S4i/ZJ8nc4nY9rq
+	iMrRIonCJBnYJotWSCnWeYsLwmet1nkmltBMoZ4n6C8otkFf2eGpnXu+phyjufGXWsMy0M
+	8WHaP+dp2TjS/poZvzY9wcuTv+0rWIE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-nqkLro3zMXWfohlbglub1w-1; Fri, 08 Jul 2022 06:08:50 -0400
+X-MC-Unique: nqkLro3zMXWfohlbglub1w-1
+Received: by mail-wr1-f72.google.com with SMTP id j16-20020adfa550000000b0021d63d200a8so3067363wrb.5
+        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 03:08:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R31VwcSPJiQ7JIw87RxF+TN0+eL/CdtqRF2EIROnvwo=;
+        b=wimHuvJdt9sNKI/NRUNl1g/AESHrH86hBtCcxxMtnGcfGdsPEEl9gq9m81r5HH7/Q6
+         4ZmTfX3ELLjPqGV3AddRl7cAtTtVrjwizyqfmVZvD1UKAiNHw4RU5jamdVScE7qgw2X1
+         DkWg2zN6sowjNwpI7LJQt4cVlK8DxNyw7HhCUJAfDJT1Q0kt1I795+o7yv3+U8f6tkVd
+         RSXX9JOiWrhkSPVMZu0QkhRYCWwzCR7D7DmzqCLxYrGm8AKwDPAE/KeMEKFQqGdPwi3d
+         HsaC2KaCsnssa+oZ6OqNOaVuWPASbFtzgUG4+bKITaYLZJWO5KleNvVOV83GNJ2JFSEM
+         eKQQ==
+X-Gm-Message-State: AJIora8GsfAGIbQtcN4YK9yMLHtJCBh8hwuIRu3BI64GMIh0g557g2AQ
+	sXIr9XGBeIak8g2vy4or+tC7R1kkzMUmBbZF8UZk5LHkqSrgyG0CRqDprBPQAa+gsbccX6sbu6Y
+	mO8FbyHATny2hLA==
+X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822305wmq.108.1657274929750;
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1syukJVbZC5Q5vHTRyn7SXZAqXHIKjGpeSBXFwl4fsGgBLNx7VcuUla/SxRd4bJfBA7oD8ULA==
+X-Received: by 2002:a05:600c:4e8b:b0:3a0:5826:3321 with SMTP id f11-20020a05600c4e8b00b003a058263321mr2822281wmq.108.1657274929580;
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+Received: from debian.home (2a01cb058d1194004161f17a6a9ad508.ipv6.abo.wanadoo.fr. [2a01:cb05:8d11:9400:4161:f17a:6a9a:d508])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1cf40a000000b003a2c7bf0497sm1654705wma.16.2022.07.08.03.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 03:08:49 -0700 (PDT)
+Date: Fri, 8 Jul 2022 12:08:47 +0200
+From: Guillaume Nault <gnault@redhat.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Tom Parkin <tparkin@katalix.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] l2tp: l2tp_debugfs: fix Clang -Wformat warnings
+Message-ID: <20220708100847.GA26192@debian.home>
+References: <20220707221456.1782048-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20220707221456.1782048-1-justinstitt@google.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=gnault@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707152930.1789437-6-netdev@kapio-technology.com>
 
-Hi Hans,
+On Thu, Jul 07, 2022 at 03:14:56PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter the following warnings:
+> | net/l2tp/l2tp_debugfs.c:187:40: error: format specifies type 'unsigned
+> | short' but the argument has type 'u32' (aka 'unsigned int')
+> | [-Werror,-Wformat] seq_printf(m, "   nr %hu, ns %hu\n", session->nr,
+> | session->ns);
+> -
+> | net/l2tp/l2tp_debugfs.c:196:32: error: format specifies type 'unsigned
+> | short' but the argument has type 'int' [-Werror,-Wformat]
+> | session->l2specific_type, l2tp_get_l2specific_len(session));
+> -
+> | net/l2tp/l2tp_debugfs.c:219:6: error: format specifies type 'unsigned
+> | short' but the argument has type 'u32' (aka 'unsigned int')
+> | [-Werror,-Wformat] session->nr, session->ns,
+> 
+> Both session->nr and ->nc are of type `u32`. The currently used format
+> specifier is `%hu` which describes a `u16`. My proposed fix is to listen
+> to Clang and use the correct format specifier `%u`.
+> 
+> For the warning at line 196, l2tp_get_l2specific_len() returns an int
+> and should therefore be using the `%d` format specifier.
 
-Thank you for the patch! Perhaps something to improve:
+Acked-by: Guillaume Nault <gnault@redhat.com>
 
-[auto build test WARNING on net/master]
-[also build test WARNING on shuah-kselftest/next linus/master v5.19-rc5]
-[cannot apply to net-next/master next-20220707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 07266d066301b97ad56a693f81b29b7ced429b27
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220708/202207081751.PPV8GRpf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/74f76ae0b0d4b12864a0cf5ff3c0685bc420aea3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220707-233246
-        git checkout 74f76ae0b0d4b12864a0cf5ff3c0685bc420aea3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/mv88e6xxx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/dsa/mv88e6xxx/chip.c:1696:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (mv88e6xxx_port_is_locked(chip, port))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:1698:6: note: uninitialized use occurs here
-           if (err)
-               ^~~
-   drivers/net/dsa/mv88e6xxx/chip.c:1696:2: note: remove the 'if' if its condition is always true
-           if (mv88e6xxx_port_is_locked(chip, port))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:1694:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +1696 drivers/net/dsa/mv88e6xxx/chip.c
-
-  1690	
-  1691	static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
-  1692	{
-  1693		struct mv88e6xxx_chip *chip = ds->priv;
-  1694		int err;
-  1695	
-> 1696		if (mv88e6xxx_port_is_locked(chip, port))
-  1697			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
-  1698		if (err)
-  1699			dev_err(chip->ds->dev, "p%d: failed to clear locked entries: %d\n",
-  1700				port, err);
-  1701	
-  1702		mv88e6xxx_reg_lock(chip);
-  1703		err = mv88e6xxx_port_fast_age_fid(chip, port, 0);
-  1704		mv88e6xxx_reg_unlock(chip);
-  1705	
-  1706		if (err)
-  1707			dev_err(chip->ds->dev, "p%d: failed to flush ATU: %d\n",
-  1708				port, err);
-  1709	}
-  1710	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
