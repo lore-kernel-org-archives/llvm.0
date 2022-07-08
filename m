@@ -1,42 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8178B29A9
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 16:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EFE3229
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 17:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657296983; x=1688832983;
+  t=1657300622; x=1688836622;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U8Q/JDShkN96zOSvjLaUmT9NJN1lPPjA0YfUSeO2/BM=;
-  b=ZpfP56nUivj5F2T+JhgmpQqOhBDiMs3CiCvJrECnEB/U7JhZur7Umn2l
-   c0vqAOol2ZyurxLriRXlGmuzNgM7uXoxDcGjA9aRGFY6M18hG1gHkFazp
-   3zEqndnjSW7tXPETv7AxI9sZpIlqhu5llLn5BRyPuLBSC55eNCRWzF1A0
-   6NsruawNlg5dq7SiWCdZNoPz/KC61guH8AtZ7vQyABD0jfEgtutWIHQx3
-   znGaaiP+QfV/yoZkF4xLs6LsvEhzdJOpJ1QDJ0QJiMeByRSGBVglb8gG7
-   1sXB+h1R/XXK5dfamHBP7oCq10YZmBWE9K+3ktL4u6Gs+LChtNkZv8GFx
+  bh=pC+2/rBUja//IMlc760pKRue825TaWgK5JHe9TZPuFs=;
+  b=bsde9RIzDIAjAhQjRQk8gJEgSU15XLwZiATxyCte6m5KbtluaQhEZ44n
+   DTXk0RrXFoj3RIeoFYKY+Z28OgyQscSAkEiLETjD66kqvjDwIItlI4Kg1
+   ZMIMPvzRrtH7h04YUvneEP9l+eM9RGH2cbAUHb+UJtBFmTZ9cAJVEydW+
+   YasgQbP9NLqGNP3QhIlto6cwrQInMjnPxU3Dos5KOw3BVToZwvZg2FxX7
+   wCj1QTEOdBYuOZO7IrL5EPjURy92CTNMuUbN0wNR6rxgmhCzdRKgU3nxm
+   xue4Sb1fmQqqSJaQ3x+dVe0sS//YSmq8aTksT2d1M/qhmwJA9iW3lQfdQ
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="283065026"
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="309908223"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="283065026"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 09:15:59 -0700
+   d="scan'208";a="309908223"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 10:17:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="544260506"
+   d="scan'208";a="626768821"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jul 2022 09:15:58 -0700
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 10:17:00 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9qe5-000NgU-R2;
-	Fri, 08 Jul 2022 16:15:57 +0000
-Date: Sat, 9 Jul 2022 00:15:37 +0800
+	id 1o9rb9-000NjA-BF;
+	Fri, 08 Jul 2022 17:16:59 +0000
+Date: Sat, 9 Jul 2022 01:16:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 27/35] ld.lld: error:
- arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
-Message-ID: <202207090002.wns3emYw-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [linux-next:master 7253/8914]
+ drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2720:6: warning: no
+ previous prototype for function 'dc_reset_state'
+Message-ID: <202207090100.acXdJ79H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,39 +48,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   144435741b0a6f31403d3084103678da3b4f9d11
-commit: 67a0731f120a735a7d6f8685d1fed092e460902e [27/35] powerpc: Make virt_to_pfn() a static inline
-config: powerpc-mpc8315_rdb_defconfig (https://download.01.org/0day-ci/archive/20220709/202207090002.wns3emYw-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f2528c29385819a84480cacef4886b049761e2c5
+commit: 97ca308925a50aa80711ccfaf814fa3898374862 [7253/8914] drm/amd/display: Add minimal pipe split transition state
+config: riscv-randconfig-r006-20220707 (https://download.01.org/0day-ci/archive/20220709/202207090100.acXdJ79H-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=67a0731f120a735a7d6f8685d1fed092e460902e
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout 67a0731f120a735a7d6f8685d1fed092e460902e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=97ca308925a50aa80711ccfaf814fa3898374862
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 97ca308925a50aa80711ccfaf814fa3898374862
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
-   >>> static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-   >>> ^
-   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
-   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:66: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2720:6: warning: no previous prototype for function 'dc_reset_state' [-Wmissing-prototypes]
+   void dc_reset_state(struct dc *dc, struct dc_state *context)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2720:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dc_reset_state(struct dc *dc, struct dc_state *context)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/dc_reset_state +2720 drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c
+
+  2719	
+> 2720	void dc_reset_state(struct dc *dc, struct dc_state *context)
+  2721	{
+  2722		dc_resource_state_destruct(context);
+  2723	
+  2724		/* clear the structure, but don't reset the reference count */
+  2725		memset(context, 0, offsetof(struct dc_state, refcount));
+  2726	
+  2727		init_state(dc, context);
+  2728	}
+  2729	
 
 -- 
 0-DAY CI Kernel Test Service
