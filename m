@@ -1,207 +1,321 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F4228E2
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 15:42:35 +0000 (UTC)
-Received: by mail-il1-f179.google.com with SMTP id h16so5101255ila.2
-        for <llvm@lists.linux.dev>; Fri, 08 Jul 2022 08:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1qbexzS6sol5qJ39FyR4R0bbeTrcJijBH7KTqUd0Ou8=;
-        b=SwjJ9VYJLFyQCQJDmktrB+p9IemrszRWS/6xHtGftz6bTaFQ60Ai5c/vhHvJ/HoYpj
-         x3DMyzXOy9AC+leTEXpHVf/JhsvZXoT0LCbRNrd7Unk/gWj/gNmcCQoqZHGasCcEN8SH
-         Bn7psIeduhzabFb9TecVtcYFsBKumv3iG00LabLyDU1dmJWUXDU3xkF7ChFDMuyHTSip
-         hrkRrBmh2iqJDFN7RIEQqEPY9ZJIhE2qKqWrJaTjIQX9JLTTq2iW6gRKgmD6pC9V4yif
-         02nApBb+hbZLzP+h2lomwhGm9NWEki3RDudjL8QcW1RysgIlKk0mL1TT2IgnNpXChR+D
-         dgRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1qbexzS6sol5qJ39FyR4R0bbeTrcJijBH7KTqUd0Ou8=;
-        b=8FSMAbtLi1HMXodSbvuZPh5xk7aYZK8KhTwYwcyl8oY+khWI6vhv+lPIXR0d8oTunu
-         vi5iU7KaIQoRFdqR+Oh9Wkw/EPP2YhA/gptZtKyWnP270fzHxTsxjXvL5VbulPw5LDqx
-         e8JqIguDxZ3U9FJM25rahnrarla/O63o55mB81WxIHKm3m+aXY+r0mVBimxKL4cjvXyk
-         h0ZD95zRVYo6wlrWx034ldYU8tBAfYFEmCUdass1YGcdjlWc0WhVJZD/xW1AlNz6JR/g
-         /5OZttJkBHIYBBpIBsdoelkyW+pd5MC52njLKt6WBCeMZh93UmHu2MezkaNV14zK+e3j
-         l76w==
-X-Gm-Message-State: AJIora9JgZBLDH7TMkE4yVtMWwPjLfxz6bHex54CUJ5OvLCfeENc411C
-	x4O2avaYhFGg9hvNqJFABgc=
-X-Google-Smtp-Source: AGRyM1vz8B/CoTAGqci2yIFVCBapyRIex1680cllaQQhyX5o64k7/OZUGHA80vWS9TD2sV6E27bDfA==
-X-Received: by 2002:a05:6e02:174a:b0:2da:c72f:e3a6 with SMTP id y10-20020a056e02174a00b002dac72fe3a6mr2446019ill.309.1657294954008;
-        Fri, 08 Jul 2022 08:42:34 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id a9-20020a92c709000000b002dc133c9468sm5698548ilp.6.2022.07.08.08.42.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 08:42:32 -0700 (PDT)
-Message-ID: <5841cdea-2587-5bd8-3e6c-19e49121677a@gmail.com>
-Date: Fri, 8 Jul 2022 17:42:28 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C70A29A9
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 16:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657296967; x=1688832967;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OPCFuffq4rP/hg3BpO52TtcI13/lCd18i6iB9CMLVzw=;
+  b=MzTec0BEfDMT1z7vSzZE28QgpcrBrP4ROnZuC6/vorXQgb3kHzoTeoD5
+   /v88r33DDW7wKtQ+zGE+2Cz3CSRfgGpepSNLwAL/E9DlNhidOnoWMZd/S
+   cvXQhcI14SHiWLYbVOx/7ZMAReZ1b4lYmY16J4IuT+5yILeM40Su2fb6H
+   vTPaBNXF9QTmgOChxsLmhFecJpZfa0skw2q1NDAT7vqq3eRWut5AOuG1P
+   kP5Gih+uQpBnWM486ICAA/Jq9uiOmhUUWG8ykxLrQqSt73EWdNKrUAKYB
+   9TZJ+Fj5IzL28jZbTfjMnuDHgSAkPp2pOE6khtbpDtaYXKBO2c/gkmgSJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="264094538"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="264094538"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 09:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="736391449"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 09:15:58 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9qe5-000NgY-SE;
+	Fri, 08 Jul 2022 16:15:57 +0000
+Date: Sat, 9 Jul 2022 00:15:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct
+ ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields
+ order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive,
+ consider reordering the fields or addin...
+Message-ID: <202207090025.tVBfb94P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v24 07/10] soc: mediatek: mmsys: add mmsys for support 64
- reset bits
-Content-Language: en-US
-To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux@roeck-us.net
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "jason-jh . lin" <jason-jh.lin@mediatek.com>,
- Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev, singo.chang@mediatek.com,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220622130824.29143-1-nancy.lin@mediatek.com>
- <20220622130824.29143-8-nancy.lin@mediatek.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220622130824.29143-8-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
+commit: 7bf50a968a1cd02728e9120ad0216dc80f7a6fb0 iio:adc:ad7476: Handle the different regulators used by various parts.
+date:   1 year, 2 months ago
+config: s390-randconfig-c005-20220703 (https://download.01.org/0day-ci/archive/20220709/202207090025.tVBfb94P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7bf50a968a1cd02728e9120ad0216dc80f7a6fb0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7bf50a968a1cd02728e9120ad0216dc80f7a6fb0
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=s390 clang-analyzer 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+clang-analyzer warnings: (new ones prefixed by >>)
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:308:3: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ^
+   drivers/message/fusion/mptspi.c:1259:3: note: Loop condition is false.  Exiting loop
+                   container_of(work, struct work_queue_wrapper, work);
+                   ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   drivers/message/fusion/mptspi.c:1269:6: note: Assuming field 'spi_pending' is 0
+           if (hd->spi_pending) {
+               ^~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:1269:2: note: Taking false branch
+           if (hd->spi_pending) {
+           ^
+   drivers/message/fusion/mptspi.c:1281:3: note: Loop condition is true.  Entering loop body
+                   shost_for_each_device(sdev, ioc->sh)
+                   ^
+   include/scsi/scsi_device.h:380:2: note: expanded from macro 'shost_for_each_device'
+           for ((sdev) = __scsi_iterate_devices((shost), NULL); \
+           ^
+   drivers/message/fusion/mptspi.c:1282:4: note: Calling 'mptspi_dv_device'
+                           mptspi_dv_device(hd, sdev);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:690:6: note: Assuming field 'channel' is not equal to 0
+           if (sdev->channel == 0 &&
+               ^~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:690:25: note: Left side of '&&' is false
+           if (sdev->channel == 0 &&
+                                  ^
+   drivers/message/fusion/mptspi.c:695:6: note: Assuming field 'channel' is not equal to 1
+           if (sdev->channel == 1 &&
+               ^~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:695:25: note: Left side of '&&' is false
+           if (sdev->channel == 1 &&
+                                  ^
+   drivers/message/fusion/mptspi.c:706:6: note: Assuming field 'channel' is not equal to 1
+           if (sdev->channel == 1 &&
+               ^~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:706:25: note: Left side of '&&' is false
+           if (sdev->channel == 1 &&
+                                  ^
+   drivers/message/fusion/mptspi.c:711:2: note: Calling 'mptspi_read_parameters'
+           mptspi_read_parameters(sdev->sdev_target);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:600:2: note: Calling 'mptspi_read_spi_device_pg0'
+           mptspi_read_spi_device_pg0(starget, &spi_dev_pg0);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:527:6: note: Assuming field 'channel' is equal to 0
+           if (starget->channel == 0 &&
+               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:527:6: note: Left side of '&&' is true
+   drivers/message/fusion/mptspi.c:528:6: note: Assuming the condition is true
+               mptspi_is_raid(hd, starget->id))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:527:2: note: Taking true branch
+           if (starget->channel == 0 &&
+           ^
+   drivers/message/fusion/mptspi.c:529:3: note: Returning without writing to 'pass_pg0->NegotiatedParameters'
+                   return -1;
+                   ^
+   drivers/message/fusion/mptspi.c:600:2: note: Returning from 'mptspi_read_spi_device_pg0'
+           mptspi_read_spi_device_pg0(starget, &spi_dev_pg0);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/message/fusion/mptspi.c:602:9: note: 1st function call argument is an uninitialized value
+           nego = le32_to_cpu(spi_dev_pg0.NegotiatedParameters);
+                  ^
+   include/linux/byteorder/generic.h:89:21: note: expanded from macro 'le32_to_cpu'
+   #define le32_to_cpu __le32_to_cpu
+                       ^
+   include/uapi/linux/byteorder/big_endian.h:34:26: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:115:28: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                              ^                 ~~~~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   21 warnings generated.
+>> drivers/iio/adc/ad7476.c:29:8: warning: Excessive padding in 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_chip_info {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:29:8: note: Excessive padding in 'struct ad7476_chip_info' (10 padding bytes, where 2 is optimal). Optimal fields order: reset, channel, convst_channel, int_vref_uv, has_vref, has_vdrive, consider reordering the fields or adding explicit padding members
+   struct ad7476_chip_info {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+>> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (472 padding bytes, where 216 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7476_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   drivers/iio/adc/ad7766.c:35:8: warning: Excessive padding in 'struct ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7766 {
+   ~~~~~~~^~~~~~~~
+   drivers/iio/adc/ad7766.c:35:8: note: Excessive padding in 'struct ad7766' (392 padding bytes, where 136 is optimal). Optimal fields order: data, chip_info, spi, mclk, pd_gpio, trig, reg, msg, xfer, consider reordering the fields or adding explicit padding members
+   struct ad7766 {
+   ~~~~~~~^~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   drivers/iio/adc/ad7768-1.c:154:8: warning: Excessive padding in 'struct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, completion, samp_freq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7768_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/adc/ad7768-1.c:154:8: note: Excessive padding in 'struct ad7768_state' (388 padding bytes, where 132 is optimal). Optimal fields order: data, mclk_freq, spi, vref, mclk, trig, gpio_sync_in, labels, lock, completion, samp_freq, consider reordering the fields or adding explicit padding members
+   struct ad7768_state {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 19 warnings (7 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   Suppressed 20 warnings (8 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   20 warnings generated.
+   Suppressed 20 warnings (8 in non-user code, 12 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+   include/linux/hid.h:1004:9: warning: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'input') [clang-analyzer-core.NullDereference]
+                                       input->name, c, type);
+                                       ^
+   drivers/hid/hid-twinhan.c:65:6: note: Assuming the condition is false
+           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_KEYBOARD)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-twinhan.c:65:2: note: Taking false branch
+           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_KEYBOARD)
+           ^
+   drivers/hid/hid-twinhan.c:68:2: note: Control jumps to 'case 31:'  at line 83
+           switch (usage->hid & HID_USAGE) {
+           ^
+   drivers/hid/hid-twinhan.c:83:14: note: Calling 'hid_map_usage_clear'
+           case 0x01f: th_map_key_clear(KEY_NUMERIC_2);    break;
+                       ^
+   drivers/hid/hid-twinhan.c:59:29: note: expanded from macro 'th_map_key_clear'
+   #define th_map_key_clear(c)     hid_map_usage_clear(hi, usage, bit, max, \
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1032:2: note: Calling 'hid_map_usage'
+           hid_map_usage(hidinput, usage, bit, max, type, c);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:979:2: note: 'input' initialized here
+           struct input_dev *input = hidinput->input;
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:983:2: note: Control jumps to 'case 1:'  at line 992
+           switch (type) {
+           ^
+   include/linux/hid.h:995:3: note:  Execution continues on line 1002
+                   break;
+                   ^
+   include/linux/hid.h:1002:15: note: 'c' is <= 'limit'
+           if (unlikely(c > limit || !bmap)) {
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1002:15: note: Left side of '||' is false
+           if (unlikely(c > limit || !bmap)) {
+                        ^
+   include/linux/hid.h:1002:28: note: Assuming 'bmap' is null
+           if (unlikely(c > limit || !bmap)) {
+                                     ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1002:28: note: Assuming pointer value is null
+           if (unlikely(c > limit || !bmap)) {
+                                     ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1002:2: note: Taking true branch
+           if (unlikely(c > limit || !bmap)) {
+           ^
+   include/linux/hid.h:1003:3: note: Assuming the condition is true
+                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
+                   ^
+   include/linux/printk.h:528:2: note: expanded from macro 'pr_warn_ratelimited'
+           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:511:6: note: expanded from macro 'printk_ratelimited'
+           if (__ratelimit(&_rs))                                          \
+               ^~~~~~~~~~~~~~~~~
+   include/linux/ratelimit_types.h:41:28: note: expanded from macro '__ratelimit'
+   #define __ratelimit(state) ___ratelimit(state, __func__)
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1003:3: note: Taking true branch
+                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
 
-On 22/06/2022 15:08, Nancy.Lin wrote:
-> Add mmsys for support 64 reset bits. It is a preparation for MT8195
-> vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset bits.
-> 
-> 1. Add the number of reset bits in mmsys private data
-> 2. move the whole "reset register code section" behind the
-> "get mmsys->data" code section for getting the num_resets in mmsys->data.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-mmsys.c | 35 ++++++++++++++++++++------------
->   drivers/soc/mediatek/mtk-mmsys.h |  1 +
->   2 files changed, 23 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 16be77d5acac..47b72ae72cc2 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -20,6 +20,8 @@
->   #include "mt8195-mmsys.h"
->   #include "mt8365-mmsys.h"
->   
-> +#define MMSYS_SW_RESET_PER_REG 32
-> +
->   static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
->   	.clk_driver = "clk-mt2701-mm",
->   	.routes = mmsys_default_routing_table,
-> @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
->   	.routes = mmsys_default_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
->   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
-> @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
->   	.routes = mmsys_mt8183_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
->   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
-> @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
->   	.routes = mmsys_mt8186_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
->   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data = {
-> @@ -288,10 +293,14 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
->   {
->   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
->   	unsigned long flags;
-> +	u32 offset;
-> +
-> +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
-> +	id = id % MMSYS_SW_RESET_PER_REG;
->   
->   	spin_lock_irqsave(&mmsys->lock, flags);
->   
-> -	mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id),
-> +	mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset + offset, BIT(id),
->   			      assert ? 0 : BIT(id), NULL);
+vim +29 drivers/iio/adc/ad7476.c
 
-reg = mmsys->data->sw0_rst_offset + offset;
-mtk_mmsys_update_bits(mmsys, reg, BIT(id),
-                       assert ? 0 : BIT(id), NULL);
+87c5b10fd97937 drivers/iio/adc/ad7476.c         Lars-Peter Clausen 2012-09-17  28  
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @29  struct ad7476_chip_info {
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  30  	unsigned int			int_vref_uv;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  31  	struct iio_chan_spec		channel[2];
+3a6af93dd66eba drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  32  	/* channels used when convst gpio is defined */
+3a6af93dd66eba drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  33  	struct iio_chan_spec		convst_channel[2];
+87c5b10fd97937 drivers/iio/adc/ad7476.c         Lars-Peter Clausen 2012-09-17  34  	void (*reset)(struct ad7476_state *);
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  35  	bool				has_vref;
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  36  	bool				has_vdrive;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  37  };
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  38  
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @39  struct ad7476_state {
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  40  	struct spi_device		*spi;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  41  	const struct ad7476_chip_info	*chip_info;
+7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  42  	struct regulator		*ref_reg;
+af37e4703d00ce drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  43  	struct gpio_desc		*convst_gpio;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  44  	struct spi_transfer		xfer;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  45  	struct spi_message		msg;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  46  	/*
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  47  	 * DMA (thus cache coherency maintenance) requires the
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  48  	 * transfer buffers to live in their own cache lines.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  49  	 * Make the buffer large enough for one 16 bit sample and one 64 bit
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  50  	 * aligned 64 bit timestamp.
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  51  	 */
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  52  	unsigned char data[ALIGN(2, sizeof(s64)) + sizeof(s64)]
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  53  			____cacheline_aligned;
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  54  };
+7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  55  
 
-Other then that, patch looks good.
-By the way setting val depending on assert in the function call gets (for me) 
-hard to read, as I said earlier.
+:::::: The code at line 29 was first introduced by commit
+:::::: 7a28fe3c93d6cd920c84678a1bf45af8b4248577 staging:iio:ad7476: Squash driver into a single file.
 
-Regards,
-Matthias
+:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
+:::::: CC: Jonathan Cameron <jic23@kernel.org>
 
->   
->   	spin_unlock_irqrestore(&mmsys->lock, flags);
-> @@ -349,18 +358,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> -	spin_lock_init(&mmsys->lock);
-> -
-> -	mmsys->rcdev.owner = THIS_MODULE;
-> -	mmsys->rcdev.nr_resets = 32;
-> -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> -	mmsys->rcdev.of_node = pdev->dev.of_node;
-> -	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
-> -		return ret;
-> -	}
-> -
->   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->   	if (!res) {
->   		dev_err(dev, "Couldn't get mmsys resource\n");
-> @@ -382,6 +379,18 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
->   		mmsys->data = match_data->drv_data[0];
->   	}
->   
-> +	spin_lock_init(&mmsys->lock);
-> +
-> +	mmsys->rcdev.owner = THIS_MODULE;
-> +	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
-> +	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> +	mmsys->rcdev.of_node = pdev->dev.of_node;
-> +	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->   #if IS_REACHABLE(CONFIG_MTK_CMDQ)
->   	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
->   	if (ret)
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-> index f01ba206481d..20a271b80b3b 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.h
-> +++ b/drivers/soc/mediatek/mtk-mmsys.h
-> @@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
->   	const struct mtk_mmsys_routes *routes;
->   	const unsigned int num_routes;
->   	const u16 sw0_rst_offset;
-> +	const u32 num_resets;
->   };
->   
->   struct mtk_mmsys_match_data {
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
