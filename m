@@ -1,89 +1,80 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA797C
-	for <llvm@lists.linux.dev>; Thu,  7 Jul 2022 23:19:21 +0000 (UTC)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay11.hostedemail.com (Postfix) with ESMTP id E23728056B;
-	Thu,  7 Jul 2022 23:10:30 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 30C582F;
-	Thu,  7 Jul 2022 23:10:23 +0000 (UTC)
-Message-ID: <6a8e2e97ec48e5694e623126537af3448ed99f56.camel@perches.com>
-Subject: Re: [PATCH] net: rxrpc: fix clang -Wformat warning
-From: Joe Perches <joe@perches.com>
-To: Justin Stitt <justinstitt@google.com>, "David S . Miller"
-	 <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	 <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: David Howells <dhowells@redhat.com>, Marc Dionne
- <marc.dionne@auristor.com>,  Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-afs@lists.infradead.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Thu, 07 Jul 2022 16:10:22 -0700
-In-Reply-To: <20220706235648.594609-1-justinstitt@google.com>
-References: <20220706235648.594609-1-justinstitt@google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852D57A
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 00:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657238594; x=1688774594;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=4pnh6u/Th2OWmbYptilPO7fuupk51rgY9liFBuBuWVI=;
+  b=MuYjCF66nrExPDOFprUq1S7i0EDUvCBytYWpIgP3Y0vAFTxyW8leYN1Z
+   7TZChflxcnIC9P4D9M5A4IoJIl6z09Rh89B5jizJ7eaw/8V7Hb6Zzp0l2
+   OEc+2wqU5df/+Q0DQipjTRYDDnIVKin8eZUNf12WdYVp7jWMGgHTEREV4
+   XlC/t/wZ7F2WxB9eMHQw3UOzwLQmZLSo99q72XvkU85Z4Xf6iOBokhAh7
+   SAyisRMGCcPm7ZmKEklgM4iEzmHfFd7i8AuXyD+klR5HfDZYjFa9fNpgp
+   OvsLph7B8j05Bm/WH3BMRRcUoXCYCgUTI+THBclqNnxD86Yt3+W8g5hAV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284889600"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="284889600"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 17:03:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="736151570"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 17:03:12 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o9bSi-000Mdu-4s;
+	Fri, 08 Jul 2022 00:03:12 +0000
+Date: Fri, 8 Jul 2022 08:02:26 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [intel-tdx:guest-hardening-rebased 10/23] vmlinux.o: warning:
+ objtool: pv_ops[1]: native_write_msr
+Message-ID: <202207080721.jEHxtC8x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Stat-Signature: q75ur5j61dcw7mt9j57gstbhoo1aa1j3
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 30C582F
-X-Spam-Status: No, score=-2.86
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19JyB57Fw8UcAjCsIKXO1xTw9rawYd6lwM=
-X-HE-Tag: 1657235423-298164
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 2022-07-06 at 16:56 -0700, Justin Stitt wrote:
-> When building with Clang we encounter this warning:
-> > net/rxrpc/rxkad.c:434:33: error: format specifies type 'unsigned short'
-> > but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-> > _leave(" =3D %d [set %hx]", ret, y);
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Andi Kleen <ak@linux.intel.com>
+CC: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-Does anyone still use these debugging macros in rxrpc or
-is it historic cruft?
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   64a4c4e66ca9cce1ca55de6d801f32284fbf7c8e
+commit: 4a852dcd0f95fe90d005c6bceefb3376a99389d2 [10/23] x86/tdx/paravirt: Move wrmsrl outside PARAVIRT_XXL
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220708/202207080721.jEHxtC8x-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/4a852dcd0f95fe90d005c6bceefb3376a99389d2
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout 4a852dcd0f95fe90d005c6bceefb3376a99389d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-net/rxrpc/ar-internal.h-#define kenter(FMT,...) dbgprintk("=3D=3D> %s("FMT"=
-)",__func__ ,##__VA_ARGS__)
-net/rxrpc/ar-internal.h-#define kleave(FMT,...) dbgprintk("<=3D=3D %s()"FMT=
-"",__func__ ,##__VA_ARGS__)
-net/rxrpc/ar-internal.h-#define kdebug(FMT,...) dbgprintk("    "FMT ,##__VA=
-_ARGS__)
-net/rxrpc/ar-internal.h-#define kproto(FMT,...) dbgprintk("### "FMT ,##__VA=
-_ARGS__)
-net/rxrpc/ar-internal.h-#define knet(FMT,...)   dbgprintk("@@@ "FMT ,##__VA=
-_ARGS__)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-etc...
+All warnings (new ones prefixed by >>):
 
-[]
+>> vmlinux.o: warning: objtool: pv_ops[1]: native_write_msr
+>> vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x155: call to pv_ops[0]() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x2f: call to memset() leaves .noinstr.text section
 
-net/rxrpc/Kconfig:config AF_RXRPC_DEBUG
-net/rxrpc/Kconfig-      bool "RxRPC dynamic debugging"
-net/rxrpc/Kconfig-      help
-net/rxrpc/Kconfig-        Say Y here to make runtime controllable debugging=
- messages appear.
-net/rxrpc/Kconfig-
-net/rxrpc/Kconfig-        See Documentation/networking/rxrpc.rst
-
-This seems to show there is debugging documentation, but it
-doesn't seem to exist in this file.
-
-> diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
-[]
-> @@ -431,7 +431,7 @@ static int rxkad_secure_packet(struct rxrpc_call *cal=
-l,
->  		break;
->  	}
-> =20
-> -	_leave(" =3D %d [set %hx]", ret, y);
-> +	_leave(" =3D %d [set %u]", ret, y);
->  	return ret;
->  }
-> =20
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
