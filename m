@@ -1,42 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A645A635
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 02:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5A635
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 03:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657249059; x=1688785059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5GVsY9AY9TffAdZABFROe8l/VfJWEHMR67/Fkl9Hspw=;
-  b=F+BoWTQ4cgraVF55etX1wnAV/yuyzACBQFB5TdESUSTeD4AuYydbLIJw
-   OPJETDtEOnjX/u3RROjZ7kFb60tML212YSinjZj78L2tdpYDgwRnUgY1f
-   i28G/f6CHa4ylLILIh2KnpHy0f4RlMVPTnX86IfRkmx27nCeEKv6WwCxV
-   gOEqsLDqCprUjWfEiRfeAIlgb3ZyWQc6oU4+3vmHVKAkccUNR/joqlG4Z
-   Kmfq2MYZnY6zyAflE0NzDQLOP+pB2/6cC7O3LnhUJMy3eGGSkfEDtECAy
-   If5OdGmSuWDFGz/2G9ay7nUEV8KtrDnEmfTc8KR46NzDvfg7mURHaNmXR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348157722"
+  t=1657252045; x=1688788045;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a6tewsjtZFrx9ugYhZX9sqQNv1Saw6kwS91FeQfudEA=;
+  b=FrmzjBSNBv42JtQPVw7ucUufRZ12gTV1+GYZCOuWG3VVRE8XWSlkQz+o
+   qK/+lxz2+uUgYuOPo0amfHQ29sli8mIUQZo7t/zjieyANzX7DkvN076uh
+   LZiima9QJi5E5Lv4o3dW3iBeuwZFYI3H1Vp+UycQGeU62VxwrllXLWMl2
+   DmrS3STuc+0B7AX9s9UGEaP3TOuq2rpqzyVvBgsTrLLGC/hXDuc5AkxsG
+   0JDr6xO3wYZ+jZxbtUbGpgIjl5Ds5xPdCOaks8FxVYDvx7HNBAqJtvpy/
+   UgxizhOntYRVydL6Db3q/IFptv3/lr+9AEg6ffNCe2OOS49n+ANP8+CVS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="345869486"
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="348157722"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 19:57:38 -0700
+   d="scan'208";a="345869486"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:47:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="621041997"
+   d="scan'208";a="568778601"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jul 2022 19:57:22 -0700
+  by orsmga006.jf.intel.com with ESMTP; 07 Jul 2022 20:47:22 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9eBF-000MqY-9n;
-	Fri, 08 Jul 2022 02:57:21 +0000
-Date: Fri, 8 Jul 2022 10:56:27 +0800
+	id 1o9exe-000MsI-65;
+	Fri, 08 Jul 2022 03:47:22 +0000
+Date: Fri, 8 Jul 2022 11:47:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 1/2] arm64: run softirqs on the per-CPU IRQ stack
-Message-ID: <202207081057.tTnVo798-lkp@intel.com>
-References: <20220707110511.52129-2-zhengqi.arch@bytedance.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 5/8]
+ fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types
+ ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
+ 12)) *' (aka 'unsigned long *'))
+Message-ID: <202207081133.gqSVQ0Ct-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,65 +48,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707110511.52129-2-zhengqi.arch@bytedance.com>
 
-Hi Qi,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on next-20220707]
-[cannot apply to linus/master v5.19-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/arm64-run-softirqs-on-the-per-CPU-IRQ-stack/20220707-190735
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-buildonly-randconfig-r001-20220707 (https://download.01.org/0day-ci/archive/20220708/202207081057.tTnVo798-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
+head:   569e0acf4192ada33675e44b24701e679d87ebc9
+commit: f398cb911105297654980b5973ff230323061fce [5/8] cifs: Change the I/O paths to use an iterator rather than a page list
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220708/202207081133.gqSVQ0Ct-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7e4c2b77e107babc244e0f0e6568ed0af50f06b3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qi-Zheng/arm64-run-softirqs-on-the-per-CPU-IRQ-stack/20220707-190735
-        git checkout 7e4c2b77e107babc244e0f0e6568ed0af50f06b3
+        # https://github.com/ammarfaizi2/linux-block/commit/f398cb911105297654980b5973ff230323061fce
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
+        git checkout f398cb911105297654980b5973ff230323061fce
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/irq.c:80:6: warning: no previous prototype for function 'do_softirq_own_stack' [-Wmissing-prototypes]
-   void do_softirq_own_stack(void)
-        ^
-   arch/arm64/kernel/irq.c:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void do_softirq_own_stack(void)
-   ^
-   static 
-   arch/arm64/kernel/irq.c:118:13: warning: no previous prototype for function 'init_IRQ' [-Wmissing-prototypes]
-   void __init init_IRQ(void)
-               ^
-   arch/arm64/kernel/irq.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_IRQ(void)
-   ^
-   static 
+>> fs/cifs/smb2ops.c:4785:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                   seg = min(size - copied, PAGE_SIZE);
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (rdata->result != 0) {
+                       ^~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:5026:9: note: uninitialized use occurs here
+           return length;
+                  ^~~~~~
+   fs/cifs/smb2ops.c:4994:3: note: remove the 'if' if its condition is always true
+                   if (rdata->result != 0) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4893:12: note: initialize the variable 'length' to silence this warning
+           int length;
+                     ^
+                      = 0
    2 warnings generated.
 
 
-vim +/do_softirq_own_stack +80 arch/arm64/kernel/irq.c
+vim +4785 fs/cifs/smb2ops.c
 
-    79	
-  > 80	void do_softirq_own_stack(void)
-    81	{
-    82		call_on_irq_stack(NULL, ____do_softirq);
-    83	}
-    84	
+  4735	
+  4736	/*
+  4737	 * This function will initialize new_rq and encrypt the content.
+  4738	 * The first entry, new_rq[0], only contains a single iov which contains
+  4739	 * a smb2_transform_hdr and is pre-allocated by the caller.
+  4740	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
+  4741	 *
+  4742	 * The end result is an array of smb_rqst structures where the first structure
+  4743	 * only contains a single iov for the transform header which we then can pass
+  4744	 * to crypt_message().
+  4745	 *
+  4746	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
+  4747	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
+  4748	 */
+  4749	static int
+  4750	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
+  4751			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
+  4752	{
+  4753		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
+  4754		struct page *page;
+  4755		unsigned int orig_len = 0;
+  4756		int i, j;
+  4757		int rc = -ENOMEM;
+  4758	
+  4759		for (i = 1; i < num_rqst; i++) {
+  4760			struct smb_rqst *old = &old_rq[i - 1];
+  4761			struct smb_rqst *new = &new_rq[i];
+  4762			struct xarray *buffer = &new->rq_buffer;
+  4763			unsigned int npages;
+  4764			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
+  4765	
+  4766			xa_init(buffer);
+  4767	
+  4768			if (size > 0) {
+  4769				npages = DIV_ROUND_UP(size, PAGE_SIZE);
+  4770				for (j = 0; j < npages; j++) {
+  4771					void *o;
+  4772	
+  4773					rc = -ENOMEM;
+  4774					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
+  4775					if (!page)
+  4776						goto err_free;
+  4777					page->index = j;
+  4778					o = xa_store(buffer, j, page, GFP_KERNEL);
+  4779					if (xa_is_err(o)) {
+  4780						rc = xa_err(o);
+  4781						put_page(page);
+  4782						goto err_free;
+  4783					}
+  4784	
+> 4785					seg = min(size - copied, PAGE_SIZE);
+  4786					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+  4787						rc = -EFAULT;
+  4788						goto err_free;
+  4789					}
+  4790					copied += seg;
+  4791				}
+  4792				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
+  4793						buffer, 0, size);
+  4794			}
+  4795			new->rq_iov = old->rq_iov;
+  4796			new->rq_nvec = old->rq_nvec;
+  4797			orig_len += smb_rqst_len(server, new);
+  4798		}
+  4799	
+  4800		/* fill the 1st iov with a transform header */
+  4801		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
+  4802	
+  4803		rc = crypt_message(server, num_rqst, new_rq, 1);
+  4804		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
+  4805		if (rc)
+  4806			goto err_free;
+  4807	
+  4808		return rc;
+  4809	
+  4810	err_free:
+  4811		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
+  4812		return rc;
+  4813	}
+  4814	
 
 -- 
 0-DAY CI Kernel Test Service
