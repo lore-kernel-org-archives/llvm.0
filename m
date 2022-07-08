@@ -1,44 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFA5627
-	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 01:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACF3635
+	for <llvm@lists.linux.dev>; Fri,  8 Jul 2022 02:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657244119; x=1688780119;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tm/IK85Oh0pUEKR3BZoHT9X0SlIpsexuYWj1KxUMO7I=;
-  b=YFhiVeAcV4NnB3tUWPhG1JGZDPCEkyYZ+WQq8HhucWNXcX5Thq62t6LX
-   w7SyTBsAyf7x/FQGbr9uy87BTBSVFkzGZzs717uSyBBYarqY4FedHLqtF
-   yrgJBn4SLb/RJ7agLrxxdeaVNEt3O6iT3PnGtB+QQnZuFvhGVLwz/Maa4
-   mlpSczXqQq6yEWV/TL4KPZTJ8Dybuzcn/W8d9MfdSwX0Ezj51Sisfa8+t
-   OPl7WgEWLFf+mjpSe9qCwWCTki7nlLSJ9595hHmJgr1pypEAKefDw+CQA
-   bjTSKQg11He/ziz4+6/IhJXlganxN5X19Io2MZuLmKWyujpbV0glph2Tt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="348146592"
+  t=1657247784; x=1688783784;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iUKZGaJlWrm5IKf/vVEiS3HRWMlvbWPklBvZC/lfcYc=;
+  b=jASvOCkeMeA7FpRiGWgKZXZ161Ofu/zdtdjAKjd2wq5f7KT7VuU5j2rh
+   NOlPOhHdiGxb9TOkXGRqM0sFYyTO7oIJTsoJR3s8//XmOhKZWFIOP18ok
+   YaAgoXbUYLpkHYS5FEmSnwmnNjqtLE+gsH04Nhg8JwZ6hz4e2wck+Fba0
+   sssTYD/HfU85xWF/qmz/k7J874a6rboWeB9kzCtRF2Ixx+xFuMZtT9fHo
+   XFJxXX72oeB7GR9gTYuD9GaMaQ38Fv1EG1PNQY1fsuUHos3aPQm5nSE45
+   soWzrs4GniGlYbXEnkbRhwleDSqMeY/bC8kgg9K96kklnwMKxCgNh82J4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="264584177"
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="348146592"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 18:35:18 -0700
+   d="scan'208";a="264584177"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 19:36:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="661601894"
+   d="scan'208";a="593958910"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2022 18:35:16 -0700
+  by orsmga002.jf.intel.com with ESMTP; 07 Jul 2022 19:36:20 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o9ctn-000Mis-SK;
-	Fri, 08 Jul 2022 01:35:15 +0000
-Date: Fri, 8 Jul 2022 09:34:29 +0800
+	id 1o9dqt-000Mmo-BD;
+	Fri, 08 Jul 2022 02:36:19 +0000
+Date: Fri, 8 Jul 2022 10:35:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 5/8]
- fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized
- whenever 'if' condition is false
-Message-ID: <202207080923.s0L0sZLm-lkp@intel.com>
+To: gjoyce@linux.vnet.ibm.com, keyrings@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, gjoyce@ibm.com,
+	dhowells@redhat.com, jarkko@kernel.org, andrzej.jakowski@intel.com,
+	jonathan.derrick@linux.dev, drmiller.lnx@gmail.com,
+	linux-block@vger.kernel.org, greg@gilhooley.com
+Subject: Re: [PATCH 4/4] arch_vars: create arch specific permanent store
+Message-ID: <202207081010.mn8e8rca-lkp@intel.com>
+References: <20220706023935.875994-5-gjoyce@linux.vnet.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,201 +48,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220706023935.875994-5-gjoyce@linux.vnet.ibm.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
-head:   569e0acf4192ada33675e44b24701e679d87ebc9
-commit: f398cb911105297654980b5973ff230323061fce [5/8] cifs: Change the I/O paths to use an iterator rather than a page list
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220708/202207080923.s0L0sZLm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+Hi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/gjoyce-linux-vnet-ibm-com/sed-opal-keyrings-discovery-revert-and-key-store/20220706-104204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: arm-randconfig-r036-20220706 (https://download.01.org/0day-ci/archive/20220708/202207081010.mn8e8rca-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f398cb911105297654980b5973ff230323061fce
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
-        git checkout f398cb911105297654980b5973ff230323061fce
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/b984dda112cdbda6b41045bf63f790a3c2903c7a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review gjoyce-linux-vnet-ibm-com/sed-opal-keyrings-discovery-revert-and-key-store/20220706-104204
+        git checkout b984dda112cdbda6b41045bf63f790a3c2903c7a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> fs/cifs/smb2ops.c:4994:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                       ^~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:5026:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4994:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4893:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   1 warning generated.
+>> block/sed-opal.c:286:8: error: call to undeclared function 'key_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           key = key_alloc(&key_type_user, desc, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+                 ^
+>> block/sed-opal.c:286:19: error: use of undeclared identifier 'key_type_user'
+           key = key_alloc(&key_type_user, desc, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+                            ^
+>> block/sed-opal.c:288:5: error: use of undeclared identifier 'KEY_USR_VIEW'
+                                   KEY_USR_VIEW | KEY_USR_SEARCH | KEY_USR_WRITE,
+                                   ^
+>> block/sed-opal.c:288:20: error: use of undeclared identifier 'KEY_USR_SEARCH'
+                                   KEY_USR_VIEW | KEY_USR_SEARCH | KEY_USR_WRITE,
+                                                  ^
+>> block/sed-opal.c:288:37: error: use of undeclared identifier 'KEY_USR_WRITE'
+                                   KEY_USR_VIEW | KEY_USR_SEARCH | KEY_USR_WRITE,
+                                                                   ^
+>> block/sed-opal.c:294:8: error: call to undeclared function 'key_instantiate_and_link'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = key_instantiate_and_link(key, key_data, keylen,
+                 ^
+   block/sed-opal.c:294:8: note: did you mean 'd_instantiate_anon'?
+   include/linux/dcache.h:223:24: note: 'd_instantiate_anon' declared here
+   extern struct dentry * d_instantiate_anon(struct dentry *, struct inode *);
+                          ^
+   block/sed-opal.c:307:2: error: unknown type name 'key_ref_t'; did you mean 'key_perm_t'?
+           key_ref_t kref;
+           ^~~~~~~~~
+           key_perm_t
+   include/linux/key.h:31:18: note: 'key_perm_t' declared here
+   typedef uint32_t key_perm_t;
+                    ^
+>> block/sed-opal.c:313:9: error: call to undeclared function 'keyring_search'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           kref = keyring_search(make_key_ref(sed_opal_keyring, true),
+                  ^
+   block/sed-opal.c:314:4: error: use of undeclared identifier 'key_type_user'
+                   &key_type_user,
+                    ^
+>> block/sed-opal.c:318:13: warning: incompatible integer to pointer conversion passing 'key_perm_t' (aka 'unsigned int') to parameter of type 'const void *' [-Wint-conversion]
+           if (IS_ERR(kref)) {
+                      ^~~~
+   include/linux/err.h:34:60: note: passing argument to parameter 'ptr' here
+   static inline bool __must_check IS_ERR(__force const void *ptr)
+                                                              ^
+   block/sed-opal.c:319:17: warning: incompatible integer to pointer conversion passing 'key_perm_t' (aka 'unsigned int') to parameter of type 'const void *' [-Wint-conversion]
+                   ret = PTR_ERR(kref);
+                                 ^~~~
+   include/linux/err.h:29:61: note: passing argument to parameter 'ptr' here
+   static inline long __must_check PTR_ERR(__force const void *ptr)
+                                                               ^
+>> block/sed-opal.c:322:17: error: incomplete definition of type 'struct key'
+                   down_read(&key->sem);
+                              ~~~^
+   include/linux/key.h:33:8: note: forward declaration of 'struct key'
+   struct key;
+          ^
+   block/sed-opal.c:325:20: error: incomplete definition of type 'struct key'
+                           if (buflen > key->datalen)
+                                        ~~~^
+   include/linux/key.h:33:8: note: forward declaration of 'struct key'
+   struct key;
+          ^
+   block/sed-opal.c:326:17: error: incomplete definition of type 'struct key'
+                                   buflen = key->datalen;
+                                            ~~~^
+   include/linux/key.h:33:8: note: forward declaration of 'struct key'
+   struct key;
+          ^
+   block/sed-opal.c:328:13: error: incomplete definition of type 'struct key'
+                           ret = key->type->read(key, (char *)buffer, buflen);
+                                 ~~~^
+   include/linux/key.h:33:8: note: forward declaration of 'struct key'
+   struct key;
+          ^
+   block/sed-opal.c:330:15: error: incomplete definition of type 'struct key'
+                   up_read(&key->sem);
+                            ~~~^
+   include/linux/key.h:33:8: note: forward declaration of 'struct key'
+   struct key;
+          ^
+>> block/sed-opal.c:2938:7: error: call to undeclared function 'keyring_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           kr = keyring_alloc(".sed_opal",
+                ^
+>> block/sed-opal.c:2940:4: error: use of undeclared identifier 'KEY_POS_ALL'
+                   (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW |
+                    ^
+>> block/sed-opal.c:2940:19: error: use of undeclared identifier 'KEY_POS_SETATTR'
+                   (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW |
+                                   ^
+   block/sed-opal.c:2940:38: error: use of undeclared identifier 'KEY_USR_VIEW'
+                   (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW |
+                                                      ^
+>> block/sed-opal.c:2941:3: error: use of undeclared identifier 'KEY_USR_READ'
+                   KEY_USR_READ | KEY_USR_SEARCH | KEY_USR_WRITE,
+                   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   2 warnings and 20 errors generated.
 
 
-vim +4994 fs/cifs/smb2ops.c
+vim +/key_alloc +286 block/sed-opal.c
 
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4880  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4881  static int
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4882  handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
-f398cb91110529 David Howells      2022-01-24  4883  		 char *buf, unsigned int buf_len, struct xarray *pages,
-f398cb91110529 David Howells      2022-01-24  4884  		 unsigned int pages_len, bool is_offloaded)
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4885  {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4886  	unsigned int data_offset;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4887  	unsigned int data_len;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4888  	unsigned int cur_off;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4889  	unsigned int cur_page_idx;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4890  	unsigned int pad_len;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4891  	struct cifs_readdata *rdata = mid->callback_data;
-0d35e382e4e96a Ronnie Sahlberg    2021-11-05  4892  	struct smb2_hdr *shdr = (struct smb2_hdr *)buf;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4893  	int length;
-74dcf418fe3446 Long Li            2017-11-22  4894  	bool use_rdma_mr = false;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4895  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4896  	if (shdr->Command != SMB2_READ) {
-3175eb9b577e82 Ronnie Sahlberg    2019-09-04  4897  		cifs_server_dbg(VFS, "only big read responses are supported\n");
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4898  		return -ENOTSUPP;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4899  	}
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4900  
-511c54a2f69195 Pavel Shilovsky    2017-07-08  4901  	if (server->ops->is_session_expired &&
-511c54a2f69195 Pavel Shilovsky    2017-07-08  4902  	    server->ops->is_session_expired(buf)) {
-de9ac0a6e9efdf Rohith Surabattula 2020-10-28  4903  		if (!is_offloaded)
-183eea2ee5ba96 Shyam Prasad N     2021-07-19  4904  			cifs_reconnect(server, true);
-511c54a2f69195 Pavel Shilovsky    2017-07-08  4905  		return -1;
-511c54a2f69195 Pavel Shilovsky    2017-07-08  4906  	}
-511c54a2f69195 Pavel Shilovsky    2017-07-08  4907  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4908  	if (server->ops->is_status_pending &&
-66265f134acfb2 Pavel Shilovsky    2019-01-23  4909  			server->ops->is_status_pending(buf, server))
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4910  		return -1;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4911  
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4912  	/* set up first two iov to get credits */
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4913  	rdata->iov[0].iov_base = buf;
-bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4914  	rdata->iov[0].iov_len = 0;
-bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4915  	rdata->iov[1].iov_base = buf;
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4916  	rdata->iov[1].iov_len =
-bb1bccb60c2ebd Pavel Shilovsky    2019-01-17  4917  		min_t(unsigned int, buf_len, server->vals->read_rsp_size);
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4918  	cifs_dbg(FYI, "0: iov_base=%p iov_len=%zu\n",
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4919  		 rdata->iov[0].iov_base, rdata->iov[0].iov_len);
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4920  	cifs_dbg(FYI, "1: iov_base=%p iov_len=%zu\n",
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4921  		 rdata->iov[1].iov_base, rdata->iov[1].iov_len);
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4922  
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4923  	rdata->result = server->ops->map_error(buf, true);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4924  	if (rdata->result != 0) {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4925  		cifs_dbg(FYI, "%s: server returned error %d\n",
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4926  			 __func__, rdata->result);
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4927  		/* normal error on read response */
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4928  		if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4929  			mid->mid_state = MID_RESPONSE_RECEIVED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4930  		else
-ec678eae746dd2 Pavel Shilovsky    2019-01-18  4931  			dequeue_mid(mid, false);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4932  		return 0;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4933  	}
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4934  
-1fc6ad2f10ad6f Ronnie Sahlberg    2018-06-01  4935  	data_offset = server->ops->read_data_offset(buf);
-74dcf418fe3446 Long Li            2017-11-22  4936  #ifdef CONFIG_CIFS_SMB_DIRECT
-74dcf418fe3446 Long Li            2017-11-22  4937  	use_rdma_mr = rdata->mr;
-74dcf418fe3446 Long Li            2017-11-22  4938  #endif
-74dcf418fe3446 Long Li            2017-11-22  4939  	data_len = server->ops->read_data_length(buf, use_rdma_mr);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4940  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4941  	if (data_offset < server->vals->read_rsp_size) {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4942  		/*
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4943  		 * win2k8 sometimes sends an offset of 0 when the read
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4944  		 * is beyond the EOF. Treat it as if the data starts just after
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4945  		 * the header.
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4946  		 */
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4947  		cifs_dbg(FYI, "%s: data offset (%u) inside read response header\n",
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4948  			 __func__, data_offset);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4949  		data_offset = server->vals->read_rsp_size;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4950  	} else if (data_offset > MAX_CIFS_SMALL_BUFFER_SIZE) {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4951  		/* data_offset is beyond the end of smallbuf */
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4952  		cifs_dbg(FYI, "%s: data offset (%u) beyond end of smallbuf\n",
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4953  			 __func__, data_offset);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4954  		rdata->result = -EIO;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4955  		if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4956  			mid->mid_state = MID_RESPONSE_MALFORMED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4957  		else
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4958  			dequeue_mid(mid, rdata->result);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4959  		return 0;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4960  	}
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4961  
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4962  	pad_len = data_offset - server->vals->read_rsp_size;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4963  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4964  	if (buf_len <= data_offset) {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  4965  		/* read response payload is in pages */
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4966  		cur_page_idx = pad_len / PAGE_SIZE;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4967  		cur_off = pad_len % PAGE_SIZE;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4968  
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4969  		if (cur_page_idx != 0) {
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4970  			/* data offset is beyond the 1st page of response */
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4971  			cifs_dbg(FYI, "%s: data offset (%u) beyond 1st page of response\n",
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4972  				 __func__, data_offset);
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4973  			rdata->result = -EIO;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4974  			if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4975  				mid->mid_state = MID_RESPONSE_MALFORMED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4976  			else
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4977  				dequeue_mid(mid, rdata->result);
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4978  			return 0;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4979  		}
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4980  
-f398cb91110529 David Howells      2022-01-24  4981  		if (data_len > pages_len - pad_len) {
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4982  			/* data_len is corrupt -- discard frame */
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4983  			rdata->result = -EIO;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4984  			if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4985  				mid->mid_state = MID_RESPONSE_MALFORMED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4986  			else
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4987  				dequeue_mid(mid, rdata->result);
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4988  			return 0;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4989  		}
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4990  
-f398cb91110529 David Howells      2022-01-24  4991  		/* Copy the data to the output I/O iterator. */
-f398cb91110529 David Howells      2022-01-24  4992  		rdata->result = cifs_copy_pages_to_iter(pages, pages_len,
-f398cb91110529 David Howells      2022-01-24  4993  							cur_off, &rdata->iter);
-c42a6abe301283 Pavel Shilovsky    2016-11-17 @4994  		if (rdata->result != 0) {
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4995  			if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4996  				mid->mid_state = MID_RESPONSE_MALFORMED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  4997  			else
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4998  				dequeue_mid(mid, rdata->result);
-c42a6abe301283 Pavel Shilovsky    2016-11-17  4999  			return 0;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  5000  		}
-f398cb91110529 David Howells      2022-01-24  5001  		rdata->got_bytes = pages_len;
-c42a6abe301283 Pavel Shilovsky    2016-11-17  5002  
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5003  	} else if (buf_len >= data_offset + data_len) {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5004  		/* read response payload is in buf */
-f398cb91110529 David Howells      2022-01-24  5005  		WARN_ONCE(pages && !xa_empty(pages),
-f398cb91110529 David Howells      2022-01-24  5006  			  "read data can be either in buf or in pages");
-f398cb91110529 David Howells      2022-01-24  5007  		length = copy_to_iter(buf + data_offset, data_len, &rdata->iter);
-f398cb91110529 David Howells      2022-01-24  5008  		if (length < 0)
-f398cb91110529 David Howells      2022-01-24  5009  			return length;
-f398cb91110529 David Howells      2022-01-24  5010  		rdata->got_bytes = data_len;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5011  	} else {
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5012  		/* read response payload cannot be in both buf and pages */
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5013  		WARN_ONCE(1, "buf can not contain only a part of read data");
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5014  		rdata->result = -EIO;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5015  		if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5016  			mid->mid_state = MID_RESPONSE_MALFORMED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5017  		else
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5018  			dequeue_mid(mid, rdata->result);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5019  		return 0;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5020  	}
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5021  
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5022  	if (is_offloaded)
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5023  		mid->mid_state = MID_RESPONSE_RECEIVED;
-ac873aa3dc2170 Rohith Surabattula 2020-10-29  5024  	else
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5025  		dequeue_mid(mid, false);
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5026  	return length;
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5027  }
-4326ed2f6a16ae Pavel Shilovsky    2016-11-17  5028  
-
-:::::: The code at line 4994 was first introduced by commit
-:::::: c42a6abe3012832a68a371dabe17c2ced97e62ad CIFS: Add capability to decrypt big read responses
-
-:::::: TO: Pavel Shilovsky <pshilov@microsoft.com>
-:::::: CC: Steve French <smfrench@gmail.com>
+455a7b238cd6bc6 Scott Bauer 2017-02-03  274  
+8a2b115580e8f7c Greg Joyce  2022-07-05  275  /*
+8a2b115580e8f7c Greg Joyce  2022-07-05  276   * Allocate/update a SED Opal key and add it to the SED Opal keyring.
+8a2b115580e8f7c Greg Joyce  2022-07-05  277   */
+8a2b115580e8f7c Greg Joyce  2022-07-05  278  static int update_sed_opal_key(const char *desc, u_char *key_data, int keylen)
+8a2b115580e8f7c Greg Joyce  2022-07-05  279  {
+8a2b115580e8f7c Greg Joyce  2022-07-05  280  	int ret;
+8a2b115580e8f7c Greg Joyce  2022-07-05  281  	struct key *key;
+8a2b115580e8f7c Greg Joyce  2022-07-05  282  
+8a2b115580e8f7c Greg Joyce  2022-07-05  283  	if (!sed_opal_keyring)
+8a2b115580e8f7c Greg Joyce  2022-07-05  284  		return -ENOKEY;
+8a2b115580e8f7c Greg Joyce  2022-07-05  285  
+8a2b115580e8f7c Greg Joyce  2022-07-05 @286  	key = key_alloc(&key_type_user, desc, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+8a2b115580e8f7c Greg Joyce  2022-07-05  287  				current_cred(),
+8a2b115580e8f7c Greg Joyce  2022-07-05 @288  				KEY_USR_VIEW | KEY_USR_SEARCH | KEY_USR_WRITE,
+8a2b115580e8f7c Greg Joyce  2022-07-05  289  				0,
+8a2b115580e8f7c Greg Joyce  2022-07-05  290  				NULL);
+8a2b115580e8f7c Greg Joyce  2022-07-05  291  	if (IS_ERR(key))
+8a2b115580e8f7c Greg Joyce  2022-07-05  292  		return PTR_ERR(key);
+8a2b115580e8f7c Greg Joyce  2022-07-05  293  
+8a2b115580e8f7c Greg Joyce  2022-07-05 @294  	ret = key_instantiate_and_link(key, key_data, keylen,
+8a2b115580e8f7c Greg Joyce  2022-07-05  295  			sed_opal_keyring, NULL);
+8a2b115580e8f7c Greg Joyce  2022-07-05  296  	key_put(key);
+8a2b115580e8f7c Greg Joyce  2022-07-05  297  
+8a2b115580e8f7c Greg Joyce  2022-07-05  298  	return ret;
+8a2b115580e8f7c Greg Joyce  2022-07-05  299  }
+8a2b115580e8f7c Greg Joyce  2022-07-05  300  
+8a2b115580e8f7c Greg Joyce  2022-07-05  301  /*
+8a2b115580e8f7c Greg Joyce  2022-07-05  302   * Read a SED Opal key from the SED Opal keyring.
+8a2b115580e8f7c Greg Joyce  2022-07-05  303   */
+8a2b115580e8f7c Greg Joyce  2022-07-05  304  static int read_sed_opal_key(const char *key_name, u_char *buffer, int buflen)
+8a2b115580e8f7c Greg Joyce  2022-07-05  305  {
+8a2b115580e8f7c Greg Joyce  2022-07-05  306  	int ret;
+8a2b115580e8f7c Greg Joyce  2022-07-05  307  	key_ref_t kref;
+8a2b115580e8f7c Greg Joyce  2022-07-05  308  	struct key *key;
+8a2b115580e8f7c Greg Joyce  2022-07-05  309  
+8a2b115580e8f7c Greg Joyce  2022-07-05  310  	if (!sed_opal_keyring)
+8a2b115580e8f7c Greg Joyce  2022-07-05  311  		return -ENOKEY;
+8a2b115580e8f7c Greg Joyce  2022-07-05  312  
+8a2b115580e8f7c Greg Joyce  2022-07-05 @313  	kref = keyring_search(make_key_ref(sed_opal_keyring, true),
+8a2b115580e8f7c Greg Joyce  2022-07-05  314  		&key_type_user,
+8a2b115580e8f7c Greg Joyce  2022-07-05  315  		key_name,
+8a2b115580e8f7c Greg Joyce  2022-07-05  316  		true);
+8a2b115580e8f7c Greg Joyce  2022-07-05  317  
+8a2b115580e8f7c Greg Joyce  2022-07-05 @318  	if (IS_ERR(kref)) {
+8a2b115580e8f7c Greg Joyce  2022-07-05  319  		ret = PTR_ERR(kref);
+8a2b115580e8f7c Greg Joyce  2022-07-05  320  	} else {
+8a2b115580e8f7c Greg Joyce  2022-07-05  321  		key = key_ref_to_ptr(kref);
+8a2b115580e8f7c Greg Joyce  2022-07-05 @322  		down_read(&key->sem);
+8a2b115580e8f7c Greg Joyce  2022-07-05  323  		ret = key_validate(key);
+8a2b115580e8f7c Greg Joyce  2022-07-05  324  		if (ret == 0) {
+8a2b115580e8f7c Greg Joyce  2022-07-05  325  			if (buflen > key->datalen)
+8a2b115580e8f7c Greg Joyce  2022-07-05  326  				buflen = key->datalen;
+8a2b115580e8f7c Greg Joyce  2022-07-05  327  
+8a2b115580e8f7c Greg Joyce  2022-07-05  328  			ret = key->type->read(key, (char *)buffer, buflen);
+8a2b115580e8f7c Greg Joyce  2022-07-05  329  		}
+8a2b115580e8f7c Greg Joyce  2022-07-05  330  		up_read(&key->sem);
+8a2b115580e8f7c Greg Joyce  2022-07-05  331  
+8a2b115580e8f7c Greg Joyce  2022-07-05  332  		key_ref_put(kref);
+8a2b115580e8f7c Greg Joyce  2022-07-05  333  	}
+8a2b115580e8f7c Greg Joyce  2022-07-05  334  
+8a2b115580e8f7c Greg Joyce  2022-07-05  335  	return ret;
+8a2b115580e8f7c Greg Joyce  2022-07-05  336  }
+8a2b115580e8f7c Greg Joyce  2022-07-05  337  
 
 -- 
 0-DAY CI Kernel Test Service
