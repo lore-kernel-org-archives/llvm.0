@@ -1,47 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19D77A
-	for <llvm@lists.linux.dev>; Sat,  9 Jul 2022 04:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E377A
+	for <llvm@lists.linux.dev>; Sat,  9 Jul 2022 05:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657342106; x=1688878106;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9FJdgpVWJJ2BRz+OsQTAFxbmAAiWjXd3WhDQtcsVTGE=;
-  b=d+fCZk5qZzSSphujpqN04GLMcei/U8LQ4xpTy3pixNdGpHreRj3tKijy
-   SfO0StPW1y8vx7nBqLJbNRLWUKOKCl9cuvP2/NmCzguRqkS6TkxoXbl9c
-   eEMe58I+AOOGzUs1lfV2Uw6X/h6cM/fAacMc1NE502E+7KG+2mf1sroiY
-   Fc3/d96q10Wj3GP/RNCEswJUHq7+N3iyQvu4m/pT+50zbMwz56Xd6jVC7
-   SihXM5G3s4eSjTy/mBxSTUKj3pyV1+kBbxoyFLdvO72u2N/osBBkxA0pk
-   2w6Eg1Gia8NWZHQDXKX0zKOndAPFmBC8OPVpxaWu6tRrT1GM/EBVpsuRL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="284429857"
+  t=1657343967; x=1688879967;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e69Yt4ISwfO72hjB8aCVBuYA1H8ff6s2CXB1mn1onmA=;
+  b=bPxC2JJAFGCZBJIpnVJXY5IbOduxKY35XUodt40Zidgr/9hMZ10PZDJM
+   40lVwNkwH4nkESgh6dj3G94Gsp0UvB5aPNYa37MYvn2oXTar10GchDm4U
+   QrQUCHkROb/cSut2EBJpQKYlRgo8nWSA9W+HGcAUJ3WGzGVJage9fYYjX
+   uadf6jk4lIfce9u8Op1acSJNzpHTJZ6GvDGm4dtz61QWVRHdSBmoqu2Rx
+   KLNZB6eU9W26IERsWGR6oQcGBIyLuQigO70eD/v/ENTAK9oAJlKGQ6ttn
+   tgwACP3ejO5AfoxnU9A3fhcE6xA2+Jludbu/HlSLiWem7AU7aNiGP42CJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="264822303"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="284429857"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 21:48:26 -0700
+   d="scan'208";a="264822303"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 22:19:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="736553000"
+   d="scan'208";a="569181360"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2022 21:48:23 -0700
+  by orsmga006.jf.intel.com with ESMTP; 08 Jul 2022 22:19:24 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oA2OF-000OJo-4G;
-	Sat, 09 Jul 2022 04:48:23 +0000
-Date: Sat, 9 Jul 2022 12:47:36 +0800
+	id 1oA2sG-000OLW-6l;
+	Sat, 09 Jul 2022 05:19:24 +0000
+Date: Sat, 9 Jul 2022 13:18:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
-	gregkh@linuxfoundation.org
+To: Pankaj Raghav <p.raghav@samsung.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Thinh.Nguyen@synopsys.com, quic_jackp@quicinc.com,
-	Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH 3/5] usb: dwc3: gadget: Adjust IRQ management during soft
- disconnect/connect
-Message-ID: <202207091200.uLedVxl7-lkp@intel.com>
-References: <20220708185007.21743-4-quic_wcheng@quicinc.com>
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof-next:20220707-dm-zoned-npo2 10/13]
+ drivers/md/dm-table.c:253:26: error: incompatible pointer types passing
+ 'struct block_device *' to parameter of type 'struct gendisk *'
+Message-ID: <202207091312.g0qYNPN6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,105 +46,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220708185007.21743-4-quic_wcheng@quicinc.com>
 
-Hi Wesley,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v5.19-rc5 next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wesley-Cheng/Fix-controller-halt-and-endxfer-timeout-issues/20220709-025241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220709/202207091200.uLedVxl7-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 562c3467a6738aa89203f72fc1d1343e5baadf3c)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20220707-dm-zoned-npo2
+head:   3d1b6e41f76394610669e380da4f65bc5e7cf8ac
+commit: d7a44aa426f271934d5539d39454ef3acc45f9d8 [10/13] dm-table: use bdev_is_zone_start helper in device_area_is_invalid()
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220709/202207091312.g0qYNPN6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/457fe4752b0f6dcc5c1b329f91003b7ffc518b44
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wesley-Cheng/Fix-controller-halt-and-endxfer-timeout-issues/20220709-025241
-        git checkout 457fe4752b0f6dcc5c1b329f91003b7ffc518b44
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=d7a44aa426f271934d5539d39454ef3acc45f9d8
+        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+        git fetch --no-tags mcgrof-next 20220707-dm-zoned-npo2
+        git checkout d7a44aa426f271934d5539d39454ef3acc45f9d8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/dwc3/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/usb/dwc3/gadget.c:2032:18: warning: unused variable 'flags' [-Wunused-variable]
-           unsigned long                   flags;
-                                           ^
-   1 warning generated.
+   drivers/md/dm-table.c:251:31: error: call to undeclared function 'bdev_zone_sectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   unsigned int zone_sectors = bdev_zone_sectors(bdev);
+                                               ^
+   drivers/md/dm-table.c:251:31: note: did you mean 'bdev_nr_sectors'?
+   include/linux/blkdev.h:838:24: note: 'bdev_nr_sectors' declared here
+   static inline sector_t bdev_nr_sectors(struct block_device *bdev)
+                          ^
+>> drivers/md/dm-table.c:253:26: error: incompatible pointer types passing 'struct block_device *' to parameter of type 'struct gendisk *' [-Werror,-Wincompatible-pointer-types]
+                   if (bdev_is_zone_start(bdev, start)) {
+                                          ^~~~
+   include/linux/blkdev.h:772:55: note: passing argument to parameter 'disk' here
+   static inline bool bdev_is_zone_start(struct gendisk *disk, sector_t sec)
+                                                         ^
+   drivers/md/dm-table.c:270:26: error: incompatible pointer types passing 'struct block_device *' to parameter of type 'struct gendisk *' [-Werror,-Wincompatible-pointer-types]
+                   if (bdev_is_zone_start(bdev, len)) {
+                                          ^~~~
+   include/linux/blkdev.h:772:55: note: passing argument to parameter 'disk' here
+   static inline bool bdev_is_zone_start(struct gendisk *disk, sector_t sec)
+                                                         ^
+   drivers/md/dm-table.c:1624:9: error: call to undeclared function 'bdev_zone_sectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return bdev_zone_sectors(dev->bdev) != *zone_sectors;
+                  ^
+   4 errors generated.
 
 
-vim +/flags +2032 drivers/usb/dwc3/gadget.c
+vim +253 drivers/md/dm-table.c
 
-d4f1afe5e896c1 Felipe Balbi 2018-08-01  2022  
-72246da40f3719 Felipe Balbi 2011-08-19  2023  static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-72246da40f3719 Felipe Balbi 2011-08-19  2024  		struct usb_request *request)
-72246da40f3719 Felipe Balbi 2011-08-19  2025  {
-72246da40f3719 Felipe Balbi 2011-08-19  2026  	struct dwc3_request		*req = to_dwc3_request(request);
-72246da40f3719 Felipe Balbi 2011-08-19  2027  	struct dwc3_request		*r = NULL;
-72246da40f3719 Felipe Balbi 2011-08-19  2028  
-72246da40f3719 Felipe Balbi 2011-08-19  2029  	struct dwc3_ep			*dep = to_dwc3_ep(ep);
-72246da40f3719 Felipe Balbi 2011-08-19  2030  	struct dwc3			*dwc = dep->dwc;
-72246da40f3719 Felipe Balbi 2011-08-19  2031  
-72246da40f3719 Felipe Balbi 2011-08-19 @2032  	unsigned long			flags;
-72246da40f3719 Felipe Balbi 2011-08-19  2033  	int				ret = 0;
-72246da40f3719 Felipe Balbi 2011-08-19  2034  
-2c4cbe6e5a9c71 Felipe Balbi 2014-04-30  2035  	trace_dwc3_ep_dequeue(req);
-2c4cbe6e5a9c71 Felipe Balbi 2014-04-30  2036  
-457fe4752b0f6d Wesley Cheng 2022-07-08  2037  	spin_lock(&dwc->lock);
-72246da40f3719 Felipe Balbi 2011-08-19  2038  
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2039  	list_for_each_entry(r, &dep->cancelled_list, list) {
-72246da40f3719 Felipe Balbi 2011-08-19  2040  		if (r == req)
-fcd2def6639293 Thinh Nguyen 2020-03-05  2041  			goto out;
-72246da40f3719 Felipe Balbi 2011-08-19  2042  	}
-72246da40f3719 Felipe Balbi 2011-08-19  2043  
-aa3342c8bb618a Felipe Balbi 2016-03-14  2044  	list_for_each_entry(r, &dep->pending_list, list) {
-fcd2def6639293 Thinh Nguyen 2020-03-05  2045  		if (r == req) {
-fcd2def6639293 Thinh Nguyen 2020-03-05  2046  			dwc3_gadget_giveback(dep, req, -ECONNRESET);
-fcd2def6639293 Thinh Nguyen 2020-03-05  2047  			goto out;
-fcd2def6639293 Thinh Nguyen 2020-03-05  2048  		}
-72246da40f3719 Felipe Balbi 2011-08-19  2049  	}
-72246da40f3719 Felipe Balbi 2011-08-19  2050  
-aa3342c8bb618a Felipe Balbi 2016-03-14  2051  	list_for_each_entry(r, &dep->started_list, list) {
-72246da40f3719 Felipe Balbi 2011-08-19  2052  		if (r == req) {
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2053  			struct dwc3_request *t;
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2054  
-72246da40f3719 Felipe Balbi 2011-08-19  2055  			/* wait until it is processed */
-c5353b225df9b2 Felipe Balbi 2019-02-13  2056  			dwc3_stop_active_transfer(dep, true, true);
-cf3113d893d442 Felipe Balbi 2017-02-17  2057  
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2058  			/*
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2059  			 * Remove any started request if the transfer is
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2060  			 * cancelled.
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2061  			 */
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2062  			list_for_each_entry_safe(r, t, &dep->started_list, list)
-04dd6e76b22889 Ray Chi      2021-03-28  2063  				dwc3_gadget_move_cancelled_request(r,
-04dd6e76b22889 Ray Chi      2021-03-28  2064  						DWC3_REQUEST_STATUS_DEQUEUED);
-cf3113d893d442 Felipe Balbi 2017-02-17  2065  
-a5c7682aaaa10e Thinh Nguyen 2021-01-04  2066  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
-a5c7682aaaa10e Thinh Nguyen 2021-01-04  2067  
-fcd2def6639293 Thinh Nguyen 2020-03-05  2068  			goto out;
-72246da40f3719 Felipe Balbi 2011-08-19  2069  		}
-72246da40f3719 Felipe Balbi 2011-08-19  2070  	}
-fcd2def6639293 Thinh Nguyen 2020-03-05  2071  
-04fb365c453e14 Felipe Balbi 2017-05-17  2072  	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-72246da40f3719 Felipe Balbi 2011-08-19  2073  		request, ep->name);
-72246da40f3719 Felipe Balbi 2011-08-19  2074  	ret = -EINVAL;
-fcd2def6639293 Thinh Nguyen 2020-03-05  2075  out:
-457fe4752b0f6d Wesley Cheng 2022-07-08  2076  	spin_unlock(&dwc->lock);
-72246da40f3719 Felipe Balbi 2011-08-19  2077  
-72246da40f3719 Felipe Balbi 2011-08-19  2078  	return ret;
-72246da40f3719 Felipe Balbi 2011-08-19  2079  }
-72246da40f3719 Felipe Balbi 2011-08-19  2080  
+   220	
+   221	/*
+   222	 * If possible, this checks an area of a destination device is invalid.
+   223	 */
+   224	static int device_area_is_invalid(struct dm_target *ti, struct dm_dev *dev,
+   225					  sector_t start, sector_t len, void *data)
+   226	{
+   227		struct queue_limits *limits = data;
+   228		struct block_device *bdev = dev->bdev;
+   229		sector_t dev_size = bdev_nr_sectors(bdev);
+   230		unsigned short logical_block_size_sectors =
+   231			limits->logical_block_size >> SECTOR_SHIFT;
+   232	
+   233		if (!dev_size)
+   234			return 0;
+   235	
+   236		if ((start >= dev_size) || (start + len > dev_size)) {
+   237			DMWARN("%s: %pg too small for target: "
+   238			       "start=%llu, len=%llu, dev_size=%llu",
+   239			       dm_device_name(ti->table->md), bdev,
+   240			       (unsigned long long)start,
+   241			       (unsigned long long)len,
+   242			       (unsigned long long)dev_size);
+   243			return 1;
+   244		}
+   245	
+   246		/*
+   247		 * If the target is mapped to zoned block device(s), check
+   248		 * that the zones are not partially mapped.
+   249		 */
+   250		if (bdev_is_zoned(bdev)) {
+ > 251			unsigned int zone_sectors = bdev_zone_sectors(bdev);
+   252	
+ > 253			if (bdev_is_zone_start(bdev, start)) {
+   254				DMWARN("%s: start=%llu not aligned to h/w zone size %u of %pg",
+   255				       dm_device_name(ti->table->md),
+   256				       (unsigned long long)start,
+   257				       zone_sectors, bdev);
+   258				return 1;
+   259			}
+   260	
+   261			/*
+   262			 * Note: The last zone of a zoned block device may be smaller
+   263			 * than other zones. So for a target mapping the end of a
+   264			 * zoned block device with such a zone, len would not be zone
+   265			 * aligned. We do not allow such last smaller zone to be part
+   266			 * of the mapping here to ensure that mappings with multiple
+   267			 * devices do not end up with a smaller zone in the middle of
+   268			 * the sector range.
+   269			 */
+   270			if (bdev_is_zone_start(bdev, len)) {
+   271				DMWARN("%s: len=%llu not aligned to h/w zone size %u of %pg",
+   272				       dm_device_name(ti->table->md),
+   273				       (unsigned long long)len,
+   274				       zone_sectors, bdev);
+   275				return 1;
+   276			}
+   277		}
+   278	
+   279		if (logical_block_size_sectors <= 1)
+   280			return 0;
+   281	
+   282		if (start & (logical_block_size_sectors - 1)) {
+   283			DMWARN("%s: start=%llu not aligned to h/w "
+   284			       "logical block size %u of %pg",
+   285			       dm_device_name(ti->table->md),
+   286			       (unsigned long long)start,
+   287			       limits->logical_block_size, bdev);
+   288			return 1;
+   289		}
+   290	
+   291		if (len & (logical_block_size_sectors - 1)) {
+   292			DMWARN("%s: len=%llu not aligned to h/w "
+   293			       "logical block size %u of %pg",
+   294			       dm_device_name(ti->table->md),
+   295			       (unsigned long long)len,
+   296			       limits->logical_block_size, bdev);
+   297			return 1;
+   298		}
+   299	
+   300		return 0;
+   301	}
+   302	
 
 -- 
 0-DAY CI Kernel Test Service
