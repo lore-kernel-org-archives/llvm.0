@@ -1,42 +1,46 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF12F59
-	for <llvm@lists.linux.dev>; Sat,  9 Jul 2022 23:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746AF7A
+	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 01:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657408882; x=1688944882;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oITfWi4j+w3lW4w5dIdlJ6FTgZPOGpbS4WG1B8GgCiI=;
-  b=UOTdCyd19H3WNMFd7N5TFKJwoPpp3Qg/fY8GCEylphxeFEadNZmtcOA4
-   PSWkqDBisBcf6ZComPTycgQ6cmf65ur2h0QTjxJGLoRysZqwR16kgKSIz
-   sRiF2oPhZNGYFLzhLf4Tx9VAv61uH5Vjy0m7At/ia1dnjY8Hoe8gT7gzG
-   hTZZLj7AqXFb4eoK8YsqqryFP5gVGPhGPRXOoz0jprcM84lI4Exkxczdq
-   vwxNaAOG16R+rQtiDLxqTrpy8C1uwSe3EbNBO9o5wpRXhft+LmwI/8QwV
-   GUQmdj69lub77pqWILVCxYE9xZMZaPtaUo7TGCjrxFLSeEqSa37+o0BH/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="283220215"
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="283220215"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 16:21:22 -0700
+  t=1657415608; x=1688951608;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OhWo23JWwfXIx3sgChlYW09NF6N1Xz6MXcIILyS2Nto=;
+  b=g9eGeq/uyAwzcGQCbx/nS1+y8qUx+2xB1wMVx6tDwNjU+5ZR1LweiOnJ
+   E8stBM8mmPwpRFzUM1Ayguy4EJwkJWrvyNkqutzQm6b7W15I3wkRsR+3p
+   h+1e2Mf6Yk92ip+CpPCMrGNgcpIqWHSLOUWyakrXGOeM+v+xmcXMZLdMR
+   CcyvIwORT6Rf6wa3RgGrnF47UgC2Iqz3N1BuQOHRivAlkD51hMdjqRwWP
+   jZQ2CmWGfGAs4oP0tkb0w88TpuNzJQmQA7A8jPk4JzOkPS0LVBqaEGuvt
+   EILNRRjNV/AD6dMR2liA3KQ6PjEWXgn2Ip+HgwrUMPXoZdbSqUEz+6Yca
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="282022825"
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="282022825"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 18:13:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="921367604"
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="594494740"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2022 16:21:20 -0700
+  by orsmga002.jf.intel.com with ESMTP; 09 Jul 2022 18:13:24 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oAJlI-000PFo-34;
-	Sat, 09 Jul 2022 23:21:20 +0000
-Date: Sun, 10 Jul 2022 07:20:54 +0800
+	id 1oALVj-000PLG-Jk;
+	Sun, 10 Jul 2022 01:13:23 +0000
+Date: Sun, 10 Jul 2022 09:12:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, zx2c4@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [crng-random:tip 1/2] arch/x86/kernel/kexec-bzimage64.c:219:14:
- error: no member named 'ima_buffer_size' in 'struct kimage'
-Message-ID: <202207100728.6J1p2SEd-lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linexp.org>, daniel.lezcano@linaro.org,
+	rafael@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rui.zhang@intel.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+	Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH v4 12/12] thermal/of: Initialize trip points separately
+Message-ID: <202207100924.K7DHJPX2-lkp@intel.com>
+References: <20220709223229.1619339-13-daniel.lezcano@linexp.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,74 +49,175 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220709223229.1619339-13-daniel.lezcano@linexp.org>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tip
-head:   532de96923f9c8e0ec456c1b91499327579c2aba
-commit: acc53fc31a5e3d990d8241a09438d98b1a6aee1f [1/2] x86/setup: Use rng seeds from setup_data
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220710/202207100728.6J1p2SEd-lkp@intel.com/config)
+Hi Daniel,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on tegra/for-next linus/master v5.19-rc5 next-20220708]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-OF-rework/20220710-063550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220710/202207100924.K7DHJPX2-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=acc53fc31a5e3d990d8241a09438d98b1a6aee1f
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random tip
-        git checkout acc53fc31a5e3d990d8241a09438d98b1a6aee1f
+        # https://github.com/intel-lab-lkp/linux/commit/ae09a5baa03d816f54f1e0654fd0ad08eab5d427
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-OF-rework/20220710-063550
+        git checkout ae09a5baa03d816f54f1e0654fd0ad08eab5d427
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/kexec-bzimage64.c:219:14: error: no member named 'ima_buffer_size' in 'struct kimage'
-           if (!image->ima_buffer_size)
-                ~~~~~  ^
->> arch/x86/kernel/kexec-bzimage64.c:226:21: error: no member named 'ima_buffer_addr' in 'struct kimage'
-           ima->addr = image->ima_buffer_addr;
-                       ~~~~~  ^
-   arch/x86/kernel/kexec-bzimage64.c:227:21: error: no member named 'ima_buffer_size' in 'struct kimage'
-           ima->size = image->ima_buffer_size;
-                       ~~~~~  ^
-   3 errors generated.
+>> drivers/thermal/thermal_of.c:977:6: warning: variable 'gchild' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!tz->tbps) {
+               ^~~~~~~~~
+   drivers/thermal/thermal_of.c:1010:14: note: uninitialized use occurs here
+           of_node_put(gchild);
+                       ^~~~~~
+   drivers/thermal/thermal_of.c:977:2: note: remove the 'if' if its condition is always false
+           if (!tz->tbps) {
+           ^~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_of.c:917:43: note: initialize the variable 'gchild' to silence this warning
+           struct device_node *child = NULL, *gchild;
+                                                    ^
+                                                     = NULL
+   1 warning generated.
 
 
-vim +219 arch/x86/kernel/kexec-bzimage64.c
+vim +977 drivers/thermal/thermal_of.c
 
-6a2c20e7d8900ed Vivek Goyal       2014-08-08  209  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  210  static void
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  211  setup_ima_state(const struct kimage *image, struct boot_params *params,
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  212  		unsigned long params_load_addr,
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  213  		unsigned int ima_setup_data_offset)
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  214  {
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  215  	struct setup_data *sd = (void *)params + ima_setup_data_offset;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  216  	unsigned long setup_data_phys;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  217  	struct ima_setup_data *ima;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  218  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30 @219  	if (!image->ima_buffer_size)
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  220  		return;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  221  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  222  	sd->type = SETUP_IMA;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  223  	sd->len = sizeof(*ima);
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  224  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  225  	ima = (void *)sd + sizeof(struct setup_data);
-b69a2afd5afce9b Jonathan McDowell 2022-06-30 @226  	ima->addr = image->ima_buffer_addr;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  227  	ima->size = image->ima_buffer_size;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  228  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  229  	/* Add setup data */
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  230  	setup_data_phys = params_load_addr + ima_setup_data_offset;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  231  	sd->next = params->hdr.setup_data;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  232  	params->hdr.setup_data = setup_data_phys;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  233  }
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  234  
-
-:::::: The code at line 219 was first introduced by commit
-:::::: b69a2afd5afce9bf6d56e349d6ab592c916e20f2 x86/kexec: Carry forward IMA measurement log on kexec
-
-:::::: TO: Jonathan McDowell <noodles@fb.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   899  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   900  /**
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   901   * thermal_of_build_thermal_zone - parse and fill one thermal zone data
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   902   * @np: DT node containing a thermal zone node
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   903   *
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   904   * This function parses a thermal zone type of node represented by
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   905   * @np parameter and fills the read data into a __thermal_zone data structure
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   906   * and return this pointer.
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   907   *
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   908   * TODO: Missing properties to parse: thermal-sensor-names
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   909   *
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   910   * Return: On success returns a valid struct __thermal_zone,
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   911   * otherwise, it returns a corresponding ERR_PTR(). Caller must
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   912   * check the return value with help of IS_ERR() helper.
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   913   */
+c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   914  static struct __thermal_zone
+c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   915  __init *thermal_of_build_thermal_zone(struct device_node *np)
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   916  {
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   917  	struct device_node *child = NULL, *gchild;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   918  	struct __thermal_zone *tz;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   919  	int ret, i;
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   920  	u32 prop, coef[2];
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   921  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   922  	if (!np) {
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   923  		pr_err("no thermal zone np\n");
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   924  		return ERR_PTR(-EINVAL);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   925  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   926  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   927  	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   928  	if (!tz)
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   929  		return ERR_PTR(-ENOMEM);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   930  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   931  	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   932  	if (ret < 0) {
+3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   933  		pr_err("%pOFn: missing polling-delay-passive property\n", np);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   934  		goto free_tz;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   935  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   936  	tz->passive_delay = prop;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   937  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   938  	ret = of_property_read_u32(np, "polling-delay", &prop);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   939  	if (ret < 0) {
+3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   940  		pr_err("%pOFn: missing polling-delay property\n", np);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   941  		goto free_tz;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   942  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   943  	tz->polling_delay = prop;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   944  
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   945  	/*
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   946  	 * REVIST: for now, the thermal framework supports only
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   947  	 * one sensor per thermal zone. Thus, we are considering
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   948  	 * only the first two values as slope and offset.
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   949  	 */
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   950  	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   951  	if (ret == 0) {
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   952  		tz->slope = coef[0];
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   953  		tz->offset = coef[1];
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   954  	} else {
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   955  		tz->slope = 1;
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   956  		tz->offset = 0;
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   957  	}
+a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   958  
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   959  	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   960  	if (IS_ERR(tz->trips)) {
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   961  		ret = PTR_ERR(tz->trips);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   962  		goto finish;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   963  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   964  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   965  	/* cooling-maps */
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   966  	child = of_get_child_by_name(np, "cooling-maps");
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   967  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   968  	/* cooling-maps not provided */
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   969  	if (!child)
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   970  		goto finish;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   971  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   972  	tz->num_tbps = of_get_child_count(child);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   973  	if (tz->num_tbps == 0)
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   974  		goto finish;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   975  
+6396bb221514d2 drivers/thermal/of-thermal.c Kees Cook          2018-06-12   976  	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  @977  	if (!tz->tbps) {
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   978  		ret = -ENOMEM;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   979  		goto free_trips;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   980  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   981  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   982  	i = 0;
+ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   983  	for_each_child_of_node(child, gchild) {
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   984  		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   985  		if (ret) {
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   986  			of_node_put(gchild);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   987  			goto free_tbps;
+ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   988  		}
+ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   989  	}
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   990  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   991  finish:
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   992  	of_node_put(child);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   993  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   994  	return tz;
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   995  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   996  free_tbps:
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   997  	for (i = i - 1; i >= 0; i--) {
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   998  		struct __thermal_bind_params *tbp = tz->tbps + i;
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   999  		int j;
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1000  
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1001  		for (j = 0; j < tbp->count; j++)
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1002  			of_node_put(tbp->tcbp[j].cooling_device);
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1003  
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1004  		kfree(tbp->tcbp);
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1005  	}
+a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1006  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1007  	kfree(tz->tbps);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1008  free_trips:
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1009  	kfree(tz->trips);
+c2aad93c7edd5e drivers/thermal/of-thermal.c Vladimir Zapolskiy 2014-09-29  1010  	of_node_put(gchild);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1011  free_tz:
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1012  	kfree(tz);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1013  	of_node_put(child);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1014  
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1015  	return ERR_PTR(ret);
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1016  }
+4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1017  
 
 -- 
 0-DAY CI Kernel Test Service
