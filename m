@@ -1,86 +1,130 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3004EA52
-	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 07:11:21 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-31cb93cadf2so23047697b3.11
-        for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 00:11:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20CD1104;
+	Sun, 10 Jul 2022 10:01:45 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id z12so3581895wrq.7;
+        Sun, 10 Jul 2022 03:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=yAMjD7bFyIwsVP6jYrt8xQond+JqwS9zkIdAHuIkxN4=;
-        b=liUn+rKXpXfrSoXvO27l9hLOj7oo5CX3m8yhnF3O8Uo0ba67YaoDhrup80Hbcz/pZt
-         3kEuSGbXJ20Wjh0GYHTqFpZtKEZTJfIOo6ThgYoOEp2lTm2OD1kiiQOE5AlkPCIb7FhR
-         Tgr1uBsd4QNXfMDjRN98RrNJXH2RxHP4DsVvOShzHxsugmZFmGMPWkmfqWEUF6RLrBlh
-         cvl2b5KOOrsYKyDUTpPB8jei5OI4Mvz7jOa92WwuRm+EyFtKNtzWbal3Xi9gB2ZoXySc
-         /UwtJaMhzidFnMAMzLeSU447Q7mJxgTTUU8bSkvqarH+A4jBk0DqFjmT0m4eHC3F5Kka
-         kbrg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=81hvwpBlfxQBH7APOHFnmGU6Oy26r79hMsY7b8ngUnA=;
+        b=LaBR8No6eDA8e9Rql/Q8hpGkLLfuSD5/EMXQepcthh8cGp7UjbSFP1k9BsyzXUHnNy
+         /Tpq4atRiIOMgSMJhXBMpDbldJ1g4b5k0jQCcLGn8jfGRoB7x/q/8CTNYecJfV/bu4Bo
+         MERWiqyGTdkZFrXjwSPTS3Z7Yn+KmnzXcWrJiE8YusI2QP2MhVEHWCSDIj8F43mtTiYZ
+         TEX0Th1RPImvZ0IVeKx1UMGztnYZGsQwur0HjBXDJzClOHfTYfzZhOg8rixDdLobrGug
+         oZU4dhUGGW50vkkWM5cZ8x/txINWUWLWL80giRRZdFN9hqvwmfL00pFxL7khmpX45EwE
+         onMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=yAMjD7bFyIwsVP6jYrt8xQond+JqwS9zkIdAHuIkxN4=;
-        b=25+8n1w8NHDIdvlYtOajui2mu2ZIuMfvLqAbgMfa0iQH4gWx71afZmT3osx0xjmDBk
-         2vnFkFekqxB6HLSw0Z11vu/KuDIefAF915GTGoCTuEmidB8vbZpZdeZ3/TWzmOIAWqCW
-         oai1zdZX/n3hFJ4bZBT3DJ4q07LXpf0QoyxWy2o0xamOhK6oT1YusHU/+Od8PhqC5oiG
-         f0/0P287bxo/eHBIbb6ib2hQpLCJGVXC9UyF1OXZR/eiOpLzqFu32LMr5D+yLXJzFbTt
-         PrUGm1b9U9t6+qpA3UelTaVVfpp7YAfWdKbQq0IWVceKzCZ1uTdQ8VO6llluc0mdsk2+
-         51aQ==
-X-Gm-Message-State: AJIora+xC3DPg0gDu+kQnqcnu6cAymXa4zackADhifWN9ygGtQG176M2
-	M+KeuZONTRkUthOKWdSJtJX3Iir3/9FR
-X-Google-Smtp-Source: AGRyM1uY19WwEDO1WCIR2j0jrtOz0gxs4GLwPuef+3yW0ZQEqrwPS8ucUN0ZHVTBtuSCTsnBGf4HM4ONI3cb
-X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:1844:d82b:e1a:5303])
- (user=maskray job=sendgmr) by 2002:a05:6902:706:b0:66e:ef10:1f7 with SMTP id
- k6-20020a056902070600b0066eef1001f7mr5952684ybt.610.1657437080152; Sun, 10
- Jul 2022 00:11:20 -0700 (PDT)
-Date: Sun, 10 Jul 2022 00:11:17 -0700
-Message-Id: <20220710071117.446112-1-maskray@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=81hvwpBlfxQBH7APOHFnmGU6Oy26r79hMsY7b8ngUnA=;
+        b=aT4dH0nQHQ/YQqMV/yimR6oRj9g5/XpVlLD7sa9mjyuuGDPaZzmCfX2cJZgdC5bHi+
+         DhYlLTjNUOBTw7hXFoToKoLbmWD1e0Atr841pAnez67e/nMP8Cv5jvQ0dIDQIdq3OGi1
+         D6C2Yw07ZkfFxc3MQByvOnlG/6K+L8rGPBL+BHJDwn3WU52e9nYHI7gv3pbgIw7UlqFA
+         wspgCXimZ4LdvXcBtDjAJLMKOtCWSjTmAovEgdY8/P6pi0stCbk+bze2ipUGmmK0QRWA
+         KeXc/h+48OJ2UXTzvOiZY4Uign60LkhmEJ/Ra641zwUMdfCd1IkXwUQ3q46pjOuFApxf
+         hhHg==
+X-Gm-Message-State: AJIora/8PeYzobQ3vjAJgoIn9TM7XA6xtsyri6rzzJ7bNCRMqWtH3cig
+	ySBU/mZTXyJtDt5Anm36mxo=
+X-Google-Smtp-Source: AGRyM1t1D8hDiyos2lkhzHSCdCKBxQy3yBejjsdGsbA5T1lQgpocurWl0ACdlPHS4JNTO6vo74nRPw==
+X-Received: by 2002:a05:6000:54f:b0:21b:944c:c70b with SMTP id b15-20020a056000054f00b0021b944cc70bmr12117283wrf.572.1657447303959;
+        Sun, 10 Jul 2022 03:01:43 -0700 (PDT)
+Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003a2da6b2cbesm3502026wme.33.2022.07.10.03.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 03:01:42 -0700 (PDT)
+From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To: Benjamin LaHaise <bcrl@kvack.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-aio@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	nvdimm@lists.linux.dev,
+	io-uring@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs: Call kmap_local_page() in copy_string_kernel()
+Date: Sun, 10 Jul 2022 12:01:36 +0200
+Message-Id: <20220710100136.25496-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Subject: [PATCH] riscv: Pass -mno-relax only on lld < 15.0.0
-From: Fangrui Song <maskray@google.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
-Cc: Khem Raj <raj.khem@gmail.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-lld since
-https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec77262d392e2923e1d680f6985
-(milestone: 15.0.0) has implemented some RISC-V linker relaxation.
--mno-relax is no longer needed in KBUILD_CFLAGS/KBUILD_AFLAGS to
-suppress R_RISCV_ALIGN which older lld can not handle:
+The use of kmap_atomic() is being deprecated in favor of kmap_local_page().
 
-ld.lld: error: capability.c:(.fixup+0x0): relocation R_RISCV_ALIGN requires unimplemented linker relaxation; recompile with -mno-relax but the .o is already compiled with -mno-relax
+With kmap_local_page(), the mappings are per thread, CPU local, not
+globally visible and can take page faults. Furthermore, the mappings can be
+acquired from any context (including interrupts).
 
-Signed-off-by: Fangrui Song <maskray@google.com>
+Therefore, use kmap_local_page() in copy_string_kernel() instead of
+kmap_atomic().
+
+Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
+HIGHMEM64GB enabled.
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- arch/riscv/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 34cf8a598617..7e4ceb2a0981 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -37,6 +37,7 @@ else
- endif
+I sent a first patch to fs/exec.c for converting kmap() and kmap_atomic()
+to kmap_local_page():
+https://lore.kernel.org/lkml/20220630163527.9776-1-fmdefrancesco@gmail.com/
+
+Some days ago, Ira Weiny, while he was reviewing that patch, made me notice
+that I had overlooked a second kmap_atomic() in the same file (thanks):
+https://lore.kernel.org/lkml/YsiQptk19txHrG4c@iweiny-desk3/
+
+I've been asked to send this as an additional change. This is why there will
+not be any second version of that previous patch.
+
+ fs/exec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 4a2129c0d422..5fa652ca5823 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -639,11 +639,11 @@ int copy_string_kernel(const char *arg, struct linux_binprm *bprm)
+ 		page = get_arg_page(bprm, pos, 1);
+ 		if (!page)
+ 			return -E2BIG;
+-		kaddr = kmap_atomic(page);
++		kaddr = kmap_local_page(page);
+ 		flush_arg_page(bprm, pos & PAGE_MASK, page);
+ 		memcpy(kaddr + offset_in_page(pos), arg, bytes_to_copy);
+ 		flush_dcache_page(page);
+-		kunmap_atomic(kaddr);
++		kunmap_local(kaddr);
+ 		put_arg_page(page);
+ 	}
  
- ifeq ($(CONFIG_LD_IS_LLD),y)
-+ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
- 	KBUILD_CFLAGS += -mno-relax
- 	KBUILD_AFLAGS += -mno-relax
- ifndef CONFIG_AS_IS_LLVM
-@@ -44,6 +45,7 @@ ifndef CONFIG_AS_IS_LLVM
- 	KBUILD_AFLAGS += -Wa,-mno-relax
- endif
- endif
-+endif
- 
- # ISA string setting
- riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
 -- 
-2.37.0.144.g8ac04bfd2-goog
+2.36.1
 
