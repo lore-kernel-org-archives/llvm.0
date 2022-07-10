@@ -1,44 +1,51 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C1A7B
-	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 15:27:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49537B
+	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 16:08:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657466839; x=1689002839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mGAGaSfXQm2SL/iTSZF/suXuHJIMeoRg4o5Kzyy1gkU=;
-  b=W1KWyYTQiiDpyaep3ferpTUGnJXAq1ohc/uZBnASc0ZT8NIFjl7YuPVi
-   edXpijXkBBbMiQ64hKdgV6H2z4pEDA9HqcwVMwn6dkv/61P1kMfEHyzYD
-   eaEjX/nKCZ3X8T5JkWuRziPj9mNxoMUweJ/TvIqOSeCg//C41GJt2YxKm
-   1AAb312245AozU+nTahpqDFBDqHPa6Dovt5bOOAI1AZbWU0y+xF5j4Ol4
-   8qsVG6nkaL30fm61KtoiPchT8TpbBg3SNVMVAJ24MW+jnfAzyHq0htc6/
-   jCFPONQLVFxyxBqqRCeb4fQDyAuwZRYIPZ3CUXXRKkZvK3auTZMWS9OBc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="346206471"
+  t=1657469302; x=1689005302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u2rFHyjk0IO1Axsj1F5yVAJwDZ/wJ5mGUuZgurI+KIg=;
+  b=buQ8/caL7jTGu4FjzP0NkIza9BlrMtN0FJWhqCASxD+RVGChK40/u48x
+   5qC9WxLasQQngqea7CuqRy6wpd5bKmG3mJOyAW5BsJ0khfHKGORhqUDhY
+   rCPQqdw45UieT2dAOEHHsFIwTtJ+9iCA0dHD3s2xsDHsINRp99ND3FM2i
+   rH7GHyp6MHedaLrZNlN+oOm0WuVppf/Dy8rYSsewXRfN7BDA3PXAs166N
+   cywqFAexndrKjse6Cdm1KQbD/I97Sih3JsMsdZoDZlIkHOrQQMSOjEQNz
+   bFShTJyaZqHtzW/t06G+xPlT7qsLqYe9KVU89OaYCVyl9Y50vIBztAkMg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285265475"
 X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="346206471"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 08:27:18 -0700
+   d="scan'208";a="285265475"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 09:08:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="921516363"
+   d="scan'208";a="662291019"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jul 2022 08:27:16 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2022 09:08:18 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oAYq4-000PxY-3F;
-	Sun, 10 Jul 2022 15:27:16 +0000
-Date: Sun, 10 Jul 2022 23:26:58 +0800
+	id 1oAZTl-000Pzi-Cs;
+	Sun, 10 Jul 2022 16:08:17 +0000
+Date: Mon, 11 Jul 2022 00:07:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stanislav Fomichev <sdf@google.com>
+To: Lino Sanfilippo <LinoSanfilippo@gmx.de>, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>
-Subject: [linux-next:master 5835/8914] kernel/bpf/bpf_lsm.c:51:26: warning:
- variable 'args' set but not used
-Message-ID: <202207102321.jwphabAL-lkp@intel.com>
+	ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	andriy.shevchenko@linux.intel.com, vz@mleia.com,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lukas@wunner.de, p.rosenberger@kunbus.com,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH v3 3/8] serial: core, 8250: set RS485 termination gpio in
+ serial core
+Message-ID: <202207102355.Y27cvu6y-lkp@intel.com>
+References: <20220710150322.2846170-4-LinoSanfilippo@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,53 +54,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220710150322.2846170-4-LinoSanfilippo@gmx.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f2528c29385819a84480cacef4886b049761e2c5
-commit: 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e [5835/8914] bpf: per-cgroup lsm flavor
-config: arm-buildonly-randconfig-r003-20220710 (https://download.01.org/0day-ci/archive/20220710/202207102321.jwphabAL-lkp@intel.com/config)
+Hi Lino,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on 7e5b4322cde067e1d0f1bf8f490e93f664a7c843]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lino-Sanfilippo/Fixes-and-cleanup-for-RS485/20220710-230624
+base:   7e5b4322cde067e1d0f1bf8f490e93f664a7c843
+config: hexagon-randconfig-r041-20220710 (https://download.01.org/0day-ci/archive/20220710/202207102355.Y27cvu6y-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
+        # https://github.com/intel-lab-lkp/linux/commit/846f02e6da9692810ed632dd72f45af667c3cc67
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lino-Sanfilippo/Fixes-and-cleanup-for-RS485/20220710-230624
+        git checkout 846f02e6da9692810ed632dd72f45af667c3cc67
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/bpf_lsm.c:51:26: warning: variable 'args' set but not used [-Wunused-but-set-variable]
-           const struct btf_param *args;
-                                   ^
+>> drivers/tty/serial/serial_core.c:1364:6: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+           if (!rs485->flags & SER_RS485_ENABLED)
+               ^             ~
+   drivers/tty/serial/serial_core.c:1364:6: note: add parentheses after the '!' to evaluate the bitwise operator first
+           if (!rs485->flags & SER_RS485_ENABLED)
+               ^
+                (                               )
+   drivers/tty/serial/serial_core.c:1364:6: note: add parentheses around left hand side expression to silence this warning
+           if (!rs485->flags & SER_RS485_ENABLED)
+               ^
+               (            )
    1 warning generated.
 
 
-vim +/args +51 kernel/bpf/bpf_lsm.c
+vim +1364 drivers/tty/serial/serial_core.c
 
-    47	
-    48	void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
-    49				     bpf_func_t *bpf_func)
-    50	{
-  > 51		const struct btf_param *args;
-    52	
-    53		if (btf_type_vlen(prog->aux->attach_func_proto) < 1 ||
-    54		    btf_id_set_contains(&bpf_lsm_current_hooks,
-    55					prog->aux->attach_btf_id)) {
-    56			*bpf_func = __cgroup_bpf_run_lsm_current;
-    57			return;
-    58		}
-    59	
-    60		args = btf_params(prog->aux->attach_func_proto);
-    61	
+  1360	
+  1361	static void uart_set_rs485_termination(struct uart_port *port,
+  1362					       const struct serial_rs485 *rs485)
+  1363	{
+> 1364		if (!rs485->flags & SER_RS485_ENABLED)
+  1365			return;
+  1366	
+  1367		gpiod_set_value_cansleep(port->rs485_term_gpio,
+  1368					 !!(rs485->flags & SER_RS485_TERMINATE_BUS));
+  1369	}
+  1370	
 
 -- 
 0-DAY CI Kernel Test Service
