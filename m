@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C2D1C34
-	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 19:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116487A
+	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 19:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1657482688; x=1689018688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VimeObqSAUdsl+VyBYK+6D0nkc7GGjZa6oJYVfC1ebA=;
-  b=ihm6JElOVHSS50GIuPNIncEJotI+4v3rFo80tNF8i439IhLROXqdcCj6
-   jIR3KKtjnKlnZLkpRm4FJ/rCbA4L61blDD4sJg/1NAWaD2SV1lFA2Ogf6
-   1n/xVUQfH9+/hsO1Hrf4yaKbGnxRwTNLgOktBTiR+KbDUAKGI7qG4kKV7
-   M0OB8HZ4UToBHMiuzGHOaqcb97mbdFDJFEzFx+TXcVZ69TGV+6uZbtH7Z
-   qZojrcgaDZ1Wai0MTzICO/6pLDtK0c0btxz486Tcr0C0IkapQ88ng0a3l
-   0u2mxM6/8SDEsNbf0BI7srz9KSgCCo+6K4XNZW+BKUlk7RlEqsItGeYjv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="283289702"
+  bh=JT82txfABd2+w9YuBxFDbldHkxcs/m9vx4Tqb/9oSco=;
+  b=b+jCC5FMifUx6znvm6j+OPrFve17SXtvWhShwYrKD6tXgFeN1cWHqE6G
+   2kg1fYh+3d+2v3OTAotjMQ5jDrOR86dB4Aq7+J+FcnpmSvvWLPsISb0DP
+   lpmF8gd6m3NBN30FLMpwv6TlItphREilmel+1vGXo9VlY5ZS3bmAmBNfW
+   1O8+8lGAJxqT51tlqO6eWmcEd9z8XrMPO2uWa8e/mZ9E/GYlEt/iC2C2+
+   Llw6EUTWSqbTY6X6imF/CY1RBe+HJ85U6fXK2FJwAIBKVo4s3b2hubjzS
+   Rk8kJ6OpGVNCS9PxJpMIcI+ksPhvhdlb5FCxPFPxfQEmNuOENZDH9LB3A
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="348518023"
 X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="283289702"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 12:51:27 -0700
+   d="scan'208";a="348518023"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 12:51:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="684176248"
+   d="scan'208";a="771319382"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jul 2022 12:51:25 -0700
+  by orsmga005.jf.intel.com with ESMTP; 10 Jul 2022 12:51:25 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oAcxh-000Q9o-1L;
+	id 1oAcxh-000Q9q-25;
 	Sun, 10 Jul 2022 19:51:25 +0000
-Date: Mon, 11 Jul 2022 03:51:03 +0800
+Date: Mon, 11 Jul 2022 03:51:05 +0800
 From: kernel test robot <lkp@intel.com>
 To: priyanka.dandamudi@intel.com, matthew.auld@intel.com,
 	nirmoy.das@intel.com, intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
 Subject: Re: [Intel-gfx] [PATCH v4 1/2] drm/i915: Add support for LMEM PCIe
  resizable bar
-Message-ID: <202207110323.aQxXZ1kk-lkp@intel.com>
+Message-ID: <202207110340.zwofgDuU-lkp@intel.com>
 References: <20220710172925.2465158-2-priyanka.dandamudi@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,7 +57,7 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/priyanka-dandamudi-intel-com/Add-support-for-LMEM-PCIe-resizable-bar/20220711-014151
 base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220711/202207110323.aQxXZ1kk-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220711/202207110340.zwofgDuU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
