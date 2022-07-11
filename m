@@ -1,108 +1,97 @@
 Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAB11FA6
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:44:17 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so9208712pjl.5
-        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:44:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA5A4692
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 19:20:31 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so9292631pjl.5
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 12:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J7LwcaH/4ZJxBfsg6OaMDgqa4Pbc62u2OyXlJzlw9do=;
-        b=ntwjDY2nSfK73KyfSvT+W/5MoQK5AetF8XDSAEBubzlKS5FLSZ8UMwit+blTxvyUrr
-         rz5Mbirtp81JlJDNuwDSU/t4vhlr4kVvmyjnDUu2ydqFXFKZ5Ug3dPxIWPMPzC5YSyav
-         uvz09n2HmfJ3DqNVucEs3MImOhYyNhWCe0nCG5IcXc1cHxGbXghcmjSoZbMYKCcPrzIv
-         VlnyCF5kbFhdbS4pEi3I4aNwvTgmECtAaTCI3MCUBtjK2yL7mKpPW+hTrouqpyi+oDN3
-         VDSa5LG6aSr4CjYnk+lpAkQh71lLoPy2GkoEknygs68bF2yzu462J4NuhWLM6f7gkD+G
-         uHWw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NrYdGTk0yKCuMljUwPZ7/uXlafiom1+RNi/pXfEgS+Y=;
+        b=avtznRRY4iS1AmoNE+xFYckNON9ycVHYL5nrww0X0/cL24DXv29e4e7u9Ra3AulsGp
+         t8nShsS3H0X29qd3p2cDNwKAQ+T1Lc6bZfy2P+sNHEhC773m5LtNMKtdbh7p4XerMl3+
+         WxVrB5yDkfmcO8w7XD9Vna5BS8Y7HSlmDtonN0dcDUgaB+8GsyYbXvPaLe8B8Y15QS5F
+         4fpAqxlzmXrZeei0rEj/LduqDgjqPXhsTN5zJeQzqMQGXLs0hKXTbbD81UbEHtdDz6zO
+         Yvkseu6BtC9cklXVX5PtKZ568HnkGJJ32D9CrRb+kVJVC4mqqqh2dvIHjoJjg9Mvao4Y
+         Lvdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J7LwcaH/4ZJxBfsg6OaMDgqa4Pbc62u2OyXlJzlw9do=;
-        b=M22NXHKiB/uKbhDwzQlYkFLIQiXe9Ao3MO9PzGzaw5cPslWHR0s5m+WKLHLm2EAtjs
-         MmvoGIG0L3V55whPqb6D83n3HBs/B9EsyMG/ILbL77JOAKLwEgkXRa1Z52j7yasRsgEx
-         ItyXYeT0Xq6t8BgwUHmmxwJS5At5kwc7/Y6PCTAufKEIJXV6QuyutT/jOrQu5cPWlVEO
-         fsCIcffbWrnkabDe8tBHqvOGjIfFRQqW0s54FBWmsAnLMt+ZXUJ/K+Pfdv6Vzd2vam70
-         K4lQVZ2c8C/zUSTKRo6gRUIs6V271i9CthY1zz0QDnDSf6wFvmN6sDnRQYlBXUf76RrF
-         JJwQ==
-X-Gm-Message-State: AJIora8W405hlxgYnmWXcb5AQQf31Szu0y+l6kVF6Ypdc6yrTF/RiMtG
-	xm5WNuwyjAAhbZxPTlp9tIqFkALklrgapOAIc4dUTg==
-X-Google-Smtp-Source: AGRyM1tfGXlm4xazcR7kvzTtVPgwxkaCg9LijfWYSCwwHrXilEf9eTDcbeFIk4hpupUm+gcikEf33SSuxEzSJWEpb4Y=
-X-Received: by 2002:a17:903:1111:b0:16a:acf4:e951 with SMTP id
- n17-20020a170903111100b0016aacf4e951mr19787208plh.72.1657565057412; Mon, 11
- Jul 2022 11:44:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NrYdGTk0yKCuMljUwPZ7/uXlafiom1+RNi/pXfEgS+Y=;
+        b=wZQttkznD7e9FSVPUlU+pQZVZdSXVoUwwyRVneMoW82yBMuGfJkgIKibP6NOjAitB5
+         p/g9zGMR5yHfOx6Kqe5TQtPQFE1s1PS8XxLUk8URDSu/ItOUxalWxZfoKFqMvhZzJpso
+         p470iVG5d5E8mcSkbsAQcYbv3cyj9o1c86PAmG2Tg1MFUXUeVJi5oDMaGVKTpufhxb9O
+         gsZLnFuW5ify3fweERJyb4ptpqQN4qluAPnrvIgoaNfjFFxvjN4DAjxA90U6kaJVuNhl
+         DHjwuzWbhYCZEvIE9ygKUWt+BYI72at+ELeIz2jPtUjhwvfjFRFAOfkCtlGHuGq4bd0G
+         ijMQ==
+X-Gm-Message-State: AJIora+dJ95QOUqnI0vb+1L+T/PCIgK+hFezWtctZhi/B9k3fdmpl6L7
+	lEy3TBkr46wk61PgKgZtgfpHSQ==
+X-Google-Smtp-Source: AGRyM1t/be+eF6H+YW5M2kcvwqqjrTB3VqZ6D3Mx34zzp6TePEh7gNQILyffnVjxOuTtoikVhDnlfQ==
+X-Received: by 2002:a17:902:8f87:b0:16c:2c88:39ec with SMTP id z7-20020a1709028f8700b0016c2c8839ecmr17150281plo.52.1657567231016;
+        Mon, 11 Jul 2022 12:20:31 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:a8b3:6eff:f380:e88b])
+        by smtp.gmail.com with ESMTPSA id o33-20020a17090a0a2400b001ece32cbec9sm7270672pjo.24.2022.07.11.12.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 12:20:29 -0700 (PDT)
+Date: Mon, 11 Jul 2022 12:20:22 -0700
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Haibo Li <haibo.li@mediatek.com>
+Cc: xiaoming.yu@mediatek.com, Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] cfi: free old cfi shadow asynchronously
+Message-ID: <Ysx39t+I56lDGe4i@google.com>
+References: <20220704014046.34596-1-haibo.li@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207100408.3Fsr7rOp-lkp@intel.com>
-In-Reply-To: <202207100408.3Fsr7rOp-lkp@intel.com>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Mon, 11 Jul 2022 11:44:06 -0700
-Message-ID: <CAKH8qBsadO3=RhEnd-=wd783XiErUorozW09rNKnnRmGCZqTwQ@mail.gmail.com>
-Subject: Re: [linux-next:master 5835/8914] ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_current
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Memory Management List <linux-mm@kvack.org>, Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704014046.34596-1-haibo.li@mediatek.com>
 
-On Sat, Jul 9, 2022 at 1:07 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   f2528c29385819a84480cacef4886b049761e2c5
-> commit: 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e [5835/8914] bpf: per-cgroup lsm flavor
-> config: arm64-randconfig-r013-20220708 (https://download.01.org/0day-ci/archive/20220710/202207100408.3Fsr7rOp-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_current
->    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->    >>> referenced 1 more times
-> --
-> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_socket
->    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_sock
->    >>> referenced by bpf_lsm.c:65 (kernel/bpf/bpf_lsm.c:65)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->    >>> referenced by bpf_lsm.c:65 (kernel/bpf/bpf_lsm.c:65)
->    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+On Mon, Jul 04, 2022 at 09:40:44AM +0800, Haibo Li wrote:
+> This patchset changes synchronize_rcu to call_rcu in update_shadow.
+> 
+> Patch 1 enables the CFI sanitization for cfi.c and 
+> bypass __cfi_slowpath_diag.
+> It is the prerequisite for using call_rcu in cfi.c.
+> 
+> Patch 2 changes synchronize_rcu to call_rcu and
+> free old cfi shadow in rcu cb
+> 
+> Changes in v2:
+>  - Remove _run_cfi_check,add __nocfi to __cfi_slowpath_diag directly
+>  - Rename _cfi_shadow_free_rcu to free_shadow
+> 
+> Haibo Li (2):
+>   cfi: enable sanitize for cfi.c
+>   cfi: free old cfi shadow asynchronously
+> 
+>  kernel/Makefile |  3 ---
+>  kernel/cfi.c    | 14 +++++++++++---
+>  2 files changed, 11 insertions(+), 6 deletions(-)
 
-More esoteric configurations:
+Thanks for sending v2! For the series:
 
-CONFIG_BPF_LSM=y
-# CONFIG_CGROUP_BPF is not set
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-Will fix it sometime this week along with the other warning about unused 'args'.
+Sami
