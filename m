@@ -1,155 +1,132 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16404420
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 16:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657558657; x=1689094657;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LJc053lm49/34TAoPU0ZlWIW2HltKDIYbPHFGb4uF7U=;
-  b=heZo2xy2+F0a65lWWjLLf2idvSWjhGR9Sg8pRWlpqGRvfl3EMJG4t2nD
-   DX/67CcTVQBBGWQm7we1RjdFqa59cwIOj2v/zNHLOEm5fEz4apMpoX/11
-   pQSh//99rFB6MwyJMq6Q1HVDQV6ATQ3y7MDAig/ceRSeAdlM20lGy71/j
-   s+tvVE9181htfmia9aWZ9JLcfq7V+/WdSnYJhYcbxVwlyZy3oyOU+5oxs
-   F6rX+2ASa1UkGfyRqEHtLUX+UBN2H2wt5ODDJf7jloti0onhEE5Jska5h
-   5rIFATr//CbnTN5ZNLQjau+S/X/b9R9ZSZy4UWtjVbeumGbCUsTXFRHLb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="284741401"
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="284741401"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 09:57:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="569842310"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jul 2022 09:57:34 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oAwj0-0000yl-1a;
-	Mon, 11 Jul 2022 16:57:34 +0000
-Date: Tue, 12 Jul 2022 00:56:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sven Peter <sven@svenpeter.dev>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bluetooth-wip 8/8]
- drivers/bluetooth/hci_bcm43xx.c:1280:8: error: incompatible pointer types
- passing '__le64 *' (aka 'unsigned long long *') to parameter of type
- 'dma_addr_t *' (aka 'unsigned int *')
-Message-ID: <202207120005.X91mQhqU-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFFC4420
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 17:08:00 +0000 (UTC)
+Received: by mail-qv1-f47.google.com with SMTP id cw12so807828qvb.12
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 10:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wWcvYvacvD8N8pcx60t/vSUQTr5iBONKiVXdnTKPElY=;
+        b=hOeLS2jTOqNMJXllVkjPxyOh9QyOBElTgjCJz0L+yC+3W9UQDw8rHggLAS/L/KpdEJ
+         34DVd5BpJCtkVJI8v++Lf7DyZRgtfa06CQNG+M4EwmoXt32j5BkWrm5gIeCav30Zn6Qa
+         6zYxBqPJdX04We78iNWuy2RsaNUkrufURHdUt+o0XvMwJqsIE0MxTf8ljHFHQ702zo3f
+         KLdpFnSxgXyLN5T9kEhmOBiIzmtG4XKYK5TciFi3fK0ObdQviFwC61EmtiyhoZG7yLXP
+         1ZzYXfpsNZTWOExzoBfT4At3hlklIPtsMr3kYfgsUSgi5jsQdkEB5O2eujgzjeaMN7n+
+         BNAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wWcvYvacvD8N8pcx60t/vSUQTr5iBONKiVXdnTKPElY=;
+        b=J5C0CxhQj2itzUf6AEP4e4N1w4/08AqyLqFQc6z7VHVFJ5ypPBqwgFqEAwosegcV4o
+         lw/92D+zmfiohnZhpsw2W2AIf6mK76JqfqaCWfkX8SDNYC8gsRG+telx/tWmr9Tlbd1r
+         Y8ltVbo5Ae5OyXZv9NodIexGJl+hpM8AzpH/4yw4o2dsud5EzZFP5vKgvowPsfWw0bQE
+         98bkqJ0hlaZ6OB4fu7cO20vkJ9zSFS/LME8VfQwHf2Zx9nYoSASW1GRaE+2v7ix6Rd/K
+         UztbX95E3s3TQiFMxubsOZTkTgj38G+5AWdSsfCz/F0dcuAZ6+pNEJByotVatYRpdvff
+         godQ==
+X-Gm-Message-State: AJIora/AdTKJCj/sAKzzJckagUeZEYHTAuRmdNZ2DcAAnHokGPeDhKul
+	ssx6JeN4jRzrktF0HUumF7LhmNzsxztfGy6TJ5BHyA==
+X-Google-Smtp-Source: AGRyM1tuHzXpJtx7yTkOQUhvNHpR+JwZ1+CpX+7GCj/1c16E9RRHBJO8NTioymnSxwYptVpdWinnRIR491eHxiEZsXA=
+X-Received: by 2002:a05:6214:d03:b0:473:7764:2ab with SMTP id
+ 3-20020a0562140d0300b00473776402abmr2519187qvh.119.1657559279665; Mon, 11 Jul
+ 2022 10:07:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220711163021.152578-1-nathan@kernel.org>
+In-Reply-To: <20220711163021.152578-1-nathan@kernel.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Mon, 11 Jul 2022 20:07:48 +0300
+Message-ID: <CAA8EJpoDe5-_jd-zDRsPV06QVah1266YT2fBSWYT7GSTR2K9wA@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gpucc-sm8350: Fix "initializer element is not
+ constant" error
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Konrad Dybcio <konrad.dybcio@somainline.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Robert Foss <robert.foss@linaro.org>, linux-arm-msm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/AsahiLinux/linux bluetooth-wip
-head:   988727c92ef6a0ae2c476c6f06676b63665c6059
-commit: 988727c92ef6a0ae2c476c6f06676b63665c6059 [8/8] Bluetooth: hci_bcm43xx: Add new driver for BCM43XX PCI boards
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220712/202207120005.X91mQhqU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/988727c92ef6a0ae2c476c6f06676b63665c6059
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bluetooth-wip
-        git checkout 988727c92ef6a0ae2c476c6f06676b63665c6059
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+On Mon, 11 Jul 2022 at 19:30, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> When building with clang or GCC older than 8, errors along the following
+> lines occur:
+>
+>   drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
+>           gpu_cc_parent,
+>           ^~~~~~~~~~~~~
+>   drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
+>           gpu_cc_parent,
+>           ^~~~~~~~~~~~~
+>   2 errors generated.
+>
+> The C standard allows an implementation to accept other forms of
+> constant expressions, which GCC 8+ has chosen to do, but it is not
+> required. To fix this error with clang and older supported versions of
+> GCC, use a macro so that the expression can be used in a designated
+> initializer.
+>
+> Fixes: 160758b05ab1 ("clk: qcom: add support for SM8350 GPUCC")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1660
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/clk/qcom/gpucc-sm8350.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/gpucc-sm8350.c b/drivers/clk/qcom/gpucc-sm8350.c
+> index d13fa813d190..9390723f6e40 100644
+> --- a/drivers/clk/qcom/gpucc-sm8350.c
+> +++ b/drivers/clk/qcom/gpucc-sm8350.c
+> @@ -51,9 +51,9 @@ static const struct alpha_pll_config gpu_cc_pll0_config = {
+>         .user_ctl_hi1_val = 0x00000000,
+>  };
+>
+> -static const struct clk_parent_data gpu_cc_parent = {
+> -       .fw_name = "bi_tcxo",
+> -};
+> +#define GPU_CC_PARENT_INIT { .fw_name = "bi_txco", }
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Please inline this macro. It adds no additional value in my opinion
 
-All errors (new ones prefixed by >>):
+> +
+> +static const struct clk_parent_data gpu_cc_parent = GPU_CC_PARENT_INIT;
+>
+>  static struct clk_alpha_pll gpu_cc_pll0 = {
+>         .offset = 0x0,
+> @@ -108,7 +108,7 @@ static const struct parent_map gpu_cc_parent_map_0[] = {
+>  };
+>
+>  static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+> -       gpu_cc_parent,
+> +       GPU_CC_PARENT_INIT,
+>         { .hw = &gpu_cc_pll0.clkr.hw },
+>         { .hw = &gpu_cc_pll1.clkr.hw },
+>         { .fw_name = "gcc_gpu_gpll0_clk_src" },
+> @@ -123,7 +123,7 @@ static const struct parent_map gpu_cc_parent_map_1[] = {
+>  };
+>
+>  static const struct clk_parent_data gpu_cc_parent_data_1[] = {
+> -       gpu_cc_parent,
+> +       GPU_CC_PARENT_INIT,
+>         { .hw = &gpu_cc_pll1.clkr.hw },
+>         { .fw_name = "gcc_gpu_gpll0_clk_src" },
+>         { .fw_name = "gcc_gpu_gpll0_div_clk_src" },
+>
+> base-commit: 0dd8e16bfbc003b009f843e75fae4046daa08fe9
+> --
+> 2.37.0
+>
 
-   drivers/bluetooth/hci_bcm43xx.c:1088:23: warning: unused variable 'bcm43xx' [-Wunused-variable]
-           struct bcm43xx_data *bcm43xx = hci_get_drvdata(hdev);
-                                ^
->> drivers/bluetooth/hci_bcm43xx.c:1280:8: error: incompatible pointer types passing '__le64 *' (aka 'unsigned long long *') to parameter of type 'dma_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-                               &bcm43xx->ctx->per_info_addr, GFP_KERNEL);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:550:15: note: passing argument to parameter 'dma_handle' here
-                   dma_addr_t *dma_handle, gfp_t gfp)
-                               ^
-   1 warning and 1 error generated.
-
-
-vim +1280 drivers/bluetooth/hci_bcm43xx.c
-
-  1256	
-  1257	static int bcm43xx_init_context(struct bcm43xx_data *bcm43xx)
-  1258	{
-  1259		struct device *dev = &bcm43xx->pdev->dev;
-  1260	
-  1261		bcm43xx->ctx = dmam_alloc_coherent(dev, sizeof(*bcm43xx->ctx),
-  1262						   &bcm43xx->ctx_dma, GFP_KERNEL);
-  1263		if (!bcm43xx->ctx)
-  1264			return -ENOMEM;
-  1265		memset(bcm43xx->ctx, 0, sizeof(*bcm43xx->ctx));
-  1266	
-  1267		bcm43xx->ring_state =
-  1268			dmam_alloc_coherent(dev, sizeof(*bcm43xx->ring_state),
-  1269					    &bcm43xx->ring_state_dma, GFP_KERNEL);
-  1270		if (!bcm43xx->ring_state)
-  1271			return -ENOMEM;
-  1272		memset(bcm43xx->ring_state, 0, sizeof(*bcm43xx->ring_state));
-  1273	
-  1274		bcm43xx->ctx->version = cpu_to_le16(1);
-  1275		bcm43xx->ctx->size = cpu_to_le16(sizeof(*bcm43xx->ctx));
-  1276		bcm43xx->ctx->enabled_caps = cpu_to_le16(2);
-  1277	
-  1278		// TODO: do we actually care about the contents here?
-  1279		dmam_alloc_coherent(&bcm43xx->pdev->dev, PAGE_SIZE,
-> 1280				    &bcm43xx->ctx->per_info_addr, GFP_KERNEL);
-  1281	
-  1282		bcm43xx->ctx->xfer_ring_heads_addr =
-  1283			bcm43xx->ring_state_dma +
-  1284			offsetof(struct bcm43xx_ring_state, xfer_ring_head);
-  1285		bcm43xx->ctx->xfer_ring_tails_addr =
-  1286			bcm43xx->ring_state_dma +
-  1287			offsetof(struct bcm43xx_ring_state, xfer_ring_tail);
-  1288		bcm43xx->ctx->completion_ring_heads_addr =
-  1289			bcm43xx->ring_state_dma +
-  1290			offsetof(struct bcm43xx_ring_state, completion_ring_head);
-  1291		bcm43xx->ctx->completion_ring_tails_addr =
-  1292			bcm43xx->ring_state_dma +
-  1293			offsetof(struct bcm43xx_ring_state, completion_ring_tail);
-  1294	
-  1295		bcm43xx->ctx->n_completion_rings =
-  1296			cpu_to_le16(BCM43XX_N_COMPLETION_RINGS);
-  1297		bcm43xx->ctx->n_xfer_rings = cpu_to_le16(BCM43XX_N_TRANSFER_RINGS);
-  1298	
-  1299		bcm43xx->ctx->control_completion_ring_addr =
-  1300			cpu_to_le64(bcm43xx->control_ack_ring.ring_dma);
-  1301		bcm43xx->ctx->control_completion_ring_n_entries =
-  1302			cpu_to_le16(bcm43xx->control_ack_ring.n_entries);
-  1303		bcm43xx->ctx->control_completion_ring_doorbell = cpu_to_le16(0xffff);
-  1304		bcm43xx->ctx->control_completion_ring_msi = 0;
-  1305		bcm43xx->ctx->control_completion_ring_header_size = 0;
-  1306		bcm43xx->ctx->control_completion_ring_footer_size = 0;
-  1307	
-  1308		bcm43xx->ctx->control_xfer_ring_addr =
-  1309			cpu_to_le64(bcm43xx->control_h2d_ring.ring_dma);
-  1310		bcm43xx->ctx->control_xfer_ring_n_entries =
-  1311			cpu_to_le16(bcm43xx->control_h2d_ring.n_entries);
-  1312		bcm43xx->ctx->control_xfer_ring_doorbell =
-  1313			cpu_to_le16(bcm43xx->control_h2d_ring.doorbell);
-  1314		bcm43xx->ctx->control_xfer_ring_msi = 0;
-  1315		bcm43xx->ctx->control_xfer_ring_header_size = 0;
-  1316		bcm43xx->ctx->control_xfer_ring_footer_size =
-  1317			bcm43xx->control_h2d_ring.payload_size / 4;
-  1318	
-  1319		return 0;
-  1320	}
-  1321	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With best wishes
+Dmitry
