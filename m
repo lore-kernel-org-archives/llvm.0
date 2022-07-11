@@ -1,39 +1,39 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0257153A4
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 23:02:02 +0000 (UTC)
-Received: by mail-pl1-f201.google.com with SMTP id z9-20020a170903018900b0016c39b2c1ffso3869137plg.12
-        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 16:02:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAA16AA3
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 23:24:19 +0000 (UTC)
+Received: by mail-pl1-f202.google.com with SMTP id a17-20020a170902ecd100b0016c012c4cf3so4615493plh.15
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6HZTXRLqo/8phSSGx4LtiryFoKC4QXTfVKLTgEMjAPM=;
-        b=o3liI5oKlmf3CRZ3JudkUyA+S45s1xuUjQgg4qUAgzbUSSujxg49gSp0NnUZkgYNbR
-         rHpUSfdNJjROD77RNYHlkBV5fo8d1/p8YdE1na4Ny48l+efsyWXQBNtnscRZExG1oYRb
-         qEZ4Sf/+/R9glUdZqMpAImdqO9UMG2fyRv1SCg5Fk5v7dPr5D9GPf0ghw9lOpDQ0Ft48
-         +fEFM56q6B9ddNI9k8LzGZGsf1q3f7tZHqkeGZZ1UICHTPTvG69YFHVOp8QKJz4PEn0W
-         Ta/uaowo7hlglqqOdTBFbdM70PUUhgFgKc1Vy6+Ddgl24GW5avbvTKjdiPgPGHYxTM2W
-         BkGg==
+        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
+        b=sCVKm48mz9thFPGiNjebj0f8Ux4GHLmdUiWrS5kfCfL7Skr7uUpfr7BCOZeTmn5G/q
+         l4q/M5QlFd9IjG111yuY+KY+3tkSuhKAMd++FE4a6dm8KwA+Xu+cDNQIqm2v7Ktc1H7X
+         cgaHSVeIKa/TrMlyRILF+DLaQhCQFDTPfjTwHGQTrD31hw5XI56K6ANsyMRI17TISxPu
+         lKy3I3qWsmop7UvoliD1b2lAxEItNWmXCgUY5mTyI2hoBVvOtBmM6WASGpGxuDcgihZB
+         OEbIY9duvztNj5VbFLdgpBm3DelWHxpS+MbfmeswjLA1Atu0KvuIiqe9jNUhtf1zfnpw
+         SV7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6HZTXRLqo/8phSSGx4LtiryFoKC4QXTfVKLTgEMjAPM=;
-        b=sCrhsERJnSicSBDr6JmVFSVEBlrsoqpEizqluFTwWD4CMnoE5JI22d87AdMdq3wDAe
-         XxxYSgxAY91HJovWrIHOHXDY5suq24vFRGobJNsHjCnOu9N42ajN4hbUKIaBnseBjXMH
-         FCHMeCmMplP5p1q2z1kSr1MjcGT11BnHcJxvRRXhO0j9s73f7gp+Pj5BitR6QPxn6MLO
-         S/Z0AHpWJwAw/2SteFYqW7c/ZIsB05IIgl5iO5tV2ZHG0RAWXjMDGFnOxOAx/uWMA8Qw
-         aRIT/kG7HTUHKFbC5TRTGFbBl4cHDilBthh3FmoufYq1Ot1CT9wP+rPwqP/+X69J9Vwn
-         tzpQ==
-X-Gm-Message-State: AJIora95+snnQNjfxJuwWsQh5kv1I1spJoLfGeVtDkQpE2HC/ZewKG83
-	Y3t4yg61TX08+eauVBa5uUV1YQalfvXpidYxCA==
-X-Google-Smtp-Source: AGRyM1s8GAUw6oJb4kdKctccEL9cc/33sTeAzDqLpBI9KS5As9yYb495GOej4rAX/0fCqnwT+cLLAWkWWXzBrvAh8w==
+        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
+        b=RFW7H34bCGMKJlPJnjunEeB3kLjvwhWFLRFqI922C9MQ2NxpQ7EYrGdkE1cjaGQx6H
+         9BX1sn/TaK1INkcyY4Ca2j58dc+DcPl/8O15xw9gR5ea5FGGO0+y9DjuAXualLWZICiX
+         I1Q9+8HV5n7BLWuIKdGjWG97Bm2cSvVmdWtnyW57rEUx9X41AxJEwOBjwIOIWqV7EMcz
+         46svgCMvm+ZrpC1jpXfBD8zdgd3gH7i+EImiFiC5np0oFcVMCf4e8852irfUMwzfaXWc
+         Z8+kznoHeqcM71pcKC4BKnSxB0EikDUOiJyp320TJOcpKOEl1kX1IA48IHX/4+MJBJ+G
+         FN2w==
+X-Gm-Message-State: AJIora/FGSWJjJDLADX+awuO76o94meMsX+hvtUQHAuI4od75dIZ78md
+	zdQsvjmdVMtz6zdTOVWzOv7ID92Z4naD9EQJYw==
+X-Google-Smtp-Source: AGRyM1urqIouEsnUe5KdWsxfF/hyxCnwf9BX7/8Ikk+sg+vUOJng3563UFtUsVQar7sVaOqBBGg/XKztAe8jRDsNPA==
 X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
- (user=justinstitt job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP
- id t9-20020a17090a024900b001e0a8a33c6cmr31669pje.0.1657580522068; Mon, 11 Jul
- 2022 16:02:02 -0700 (PDT)
-Date: Mon, 11 Jul 2022 16:01:48 -0700
-Message-Id: <20220711230148.2130871-1-justinstitt@google.com>
+ (user=justinstitt job=sendgmr) by 2002:a05:6a00:1946:b0:52a:e551:2241 with
+ SMTP id s6-20020a056a00194600b0052ae5512241mr1307184pfk.29.1657581859475;
+ Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
+Date: Mon, 11 Jul 2022 16:24:04 -0700
+Message-Id: <20220711232404.2189257-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,33 +41,30 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH] ntb: idt: fix clang -Wformat warnings
+Subject: [PATCH] qlogic: qed: fix clang -Wformat warnings
 From: Justin Stitt <justinstitt@google.com>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>, 
-	Allen Hubbe <allenbh@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, ntb@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
+To: Ariel Elior <aelior@marvell.com>, Manish Chopra <manishc@marvell.com>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 When building with Clang we encounter these warnings:
-| drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type
-| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-| "\t%hhu-%hhu.\t", idx + cnt - 1);
+| drivers/net/ethernet/qlogic/qed/qed_dev.c:416:30: error: format
+| specifies type 'char' but the argument has type 'u32' (aka 'unsigned
+| int') [-Werror,-Wformat] i);
 -
-| drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type
-| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-| "\t%hhu-%hhu.\t", idx + cnt - 1);
--
-| drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type
-| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat], src);
+| drivers/net/ethernet/qlogic/qed/qed_dev.c:630:13: error: format
+| specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
+| p_llh_info->num_ppfid - 1);
 
-For the first two warnings the format specifier used is `%hhu` which
-describes a u8. Both `idx` and `cnt` are u8 as well. However, the
-expression as a whole is promoted to an int as you cannot get
-smaller-than-int from addition. Therefore, to fix the warning, use the
-promoted-to-type's format specifier -- in this case `%d`.
+For the first warning, `i` is a u32 which is much wider than the format
+specifier `%hhd` describes. This results in a loss of bits after 2^7.
+
+The second warning involves implicit integer promotion as the resulting
+type of addition cannot be smaller than an int.
 
 example:
 ``
@@ -76,9 +73,6 @@ int size = sizeof(a + b - 1);
 printf("%d\n", size);
 // output: 4
 ```
-
-For the last warning, src is of type `int` while the format specifier
-describes a u8. The fix here is just to use the proper specifier `%d`.
 
 See more:
 (https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
@@ -90,45 +84,31 @@ otherwise, it is converted to an unsigned int."
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
-Note: This patch silences the -Wformat warnings for this file (which is
-the goal) but in reality all instances of `%hh[dux]` should be converted
-to `%[dux]` for this file and probably every file. That's a bit larger
-scope than the goal of enabling -Wformat for Clang builds, though.
+ drivers/net/ethernet/qlogic/qed/qed_dev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/ntb/hw/idt/ntb_hw_idt.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
-index 733557231ed0..0ed6f809ff2e 100644
---- a/drivers/ntb/hw/idt/ntb_hw_idt.c
-+++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
-@@ -2406,7 +2406,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
- 				"\t%hhu.\t", idx);
- 		else
- 			off += scnprintf(strbuf + off, size - off,
--				"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-+				"\t%hhu-%d.\t", idx, idx + cnt - 1);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+index 672480c9d195..d61cd32ec3b6 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+@@ -412,7 +412,7 @@ static int qed_llh_alloc(struct qed_dev *cdev)
+ 			continue;
  
- 		off += scnprintf(strbuf + off, size - off, "%s BAR%hhu, ",
- 			idt_get_mw_name(data), ndev->mws[idx].bar);
-@@ -2435,7 +2435,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
- 					"\t%hhu.\t", idx);
- 			else
- 				off += scnprintf(strbuf + off, size - off,
--					"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-+					"\t%hhu-%d.\t", idx, idx + cnt - 1);
- 
- 			off += scnprintf(strbuf + off, size - off,
- 				"%s BAR%hhu, ", idt_get_mw_name(data),
-@@ -2480,7 +2480,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
- 		int src;
- 		data = idt_ntb_msg_read(&ndev->ntb, &src, idx);
- 		off += scnprintf(strbuf + off, size - off,
--			"\t%hhu. 0x%08x from peer %hhu (Port %hhu)\n",
-+			"\t%hhu. 0x%08x from peer %d (Port %hhu)\n",
- 			idx, data, src, ndev->peers[src].port);
+ 		p_llh_info->ppfid_array[p_llh_info->num_ppfid] = i;
+-		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %hhd\n",
++		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %u\n",
+ 			   p_llh_info->num_ppfid, i);
+ 		p_llh_info->num_ppfid++;
  	}
- 	off += scnprintf(strbuf + off, size - off, "\n");
+@@ -626,7 +626,7 @@ static int qed_llh_abs_ppfid(struct qed_dev *cdev, u8 ppfid, u8 *p_abs_ppfid)
+ 
+ 	if (ppfid >= p_llh_info->num_ppfid) {
+ 		DP_NOTICE(cdev,
+-			  "ppfid %d is not valid, available indices are 0..%hhd\n",
++			  "ppfid %d is not valid, available indices are 0..%d\n",
+ 			  ppfid, p_llh_info->num_ppfid - 1);
+ 		*p_abs_ppfid = 0;
+ 		return -EINVAL;
 -- 
 2.37.0.144.g8ac04bfd2-goog
 
