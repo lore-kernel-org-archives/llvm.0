@@ -1,85 +1,119 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-qt1-f193.google.com (mail-qt1-f193.google.com [209.85.160.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87F64420
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:11:18 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-31c89c753b3so49869957b3.5
-        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:11:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155174420
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:19:35 +0000 (UTC)
+Received: by mail-qt1-f193.google.com with SMTP id y3so7679600qtv.5
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:19:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=37XjpwINbIdCZOixjlZ7DvCc9OsQ74PUxXtDLJLAMo4=;
-        b=IGiyhqhxriPnKAgqV311rQDmdO12mi2/guaqtzz3mgBzIbpqRQMHf7uelOX72j4nGc
-         MYbky0QOOv8+y7b5C9oVG4vxM7XJDppT1Sx+Un/13hdgwUdPIF/wuesJYIrsSNdOxEhC
-         3jZAR38HwfyjjdawLFfgrHZmGHp5crwHTY5xWVXsHgsHTQ9qgwCUOIrCBscNWnKCIrRr
-         9tqXJG4uZSX+5Ug0rC1T3GoYb6pMwZGFpZ0upBjcRHXeKd+KunH/etzIhdbD+9mYUhU8
-         7kBkGn8xR8SDxMHYd+GgA35EdNby72zVXx92yrj7VpYLw0WXVlrl6H1KbTFBVgSZHQwh
-         ZEfA==
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=e6nsFOxZnzPb9Fg1eVEUYJR+YSdsd9tr+jTyGytdjgk=;
+        b=hixRA94QJlnFy6oD28fznNLUmKLxYaMovgs+rkwhe9Q4kwVJFHUs6nRXwpxGXR3g5S
+         a3i3Qunf2o9loKGAaKP8bODyDHKyqO+8/lmm2MUIF/w4LDQKSdrYfwUUeGuV2NoSNksE
+         9jVvxO0LD4nN5ueoG3+K8SDGPTqc0Mw/yPtOw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=37XjpwINbIdCZOixjlZ7DvCc9OsQ74PUxXtDLJLAMo4=;
-        b=R7qFWlkPF4c/m5eGaH1216YoglWTJYcQgMTxkxmfPIMWHsEuAbjitoOVqc9oAxOVJS
-         Fy17X8rsI+3qyXa74w3oUcawO7josW4gyEF2l7vjmE6qJDmqDeJx23V2uXxhxgO54b2J
-         QWlFNFn8D/PgjLKjHmsHaHg9vUpzNmTGDXWbVARTjgRD11k7zecsf1UFAofIp9vjUOp4
-         c92BopPl7NYY8z5HCz1NyLjs/kWm84ttxbj0jisNHGUYBbpkDwLb0BjBSQSk+4IwPfMx
-         EItvh7UpnDxlecePcjNhCV9s3mQSZle4wwW8fYAX1EnK2RfZJjZv8klweN/vwxZQZXey
-         t1cQ==
-X-Gm-Message-State: AJIora91WgoGxgA/nnyk5SAh2tfzo5rQkQJn6b3OLDH+w7iAVE3q1B32
-	dILoeNUQctPwMyHmUnFhu7bzdh909oVow2ian+g=
-X-Google-Smtp-Source: AGRyM1t3o9MGllrJmYwYsI6Eh1blY0EaoLJloeGoMm8iXYkkrvr9JNskwbGliGv3yrbPrkQJtDpHenoxX1qKCva3hq4=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:1f7d:643f:d86b:d30])
- (user=ndesaulniers job=sendgmr) by 2002:a81:998e:0:b0:31c:3c64:ceae with SMTP
- id q136-20020a81998e000000b0031c3c64ceaemr20750431ywg.494.1657563077827; Mon,
- 11 Jul 2022 11:11:17 -0700 (PDT)
-Date: Mon, 11 Jul 2022 11:10:58 -0700
-Message-Id: <20220711181101.1559558-1-ndesaulniers@google.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=e6nsFOxZnzPb9Fg1eVEUYJR+YSdsd9tr+jTyGytdjgk=;
+        b=rUlZVocbLW5RdHz4OgmzN4RB1TUMPena/HI8ocecWNkD2tPIalIrsMX7uWt7PlBeIH
+         ODKsB4i5imn5qvw9M+g1Trasrjmv3t8te+IvYyDKUVVU5I0a+yTDGt+kNcTQavI9TsMg
+         DbWR/niZE6+FHyRq6Gp1jS3GxzuxS9Jm/A6nE76ipNVHPX/Woe1HRwhnPerfx1C7wn1f
+         a5Om6bBHGPC1Ysvb2eIM33+q3jYSIPj5ynzIc9J08esity3TWFHNRVCZJSlfxFJxBcsb
+         8gDShe9IzbXUVBtAaQeqRCJMMvFrUQa2szrlqfWS/lqi82qc2paD4LM6a8qU+IbFhZ7e
+         i9ng==
+X-Gm-Message-State: AJIora8sZKyI4i4HqQ+eVCUJeXyD8kUnp7sokLQSffw91MO0vp5mW04O
+	bA/d1BAmZjKw7nPhkk+lDBLJ6g==
+X-Google-Smtp-Source: AGRyM1vflDx9HvWERfjB8kjC3JSmSBi3Bpo+ts1BGakRNUmrDwK+VCNbX6CUmO+UCyh08bHwdhVjig==
+X-Received: by 2002:ac8:5a91:0:b0:31e:a602:a189 with SMTP id c17-20020ac85a91000000b0031ea602a189mr14037334qtc.552.1657563574845;
+        Mon, 11 Jul 2022 11:19:34 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-245.dsl.bell.ca. [209.226.106.245])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006aedb35d8a1sm7325234qko.74.2022.07.11.11.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 11:19:34 -0700 (PDT)
+Date: Mon, 11 Jul 2022 14:19:33 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: postmaster@kernel.org, clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [sysadmin] Fwd: Bouncing messages from llvm@lists.linux.dev
+Message-ID: <20220711181933.rcukzsnabiiowy7p@meerkat.local>
+References: <1657492202-18435-mlmmj-51d729a7@lists.linux.dev>
+ <CAFP8O3+Lw0wKfWY-VA+tuAnVcjyN17E=yk6-VU5WcWG1xdH+UA@mail.gmail.com>
+ <CAKwvOd=u=77MQwFeyaBbc2T0JXSESKRDNrFtiaTTuRcm6K1BPg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657563058; l=1024;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=UwBPgIcopp176p+9NLELYyArInZxsbOzJt598/EPZHw=;
- b=FFllqwq8yPj+R6TWOEXNM/20Ih2vUuarPXeoC0vRo+LhfHMzE6uno3y1ovfyYPHNKok9IN7Pha/J
- vN/MdOtbBo/XF1PjkbttYs3NzLl3ApI8dCvX6b/3/k3hGvH9ArdI
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH] Documentation/process: Add embargoed HW contact for LLVM
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Darren Hart <darren@os.amperecomputing.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=u=77MQwFeyaBbc2T0JXSESKRDNrFtiaTTuRcm6K1BPg@mail.gmail.com>
 
-Should the need for toolchain mitigations ever be necessary, add a group
-for toolchain ambassadors.
+On Mon, Jul 11, 2022 at 10:54:34AM -0700, 'Nick Desaulniers' via Systems Administrators wrote:
+> Hi Post Master,
+> Any idea what's up with the below message?
+> 
+> To Fangrui, it sounded like his patch wasn't delivered to our list but
+> the message Fangrui sent was indeed posted.
+> https://lore.kernel.org/llvm/20220710071117.446112-1-maskray@google.com/
+> 
+> Can the error be reworded possibly to elucidate what's going on?
 
-Add Nick Desaulniers as LLVM's ambassador for the embargoed hardware
-issues process.
+This happens in a rare case when we mistakenly allow a spam message through,
+which is this one:
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Documentation/process/embargoed-hardware-issues.rst | 3 +++
- 1 file changed, 3 insertions(+)
+https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzettait.com/
 
-diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
-index 95999302d279..48bd249d96b9 100644
---- a/Documentation/process/embargoed-hardware-issues.rst
-+++ b/Documentation/process/embargoed-hardware-issues.rst
-@@ -264,6 +264,9 @@ an involved disclosed party. The current ambassadors list:
- 
-   Amazon
-   Google	Kees Cook <keescook@chromium.org>
-+
-+  GCC
-+  LLVM		Nick Desaulniers <ndesaulniers@google.com>
-   ============= ========================================================
- 
- If you want your organization to be added to the ambassadors list, please
--- 
-2.37.0.144.g8ac04bfd2-goog
+when we tried to deliver this message to maskray@google.com, Google's spam
+filters rejected it, so we got back a bounce. When this happens, mlmmj follows
+up with a probe email to make sure the address is still valid, which is the
+message you received.
 
+This behaviour is indeed a bit confusing, but it's not about the mail you sent
+out, just the spam your MX refused to receive.
+
+HTH,
+Konstantin
+
+> 
+> ---------- Forwarded message ---------
+> From: Fangrui Song <maskray@google.com>
+> Date: Mon, Jul 11, 2022 at 10:36 AM
+> Subject: Fwd: Bouncing messages from llvm@lists.linux.dev
+> To: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> 
+> ---------- Forwarded message ---------
+> From: <llvm+owner@lists.linux.dev>
+> Date: Sun, Jul 10, 2022 at 3:30 PM
+> Subject: Bouncing messages from llvm@lists.linux.dev
+> To: <maskray@google.com>
+> 
+> 
+> Greetings!
+> 
+> This is the mlmmj program managing the <llvm@lists.linux.dev> mailing list.
+> 
+> Some messages to you could not be delivered. If you're seeing this
+> message it means things are back to normal, and it's merely for your
+> information.
+> 
+> Here is the list of the bounced messages:
+> - 11406
+> 
+> 
+> 
+> 
+> --
+> 宋方睿
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
