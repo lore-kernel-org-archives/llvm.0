@@ -1,378 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F94B4420
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657563709;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=l/sYZ6xtvsR4HzTQTxF0xthRyUtDJfHW8z+G55nKd4s=;
-	b=NfH+hV7Awv9XKTKuuK+X55FbFETlmeByARza61GYx00CrWFEFmV50FPbOsWi2nVYFYLQeq
-	FUtLCTp+/gh+wgJ+FoDzJT8VQ/63Pcb7aP/lt8naAikRxqdp2UPatXWuOu2emfpOhGI6H9
-	zH1OTtQ3iFNsSQXBbRWFPyZAb/0Gejo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-yR3NQWiXOwiB2f9P1Rlbkg-1; Mon, 11 Jul 2022 14:21:47 -0400
-X-MC-Unique: yR3NQWiXOwiB2f9P1Rlbkg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FF8E1C00ACA
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:21:47 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.34.251])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7D53E1121314;
-	Mon, 11 Jul 2022 18:21:47 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (11/492 SKIPPED): Test report for d9cdc3b1
- (mainline.kernel.org-clang)
-Date: Mon, 11 Jul 2022 18:21:44 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52311FA6
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:30:44 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id t25so10113637lfg.7
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W6rHtwTB0NR34ZrWFPTYwR9rMJ2eE52/aL3ngs7eeXg=;
+        b=NAqlwqGBo+69LcmrUq/XxSCfYkEWFm5FlpgxueWSHhEjIaFD/BDj6j9L+VTm95GR0O
+         gnQJp81msbhNvbN06Nk6L4TOS4XCOkZ4knLOacK0G2tY2Jdw3u6eYFIdgBEEhL4goQY6
+         qJ9xoMic6x1yQmeenrGSFdDYheecCfShH78VlTwp4otHIpPoS2NvRzxJuL5Wy9gSpDoz
+         gIU4oe6rOJkbQiQhA57TLrTeqJNJvAEWALBVjk8oyzXiTZMPbZPvLX4f2Hiiwv1AXAPn
+         0/q1DP/oa790bCMZrySnSRL/9pjfDUdloVDzwKEnOWrbKLGOog7YdlJJNZLXOQrckxPo
+         yOQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W6rHtwTB0NR34ZrWFPTYwR9rMJ2eE52/aL3ngs7eeXg=;
+        b=Eyil9REZCdouWdRhZfoaPjMJ1G8LYcCbIKrIoC14VBI9kk5EMX7OCGF9YT6ccgTw5D
+         EzGD9jvaXn+R+p5tqV4FKWiR471p3NUAH2KH6pCkkacwU8v69HUc89Rpn039YIlBdTt/
+         gJwZt1K0ypzJjd2YrOkYiB4pUjkbkmQ+0hB/DtZ5r4N9Ok1AILD1OoSoGjv4JMl6cRje
+         TuxlXi3992kopbjf4gRNZuZoPw3zoEsFH8mJ9Ajs4c0GjDNpciWNywBoE/cNEeXfimtd
+         xTd8F+2+xwvrIrILKlecjIWM4qQ3RQJ2G6DzoZMMGx6zDMLb8LyMZddNMMX32yNuinGC
+         9Cqw==
+X-Gm-Message-State: AJIora9ZrHrICycNdNl9GqIHjxvieB91RYItBv3C/z9M0nrjzvJX4rma
+	netV8NUm/3mUG7v3oJY9PKARd6Si5EeC3w0ilrZvgQ==
+X-Google-Smtp-Source: AGRyM1uk9pHlmfUEizNMvHuz+4LalVLSTKQ6858614s9zcmQcAzVyJNsiGJlYrL4tR1HFXuESEtl722aQ3auPgX7sro=
+X-Received: by 2002:ac2:4c46:0:b0:489:e93c:69b with SMTP id
+ o6-20020ac24c46000000b00489e93c069bmr724646lfk.403.1657564242829; Mon, 11 Jul
+ 2022 11:30:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <46311.122071114214701317@us-mta-511.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <1657492202-18435-mlmmj-51d729a7@lists.linux.dev>
+ <CAFP8O3+Lw0wKfWY-VA+tuAnVcjyN17E=yk6-VU5WcWG1xdH+UA@mail.gmail.com>
+ <CAKwvOd=u=77MQwFeyaBbc2T0JXSESKRDNrFtiaTTuRcm6K1BPg@mail.gmail.com> <20220711181933.rcukzsnabiiowy7p@meerkat.local>
+In-Reply-To: <20220711181933.rcukzsnabiiowy7p@meerkat.local>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 11 Jul 2022 11:30:31 -0700
+Message-ID: <CAKwvOdmPjCWo0kjfUEamH+bBbeBK09nDcZzyKSr1ze+sVbUvcA@mail.gmail.com>
+Subject: Re: [sysadmin] Fwd: Bouncing messages from llvm@lists.linux.dev
+To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc: postmaster@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Jul 11, 2022 at 11:19 AM Konstantin Ryabitsev
+<konstantin@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 11, 2022 at 10:54:34AM -0700, 'Nick Desaulniers' via Systems =
+Administrators wrote:
+> > Hi Post Master,
+> > Any idea what's up with the below message?
+> >
+> > To Fangrui, it sounded like his patch wasn't delivered to our list but
+> > the message Fangrui sent was indeed posted.
+> > https://lore.kernel.org/llvm/20220710071117.446112-1-maskray@google.com=
+/
+> >
+> > Can the error be reworded possibly to elucidate what's going on?
+>
+> This happens in a rare case when we mistakenly allow a spam message throu=
+gh,
+> which is this one:
+>
+> https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzett=
+ait.com/
+>
+> when we tried to deliver this message to maskray@google.com, Google's spa=
+m
+> filters rejected it, so we got back a bounce. When this happens, mlmmj fo=
+llows
+> up with a probe email to make sure the address is still valid, which is t=
+he
+> message you received.
+>
+> This behaviour is indeed a bit confusing, but it's not about the mail you=
+ sent
+> out, just the spam your MX refused to receive.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Cool, thanks for the explanation.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Any chance the error message could say something like:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/47437
+The message at
+https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzettai=
+t.com/
+could not be delivered to you; it may be spam but you might want to verify.
 
-One or more kernel tests failed:
+Since I suspect the message id will be in the lore URL?
 
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - Boot test
-                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
- filename '/devices/mc0'
-                          http://lists.infradead.org/pipermail/linux-arm-ke=
-rnel/2022-June/750380.html
-         aarch64 - LTP - commands
-                   Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' fail=
-ed, not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1249
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         aarch64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-         ppc64le - AMTU (Abstract Machine Test Utility)
-                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
-AIL
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1162
-         ppc64le - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         ppc64le - trace: ftrace/tracer
-                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
-error: No such device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/803
-         ppc64le - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         ppc64le - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         ppc64le - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-           s390x - LTP - commands
-                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/972
-                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1251
-                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
-not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1264
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - kselftest build - net
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - kselftest build - bpf
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - kselftests upstream - net
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - forwarding
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - tc
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - bpf
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - bpf_test_progs
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-          x86_64 - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - kselftests upstream - net
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - forwarding
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - tc
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - bpf
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
-          x86_64 - kselftests upstream - bpf_test_progs
-                   Issue: kselftests: fail to install bpftool-5.19.0-rc5
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1263
+>
+> HTH,
+> Konstantin
+>
+> >
+> > ---------- Forwarded message ---------
+> > From: Fangrui Song <maskray@google.com>
+> > Date: Mon, Jul 11, 2022 at 10:36 AM
+> > Subject: Fwd: Bouncing messages from llvm@lists.linux.dev
+> > To: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> >
+> > ---------- Forwarded message ---------
+> > From: <llvm+owner@lists.linux.dev>
+> > Date: Sun, Jul 10, 2022 at 3:30 PM
+> > Subject: Bouncing messages from llvm@lists.linux.dev
+> > To: <maskray@google.com>
+> >
+> >
+> > Greetings!
+> >
+> > This is the mlmmj program managing the <llvm@lists.linux.dev> mailing l=
+ist.
+> >
+> > Some messages to you could not be delivered. If you're seeing this
+> > message it means things are back to normal, and it's merely for your
+> > information.
+> >
+> > Here is the list of the bounced messages:
+> > - 11406
+> >
+> >
+> >
+> >
+> > --
+> > =E5=AE=8B=E6=96=B9=E7=9D=BF
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Thanks,
+~Nick Desaulniers
