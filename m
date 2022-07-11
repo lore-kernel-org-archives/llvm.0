@@ -1,136 +1,185 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB001849
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 01:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11FA1C3B
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 05:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657503131; x=1689039131;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sB3iQbeUOie1kOd/vhD8O01k5FoLybA9xZ5Z8ht/6v0=;
-  b=XGQYKvCrZYGOMmiMSTl3LvKDOcExude97W62PZZ5CxORe9UV9FqS+ZrY
-   3GrkfOGcxSzcl0rPKcuPMj1iLZ2XkTB1cpkcR0F2fSns9WLgC64Z2oMLj
-   S0odQBiB4SkvKOqbJ8kNfaiaPuq8y8ZrgPSJRPZO0ASiONivSzrrpG9M7
-   Ow+jfhDrS61uSNaJ024L0Cu+uD2ccOSZT3AQpFi84mVZQ4xwZWKwfBlgW
-   G1MJ1sgZCh7b4BhR2spPf9u/+dlFqli1YssXlpjAbHjPp7i6xEC1yEbF8
-   pyJCO8Af1EOMxP806/fbraxlDbmtE9z5GznaTFABsCKjG5/Mte0BZVNkd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="310156684"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="310156684"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 18:32:08 -0700
+  t=1657517718; x=1689053718;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=R1N2LYQ3qh5Dq/vXVLASWRAWmxcB+ZLyY5e7k5Tm7To=;
+  b=j7QTHPtrlliRTRH3EG4amTDZ/5S2ZokJr5pZDdaZVEz4gz5clxA6ppOH
+   duMlH37E5mQnCxqQIOcJ+t/Iz+P31C5AUQIZeqIVEiahaRsgrC5pK9d1o
+   2FK95mJbmqZ71XTFWtWAtf7eqZS3SG+pAlwQMN+/KSy3Aq79/F3LCRVMm
+   QYAxu6DhAoFfovmY009u9jYPLW9r1GxuW4eicNV3Ps0ZCWzOi5KsPjPIL
+   YWnZuVwC58Ezf85QHsWSuA8CFphNQxZaejfwhNHQSKfL+TDMFHflSWxfL
+   Jk4/etc/liej9a0XfXEiAltWGaODMz3XPBAfYwVXPJSfbJfI8aU1VlJo6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282130813"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="282130813"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 22:35:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="921610211"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="662421271"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jul 2022 18:32:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2022 22:35:16 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oAiHO-0000A3-Ls;
-	Mon, 11 Jul 2022 01:32:06 +0000
-Date: Mon, 11 Jul 2022 09:31:52 +0800
+	id 1oAm4i-0000TM-0x;
+	Mon, 11 Jul 2022 05:35:16 +0000
+Date: Mon, 11 Jul 2022 13:34:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matteo Croce <mcroce@microsoft.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Subject: [esmil:visionfive 4/50] arch/riscv/lib/string.c:154:7: error:
- redefinition of '__memset'
-Message-ID: <202207110842.bZK9H8Xt-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [alobakin:xdp_hints 20/52]
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2553:3: error: call to
+ undeclared function 'xdp_set_data_meta_invalid'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202207111325.Zy0bi2Yw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/esmil/linux visionfive
-head:   943858df470556d0b7f3b31fcc10931603f0f3cc
-commit: bdf1612f166c6ff3822236aa35c1497449fe7d35 [4/50] riscv: optimized memset
-config: riscv-randconfig-r033-20220710 (https://download.01.org/0day-ci/archive/20220711/202207110842.bZK9H8Xt-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
+tree:   https://github.com/alobakin/linux xdp_hints
+head:   e9f4215398901c2e3f477da53abc668ce7b7e320
+commit: 62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4 [20/52] net, xdp: move XDP metadata helpers into new xdp_meta.h
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220711/202207111325.Zy0bi2Yw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/bdf1612f166c6ff3822236aa35c1497449fe7d35
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout bdf1612f166c6ff3822236aa35c1497449fe7d35
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/alobakin/linux/commit/62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4
+        git remote add alobakin https://github.com/alobakin/linux
+        git fetch --no-tags alobakin xdp_hints
+        git checkout 62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/ drivers/net/ethernet/freescale/dpaa/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   arch/riscv/lib/string.c:90:57: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-                                                           ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:90:7: error: redefinition of '__memcpy'
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-         ^
-   arch/riscv/include/asm/string.h:21:31: note: expanded from macro 'memcpy'
-   #define memcpy(dst, src, len) __memcpy(dst, src, len)
-                                 ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:113:58: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-                                                            ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:97:7: note: previous definition is here
-   void *__memmove(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:113:7: error: redefinition of '__memmove'
-   void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-         ^
-   arch/riscv/include/asm/string.h:23:32: note: expanded from macro 'memmove'
-   #define memmove(dst, src, len) __memmove(dst, src, len)
-                                  ^
-   arch/riscv/lib/string.c:97:7: note: previous definition is here
-   void *__memmove(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:154:44: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memset(void *s, int c, size_t count) __weak __alias(__memset);
-                                              ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:116:7: note: previous definition is here
-   void *__memset(void *s, int c, size_t count)
-         ^
->> arch/riscv/lib/string.c:154:7: error: redefinition of '__memset'
-   void *memset(void *s, int c, size_t count) __weak __alias(__memset);
-         ^
-   arch/riscv/include/asm/string.h:22:25: note: expanded from macro 'memset'
-   #define memset(s, c, n) __memset(s, c, n)
-                           ^
-   arch/riscv/lib/string.c:116:7: note: previous definition is here
-   void *__memset(void *s, int c, size_t count)
-         ^
-   3 warnings and 3 errors generated.
+>> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2553:3: error: call to undeclared function 'xdp_set_data_meta_invalid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   xdp_set_data_meta_invalid(&xdp);
+                   ^
+>> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2567:19: error: call to undeclared function 'xdp_data_meta_unsupported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   *xdp_meta_len = xdp_data_meta_unsupported(&xdp) ? 0 :
+                                   ^
+   2 errors generated.
 
 
-vim +/__memset +154 arch/riscv/lib/string.c
+vim +/xdp_set_data_meta_invalid +2553 drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
 
-   153	
- > 154	void *memset(void *s, int c, size_t count) __weak __alias(__memset);
+d57e57d0cd04be Camelia Groza          2020-11-25  2525  
+86c0c196cbe48f Camelia Groza          2020-11-25  2526  static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
+d57e57d0cd04be Camelia Groza          2020-11-25  2527  			struct dpaa_fq *dpaa_fq, unsigned int *xdp_meta_len)
+86c0c196cbe48f Camelia Groza          2020-11-25  2528  {
+86c0c196cbe48f Camelia Groza          2020-11-25  2529  	ssize_t fd_off = qm_fd_get_offset(fd);
+86c0c196cbe48f Camelia Groza          2020-11-25  2530  	struct bpf_prog *xdp_prog;
+d57e57d0cd04be Camelia Groza          2020-11-25  2531  	struct xdp_frame *xdpf;
+86c0c196cbe48f Camelia Groza          2020-11-25  2532  	struct xdp_buff xdp;
+86c0c196cbe48f Camelia Groza          2020-11-25  2533  	u32 xdp_act;
+a1e031ffb422bb Camelia Groza          2020-11-25  2534  	int err;
+86c0c196cbe48f Camelia Groza          2020-11-25  2535  
+86c0c196cbe48f Camelia Groza          2020-11-25  2536  	xdp_prog = READ_ONCE(priv->xdp_prog);
+547aabcac3251c Toke Høiland-Jørgensen 2021-06-24  2537  	if (!xdp_prog)
+86c0c196cbe48f Camelia Groza          2020-11-25  2538  		return XDP_PASS;
+86c0c196cbe48f Camelia Groza          2020-11-25  2539  
+43b5169d8355cc Lorenzo Bianconi       2020-12-22  2540  	xdp_init_buff(&xdp, DPAA_BP_RAW_SIZE - DPAA_TX_PRIV_DATA_SIZE,
+43b5169d8355cc Lorenzo Bianconi       2020-12-22  2541  		      &dpaa_fq->xdp_rxq);
+be9df4aff65f18 Lorenzo Bianconi       2020-12-22  2542  	xdp_prepare_buff(&xdp, vaddr + fd_off - XDP_PACKET_HEADROOM,
+be9df4aff65f18 Lorenzo Bianconi       2020-12-22  2543  			 XDP_PACKET_HEADROOM, qm_fd_get_length(fd), true);
+86c0c196cbe48f Camelia Groza          2020-11-25  2544  
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2545  	/* We reserve a fixed headroom of 256 bytes under the erratum and we
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2546  	 * offer it all to XDP programs to use. If no room is left for the
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2547  	 * xdpf backpointer on TX, we will need to copy the data.
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2548  	 * Disable metadata support since data realignments might be required
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2549  	 * and the information can be lost.
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2550  	 */
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2551  #ifdef CONFIG_DPAA_ERRATUM_A050385
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2552  	if (unlikely(fman_has_errata_a050385())) {
+ae680bcbd06ae9 Camelia Groza          2020-11-25 @2553  		xdp_set_data_meta_invalid(&xdp);
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2554  		xdp.data_hard_start = vaddr;
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2555  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2556  	}
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2557  #endif
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2558  
+86c0c196cbe48f Camelia Groza          2020-11-25  2559  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
+86c0c196cbe48f Camelia Groza          2020-11-25  2560  
+86c0c196cbe48f Camelia Groza          2020-11-25  2561  	/* Update the length and the offset of the FD */
+86c0c196cbe48f Camelia Groza          2020-11-25  2562  	qm_fd_set_contig(fd, xdp.data - vaddr, xdp.data_end - xdp.data);
+86c0c196cbe48f Camelia Groza          2020-11-25  2563  
+86c0c196cbe48f Camelia Groza          2020-11-25  2564  	switch (xdp_act) {
+86c0c196cbe48f Camelia Groza          2020-11-25  2565  	case XDP_PASS:
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2566  #ifdef CONFIG_DPAA_ERRATUM_A050385
+ae680bcbd06ae9 Camelia Groza          2020-11-25 @2567  		*xdp_meta_len = xdp_data_meta_unsupported(&xdp) ? 0 :
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2568  				xdp.data - xdp.data_meta;
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2569  #else
+86c0c196cbe48f Camelia Groza          2020-11-25  2570  		*xdp_meta_len = xdp.data - xdp.data_meta;
+ae680bcbd06ae9 Camelia Groza          2020-11-25  2571  #endif
+d57e57d0cd04be Camelia Groza          2020-11-25  2572  		break;
+d57e57d0cd04be Camelia Groza          2020-11-25  2573  	case XDP_TX:
+d57e57d0cd04be Camelia Groza          2020-11-25  2574  		/* We can access the full headroom when sending the frame
+d57e57d0cd04be Camelia Groza          2020-11-25  2575  		 * back out
+d57e57d0cd04be Camelia Groza          2020-11-25  2576  		 */
+d57e57d0cd04be Camelia Groza          2020-11-25  2577  		xdp.data_hard_start = vaddr;
+d57e57d0cd04be Camelia Groza          2020-11-25  2578  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
+d57e57d0cd04be Camelia Groza          2020-11-25  2579  		xdpf = xdp_convert_buff_to_frame(&xdp);
+d57e57d0cd04be Camelia Groza          2020-11-25  2580  		if (unlikely(!xdpf)) {
+d57e57d0cd04be Camelia Groza          2020-11-25  2581  			free_pages((unsigned long)vaddr, 0);
+d57e57d0cd04be Camelia Groza          2020-11-25  2582  			break;
+d57e57d0cd04be Camelia Groza          2020-11-25  2583  		}
+d57e57d0cd04be Camelia Groza          2020-11-25  2584  
+d57e57d0cd04be Camelia Groza          2020-11-25  2585  		if (dpaa_xdp_xmit_frame(priv->net_dev, xdpf))
+d57e57d0cd04be Camelia Groza          2020-11-25  2586  			xdp_return_frame_rx_napi(xdpf);
+d57e57d0cd04be Camelia Groza          2020-11-25  2587  
+a1e031ffb422bb Camelia Groza          2020-11-25  2588  		break;
+a1e031ffb422bb Camelia Groza          2020-11-25  2589  	case XDP_REDIRECT:
+a1e031ffb422bb Camelia Groza          2020-11-25  2590  		/* Allow redirect to use the full headroom */
+a1e031ffb422bb Camelia Groza          2020-11-25  2591  		xdp.data_hard_start = vaddr;
+a1e031ffb422bb Camelia Groza          2020-11-25  2592  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
+a1e031ffb422bb Camelia Groza          2020-11-25  2593  
+a1e031ffb422bb Camelia Groza          2020-11-25  2594  		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+a1e031ffb422bb Camelia Groza          2020-11-25  2595  		if (err) {
+a1e031ffb422bb Camelia Groza          2020-11-25  2596  			trace_xdp_exception(priv->net_dev, xdp_prog, xdp_act);
+a1e031ffb422bb Camelia Groza          2020-11-25  2597  			free_pages((unsigned long)vaddr, 0);
+a1e031ffb422bb Camelia Groza          2020-11-25  2598  		}
+86c0c196cbe48f Camelia Groza          2020-11-25  2599  		break;
+86c0c196cbe48f Camelia Groza          2020-11-25  2600  	default:
+c8064e5b4adac5 Paolo Abeni            2021-11-30  2601  		bpf_warn_invalid_xdp_action(priv->net_dev, xdp_prog, xdp_act);
+86c0c196cbe48f Camelia Groza          2020-11-25  2602  		fallthrough;
+86c0c196cbe48f Camelia Groza          2020-11-25  2603  	case XDP_ABORTED:
+86c0c196cbe48f Camelia Groza          2020-11-25  2604  		trace_xdp_exception(priv->net_dev, xdp_prog, xdp_act);
+86c0c196cbe48f Camelia Groza          2020-11-25  2605  		fallthrough;
+86c0c196cbe48f Camelia Groza          2020-11-25  2606  	case XDP_DROP:
+86c0c196cbe48f Camelia Groza          2020-11-25  2607  		/* Free the buffer */
+86c0c196cbe48f Camelia Groza          2020-11-25  2608  		free_pages((unsigned long)vaddr, 0);
+86c0c196cbe48f Camelia Groza          2020-11-25  2609  		break;
+86c0c196cbe48f Camelia Groza          2020-11-25  2610  	}
+86c0c196cbe48f Camelia Groza          2020-11-25  2611  
+86c0c196cbe48f Camelia Groza          2020-11-25  2612  	return xdp_act;
+86c0c196cbe48f Camelia Groza          2020-11-25  2613  }
+86c0c196cbe48f Camelia Groza          2020-11-25  2614  
+
+:::::: The code at line 2553 was first introduced by commit
+:::::: ae680bcbd06ae9189e0102f8cdb5fd938b00725f dpaa_eth: implement the A050385 erratum workaround for XDP
+
+:::::: TO: Camelia Groza <camelia.groza@nxp.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
