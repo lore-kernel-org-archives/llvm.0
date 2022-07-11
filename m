@@ -1,95 +1,85 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20C24692
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 19:32:11 +0000 (UTC)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31bf3656517so59490857b3.12
-        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 12:32:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254A64692
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 19:44:18 +0000 (UTC)
+Received: by mail-ej1-f42.google.com with SMTP id l23so10567877ejr.5
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 12:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=c1Cx5iQ53pL7HiSekvxBvkLFnjl+EdINP714DV+6Thc=;
-        b=VGbgzTZgTZX/2WZ+zac2xcxgBOwMdDpG9pYD+JVrSpuVQ5DymsCz/HaW+V8a96bHUv
-         RUe2GR1Rf+1rw0q4fOwXBiytVFtBcai/HJT3+MsFcLE3QV+HIeDlOJX1BuktRmNk9qeE
-         BT01HWEFL+5GIktnzk97krULC0/b3iATNOja9ZRNCcLiB/eGN9Dm/nCl9jrCHwvsqgPb
-         sv0ttnd98xmeybPn74vKnLywP5tcqPFDwhWRH+wN6g0wFu0p+lSeNMVLt+SnheDXyFT+
-         QNexh42MKBMRF4SUGRr4c1jj8QKiQFpyuJyXP98lN1kcD1Fe1Vpgj11dZ8nLzCAkshMA
-         ClHg==
+        bh=BwEDVdKbnbZtn9p0uC93yaXB5Vwp4sXmO/V6mgJc1hE=;
+        b=Opt4AN70UWDNIKd9DrhmzqMlFdNVINRChnpwp92hsWrOpZvBTfEZJN7paVV3K1qBFM
+         7OZBpDZMglnQFlcLjrZ9pDfXTkdTQoUzuP0Hz6eUeQux4XKzh2WKfUasuN2gSwWsHLep
+         DzWiJVcrraZfXmxMQGs9Pb2Y/u1AF7nC4xlTKtrnqEUhJhoVIbnrdnqPX2Iy3Rfk7bXT
+         5SFxJySXeTvn6G4IFMg7HMX+a9tR0UjYWpLwPE3Q0biZEU0kBbtVAuQNo8jYH7ImbN+0
+         PlwWct+os2RQ50ZmFHtlRB1eot1RVM7cLSdtJgMbb737jfzbRmo5RVd/r5jq5syWOwH8
+         K+ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c1Cx5iQ53pL7HiSekvxBvkLFnjl+EdINP714DV+6Thc=;
-        b=rbWb6sPcMi4hJ53SdGJVzI6+bLUEzaSGl2dGkaUlLOgFs9UGQkxoXEn4qjp+YsS477
-         Kmerju+UmG9iC1zSYgsAOKUWXoAWXOnncPZXYZ8esEPSdszC5JadTiY8PUdmeX5fAPkR
-         QHKPz4q2xWl1/FW2EPKNGUHBlkuOVzb+0jTs/EByBf8XoCDJgp/cnj4bYOPdd+ZsWV6u
-         9EoPDS0A8zIfyrSze6hFEKCje+c1IY05rPkL4B25bFOA5Hh/rxQFBDIgACXSusPQjF6F
-         SdvKa2RqcJWuvNipIVXmlguHosimoMYh0g5dLPyUoJVPyXQZroAAqxTuVGkbX06Vo5p9
-         GcUA==
-X-Gm-Message-State: AJIora+6JEnT7cj6XubvfgM+gzp+xgAFL7rJueJCB/lincujUyO7M9SJ
-	GiLwTZsfQq1IhDnKjzC91QFwSrHbgheePo7Gzux2vw==
-X-Google-Smtp-Source: AGRyM1tnA2ak+GWWf/mQNTQkis9L/nmlb5vokwYVfajiT4hmUTR6TfOY26PDc7uxn6KxN/uUrRr2coYj3+eh/ESYER0=
-X-Received: by 2002:a81:3984:0:b0:31c:b59e:a899 with SMTP id
- g126-20020a813984000000b0031cb59ea899mr21304958ywa.195.1657567930561; Mon, 11
- Jul 2022 12:32:10 -0700 (PDT)
+        bh=BwEDVdKbnbZtn9p0uC93yaXB5Vwp4sXmO/V6mgJc1hE=;
+        b=cnG1zTG5AfKwBdmbt3eXae7jFkIG3TuWepDK44DYtyKIf8uVCvR7U4vvsXyeip5+Hl
+         3Fb00sDaiMBF71wQ5KtvwnVoDGxaI7IrKfbgom/VelUHKRmksT8usD919ZKlR8D6cSJ8
+         j83PVcCSF7rWgXmb626bcl1itwjvNTxfjmnclUHFJkskUzXK3lQC7IdUMZ9MYmZGUlMW
+         2xi5iUR/zELFrQOjaP1Nm27Kp5/nh4thB6t9OVHpUlV+Ren52FvqrXKBqoj8Uiy5Vitr
+         ND8PVNJPvXLgOPX9KWZKtLq5tlxxD6bsB+RKsD1bwqPpwm2874Lr2meW73eH6z17ekmo
+         ieqA==
+X-Gm-Message-State: AJIora+y5qsBpG0vtrNtqteGt3KDsuG726QD4/DsuqHm4qEjty1shlsP
+	JabNeSlXIB1mF5KE920ZKMj2H+92TauwXNIwWr7+2Q==
+X-Google-Smtp-Source: AGRyM1tHofXUqkdW7BnM1C245t2ran6VcnZvUJuKy6J7zLT7nKrsoMbm7F1S99ufXtKPsrkkFHcy/q7Q5UPlTaovmsk=
+X-Received: by 2002:a17:907:60cc:b0:72b:40a8:a5b with SMTP id
+ hv12-20020a17090760cc00b0072b40a80a5bmr11795359ejc.379.1657568656253; Mon, 11
+ Jul 2022 12:44:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1657492202-18435-mlmmj-51d729a7@lists.linux.dev>
- <CAFP8O3+Lw0wKfWY-VA+tuAnVcjyN17E=yk6-VU5WcWG1xdH+UA@mail.gmail.com>
- <CAKwvOd=u=77MQwFeyaBbc2T0JXSESKRDNrFtiaTTuRcm6K1BPg@mail.gmail.com>
- <20220711181933.rcukzsnabiiowy7p@meerkat.local> <CAKwvOdmPjCWo0kjfUEamH+bBbeBK09nDcZzyKSr1ze+sVbUvcA@mail.gmail.com>
- <20220711192719.qryq35epoko2jeii@meerkat.local> <CAKwvOdkmy47RKjp8KeTN8L-y4jS-MtzyCCwoiBkAWHTDSixXXw@mail.gmail.com>
-In-Reply-To: <CAKwvOdkmy47RKjp8KeTN8L-y4jS-MtzyCCwoiBkAWHTDSixXXw@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Mon, 11 Jul 2022 12:31:59 -0700
-Message-ID: <CAFP8O3LTKizPJnGdtkTY8TQ+FjwCHd-b2oP8GDCEMKneRh83xA@mail.gmail.com>
-Subject: Re: [sysadmin] Fwd: Bouncing messages from llvm@lists.linux.dev
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, postmaster@kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+References: <20220707191745.840590-1-justinstitt@google.com> <YsvniilEnfUOd+yk@salvia>
+In-Reply-To: <YsvniilEnfUOd+yk@salvia>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 11 Jul 2022 12:44:05 -0700
+Message-ID: <CAFhGd8qDwoWLTJEGtap3s2_+AOLdnSg57DO8VgoMrqDtcFY7qQ@mail.gmail.com>
+Subject: Re: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 11, 2022 at 12:30 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Mon, Jul 11, 2022 at 2:04 AM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
 >
-> On Mon, Jul 11, 2022 at 12:27 PM Konstantin Ryabitsev
-> <konstantin@linuxfoundation.org> wrote:
+> On Thu, Jul 07, 2022 at 12:17:45PM -0700, Justin Stitt wrote:
+> > diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
+> > index 459d0696c91a..5d74abffc94f 100644
+> > --- a/net/netfilter/xt_TPROXY.c
+> > +++ b/net/netfilter/xt_TPROXY.c
+> > @@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+> >                  targets on the same rule yet */
+> >               skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
 > >
-> > On Mon, Jul 11, 2022 at 11:30:31AM -0700, Nick Desaulniers wrote:
-> > > Any chance the error message could say something like:
-> > >
-> > > The message at
-> > > https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzettait.com/
-> > > could not be delivered to you; it may be spam but you might want to verify.
+> > -             pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> > +             pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> >                        tproto, &iph->saddr, ntohs(hp->source),
+> >                        laddr, ntohs(lport), skb->mark);
 > >
-> > Unfortunately, mlmmj doesn't give me access to the message-id of the bouncing
-> > message (see http://mlmmj.org/docs/readme-listtexts/).
+> > @@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+> >               return NF_ACCEPT;
+> >       }
 > >
-> > I will tweak the wording to offer a bit more explanation, though, something
-> > like:
-> >
-> >     Some messages to you could not be delivered. This usually happens if we
-> >     have accepted a spam message that is being rejected by your mail host when
-> >     we try to deliver it, but may also be due to other reasons. Please review
-> >     the public list archives to check if you are missing any legitimate mail.
-> >
-> >     If you're seeing this message it usually means that things are back to
-> >     normal and no further action is required from you.
-> >
-> >     Here is the list of the bounced messages:
-> >     - %bouncenumbers%
-> >
-> > -K
+> > -     pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> > +     pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
+> >                tproto, &iph->saddr, ntohs(hp->source),
+> >                &iph->daddr, ntohs(hp->dest), skb->mark);
 >
-> LGTM; thanks Konstantin!
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-LGTM. Thanks!
+> Could you instead send a patch to remove these pr_debug calls?
+Do you mean all Instances of pr_debug in `xt_TPROXY.c` (of which there
+are six) or just these two specific cases @ +169 and +177.
+> Thanks.
