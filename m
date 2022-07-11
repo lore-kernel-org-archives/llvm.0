@@ -1,48 +1,104 @@
-Received: from absceraw.gazzettait.com (absceraw.gazzettait.com [45.141.237.93])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC032561
-	for <llvm@lists.linux.dev>; Sun, 10 Jul 2022 21:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=gazzettait.com;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=mar.ste@gazzettait.com;
- bh=WUPTBNCY7DKAhAMRCEhYI8mxbak=;
- b=SRDnGra1gSNZQcqMKy8HrVd+UtTzMu6L5xO2qXSvAxm4Z7mFoMpN6ijpJBUuV4eDv13SoX4JYUZt
-   5h1j39gHJ9aif1hNuY6Y7BlAg4GNp+MmcxMc+ncRGH3IUvfwXMUpTOrtrXWGu4TlsgLr84TQk+O3
-   dvVAkgGqs5OZjG9+v+ZuYQiKDg0gCCiB/z4UAT9LtucI7pfDCipHlUWjpEavxNCUciqaYM7ugO90
-   ingYULoPPF1c+uu1Oxk+dBWpoU9ejx4K2MtYKJ6yIICaQpdDiVfzJgM2aKGRoxDVWR9dyjZE8dcs
-   VCra6OhtqNrOq1qFEgOx3748gVWSlCg00peMZg==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=gazzettait.com;
- b=ZjHzB4mRo9cXFR/vqHuUgy2hxaH4jN8gFBiCvZyL9sNVzEZNhIUnWMegqyKtlaXPe/gPTTCzkF5x
-   MtaOF+kwWZKxhGGXngwFbPfrnyR/wL8Ho7zsrJ7oldXuKcpIYbZEKiga8u0Zhs67BWrqi4Ek7CpU
-   LpX6wQvLl2Nr0HPeKEktOzQ++t2SeV//zeGjlPDub/Q6fVzwMn/r4WsONNY3YZiXlLXDciNL1SXv
-   QnucgpDiwQrzHZ9NfW4+Lu6vCKhBLIAOgHJigrWwnmpQXch/o1Pka1SdqnqHjmKxlu1TZlytygKU
-   Zl7WOq9NldgJ4P2+Te2OfrZ8bwr2VYYNu//uRQ==;
-Content-Type: text/plain; charset="iso-8859-1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B19D1360
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 00:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=2XKbdPJjnxVplVpIW0prOE5SMVdMJp4Cpi9zvSg2mgQ=; b=UkEhP6uA3PGlJ5MzM0WCIlpRQ6
+	7LzZR50E9K+rf3H2brNn7tlRR1aJFoZ/S22jmHR3b9jwAWBBBSo5Y1SJiE/xleeZKmjfkfDg+h1mH
+	+jWWsgDpD0XMnll5fN7AAs7pKlXHRTlQVfAikSyhSf7vpdpvONQbt7TJsDW83AdWPn3hCft0t8jNO
+	HGCCfusjZW7rwcMGbCv+BFsmh2c6dU60PqewycFhZ3sf3uZP+9iI0ix2RpC/qh0pKeOOIby6ItMJ7
+	p0/qZYckJttsJZ3Hl2RMKMQlt5mPq/+ZJ8ExIoz51lrmPTOp34B2lPN21Vfb5BASPORXcwlejeIqn
+	JjswkT9Q==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+	by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oAhBW-00Eg6K-O0; Mon, 11 Jul 2022 00:21:58 +0000
+Message-ID: <fdd9bf58-4b9e-8843-c669-9550ada614c5@infradead.org>
+Date: Sun, 10 Jul 2022 17:21:55 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Proposition 
-To: llvm@lists.linux.dev
-From: "Julio" <mar.ste@gazzettait.com>
-Date: Sun, 10 Jul 2022 14:54:13 -0700
-Reply-To: juliobol@laboragt.com
-Message-ID: <0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzettait.com>
-
-Good Day
-
-I'm Julio Bologna, working with A Laboratories UK Ltd as a research consult=
-ant..
-
-I have a business proposal that would interest you on this, Kindly contact =
-me for full details. bologjulio@gmail.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: ld.lld: error: undefined symbol: omap_set_dma_priority
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-fbdev@vger.kernel.org
+References: <202207080322.DnumSqh8-lkp@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202207080322.DnumSqh8-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
 
-Thank you.
-Regards
-Julio Bologna
+On 7/7/22 12:17, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   e8a4e1c1bb697b1d9fc48f0e56dc0f50bc024bee
+> commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+> date:   5 weeks ago
+> config: arm-randconfig-r035-20220706 (https://download.01.org/0day-ci/archive/20220708/202207080322.DnumSqh8-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 7036440eab3e2d47a775d4616909f8235488d714
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: omap_set_dma_priority
+>    >>> referenced by omapfb_main.c:1706 (drivers/video/fbdev/omap/omapfb_main.c:1706)
+>    >>>               video/fbdev/omap/omapfb_main.o:(omapfb_do_probe) in archive drivers/built-in.a
+
+(also happens with gcc)
+
+Discrepancy between arch/arm/Kconfig and arch/arm/mach-omap1/{Kconfig,Makefile},
+drivers/video/fbdev/omap/Kconfig, and <linux/omap-dma.h>.
+
+Kernel .config has
+
+CONFIG_ARCH_OMAP1=y
+# CONFIG_ARCH_OMAP730 is not set
+# CONFIG_ARCH_OMAP850 is not set
+# CONFIG_ARCH_OMAP16XX is not set
+CONFIG_ARCH_OMAP=y
+
+FB_OMAP_DMA_TUNE depends on FB_OMAP, which
+depends on ARCH_OMAP1 || (ARM && COMPILE_TEST), all of which are 'y'.
+
+<linux/omap-dma.h> expects omap_set_dma_priority() to be defined
+elsewhere (not inline) for this .config:
+
+#if defined(CONFIG_ARCH_OMAP1)
+extern void omap_set_dma_priority(int lch, int dst_port, int priority);
+#else
+static inline void omap_set_dma_priority(int lch, int dst_port, int priority)
+{
+}
+#endif
+
+but arch/arm/mach-omap1/Makefile only builds omap-dma.o for
+ifdef CONFIG_ARCH_OMAP1_ANY, which is not set.
+
+
+-- 
+~Randy
