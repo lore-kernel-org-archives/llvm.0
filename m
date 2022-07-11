@@ -1,163 +1,108 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516F81FA6
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:35:09 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id t25so10130725lfg.7
-        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:35:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAB11FA6
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 18:44:17 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so9208712pjl.5
+        for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 11:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AqqveFmjBsc4u/9rgTbLZUZ6Shr0vBwqgbZ9HY8BvP0=;
-        b=BsfiPdcppREkrn9AC5kkVy991DSbOiOn+QxPCfVyiL1InhbgHkYd8uX2KxWHIqdri+
-         vJIDc1VwZ7wQYYg+AjQQ94qGdHrPXOeEAloQ8RBTboX5nWzvyG2eAPd+zzpSCa5WHs8Z
-         OhxKbTXhZ9k/xhfe4De+1UkzKC4Vxo2iCa6xYGzyitsN5qNUTtyl3tTyRZjN+/+MY3Ho
-         U11DWObm9bnQRQp/TQMbIosda/O22Co9OXkUreN4QJofsNFYLuM9Ly834UhDmt8B3bqp
-         XAXU0mXSU8rkLvV3CiT6eGfRfxRp6w7X/u/AaLDoVcO82P/TY4y7gRXm5xcRQ5AZCXCz
-         wmFw==
+         :cc;
+        bh=J7LwcaH/4ZJxBfsg6OaMDgqa4Pbc62u2OyXlJzlw9do=;
+        b=ntwjDY2nSfK73KyfSvT+W/5MoQK5AetF8XDSAEBubzlKS5FLSZ8UMwit+blTxvyUrr
+         rz5Mbirtp81JlJDNuwDSU/t4vhlr4kVvmyjnDUu2ydqFXFKZ5Ug3dPxIWPMPzC5YSyav
+         uvz09n2HmfJ3DqNVucEs3MImOhYyNhWCe0nCG5IcXc1cHxGbXghcmjSoZbMYKCcPrzIv
+         VlnyCF5kbFhdbS4pEi3I4aNwvTgmECtAaTCI3MCUBtjK2yL7mKpPW+hTrouqpyi+oDN3
+         VDSa5LG6aSr4CjYnk+lpAkQh71lLoPy2GkoEknygs68bF2yzu462J4NuhWLM6f7gkD+G
+         uHWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AqqveFmjBsc4u/9rgTbLZUZ6Shr0vBwqgbZ9HY8BvP0=;
-        b=r21oYeclQ3E3Q2nyK+E2mQcaNway9cQ6I3ksc3PRaoat+81M93kw66chLwsnxBOeQ7
-         yua02eKkwwcpRjPjSeBzWkq3amOUxNYdOyxnXqpstKBMdLa5KyvKUW1p1M2V9u3Z/LyD
-         FAX2thjxH+1EqmvGKnqUcSa4ChE5htAegeWuaXLve5T6kPEHh9z6RaiH33JL5paaFI8c
-         uwLp983uqK6VNmgnr8b7G0mmwZUr+3eLBOn+RD5d/gpArZ0wPvaLLUjSAq4KTPskwKTi
-         Xmx5FjJ4+Eeqjfu73GhrTYOKJya64Me3tWnBIOQZuNDmq2yIfGmk3rUbAIyUJ0KxvTk9
-         T85g==
-X-Gm-Message-State: AJIora/qvINMT+k7vPO2D+73Evane8X0j2dpoip44c2F7ua2fyg9r+cX
-	uQ41qWazIUzgdyF2i7ZH8cxl3RGMGuqNwGgJoN8MZQ==
-X-Google-Smtp-Source: AGRyM1vknHWkoCQQCV+s/LUJYhUQBw4Gh+iSAFaczxcs4dnNxQW3c1f5S9e/EkHIXv5AbWkC9WNuC3f7HaOIFcvlzoQ=
-X-Received: by 2002:a05:6512:308b:b0:489:32f8:426c with SMTP id
- z11-20020a056512308b00b0048932f8426cmr13195433lfd.270.1657564507156; Mon, 11
- Jul 2022 11:35:07 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=J7LwcaH/4ZJxBfsg6OaMDgqa4Pbc62u2OyXlJzlw9do=;
+        b=M22NXHKiB/uKbhDwzQlYkFLIQiXe9Ao3MO9PzGzaw5cPslWHR0s5m+WKLHLm2EAtjs
+         MmvoGIG0L3V55whPqb6D83n3HBs/B9EsyMG/ILbL77JOAKLwEgkXRa1Z52j7yasRsgEx
+         ItyXYeT0Xq6t8BgwUHmmxwJS5At5kwc7/Y6PCTAufKEIJXV6QuyutT/jOrQu5cPWlVEO
+         fsCIcffbWrnkabDe8tBHqvOGjIfFRQqW0s54FBWmsAnLMt+ZXUJ/K+Pfdv6Vzd2vam70
+         K4lQVZ2c8C/zUSTKRo6gRUIs6V271i9CthY1zz0QDnDSf6wFvmN6sDnRQYlBXUf76RrF
+         JJwQ==
+X-Gm-Message-State: AJIora8W405hlxgYnmWXcb5AQQf31Szu0y+l6kVF6Ypdc6yrTF/RiMtG
+	xm5WNuwyjAAhbZxPTlp9tIqFkALklrgapOAIc4dUTg==
+X-Google-Smtp-Source: AGRyM1tfGXlm4xazcR7kvzTtVPgwxkaCg9LijfWYSCwwHrXilEf9eTDcbeFIk4hpupUm+gcikEf33SSuxEzSJWEpb4Y=
+X-Received: by 2002:a17:903:1111:b0:16a:acf4:e951 with SMTP id
+ n17-20020a170903111100b0016aacf4e951mr19787208plh.72.1657565057412; Mon, 11
+ Jul 2022 11:44:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1657492202-18435-mlmmj-51d729a7@lists.linux.dev>
- <CAFP8O3+Lw0wKfWY-VA+tuAnVcjyN17E=yk6-VU5WcWG1xdH+UA@mail.gmail.com>
- <CAKwvOd=u=77MQwFeyaBbc2T0JXSESKRDNrFtiaTTuRcm6K1BPg@mail.gmail.com>
- <20220711181933.rcukzsnabiiowy7p@meerkat.local> <CAKwvOdmPjCWo0kjfUEamH+bBbeBK09nDcZzyKSr1ze+sVbUvcA@mail.gmail.com>
-In-Reply-To: <CAKwvOdmPjCWo0kjfUEamH+bBbeBK09nDcZzyKSr1ze+sVbUvcA@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Mon, 11 Jul 2022 11:34:55 -0700
-Message-ID: <CAFP8O3JtxmwWSxTen-G3d8sZ68uCCk+_EEk75pJ2S+-RmAEssw@mail.gmail.com>
-Subject: Re: [sysadmin] Fwd: Bouncing messages from llvm@lists.linux.dev
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>, postmaster@kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+References: <202207100408.3Fsr7rOp-lkp@intel.com>
+In-Reply-To: <202207100408.3Fsr7rOp-lkp@intel.com>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Mon, 11 Jul 2022 11:44:06 -0700
+Message-ID: <CAKH8qBsadO3=RhEnd-=wd783XiErUorozW09rNKnnRmGCZqTwQ@mail.gmail.com>
+Subject: Re: [linux-next:master 5835/8914] ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_current
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Linux Memory Management List <linux-mm@kvack.org>, Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau <kafai@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 11, 2022 at 11:30 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Sat, Jul 9, 2022 at 1:07 PM kernel test robot <lkp@intel.com> wrote:
 >
-> On Mon, Jul 11, 2022 at 11:19 AM Konstantin Ryabitsev
-> <konstantin@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 10:54:34AM -0700, 'Nick Desaulniers' via System=
-s Administrators wrote:
-> > > Hi Post Master,
-> > > Any idea what's up with the below message?
-> > >
-> > > To Fangrui, it sounded like his patch wasn't delivered to our list bu=
-t
-> > > the message Fangrui sent was indeed posted.
-> > > https://lore.kernel.org/llvm/20220710071117.446112-1-maskray@google.c=
-om/
-> > >
-> > > Can the error be reworded possibly to elucidate what's going on?
-> >
-> > This happens in a rare case when we mistakenly allow a spam message thr=
-ough,
-> > which is this one:
-> >
-> > https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazze=
-ttait.com/
-> >
-> > when we tried to deliver this message to maskray@google.com, Google's s=
-pam
-> > filters rejected it, so we got back a bounce. When this happens, mlmmj =
-follows
-> > up with a probe email to make sure the address is still valid, which is=
- the
-> > message you received.
-> >
-> > This behaviour is indeed a bit confusing, but it's not about the mail y=
-ou sent
-> > out, just the spam your MX refused to receive.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   f2528c29385819a84480cacef4886b049761e2c5
+> commit: 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e [5835/8914] bpf: per-cgroup lsm flavor
+> config: arm64-randconfig-r013-20220708 (https://download.01.org/0day-ci/archive/20220710/202207100408.3Fsr7rOp-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 69fd337a975c7e690dfe49d9cb4fe5ba1e6db44e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 >
-> Cool, thanks for the explanation.
-
-Thanks, too. The bounce from the spam happened to be delivered to my
-mailbox few hours after I posted the patch, so I got confused :)
-
-> Any chance the error message could say something like:
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 >
-> The message at
-> https://lore.kernel.org/llvm/0.0.3.735.1D894A7973BDB9A.0@absceraw.gazzett=
-ait.com/
-> could not be delivered to you; it may be spam but you might want to verif=
-y.
-
-The wording looks great!
-
-> Since I suspect the message id will be in the lore URL?
+> All errors (new ones prefixed by >>):
 >
-> >
-> > HTH,
-> > Konstantin
-> >
-> > >
-> > > ---------- Forwarded message ---------
-> > > From: Fangrui Song <maskray@google.com>
-> > > Date: Mon, Jul 11, 2022 at 10:36 AM
-> > > Subject: Fwd: Bouncing messages from llvm@lists.linux.dev
-> > > To: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > >
-> > > ---------- Forwarded message ---------
-> > > From: <llvm+owner@lists.linux.dev>
-> > > Date: Sun, Jul 10, 2022 at 3:30 PM
-> > > Subject: Bouncing messages from llvm@lists.linux.dev
-> > > To: <maskray@google.com>
-> > >
-> > >
-> > > Greetings!
-> > >
-> > > This is the mlmmj program managing the <llvm@lists.linux.dev> mailing=
- list.
-> > >
-> > > Some messages to you could not be delivered. If you're seeing this
-> > > message it means things are back to normal, and it's merely for your
-> > > information.
-> > >
-> > > Here is the list of the bounced messages:
-> > > - 11406
-> > >
-> > >
-> > >
-> > >
-> > > --
-> > > =E5=AE=8B=E6=96=B9=E7=9D=BF
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > > ~Nick Desaulniers
->
->
+> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_current
+>    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+>    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+>    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+>    >>> referenced 1 more times
+> --
+> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_socket
+>    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+>    >>> referenced by bpf_lsm.c:0 (kernel/bpf/bpf_lsm.c:0)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: __cgroup_bpf_run_lsm_sock
+>    >>> referenced by bpf_lsm.c:65 (kernel/bpf/bpf_lsm.c:65)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
+>    >>> referenced by bpf_lsm.c:65 (kernel/bpf/bpf_lsm.c:65)
+>    >>> bpf/bpf_lsm.o:(bpf_lsm_find_cgroup_shim) in archive kernel/built-in.a
 >
 > --
-> Thanks,
-> ~Nick Desaulniers
->
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
+More esoteric configurations:
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+CONFIG_BPF_LSM=y
+# CONFIG_CGROUP_BPF is not set
+
+Will fix it sometime this week along with the other warning about unused 'args'.
