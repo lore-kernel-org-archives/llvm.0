@@ -1,55 +1,109 @@
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B2B1FCE
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 09:12:38 +0000 (UTC)
-Date: Mon, 11 Jul 2022 11:04:10 +0200
-From: Pablo Neira Ayuso <pablo@netfilter.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] netfilter: xt_TPROXY: fix clang -Wformat warnings:
-Message-ID: <YsvniilEnfUOd+yk@salvia>
-References: <20220707191745.840590-1-justinstitt@google.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74E11FCE
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 09:25:25 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9865415BF;
+	Mon, 11 Jul 2022 02:25:25 -0700 (PDT)
+Received: from [10.57.43.82] (unknown [10.57.43.82])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3E43F73D;
+	Mon, 11 Jul 2022 02:25:22 -0700 (PDT)
+Message-ID: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
+Date: Mon, 11 Jul 2022 10:25:20 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220707191745.840590-1-justinstitt@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
+ not supported
+Content-Language: en-US
+To: Vince Weaver <vincent.weaver@maine.edu>,
+ Andrew Kilroy <andrew.kilroy@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220704145333.22557-1-andrew.kilroy@arm.com>
+ <20220704145333.22557-3-andrew.kilroy@arm.com>
+ <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 07, 2022 at 12:17:45PM -0700, Justin Stitt wrote:
-> diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
-> index 459d0696c91a..5d74abffc94f 100644
-> --- a/net/netfilter/xt_TPROXY.c
-> +++ b/net/netfilter/xt_TPROXY.c
-> @@ -169,7 +169,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
->  		   targets on the same rule yet */
->  		skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
->  
-> -		pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-> +		pr_debug("redirecting: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
->  			 tproto, &iph->saddr, ntohs(hp->source),
->  			 laddr, ntohs(lport), skb->mark);
->  
-> @@ -177,7 +177,7 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
->  		return NF_ACCEPT;
->  	}
->  
-> -	pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-> +	pr_debug("no socket, dropping: proto %d %pI6:%hu -> %pI6:%hu, mark: %x\n",
->  		 tproto, &iph->saddr, ntohs(hp->source),
->  		 &iph->daddr, ntohs(hp->dest), skb->mark);
 
-Could you instead send a patch to remove these pr_debug calls?
 
-Thanks.
+On 06/07/2022 17:01, Vince Weaver wrote:
+> On Mon, 4 Jul 2022, Andrew Kilroy wrote:
+> 
+>> A subsequent patch alters perf to perf_event_open with the
+>> PERF_SAMPLE_ARCH_1 bit on.
+>>
+>> This patch deals with the case where the kernel does not know about the
+>> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
+>> authentication masks.  In this case the perf_event_open system call
+>> returns -EINVAL (-22) and perf exits with an error.
+>>
+>> This patch causes userspace process to re-attempt the perf_event_open
+>> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
+>> field, allowing the perf_event_open system call to succeed.
+> 
+> So in this case you are leaking ARM64-specific info into the generic 
+> perf_event_open() call?  Is there any way the kernel could implement this 
+> without userspace having to deal with the issue?
+
+Hi Vince,
+
+The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
+and then it's not Arm specific, it's just that only Arm implements it for now.
+This is definitely an option.
+
+But if no platform ever implements something similar then that bit is wasted.
+The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
+But as you say, maybe making it arch specific isn't the right way either.
+
+I wouldn't say the perf_event_open call is currently generic though, lots of
+it already requires knowledge of the current platform, and searching for 'x86'
+in the docs for it gives 10 matches.
+
+> 
+> There are a few recent ARM64 perf_event related patches that are pushing 
+> ARM specific interfaces into the generic code, with the apparent 
+> assumption that it will just be implemented in the userspace perf tool.  
+> However there are a number of outside-the-kernel codebases that also use 
+> perf_event_open() and it seems a bit onerous if all of them have to start 
+> adding a lot of extra ARM64-specific code, especially because as far as I 
+
+Because pointer auth is a hardware feature, other tools have no choice but
+to implement this if they do Dwarf based stack unwinding. There is no way
+around that. The pointers are stored mangled and they don't make sense
+without masking them. GDB has already implemented support for it. If they
+don't do Dwarf based stack unwinding then they can carry on as they are
+and everything will still work.
+
+> can tell there haven't been any documentation patches included for the 
+> Makefile.
+
+We plan to update the docs for the syscall, but it's in another repo, and
+we'll wait for this change to be finalised first. I'm not sure what you
+mean about the Makefile?
+
+Thanks
+James
+
+> 
+> The other recent change that's annoying for userspace is the addition of 
+> the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
+> functionality found in /sys/devices/cpu/rdpmc
+> 
+> Vince Weaver
+> vincent.weaver@maine.edu
