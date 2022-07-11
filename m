@@ -1,333 +1,240 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6302A23A8
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 09:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657533539; x=1689069539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LjdX+LF/NKbHZWtN8A0s6n7Sww3GeGIsI297RxDs2QQ=;
-  b=ms7ImH+MqMCqZ50GRyM8oIUuD+ZyWL0TSVC9b0l05aIC0jOXq3M8zULN
-   /SwwAIEG0NmFHVZCYnhM8qfTlcqhj3AP7OQ29fTxCrfK2IogPL49HU/Wg
-   fSx97/DeZmlPU2cTf8SjhVYQAnbh/Z6b9TIKbrvnhWu3M5TfljaaUk42L
-   ThW0j/u4K63xcDfbG7DKXIYCB+lIOeKc68f9crjMgdXwxxqdEt2ewDGMd
-   6URyL8Yar3/UjsM7e/86gcCJnaR4YZzoI0PY/ynBCOkye7csDnh34XGEb
-   HhGVq4euvJ37ofZWLSojGd+YCqEmCseTiR5fdpiv3RDoT3xDPPkozi+bH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="283375545"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="283375545"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 02:58:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="544952023"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 02:58:23 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oAqBK-0000ez-TP;
-	Mon, 11 Jul 2022 09:58:22 +0000
-Date: Mon, 11 Jul 2022 17:58:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in
- 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal
- fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways,
- cache_mode, probe_target_ways, fixed_si...
-Message-ID: <202207111703.pE1rkAYv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AC63C1D
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 10:44:03 +0000 (UTC)
+X-UUID: 67f7b038040a49bf87d29f042be0b52e-20220711
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:4187df05-70a7-42dd-8377-18c39126efc6,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:9cfb28d7-5d6d-4eaf-a635-828a3ee48b7c,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+	,QS:nil,BEC:nil,COL:0
+X-UUID: 67f7b038040a49bf87d29f042be0b52e-20220711
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 707082554; Mon, 11 Jul 2022 18:43:56 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 11 Jul 2022 18:43:55 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Mon, 11 Jul 2022 18:43:55 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v24 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+Date: Mon, 11 Jul 2022 18:43:47 +0800
+Message-ID: <20220711104354.14181-1-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-MTK: N
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   32346491ddf24599decca06190ebca03ff9de7f8
-commit: 2b8175a1f108361c2c1a11b27415631994efbfce soc: qcom: llcc: Add write-cache cacheable support
-date:   5 months ago
-config: riscv-randconfig-c006-20220707 (https://download.01.org/0day-ci/archive/20220711/202207111703.pE1rkAYv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b8175a1f108361c2c1a11b27415631994efbfce
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2b8175a1f108361c2c1a11b27415631994efbfce
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
+The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Add DRM and these modules support by the patches below:
 
+Changes in v24:
+- fix ovl_adaptor binding issue (mtk_disp_ovl_adaptor.c)
+  - Since ovl_adaptor is an aggregated component, it should be bounded after
+    all its child components are bounded.
+- rebase to next-20220708
 
-clang-analyzer warnings: (new ones prefixed by >>)
-                                                      ^~~~
-   Suppressed 7 warnings (7 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   8 warnings generated.
-   drivers/gpio/gpio-virtio.c:24:8: warning: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct virtio_gpio_line {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-virtio.c:24:8: note: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members
-   struct virtio_gpio_line {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-virtio.c:32:8: warning: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct vgpio_irq_line {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-virtio.c:32:8: note: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members
-   struct vgpio_irq_line {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   Suppressed 7 warnings (7 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   12 warnings generated.
-   drivers/bus/mhi/core/pm.c:320:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:320:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:377:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:377:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:720:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:720:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:739:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:739:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:1201:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/pm.c:1201:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 7 warnings (7 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   7 warnings generated.
-   drivers/usb/cdns3/cdns3-ti.c:160:2: warning: Value stored to 'reg' is never read [clang-analyzer-deadcode.DeadStores]
-           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/cdns3/cdns3-ti.c:160:2: note: Value stored to 'reg' is never read
-           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   10 warnings generated.
-   Suppressed 10 warnings (10 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
->> drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct llcc_slice_config {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/soc/qcom/llcc-qcom.c:88:8: note: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members
-   struct llcc_slice_config {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   5 warnings generated.
-   Suppressed 5 warnings (5 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (2 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (2 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   Suppressed 6 warnings (6 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   10 warnings generated.
-   drivers/firewire/core-cdev.c:611:2: warning: 7th function call argument is an uninitialized value [clang-analyzer-core.CallAndMessage]
-           fw_send_request(client->device->card, &e->r.transaction,
-           ^
-   drivers/firewire/core-cdev.c:1481:6: note: Assuming field 'speed' is <= field 'link_speed'
-           if (a->speed > client->device->card->link_speed ||
-               ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
-           if (a->speed > client->device->card->link_speed ||
-               ^
-   drivers/firewire/core-cdev.c:1482:6: note: Assuming the condition is false
-               a->length > 1024 << a->speed)
-               ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
-           if (a->speed > client->device->card->link_speed ||
-           ^
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^
-   include/linux/compiler.h:58:31: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                 ^
-   drivers/firewire/core-cdev.c:1481:9: note: Field 'speed' is <= field 'link_speed'
-           if (a->speed > client->device->card->link_speed ||
-                  ^
-   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
-           if (a->speed > client->device->card->link_speed ||
-               ^
-   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
-           if (a->speed > client->device->card->link_speed ||
-           ^
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^
-   include/linux/compiler.h:58:69: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ^
-   include/linux/compiler.h:69:2: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-           ^
-   drivers/firewire/core-cdev.c:1481:2: note: Taking false branch
-           if (a->speed > client->device->card->link_speed ||
-           ^
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/firewire/core-cdev.c:1485:6: note: Assuming field 'tag' is <= 3
-           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
-               ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/firewire/core-cdev.c:1485:6: note: Left side of '||' is false
-           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
-               ^
-   drivers/firewire/core-cdev.c:1485:20: note: Assuming field 'channel' is <= 63
-           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
-                             ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+Changes in v23:
+- separate[7] mmsys/mutex and drm patches into two series
 
-vim +88 drivers/soc/qcom/llcc-qcom.c
+Changes in v22:
+- rebase to next-20220525
+- rebase to vdosys0 series v22
+- separate dts to a new patch
 
-8008e7902f28eb Sai Prakash Ranjan    2022-01-28   60  
-99356b03b431f9 Vivek Gautam          2019-07-18   61  /**
-171c03171a4cdf Lee Jones             2020-11-03   62   * struct llcc_slice_config - Data associated with the llcc slice
-99356b03b431f9 Vivek Gautam          2019-07-18   63   * @usecase_id: Unique id for the client's use case
-99356b03b431f9 Vivek Gautam          2019-07-18   64   * @slice_id: llcc slice id for each client
-99356b03b431f9 Vivek Gautam          2019-07-18   65   * @max_cap: The maximum capacity of the cache slice provided in KB
-99356b03b431f9 Vivek Gautam          2019-07-18   66   * @priority: Priority of the client used to select victim line for replacement
-99356b03b431f9 Vivek Gautam          2019-07-18   67   * @fixed_size: Boolean indicating if the slice has a fixed capacity
-99356b03b431f9 Vivek Gautam          2019-07-18   68   * @bonus_ways: Bonus ways are additional ways to be used for any slice,
-99356b03b431f9 Vivek Gautam          2019-07-18   69   *		if client ends up using more than reserved cache ways. Bonus
-99356b03b431f9 Vivek Gautam          2019-07-18   70   *		ways are allocated only if they are not reserved for some
-99356b03b431f9 Vivek Gautam          2019-07-18   71   *		other client.
-99356b03b431f9 Vivek Gautam          2019-07-18   72   * @res_ways: Reserved ways for the cache slice, the reserved ways cannot
-99356b03b431f9 Vivek Gautam          2019-07-18   73   *		be used by any other client than the one its assigned to.
-99356b03b431f9 Vivek Gautam          2019-07-18   74   * @cache_mode: Each slice operates as a cache, this controls the mode of the
-99356b03b431f9 Vivek Gautam          2019-07-18   75   *             slice: normal or TCM(Tightly Coupled Memory)
-99356b03b431f9 Vivek Gautam          2019-07-18   76   * @probe_target_ways: Determines what ways to probe for access hit. When
-99356b03b431f9 Vivek Gautam          2019-07-18   77   *                    configured to 1 only bonus and reserved ways are probed.
-99356b03b431f9 Vivek Gautam          2019-07-18   78   *                    When configured to 0 all ways in llcc are probed.
-99356b03b431f9 Vivek Gautam          2019-07-18   79   * @dis_cap_alloc: Disable capacity based allocation for a client
-99356b03b431f9 Vivek Gautam          2019-07-18   80   * @retain_on_pc: If this bit is set and client has maintained active vote
-99356b03b431f9 Vivek Gautam          2019-07-18   81   *               then the ways assigned to this client are not flushed on power
-99356b03b431f9 Vivek Gautam          2019-07-18   82   *               collapse.
-99356b03b431f9 Vivek Gautam          2019-07-18   83   * @activate_on_init: Activate the slice immediately after it is programmed
-c4df37fe186de4 Manivannan Sadhasivam 2020-11-30   84   * @write_scid_en: Bit enables write cache support for a given scid.
-2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   85   * @write_scid_cacheable_en: Enables write cache cacheable support for a
-2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   86   *			     given scid (not supported on v2 or older hardware).
-99356b03b431f9 Vivek Gautam          2019-07-18   87   */
-99356b03b431f9 Vivek Gautam          2019-07-18  @88  struct llcc_slice_config {
-99356b03b431f9 Vivek Gautam          2019-07-18   89  	u32 usecase_id;
-99356b03b431f9 Vivek Gautam          2019-07-18   90  	u32 slice_id;
-99356b03b431f9 Vivek Gautam          2019-07-18   91  	u32 max_cap;
-99356b03b431f9 Vivek Gautam          2019-07-18   92  	u32 priority;
-99356b03b431f9 Vivek Gautam          2019-07-18   93  	bool fixed_size;
-99356b03b431f9 Vivek Gautam          2019-07-18   94  	u32 bonus_ways;
-99356b03b431f9 Vivek Gautam          2019-07-18   95  	u32 res_ways;
-99356b03b431f9 Vivek Gautam          2019-07-18   96  	u32 cache_mode;
-99356b03b431f9 Vivek Gautam          2019-07-18   97  	u32 probe_target_ways;
-99356b03b431f9 Vivek Gautam          2019-07-18   98  	bool dis_cap_alloc;
-99356b03b431f9 Vivek Gautam          2019-07-18   99  	bool retain_on_pc;
-99356b03b431f9 Vivek Gautam          2019-07-18  100  	bool activate_on_init;
-c4df37fe186de4 Manivannan Sadhasivam 2020-11-30  101  	bool write_scid_en;
-2b8175a1f10836 Sai Prakash Ranjan    2022-01-28  102  	bool write_scid_cacheable_en;
-99356b03b431f9 Vivek Gautam          2019-07-18  103  };
-99356b03b431f9 Vivek Gautam          2019-07-18  104  
+Changes in v21:
+- fix reviewer comment
+  - fix rdma and ethdr binding doc and dts
 
-:::::: The code at line 88 was first introduced by commit
-:::::: 99356b03b431f9589bbaec2bc5bacceccb3dd99a soc: qcom: Make llcc-qcom a generic driver
+Changes in v20:
+- fix reviewer comment
+  - update mmsys update bit api name
+  - add mtk_mmsys_update_bits error message if lose gce property
+  - list all mt8195 vdosys1 reset bits
 
-:::::: TO: Vivek Gautam <vivek.gautam@codeaurora.org>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+Changes in v19:
+- fix reviewer comment
+  - separate mt8195 mmsys component to a new patch
+  - separate mt8195 vdo0 and vdo1 routing table
+  - separate mmsys_write_reg api to a new patch and simplify write reg code
+  - separate mmsys 64 bit reset to a new patch
+  - separate mtk-mutex dp_intf1 component to a new patch
+
+Changes in v18:
+- fix reviewer comment
+  - fix rdma binding doc
+  - fix ethdr binding doc
+  - refine mmsys config cmdq support
+  - refine merge reset control flow, get reset control in probe function
+  - add ethdr reset control error handling and remove dbg log
+- rebase to vdosys0 series v20 (ref [5])
+
+Changes in v17:
+- fix reviewer comment in v16
+  - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
+  - separate mmsys config API
+  - move mdp_rdma binding yaml
+- fix ovl adaptor pm runtime get sync timing issue
+- rebase to vdosys0 series v19 (ref [5])
+- rebase to [7] for modify vblank register change
+
+Changes in v16:
+- fix reviewer comment in v 15
+  - fix mtk_drm_ddp_comp.c alignment
+  - fix vdosys0 mmsys num before adding vdosys1 patch
+
+Changes in v15:
+- fix ethdr uppercase hex number in dts
+
+Changes in v14:
+- remove MTK_MMSYS 64 bit dependency
+- add ethdr.yaml back and fix dt_schema check fail
+
+Resend v13
+- add related maintainer in maillist
+
+Changes in v13:
+- fix reviewer comment in v12
+  - fix rdma dt-binding format
+  - fix dts node naming
+- fix 32 bit build error
+  - modify 64bit dependency for mtk-mmsys
+- rebase to vdosys0 series v16. (ref [5])
+
+Changes in v12:
+- fix reviewer comment in v11
+  - modify mbox index
+  - refine dma dev for ovl_adaptor sub driver
+
+Changes in v11:
+- remove ethdr vblank spin lock
+- refine ovl_adaptor print message
+
+Changes in v10:
+- refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
+- fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
+
+Changes in v9:
+- rebase on kernel-5.16-rc1
+- rebase on vdosys0 series v13. (ref [5])
+- fix ovl_adaptor sub driver is brought up unintentionally
+- fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue 
+
+Changes in v8:
+- separate merge async reset to new patch.
+- separate drm ovl_adaptor sub driver to new patch.
+- fix reviewer comment in v7.
+
+Changes in v7:
+- rebase on vdosys0 series v12 (ref[5])
+- add dma description in ethdr binding document.
+- refine vdosys1 bit definition of mmsys routing table.
+- separate merge modification into 3 pathces.
+- separate mutex modification into 2 patches.
+- add plane color coding for mdp_rdma csc.
+- move mdp_rdma pm control to ovl_adaptor.
+- fix reviewer comment in v6.
+
+Changes in v6:
+- rebase on kernel-5.15-rc1.
+- change mbox label to gce0 for dts node of vdosys1.
+- modify mmsys reset num for mt8195.
+- rebase on vdosys0 series v10. (ref [5])
+- use drm to bring up ovl_adaptor driver.
+- move drm iommu/mutex check from kms init to drm bind.
+- modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
+- modify for reviewer's comment in v5.
+
+Changes in v5:
+- add mmsys reset controller reference.
+
+Changes in v4:
+- use merge common driver for merge1~4.
+- refine ovl_adaptor rdma driver.
+- use ovl_adaptor ddp_comp function instead of ethdr.
+- modify for reviewer's comment in v3.
+
+Changes in v3:
+- modify for reviewer's comment in v2.
+- add vdosys1 2 pixels align limit.
+- add mixer odd offset support.
+
+Changes in v2:
+- Merge PSEUDO_OVL and ETHDR into one DRM component.
+- Add mmsys config API for vdosys1 hardware setting.
+- Add mmsys reset control using linux reset framework.
+
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+
+This series are based on the following patch:
+[1] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+    20220112114724.1953-4-tinghan.shen@mediatek.com
+[2] arm64: dts: mt8195: add IOMMU and smi nodes
+    20210615173233.26682-15-tinghan.shen@mediatek.com
+[3] arm64: dts: mt8195: add gce node
+    20220126090109.32143-1-jason-jh.lin@mediatek.com
+[4] [v2] arm64: dts: mt8195: add display node for vdosys0
+    20220225021535.2655-1-jason-jh.lin@mediatek.com
+[5] Add MediaTek SoC DRM (vdosys0) support for mt8195 - v22 series
+    20220526102126.19756-1-jason-jh.lin@mediatek.com
+[6] dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+    20220407075726.17771-2-yong.wu@mediatek.com
+[7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+    20220526110233.20080-1-nancy.lin@mediatek.com
+
+Nancy.Lin (7):
+  dt-bindings: mediatek: add ethdr definition for mt8195
+  drm/mediatek: add ETHDR support for MT8195
+  drm/mediatek: add ovl_adaptor support for MT8195
+  drm/mediatek: add dma dev get function
+  drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
+  drm/mediatek: add drm ovl_adaptor sub driver for MT8195
+  drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
+
+ .../display/mediatek/mediatek,ethdr.yaml      | 188 +++++++
+ drivers/gpu/drm/mediatek/Makefile             |   2 +
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
+ .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 528 ++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  96 ++--
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 125 +++--
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 359 ++++++++----
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  24 +-
+ drivers/gpu/drm/mediatek/mtk_ethdr.c          | 370 ++++++++++++
+ drivers/gpu/drm/mediatek/mtk_ethdr.h          |  26 +
+ 12 files changed, 1613 insertions(+), 195 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+
