@@ -1,35 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D334411
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 15:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF584411
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 15:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657552911;
+	s=mimecast20190719; t=1657554661;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=2bOA5is7sgygtyuoIQDAxGEaK3zlHD8o++8IXzrHyPs=;
-	b=KdyS4UzQl5bGlEAGZ2dbdfgghyIMm6CUrjUITYEs8hyjDLvpiC7dPrLyV2FxW5vkrHkwFb
-	b+q7IPUmC3Dz8y3FwioJ0PIOWXqqV3mZA7b9sqNWO6KAbV8eWALnVgSPjN4BYNAAeXwQhe
-	ATx7WEyILSSbX/UawAVa+nYAMhWmDjc=
+	bh=Ko591qlSfGBSvf6IqjRiYYpfVXVJcYCgVwRz0kbS4R8=;
+	b=Gy0MApA3lMnmSAxtLjxjLEV1IIWnUlAGCt5NJ3f2Ci6pwNSbjoXoF7yeYhyDmxp1dKYV+u
+	FNjuCqbcc2PJCFfUzQ5xHF8ppywJyNLXCuDjlRdqyhK5/UHwFDt2xN+0iOlX4E9PO2ltUF
+	fgcHRoUyO4ZKZ5RHs/Vnzui4+wnZsNQ=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-201-3o3aGmODNxGft5KbkCmcww-1; Mon, 11 Jul 2022 11:21:49 -0400
-X-MC-Unique: 3o3aGmODNxGft5KbkCmcww-1
+ us-mta-116-Bmw9H1TpM3WqcEyHu4mF0A-1; Mon, 11 Jul 2022 11:50:54 -0400
+X-MC-Unique: Bmw9H1TpM3WqcEyHu4mF0A-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A08F03C10227
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 15:21:49 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24D8B1C13947
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 15:50:54 +0000 (UTC)
 Received: from [172.64.4.17] (unknown [10.30.34.251])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8E4C32166B26;
-	Mon, 11 Jul 2022 15:21:49 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 113702166B26;
+	Mon, 11 Jul 2022 15:50:54 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (7/492 SKIPPED): Test report for e5524c2a
+Subject: =?utf-8?b?4pyF?= PASS (7/492 SKIPPED): Test report for 525496a0
  (mainline.kernel.org-clang)
-Date: Mon, 11 Jul 2022 15:21:46 -0000
+Date: Mon, 11 Jul 2022 15:50:50 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-Message-Id: <79309.122071111214902283@us-mta-201.us.mimecast.lan>
+Message-Id: <84558.122071111505402295@us-mta-116.us.mimecast.lan>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -55,17 +55,17 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/47416
+    https://datawarehouse.cki-project.org/kcidb/checkouts/47406
 
 One or more kernel tests failed:
 
     We also see the following known issues which are not related to your ch=
 anges:
          aarch64 - Boot test
-                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
- filename '/devices/mc0'
-                          http://lists.infradead.org/pipermail/linux-arm-ke=
-rnel/2022-June/750380.html
+                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
+ht-etm4x: probe of ARMHC500:20 failed with error -17
+                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
+BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
          aarch64 - LTP - syscalls
                    Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
 ty bit to be set after writing to mmap()-ed area
@@ -89,6 +89,15 @@ _gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
  tclass=3Dcapability permissive=3D0
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
 3062
+         aarch64 - Storage - lvm thinp stqe test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: lvm thinp stqe test: FAIL: rcu: INFO: rcu_preempt=
+ detected expedited stalls on CPUs/tasks
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1180
          aarch64 - Storage - SCSI VPD
                    Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
 m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
@@ -145,6 +154,11 @@ nel/kernel-tests/-/issues/1213
 emory function: kaslr
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1169
+         ppc64le - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
          ppc64le - AMTU (Abstract Machine Test Utility)
                    Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
 AIL
@@ -188,6 +202,11 @@ nel/kernel-tests/-/issues/1213
 erf_event/test line 88, 104, 109, 115
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/814
+           s390x - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
            s390x - LTP - syscalls
                    Issue: LTP: ioctl_loop05 - TBROK: Cannot find block devi=
 ce for /mnt/testarea/ltp-w7JfbOmzJY/iocfULVTn/test.img
@@ -288,11 +307,6 @@ nel/kernel-tests/-/issues/1263
                    Issue: kselftests: fail to install bpftool-5.19.0-rc5
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1263
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
           x86_64 - xfstests - nfsv4.2
                    Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
 m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
@@ -309,11 +323,6 @@ si_debug failed
  CPUs/tasks
                           https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
 63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
           x86_64 - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
@@ -369,11 +378,6 @@ t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
 =3D1
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
 3604#c3
-          x86_64 - xfstests - cifsv3.11
-                   Issue: xfstests - cifsv3.11: generic/391: stat: Invalid =
-argument
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1187
 
 
 If you find a failure unrelated to your changes, please tag it at https://d=
