@@ -1,109 +1,333 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74E11FCE
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 09:25:25 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9865415BF;
-	Mon, 11 Jul 2022 02:25:25 -0700 (PDT)
-Received: from [10.57.43.82] (unknown [10.57.43.82])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3E43F73D;
-	Mon, 11 Jul 2022 02:25:22 -0700 (PDT)
-Message-ID: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
-Date: Mon, 11 Jul 2022 10:25:20 +0100
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6302A23A8
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 09:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657533539; x=1689069539;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LjdX+LF/NKbHZWtN8A0s6n7Sww3GeGIsI297RxDs2QQ=;
+  b=ms7ImH+MqMCqZ50GRyM8oIUuD+ZyWL0TSVC9b0l05aIC0jOXq3M8zULN
+   /SwwAIEG0NmFHVZCYnhM8qfTlcqhj3AP7OQ29fTxCrfK2IogPL49HU/Wg
+   fSx97/DeZmlPU2cTf8SjhVYQAnbh/Z6b9TIKbrvnhWu3M5TfljaaUk42L
+   ThW0j/u4K63xcDfbG7DKXIYCB+lIOeKc68f9crjMgdXwxxqdEt2ewDGMd
+   6URyL8Yar3/UjsM7e/86gcCJnaR4YZzoI0PY/ynBCOkye7csDnh34XGEb
+   HhGVq4euvJ37ofZWLSojGd+YCqEmCseTiR5fdpiv3RDoT3xDPPkozi+bH
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="283375545"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="283375545"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 02:58:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="544952023"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 02:58:23 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oAqBK-0000ez-TP;
+	Mon, 11 Jul 2022 09:58:22 +0000
+Date: Mon, 11 Jul 2022 17:58:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in
+ 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal
+ fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways,
+ cache_mode, probe_target_ways, fixed_si...
+Message-ID: <202207111703.pE1rkAYv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
- not supported
-Content-Language: en-US
-To: Vince Weaver <vincent.weaver@maine.edu>,
- Andrew Kilroy <andrew.kilroy@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
- linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220704145333.22557-1-andrew.kilroy@arm.com>
- <20220704145333.22557-3-andrew.kilroy@arm.com>
- <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   32346491ddf24599decca06190ebca03ff9de7f8
+commit: 2b8175a1f108361c2c1a11b27415631994efbfce soc: qcom: llcc: Add write-cache cacheable support
+date:   5 months ago
+config: riscv-randconfig-c006-20220707 (https://download.01.org/0day-ci/archive/20220711/202207111703.pE1rkAYv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b8175a1f108361c2c1a11b27415631994efbfce
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2b8175a1f108361c2c1a11b27415631994efbfce
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+clang-analyzer warnings: (new ones prefixed by >>)
+                                                      ^~~~
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   8 warnings generated.
+   drivers/gpio/gpio-virtio.c:24:8: warning: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:24:8: note: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:32:8: warning: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct vgpio_irq_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:32:8: note: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members
+   struct vgpio_irq_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   12 warnings generated.
+   drivers/bus/mhi/core/pm.c:320:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:320:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:377:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:377:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:720:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:720:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:739:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:739:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:1201:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:1201:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+   drivers/usb/cdns3/cdns3-ti.c:160:2: warning: Value stored to 'reg' is never read [clang-analyzer-deadcode.DeadStores]
+           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/cdns3/cdns3-ti.c:160:2: note: Value stored to 'reg' is never read
+           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   10 warnings generated.
+   Suppressed 10 warnings (10 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+>> drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct llcc_slice_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/llcc-qcom.c:88:8: note: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members
+   struct llcc_slice_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~~
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   5 warnings generated.
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   5 warnings generated.
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   10 warnings generated.
+   drivers/firewire/core-cdev.c:611:2: warning: 7th function call argument is an uninitialized value [clang-analyzer-core.CallAndMessage]
+           fw_send_request(client->device->card, &e->r.transaction,
+           ^
+   drivers/firewire/core-cdev.c:1481:6: note: Assuming field 'speed' is <= field 'link_speed'
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   drivers/firewire/core-cdev.c:1482:6: note: Assuming the condition is false
+               a->length > 1024 << a->speed)
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^
+   include/linux/compiler.h:58:31: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                 ^
+   drivers/firewire/core-cdev.c:1481:9: note: Field 'speed' is <= field 'link_speed'
+           if (a->speed > client->device->card->link_speed ||
+                  ^
+   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^
+   include/linux/compiler.h:58:69: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                       ^
+   include/linux/compiler.h:69:2: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+           ^
+   drivers/firewire/core-cdev.c:1481:2: note: Taking false branch
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/firewire/core-cdev.c:1485:6: note: Assuming field 'tag' is <= 3
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1485:6: note: Left side of '||' is false
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+               ^
+   drivers/firewire/core-cdev.c:1485:20: note: Assuming field 'channel' is <= 63
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+                             ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
 
-On 06/07/2022 17:01, Vince Weaver wrote:
-> On Mon, 4 Jul 2022, Andrew Kilroy wrote:
-> 
->> A subsequent patch alters perf to perf_event_open with the
->> PERF_SAMPLE_ARCH_1 bit on.
->>
->> This patch deals with the case where the kernel does not know about the
->> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
->> authentication masks.  In this case the perf_event_open system call
->> returns -EINVAL (-22) and perf exits with an error.
->>
->> This patch causes userspace process to re-attempt the perf_event_open
->> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
->> field, allowing the perf_event_open system call to succeed.
-> 
-> So in this case you are leaking ARM64-specific info into the generic 
-> perf_event_open() call?  Is there any way the kernel could implement this 
-> without userspace having to deal with the issue?
+vim +88 drivers/soc/qcom/llcc-qcom.c
 
-Hi Vince,
+8008e7902f28eb Sai Prakash Ranjan    2022-01-28   60  
+99356b03b431f9 Vivek Gautam          2019-07-18   61  /**
+171c03171a4cdf Lee Jones             2020-11-03   62   * struct llcc_slice_config - Data associated with the llcc slice
+99356b03b431f9 Vivek Gautam          2019-07-18   63   * @usecase_id: Unique id for the client's use case
+99356b03b431f9 Vivek Gautam          2019-07-18   64   * @slice_id: llcc slice id for each client
+99356b03b431f9 Vivek Gautam          2019-07-18   65   * @max_cap: The maximum capacity of the cache slice provided in KB
+99356b03b431f9 Vivek Gautam          2019-07-18   66   * @priority: Priority of the client used to select victim line for replacement
+99356b03b431f9 Vivek Gautam          2019-07-18   67   * @fixed_size: Boolean indicating if the slice has a fixed capacity
+99356b03b431f9 Vivek Gautam          2019-07-18   68   * @bonus_ways: Bonus ways are additional ways to be used for any slice,
+99356b03b431f9 Vivek Gautam          2019-07-18   69   *		if client ends up using more than reserved cache ways. Bonus
+99356b03b431f9 Vivek Gautam          2019-07-18   70   *		ways are allocated only if they are not reserved for some
+99356b03b431f9 Vivek Gautam          2019-07-18   71   *		other client.
+99356b03b431f9 Vivek Gautam          2019-07-18   72   * @res_ways: Reserved ways for the cache slice, the reserved ways cannot
+99356b03b431f9 Vivek Gautam          2019-07-18   73   *		be used by any other client than the one its assigned to.
+99356b03b431f9 Vivek Gautam          2019-07-18   74   * @cache_mode: Each slice operates as a cache, this controls the mode of the
+99356b03b431f9 Vivek Gautam          2019-07-18   75   *             slice: normal or TCM(Tightly Coupled Memory)
+99356b03b431f9 Vivek Gautam          2019-07-18   76   * @probe_target_ways: Determines what ways to probe for access hit. When
+99356b03b431f9 Vivek Gautam          2019-07-18   77   *                    configured to 1 only bonus and reserved ways are probed.
+99356b03b431f9 Vivek Gautam          2019-07-18   78   *                    When configured to 0 all ways in llcc are probed.
+99356b03b431f9 Vivek Gautam          2019-07-18   79   * @dis_cap_alloc: Disable capacity based allocation for a client
+99356b03b431f9 Vivek Gautam          2019-07-18   80   * @retain_on_pc: If this bit is set and client has maintained active vote
+99356b03b431f9 Vivek Gautam          2019-07-18   81   *               then the ways assigned to this client are not flushed on power
+99356b03b431f9 Vivek Gautam          2019-07-18   82   *               collapse.
+99356b03b431f9 Vivek Gautam          2019-07-18   83   * @activate_on_init: Activate the slice immediately after it is programmed
+c4df37fe186de4 Manivannan Sadhasivam 2020-11-30   84   * @write_scid_en: Bit enables write cache support for a given scid.
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   85   * @write_scid_cacheable_en: Enables write cache cacheable support for a
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   86   *			     given scid (not supported on v2 or older hardware).
+99356b03b431f9 Vivek Gautam          2019-07-18   87   */
+99356b03b431f9 Vivek Gautam          2019-07-18  @88  struct llcc_slice_config {
+99356b03b431f9 Vivek Gautam          2019-07-18   89  	u32 usecase_id;
+99356b03b431f9 Vivek Gautam          2019-07-18   90  	u32 slice_id;
+99356b03b431f9 Vivek Gautam          2019-07-18   91  	u32 max_cap;
+99356b03b431f9 Vivek Gautam          2019-07-18   92  	u32 priority;
+99356b03b431f9 Vivek Gautam          2019-07-18   93  	bool fixed_size;
+99356b03b431f9 Vivek Gautam          2019-07-18   94  	u32 bonus_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   95  	u32 res_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   96  	u32 cache_mode;
+99356b03b431f9 Vivek Gautam          2019-07-18   97  	u32 probe_target_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   98  	bool dis_cap_alloc;
+99356b03b431f9 Vivek Gautam          2019-07-18   99  	bool retain_on_pc;
+99356b03b431f9 Vivek Gautam          2019-07-18  100  	bool activate_on_init;
+c4df37fe186de4 Manivannan Sadhasivam 2020-11-30  101  	bool write_scid_en;
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28  102  	bool write_scid_cacheable_en;
+99356b03b431f9 Vivek Gautam          2019-07-18  103  };
+99356b03b431f9 Vivek Gautam          2019-07-18  104  
 
-The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
-and then it's not Arm specific, it's just that only Arm implements it for now.
-This is definitely an option.
+:::::: The code at line 88 was first introduced by commit
+:::::: 99356b03b431f9589bbaec2bc5bacceccb3dd99a soc: qcom: Make llcc-qcom a generic driver
 
-But if no platform ever implements something similar then that bit is wasted.
-The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
-But as you say, maybe making it arch specific isn't the right way either.
+:::::: TO: Vivek Gautam <vivek.gautam@codeaurora.org>
+:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-I wouldn't say the perf_event_open call is currently generic though, lots of
-it already requires knowledge of the current platform, and searching for 'x86'
-in the docs for it gives 10 matches.
-
-> 
-> There are a few recent ARM64 perf_event related patches that are pushing 
-> ARM specific interfaces into the generic code, with the apparent 
-> assumption that it will just be implemented in the userspace perf tool.  
-> However there are a number of outside-the-kernel codebases that also use 
-> perf_event_open() and it seems a bit onerous if all of them have to start 
-> adding a lot of extra ARM64-specific code, especially because as far as I 
-
-Because pointer auth is a hardware feature, other tools have no choice but
-to implement this if they do Dwarf based stack unwinding. There is no way
-around that. The pointers are stored mangled and they don't make sense
-without masking them. GDB has already implemented support for it. If they
-don't do Dwarf based stack unwinding then they can carry on as they are
-and everything will still work.
-
-> can tell there haven't been any documentation patches included for the 
-> Makefile.
-
-We plan to update the docs for the syscall, but it's in another repo, and
-we'll wait for this change to be finalised first. I'm not sure what you
-mean about the Makefile?
-
-Thanks
-James
-
-> 
-> The other recent change that's annoying for userspace is the addition of 
-> the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
-> functionality found in /sys/devices/cpu/rdpmc
-> 
-> Vince Weaver
-> vincent.weaver@maine.edu
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
