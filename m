@@ -1,186 +1,196 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11FA1C3B
-	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 05:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657517718; x=1689053718;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=R1N2LYQ3qh5Dq/vXVLASWRAWmxcB+ZLyY5e7k5Tm7To=;
-  b=j7QTHPtrlliRTRH3EG4amTDZ/5S2ZokJr5pZDdaZVEz4gz5clxA6ppOH
-   duMlH37E5mQnCxqQIOcJ+t/Iz+P31C5AUQIZeqIVEiahaRsgrC5pK9d1o
-   2FK95mJbmqZ71XTFWtWAtf7eqZS3SG+pAlwQMN+/KSy3Aq79/F3LCRVMm
-   QYAxu6DhAoFfovmY009u9jYPLW9r1GxuW4eicNV3Ps0ZCWzOi5KsPjPIL
-   YWnZuVwC58Ezf85QHsWSuA8CFphNQxZaejfwhNHQSKfL+TDMFHflSWxfL
-   Jk4/etc/liej9a0XfXEiAltWGaODMz3XPBAfYwVXPJSfbJfI8aU1VlJo6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282130813"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="282130813"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 22:35:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="662421271"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2022 22:35:16 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oAm4i-0000TM-0x;
-	Mon, 11 Jul 2022 05:35:16 +0000
-Date: Mon, 11 Jul 2022 13:34:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [alobakin:xdp_hints 20/52]
- drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2553:3: error: call to
- undeclared function 'xdp_set_data_meta_invalid'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202207111325.Zy0bi2Yw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2AE1FA6
+	for <llvm@lists.linux.dev>; Mon, 11 Jul 2022 05:53:05 +0000 (UTC)
+X-UUID: e3c1c3db69ba4d1699447d7170d07ee2-20220711
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:dc5af464-2796-4d8f-a62d-f35428f31708,OB:0,LO
+	B:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:50
+X-CID-INFO: VERSION:1.1.8,REQID:dc5af464-2796-4d8f-a62d-f35428f31708,OB:0,LOB:
+	10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:50
+X-CID-META: VersionHash:0f94e32,CLOUDID:3e381187-57f0-47ca-ba27-fe8c57fbf305,C
+	OID:e85d7af3f061,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e3c1c3db69ba4d1699447d7170d07ee2-20220711
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 312251192; Mon, 11 Jul 2022 13:52:53 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 11 Jul 2022 13:52:51 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 Jul 2022 13:52:51 +0800
+Message-ID: <632d03e8773520faf0eba3bb7c716435b54b6794.camel@mediatek.com>
+Subject: Re: [PATCH v24 04/10] soc: mediatek: add mtk_mmsys_update_bits API
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring
+	<robh+dt@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Mon, 11 Jul 2022 13:52:49 +0800
+In-Reply-To: <d1a93418-587b-a03d-ed9b-01646345deeb@gmail.com>
+References: <20220622130824.29143-1-nancy.lin@mediatek.com>
+	 <20220622130824.29143-5-nancy.lin@mediatek.com>
+	 <d1a93418-587b-a03d-ed9b-01646345deeb@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://github.com/alobakin/linux xdp_hints
-head:   e9f4215398901c2e3f477da53abc668ce7b7e320
-commit: 62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4 [20/52] net, xdp: move XDP metadata helpers into new xdp_meta.h
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220711/202207111325.Zy0bi2Yw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/alobakin/linux/commit/62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin xdp_hints
-        git checkout 62a8828e246dd5ebf5aa0dc2b4cc68960eb3dea4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/ drivers/net/ethernet/freescale/dpaa/
+Hi Matthias,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the review.
 
-All errors (new ones prefixed by >>):
+On Fri, 2022-07-08 at 17:34 +0200, Matthias Brugger wrote:
+> 
+> On 22/06/2022 15:08, Nancy.Lin wrote:
+> > Add mtk_mmsys_update_bits API. Simplify code for update  mmsys reg.
+> > It is a preparation for adding support for mmsys config API.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> > Tested-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-mmsys.c | 37 +++++++++++++------------
+> > -------
+> >   1 file changed, 15 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> > b/drivers/soc/mediatek/mtk-mmsys.c
+> > index a74c86197d6a..ca5bf07114fa 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -192,22 +192,27 @@ static int
+> > mtk_mmsys_find_match_drvdata(struct mtk_mmsys *mmsys,
+> >   	return -EINVAL;
+> >   }
+> >   
+> > +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32
+> > offset, u32 mask, u32 val)
+> > +{
+> > +	u32 tmp;
+> > +
+> > +	tmp = readl_relaxed(mmsys->regs + offset);
+> > +	tmp = (tmp & ~mask) | val;
+> > +	writel_relaxed(tmp, mmsys->regs + offset);
+> > +}
+> > +
+> >   void mtk_mmsys_ddp_connect(struct device *dev,
+> >   			   enum mtk_ddp_comp_id cur,
+> >   			   enum mtk_ddp_comp_id next)
+> >   {
+> >   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> >   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> > -	u32 reg;
+> >   	int i;
+> >   
+> >   	for (i = 0; i < mmsys->data->num_routes; i++)
+> > -		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp) {
+> > -			reg = readl_relaxed(mmsys->regs +
+> > routes[i].addr);
+> > -			reg &= ~routes[i].mask;
+> > -			reg |= routes[i].val;
+> > -			writel_relaxed(reg, mmsys->regs +
+> > routes[i].addr);
+> > -		}
+> > +		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp)
+> > +			mtk_mmsys_update_bits(mmsys, routes[i].addr,
+> > routes[i].mask,
+> > +					      routes[i].val);
+> >   }
+> >   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
+> >   
+> > @@ -217,15 +222,11 @@ void mtk_mmsys_ddp_disconnect(struct device
+> > *dev,
+> >   {
+> >   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> >   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> > -	u32 reg;
+> >   	int i;
+> >   
+> >   	for (i = 0; i < mmsys->data->num_routes; i++)
+> > -		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp) {
+> > -			reg = readl_relaxed(mmsys->regs +
+> > routes[i].addr);
+> > -			reg &= ~routes[i].mask;
+> > -			writel_relaxed(reg, mmsys->regs +
+> > routes[i].addr);
+> > -		}
+> > +		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp)
+> > +			mtk_mmsys_update_bits(mmsys, routes[i].addr,
+> > routes[i].mask, 0);
+> >   }
+> >   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+> >   
+> > @@ -234,18 +235,10 @@ static int mtk_mmsys_reset_update(struct
+> > reset_controller_dev *rcdev, unsigned l
+> >   {
+> >   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys,
+> > rcdev);
+> >   	unsigned long flags;
+> > -	u32 reg;
+> >   
+> >   	spin_lock_irqsave(&mmsys->lock, flags);
+> >   
+> > -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> > -
+> > -	if (assert)
+> > -		reg &= ~BIT(id);
+> > -	else
+> > -		reg |= BIT(id);
+> > -
+> > -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> > +	mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset,
+> > BIT(id), assert ? 0 : BIT(id));
+> 
+> Let's be this a normal if (assert) else but calling
+> mtk_mmsys_update_bits().
+> 
+> Other then that patch looks good.
+> 
+> Matthias
+> 
+OK, I will change to
 
->> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2553:3: error: call to undeclared function 'xdp_set_data_meta_invalid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   xdp_set_data_meta_invalid(&xdp);
-                   ^
->> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:2567:19: error: call to undeclared function 'xdp_data_meta_unsupported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   *xdp_meta_len = xdp_data_meta_unsupported(&xdp) ? 0 :
-                                   ^
-   2 errors generated.
+if (asssert)
+    mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id),
+0);
+else
+    mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id),
+BIT(id));
 
+BRs,
+Nancy
 
-vim +/xdp_set_data_meta_invalid +2553 drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> >   
+> >   	spin_unlock_irqrestore(&mmsys->lock, flags);
+> >   
 
-d57e57d0cd04be Camelia Groza          2020-11-25  2525  
-86c0c196cbe48f Camelia Groza          2020-11-25  2526  static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
-d57e57d0cd04be Camelia Groza          2020-11-25  2527  			struct dpaa_fq *dpaa_fq, unsigned int *xdp_meta_len)
-86c0c196cbe48f Camelia Groza          2020-11-25  2528  {
-86c0c196cbe48f Camelia Groza          2020-11-25  2529  	ssize_t fd_off = qm_fd_get_offset(fd);
-86c0c196cbe48f Camelia Groza          2020-11-25  2530  	struct bpf_prog *xdp_prog;
-d57e57d0cd04be Camelia Groza          2020-11-25  2531  	struct xdp_frame *xdpf;
-86c0c196cbe48f Camelia Groza          2020-11-25  2532  	struct xdp_buff xdp;
-86c0c196cbe48f Camelia Groza          2020-11-25  2533  	u32 xdp_act;
-a1e031ffb422bb Camelia Groza          2020-11-25  2534  	int err;
-86c0c196cbe48f Camelia Groza          2020-11-25  2535  
-86c0c196cbe48f Camelia Groza          2020-11-25  2536  	xdp_prog = READ_ONCE(priv->xdp_prog);
-547aabcac3251c Toke Høiland-Jørgensen 2021-06-24  2537  	if (!xdp_prog)
-86c0c196cbe48f Camelia Groza          2020-11-25  2538  		return XDP_PASS;
-86c0c196cbe48f Camelia Groza          2020-11-25  2539  
-43b5169d8355cc Lorenzo Bianconi       2020-12-22  2540  	xdp_init_buff(&xdp, DPAA_BP_RAW_SIZE - DPAA_TX_PRIV_DATA_SIZE,
-43b5169d8355cc Lorenzo Bianconi       2020-12-22  2541  		      &dpaa_fq->xdp_rxq);
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  2542  	xdp_prepare_buff(&xdp, vaddr + fd_off - XDP_PACKET_HEADROOM,
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  2543  			 XDP_PACKET_HEADROOM, qm_fd_get_length(fd), true);
-86c0c196cbe48f Camelia Groza          2020-11-25  2544  
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2545  	/* We reserve a fixed headroom of 256 bytes under the erratum and we
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2546  	 * offer it all to XDP programs to use. If no room is left for the
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2547  	 * xdpf backpointer on TX, we will need to copy the data.
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2548  	 * Disable metadata support since data realignments might be required
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2549  	 * and the information can be lost.
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2550  	 */
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2551  #ifdef CONFIG_DPAA_ERRATUM_A050385
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2552  	if (unlikely(fman_has_errata_a050385())) {
-ae680bcbd06ae9 Camelia Groza          2020-11-25 @2553  		xdp_set_data_meta_invalid(&xdp);
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2554  		xdp.data_hard_start = vaddr;
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2555  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2556  	}
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2557  #endif
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2558  
-86c0c196cbe48f Camelia Groza          2020-11-25  2559  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
-86c0c196cbe48f Camelia Groza          2020-11-25  2560  
-86c0c196cbe48f Camelia Groza          2020-11-25  2561  	/* Update the length and the offset of the FD */
-86c0c196cbe48f Camelia Groza          2020-11-25  2562  	qm_fd_set_contig(fd, xdp.data - vaddr, xdp.data_end - xdp.data);
-86c0c196cbe48f Camelia Groza          2020-11-25  2563  
-86c0c196cbe48f Camelia Groza          2020-11-25  2564  	switch (xdp_act) {
-86c0c196cbe48f Camelia Groza          2020-11-25  2565  	case XDP_PASS:
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2566  #ifdef CONFIG_DPAA_ERRATUM_A050385
-ae680bcbd06ae9 Camelia Groza          2020-11-25 @2567  		*xdp_meta_len = xdp_data_meta_unsupported(&xdp) ? 0 :
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2568  				xdp.data - xdp.data_meta;
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2569  #else
-86c0c196cbe48f Camelia Groza          2020-11-25  2570  		*xdp_meta_len = xdp.data - xdp.data_meta;
-ae680bcbd06ae9 Camelia Groza          2020-11-25  2571  #endif
-d57e57d0cd04be Camelia Groza          2020-11-25  2572  		break;
-d57e57d0cd04be Camelia Groza          2020-11-25  2573  	case XDP_TX:
-d57e57d0cd04be Camelia Groza          2020-11-25  2574  		/* We can access the full headroom when sending the frame
-d57e57d0cd04be Camelia Groza          2020-11-25  2575  		 * back out
-d57e57d0cd04be Camelia Groza          2020-11-25  2576  		 */
-d57e57d0cd04be Camelia Groza          2020-11-25  2577  		xdp.data_hard_start = vaddr;
-d57e57d0cd04be Camelia Groza          2020-11-25  2578  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
-d57e57d0cd04be Camelia Groza          2020-11-25  2579  		xdpf = xdp_convert_buff_to_frame(&xdp);
-d57e57d0cd04be Camelia Groza          2020-11-25  2580  		if (unlikely(!xdpf)) {
-d57e57d0cd04be Camelia Groza          2020-11-25  2581  			free_pages((unsigned long)vaddr, 0);
-d57e57d0cd04be Camelia Groza          2020-11-25  2582  			break;
-d57e57d0cd04be Camelia Groza          2020-11-25  2583  		}
-d57e57d0cd04be Camelia Groza          2020-11-25  2584  
-d57e57d0cd04be Camelia Groza          2020-11-25  2585  		if (dpaa_xdp_xmit_frame(priv->net_dev, xdpf))
-d57e57d0cd04be Camelia Groza          2020-11-25  2586  			xdp_return_frame_rx_napi(xdpf);
-d57e57d0cd04be Camelia Groza          2020-11-25  2587  
-a1e031ffb422bb Camelia Groza          2020-11-25  2588  		break;
-a1e031ffb422bb Camelia Groza          2020-11-25  2589  	case XDP_REDIRECT:
-a1e031ffb422bb Camelia Groza          2020-11-25  2590  		/* Allow redirect to use the full headroom */
-a1e031ffb422bb Camelia Groza          2020-11-25  2591  		xdp.data_hard_start = vaddr;
-a1e031ffb422bb Camelia Groza          2020-11-25  2592  		xdp.frame_sz = DPAA_BP_RAW_SIZE;
-a1e031ffb422bb Camelia Groza          2020-11-25  2593  
-a1e031ffb422bb Camelia Groza          2020-11-25  2594  		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
-a1e031ffb422bb Camelia Groza          2020-11-25  2595  		if (err) {
-a1e031ffb422bb Camelia Groza          2020-11-25  2596  			trace_xdp_exception(priv->net_dev, xdp_prog, xdp_act);
-a1e031ffb422bb Camelia Groza          2020-11-25  2597  			free_pages((unsigned long)vaddr, 0);
-a1e031ffb422bb Camelia Groza          2020-11-25  2598  		}
-86c0c196cbe48f Camelia Groza          2020-11-25  2599  		break;
-86c0c196cbe48f Camelia Groza          2020-11-25  2600  	default:
-c8064e5b4adac5 Paolo Abeni            2021-11-30  2601  		bpf_warn_invalid_xdp_action(priv->net_dev, xdp_prog, xdp_act);
-86c0c196cbe48f Camelia Groza          2020-11-25  2602  		fallthrough;
-86c0c196cbe48f Camelia Groza          2020-11-25  2603  	case XDP_ABORTED:
-86c0c196cbe48f Camelia Groza          2020-11-25  2604  		trace_xdp_exception(priv->net_dev, xdp_prog, xdp_act);
-86c0c196cbe48f Camelia Groza          2020-11-25  2605  		fallthrough;
-86c0c196cbe48f Camelia Groza          2020-11-25  2606  	case XDP_DROP:
-86c0c196cbe48f Camelia Groza          2020-11-25  2607  		/* Free the buffer */
-86c0c196cbe48f Camelia Groza          2020-11-25  2608  		free_pages((unsigned long)vaddr, 0);
-86c0c196cbe48f Camelia Groza          2020-11-25  2609  		break;
-86c0c196cbe48f Camelia Groza          2020-11-25  2610  	}
-86c0c196cbe48f Camelia Groza          2020-11-25  2611  
-86c0c196cbe48f Camelia Groza          2020-11-25  2612  	return xdp_act;
-86c0c196cbe48f Camelia Groza          2020-11-25  2613  }
-86c0c196cbe48f Camelia Groza          2020-11-25  2614  
-
-:::::: The code at line 2553 was first introduced by commit
-:::::: ae680bcbd06ae9189e0102f8cdb5fd938b00725f dpaa_eth: implement the A050385 erratum workaround for XDP
-
-:::::: TO: Camelia Groza <camelia.groza@nxp.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
