@@ -1,112 +1,164 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9502CA7
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 23:25:35 +0000 (UTC)
-Received: by mail-pg1-f202.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso4044526pgk.21
-        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 16:25:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549B32CA7
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 23:26:12 +0000 (UTC)
+Received: by mail-io1-f50.google.com with SMTP id u20so9379963iob.8
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 16:26:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=OhirvL3LrpsrpGUFLH/SV2OLOMXqNUAB/vXAw1XRY00=;
-        b=R8xM1rtChBJCyKph+bVpC2te2Q0v2DLVsD8aFQuy8l2zZkyEHlV5DCicE20Y8T9uRW
-         1jc2S1CQi4fEh/28xemYWzn+E1SfGirSE+OQEPvYJveHwE+/F/6FJYMjpftsBW05O9US
-         OOQInlQ0EVeu5FuhmLv8dTYRebVYbSYZA1zsy7m41XNFkplNRR3kgsDlsazFpzd7oIus
-         HqK8FRzTjHqmOTy9UExoMi+dmwCbpv0u+nAj4QwP3CVJmgM4bWmgIexoILG046LhDQ4B
-         t1rJl4VfcBRY+VmYzEtBUH5vBbaulgiZS+oVi3GQcasTQyHcmZWXnivlt2whBfObAnz4
-         TsLg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3YvOgvXOXgKJ9W7BKp/jkotIdUHeW5Mi6XOrIgvd1o=;
+        b=kJSM4FUJOFEyyoUlphbsiJKDF2fNs2Q+gA9Fkw7292mE0XgsScrHFuFpU6ZaG4FHoR
+         8jim+pM87JzYkIEcjbuYVe+HBhJyJVyRChTMGYD+s1rhfzt6Vs/gYwByIJSz5sKu9pXM
+         zB2z8LCeDF6vGQvLA2uw2+SC+Ga1W5AOEQ8hfWuCtu++Q3rEHbrcGXCFpNp2ctU6bkBv
+         ut0nnOg+/qJ3rMOoDwp/z6BntO0mnu0kbMy+W23h+qgP+uelv4SzTrRaAdwH8Dx1jVPL
+         HHJoeJeEA9qaZNwHxV+uKU9sAnU9H0CTrhfBW8LK2TZ1oSOf4aapoR4OJPGX5PEpbM21
+         dZ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=OhirvL3LrpsrpGUFLH/SV2OLOMXqNUAB/vXAw1XRY00=;
-        b=GQfPRTe9OFbFCNRWaSOw0ZCkaWQv6y8dV4zzXC4rf6mzJ+L0KxnoALsEUQmK87ltO6
-         jzZqcgZ00ZqePDLz8l1Ct77h3CnDeOGM5Tbnvk7WwjmW1NgS5rVgjDtjIb9swbC63sdM
-         Ju1LgcJ9Vt60IJS8QLO+zb/DDOJFmd9bLwxlBSIAsUm1r8OUwl8sSCpjpMJdI2wA8/pO
-         Epc0O40qmMw7Gc4b/a8plhBdRoydAERipUQ7EnOFk2iB5UF3B6wFRJiQIsFw7wyG9341
-         PEdMoj1hqGfSudYKZI4ntO9yokPIJrJX6wHybLOvADSMMEyEbD7/E16LUNVC8x20id4u
-         V7CA==
-X-Gm-Message-State: AJIora/aXotIqI01hJH8hBPHNFbs/NE6V4+AbFu4tASV5G/tBMOh8PNB
-	XrnmbFK6mXdOL8vq/E6i2C3+WdO2rsAeWw==
-X-Google-Smtp-Source: AGRyM1vnAn3L1a5orvF7pBa+LLZ8msIBU+2aUfJxeXzDvaD++UBWHlHM4MdhaBExUPvkVqAR7ySiTLQpTvPeGg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:278b:b0:1ef:b15e:61e3 with SMTP
- id pw11-20020a17090b278b00b001efb15e61e3mr6864938pjb.143.1657668334688; Tue,
- 12 Jul 2022 16:25:34 -0700 (PDT)
-Date: Wed, 13 Jul 2022 07:25:27 +0800
-Message-Id: <20220712232527.1864211-1-davidgow@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3YvOgvXOXgKJ9W7BKp/jkotIdUHeW5Mi6XOrIgvd1o=;
+        b=dFqhzw86cqT5zSUd0vyf39SpObegfvBpp1W63nBqQfBxwGCPt3iRsuc6QtECtWN+VK
+         iOHXQ4GRO8osmkdFuNTofdOCYVC85vKTtrf/pwnyUVcDZvzvKbduQRvpdFyay+OHaE/o
+         SQoTVwjyzYUDh3MX7q0v+K/tNRJCrQ9oaDnXCxhUM/DzGpFHx91tCNk+MRAT5ltPzwMs
+         C0D129BYbzrmYTo7dIwtBrLmtZiAdzHiMUwl+/6oC5cxt6pvCErS3P1jq9UPjQL3TEq5
+         rQ9A3Bw/SZy5SKizK4Zkfh28Sz3ikoJiVQOXXS+5opjz2ivaz2FEKWr4uqD8TGFvaHem
+         gK5A==
+X-Gm-Message-State: AJIora8rZ6uCZf8pRy7g7rDjjXYUu1MjJUG4uJETH9jpXhc9O1AetaFc
+	BLA3OOP6pkF8CghljMHpjxM=
+X-Google-Smtp-Source: AGRyM1saynzQkwGM+ob0Kfg8t62NJax3I9qIPugPBKcuk0nur2+1d9I6KibU7dK0bZ0KsICgPJcMuQ==
+X-Received: by 2002:a05:6638:134a:b0:33f:20b6:398b with SMTP id u10-20020a056638134a00b0033f20b6398bmr334606jad.301.1657668371297;
+        Tue, 12 Jul 2022 16:26:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-105-222.hlrn.qwest.net. [71.218.105.222])
+        by smtp.gmail.com with ESMTPSA id o17-20020a92d4d1000000b002dbee570531sm4194605ilm.18.2022.07.12.16.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 16:26:10 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: bpf@vger.kernel.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3] bpf/scripts: Generate GCC compatible helpers
+Date: Tue, 12 Jul 2022 17:25:56 -0600
+Message-Id: <20220712232556.248863-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH v2] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
-From: David Gow <davidgow@google.com>
-To: Daniel Latypov <dlatypov@google.com>, Brendan Higgins <brendanhiggins@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	kernel test robot <yujie.liu@intel.com>, kernel test robot <lkp@intel.com>, 
-	Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-It's possible that memory allocation for 'filtered' will fail, but for the
-copy of the suite to succeed. In this case, the copy could be leaked.
+The current bpf_helper_defs.h helpers are llvm specific and don't work
+correctly with gcc.
 
-Properly free 'copy' in the error case for the allocation of 'filtered'
-failing.
+GCC appears to required kernel helper funcs to have the following
+attribute set: __attribute__((kernel_helper(NUM)))
 
-Note that there may also have been a similar issue in
-kunit_filter_subsuites, before it was removed in "kunit: flatten
-kunit_suite*** to kunit_suite** in .kunit_test_suites".
+Generate gcc compatible headers based on the format in bpf-helpers.h.
 
-This was reported by clang-analyzer via the kernel test robot, here:
-https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
+This generates GCC/Clang compatible helpers, for example:
+	/* Helper macro for GCC/Clang compatibility */
+	#define NOARG
+	#if __GNUC__ && !__clang__
+	#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \
+	ret_type ret_star name(__VA_ARGS__) __attribute__((kernel_helper(num)));
+	#else
+	#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \
+	static ret_type ret_star(*name)(__VA_ARGS__) = (void *) num;
+	#endif
 
-And by smatch via Dan Carpenter and the kernel test robot:
-https://lore.kernel.org/all/202207101328.ASjx88yj-lkp@intel.com/
+	BPF_HELPER_DEF(1, *, void, bpf_map_lookup_elem, void *map, const void *key)
 
-Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
+	BPF_HELPER_DEF(2, NOARG, long, bpf_map_update_elem, void *map, const void *key, const void *value, __u64 flags)
+
+See:
+https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
+
+This fixes the following build error:
+error: indirect call in function, which are not supported by eBPF
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-
-Thanks everyone! No actual code changes in v2, just fixes to the
-description.
-
-Changes since v1:
-https://lore.kernel.org/all/20220712095627.1770312-1-davidgow@google.com/
-- Fix a mistake in the commit description where we noted the allocation
-  for 'copy' could fail, instead of 'filtered'. (Thanks Yujie!)
-- Noted in the description that smatch also found this (Thanks Dan!)
-- Added the extra Reported-by and Reviewed-by tags.
-
+Changes v2 -> v3:
+  - use a conditional helper macro
+Changes v1 -> v2:
+  - more details in commit log
 ---
- lib/kunit/executor.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ scripts/bpf_doc.py | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 6c489d6c5e5d..5e223327196a 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -74,8 +74,10 @@ kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
- 		return ERR_PTR(-ENOMEM);
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index a0ec321469bd..45f51ff1318c 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -717,6 +717,16 @@ class PrinterHelpers(Printer):
+         header = '''\
+ /* This is auto-generated file. See bpf_doc.py for details. */
  
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
--	if (!filtered)
-+	if (!filtered) {
-+		kfree(copy);
- 		return ERR_PTR(-ENOMEM);
-+	}
++/* Helper macro for GCC/Clang compatibility */
++#define NOARG
++#if __GNUC__ && !__clang__
++#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \\
++ret_type ret_star name(__VA_ARGS__) __attribute__((kernel_helper(num)));
++#else
++#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \\
++static ret_type ret_star(*name)(__VA_ARGS__) = (void *) num;
++#endif
++
+ /* Forward declarations of BPF structs */'''
  
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
+         print(header)
+@@ -746,6 +756,11 @@ class PrinterHelpers(Printer):
+             return
+         self.seen_helpers.add(proto['name'])
+ 
++        if proto['ret_star']:
++            ret_star = proto['ret_star']
++        else:
++            ret_star = 'NOARG'
++
+         print('/*')
+         print(" * %s" % proto['name'])
+         print(" *")
+@@ -762,8 +777,8 @@ class PrinterHelpers(Printer):
+                 print(' *{}{}'.format(' \t' if line else '', line))
+ 
+         print(' */')
+-        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
+-                                      proto['ret_star'], proto['name']), end='')
++        print('BPF_HELPER_DEF(%d, %s, %s, %s, ' % (len(self.seen_helpers),
++            ret_star, self.map_type(proto['ret_type']), proto['name']), end='')
+         comma = ''
+         for i, a in enumerate(proto['args']):
+             t = a['type']
+@@ -781,7 +796,7 @@ class PrinterHelpers(Printer):
+             comma = ', '
+             print(one_arg, end='')
+ 
+-        print(') = (void *) %d;' % len(self.seen_helpers))
++        print(')')
+         print('')
+ 
+ ###############################################################################
 -- 
-2.37.0.144.g8ac04bfd2-goog
+2.34.1
 
