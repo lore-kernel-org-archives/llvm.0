@@ -1,99 +1,112 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8896AAC
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:30:47 +0000 (UTC)
-Received: by mail-qk1-f172.google.com with SMTP id i2so5286612qkm.8
-        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 14:30:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9502CA7
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 23:25:35 +0000 (UTC)
+Received: by mail-pg1-f202.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso4044526pgk.21
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 16:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=/ov82X9kW39yvbxY1McMir/k+O2+nYDyG4xPScmDyfc=;
-        b=ay3/5lDUwcy1Hcdr2vmHaxiMQwYnvd/iCWseV3Jo2Kp2E/uDYFyEIr76QZQCwA7K+S
-         wi1beA0eG1qxbEBdN7ZT4w6+ri8TWB8pNNplK5yvswScENpVx3UZUWOZYg2+DBlj4gEf
-         YPcT+/qh0IYxNQoeADazl8GnAJqKoTR8qVEaM=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=OhirvL3LrpsrpGUFLH/SV2OLOMXqNUAB/vXAw1XRY00=;
+        b=R8xM1rtChBJCyKph+bVpC2te2Q0v2DLVsD8aFQuy8l2zZkyEHlV5DCicE20Y8T9uRW
+         1jc2S1CQi4fEh/28xemYWzn+E1SfGirSE+OQEPvYJveHwE+/F/6FJYMjpftsBW05O9US
+         OOQInlQ0EVeu5FuhmLv8dTYRebVYbSYZA1zsy7m41XNFkplNRR3kgsDlsazFpzd7oIus
+         HqK8FRzTjHqmOTy9UExoMi+dmwCbpv0u+nAj4QwP3CVJmgM4bWmgIexoILG046LhDQ4B
+         t1rJl4VfcBRY+VmYzEtBUH5vBbaulgiZS+oVi3GQcasTQyHcmZWXnivlt2whBfObAnz4
+         TsLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=/ov82X9kW39yvbxY1McMir/k+O2+nYDyG4xPScmDyfc=;
-        b=45z+8lyJXkK15eXE6nMQ5NtIhNJuIfgFgQNKAxukS+XglfqKKbVpxzTYYpwfbjvdti
-         6TP/F0Jcn6A5CuCuMoA9VViN0HXsdXHTVRbVLqQTjycI9aQGU7+izNefpfDFizAx15O+
-         oYBbbZ9EJNd1m4Smm5a+s6bmf3PKb/9JR1fB82Zq1ZVOx4MRszaH0n7EGfH/fCplS6cE
-         6cx+nV/irl8vxJ2B4e7TLHJcmK1iVGk3Ofg7dQa4Kf2E52gKr3NnTRvqWm9QqnISIhjQ
-         6Isx2VeK78IaRdYfew0e/xmKGn+HDFXt36Qs7j3ecj2gkexxMaALT/x96l6OQy+3EG3g
-         NmRg==
-X-Gm-Message-State: AJIora/2ez6osYsDunGR867vwozQ500Z/5ZZMjOAaG/cwWCWu5yWWGKy
-	tZdWQzWUdhbpvD97YArDSwC0Hw==
-X-Google-Smtp-Source: AGRyM1tPYp1vPM53Xd2cP3aF0HKDN4RijBCYmU7LSYzQBcaeKECQ9LthjfLWLntHfoh9ElULngaJQA==
-X-Received: by 2002:a05:620a:132d:b0:6b5:9575:9080 with SMTP id p13-20020a05620a132d00b006b595759080mr222850qkj.153.1657661446728;
-        Tue, 12 Jul 2022 14:30:46 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id y13-20020a05620a44cd00b006b5a9e53105sm1931238qkp.91.2022.07.12.14.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:30:46 -0700 (PDT)
-From: Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date: Tue, 12 Jul 2022 17:30:44 -0400 (EDT)
-To: James Clark <james.clark@arm.com>
-cc: Andrew Kilroy <andrew.kilroy@arm.com>, linux-kernel@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org, acme@kernel.org, 
-    Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-    Mark Rutland <mark.rutland@arm.com>, 
-    Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-    Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-    Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
-    Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
-    KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>, 
-    linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, 
-    bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
- not supported
-In-Reply-To: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
-Message-ID: <8b6a583a-4ee0-8097-54e5-7d51a6edaa@maine.edu>
-References: <20220704145333.22557-1-andrew.kilroy@arm.com> <20220704145333.22557-3-andrew.kilroy@arm.com> <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu> <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=OhirvL3LrpsrpGUFLH/SV2OLOMXqNUAB/vXAw1XRY00=;
+        b=GQfPRTe9OFbFCNRWaSOw0ZCkaWQv6y8dV4zzXC4rf6mzJ+L0KxnoALsEUQmK87ltO6
+         jzZqcgZ00ZqePDLz8l1Ct77h3CnDeOGM5Tbnvk7WwjmW1NgS5rVgjDtjIb9swbC63sdM
+         Ju1LgcJ9Vt60IJS8QLO+zb/DDOJFmd9bLwxlBSIAsUm1r8OUwl8sSCpjpMJdI2wA8/pO
+         Epc0O40qmMw7Gc4b/a8plhBdRoydAERipUQ7EnOFk2iB5UF3B6wFRJiQIsFw7wyG9341
+         PEdMoj1hqGfSudYKZI4ntO9yokPIJrJX6wHybLOvADSMMEyEbD7/E16LUNVC8x20id4u
+         V7CA==
+X-Gm-Message-State: AJIora/aXotIqI01hJH8hBPHNFbs/NE6V4+AbFu4tASV5G/tBMOh8PNB
+	XrnmbFK6mXdOL8vq/E6i2C3+WdO2rsAeWw==
+X-Google-Smtp-Source: AGRyM1vnAn3L1a5orvF7pBa+LLZ8msIBU+2aUfJxeXzDvaD++UBWHlHM4MdhaBExUPvkVqAR7ySiTLQpTvPeGg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:278b:b0:1ef:b15e:61e3 with SMTP
+ id pw11-20020a17090b278b00b001efb15e61e3mr6864938pjb.143.1657668334688; Tue,
+ 12 Jul 2022 16:25:34 -0700 (PDT)
+Date: Wed, 13 Jul 2022 07:25:27 +0800
+Message-Id: <20220712232527.1864211-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH v2] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
+From: David Gow <davidgow@google.com>
+To: Daniel Latypov <dlatypov@google.com>, Brendan Higgins <brendanhiggins@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	kernel test robot <yujie.liu@intel.com>, kernel test robot <lkp@intel.com>, 
+	Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 11 Jul 2022, James Clark wrote:
-> On 06/07/2022 17:01, Vince Weaver wrote:
-> > So in this case you are leaking ARM64-specific info into the generic 
-> > perf_event_open() call?  Is there any way the kernel could implement this 
-> > without userspace having to deal with the issue?
-> 
-> The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
-> and then it's not Arm specific, it's just that only Arm implements it for now.
-> This is definitely an option.
-> 
-> But if no platform ever implements something similar then that bit is wasted.
-> The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
-> But as you say, maybe making it arch specific isn't the right way either.
+It's possible that memory allocation for 'filtered' will fail, but for the
+copy of the suite to succeed. In this case, the copy could be leaked.
 
-I don't know what the current kernel policy is on this kind of thing, but 
-in the past perf_event_open was meant to be a generic as possible.
-Having architecture-specific magic bits is best avoided.
-However I'm not the maintainer for this so really my opinion doesn't 
-really matter.
+Properly free 'copy' in the error case for the allocation of 'filtered'
+failing.
 
-I'm just speaking up as a userspace coder who is trying to write 
-cross-platform tools, and having to maintain obscure arch-specific code 
-paths in every single utility ends up being a huge pain.  And isn't the 
-whole point of an operating system to abstract this away?
+Note that there may also have been a similar issue in
+kunit_filter_subsuites, before it was removed in "kunit: flatten
+kunit_suite*** to kunit_suite** in .kunit_test_suites".
 
-> > can tell there haven't been any documentation patches included for the 
-> > Makefile.
-> 
-> We plan to update the docs for the syscall, but it's in another repo, and
-> we'll wait for this change to be finalised first. I'm not sure what you
-> mean about the Makefile?
+This was reported by clang-analyzer via the kernel test robot, here:
+https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
 
-sorry, that was a mis-type.  I meant "manpage" not Makefile.
+And by smatch via Dan Carpenter and the kernel test robot:
+https://lore.kernel.org/all/202207101328.ASjx88yj-lkp@intel.com/
 
-Vince Weaver
-vincent.weaver@maine.edu
+Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+
+Thanks everyone! No actual code changes in v2, just fixes to the
+description.
+
+Changes since v1:
+https://lore.kernel.org/all/20220712095627.1770312-1-davidgow@google.com/
+- Fix a mistake in the commit description where we noted the allocation
+  for 'copy' could fail, instead of 'filtered'. (Thanks Yujie!)
+- Noted in the description that smatch also found this (Thanks Dan!)
+- Added the extra Reported-by and Reviewed-by tags.
+
+---
+ lib/kunit/executor.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 6c489d6c5e5d..5e223327196a 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -74,8 +74,10 @@ kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+-	if (!filtered)
++	if (!filtered) {
++		kfree(copy);
+ 		return ERR_PTR(-ENOMEM);
++	}
+ 
+ 	n = 0;
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-- 
+2.37.0.144.g8ac04bfd2-goog
+
