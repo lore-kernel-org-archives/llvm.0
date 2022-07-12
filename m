@@ -1,337 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E0D7A
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657618908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pxSXogP+WGCZRqw/lQu4d7oiNiFE2JGJVt/jL4SUhIU=;
-	b=R5zAYH/ywXrhykDfwUcS95U3/GsjREas5eCcr6QaAh/Mklg72sOnqQGL9zgSgksQMFcm7U
-	A+ANVzdN6RBExciaSgIn0YRTaN9TTZkbUvWED5HbKq58qNIVQa+K8HnQRqAsaWCj4aDfnq
-	Qc/C0ADK9k4k4U5D3pp1tvMFiERE8Qo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-79-DAm8jj9dMBSNj3c3WtV7vw-1; Tue, 12 Jul 2022 05:41:47 -0400
-X-MC-Unique: DAm8jj9dMBSNj3c3WtV7vw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA66685A587
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:41:46 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.34.251])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DB2DB492C3B;
-	Tue, 12 Jul 2022 09:41:46 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (79/492 SKIPPED): Test report for 5a29232d
- (mainline.kernel.org-clang)
-Date: Tue, 12 Jul 2022 09:41:43 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B02D7A
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:48:23 +0000 (UTC)
+Received: by mail-wr1-f47.google.com with SMTP id a5so10370257wrx.12
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 02:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WcPIJHWyToGVlIzDYOdfUB4mbv1ws7QerB6L3JMPYZ0=;
+        b=qTn9s6H2hO+MfqMpLno3oo6tu+sKBx1LyvIZ9q4T2q6toceAyIopXU8BLiLSSJh8Y5
+         gOMGN/tva7VtKfi/E7zxIfu4EygB4KXSzlahhUZABzcp0mb8n22EtrxNnN2uhka+jt3F
+         jM7yPbQN2NxmfGSx3Zu+dILeI4CqzzLaJYElYWrxe9g/4rWz4fFvP6zYieOJNN1aUE0B
+         KtcyVselTQRu9d1tyguKxAQcYRrhkv0zB4zefB0/vdgeqLAqu+U4hiqadhnGm6thgaYC
+         hSBVL+vaVO61bTPDOqmObpLN88sGQJxNa8oHy271N7jyFymCls6oJoecMFJUm1XLOrLW
+         PNoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WcPIJHWyToGVlIzDYOdfUB4mbv1ws7QerB6L3JMPYZ0=;
+        b=z5+4yM9jqSzJS7pAVR5H4EZYBhulyGi5IXQtRax5rTlU2sSDKS28xg8bZkbk4VshYa
+         m+HIbUK86P8COShkF1WbS4/YrWHqteGMzQ/fgVpD/WLzygHVbax5CGF4p5LAJxvCPe0B
+         A23Fxr8xumKAkx0etnjd5I5xYUEg/M1OXooVWzcXfl/uhexsntUh+Lq5ov1D7X6YtJb9
+         gskfDwo3goYE2BFwFmAdUI4txLjJmB876R3OY4I4KsR1ymFG7KFy/HwjUN8Pg69Va6BY
+         4gtfmVw7bqCaygul91XW2PAQ5+/+PvkfMoMj383VmvJT6tnowKQHbVuJ2G+DiFTVEJGd
+         lK1Q==
+X-Gm-Message-State: AJIora8VvEzoHNifUHmpGUhvBeIfu2IIpqpE8WYahsJxmFgsNxGj65pJ
+	SWO0DQG1u1hOGTgjNRyTOd8D6A==
+X-Google-Smtp-Source: AGRyM1t8KGr5XoQft8lPqDZI8l7AxfbF/t6JDU+4e6F9ndr5oYREAwYjj1hvJgKWw4r5YUmX41ahuA==
+X-Received: by 2002:a5d:6d49:0:b0:21b:a3ba:30b5 with SMTP id k9-20020a5d6d49000000b0021ba3ba30b5mr21773949wri.513.1657619301745;
+        Tue, 12 Jul 2022 02:48:21 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id n68-20020a1c2747000000b0039c96b97359sm9024370wmn.37.2022.07.12.02.48.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 02:48:21 -0700 (PDT)
+Message-ID: <a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com>
+Date: Tue, 12 Jul 2022 10:48:20 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <69102.122071205414700221@us-mta-79.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+Cc: Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+ Song Liu <songliubraving@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+ <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+ <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+ <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+From: Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 12/07/2022 05:40, Andrii Nakryiko wrote:
+> CC Quentin as well
+> 
+> On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+> <james.hilliard1@gmail.com> wrote:
+>>
+>> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+>>>
+>>>
+>>>
+>>> On 7/6/22 10:28 AM, James Hilliard wrote:
+>>>> The current bpf_helper_defs.h helpers are llvm specific and don't work
+>>>> correctly with gcc.
+>>>>
+>>>> GCC appears to required kernel helper funcs to have the following
+>>>> attribute set: __attribute__((kernel_helper(NUM)))
+>>>>
+>>>> Generate gcc compatible headers based on the format in bpf-helpers.h.
+>>>>
+>>>> This adds conditional blocks for GCC while leaving clang codepaths
+>>>> unchanged, for example:
+>>>>       #if __GNUC__ && !__clang__
+>>>>       void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+>>>>       #else
+>>>>       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+>>>>       #endif
+>>>
+>>> It does look like that gcc kernel_helper attribute is better than
+>>> '(void *) 1' style. The original clang uses '(void *) 1' style is
+>>> just for simplicity.
+>>
+>> Isn't the original style going to be needed for backwards compatibility with
+>> older clang versions for a while?
+> 
+> I'm curious, is there any added benefit to having this special
+> kernel_helper attribute vs what we did in Clang for a long time? Did
+> GCC do it just to be different and require workarounds like this or
+> there was some technical benefit to this?
+> 
+> This duplication of definitions with #if for each one looks really
+> awful, IMO. I'd rather have a macro invocation like below (or
+> something along those lines) for each helper:
+> 
+> BPF_HELPER_DEF(2, void *, bpf_map_update_elem, void *map, const void
+> *key, const void *value, __u64 flags);
+> 
+> And then define BPF_HELPER_DEF() once based on whether it's Clang or GCC.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Hi, for what it's worth I agree with Andrii, I would rather avoid the
+#if/else/endif and dual definition for each helper in the header, using
+a macro should keep it more readable indeed. The existing one
+(BPF_HELPER(return_type, name, args, id)) can likely be adapted.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Also I note that contrarily to clang's helpers, you don't declare GCC's
+as "static" (although I'm not sure of the effect of declaring them
+static in this case).
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/47596
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - LTP - syscalls
-                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
-ty bit to be set after writing to mmap()-ed area
-                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
-i/
-         aarch64 - LTP - commands
-                   Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -=
-P' failed.
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/755
-                   Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' fail=
-ed, not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1249
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         aarch64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-         ppc64le - Boot test
-                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
-7.0: Cannot write: No space left on device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1047
-         ppc64le - Boot test
-                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
-7.0: Cannot write: No space left on device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1047
-         ppc64le - Boot test
-                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
-7.0: Cannot write: No space left on device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1047
-           s390x - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-           s390x - LTP - commands
-                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/972
-                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1251
-                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
-not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1264
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - kselftest build - net
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - kselftest build - bpf
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - Boot test
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-          x86_64 - Storage - blktests - nvmeof-mp
-                   Issue: Storage blktests - nvmeof-mp: FAIL: Configured NV=
-Me target driver
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1168
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
-tch container ID
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1167
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Quentin
