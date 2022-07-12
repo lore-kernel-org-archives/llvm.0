@@ -1,38 +1,38 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630976AAC
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:27:22 +0000 (UTC)
-Received: by mail-io1-f41.google.com with SMTP id y2so9139633ior.12
-        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 14:27:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC816AAC
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:30:33 +0000 (UTC)
+Received: by mail-ed1-f43.google.com with SMTP id eq6so11771132edb.6
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 14:30:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
-        b=FMJNqa++kuJpdQYJXjWWJcEWpD8+YWreVG7WugTc0ennaNQ4QR7g8pXILGxJlJ45Tv
-         cB4XqYlFi6xnxR63ejBJexoF9BKMSG8ivgsWYOM6F3T9eOXrFw96hdTxCtFpg7cbuCUh
-         gicIFv0swNlNJPJsLTNN5Zv1Y+5d49PtpDWn+lsVJ18QnUn7vApvzDoS48Tg2ffs/qQc
-         1QdwHD3kSAX8nvdErP/G3gA9yj1QcMMoijpCESLcOKunlCtGyjrVyoQEwckhS71h9RFs
-         4Dl/LY0JvOXaii8UM6oYj/xSqoywoU8cnGQuqLl5j/7qYIaB6loPcnbFqanDr59ekRr+
-         V0nQ==
+        bh=uu5ujFc12aNN3GGgqs6/6TW5s77fyJHq00hImXE08gI=;
+        b=jp/YuOF9u9ixWxX/FaasM7zJIZ22SD11WXANkZsA2SXcXAqk7mL9xH4XlWADqdZPQ9
+         oOQSf0lzznnLakgMnSuhLJAHL6h8LmBH5RFTFVE6i3vmTSJQkDTtJkgqnZP0ltTOMkVl
+         ST/MvgqZCH1gUrAc4tD0hrC0e9TNkZ/NCqz2NhpOMuqMDbejg++UlauSXwid1e1gHrTC
+         DcF6qNCmyGdBFU9Gub4Og+XCanv/trY/27bEp/WlQZJkJv5pNNkFJMvovd74SzZ9eX+d
+         LqkD2bo/bPUDdUTus90upuXoRy7WZrDFsfWjHjOCNBzuDLWHnw3cAsn7QT9XWddnwwV3
+         kBCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
-        b=UuzadF9AvcVKcWg09aw7mXfIxCgIcVveRmzrlW46JS06b/i7VgLBmY8zAqXhKKsH4T
-         qFksNDwZSkFCPTIxQjUStQQ4Ch1T9ljCYV+qACfVo3BlmAe8e8B4DfojI/gh38DYpjGv
-         8+oQ8KrjXEvE/LC+bLNAEm6kDDGCNFmqs7m5/AsDjPmhj8gWud9cvUt+7lRd1EViQ+N/
-         MWxd6LkBRvDHp5ayc0RVRtYyNcAvRe173T9OFWF9RuK25TICf7C0SZ/GnSQohfcLDoBo
-         MtP6nUL7sjvbMNeLHCLj1UjatxJAr8Xur3TMfUbZ2p4e7bfOc2dQVzOX+yNfg2IYFFSA
-         0wXQ==
-X-Gm-Message-State: AJIora/4Bjg1sXZT0fqHDXzaTjOVAz1ZooZwo3c1SKTTrqAakIPr8cNP
-	TZ/QZ6Da8edeFU8nsmRJZvXkyG9jvx20rjEDHLcsmg==
-X-Google-Smtp-Source: AGRyM1tNjr8o/bDVFpbm8D9wO5b8kklpsyfdub1zcBTGrK8QXVgsSC8mlph3W82pJqOwau91MwVRx/tD9fxDqB4UnFQ=
-X-Received: by 2002:a05:6602:340b:b0:67b:8189:23c5 with SMTP id
- n11-20020a056602340b00b0067b818923c5mr130294ioz.52.1657661241327; Tue, 12 Jul
- 2022 14:27:21 -0700 (PDT)
+        bh=uu5ujFc12aNN3GGgqs6/6TW5s77fyJHq00hImXE08gI=;
+        b=kTyLMTZ+wWBVlQfBLVCwuNc3xz8hNRqhc5/oFZuv86dAaV4/DYDHTvE4ECBREXApS8
+         D9BU5X++vx+Au+UIttujhqKizpjWPKqSjeFMc7DDs8NI+CFSOqV5l4VRRxUOLGGkrvD9
+         2r06c29IEG9VxhxLp3zRpXb0aAaWxF5xgswV+L+e0Pf4F01QnWtUEY1f0iobWrNn8k3L
+         C9++gbsAbUm9XBeOknwEUCxZBHk+dGdQR1CPn/y5wOeHqlT+27Elx49gxI7tMivOJY55
+         eeaIWTvW4LXleujtnKiCdvftMbuSz+dKH7vrQJDhzrS7tGoJzTfBSq8yL05qJ6ELMixB
+         kN+A==
+X-Gm-Message-State: AJIora/nUaVqoi6sSPRhLqtLpERdrYA/YzeflOF1zVMgUJYk68R1CHMv
+	vqtwSQEJXRKlAJ8Suto0qtqsaSNsP9Wo4/eDeYTRjg==
+X-Google-Smtp-Source: AGRyM1u5z01hy3Db/V7yac0AKg4gJxLrEynC/5VZC4/iEhjgrrd8swu9Ogii71DuH6u8AeBeQIY6BBvqQvxRat1WNZA=
+X-Received: by 2002:a05:6402:4488:b0:43a:7b6e:4b04 with SMTP id
+ er8-20020a056402448800b0043a7b6e4b04mr199448edb.202.1657661431987; Tue, 12
+ Jul 2022 14:30:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,18 +41,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220712095627.1770312-1-davidgow@google.com>
 In-Reply-To: <20220712095627.1770312-1-davidgow@google.com>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Tue, 12 Jul 2022 14:27:10 -0700
-Message-ID: <CAGS_qxrBGcz4gAtqu8QSJO8SP_a0n+18OiBVQaRXBQMwbL4w+Q@mail.gmail.com>
+From: Brendan Higgins <brendanhiggins@google.com>
+Date: Tue, 12 Jul 2022 17:30:20 -0400
+Message-ID: <CAFd5g46eTf_9i-JosUKiL5MQ_iTGNw5eO-TpokVh7PJevMztcQ@mail.gmail.com>
 Subject: Re: [PATCH] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
 To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendanhiggins@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+Cc: Daniel Latypov <dlatypov@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
 	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
 	kernel test robot <yujie.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 12, 2022 at 2:56 AM David Gow <davidgow@google.com> wrote:
+On Tue, Jul 12, 2022 at 5:56 AM David Gow <davidgow@google.com> wrote:
 >
 > It's possible that memory allocation for the copy will fail, but for the
 > copy of the suite to succeed. In this case, the copy could be leaked.
@@ -71,6 +71,4 @@ On Tue, Jul 12, 2022 at 2:56 AM David Gow <davidgow@google.com> wrote:
 > Reported-by: kernel test robot <yujie.liu@intel.com>
 > Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-
-Thanks for taking care of this.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
