@@ -1,137 +1,337 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2127.outbound.protection.outlook.com [40.107.102.127])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C12B7A
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:21:14 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lZDZsbVhMvNF0ZZ7ZAZ3RC07yywikRQF2lkmSIX0hpeu4xmGNi/wWCWcvCvzvHwtiMPqnkS9pFNCSqX1/QI1J24p19ffBZ9r6wNlhYConh80hfskjAqnTDEvloZfYOizesAZYqU973hs3fjIiI2EHtp+00m9JU9qvoSWZSPlLs1lSvEamnzD8sgJw9n2/DMTppy/T88g3ZvjJkCgobUyou2jIT1jB1Krd8kHSN6H4wBTAx/hTXggcs27p2VOFLQ1oFwVKi6WUkzr7l75M69cHtzA68tPx1bQ4PzsQQn75rc6IO/e9sMSMhHZALEzoC7DTHJ38umpfQPzq/EvPMMJCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sVUJl4CwulCat/vBDd2HPb89Ic9AQPWnfp4jAjLeAQA=;
- b=erJVb9hsxki8/PFtV4Xim6a5d2rsWZofCQnxsTjHj7TPgl2vUXLlRxl79LXABUtnn7iEhoio/2oeu8G3lTZsBHyo0dT564Rrv7lvz9WauOmy57M/1D/w1lCCrpVcFRLsSVCEKaVZwzloxugnR7VCjmP0uCRSvBOx8RMPKe00bL8LFLvYIxdtP/UB3iC9a7rxJgMPbiVCJgPT7KGGGh5S2sR+c3HRvL16Fd4KnN8yQB2WDM7Cb4zMYMFoM7kVgJksFZ2fncy/kJrZbjNCYn6LHDicdnbfqLxYqKTBcbr6bewNRC5/iGTYM1ZCM1tOpwEkfMdU8oZKbEyH0QHfaZOBCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sVUJl4CwulCat/vBDd2HPb89Ic9AQPWnfp4jAjLeAQA=;
- b=Jmbe5DaXGJwsg15Lk/4WEokxsEgWxAKRhzJA7iiVgxgfCHabML6KVxFIta/qB/VBxnx+5klju7DYj3ENx8nOMPbmULAte1xhR2QXvl/ed6cbbIEsbsXXlrW1FzKTAG3kUH4X3q6hELYg1e/2yUuiIyuBctmtqFFO3WYES2SZkYw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY5PR13MB3700.namprd13.prod.outlook.com (2603:10b6:a03:21b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.10; Tue, 12 Jul
- 2022 09:21:10 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::bd99:64d1:83ec:1b2]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::bd99:64d1:83ec:1b2%9]) with mapi id 15.20.5438.011; Tue, 12 Jul 2022
- 09:21:10 +0000
-Date: Tue, 12 Jul 2022 11:21:03 +0200
-From: Simon Horman <simon.horman@corigine.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Fei Qin <fei.qin@corigine.com>,
-	Yu Xiao <yu.xiao@corigine.com>,
-	Yinjun Zhang <yinjun.zhang@corigine.com>,
-	Dirk van der Merwe <dirk.vandermerwe@netronome.com>,
-	Leon Romanovsky <leon@kernel.org>, oss-drivers@corigine.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] nfp: fix clang -Wformat warnings
-Message-ID: <Ys08/1BjtahTIIvJ@corigine.com>
-References: <20220712000152.2292031-1-justinstitt@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712000152.2292031-1-justinstitt@google.com>
-X-ClientProxiedBy: AS4P190CA0021.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d0::6) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E0D7A
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1657618908;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pxSXogP+WGCZRqw/lQu4d7oiNiFE2JGJVt/jL4SUhIU=;
+	b=R5zAYH/ywXrhykDfwUcS95U3/GsjREas5eCcr6QaAh/Mklg72sOnqQGL9zgSgksQMFcm7U
+	A+ANVzdN6RBExciaSgIn0YRTaN9TTZkbUvWED5HbKq58qNIVQa+K8HnQRqAsaWCj4aDfnq
+	Qc/C0ADK9k4k4U5D3pp1tvMFiERE8Qo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-79-DAm8jj9dMBSNj3c3WtV7vw-1; Tue, 12 Jul 2022 05:41:47 -0400
+X-MC-Unique: DAm8jj9dMBSNj3c3WtV7vw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA66685A587
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:41:46 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.34.251])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DB2DB492C3B;
+	Tue, 12 Jul 2022 09:41:46 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (79/492 SKIPPED): Test report for 5a29232d
+ (mainline.kernel.org-clang)
+Date: Tue, 12 Jul 2022 09:41:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 942dc8a9-5b88-40cd-63c7-08da63e7dbb4
-X-MS-TrafficTypeDiagnostic: BY5PR13MB3700:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	vehwo24KI+MT+XD+0ECLR43da00duK1QzlG8pqBIU3ZVQ4At9PTlevrmF5cfUPsfZrzS0tyCb5wqyRcTN4sAvaG1tBbYp85CKsNBoCywsBiBj95oWxAy9pkEOlOgeR2y3O8L6tQSbNha5HUeJq004ubOwuiEd2O+KbCpjE7QXVYR8qTHnrUG3LBaEQBdo2ZP+Nq9KVKIiD6GTslqr+YnklO/vaBXyWhlMHXt3/6v71lwZvElOnobqLwqNS3cFSi4soFABS/53fmD6LgNn5pXZ1fwp754HylyCZud1cPZEOw3saYnPq8bHldg0zXD+/awTmKxghuTYArUXFStmNiBDgPjTpIh4A36825UblEuzUeKUECQ+cPiCmFmPo7IcO58uxhZA4KPmUQsy8jeUZqvTchnW3lhz7+OkaH9T7ymBTAVC6Br5JouXTw0lfWuu4YoKfJVfhgX5d6kvKDP8qYdlDo8zClKh9Noxmn0ygAe/ago/T4v0GVltGl6djM8RMjmLPQRiFssS29aXSswhn2gukbSfNc846rJ+zJNipXASBUKhcySH1MzDkA3ez44aotzQ+Q/XRUo6ynKc7xJqbIbDDLDb00Vz6l0x6fqFpwveyuHrxM16ICYJuXBpqwimBLfZoEaBGej+1BdajmC9b9zW8z1mRrx0PNQix+Ym6CvwgR3jxJQoDKGn7WNY4ZV+Yn4RFjO4pK8pRx1N609dDJgnhWMqYj4fLdACekvoEnOP+HdyhCD0SBxsNYLajmlhG4O34CcGd5gdFREVJAZ4NkuZGajK5kG0XYUeYS0sJkUMvk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(39850400004)(396003)(346002)(86362001)(38100700002)(478600001)(8936002)(44832011)(966005)(2906002)(7416002)(6486002)(41300700001)(316002)(5660300002)(6916009)(54906003)(8676002)(66556008)(66946007)(4326008)(186003)(66476007)(52116002)(6666004)(6506007)(83380400001)(6512007)(2616005)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?yl94m2deNnUWPJJOiDWTLgk4v+uRRRh0EbmoPl7p/pHNqN5PNalzG+7D+Nvl?=
- =?us-ascii?Q?6RMjzOAGItwfT8z36m+zkpTax9FpoWtxfBYJP9foH0a3xmxFMgCzEptYd9Iq?=
- =?us-ascii?Q?Nv1+XC3GLBk4jcqYsp17jHBZ2f3lSTXuNxpSe3bzExT2KFoPUzX9U0TMqSpo?=
- =?us-ascii?Q?QYS2CkmHVNDMbZSRWPi4GaBmzJ3aWMSeO2NfSEEt5TMiJjIFEvBMkeBavWwF?=
- =?us-ascii?Q?FVozgoAOqUB+yrhu4tTb5yx3zDN/LB5YUyyW+PvlSEmCE1nDCekF1+boOt2p?=
- =?us-ascii?Q?Ge0Oe5Bj4rFu6abzFyThKbG2DJ/doxPUVI6SNodPXfu1rtx6uLgWXrsDILLB?=
- =?us-ascii?Q?9FFMb1HKbJAMa81M9CcU45zTYqbJ3TPq2PJZia7syCdOLGr5QyKx1I3jT1AA?=
- =?us-ascii?Q?GtkuOZgiVMDhc1QtUuShpQ4GIb6ji2w7zbOEInVPTNLXK0T08mtfJRbpSSdY?=
- =?us-ascii?Q?qtO6OpVhpZ4l67cJSzRK47Bn1qZfWOvNBEoiatIhpq0xD2h8GU8NHKrHFdDm?=
- =?us-ascii?Q?NObgXVVY/xwJVEtnl6jHEXRm7te475lcg2OrUoQSnEfEugo7lkrTBhbuzv+B?=
- =?us-ascii?Q?4++t1BpOq9KkBqdEVo0DHlhfgC84JQ1jo44DClWQ67amWd/nWQkx0mzfqZzo?=
- =?us-ascii?Q?DrWschVmLSiD6X2jllj26PSf1j2hVRUsoZvoOZCFZ8bMzczcTfoDYf7KHA1s?=
- =?us-ascii?Q?1BJl8IcpDnq6GgZGDZFH/hdyETsUg+Ifom+RQcR1cY5rFim/FRNTnQq5vYo7?=
- =?us-ascii?Q?Trx9qIL3kt1Nuoejbh06N0yK6UdFG2rBnuyF40eDR1gSGb+cSy2gVATAXQ2Z?=
- =?us-ascii?Q?HR3Q9rAjZnFRlSdJ+v51Q+JftBZ+PfLnfcw49jl5Rirg0WXQ4qYj7VzucHhF?=
- =?us-ascii?Q?eLqpHgilPTxvDq6TZOlzwo34hpP4OfhoRfFAJqvWv+9AD5vY+tkXWalGFdvs?=
- =?us-ascii?Q?85OeeS0NYWusxcibcI58RWj0IrTztIA/kqvX3LXKCMA4grFQZ9/Uk+43FKDX?=
- =?us-ascii?Q?DkeINd1Ye1KLYvVk8+WwhQYIwjs0LF64ReTrj+hCLLnakFBBWod2edwQotjQ?=
- =?us-ascii?Q?STaZDnhmPongph9zdDFrasaZve0i+zAiKVMEepHprxq3C576M/Pd+m0v7aDl?=
- =?us-ascii?Q?Q8IGX70WSqq0mnn1BUeq6Mwj6H+bkJapP1cm1sdh9PFE7j4XoSruOX3xXWj+?=
- =?us-ascii?Q?A+tV5Gr50nVUt7ektvPpfsRAZvMuoGAlBGQtgFCgKbO1KZoSAu9QPgVdJMhZ?=
- =?us-ascii?Q?Y1JACXcWTyGFEbhdyHkcBTmpcmp6BirqVG3oRr0m27vm7Yhc89hThh4ICaxE?=
- =?us-ascii?Q?IRS5GJw6OzD0fmZjkWEOcfXOEX+SCIETqdmJXvXmQy6bSUg7oTKHRa8Z9Dxw?=
- =?us-ascii?Q?IFs0TRKaf3azTQZ3j5vWWLxhrisGMxBYynAOOoRj0SILziCYfI4g013toD2k?=
- =?us-ascii?Q?3XrOnV6+4isUyFOHFW2z6kBg4DOwcfPY2YK4Z4af+4aE2vi/RKbe0bH9q/jh?=
- =?us-ascii?Q?skp4/T0tHjVvFOL0ZTJYyJ8iiJ0IhNq1G5PuvbnCA4oU3imqJMPkkwHVOH1B?=
- =?us-ascii?Q?VFQAb8NPpAfPLPccUpFvVUVK1XKcCgsiM5YNumzjC9Al4cx3Iw6Qu7hyoiay?=
- =?us-ascii?Q?IUfzv4zclVLSB2zD2V4KYSQkRv4+74YvBg313yAtzvLhSbhh3fBWWOSxzhJB?=
- =?us-ascii?Q?0lR8IQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 942dc8a9-5b88-40cd-63c7-08da63e7dbb4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 09:21:10.2380
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gxdfDBOg/0ukukGGzRa75XeWapw9ugcOCyb/HSrwtihMXN9IqfeHFOQ1R6FDkRvcukEKpmWRBpjS+erpNGT3HZpOEO0/6mlHW65VT17NCRc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3700
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Message-Id: <69102.122071205414700221@us-mta-79.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 11, 2022 at 05:01:52PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter these warnings:
-> | drivers/net/ethernet/netronome/nfp/nfp_app.c:233:99: error: format
-> | specifies type 'unsigned char' but the argument has underlying type
-> | 'unsigned int' [-Werror,-Wformat] nfp_err(pf->cpp, "unknown FW app ID
-> | 0x%02hhx, driver too old or support for FW not built in\n", id);
-> -
-> | drivers/net/ethernet/netronome/nfp/nfp_main.c:396:11: error: format
-> | specifies type 'unsigned char' but the argument has type 'int'
-> | [-Werror,-Wformat] serial, interface >> 8, interface & 0xff);
-> 
-> Correct format specifier for `id` is `%x` since the default type for the
-> `nfp_app_id` enum is `unsigned int`. The second warning is also solved
-> by using the `%x` format specifier as the expressions involving
-> `interface` are implicity promoted to integers (%x is used to maintain
-> hexadecimal representation).
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Hi, we tested your kernel and here are the results:
 
-Thanks for improving the nfp driver.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Tested-by: CKI Project <cki-project@redhat.com>
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/47596
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+         aarch64 - LTP - commands
+                   Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -=
+P' failed.
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/755
+                   Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' fail=
+ed, not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1249
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         ppc64le - Boot test
+                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
+7.0: Cannot write: No space left on device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1047
+         ppc64le - Boot test
+                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
+7.0: Cannot write: No space left on device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1047
+         ppc64le - Boot test
+                   Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.1=
+7.0: Cannot write: No space left on device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1047
+           s390x - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - kselftest build - net
+                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
+atal error: 'gnu/stubs-32.h' file not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1222
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - kselftest build - bpf
+                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
+atal error: 'gnu/stubs-32.h' file not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1222
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+          x86_64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
+          x86_64 - Storage - blktests - nvmeof-mp
+                   Issue: Storage blktests - nvmeof-mp: FAIL: Configured NV=
+Me target driver
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1168
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
