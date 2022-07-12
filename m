@@ -1,40 +1,49 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C8723A9
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 06:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC43F23DB
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 06:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657605663; x=1689141663;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=G0libjz9gg+1D5DhcHgGBSdmno6eBoH0q8p5daSIOZM=;
-  b=Ec4Mh4clfK+7USHgHyKBtsGwCm/wEsNlYj78IBwtLHJy/GaYC8oCJN19
-   yvyzYwZH+d3Wi4qbN9dV0AGCeNNY1vYRAL/dm5yvX/ThxlSsZgCOY+UZS
-   4EEJT8z8DU1Kf+AfRpGyIyk9uQy7yl9F6S48hlRC4qkMbiRHZiLyB93EO
-   eazX0CFFWgmz4qn+HXFlbugLDrIeVf80+qCIou+JcFQf8f3+a4xa2LtaU
-   Pvka18QdWiktfT+5s3M+6CSeBcz7273z42SPL7WlojpSYAd8ULohhqzsE
-   6J8EvHI6KX6U+UOagdBVXU6h479dRHa7FwCVWoIRNjlfUiZT7Xz3NwJhp
+  t=1657605665; x=1689141665;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=niSDj7COpCoIbSKZJ94NOMMTydgv1jKW5ap9HCOE6ds=;
+  b=hWYnuXhl5YerkEXNhVHYy2j37qtl8UabeoszelDclVevkzsOwkllSTgY
+   //WN04uhpEiQVK3NrwIS0efq4crY9lNTdQDArbqtHYggqrOJ7ebB5CuzL
+   wmjLZYb9irEOsFKDziDU2X0UVg+FSjsQsdEq3WQuZoF/reyBtjjboT+Dz
+   4Yg+DxY2lUMWA1LtHysm+IIzP/J2//bzHNJePrDQo+Q7jPvkJwFHWsXTQ
+   CGVxRi6OGQeRu4Dmsa6/R3HVJjtJKhh3WqI4F3ueHp+aNv6aVQXKlat59
+   NsRiRPpNEc6blXo7aRssPqpk596Izy/jlIH+jhjIFho3sbdi0PPMCgf36
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="265258902"
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="284873026"
 X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="265258902"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:01:02 -0700
+   d="scan'208";a="284873026"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:01:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="570063330"
+   d="scan'208";a="627773540"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jul 2022 23:01:01 -0700
+  by orsmga001.jf.intel.com with ESMTP; 11 Jul 2022 23:01:01 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oB8xB-0001n1-62;
+	id 1oB8xB-0001n3-6O;
 	Tue, 12 Jul 2022 06:01:01 +0000
-Date: Tue, 12 Jul 2022 14:00:41 +0800
+Date: Tue, 12 Jul 2022 14:00:40 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: .text.cyapa_update_fw_store: unexpected
- end of section
-Message-ID: <202207121346.z5Qtf4lj-lkp@intel.com>
+To: Dan Carpenter <error27@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Leon Romanovsky <leon@kernel.org>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] vfio/mlx5: clean up overflow check
+Message-ID: <202207121350.fs2JOFWt-lkp@intel.com>
+References: <YsbzgQQ4bg6v+iTS@kili>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,36 +52,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YsbzgQQ4bg6v+iTS@kili>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Nick Desaulniers <ndesaulniers@google.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>
+Hi Dan,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5a29232d870d9e63fe5ff30b081be6ea7cc2465d
-commit: f12b034afeb3a977bbb1c6584dedc0f3dc666f14 scripts/Makefile.clang: default to LLVM_IAS=1
-date:   11 months ago
-config: x86_64-randconfig-a004-20220627 (https://download.01.org/0day-ci/archive/20220712/202207121346.z5Qtf4lj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on awilliam-vfio/next]
+[also build test WARNING on rdma/for-next linus/master v5.19-rc6 next-20220711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/vfio-mlx5-clean-up-overflow-check/20220707-225657
+base:   https://github.com/awilliam/linux-vfio.git next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220712/202207121350.fs2JOFWt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f12b034afeb3a977bbb1c6584dedc0f3dc666f14
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f12b034afeb3a977bbb1c6584dedc0f3dc666f14
+        # https://github.com/intel-lab-lkp/linux/commit/44607f8f3817e1af6622db7d70ad5bc457b8f203
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dan-Carpenter/vfio-mlx5-clean-up-overflow-check/20220707-225657
+        git checkout 44607f8f3817e1af6622db7d70ad5bc457b8f203
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/ drivers/md/ drivers/vfio/pci/mlx5/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: .text.cyapa_update_fw_store: unexpected end of section
+>> drivers/vfio/pci/mlx5/main.c:282:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof ((unsigned long)*pos) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+               check_add_overflow(len, (unsigned long)*pos, &requested_length))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:67:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+>> drivers/vfio/pci/mlx5/main.c:282:6: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (&requested_length)' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+               check_add_overflow(len, (unsigned long)*pos, &requested_length))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:68:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == __d);                   \
+                   ~~~~ ^  ~~~
+   2 warnings generated.
+
+
+vim +282 drivers/vfio/pci/mlx5/main.c
+
+   269	
+   270	static ssize_t mlx5vf_resume_write(struct file *filp, const char __user *buf,
+   271					   size_t len, loff_t *pos)
+   272	{
+   273		struct mlx5_vf_migration_file *migf = filp->private_data;
+   274		unsigned long requested_length;
+   275		ssize_t done = 0;
+   276	
+   277		if (pos)
+   278			return -ESPIPE;
+   279		pos = &filp->f_pos;
+   280	
+   281		if (*pos < 0 || *pos > ULONG_MAX ||
+ > 282		    check_add_overflow(len, (unsigned long)*pos, &requested_length))
+   283			return -EINVAL;
+   284	
+   285		if (requested_length > MAX_MIGRATION_SIZE)
+   286			return -ENOMEM;
+   287	
+   288		mutex_lock(&migf->lock);
+   289		if (migf->disabled) {
+   290			done = -ENODEV;
+   291			goto out_unlock;
+   292		}
+   293	
+   294		if (migf->allocated_length < requested_length) {
+   295			done = mlx5vf_add_migration_pages(
+   296				migf,
+   297				DIV_ROUND_UP(requested_length - migf->allocated_length,
+   298					     PAGE_SIZE));
+   299			if (done)
+   300				goto out_unlock;
+   301		}
+   302	
+   303		while (len) {
+   304			size_t page_offset;
+   305			struct page *page;
+   306			size_t page_len;
+   307			u8 *to_buff;
+   308			int ret;
+   309	
+   310			page_offset = (*pos) % PAGE_SIZE;
+   311			page = mlx5vf_get_migration_page(migf, *pos - page_offset);
+   312			if (!page) {
+   313				if (done == 0)
+   314					done = -EINVAL;
+   315				goto out_unlock;
+   316			}
+   317	
+   318			page_len = min_t(size_t, len, PAGE_SIZE - page_offset);
+   319			to_buff = kmap_local_page(page);
+   320			ret = copy_from_user(to_buff + page_offset, buf, page_len);
+   321			kunmap_local(to_buff);
+   322			if (ret) {
+   323				done = -EFAULT;
+   324				goto out_unlock;
+   325			}
+   326			*pos += page_len;
+   327			len -= page_len;
+   328			done += page_len;
+   329			buf += page_len;
+   330			migf->total_length += page_len;
+   331		}
+   332	out_unlock:
+   333		mutex_unlock(&migf->lock);
+   334		return done;
+   335	}
+   336	
 
 -- 
 0-DAY CI Kernel Test Service
