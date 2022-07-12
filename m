@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D74681
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 18:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722E84699
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 18:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1657649191; x=1689185191;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oxM7i46Yu/woW8rLhZi0IvHogzSBiQQtRqt+Ji4uiH4=;
-  b=nb0o1Lw77KYcEq6XXOzMM37hda9sQIR/IfHe1Yn3S4V/WqwLu9bsDCkq
-   yZsUQmKWITlT3uUx4e3ZT0SY6N2qbqfoRMKA22V6XMj0lgHRvFibjR7Ir
-   fyHfgXQkU3Rz5WxWaGa0IGcnKQsOg3XX2CzAHtBFhCi4bhor/Ncz1hKe2
-   pvMdCvc/EGITlst5h3VJ+Br9Udmi2wvr5X4v4b9KcAZKXjmP9TJffXrmt
-   jtwtSSyam2Jr22pB1bbfBjpAYXgtuh0u8tSZBDyFJUHTO9pdCecSv7QYx
-   LsqUaWlcLhnbU99njcfjZqeoxE5ZWrypJSwC0yQm79as0qEz7s0B8q4z8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264796593"
+  bh=3OY3Eq99+maed0wT5vsCAhmiHbzhccXIeGcTBur8GH8=;
+  b=SanwA6FU0gYriI0gDVL4q5kqD01hn4ucUwguVohe/o5C2bIjxGSAF/Od
+   qQ6imz79P4N2C6DlXivnH+szKtCqLw8W/iKALLMf9IaupD48veqPpGBp4
+   d/SuRlhtYzZ3vuc1RW/UBrpkfKZkSDrs7WIyn1u5T6UuCwFda30XqNad0
+   OrBYW0elP/qSvXtX2gj66L6FTKSgD37VgyImcLGZGHJOndcp8MN/Z3oRN
+   rk1pkfoqBgsrcGjDX/Hxf6dh2VoGYookMDSSP0YEFLhkv8YoUMCHx/Qyb
+   wNSOUZWQXaWZRJC5lw3hD4z7y4SQoJwUBb29uqcbKHihJNgrxTq4gv2Yt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265419769"
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="264796593"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 11:06:30 -0700
+   d="scan'208";a="265419769"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 11:06:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="627987365"
+   d="scan'208";a="622609782"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 12 Jul 2022 11:06:29 -0700
+  by orsmga008.jf.intel.com with ESMTP; 12 Jul 2022 11:06:29 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBKHE-0002Yd-Er;
+	id 1oBKHE-0002YZ-E2;
 	Tue, 12 Jul 2022 18:06:28 +0000
-Date: Wed, 13 Jul 2022 02:05:44 +0800
+Date: Wed, 13 Jul 2022 02:05:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dominique Martinet <asmadeus@codewreck.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
 Subject: [martinetd:9p-next 11/11] net/9p/trans_fd.c:275:12: warning: unused
  variable 'failme'
-Message-ID: <202207130248.PanFct3N-lkp@intel.com>
+Message-ID: <202207130211.3Gyzsvmp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ Content-Disposition: inline
 tree:   https://github.com/martinetd/linux.git 9p-next
 head:   c249fb4f91931b9f010849134e95d33e388c375b
 commit: c249fb4f91931b9f010849134e95d33e388c375b [11/11] 9p: roll p9_tag_remove into p9_req_put
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220713/202207130248.PanFct3N-lkp@intel.com/config)
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220713/202207130211.3Gyzsvmp-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -60,7 +60,7 @@ reproduce (this is a W=1 build):
         git checkout c249fb4f91931b9f010849134e95d33e388c375b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/9p/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/9p/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
