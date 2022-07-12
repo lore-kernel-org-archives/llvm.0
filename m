@@ -1,134 +1,138 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0925A4414
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 16:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657642405; x=1689178405;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c7Iz6RHMVKPXdsiWGS1iCkYOkcfyRfnOC1COzQRedNg=;
-  b=UJ1JPz3OjelS2AG/BED/Cjsbh9Z4CvEP58XNF8p4+l3lwGPY8+OqkvL7
-   sIOJSUMdLpA+Gk+0aXILqaBY4V0eUFYv1QVX6Fhq8GQQHPCDUmISiMsus
-   WdvAUoPNqFywPe/U1DmWPZSIrHzW7z2taIYPfJBuiKsaGqjf5+6dwR7ZL
-   aYnJ4jFw9W/lseF3SktPg6I+WjFmlZlqBYrmCOMTK91CWfTOQWJwveFda
-   xjKX2boGZnxdmSvUfFyB6xdB/NZ56Zvs74CsBRelUYkrpI3b3HFQTGg0u
-   7abbZPRwpKf0jx3JRUL9PeQW2Hel7lHIhse9tnvn7Bk5++0f5hpnizuBG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285719486"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="285719486"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:11:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="652975426"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jul 2022 09:11:23 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBITq-0002O7-Mb;
-	Tue, 12 Jul 2022 16:11:22 +0000
-Date: Wed, 13 Jul 2022 00:10:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lama Kayal <lkayal@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>
-Subject: [saeed:mlx5-queue 40/68]
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable
- 'err' is uninitialized when used here
-Message-ID: <202207130003.SL9fRJbu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0084681
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 16:48:19 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id h23so15328361ejj.12
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 09:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mbcmmT+pMIMYMSXXNjbFWB+IQNvMXD49nlszvCumBmU=;
+        b=C1vtv/hzFoN+4KUlqwUzTpCbKy6osNIrSgaVsPH2ISYa96ePHQDacSsKJieasMjDbW
+         xQI+2uqQcp+HXJH4Jnpi+G1ApZQOCEsLycWTM3DqBia6powR7ttUJSwGGXT5y9tFxrsL
+         mA/fbxw9AoAeeGMXWPdEeVKS60RwLdjij3kub586mW+2jlmcVpPAReibwGwnBBcqaCrZ
+         +0fsFwlHPyxePGt3TUDYuWU/JZwniI+wJJA1Sh1OpGwWmuypq4MXTDkbA/UtNV2NGWpP
+         zXWx4GuVCBZXpX7HmrZUtEYp+HVNYN9YyERwAX29yTRiQTiTyTlZQtc56VrhsipDOsBE
+         ssPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mbcmmT+pMIMYMSXXNjbFWB+IQNvMXD49nlszvCumBmU=;
+        b=eqj5uIxsZ4lb83ZnhRuSRpcb2PHtAG4N3bmW9QOFLSZsD2ePeliwCNsVG4/qYtAPas
+         d5p/PHkuzcW5Qj+BHNUBV3M/JsTSIBF3a0l4PjZTUtfgk7yNfLJ7bvRvb4I2aGLhd79H
+         eEsOszXLVwsnxWjOfV/ChfkMNz3ICUX+l4WGOVY0yG0HyOiQcne93lCXGm1rymUPTskM
+         LSvTxPMfKLSGTEqZCHVUI7VxtYzf0/2owQKrbvhQBqiUIOgY2QlJ3TGXjI6BmsJAfjqX
+         U9baVC6jY63kMTKvRoL8LguPkyYosIdnPibCti36T8PyH+R/en66CM9d6DDNb0GzDqBf
+         250w==
+X-Gm-Message-State: AJIora/ueYf/EtgQbkKyM5KiGwvFJNrrvTPaNWd3KyLQvhTe50z0rJck
+	q3v4/zc8Zh0066aupZrys+4i6JnWLwoH0OitXD8=
+X-Google-Smtp-Source: AGRyM1ult/9veqdiVtMu6Yt+QfiYXMYM/CbHEUmsdXJfyLCmDL4cncCV1h1TX4KkfDkaeoJZksDdv+HaMlACJA7Ni9E=
+X-Received: by 2002:a17:907:6e03:b0:726:a6a3:7515 with SMTP id
+ sd3-20020a1709076e0300b00726a6a37515mr25271067ejc.676.1657644497455; Tue, 12
+ Jul 2022 09:48:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+ <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com> <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+ <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com> <87v8s260j1.fsf@oracle.com>
+In-Reply-To: <87v8s260j1.fsf@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 12 Jul 2022 09:48:05 -0700
+Message-ID: <CAADnVQLQGHoj_gCOvdFFw2pRxgMubPSp+bRpFeCSa5zvcK2qRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, James Hilliard <james.hilliard1@gmail.com>, 
+	Quentin Monnet <quentin@isovalent.com>, Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git mlx5-queue
-head:   a78a596e3e1e4b584883b0a6f58d8f9c61943fb1
-commit: 4d121fe4ec12681d4948420ee172eb9d325df533 [40/68] net/mlx5e: Convert mlx5e_flow_steering member of mlx5e_priv to pointer
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220713/202207130003.SL9fRJbu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=4d121fe4ec12681d4948420ee172eb9d325df533
-        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
-        git fetch --no-tags saeed mlx5-queue
-        git checkout 4d121fe4ec12681d4948420ee172eb9d325df533
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
+On Tue, Jul 12, 2022 at 4:20 AM Jose E. Marchesi
+<jose.marchesi@oracle.com> wrote:
+>
+>
+> > CC Quentin as well
+> >
+> > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+> > <james.hilliard1@gmail.com> wrote:
+> >>
+> >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+> >> >
+> >> >
+> >> >
+> >> > On 7/6/22 10:28 AM, James Hilliard wrote:
+> >> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
+> >> > > correctly with gcc.
+> >> > >
+> >> > > GCC appears to required kernel helper funcs to have the following
+> >> > > attribute set: __attribute__((kernel_helper(NUM)))
+> >> > >
+> >> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
+> >> > >
+> >> > > This adds conditional blocks for GCC while leaving clang codepaths
+> >> > > unchanged, for example:
+> >> > >       #if __GNUC__ && !__clang__
+> >> > >       void *bpf_map_lookup_elem(void *map, const void *key)
+> >> > > __attribute__((kernel_helper(1)));
+> >> > >       #else
+> >> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+> >> > >       #endif
+> >> >
+> >> > It does look like that gcc kernel_helper attribute is better than
+> >> > '(void *) 1' style. The original clang uses '(void *) 1' style is
+> >> > just for simplicity.
+> >>
+> >> Isn't the original style going to be needed for backwards compatibility with
+> >> older clang versions for a while?
+> >
+> > I'm curious, is there any added benefit to having this special
+> > kernel_helper attribute vs what we did in Clang for a long time?
+> > Did GCC do it just to be different and require workarounds like this
+> > or there was some technical benefit to this?
+>
+> We did it that way so we could make trouble and piss you off.
+>
+> Nah :)
+>
+> We did it that way because technically speaking the clang construction
+> works relying on particular optimizations to happen to get correct
+> compiled programs, which is not guaranteed to happen and _may_ break in
+> the future.
+>
+> In fact, if you compile a call to such a function prototype with clang
+> with -O0 the compiler will try to load the function's address in a
+> register and then emit an invalid BPF instruction:
+>
+>   28:   8d 00 00 00 03 00 00 00         *unknown*
+>
+> On the other hand the kernel_helper attribute is bullet-proof: will work
+> with any optimization level, with any version of the compiler, and in
+> our opinion it is also more readable, more tidy and more correct.
+>
+> Note I'm not saying what you do in clang is not reasonable; it may be,
+> obviously it works well enough for you in practice.  Only that we have
+> good reasons for doing it differently in GCC.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-                   mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
-                                                                         ^~~
-   drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h:67:11: note: expanded from macro 'mlx5_core_err'
-                  ##__VA_ARGS__)
-                    ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5006:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/err +5015 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-
-593cf33829adfd Rana Shahout    2016-04-20  5000  
-182570b26223de Feras Daoud     2018-10-02  5001  static int mlx5e_nic_init(struct mlx5_core_dev *mdev,
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5002  			  struct net_device *netdev)
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5003  {
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5004  	struct mlx5e_priv *priv = netdev_priv(netdev);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5005  	struct mlx5e_flow_steering *fs;
-547eede070eb98 Ilan Tayari     2017-04-18  5006  	int err;
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5007  
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5008  	mlx5e_build_nic_params(priv, &priv->xsk, netdev->mtu);
-84db6612471416 Roi Dayan       2020-09-16  5009  	mlx5e_vxlan_set_netdev_info(priv);
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5010  
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5011  	mlx5e_timestamp_init(priv);
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5012  
-4d121fe4ec1268 Lama Kayal      2022-01-09  5013  	fs = mlx5e_fs_init(priv->profile);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5014  	if (!fs) {
-68e66e1a69cd94 Moshe Shemesh   2021-10-02 @5015  		mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5016  		return -ENOMEM;
-68e66e1a69cd94 Moshe Shemesh   2021-10-02  5017  	}
-4d121fe4ec1268 Lama Kayal      2022-01-09  5018  	priv->fs = fs;
-68e66e1a69cd94 Moshe Shemesh   2021-10-02  5019  
-547eede070eb98 Ilan Tayari     2017-04-18  5020  	err = mlx5e_ipsec_init(priv);
-547eede070eb98 Ilan Tayari     2017-04-18  5021  	if (err)
-547eede070eb98 Ilan Tayari     2017-04-18  5022  		mlx5_core_err(mdev, "IPSec initialization failed, %d\n", err);
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5023  
-943aa7bda37301 Leon Romanovsky 2022-04-04  5024  	err = mlx5e_ktls_init(priv);
-43585a41bd8949 Ilya Lesokhin   2018-04-30  5025  	if (err)
-43585a41bd8949 Ilya Lesokhin   2018-04-30  5026  		mlx5_core_err(mdev, "TLS initialization failed, %d\n", err);
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5027  
-11af6a6d09e9a9 Aya Levin       2019-07-11  5028  	mlx5e_health_create_reporters(priv);
-182570b26223de Feras Daoud     2018-10-02  5029  	return 0;
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5030  }
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5031  
-
-:::::: The code at line 5015 was first introduced by commit
-:::::: 68e66e1a69cd94f934522348ab232af49863452a net/mlx5e: Fix vlan data lost during suspend flow
-
-:::::: TO: Moshe Shemesh <moshe@nvidia.com>
-:::::: CC: Saeed Mahameed <saeedm@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Not questioning the validity of the reasons, but they created
+the unnecessary difference between compilers.
+We have to avoid forking.
+Meaning we're not going to work around that by ifdefs in
+bpf_helper_defs.h
+Because gcc community will not learn the lesson and will keep
+the bad practice of unnecessary forks.
+The best path forward here is to support both (void *) 1 style
+and kernel_helper attribute in both gcc and llvm.
+Moving forward the bpf_helper_defs.h will stay with (void *)1 style
+and when both compilers support both options we will start
+transitioning to the new kernel_helpers style.
