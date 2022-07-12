@@ -1,90 +1,76 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B7D6AAC
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657660715; x=1689196715;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=m0P1iMeeG5NlB1s2l25XkUPFYonMIM49J2R1G57IVXo=;
-  b=Bjw3WscEWMcIrcJynj3zYZd4R58uyxUwQhywHgnI4a4QOP3p7SCvUVMf
-   BVzF+oZPqwlAYoezCp9HxDc6cHFge12ChH+SxQa75iiNPPuVPYd7rB83k
-   V6u7HjK65s29JGwJTScHl968Sxq5iJSgiqEGk0tQ9d3F9wTQ7M77Nlaui
-   YY8J6snnA1D9WxFsvnzltwveiLSAytg7DgNy/4ythGf6adVbSPUdGeJ+c
-   1zl+O1lf0lSjvI4xLbADWvFdDG6ur9AdNJIWZs1sBFKqpic/V2ubuRJs4
-   dGG/I0fvMvt1+vmxvigmjrxuacwC4ImfX6RkLISr7JyTOSot9h6IR3KB7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285071435"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="285071435"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 14:18:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="622665346"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jul 2022 14:18:34 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBNH7-0002hd-GZ;
-	Tue, 12 Jul 2022 21:18:33 +0000
-Date: Wed, 13 Jul 2022 05:18:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function
- riscv_of_processor_hartid: .text+0x14): relocation R_RISCV_HI20 out of
- range: 529058 is not in [-524288, 524287]; references __stack_chk_guard
-Message-ID: <202207130516.Yk6LEctT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630976AAC
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:27:22 +0000 (UTC)
+Received: by mail-io1-f41.google.com with SMTP id y2so9139633ior.12
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 14:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
+        b=FMJNqa++kuJpdQYJXjWWJcEWpD8+YWreVG7WugTc0ennaNQ4QR7g8pXILGxJlJ45Tv
+         cB4XqYlFi6xnxR63ejBJexoF9BKMSG8ivgsWYOM6F3T9eOXrFw96hdTxCtFpg7cbuCUh
+         gicIFv0swNlNJPJsLTNN5Zv1Y+5d49PtpDWn+lsVJ18QnUn7vApvzDoS48Tg2ffs/qQc
+         1QdwHD3kSAX8nvdErP/G3gA9yj1QcMMoijpCESLcOKunlCtGyjrVyoQEwckhS71h9RFs
+         4Dl/LY0JvOXaii8UM6oYj/xSqoywoU8cnGQuqLl5j/7qYIaB6loPcnbFqanDr59ekRr+
+         V0nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
+        b=UuzadF9AvcVKcWg09aw7mXfIxCgIcVveRmzrlW46JS06b/i7VgLBmY8zAqXhKKsH4T
+         qFksNDwZSkFCPTIxQjUStQQ4Ch1T9ljCYV+qACfVo3BlmAe8e8B4DfojI/gh38DYpjGv
+         8+oQ8KrjXEvE/LC+bLNAEm6kDDGCNFmqs7m5/AsDjPmhj8gWud9cvUt+7lRd1EViQ+N/
+         MWxd6LkBRvDHp5ayc0RVRtYyNcAvRe173T9OFWF9RuK25TICf7C0SZ/GnSQohfcLDoBo
+         MtP6nUL7sjvbMNeLHCLj1UjatxJAr8Xur3TMfUbZ2p4e7bfOc2dQVzOX+yNfg2IYFFSA
+         0wXQ==
+X-Gm-Message-State: AJIora/4Bjg1sXZT0fqHDXzaTjOVAz1ZooZwo3c1SKTTrqAakIPr8cNP
+	TZ/QZ6Da8edeFU8nsmRJZvXkyG9jvx20rjEDHLcsmg==
+X-Google-Smtp-Source: AGRyM1tNjr8o/bDVFpbm8D9wO5b8kklpsyfdub1zcBTGrK8QXVgsSC8mlph3W82pJqOwau91MwVRx/tD9fxDqB4UnFQ=
+X-Received: by 2002:a05:6602:340b:b0:67b:8189:23c5 with SMTP id
+ n11-20020a056602340b00b0067b818923c5mr130294ioz.52.1657661241327; Tue, 12 Jul
+ 2022 14:27:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220712095627.1770312-1-davidgow@google.com>
+In-Reply-To: <20220712095627.1770312-1-davidgow@google.com>
+From: Daniel Latypov <dlatypov@google.com>
+Date: Tue, 12 Jul 2022 14:27:10 -0700
+Message-ID: <CAGS_qxrBGcz4gAtqu8QSJO8SP_a0n+18OiBVQaRXBQMwbL4w+Q@mail.gmail.com>
+Subject: Re: [PATCH] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
+To: David Gow <davidgow@google.com>
+Cc: Brendan Higgins <brendanhiggins@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	kernel test robot <yujie.liu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Arnd Bergmann <arnd@arndb.de>
-CC: Daniel Vetter <daniel.vetter@ffwll.ch>
-CC: Kees Cook <keescook@chromium.org>
+On Tue, Jul 12, 2022 at 2:56 AM David Gow <davidgow@google.com> wrote:
+>
+> It's possible that memory allocation for the copy will fail, but for the
+> copy of the suite to succeed. In this case, the copy could be leaked.
+>
+> Properly free 'copy' in the error case for the allocation of 'filtered'
+> failing.
+>
+> Note that there may also have been a similar issue in
+> kunit_filter_subsuites, before it was removed in "kunit: flatten
+> kunit_suite*** to kunit_suite** in .kunit_test_suites".
+>
+> This was reported by clang-analyzer via the kernel test robot, here:
+> https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
+>
+> Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   72a8e05d4f66b5af7854df4490e3135168694b6b
-commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
-date:   10 months ago
-config: riscv-randconfig-r036-20220710 (https://download.01.org/0day-ci/archive/20220713/202207130516.Yk6LEctT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid: .text+0x14): relocation R_RISCV_HI20 out of range: 529058 is not in [-524288, 524287]; references __stack_chk_guard
-   >>> referenced by cpu.c
-   >>> defined in arch/riscv/built-in.a(kernel/process.o)
---
->> ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
---
->> ld.lld: error: arch/riscv/built-in.a(kernel/kgdb.o):(function dbg_get_reg: .text+0x28): relocation R_RISCV_HI20 out of range: 528195 is not in [-524288, 524287]; references dbg_reg_def
-   >>> referenced by kgdb.c
-   >>> defined in arch/riscv/built-in.a(kernel/kgdb.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks for taking care of this.
