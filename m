@@ -1,220 +1,223 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438253C3E
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 11:47:10 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id u13so13494341lfn.5
-        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 04:47:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5AA3D65
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 12:25:24 +0000 (UTC)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CA2nfd027964;
+	Tue, 12 Jul 2022 11:30:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=VFoJb4L56Js3MJo2FaoD9xgMIgtEdp22V7xokcIKrdw=;
+ b=Kct4dBEUw2KuVTGawoAq3WNOsN83bIxnXLNPSNMKa240MwX34dR7l2D6C40R4LmuX3Jf
+ 0QF3SgqrVjLJbl6w9R25J3unRf6LATM606OZa78WHl9u1fI1oNDUxgD3tBSla/hd5gGe
+ DiEyqROfF7BfgHUY7ALznSykqyAJUBh7JmmO/TkVz8YA4fEf7+OB87/I6o/w2NC3EP6i
+ WfleQHWAGCuBz/nwDMDhK88aY467ai2S4rCFWNEt8YEOo1UBxnLmCOPsOhB71OaSeTze
+ 7druwn5wQUn9Ha9mXixVqnr8TfjFWnUg886fQTyCyJFZ23qpSTlzSnfItK8mI7H1CuKH NQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71rfxe1y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Jul 2022 11:30:12 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26CBAA6x025747;
+	Tue, 12 Jul 2022 11:30:11 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2046.outbound.protection.outlook.com [104.47.51.46])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h7043h5ve-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Jul 2022 11:30:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jSvIjMbvizdiUDqOKvBeo9FCp7scKk4e8hStNv8gzgj5L9n3KpuzuL3g7FeWTaDEWMRu79COfY8SngP1cEOZtU1LHxyPGIZnEbb+3S/8KZsa5p7SVD4X5TM5JYdOzeZnPUsyh7eLlAdyQbJ0Ag4xhyCdBgWcYjpgtaf50leKwkUKcEVTiFiTz7gVmF+mkBA93fOZx2UOEDbSsBh5FvQJIuZVabKY0UF29w3+hyIO1Ya48qO+4FjCJrSqsQqooDc2OqpCgMaMTeORTekmr+oyBkTuJwGV5XmzLSVYT4UZzCF/FY71CxG+F5J5rquGAoXFayWKQH7u765pMci3IibPxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VFoJb4L56Js3MJo2FaoD9xgMIgtEdp22V7xokcIKrdw=;
+ b=bypMalIieX6KvCR67UHHsQH5opL1ijYghv+cw4m3GsThvGTD34Vkmj5LTXL+0wKDLXgjIdWdG5uXUN7vj+FIDqaOaLFdQZMkI5v+ioUxHrVYvaIiqRtqYW34fhRjHqWZ7H2bQlSJQQC8JPe170o8g4J53iioqxh00DClctmly9bO5iSL0Nelj0rMQkLAP5slGCrEMTWbCoXjiUJQ7Ry0D3MZNnTh3ujxNJVB/4ndJXzm2DArMFjy/n2+0ZmFKMmsUAdWIilgTYUW8RbotIHXI6orYSgkWMZ9hcyHknohD2lYKf0yf3NtBw9GsnzQRksZnqyjFobOvsmbMBD1DqhcOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=UgT30bC5T+elvizr+rDtBDdzHu6utcbtXAwHMvUgsz8=;
-        b=e7RD3BLzQcsIlkVVm0wCXZdT1Q55WRmEmccyvgtuEpp2Qo64V5NvzMj2lS5kTBzyIN
-         h0tupRZP66xFz5YAVF+K+zuEKFqW+P8GQ76CIGI1U8SOZGidpW4BLQ1kV1FBK+drb3Om
-         Atib5VxfiORJa2ehvJh4zb9GuVuGl6JbaSFg/qIGxuEyr4eKQnpMjjT6wv4SKatFqoXw
-         6/+j0Dn7G9oeW7z32GMxu/xnDMnOdRt7+ms+IdrxZel85LliY2oUYT6+6RerPiv7Y7MQ
-         Yf3U6LdgPvgY+DQAvdJRRBdqurNemiNO8tR6eJIOF0yreWpAkP/jLBZADIWBL1jLbKn9
-         Qwwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=UgT30bC5T+elvizr+rDtBDdzHu6utcbtXAwHMvUgsz8=;
-        b=zWQcva39qGAgWZhRNB/61+QEKvGYfPP0deRBr1MRasI/jI4OYcO9dYOEQM8ta2SwOp
-         XDdxra+KBPKAVAMIqrnE7GZ0Bz1mnA7hT6IykIrTaMVELehhiSLI9J3LtiLuJYXKuh+n
-         iPAAjQX54q0Jt39CaVAEWm2tzdyKBHU70M4jO9d3yBqHZl+mJ6Um6jh1DTikqhQ5CMSd
-         aRTj9r/Jk3bK/kFCVNcB8aQJG9riPb9h7LW0muIobAh4gRocMvhuzugCOg/RVHK2JcKK
-         u/xHFNFFucYWJ2OlwWoqEoxubASxWaOhof5FBC2sGnK1R/5Nc4AStmbYV/rBjkQcYjRd
-         0yVw==
-X-Gm-Message-State: AJIora9NMueLrB7NtkcwB72lvLssGB0/07eMbhHFYUoVQ/oc/1btfUCh
-	aix5O+G5IxX8Y5HPTi3mrcVj
-X-Google-Smtp-Source: AGRyM1tHDbfRY+4AfOcM6z4kVeFyEPeRZ6HiMnp4I/NH1hbvS+ZYO6E1rcmZomak5YYSypo0qftB7w==
-X-Received: by 2002:a05:6512:3e0e:b0:489:c79f:4019 with SMTP id i14-20020a0565123e0e00b00489c79f4019mr12067037lfv.68.1657626428175;
-        Tue, 12 Jul 2022 04:47:08 -0700 (PDT)
-Received: from smtpclient.apple ([185.30.228.158])
-        by smtp.gmail.com with ESMTPSA id c8-20020a056512074800b004795d64f37dsm2143683lfs.105.2022.07.12.04.47.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Jul 2022 04:47:07 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VFoJb4L56Js3MJo2FaoD9xgMIgtEdp22V7xokcIKrdw=;
+ b=0FfZerOygaU3+C7azKw1vOa7AYtm18fBUDMvkpMeBkVoXV71tQ6hKN9BSIEewYrrZ+ZzFZHGiLt2siZYy50sN3v+bKR5/QRAeM6QWrF/lMEelLBeqA12ETTNRORpn7EtN9W09swS2oDA2hQjuHsdxLbrkS9qYA5Fge/EV4j8xRw=
+Received: from BYAPR10MB2888.namprd10.prod.outlook.com (2603:10b6:a03:88::32)
+ by SJ0PR10MB5408.namprd10.prod.outlook.com (2603:10b6:a03:3ba::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Tue, 12 Jul
+ 2022 11:30:08 +0000
+Received: from BYAPR10MB2888.namprd10.prod.outlook.com
+ ([fe80::b5ee:262a:b151:2fdd]) by BYAPR10MB2888.namprd10.prod.outlook.com
+ ([fe80::b5ee:262a:b151:2fdd%4]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 11:30:08 +0000
+From: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+To: Quentin Monnet <quentin@isovalent.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        James Hilliard
+ <james.hilliard1@gmail.com>,
+        Yonghong Song <yhs@fb.com>, bpf
+ <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel
+ Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John
+ Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+ <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        Networking
+ <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+	<a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+	<CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+	<CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+	<a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com>
+Date: Tue, 12 Jul 2022 13:29:58 +0200
+In-Reply-To: <a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com> (Quentin
+	Monnet's message of "Tue, 12 Jul 2022 10:48:20 +0100")
+Message-ID: <87r12q6021.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: AM6PR0502CA0039.eurprd05.prod.outlook.com
+ (2603:10a6:20b:56::16) To BYAPR10MB2888.namprd10.prod.outlook.com
+ (2603:10b6:a03:88::32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [TCWG CI] Regression caused by linux: lib/bitmap: Make length
- parameter `len` unsigned
-From: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
-In-Reply-To: <1791141562.180.1657258946129@jenkins.jenkins>
-Date: Tue, 12 Jul 2022 14:47:06 +0300
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
- llvm@lists.linux.dev,
- arnd@linaro.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <18ADC767-346E-4C44-93A3-DF3D1811F6CB@linaro.org>
-References: <1791141562.180.1657258946129@jenkins.jenkins>
-To: Yury Norov <yury.norov@gmail.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c20a30e-6090-4055-f415-08da63f9e036
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5408:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	sBCWpVbW8J/r9VoL7HUTTK4vGdcdsac9dIh43mW0X7hNxm8T09pB7lAUjX/2upsBS2ZyJTL7J9ceFvbIRMWu2OHD1FtdnMIDhpvIIXLABXTqEIoa7U7BwJviw2oH4qapbDuA5FfGrW4NF2MG4yqB30qaRR7hn5KKZNdJMOHg8SeRzcvvT3EZ/noAkg4mSgtS4QvndTPQ6QTbHPbcWWLu89u2Wf+OxhUq+wlI4q0DuAgSFD/C8Hv+Kgnd2uC9ZQfZx0t5OOFraalGeLVL1wvGU1FnFGqyDYs6u0tyFYwzUmnFgk+cWggSNH2yt6XjDWAWfbZ6IvD/cDdTTGa5lK4/KvzztjyjWm0+qA9x+eXY2w4Fsq0/tb8C9COMLOR4b6RwgWm9EVZgxNXGKv+gdWH3QHagUTwC2TbA+f3bS1ff7nGh20vD5OXy6mFhuqKg5/6jAwAAUaByuk2NCSlue6n5+nJ7iNQoxVUezxdxRCIUtNCxLnnLfrhGoG/aj3pC9vPHbdGEGZj6xV5ngycMcRfyrhpUvK4TgeoTALdBO11NlHZafj+1dCPJk8teL+H16ERLKlfiFRaaeJc7apLuX7LMHx+tEIDyff8JZE/6C63K/rE8squcR7TBk5WZyRLpDdd7031pch58BGZgC9nCOmAYrTIE6gN6lEThkD3eVxcMlnMp+Wi0rMfh0ay5dUKn1f5CoUiBWh5deN6Z/tJvHY2BUr6la4ilc5u4Q4uyEb93shrrRvyyUEaQl8sG7UXBzivdq6tZCwQ5FW3geRsyuP2m3Y7sVMHiVnN+H2wpFTiu9W0GRrS1NqDOcNilv5w6ebnJ
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2888.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39860400002)(346002)(366004)(376002)(4326008)(8676002)(26005)(66556008)(66476007)(38350700002)(66946007)(5660300002)(53546011)(478600001)(6512007)(38100700002)(52116002)(86362001)(8936002)(2616005)(316002)(41300700001)(6666004)(7416002)(54906003)(6916009)(2906002)(36756003)(83380400001)(186003)(6486002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?k+NvVQxq7eIdQWp6K6QsNeABXCoprLByxlYtz8QYGuefwGY7EIP4cHQckjN5?=
+ =?us-ascii?Q?VYsQ/p254l1q0gD0eZS5eo1Jb+I5cFhKSx9adbsEx6TWQ2SYqTm4/9AYi6lD?=
+ =?us-ascii?Q?Qu0o76cawXv9TXDggu3ZUYRpF+L5yz+p7ExJh1L/WI0H0PbTjIEMM6vxndwy?=
+ =?us-ascii?Q?E5I9r+0EZB/3v2rkF+o2O7bLmk5EwCQEZ5GLKadihiQ+Yl6jDJSoCMiAYo4J?=
+ =?us-ascii?Q?kUF5v2xbIcn1/sAImOx5GY25yYfj/hb/xDdcLYqs1sxUBCdhXiIghtDGte0r?=
+ =?us-ascii?Q?RPWFWVD9vot8LF0u6pZCKVlHI7px5JEbNROJ4sp9ZkYL5mIXwKCnWqQunV2K?=
+ =?us-ascii?Q?gOBNz9m9+FIoIuTF20uj8h9+Tchdigwankgk+fuPcKhDq0P7n6sZ56ItzIjt?=
+ =?us-ascii?Q?Fqy0bEqiqnxppmY/DDZEUZltd2lsii0Q8ZDtYKuHAlvojbaSMbxbRYI6jlYx?=
+ =?us-ascii?Q?CjUx3vLYVq9nNdEZLqA5rCCLE8N1aVHXJhZdTVpjvgOfjh0CYt5ZssHx/gW9?=
+ =?us-ascii?Q?m9JVLGXTYIr5yyccN5OBvfqBeJqI1A/GB8U/BMv4S1kd335YXDOcu9EyrIxV?=
+ =?us-ascii?Q?wym/FkF/2qbWJrARF9aIA/m26eH8ebX4FbWysTaMTIPZL8r0T9qZL80UQhtV?=
+ =?us-ascii?Q?uWaEBPfvV2p44vmAniCiAyC/TV2d1p7XcTASHvhKuuWXynvfok0dTA5oWulN?=
+ =?us-ascii?Q?xRBz5s5OyXDxbzst6YZa4aHSgXd2xP9/Np6ai5/70rz8Z/TT292BRx9v0uC1?=
+ =?us-ascii?Q?ABCGWBN6eIeRImuxd0+KtrsjAld2PKMaVtpXkisg3u79ImFQh5kvi/VklOPa?=
+ =?us-ascii?Q?jkkL1Hj9k6+ZfdRFxuRQEqmTkIcr/ATKM9edOg5gf6Po9+cuJgS5PTgSAUWd?=
+ =?us-ascii?Q?l/T2ONjDgRGKCdMYd0Hb9ZbA2bLOcaqaIccz50oMAi63KF47hxIgMnI4XOhv?=
+ =?us-ascii?Q?hf+jiR+kBNAzgbzBsA4t8DXmZ0ckS0i1qZ6LjlEcTKwX9uD3UTO49opyjXsG?=
+ =?us-ascii?Q?hcHC5r14RaCO4ARtF7saWCmpvZ985tRMNZttXmSdcgWMh/c4c5E5gAbGaVxE?=
+ =?us-ascii?Q?Qea3SXAm83MrOy2z4T2HRHxomPbrfwmBwNaN2fEe8/6gy5sG2rSn2qoJ0Nm8?=
+ =?us-ascii?Q?HiXoILLsEM+U7DUomBxtVpbDMS9x9660eW3AClOiWgjrwgaZUkhHFJ1Dtk2q?=
+ =?us-ascii?Q?nrZlY2BPQon6qco+8FM28FuNPmL0yGOI7Ks7KrLbqqoACfy4ARUrX+LuwwoR?=
+ =?us-ascii?Q?C/5paTpPctYEbRuBxtkZoKwk5ALblHB8RSjrU+Rcs+sGfMzZVSFmeQzammqp?=
+ =?us-ascii?Q?QBFWgQ6LGdqAC9rEFBMIsL/HZ6D7dXf8bYzJZPTvKh2LIA/Lv1kEdWY1z5Mv?=
+ =?us-ascii?Q?Ja2fOVaxifofKI54BN0+DnxpIytL1zpqJaRESBz69/PVqleUkP6mI+heVUxY?=
+ =?us-ascii?Q?yuIWbm0sBnO1kZIxiMAFH10ip+Q+eSehnyGBgYMZljXJHCESCnvtEL8oZX+C?=
+ =?us-ascii?Q?TT0DKpwCHKbOb7ebF7niE3xSpGwQ3U3OJY+F0wu6m4RRmlnBZio0wCwsmU58?=
+ =?us-ascii?Q?JqGeywbjzkNGHQdCi46AtLCrHY8FKqUF1X+su9MLoJAN23SdWBs2IFHJ8caG?=
+ =?us-ascii?Q?Vg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c20a30e-6090-4055-f415-08da63f9e036
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2888.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 11:30:08.7144
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DdrpLFmQYWhRFmJBpry8a1rWTabRHQFT0No7ZjkbgdNdQuLEoyWhSQRcnUbaECm5ICs2J3tOmuopZrSJrdZpV4zW7SrHzlxoCimPlSthocE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5408
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-12_08:2022-07-12,2022-07-12 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=819
+ malwarescore=0 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120043
+X-Proofpoint-GUID: 3M2MMJiVcky8xhOIZb3Z7500hYO3v00Z
+X-Proofpoint-ORIG-GUID: 3M2MMJiVcky8xhOIZb3Z7500hYO3v00Z
 
-Hi All,
 
-Excuse the noise.  This report is for Yury's development bitmap branch, =
-and I forgot to update email preference to not spam llvm@.
+> On 12/07/2022 05:40, Andrii Nakryiko wrote:
+>> CC Quentin as well
+>> 
+>> On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+>> <james.hilliard1@gmail.com> wrote:
+>>>
+>>> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 7/6/22 10:28 AM, James Hilliard wrote:
+>>>>> The current bpf_helper_defs.h helpers are llvm specific and don't work
+>>>>> correctly with gcc.
+>>>>>
+>>>>> GCC appears to required kernel helper funcs to have the following
+>>>>> attribute set: __attribute__((kernel_helper(NUM)))
+>>>>>
+>>>>> Generate gcc compatible headers based on the format in bpf-helpers.h.
+>>>>>
+>>>>> This adds conditional blocks for GCC while leaving clang codepaths
+>>>>> unchanged, for example:
+>>>>>       #if __GNUC__ && !__clang__
+>>>>>       void *bpf_map_lookup_elem(void *map, const void *key)
+>>>>> __attribute__((kernel_helper(1)));
+>>>>>       #else
+>>>>>       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+>>>>>       #endif
+>>>>
+>>>> It does look like that gcc kernel_helper attribute is better than
+>>>> '(void *) 1' style. The original clang uses '(void *) 1' style is
+>>>> just for simplicity.
+>>>
+>>> Isn't the original style going to be needed for backwards compatibility with
+>>> older clang versions for a while?
+>> 
+>> I'm curious, is there any added benefit to having this special
+>> kernel_helper attribute vs what we did in Clang for a long time? Did
+>> GCC do it just to be different and require workarounds like this or
+>> there was some technical benefit to this?
+>> 
+>> This duplication of definitions with #if for each one looks really
+>> awful, IMO. I'd rather have a macro invocation like below (or
+>> something along those lines) for each helper:
+>> 
+>> BPF_HELPER_DEF(2, void *, bpf_map_update_elem, void *map, const void
+>> *key, const void *value, __u64 flags);
+>> 
+>> And then define BPF_HELPER_DEF() once based on whether it's Clang or GCC.
+>
+> Hi, for what it's worth I agree with Andrii, I would rather avoid the
+> #if/else/endif and dual definition for each helper in the header, using
+> a macro should keep it more readable indeed. The existing one
+> (BPF_HELPER(return_type, name, args, id)) can likely be adapted.
+>
+> Also I note that contrarily to clang's helpers, you don't declare GCC's
+> as "static" (although I'm not sure of the effect of declaring them
+> static in this case).
 
-Hi Yury,
+That's because in the clang line bpf_map_lookup_elem is a static
+variable, a pointer to a function type, initialized to 1.
 
-FYI.
+On the other hand, in the GCC line bpf_map_lookup_elem is just a normal
+function declaration.  No variable, and thus no need for `static'.
 
---
-Maxim Kuvyrkov
-https://www.linaro.org
-
-> On 8 Jul 2022, at 08:42, ci_notify@linaro.org wrote:
->=20
-> [TCWG CI] Regression caused by linux: lib/bitmap: Make length =
-parameter `len` unsigned:
-> commit aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-> Author: Paul Menzel <pmenzel@molgen.mpg.de>
->=20
->    lib/bitmap: Make length parameter `len` unsigned
->=20
-> Results regressed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 547
-> # First few build errors in logs:
-> # 00:01:34 lib/bitmap.c:351:6: error: conflicting types for =
-'__bitmap_set'
-> # 00:01:34 make[1]: *** [lib/bitmap.o] Error 1
-> # 00:01:37 make: *** [lib] Error 2
->=20
-> from
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 564
-> # linux build successful:
-> all
->=20
-> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, =
-REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
->=20
-> This commit has regressed these CI configurations:
-> - tcwg_kernel/llvm-release-arm-norov-allnoconfig
->=20
-> First_bad build: =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/build-aaa4ab5ec04480fd0c16c7452d28444c862b=
-2b87/
-> Last_good build: =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/build-dc34d5036692c614eef23c1130ee42a201c3=
-16bf/
-> Baseline build: =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/build-baseline/
-> Even more details: =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/
->=20
-> Reproduce builds:
-> <cut>
-> mkdir investigate-linux-aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-> cd investigate-linux-aaa4ab5ec04480fd0c16c7452d28444c862b2b87
->=20
-> # Fetch scripts
-> git clone https://git.linaro.org/toolchain/jenkins-scripts
->=20
-> # Fetch manifests and test.sh script
-> mkdir -p artifacts/manifests
-> curl -o artifacts/manifests/build-baseline.sh =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/manifests/build-baseline.sh --fail
-> curl -o artifacts/manifests/build-parameters.sh =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/manifests/build-parameters.sh --fail
-> curl -o artifacts/test.sh =
-https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-a=
-llnoconfig/1/artifact/artifacts/test.sh --fail
-> chmod +x artifacts/test.sh
->=20
-> # Reproduce the baseline build (build all pre-requisites)
-> ./jenkins-scripts/tcwg_kernel-build.sh @@ =
-artifacts/manifests/build-baseline.sh
->=20
-> # Save baseline build state (which is then restored in =
-artifacts/test.sh)
-> mkdir -p ./bisect
-> rsync -a --del --delete-excluded --exclude /bisect/ --exclude =
-/artifacts/ --exclude /linux/ ./ ./bisect/baseline/
->=20
-> cd linux
->=20
-> # Reproduce first_bad build
-> git checkout --detach aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-> ../artifacts/test.sh
->=20
-> # Reproduce last_good build
-> git checkout --detach dc34d5036692c614eef23c1130ee42a201c316bf
-> ../artifacts/test.sh
->=20
-> cd ..
-> </cut>
->=20
-> Full commit (up to 1000 lines):
-> <cut>
-> commit aaa4ab5ec04480fd0c16c7452d28444c862b2b87
-> Author: Paul Menzel <pmenzel@molgen.mpg.de>
-> Date:   Thu Jul 7 23:50:52 2022 +0200
->=20
->    lib/bitmap: Make length parameter `len` unsigned
->=20
->    The length is non-negative, so make it unsigned, and adapt while
->    condition accordingly.
->=20
->    Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->    Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
-> lib/bitmap.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/lib/bitmap.c b/lib/bitmap.c
-> index b18e31ea6e66..0746beb336df 100644
-> --- a/lib/bitmap.c
-> +++ b/lib/bitmap.c
-> @@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, =
-unsigned int bits)
-> }
-> EXPORT_SYMBOL(__bitmap_weight);
->=20
-> -void __bitmap_set(unsigned long *map, unsigned int start, int len)
-> +void __bitmap_set(unsigned long *map, unsigned int start, unsigned =
-int len)
-> {
-> 	unsigned long *p =3D map + BIT_WORD(start);
-> 	const unsigned int size =3D start + len;
-> 	int bits_to_set =3D BITS_PER_LONG - (start % BITS_PER_LONG);
-> 	unsigned long mask_to_set =3D BITMAP_FIRST_WORD_MASK(start);
->=20
-> -	while (len - bits_to_set >=3D 0) {
-> +	while (len >=3D bits_to_set) {
-> 		*p |=3D mask_to_set;
-> 		len -=3D bits_to_set;
-> 		bits_to_set =3D BITS_PER_LONG;
-> </cut>
-
+>
+> Thanks,
+> Quentin
