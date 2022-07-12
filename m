@@ -1,32 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A5E2F33
-	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 18:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950E7C3411C;
-	Tue, 12 Jul 2022 18:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657652165;
-	bh=+8++mmPF4oeO7kDkagulOMwZIhGJMwHoTQm+dU3sDQs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qRAubObhVb9WlnK6U7QegUe+cOdYIue8KdIFkzzfJ1Z+W1mzMm5KuCW2znasRcWUq
-	 a2pCzmneBX6Txz3qaTEqify6gFETbOYamVlS2KyaNX4GBp/jl8dCEvgUh7FlGC2Vm/
-	 Wthmt84LW8yP6GtMmcmsYuhw/0Mld+h39qgWapkLAKv8dbfj+C1pOLvaSe1cvO/AxV
-	 3c0afBvtFR8ohfOtDSIfyzhhtYCQOlBk2eAj7iHLXnabPKCNWkbMzF6HHSOZKW+mOP
-	 tWFLBZ2KN067OUtltvsfCCe6TwbmF1zOlDqiKoJ6Rzxb1kHi5PKGMRigszfomHc+yH
-	 /2OOMqPRXPfzw==
-Date: Tue, 12 Jul 2022 11:56:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: pablo@netfilter.org, coreteam@netfilter.org, davem@davemloft.net,
-	edumazet@google.com, fw@strlen.de, kadlec@netfilter.org,
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	ndesaulniers@google.com, netdev@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, pabeni@redhat.com, trix@redhat.com
-Subject: Re: [PATCH] netfilter: xt_TPROXY: remove pr_debug invocations
-Message-ID: <Ys3DwnYiF9eDwr2T@dev-arch.thelio-3990X>
-References: <Ys0zZACWwGilTwHx@salvia>
- <20220712183452.2949361-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EDB4681
+	for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 20:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657656455; x=1689192455;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I4PtPocbbHJsmVqeSdj0j+ww60VTiKmwmGpsonHY+Qs=;
+  b=ZiIaZPxJCRYneem7SN3rbQPYWAM8T69oKyqNbyxGJLXETVqVCUaSqB81
+   EEWqVDjZisr2d+CoxBieYGoteMIMjGdKlSd1y8g+wapW62Mcpzy5iddp9
+   8fXxxiL1hZeunCwcP1r9a+uD55lSC55d2cSfexnPyY6wlrjnxWySDxyMU
+   YTBljlf6kKn8hsToie00GSdQIuBKHj4ioY+taNseuqDosb5K0bwjPW3Fe
+   +kbtNFrWSJVFwtLdckqSYroENpTvj6FhJHchTuCZcqNSuKNsUhUhCHn4I
+   HpO4PuUkC31DmBZEhIfg/0YyiZcwEB8hzFrn498wHjedXuARDaYOfm3dz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="346714230"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="346714230"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 13:07:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="737608261"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jul 2022 13:07:32 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oBMAN-0002ei-HF;
+	Tue, 12 Jul 2022 20:07:31 +0000
+Date: Wed, 13 Jul 2022 04:07:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Borislav Petkov <bp@suse.de>,
+	Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+	Ben Hutchings <bwh@kernel.org>
+Subject: [linux-stable-rc:linux-5.10.y 7109/7120]
+ arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on
+ redeclared variable
+Message-ID: <202207130344.AUqExE4E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,114 +51,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712183452.2949361-1-justinstitt@google.com>
 
-Hi Justin,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   ba398a0e54049bb6a1c102245ae84103f103ff2c
+commit: 855b78ccf1c8c952e148bdbd234cde117b098060 [7109/7120] KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207130344.AUqExE4E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=855b78ccf1c8c952e148bdbd234cde117b098060
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 855b78ccf1c8c952e148bdbd234cde117b098060
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
 
-On Tue, Jul 12, 2022 at 11:34:52AM -0700, Justin Stitt wrote:
-> pr_debug calls are no longer needed in this file.
-> 
-> Pablo suggested "a patch to remove these pr_debug calls". This patch has
-> some other beneficial collateral as it also silences multiple Clang
-> -Wformat warnings that were present in the pr_debug calls.
-> 
-> Suggested-by: Pablo Neira Ayuso <pablo@netfilter.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for the patch!
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on redeclared variable [-Wsection]
+   DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+                       ^
+   arch/x86/include/asm/nospec-branch.h:278:12: note: previous declaration is here
+   extern u64 x86_spec_ctrl_current;
+              ^
+   1 warning generated.
 
-Couple of style comments below that probably warrant a v2, you can carry
-the above tag forward for future revisions. No need to give me a
-"Suggested-by".
 
-> ---
-> Suggestion here: https://lore.kernel.org/all/Ys0zZACWwGilTwHx@salvia/
-> 
->  net/netfilter/xt_TPROXY.c | 19 -------------------
->  1 file changed, 19 deletions(-)
-> 
-> diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
-> index 459d0696c91a..dc7284e6357b 100644
-> --- a/net/netfilter/xt_TPROXY.c
-> +++ b/net/netfilter/xt_TPROXY.c
-> @@ -74,18 +74,10 @@ tproxy_tg4(struct net *net, struct sk_buff *skb, __be32 laddr, __be16 lport,
->  		/* This should be in a separate target, but we don't do multiple
->  		   targets on the same rule yet */
->  		skb->mark = (skb->mark & ~mark_mask) ^ mark_value;
-> -
-> -		pr_debug("redirecting: proto %hhu %pI4:%hu -> %pI4:%hu, mark: %x\n",
-> -			 iph->protocol, &iph->daddr, ntohs(hp->dest),
-> -			 &laddr, ntohs(lport), skb->mark);
-> -
->  		nf_tproxy_assign_sock(skb, sk);
->  		return NF_ACCEPT;
->  	}
->  
-> -	pr_debug("no socket, dropping: proto %hhu %pI4:%hu -> %pI4:%hu, mark: %x\n",
-> -		 iph->protocol, &iph->saddr, ntohs(hp->source),
-> -		 &iph->daddr, ntohs(hp->dest), skb->mark);
->  	return NF_DROP;
->  }
->  
-> @@ -123,13 +115,11 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
->  
->  	tproto = ipv6_find_hdr(skb, &thoff, -1, NULL, NULL);
->  	if (tproto < 0) {
+vim +57 arch/x86/kernel/cpu/bugs.c
 
-checkpatch.pl should have warned that these if statement braces here and
-below are no longer necessary because there is only one statement within
-them now.
+c40221c4c496c5 Peter Zijlstra 2022-06-14  55  
+c40221c4c496c5 Peter Zijlstra 2022-06-14  56  /* The current value of the SPEC_CTRL MSR with task-specific bits set */
+c40221c4c496c5 Peter Zijlstra 2022-06-14 @57  DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+c40221c4c496c5 Peter Zijlstra 2022-06-14  58  EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
+c40221c4c496c5 Peter Zijlstra 2022-06-14  59  
 
-	if (tproto < 0)
-		return NF_DROP;
+:::::: The code at line 57 was first introduced by commit
+:::::: c40221c4c496c5c026ede111094a96f292875d88 x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
 
-I believe it is important to do these types of style cleanups when doing
-a larger change so that people do not try to do them as standalone
-changes, which can irritate maintainers.
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-> -		pr_debug("unable to find transport header in IPv6 packet, dropping\n");
->  		return NF_DROP;
->  	}
->  
->  	hp = skb_header_pointer(skb, thoff, sizeof(_hdr), &_hdr);
->  	if (hp == NULL) {
-> -		pr_debug("unable to grab transport header contents in IPv6 packet, dropping\n");
->  		return NF_DROP;
->  	}
-
-	if (hp == NULL)
-		return NF_DROP;
-
-could even go a step farther and make it
-
-	if (!hp)
-		return NF_DROP;
-
-if there is a warning about that.
-
->  
-> @@ -168,19 +158,10 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
->  		/* This should be in a separate target, but we don't do multiple
->  		   targets on the same rule yet */
->  		skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
-> -
-> -		pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-> -			 tproto, &iph->saddr, ntohs(hp->source),
-> -			 laddr, ntohs(lport), skb->mark);
-> -
->  		nf_tproxy_assign_sock(skb, sk);
->  		return NF_ACCEPT;
->  	}
->  
-> -	pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
-> -		 tproto, &iph->saddr, ntohs(hp->source),
-> -		 &iph->daddr, ntohs(hp->dest), skb->mark);
-> -
->  	return NF_DROP;
->  }
->  
-> -- 
-> 2.37.0.144.g8ac04bfd2-goog
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
