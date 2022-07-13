@@ -1,35 +1,35 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FB129A0
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 11:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC2A29A0
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 11:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657711510; x=1689247510;
+  t=1657711512; x=1689247512;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LOLSMfBH+ThyF9oJWZiO1uOl+c5t8VSAaXVhaqK53BY=;
-  b=I4LJIATKn+jpirQ6seywBE1ltcyRcjKIuso4excoIfUrb4VOKkyS3f5r
-   wlm/1A9HCw2EvkoXDT26HeheCq9KVVbvNjUIjIbe05DX6wRJNXJaKAU9e
-   eWxfCfMNqxNvl0VEs5JgNRftY/TMWP9M83uh+plEIi0s2VBZbiqXiy9qi
-   0JkhRgUdUAgPMiktlwZ2nRAAXy6gDz1vncT9m8KQAtqU4qVfeBu8+gl9y
-   pPUnMD88swzCiHcDiQwTZvTACiCDiuVOBOG/1Nm9Q8BuMVVB3c2hYk/WC
-   8NSc3/4Ar9+E0uHfoUQtYA1EiFuTym8l74N5tg7YVmac6iqazCjRxYhcR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286318612"
+  bh=xA6De5du1h40WQGQhyOrLijvhmThcZKzStWUuRAh97k=;
+  b=U6HAXvramFE3FKG0qvvPwFoChpIWORB1rQQoML4cwQ2xRc4HSWwIoDd7
+   lvHlO5C4/Fcq6hutySDzj+8NkCdOZm96CiN/L+AS7+TAP1wnaEMln9YxJ
+   HnelLcSCfBe7eSr4iYpHe08bVWWj/bqPlcVoiiVmnyRPiVTW5S5bbg5ha
+   c85weN3F3sPePa2ZQdWgUvOynDMQ7shQbCA9DhrfZeC0h+iQC7p60WNET
+   2PL6E5hBnuCayxEPNq1eFuzusKkB3vYvr0TwBOfORLw61tpDDCNK3y9Lm
+   vtj4/a3f8123taqU8EbQ9wvZoE8g22wAb7RBR8gb+Ih7ObgSPYTxOW02M
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286318613"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="286318612"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
+   d="scan'208";a="286318613"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="622903395"
+   d="scan'208";a="737841061"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBaUB-0003Pb-Ny;
+	id 1oBaUB-0003Pl-PZ;
 	Wed, 13 Jul 2022 11:24:55 +0000
-Date: Wed, 13 Jul 2022 19:24:21 +0800
+Date: Wed, 13 Jul 2022 19:24:23 +0800
 From: kernel test robot <lkp@intel.com>
 To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -37,7 +37,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
 Subject: [cilium:pr/meta5 4/4] kernel/bpf/net.c:52:28: warning: variable
  'peer' is uninitialized when used here
-Message-ID: <202207131941.ZTw3SDaO-lkp@intel.com>
+Message-ID: <202207131933.oKjzatHd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ Content-Disposition: inline
 tree:   https://github.com/cilium/linux.git pr/meta5
 head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
 commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
-config: hexagon-randconfig-r003-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131941.ZTw3SDaO-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207131933.oKjzatHd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -61,7 +61,7 @@ reproduce (this is a W=1 build):
         git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
