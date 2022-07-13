@@ -1,39 +1,70 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FB115AA
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 04:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657685807; x=1689221807;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=CYapNGPe239IbYoQSuC9UWJthg0UO7S4pqcu4S734kY=;
-  b=KYdixRtRzx31GWyYI/tpc20o1GBHx7guXpmxESV4ArzW/jD6tPSdLrhb
-   G3gjRvYTusGPw2LDGEYWsPfK5eWx5i7DxTZUuJGwdpa8e4ifScEvyyVUs
-   Ri3Qg/23O6Jo22pB2WSNcNFNJmOtANMhkOcO+k6CrRwqfwb6NevDwwLMj
-   fb1zdqvshhqhoHqOnByidzd19aR9MkpZnt7UdPwn5w3KDqlqnO4wSl+Zy
-   9W5U05QGs1e6S4TZVb0kxBZgkoEDHUcWYeCNC2GCMx4xhCMKQ9w+bq5Ci
-   kyu3Lr1rnLlXSJNiVeCtJceLSZoQXogqOP7xWYoYhVuHnqUWUa5/WCl6e
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265516366"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265516366"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 21:16:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="570460030"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jul 2022 21:16:45 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBTnp-00034X-2O;
-	Wed, 13 Jul 2022 04:16:45 +0000
-Date: Wed, 13 Jul 2022 12:16:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] riscv: Pass -mno-relax only on lld < 15.0.0
-Message-ID: <202207131251.9wFgtqfN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8A115AA
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 04:25:54 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso1678944pjo.0
+        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 21:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nMGzjqDUW6SdVGyuTZy6wI3JH0wU7GZTzrC52WE7cc0=;
+        b=ABfb0rNSZ2TR5dRBsJ0xrkkxMAwSh4EmmJtx205q+k9wcvQiq9H5D8qVacW42Z8vka
+         Za1l9DY7v8VSiU9o/K6H4DW5LoPWI+7Q5yi4LMJ7Ufq22dIUV4RWtW9C+7E8hA2BIAqt
+         u2MRX27wnScWVmlI9KyNah4SX5qBTYg5n4hili8eTXUJymco/6PRVPB3O07+8CFHUnG7
+         4QkfxQc2lyRsYJf9D//gvyo0Nem3uQlG7YNASr6iz4jPriA6RUYpQjlfDbEY/AZE2JVd
+         lP4Wit1ln6emmVBwFrOlRZno7whBDhFhY+FbK8mLyPX221eskMJ7coT5mz8PTV6U3Eyj
+         oZtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nMGzjqDUW6SdVGyuTZy6wI3JH0wU7GZTzrC52WE7cc0=;
+        b=vL24610vRv+izm58FWNG7RWhctawfibm1hd33a/JNUQJxRQUMphcySf+K1CXpjsEwK
+         x5lS+4p/syiZ63gTyceeHTMSb5g9zt7KIDW0xv5paaNxwdn0+AExGrKCiW1VYM6wla5Y
+         UfnkYyw+2/Aj2ciq11bx3oBvKABZxL5UwTeYc4e93A0xuPsZ+UfR31TX5WFQA41/Le+P
+         YiAYTUyVMZgGHv3fE3gnwNCXrI1DQxH+NegNP0jAQyLvDGruGUtDUb74w4BAJccpRUju
+         xRlGZozaM7lDLunf5qcieYy+14Gbmasx4p++kh5FCw9gTr3BCr0hYPitUBv3Wx4jEoUr
+         fYFA==
+X-Gm-Message-State: AJIora/JCJ6oA3D6m8u6gDK2Cr8tCdftyJa50lz7sjCrrSLZRGeUgvLZ
+	e16cQfk+KpzI4s27nAjzQMg=
+X-Google-Smtp-Source: AGRyM1syYHQhPr7RhT9rFmN72PJ2fPdHbWvXbIqYCV2V7Z2PlYl6loSQ1/6Fo3O8xuydFUf85LKmKw==
+X-Received: by 2002:a17:90b:3890:b0:1f0:2abb:e7d1 with SMTP id mu16-20020a17090b389000b001f02abbe7d1mr8212824pjb.158.1657686353312;
+        Tue, 12 Jul 2022 21:25:53 -0700 (PDT)
+Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:580c])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170902680b00b0016a11750b50sm7640118plk.16.2022.07.12.21.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 21:25:52 -0700 (PDT)
+Date: Tue, 12 Jul 2022 21:25:49 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>, Yonghong Song <yhs@fb.com>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+Message-ID: <20220713042549.uljgrp4lffianxyj@macbook-pro-3.dhcp.thefacebook.com>
+References: <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+ <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+ <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+ <87v8s260j1.fsf@oracle.com>
+ <CAADnVQLQGHoj_gCOvdFFw2pRxgMubPSp+bRpFeCSa5zvcK2qRQ@mail.gmail.com>
+ <CADvTj4qqxckZmxvL=97e-2W5M4DgCCMDV8RCFDg23+cY2URjTA@mail.gmail.com>
+ <20220713011851.4a2tnqhdd5f5iwak@macbook-pro-3.dhcp.thefacebook.com>
+ <CADvTj4o7z7J=4BOtKM9dthZyfFogV6hL5zKBwiBq7vs+bNhUHA@mail.gmail.com>
+ <CAADnVQJAz7BcZjrBwu-8MjQprh86Z_UpWGMSQtFnowZTc4d6Vw@mail.gmail.com>
+ <CADvTj4qtCfmsu=dMZx9LtaDMOSNsOxGVSa1g3USEWroA1AfTJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,56 +73,185 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CADvTj4qtCfmsu=dMZx9LtaDMOSNsOxGVSa1g3USEWroA1AfTJA@mail.gmail.com>
 
-BCC: lkp@intel.com
-In-Reply-To: <20220710071117.446112-1-maskray@google.com>
-References: <20220710071117.446112-1-maskray@google.com>
-TO: Fangrui Song <maskray@google.com>
-TO: Paul Walmsley <paul.walmsley@sifive.com>
-TO: Palmer Dabbelt <palmer@dabbelt.com>
-TO: Albert Ou <aou@eecs.berkeley.edu>
-TO: linux-riscv@lists.infradead.org
-CC: Khem Raj <raj.khem@gmail.com>
-CC: linux-kernel@vger.kernel.org
-CC: llvm@lists.linux.dev
-CC: Fangrui Song <maskray@google.com>
+On Tue, Jul 12, 2022 at 08:56:35PM -0600, James Hilliard wrote:
+> On Tue, Jul 12, 2022 at 7:45 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 6:29 PM James Hilliard
+> > <james.hilliard1@gmail.com> wrote:
+> > >
+> > > On Tue, Jul 12, 2022 at 7:18 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Tue, Jul 12, 2022 at 07:10:27PM -0600, James Hilliard wrote:
+> > > > > On Tue, Jul 12, 2022 at 10:48 AM Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jul 12, 2022 at 4:20 AM Jose E. Marchesi
+> > > > > > <jose.marchesi@oracle.com> wrote:
+> > > > > > >
+> > > > > > >
+> > > > > > > > CC Quentin as well
+> > > > > > > >
+> > > > > > > > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+> > > > > > > > <james.hilliard1@gmail.com> wrote:
+> > > > > > > >>
+> > > > > > > >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > > > > >> >
+> > > > > > > >> >
+> > > > > > > >> >
+> > > > > > > >> > On 7/6/22 10:28 AM, James Hilliard wrote:
+> > > > > > > >> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
+> > > > > > > >> > > correctly with gcc.
+> > > > > > > >> > >
+> > > > > > > >> > > GCC appears to required kernel helper funcs to have the following
+> > > > > > > >> > > attribute set: __attribute__((kernel_helper(NUM)))
+> > > > > > > >> > >
+> > > > > > > >> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
+> > > > > > > >> > >
+> > > > > > > >> > > This adds conditional blocks for GCC while leaving clang codepaths
+> > > > > > > >> > > unchanged, for example:
+> > > > > > > >> > >       #if __GNUC__ && !__clang__
+> > > > > > > >> > >       void *bpf_map_lookup_elem(void *map, const void *key)
+> > > > > > > >> > > __attribute__((kernel_helper(1)));
+> > > > > > > >> > >       #else
+> > > > > > > >> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+> > > > > > > >> > >       #endif
+> > > > > > > >> >
+> > > > > > > >> > It does look like that gcc kernel_helper attribute is better than
+> > > > > > > >> > '(void *) 1' style. The original clang uses '(void *) 1' style is
+> > > > > > > >> > just for simplicity.
+> > > > > > > >>
+> > > > > > > >> Isn't the original style going to be needed for backwards compatibility with
+> > > > > > > >> older clang versions for a while?
+> > > > > > > >
+> > > > > > > > I'm curious, is there any added benefit to having this special
+> > > > > > > > kernel_helper attribute vs what we did in Clang for a long time?
+> > > > > > > > Did GCC do it just to be different and require workarounds like this
+> > > > > > > > or there was some technical benefit to this?
+> > > > > > >
+> > > > > > > We did it that way so we could make trouble and piss you off.
+> > > > > > >
+> > > > > > > Nah :)
+> > > > > > >
+> > > > > > > We did it that way because technically speaking the clang construction
+> > > > > > > works relying on particular optimizations to happen to get correct
+> > > > > > > compiled programs, which is not guaranteed to happen and _may_ break in
+> > > > > > > the future.
+> > > > > > >
+> > > > > > > In fact, if you compile a call to such a function prototype with clang
+> > > > > > > with -O0 the compiler will try to load the function's address in a
+> > > > > > > register and then emit an invalid BPF instruction:
+> > > > > > >
+> > > > > > >   28:   8d 00 00 00 03 00 00 00         *unknown*
+> > > > > > >
+> > > > > > > On the other hand the kernel_helper attribute is bullet-proof: will work
+> > > > > > > with any optimization level, with any version of the compiler, and in
+> > > > > > > our opinion it is also more readable, more tidy and more correct.
+> > > > > > >
+> > > > > > > Note I'm not saying what you do in clang is not reasonable; it may be,
+> > > > > > > obviously it works well enough for you in practice.  Only that we have
+> > > > > > > good reasons for doing it differently in GCC.
+> > > > > >
+> > > > > > Not questioning the validity of the reasons, but they created
+> > > > > > the unnecessary difference between compilers.
+> > > > >
+> > > > > Sounds to me like clang is relying on an unreliable hack that may
+> > > > > be difficult to implement in GCC, so let's see what's the best option
+> > > > > moving forwards in terms of a migration path for both GCC and clang.
+> > > >
+> > > > The following is a valid C code:
+> > > > static long (*foo) (void) = (void *) 1234;
+> > > > foo();
+> > > >
+> > > > and GCC has to generate correct assembly assuming it runs at -O1 or higher.
+> > >
+> > > Providing -O1 or higher with gcc-bpf does not seem to work at the moment.
+> >
+> > Let's fix gcc first.
+> 
+> If the intention is to migrate to kernel_helper for clang as well it
+> seems kind of
+> redundant, is there a real world use case for supporting the '(void *)
+> 1' style in
+> GCC rather than just adding feature detection+kernel_helper support to libbpf?
+> 
+> My assumption is that kernel helpers are in practice always used via libbpf
+> which appears to be sufficient in terms of being able to provide a compatibility
+> layer via feature detection. Or is there some use case I'm missing here?
 
-Hi Fangrui,
+static long (*foo) (void) = (void *) 1234;
+is not about calling into "kernel helpers".
+There is no concept of "kernel" in BPF ISA.
+'call 1234' insn means call a function with that absolute address.
+The gcc named that attribute incorrectly.
+It should be renamed to something like __attribute__((fixed_address(1234))).
 
-Thank you for the patch! Yet something to improve:
+It's a linux kernel abi choice to interpret 'call abs_addr' as a call to a kernel
+provided function at that address. 1,2,3,... are addresses of functions.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc6 next-20220712]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > > > There is no indirect call insn defined in BPF ISA yet,
+> > > > so the -O0 behavior is undefined.
+> > >
+> > > Well GCC at least seems to be able to compile BPF programs with -O0 using
+> > > kernel_helper. I assume -O0 is probably just targeting the minimum BPF ISA
+> > > optimization level or something like that which avoids indirect calls.
+> >
+> > There are other reasons why -O0 compiled progs will
+> > fail in the verifier.
+> 
+> Why would -O0 generate code that isn't compatible with the selected
+> target BPF ISA?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fangrui-Song/riscv-Pass-mno-relax-only-on-lld-15-0-0/20220710-151301
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b1c428b6c3684ee8ddf4137d68b3e8d51d2a700f
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220713/202207131251.9wFgtqfN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9abe0b92e612c5b6c53d4658b46c60b75bbd39d3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fangrui-Song/riscv-Pass-mno-relax-only-on-lld-15-0-0/20220710-151301
-        git checkout 9abe0b92e612c5b6c53d4658b46c60b75bbd39d3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+llvm has no issue producing valid BPF code with -O0.
+It's the kernel verifier that doesn't understand such code.
+For the following code:
+static long (*foo) (void) = (void *) 1234;
+long bar(void)
+{
+    return foo();
+}
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+With -O[12] llvm will generate
+  call 1234
+  exit
+With -O0
+  r1 = foo ll
+  r1 = *(u64 *)(r1 + 0)
+  callx r1
+  exit
 
-All errors (new ones prefixed by >>):
+Both codes are valid and equivalent.
+'callx' here is a reserved insn. The kernel verifier doesn't know about it yet,
+but llvm was generting such code for 8+ years.
 
->> ld.lld: error: fs/built-in.a(nfs/nfs3xdr.o):(function decode_wcc_data: .text+0x2ec4): relocation R_RISCV_RVC_JUMP out of range: -1079 is not in [-1024, 1023]; references decode_fattr3
-   >>> referenced by nfs3xdr.c
-   >>> defined in fs/built-in.a(nfs/nfs3xdr.o)
+> > Assuming that kernel_helper attr is actually necessary
+> > we have to add its support to clang as well.
+> 
+> I mean, I'd argue there's a difference between something being arguably a better
+> alternative(optional) and actually being necessary(non-optional).
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+gcc's attribute is not better.
+It's just a different way to tell compiler about fixed function address.
+
+> > gcc-bpf is a niche. If gcc devs want it to become a real
+> > alternative to clang they have to always aim for feature parity
+> > instead of inventing their own ways of doing things.
+> 
+> What's ultimately going to help the most in regards to helping gcc-bpf reach
+> feature parity with clang is getting it minimally usable in the real
+> world, because
+> that's how you're going to get more people testing+fixing bugs so that all these
+> differences/incompatibilities can be worked though/fixed.
+
+Can gcc-bpf compile all of selftests/bpf ?
+How many of compiled programs will pass the verifier ?
+
+> If nobody can compile a real world BPF program with gcc-bpf it's likely going to
+> lag further behind.
+
+selftest/bpf is a first milestone that gcc-bpf has to pass before talking about
+'real world' bpf progs.
