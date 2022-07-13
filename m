@@ -1,100 +1,81 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7D84A0C
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 19:11:49 +0000 (UTC)
-Received: by mail-pj1-f50.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so5269205pjr.4
-        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 12:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6WniWrj3ZgV51g7LWc0uoxvElrFWWSWmqIiBeCx0TGA=;
-        b=ftc2b3pp6VR3l1NA92GZ1N4vRKA+MEjmtdqoxsl3Ilze+gmL3NDB39Xm1aCUdHFAve
-         ViqgNdDyRFizVooQRLgGQH4tRCDVbf4YL5Uh6mby/MBunMDDoadRWmyj+YL3qrHF0ypW
-         MkAabV2guUnjUXJVxtpso92ITWK0U905ay0RjCxncmkv0mJM8tDNb4SXV8BKG4ELjF+V
-         lgFX2eOjqFWohepJI+Jle2fvaTfUeWje32HNTboIhc2w6V2+2S5ky6HHrX0eWNVnaMfo
-         UpJP2oGxGfI7HhWKRl9gQIMdw38F9HGZxfy6d326Dhx08QkiR6O7njqSDrStBulkTbw+
-         NdSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6WniWrj3ZgV51g7LWc0uoxvElrFWWSWmqIiBeCx0TGA=;
-        b=lCxZQDFdqLufjy9yTFkNDt1BohcC1+/+R2Sc9J1mynZOPuH4o8lxah7yFH+2t0xggO
-         QfovaYzEY7ofk/BMNmFb0UMPmR70iQ0Mm61t6bhuul50J0mgrAIkATzHp3WSbUIB182R
-         WWH94CR3KA68fytgpYLqRH2hgvWX5Lb3Jg2550vq+HhZDUbVWS7yKqeTFeZdDH9ZQsue
-         LuEhsXzLtJBIWN56VDqlPBOh+TOXQJL/5jw0VkfL1gKlQZ5pxZlPzaC0kTJE0Fmpdioc
-         Mamb1XIZGyWAuglWlKNL2XqGSOaE2vSViU0I2wxlcek/2V6BkDysiz0snfIRVT/eCpNK
-         SkmA==
-X-Gm-Message-State: AJIora/g5IVREAcp4C05ZaqCze14Nu0nvhW0P8j3kOaBXRNP9eSoxtKD
-	oaJ7d6fVg4uUSWChhFl5iyywQywlcRoKGU386+CBVRpROa5k5qpQ
-X-Google-Smtp-Source: AGRyM1s7h95SkBhPctIM6Jk4WHc6HW94JZP5f9ql2cZvctg5a76kUb6rS1bFK6/zTvkzmwLovIkP/1ZWeMRAm34h4vI=
-X-Received: by 2002:a17:903:244d:b0:16c:5bfe:2e87 with SMTP id
- l13-20020a170903244d00b0016c5bfe2e87mr4671742pls.148.1657739509327; Wed, 13
- Jul 2022 12:11:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741EB4A0A
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 19:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657740194; x=1689276194;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Q7KHB3M2QFV9b5Jvr54Kwg9Kzv2u1pwotvnqqbVJQAU=;
+  b=jnB3r64t5I8tbkbLFniNPh4ffuufsVBJWKRGiWc9V0RWrDUGPaUn5uua
+   Gpo7sDy0Zs8futQyeiG2XbaYfMQAeWH9+9y7rXg/cAgGuSu9NXsLyZzoh
+   KVp/o6sFIl8d4S/7KMdKt65FocUy9d8Z0EgG/cPSrM1Jjd0i5XSZrWKE1
+   zmqEuOLwwKDsckTklq7DMVF46Ndr32sX0QjOS/Seaete5rIVJS3Z4RKJ8
+   Y9WtLXTnwrzHkGPSsKfcGLJSIBK6xjQZMCVbI9k4fE1Yj2NEL3tlgTLYo
+   7CeFs5HiPQjcsre1kzY0GCTfLDseaSE4lFNC/WDf9OZA0VPSrq5k/Ocnb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310969829"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="310969829"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 12:22:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="653536973"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Jul 2022 12:22:07 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oBhvz-0003k7-4L;
+	Wed, 13 Jul 2022 19:22:07 +0000
+Date: Thu, 14 Jul 2022 03:21:25 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: entry_SYSCALL_compat+0x0:
+ ANNOTATE_NOENDBR on ENDBR
+Message-ID: <202207140331.eI1PiJAM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220713173503.3889486-1-nathan@kernel.org>
-In-Reply-To: <20220713173503.3889486-1-nathan@kernel.org>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Wed, 13 Jul 2022 12:11:38 -0700
-Message-ID: <CAKH8qBsTJcipS65962_hTLhpqzv42YWQpXntVkkt4RhCYubT7g@mail.gmail.com>
-Subject: Re: [PATCH] bpf, arm64: Mark dummy_tramp as global
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>, 
-	Xu Kuohai <xukuohai@huawei.com>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jul 13, 2022 at 10:35 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When building with clang + CONFIG_CFI_CLANG=y, the following error
-> occurs at link time:
->
->   ld.lld: error: undefined symbol: dummy_tramp
->
-> dummy_tramp is declared globally in C but its definition in inline
-> assembly does not use .global, which prevents clang from properly
-> resolving the references to it when creating the CFI jump tables.
->
-> Mark dummy_tramp as global so that the reference can be properly
-> resolved.
->
-> Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1661
-> Suggested-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: Borislav Petkov <bp@suse.de>
+CC: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b047602d579b4fb028128a525f056bbdc890e7f0
+commit: 2dbb887e875b1de3ca8f40ddf26bcfe55798c609 x86/entry: Add kernel IBRS implementation
+date:   2 weeks ago
+config: x86_64-randconfig-r005-20220627 (https://download.01.org/0day-ci/archive/20220714/202207140331.eI1PiJAM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2dbb887e875b1de3ca8f40ddf26bcfe55798c609
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2dbb887e875b1de3ca8f40ddf26bcfe55798c609
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> ---
->  arch/arm64/net/bpf_jit_comp.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index fd1cb0d2aaa6..dcc572b7d4da 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -604,6 +604,7 @@ void dummy_tramp(void);
->
->  asm (
->  "      .pushsection .text, \"ax\", @progbits\n"
-> +"      .global dummy_tramp\n"
->  "      .type dummy_tramp, %function\n"
->  "dummy_tramp:"
->  #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
->
-> base-commit: ace2bee839e08df324cb320763258dfd72e6120e
-> --
-> 2.37.1
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: entry_SYSCALL_compat+0x0: ANNOTATE_NOENDBR on ENDBR
+   vmlinux.o: warning: objtool: ibt_selftest+0xf: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ibt_selftest+0x19: return with modified stack frame
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
