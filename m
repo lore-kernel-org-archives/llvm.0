@@ -1,227 +1,113 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7063E4681
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 15:55:47 +0000 (UTC)
-Received: by mail-pg1-f201.google.com with SMTP id 81-20020a630054000000b0041978b2aa9eso2504103pga.9
-        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E444681
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 16:02:11 +0000 (UTC)
+Received: by mail-lf1-f46.google.com with SMTP id z25so19833576lfr.2
+        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 09:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=TjHjMkxHdrjtTtLaLLkPMs792kod3mIYtSimCy6NVweAsJU75rtvhot4VpXsblBqly
-         qHRf5/L3tn7yMu364MBoudvFOE15V1qz4sWU7IX1ZmSnyAtwoN3kNYw02DuKnsDO5gjp
-         M7RQmANYsVuNDbgNtkXvd3a8DnuUQH+hZV3ikimvffMZd8joeIgwo7GaoFBX8DFrddDF
-         llsAFJQV9aU6qv7H1VvM3a3PUKiZyeNUhvRUKDT5CnUoj9OxYRKgWhY0+MNYPlyo3vp0
-         JKfjLrkj60y7DnOnKgIUy/4L8UmsN/TA25iA1sJPVSruP4sBdSbj5QDwOKoVzrQcwL4a
-         C7Kw==
+        bh=NWhhvtNedj35MafqKUgxobbUIMg+S+RFU2eVuxPt0V0=;
+        b=saXm/2DYYz98lsTnnnC4cZtzYwilQkVPbJz+Nt8IPEgjczMyht2rA9hFXIPsqWNa6W
+         jI+4KGQifKOciJaWQpa3wxOyh1iDQ3qOjrX7waH11xADUvW1AIhG1JvMAeDQ7DctNFhe
+         6hyWOeo/UxxgdDqONL085MaflbXekwYgcWtnVe0XQnbhXnqNnuH3+u1igyds3nyyU+ec
+         Bmk6o8eQhP+6F3ls5V7k0sXqT1WMSCC5s4lUxMiIeEvk53wyARe/cqu9v+G3jDWEmEHk
+         7ZiVFOQK0Fhy21v6o7n+Mmt8F/NHkiTMTH2vNkK13sxtrvtnVYPzIpjYY7y5VC9zOosC
+         QkVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=GmWP3sTXm3jiO/xujqRr6FDAjtr3LDV9hojxFVF79tPjR1nXS0uUKokAIlk+Hq3CLQ
-         fR+vd8K70o93XgYQ1U8AJalgZJqnyk+QjaJPmJuQOXBo6Fkc4ruENBnibILZ3ajmzt8d
-         rBoDcPCL7SQJDsycASW4Cb8Qvyzg1QzqBm8SDS2ou6UIi7EDyWvxI5yoQQAcpMkOAzWv
-         wp0M4Q9kM4rJW3nXJG0MTO3y6cvViHnt7Erk/5+7jhEv7kcn/ctiz8H8odRRxrHg1Ck4
-         mG767pkJLIvOIt0Gc2QkMNG8TaOZ6K59quPVi0SpCjmmEl2KOuarRe23nPeIh55KZ73M
-         yc1Q==
-X-Gm-Message-State: AJIora85PMzq2lqFzIerGRUr07dzbieTmORv4szhIVnwiItp1Lkhm/hz
-	L6E1+ya35oDta3JmKcBRVWKvpq8=
-X-Google-Smtp-Source: AGRyM1vCSrU7O6O9FOIV8kUv1lP2Lkoiv9Ln98VM/44THqm2zXjHACWzfrfMXWhmXMTgZeZAsBg2f70=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id
- m2-20020a170902db0200b0016c5568d740mr3785558plx.100.1657727746774; Wed, 13
- Jul 2022 08:55:46 -0700 (PDT)
-Date: Wed, 13 Jul 2022 08:55:45 -0700
-In-Reply-To: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Message-Id: <Ys7rAaRKbTEzvjFY@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWhhvtNedj35MafqKUgxobbUIMg+S+RFU2eVuxPt0V0=;
+        b=CifueHhi+yYqzwDrEk7X1USFULMPsLSVlQXJrq99SC/CucUcgpPWIEGdgXMX6Hg0we
+         OuZOBxKp7CVomvZ57FI3m5JROdO8c0DsJhXrBnA4XgEov7+NnZPmUa0ixtpF0vIhgddX
+         xsTz6h6u3cuErNj9dV/EzTPdFLW7vNBs/MRlha4g+yh3MaL6bdfbWZGpUVxg/L9xx1rB
+         Qqy33gMDYgkWRAcxcKgWnpcAYNe+gygNbnSTwD3HqMEKyVRNDEB4JiOpiQYWqrj/bxNd
+         XmS4gfmU0tVUrCW64QwJtmT8p4/jzzxEgjzMEC8NbvZI8agsl5Un57wBZePbGHzOv1sA
+         gwbw==
+X-Gm-Message-State: AJIora91c36MaetlPBgOWNEqLABC7xQowiTXlH0Pi6dNcQOYG7VT3rlO
+	h2ZeYQDy7QzgzxnSqeBdwuW3qSf2zCMpKTq7lZheJQ==
+X-Google-Smtp-Source: AGRyM1tEeAU8wQ+I9NLXcaCNWF3OMoEcj9swPCub58eFdu/CXAS2vrblZpMhD6UCziXF3nb8vHjaU/FZqJjyD96sp1k=
+X-Received: by 2002:ac2:4c46:0:b0:489:e93c:69b with SMTP id
+ o6-20020ac24c46000000b00489e93c069bmr2291049lfk.403.1657728129923; Wed, 13
+ Jul 2022 09:02:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-From: sdf@google.com
-To: xiaolinkui <xiaolinkui@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org, 
-	hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, kpsingh@kernel.org, 
-	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
-	xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+References: <Ys7pLq+tQk5xEa/B@dev-arch.thelio-3990X>
+In-Reply-To: <Ys7pLq+tQk5xEa/B@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 13 Jul 2022 09:01:58 -0700
+Message-ID: <CAKwvOd=kqfAZoywsOFbvvzUJD+zVgFgmDAAcb7h0U8LGzfG33A@mail.gmail.com>
+Subject: Re: objtool "'naked' return found in RETHUNK build" with clang + CONFIG_K{A,C}SAN=y
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 07/13, xiaolinkui wrote:
-> From: Linkui Xiao<xiaolinkui@kylinos.cn>
-                    ^ space here?
+On Wed, Jul 13, 2022 at 8:48 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Josh and Peter,
+>
+> After commit 9bb2ec608a20 ("objtool: Update Retpoline validation") and
+> commit f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs"), I
+> see a spew of objtool warnings when building certain configurations with
+> clang. Examples below, they appear to trigger in every single file.
+>
+> With x86_64_defconfig + CONFIG_KASAN=y:
+>
+> arch/x86/ia32/audit.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/ia32/audit.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> init/version.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> init/version.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> arch/x86/kernel/platform-quirks.o: warning: objtool: asan.module_ctor+0x0: 'naked' return found in RETHUNK build
+> init/calibrate.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> init/calibrate.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+>
+> With x86_64_defconfig + CONFIG_KCSAN=y:
+>
+> arch/x86/ia32/audit.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> init/calibrate.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> init/version.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> arch/x86/kernel/fpu/bugs.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> arch/x86/kernel/cpu/rdrand.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> arch/x86/events/probe.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> arch/x86/kernel/apic/ipi.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
 
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
+Thanks for the report. I wonder if this might be a compiler bug; it
+seems like the {a|t}san.module_{c|d}tor functions are being emitted
+with ret instructions?
 
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-> return of 0/1 in function 'decap_v4' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-> return of 0/1 in function 'decap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-> return of 0/1 in function 'encap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-> return of 0/1 in function 'parse_tcp' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-> return of 0/1 in function 'parse_udp' with return type bool
+If you have one of these builds lying around still, can you provide:
 
-> Generated by: scripts/coccinelle/misc/boolreturn.cocci
+$ llvm-objdump -dr --disassemble-symbols=tsan.module_ctor
+arch/x86/kernel/fpu/bugs.o
 
-> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
+(I'm about to head into a bunch of meetings now, but can check more
+this afternoon; see you at Noon)
 
-This patch likely needs a resend with proper [PATCH bpf] or
-[PATCH bpf-next] subject to end up in patchwork and to be picked up.
+If Peter and Josh are bored, feel free to stop by
+https://meet.google.com/yjf-jyqk-iaz
+at Noon PDT / 19:00 UTV today.
 
-Take a look at Documentation/bpf/bpf_devel_QA.rst section "Q: How do I
-indicate which tree (bpf vs. bpf-next) my patch should be applied to?".
+>
+> If there is any additional information I can provide or patches I can
+> test, I am happy to do so!
+>
+> Cheers,
+> Nathan
+>
 
-Since that's a cleanup, you most likely want to target bpf-next.
 
-> ---
->   .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
->   1 file changed, 15 insertions(+), 15 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c  
-> b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> index 125d872d7981..ba48fcb98ab2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
->   	udp = data + off;
-
->   	if (udp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (!is_icmp) {
->   		pckt->flow.port16[0] = udp->source;
->   		pckt->flow.port16[1] = udp->dest;
-> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
->   		pckt->flow.port16[0] = udp->dest;
->   		pckt->flow.port16[1] = udp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
-
->   	tcp = data + off;
->   	if (tcp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (tcp->syn)
->   		pckt->flags |= (1 << 1);
->   	if (!is_icmp) {
-> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
->   		pckt->flow.port16[0] = tcp->dest;
->   		pckt->flow.port16[1] = tcp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	void *data;
-
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct ipv6hdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 56710;
-> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
->   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
->   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip_suffix <<= 15;
->   	ip_suffix ^= pckt->flow.src;
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct iphdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || iph + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
-> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   		csum += *next_iph_u16++;
->   	iph->check = ~((csum & 0xffff) + (csum >> 16));
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> -	return 1;
-> +		return false;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void  
-> **data_end, bool inner_v4)
->   	else
->   		new_eth->eth_proto = 56710;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void  
-> **data_end)
->   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> --
-> 2.17.1
-
+-- 
+Thanks,
+~Nick Desaulniers
