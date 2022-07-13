@@ -1,45 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6F129A0
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 11:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FB129A0
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 11:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657711498; x=1689247498;
+  t=1657711510; x=1689247510;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PKE5vrdwjr1dTFgUoMNEf+418Rz+eDd76hO1bJwhKCI=;
-  b=To9eBRpz5LGI+bUIja/cJxU4F0g0r4B9iFLRsDkYuP1Oh46Eua2c9d75
-   9uVI15c9nfv6m36HpiWKnBRz2mDFpWx9pJxS1qZEFyZubITY1gnq9YF23
-   y8doZNgDoTZ39JUA9ZZsH9qVsdDx17ws8rQO/aspprxnOB+v+YtpSfHTU
-   Z51syNOj42B5G/HMkOkics+j3PUmmEIjC0OdCUIwpNiLVHypL8Ayc2VrX
-   TyYkAdnNlbN2yZcXSQpHVCsceK+OTPsVOxNG5pCcdtt/+Rf7XjZtriJfB
-   ST3Ok69vv0CNFWYifa2Q73Mu16e1yEr/ioxCcTACBcv5tMVc+kPNvSQHN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268219997"
+  bh=LOLSMfBH+ThyF9oJWZiO1uOl+c5t8VSAaXVhaqK53BY=;
+  b=I4LJIATKn+jpirQ6seywBE1ltcyRcjKIuso4excoIfUrb4VOKkyS3f5r
+   wlm/1A9HCw2EvkoXDT26HeheCq9KVVbvNjUIjIbe05DX6wRJNXJaKAU9e
+   eWxfCfMNqxNvl0VEs5JgNRftY/TMWP9M83uh+plEIi0s2VBZbiqXiy9qi
+   0JkhRgUdUAgPMiktlwZ2nRAAXy6gDz1vncT9m8KQAtqU4qVfeBu8+gl9y
+   pPUnMD88swzCiHcDiQwTZvTACiCDiuVOBOG/1Nm9Q8BuMVVB3c2hYk/WC
+   8NSc3/4Ar9+E0uHfoUQtYA1EiFuTym8l74N5tg7YVmac6iqazCjRxYhcR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286318612"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="268219997"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:58 -0700
+   d="scan'208";a="286318612"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="663322623"
+   d="scan'208";a="622903395"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
+  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBaUB-0003Pf-On;
+	id 1oBaUB-0003Pb-Ny;
 	Wed, 13 Jul 2022 11:24:55 +0000
-Date: Wed, 13 Jul 2022 19:24:20 +0800
+Date: Wed, 13 Jul 2022 19:24:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arthur Grillo <arthur.grillo@usp.br>
+To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Subject: [linux-next:master 9157/9846]
- drivers/gpu/drm/tests/drm_mm_test.c:344:12: warning: stack frame size (1032)
- exceeds limit (1024) in '__igt_reserve'
-Message-ID: <202207131924.3JDQ4WsP-lkp@intel.com>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	linux-kernel@vger.kernel.org
+Subject: [cilium:pr/meta5 4/4] kernel/bpf/net.c:52:28: warning: variable
+ 'peer' is uninitialized when used here
+Message-ID: <202207131941.ZTw3SDaO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,160 +47,110 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   734339e5c1c46e3af041b4c288c213e045e34354
-commit: fc8d29e298cf47e07c2764ec1c340c1df8e50431 [9157/9846] drm: selftest: convert drm_mm selftest to KUnit
-config: arm-randconfig-r024-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131924.3JDQ4WsP-lkp@intel.com/config)
+tree:   https://github.com/cilium/linux.git pr/meta5
+head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
+commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
+config: hexagon-randconfig-r003-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131941.ZTw3SDaO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=fc8d29e298cf47e07c2764ec1c340c1df8e50431
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout fc8d29e298cf47e07c2764ec1c340c1df8e50431
+        # https://github.com/cilium/linux/commit/3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
+        git remote add cilium https://github.com/cilium/linux.git
+        git fetch --no-tags cilium pr/meta5
+        git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tests/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/tests/drm_mm_test.c:344:12: warning: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Wframe-larger-than]
-   static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
-              ^
+>> kernel/bpf/net.c:52:28: warning: variable 'peer' is uninitialized when used here [-Wuninitialized]
+                                   dev_sch_entry_prio_set(peer, prio, nprog);
+                                                          ^~~~
+   kernel/bpf/net.c:33:32: note: initialize the variable 'peer' to silence this warning
+           struct sch_entry *entry, *peer;
+                                         ^
+                                          = NULL
    1 warning generated.
 
 
-vim +/__igt_reserve +344 drivers/gpu/drm/tests/drm_mm_test.c
+vim +/peer +52 kernel/bpf/net.c
 
-   343	
- > 344	static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
-   345	{
-   346		DRM_RND_STATE(prng, random_seed);
-   347		struct drm_mm mm;
-   348		struct drm_mm_node tmp, *nodes, *node, *next;
-   349		unsigned int *order, n, m, o = 0;
-   350		int ret, err;
-   351	
-   352		/* For exercising drm_mm_reserve_node(struct kunit *test, ), we want to check that
-   353		 * reservations outside of the drm_mm range are rejected, and to
-   354		 * overlapping and otherwise already occupied ranges. Afterwards,
-   355		 * the tree and nodes should be intact.
-   356		 */
-   357	
-   358		DRM_MM_BUG_ON(!count);
-   359		DRM_MM_BUG_ON(!size);
-   360	
-   361		ret = -ENOMEM;
-   362		order = drm_random_order(count, &prng);
-   363		if (!order)
-   364			goto err;
-   365	
-   366		nodes = vzalloc(array_size(count, sizeof(*nodes)));
-   367		KUNIT_ASSERT_TRUE(test, nodes);
-   368	
-   369		ret = -EINVAL;
-   370		drm_mm_init(&mm, 0, count * size);
-   371	
-   372		if (!check_reserve_boundaries(test, &mm, count, size))
-   373			goto out;
-   374	
-   375		for (n = 0; n < count; n++) {
-   376			nodes[n].start = order[n] * size;
-   377			nodes[n].size = size;
-   378	
-   379			err = drm_mm_reserve_node(&mm, &nodes[n]);
-   380			if (err) {
-   381				KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
-   382					   n, nodes[n].start);
-   383				ret = err;
-   384				goto out;
-   385			}
-   386	
-   387			if (!drm_mm_node_allocated(&nodes[n])) {
-   388				KUNIT_FAIL(test, "reserved node not allocated! step %d, start %llu\n",
-   389					   n, nodes[n].start);
-   390				goto out;
-   391			}
-   392	
-   393			if (!expect_reserve_fail(test, &mm, &nodes[n]))
-   394				goto out;
-   395		}
-   396	
-   397		/* After random insertion the nodes should be in order */
-   398		if (!assert_continuous(test, &mm, size))
-   399			goto out;
-   400	
-   401		/* Repeated use should then fail */
-   402		drm_random_reorder(order, count, &prng);
-   403		for (n = 0; n < count; n++) {
-   404			if (!expect_reserve_fail(test, &mm, set_node(&tmp, order[n] * size, 1)))
-   405				goto out;
-   406	
-   407			/* Remove and reinsert should work */
-   408			drm_mm_remove_node(&nodes[order[n]]);
-   409			err = drm_mm_reserve_node(&mm, &nodes[order[n]]);
-   410			if (err) {
-   411				KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
-   412					   n, nodes[n].start);
-   413				ret = err;
-   414				goto out;
-   415			}
-   416		}
-   417	
-   418		if (!assert_continuous(test, &mm, size))
-   419			goto out;
-   420	
-   421		/* Overlapping use should then fail */
-   422		for (n = 0; n < count; n++) {
-   423			if (!expect_reserve_fail(test, &mm, set_node(&tmp, 0, size * count)))
-   424				goto out;
-   425		}
-   426		for (n = 0; n < count; n++) {
-   427			if (!expect_reserve_fail(test, &mm, set_node(&tmp, size * n, size * (count - n))))
-   428				goto out;
-   429		}
-   430	
-   431		/* Remove several, reinsert, check full */
-   432		for_each_prime_number(n, min(max_prime, count)) {
-   433			for (m = 0; m < n; m++) {
-   434				node = &nodes[order[(o + m) % count]];
-   435				drm_mm_remove_node(node);
-   436			}
-   437	
-   438			for (m = 0; m < n; m++) {
-   439				node = &nodes[order[(o + m) % count]];
-   440				err = drm_mm_reserve_node(&mm, node);
-   441				if (err) {
-   442					KUNIT_FAIL(test, "reserve failed, step %d/%d, start %llu\n",
-   443						   m, n, node->start);
-   444					ret = err;
-   445					goto out;
-   446				}
-   447			}
-   448	
-   449			o += n;
-   450	
-   451			if (!assert_continuous(test, &mm, size))
-   452				goto out;
-   453		}
-   454	
-   455		ret = 0;
-   456	out:
-   457		drm_mm_for_each_node_safe(node, next, &mm)
-   458			drm_mm_remove_node(node);
-   459		drm_mm_takedown(&mm);
-   460		vfree(nodes);
-   461		kfree(order);
-   462	err:
-   463		return ret;
-   464	}
-   465	
+    28	
+    29	static int __sch_prog_attach(struct net_device *dev, bool ingress, u32 limit,
+    30				     struct bpf_prog *nprog, u32 prio, u32 flags)
+    31	{
+    32		struct bpf_prog_array_item *item, *tmp;
+    33		struct sch_entry *entry, *peer;
+    34		struct bpf_prog *oprog;
+    35		bool created;
+    36		int i, j;
+    37	
+    38		entry = dev_sch_entry_fetch(dev, ingress, &created);
+    39		if (!entry)
+    40			return -ENOMEM;
+    41		for (i = 0; i < limit; i++) {
+    42			item = &entry->items[i];
+    43			oprog = item->prog;
+    44			if (!oprog)
+    45				break;
+    46			if (item->bpf_priority == prio) {
+    47				if (flags & BPF_F_REPLACE) {
+    48					/* Pairs with READ_ONCE() in sch_run_progs(). */
+    49					WRITE_ONCE(item->prog, nprog);
+    50					if (sch_prog_refcounted(oprog))
+    51						bpf_prog_put(oprog);
+  > 52					dev_sch_entry_prio_set(peer, prio, nprog);
+    53					return prio;
+    54				}
+    55				return -EBUSY;
+    56			}
+    57		}
+    58		if (dev_sch_entry_total(entry) >= limit)
+    59			return -ENOSPC;
+    60		prio = dev_sch_entry_prio_new(entry, prio, nprog);
+    61		if (prio < 0) {
+    62			if (created)
+    63				dev_sch_entry_free(entry);
+    64			return -ENOMEM;
+    65		}
+    66		peer = dev_sch_entry_peer(entry);
+    67		dev_sch_entry_clear(peer);
+    68		for (i = 0, j = 0; i < limit; i++, j++) {
+    69			item = &entry->items[i];
+    70			tmp = &peer->items[j];
+    71			oprog = item->prog;
+    72			if (!oprog) {
+    73				if (i == j) {
+    74					tmp->prog = nprog;
+    75					tmp->bpf_priority = prio;
+    76				}
+    77				break;
+    78			} else if (item->bpf_priority < prio) {
+    79				tmp->prog = oprog;
+    80				tmp->bpf_priority = item->bpf_priority;
+    81			} else if (item->bpf_priority > prio) {
+    82				if (i == j) {
+    83					tmp->prog = nprog;
+    84					tmp->bpf_priority = prio;
+    85					tmp = &peer->items[++j];
+    86				}
+    87				tmp->prog = oprog;
+    88				tmp->bpf_priority = item->bpf_priority;
+    89			}
+    90		}
+    91		dev_sch_entry_update(dev, peer, ingress);
+    92		if (ingress)
+    93			net_inc_ingress_queue();
+    94		else
+    95			net_inc_egress_queue();
+    96		return prio;
+    97	}
+    98	
 
 -- 
 0-DAY CI Kernel Test Service
