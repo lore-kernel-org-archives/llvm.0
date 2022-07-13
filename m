@@ -1,89 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3174681
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 16:27:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE32C34114;
-	Wed, 13 Jul 2022 16:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657729625;
-	bh=QsCvpn2gWQQ1jAoqmKwmo/Cv3eyEdtKIBceRVgAOtxA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AZPtdVxsPialzeevmLca0Myws6u+ggFFxfdSyrByJNe/SP5gpXevDD1NpAM8cu8sC
-	 BpDecMgFuJS7TdqW7J7+2GuZoBqeA+p0aZ5rz6xC6j+TPlqCBESwHEIuU9vQVg8ikJ
-	 qzDNd3RNsCqqRR64oyz+o/dACayVru8aCSpxjbvOKKZuk0kGxSLMq2mApVn4lRTsmW
-	 3sMjxNwZMNkmQkKWNE+YZ2b4J1yXbHzoKpGcyEcsBR0ThC4L9+JfbBl1OqpXLK4m8k
-	 AmXW35S/ShAEifVdHrvvJzQxTASyBbNiw7N0IFsBWM+B5ndKuLoqe0daeHdKZlyBqY
-	 OfEf5gs73l3GQ==
-Date: Wed, 13 Jul 2022 09:27:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
- x86_spec_ctrl_current
-Message-ID: <Ys7yV0VGXyxX3VWj@dev-arch.thelio-3990X>
-References: <20220713152436.2294819-1-nathan@kernel.org>
- <Ys7xUVjpNyXY0nXf@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BC346B3
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 16:42:30 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id t25so20002787lfg.7
+        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 09:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8U/kpprYOiKhRtd/pitD6dzqU8q761nxCcIW1SxfQ/I=;
+        b=om+4qQHrG9fC3TgF/PgRIpHyp0cIv77lO4cS+gZ7c9Djl807JiQp8cTiOOuqiBGa/Y
+         SGdQWh3B4eD6KWhSc9sXrIOJ69sIe2N73ONPMD/eXmZgSKNf/8k7VrRcQAb4MpfywDZt
+         wGr0INbkx/ila5QNHhqU2ilTw1UM9RkR6x0LmFZfuz/itpukhSw8NwcSfVSkgt1Y4XWS
+         pCrApOIFgKCBUkOExgjeusS1GRP/ePsgi1m8OEls0tpCy65eNtMALGrhVOieFwicPo56
+         ecbyq79Y9rQvkWJkyauwCGqJ+yE1srhGgrY+eLFu48Mt5has7XoQTxjqKTsndLmg3KmW
+         VUiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8U/kpprYOiKhRtd/pitD6dzqU8q761nxCcIW1SxfQ/I=;
+        b=1mlb//tC28tlpRfNz0O9KZcg7P1zUTFuASg7wZfFkRppgehc2ouZjINqDJYnh1N5y2
+         Wo2GPiV9+IBDZbWtAYxcrKmQ7IlPNZtVOp7JWzQk2RfLEivFqegDlsRXTY1OwsuNIugL
+         VWiO9z5zpWWDstUcpwzZSHiD3sW2I6AraXGFJSK06Jixky/3kG1kWV5Qdv0hUKNPUNa9
+         AJA/0APeE331kWiGaaWwaX89aa5RctSLA8HlByJBlnmbKbjW/xKIN08kzqoMKA8uQSQP
+         /ZJU2sh4EjcZLVCwyz4rW7WFZxplll3yrCWdE+sAeNKYhm9ryQYnNvaVM2e4yfdsEfj1
+         SG8A==
+X-Gm-Message-State: AJIora9f/2l2pRCDeVhsEIKXac0NGezCyqWMZqYnkOLA3chvApYfyXLl
+	qbke4kFlMNcKlXNQ5Kn3/Ab+meNIpGyihPoxbi7jAw==
+X-Google-Smtp-Source: AGRyM1tl2RI3IV+VBNDQPx3uJ6naiV2PHsHydAS7JxITurhIUX48/sr1CJ5414fOVONa/KGr7l7+ObTVcWw1yBVXMpw=
+X-Received: by 2002:a05:6512:1188:b0:481:2eb7:f2 with SMTP id
+ g8-20020a056512118800b004812eb700f2mr2485552lfr.401.1657730548248; Wed, 13
+ Jul 2022 09:42:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7xUVjpNyXY0nXf@hirez.programming.kicks-ass.net>
+References: <Ys7pLq+tQk5xEa/B@dev-arch.thelio-3990X> <CAKwvOd=kqfAZoywsOFbvvzUJD+zVgFgmDAAcb7h0U8LGzfG33A@mail.gmail.com>
+ <Ys7vKYJ9tyih8Cng@dev-arch.thelio-3990X> <Ys7yBcfBRWXPLsLq@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ys7yBcfBRWXPLsLq@hirez.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 13 Jul 2022 09:42:16 -0700
+Message-ID: <CAKwvOdmcU3SxgMGsX4MRfR6mskYu5kPYNwUNuNLKeSeskMV5Qg@mail.gmail.com>
+Subject: Re: objtool "'naked' return found in RETHUNK build" with clang + CONFIG_K{A,C}SAN=y
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jul 13, 2022 at 06:22:41PM +0200, Peter Zijlstra wrote:
-> On Wed, Jul 13, 2022 at 08:24:37AM -0700, Nathan Chancellor wrote:
-> > Clang warns:
-> > 
-> >   arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> >   DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> >                       ^
-> >   arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> >   extern u64 x86_spec_ctrl_current;
-> >              ^
-> >   1 error generated.
-> > 
-> > The declaration should be using DECLARE_PER_CPU instead so all
-> > attributes stay in sync.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > 
-> > v1 -> v2: https://lore.kernel.org/20220713152222.1697913-1-nathan@kernel.org/
-> > 
-> > * Use asm/percpu.h instead of linux/percpu.h to avoid static call
-> >   include errors.
-> > 
-> >  arch/x86/include/asm/nospec-branch.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-> > index bb05ed4f46bd..10a3bfc1eb23 100644
-> > --- a/arch/x86/include/asm/nospec-branch.h
-> > +++ b/arch/x86/include/asm/nospec-branch.h
-> > @@ -11,6 +11,7 @@
-> >  #include <asm/cpufeatures.h>
-> >  #include <asm/msr-index.h>
-> >  #include <asm/unwind_hints.h>
-> > +#include <asm/percpu.h>
-> >  
-> >  #define RETPOLINE_THUNK_SIZE	32
-> >  
-> 
-> When I tried this earlier today I ran into cyclic headers, you sure this
-> works?
+On Wed, Jul 13, 2022 at 9:25 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Jul 13, 2022 at 09:13:29AM -0700, Nathan Chancellor wrote:
+> > On Wed, Jul 13, 2022 at 09:01:58AM -0700, Nick Desaulniers wrote:
+> > > On Wed, Jul 13, 2022 at 8:48 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > Hi Josh and Peter,
+> > > >
+> > > > After commit 9bb2ec608a20 ("objtool: Update Retpoline validation") and
+> > > > commit f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs"), I
+> > > > see a spew of objtool warnings when building certain configurations with
+> > > > clang. Examples below, they appear to trigger in every single file.
+> > > >
+> > > > With x86_64_defconfig + CONFIG_KASAN=y:
+> > > >
+> > > > arch/x86/ia32/audit.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/ia32/audit.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > init/version.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > init/version.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/platform-quirks.o: warning: objtool: asan.module_ctor+0x0: 'naked' return found in RETHUNK build
+> > > > init/calibrate.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > init/calibrate.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > >
+> > > > With x86_64_defconfig + CONFIG_KCSAN=y:
+> > > >
+> > > > arch/x86/ia32/audit.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > init/calibrate.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > init/version.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > arch/x86/events/probe.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > arch/x86/kernel/apic/ipi.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > >
+> > > Thanks for the report. I wonder if this might be a compiler bug; it
+> > > seems like the {a|t}san.module_{c|d}tor functions are being emitted
+> > > with ret instructions?
+> > >
+> > > If you have one of these builds lying around still, can you provide:
+> > >
+> > > $ llvm-objdump -dr --disassemble-symbols=tsan.module_ctor
+> > > arch/x86/kernel/fpu/bugs.o
+> >
+> > Sure thing.
+> >
+> > With KASAN:
+> >
+> > $ llvm-objdump -r --disassemble-symbols=asan.module_ctor,asan.module_dtor build/arch/x86/kernel/fpu/bugs.o
+> >
+> > build/arch/x86/kernel/fpu/bugs.o:     file format elf64-x86-64
+> >
+> > Disassembly of section .text.asan.module_ctor:
+> >
+> > 0000000000000000 <asan.module_ctor>:
+> >        0: be 01 00 00 00                      movl    $1, %esi
+> >        5: 48 c7 c7 00 00 00 00                movq    $0, %rdi
+> >               0000000000000008:  R_X86_64_32S .data
+> >        c: e8 00 00 00 00                      callq   0x11 <asan.module_ctor+0x11>
+> >               000000000000000d:  R_X86_64_PLT32       __asan_register_globals-0x4
+> >       11: c3                                  retq
+>
+> As Nick said; this should be: 'jmp __x86_return_thunk', on those builds.
 
-Yes, I did my regular set of x86 builds with clang and they all passed.
+https://github.com/llvm/llvm-project/issues/56514
 
-Cheers,
-Nathan
+-- 
+Thanks,
+~Nick Desaulniers
