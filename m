@@ -1,81 +1,160 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741EB4A0A
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 19:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657740194; x=1689276194;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Q7KHB3M2QFV9b5Jvr54Kwg9Kzv2u1pwotvnqqbVJQAU=;
-  b=jnB3r64t5I8tbkbLFniNPh4ffuufsVBJWKRGiWc9V0RWrDUGPaUn5uua
-   Gpo7sDy0Zs8futQyeiG2XbaYfMQAeWH9+9y7rXg/cAgGuSu9NXsLyZzoh
-   KVp/o6sFIl8d4S/7KMdKt65FocUy9d8Z0EgG/cPSrM1Jjd0i5XSZrWKE1
-   zmqEuOLwwKDsckTklq7DMVF46Ndr32sX0QjOS/Seaete5rIVJS3Z4RKJ8
-   Y9WtLXTnwrzHkGPSsKfcGLJSIBK6xjQZMCVbI9k4fE1Yj2NEL3tlgTLYo
-   7CeFs5HiPQjcsre1kzY0GCTfLDseaSE4lFNC/WDf9OZA0VPSrq5k/Ocnb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310969829"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="310969829"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 12:22:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="653536973"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Jul 2022 12:22:07 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBhvz-0003k7-4L;
-	Wed, 13 Jul 2022 19:22:07 +0000
-Date: Thu, 14 Jul 2022 03:21:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: entry_SYSCALL_compat+0x0:
- ANNOTATE_NOENDBR on ENDBR
-Message-ID: <202207140331.eI1PiJAM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA20F4A25
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 22:05:45 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id o7so21300278lfq.9
+        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 15:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CVPURYDSdi9kkIBxu2J8OfzWwrMxbZ9TkMBa/yDaqbI=;
+        b=LGx/babJfl+Y6xdyF7x7eVHkVsNPeGrKZXB/vlSpnRKiFwIEbEdT+om3gcdVShfutk
+         ttzO/XQ7XccC/2fi6sSjNVa0/LRMuMIhuB3lBZsrUPOx7DOQocrpDdPkr9+woi/7yaUE
+         iwGmpJYPewHHHKgAJNhl3WHWmBurU4N4+GfNeCPrNcT+5xEyqMjTWgEmu93skeXa21Ni
+         J0nJpw5UIwPvM7FnfmHvJTo92zviDVIQ9fmLTjyK3trz8Bfu4ibZH3u3YNBxSf+RFoDf
+         CvJD0c8F6WACY4CHiJ2Y+CsOT8lT8yIiiCxG37ojl5JAqpRSvgVr9yagvllN/ZtSvLfx
+         2ujw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CVPURYDSdi9kkIBxu2J8OfzWwrMxbZ9TkMBa/yDaqbI=;
+        b=Xf5MgPdO30biqikkZn5gMfpyDw1QkVrvsbIwqWYicaytFIjI6jQcNnvejJLxF8LK0d
+         l5m43lp1TKIS4jBgtA+Nw/ZOFnSxRpQOBNMsL7HA1tcvTbvWQgZIIgCldVQrxZEk1BiH
+         3bbxMVwhZf2LVI8ToEck8Y9oGPIb/eRECqoiEZzL6GTrmMxCCUzbTUOrKbYbvYaIZ1Au
+         kpyIxEognHcScL21ex8O+8BXQKsvwsYlqBtFXtORmbjGtdne7syteMJJhlTbeIrZgFvE
+         V3Zin9uZDi1X6vle87fny6vaCniPCqZCTXUtO6/PCixbauchkO4DyXka7l+FQNykMg/n
+         874Q==
+X-Gm-Message-State: AJIora+cVpW58rkyfSkPTSKwsGWcYU/M8dQtFgNelDg7jsFipt2zBriu
+	GbFvf+IiJ+jY10umlDaz5Sa3TcdabSlVBQ0MPnAbxA==
+X-Google-Smtp-Source: AGRyM1u+R0H25ckFnrRFa69dJVpugjvCWY4ydQDn4vkcqRK09kVCwM2Gdokbj5tZpUcNzgLnQdvki6JctOr42JiEl60=
+X-Received: by 2002:a05:6512:e83:b0:489:c6fe:e121 with SMTP id
+ bi3-20020a0565120e8300b00489c6fee121mr3227885lfb.100.1657749943665; Wed, 13
+ Jul 2022 15:05:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <Ys7pLq+tQk5xEa/B@dev-arch.thelio-3990X> <CAKwvOd=kqfAZoywsOFbvvzUJD+zVgFgmDAAcb7h0U8LGzfG33A@mail.gmail.com>
+ <Ys7vKYJ9tyih8Cng@dev-arch.thelio-3990X> <Ys7yBcfBRWXPLsLq@hirez.programming.kicks-ass.net>
+ <CAKwvOdmcU3SxgMGsX4MRfR6mskYu5kPYNwUNuNLKeSeskMV5Qg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmcU3SxgMGsX4MRfR6mskYu5kPYNwUNuNLKeSeskMV5Qg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 13 Jul 2022 15:05:32 -0700
+Message-ID: <CAKwvOdkfz9aYDb9vzdttVucJDYX+98=O58sLE+6aTmCORwX0YA@mail.gmail.com>
+Subject: Re: objtool "'naked' return found in RETHUNK build" with clang + CONFIG_K{A,C}SAN=y
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Josh Poimboeuf <jpoimboe@kernel.org>
+On Wed, Jul 13, 2022 at 9:42 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Wed, Jul 13, 2022 at 9:25 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, Jul 13, 2022 at 09:13:29AM -0700, Nathan Chancellor wrote:
+> > > On Wed, Jul 13, 2022 at 09:01:58AM -0700, Nick Desaulniers wrote:
+> > > > On Wed, Jul 13, 2022 at 8:48 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > >
+> > > > > Hi Josh and Peter,
+> > > > >
+> > > > > After commit 9bb2ec608a20 ("objtool: Update Retpoline validation") and
+> > > > > commit f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs"), I
+> > > > > see a spew of objtool warnings when building certain configurations with
+> > > > > clang. Examples below, they appear to trigger in every single file.
+> > > > >
+> > > > > With x86_64_defconfig + CONFIG_KASAN=y:
+> > > > >
+> > > > > arch/x86/ia32/audit.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/ia32/audit.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > > init/version.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > > init/version.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/platform-quirks.o: warning: objtool: asan.module_ctor+0x0: 'naked' return found in RETHUNK build
+> > > > > init/calibrate.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
+> > > > > init/calibrate.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
+> > > > >
+> > > > > With x86_64_defconfig + CONFIG_KCSAN=y:
+> > > > >
+> > > > > arch/x86/ia32/audit.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > init/calibrate.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > init/version.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/fpu/bugs.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > arch/x86/events/probe.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
+> > > > > arch/x86/kernel/apic/ipi.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b047602d579b4fb028128a525f056bbdc890e7f0
-commit: 2dbb887e875b1de3ca8f40ddf26bcfe55798c609 x86/entry: Add kernel IBRS implementation
-date:   2 weeks ago
-config: x86_64-randconfig-r005-20220627 (https://download.01.org/0day-ci/archive/20220714/202207140331.eI1PiJAM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2dbb887e875b1de3ca8f40ddf26bcfe55798c609
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2dbb887e875b1de3ca8f40ddf26bcfe55798c609
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+It's not just the sanitizers, `CONFIG_GCOV_KERNEL=y` +
+`CONFIG_GCOV_PROFILE_ALL=y` also has this issue:
+```
+...
+drivers/base/platform.o: warning: objtool: __llvm_gcov_reset+0xa94:
+'naked' return found in RETHUNK build
+net/core/netpoll.o: warning: objtool: __llvm_gcov_reset+0xde3: 'naked'
+return found in RETHUNK build
+net/netfilter/nf_conntrack_netlink.o: warning: objtool:
+__llvm_gcov_reset+0x1b94: 'naked' return found in RETHUNK build
+fs/fs_parser.o: warning: objtool: __llvm_gcov_reset+0x344: 'naked'
+return found in RETHUNK build
+drivers/acpi/debugfs.o: warning: objtool: __llvm_gcov_reset+0xb:
+'naked' return found in RETHUNK build
+mm/pagewalk.o: warning: objtool: __llvm_gcov_reset+0x77f: 'naked'
+return found in RETHUNK build
+drivers/tty/serial/8250/8250_pnp.o: warning: objtool:
+__llvm_gcov_reset+0x231: 'naked' return found in RETHUNK build
+fs/init.o: warning: objtool: __llvm_gcov_reset+0x2f7: 'naked' return
+found in RETHUNK build
+drivers/gpu/drm/drm_fourcc.o: warning: objtool:
+__llvm_gcov_reset+0x1ce: 'naked' return found in RETHUNK build
+...
+```
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> > > >
+> > > > Thanks for the report. I wonder if this might be a compiler bug; it
+> > > > seems like the {a|t}san.module_{c|d}tor functions are being emitted
+> > > > with ret instructions?
+> > > >
+> > > > If you have one of these builds lying around still, can you provide:
+> > > >
+> > > > $ llvm-objdump -dr --disassemble-symbols=tsan.module_ctor
+> > > > arch/x86/kernel/fpu/bugs.o
+> > >
+> > > Sure thing.
+> > >
+> > > With KASAN:
+> > >
+> > > $ llvm-objdump -r --disassemble-symbols=asan.module_ctor,asan.module_dtor build/arch/x86/kernel/fpu/bugs.o
+> > >
+> > > build/arch/x86/kernel/fpu/bugs.o:     file format elf64-x86-64
+> > >
+> > > Disassembly of section .text.asan.module_ctor:
+> > >
+> > > 0000000000000000 <asan.module_ctor>:
+> > >        0: be 01 00 00 00                      movl    $1, %esi
+> > >        5: 48 c7 c7 00 00 00 00                movq    $0, %rdi
+> > >               0000000000000008:  R_X86_64_32S .data
+> > >        c: e8 00 00 00 00                      callq   0x11 <asan.module_ctor+0x11>
+> > >               000000000000000d:  R_X86_64_PLT32       __asan_register_globals-0x4
+> > >       11: c3                                  retq
+> >
+> > As Nick said; this should be: 'jmp __x86_return_thunk', on those builds.
+>
+> https://github.com/llvm/llvm-project/issues/56514
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-All warnings (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: entry_SYSCALL_compat+0x0: ANNOTATE_NOENDBR on ENDBR
-   vmlinux.o: warning: objtool: ibt_selftest+0xf: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ibt_selftest+0x19: return with modified stack frame
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
