@@ -1,119 +1,111 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256F17A
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 07:19:29 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id 75so16585616ybf.4
-        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 00:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HyJsR8RZ7AyXv8e801jKuabl2zWRfVP1YrI7f5FTJO8=;
-        b=YzGNvs8posRLbFdR5G4kuRjrYsgmtP+o0QPOCcfYVF7aX1fFOUawnIIFtbKTCVGm89
-         OFLY5MX+erKjQ4f210z1iUfaf2aqiUbt9eG9c4w0NPNI2BN5Jmn6tMKhe+WRmhxXkX77
-         ff77U3Gh7wyN/mH2OrcixDohQ2/MMPttDRhQ1ZUVmvuZnhLrLAubYsBu8IQzED9Vi+Jm
-         96Es14ypsmXVWB2tifn2yeECQHJds/yrtddLUnJxOFC0EvP/0aXlnRuYNjdvOJLBRxgJ
-         nYEiIzDWxRP4AOT/ocmn4h1m1DXTT/mIG5QXk12QCUphDDh+Y6rnhhTBrRmVldi9s7Jd
-         uWIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HyJsR8RZ7AyXv8e801jKuabl2zWRfVP1YrI7f5FTJO8=;
-        b=2dfaR1qEhLkAhW4jN6d5/TSsGPKsv8MStlRFevDTK3jxIP+vfO3BnRjw0D4+cIoCNc
-         d8K90RrG5wLLkd2LOzVE5AC+d9EOBI/CUVPJI6caGLlFMmLINuma/YuDrH/yjosXKVYI
-         FYbEQVQJlkhBFHQDwX0PjyFQvgBwrxmFan78pj68gHVxizr09JntOk6v/ZtuT3UfvVZ5
-         lgTrJKJkhu86jRdXVRNY0bV1PXoo/76qSKXqgrqwtd1LRHX8yERWlT1Hi/je4z4SqVDJ
-         ZD7a/LhU7uYYj6V+lsHCFLo7jdPAEc4UGJE4iYk1wz49e6x97EV71Lo3H1OuFw3SiY1H
-         TNCQ==
-X-Gm-Message-State: AJIora+G2E+b6KR1ufjJnAa6QsNrOGV4/BCxN+OAXvJJCTKy+jAVUo2M
-	Btv0rmBdC6nsjO2q19Qc+MBenqCuC7VTTpTG5V2NrQ==
-X-Google-Smtp-Source: AGRyM1s00VBi0SUotB0d4Pqpeid40B5yNRLv0YgE7oSjhXLZ7hyBdKL092F72TsJeiadw2fjEA0OW2cbWkHWFq3DMh4=
-X-Received: by 2002:a25:4053:0:b0:66e:6a1d:c3b6 with SMTP id
- n80-20020a254053000000b0066e6a1dc3b6mr2355220yba.111.1657696768911; Wed, 13
- Jul 2022 00:19:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F307A
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 07:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937B1C3411E;
+	Wed, 13 Jul 2022 07:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1657697052;
+	bh=Jfaqpz4SNBajpuUinidVA+7dT+UHlgGv8dACmnXz688=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KsMHKPnDhC6PLCFiJH0tdMMg65Eoo0Pqmsj7JTTD+Cigi52kNO+0b9ykySa87dxLy
+	 VYghbmZBsY2+UNI5UN86QI3hprEGy5ooh5zkFOm+4Lzex+AUVUkgX7pbZZBSnnT/nt
+	 KWiT27nn6X40FfEg5D2vsjvjf9GWL6J9FF67slUY=
+Date: Wed, 13 Jul 2022 09:24:09 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Borislav Petkov <bp@suse.de>,
+	Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+	Ben Hutchings <bwh@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [linux-stable-rc:linux-5.10.y 7109/7120]
+ arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on
+ redeclared variable
+Message-ID: <Ys5zGYxqsZvmwCsR@kroah.com>
+References: <202207130344.AUqExE4E-lkp@intel.com>
+ <Ys3Xu+Vikf9WgIgz@dev-arch.thelio-3990X>
+ <Ys3Ye7OR+5IpUoTv@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207131251.9wFgtqfN-lkp@intel.com> <CAFP8O3JXbg1HNRwO_b5bbg8iUqa1-Md8XPdmobUp7R8XzV2cYg@mail.gmail.com>
-In-Reply-To: <CAFP8O3JXbg1HNRwO_b5bbg8iUqa1-Md8XPdmobUp7R8XzV2cYg@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 13 Jul 2022 00:19:17 -0700
-Message-ID: <CAFP8O3Lp91VJwnNuUzmKuDi9va8-L2Z_O8hNr4mifkD7xC9aOg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Pass -mno-relax only on lld < 15.0.0
-To: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys3Ye7OR+5IpUoTv@dev-arch.thelio-3990X>
 
-On Tue, Jul 12, 2022 at 10:48 PM Fangrui Song <maskray@google.com> wrote:
->
-> On Tue, Jul 12, 2022 at 9:16 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > BCC: lkp@intel.com
-> > In-Reply-To: <20220710071117.446112-1-maskray@google.com>
-> > References: <20220710071117.446112-1-maskray@google.com>
-> > TO: Fangrui Song <maskray@google.com>
-> > TO: Paul Walmsley <paul.walmsley@sifive.com>
-> > TO: Palmer Dabbelt <palmer@dabbelt.com>
-> > TO: Albert Ou <aou@eecs.berkeley.edu>
-> > TO: linux-riscv@lists.infradead.org
-> > CC: Khem Raj <raj.khem@gmail.com>
-> > CC: linux-kernel@vger.kernel.org
-> > CC: llvm@lists.linux.dev
-> > CC: Fangrui Song <maskray@google.com>
-> >
-> > Hi Fangrui,
-> >
-> > Thank you for the patch! Yet something to improve:
-> >
-> > [auto build test ERROR on linus/master]
-> > [also build test ERROR on v5.19-rc6 next-20220712]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Fangrui-Song/riscv-Pass-mno-relax-only-on-lld-15-0-0/20220710-151301
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b1c428b6c3684ee8ddf4137d68b3e8d51d2a700f
-> > config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220713/202207131251.9wFgtqfN-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/9abe0b92e612c5b6c53d4658b46c60b75bbd39d3
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Fangrui-Song/riscv-Pass-mno-relax-only-on-lld-15-0-0/20220710-151301
-> >         git checkout 9abe0b92e612c5b6c53d4658b46c60b75bbd39d3
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: fs/built-in.a(nfs/nfs3xdr.o):(function decode_wcc_data: .text+0x2ec4): relocation R_RISCV_RVC_JUMP out of range: -1079 is not in [-1024, 1023]; references decode_fattr3
-> >    >>> referenced by nfs3xdr.c
-> >    >>> defined in fs/built-in.a(nfs/nfs3xdr.o)
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> >
->
-> This exposed an issue about imprecise branch distance computation when
-> checking a call instruction referencing the same input section.
-> I'll fix lld.
+On Tue, Jul 12, 2022 at 01:24:27PM -0700, Nathan Chancellor wrote:
+> On Tue, Jul 12, 2022 at 01:21:15PM -0700, Nathan Chancellor wrote:
+> > On Wed, Jul 13, 2022 at 04:07:25AM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > > head:   ba398a0e54049bb6a1c102245ae84103f103ff2c
+> > > commit: 855b78ccf1c8c952e148bdbd234cde117b098060 [7109/7120] KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
+> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207130344.AUqExE4E-lkp@intel.com/config)
+> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=855b78ccf1c8c952e148bdbd234cde117b098060
+> > >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> > >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> > >         git checkout 855b78ccf1c8c952e148bdbd234cde117b098060
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > >> arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on redeclared variable [-Wsection]
+> > >    DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+> > >                        ^
+> > >    arch/x86/include/asm/nospec-branch.h:278:12: note: previous declaration is here
+> > >    extern u64 x86_spec_ctrl_current;
+> > >               ^
+> > >    1 warning generated.
+> > > 
+> > > 
+> > > vim +57 arch/x86/kernel/cpu/bugs.c
+> > > 
+> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  55  
+> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  56  /* The current value of the SPEC_CTRL MSR with task-specific bits set */
+> > > c40221c4c496c5 Peter Zijlstra 2022-06-14 @57  DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  58  EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
+> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  59  
+> > > 
+> > > :::::: The code at line 57 was first introduced by commit
+> > > :::::: c40221c4c496c5c026ede111094a96f292875d88 x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
+> > > 
+> > > :::::: TO: Peter Zijlstra <peterz@infradead.org>
+> > > :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> > > 
+> > 
+> > Looks like that declaration should be using DECLARE_PER_CPU?
+> 
+> Additionally, this appears to be an issue on mainline, our CI is
+> starting to roll in with these patches (clang-13 + x86_64 allmodconfig):
+> 
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/2658541992
+> 
+> https://builds.tuxbuild.com/2Br2Q4juY6VKxbmgzULKe5C3pGq/build.log
+> 
+> I am happy to send a patch if this is correct, unless someone else wants
+> to.
 
-This was an issue in the R_RISCV_CALL lld patch. I just fixed it in
-https://github.com/llvm/llvm-project/commit/6b1d151fe3dc530195d8802f1ecc247c8235dd3a
-.
+Please do so.
 
-It's unnecessary to adjust the commit message since riscv32/riscv64
-kernels should work with the very first R_RISCV_ALIGN lld patch.
+thanks,
+
+greg k-h
