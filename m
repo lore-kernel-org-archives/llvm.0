@@ -1,300 +1,343 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD7615A9
-	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 05:25:46 +0000 (UTC)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-10c0d96953fso12937602fac.0
-        for <llvm@lists.linux.dev>; Tue, 12 Jul 2022 22:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sPp3aq0xZox3YgcmSdjOtI+bv4N4Elhm3ft32O6ITtU=;
-        b=Ze+BeJ0tPtuKyIdK9+nYuwG82J9kkGgHxSxb3fhFQSqz/IgTCMdlj+LG4nnRFLZ+Y1
-         /Xfi49U8mCxM8UBHo+J0CbFdQGij738KNFD/RA+VOiWWtSJzXWwk2QMllMzz07S+gMfO
-         KzuO0rBmFJfcjjmsn5I65gz9PZr6kD/J4iq7LeOXZHcBsTOU0AvLJQEfb9+PcoSqOHxt
-         O8XfX2XSMTEsxVtGkitz1gvUSeSxRy5qr1Dw8z89vjerWeDuyqHag7FLZloD5UzOOLZX
-         aKwP7j60DfTLdAtWSx+zppRFh0o/fG9p5P5m8hBHzkYz8yeUzo2gCavdIgSR38HE0JXY
-         horA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sPp3aq0xZox3YgcmSdjOtI+bv4N4Elhm3ft32O6ITtU=;
-        b=Nm38pCnP0w43b025wyQ6Vk++NpGDPQT8ZxR/CfrJDw2aWE/Hf/8WgmIH01wYj8knsK
-         JwX5k//VgbtZAorAfVTABRvC1g5gVjut8e52T8C6zhcn9Xtz54lT+1gTRoXNiKToXw/E
-         3mPIKpakldDw9GGC/PEQ5fe/cerAUvd9CoJCISH9wi8e77WVPzalazmsutKnTXxAgxnn
-         wX1Oi4u5Tk3QqQCNPPjpT+Klfqjxv3kuyU6M3SBqvr7z4ogxfNC+oONDekrs6Llsa3Ra
-         zve0pHb+rRyho1vcLNmJIeGSjWebYYyPD5s6LnSrCkzGDImnWjg81GFaKAmfvB3ewzo2
-         alrA==
-X-Gm-Message-State: AJIora842EOtoS6kofVOG2cL6MuI3um/y4CA9Tn7BYyuOaQNpXX7Io27
-	c9909459dsuUO5dx/wJZh5+3kAVI8hmgoYxie2E=
-X-Google-Smtp-Source: AGRyM1vQXFje4zdFVX9Smy3FQLg2cwpHs+aHjhTMwyS0O4HCACAauNpLvl6mm/3P02dEVw66PJRLsEqG86+roxnGbJc=
-X-Received: by 2002:a05:6870:d0ce:b0:f3:3856:f552 with SMTP id
- k14-20020a056870d0ce00b000f33856f552mr914530oaa.99.1657689944976; Tue, 12 Jul
- 2022 22:25:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3E715A9
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 05:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1657690316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bYMfmFE+m2HCdhiHh1kgs09OpUga+oizrDwB70PHaEs=;
+	b=LPAuvbtPNGq2SvADq/OBm5Z/PTs8rzyMrHSdQxA8WztNF3A0tpKZV1skMdcB6dOXdp61HH
+	1tsh/gRDTMmYz6rY3T0yfRcux78GOFR/Ab1e4Gwc+zCwqVtzr3/1KTNWJF820yifvXMSfH
+	GcrDysqt1Rd2Brf2d458fmitCN+xAHE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-0vqPzmU1MY2hkRX6EZl9Vg-1; Wed, 13 Jul 2022 01:31:55 -0400
+X-MC-Unique: 0vqPzmU1MY2hkRX6EZl9Vg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC97D1C04B63
+	for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 05:31:54 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.34.251])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CE3AE492C3B;
+	Wed, 13 Jul 2022 05:31:54 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 72a8e05d
+ (mainline.kernel.org-clang)
+Date: Wed, 13 Jul 2022 05:31:54 -0000
+CC: mmalik@redhat.com, omosnace@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com> <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
- <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
- <87v8s260j1.fsf@oracle.com> <CAADnVQLQGHoj_gCOvdFFw2pRxgMubPSp+bRpFeCSa5zvcK2qRQ@mail.gmail.com>
- <CADvTj4qqxckZmxvL=97e-2W5M4DgCCMDV8RCFDg23+cY2URjTA@mail.gmail.com>
- <20220713011851.4a2tnqhdd5f5iwak@macbook-pro-3.dhcp.thefacebook.com>
- <CADvTj4o7z7J=4BOtKM9dthZyfFogV6hL5zKBwiBq7vs+bNhUHA@mail.gmail.com>
- <CAADnVQJAz7BcZjrBwu-8MjQprh86Z_UpWGMSQtFnowZTc4d6Vw@mail.gmail.com>
- <CADvTj4qtCfmsu=dMZx9LtaDMOSNsOxGVSa1g3USEWroA1AfTJA@mail.gmail.com> <20220713042549.uljgrp4lffianxyj@macbook-pro-3.dhcp.thefacebook.com>
-In-Reply-To: <20220713042549.uljgrp4lffianxyj@macbook-pro-3.dhcp.thefacebook.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 12 Jul 2022 23:25:33 -0600
-Message-ID: <CADvTj4qm5MyUtbHq6iOTiqDyJX=ra=ETOEVq-iXggzzEMhXJ8g@mail.gmail.com>
-Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: "Jose E. Marchesi" <jose.marchesi@oracle.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Quentin Monnet <quentin@isovalent.com>, Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Message-Id: <60095.122071301315500311@us-mta-377.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 12, 2022 at 10:25 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Jul 12, 2022 at 08:56:35PM -0600, James Hilliard wrote:
-> > On Tue, Jul 12, 2022 at 7:45 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Jul 12, 2022 at 6:29 PM James Hilliard
-> > > <james.hilliard1@gmail.com> wrote:
-> > > >
-> > > > On Tue, Jul 12, 2022 at 7:18 PM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Tue, Jul 12, 2022 at 07:10:27PM -0600, James Hilliard wrote:
-> > > > > > On Tue, Jul 12, 2022 at 10:48 AM Alexei Starovoitov
-> > > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Tue, Jul 12, 2022 at 4:20 AM Jose E. Marchesi
-> > > > > > > <jose.marchesi@oracle.com> wrote:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > > CC Quentin as well
-> > > > > > > > >
-> > > > > > > > > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
-> > > > > > > > > <james.hilliard1@gmail.com> wrote:
-> > > > > > > > >>
-> > > > > > > > >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > > > > >> >
-> > > > > > > > >> >
-> > > > > > > > >> >
-> > > > > > > > >> > On 7/6/22 10:28 AM, James Hilliard wrote:
-> > > > > > > > >> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
-> > > > > > > > >> > > correctly with gcc.
-> > > > > > > > >> > >
-> > > > > > > > >> > > GCC appears to required kernel helper funcs to have the following
-> > > > > > > > >> > > attribute set: __attribute__((kernel_helper(NUM)))
-> > > > > > > > >> > >
-> > > > > > > > >> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
-> > > > > > > > >> > >
-> > > > > > > > >> > > This adds conditional blocks for GCC while leaving clang codepaths
-> > > > > > > > >> > > unchanged, for example:
-> > > > > > > > >> > >       #if __GNUC__ && !__clang__
-> > > > > > > > >> > >       void *bpf_map_lookup_elem(void *map, const void *key)
-> > > > > > > > >> > > __attribute__((kernel_helper(1)));
-> > > > > > > > >> > >       #else
-> > > > > > > > >> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
-> > > > > > > > >> > >       #endif
-> > > > > > > > >> >
-> > > > > > > > >> > It does look like that gcc kernel_helper attribute is better than
-> > > > > > > > >> > '(void *) 1' style. The original clang uses '(void *) 1' style is
-> > > > > > > > >> > just for simplicity.
-> > > > > > > > >>
-> > > > > > > > >> Isn't the original style going to be needed for backwards compatibility with
-> > > > > > > > >> older clang versions for a while?
-> > > > > > > > >
-> > > > > > > > > I'm curious, is there any added benefit to having this special
-> > > > > > > > > kernel_helper attribute vs what we did in Clang for a long time?
-> > > > > > > > > Did GCC do it just to be different and require workarounds like this
-> > > > > > > > > or there was some technical benefit to this?
-> > > > > > > >
-> > > > > > > > We did it that way so we could make trouble and piss you off.
-> > > > > > > >
-> > > > > > > > Nah :)
-> > > > > > > >
-> > > > > > > > We did it that way because technically speaking the clang construction
-> > > > > > > > works relying on particular optimizations to happen to get correct
-> > > > > > > > compiled programs, which is not guaranteed to happen and _may_ break in
-> > > > > > > > the future.
-> > > > > > > >
-> > > > > > > > In fact, if you compile a call to such a function prototype with clang
-> > > > > > > > with -O0 the compiler will try to load the function's address in a
-> > > > > > > > register and then emit an invalid BPF instruction:
-> > > > > > > >
-> > > > > > > >   28:   8d 00 00 00 03 00 00 00         *unknown*
-> > > > > > > >
-> > > > > > > > On the other hand the kernel_helper attribute is bullet-proof: will work
-> > > > > > > > with any optimization level, with any version of the compiler, and in
-> > > > > > > > our opinion it is also more readable, more tidy and more correct.
-> > > > > > > >
-> > > > > > > > Note I'm not saying what you do in clang is not reasonable; it may be,
-> > > > > > > > obviously it works well enough for you in practice.  Only that we have
-> > > > > > > > good reasons for doing it differently in GCC.
-> > > > > > >
-> > > > > > > Not questioning the validity of the reasons, but they created
-> > > > > > > the unnecessary difference between compilers.
-> > > > > >
-> > > > > > Sounds to me like clang is relying on an unreliable hack that may
-> > > > > > be difficult to implement in GCC, so let's see what's the best option
-> > > > > > moving forwards in terms of a migration path for both GCC and clang.
-> > > > >
-> > > > > The following is a valid C code:
-> > > > > static long (*foo) (void) = (void *) 1234;
-> > > > > foo();
-> > > > >
-> > > > > and GCC has to generate correct assembly assuming it runs at -O1 or higher.
-> > > >
-> > > > Providing -O1 or higher with gcc-bpf does not seem to work at the moment.
-> > >
-> > > Let's fix gcc first.
-> >
-> > If the intention is to migrate to kernel_helper for clang as well it
-> > seems kind of
-> > redundant, is there a real world use case for supporting the '(void *)
-> > 1' style in
-> > GCC rather than just adding feature detection+kernel_helper support to libbpf?
-> >
-> > My assumption is that kernel helpers are in practice always used via libbpf
-> > which appears to be sufficient in terms of being able to provide a compatibility
-> > layer via feature detection. Or is there some use case I'm missing here?
->
-> static long (*foo) (void) = (void *) 1234;
-> is not about calling into "kernel helpers".
-> There is no concept of "kernel" in BPF ISA.
+Hi, we tested your kernel and here are the results:
 
-I thought GCC at least had a somewhat kernel specific BPF ISA target,
-I presume clang's bpf target is more generalized.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> 'call 1234' insn means call a function with that absolute address.
-> The gcc named that attribute incorrectly.
-> It should be renamed to something like __attribute__((fixed_address(1234))).
->
-> It's a linux kernel abi choice to interpret 'call abs_addr' as a call to a kernel
-> provided function at that address. 1,2,3,... are addresses of functions.
 
-The impression I got was that GCC's BPF support was designed for targeting
-the kernel ISA effectively, at least going off of the gcc-bpf docs gave me that
-impression, although I might be wrong about that.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/47661
 
->
-> > >
-> > > > > There is no indirect call insn defined in BPF ISA yet,
-> > > > > so the -O0 behavior is undefined.
-> > > >
-> > > > Well GCC at least seems to be able to compile BPF programs with -O0 using
-> > > > kernel_helper. I assume -O0 is probably just targeting the minimum BPF ISA
-> > > > optimization level or something like that which avoids indirect calls.
-> > >
-> > > There are other reasons why -O0 compiled progs will
-> > > fail in the verifier.
-> >
-> > Why would -O0 generate code that isn't compatible with the selected
-> > target BPF ISA?
->
-> llvm has no issue producing valid BPF code with -O0.
-> It's the kernel verifier that doesn't understand such code.
-> For the following code:
-> static long (*foo) (void) = (void *) 1234;
-> long bar(void)
-> {
->     return foo();
-> }
->
-> With -O[12] llvm will generate
->   call 1234
->   exit
-> With -O0
->   r1 = foo ll
->   r1 = *(u64 *)(r1 + 0)
->   callx r1
->   exit
->
-> Both codes are valid and equivalent.
-> 'callx' here is a reserved insn. The kernel verifier doesn't know about it yet,
-> but llvm was generting such code for 8+ years.
+One or more kernel tests failed:
 
-Hmm, I thought GCC gates non-kernel compatible BPF behind -mxbpf(for
-use with GCC's internal test suite mostly AFAIU):
-https://gcc.gnu.org/onlinedocs/gcc/eBPF-Options.html
+    Unrecognized or new issues:
+         ppc64le - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4332364
 
->
-> > > Assuming that kernel_helper attr is actually necessary
-> > > we have to add its support to clang as well.
-> >
-> > I mean, I'd argue there's a difference between something being arguably a better
-> > alternative(optional) and actually being necessary(non-optional).
->
-> gcc's attribute is not better.
-> It's just a different way to tell compiler about fixed function address.
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
+ filename '/devices/mc0'
+                          http://lists.infradead.org/pipermail/linux-arm-ke=
+rnel/2022-June/750380.html
+         aarch64 - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+         aarch64 - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         ppc64le - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+         ppc64le - AMTU (Abstract Machine Test Utility)
+                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
+AIL
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1162
+         ppc64le - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         ppc64le - trace: ftrace/tracer
+                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
+error: No such device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/803
+         ppc64le - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         ppc64le - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         ppc64le - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - kselftest build - net
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - kselftest build - bpf
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+          x86_64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
 
-I presume it's a lot simpler implementation wise than the clang
-version, but I could
-be wrong about that though. I mostly work with compiler integration testing and
-build fixes, compiler internals are a bit out of my area of expertise.
 
->
-> > > gcc-bpf is a niche. If gcc devs want it to become a real
-> > > alternative to clang they have to always aim for feature parity
-> > > instead of inventing their own ways of doing things.
-> >
-> > What's ultimately going to help the most in regards to helping gcc-bpf reach
-> > feature parity with clang is getting it minimally usable in the real
-> > world, because
-> > that's how you're going to get more people testing+fixing bugs so that all these
-> > differences/incompatibilities can be worked though/fixed.
->
-> Can gcc-bpf compile all of selftests/bpf ?
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-Don't pretty much all of those use?:
-#include <bpf/bpf_helpers.h>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Which doesn't really work without adding kernel_helper support to libbpf at the
-moment when building with gcc-bpf.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> How many of compiled programs will pass the verifier ?
-
-Not really sure, still been working through toolchain/build issues...kinda
-tricky to do proper testing when those are all using clang specific headers.
-
-Would be handy to get integration testing running against them with gcc-bpf
-so that we can at least get a baseline in terms of what's working and catch
-regressions when fixing compiler/toolchain issues, right now I think gcc-bpf is
-mostly only using an internal test suite.
-
->
-> > If nobody can compile a real world BPF program with gcc-bpf it's likely going to
-> > lag further behind.
->
-> selftest/bpf is a first milestone that gcc-bpf has to pass before talking about
-> 'real world' bpf progs.
-
-A test suite designed to exercise lots of edge cases isn't exactly a great first
-milestone for something like this, something like the 3 small systemd BPF
-programs on the other hand would be a good start IMO, since they are
-widely used real world programs and relatively simple. They aren't going to
-exercise all potential edge cases but they are a good starting point when it
-comes to having say something for testing real world toolchain integrations
-against(which is in really rough shape at the moment).
-
-I mean even getting some normal-ish progs buildable without downstream
-library patches would be a big improvement as one can then iterate a lot easier.
-
-I mean, we're dealing with multiple issues here, some of which are more
-toolchain/integration issues and others are compiler issues. If we can get
-a little more integration testing going it's going to be easier to flush out the
-remaining compiler issues. Kinda tricky to fix one without fixing the other.
