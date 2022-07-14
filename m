@@ -1,67 +1,92 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D77D2F53
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:40:16 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id n74so4168207yba.3
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=lu6wSZdbs1tW8071fLNm+qwJz0Gga60nDMQS/pMdOy0=;
-        b=Aq9vpPI5Nj7rZ9ygAzRYELM6TKqbC/rS7Y8wLUqfFzzonUDS56lJAGtX3d2AjDLXdg
-         hfNUHlVocVgVMtlFX3Lirjg4nGjFr8CK348ciz9fPazt5ACLRjEm6R87jmKudzn656fd
-         pN64g08RDcMA1Nc0gJpBzp235E75gO7kFr3Fc0CF6q2NcbIn3fPrUDVMvXvatx0sevKO
-         my9ddWO3Uol4/J1hYa5V2jA4NAqDi4lFi6sA7F/BYtUfDhHy0+2SzM0WUIGLiVhHEc0E
-         ohTPHUxW0AGrbtU2QhZGAkudjpfVjPsMer1oxyrtEWCJBEysl/7cqo3BpFl2kz5jPyP4
-         PtBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=lu6wSZdbs1tW8071fLNm+qwJz0Gga60nDMQS/pMdOy0=;
-        b=v2PocvUtOFfcW60Up4QgoQU/pbNPkPoD+C/sjXaSN06nAzc2kXV2z9RCWKN13XsrGx
-         BKSM3yI5191ly6ez0zGN3oXmzzR1d8p5FXSDUj4cX3xGAZWgsOOCiMyC+zZA4FiImQQn
-         M9YfcLpGoSo6SH1XcxlxIeivoWM4N9Lt04/2DzGelY4DEKXoEvajM5wUhmRUw0NZhaKb
-         knLIVYb1WqcbTUApPJnRZivGwyYx5WGmqe4+CfLFbZzMRTj6mNm6kIBZb+Pxix3HGVnq
-         dODcOZ4pPyQM1yM24V+l/Lfa/qxF3nNTODnAYqC9ILaViisSDSg0oB3W/feJ9jiYdYT/
-         AzqA==
-X-Gm-Message-State: AJIora9KvsIuj03wXm/LcQnkqyhexi3YoLW6FrCgzv5eatobxcAenQHQ
-	oEg6LZsuvcCk9oEa6kkZufo06tENpS+DeZX3Yr97wa+/vIuZMQ==
-X-Google-Smtp-Source: AGRyM1supX8hPuV/sZdbncNqOlH6yVsdNGats0XpBcSB7ua/uAi8Fvf/U06L6ue4KPyzlFqevwLdQuqPNZxvlFVQoIY=
-X-Received: by 2002:a05:6902:983:b0:66f:c668:fe2b with SMTP id
- bv3-20020a056902098300b0066fc668fe2bmr5188764ybb.617.1657816815042; Thu, 14
- Jul 2022 09:40:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59E82F53
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657817009; x=1689353009;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N/xECZxr+sWlay9b7MODTqclvFGTFHTyS6Ax8kmXyOI=;
+  b=bNi5q43pP0vQSJNIl/0+fPJ99eHvqCYNzNdMYOF+nQzvLnFFeQtFobHE
+   eaF/UbTVpQmWmyrJADac/euVmejeMn41t/O3wKsnfFrDomk5oDwDdRMgT
+   F6RaGZLvz4K+4cNU28GMRH9BQM1ujO8tVrt2dmhoW0CgZ9Z4lhtcEY71P
+   PFl4EPB1NzELukqeDwAR+kCwye1Be+7s2PX3jv1WTkY2glYN5mgdVYSU/
+   Sb8NDsvBgiRip057QANpidKjFHJecRkw3TpVps1mIUVaFmTZ4Z6Sf35SH
+   zcN6iDzjBHHYeSRPaO+kaaUgq2peDhecs7CDLdpWAobbOiZ+I4YHwh42o
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268596855"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="268596855"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 09:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="738340522"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Jul 2022 09:43:28 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oC1vz-0000sn-KH;
+	Thu, 14 Jul 2022 16:43:27 +0000
+Date: Fri, 15 Jul 2022 00:42:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH bpf-next v6 12/23] HID: initial BPF implementation
+Message-ID: <202207150008.O4t08On6-lkp@intel.com>
+References: <20220712145850.599666-13-benjamin.tissoires@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date: Thu, 14 Jul 2022 17:39:39 +0100
-Message-ID: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
-Subject: help with clang build for mips
-To: llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712145850.599666-13-benjamin.tissoires@redhat.com>
 
-Hi All,
+Hi Benjamin,
 
-I am trying to build the kernel for mips architecture with clang. I
-see some of the configuration builds properly, but some of the configs
-fails with the error (fuloong2e_defconfig):
+I love your patch! Yet something to improve:
 
-error: unknown target CPU 'loongson2e'
-note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+[auto build test ERROR on bpf-next/master]
 
-Another one fails with (jazz_defconfig):
-error: unknown target CPU 'r4600'
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/Introduce-eBPF-support-for-HID-devices/20220712-230852
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: arm-vexpress_defconfig (https://download.01.org/0day-ci/archive/20220715/202207150008.O4t08On6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/57eb5074a35029f30cc13ed3a526b3342b169788
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Tissoires/Introduce-eBPF-support-for-HID-devices/20220712-230852
+        git checkout 57eb5074a35029f30cc13ed3a526b3342b169788
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-is there any way to build these configs which fails with "unknown
-target CPU". or they should be skipped for a clang build?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: dispatch_hid_bpf_device_event
+   >>> referenced by hid-core.c
+   >>> hid/hid-core.o:(hid_input_report) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: hid_bpf_device_init
+   >>> referenced by hid-core.c
+   >>> hid/hid-core.o:(hid_allocate_device) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: hid_bpf_destroy_device
+   >>> referenced by hid-core.c
+   >>> hid/hid-core.o:(hid_destroy_device) in archive drivers/built-in.a
 
 -- 
-Regards
-Sudip
+0-DAY CI Kernel Test Service
+https://01.org/lkp
