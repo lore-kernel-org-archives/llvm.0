@@ -1,247 +1,102 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C508600D
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 20:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657830528; x=1689366528;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RmsJ85zaQ6SLdTrbC7HU94sH2GH/ck7+Z2JTgwkKajs=;
-  b=J2d+ndcThEBkhps/lgh9c8yVJ9jO+ox+Lfa8S/kvyU+so7bBkfdrCtwy
-   beKxEwRcAEIGGRLW7m3UgdKANhgyW3OoGvTNIVpcGuAfQlPiabUh+S6+E
-   jRCqrN/qlluzvSqvR4mPx8OrU/kBqUzm0s0mr9wTEdDQpx0mroeRjb6Kj
-   TlkmZTcZ5oVgk74CeoHUM4rtOHvVGOchfjH15agXdUZsAGxY8lrLpelyM
-   fGpuMhUe4a7TuPmHIFB82VTw1eOuuqnMDK9LnupRAvjDzEMfmk0HWie75
-   ascFHezGBB82LwumTFjMTtdbfAFMRpOgBOWMNkRpMMemOPvutRcljN4Pv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268649333"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="268649333"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 13:28:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="663923875"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 13:28:38 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oC5Rt-00017t-IE;
-	Thu, 14 Jul 2022 20:28:37 +0000
-Date: Fri, 15 Jul 2022 04:28:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicholas Piggin <npiggin@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Nicholas Piggin <npiggin@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	"linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 06/12] locking/qspinlock: merge qspinlock_paravirt.h
- into qspinlock.c
-Message-ID: <202207150452.zk1w58X4-lkp@intel.com>
-References: <20220713070704.308394-7-npiggin@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A877E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 20:56:57 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-31cd7ade3d6so24389037b3.3
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 13:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=QUqpeU8M4eT15MSqD/BnartlfIY7kCYtJMFstSRxuF8=;
+        b=NyEeYk2hC69eFMaSk0Josx4oxWR1Fw4LfEAYWwZxyp575imGZDYXhsKWYy50e9F+Bo
+         YGPxB9QU2iqkEiA6h7gMhlOK8fFpLRXEijEBPs9FQPw7rG1KQvyXn4LMsrSlfjCrNlIl
+         2xgTGZfmTH0qM41NM9B2AujqAAzkK5KughTx8Aaxh/IJ8kDoLigS5lb4bVYCEaHmjb0V
+         y0HTyc71eCPL3GlhFvxZ5CvHY88UH3w9Lv4+lGItJEUhk/2QcAbUhJ2sex6rz5Q6oxgH
+         ZqrqciQ8psIEwofly+ywHyNrweQKgL9dgQ7LRsKFe/wm2cHmJkhw/TQCRCSUYm49RrEQ
+         M7Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=QUqpeU8M4eT15MSqD/BnartlfIY7kCYtJMFstSRxuF8=;
+        b=bLttTCBEnmoXGoV4yP8Mt7hfv1hrltiLP+h3VmRK/Blr+7HBHe36HG2AkSaOnEfg6C
+         ufYLiV1VetOhmSm+sAzHCfdgTycndqjpXnsH78tggpasz+DcTI1PnTRGyyz0MQJLLwF+
+         nsS5CIW0hJRaMQGcvo+h+gWJ1FZ762hmctzQyC422CxGRRIiRlMzAekjzXicujERwBnH
+         biIIUTAkpJc0M3z5nDHChFidZIPs5NxNnuN28iPzO3nczpAK0NqUwroCsafRboOXBB80
+         DI1+5PQRldhE9Sqcck6PDh2owTD3/y5dTL+n12JPzg6On8OpD8i+GjXAe3PIUdDOpCM4
+         PEhA==
+X-Gm-Message-State: AJIora81sL8UIl4zEX39UM4CTiRLceQrBQZ940bXh2ovkJb996XvB5hK
+	HzznvQ2NZ+S0yZghnxASF3DK3EyEgMVpv8FAEY4=
+X-Google-Smtp-Source: AGRyM1vmKTM1FaMh8eU2urAb2+GraZv12lCqQp6YihgU9kbN0pGejEVllwkey8v+ez9pXys1HIiTU3tYEB6dltut3lA=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:4bc2:7a2b:c53a:2dfb])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:4a0b:0:b0:31d:b645:84e8 with SMTP
+ id x11-20020a814a0b000000b0031db64584e8mr12085251ywa.239.1657832216295; Thu,
+ 14 Jul 2022 13:56:56 -0700 (PDT)
+Date: Thu, 14 Jul 2022 13:56:43 -0700
+Message-Id: <20220714205646.4023495-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713070704.308394-7-npiggin@gmail.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657832203; l=1877;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=Y4sBF3AutOxiL+SHsVeEMPpQpIermTXH5kEyp1GPq6s=;
+ b=xAaXgfs85FDQXD5OVaEIdThMCupKgeKa7r1xcwZp0TJeZ/wzFgnNld9VUOf2smHAxawT1Tl+RB0i
+ 41zv0RrbCoTKsJJu944BR/UI3/BuEGBX+ihO/SpLluzyQ46i8YUm
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nicholas,
+Building with UBSAN_DIV_ZERO with clang produces numerous fallthrough
+warnings from objtool.
 
-I love your patch! Perhaps something to improve:
+In the case of uncheck division, UBSAN_DIV_ZERO may introduce new
+control flow to check for division by zero. Because the result of the
+division is undefined, LLVM may optimize the control flow such that
+after the call to __ubsan_handle_divrem_overflow doesn't matter. If
+panic_on_warn was set, __ubsan_handle_divrem_overflow would panic. The
+problem is is that panic_on_warn is run time configurable. If it's
+disabled, then we cannot guarantee that we will be able to recover
+safely.  Disable this config for clang until we can come up with a
+solution in LLVM.
 
-[auto build test WARNING on tip/locking/core]
-[also build test WARNING on tip/x86/core powerpc/next linus/master v5.19-rc6 next-20220714]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Link: https://github.com/ClangBuiltLinux/linux/issues/1657
+Link: https://github.com/llvm/llvm-project/issues/56289
+Link: https://lore.kernel.org/lkml/CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com/
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Linus,
+I still think we should add explicit checks to gaurd against divide by
+zero.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/locking-qspinlock-simplify-code-generation/20220713-151009
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git eae6d58d67d9739be5f7ae2dbead1d0ef6528243
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220715/202207150452.zk1w58X4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/91668ee1ed703d7ea84e314136dc732da05ec9e7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nicholas-Piggin/locking-qspinlock-simplify-code-generation/20220713-151009
-        git checkout 91668ee1ed703d7ea84e314136dc732da05ec9e7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/locking/
+ lib/Kconfig.ubsan | 3 +++
+ 1 file changed, 3 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/locking/qspinlock.c:513:7: warning: variable 'wait_early' set but not used [-Wunused-but-set-variable]
-           bool wait_early;
-                ^
->> kernel/locking/qspinlock.c:619:6: warning: variable 'waitcnt' set but not used [-Wunused-but-set-variable]
-           int waitcnt = 0;
-               ^
->> kernel/locking/qspinlock.c:705:1: warning: no previous prototype for function '__pv_queued_spin_unlock_slowpath' [-Wmissing-prototypes]
-   __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
-   ^
-   kernel/locking/qspinlock.c:704:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __visible void
-             ^
-             static 
-   3 warnings generated.
-
-
-vim +/waitcnt +619 kernel/locking/qspinlock.c
-
-   607	
-   608	/*
-   609	 * Wait for l->locked to become clear and acquire the lock;
-   610	 * halt the vcpu after a short spin.
-   611	 * __pv_queued_spin_unlock() will wake us.
-   612	 *
-   613	 * The current value of the lock will be returned for additional processing.
-   614	 */
-   615	static u32
-   616	pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
-   617	{
-   618		struct qspinlock **lp = NULL;
- > 619		int waitcnt = 0;
-   620		int loop;
-   621	
-   622		/*
-   623		 * If pv_kick_node() already advanced our state, we don't need to
-   624		 * insert ourselves into the hash table anymore.
-   625		 */
-   626		if (READ_ONCE(node->state) == vcpu_hashed)
-   627			lp = (struct qspinlock **)1;
-   628	
-   629		/*
-   630		 * Tracking # of slowpath locking operations
-   631		 */
-   632		lockevent_inc(lock_slowpath);
-   633	
-   634		for (;; waitcnt++) {
-   635			/*
-   636			 * Set correct vCPU state to be used by queue node wait-early
-   637			 * mechanism.
-   638			 */
-   639			WRITE_ONCE(node->state, vcpu_running);
-   640	
-   641			/*
-   642			 * Set the pending bit in the active lock spinning loop to
-   643			 * disable lock stealing before attempting to acquire the lock.
-   644			 */
-   645			set_pending(lock);
-   646			for (loop = SPIN_THRESHOLD; loop; loop--) {
-   647				if (trylock_clear_pending(lock))
-   648					goto gotlock;
-   649				cpu_relax();
-   650			}
-   651			clear_pending(lock);
-   652	
-   653	
-   654			if (!lp) { /* ONCE */
-   655				lp = pv_hash(lock, node);
-   656	
-   657				/*
-   658				 * We must hash before setting _Q_SLOW_VAL, such that
-   659				 * when we observe _Q_SLOW_VAL in __pv_queued_spin_unlock()
-   660				 * we'll be sure to be able to observe our hash entry.
-   661				 *
-   662				 *   [S] <hash>                 [Rmw] l->locked == _Q_SLOW_VAL
-   663				 *       MB                           RMB
-   664				 * [RmW] l->locked = _Q_SLOW_VAL  [L] <unhash>
-   665				 *
-   666				 * Matches the smp_rmb() in __pv_queued_spin_unlock().
-   667				 */
-   668				if (xchg(&lock->locked, _Q_SLOW_VAL) == 0) {
-   669					/*
-   670					 * The lock was free and now we own the lock.
-   671					 * Change the lock value back to _Q_LOCKED_VAL
-   672					 * and unhash the table.
-   673					 */
-   674					WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
-   675					WRITE_ONCE(*lp, NULL);
-   676					goto gotlock;
-   677				}
-   678			}
-   679			WRITE_ONCE(node->state, vcpu_hashed);
-   680			lockevent_inc(pv_wait_head);
-   681			lockevent_cond_inc(pv_wait_again, waitcnt);
-   682			pv_wait(&lock->locked, _Q_SLOW_VAL);
-   683	
-   684			/*
-   685			 * Because of lock stealing, the queue head vCPU may not be
-   686			 * able to acquire the lock before it has to wait again.
-   687			 */
-   688		}
-   689	
-   690		/*
-   691		 * The cmpxchg() or xchg() call before coming here provides the
-   692		 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
-   693		 * here is to indicate to the compiler that the value will always
-   694		 * be nozero to enable better code optimization.
-   695		 */
-   696	gotlock:
-   697		return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
-   698	}
-   699	
-   700	/*
-   701	 * PV versions of the unlock fastpath and slowpath functions to be used
-   702	 * instead of queued_spin_unlock().
-   703	 */
-   704	__visible void
- > 705	__pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
-   706	{
-   707		struct qnode *node;
-   708	
-   709		if (unlikely(locked != _Q_SLOW_VAL)) {
-   710			WARN(!debug_locks_silent,
-   711			     "pvqspinlock: lock 0x%lx has corrupted value 0x%x!\n",
-   712			     (unsigned long)lock, atomic_read(&lock->val));
-   713			return;
-   714		}
-   715	
-   716		/*
-   717		 * A failed cmpxchg doesn't provide any memory-ordering guarantees,
-   718		 * so we need a barrier to order the read of the node data in
-   719		 * pv_unhash *after* we've read the lock being _Q_SLOW_VAL.
-   720		 *
-   721		 * Matches the cmpxchg() in pv_wait_head_or_lock() setting _Q_SLOW_VAL.
-   722		 */
-   723		smp_rmb();
-   724	
-   725		/*
-   726		 * Since the above failed to release, this must be the SLOW path.
-   727		 * Therefore start by looking up the blocked node and unhashing it.
-   728		 */
-   729		node = pv_unhash(lock);
-   730	
-   731		/*
-   732		 * Now that we have a reference to the (likely) blocked qnode,
-   733		 * release the lock.
-   734		 */
-   735		smp_store_release(&lock->locked, 0);
-   736	
-   737		/*
-   738		 * At this point the memory pointed at by lock can be freed/reused,
-   739		 * however we can still use the qnode to kick the CPU.
-   740		 * The other vCPU may not really be halted, but kicking an active
-   741		 * vCPU is harmless other than the additional latency in completing
-   742		 * the unlock.
-   743		 */
-   744		lockevent_inc(pv_kick_unlock);
-   745		pv_kick(node->cpu);
-   746	}
-   747	
-
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index a9f7eb047768..fd15230a703b 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -84,6 +84,9 @@ config UBSAN_SHIFT
+ config UBSAN_DIV_ZERO
+ 	bool "Perform checking for integer divide-by-zero"
+ 	depends on $(cc-option,-fsanitize=integer-divide-by-zero)
++	# https://github.com/ClangBuiltLinux/linux/issues/1657
++	# https://github.com/llvm/llvm-project/issues/56289
++	depends on !CC_IS_CLANG
+ 	help
+ 	  This option enables -fsanitize=integer-divide-by-zero which checks
+ 	  for integer division by zero. This is effectively redundant with the
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.170.g444d1eabd0-goog
+
