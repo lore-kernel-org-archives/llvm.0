@@ -1,43 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582342F44
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADDB2F44
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 10:22:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657792270; x=1689328270;
+  t=1657794130; x=1689330130;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WBUTw7tz+k6O2goVYiYebYBag5C/B83mURXLeuUbsu0=;
-  b=DvMY28/aHg4qDA0LjURL/did2/k6KmyOLWUgAJRnm8/ZmcqTPyh/zC8p
-   H480s+cuzZa6gWv4HwENHbz5PUcldnjNR/T3B+VGhZMtWuufswAFUCffO
-   7Y7YNJ2RRS2THd1OjIfjTHswMu1fGTyYVFgev0me91HaQDp+INLM4W/pd
-   aIaUHr84d0nbz87OZfX6pQayyaAnSQlXqbDlJFj9M0qob9J6l56WYCz/G
-   0IJoEPXNUpJeHZp5jEaSGZlrGb8FdK6MZQz0Ng0hPOdwV3AMHsrTUAJxi
-   e5hJ8M663TO5FJP7gAzl8lJZ0kxe6+kEd2mIXLEfaf4u8jzifE7AEzrPa
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="311118569"
+  bh=SjixICY63dlkEDqfR3BHJ38BHvY7nzfEqXWF2S723SY=;
+  b=BQOTlW+TyZ/Hz5ttVtqTp2uikha65y8xL3gLP5s3RbchLFcLUDro5ux3
+   gfJJDzmB+7u92qGj02Jyaep8bkU0uirOM3DNYy5woD22/VPmLM8SzhWeR
+   fbwS6/n8bzH96KHrCb0owSjSZTCpMhHs/wkhfLeqEz1ZK1i9YruhQDPyi
+   4rrA1qxeOdXETFa4wCjiKScLDRNkkKTHm000fnqsFvb77X/cV84xiQ8QJ
+   tQS3mkzC2NaRonBWUCYa/ui+ZA9Y7dtExrrdfyMkg9+9kDz0bSNtsfNrz
+   9MxuRcGYEeF6wA1Oh/7g+VWw6GTe1kZ6ghlaZxXagWKq42wze0klZPAou
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286216691"
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="311118569"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:51:09 -0700
+   d="scan'208";a="286216691"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:22:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="596036079"
+   d="scan'208";a="663731719"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jul 2022 02:51:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 03:22:08 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBvUx-0000PQ-3j;
-	Thu, 14 Jul 2022 09:51:07 +0000
-Date: Thu, 14 Jul 2022 17:50:34 +0800
+	id 1oBvyy-0000Rh-8Q;
+	Thu, 14 Jul 2022 10:22:08 +0000
+Date: Thu, 14 Jul 2022 18:21:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [morimoto:sound-2022-07-04-v1 23/23]
- sound/soc/codecs/wcd9335.c:2070:4: error: field designator 'playback' does
- not refer to any field in type 'struct snd_soc_dai_driver'
-Message-ID: <202207141741.fIItLaEd-lkp@intel.com>
+Subject: [morimoto:sound-2022-07-04-v1 15/23]
+ sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named
+ 'stream_active' in 'struct snd_soc_dai'
+Message-ID: <202207141829.xL3HSLc4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,199 +49,84 @@ Content-Disposition: inline
 
 tree:   https://github.com/morimoto/linux sound-2022-07-04-v1
 head:   e9efd77b37adcddf8f910f34dd0df06be9d896cb
-commit: e9efd77b37adcddf8f910f34dd0df06be9d896cb [23/23] remove
-config: arm64-randconfig-r001-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141741.fIItLaEd-lkp@intel.com/config)
+commit: 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23 [15/23] ASoC: count activity via TX/RX base instead of Playback/Capture.
+config: arm-randconfig-r026-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141829.xL3HSLc4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/morimoto/linux/commit/e9efd77b37adcddf8f910f34dd0df06be9d896cb
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/morimoto/linux/commit/2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
         git remote add morimoto https://github.com/morimoto/linux
         git fetch --no-tags morimoto sound-2022-07-04-v1
-        git checkout e9efd77b37adcddf8f910f34dd0df06be9d896cb
+        git checkout 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/ sound/soc/mediatek/mt8195/ sound/soc/meson/ sound/soc/qcom/ sound/soc/stm/ sound/soc/sunxi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/wcd9335.c:2070:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd9335.c:2085:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2099:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2114:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2128:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2143:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2157:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd9335.c:4930:13: error: invalid application of 'sizeof' to an incomplete type 'struct snd_soc_dai_driver[]'
-                                                  ARRAY_SIZE(wcd9335_slim_dais));
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   8 errors generated.
---
->> sound/soc/codecs/wcd934x.c:2022:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd934x.c:2036:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2050:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2064:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2078:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2092:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2106:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd934x.c:5949:13: error: invalid application of 'sizeof' to an incomplete type 'struct snd_soc_dai_driver[]'
-                                                  ARRAY_SIZE(wcd934x_slim_dais));
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   8 errors generated.
+>> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named 'stream_active' in 'struct snd_soc_dai'
+                                   if (cpu_dai->stream_active[conn->stream_dir] > 0) {
+                                       ~~~~~~~  ^
+   1 error generated.
 
 
-vim +2070 sound/soc/codecs/wcd9335.c
+vim +1341 sound/soc/mediatek/mt8195/mt8195-mt6359.c
 
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2065  
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2066  static struct snd_soc_dai_driver wcd9335_slim_dais[] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2067  	[0] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2068  		.name = "wcd9335_rx1",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2069  		.id = AIF1_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28 @2070  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2071  			.stream_name = "AIF1 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2072  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2073  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2074  			.formats = WCD9335_FORMATS_S16_S24_LE,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2075  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2076  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2077  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2078  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2079  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2080  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2081  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2082  	[1] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2083  		.name = "wcd9335_tx1",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2084  		.id = AIF1_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28 @2085  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2086  			.stream_name = "AIF1 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2087  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2088  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2089  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2090  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2091  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2092  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2093  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2094  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2095  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2096  	[2] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2097  		.name = "wcd9335_rx2",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2098  		.id = AIF2_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2099  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2100  			.stream_name = "AIF2 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2101  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2102  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2103  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2104  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2105  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2106  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2107  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2108  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2109  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2110  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2111  	[3] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2112  		.name = "wcd9335_tx2",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2113  		.id = AIF2_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2114  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2115  			.stream_name = "AIF2 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2116  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2117  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2118  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2119  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2120  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2121  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2122  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2123  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2124  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2125  	[4] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2126  		.name = "wcd9335_rx3",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2127  		.id = AIF3_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2128  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2129  			.stream_name = "AIF3 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2130  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2131  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2132  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2133  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2134  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2135  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2136  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2137  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2138  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2139  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2140  	[5] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2141  		.name = "wcd9335_tx3",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2142  		.id = AIF3_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2143  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2144  			.stream_name = "AIF3 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2145  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2146  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2147  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2148  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2149  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2150  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2151  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2152  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2153  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2154  	[6] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2155  		.name = "wcd9335_rx4",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2156  		.id = AIF4_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2157  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2158  			.stream_name = "AIF4 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2159  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2160  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2161  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2162  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2163  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2164  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2165  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2166  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2167  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2168  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2169  };
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2170  
+40d605df0a7bf77 sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2021-08-19  1319  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1320  /* fixup the BE DAI link to match any values from topology */
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1321  static int mt8195_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1322  				 struct snd_pcm_hw_params *params)
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1323  {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1324  	struct snd_soc_card *card = rtd->card;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1325  	struct snd_soc_dai_link *sof_dai_link = NULL;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1326  	struct snd_soc_pcm_runtime *runtime;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1327  	struct snd_soc_dai *cpu_dai;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1328  	int i, j, ret = 0;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1329  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1330  	for (i = 0; i < ARRAY_SIZE(g_sof_conn_streams); i++) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1331  		const struct sof_conn_stream *conn = &g_sof_conn_streams[i];
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1332  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1333  		if (strcmp(rtd->dai_link->name, conn->normal_link))
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1334  			continue;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1335  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1336  		for_each_card_rtds(card, runtime) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1337  			if (strcmp(runtime->dai_link->name, conn->sof_link))
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1338  				continue;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1339  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1340  			for_each_rtd_cpu_dais(runtime, j, cpu_dai) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24 @1341  				if (cpu_dai->stream_active[conn->stream_dir] > 0) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1342  					sof_dai_link = runtime->dai_link;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1343  					break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1344  				}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1345  			}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1346  			break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1347  		}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1348  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1349  		if (sof_dai_link && sof_dai_link->be_hw_params_fixup)
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1350  			ret = sof_dai_link->be_hw_params_fixup(runtime, params);
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1351  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1352  		break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1353  	}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1354  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1355  	if (!strcmp(rtd->dai_link->name, "ETDM2_IN_BE") ||
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1356  	    !strcmp(rtd->dai_link->name, "ETDM1_OUT_BE")) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1357  		mt8195_etdm_hw_params_fixup(runtime, params);
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1358  	}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1359  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1360  	return ret;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1361  }
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1362  
 
-:::::: The code at line 2070 was first introduced by commit
-:::::: 20aedafdf4926e7a957f8b302a18c8fb75c7e332 ASoC: wcd9335: add support to wcd9335 codec
+:::::: The code at line 1341 was first introduced by commit
+:::::: 4dbc714fe07641e7a07731f82152448ef09f3002 ASoC: mediatek: mt8195: revise mt8195-mt6359-rt1019-rt5682.c
 
-:::::: TO: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+:::::: TO: Trevor Wu <trevor.wu@mediatek.com>
 :::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
