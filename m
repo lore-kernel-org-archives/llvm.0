@@ -1,28 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E324A38
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 15:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F314FC34114;
-	Thu, 14 Jul 2022 15:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCBE4A38
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:05:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4705AC34114;
+	Thu, 14 Jul 2022 16:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657814118;
-	bh=4qMtVyFcWvW65W5QmSZM/dYNE02o7SyZGAA6cLCMC1Q=;
+	s=k20201202; t=1657814745;
+	bh=u1PzRpfvIioRbL5vI4/uG1dc+4gqO2bAsTU0TqTxIPY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iIn3ue86mrF4qt03v8pjqJ798SWoFvduzW+vmwLdXgPEJ5P79RzUld1b15eX6ypQ2
-	 Xn1v4A+oe8cX9CcdnYnxK7c+RQKzPwKGf+C8qllo7KOtzrQ83V7ncYg9RELJ7uLiuT
-	 jwTXTXFICfYAhtMT2XpnZ9akks8Lys76lMqB9S+L7hT2cinDuXgR8AJNi1pcm/ZvGi
-	 CnDUc5VJN7wR9sX/7o/LRalaOC33SPp7wfM2uI2f2U08saUEwWDoOsR2SPpsAZFYiS
-	 /QcbnGxvjl5+jH3gzSjbn0sEYV7Tn6n+05oiJcAECjLHVqVdFA7L3y5XOVoup/uY8Q
-	 OX/aIZXROLs0Q==
-Date: Thu, 14 Jul 2022 08:55:16 -0700
+	b=CT5yUYctDZH0qrlGCxQAuMOPhME+eSBJ6C/DdjprmCXeGu8g64qYnz24aLVyk7OeL
+	 JUc/T82SG0qPzcncprQ2CNCgskGbbduSDjkU3DlyyaS6/46A9zAbQE44WPQP0QVq/+
+	 EMItdC36oS3MuGW8wG6n92hoXMSXrTu8wyIm/tFLMzxb1rg5fdDQwJg9xFSf6IMWKf
+	 JEzhwySCauX+dN8stFawkDD8p7uycHt0rplKPdKm5ie5+5GqAbpoJa8OYYy1oSVLqY
+	 rBTwM3Kc8GBFAVuCXRmQWkzkAOdDDgIx0fhhQtF/XJQLfXWpb/O3YC7vwWrMzgXJ4n
+	 6CBsDgZnqZXuQ==
+Date: Thu, 14 Jul 2022 09:05:43 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev
-Subject: Re: Linux v5.19-rc6: Building and testing x86/retbleed
-Message-ID: <YtA8ZH5sZWL35/Pr@dev-arch.thelio-3990X>
-References: <CA+icZUURRcY+f6OHbAqc_ruUSsft8hMttOy9TS=k0MnATpjLGg@mail.gmail.com>
+To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: linux-next: Tree for Jul 14
+Message-ID: <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
+References: <20220714185514.7d1a2ac9@canb.auug.org.au>
+ <Ys/42uMzQy+CFTGI@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,62 +34,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUURRcY+f6OHbAqc_ruUSsft8hMttOy9TS=k0MnATpjLGg@mail.gmail.com>
+In-Reply-To: <Ys/42uMzQy+CFTGI@debian>
 
-Hi Sedat!
+Hi Sudip,
 
-On Thu, Jul 14, 2022 at 11:49:33AM +0200, Sedat Dilek wrote:
-> Hi,
+On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi Stephen,
 > 
-> as far as I can see to fully support x86/retbleed you need LLVM-15?
-
-> Due to:
+> On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20220713:
 > 
-> [ arch/x86/Kconfig ]
-> config CC_HAS_RETURN_THUNK
-> def_bool $(cc-option,-mfunction-return=thunk-extern)
+> Build failures on next-20220714:
 
-Per the documentation, rethunks are only effective for certain AMD Zen
-platforms so unless you have one of those CPUs, you don't need a new
-compiler for the retbleed mitigations. Additionally, you might have an
-old enough CPU that doesn't require them anyways, the affected models
-can be seen in the cpu_vuln_blacklist variable in
-arch/x86/kernel/cpu/common.c.
+<snip>
 
-For the record, here is the output of the retbleed sysfs node on all of
-my x86 hardware:
+> x86_64 allmodconfig with clang fails with:
+> 
+> drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
+>         gpu_cc_parent,
+>         ^~~~~~~~~~~~~
+> drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
+>         gpu_cc_parent,
+>         ^~~~~~~~~~~~~
 
-AMD Threadripper 3990X: Mitigation: untrained return thunk; SMT enabled with STIBP protection
-Intel Core i7-11700: Mitigation: Enhanced IBRS
-AMD Ryzen 3 4300G: Mitigation: untrained return thunk; SMT enabled with STIBP protection
-Intel Core i5-4210U: Not affected
+I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
+for this a few days ago, it just needs to be picked up.
 
-> Has someone a commit-id which supports above and is stable/safe?
+> arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
+> DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+>                     ^
+> ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
+> extern u64 x86_spec_ctrl_current;
 
-This is the latest compiler I built and everything appears to work fine:
+This is now fixed in -tip so it should be fixed in -next tomorrorow:
 
-$ clang --version | head -1
-ClangBuiltLinux clang version 15.0.0 (https://github.com/llvm/llvm-project 0406c0cda675f3cb7d294a3e65eb4f19c9efe98b)
+https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
 
-> Has anyone numbers w/ and w/o enabling x86/retbleed?
-
-I haven't noticed any major slow downs while compiling kernels, which is
-the main use case for my workstation, but it is a Zen platform so I am
-not paying the IBPB penalty, which will be worse. Some stats of my full
-set of builds against linux-next and mainline:
-
-Before:
-
-linux-next: 2h 29m 44s
-mainline: 2h 21m 49s
-
-After:
-
-linux-next: 2h 34m 04s
-mainline: 2h 23m 53s
-
-I would say that is within the noise of thermal throttling and other
-variables.
+In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
+for any clang related issues so that we can get them taken care of ASAP,
+we have a MAINTAINERS entry for a reason :) thank you for testing with
+clang; the more people that use it, hopefully the easier it will be to
+get things unbroken.
 
 Cheers,
 Nathan
