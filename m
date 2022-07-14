@@ -1,207 +1,88 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8355A2C9C
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657791071; x=1689327071;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=STQRNUIY8SmSePbPiAzgY7UJQEqu/K3AxLZRnk3A8rg=;
-  b=UPmiYacnmQrUggfxl8tzLg+NnBAeg03qIKR7xP662DJmJEhW2ff6y9Pz
-   98PrXrgWXvK/xToHi3BJNy/QkprR/Y3Kzs254mNnkbeVeq3rr+Fu5mDVa
-   8w0hBPdeh7q0S/p8wEjzbFQsvItTcKBhpVuAUdcziS0JILH7x9clbcCry
-   StCHTA6+R5d+eR5VJsHIBPP3cywKhVVb0YIhKpTePAxKcohb/Ct8cP80I
-   BuT2h1HUuoKAosaoZHy4h2Yr1OqZN5331/Ineddq3OSehF2TxagbCMfEp
-   r5jo2u3rTImlpkzTnpmWl50oTc8fi0sw+yE9WesMAPnbplyB8t62hd9pb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="371776406"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="371776406"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:31:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="623345675"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 02:31:06 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBvBa-0000Nm-5I;
-	Thu, 14 Jul 2022 09:31:06 +0000
-Date: Thu, 14 Jul 2022 17:30:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [sre-misc:rk3588 39/42] drivers/mfd/rk8xx-core.c:654:40: warning:
- operator '?:' has lower precedence than '|'; '|' will be evaluated first
-Message-ID: <202207141718.NA620oNa-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF2A2F44
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:50:10 +0000 (UTC)
+Received: by mail-oi1-f177.google.com with SMTP id w81so1812562oiw.0
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 02:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to:cc;
+        bh=ituFRW03CJ69UX44RThNKS/t7e3hyB9IpwP5rCupbuw=;
+        b=Byav1HHwnrYxcAdGKxqq5abxMDnuwEUZbwzx3N2KxSzW3PIt1g8jHwnSo3OBd7U0Yj
+         YLIrkvDZyzR3dFDupkZAjQ/7lDhHr2pK1cK3fyHQkVETjeQmtg3EV6m3lPvhTvT4/5eT
+         8hRMHjz74WRLHCgWfADi3wHyrd7Gey7jpzKAfPPxODbu8S3qO8pieM4noI7tZZf6FLB4
+         Bh/NBzXFbyUU9HJu5l5J+ixVBLPsUeYmkwxzqj+Vd6LOlCD930Wlal05jFdsVYbshU2M
+         y8PYsyhU8vtEljq9aiCUgbaSAWcF3Jn2dqjJKIDwc6cxoD+WHQckKvVeA2REBZchub1B
+         BK4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ituFRW03CJ69UX44RThNKS/t7e3hyB9IpwP5rCupbuw=;
+        b=MwocqZEVavyotCCTwf0BiETTVpI22toZjsm3UCoMGOtIOvLifwM/Bun6kUfdsufSfT
+         9/ik8Op8YQsFf9Ov6y3tquBgZQvPDoyskA6HeX5SoMy7REuoEfsyRPWk+lI4VsN4c41P
+         RDLPz/ldL7kNs3vAUL4wZCoYdQxvLF0l0uThLXQ5aduf48jRkkF4LlXpfmUxvE2WaZGB
+         YOzd/7P/2Bf9HWsRFnJqvAE6I2PwfdX44jRRPphkHd6p9a49eAcukfbdRTry2XxTjDIB
+         okcW4VsX5lA2LZ2YpkBUjS2oipY80jTh2iJ4RmcisXF9Ck9ZQai7RcFsWNKbt8BpzC0w
+         FT1Q==
+X-Gm-Message-State: AJIora9dsoDsKXxiwuowVCLfTwI/xEMoQFCDVyXYlyMSXxQMC1g3wy+H
+	Jve+EVI93vbJ7u4H4DsFy/+U4cX9Fa1M35ys/YA=
+X-Google-Smtp-Source: AGRyM1tDUiJU7EjLK4/ttlpjgQwo5Z8e7kl4C4MWxAmb+RFvnfOkCe4e1sr9LUfKwQxKpZDl0I+tpF+BTKjR8c78rQ8=
+X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
+ ay43-20020a056808302b00b002f9eeef0f03mr6975747oib.128.1657792209455; Thu, 14
+ Jul 2022 02:50:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Thu, 14 Jul 2022 11:49:33 +0200
+Message-ID: <CA+icZUURRcY+f6OHbAqc_ruUSsft8hMttOy9TS=k0MnATpjLGg@mail.gmail.com>
+Subject: Linux v5.19-rc6: Building and testing x86/retbleed
+To: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
-head:   720bd5858aced5b400d963fd155c40adb98c47b4
-commit: 18650ce6630a3f066680e3affab33a11b9f3d14d [39/42] mfd: rk8xx: add rk806 support
-config: arm64-randconfig-r005-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141718.NA620oNa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/commit/?id=18650ce6630a3f066680e3affab33a11b9f3d14d
-        git remote add sre-misc https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git
-        git fetch --no-tags sre-misc rk3588
-        git checkout 18650ce6630a3f066680e3affab33a11b9f3d14d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mfd/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+as far as I can see to fully support x86/retbleed you need LLVM-15?
 
-All warnings (new ones prefixed by >>):
+Due to:
 
->> drivers/mfd/rk8xx-core.c:654:40: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
-                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
-                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/mfd/rk8xx-core.c:654:40: note: place parentheses around the '|' expression to silence this warning
-                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
-                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/mfd/rk8xx-core.c:654:40: note: place parentheses around the '?:' expression to evaluate it first
-                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
-                                                                      ^
-                                                         (                             )
-   1 warning generated.
+[ arch/x86/Kconfig ]
+config CC_HAS_RETURN_THUNK
+def_bool $(cc-option,-mfunction-return=thunk-extern)
 
+Has someone a commit-id which supports above and is stable/safe?
 
-vim +654 drivers/mfd/rk8xx-core.c
+Looks like apt.llvm.org ships new clang-15 packages, again (see P.S.).
 
-   585	
-   586	int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap)
-   587	{
-   588		struct rk808 *rk808;
-   589		const struct rk808_reg_data *pre_init_reg;
-   590		const struct mfd_cell *cells;
-   591		bool dual_support = false;
-   592		int nr_pre_init_regs;
-   593		int nr_cells;
-   594		int ret;
-   595		int i;
-   596	
-   597		rk808 = devm_kzalloc(dev, sizeof(*rk808), GFP_KERNEL);
-   598		if (!rk808)
-   599			return -ENOMEM;
-   600		rk808->dev = dev;
-   601		rk808->variant = variant;
-   602		rk808->regmap = regmap;
-   603		dev_set_drvdata(dev, rk808);
-   604	
-   605		switch (rk808->variant) {
-   606		case RK805_ID:
-   607			rk808->regmap_irq_chip = &rk805_irq_chip;
-   608			pre_init_reg = rk805_pre_init_reg;
-   609			nr_pre_init_regs = ARRAY_SIZE(rk805_pre_init_reg);
-   610			cells = rk805s;
-   611			nr_cells = ARRAY_SIZE(rk805s);
-   612			break;
-   613		case RK806_ID:
-   614			rk808->regmap_irq_chip = &rk806_irq_chip;
-   615			pre_init_reg = rk806_pre_init_reg;
-   616			nr_pre_init_regs = ARRAY_SIZE(rk806_pre_init_reg);
-   617			cells = rk806s;
-   618			nr_cells = ARRAY_SIZE(rk806s);
-   619			dual_support = true;
-   620			break;
-   621		case RK808_ID:
-   622			rk808->regmap_irq_chip = &rk808_irq_chip;
-   623			pre_init_reg = rk808_pre_init_reg;
-   624			nr_pre_init_regs = ARRAY_SIZE(rk808_pre_init_reg);
-   625			cells = rk808s;
-   626			nr_cells = ARRAY_SIZE(rk808s);
-   627			break;
-   628		case RK818_ID:
-   629			rk808->regmap_irq_chip = &rk818_irq_chip;
-   630			pre_init_reg = rk818_pre_init_reg;
-   631			nr_pre_init_regs = ARRAY_SIZE(rk818_pre_init_reg);
-   632			cells = rk818s;
-   633			nr_cells = ARRAY_SIZE(rk818s);
-   634			break;
-   635		case RK809_ID:
-   636		case RK817_ID:
-   637			rk808->regmap_irq_chip = &rk817_irq_chip;
-   638			pre_init_reg = rk817_pre_init_reg;
-   639			nr_pre_init_regs = ARRAY_SIZE(rk817_pre_init_reg);
-   640			cells = rk817s;
-   641			nr_cells = ARRAY_SIZE(rk817s);
-   642			break;
-   643		default:
-   644			dev_err(dev, "Unsupported RK8XX ID %lu\n", rk808->variant);
-   645			return -EINVAL;
-   646		}
-   647	
-   648		dev_info(dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
-   649	
-   650		if (!irq)
-   651			return dev_err_probe(dev, -EINVAL, "No interrupt support, no core IRQ\n");
-   652	
-   653		ret = devm_regmap_add_irq_chip(dev, rk808->regmap, irq,
- > 654					       IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
-   655					       rk808->regmap_irq_chip, &rk808->irq_data);
-   656		if (ret)
-   657			return dev_err_probe(dev, ret, "Failed to add irq_chip\n");
-   658	
-   659		for (i = 0; i < nr_pre_init_regs; i++) {
-   660			ret = regmap_update_bits(rk808->regmap,
-   661						pre_init_reg[i].addr,
-   662						pre_init_reg[i].mask,
-   663						pre_init_reg[i].value);
-   664			if (ret)
-   665				return dev_err_probe(dev, ret, "0x%x write err\n",
-   666						     pre_init_reg[i].addr);
-   667		}
-   668	
-   669		ret = devm_mfd_add_devices(dev, dual_support ? PLATFORM_DEVID_AUTO : PLATFORM_DEVID_NONE,
-   670				      cells, nr_cells, NULL, 0,
-   671				      regmap_irq_get_domain(rk808->irq_data));
-   672		if (ret)
-   673			return dev_err_probe(dev, ret, "failed to add MFD devices\n");
-   674	
-   675		if (device_property_read_bool(dev, "rockchip,system-power-controller")) {
-   676			ret = devm_register_sys_off_handler(dev,
-   677					    SYS_OFF_MODE_POWER_OFF_PREPARE, SYS_OFF_PRIO_HIGH,
-   678					    &rk808_power_off, rk808);
-   679			if (ret)
-   680				return dev_err_probe(dev, ret,
-   681						     "failed to register poweroff handler\n");
-   682	
-   683			switch (rk808->variant) {
-   684			case RK809_ID:
-   685			case RK817_ID:
-   686				ret = devm_register_sys_off_handler(dev,
-   687								    SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
-   688								    &rk808_restart, rk808);
-   689				if (ret)
-   690					dev_warn(dev, "failed to register rst handler, %d\n", ret);
-   691				break;
-   692			default:
-   693				dev_dbg(dev, "pmic controlled board reset not supported\n");
-   694				break;
-   695			}
-   696		}
-   697	
-   698		return 0;
-   699	}
-   700	EXPORT_SYMBOL_GPL(rk8xx_probe);
-   701	
+Has anyone numbers w/ and w/o enabling x86/retbleed?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks.
+
+Regards,
+-Sedat-
+
+P.S.: List of available clang-15 packages in Debian AMD64 world.
+
+$ LC_ALL=C apt-cache policy clang-15
+clang-15:
+ Installed: (none)
+ Candidate: 1:15~++20220712100758+8fe076ffe090-1~exp1~20220712220909.616
+ Version table:
+    1:15~++20220712100758+8fe076ffe090-1~exp1~20220712220909.616 99
+        99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
+    1:15~++20220625103012+3d37e785c77a-1~exp1 99
+        99 https://ftp.debian.org/debian unstable/main amd64 Packages
+        99 https://deb.debian.org/debian unstable/main amd64 Packages
+    1:15~++20220309105819+8bef17ed59aa-1~exp1 99
+        99 https://ftp.debian.org/debian experimental/main amd64 Packages
+        99 https://deb.debian.org/debian experimental/main amd64 Packages
+
+-EOT-
