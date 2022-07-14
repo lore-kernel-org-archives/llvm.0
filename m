@@ -1,92 +1,69 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59E82F53
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657817009; x=1689353009;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N/xECZxr+sWlay9b7MODTqclvFGTFHTyS6Ax8kmXyOI=;
-  b=bNi5q43pP0vQSJNIl/0+fPJ99eHvqCYNzNdMYOF+nQzvLnFFeQtFobHE
-   eaF/UbTVpQmWmyrJADac/euVmejeMn41t/O3wKsnfFrDomk5oDwDdRMgT
-   F6RaGZLvz4K+4cNU28GMRH9BQM1ujO8tVrt2dmhoW0CgZ9Z4lhtcEY71P
-   PFl4EPB1NzELukqeDwAR+kCwye1Be+7s2PX3jv1WTkY2glYN5mgdVYSU/
-   Sb8NDsvBgiRip057QANpidKjFHJecRkw3TpVps1mIUVaFmTZ4Z6Sf35SH
-   zcN6iDzjBHHYeSRPaO+kaaUgq2peDhecs7CDLdpWAobbOiZ+I4YHwh42o
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268596855"
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="268596855"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 09:43:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="738340522"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jul 2022 09:43:28 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oC1vz-0000sn-KH;
-	Thu, 14 Jul 2022 16:43:27 +0000
-Date: Fri, 15 Jul 2022 00:42:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH bpf-next v6 12/23] HID: initial BPF implementation
-Message-ID: <202207150008.O4t08On6-lkp@intel.com>
-References: <20220712145850.599666-13-benjamin.tissoires@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DEF4C64
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61802C34114;
+	Thu, 14 Jul 2022 16:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657817087;
+	bh=8DzjZ8Pj1BFtFMk4g4SFC/yQwR97X9txfSiLvi2MmfI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fydiakQwD0XRBJza3O5Fq46aBDUSHohbSZ3dk4fnf0PDvrAA6Q19+5Ktjp69bfAaG
+	 Qe+lOFqYkXOvdHXZkGyaBi2fx3DSfH5qPVz3gSz2c3ZJTopfJRWp6QZzOicdGP01Ma
+	 /TOXi/87lQsioSTRzEPKmxL0iSSmd14K3Jy1O3zcddG63JSznRvlzoj721UrzEiyXq
+	 H/TBKteIsSUdFe2WOyhRUCXSfQldQ2EduiQQi55vgBiGxCBaK6ZjT4/mJEI9lQjB7a
+	 OmbTmbyAa13DguFHze88dY7hnMLv5ogTK70+1EHsY/TlIBAbLHZBknNmLww4AwZneH
+	 zZNjNwJGxz10A==
+Date: Thu, 14 Jul 2022 09:44:47 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Jie2x Zhou <jie2x.zhou@intel.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+ Philip Li <philip.li@intel.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] tools/testing/selftests/net/bpf/Makefile: fix fatal
+ error: 'bpf/bpf_helpers.h' file not found
+Message-ID: <20220714094447.6e66fd0e@kernel.org>
+In-Reply-To: <20220714065003.8388-1-jie2x.zhou@intel.com>
+References: <20220714065003.8388-1-jie2x.zhou@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712145850.599666-13-benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Benjamin,
+On Thu, 14 Jul 2022 14:50:03 +0800 Jie2x Zhou wrote:
+> In tools/testing/selftests run:
+> make -C bpf
+> make -C net
+> fatal error: 'bpf/bpf_helpers.h' file not found
+> 
+> Add bpf/bpf_helpers.h include path in net/bpf/Makefile.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+> ---
+>  tools/testing/selftests/net/bpf/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+> index 8ccaf8732eb2..07d56d446358 100644
+> --- a/tools/testing/selftests/net/bpf/Makefile
+> +++ b/tools/testing/selftests/net/bpf/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  CLANG ?= clang
+> +CCINCLUDE += -I../bpf/tools/include
+>  CCINCLUDE += -I../../bpf
+>  CCINCLUDE += -I../../../../lib
+>  CCINCLUDE += -I../../../../../usr/include/
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/Introduce-eBPF-support-for-HID-devices/20220712-230852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: arm-vexpress_defconfig (https://download.01.org/0day-ci/archive/20220715/202207150008.O4t08On6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/57eb5074a35029f30cc13ed3a526b3342b169788
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Tissoires/Introduce-eBPF-support-for-HID-devices/20220712-230852
-        git checkout 57eb5074a35029f30cc13ed3a526b3342b169788
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: dispatch_hid_bpf_device_event
-   >>> referenced by hid-core.c
-   >>> hid/hid-core.o:(hid_input_report) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: hid_bpf_device_init
-   >>> referenced by hid-core.c
-   >>> hid/hid-core.o:(hid_allocate_device) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: hid_bpf_destroy_device
-   >>> referenced by hid-core.c
-   >>> hid/hid-core.o:(hid_destroy_device) in archive drivers/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Can we switch to relative paths here, somehow?
+We keep adding those include paths, see 7b92aa9e6135 ("selftests net:
+fix kselftest net fatal error") for example.
