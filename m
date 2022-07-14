@@ -1,58 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB937E
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2949CC34115;
-	Thu, 14 Jul 2022 21:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657835812;
-	bh=TDT225qtaJiJJ/sXK+/mfrJByrAF7WxNY1oTf+wrD3M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=p36/IcPA5ZX2ESPnYXBlSmk2tUJvSnLWpfdDN8GYJoWCo8FyaK5ixOTUqSVleYptd
-	 MPaAL6ANoeXynr6hHNdeZ8OS6xJO/1GoMbmczHnfdyovr4prIBN/LzT2UV2uv1bdZP
-	 EKqrhUZKIVNO2pMOWb+3EGK3raN6XbeSdV24aBkL7tpsqI0xLf+sb8h+PwxuTECki5
-	 RzEvbTtqrgDnTSquk9TYwBtKgeu1Q0x6jtARj4pBFBK6T6CmFVzygq8BVyuZi1G1o9
-	 IhXTMLDf4GxtdhtfsMBaV2W8W5f+lzHIyj6kSEBf0Tz0Jtn4W0yRpJG1w7+GRcIXwG
-	 l2EoJowRxV2cw==
-Date: Thu, 14 Jul 2022 14:56:52 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Borislav Petkov <bp@suse.de>, "the arch/x86
- maintainers" <x86@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
- stable <stable@vger.kernel.org>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
- x86_spec_ctrl_current
-Message-ID: <20220714145652.22cf4878@kernel.org>
-In-Reply-To: <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
-References: <20220713152436.2294819-1-nathan@kernel.org>
-	<20220714143005.73c71cf8@kernel.org>
-	<CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B266029
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 22:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657836648; x=1689372648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CK+IXwH2VwMcX91K6wXOfphw35V9iUE1EjsV3k1dtpE=;
+  b=HwLSzZ2+qYR+j7uLClxFo7Twt3bzZSJ2qL0yzSVKwyWDawrd1IBOpycX
+   kQzZFqGz3bTO6gmcyhF3IeZvjWtjdGETtpTJvMXl/g7zBpsLFuFITR6EA
+   JGZ3lZKnnPQTlZm58ymXdmqPqMOMNyM8/EClwl1YmgzIvAfjeIvjoaDXb
+   6VGO3ByTGuYtMhuYlJPjAvfW0tQlMTuGuAnA7fxw5URPiF25VGS7MzQxv
+   THBHBfQyZki+Gsz2R39TNTUc7BpSw5MftFA4wL5ViYFag/EL3KDifNxnk
+   GbXWZFziWa6YEh/qKU3Y9elunq05hYVKAE1kKPBy775jVhQiDf+wm0izd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349606103"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="349606103"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 15:10:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="628867169"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jul 2022 15:10:45 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oC72i-0001CD-MT;
+	Thu, 14 Jul 2022 22:10:44 +0000
+Date: Fri, 15 Jul 2022 06:10:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Coddington <bcodding@redhat.com>,
+	David Howells <dhowells@redhat.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ebiederm@xmission.com,
+	Ian Kent <raven@themaw.net>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KEYS: Add keyagent request_key
+Message-ID: <202207150537.QnoEUasf-lkp@intel.com>
+References: <061dd6fe81dc97a4375e52ec0da20a54cf582cb5.1657624639.git.bcodding@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <061dd6fe81dc97a4375e52ec0da20a54cf582cb5.1657624639.git.bcodding@redhat.com>
 
-On Thu, 14 Jul 2022 14:51:52 -0700 Linus Torvalds wrote:
-> On Thu, Jul 14, 2022 at 2:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> > Hi, sorry to bother, any idea on the ETA for this fix getting into
-> > Linus's tree? I'm trying to figure out if we should wait with
-> > forwarding the networking trees or this will take a while.  
-> 
-> Well, I have that patch by now in my own clang tree, but was holding
-> it off just because I was expecting a few other fixes for the fallout.
-> 
-> But if this particular one causes problems for maintainers, I can
-> easily just take it right away just cherry-pick it from my own
-> test-tree to my "main" tree.
+Hi Benjamin,
 
-I have clang 13, let me double check this fix is enough for the build
-to complete without disabling WERROR. If it's not a hassle it'd
-certainly make my life easier if the fix gotten applied now...
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jmorris-security/next-testing]
+[also build test WARNING on dhowells-fs/fscache-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Coddington/Keyagents-another-call_usermodehelper-approach-for-namespaces/20220712-203658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git next-testing
+config: hexagon-randconfig-r005-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150537.QnoEUasf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4d4f4ae463335d3e611bdb71330ab37af115cde9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Coddington/Keyagents-another-call_usermodehelper-approach-for-namespaces/20220712-203658
+        git checkout 4d4f4ae463335d3e611bdb71330ab37af115cde9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash security/keys/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> security/keys/request_key.c:254:1: warning: unused label 'done' [-Wunused-label]
+   done:
+   ^~~~~
+   1 warning generated.
+
+
+vim +/done +254 security/keys/request_key.c
+
+   217	
+   218	/*
+   219	 * Call out to userspace for key construction.
+   220	 *
+   221	 * Program failure is ignored in favour of key status.
+   222	 */
+   223	static int construct_key(struct key *key, const void *callout_info,
+   224				 size_t callout_len, void *aux,
+   225				 struct key *dest_keyring)
+   226	{
+   227		request_key_actor_t actor;
+   228		struct key *authkey;
+   229		int ret;
+   230	
+   231		kenter("%d,%p,%zu,%p", key->serial, callout_info, callout_len, aux);
+   232	
+   233		/* allocate an authorisation key */
+   234		authkey = request_key_auth_new(key, "create", callout_info, callout_len,
+   235					       dest_keyring);
+   236		if (IS_ERR(authkey))
+   237			return PTR_ERR(authkey);
+   238	
+   239		/* Make the call */
+   240		actor = call_sbin_request_key;
+   241		if (key->type->request_key)
+   242			actor = key->type->request_key;
+   243	#ifdef CONFIG_KEYAGENT
+   244		else {
+   245			ret = keyagent_request_key(authkey, aux);
+   246	
+   247			/* ENOKEY: no keyagents match on calling process' keyrings */
+   248			if (ret != -ENOKEY)
+   249				goto done;
+   250		}
+   251	#endif
+   252		ret = actor(authkey, aux);
+   253	
+ > 254	done:
+   255		/* check that the actor called complete_request_key() prior to
+   256		 * returning an error */
+   257		WARN_ON(ret < 0 &&
+   258			!test_bit(KEY_FLAG_INVALIDATED, &authkey->flags));
+   259	
+   260		key_put(authkey);
+   261		kleave(" = %d", ret);
+   262		return ret;
+   263	}
+   264	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
