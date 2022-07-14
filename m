@@ -1,88 +1,61 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB537E
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657834189; x=1689370189;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3c8rieG5/+3xGe+SwE823C2HKOyaQKK2fvLIkpyKg6c=;
-  b=QOy5gVn4M8kAuRM3OJQluDkjnP9paeY9/Fpi7+o4zw2Ky1pQr3cm6mOS
-   /mcnyK8T3uETOtITCZruK3AhxR7f0/w+88izJzxgXtM3jvE9YaEpMMdjr
-   zuql4zy392tNDfHqUeK2wv9491rGpgI5sXCBokbyzEQYT+hIJXz+BfU8/
-   gVl0qyqL6OXs4GgYtutkJHOyoVSePjIK8INwYKhEa3jRFriCmtvH6+O0A
-   0edF1TrHsplXdMnnVQKUPvbvAA4eynnY3RZiQpdXId+iZPhjLt0dbRrFy
-   Wkiay5V7ziAse1R6vk6y3yJZin6nL/w3c/yAU1dtWlDHe/CCEXsEruWbZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286373894"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="286373894"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 14:29:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="923237838"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 14:29:44 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oC6P1-0001An-Qp;
-	Thu, 14 Jul 2022 21:29:43 +0000
-Date: Fri, 15 Jul 2022 05:29:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpoimboe:lkdtm 2/3] drivers/misc/lkdtm/rodata.c:14:26: error:
- expected string literal in 'asm'
-Message-ID: <202207150539.2uMSuhwL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CA07E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAECAC34115;
+	Thu, 14 Jul 2022 21:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657834206;
+	bh=pGm0dsNASTYMf22ud+Wu7McUirHoIf7rEXRhC4vp9qA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IMaYBh8EsSajCKtn5/TqeXYalivBUf6PZbpfG7e0JeKW2C9/2EGF2wGihOgv3byEx
+	 6e06ZJCjE8fYREe3JS363dDB98jnUFQK3xqzbfc4pyxDuBY2Nvvip+89OyrgU6D8fB
+	 jGuwUzExoDmHyLLtSV1xAkLEHzP/gTCokcOdl6YzTySRvv/CfqOVesKXoNkSg5ocuE
+	 +I02B2a+BNiPztvpW62iP0T/+blURoDpWwKm9iyAiezO9XXYnX/rxp09i24ZENhCnn
+	 n6x05JW7a00mUXf97nSoM6rnPTpB5GM6a3Nd1BQBpETyQI4hO+HN8WZF0H/aKMWwlF
+	 lT9IzoMQ2Tknw==
+Date: Thu, 14 Jul 2022 14:30:05 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Borislav Petkov <bp@suse.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org, Nick
+ Desaulniers <ndesaulniers@google.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ stable@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
+ x86_spec_ctrl_current
+Message-ID: <20220714143005.73c71cf8@kernel.org>
+In-Reply-To: <20220713152436.2294819-1-nathan@kernel.org>
+References: <20220713152436.2294819-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git lkdtm
-head:   91b11c81a070d7a1c75c467ccf6703b01cf78cfb
-commit: 26fe5d8405b16b3153bdb867dda090256a561b80 [2/3] lkdtm: Disable return thunks in rodata.c
-config: hexagon-randconfig-r024-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150539.2uMSuhwL-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=26fe5d8405b16b3153bdb867dda090256a561b80
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe lkdtm
-        git checkout 26fe5d8405b16b3153bdb867dda090256a561b80
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/misc/
+On Wed, 13 Jul 2022 08:24:37 -0700 Nathan Chancellor wrote:
+> Clang warns:
+> 
+>   arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
+>   DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+>                       ^
+>   arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
+>   extern u64 x86_spec_ctrl_current;
+>              ^
+>   1 error generated.
+> 
+> The declaration should be using DECLARE_PER_CPU instead so all
+> attributes stay in sync.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/misc/lkdtm/rodata.c:14:26: error: expected string literal in 'asm'
-                   asm(ANNOTATE_UNRET_SAFE);
-                                          ^
-   1 error generated.
-
-
-vim +/asm +14 drivers/misc/lkdtm/rodata.c
-
-     8	
-     9	void noinstr lkdtm_rodata_do_nothing(void)
-    10	{
-    11		/* Does nothing. We just want an architecture agnostic "return". */
-    12	
-    13		if (IS_ENABLED(CONFIG_OBJTOOL))
-  > 14			asm(ANNOTATE_UNRET_SAFE);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hi, sorry to bother, any idea on the ETA for this fix getting into
+Linus's tree? I'm trying to figure out if we should wait with 
+forwarding the networking trees or this will take a while.
