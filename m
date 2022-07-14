@@ -1,112 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250CF4C62
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:29:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A34C34114;
-	Thu, 14 Jul 2022 16:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657816159;
-	bh=SnQc6p3PeqS1n3VRIcugq60v7kSKmJEFyoz8QtpbexQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JjRz+faWGfxgMxT7jllxUWJWqUPhg+FB4QKsQrOiXTNOLgxrmCXGGrSneo++XwKZd
-	 1aLi9Q1BAvF9QU3pSooD2HTnG5Y5SSF+ZTDfmz5J7sFFyTPIiuOVAd5A0ThQ2QF/Dc
-	 YkwawbPoK0l6BmHreuiMx/f0+0NmzXKn4eWpA2+oX5WaS6o67+tCqBSjYvsL9ekp8Z
-	 /JudLDyKoQyHGVsLrSTJE+0ca3CkzZFm5gVAAsCr8O4vaYMxFTaIXQwXDWXgHhrj5/
-	 kYpA7Fr/K/mkIFnFDUwGTacMwfb52m89oK4fcsZ9S6i7AHoSwrCqtDrJjqkVaGJgop
-	 AwK7mtfRI80ag==
-Date: Thu, 14 Jul 2022 09:29:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: linux-next: Tree for Jul 14
-Message-ID: <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-References: <20220714185514.7d1a2ac9@canb.auug.org.au>
- <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
- <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D77D2F53
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:40:16 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id n74so4168207yba.3
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lu6wSZdbs1tW8071fLNm+qwJz0Gga60nDMQS/pMdOy0=;
+        b=Aq9vpPI5Nj7rZ9ygAzRYELM6TKqbC/rS7Y8wLUqfFzzonUDS56lJAGtX3d2AjDLXdg
+         hfNUHlVocVgVMtlFX3Lirjg4nGjFr8CK348ciz9fPazt5ACLRjEm6R87jmKudzn656fd
+         pN64g08RDcMA1Nc0gJpBzp235E75gO7kFr3Fc0CF6q2NcbIn3fPrUDVMvXvatx0sevKO
+         my9ddWO3Uol4/J1hYa5V2jA4NAqDi4lFi6sA7F/BYtUfDhHy0+2SzM0WUIGLiVhHEc0E
+         ohTPHUxW0AGrbtU2QhZGAkudjpfVjPsMer1oxyrtEWCJBEysl/7cqo3BpFl2kz5jPyP4
+         PtBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lu6wSZdbs1tW8071fLNm+qwJz0Gga60nDMQS/pMdOy0=;
+        b=v2PocvUtOFfcW60Up4QgoQU/pbNPkPoD+C/sjXaSN06nAzc2kXV2z9RCWKN13XsrGx
+         BKSM3yI5191ly6ez0zGN3oXmzzR1d8p5FXSDUj4cX3xGAZWgsOOCiMyC+zZA4FiImQQn
+         M9YfcLpGoSo6SH1XcxlxIeivoWM4N9Lt04/2DzGelY4DEKXoEvajM5wUhmRUw0NZhaKb
+         knLIVYb1WqcbTUApPJnRZivGwyYx5WGmqe4+CfLFbZzMRTj6mNm6kIBZb+Pxix3HGVnq
+         dODcOZ4pPyQM1yM24V+l/Lfa/qxF3nNTODnAYqC9ILaViisSDSg0oB3W/feJ9jiYdYT/
+         AzqA==
+X-Gm-Message-State: AJIora9KvsIuj03wXm/LcQnkqyhexi3YoLW6FrCgzv5eatobxcAenQHQ
+	oEg6LZsuvcCk9oEa6kkZufo06tENpS+DeZX3Yr97wa+/vIuZMQ==
+X-Google-Smtp-Source: AGRyM1supX8hPuV/sZdbncNqOlH6yVsdNGats0XpBcSB7ua/uAi8Fvf/U06L6ue4KPyzlFqevwLdQuqPNZxvlFVQoIY=
+X-Received: by 2002:a05:6902:983:b0:66f:c668:fe2b with SMTP id
+ bv3-20020a056902098300b0066fc668fe2bmr5188764ybb.617.1657816815042; Thu, 14
+ Jul 2022 09:40:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date: Thu, 14 Jul 2022 17:39:39 +0100
+Message-ID: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
+Subject: help with clang build for mips
+To: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
-> Hi Nathan,
-> 
-> On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Sudip,
-> >
-> > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > Hi Stephen,
-> > >
-> > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > Changes since 20220713:
-> > >
-> > > Build failures on next-20220714:
-> >
-> > <snip>
-> >
-> > > x86_64 allmodconfig with clang fails with:
-> > >
-> > > drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
-> > >         gpu_cc_parent,
-> > >         ^~~~~~~~~~~~~
-> > > drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
-> > >         gpu_cc_parent,
-> > >         ^~~~~~~~~~~~~
-> >
-> > I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
-> > for this a few days ago, it just needs to be picked up.
-> >
-> > > arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> > > DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> > >                     ^
-> > > ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> > > extern u64 x86_spec_ctrl_current;
-> >
-> > This is now fixed in -tip so it should be fixed in -next tomorrorow:
-> >
-> > https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
-> 
-> This should also go to Linus. This failure is in the mainline also.
-> https://lore.kernel.org/lkml/Ys6sZj6KYthnDppq@debian/
+Hi All,
 
-Yes, it is in the x86/urgent branch so it should get there by -rc7. Our
-CI is red too :(
+I am trying to build the kernel for mips architecture with clang. I
+see some of the configuration builds properly, but some of the configs
+fails with the error (fuloong2e_defconfig):
 
-> > In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
-> > for any clang related issues so that we can get them taken care of ASAP,
-> > we have a MAINTAINERS entry for a reason :) thank you for testing with
-> > clang; the more people that use it, hopefully the easier it will be to
-> > get things unbroken.
-> 
-> Sure. I run arm, arm64, powerpc and x86_64 allmodconfigs with clang
-> (along with gcc) every night for mainline, started with linux-next
-> from today. Trying to setup the mips build also, I will mail llvm list
-> asking for help with the mips build.
-> Currently I only monitor the clang output from x86_64 as thats the one
-> which builds. If you want I can send the other reports also.
+error: unknown target CPU 'loongson2e'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
 
-Sure! I am not sure that we have tested mips or powerpc allmodconfig now
-that I am thinking about it but we'll certainly take a look at any
-issues that come from them and see what we can do.
+Another one fails with (jazz_defconfig):
+error: unknown target CPU 'r4600'
 
-arm and arm64 are not warning free so disabling CONFIG_WERROR will help
-out there (arm64 is a recent failure that I have not been able to
-entirely figure out: https://github.com/ClangBuiltLinux/linux/issues/1642)
-but I do want to get those warning clean soon so they just build out of
-the box.
+is there any way to build these configs which fails with "unknown
+target CPU". or they should be skipped for a clang build?
 
-Cheers,
-Nathan
+
+-- 
+Regards
+Sudip
