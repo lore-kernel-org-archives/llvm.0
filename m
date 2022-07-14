@@ -1,102 +1,80 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044AA7A
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 06:21:14 +0000 (UTC)
-Received: by mail-ej1-f43.google.com with SMTP id os14so1598126ejb.4
-        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 23:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pq95ND8BDQIHwxsqfPmYBdAOr2LWRGPXUOS7G88vYNI=;
-        b=mc0niwUHgxn7oIC9eFaGWNcnvDu1V+as79Nu5JgwbKfVSmLi+rtAzf2GVzshoZ28kq
-         9Q48QZiUjhjsCECE6In9OsDA0k926V5Gb4qKamyvRF5PdT83Od9BrFw9CnQtKppSplGv
-         3XNOy2MF3ARw+5Pf0AGPJ+hz4tR0EWDknQTCcPCnBpEOa/ec1nmyyloMwjnYAsT7lXt3
-         kHtxOGVr4c1Bms88ujUUsJwTKX+NokAOqAnrCOpcKoZBZnGRG508NvJezPLFGSgkGNPE
-         761In9b79cciRBpogVK+fuFR6ndymTYq8zj9MMdyX0ZKnKvnH/ohDy1yVo8MMi11Yr13
-         tIjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pq95ND8BDQIHwxsqfPmYBdAOr2LWRGPXUOS7G88vYNI=;
-        b=bmNQcUPv3wuVjwGLbb5zQZNI1g9G3Ne88eee6YzUu1PKbH9hY2V/By/raYNb+EV6wa
-         dymCgVrtCrKbi9Ael/f2n6ZCbka8924t55lwPl5T+szcS6crq0ExqbYXbaoomCacKyrI
-         0wiXBJ6BHdtj86ZgnRzjQw4SRWD647fyag3fLp2tr96aQk4RVtBoziODyRD1irqiZ+GK
-         eqzXGRHIC+ZfqjkNsEOs8IFtqT1HVTERnND4Qt0eSgSzCjt1AQZytLLtzY+W8hxZsah6
-         RjVBSMmEyqgRCu4vpSivvMTV22LtM++W3NwLTz2+mwdCjGWKvzXEMkFPBzGse1XoJpiu
-         h4ZA==
-X-Gm-Message-State: AJIora9Sd9M953H0Cr/AGQY93Tm5L1v0w2sF686KrAlug54PBNhNgRhZ
-	syJmDCQXohGHsINLKwqZdjSiqke/QJxaZbIVTes=
-X-Google-Smtp-Source: AGRyM1thXSIGIJL+S9pfG4Jcto8eU8bl95TqWCff70xLa+xLFkC2RH9LBJ5EQL/XyoX+FpumrxKtVs2t6vyYY/7l2wc=
-X-Received: by 2002:a17:906:cc0c:b0:72b:68df:8aff with SMTP id
- ml12-20020a170906cc0c00b0072b68df8affmr7264433ejb.226.1657779673195; Wed, 13
- Jul 2022 23:21:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCB4190
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 06:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52903C3411C;
+	Thu, 14 Jul 2022 06:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657780213;
+	bh=Co4vum7iIofAsD257jnj79VKCZwfePDA16sToDYsDFo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=uDJJ0LKTiahf9Xl10Les2tj5eitPVe7zSFCq+o6CQQ7v2qxIqzua07hqJV5M2hDu1
+	 bwDONyhcJTWF+7pGCRDRcusezXuKApExW1Q58J5Wz+e6IhoNCi5UisyIhtXX6S1Kr1
+	 L36H9rDo+mfZ6B6dXPIzCToU/OM7CISkXjG3cpBDeOincTdmuDHaaZzzmRhlooGffe
+	 tRfOGL9iq+xjQK/T9iaC0WbU6SYdoahXBjd2rWeu1p+Z2crik9GXqiuZ/C5B1apYw2
+	 082WCdvz/8dYJPV3RDHrxj19m7haPr1fFTc6WEAhGTCenN6hJG2BD6nv0/mXbuQZEK
+	 uyQrwPT/jwAHw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34EBEE45227;
+	Thu, 14 Jul 2022 06:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714015647.25074-1-xiaolinkui@kylinos.cn> <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
-In-Reply-To: <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 13 Jul 2022 23:21:01 -0700
-Message-ID: <CAEf4BzY5ncGXcnFVGgdQp_wMrJ4dsgae2s95BXr4PkL2oMURnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from
- bool functions
-To: Stanislav Fomichev <sdf@google.com>
-Cc: xiaolinkui <xiaolinkui@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	john fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, xiaolinkui@kylinos.cn, 
-	Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from bool
+ functions
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <165778021321.31820.870066365778813774.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Jul 2022 06:30:13 +0000
+References: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+In-Reply-To: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+To: xiaolinkui <xiaolinkui@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com, shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, xiaolinkui@kylinos.cn, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-On Wed, Jul 13, 2022 at 8:37 PM Stanislav Fomichev <sdf@google.com> wrote:
->
-> On Wed, Jul 13, 2022 at 6:57 PM xiaolinkui <xiaolinkui@gmail.com> wrote:
-> >
-> > From: Linkui Xiao <xiaolinkui@kylinos.cn>
-> >
-> > Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> > functions.  This fixes the following warnings from coccicheck:
-> >
-> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-> > return of 0/1 in function 'decap_v4' with return type bool
-> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-> > return of 0/1 in function 'decap_v6' with return type bool
-> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-> > return of 0/1 in function 'encap_v6' with return type bool
-> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-> > return of 0/1 in function 'parse_tcp' with return type bool
-> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-> > return of 0/1 in function 'parse_udp' with return type bool
-> >
-> > Generated by: scripts/coccinelle/misc/boolreturn.cocci
-> >
-> > Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
-> Reviewed-by: Stanislav Fomichev <sdf@google.com>
->
-> > Suggested-by: Stanislav Fomichev <sdf@google.com>
-> That shouldn't be here :-) I didn't suggest the patch, you're
-> suggesting it, I'm just suggesting to properly format it.
-> Probably not worth a respin, I hope whoever gets to apply it can drop
-> that line (or maybe keep it, I don't mind).
+Hello:
 
-Dropped Suggested-by, applied to bpf-next.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
->
-> > ---
-> >  .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
-> >  1 file changed, 15 insertions(+), 15 deletions(-)
-> >
+On Thu, 14 Jul 2022 09:56:47 +0800 you wrote:
+> From: Linkui Xiao <xiaolinkui@kylinos.cn>
+> 
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+> 
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> return of 0/1 in function 'decap_v4' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> return of 0/1 in function 'decap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> return of 0/1 in function 'encap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> return of 0/1 in function 'parse_tcp' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> return of 0/1 in function 'parse_udp' with return type bool
+> 
+> [...]
 
-[...]
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Return true/false (not 1/0) from bool functions
+    https://git.kernel.org/bpf/bpf-next/c/94bf6aad5dbe
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
