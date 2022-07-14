@@ -1,71 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880503D79;
-	Thu, 14 Jul 2022 15:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A1C2C385A2;
-	Thu, 14 Jul 2022 15:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E324A38
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 15:55:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F314FC34114;
+	Thu, 14 Jul 2022 15:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657810815;
-	bh=R+qJYsXeO4VPKnKzbC6ePW1RszlSU5kzXy/j+1wtGL8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pBbPobjqiHhMQErWCWv/hnEuLAcveWa9R/8G0gYHwc30+25M7DqDQf6oXJP4U7ApZ
-	 Hr5M3dHscly6S+7EbduaXAxIul2kQPxX0wGDQzcsLu6PwlGS5xIviuQfS5cSBU21YS
-	 BHC8S9lborX6i1Lw/jvOYY1VTNn8YevN8M6OfDfsoYr59iTUB6ifhl2Kt9jzOHe4lU
-	 TqscNzet2fcyAT/RtaxsxuvNSl1f0iOo5whLzyjIh7Mb0Ke+Jhq4jgWWLNfkw6VUFI
-	 a2HBsRtJMOUHkMdGwWtM1pBHMndtd0R944xSfjGDus52GP2bXIkWr2zuW01qQeQFKD
-	 Th2eiDQUEHw+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC13EE45228;
-	Thu, 14 Jul 2022 15:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1657814118;
+	bh=4qMtVyFcWvW65W5QmSZM/dYNE02o7SyZGAA6cLCMC1Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iIn3ue86mrF4qt03v8pjqJ798SWoFvduzW+vmwLdXgPEJ5P79RzUld1b15eX6ypQ2
+	 Xn1v4A+oe8cX9CcdnYnxK7c+RQKzPwKGf+C8qllo7KOtzrQ83V7ncYg9RELJ7uLiuT
+	 jwTXTXFICfYAhtMT2XpnZ9akks8Lys76lMqB9S+L7hT2cinDuXgR8AJNi1pcm/ZvGi
+	 CnDUc5VJN7wR9sX/7o/LRalaOC33SPp7wfM2uI2f2U08saUEwWDoOsR2SPpsAZFYiS
+	 /QcbnGxvjl5+jH3gzSjbn0sEYV7Tn6n+05oiJcAECjLHVqVdFA7L3y5XOVoup/uY8Q
+	 OX/aIZXROLs0Q==
+Date: Thu, 14 Jul 2022 08:55:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev
+Subject: Re: Linux v5.19-rc6: Building and testing x86/retbleed
+Message-ID: <YtA8ZH5sZWL35/Pr@dev-arch.thelio-3990X>
+References: <CA+icZUURRcY+f6OHbAqc_ruUSsft8hMttOy9TS=k0MnATpjLGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf, arm64: Mark dummy_tramp as global
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <165781081489.29992.6920779338134686620.git-patchwork-notify@kernel.org>
-Date: Thu, 14 Jul 2022 15:00:14 +0000
-References: <20220713173503.3889486-1-nathan@kernel.org>
-In-Reply-To: <20220713173503.3889486-1-nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- zlim.lnx@gmail.com, xukuohai@huawei.com, ndesaulniers@google.com,
- trix@redhat.com, bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
- samitolvanen@google.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUURRcY+f6OHbAqc_ruUSsft8hMttOy9TS=k0MnATpjLGg@mail.gmail.com>
 
-Hello:
+Hi Sedat!
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Wed, 13 Jul 2022 10:35:03 -0700 you wrote:
-> When building with clang + CONFIG_CFI_CLANG=y, the following error
-> occurs at link time:
+On Thu, Jul 14, 2022 at 11:49:33AM +0200, Sedat Dilek wrote:
+> Hi,
 > 
->   ld.lld: error: undefined symbol: dummy_tramp
+> as far as I can see to fully support x86/retbleed you need LLVM-15?
+
+> Due to:
 > 
-> dummy_tramp is declared globally in C but its definition in inline
-> assembly does not use .global, which prevents clang from properly
-> resolving the references to it when creating the CFI jump tables.
-> 
-> [...]
+> [ arch/x86/Kconfig ]
+> config CC_HAS_RETURN_THUNK
+> def_bool $(cc-option,-mfunction-return=thunk-extern)
 
-Here is the summary with links:
-  - bpf, arm64: Mark dummy_tramp as global
-    https://git.kernel.org/bpf/bpf-next/c/33f32e5072b6
+Per the documentation, rethunks are only effective for certain AMD Zen
+platforms so unless you have one of those CPUs, you don't need a new
+compiler for the retbleed mitigations. Additionally, you might have an
+old enough CPU that doesn't require them anyways, the affected models
+can be seen in the cpu_vuln_blacklist variable in
+arch/x86/kernel/cpu/common.c.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+For the record, here is the output of the retbleed sysfs node on all of
+my x86 hardware:
 
+AMD Threadripper 3990X: Mitigation: untrained return thunk; SMT enabled with STIBP protection
+Intel Core i7-11700: Mitigation: Enhanced IBRS
+AMD Ryzen 3 4300G: Mitigation: untrained return thunk; SMT enabled with STIBP protection
+Intel Core i5-4210U: Not affected
 
+> Has someone a commit-id which supports above and is stable/safe?
+
+This is the latest compiler I built and everything appears to work fine:
+
+$ clang --version | head -1
+ClangBuiltLinux clang version 15.0.0 (https://github.com/llvm/llvm-project 0406c0cda675f3cb7d294a3e65eb4f19c9efe98b)
+
+> Has anyone numbers w/ and w/o enabling x86/retbleed?
+
+I haven't noticed any major slow downs while compiling kernels, which is
+the main use case for my workstation, but it is a Zen platform so I am
+not paying the IBPB penalty, which will be worse. Some stats of my full
+set of builds against linux-next and mainline:
+
+Before:
+
+linux-next: 2h 29m 44s
+mainline: 2h 21m 49s
+
+After:
+
+linux-next: 2h 34m 04s
+mainline: 2h 23m 53s
+
+I would say that is within the noise of thermal throttling and other
+variables.
+
+Cheers,
+Nathan
