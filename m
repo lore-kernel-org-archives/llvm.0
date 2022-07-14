@@ -1,298 +1,217 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3363915BD
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 02:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657767237; x=1689303237;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uXBr+b7nuMPC6o7bPr1dKJ2/w9t4hZ+yDBweFmqEdiU=;
-  b=PaVMvUqu/XaN6uqru4sBURWwWatZVQbOczwYJIPBx1q0/sZ7trlfgC5A
-   H1hKir3Z97BaMdTe/lc5cWtcovYPvNUFTwbYqJwsCmNOMJX/8mw6ZLRFy
-   /aPyS5ZNd9z/kiSCq0J3ySXEWYi0yRYSFG8ZhdfnXDq8P8b4dY4QJJ3Xe
-   iHN8CZu4VoBwiASVdorrjAEnhxohDYZlFAnN6HCcplfLuEVyIW4rB7YEX
-   SZqTMIV4KwyHPdeOhhZw+i/C6eBoEMjAcslwQC2py5TuT2OdIha1+qUHB
-   VfLmB1LKRq8nUSZR9l5XPUXQvKenN7Ct573QBG/nTy6RETfFIH2F50jMO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268430779"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="268430779"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 19:53:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="546093778"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Jul 2022 19:53:55 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oBozC-00005a-9V;
-	Thu, 14 Jul 2022 02:53:54 +0000
-Date: Thu, 14 Jul 2022 10:53:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-bwmon-llcc-manual-regmap 21/21]
- drivers/soc/qcom/icc-bwmon.c:196:22: error: no member named 'irq_mask' in
- 'struct icc_bwmon_data'
-Message-ID: <202207141006.2vNwc0fD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB7B17C2
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 03:37:49 +0000 (UTC)
+Received: by mail-pg1-f182.google.com with SMTP id bh13so405632pgb.4
+        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 20:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lvv+2TNZ0UDHHJtA78+IPj1aaCqqH2RNt69XAZ3FeMQ=;
+        b=kGmHh59tEq+2m/EXFCaTXBuhec54r+LXVmBhv6huC9hibsPHvJJj1ys+qrE6Q+QlQB
+         DI+v8T/0C8b7exf9ujwi1xbkMLl9p7N1O5hrIZPIougaTEF8SPcDJJsowVGMzT2k/VKv
+         gugnlaGDXN3zCL1vGMPLCtpsB3dD/4KuIqLcg5BwnkVhqmliDQ44sbdgaIe741XIyZav
+         jcPYFO9cGu0bm80KPz9p4b0TIxZIyDVfVXc6+dkpNBMBLYhLK+6YwsXdLlP41e82M9vq
+         sZ2e6CjUFE21Wi9/8r83RaofWIL6rhx1sJe31XDvEWFzOxRqXnoa/WCWWcHVeWS8tzUP
+         vxwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lvv+2TNZ0UDHHJtA78+IPj1aaCqqH2RNt69XAZ3FeMQ=;
+        b=c267X+WUaQvrWXUfgecTppD2c4T57A5IIZclaukyoVH9wcqIGyPGNYC4W0OwW+5WVs
+         S4eRVH5yOSGQLDreyna2oLa3Lf+Av5udPmS4PByAhgj3sa+9Mi4m8cCOUgEqo8qzfHW0
+         NWZU+r2fKFcXMH0cslIXQgfAaXfdV874JKBA0i4HKG6bi9VKiG/b8xzpNdNdlNKRRp3c
+         Rpvo2jakzjKwYCxM5gO9YNrsIvS75tMM+URCCea8U41rWhUC9o9Q6oUf4vHRSJE+KTpL
+         Wb+3+KUCBYIE7jrkAJ+1RznL6Uu9z2kIqPpWvfKY/Revs0SgbA8ZPZxchhK0gJpLrCrd
+         +sjw==
+X-Gm-Message-State: AJIora96lYjBDyC44lvgs7wPn7gEmDl+sFtuA26UbNMLAEOmiPfS7Oza
+	mUWVarVnAPSBrRCvCk+wjTm+pGadHxaFmdj8dI31Dw==
+X-Google-Smtp-Source: AGRyM1t2WNX3fdg8RDVN4sXgU8o9Eo5obTLhkOP7m80mDOjsuCxh8E/oGcw8TMyRHeHrzjaR3mcwAC6vdTYNNiVwhGk=
+X-Received: by 2002:a62:6d05:0:b0:528:99a2:b10 with SMTP id
+ i5-20020a626d05000000b0052899a20b10mr6311821pfc.72.1657769869020; Wed, 13 Jul
+ 2022 20:37:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+In-Reply-To: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Wed, 13 Jul 2022 20:37:37 -0700
+Message-ID: <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from
+ bool functions
+To: xiaolinkui <xiaolinkui@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org, 
+	hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, kpsingh@kernel.org, 
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
+	xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/krzk/linux n/qcom-bwmon-llcc-manual-regmap
-head:   f8c2f9796ac481bfd123096df5dd4d9f570c57b6
-commit: f8c2f9796ac481bfd123096df5dd4d9f570c57b6 [21/21] wip
-config: hexagon-buildonly-randconfig-r001-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141006.2vNwc0fD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/f8c2f9796ac481bfd123096df5dd4d9f570c57b6
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-bwmon-llcc-manual-regmap
-        git checkout f8c2f9796ac481bfd123096df5dd4d9f570c57b6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
+On Wed, Jul 13, 2022 at 6:57 PM xiaolinkui <xiaolinkui@gmail.com> wrote:
+>
+> From: Linkui Xiao <xiaolinkui@kylinos.cn>
+>
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+>
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> return of 0/1 in function 'decap_v4' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> return of 0/1 in function 'decap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> return of 0/1 in function 'encap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> return of 0/1 in function 'parse_tcp' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> return of 0/1 in function 'parse_udp' with return type bool
+>
+> Generated by: scripts/coccinelle/misc/boolreturn.cocci
+>
+> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+That shouldn't be here :-) I didn't suggest the patch, you're
+suggesting it, I'm just suggesting to properly format it.
+Probably not worth a respin, I hope whoever gets to apply it can drop
+that line (or maybe keep it, I don't mind).
 
-All errors (new ones prefixed by >>):
-
->> drivers/soc/qcom/icc-bwmon.c:196:22: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
-           writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
-                  ~~~~~~~~~~~  ^
-   drivers/soc/qcom/icc-bwmon.c:273:35: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
-           bwmon_enable(bwmon, bwmon->data->irq_mask);
-                               ~~~~~~~~~~~  ^
-   drivers/soc/qcom/icc-bwmon.c:283:25: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
-           status &= bwmon->data->irq_mask;
-                     ~~~~~~~~~~~  ^
->> drivers/soc/qcom/icc-bwmon.c:299:50: error: no member named 'irq_shift' in 'struct icc_bwmon_data'
-           zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
-                                              ~~~~~~~~~~~  ^
-   drivers/soc/qcom/icc-bwmon.c:344:29: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
-                   irq_enable = bwmon->data->irq_mask;
-                                ~~~~~~~~~~~  ^
->> drivers/soc/qcom/icc-bwmon.c:445:3: error: field designator 'irq_mask' does not refer to any field in type 'const struct icc_bwmon_data'
-           .irq_mask = BWMON_V4_IRQ_ENABLE_MASK,
-            ^
->> drivers/soc/qcom/icc-bwmon.c:446:3: error: field designator 'irq_shift' does not refer to any field in type 'const struct icc_bwmon_data'
-           .irq_shift = BWMON_V4_IRQ_STATUS_ZONE_SHIFT,
-            ^
->> drivers/soc/qcom/icc-bwmon.c:471:14: error: use of undeclared identifier 'BWMON_V5_IRQ_ENABLE_MASK'
-           .irq_mask = BWMON_V5_IRQ_ENABLE_MASK,
-                       ^
->> drivers/soc/qcom/icc-bwmon.c:472:15: error: use of undeclared identifier 'BWMON_V5_IRQ_STATUS_ZONE_SHIFT'
-           .irq_shift = BWMON_V5_IRQ_STATUS_ZONE_SHIFT,
-                        ^
-   9 errors generated.
-
-
-vim +196 drivers/soc/qcom/icc-bwmon.c
-
-   177	
-   178	static void bwmon_clear_irq(struct icc_bwmon *bwmon)
-   179	{
-   180		/*
-   181		 * Clear zone and global interrupts. The order and barriers are
-   182		 * important. Quoting downstream Qualcomm msm-4.9 tree:
-   183		 *
-   184		 * Synchronize the local interrupt clear in mon_irq_clear()
-   185		 * with the global interrupt clear here. Otherwise, the CPU
-   186		 * may reorder the two writes and clear the global interrupt
-   187		 * before the local interrupt, causing the global interrupt
-   188		 * to be retriggered by the local interrupt still being high.
-   189		 *
-   190		 * Similarly, because the global registers are in a different
-   191		 * region than the local registers, we need to ensure any register
-   192		 * writes to enable the monitor after this call are ordered with the
-   193		 * clearing here so that local writes don't happen before the
-   194		 * interrupt is cleared.
-   195		 */
- > 196		writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
-   197		if (bwmon->data->has_global_irq)
-   198			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
-   199			       BWMON_REG(bwmon, global_irq_clear_reg));
-   200	}
-   201	
-   202	static void bwmon_disable(struct icc_bwmon *bwmon)
-   203	{
-   204		/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
-   205		if (bwmon->data->has_global_irq)
-   206			writel(0x0, BWMON_REG(bwmon, global_irq_enable_reg));
-   207		writel(0x0, BWMON_REG(bwmon, irq_enable_reg));
-   208	
-   209		/*
-   210		 * Disable bwmon. Must happen before bwmon_clear_irq() to avoid spurious
-   211		 * IRQ.
-   212		 */
-   213		writel(0x0, BWMON_REG(bwmon, enable_reg));
-   214	}
-   215	
-   216	static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
-   217	{
-   218		/* Enable interrupts */
-   219		if (bwmon->data->has_global_irq)
-   220			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
-   221			       BWMON_REG(bwmon, global_irq_enable_reg));
-   222		writel(irq_enable, BWMON_REG(bwmon, irq_enable_reg));
-   223	
-   224		/* Enable bwmon */
-   225		writel(BWMON_ENABLE_ENABLE, BWMON_REG(bwmon, enable_reg));
-   226	}
-   227	
-   228	static unsigned int bwmon_kbps_to_count(struct icc_bwmon *bwmon, unsigned int kbps)
-   229	{
-   230		return kbps / bwmon->data->count_unit_kb;
-   231	}
-   232	
-   233	static void bwmon_set_threshold(struct icc_bwmon *bwmon,
-   234					volatile void __iomem *addr, unsigned int kbps)
-   235	{
-   236		unsigned int thres;
-   237	
-   238		thres = mult_frac(bwmon_kbps_to_count(bwmon, kbps), bwmon->data->sample_ms,
-   239				  MSEC_PER_SEC);
-   240		writel_relaxed(thres, addr);
-   241	}
-   242	
-   243	static void bwmon_start(struct icc_bwmon *bwmon)
-   244	{
-   245		const struct icc_bwmon_data *data = bwmon->data;
-   246		unsigned int thres_count;
-   247		int window;
-   248	
-   249		bwmon_clear_counters(bwmon);
-   250	
-   251		window = mult_frac(bwmon->data->sample_ms, HW_TIMER_HZ, MSEC_PER_SEC);
-   252		/* Maximum sampling window: 0xfffff */
-   253		writel_relaxed(window, BWMON_REG(bwmon, sample_window_reg));
-   254	
-   255		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_high_reg),
-   256				    data->default_highbw_kbps);
-   257		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_med_reg),
-   258				    data->default_medbw_kbps);
-   259		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_low_reg),
-   260				    data->default_lowbw_kbps);
-   261	
-   262		thres_count = data->zone3_thres_count << BWMON_THRESHOLD_COUNT_ZONE3_SHIFT |
-   263			      BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT << BWMON_THRESHOLD_COUNT_ZONE2_SHIFT |
-   264			      data->zone1_thres_count << BWMON_THRESHOLD_COUNT_ZONE1_SHIFT |
-   265			      BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT;
-   266		writel_relaxed(thres_count,
-   267			       BWMON_REG(bwmon, threshold_count_reg));
-   268		writel_relaxed(BWMON_ZONE_ACTIONS_DEFAULT,
-   269			       BWMON_REG(bwmon, zone_actions_reg));
-   270		/* Write barriers in bwmon_clear_irq() */
-   271	
-   272		bwmon_clear_irq(bwmon);
-   273		bwmon_enable(bwmon, bwmon->data->irq_mask);
-   274	}
-   275	
-   276	static irqreturn_t bwmon_intr(int irq, void *dev_id)
-   277	{
-   278		struct icc_bwmon *bwmon = dev_id;
-   279		unsigned int status, max;
-   280		int zone;
-   281	
-   282		status = readl(BWMON_REG(bwmon, irq_status_reg));
- > 283		status &= bwmon->data->irq_mask;
-   284		if (!status) {
-   285			/*
-   286			 * Only zone 1 and zone 3 interrupts are enabled but zone 2
-   287			 * threshold could be hit and trigger interrupt even if not
-   288			 * enabled.
-   289			 * Such spurious interrupt might come with valuable max count or
-   290			 * not, so solution would be to always check all
-   291			 * BWMON_ZONE_MAX() registers to find the highest value.
-   292			 * Such case is currently ignored.
-   293			 */
-   294			return IRQ_NONE;
-   295		}
-   296	
-   297		bwmon_disable(bwmon);
-   298	
- > 299		zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
-   300		pr_err("AAA bwmon 0x%x -> zone %d-%d\n", status,
-   301		       get_bitmask_order(status >> BWMON_V4_IRQ_STATUS_ZONE_SHIFT), zone);
-   302	
-   303		/*
-   304		 * Zone max bytes count register returns count units within sampling
-   305		 * window.  Downstream kernel for BWMONv4 (called BWMON type 2 in
-   306		 * downstream) always increments the max bytes count by one.
-   307		 */
-   308		max = readl(BWMON_REG_ZONE_MAX(bwmon, zone)) + 1;
-   309		max *= bwmon->data->count_unit_kb;
-   310		bwmon->target_kbps = mult_frac(max, MSEC_PER_SEC, bwmon->data->sample_ms);
-   311	
-   312		return IRQ_WAKE_THREAD;
-   313	}
-   314	
-   315	static irqreturn_t bwmon_intr_thread(int irq, void *dev_id)
-   316	{
-   317		struct icc_bwmon *bwmon = dev_id;
-   318		unsigned int irq_enable = 0;
-   319		struct dev_pm_opp *opp, *target_opp;
-   320		unsigned int bw_kbps, up_kbps, down_kbps;
-   321	
-   322		bw_kbps = bwmon->target_kbps;
-   323	
-   324		target_opp = dev_pm_opp_find_bw_ceil(bwmon->dev, &bw_kbps, 0);
-   325		if (IS_ERR(target_opp) && PTR_ERR(target_opp) == -ERANGE)
-   326			target_opp = dev_pm_opp_find_bw_floor(bwmon->dev, &bw_kbps, 0);
-   327	
-   328		bwmon->target_kbps = bw_kbps;
-   329	
-   330		bw_kbps--;
-   331		opp = dev_pm_opp_find_bw_floor(bwmon->dev, &bw_kbps, 0);
-   332		if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
-   333			down_kbps = bwmon->target_kbps;
-   334		else
-   335			down_kbps = bw_kbps;
-   336	
-   337		up_kbps = bwmon->target_kbps + 1;
-   338	
-   339		if (bwmon->target_kbps >= bwmon->max_bw_kbps)
-   340			irq_enable = BIT(BWMON_V4_IRQ_ENABLE_ZONE1_SHIFT);
-   341		else if (bwmon->target_kbps <= bwmon->min_bw_kbps)
-   342			irq_enable = BIT(BWMON_V4_IRQ_ENABLE_ZONE3_SHIFT);
-   343		else
- > 344			irq_enable = bwmon->data->irq_mask;
-   345	
-   346		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_high_reg),
-   347				    up_kbps);
-   348		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_med_reg),
-   349				    down_kbps);
-   350		/* Write barriers in bwmon_clear_counters() */
-   351		bwmon_clear_counters(bwmon);
-   352		bwmon_clear_irq(bwmon);
-   353		bwmon_enable(bwmon, irq_enable);
-   354	
-   355		if (bwmon->target_kbps == bwmon->current_kbps)
-   356			goto out;
-   357	
-   358		dev_pm_opp_set_opp(bwmon->dev, target_opp);
-   359		bwmon->current_kbps = bwmon->target_kbps;
-   360	
-   361	out:
-   362		dev_pm_opp_put(target_opp);
-   363		if (!IS_ERR(opp))
-   364			dev_pm_opp_put(opp);
-   365	
-   366		return IRQ_HANDLED;
-   367	}
-   368	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> index 125d872d7981..ba48fcb98ab2 100644
+> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
+>         udp = data + off;
+>
+>         if (udp + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         if (!is_icmp) {
+>                 pckt->flow.port16[0] = udp->source;
+>                 pckt->flow.port16[1] = udp->dest;
+> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
+>                 pckt->flow.port16[0] = udp->dest;
+>                 pckt->flow.port16[1] = udp->source;
+>         }
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
+>
+>         tcp = data + off;
+>         if (tcp + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         if (tcp->syn)
+>                 pckt->flags |= (1 << 1);
+>         if (!is_icmp) {
+> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
+>                 pckt->flow.port16[0] = tcp->dest;
+>                 pckt->flow.port16[1] = tcp->source;
+>         }
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         void *data;
+>
+>         if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
+> -               return 0;
+> +               return false;
+>         data = (void *)(long)xdp->data;
+>         data_end = (void *)(long)xdp->data_end;
+>         new_eth = data;
+> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         old_eth = data + sizeof(struct ipv6hdr);
+>         if (new_eth + 1 > data_end ||
+>             old_eth + 1 > data_end || ip6h + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         memcpy(new_eth->eth_dest, cval->mac, 6);
+>         memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 56710;
+> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         ip6h->saddr.in6_u.u6_addr32[2] = 3;
+>         ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
+>         memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>         ip_suffix <<= 15;
+>         ip_suffix ^= pckt->flow.src;
+>         if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
+> -               return 0;
+> +               return false;
+>         data = (void *)(long)xdp->data;
+>         data_end = (void *)(long)xdp->data_end;
+>         new_eth = data;
+> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>         old_eth = data + sizeof(struct iphdr);
+>         if (new_eth + 1 > data_end ||
+>             old_eth + 1 > data_end || iph + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         memcpy(new_eth->eth_dest, cval->mac, 6);
+>         memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 8;
+> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>                 csum += *next_iph_u16++;
+>         iph->check = ~((csum & 0xffff) + (csum >> 16));
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -               return 0;
+> -       return 1;
+> +               return false;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void **data_end, bool inner_v4)
+>         else
+>                 new_eth->eth_proto = 56710;
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
+> -               return 0;
+> +               return false;
+>         *data = (void *)(long)xdp->data;
+>         *data_end = (void *)(long)xdp->data_end;
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void **data_end)
+>         memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 8;
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -               return 0;
+> +               return false;
+>         *data = (void *)(long)xdp->data;
+>         *data_end = (void *)(long)xdp->data_end;
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> --
+> 2.17.1
+>
