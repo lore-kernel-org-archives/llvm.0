@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620B12C9C
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 08:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8355A2C9C
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657788607; x=1689324607;
+  t=1657791071; x=1689327071;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9YLyw3a9ws0g5Y/zxv66yB33PVyxoOytrXNruWQ7tPA=;
-  b=XX8K6Bw2z6M0d8w7RV5JHZWbegF0ZtziqPmNYFvlnGgx9EcwFCJIdGh1
-   6gQzLEQJLDy+KT28SBS4PGudFg3uBqyKK+nXWEoYdqfSyI/2tY8PrbxVq
-   AECd3YQceyGBGRg9DPhjVNHraoFqQgvHpmv1uLu6WUC+oK3vq3RD61CJe
-   DgCDrv956VrJNyKx78GvqQrt5WWkdOZ6eN61kphOl8SYTRLm0TtIXuiEJ
-   tMGtaRxHdiC/Or+IliWamLqacu8EThD/t6iPyyYS70ghIuz0kEVtWeURF
-   Wyu+RmXI8pUPSP/N+7YLGK95rozl+HM8kXZorkK0Sjv6YPZVvDg5/mwDl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="349423973"
+  bh=STQRNUIY8SmSePbPiAzgY7UJQEqu/K3AxLZRnk3A8rg=;
+  b=UPmiYacnmQrUggfxl8tzLg+NnBAeg03qIKR7xP662DJmJEhW2ff6y9Pz
+   98PrXrgWXvK/xToHi3BJNy/QkprR/Y3Kzs254mNnkbeVeq3rr+Fu5mDVa
+   8w0hBPdeh7q0S/p8wEjzbFQsvItTcKBhpVuAUdcziS0JILH7x9clbcCry
+   StCHTA6+R5d+eR5VJsHIBPP3cywKhVVb0YIhKpTePAxKcohb/Ct8cP80I
+   BuT2h1HUuoKAosaoZHy4h2Yr1OqZN5331/Ineddq3OSehF2TxagbCMfEp
+   r5jo2u3rTImlpkzTnpmWl50oTc8fi0sw+yE9WesMAPnbplyB8t62hd9pb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="371776406"
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="349423973"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 01:50:06 -0700
+   d="scan'208";a="371776406"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:31:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="663708019"
+   d="scan'208";a="623345675"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 01:50:05 -0700
+  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 02:31:06 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBuXs-0000MG-Ct;
-	Thu, 14 Jul 2022 08:50:04 +0000
-Date: Thu, 14 Jul 2022 16:49:20 +0800
+	id 1oBvBa-0000Nm-5I;
+	Thu, 14 Jul 2022 09:31:06 +0000
+Date: Thu, 14 Jul 2022 17:30:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Xiang Gao <xiang@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [xiang:erofs/advancedpcl 16/16] fs/erofs/zdata.c:896:12: warning:
- variable 'len' is uninitialized when used here
-Message-ID: <202207141642.UPeaIPx7-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [sre-misc:rk3588 39/42] drivers/mfd/rk8xx-core.c:654:40: warning:
+ operator '?:' has lower precedence than '|'; '|' will be evaluated first
+Message-ID: <202207141718.NA620oNa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,84 +46,161 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git erofs/advancedpcl
-head:   0889e3f1d4cc1d9cb08d961107c5e810c47ecfd0
-commit: 0889e3f1d4cc1d9cb08d961107c5e810c47ecfd0 [16/16] erofs: introduce multi-reference pclusters (fully-referenced)
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220714/202207141642.UPeaIPx7-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
+head:   720bd5858aced5b400d963fd155c40adb98c47b4
+commit: 18650ce6630a3f066680e3affab33a11b9f3d14d [39/42] mfd: rk8xx: add rk806 support
+config: arm64-randconfig-r005-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141718.NA620oNa-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git/commit/?id=0889e3f1d4cc1d9cb08d961107c5e810c47ecfd0
-        git remote add xiang https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git
-        git fetch --no-tags xiang erofs/advancedpcl
-        git checkout 0889e3f1d4cc1d9cb08d961107c5e810c47ecfd0
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/commit/?id=18650ce6630a3f066680e3affab33a11b9f3d14d
+        git remote add sre-misc https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git
+        git fetch --no-tags sre-misc rk3588
+        git checkout 18650ce6630a3f066680e3affab33a11b9f3d14d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/erofs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mfd/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/erofs/zdata.c:896:12: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                                   cur += len;
-                                          ^~~
-   fs/erofs/zdata.c:887:32: note: initialize the variable 'len' to silence this warning
-                           unsigned int pgnr, scur, len;
-                                                       ^
-                                                        = 0
+>> drivers/mfd/rk8xx-core.c:654:40: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
+                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/mfd/rk8xx-core.c:654:40: note: place parentheses around the '|' expression to silence this warning
+                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/mfd/rk8xx-core.c:654:40: note: place parentheses around the '?:' expression to evaluate it first
+                                          IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
+                                                                      ^
+                                                         (                             )
    1 warning generated.
 
 
-vim +/len +896 fs/erofs/zdata.c
+vim +654 drivers/mfd/rk8xx-core.c
 
-   869	
-   870	static void z_erofs_fill_other_copies(struct z_erofs_decompress_backend *be,
-   871					      int err)
-   872	{
-   873		unsigned int off0 = be->pcl->pageofs_out;
-   874		struct list_head *p, *n;
-   875	
-   876		list_for_each_safe(p, n, &be->decompressed_secondary_bvecs) {
-   877			struct z_erofs_bvec_item *bvi;
-   878			unsigned int end, cur;
-   879			void *dst, *src;
-   880	
-   881			bvi = container_of(p, struct z_erofs_bvec_item, list);
-   882			cur = bvi->bvec.offset < 0 ? -bvi->bvec.offset : 0;
-   883			end = min_t(unsigned int, be->pcl->length - bvi->bvec.offset,
-   884				    bvi->bvec.end);
-   885			dst = kmap_local_page(bvi->bvec.page);
-   886			while (cur < end) {
-   887				unsigned int pgnr, scur, len;
-   888	
-   889				pgnr = (bvi->bvec.offset + cur + off0) >> PAGE_SHIFT;
-   890				DBG_BUGON(pgnr >= be->nr_pages);
-   891	
-   892				scur = bvi->bvec.offset + cur -
-   893						((pgnr << PAGE_SHIFT) - off0);
-   894				if (!be->decompressed_pages[pgnr]) {
-   895					err = -EFSCORRUPTED;
- > 896					cur += len;
-   897					continue;
-   898				}
-   899				src = kmap_local_page(be->decompressed_pages[pgnr]);
-   900				len = min_t(unsigned int, end - cur, PAGE_SIZE - scur);
-   901				memcpy(dst + cur, src + scur, len);
-   902				kunmap_local(src);
-   903				cur += len;
-   904			}
-   905			kunmap_local(dst);
-   906			if (err)
-   907				z_erofs_page_mark_eio(bvi->bvec.page);
-   908			z_erofs_onlinepage_endio(bvi->bvec.page);
-   909			list_del(p);
-   910			kfree(bvi);
-   911		}
-   912	}
-   913	
+   585	
+   586	int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap)
+   587	{
+   588		struct rk808 *rk808;
+   589		const struct rk808_reg_data *pre_init_reg;
+   590		const struct mfd_cell *cells;
+   591		bool dual_support = false;
+   592		int nr_pre_init_regs;
+   593		int nr_cells;
+   594		int ret;
+   595		int i;
+   596	
+   597		rk808 = devm_kzalloc(dev, sizeof(*rk808), GFP_KERNEL);
+   598		if (!rk808)
+   599			return -ENOMEM;
+   600		rk808->dev = dev;
+   601		rk808->variant = variant;
+   602		rk808->regmap = regmap;
+   603		dev_set_drvdata(dev, rk808);
+   604	
+   605		switch (rk808->variant) {
+   606		case RK805_ID:
+   607			rk808->regmap_irq_chip = &rk805_irq_chip;
+   608			pre_init_reg = rk805_pre_init_reg;
+   609			nr_pre_init_regs = ARRAY_SIZE(rk805_pre_init_reg);
+   610			cells = rk805s;
+   611			nr_cells = ARRAY_SIZE(rk805s);
+   612			break;
+   613		case RK806_ID:
+   614			rk808->regmap_irq_chip = &rk806_irq_chip;
+   615			pre_init_reg = rk806_pre_init_reg;
+   616			nr_pre_init_regs = ARRAY_SIZE(rk806_pre_init_reg);
+   617			cells = rk806s;
+   618			nr_cells = ARRAY_SIZE(rk806s);
+   619			dual_support = true;
+   620			break;
+   621		case RK808_ID:
+   622			rk808->regmap_irq_chip = &rk808_irq_chip;
+   623			pre_init_reg = rk808_pre_init_reg;
+   624			nr_pre_init_regs = ARRAY_SIZE(rk808_pre_init_reg);
+   625			cells = rk808s;
+   626			nr_cells = ARRAY_SIZE(rk808s);
+   627			break;
+   628		case RK818_ID:
+   629			rk808->regmap_irq_chip = &rk818_irq_chip;
+   630			pre_init_reg = rk818_pre_init_reg;
+   631			nr_pre_init_regs = ARRAY_SIZE(rk818_pre_init_reg);
+   632			cells = rk818s;
+   633			nr_cells = ARRAY_SIZE(rk818s);
+   634			break;
+   635		case RK809_ID:
+   636		case RK817_ID:
+   637			rk808->regmap_irq_chip = &rk817_irq_chip;
+   638			pre_init_reg = rk817_pre_init_reg;
+   639			nr_pre_init_regs = ARRAY_SIZE(rk817_pre_init_reg);
+   640			cells = rk817s;
+   641			nr_cells = ARRAY_SIZE(rk817s);
+   642			break;
+   643		default:
+   644			dev_err(dev, "Unsupported RK8XX ID %lu\n", rk808->variant);
+   645			return -EINVAL;
+   646		}
+   647	
+   648		dev_info(dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
+   649	
+   650		if (!irq)
+   651			return dev_err_probe(dev, -EINVAL, "No interrupt support, no core IRQ\n");
+   652	
+   653		ret = devm_regmap_add_irq_chip(dev, rk808->regmap, irq,
+ > 654					       IRQF_ONESHOT | dual_support ? IRQF_SHARED : 0, -1,
+   655					       rk808->regmap_irq_chip, &rk808->irq_data);
+   656		if (ret)
+   657			return dev_err_probe(dev, ret, "Failed to add irq_chip\n");
+   658	
+   659		for (i = 0; i < nr_pre_init_regs; i++) {
+   660			ret = regmap_update_bits(rk808->regmap,
+   661						pre_init_reg[i].addr,
+   662						pre_init_reg[i].mask,
+   663						pre_init_reg[i].value);
+   664			if (ret)
+   665				return dev_err_probe(dev, ret, "0x%x write err\n",
+   666						     pre_init_reg[i].addr);
+   667		}
+   668	
+   669		ret = devm_mfd_add_devices(dev, dual_support ? PLATFORM_DEVID_AUTO : PLATFORM_DEVID_NONE,
+   670				      cells, nr_cells, NULL, 0,
+   671				      regmap_irq_get_domain(rk808->irq_data));
+   672		if (ret)
+   673			return dev_err_probe(dev, ret, "failed to add MFD devices\n");
+   674	
+   675		if (device_property_read_bool(dev, "rockchip,system-power-controller")) {
+   676			ret = devm_register_sys_off_handler(dev,
+   677					    SYS_OFF_MODE_POWER_OFF_PREPARE, SYS_OFF_PRIO_HIGH,
+   678					    &rk808_power_off, rk808);
+   679			if (ret)
+   680				return dev_err_probe(dev, ret,
+   681						     "failed to register poweroff handler\n");
+   682	
+   683			switch (rk808->variant) {
+   684			case RK809_ID:
+   685			case RK817_ID:
+   686				ret = devm_register_sys_off_handler(dev,
+   687								    SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
+   688								    &rk808_restart, rk808);
+   689				if (ret)
+   690					dev_warn(dev, "failed to register rst handler, %d\n", ret);
+   691				break;
+   692			default:
+   693				dev_dbg(dev, "pmic controlled board reset not supported\n");
+   694				break;
+   695			}
+   696		}
+   697	
+   698		return 0;
+   699	}
+   700	EXPORT_SYMBOL_GPL(rk8xx_probe);
+   701	
 
 -- 
 0-DAY CI Kernel Test Service
