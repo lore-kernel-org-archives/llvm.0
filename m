@@ -1,85 +1,76 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608D27E
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:48:57 +0000 (UTC)
-Received: by mail-ej1-f54.google.com with SMTP id va17so5853515ejb.0
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:48:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F647E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:52:13 +0000 (UTC)
+Received: by mail-ed1-f54.google.com with SMTP id m16so4063766edb.11
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=L1iX27wFeV0T/X/fBHF2BNfaWRJqrDGUQT8DlTbAlDg=;
-        b=FWC7HCmyZVead3f2O3DASZjsf1DvWU3lo55I8StLcNFNInBWNn7wtRAGdMMZc7vrOy
-         4gtk6E+oaR9L65XjWqwLxsWfinSbNh3ow9dXD48q+t8QtaY3AmdJvPCbjHSn25eVEFJh
-         CND1MbO0rSFNpPNls/b2Mfc4joBGdSTOm5a5g=
+        bh=gCwGv/e/gf0C6iderKEIRJdi0X+OWhvleA0ffjecAUA=;
+        b=dxV59InvESm2MJqKBf3+U1Ds3/hawDeEnGZ38sSmB5Il756bzpwxIre3Atc0Q1lkzC
+         hyBFGJ3TV2g0q8oktcCZOMFI8cRxHm73bG0bhfMCqzN/UjJnIR7jKT4a9XBskQw9dd6h
+         OqDy+jIwcgGlmmWZTsqokmdOnUKSxRvScSSq0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=L1iX27wFeV0T/X/fBHF2BNfaWRJqrDGUQT8DlTbAlDg=;
-        b=fWecv2TKMKDHWXzuxKWLaEjZpdnwJqddFd1ygLFMGSmx5l9SYkBSBGEZ9TUPU9bSEm
-         RFpXMjPuaYEHsOvlkLrtNgnCVaQ3+GOjdtL7i1jfSn2PvO8mfTcy+oXTtZ15l4OchM7H
-         0aKCZwtL4fNSNx5+HYETInvg5jE795Rz7SJHIOJzbG6mWGtjmPqDDbNBQFeiAxRK7RuQ
-         72uITKMbUdY+Bics26jPA0OrZHfl1TRy024JZnAiydXfsWK0IKnimvu+oDi+qe5rpY2Z
-         FHuCRS4M6dpHCU7kN8sqc6V6fuKSvGVFcSHilpkjHjfCY+BnCHgIipMTkFDluft6fX1h
-         x/xw==
-X-Gm-Message-State: AJIora9a1TYWVU1ncnNZxFhdyPdHIWSNebl3zcJ8XeSZTwYj8PsQ0Bbe
-	D6xjzg9yNHvhA3TogFjHh/FmawHGUxEvtDcvnnc=
-X-Google-Smtp-Source: AGRyM1uIycZOFMQuMzBlHYQ8zAQvmoUVUfdPOobt4X/lWZubpElguGra33uuNYpfTztdoySf7u8AhQ==
-X-Received: by 2002:a17:906:2086:b0:712:1257:77bf with SMTP id 6-20020a170906208600b00712125777bfmr11094911ejq.655.1657835335291;
-        Thu, 14 Jul 2022 14:48:55 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id ky13-20020a170907778d00b0072ae174cdd4sm1155625ejc.111.2022.07.14.14.48.53
+        bh=gCwGv/e/gf0C6iderKEIRJdi0X+OWhvleA0ffjecAUA=;
+        b=1NN/oRzL7OPyfndpsvMBmjkpXwAAySTGOgbaZGBWdINs2Gx0Lf3bmGYwkftabwWr9l
+         39G1jQG3Cazszv3VgbJWb/9HkV2zn0Pl0phbImmsbLiQjPBepgPG9ldd21z9GhK6dUzt
+         4Z4T6EZ+MJKEUQJKBC+G02XfwkwzEb5wc5IVMzZA0r/iL+HJjFiN3QcOsyQloyd/4SS1
+         tQFMsGyQ9FeuSaH4YHgdPRcgRR1JDjYeCXCrCti0JP7elEGj6GIHiqWVgzHXcwJa1Khl
+         zG+Va7zwY6pYwjwx2rtImgWG5KFc+jDKIVugmrfVMW86AAKvzXHgBDPYDBfps/kAM+9A
+         UoQA==
+X-Gm-Message-State: AJIora/mzJbzn1FhjQv1LdsThWqNnIhcJvQ8YmLKqiyiOC/7Jk+g3/ab
+	Wq3R1ibFeb6QiY0OKwU0fvXUA9CWpVQojacBxBU=
+X-Google-Smtp-Source: AGRyM1tNvTkrwo0y3GHAyiYGaUxBYUCyJYg9b0NAPTYxlmT7GQ+PawabXj8O32e2KNqtDmK1SCHU8A==
+X-Received: by 2002:a05:6402:1741:b0:433:4e4d:bfb4 with SMTP id v1-20020a056402174100b004334e4dbfb4mr14909875edx.7.1657835531939;
+        Thu, 14 Jul 2022 14:52:11 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id la15-20020a170907780f00b0072aeda86ac3sm1193510ejc.149.2022.07.14.14.52.09
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 14:48:54 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id v16so4261973wrd.13
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:48:53 -0700 (PDT)
-X-Received: by 2002:a05:6000:180f:b0:21d:68f8:c4ac with SMTP id
- m15-20020a056000180f00b0021d68f8c4acmr10262406wrh.193.1657835333499; Thu, 14
- Jul 2022 14:48:53 -0700 (PDT)
+        Thu, 14 Jul 2022 14:52:09 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id v16so4270728wrd.13
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:52:09 -0700 (PDT)
+X-Received: by 2002:a5d:544b:0:b0:21d:70cb:b4a2 with SMTP id
+ w11-20020a5d544b000000b0021d70cbb4a2mr9822619wrv.281.1657835528671; Thu, 14
+ Jul 2022 14:52:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714205646.4023495-1-ndesaulniers@google.com>
- <CAHk-=whnndsMXO=32vFn9-Osw4r8-NvROV1rtsbxjw9Uvj1WPA@mail.gmail.com> <CAKwvOd=PB9Kpbnf3y0e5u6LrZ=Lv2Ex8O7y=VY63D67Jf2eyHQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=PB9Kpbnf3y0e5u6LrZ=Lv2Ex8O7y=VY63D67Jf2eyHQ@mail.gmail.com>
+References: <20220713152436.2294819-1-nathan@kernel.org> <20220714143005.73c71cf8@kernel.org>
+In-Reply-To: <20220714143005.73c71cf8@kernel.org>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 14 Jul 2022 14:48:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whs05rO37wjdTOgppP-N+mYy70Q2ctBrp6vMoUP=OtcVA@mail.gmail.com>
-Message-ID: <CAHk-=whs05rO37wjdTOgppP-N+mYy70Q2ctBrp6vMoUP=OtcVA@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+Date: Thu, 14 Jul 2022 14:51:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
+Message-ID: <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Borislav Petkov <bp@suse.de>, "the arch/x86 maintainers" <x86@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Alexander Potapenko <glider@google.com>
+	stable <stable@vger.kernel.org>, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 14, 2022 at 2:38 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Thu, Jul 14, 2022 at 2:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> int do_div (int dividend, int divisor) {
->   return dividend / divisor;
-> }
->
-> has UB should divisor ever be zero, not much different from:
+> Hi, sorry to bother, any idea on the ETA for this fix getting into
+> Linus's tree? I'm trying to figure out if we should wait with
+> forwarding the networking trees or this will take a while.
 
-So?
+Well, I have that patch by now in my own clang tree, but was holding
+it off just because I was expecting a few other fixes for the fallout.
 
-What about the million other '/' in the kernel?
+But if this particular one causes problems for maintainers, I can
+easily just take it right away just cherry-pick it from my own
+test-tree to my "main" tree.
 
-Adding one check to 'do_div()' is just stupid. It's like using a
-bottle-cap as an umbrella.
-
-Nick, that's the whole _point_ of having compiler support for things
-like this - automation. Because doing them manually one at a time is
-just completely broken and stupid.
-
-                Linus
+            Linus
