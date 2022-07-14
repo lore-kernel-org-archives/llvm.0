@@ -1,223 +1,182 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23379198
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 01:57:34 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id 23so229363pgc.8
-        for <llvm@lists.linux.dev>; Wed, 13 Jul 2022 18:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=QEFD8UEDLflLNqgQcLwFXDM2cd0cOwEDdb9XlhbH4ys=;
-        b=oK3booY/UKJedbrTI8072q/AFTCHy6bKPeZiP60iqUX+NvM828d1MK//+Qq5X4qZm1
-         iGH/WKGPYJHroGrihMamfl0srlCm3/PuA100aWHULdkJFALA5AkpvJ8mLZgXErJlLdfe
-         4DpvV6ORfwkwdmMVu0HdzYrVw6FuSZEdv7+NfO+01mu0Y0ytbzfp/bGyuPx9oxsDyyzr
-         P74pRr49NfVqECJYlF7WZnuNwUoio8/+j3unEUFG4VSgFdqdS9Ja4EywjeFa/T3uZi7m
-         ak6HzNyEuIC40A8axsPoqKgGnvlx/0RpwJLc2M+ppAoiGZ2Usp4stZb8SZtesu3f9aMy
-         tXsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=QEFD8UEDLflLNqgQcLwFXDM2cd0cOwEDdb9XlhbH4ys=;
-        b=sOMn/jGTu6tfWkWWU+ajviDdGej5Z9/4dCH75Ul6ROp2i+YxbcqEUBkEzghHAmMVgH
-         8BTojh8uXyZ0tbNw4vKulZBZRqZdpTiyidee2dnYP9QVgCrOP0BAlBvkzSyd0iEuXOi3
-         JTBnQ1A8YAOZJ7ZSptl1OfZ2Tvp+R0DoXndUlUt8MpNP9ZbZ43Yr8qb1ESJpejo7W9pA
-         t0XzudaRb9iiA/tyc+FJAK6RugftOPVbc+XfdXmWlDz23Y4EYmML9NYoUUMqTmLSqMJD
-         YcKHK5U6enPtEWtFAI7gXa4wVtvCQCPAYnoWZpD+RE76Qbjdthe32HEG4lBsOFNGZ8+c
-         VyVw==
-X-Gm-Message-State: AJIora8hz+xuPFipd33dJuPLtPdWmBh01eGhfUNFd6sYbssRZYVyO8vi
-	jCazGAniDTUyPJSeNU3qk9Q=
-X-Google-Smtp-Source: AGRyM1s66EyjNZllGAu1+HlJDXad7sC+cYWu4RvO2yo+32ux/eJDbKpJiq//cWALCZq7OM213gfS0Q==
-X-Received: by 2002:a05:6a00:2312:b0:52b:928:99dd with SMTP id h18-20020a056a00231200b0052b092899ddmr5928587pfh.77.1657763853662;
-        Wed, 13 Jul 2022 18:57:33 -0700 (PDT)
-Received: from localhost.localdomain ([23.91.97.158])
-        by smtp.gmail.com with ESMTPSA id t24-20020a17090a5d9800b001ef917f1c30sm163843pji.6.2022.07.13.18.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 18:57:33 -0700 (PDT)
-From: xiaolinkui <xiaolinkui@gmail.com>
-X-Google-Original-From: xiaolinkui <xiaolinkui@kylinos.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	xiaolinkui@kylinos.cn,
-	xiaolinkui@gmail.com
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from bool functions
-Date: Thu, 14 Jul 2022 09:56:47 +0800
-Message-Id: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AACA198
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 02:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657764296; x=1689300296;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wKXE+tKB8Oc/YSpSDtXNzjGi4vRHirxTYfnydokcET8=;
+  b=HBmnbWrDimE8t7lWET/5BWrBob9EmE4XD2nDk2R+L93vZWmOO8Mmbyo/
+   aOHmsGtv9kkSNyueVr4bm5KMnhKsMPfcqeb0ZTVUcZYBn20K6mo4nxbkI
+   JwUuHb3Y/mNH9DPTwI6RTdKAFkgGo/KuBUDiepOpJ7akev2xlNnzMTP6O
+   tntVKXj1r8REYCxU1iGVOSjCZvMkpbUMmOhOuLtRnRZevr+142MiS2m87
+   hM90SJtwEBF1b6ZFazdy4qZb5bvTqfkYDRZHvZ62CqYi6+Gswce2U3USI
+   YL70ETZRFphn7kwVDNxLpkhE5ThwpCDd/QIqoVp+l8klT+6pw3PIDFsNl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265802881"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="265802881"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 19:04:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="628530837"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Jul 2022 19:04:53 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oBoDk-000034-FF;
+	Thu, 14 Jul 2022 02:04:52 +0000
+Date: Thu, 14 Jul 2022 10:04:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>
+Subject: [bvanassche:block-bitwise-opf 38/64]
+ drivers/nvme/target/io-cmd-bdev.c:310:6: error: use of undeclared identifier
+ 'op'
+Message-ID: <202207140939.IrQaDqbX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Linkui Xiao <xiaolinkui@kylinos.cn>
+tree:   https://github.com/bvanassche/linux block-bitwise-opf
+head:   a18eedf7d10c719e2da2a802964f8aaade09e72c
+commit: 5d612f7990f6438fe5d09c30560c0e25a1d292a2 [38/64] nvme/target: Use the new blk_opf_t type
+config: riscv-randconfig-r042-20220713 (https://download.01.org/0day-ci/archive/20220714/202207140939.IrQaDqbX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/bvanassche/linux/commit/5d612f7990f6438fe5d09c30560c0e25a1d292a2
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche block-bitwise-opf
+        git checkout 5d612f7990f6438fe5d09c30560c0e25a1d292a2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/nvme/target/
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-return of 0/1 in function 'decap_v4' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-return of 0/1 in function 'decap_v6' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-return of 0/1 in function 'encap_v6' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-return of 0/1 in function 'parse_tcp' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-return of 0/1 in function 'parse_udp' with return type bool
+All errors (new ones prefixed by >>):
 
-Generated by: scripts/coccinelle/misc/boolreturn.cocci
+>> drivers/nvme/target/io-cmd-bdev.c:310:6: error: use of undeclared identifier 'op'
+                                           op, GFP_KERNEL);
+                                           ^
+   1 error generated.
 
-Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
-Suggested-by: Stanislav Fomichev <sdf@google.com>
----
- .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 125d872d7981..ba48fcb98ab2 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
- 	udp = data + off;
- 
- 	if (udp + 1 > data_end)
--		return 0;
-+		return false;
- 	if (!is_icmp) {
- 		pckt->flow.port16[0] = udp->source;
- 		pckt->flow.port16[1] = udp->dest;
-@@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
- 		pckt->flow.port16[0] = udp->dest;
- 		pckt->flow.port16[1] = udp->source;
- 	}
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
- 
- 	tcp = data + off;
- 	if (tcp + 1 > data_end)
--		return 0;
-+		return false;
- 	if (tcp->syn)
- 		pckt->flags |= (1 << 1);
- 	if (!is_icmp) {
-@@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
- 		pckt->flow.port16[0] = tcp->dest;
- 		pckt->flow.port16[1] = tcp->source;
- 	}
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	void *data;
- 
- 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
--		return 0;
-+		return false;
- 	data = (void *)(long)xdp->data;
- 	data_end = (void *)(long)xdp->data_end;
- 	new_eth = data;
-@@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	old_eth = data + sizeof(struct ipv6hdr);
- 	if (new_eth + 1 > data_end ||
- 	    old_eth + 1 > data_end || ip6h + 1 > data_end)
--		return 0;
-+		return false;
- 	memcpy(new_eth->eth_dest, cval->mac, 6);
- 	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 56710;
-@@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	ip6h->saddr.in6_u.u6_addr32[2] = 3;
- 	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
- 	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 	ip_suffix <<= 15;
- 	ip_suffix ^= pckt->flow.src;
- 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
--		return 0;
-+		return false;
- 	data = (void *)(long)xdp->data;
- 	data_end = (void *)(long)xdp->data_end;
- 	new_eth = data;
-@@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 	old_eth = data + sizeof(struct iphdr);
- 	if (new_eth + 1 > data_end ||
- 	    old_eth + 1 > data_end || iph + 1 > data_end)
--		return 0;
-+		return false;
- 	memcpy(new_eth->eth_dest, cval->mac, 6);
- 	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 8;
-@@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 		csum += *next_iph_u16++;
- 	iph->check = ~((csum & 0xffff) + (csum >> 16));
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
--		return 0;
--	return 1;
-+		return false;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void **data_end, bool inner_v4)
- 	else
- 		new_eth->eth_proto = 56710;
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
--		return 0;
-+		return false;
- 	*data = (void *)(long)xdp->data;
- 	*data_end = (void *)(long)xdp->data_end;
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void **data_end)
- 	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 8;
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
--		return 0;
-+		return false;
- 	*data = (void *)(long)xdp->data;
- 	*data_end = (void *)(long)xdp->data_end;
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
+vim +/op +310 drivers/nvme/target/io-cmd-bdev.c
+
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  241  
+d5eff33ee6f808 drivers/nvme/target/io-cmd-bdev.c Chaitanya Kulkarni      2018-05-23  242  static void nvmet_bdev_execute_rw(struct nvmet_req *req)
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  243  {
+5f7136db829960 drivers/nvme/target/io-cmd-bdev.c Matthew Wilcox (Oracle  2021-01-29  244) 	unsigned int sg_cnt = req->sg_cnt;
+73383adfad245b drivers/nvme/target/io-cmd-bdev.c Sagi Grimberg           2018-09-28  245  	struct bio *bio;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  246  	struct scatterlist *sg;
+9dea0c81ee4a7b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2019-10-28  247  	struct blk_plug plug;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  248  	sector_t sector;
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  249  	blk_opf_t opf;
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  250  	int i, rc;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  251  	struct sg_mapping_iter prot_miter;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  252  	unsigned int iter_flags;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  253  	unsigned int total_len = nvmet_rw_data_len(req) + req->metadata_len;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  254  
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  255  	if (!nvmet_check_transfer_len(req, total_len))
+e9061c397839ee drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2019-10-23  256  		return;
+e9061c397839ee drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2019-10-23  257  
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  258  	if (!req->sg_cnt) {
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  259  		nvmet_req_complete(req, 0);
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  260  		return;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  261  	}
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  262  
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  263  	if (req->cmd->rw.opcode == nvme_cmd_write) {
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  264  		opf = REQ_OP_WRITE | REQ_SYNC | REQ_IDLE;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  265  		if (req->cmd->rw.control & cpu_to_le16(NVME_RW_FUA))
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  266  			opf |= REQ_FUA;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  267  		iter_flags = SG_MITER_TO_SG;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  268  	} else {
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  269  		opf = REQ_OP_READ;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  270  		iter_flags = SG_MITER_FROM_SG;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  271  	}
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  272  
+c6925093d0b283 drivers/nvme/target/io-cmd-bdev.c Logan Gunthorpe         2018-10-04  273  	if (is_pci_p2pdma_page(sg_page(req->sg)))
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  274  		opf |= REQ_NOMERGE;
+c6925093d0b283 drivers/nvme/target/io-cmd-bdev.c Logan Gunthorpe         2018-10-04  275  
+193fcf371f9e37 drivers/nvme/target/io-cmd-bdev.c Chaitanya Kulkarni      2021-01-11  276  	sector = nvmet_lba_to_sect(req->ns, req->cmd->rw.slba);
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  277  
+608a969046e6e0 drivers/nvme/target/io-cmd-bdev.c Chaitanya Kulkarni      2021-05-06  278  	if (nvmet_use_inline_bvec(req)) {
+73383adfad245b drivers/nvme/target/io-cmd-bdev.c Sagi Grimberg           2018-09-28  279  		bio = &req->b.inline_bio;
+49add4966d7924 drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2022-01-24  280  		bio_init(bio, req->ns->bdev, req->inline_bvec,
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  281  			 ARRAY_SIZE(req->inline_bvec), opf);
+73383adfad245b drivers/nvme/target/io-cmd-bdev.c Sagi Grimberg           2018-09-28  282  	} else {
+5d612f7990f643 drivers/nvme/target/io-cmd-bdev.c Bart Van Assche         2022-06-17  283  		bio = bio_alloc(req->ns->bdev, bio_max_segs(sg_cnt), opf,
+07888c665b405b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2022-01-24  284  				GFP_KERNEL);
+73383adfad245b drivers/nvme/target/io-cmd-bdev.c Sagi Grimberg           2018-09-28  285  	}
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  286  	bio->bi_iter.bi_sector = sector;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  287  	bio->bi_private = req;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  288  	bio->bi_end_io = nvmet_bio_done;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  289  
+9dea0c81ee4a7b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2019-10-28  290  	blk_start_plug(&plug);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  291  	if (req->metadata_len)
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  292  		sg_miter_start(&prot_miter, req->metadata_sg,
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  293  			       req->metadata_sg_cnt, iter_flags);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  294  
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  295  	for_each_sg(req->sg, sg, req->sg_cnt, i) {
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  296  		while (bio_add_page(bio, sg_page(sg), sg->length, sg->offset)
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  297  				!= sg->length) {
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  298  			struct bio *prev = bio;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  299  
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  300  			if (req->metadata_len) {
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  301  				rc = nvmet_bdev_alloc_bip(req, bio,
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  302  							  &prot_miter);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  303  				if (unlikely(rc)) {
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  304  					bio_io_error(bio);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  305  					return;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  306  				}
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  307  			}
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  308  
+07888c665b405b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2022-01-24  309  			bio = bio_alloc(req->ns->bdev, bio_max_segs(sg_cnt),
+07888c665b405b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2022-01-24 @310  					op, GFP_KERNEL);
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  311  			bio->bi_iter.bi_sector = sector;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  312  
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  313  			bio_chain(bio, prev);
+c2f30f08c115a6 drivers/nvme/target/io-cmd.c      Max Gurtovoy            2017-07-10  314  			submit_bio(prev);
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  315  		}
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  316  
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  317  		sector += sg->length >> 9;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  318  		sg_cnt--;
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  319  	}
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  320  
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  321  	if (req->metadata_len) {
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  322  		rc = nvmet_bdev_alloc_bip(req, bio, &prot_miter);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  323  		if (unlikely(rc)) {
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  324  			bio_io_error(bio);
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  325  			return;
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  326  		}
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  327  	}
+c6e3f13398123a drivers/nvme/target/io-cmd-bdev.c Israel Rukshin          2020-05-19  328  
+16d3a280d4d73e drivers/nvme/target/io-cmd-bdev.c Sagi Grimberg           2018-12-12  329  	submit_bio(bio);
+9dea0c81ee4a7b drivers/nvme/target/io-cmd-bdev.c Christoph Hellwig       2019-10-28  330  	blk_finish_plug(&plug);
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  331  }
+a07b4970f464f1 drivers/nvme/target/io-cmd.c      Christoph Hellwig       2016-06-21  332  
+
+:::::: The code at line 310 was first introduced by commit
+:::::: 07888c665b405b1cd3577ddebfeb74f4717a84c4 block: pass a block_device and opf to bio_alloc
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
