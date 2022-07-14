@@ -1,33 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B457E
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8373CC34114;
-	Thu, 14 Jul 2022 21:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14147E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C873FC34114;
+	Thu, 14 Jul 2022 21:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657833852;
-	bh=aLCC/tzGrl4JLgsRiVAJXvFl+1z5/lLOZIt/Tgalp5w=;
+	s=k20201202; t=1657833898;
+	bh=WvpnAxKxsj54Q5vNQwYzZo/IQOstcntEKXe0TpyNz8s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DitiNwOImS/39CrkT49KqO9aKcjzMfdIop4yqy/QyO+xFRRu5/ChXt0wrQ1a6i5HZ
-	 QknrPiVfUheoeEMo3VM9WPCLxiKxh4AEMZNZgCYzAMqkhT1gh7ekakZNpGx2l5aLZm
-	 peVNdjZ/1cbw1PlmlaT6OvobAG0eVUJTQEAWBVWV1Q0+jcPyRPXvPsNYesW70T7Kz4
-	 Tm04ch2XIBqZV7ZojCYFwoka3cTjMib0B+06RXW/d86+dNIAwEqz+1RZaQgG/sMGlc
-	 wcdDy0elHtbUsAlR3GAfJNOK3F9QveDgNrjZ9s9phzfrpAsldV4KMuwwxglyzoQUo0
-	 th95JkOuqc5Fw==
-Date: Thu, 14 Jul 2022 14:24:10 -0700
+	b=aGGgGGFTBXsnNpfLZqeLZBpxrfs0pGGhOWXuWtu1oy1ohhMvPtLtolqO3ILQmMBSR
+	 4BBBUeQJ9bF/2j7HPR3PnA1ej+sVppXFT1ruIoAX0K7NiOMsD7cNueLI6GdcaN4v6g
+	 cwYfx1Yn95feVNT+2/0ccwUW1WN4362rfhELcCc5XIqdt3gjo90gQAMF6upuYAvldS
+	 n+xXRFZvH2UyHOX7wQ3PZ55JAhKEfhT3livOPWs7EFNl0hd4n8o+g9a9ePMz/BW8u2
+	 9ThFsr+JfS5nC0XZ7GVvF8EU3mXB78QoRQmUu8qf19wxUwHJ9aAsS5/Q0asGOM9MrT
+	 lEri2W4cMKlcA==
+Date: Thu, 14 Jul 2022 14:24:56 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: linux-next: Tree for Jul 14
-Message-ID: <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
-References: <20220714185514.7d1a2ac9@canb.auug.org.au>
- <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
- <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
- <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
- <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
+Message-ID: <YtCJqK2axavXWny8@dev-arch.thelio-3990X>
+References: <20220714205646.4023495-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,102 +37,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
+In-Reply-To: <20220714205646.4023495-1-ndesaulniers@google.com>
 
-Dropping the next list and Stephen as these issues are likely present on
-mainline as well.
-
-On Thu, Jul 14, 2022 at 07:26:27PM +0100, Sudip Mukherjee wrote:
-> Hi Nathan,
+On Thu, Jul 14, 2022 at 01:56:43PM -0700, Nick Desaulniers wrote:
+> Building with UBSAN_DIV_ZERO with clang produces numerous fallthrough
+> warnings from objtool.
 > 
-> On Thu, Jul 14, 2022 at 5:29 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
-> > > Hi Nathan,
-> > >
-> > > On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > Hi Sudip,
-> > > >
-> > > > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > > > Hi Stephen,
-> > > > >
-> > > > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > > > > Hi all,
-> > > > > >
-> > > > > > Changes since 20220713:
-> > > > >
-> > > > > Build failures on next-20220714:
-> > > >
-> > > > <snip>
-> > > >
+> In the case of uncheck division, UBSAN_DIV_ZERO may introduce new
+> control flow to check for division by zero. Because the result of the
+> division is undefined, LLVM may optimize the control flow such that
+> after the call to __ubsan_handle_divrem_overflow doesn't matter. If
+> panic_on_warn was set, __ubsan_handle_divrem_overflow would panic. The
+> problem is is that panic_on_warn is run time configurable. If it's
+> disabled, then we cannot guarantee that we will be able to recover
+> safely.  Disable this config for clang until we can come up with a
+> solution in LLVM.
 > 
-> <snip>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1657
+> Link: https://github.com/llvm/llvm-project/issues/56289
+> Link: https://lore.kernel.org/lkml/CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com/
+> Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> Linus,
+> I still think we should add explicit checks to gaurd against divide by
+> zero.
 > 
-> >
-> > Sure! I am not sure that we have tested mips or powerpc allmodconfig now
-> > that I am thinking about it but we'll certainly take a look at any
-> > issues that come from them and see what we can do.
+>  lib/Kconfig.ubsan | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> The build errors from powerpc allmodconfig with clang:
-
-Thanks for testing!
-
-> 1)
-> Error: External symbol 'memset' referenced from prom_init.c
-
-Good to know this is not clang specific.
-
-> 2)
-> drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is
-> not a compile-time constant
->         gpu_cc_parent,
->         ^~~~~~~~~~~~~
-> drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is
-> not a compile-time constant
->         gpu_cc_parent,
->         ^~~~~~~~~~~~~
-> 3)
-> sound/soc/intel/avs/path.c:815:18: error: stack frame size (2672)
-> exceeds limit (2048) in 'avs_path_create'
-> [-Werror,-Wframe-larger-than]
-> struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
->                  ^
-
-Right so this one is the one I linked early that impacts arm64 (also
-arm and riscv). It appears to be related to KASAN + FORTIFY_SOURCE and I
-have a diff that works but I am not sure if it is acceptable. I guess I
-should just submit it and see.
-
-> 4)
-> drivers/net/ethernet/mellanox/mlx4/main.c:3332:12: error: stack frame
-> size (2128) exceeds limit (2048) in 'mlx4_load_one'
-> [-Werror,-Wframe-larger-than]
-> static int mlx4_load_one(struct pci_dev *pdev, int pci_dev_data,
->            ^
-> 5)
-> In file included from drivers/scsi/BusLogic.c:51:
-> drivers/scsi/FlashPoint.c:1712:12: error: stack frame size (2896)
-> exceeds limit (2048) in 'FlashPoint_HandleInterrupt'
-> [-Werror,-Wframe-larger-than]
-> static int FlashPoint_HandleInterrupt(void *pcard)
->            ^
-> 6)
-> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1093:12: error: stack frame size
-> (2128) exceeds limit (2048) in 'vcn_v3_0_start'
-> [-Werror,-Wframe-larger-than]
-
-I don't see any large variables on the stack in these functions so I am
-guessing we are just getting murdered by inlining in combination with
-KASAN instrumentation, as KASAN gets turned on by allmodconfig.
-Unfortunately, this has been an issue for a long time:
-
-https://github.com/ClangBuiltLinux/linux/issues/39
-
-It has not been as bad with CONFIG_KASAN_STACK force disabled for clang
-but it is still there for certain architectures, namely ARCH=arm. I
-would be curious to see if all those -Wframe-larger-than instances
-disappear with CONFIG_KASAN disabled.
-
-Cheers,
-Nathan
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index a9f7eb047768..fd15230a703b 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -84,6 +84,9 @@ config UBSAN_SHIFT
+>  config UBSAN_DIV_ZERO
+>  	bool "Perform checking for integer divide-by-zero"
+>  	depends on $(cc-option,-fsanitize=integer-divide-by-zero)
+> +	# https://github.com/ClangBuiltLinux/linux/issues/1657
+> +	# https://github.com/llvm/llvm-project/issues/56289
+> +	depends on !CC_IS_CLANG
+>  	help
+>  	  This option enables -fsanitize=integer-divide-by-zero which checks
+>  	  for integer division by zero. This is effectively redundant with the
+> -- 
+> 2.37.0.170.g444d1eabd0-goog
+> 
+> 
