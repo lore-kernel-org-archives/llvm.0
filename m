@@ -1,45 +1,49 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E62A600D
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 18:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F57600E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 18:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657824335; x=1689360335;
+  t=1657824336; x=1689360336;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=axUJAiXtyhfkKPl/p703YhQUhJUoUv9GV4siXTqqpPU=;
-  b=WzsL8zuDH+LxalQmlFrhh70wZya5VumMR9AUBVMYTkzdBajsdslTcirD
-   A+lkpFCedyo1sRsnto6VTnms4nIqyIstAwY5Xi8sfBAFpmpa23i/YJFtI
-   smfZhbf7WgikAxxfGq5JfQcQAFfyN8DSfduNnqgPByylRZy6UmXdn+sWz
-   lUs+2TLl7RD7Am9Y7sGkJTmNQrTxlxr4N0OQgI6T8kh3sMcAa0GhBkJtF
-   iJvcgvDUvCOh7+b/6eXOLQ1L7q8EvNXlsNQHmd/aknW6uamcY5c77IlC4
-   vFJcT2tHloW6oHt2hEHSJjARM4FLMxIB4D0p/bebS5fuv+bcJNPxezCeZ
+  bh=pPi3eWsIlBGTVv6fqrE93d3yLDmKbn4WssjJSQISjSw=;
+  b=TenOdx/MVCZEAIra8m4l0UgPLwexgetAwrAQSUa/G+hjJgG3OU8jq05c
+   CE4vixAvPgmUqtkVj4s7aJxaZCC2Kwx5rSsECsiEHUmteduxIpnH1WsZT
+   tOeX3n36F7WaQ4peXwcMgz9F+3UVIWu9fuHeoMbDewvFEYcmMBYfj9DMY
+   0WBBLOawihEarICySTEZhgCST7UaoEIPWQ6pxnyhpefzXPplnP8VmtqEu
+   2sZc72mKalDKQwL4h9Rteaqo5rzVHYlDgSEGPCtW5CSEfIJcgFStdcUnH
+   pk19lpxfjEsiLbw8S5IKK7+d61URPNdCzhK3urpD9fjnpzRfCS2nOI5nK
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349569808"
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286344558"
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="349569808"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:45:34 -0700
+   d="scan'208";a="286344558"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:45:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="772725466"
+   d="scan'208";a="842248488"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Jul 2022 11:45:32 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 14 Jul 2022 11:45:32 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oC3q8-00010I-8j;
+	id 1oC3q8-00010F-8A;
 	Thu, 14 Jul 2022 18:45:32 +0000
-Date: Fri, 15 Jul 2022 02:45:10 +0800
+Date: Fri, 15 Jul 2022 02:45:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Artem Blagodarenko <artem.blagodarenko@gmail.com>,
-	linux-ext4@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, adilger.kernel@dilger.ca,
-	andrew.perepechko@hpe.com,
-	Artem Blagodarenko <artem.blagodarenko@gmail.com>
-Subject: Re: [PATCH v4] ext4: truncate during setxattr leads to kernel panic
-Message-ID: <202207150257.B4gnbAMM-lkp@intel.com>
-References: <20220711145735.53676-1-artem.blagodarenko@gmail.com>
+To: Li Chen <me@linux.beauty>, Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Li Chen <lchen@ambarella.com>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/4] mm/sparse: skip no-map memblock check when
+ fill_subsection_map
+Message-ID: <202207150209.3Svjqq9D-lkp@intel.com>
+References: <20220711122459.13773-3-me@linux.beauty>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,67 +52,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220711145735.53676-1-artem.blagodarenko@gmail.com>
+In-Reply-To: <20220711122459.13773-3-me@linux.beauty>
 
-Hi Artem,
+Hi Li,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v5.19-rc6 next-20220714]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on arm64/for-next/core arm-perf/for-next/perf linus/master v5.19-rc6 next-20220714]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Artem-Blagodarenko/ext4-truncate-during-setxattr-leads-to-kernel-panic/20220711-232350
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: hexagon-randconfig-r045-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150257.B4gnbAMM-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Chen/add-struct-page-and-Direct-I-O-support-to-reserved-memory/20220711-202957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: x86_64-randconfig-k001 (https://download.01.org/0day-ci/archive/20220715/202207150209.3Svjqq9D-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/600aeea1cc6d36f380862bb88e50b670e0a57e4f
+        # https://github.com/intel-lab-lkp/linux/commit/d9809d17afee6693084b417325807c7123432fab
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Artem-Blagodarenko/ext4-truncate-during-setxattr-leads-to-kernel-panic/20220711-232350
-        git checkout 600aeea1cc6d36f380862bb88e50b670e0a57e4f
+        git fetch --no-tags linux-review Li-Chen/add-struct-page-and-Direct-I-O-support-to-reserved-memory/20220711-202957
+        git checkout d9809d17afee6693084b417325807c7123432fab
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/ fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> fs/ext4/xattr.c:1563:15: warning: no previous prototype for function 'delayed_iput' [-Wmissing-prototypes]
-   noinline void delayed_iput(struct inode *inode, struct delayed_iput_work *work)
-                 ^
-   fs/ext4/xattr.c:1563:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline void delayed_iput(struct inode *inode, struct delayed_iput_work *work)
-            ^
-            static 
-   1 warning generated.
-
-
-vim +/delayed_iput +1563 fs/ext4/xattr.c
-
-  1562	
-> 1563	noinline void delayed_iput(struct inode *inode, struct delayed_iput_work *work)
-  1564	{
-  1565		if (!inode) {
-  1566			kfree(work);
-  1567			return;
-  1568		}
-  1569	
-  1570		if (!work) {
-  1571			iput(inode);
-  1572		} else {
-  1573			INIT_WORK(&work->work, delayed_iput_fn);
-  1574			work->inode = inode;
-  1575			queue_work(EXT4_SB(inode->i_sb)->s_misc_wq, &work->work);
-  1576		}
-  1577	}
-  1578	
+>> WARNING: modpost: vmlinux.o(.text+0x346d8f): Section mismatch in reference from the function fill_subsection_map() to the function .meminit.text:memblock_is_map_memory()
+The function fill_subsection_map() references
+the function __meminit memblock_is_map_memory().
+This is often because fill_subsection_map lacks a __meminit
+annotation or the annotation of memblock_is_map_memory is wrong.
 
 -- 
 0-DAY CI Kernel Test Service
