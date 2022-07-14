@@ -1,90 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14147E
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:24:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C873FC34114;
-	Thu, 14 Jul 2022 21:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657833898;
-	bh=WvpnAxKxsj54Q5vNQwYzZo/IQOstcntEKXe0TpyNz8s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aGGgGGFTBXsnNpfLZqeLZBpxrfs0pGGhOWXuWtu1oy1ohhMvPtLtolqO3ILQmMBSR
-	 4BBBUeQJ9bF/2j7HPR3PnA1ej+sVppXFT1ruIoAX0K7NiOMsD7cNueLI6GdcaN4v6g
-	 cwYfx1Yn95feVNT+2/0ccwUW1WN4362rfhELcCc5XIqdt3gjo90gQAMF6upuYAvldS
-	 n+xXRFZvH2UyHOX7wQ3PZ55JAhKEfhT3livOPWs7EFNl0hd4n8o+g9a9ePMz/BW8u2
-	 9ThFsr+JfS5nC0XZ7GVvF8EU3mXB78QoRQmUu8qf19wxUwHJ9aAsS5/Q0asGOM9MrT
-	 lEri2W4cMKlcA==
-Date: Thu, 14 Jul 2022 14:24:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
-Message-ID: <YtCJqK2axavXWny8@dev-arch.thelio-3990X>
-References: <20220714205646.4023495-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889737E
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 21:25:02 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id bp15so5685961ejb.6
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3t3I9dkeOpZv3dAGJjzgDy35dMg8T+EkyLmF6AEUuHY=;
+        b=dfM/p2kaK73Hlj3gYy/B6pQeiTl6yNjenC/l7tWyHXO/NKnlYmKfPFxUnWCALi2Nza
+         qBh/ZB/SDONX8G+QlzbRNpr4opolwhsauiPD4PEgBz6DTrBixKZNwJj2dqFTFIprdvAa
+         fS3maq4vZY7wJ4sp0qBva9wRpI4kHMcIOecMw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3t3I9dkeOpZv3dAGJjzgDy35dMg8T+EkyLmF6AEUuHY=;
+        b=VI5oW2L/bxtngZt8/L9UsISP9UmDpqQfPrBLBewj9zLkwkpU04BLcyHz4P9VSgHZDa
+         4kQIuvv/wW/dWzc2KKrnKbd/NKlcknM17hwBQr6GpzyEb2Bl05DID18AhamxVvw7efa9
+         KJKb8Tb46RABguw3bJb3J4HdJ/o8pbPXzK5B/Pwwre5BKWTgnkQJu0RDsbwnAqYurBGc
+         yjSbMk850OE02zMPs11NUBz3mV3zrUDcphAPd5q7xCBJySr1KIyQuuN0UL2fz7NLc/42
+         RRh3BfYi3fK6KVpOPSbauqvGvlQKbOk5Xnbr0699W8TSExIZkDiZXfqaq8DHuQPGau4K
+         MDMA==
+X-Gm-Message-State: AJIora9zAJbxQ0N115OCW/XTpVMqd27KLOVLnL/DVuBWhyKMWSdQQmhp
+	+CZAllpA2ub0ZuPfsApbZ2ZKQz30DULULA6SkOw=
+X-Google-Smtp-Source: AGRyM1th0iuC1dvkOMS1naDp8TO8NDOoziwPizMu+wOhGCoCDAnNNswIziC8/mGnmyma3BR5WwV55Q==
+X-Received: by 2002:a17:907:3fa8:b0:72b:5895:f54f with SMTP id hr40-20020a1709073fa800b0072b5895f54fmr10648917ejc.464.1657833900589;
+        Thu, 14 Jul 2022 14:25:00 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id t10-20020a05640203ca00b0043a26e3db72sm1714377edw.54.2022.07.14.14.24.59
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 14:24:59 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id b6so1261655wmq.5
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 14:24:59 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ec9:b0:3a2:e9bd:fcd9 with SMTP id
+ g9-20020a05600c4ec900b003a2e9bdfcd9mr17595143wmq.154.1657833899118; Thu, 14
+ Jul 2022 14:24:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220714205646.4023495-1-ndesaulniers@google.com>
 In-Reply-To: <20220714205646.4023495-1-ndesaulniers@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 14 Jul 2022 14:24:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whnndsMXO=32vFn9-Osw4r8-NvROV1rtsbxjw9Uvj1WPA@mail.gmail.com>
+Message-ID: <CAHk-=whnndsMXO=32vFn9-Osw4r8-NvROV1rtsbxjw9Uvj1WPA@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 14, 2022 at 01:56:43PM -0700, Nick Desaulniers wrote:
-> Building with UBSAN_DIV_ZERO with clang produces numerous fallthrough
-> warnings from objtool.
-> 
-> In the case of uncheck division, UBSAN_DIV_ZERO may introduce new
-> control flow to check for division by zero. Because the result of the
-> division is undefined, LLVM may optimize the control flow such that
-> after the call to __ubsan_handle_divrem_overflow doesn't matter. If
-> panic_on_warn was set, __ubsan_handle_divrem_overflow would panic. The
-> problem is is that panic_on_warn is run time configurable. If it's
-> disabled, then we cannot guarantee that we will be able to recover
-> safely.  Disable this config for clang until we can come up with a
-> solution in LLVM.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1657
-> Link: https://github.com/llvm/llvm-project/issues/56289
-> Link: https://lore.kernel.org/lkml/CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com/
-> Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
+On Thu, Jul 14, 2022 at 1:56 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
 > Linus,
 > I still think we should add explicit checks to gaurd against divide by
 > zero.
-> 
->  lib/Kconfig.ubsan | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index a9f7eb047768..fd15230a703b 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -84,6 +84,9 @@ config UBSAN_SHIFT
->  config UBSAN_DIV_ZERO
->  	bool "Perform checking for integer divide-by-zero"
->  	depends on $(cc-option,-fsanitize=integer-divide-by-zero)
-> +	# https://github.com/ClangBuiltLinux/linux/issues/1657
-> +	# https://github.com/llvm/llvm-project/issues/56289
-> +	depends on !CC_IS_CLANG
->  	help
->  	  This option enables -fsanitize=integer-divide-by-zero which checks
->  	  for integer division by zero. This is effectively redundant with the
-> -- 
-> 2.37.0.170.g444d1eabd0-goog
-> 
-> 
+
+I mean, that's what UBSAN_DIV_ZERO is supposed to do.
+
+The fact that clang then messes it up, and turns "I found undefined
+behavior" into "I just crashed the machine" is why it needs to be
+disabled.
+
+Please conmvince clang people to fix the sanitizer.
+
+  san=C2=B7i=C2=B7tize
+  /=CB=88san=C9=99=CB=8Ct=C4=ABz/
+  verb
+  make clean and hygienic; disinfect.
+
+note how "sanitize" is meant to clean things of undefined behavior.
+
+The way you do that is by warning, and giving it defined behavior. It
+really is that simple.
+
+Clang seems to warn and then just turn it into ANOTHER - and much
+worse - undefined behavior.
+
+In other words, clang doesn't "sanitize" anything at all. It just
+moves the mess around and makes it worse.
+
+                    Linus
