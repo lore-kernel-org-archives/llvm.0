@@ -1,115 +1,90 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4786D4A38
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:22:10 +0000 (UTC)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ef5380669cso22197947b3.9
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 09:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8PLNmXxl330LfuHB/ULIc5yFPBlPwtCsvTmuIMEY5vA=;
-        b=dLqbRYRTbz//P2gYc1pZHfFAE7Y+lqUE0qZa2LhvvNfxOI6moys75wiIYrlgt34jIg
-         cntt5bSx9j0nKHZ2RKJnCjnE8DBBgsSjBYdyqETxY81Yrt3OK4/BVQ5+MmMoS+xYDQVS
-         oIwcJq86/w0x9rBpN5CNmhA6CMq+95P7vll/mv9TDxVXoIUXIKsyld90NB96/HK97u72
-         R1v0WXS5EyjTjl179NvWS5glLHPVFwBoF83gU6z6LMIqjDZO+ko9AiJhmVf7WFN1PlQ6
-         zdXOPj6eMeBg4LcViEA8r7xHYWMT2IQ1J8UkiquYxzY/p7nSKt/RXLuzKce1VR+Swq/P
-         vROw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8PLNmXxl330LfuHB/ULIc5yFPBlPwtCsvTmuIMEY5vA=;
-        b=ZNz0tTxfntF8al1AfBI3k99txfs7yZGLyofwurWEN2Y8OHtotiWyspzZ/zmHH5zEBU
-         sZyXjsKFMU2A6SKml+fGQfHq9jpwUrsD4RlP/pD6CvRamPiM1KKa4yOYomx2tFabLhdX
-         UyyvN1F3Z5v62zEj2sbT5k3kvlJnpuixiMyvdFOhjlc2hU7p40ogJ/iME/GlNoZQQ6kN
-         MBrwZ4S0FncQcfWsEl6nYUJL8agBwOo0C/eb+gK2cn6qEmqTQ5779Hw8Xt6+r1BRZVBE
-         rmlOlThr4LjP2MqTG06LIvMSBEI9K/rPJcjgAXVxlyxWEWmFmbRnAjc0xM/MMiuIjh3Q
-         KGcQ==
-X-Gm-Message-State: AJIora8sy3f34XpcHHRtlWf0Fv9lopW7MkIOJGe4F+MaK/Gc/RHLww2Y
-	hdJXr3XY6Dveh25R1J2KXAWnESWAVJ3QcIHmY2g=
-X-Google-Smtp-Source: AGRyM1skykoApRV1gfbIMqLhePAJT0SCwPyajDzu0o3LZfwwpxU3/9f1BZYxWQ2vLHGLZ+tB/Ju3VZhvG8yo7SJUNTY=
-X-Received: by 2002:a81:6783:0:b0:31c:8668:ed85 with SMTP id
- b125-20020a816783000000b0031c8668ed85mr10691429ywc.194.1657815729064; Thu, 14
- Jul 2022 09:22:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D991B4A38
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657815748; x=1689351748;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=anTrC/UY7diQsptjXG0RpBpOqejLbQkfzKVHOEeRmwg=;
+  b=XbIwt0C9hV6eT1PDRi2jj5bPRjiokGCj8m6K90B/N75cdqPCt2Mnk2k+
+   cLh+G6AdAyUf/lFWkEypFtjqkWTRgqavOVovSusq28D9XyjDTn1cYvRVH
+   ExSWJZLZe2TBWK4Jc720jhmNjIu2yKzeWgVZdCSF20541xInTu7HVMz3Q
+   ZtHll289eL6q6hP92aYkIKxJ61VTTKy9MEy9eNI8wGtqTtp8J4UaYAWVc
+   JDAQ5o+O3OQJb4sqiLu/BmdZvQhf09vQg2tvw9E1pmEtCYSHLhJw6nyic
+   d4pBPgx/4zo65An0eGTyXWaL7Z397PvZil9ifOFi+9S4/b2mz5NsxM80D
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286699853"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="286699853"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 09:22:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="772680193"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 14 Jul 2022 09:22:27 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oC1be-0000r7-Mt;
+	Thu, 14 Jul 2022 16:22:26 +0000
+Date: Fri, 15 Jul 2022 00:21:45 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: Re: [PATCH linux-next] iov_iter: Fix repeated minus operation
+Message-ID: <202207150000.o22VxhAi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
-In-Reply-To: <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
-From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date: Thu, 14 Jul 2022 17:21:32 +0100
-Message-ID: <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 14
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+BCC: lkp@intel.com
+In-Reply-To: <1657792294-56244-1-git-send-email-liuxp11@chinatelecom.cn>
+References: <1657792294-56244-1-git-send-email-liuxp11@chinatelecom.cn>
+TO: Liu Xinpeng <liuxp11@chinatelecom.cn>
+TO: sfr@canb.auug.org.au
+TO: viro@zeniv.linux.org.uk
+TO: willy@infradead.org
+CC: linux-kernel@vger.kernel.org
+CC: Liu Xinpeng <liuxp11@chinatelecom.cn>
 
-On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Sudip,
->
-> On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > Hi Stephen,
-> >
-> > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > Changes since 20220713:
-> >
-> > Build failures on next-20220714:
->
-> <snip>
->
-> > x86_64 allmodconfig with clang fails with:
-> >
-> > drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
-> >         gpu_cc_parent,
-> >         ^~~~~~~~~~~~~
-> > drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
-> >         gpu_cc_parent,
-> >         ^~~~~~~~~~~~~
->
-> I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
-> for this a few days ago, it just needs to be picked up.
->
-> > arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> > DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> >                     ^
-> > ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> > extern u64 x86_spec_ctrl_current;
->
-> This is now fixed in -tip so it should be fixed in -next tomorrorow:
->
-> https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
+Hi Liu,
 
-This should also go to Linus. This failure is in the mainline also.
-https://lore.kernel.org/lkml/Ys6sZj6KYthnDppq@debian/
+Thank you for the patch! Yet something to improve:
 
->
-> In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
-> for any clang related issues so that we can get them taken care of ASAP,
-> we have a MAINTAINERS entry for a reason :) thank you for testing with
-> clang; the more people that use it, hopefully the easier it will be to
-> get things unbroken.
+[auto build test ERROR on next-20220714]
 
-Sure. I run arm, arm64, powerpc and x86_64 allmodconfigs with clang
-(along with gcc) every night for mainline, started with linux-next
-from today. Trying to setup the mips build also, I will mail llvm list
-asking for help with the mips build.
-Currently I only monitor the clang output from x86_64 as thats the one
-which builds. If you want I can send the other reports also.
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Xinpeng/iov_iter-Fix-repeated-minus-operation/20220714-175339
+base:    37b355fdaf31ee18bda9a93c2a438dc1cbf57ec9
+config: riscv-randconfig-r031-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150000.o22VxhAi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2ab0e8fdd240ce1de894e6590b3d9ecacf02ca70
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liu-Xinpeng/iov_iter-Fix-repeated-minus-operation/20220714-175339
+        git checkout 2ab0e8fdd240ce1de894e6590b3d9ecacf02ca70
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_processor_hartid: .text+0x10): relocation R_RISCV_HI20 out of range: 531532 is not in [-524288, 524287]; references __stack_chk_guard
+   >>> referenced by cpu.c
+   >>> defined in arch/riscv/built-in.a
 
 -- 
-Regards
-Sudip
+0-DAY CI Kernel Test Service
+https://01.org/lkp
