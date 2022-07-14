@@ -1,42 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BC3191
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 02:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3363915BD
+	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 02:53:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657766521; x=1689302521;
+  t=1657767237; x=1689303237;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=htLOFGnemQAihGL9w2x61eJlWbf47zXdX5Dx4F8lH/U=;
-  b=m7bsQEudDwZ+dY6etHObLiqkHc6h7RT3+1V9/9/mgdclpBG7f9Yp9XBS
-   gEJULcaQdzH8vGgjhQxlnawBOgNnZEJoSOXdwU2uICLuhds4RFWCkA6xG
-   /ZDQdWcR1zT8f8X8LE3gustluv7pFG5FM7IxMmo/1ltAEGL48b7RxGDdh
-   aBYaZvk7Ha2CclEHnzcyv3e0mS8Z5BfQ6QRJTfpNeciw+vOxaB79r95kZ
-   nk8i0P6OZk0PCBz+NsPF1m1kODfPh5EeD2XDoCX2e7PiuP4UNMYpext+s
-   w9DJ0jzWKfpqSwsd9mPZRQnBW3V1Wb8DQe/BJWSF+FVPxo9OSLAr11NCG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286141114"
+  bh=uXBr+b7nuMPC6o7bPr1dKJ2/w9t4hZ+yDBweFmqEdiU=;
+  b=PaVMvUqu/XaN6uqru4sBURWwWatZVQbOczwYJIPBx1q0/sZ7trlfgC5A
+   H1hKir3Z97BaMdTe/lc5cWtcovYPvNUFTwbYqJwsCmNOMJX/8mw6ZLRFy
+   /aPyS5ZNd9z/kiSCq0J3ySXEWYi0yRYSFG8ZhdfnXDq8P8b4dY4QJJ3Xe
+   iHN8CZu4VoBwiASVdorrjAEnhxohDYZlFAnN6HCcplfLuEVyIW4rB7YEX
+   SZqTMIV4KwyHPdeOhhZw+i/C6eBoEMjAcslwQC2py5TuT2OdIha1+qUHB
+   VfLmB1LKRq8nUSZR9l5XPUXQvKenN7Ct573QBG/nTy6RETfFIH2F50jMO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268430779"
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="286141114"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 19:42:01 -0700
+   d="scan'208";a="268430779"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 19:53:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="599968416"
+   d="scan'208";a="546093778"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2022 19:41:59 -0700
+  by orsmga003.jf.intel.com with ESMTP; 13 Jul 2022 19:53:55 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oBonZ-00004W-P4;
-	Thu, 14 Jul 2022 02:41:53 +0000
-Date: Thu, 14 Jul 2022 10:41:12 +0800
+	id 1oBozC-00005a-9V;
+	Thu, 14 Jul 2022 02:53:54 +0000
+Date: Thu, 14 Jul 2022 10:53:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>
-Subject: [bvanassche:block-bitwise-opf 38/64]
- drivers/nvme/target/zns.c:559:35: error: use of undeclared identifier 'op'
-Message-ID: <202207141043.jpp94dQ8-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-bwmon-llcc-manual-regmap 21/21]
+ drivers/soc/qcom/icc-bwmon.c:196:22: error: no member named 'irq_mask' in
+ 'struct icc_bwmon_data'
+Message-ID: <202207141006.2vNwc0fD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,118 +47,251 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/bvanassche/linux block-bitwise-opf
-head:   a18eedf7d10c719e2da2a802964f8aaade09e72c
-commit: 5d612f7990f6438fe5d09c30560c0e25a1d292a2 [38/64] nvme/target: Use the new blk_opf_t type
-config: hexagon-randconfig-r041-20220713 (https://download.01.org/0day-ci/archive/20220714/202207141043.jpp94dQ8-lkp@intel.com/config)
+tree:   https://github.com/krzk/linux n/qcom-bwmon-llcc-manual-regmap
+head:   f8c2f9796ac481bfd123096df5dd4d9f570c57b6
+commit: f8c2f9796ac481bfd123096df5dd4d9f570c57b6 [21/21] wip
+config: hexagon-buildonly-randconfig-r001-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141006.2vNwc0fD-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/5d612f7990f6438fe5d09c30560c0e25a1d292a2
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche block-bitwise-opf
-        git checkout 5d612f7990f6438fe5d09c30560c0e25a1d292a2
+        # https://github.com/krzk/linux/commit/f8c2f9796ac481bfd123096df5dd4d9f570c57b6
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-bwmon-llcc-manual-regmap
+        git checkout f8c2f9796ac481bfd123096df5dd4d9f570c57b6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvme/target/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/nvme/target/zns.c:559:35: error: use of undeclared identifier 'op'
-                            ARRAY_SIZE(req->inline_bvec), op);
-                                                          ^
-   drivers/nvme/target/zns.c:561:47: error: use of undeclared identifier 'op'
-                   bio = bio_alloc(req->ns->bdev, req->sg_cnt, op, GFP_KERNEL);
-                                                               ^
-   2 errors generated.
+>> drivers/soc/qcom/icc-bwmon.c:196:22: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
+           writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
+                  ~~~~~~~~~~~  ^
+   drivers/soc/qcom/icc-bwmon.c:273:35: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
+           bwmon_enable(bwmon, bwmon->data->irq_mask);
+                               ~~~~~~~~~~~  ^
+   drivers/soc/qcom/icc-bwmon.c:283:25: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
+           status &= bwmon->data->irq_mask;
+                     ~~~~~~~~~~~  ^
+>> drivers/soc/qcom/icc-bwmon.c:299:50: error: no member named 'irq_shift' in 'struct icc_bwmon_data'
+           zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
+                                              ~~~~~~~~~~~  ^
+   drivers/soc/qcom/icc-bwmon.c:344:29: error: no member named 'irq_mask' in 'struct icc_bwmon_data'
+                   irq_enable = bwmon->data->irq_mask;
+                                ~~~~~~~~~~~  ^
+>> drivers/soc/qcom/icc-bwmon.c:445:3: error: field designator 'irq_mask' does not refer to any field in type 'const struct icc_bwmon_data'
+           .irq_mask = BWMON_V4_IRQ_ENABLE_MASK,
+            ^
+>> drivers/soc/qcom/icc-bwmon.c:446:3: error: field designator 'irq_shift' does not refer to any field in type 'const struct icc_bwmon_data'
+           .irq_shift = BWMON_V4_IRQ_STATUS_ZONE_SHIFT,
+            ^
+>> drivers/soc/qcom/icc-bwmon.c:471:14: error: use of undeclared identifier 'BWMON_V5_IRQ_ENABLE_MASK'
+           .irq_mask = BWMON_V5_IRQ_ENABLE_MASK,
+                       ^
+>> drivers/soc/qcom/icc-bwmon.c:472:15: error: use of undeclared identifier 'BWMON_V5_IRQ_STATUS_ZONE_SHIFT'
+           .irq_shift = BWMON_V5_IRQ_STATUS_ZONE_SHIFT,
+                        ^
+   9 errors generated.
 
 
-vim +/op +559 drivers/nvme/target/zns.c
+vim +196 drivers/soc/qcom/icc-bwmon.c
 
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  524  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  525  void nvmet_bdev_execute_zone_append(struct nvmet_req *req)
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  526  {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  527  	sector_t sect = nvmet_lba_to_sect(req->ns, req->cmd->rw.slba);
-5d612f7990f643 Bart Van Assche    2022-06-17  528  	const blk_opf_t opf = REQ_OP_ZONE_APPEND | REQ_SYNC | REQ_IDLE;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  529  	u16 status = NVME_SC_SUCCESS;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  530  	unsigned int total_len = 0;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  531  	struct scatterlist *sg;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  532  	struct bio *bio;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  533  	int sg_cnt;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  534  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  535  	/* Request is completed on len mismatch in nvmet_check_transter_len() */
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  536  	if (!nvmet_check_transfer_len(req, nvmet_rw_data_len(req)))
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  537  		return;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  538  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  539  	if (!req->sg_cnt) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  540  		nvmet_req_complete(req, 0);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  541  		return;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  542  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  543  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  544  	if (sect >= get_capacity(req->ns->bdev->bd_disk)) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  545  		req->error_loc = offsetof(struct nvme_rw_command, slba);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  546  		status = NVME_SC_LBA_RANGE | NVME_SC_DNR;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  547  		goto out;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  548  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  549  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  550  	if (sect & (bdev_zone_sectors(req->ns->bdev) - 1)) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  551  		req->error_loc = offsetof(struct nvme_rw_command, slba);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  552  		status = NVME_SC_INVALID_FIELD | NVME_SC_DNR;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  553  		goto out;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  554  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  555  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  556  	if (nvmet_use_inline_bvec(req)) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  557  		bio = &req->z.inline_bio;
-49add4966d7924 Christoph Hellwig  2022-01-24  558  		bio_init(bio, req->ns->bdev, req->inline_bvec,
-49add4966d7924 Christoph Hellwig  2022-01-24 @559  			 ARRAY_SIZE(req->inline_bvec), op);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  560  	} else {
-07888c665b405b Christoph Hellwig  2022-01-24  561  		bio = bio_alloc(req->ns->bdev, req->sg_cnt, op, GFP_KERNEL);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  562  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  563  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  564  	bio->bi_end_io = nvmet_bdev_zone_append_bio_done;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  565  	bio->bi_iter.bi_sector = sect;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  566  	bio->bi_private = req;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  567  	if (req->cmd->rw.control & cpu_to_le16(NVME_RW_FUA))
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  568  		bio->bi_opf |= REQ_FUA;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  569  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  570  	for_each_sg(req->sg, sg, req->sg_cnt, sg_cnt) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  571  		struct page *p = sg_page(sg);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  572  		unsigned int l = sg->length;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  573  		unsigned int o = sg->offset;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  574  		unsigned int ret;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  575  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  576  		ret = bio_add_zone_append_page(bio, p, l, o);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  577  		if (ret != sg->length) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  578  			status = NVME_SC_INTERNAL;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  579  			goto out_put_bio;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  580  		}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  581  		total_len += sg->length;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  582  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  583  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  584  	if (total_len != nvmet_rw_data_len(req)) {
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  585  		status = NVME_SC_INTERNAL | NVME_SC_DNR;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  586  		goto out_put_bio;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  587  	}
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  588  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  589  	submit_bio(bio);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  590  	return;
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  591  
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  592  out_put_bio:
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  593  	nvmet_req_bio_put(req, bio);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  594  out:
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  595  	nvmet_req_complete(req, status);
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  596  }
-aaf2e048af2704 Chaitanya Kulkarni 2021-06-09  597  
-
-:::::: The code at line 559 was first introduced by commit
-:::::: 49add4966d79244013fce35f95c6833fae82b8b1 block: pass a block_device and opf to bio_init
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+   177	
+   178	static void bwmon_clear_irq(struct icc_bwmon *bwmon)
+   179	{
+   180		/*
+   181		 * Clear zone and global interrupts. The order and barriers are
+   182		 * important. Quoting downstream Qualcomm msm-4.9 tree:
+   183		 *
+   184		 * Synchronize the local interrupt clear in mon_irq_clear()
+   185		 * with the global interrupt clear here. Otherwise, the CPU
+   186		 * may reorder the two writes and clear the global interrupt
+   187		 * before the local interrupt, causing the global interrupt
+   188		 * to be retriggered by the local interrupt still being high.
+   189		 *
+   190		 * Similarly, because the global registers are in a different
+   191		 * region than the local registers, we need to ensure any register
+   192		 * writes to enable the monitor after this call are ordered with the
+   193		 * clearing here so that local writes don't happen before the
+   194		 * interrupt is cleared.
+   195		 */
+ > 196		writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
+   197		if (bwmon->data->has_global_irq)
+   198			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
+   199			       BWMON_REG(bwmon, global_irq_clear_reg));
+   200	}
+   201	
+   202	static void bwmon_disable(struct icc_bwmon *bwmon)
+   203	{
+   204		/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
+   205		if (bwmon->data->has_global_irq)
+   206			writel(0x0, BWMON_REG(bwmon, global_irq_enable_reg));
+   207		writel(0x0, BWMON_REG(bwmon, irq_enable_reg));
+   208	
+   209		/*
+   210		 * Disable bwmon. Must happen before bwmon_clear_irq() to avoid spurious
+   211		 * IRQ.
+   212		 */
+   213		writel(0x0, BWMON_REG(bwmon, enable_reg));
+   214	}
+   215	
+   216	static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+   217	{
+   218		/* Enable interrupts */
+   219		if (bwmon->data->has_global_irq)
+   220			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
+   221			       BWMON_REG(bwmon, global_irq_enable_reg));
+   222		writel(irq_enable, BWMON_REG(bwmon, irq_enable_reg));
+   223	
+   224		/* Enable bwmon */
+   225		writel(BWMON_ENABLE_ENABLE, BWMON_REG(bwmon, enable_reg));
+   226	}
+   227	
+   228	static unsigned int bwmon_kbps_to_count(struct icc_bwmon *bwmon, unsigned int kbps)
+   229	{
+   230		return kbps / bwmon->data->count_unit_kb;
+   231	}
+   232	
+   233	static void bwmon_set_threshold(struct icc_bwmon *bwmon,
+   234					volatile void __iomem *addr, unsigned int kbps)
+   235	{
+   236		unsigned int thres;
+   237	
+   238		thres = mult_frac(bwmon_kbps_to_count(bwmon, kbps), bwmon->data->sample_ms,
+   239				  MSEC_PER_SEC);
+   240		writel_relaxed(thres, addr);
+   241	}
+   242	
+   243	static void bwmon_start(struct icc_bwmon *bwmon)
+   244	{
+   245		const struct icc_bwmon_data *data = bwmon->data;
+   246		unsigned int thres_count;
+   247		int window;
+   248	
+   249		bwmon_clear_counters(bwmon);
+   250	
+   251		window = mult_frac(bwmon->data->sample_ms, HW_TIMER_HZ, MSEC_PER_SEC);
+   252		/* Maximum sampling window: 0xfffff */
+   253		writel_relaxed(window, BWMON_REG(bwmon, sample_window_reg));
+   254	
+   255		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_high_reg),
+   256				    data->default_highbw_kbps);
+   257		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_med_reg),
+   258				    data->default_medbw_kbps);
+   259		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_low_reg),
+   260				    data->default_lowbw_kbps);
+   261	
+   262		thres_count = data->zone3_thres_count << BWMON_THRESHOLD_COUNT_ZONE3_SHIFT |
+   263			      BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT << BWMON_THRESHOLD_COUNT_ZONE2_SHIFT |
+   264			      data->zone1_thres_count << BWMON_THRESHOLD_COUNT_ZONE1_SHIFT |
+   265			      BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT;
+   266		writel_relaxed(thres_count,
+   267			       BWMON_REG(bwmon, threshold_count_reg));
+   268		writel_relaxed(BWMON_ZONE_ACTIONS_DEFAULT,
+   269			       BWMON_REG(bwmon, zone_actions_reg));
+   270		/* Write barriers in bwmon_clear_irq() */
+   271	
+   272		bwmon_clear_irq(bwmon);
+   273		bwmon_enable(bwmon, bwmon->data->irq_mask);
+   274	}
+   275	
+   276	static irqreturn_t bwmon_intr(int irq, void *dev_id)
+   277	{
+   278		struct icc_bwmon *bwmon = dev_id;
+   279		unsigned int status, max;
+   280		int zone;
+   281	
+   282		status = readl(BWMON_REG(bwmon, irq_status_reg));
+ > 283		status &= bwmon->data->irq_mask;
+   284		if (!status) {
+   285			/*
+   286			 * Only zone 1 and zone 3 interrupts are enabled but zone 2
+   287			 * threshold could be hit and trigger interrupt even if not
+   288			 * enabled.
+   289			 * Such spurious interrupt might come with valuable max count or
+   290			 * not, so solution would be to always check all
+   291			 * BWMON_ZONE_MAX() registers to find the highest value.
+   292			 * Such case is currently ignored.
+   293			 */
+   294			return IRQ_NONE;
+   295		}
+   296	
+   297		bwmon_disable(bwmon);
+   298	
+ > 299		zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
+   300		pr_err("AAA bwmon 0x%x -> zone %d-%d\n", status,
+   301		       get_bitmask_order(status >> BWMON_V4_IRQ_STATUS_ZONE_SHIFT), zone);
+   302	
+   303		/*
+   304		 * Zone max bytes count register returns count units within sampling
+   305		 * window.  Downstream kernel for BWMONv4 (called BWMON type 2 in
+   306		 * downstream) always increments the max bytes count by one.
+   307		 */
+   308		max = readl(BWMON_REG_ZONE_MAX(bwmon, zone)) + 1;
+   309		max *= bwmon->data->count_unit_kb;
+   310		bwmon->target_kbps = mult_frac(max, MSEC_PER_SEC, bwmon->data->sample_ms);
+   311	
+   312		return IRQ_WAKE_THREAD;
+   313	}
+   314	
+   315	static irqreturn_t bwmon_intr_thread(int irq, void *dev_id)
+   316	{
+   317		struct icc_bwmon *bwmon = dev_id;
+   318		unsigned int irq_enable = 0;
+   319		struct dev_pm_opp *opp, *target_opp;
+   320		unsigned int bw_kbps, up_kbps, down_kbps;
+   321	
+   322		bw_kbps = bwmon->target_kbps;
+   323	
+   324		target_opp = dev_pm_opp_find_bw_ceil(bwmon->dev, &bw_kbps, 0);
+   325		if (IS_ERR(target_opp) && PTR_ERR(target_opp) == -ERANGE)
+   326			target_opp = dev_pm_opp_find_bw_floor(bwmon->dev, &bw_kbps, 0);
+   327	
+   328		bwmon->target_kbps = bw_kbps;
+   329	
+   330		bw_kbps--;
+   331		opp = dev_pm_opp_find_bw_floor(bwmon->dev, &bw_kbps, 0);
+   332		if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
+   333			down_kbps = bwmon->target_kbps;
+   334		else
+   335			down_kbps = bw_kbps;
+   336	
+   337		up_kbps = bwmon->target_kbps + 1;
+   338	
+   339		if (bwmon->target_kbps >= bwmon->max_bw_kbps)
+   340			irq_enable = BIT(BWMON_V4_IRQ_ENABLE_ZONE1_SHIFT);
+   341		else if (bwmon->target_kbps <= bwmon->min_bw_kbps)
+   342			irq_enable = BIT(BWMON_V4_IRQ_ENABLE_ZONE3_SHIFT);
+   343		else
+ > 344			irq_enable = bwmon->data->irq_mask;
+   345	
+   346		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_high_reg),
+   347				    up_kbps);
+   348		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_med_reg),
+   349				    down_kbps);
+   350		/* Write barriers in bwmon_clear_counters() */
+   351		bwmon_clear_counters(bwmon);
+   352		bwmon_clear_irq(bwmon);
+   353		bwmon_enable(bwmon, irq_enable);
+   354	
+   355		if (bwmon->target_kbps == bwmon->current_kbps)
+   356			goto out;
+   357	
+   358		dev_pm_opp_set_opp(bwmon->dev, target_opp);
+   359		bwmon->current_kbps = bwmon->target_kbps;
+   360	
+   361	out:
+   362		dev_pm_opp_put(target_opp);
+   363		if (!IS_ERR(opp))
+   364			dev_pm_opp_put(opp);
+   365	
+   366		return IRQ_HANDLED;
+   367	}
+   368	
 
 -- 
 0-DAY CI Kernel Test Service
