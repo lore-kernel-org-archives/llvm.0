@@ -1,88 +1,195 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30B84C9A
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 21:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657920949; x=1689456949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vFAX1UVh0i4rvEsH7mYrdzd8F6INE5/AtplT3ycQd/M=;
-  b=LSH6UYujYW71I7Lrvh46GbvmFMapnuXFqQUuzIzlxQy3FxvJTtEIdvVf
-   TCL5ZnoMTMQLXJ7N2Kw6hTiZTNbI6yHdWwOCg7jvVFoSS7jOnvKN6Op58
-   m/LoITxgLbe1d7RfBCK55HCw3DofHTs5HYeGdAWtEIUf+tXf+O/Tvgnx+
-   nbutFP5nWAdCTNcXBKDfuCANIVhtaD/TlLEaJ6XsN28hfNTKMuHqNzNqh
-   8ktQbH5h3sWAh7xz8PBlRrDBn6F0fdi7YgIBLCRoVRAjGaIrxNL15qKh1
-   c7fsi4mpFxEoStF+sT/uTbqmXXzOdcf9p1Mkb0E+r2FPnG4n47CzmNZdP
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286640943"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="286640943"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:35:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="571689965"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 14:35:46 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oCSyP-0000mO-Bd;
-	Fri, 15 Jul 2022 21:35:45 +0000
-Date: Sat, 16 Jul 2022 05:35:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mathias Lark <mathiaslark@gmail.com>, davem@davemloft.net,
-	yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-	pabeni@redhat.com, pablo@netfilter.org, kadlec@netfilter.org,
-	fw@strlen.de, netdev@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH net-next] improve handling of ICMP_EXT_ECHO icmp type
-Message-ID: <202207160519.M8OOdyfX-lkp@intel.com>
-References: <20220714151358.GA16615@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984084C9A
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 22:06:47 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id n74so10679939yba.3
+        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 15:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=znO2Y2mgyPmy5xm12i9TL77/e75ofCAf3Bz+mrqCTv4=;
+        b=nwAiyzRfyeVohdu3BaFHjx1n2btdZSItOlEp1k1/USIkt6ye8CF/Tmpde2UgZLFQ2T
+         VKpWpyPaVmctwZl8ZfSwpEp2AWZ3zSWSXLFqo29BbYRYw1kbmkXLywzlEIsuXVVGdR/K
+         lpQlkasoIEiPB+83O+Y6+OxY0CMGw7lqu5Jn7rKleQM89vXdbC3r1yU/Zo/VtC0NeZc0
+         DujYDqUsr/EHYPEiCFjDFGG5tX9QsAJRjZo4hfOPQKC9Rx4DsxS+jus2zzz+Unem59l+
+         Gt0RfG2//6/ob5HxWL/xswiLhcV3xlt6DwvrMy9xjLTKYO9xgEOECy7rOxHJH3tE6M+X
+         hqlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=znO2Y2mgyPmy5xm12i9TL77/e75ofCAf3Bz+mrqCTv4=;
+        b=0IaEBXHXU8f2R4gghizquoOXLpaX2vYoFE+5kMHFKCENpyniwNTEZD/uT8HaO8IugX
+         LvWncOw96QVNS/v26nu+e19/pf4kdIpwadCvK9Z0IVzGzPt1DQKYfnP5N9nTs+r1r9IO
+         9zuYptK0ukj64dG+ti7kcgf5w3LbNcPj8NU4g/dWcuCtYz0yeSPA8Bz0O995c/tlb0Dm
+         aFeRcf4LlSyGYjZeR9SkkJQBJJqwDwAjHvX1Ufa61zyvaf4Yx1E92qmB1mVKsSG89aMx
+         BdtmRvLLIgprPV5d9KRXQUPurZMqEVxk1d5XIaSzwKYDipE5tCV7iISZYZ9GUpWNcT/4
+         uckg==
+X-Gm-Message-State: AJIora+pgB1KaBF0gK8tM23RLPObT03pr2DUIwSUn3LsIgknRWbA5LS/
+	MoKwyqbj+UqYjV6YuyhPAJlGVmcTkg+jxF1y81g=
+X-Google-Smtp-Source: AGRyM1vCyIioAc6FrRYSlWDCUwjzz1zghjCHuCXctUu8dF3ZQxopEjcdoi1g3VkwnNz6rOpCmINBYPNNMlGpkWgVgCk=
+X-Received: by 2002:a25:3c45:0:b0:664:cf75:c2d6 with SMTP id
+ j66-20020a253c45000000b00664cf75c2d6mr15969381yba.446.1657922806561; Fri, 15
+ Jul 2022 15:06:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714151358.GA16615@debian>
+References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
+ <YtA+127QgRifnRBZ@dev-arch.thelio-3990X> <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
+ <YtBEXdrsthFamQs8@dev-arch.thelio-3990X> <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
+ <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
+In-Reply-To: <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date: Fri, 15 Jul 2022 23:06:10 +0100
+Message-ID: <CADVatmMMWc4YYzsuMSu8uH6fTbChU_RyK75eeQb+B3aT3kDGKg@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jul 14
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mathias,
+On Thu, Jul 14, 2022 at 10:24 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Dropping the next list and Stephen as these issues are likely present on
+> mainline as well.
+>
+> On Thu, Jul 14, 2022 at 07:26:27PM +0100, Sudip Mukherjee wrote:
+> > Hi Nathan,
+> >
 
-Thank you for the patch! Yet something to improve:
+<snip>
 
-[auto build test ERROR on net-next/master]
+>
+> It has not been as bad with CONFIG_KASAN_STACK force disabled for clang
+> but it is still there for certain architectures, namely ARCH=arm. I
+> would be curious to see if all those -Wframe-larger-than instances
+> disappear with CONFIG_KASAN disabled.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mathias-Lark/improve-handling-of-ICMP_EXT_ECHO-icmp-type/20220714-231818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b126047f43f11f61f1dd64802979765d71795dae
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220716/202207160519.M8OOdyfX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d238a024060b9cf5095b5027301f5921c9140c4e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mathias-Lark/improve-handling-of-ICMP_EXT_ECHO-icmp-type/20220714-231818
-        git checkout d238a024060b9cf5095b5027301f5921c9140c4e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Almost. This is from powerpc allmodconfig of next-20220715 with
+CONFIG_KASAN disabled.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+drivers/block/ublk_drv.c:890:6: error: variable 'io' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (tag >= ubq->q_depth)
+            ^~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:890:2: note: remove the 'if' if its condition
+is always false
+        if (tag >= ubq->q_depth)
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:887:6: error: variable 'io' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (ubq->ubq_daemon && ubq->ubq_daemon != current)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:887:2: note: remove the 'if' if its condition
+is always false
+        if (ubq->ubq_daemon && ubq->ubq_daemon != current)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:884:6: error: variable 'io' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (!ubq || ub_cmd->q_id != ubq->q_id)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:884:2: note: remove the 'if' if its condition
+is always false
+        if (!ubq || ub_cmd->q_id != ubq->q_id)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:884:6: error: variable 'io' is used
+uninitialized whenever '||' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (!ubq || ub_cmd->q_id != ubq->q_id)
+            ^~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:884:6: note: remove the '||' if its condition
+is always false
+        if (!ubq || ub_cmd->q_id != ubq->q_id)
+            ^~~~~~~
+drivers/block/ublk_drv.c:880:6: error: variable 'io' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:880:2: note: remove the 'if' if its condition
+is always false
+        if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:877:6: error: variable 'io' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (!(issue_flags & IO_URING_F_SQE128))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
+        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+        ^~
+drivers/block/ublk_drv.c:877:2: note: remove the 'if' if its condition
+is always false
+        if (!(issue_flags & IO_URING_F_SQE128))
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/block/ublk_drv.c:868:20: note: initialize the variable 'io' to
+silence this warning
+        struct ublk_io *io;
+                          ^
+                           = NULL
+drivers/block/ublk_drv.c:1304:6: error: variable 'ret' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (!ub)
+            ^~~
+drivers/block/ublk_drv.c:1330:9: note: uninitialized use occurs here
+        return ret;
+               ^~~
+drivers/block/ublk_drv.c:1304:2: note: remove the 'if' if its
+condition is always false
+        if (!ub)
+        ^~~~~~~~
+drivers/block/ublk_drv.c:1301:9: note: initialize the variable 'ret'
+to silence this warning
+        int ret;
+               ^
+                = 0
+7 errors generated.
+_________________________________________________________________________________________________________________
 
-All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/icmp.h:163:19: error: unknown type name 'bool'
-   static __inline__ bool icmp_is_valid_type(__u8 type)
-                     ^
-   1 error generated.
+drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is
+not a compile-time constant
+        gpu_cc_parent,
+        ^~~~~~~~~~~~~
+drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is
+not a compile-time constant
+        gpu_cc_parent,
+        ^~~~~~~~~~~~~
+2 errors generated.
+_________________________________________________________________________________________________________________
+
+drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1093:12: error: stack frame size
+(2112) exceeds limit (2048) in 'vcn_v3_0_start'
+[-Werror,-Wframe-larger-than]
+static int vcn_v3_0_start(struct amdgpu_device *adev)
+           ^
+1 error generated.
+_________________________________________________________________________________________________________________
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip
