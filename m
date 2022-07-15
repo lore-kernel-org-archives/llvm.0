@@ -1,73 +1,47 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ABA7461
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 00:04:05 +0000 (UTC)
-Received: by mail-pf1-f171.google.com with SMTP id y9so3232957pff.12
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 17:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
-        b=RQV4iwKe2wUPu88mMk1f6hs8+uQ1Ya6IG4iamvqBQZ0RnnatLUT16HB70JAQQsh2Rm
-         s/ZRjb/ADi4YjYlOZNf4rRyEHJGwGJHwKIiG/DxJhiQvwFZFqo1yvOApgxPwBWTwkE5k
-         n05fGFUuDSx5fRERuGNvyQqCRS4HEDE+CyUN+1lrE9LEmUj9d8Mvc4I81WAP7TNQhbiq
-         9c+IqL2ykCq4gi9+rg+u/ZGtfmAwtRJNjCNwkj3iJLGUh8+Gjpmg4oeH3i+A1pwKbEKY
-         E4dM1e/kl76zFL3umoiwRY/WGlN/y8IBrZ8AJfo6C4EuqIoxLlHZoCugbJerixMfjj8z
-         2LYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
-        b=5Qb+xU9THCpprmC5pj2f8NX/ZKwwxU8egZMigDGYOk4XWiGbnSke+ZJ14sNpsGW5iA
-         orP7Be78foE1feQdc073q+9Kr/rOHlwlZZcoNZBsM2dwbYO9D6qi0w99A/8CPPnlWkbT
-         iAnZICJuGH1HN1kGcDMhiVCKiYi9pihdLGFkDtQXgBpwqFRbypEDpQwwAZgqbmEaF+Pr
-         9ZauvVHuhfsYjpm15I7fP57bW3hbrMgTgLJmUajODQoaVDKGOvRPrDdc6SZgGv7vRP57
-         jXeSaId+aylVM5HDDzWmqlJLaPwb4U4FwvSZ+Hu662p2FiHWuNRI4NsFw9XaPcJb5j2G
-         IfNw==
-X-Gm-Message-State: AJIora88Y0R4qxvpLDchzu5Rj5Ynr+Jz2dMDEkHrhPiZTGQv8hfey3Yg
-	Sp59pxikUvrGiIXp0b03w6E=
-X-Google-Smtp-Source: AGRyM1urj2GIv1EKKty6wS9S6o5S8NLwsi59Wfu0TRZljegQWACf5/nBdipXNUa9lHaMrUSBQbZy+g==
-X-Received: by 2002:a63:c63:0:b0:3fe:e14b:b5a0 with SMTP id 35-20020a630c63000000b003fee14bb5a0mr9409241pgm.428.1657843444620;
-        Thu, 14 Jul 2022 17:04:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w125-20020a636283000000b00419b1671c54sm1995347pgb.4.2022.07.14.17.04.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 17:04:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 14 Jul 2022 17:04:02 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matt Turner <mattst88@gmail.com>, Brian Cain <bcain@quicinc.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Kees Cook <keescook@chromium.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-	linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Message-ID: <20220715000402.GA512558@roeck-us.net>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
- <20220624121313.2382500-7-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88878179
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 00:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657844645; x=1689380645;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nm/OVhAzc3zhpntqxbxIshIZhMkLU+gfhOGJ2Wbs86U=;
+  b=JeLJFHwX52dLdhNrsftz+It+IMyR5fY58CX62x+rYQNXcLajTfvAWt7w
+   NvmbmrczmVOKzTSEcyeRtKK4+ZdZNwVfC2cyjSaZPhXPtCpqxBJRLL72Q
+   o46Cdw/bOMuAuzv/OMrMg4kZREBo7O1eRgL9RYOIbpuSeU4V7rRw5BJun
+   FQbJ/mSsw08mhFmOnON6XnUqTiHhxOrJeWzqCrPxPgUir/mbNy0LlShxA
+   wRb4U5hYEd22ovpd6wcGI6rUP0JqPfKdFz2JdZ/93PBkx+Uf/UYL+c9f8
+   k/4gkWZESv3VOdElRhFJG5f2DeSnAqGIFZAhInIvmJOX9vtmMwBRJ6sNs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349630635"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="349630635"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:23:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="923298808"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 17:23:52 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oC97X-0001J1-SE;
+	Fri, 15 Jul 2022 00:23:51 +0000
+Date: Fri, 15 Jul 2022 08:22:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/joel.2022.07.14a 25/27]
+ kernel/rcu/rcuscale.c:819:14: error: call to undeclared function
+ 'rcu_lazy_get_jiffies_till_flush'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202207150859.kU3p78eN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,92 +50,131 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624121313.2382500-7-alexandr.lobakin@intel.com>
 
-On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
-> Currently, many architecture-specific non-atomic bitop
-> implementations use inline asm or other hacks which are faster or
-> more robust when working with "real" variables (i.e. fields from
-> the structures etc.), but the compilers have no clue how to optimize
-> them out when called on compile-time constants. That said, the
-> following code:
-> 
-> 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
-> 	unsigned long bar = BIT(BAR_BIT);
-> 	unsigned long baz = 0;
-> 
-> 	__set_bit(FOO_BIT, foo);
-> 	baz |= BIT(BAZ_BIT);
-> 
-> 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
-> 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
-> 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
-> 
-> triggers the first assertion on x86_64, which means that the
-> compiler is unable to evaluate it to a compile-time initializer
-> when the architecture-specific bitop is used even if it's obvious.
-> In order to let the compiler optimize out such cases, expand the
-> bitop() macro to use the "constant" C non-atomic bitop
-> implementations when all of the arguments passed are compile-time
-> constants, which means that the result will be a compile-time
-> constant as well, so that it produces more efficient and simple
-> code in 100% cases, comparing to the architecture-specific
-> counterparts.
-> 
-> The savings are architecture, compiler and compiler flags dependent,
-> for example, on x86_64 -O2:
-> 
-> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-> 
-> and ARM64 (courtesy of Mark):
-> 
-> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-> 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Reviewed-by: Marco Elver <elver@google.com>
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/joel.2022.07.14a
+head:   37d0460c40e7e364151894260d483ade68b1de34
+commit: 39e5f05326df757fa3be4617773fafb0454d9ec7 [25/27] rcuscale: Add laziness and kfree tests
+config: hexagon-randconfig-r041-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150859.kU3p78eN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/39e5f05326df757fa3be4617773fafb0454d9ec7
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/joel.2022.07.14a
+        git checkout 39e5f05326df757fa3be4617773fafb0454d9ec7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
 
-Building i386:allyesconfig ... failed
---------------
-Error log:
-arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
-arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Bisect log attached.
+All errors (new ones prefixed by >>):
 
-Guenter
+>> kernel/rcu/rcuscale.c:819:14: error: call to undeclared function 'rcu_lazy_get_jiffies_till_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   orig_jif = rcu_lazy_get_jiffies_till_flush();
+                              ^
+>> kernel/rcu/rcuscale.c:822:3: error: call to undeclared function 'rcu_lazy_set_jiffies_till_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   rcu_lazy_set_jiffies_till_flush(2 * HZ);
+                   ^
+   2 errors generated.
 
----
-# bad: [4662b7adea50bb62e993a67f611f3be625d3df0d] Add linux-next specific files for 20220713
-# good: [32346491ddf24599decca06190ebca03ff9de7f8] Linux 5.19-rc6
-git bisect start 'HEAD' 'v5.19-rc6'
-# good: [8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
-git bisect good 8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc
-# good: [07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
-git bisect good 07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5
-# good: [5ff085e5d4f6700e03635d5e700f52163a6dc2a7] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-git bisect good 5ff085e5d4f6700e03635d5e700f52163a6dc2a7
-# good: [eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-git bisect good eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab
-# good: [9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b] hexagon/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
-git bisect good 9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b
-# bad: [e878aa5faf9ac8c0b5d0c3f293389c194c250fff] Merge branch 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-git bisect bad e878aa5faf9ac8c0b5d0c3f293389c194c250fff
-# good: [cf95d50205f62c4f5f538676def847292cf39fa9] fs: don't call ->writepage from __mpage_writepage
-git bisect good cf95d50205f62c4f5f538676def847292cf39fa9
-# good: [5103cbfd92d3587713476f94f9485b96e02f0146] Merge branch 'for-next/execve' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-git bisect good 5103cbfd92d3587713476f94f9485b96e02f0146
-# good: [ee56c3e8eec166f4e4a2ca842b7804d14f3a0208] Merge branch 'master' into mm-nonmm-stable
-git bisect good ee56c3e8eec166f4e4a2ca842b7804d14f3a0208
-# bad: [dc34d5036692c614eef23c1130ee42a201c316bf] lib: test_bitmap: add compile-time optimization/evaluations assertions
-git bisect bad dc34d5036692c614eef23c1130ee42a201c316bf
-# good: [bb7379bfa680bd48b468e856475778db2ad866c1] bitops: define const_*() versions of the non-atomics
-git bisect good bb7379bfa680bd48b468e856475778db2ad866c1
-# bad: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
-git bisect bad b03fc1173c0c2bb8fad61902a862985cecdc4b1b
-# good: [e69eb9c460f128b71c6b995d75a05244e4b6cc3e] bitops: wrap non-atomic bitops with a transparent macro
-git bisect good e69eb9c460f128b71c6b995d75a05244e4b6cc3e
-# first bad commit: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
+
+vim +/rcu_lazy_get_jiffies_till_flush +819 kernel/rcu/rcuscale.c
+
+   796	
+   797	static int __init
+   798	kfree_scale_init(void)
+   799	{
+   800		long i;
+   801		int firsterr = 0;
+   802		unsigned long orig_jif, jif_start;
+   803	
+   804		// If lazy-rcu based kfree'ing is requested, then for kernels that
+   805		// support it, force all call_rcu() to call_rcu_lazy() so that non-lazy
+   806		// CBs do not remove laziness of the lazy ones (since the test tries to
+   807		// stress call_rcu_lazy() for OOM).
+   808		//
+   809		// Also, do a quick self-test to ensure laziness is as much as
+   810		// expected.
+   811		if (kfree_rcu_by_lazy && !IS_ENABLED(CONFIG_RCU_LAZY)) {
+   812			pr_alert("CONFIG_RCU_LAZY is disabled, falling back to kfree_rcu() "
+   813				 "for delayed RCU kfree'ing\n");
+   814			kfree_rcu_by_lazy = 0;
+   815		}
+   816	
+   817		if (kfree_rcu_by_lazy) {
+   818			/* do a test to check the timeout. */
+ > 819			orig_jif = rcu_lazy_get_jiffies_till_flush();
+   820	
+   821			rcu_force_call_rcu_to_lazy(true);
+ > 822			rcu_lazy_set_jiffies_till_flush(2 * HZ);
+   823			rcu_barrier();
+   824	
+   825			jif_start = jiffies;
+   826			jiffies_at_lazy_cb = 0;
+   827			call_rcu_lazy(&lazy_test1_rh, call_rcu_lazy_test1);
+   828	
+   829			smp_cond_load_relaxed(&rcu_lazy_test1_cb_called, VAL == 1);
+   830	
+   831			rcu_lazy_set_jiffies_till_flush(orig_jif);
+   832	
+   833			if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start < 2 * HZ)) {
+   834				pr_alert("ERROR: Lazy CBs are not being lazy as expected!\n");
+   835				WARN_ON_ONCE(1);
+   836				return -1;
+   837			}
+   838	
+   839			if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start > 3 * HZ)) {
+   840				pr_alert("ERROR: Lazy CBs are being too lazy!\n");
+   841				WARN_ON_ONCE(1);
+   842				return -1;
+   843			}
+   844		}
+   845	
+   846		kfree_nrealthreads = compute_real(kfree_nthreads);
+   847		/* Start up the kthreads. */
+   848		if (shutdown) {
+   849			init_waitqueue_head(&shutdown_wq);
+   850			firsterr = torture_create_kthread(kfree_scale_shutdown, NULL,
+   851							  shutdown_task);
+   852			if (torture_init_error(firsterr))
+   853				goto unwind;
+   854			schedule_timeout_uninterruptible(1);
+   855		}
+   856	
+   857		pr_alert("kfree object size=%zu, kfree_rcu_by_lazy=%d\n",
+   858				kfree_mult * sizeof(struct kfree_obj),
+   859				kfree_rcu_by_lazy);
+   860	
+   861		kfree_reader_tasks = kcalloc(kfree_nrealthreads, sizeof(kfree_reader_tasks[0]),
+   862				       GFP_KERNEL);
+   863		if (kfree_reader_tasks == NULL) {
+   864			firsterr = -ENOMEM;
+   865			goto unwind;
+   866		}
+   867	
+   868		for (i = 0; i < kfree_nrealthreads; i++) {
+   869			firsterr = torture_create_kthread(kfree_scale_thread, (void *)i,
+   870							  kfree_reader_tasks[i]);
+   871			if (torture_init_error(firsterr))
+   872				goto unwind;
+   873		}
+   874	
+   875		while (atomic_read(&n_kfree_scale_thread_started) < kfree_nrealthreads)
+   876			schedule_timeout_uninterruptible(1);
+   877	
+   878		torture_init_end();
+   879		return 0;
+   880	
+   881	unwind:
+   882		torture_init_end();
+   883		kfree_scale_cleanup();
+   884		return firsterr;
+   885	}
+   886	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
