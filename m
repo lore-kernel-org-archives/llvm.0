@@ -1,90 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FF133F0
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 15:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8698DC34115;
-	Fri, 15 Jul 2022 15:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657898505;
-	bh=SeHL3z+KjgQcyJvmNfCBj4QdNfWU9NNlzqSnGnX/s2E=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=FFYnxh8vDFpJxObyCx3iqWeu/wktIdHAG1ftuu9mAg7rWsFz+tc5h+J93PTT2+15z
-	 6nkiG1NzWNmfOvOrWXl11D0KolzzxYMtA5EzfEJypjK4i0xYt1tRSwWnb2lQmz80Jz
-	 F2FQ7SGUt37b7w9pBg1Uq5j93jhxgrBxlFgN0o5yI8ludEeSyQMyDkMn7c2ObbD1+1
-	 sdRHcDsoi7QQiArr48uJHtttPRLAwYb0bgn4i5wQXNXQBVBCBRmzGGWLITD6eUQx6U
-	 uNDiMda04+9taFjnGjkaGjP9Q3G1ZpxAWFaOHnCiS3qu4j2C46SL6mpRX2it92jOUt
-	 xIs2FC4xPq/3A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 246F25C015D; Fri, 15 Jul 2022 08:21:45 -0700 (PDT)
-Date: Fri, 15 Jul 2022 08:21:45 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-toolchains@vger.kernel.org,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51D233FF
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 16:00:09 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C617334706;
+	Fri, 15 Jul 2022 16:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1657900807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PmxgdbvxN1/lfrPzGsVJbbJYjv4n4eZUn1st8Pyud1c=;
+	b=Pp7kVSGsWY466CZ1qFGSNRDkhPmHn/u9goTaAqs2/WE8qQOHSHmG+BNk3IRkqT9Yt++P2R
+	g3aKdXGwyrby2L4UmhbAIEzDIxmc09knKMXBzXD/og4vcJCd50+z/Ti41ckR9z/fV9klD1
+	zWd2d6WjWHKfY2LDq/1DEzAZYnqZ+K4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1657900807;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PmxgdbvxN1/lfrPzGsVJbbJYjv4n4eZUn1st8Pyud1c=;
+	b=/hSNKCiAIoNQ9mboeeqD94aXqaTdvW2Sp2lj+FfzOYmCyn15JPqbejyqYWq4OEf/TfsUBX
+	BDuLuwo1UjJAJnAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B846513AC3;
+	Fri, 15 Jul 2022 16:00:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id tLP0LAeP0WLeZgAAMHmgww
+	(envelope-from <bp@suse.de>); Fri, 15 Jul 2022 16:00:07 +0000
+Date: Fri, 15 Jul 2022 18:00:00 +0200
+From: Borislav Petkov <bp@suse.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+	the arch/x86 maintainers <x86@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-arch <linux-arch@vger.kernel.org>,
-	Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-	Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-	Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Message-ID: <20220715152145.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
- <YrHUkfDWsexHRUKj@rowland.harvard.edu>
- <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
- <YrnFCSjESpeQdciv@rowland.harvard.edu>
- <20F4C097-24B4-416B-95EE-AC11F5952B44@in.tum.de>
- <YtFrPoOARrL/etBu@rowland.harvard.edu>
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	stable <stable@vger.kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
+ x86_spec_ctrl_current
+Message-ID: <YtGPAG0ZBqvotud1@zn.tnic>
+References: <20220713152436.2294819-1-nathan@kernel.org>
+ <20220714143005.73c71cf8@kernel.org>
+ <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
+ <20220714145652.22cf4878@kernel.org>
+ <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YtFrPoOARrL/etBu@rowland.harvard.edu>
+In-Reply-To: <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
 
-On Fri, Jul 15, 2022 at 09:27:26AM -0400, Alan Stern wrote:
-> On Fri, Jul 15, 2022 at 02:27:28PM +0200, Paul Heidekrüger wrote:
-> > I have just been thinking about how to word this patch; am I correct in
-> > assuming that the LKMM does not deal with loop conditions? Or in other
-> > words, there is no way for a loop condition to impose a ctrl dependency on
-> > any WRITE_ONCE's in the loop body? It are only if and switch statements the
-> > LKMM is concerned with in the case of ctrl dependencies?
-> 
-> In theory, the LKMM does say that a loop condition imposes a control 
-> dependency on any memory accesses within the loop body.  However, the 
-> herd7 tool has only very limited support for looping constructs, so in 
-> practice it's not possible to create suitable litmus tests with loops.
+On Thu, Jul 14, 2022 at 03:14:53PM -0700, Linus Torvalds wrote:
+> Anyway, I cherry-picked Nathan's patch from my clang tree and pushed
+> it out as commit db886979683a ("x86/speculation: Use DECLARE_PER_CPU
+> for x86_spec_ctrl_current").
 
-And Alan isn't joking.  The closest simulation that I know of is to
-combine limited loop unrolling with the "filter" clause.  The point of
-the filter clause is to eliminate from consideration executions that
-need the more iterations of the loop to be unrolled.
+... and I've zapped it from my lineup.
 
-And that means that as far as LKMM is concerned, loop-based control
-dependencies are similar to those for nested "if" statements.
+Thx.
 
-							Thanx, Paul
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG NÃ¼rnberg)
