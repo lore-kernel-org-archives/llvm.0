@@ -1,54 +1,55 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296917A
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 02:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8109D7A
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 03:29:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657853964; x=1689389964;
+  t=1657855742; x=1689391742;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pjjysh0EnBDNC3WRFLJzRZ7qebJsBDD1Y5BNA+E9T2k=;
-  b=koeTnpWtdg9xvcd0nY9J6m7UpqzKPSRR6fTD1rjnMxuO/ZeO39gSxqyq
-   y411hmRLOzKhQs1jNH6iGnpLBpBH2lsecdRxTbHxtFScQ3yE22BEaVMEH
-   vacPvGsyVxDXxJTffScb7ntZrHIEsYwjE1F4th98hNPJxtiIZatufuYWh
-   KnYoCLoS0RzTBLTHNbmc3lpQqP7gMASIwOwQd9QYHyVbyqiZMIIGSj03y
-   6mY/FZbhXpBKEvMuTgXxsnE/Ld4yd21GdyYTqfpkpBz6x8Hcg45Fgp0Z/
-   wUlMfy3AbVfTpgE4nd5aH6vtbExdwCoS5LI/jg7Bmpp2CwA0q/JO6QPaW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286426140"
+  bh=nHDpqD9Y3YrKtewfDlaDm5HtmvApGg7cWmyQBdGMpW4=;
+  b=HLtl0EENOc6VwqNXQs9pyI6PWeeHNHnh1otCZpjimvM9rtoZw23ZmKYU
+   BB9oXNoQ8DEqFW4+6yzElevjAQv67BMI47FEz4rOdbl5sk7r45MNu1658
+   rKZJlC9/Xlr4cVGtJyFt5k8lKSpMRkvhy2RWqzQ1SyQfC/M7ja1RA/zNw
+   E/nVX5oH6evhq7z7jXz1P/726gQv9FAOv2IJucrnHc9Kn+XyHwz7E0J48
+   rqgXqOvKqs2OfHyMMgCObu3fv147Rfuxr7wChTxRiaGT9DZ5LzM6woId3
+   OqNfqUpcokhd0+xL7TA/C1bnVcRUcl82wmXo4fVwLy7ewMx4BSjlTQmr+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268716469"
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="286426140"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 19:58:01 -0700
+   d="scan'208";a="268716469"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 20:29:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="623676749"
+   d="scan'208";a="923344287"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 19:57:59 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 20:28:59 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCBWg-0001TJ-PQ;
-	Fri, 15 Jul 2022 02:57:58 +0000
-Date: Fri, 15 Jul 2022 10:57:46 +0800
+	id 1oCC0h-0001Tt-4z;
+	Fri, 15 Jul 2022 03:28:59 +0000
+Date: Fri, 15 Jul 2022 11:28:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dan Williams <dan.j.williams@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 02/28] cxl/core: Define a 'struct cxl_switch_decoder'
-Message-ID: <202207151026.o43xqkQY-lkp@intel.com>
-References: <165784325340.1758207.5064717153608954960.stgit@dwillia2-xfh.jf.intel.com>
+Subject: Re: [PATCH v2 21/28] cxl/region: Enable the assignment of endpoint
+ decoders to regions
+Message-ID: <202207151146.jU42DhNK-lkp@intel.com>
+References: <165784336184.1758207.16403282029203949622.stgit@dwillia2-xfh.jf.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Tzm93710sI1G8hL4"
+Content-Type: multipart/mixed; boundary="P4REfjjuDmI2rwYP"
 Content-Disposition: inline
-In-Reply-To: <165784325340.1758207.5064717153608954960.stgit@dwillia2-xfh.jf.intel.com>
+In-Reply-To: <165784336184.1758207.16403282029203949622.stgit@dwillia2-xfh.jf.intel.com>
 
 
---Tzm93710sI1G8hL4
+--P4REfjjuDmI2rwYP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -67,10 +68,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/1fb44d68df6b2656f0d2c8dbe7437620a867c950
+        # https://github.com/intel-lab-lkp/linux/commit/e8f8f1fa762fad5e3a401414cf9bb5a898d8c35b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Dan-Williams/CXL-PMEM-Region-Provisioning/20220715-080748
-        git checkout 1fb44d68df6b2656f0d2c8dbe7437620a867c950
+        git checkout e8f8f1fa762fad5e3a401414cf9bb5a898d8c35b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cxl/core/
@@ -80,60 +81,78 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/cxl/core/port.c:1221: warning: expecting prototype for cxl_decoder_alloc(). Prototype was for cxl_decoder_init() instead
+>> drivers/cxl/core/hdm.c:322:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (cxled->cxld.region) {
+               ^~~~~~~~~~~~~~~~~~
+   drivers/cxl/core/hdm.c:342:9: note: uninitialized use occurs here
+           return rc;
+                  ^~
+   drivers/cxl/core/hdm.c:322:2: note: remove the 'if' if its condition is always false
+           if (cxled->cxld.region) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cxl/core/hdm.c:315:8: note: initialize the variable 'rc' to silence this warning
+           int rc;
+                 ^
+                  = 0
+   drivers/cxl/core/hdm.c:403:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (cxled->cxld.region) {
+               ^~~~~~~~~~~~~~~~~~
+   drivers/cxl/core/hdm.c:459:6: note: uninitialized use occurs here
+           if (rc)
+               ^~
+   drivers/cxl/core/hdm.c:403:2: note: remove the 'if' if its condition is always false
+           if (cxled->cxld.region) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cxl/core/hdm.c:400:8: note: initialize the variable 'rc' to silence this warning
+           int rc;
+                 ^
+                  = 0
+   2 warnings generated.
 
 
-vim +1221 drivers/cxl/core/port.c
+vim +322 drivers/cxl/core/hdm.c
 
-3750d013182b071 drivers/cxl/core/port.c Dan Williams 2022-04-21  1209  
-d54c1bbe2d34e30 drivers/cxl/core/port.c Ben Widawsky 2022-01-31  1210  /**
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1211   * cxl_decoder_alloc - Common decoder setup / initialization
-d54c1bbe2d34e30 drivers/cxl/core/port.c Ben Widawsky 2022-01-31  1212   * @port: owning port of this decoder
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1213   * @cxld: common decoder properties to initialize
-d54c1bbe2d34e30 drivers/cxl/core/port.c Ben Widawsky 2022-01-31  1214   *
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1215   * A port may contain one or more decoders. Each of those decoders
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1216   * enable some address space for CXL.mem utilization. A decoder is
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1217   * expected to be configured by the caller before registering via
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1218   * cxl_decoder_add()
-d54c1bbe2d34e30 drivers/cxl/core/port.c Ben Widawsky 2022-01-31  1219   */
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1220  static int cxl_decoder_init(struct cxl_port *port, struct cxl_decoder *cxld)
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09 @1221  {
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1222  	struct device *dev;
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1223  	int rc;
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1224  
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1225  	rc = ida_alloc(&port->decoder_ida, GFP_KERNEL);
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1226  	if (rc < 0)
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1227  		return rc;
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1228  
-74be98774dfbc5b drivers/cxl/core/port.c Dan Williams 2022-02-16  1229  	/* need parent to stick around to release the id */
-74be98774dfbc5b drivers/cxl/core/port.c Dan Williams 2022-02-16  1230  	get_device(&port->dev);
-48667f676189ecc drivers/cxl/core/bus.c  Dan Williams 2021-09-21  1231  	cxld->id = rc;
-74be98774dfbc5b drivers/cxl/core/port.c Dan Williams 2022-02-16  1232  
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1233  	dev = &cxld->dev;
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1234  	device_initialize(dev);
-3750d013182b071 drivers/cxl/core/port.c Dan Williams 2022-04-21  1235  	lockdep_set_class(&dev->mutex, &cxl_decoder_key);
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1236  	device_set_pm_not_required(dev);
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1237  	dev->parent = &port->dev;
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1238  	dev->bus = &cxl_bus_type;
-40ba17afdfabb01 drivers/cxl/core.c      Dan Williams 2021-06-09  1239  
-d2b61ed2ff63fd9 drivers/cxl/core/port.c Ben Widawsky 2022-01-23  1240  	/* Pre initialize an "empty" decoder */
-d2b61ed2ff63fd9 drivers/cxl/core/port.c Ben Widawsky 2022-01-23  1241  	cxld->interleave_ways = 1;
-d2b61ed2ff63fd9 drivers/cxl/core/port.c Ben Widawsky 2022-01-23  1242  	cxld->interleave_granularity = PAGE_SIZE;
-d2b61ed2ff63fd9 drivers/cxl/core/port.c Ben Widawsky 2022-01-23  1243  	cxld->target_type = CXL_DECODER_EXPANDER;
-e50fe01e1f2a4ab drivers/cxl/core/port.c Dan Williams 2022-05-18  1244  	cxld->hpa_range = (struct range) {
-e50fe01e1f2a4ab drivers/cxl/core/port.c Dan Williams 2022-05-18  1245  		.start = 0,
-e50fe01e1f2a4ab drivers/cxl/core/port.c Dan Williams 2022-05-18  1246  		.end = -1,
-e50fe01e1f2a4ab drivers/cxl/core/port.c Dan Williams 2022-05-18  1247  	};
-d2b61ed2ff63fd9 drivers/cxl/core/port.c Ben Widawsky 2022-01-23  1248  
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1249  	return 0;
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1250  }
-1fb44d68df6b265 drivers/cxl/core/port.c Dan Williams 2022-07-14  1251  
+   310	
+   311	int cxl_dpa_free(struct cxl_endpoint_decoder *cxled)
+   312	{
+   313		struct cxl_port *port = cxled_to_port(cxled);
+   314		struct device *dev = &cxled->cxld.dev;
+   315		int rc;
+   316	
+   317		down_write(&cxl_dpa_rwsem);
+   318		if (!cxled->dpa_res) {
+   319			rc = 0;
+   320			goto out;
+   321		}
+ > 322		if (cxled->cxld.region) {
+   323			dev_dbg(dev, "decoder assigned to: %s\n",
+   324				dev_name(&cxled->cxld.region->dev));
+   325			goto out;
+   326		}
+   327		if (cxled->cxld.flags & CXL_DECODER_F_ENABLE) {
+   328			dev_dbg(dev, "decoder enabled\n");
+   329			rc = -EBUSY;
+   330			goto out;
+   331		}
+   332		if (cxled->cxld.id != port->hdm_end) {
+   333			dev_dbg(dev, "expected decoder%d.%d\n", port->id,
+   334				port->hdm_end);
+   335			rc = -EBUSY;
+   336			goto out;
+   337		}
+   338		devm_cxl_dpa_release(cxled);
+   339		rc = 0;
+   340	out:
+   341		up_write(&cxl_dpa_rwsem);
+   342		return rc;
+   343	}
+   344	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---Tzm93710sI1G8hL4
+--P4REfjjuDmI2rwYP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -678,6 +697,7 @@ CONFIG_GENERIC_EARLY_IOREMAP=y
 CONFIG_PAGE_IDLE_FLAG=y
 CONFIG_IDLE_PAGE_TRACKING=y
 CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
+CONFIG_GET_FREE_REGION=y
 # CONFIG_VM_EVENT_COUNTERS is not set
 # CONFIG_PERCPU_STATS is not set
 CONFIG_GUP_TEST=y
@@ -848,6 +868,7 @@ CONFIG_CXL_PCI=m
 # CONFIG_CXL_MEM_RAW_COMMANDS is not set
 # CONFIG_CXL_MEM is not set
 CONFIG_CXL_PORT=y
+CONFIG_CXL_REGION=y
 # CONFIG_PCCARD is not set
 CONFIG_RAPIDIO=m
 CONFIG_RAPIDIO_TSI721=m
@@ -6902,6 +6923,7 @@ CONFIG_LIBFDT=y
 CONFIG_OID_REGISTRY=y
 CONFIG_UCS2_STRING=y
 CONFIG_SG_POOL=y
+CONFIG_MEMREGION=y
 CONFIG_ARCH_STACKWALK=y
 CONFIG_STACKDEPOT=y
 CONFIG_STACK_HASH_ORDER=20
@@ -7191,4 +7213,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---Tzm93710sI1G8hL4--
+--P4REfjjuDmI2rwYP--
