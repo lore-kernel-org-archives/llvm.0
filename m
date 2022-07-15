@@ -1,62 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4BB2F34
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 11:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CB2C341C8
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 11:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657883362;
-	bh=rtsRiustw1jcqat2Hy4pt0UdCK21bQkCfWrR0Ji81xk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rXtYe11kssl2UWw/7jxTAmDWgyYpkWgceOFf9WVSkaMpOSZ1sbKpLlNZYQgO2Nk7+
-	 FwaTwR7skQCZkzWH8/U6R/wcLUccAdouOtU/T/Ijsvz6npE2kfEllxg2Tr1MjtQANF
-	 1KhzYpExysakpOtKD8nOb+7gHQGx0LiOzhVIJo7EWX7hBtl4AYjshe97BmwOvuPhTs
-	 wVAsXpToX9CKhAC6/H0glbtYL7Dh/fSokuT509B0ySvs4KIz2jrI7jeRtow6Lb/oEc
-	 CzqtVOct09KMUoKG7WuT9RLUZBfchLFNfFt3qU9HuMVUKiH7ArXJJ3SJAKlY2FMdly
-	 KfWDQiG6N3bmA==
-Received: by mail-yb1-f173.google.com with SMTP id c131so7179522ybf.9
-        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 04:09:22 -0700 (PDT)
-X-Gm-Message-State: AJIora8Dtj2jPu4ETfizouUHM4B9VZCQRQ58DO82KbV0tt+NvUXGQWtw
-	b7/kf5yp2N6bzpR1P2y2l0Jftj8Xri/JiSGCy3Q=
-X-Google-Smtp-Source: AGRyM1vJcN9sDyn046RuutLtimHnSVmCGeQYjrZwlEcPDPkv7YZM2bUWJzF9Z/2By4vgZdxgvE9+Cc5wXVjvZqdcdRg=
-X-Received: by 2002:a25:73d1:0:b0:66e:aee4:feb3 with SMTP id
- o200-20020a2573d1000000b0066eaee4feb3mr13802426ybc.452.1657883361215; Fri, 15
- Jul 2022 04:09:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C802F34
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 11:39:25 +0000 (UTC)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26FBavGO016553
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Jul 2022 07:36:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1657885019; bh=tdZ4h7hpZb7PYZDCUa22UQK8ONN4Qvu86oDvvZF8yko=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EVjHFzTvgNX+TXFmaXWUG3WjnzDmIRfzE60friNosYrmitEDYwhgZ3xgLLOxMRV2E
+	 ioKhc2VTRwe57E9z7kf/W3vkClyoH7cv49B4vZfJvPs9lqtKrjKIFwaTpxkXtvjFYR
+	 J4/ryJw2D+kOK2evXnmVvCAYTElPq3xoIAJrnOuLBRAZYDenbiwuz9MFrqnKXO1JGx
+	 Tsa+AYrWLuFSKDfLjJsCO6py9Dp1bLSo6e2T3Z51ykRcfiIFm67F7FhlPRAEU6h6m4
+	 vf9WBNcYD19FJEdX1zOfvLC8Yq+0q0D/+ZA6NMdwFnclxLBS98fCabrcWW6lyC19HJ
+	 xXzj7IlYqVD5g==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 44F1C15C003C; Fri, 15 Jul 2022 07:36:57 -0400 (EDT)
+Date: Fri, 15 Jul 2022 07:36:57 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Hugh Dickins <hughd@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm/shmem: add support for FS_IOC_[SG]ETFLAGS for tmpfs
+Message-ID: <YtFRWXzLUjGQ5bD9@mit.edu>
+References: <20220713145234.2356641-1-tytso@mit.edu>
+ <202207150617.dHbSxB55-lkp@intel.com>
+ <CAK8P3a1zoKAhfZ+zoukwUTFbi9LYdVPFR7wMJ47WSOQ5zNVMRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220713145234.2356641-1-tytso@mit.edu> <202207150617.dHbSxB55-lkp@intel.com>
-In-Reply-To: <202207150617.dHbSxB55-lkp@intel.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 15 Jul 2022 13:09:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1zoKAhfZ+zoukwUTFbi9LYdVPFR7wMJ47WSOQ5zNVMRQ@mail.gmail.com>
-Message-ID: <CAK8P3a1zoKAhfZ+zoukwUTFbi9LYdVPFR7wMJ47WSOQ5zNVMRQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/shmem: add support for FS_IOC_[SG]ETFLAGS for tmpfs
-To: kernel test robot <lkp@intel.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, Hugh Dickins <hughd@google.com>, 
-	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1zoKAhfZ+zoukwUTFbi9LYdVPFR7wMJ47WSOQ5zNVMRQ@mail.gmail.com>
 
-On Fri, Jul 15, 2022 at 1:01 AM kernel test robot <lkp@intel.com> wrote:
->
-> >> mm/shmem.c:1062:22: error: use of undeclared identifier 'EXT2_APPEND_FL'
->            if (info->fsflags & EXT2_APPEND_FL)
->                                ^
-> >> mm/shmem.c:1064:22: error: use of undeclared identifier 'EXT2_IMMUTABLE_FL'
->            if (info->fsflags & EXT2_IMMUTABLE_FL)
->                                ^
-> >> mm/shmem.c:1066:22: error: use of undeclared identifier 'EXT2_NODUMP_FL'
->            if (info->fsflags & EXT2_NODUMP_FL)
->                                ^
+On Fri, Jul 15, 2022 at 01:09:04PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 15, 2022 at 1:01 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > >> mm/shmem.c:1062:22: error: use of undeclared identifier 'EXT2_APPEND_FL'
+> >            if (info->fsflags & EXT2_APPEND_FL)
+> >                                ^
+> > >> mm/shmem.c:1064:22: error: use of undeclared identifier 'EXT2_IMMUTABLE_FL'
+> >            if (info->fsflags & EXT2_IMMUTABLE_FL)
+> >                                ^
+> > >> mm/shmem.c:1066:22: error: use of undeclared identifier 'EXT2_NODUMP_FL'
+> >            if (info->fsflags & EXT2_NODUMP_FL)
+> >                                ^
+> 
+> I suppose this just needs to use FS_APPEND_FL/FS_IMMUTABLE_FL/FS_NODUMP_FL
+> instead of the ext2 alias names?
 
+The zero day bot was testing the v1 version of the patch.  This was
+fixed in the -v2 and -v3 versions.
 
-I suppose this just needs to use FS_APPEND_FL/FS_IMMUTABLE_FL/FS_NODUMP_FL
-instead of the ext2 alias names?
-
-      Arnd
+     	      	     	    	    - Ted
