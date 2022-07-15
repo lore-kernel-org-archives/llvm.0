@@ -1,85 +1,139 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51D233FF
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 16:00:09 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C617334706;
-	Fri, 15 Jul 2022 16:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1657900807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PmxgdbvxN1/lfrPzGsVJbbJYjv4n4eZUn1st8Pyud1c=;
-	b=Pp7kVSGsWY466CZ1qFGSNRDkhPmHn/u9goTaAqs2/WE8qQOHSHmG+BNk3IRkqT9Yt++P2R
-	g3aKdXGwyrby2L4UmhbAIEzDIxmc09knKMXBzXD/og4vcJCd50+z/Ti41ckR9z/fV9klD1
-	zWd2d6WjWHKfY2LDq/1DEzAZYnqZ+K4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1657900807;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PmxgdbvxN1/lfrPzGsVJbbJYjv4n4eZUn1st8Pyud1c=;
-	b=/hSNKCiAIoNQ9mboeeqD94aXqaTdvW2Sp2lj+FfzOYmCyn15JPqbejyqYWq4OEf/TfsUBX
-	BDuLuwo1UjJAJnAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B846513AC3;
-	Fri, 15 Jul 2022 16:00:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id tLP0LAeP0WLeZgAAMHmgww
-	(envelope-from <bp@suse.de>); Fri, 15 Jul 2022 16:00:07 +0000
-Date: Fri, 15 Jul 2022 18:00:00 +0200
-From: Borislav Petkov <bp@suse.de>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	stable <stable@vger.kernel.org>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
- x86_spec_ctrl_current
-Message-ID: <YtGPAG0ZBqvotud1@zn.tnic>
-References: <20220713152436.2294819-1-nathan@kernel.org>
- <20220714143005.73c71cf8@kernel.org>
- <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
- <20220714145652.22cf4878@kernel.org>
- <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628DF179
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 16:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657902665; x=1689438665;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s03CUPHYKCoRdjy8uP3NGHt/qLnJi/3ehlE3QYMjTes=;
+  b=dG3nrlbZ9OVtbx/EN1MvOT5UUNcriDoM6CF5O12RqqeK7WIpI9icztQL
+   FLNfiF5+2ZqHfz4pkVxTqzyQd5r/9GWF6tUq230XUqIXVqgKMFwGNfC7F
+   eqgnqdBNLIrEEs8DhHlguKz2m5VRYjEiRb65cH0rBBM/uorRqxIguxASX
+   XpU2zZOUhb3fAFgPLqpY1hBp3ycxSrG/qU9JemJ05RMxy0jeydAMjLNrJ
+   t+YmYCJ3io6dyZeR8xG4/T2bneY15OdyNE5v7gYv081//gJJtXObMlCdi
+   NJ+Kk5LnPDe9hXGUZamZJHr+o+8QRy9IhtGe2rK/4Up27OcWGBCvyRNO2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286973113"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="286973113"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 09:30:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="923566705"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Jul 2022 09:30:35 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oCOD4-0000RQ-Ly;
+	Fri, 15 Jul 2022 16:30:34 +0000
+Date: Sat, 16 Jul 2022 00:29:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dai Ngo <dai.ngo@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Chuck Lever <chuck.lever@oracle.com>
+Subject: [linux-next:master 10517/10906] fs/nfsd/nfsctl.c:1504:17: error: use
+ of undeclared identifier 'NFS4_CLIENTS_PER_GB'
+Message-ID: <202207160039.bfW3l3uk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
 
-On Thu, Jul 14, 2022 at 03:14:53PM -0700, Linus Torvalds wrote:
-> Anyway, I cherry-picked Nathan's patch from my clang tree and pushed
-> it out as commit db886979683a ("x86/speculation: Use DECLARE_PER_CPU
-> for x86_spec_ctrl_current").
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
+commit: 05eaba9bd8c0658004f71e781568f55263da8a64 [10517/10906] NFSD: limit the number of v4 clients to 1024 per 1GB of system memory
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220716/202207160039.bfW3l3uk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=05eaba9bd8c0658004f71e781568f55263da8a64
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 05eaba9bd8c0658004f71e781568f55263da8a64
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/nfsd/
 
-... and I've zapped it from my lineup.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thx.
+All errors (new ones prefixed by >>):
+
+   fs/nfsd/nfsctl.c:1392:18: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+                   /* last one */ {""}
+                                  ^~~~
+   fs/nfsd/nfsctl.c:1382:22: note: previous initialization is here
+                   [NFSD_Filecache] = {"filecache", &filecache_ops, S_IRUGO},
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/nfsd/nfsctl.c:1504:17: error: use of undeclared identifier 'NFS4_CLIENTS_PER_GB'
+           max_clients *= NFS4_CLIENTS_PER_GB;
+                          ^
+   fs/nfsd/nfsctl.c:1505:49: error: use of undeclared identifier 'NFS4_CLIENTS_PER_GB'
+           nn->nfs4_max_clients = max_t(int, max_clients, NFS4_CLIENTS_PER_GB);
+                                                          ^
+   fs/nfsd/nfsctl.c:1505:49: error: use of undeclared identifier 'NFS4_CLIENTS_PER_GB'
+   1 warning and 3 errors generated.
+
+
+vim +/NFS4_CLIENTS_PER_GB +1504 fs/nfsd/nfsctl.c
+
+  1470	
+  1471	static __net_init int nfsd_init_net(struct net *net)
+  1472	{
+  1473		int retval;
+  1474		struct nfsd_net *nn = net_generic(net, nfsd_net_id);
+  1475		struct sysinfo si;
+  1476		u64 max_clients;
+  1477	
+  1478		retval = nfsd_export_init(net);
+  1479		if (retval)
+  1480			goto out_export_error;
+  1481		retval = nfsd_idmap_init(net);
+  1482		if (retval)
+  1483			goto out_idmap_error;
+  1484		nn->nfsd_versions = NULL;
+  1485		nn->nfsd4_minorversions = NULL;
+  1486		retval = nfsd_reply_cache_init(nn);
+  1487		if (retval)
+  1488			goto out_drc_error;
+  1489		nn->nfsd4_lease = 90;	/* default lease time */
+  1490		nn->nfsd4_grace = 90;
+  1491		nn->somebody_reclaimed = false;
+  1492		nn->track_reclaim_completes = false;
+  1493		nn->clverifier_counter = prandom_u32();
+  1494		nn->clientid_base = prandom_u32();
+  1495		nn->clientid_counter = nn->clientid_base + 1;
+  1496		nn->s2s_cp_cl_id = nn->clientid_counter++;
+  1497	
+  1498		get_random_bytes(&nn->siphash_key, sizeof(nn->siphash_key));
+  1499		seqlock_init(&nn->writeverf_lock);
+  1500	
+  1501		atomic_set(&nn->nfs4_client_count, 0);
+  1502		si_meminfo(&si);
+  1503		max_clients = (u64)si.totalram * si.mem_unit / (1024 * 1024 * 1024);
+> 1504		max_clients *= NFS4_CLIENTS_PER_GB;
+  1505		nn->nfs4_max_clients = max_t(int, max_clients, NFS4_CLIENTS_PER_GB);
+  1506	
+  1507		return 0;
+  1508	
+  1509	out_drc_error:
+  1510		nfsd_idmap_shutdown(net);
+  1511	out_idmap_error:
+  1512		nfsd_export_shutdown(net);
+  1513	out_export_error:
+  1514		return retval;
+  1515	}
+  1516	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+0-DAY CI Kernel Test Service
+https://01.org/lkp
