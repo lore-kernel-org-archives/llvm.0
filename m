@@ -1,43 +1,51 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60413D76
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 17:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFC746A8
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 18:01:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657904439; x=1689440439;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e3VKXAnq32O/MiYuI7amCRRN/Y85H/Ky2ZStbfVc93M=;
-  b=Org0aprcwd7T5UMqsOnWRmof/tv8429IoQBaRg9U7R7q9gJYiYVg3uYS
-   JhoLYsAt8EBho8bQcKUWrTL2jOQpagLJ+6nTTS/v/H9E29SJ16FvDlPP0
-   4c3/TRDUBxCD6GMWAsCG7WScikDlWVWoirUdc1IeQzMS9UkuCe6LkndEz
-   vMTdjMKy0FjS9F7l9h2djUkxVoaahZGu1yPh0hiYmqkb0GT+loSJZ/0v6
-   rjT33XsWz/ORFd4zUkQelBkd7LcSntYEGj0OmnA5IKCc8QHowemHRgUm1
-   doFBypYmhDlaD6GaZjOqaSJGVdHxrnZp238sF5pF3CBd+bVdr8aGsOd+7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="265631238"
+  t=1657908104; x=1689444104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2oOfC55LrtmXB2jCaFUlj9F/z3nDDWKlHIARcSj/KtA=;
+  b=eygym2Ej9RJSiINj3CJv99cLya4SEWGmUNGgjrxxy/f9tTYOKv4eA6OY
+   M1O5o88HpRJ/BsizSFJov2C3m5xAkx/by1g9fZr0JZZKAflNkA5gu/2zy
+   MBeoqwWyoZAHVinARRRX4Nb15CH6XZxc2Hb+4BiVW8LM0t0GO+50U/qd1
+   PahFCPedoxr4j6BwwXIk97KAfcLgFZ7llWCpZzC2Ug8dHLJJWGzxtYRPK
+   qLNxDPrRxOY/e7GdZc2e7KWpJYdEHvqCb9r/3ofwRDDNK/OMAccno1p0C
+   zY5IfF7YlwW0uk1xab0zSI/MSZ7ZTiKuPiXtpFXva4YWC8fgktz9eBMYj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="311528401"
 X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="265631238"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 10:00:38 -0700
+   d="scan'208";a="311528401"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 11:01:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="723141480"
+   d="scan'208";a="546742759"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Jul 2022 10:00:37 -0700
+  by orsmga003.jf.intel.com with ESMTP; 15 Jul 2022 11:01:40 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCOg8-0000W0-BV;
-	Fri, 15 Jul 2022 17:00:36 +0000
-Date: Sat, 16 Jul 2022 01:00:23 +0800
+	id 1oCPdD-0000c6-GP;
+	Fri, 15 Jul 2022 18:01:39 +0000
+Date: Sat, 16 Jul 2022 02:01:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
+To: Amelie Delaunay <amelie.delaunay@foss.st.com>,
+	Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/18]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for function 'spihid_get_data'
-Message-ID: <202207160028.MFKQvcjJ-lkp@intel.com>
+	linux-doc@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Marek Vasut <marex@denx.de>,
+	Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH v2 3/4] dmaengine: stm32-dma: add support to trigger
+ STM32 MDMA
+Message-ID: <202207160125.oxFFO8ZQ-lkp@intel.com>
+References: <20220713142148.239253-4-amelie.delaunay@foss.st.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,88 +54,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220713142148.239253-4-amelie.delaunay@foss.st.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   2902ed1bd2d6ac439a835c53841122c7f3455a6c
-commit: caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92 [11/18] WIP: HID: transport: spi: add Apple SPI transport
-config: arm64-randconfig-r014-20220715 (https://download.01.org/0day-ci/archive/20220716/202207160028.MFKQvcjJ-lkp@intel.com/config)
+Hi Amelie,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on atorgue-stm32/stm32-next]
+[also build test WARNING on lwn-2.6/docs-next vkoul-dmaengine/next linus/master v5.19-rc6 next-20220715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Amelie-Delaunay/STM32-DMA-MDMA-chaining-feature/20220713-222358
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git stm32-next
+config: hexagon-buildonly-randconfig-r004-20220715 (https://download.01.org/0day-ci/archive/20220716/202207160125.oxFFO8ZQ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
+        # https://github.com/intel-lab-lkp/linux/commit/e1f4515659df0475a1e4d6dafd8559771c2b49b0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Amelie-Delaunay/STM32-DMA-MDMA-chaining-feature/20220713-222358
+        git checkout e1f4515659df0475a1e4d6dafd8559771c2b49b0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/spi-hid/ drivers/irqchip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma/ drivers/iio/adc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-                        ^
-   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   ^
-   static 
-   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
-                   ^
-   2 warnings generated.
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
-   4 warnings generated.
+>> drivers/dma/stm32-dma.c:211: warning: expecting prototype for struct stm32_dma_mdma_cfg. Prototype was for struct stm32_dma_mdma_config instead
 
 
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+vim +211 drivers/dma/stm32-dma.c
 
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
+   199	
+   200	/**
+   201	 * struct stm32_dma_mdma_cfg - STM32 DMA MDMA configuration
+   202	 * @stream_id: DMA request to trigger STM32 MDMA transfer
+   203	 * @ifcr: DMA interrupt flag clear register address,
+   204	 *        used by STM32 MDMA to clear DMA Transfer Complete flag
+   205	 * @tcf: DMA Transfer Complete flag
+   206	 */
+   207	struct stm32_dma_mdma_config {
+   208		u32 stream_id;
+   209		u32 ifcr;
+   210		u32 tcf;
+ > 211	};
+   212	
 
 -- 
 0-DAY CI Kernel Test Service
