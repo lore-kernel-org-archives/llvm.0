@@ -1,39 +1,46 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269255381
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 21:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30B84C9A
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 21:35:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657919747; x=1689455747;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=rDlZ+Hfy21GKlKkY4eQp+J6oyCGvCt2qKkU8wEvbix4=;
-  b=VfPHk5cens0Q40tz7kzEeFXgLbKF+0RQkuPlB63YPcQIRwcilvA7AJrH
-   gK9q59fPll+kRGatAYeNOi7WHKc/G6yczSPJ7Ryr2Vkre7ONPtTSTMYjo
-   UQ9qOo5Wsqkc/9KemEIAhuS84orxy2TOgaqDXoooXeJhOPlVry6duGtIL
-   nthBK/FX46GECvfoxS+gRAdmhwHzFShXX3ejVxH/u4IrIiPQYfoPwpBCR
-   en5UFPh5nQ57huuwdmBbuYK/qKtReQlzdl94PAbn7L5KtM/ob/O7Sh1UO
-   8xyhmbkIoWfd4m0tAjUhNM345HWU+OS2Kc5PuDW+FUSj3volFCY2LOutS
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="372216159"
+  t=1657920949; x=1689456949;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vFAX1UVh0i4rvEsH7mYrdzd8F6INE5/AtplT3ycQd/M=;
+  b=LSH6UYujYW71I7Lrvh46GbvmFMapnuXFqQUuzIzlxQy3FxvJTtEIdvVf
+   TCL5ZnoMTMQLXJ7N2Kw6hTiZTNbI6yHdWwOCg7jvVFoSS7jOnvKN6Op58
+   m/LoITxgLbe1d7RfBCK55HCw3DofHTs5HYeGdAWtEIUf+tXf+O/Tvgnx+
+   nbutFP5nWAdCTNcXBKDfuCANIVhtaD/TlLEaJ6XsN28hfNTKMuHqNzNqh
+   8ktQbH5h3sWAh7xz8PBlRrDBn6F0fdi7YgIBLCRoVRAjGaIrxNL15qKh1
+   c7fsi4mpFxEoStF+sT/uTbqmXXzOdcf9p1Mkb0E+r2FPnG4n47CzmNZdP
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286640943"
 X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="372216159"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:15:46 -0700
+   d="scan'208";a="286640943"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:35:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="546799538"
+   d="scan'208";a="571689965"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Jul 2022 14:15:45 -0700
+  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 14:35:46 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCSf3-0000lU-09;
-	Fri, 15 Jul 2022 21:15:45 +0000
-Date: Sat, 16 Jul 2022 05:14:55 +0800
+	id 1oCSyP-0000mO-Bd;
+	Fri, 15 Jul 2022 21:35:45 +0000
+Date: Sat, 16 Jul 2022 05:35:33 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: error: unknown target CPU 'loongson2f'
-Message-ID: <202207160556.SeVLUqW4-lkp@intel.com>
+To: Mathias Lark <mathiaslark@gmail.com>, davem@davemloft.net,
+	yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+	pabeni@redhat.com, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH net-next] improve handling of ICMP_EXT_ECHO icmp type
+Message-ID: <202207160519.M8OOdyfX-lkp@intel.com>
+References: <20220714151358.GA16615@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,54 +49,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220714151358.GA16615@debian>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Nathan Chancellor <nathan@kernel.org>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Hi Mathias,
 
-Hi Nathan,
+Thank you for the patch! Yet something to improve:
 
-FYI, the error/warning still remains.
+[auto build test ERROR on net-next/master]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-commit: 13ceb48bc19c563e05f407e663aaa4105fdfd408 MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
-date:   7 months ago
-config: mips-lemote2f_defconfig (https://download.01.org/0day-ci/archive/20220716/202207160556.SeVLUqW4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathias-Lark/improve-handling-of-ICMP_EXT_ECHO-icmp-type/20220714-231818
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b126047f43f11f61f1dd64802979765d71795dae
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220716/202207160519.M8OOdyfX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13ceb48bc19c563e05f407e663aaa4105fdfd408
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13ceb48bc19c563e05f407e663aaa4105fdfd408
+        # https://github.com/intel-lab-lkp/linux/commit/d238a024060b9cf5095b5027301f5921c9140c4e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mathias-Lark/improve-handling-of-ICMP_EXT_ECHO-icmp-type/20220714-231818
+        git checkout d238a024060b9cf5095b5027301f5921c9140c4e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   clang-15: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
->> error: unknown target CPU 'loongson2f'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> error: unknown target CPU 'loongson2f'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target 'missing-syscalls' not remade because of errors.
-   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   In file included from <built-in>:1:
+>> ./usr/include/linux/icmp.h:163:19: error: unknown type name 'bool'
+   static __inline__ bool icmp_is_valid_type(__u8 type)
+                     ^
+   1 error generated.
 
 -- 
 0-DAY CI Kernel Test Service
