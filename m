@@ -1,139 +1,167 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F3E6030
-	for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 23:15:56 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id y4so4286669edc.4
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:15:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ABA7461
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 00:04:05 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id y9so3232957pff.12
+        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 17:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mhQ2HipCSIsUJpyE/i8kxJC7kPv5Mey32tmIcjzcEvM=;
-        b=E2/At9bh0D+VaRs0orvvuVOXh4fB5WM8tcn/3FipPHKSOBT3NhDUeIDNQ/mQER9x8Z
-         XV9jeVxH9x2+zduW3/Gu50S4g+78OEXb8l1fM82ztO6lYoOZ7JpbZ0y5SP0OKbgx8XbJ
-         km0wJxtnSUeQCP/qz9ngZvdi21muhw6ELdWE4=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
+        b=RQV4iwKe2wUPu88mMk1f6hs8+uQ1Ya6IG4iamvqBQZ0RnnatLUT16HB70JAQQsh2Rm
+         s/ZRjb/ADi4YjYlOZNf4rRyEHJGwGJHwKIiG/DxJhiQvwFZFqo1yvOApgxPwBWTwkE5k
+         n05fGFUuDSx5fRERuGNvyQqCRS4HEDE+CyUN+1lrE9LEmUj9d8Mvc4I81WAP7TNQhbiq
+         9c+IqL2ykCq4gi9+rg+u/ZGtfmAwtRJNjCNwkj3iJLGUh8+Gjpmg4oeH3i+A1pwKbEKY
+         E4dM1e/kl76zFL3umoiwRY/WGlN/y8IBrZ8AJfo6C4EuqIoxLlHZoCugbJerixMfjj8z
+         2LYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mhQ2HipCSIsUJpyE/i8kxJC7kPv5Mey32tmIcjzcEvM=;
-        b=te3vqSUC9aDIz71J8JtV7CnoICqB3KIKhEJB8teSAOiwBdeCd4HC7OKsPt9koind0i
-         cGQbr7jgOtAA/NfK6kzAdRB7HFyXDgCHOhzMoFb00Z2EluGkiDxzZBfzpMI7gv8QLOH2
-         FAp8I86WP4SgY8F83hCi0OuI/9wih05fOSB0K6mM/VvTFKlUzGOZrVo/477kKuKRSMuw
-         Lc4VP1yHpcF2Nj9igJS9DYypyeN0ZCnxY0F29Ewn5zgaMRyUGKHTDUZDoeaYw9mOOQ1M
-         vBC00ko7siMkbaUF3+zXeFfE49B3kvqeQNl247WOnG9z+FHrIAA4KslH9TK6kDa2bAkP
-         9cDA==
-X-Gm-Message-State: AJIora8+p4OdRdAcaFppfbXenyfZvYvD+cRTEbyhChNJBedVZnJvQ3uC
-	BcbarnNCKX4Q9hEJ4dpuiroMJhhgZrFdudKm/98=
-X-Google-Smtp-Source: AGRyM1sBcEBBmCy6Nflpf5mtKGXjSXgxy4JnemBXEBsU4/GJS5Z5glbiR5809iar1F4ODf6aLdJFeQ==
-X-Received: by 2002:aa7:c98b:0:b0:43a:944f:5db6 with SMTP id c11-20020aa7c98b000000b0043a944f5db6mr15214036edt.34.1657840554640;
-        Thu, 14 Jul 2022 16:15:54 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id k16-20020a17090632d000b0072b2cb1e22csm1241837ejk.104.2022.07.14.16.15.52
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 16:15:52 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id r14so4534510wrg.1
-        for <llvm@lists.linux.dev>; Thu, 14 Jul 2022 16:15:52 -0700 (PDT)
-X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id
- f8-20020a0560001a8800b0021daa97cb16mr10335067wry.97.1657840551971; Thu, 14
- Jul 2022 16:15:51 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
+        b=5Qb+xU9THCpprmC5pj2f8NX/ZKwwxU8egZMigDGYOk4XWiGbnSke+ZJ14sNpsGW5iA
+         orP7Be78foE1feQdc073q+9Kr/rOHlwlZZcoNZBsM2dwbYO9D6qi0w99A/8CPPnlWkbT
+         iAnZICJuGH1HN1kGcDMhiVCKiYi9pihdLGFkDtQXgBpwqFRbypEDpQwwAZgqbmEaF+Pr
+         9ZauvVHuhfsYjpm15I7fP57bW3hbrMgTgLJmUajODQoaVDKGOvRPrDdc6SZgGv7vRP57
+         jXeSaId+aylVM5HDDzWmqlJLaPwb4U4FwvSZ+Hu662p2FiHWuNRI4NsFw9XaPcJb5j2G
+         IfNw==
+X-Gm-Message-State: AJIora88Y0R4qxvpLDchzu5Rj5Ynr+Jz2dMDEkHrhPiZTGQv8hfey3Yg
+	Sp59pxikUvrGiIXp0b03w6E=
+X-Google-Smtp-Source: AGRyM1urj2GIv1EKKty6wS9S6o5S8NLwsi59Wfu0TRZljegQWACf5/nBdipXNUa9lHaMrUSBQbZy+g==
+X-Received: by 2002:a63:c63:0:b0:3fe:e14b:b5a0 with SMTP id 35-20020a630c63000000b003fee14bb5a0mr9409241pgm.428.1657843444620;
+        Thu, 14 Jul 2022 17:04:04 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w125-20020a636283000000b00419b1671c54sm1995347pgb.4.2022.07.14.17.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 17:04:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 14 Jul 2022 17:04:02 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Matt Turner <mattst88@gmail.com>, Brian Cain <bcain@quicinc.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Kees Cook <keescook@chromium.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
+	linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <20220715000402.GA512558@roeck-us.net>
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+ <20220624121313.2382500-7-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714205646.4023495-1-ndesaulniers@google.com>
-In-Reply-To: <20220714205646.4023495-1-ndesaulniers@google.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 14 Jul 2022 16:15:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
-Message-ID: <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624121313.2382500-7-alexandr.lobakin@intel.com>
 
-On Thu, Jul 14, 2022 at 1:56 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Building with UBSAN_DIV_ZERO with clang produces numerous fallthrough
-> warnings from objtool.
+On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
+> Currently, many architecture-specific non-atomic bitop
+> implementations use inline asm or other hacks which are faster or
+> more robust when working with "real" variables (i.e. fields from
+> the structures etc.), but the compilers have no clue how to optimize
+> them out when called on compile-time constants. That said, the
+> following code:
+> 
+> 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
+> 	unsigned long bar = BIT(BAR_BIT);
+> 	unsigned long baz = 0;
+> 
+> 	__set_bit(FOO_BIT, foo);
+> 	baz |= BIT(BAZ_BIT);
+> 
+> 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
+> 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
+> 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> 
+> triggers the first assertion on x86_64, which means that the
+> compiler is unable to evaluate it to a compile-time initializer
+> when the architecture-specific bitop is used even if it's obvious.
+> In order to let the compiler optimize out such cases, expand the
+> bitop() macro to use the "constant" C non-atomic bitop
+> implementations when all of the arguments passed are compile-time
+> constants, which means that the result will be a compile-time
+> constant as well, so that it produces more efficient and simple
+> code in 100% cases, comparing to the architecture-specific
+> counterparts.
+> 
+> The savings are architecture, compiler and compiler flags dependent,
+> for example, on x86_64 -O2:
+> 
+> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> 
+> and ARM64 (courtesy of Mark):
+> 
+> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
+> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Marco Elver <elver@google.com>
 
-Ok, with this applied, things are better.
+Building i386:allyesconfig ... failed
+--------------
+Error log:
+arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
+arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
 
-There are still the "__ubsan_handle_load_invalid_value() with UACCESS
-enabled" messages, but those are misfeatures of the kvm cmpxchg
-implementation.
+Bisect log attached.
 
-I'm not entirely sure why the clang build warns but gcc doesn't, but I
-*think* it's because clang is just being silly. It *looks* like it
-checks that a "bool" has a value range of 0/1, and will complain if
-not.
+Guenter
 
-And the reason I say that's silly is that if I read it correctly, then
-that value has literally been generated by clang itself, using "setz"
-instruction.
-
-It's the __try_cmpxchg_user_asm() macro, and with clang-14 I have it's
-that CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT case, and the C code uses
-inline asm and does
-
-        asm_volatile_goto("\n"                                          \
-                     "1: " LOCK_PREFIX "cmpxchg"itype" %[new], %[ptr]\n"\
-                     _ASM_EXTABLE_UA(1b, %l[label])                     \
-                     : CC_OUT(z) (success),                             \
-
-where that CC_OUT() in this case turns into
-
-   # define CC_OUT(c) "=@cc" #c
-
-and clang generates this code for it:
-
-   7d01e:       f0 48 0f b1 4d 00       lock cmpxchg %rcx,0x0(%rbp)
-   7d024:       49 89 c5                mov    %rax,%r13
-   7d027:       0f 94 c0                sete   %al
-   7d02a:       41 88 c6                mov    %al,%r14b
-   7d02d:       bf 02 00 00 00          mov    $0x2,%edi
-   7d032:       44 89 f6                mov    %r14d,%esi
-   7d035:       e8 00 00 00 00          call    __sanitizer_cov_trace_const_cmp1
-   7d03a:       41 80 fe 01             cmp    $0x1,%r14b
-   7d03e:       0f 87 af 01 00 00       ja     7d1f3
-<emulator_cmpxchg_emulated+0x6b3>
-
-where that last "ja     7d1f3" is the branch to the code that then
-calls __ubsan_handle_load_invalid_value.
-
-But look at that code: it's literally
-
-    sete   %al
-    mov    %al,%r14b
-    cmp    $0x1,%r14b
-
-where clang has generated that "sete itself, and then it verifies that
-the result is "<= 1".
-
-IOW, clang seems to be literally just checking that the "sete"
-instruction works right.
-
-That's silly.
-
-Maybe I'm misreading this, but I think the reason the clang build
-complains, but the gcc build does not, is simply because gcc isn't
-doing crazy checks of how the CPU works.
-
-Some mis-feature of the "asm with flag output" code, where clang
-doesn't understand that it generated that code itself, and the "setcc"
-instruction always returns 0/1?
-
-The old issue with "memcpy/memset() leaves .noinstr.text section"
-because clang has generated out-of-line functions for trivial copies
-also remains, but whatever.
-
-             Linus
+---
+# bad: [4662b7adea50bb62e993a67f611f3be625d3df0d] Add linux-next specific files for 20220713
+# good: [32346491ddf24599decca06190ebca03ff9de7f8] Linux 5.19-rc6
+git bisect start 'HEAD' 'v5.19-rc6'
+# good: [8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+git bisect good 8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc
+# good: [07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
+git bisect good 07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5
+# good: [5ff085e5d4f6700e03635d5e700f52163a6dc2a7] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+git bisect good 5ff085e5d4f6700e03635d5e700f52163a6dc2a7
+# good: [eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+git bisect good eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab
+# good: [9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b] hexagon/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
+git bisect good 9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b
+# bad: [e878aa5faf9ac8c0b5d0c3f293389c194c250fff] Merge branch 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+git bisect bad e878aa5faf9ac8c0b5d0c3f293389c194c250fff
+# good: [cf95d50205f62c4f5f538676def847292cf39fa9] fs: don't call ->writepage from __mpage_writepage
+git bisect good cf95d50205f62c4f5f538676def847292cf39fa9
+# good: [5103cbfd92d3587713476f94f9485b96e02f0146] Merge branch 'for-next/execve' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+git bisect good 5103cbfd92d3587713476f94f9485b96e02f0146
+# good: [ee56c3e8eec166f4e4a2ca842b7804d14f3a0208] Merge branch 'master' into mm-nonmm-stable
+git bisect good ee56c3e8eec166f4e4a2ca842b7804d14f3a0208
+# bad: [dc34d5036692c614eef23c1130ee42a201c316bf] lib: test_bitmap: add compile-time optimization/evaluations assertions
+git bisect bad dc34d5036692c614eef23c1130ee42a201c316bf
+# good: [bb7379bfa680bd48b468e856475778db2ad866c1] bitops: define const_*() versions of the non-atomics
+git bisect good bb7379bfa680bd48b468e856475778db2ad866c1
+# bad: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
+git bisect bad b03fc1173c0c2bb8fad61902a862985cecdc4b1b
+# good: [e69eb9c460f128b71c6b995d75a05244e4b6cc3e] bitops: wrap non-atomic bitops with a transparent macro
+git bisect good e69eb9c460f128b71c6b995d75a05244e4b6cc3e
+# first bad commit: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
