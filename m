@@ -1,47 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88878179
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 00:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCBC198
+	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 00:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657844645; x=1689380645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nm/OVhAzc3zhpntqxbxIshIZhMkLU+gfhOGJ2Wbs86U=;
-  b=JeLJFHwX52dLdhNrsftz+It+IMyR5fY58CX62x+rYQNXcLajTfvAWt7w
-   NvmbmrczmVOKzTSEcyeRtKK4+ZdZNwVfC2cyjSaZPhXPtCpqxBJRLL72Q
-   o46Cdw/bOMuAuzv/OMrMg4kZREBo7O1eRgL9RYOIbpuSeU4V7rRw5BJun
-   FQbJ/mSsw08mhFmOnON6XnUqTiHhxOrJeWzqCrPxPgUir/mbNy0LlShxA
-   wRb4U5hYEd22ovpd6wcGI6rUP0JqPfKdFz2JdZ/93PBkx+Uf/UYL+c9f8
-   k/4gkWZESv3VOdElRhFJG5f2DeSnAqGIFZAhInIvmJOX9vtmMwBRJ6sNs
+  t=1657845236; x=1689381236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LmHXyKnAKMH9F3nbUsgv39wMlBgdj3qLzQZyWOGkDDQ=;
+  b=UFsOAEEaL1HerVj/tLyco8gCKtkJ5tWCSEps8/4fUVRU1RuyqYdESwkF
+   +U7zZRJYMJjiaTfKW6SZRJLfPFmlXjeih4wobYVBHgbTpe7PSG8UL2Vna
+   WbBXX7sQwEcOZ1i6qhXPfEHl/LAVsuSPUZ+mrKHkNPeovUcF54Dx1iHzI
+   Epgc23Yj8ycOVTxDNHi1VNHDdtb67vCqRZ7cWnFV9utbFlAszdEhjv9PI
+   gMWrKYs3RJwLgAqDfEf2Bk4OEYbiAL8v0OGmPV/sZhB3XbfOpQHMoE2tp
+   JP1fykZvaXdlX4gnJ6yX0/+cMxb9g0VF9iX952i9yUUUheKtozdWSshEu
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349630635"
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="284423737"
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="349630635"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:23:54 -0700
+   d="scan'208";a="284423737"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:33:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="923298808"
+   d="scan'208";a="546470039"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 17:23:52 -0700
+  by orsmga003.jf.intel.com with ESMTP; 14 Jul 2022 17:33:52 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oC97X-0001J1-SE;
-	Fri, 15 Jul 2022 00:23:51 +0000
-Date: Fri, 15 Jul 2022 08:22:50 +0800
+	id 1oC9HE-0001JL-2q;
+	Fri, 15 Jul 2022 00:33:52 +0000
+Date: Fri, 15 Jul 2022 08:33:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To: Benjamin Bara <bbara93@gmail.com>, dmitry.torokhov@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/joel.2022.07.14a 25/27]
- kernel/rcu/rcuscale.c:819:14: error: call to undeclared function
- 'rcu_lazy_get_jiffies_till_flush'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202207150859.kU3p78eN-lkp@intel.com>
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	Richard Leitner <richard.leitner@skidata.com>
+Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
+Message-ID: <202207150807.PrPXLs2u-lkp@intel.com>
+References: <20220713084247.3090353-1-bbara93@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,130 +48,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/joel.2022.07.14a
-head:   37d0460c40e7e364151894260d483ade68b1de34
-commit: 39e5f05326df757fa3be4617773fafb0454d9ec7 [25/27] rcuscale: Add laziness and kfree tests
-config: hexagon-randconfig-r041-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150859.kU3p78eN-lkp@intel.com/config)
+Hi Benjamin,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on hid/for-next linus/master v5.19-rc6 next-20220714]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: riscv-randconfig-r003-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150807.PrPXLs2u-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/39e5f05326df757fa3be4617773fafb0454d9ec7
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/joel.2022.07.14a
-        git checkout 39e5f05326df757fa3be4617773fafb0454d9ec7
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/13455f523263c4e90b5cc8c587ef2be97008ff5f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
+        git checkout 13455f523263c4e90b5cc8c587ef2be97008ff5f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/amd/display/amdgpu_dm/ drivers/input/touchscreen/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/rcu/rcuscale.c:819:14: error: call to undeclared function 'rcu_lazy_get_jiffies_till_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   orig_jif = rcu_lazy_get_jiffies_till_flush();
-                              ^
->> kernel/rcu/rcuscale.c:822:3: error: call to undeclared function 'rcu_lazy_set_jiffies_till_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   rcu_lazy_set_jiffies_till_flush(2 * HZ);
-                   ^
-   2 errors generated.
+>> drivers/input/touchscreen/tsc2007_core.c:112:6: warning: no previous prototype for function 'tsc2007_is_pen_down_cansleep' [-Wmissing-prototypes]
+   bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+        ^
+   drivers/input/touchscreen/tsc2007_core.c:112:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/rcu_lazy_get_jiffies_till_flush +819 kernel/rcu/rcuscale.c
+vim +/tsc2007_is_pen_down_cansleep +112 drivers/input/touchscreen/tsc2007_core.c
 
-   796	
-   797	static int __init
-   798	kfree_scale_init(void)
-   799	{
-   800		long i;
-   801		int firsterr = 0;
-   802		unsigned long orig_jif, jif_start;
-   803	
-   804		// If lazy-rcu based kfree'ing is requested, then for kernels that
-   805		// support it, force all call_rcu() to call_rcu_lazy() so that non-lazy
-   806		// CBs do not remove laziness of the lazy ones (since the test tries to
-   807		// stress call_rcu_lazy() for OOM).
-   808		//
-   809		// Also, do a quick self-test to ensure laziness is as much as
-   810		// expected.
-   811		if (kfree_rcu_by_lazy && !IS_ENABLED(CONFIG_RCU_LAZY)) {
-   812			pr_alert("CONFIG_RCU_LAZY is disabled, falling back to kfree_rcu() "
-   813				 "for delayed RCU kfree'ing\n");
-   814			kfree_rcu_by_lazy = 0;
-   815		}
-   816	
-   817		if (kfree_rcu_by_lazy) {
-   818			/* do a test to check the timeout. */
- > 819			orig_jif = rcu_lazy_get_jiffies_till_flush();
-   820	
-   821			rcu_force_call_rcu_to_lazy(true);
- > 822			rcu_lazy_set_jiffies_till_flush(2 * HZ);
-   823			rcu_barrier();
-   824	
-   825			jif_start = jiffies;
-   826			jiffies_at_lazy_cb = 0;
-   827			call_rcu_lazy(&lazy_test1_rh, call_rcu_lazy_test1);
-   828	
-   829			smp_cond_load_relaxed(&rcu_lazy_test1_cb_called, VAL == 1);
-   830	
-   831			rcu_lazy_set_jiffies_till_flush(orig_jif);
-   832	
-   833			if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start < 2 * HZ)) {
-   834				pr_alert("ERROR: Lazy CBs are not being lazy as expected!\n");
-   835				WARN_ON_ONCE(1);
-   836				return -1;
-   837			}
-   838	
-   839			if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start > 3 * HZ)) {
-   840				pr_alert("ERROR: Lazy CBs are being too lazy!\n");
-   841				WARN_ON_ONCE(1);
-   842				return -1;
-   843			}
-   844		}
-   845	
-   846		kfree_nrealthreads = compute_real(kfree_nthreads);
-   847		/* Start up the kthreads. */
-   848		if (shutdown) {
-   849			init_waitqueue_head(&shutdown_wq);
-   850			firsterr = torture_create_kthread(kfree_scale_shutdown, NULL,
-   851							  shutdown_task);
-   852			if (torture_init_error(firsterr))
-   853				goto unwind;
-   854			schedule_timeout_uninterruptible(1);
-   855		}
-   856	
-   857		pr_alert("kfree object size=%zu, kfree_rcu_by_lazy=%d\n",
-   858				kfree_mult * sizeof(struct kfree_obj),
-   859				kfree_rcu_by_lazy);
-   860	
-   861		kfree_reader_tasks = kcalloc(kfree_nrealthreads, sizeof(kfree_reader_tasks[0]),
-   862				       GFP_KERNEL);
-   863		if (kfree_reader_tasks == NULL) {
-   864			firsterr = -ENOMEM;
-   865			goto unwind;
-   866		}
-   867	
-   868		for (i = 0; i < kfree_nrealthreads; i++) {
-   869			firsterr = torture_create_kthread(kfree_scale_thread, (void *)i,
-   870							  kfree_reader_tasks[i]);
-   871			if (torture_init_error(firsterr))
-   872				goto unwind;
-   873		}
-   874	
-   875		while (atomic_read(&n_kfree_scale_thread_started) < kfree_nrealthreads)
-   876			schedule_timeout_uninterruptible(1);
-   877	
-   878		torture_init_end();
-   879		return 0;
-   880	
-   881	unwind:
-   882		torture_init_end();
-   883		kfree_scale_cleanup();
-   884		return firsterr;
-   885	}
-   886	
+   111	
+ > 112	bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+   113	{
+   114		if (!ts->get_pendown_state_cansleep)
+   115			return true;
+   116	
+   117		return ts->get_pendown_state_cansleep(&ts->client->dev);
+   118	}
+   119	
 
 -- 
 0-DAY CI Kernel Test Service
