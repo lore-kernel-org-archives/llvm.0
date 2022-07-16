@@ -1,43 +1,45 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9911366
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E677638
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657968309; x=1689504309;
+  t=1657968969; x=1689504969;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XXoIdsI06ApUFAXOZr8yxTpQ7ca8CjvUBMrdyW0LJ1A=;
-  b=d6TydlVARn2ZusMOCNz34eQdVSGtqDyrxD9HnwU/HMBKIENZ12AD5mDq
-   kuMUEkPwYIfp1dABbNh3pa576KeHOyJK+lWJrfjEW+QVyoHHKTWKdJAB2
-   rX+xN1gGgMKJGynReCiAZAIiOx1lpXoUmZl8MUmAR3n10Hgqo468haRwb
-   VLWQCjcgmap0oRXtgRZZ+5smZsyfWvXhaWGpyiZdmQYXmzC8CG5qPVrKp
-   UwLkRHik3Uz602JdgQ2uqzAo5JzOkvP7ZGsqQFrSpRoP5ud2w9GCTLr4R
-   It9bqXEFh9JSzkm+Cdp6OEIhRO6OijBMDv2zrxc2iMIrKiZ4jMFskeV5a
+  bh=grnTWgXhzfLD9ND8ntiGCpjQ1qbsNzpWO6Ixj5ZvrMg=;
+  b=aaWa7WRxkWnXM8AB40vRtWRYjG47E/9UZJcCjVbK8MjZwALvvMnKBKVs
+   xAapx0WCeAXwXmqVHkE/cnxawWhakDzYNy5noOxsw32uadKUeXoudRmhj
+   qm8TUCs2Rcb9Vi32UHNq1gDHJxWgX4mA5NwqHWM2ru18eG4fsRCigQj6Q
+   0EQv17t7dLdhw9JcBW28pss1YwCVCz6q0JNn1jF6MfA4DiKfys3vxtchB
+   cDzB6Hol0vOeyXS4Iuylfi04Ui9mrCvDnsJqPukczma5p+67DjCeuDOAi
+   9wcs/yJwdQbuF/f95nRu+noBr+FTtXo432GT31UKS/ueers/vRSvqEuDv
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="347653754"
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="347654143"
 X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="347653754"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 03:45:08 -0700
+   d="scan'208";a="347654143"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 03:56:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="664483674"
+   d="scan'208";a="624165384"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jul 2022 03:45:06 -0700
+  by orsmga008.jf.intel.com with ESMTP; 16 Jul 2022 03:56:07 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCfII-0001No-6L;
-	Sat, 16 Jul 2022 10:45:06 +0000
-Date: Sat, 16 Jul 2022 18:44:57 +0800
+	id 1oCfSw-0001OC-ED;
+	Sat, 16 Jul 2022 10:56:06 +0000
+Date: Sat, 16 Jul 2022 18:55:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
+To: Vitaly Kuznetsov <vkuznets@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko]
- undefined!
-Message-ID: <202207161803.gts1T5UA-lkp@intel.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: [linux-stable-rc:linux-5.15.y 5373/8464]
+ arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit
+ (1024) in 'kvm_hv_hypercall'
+Message-ID: <202207161843.WnHPjB0l-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,37 +49,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Paul,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   1 year, 10 months ago
-config: mips-buildonly-randconfig-r006-20220715 (https://download.01.org/0day-ci/archive/20220716/202207161803.gts1T5UA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   baefa2315cb1371486f6661a628e96fa3336f573
+commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/8464] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207161843.WnHPjB0l-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout cb188e07105f2216f5efbefac95df4b6ce266906
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
-ERROR: modpost: "vhost_iotlb_itree_next" [drivers/vdpa/mlx5/mlx5_vdpa.ko] undefined!
-ERROR: modpost: "vhost_iotlb_itree_first" [drivers/vdpa/mlx5/mlx5_vdpa.ko] undefined!
+>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+       ^
+   1 warning generated.
+
+
+vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+
+4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+
+:::::: The code at line 2185 was first introduced by commit
+:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+
+:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
