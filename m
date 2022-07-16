@@ -1,54 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40807A
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 22:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F72E7A
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 23:32:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658011861; x=1689547861;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eMZB5HTy1IP+QRRyebpuxHhRvBKz1HhDrHDYvMYNKVk=;
-  b=nJInyMDeg0hkktnbr1yunRghHzs6u8HhdvHhwXlOIXmW9yI9R59Ng2k0
-   kPbOxRlRDBd6ImKYXTvALWHw2qUs693IEgoGNOqy8egEDkkdpqhFMMKTo
-   XhONFRFcEVJnPM6xMFjAHIgWuNVmU8s9kogFLfIPQHKFQMT8JrNrARZl7
-   QrdQj254eIkVMV+TdyUV6JUsbcwLpXKHz17agdHpfXnDwzrwadiz10j2T
-   Ufxo7/8SY/90cP0g7lLfA8FcX9kFKxlrPtOFkYwF8WkB1GCNPPv/+QwLw
-   sh4mpYPM9m5pqmHCSZdCc4uDgkOx4a021WahFVlc0GnpgVde+yun/7pUa
+  t=1658014321; x=1689550321;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kSMKGwd6jWOtJrME4hiCUa+UtRIyOBYJ06HJnUGBgjE=;
+  b=gHjNwPkm1OE8H1+uBFuw8+P0elWWOQvozlOxh5CiyorTaKXjRFu7WZZQ
+   buCNKI6kNLUForI6jK4X60aY3MafehwzkuKkKVFxd03nz5Hl691nL2IgO
+   o3gVgrQCG4R+YZ6+0dfEYHbJEbLn2EsiA6zqqQn2XgaPC3t8VrKqv8dov
+   00bojIo5dgNaPm/9q6vKg9RILtqTrYPCBM5yAFmGKTFoNULxMpMQjhjd2
+   npMGq2eL2eWZNE/8XDsWqs/ANlEBdQxhktbb7P4jGDDbw4aRTIr7D6m86
+   x//mwofriZShWMHMXDM+385kCWqC3B7+ZQ59T6ZvjOWmGgdZI49o3IAFD
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="265796334"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="265796334"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:51:01 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="287157054"
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="287157054"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 16:32:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="842889559"
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="664597249"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 15:50:57 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 16 Jul 2022 16:31:58 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCqcj-0002GK-AI;
-	Sat, 16 Jul 2022 22:50:57 +0000
-Date: Sun, 17 Jul 2022 06:50:02 +0800
+	id 1oCrGQ-0002IM-5E;
+	Sat, 16 Jul 2022 23:31:58 +0000
+Date: Sun, 17 Jul 2022 07:31:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Christian Marangi <ansuelsmth@gmail.com>
-Subject: Re: [net-next PATCH v2 3/5] net: ethernet: stmicro: stmmac: move dma
- conf to dedicated struct
-Message-ID: <202207170639.k8cXFREA-lkp@intel.com>
-References: <20220716184533.2962-4-ansuelsmth@gmail.com>
+To: Usama Arif <usama.arif@bytedance.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: fs/io_uring.c:9355:9: warning: variable 'ret' is uninitialized when
+ used here
+Message-ID: <202207170730.1iSEta2h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,69 +45,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220716184533.2962-4-ansuelsmth@gmail.com>
 
-Hi Christian,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/Add-MTU-change-with-stmmac-interface-running/20220717-025128
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 2acd1022549e210edc4cfc9fc65b07b88751f0d9
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220717/202207170639.k8cXFREA-lkp@intel.com/config)
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220716-232000/Usama-Arif/io_uring-remove-ring-quiesce-in-io_uring_register/20220204-225343
+head:   a5e1e37e8b4c9ca3f59d11e31910a7f093649d31
+commit: 5c6ec2f45e82c1351622414a938ca16473523b5b io_uring: avoid ring quiesce while registering/unregistering eventfd
+date:   8 hours ago
+config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170730.1iSEta2h-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/acdac2fef543d7b7fc85c7a5627e5e833ee756d8
+        # https://github.com/intel-lab-lkp/linux/commit/5c6ec2f45e82c1351622414a938ca16473523b5b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Marangi/Add-MTU-change-with-stmmac-interface-running/20220717-025128
-        git checkout acdac2fef543d7b7fc85c7a5627e5e833ee756d8
+        git fetch --no-tags linux-review UPDATE-20220716-232000/Usama-Arif/io_uring-remove-ring-quiesce-in-io_uring_register/20220204-225343
+        git checkout 5c6ec2f45e82c1351622414a938ca16473523b5b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1094:14: error: no member named 'tx_queue' in 'struct stmmac_priv'
-           if (!(priv->tx_queue[qopt->queue].tbs & STMMAC_TBS_AVAIL))
-                 ~~~~  ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1098:9: error: no member named 'tx_queue' in 'struct stmmac_priv'
-                   priv->tx_queue[qopt->queue].tbs |= STMMAC_TBS_EN;
-                   ~~~~  ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1100:9: error: no member named 'tx_queue' in 'struct stmmac_priv'
-                   priv->tx_queue[qopt->queue].tbs &= ~STMMAC_TBS_EN;
-                   ~~~~  ^
-   3 errors generated.
+>> fs/io_uring.c:9355:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+           return ret;
+                  ^~~
+   fs/io_uring.c:9334:13: note: initialize the variable 'ret' to silence this warning
+           int fd, ret;
+                      ^
+                       = 0
+   fs/io_uring.c:1200:20: warning: unused function 'req_ref_put' [-Wunused-function]
+   static inline void req_ref_put(struct io_kiocb *req)
+                      ^
+   2 warnings generated.
 
 
-vim +1094 drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
+vim +/ret +9355 fs/io_uring.c
 
-b60189e0392fa0 Jose Abreu 2019-12-18  1086  
-430b383c737ca0 Jose Abreu 2020-01-13  1087  static int tc_setup_etf(struct stmmac_priv *priv,
-430b383c737ca0 Jose Abreu 2020-01-13  1088  			struct tc_etf_qopt_offload *qopt)
-430b383c737ca0 Jose Abreu 2020-01-13  1089  {
-430b383c737ca0 Jose Abreu 2020-01-13  1090  	if (!priv->dma_cap.tbssel)
-430b383c737ca0 Jose Abreu 2020-01-13  1091  		return -EOPNOTSUPP;
-430b383c737ca0 Jose Abreu 2020-01-13  1092  	if (qopt->queue >= priv->plat->tx_queues_to_use)
-430b383c737ca0 Jose Abreu 2020-01-13  1093  		return -EINVAL;
-430b383c737ca0 Jose Abreu 2020-01-13 @1094  	if (!(priv->tx_queue[qopt->queue].tbs & STMMAC_TBS_AVAIL))
-430b383c737ca0 Jose Abreu 2020-01-13  1095  		return -EINVAL;
-430b383c737ca0 Jose Abreu 2020-01-13  1096  
-430b383c737ca0 Jose Abreu 2020-01-13  1097  	if (qopt->enable)
-430b383c737ca0 Jose Abreu 2020-01-13  1098  		priv->tx_queue[qopt->queue].tbs |= STMMAC_TBS_EN;
-430b383c737ca0 Jose Abreu 2020-01-13  1099  	else
-430b383c737ca0 Jose Abreu 2020-01-13  1100  		priv->tx_queue[qopt->queue].tbs &= ~STMMAC_TBS_EN;
-430b383c737ca0 Jose Abreu 2020-01-13  1101  
-430b383c737ca0 Jose Abreu 2020-01-13  1102  	netdev_info(priv->dev, "%s ETF for Queue %d\n",
-430b383c737ca0 Jose Abreu 2020-01-13  1103  		    qopt->enable ? "enabled" : "disabled", qopt->queue);
-430b383c737ca0 Jose Abreu 2020-01-13  1104  	return 0;
-430b383c737ca0 Jose Abreu 2020-01-13  1105  }
-430b383c737ca0 Jose Abreu 2020-01-13  1106  
+  9329	
+  9330	static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+  9331	{
+  9332		struct io_ev_fd *ev_fd;
+  9333		__s32 __user *fds = arg;
+  9334		int fd, ret;
+  9335	
+  9336		ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->uring_lock));
+  9337		if (ev_fd)
+  9338			return -EBUSY;
+  9339	
+  9340		if (copy_from_user(&fd, fds, sizeof(*fds)))
+  9341			return -EFAULT;
+  9342	
+  9343		ev_fd = kmalloc(sizeof(*ev_fd), GFP_KERNEL);
+  9344		if (!ev_fd)
+  9345			return -ENOMEM;
+  9346	
+  9347		ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+  9348		if (IS_ERR(ev_fd->cq_ev_fd)) {
+  9349			ret = PTR_ERR(ev_fd->cq_ev_fd);
+  9350			kfree(ev_fd);
+  9351			return ret;
+  9352		}
+  9353	
+  9354		rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> 9355		return ret;
+  9356	}
+  9357	
 
 -- 
 0-DAY CI Kernel Test Service
