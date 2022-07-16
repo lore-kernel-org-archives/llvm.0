@@ -1,98 +1,75 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DE47A
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 13:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1657977361;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gnHdMkzLi00tNGCUGHal6nCmNk9iiTh/Qem2M8JBxB0=;
-	b=NIWjna02mmfQCHAOQs6j2ZaGWny+WyOjqp+nGgKxf8BzZ17gmjX061E3UqyekE3Tijmn4x
-	+gO0Cj3qTH8BXE/n2lHE0Gk1Nt14A1lNepRIHX6jNWczTiLZlNHvPCkQrLTLDSffilwnyT
-	EFKXjIp3AI4RLXEBOdd9dHPR+ei1DLA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-kkAXVNhUPomukbTdAwDcbQ-1; Sat, 16 Jul 2022 09:16:00 -0400
-X-MC-Unique: kkAXVNhUPomukbTdAwDcbQ-1
-Received: by mail-qt1-f199.google.com with SMTP id c22-20020ac81116000000b0031d25923ea8so5529370qtj.17
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 06:16:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE9D7A
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 13:22:25 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so13956362pjr.4
+        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 06:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+HNtxGQD7e4/sLkvDJa6jpv7jycfk922+wnC+RQcTIU=;
+        b=lhLES4fyFR+FYNpd2+gkPC1xS8YjVsmI18JvmW1b4NK9N2QULLu/XV9WmjYaRxewjZ
+         QLJ7fTK69VFbQpsEkQRUi9ClHMliLAYAb6Ww8oQzjGEsT7lo7yL9MpshT0upgJK6roYT
+         yy4kbpalmj7mV69hMxwtHw/OZow1kKV7lw6edrGuedmbuYWbpj8f1bwh66+E4PrvTIa/
+         CMImqd7zDHqhqXWvNFx5oWubqBh03ea3iXZnmy+YSmyvymxi7f7yE75HOo7HA6dkCHiB
+         im8dw3gYWVZk0M79ympBsaBmJm+lO/mkb52N5E6diCmb/5bfjw1XbT1vlK5PWXXXsyZ4
+         b0ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=gnHdMkzLi00tNGCUGHal6nCmNk9iiTh/Qem2M8JBxB0=;
-        b=DmRZNrj476XUzogJhCOVs9Pv63VqFr2/az9VQqEU3wJW+dXp9zq7TNLOeB3WjoKD2/
-         63eIzaQmXK4AuA6M4J6uydvwgFKLoCRg2jnNwmt2FBniiGbNZo8ZvlkyDjEPwezR60/e
-         asmGA7P0qMr+Q12pR17kUvEz/bNu3S+Coz6ewriOsgICW+dW1Eg9TBKzHhmUvOxp55HL
-         I+c2QzcqT8h1tm92TlNN2vRqt/LWhMkNCXBdjdCDSv8Ueg0m+jtc2IUH6F5VmARBhmDK
-         Z4O+Dodw4ZifU3Khql8AZ5GbXCSWOaGOTvZNvATTeF95hX3PLIbgKJqdj1WskfW76q6F
-         9CEw==
-X-Gm-Message-State: AJIora+ld1VTMgznmOGglpGQL83PogTnvDy1M4Qo/gQogfbBFE9igCvf
-	YGI2EU2LSNFC4r3+AQj3fJr8qc8hHWCPFmnJ+IVdhNLHlZjUwyMVTWOe5NTsvsQqb9m78e6DZ23
-	xqhYe4c4s9ICq2A==
-X-Received: by 2002:ac8:594e:0:b0:31d:410f:8b56 with SMTP id 14-20020ac8594e000000b0031d410f8b56mr15567517qtz.574.1657977359658;
-        Sat, 16 Jul 2022 06:15:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t0hlikaPC0mBP+PR0j6EJBA0q7qPSPcc2vLVEczOdQynomZ3XMyGd4vyQYhwE9REYZkwJhWA==
-X-Received: by 2002:ac8:594e:0:b0:31d:410f:8b56 with SMTP id 14-20020ac8594e000000b0031d410f8b56mr15567502qtz.574.1657977359393;
-        Sat, 16 Jul 2022 06:15:59 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006b5905999easm6122095qkl.121.2022.07.16.06.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 06:15:59 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: axboe@kernel.dk,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ming.lei@redhat.com
-Cc: linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ublk_drv: initialize ret variable
-Date: Sat, 16 Jul 2022 09:15:55 -0400
-Message-Id: <20220716131555.2014270-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        bh=+HNtxGQD7e4/sLkvDJa6jpv7jycfk922+wnC+RQcTIU=;
+        b=PFaBNzBE5cCXsIe75fQSBHQ6zL9Mi9uITGRlAim69gVmOJKRcG1aRPPoscqVgyzrrZ
+         TgsBQQbDJ39IKICGoNllem1wUZ4Eol+lNJ541GemikyJUUAvcIZcIzq5ZyjmZt3JMFNz
+         gcEljtKfMnARpabvhBGtAJ40cwEzSjJHYGjENRNP2/+zLXaIuidb2OChyo87Irfi0NIh
+         kHzW6S25wOgkLjdZPCblwyrbl22Opha/4TsfiMj3/1epzHvII9+ZE7P5HQhfWSbpICml
+         k4O/ZqkQe0hsdP0+ECfhmU+SYPmZOg5uDU3ZH8eIgT9do1rzra7LGzIYfp1jKrW1cTod
+         argg==
+X-Gm-Message-State: AJIora9GVuV6mrqvIGSiVt/O9nh5noaFdBtniE7DJx/XO7aZhCCJbcrV
+	eO7EkMZrKeEZnLh2r9BVMdAtbQ==
+X-Google-Smtp-Source: AGRyM1s5JiMQgQ6sRddokryRkWqTvb6c6yGQC+X2S0YHRA6yMKI5sOvmxpfsUIbDpdGMP9OcSelNvw==
+X-Received: by 2002:a17:90b:1e04:b0:1f0:61a4:d747 with SMTP id pg4-20020a17090b1e0400b001f061a4d747mr26953849pjb.58.1657977745202;
+        Sat, 16 Jul 2022 06:22:25 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id g21-20020aa796b5000000b005289cade5b0sm5807094pfk.124.2022.07.16.06.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Jul 2022 06:22:24 -0700 (PDT)
+Message-ID: <d12332ff-dbe6-6753-f327-588623edda73@kernel.dk>
+Date: Sat, 16 Jul 2022 07:22:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] ublk_drv: initialize ret variable
+Content-Language: en-US
+To: Tom Rix <trix@redhat.com>, nathan@kernel.org, ndesaulniers@google.com,
+ ming.lei@redhat.com
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20220716131555.2014270-1-trix@redhat.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220716131555.2014270-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-clang build fails with
-drivers/block/ublk_drv.c:1304:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+On 7/16/22 7:15 AM, Tom Rix wrote:
+> clang build fails with
+> drivers/block/ublk_drv.c:1304:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+> 
+> When the call to ublk_get_device_from_id() fails, ret is used without being
+> initized.  So initialize.
 
-When the call to ublk_get_device_from_id() fails, ret is used without being
-initized.  So initialize.
+Should already be fixed:
 
-Fixes: 71f28f3136af ("ublk_drv: add io_uring based userspace block driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/block/ublk_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.20/block&id=f2450f8a2c1ec3e88d6674f747b913aa5f21fa59
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 52fd0af8a4f2..4d1199c98026 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -1298,7 +1298,7 @@ static int ublk_ctrl_get_queue_affinity(struct io_uring_cmd *cmd)
- 	struct ublk_device *ub;
- 	unsigned long queue;
- 	unsigned int retlen;
--	int ret;
-+	int ret = -ENODEV;
- 
- 	ub = ublk_get_device_from_id(header->dev_id);
- 	if (!ub)
 -- 
-2.27.0
+Jens Axboe
 
