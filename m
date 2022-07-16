@@ -1,195 +1,166 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984084C9A
-	for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 22:06:47 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id n74so10679939yba.3
-        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 15:06:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715D9181
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 00:08:47 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id ez10so11499447ejc.13
+        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 17:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=znO2Y2mgyPmy5xm12i9TL77/e75ofCAf3Bz+mrqCTv4=;
-        b=nwAiyzRfyeVohdu3BaFHjx1n2btdZSItOlEp1k1/USIkt6ye8CF/Tmpde2UgZLFQ2T
-         VKpWpyPaVmctwZl8ZfSwpEp2AWZ3zSWSXLFqo29BbYRYw1kbmkXLywzlEIsuXVVGdR/K
-         lpQlkasoIEiPB+83O+Y6+OxY0CMGw7lqu5Jn7rKleQM89vXdbC3r1yU/Zo/VtC0NeZc0
-         DujYDqUsr/EHYPEiCFjDFGG5tX9QsAJRjZo4hfOPQKC9Rx4DsxS+jus2zzz+Unem59l+
-         Gt0RfG2//6/ob5HxWL/xswiLhcV3xlt6DwvrMy9xjLTKYO9xgEOECy7rOxHJH3tE6M+X
-         hqlw==
+        bh=yF0qYkuNUhOMnwb9sHzODwkBW5iHpEMQMtEm7GeRBIA=;
+        b=BS6oH5L2ejQrjFIcp4AzXd6YcaSkbptMyBqZLLMeKwDpYPko8vPRFEtEht99LRRGGT
+         K6iWrq2PRnSy6EK3Q6IswNuhFhDDeTW9LEYpyAmJ3eWeP20JyqGdYfmmFBmqy7vzoGsy
+         Ze25JNbCPxNTNh1V3Hg36j33yANMIkxQblFLcYR4Y0+89yuK8cBYflOFjIbpcAsfLShD
+         C4Qn+01ennW2EjDyRAxA7i4761Zq0ImawDtDmXMpnWR5jq0YsGAk9oRjf97EM/XXda/4
+         u/3p/ziM3tmYOFOC0fvL5WOrzjNa4MiRpYucWBIrWUP8OjOnOK4IHPAsJenq75fg+Yy3
+         GhpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=znO2Y2mgyPmy5xm12i9TL77/e75ofCAf3Bz+mrqCTv4=;
-        b=0IaEBXHXU8f2R4gghizquoOXLpaX2vYoFE+5kMHFKCENpyniwNTEZD/uT8HaO8IugX
-         LvWncOw96QVNS/v26nu+e19/pf4kdIpwadCvK9Z0IVzGzPt1DQKYfnP5N9nTs+r1r9IO
-         9zuYptK0ukj64dG+ti7kcgf5w3LbNcPj8NU4g/dWcuCtYz0yeSPA8Bz0O995c/tlb0Dm
-         aFeRcf4LlSyGYjZeR9SkkJQBJJqwDwAjHvX1Ufa61zyvaf4Yx1E92qmB1mVKsSG89aMx
-         BdtmRvLLIgprPV5d9KRXQUPurZMqEVxk1d5XIaSzwKYDipE5tCV7iISZYZ9GUpWNcT/4
-         uckg==
-X-Gm-Message-State: AJIora+pgB1KaBF0gK8tM23RLPObT03pr2DUIwSUn3LsIgknRWbA5LS/
-	MoKwyqbj+UqYjV6YuyhPAJlGVmcTkg+jxF1y81g=
-X-Google-Smtp-Source: AGRyM1vCyIioAc6FrRYSlWDCUwjzz1zghjCHuCXctUu8dF3ZQxopEjcdoi1g3VkwnNz6rOpCmINBYPNNMlGpkWgVgCk=
-X-Received: by 2002:a25:3c45:0:b0:664:cf75:c2d6 with SMTP id
- j66-20020a253c45000000b00664cf75c2d6mr15969381yba.446.1657922806561; Fri, 15
- Jul 2022 15:06:46 -0700 (PDT)
+        bh=yF0qYkuNUhOMnwb9sHzODwkBW5iHpEMQMtEm7GeRBIA=;
+        b=BGYPmYnLh73jxpbmUGcJzMANFzOfz7fl86Zk64xl8M01QKNDXJUTngK5p+FOSQ4Lgl
+         eFqbr8Y+n7958eTxHSJkAP9X0di27NPkx8J/J34RHSsfATZmkRTMWbW3PrIGvt5YXtro
+         H1Lu9KB0KtyYehZO7H/AUotkwopvSoERODCvjnBp7sd4LDRhjOAYV5ShYcmWPdJ6e8B7
+         tO+Un79/M5H4PsU+qvNVzYT2re9JiU08YFhV+4hbuxYka77BjtDp/1ylMS7IPwAlCOrM
+         rQD7cspZaTETQGPQClPCjoWMEdRgAB+3xo8BtViPi4c2U27nvMlb8EgwV5bmes12UHL5
+         U7oA==
+X-Gm-Message-State: AJIora/e352eQUOE+QyxjExgvR/92fpde7LsPe2/db9VYnxu4BuDbrz3
+	5MjexeFwVrIrBztOfSG+g5baaHZxrht5Ex6zaFTq4A==
+X-Google-Smtp-Source: AGRyM1spC6JwR89kxZwG4nhVeU6bfHjOmE3IEYDMJtJEYU9x3nVNTSOepK3dhEdseTGM80Ow8f/gWmafk1TI1WvUpZ0=
+X-Received: by 2002:a17:906:5a67:b0:72b:610d:4aa4 with SMTP id
+ my39-20020a1709065a6700b0072b610d4aa4mr16444194ejc.294.1657930125539; Fri, 15
+ Jul 2022 17:08:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X> <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
- <YtBEXdrsthFamQs8@dev-arch.thelio-3990X> <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
- <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
-In-Reply-To: <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
-From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date: Fri, 15 Jul 2022 23:06:10 +0100
-Message-ID: <CADVatmMMWc4YYzsuMSu8uH6fTbChU_RyK75eeQb+B3aT3kDGKg@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 14
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+References: <20220711212932.1501592-1-justinstitt@google.com> <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
+In-Reply-To: <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Fri, 15 Jul 2022 17:08:34 -0700
+Message-ID: <CAFhGd8pJyRYq-3VrKM+6+k0AysfYbVJEJm3FMFt9eAysAKDUpQ@mail.gmail.com>
+Subject: Re: [PATCH] mediatek: mt7601u: fix clang -Wformat warning
+To: Joe Perches <joe@perches.com>
+Cc: Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 14, 2022 at 10:24 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, Jul 14, 2022 at 11:33 PM Joe Perches <joe@perches.com> wrote:
 >
-> Dropping the next list and Stephen as these issues are likely present on
-> mainline as well.
->
-> On Thu, Jul 14, 2022 at 07:26:27PM +0100, Sudip Mukherjee wrote:
-> > Hi Nathan,
+> On Mon, 2022-07-11 at 14:29 -0700, Justin Stitt wrote:
+> > When building with Clang we encounter this warning:
+> > > drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
+> > > specifies type 'unsigned char' but the argument has type 'int'
+> > > [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
 > >
+> > The format specifier used is `%hhu` which describes a u8. Both
+> > `dev->ee->reg.start` and `.num` are u8 as well. However, the expression
+> > as a whole is promoted to an int as you cannot get smaller-than-int from
+> > addition. Therefore, to fix the warning, use the promoted-to-type's
+> > format specifier -- in this case `%d`.
+>
+> I think whenever a sizeof(unsigned type) that is less than sizeof(int) is
+> emitted with vsprintf, the preferred format specifier should be %u not %d.
 
-<snip>
+I believe the standard recommends using the promoted-to-type's format
+specifier, in this case integer. I agree, though, that it is quite
+bizarre to represent unsigned types with signed types. I'd be
+interested in hearing more opinions on the matter.
+
+> > diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+> []
+> > @@ -88,7 +88,7 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+> >                  dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
+> >       seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
+> >       seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
+> > -     seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
+> > +     seq_printf(file, "Reg channels: %hhu-%d\n", dev->ee->reg.start,
+> >                  dev->ee->reg.start + dev->ee->reg.num - 1);
+>
+> And this is not a promotion of an argument to int via varargs.
+> The arithmetic did the promotion.
+
+Right, I noted in my patch message that the type promotion was due to addition.
 
 >
-> It has not been as bad with CONFIG_KASAN_STACK force disabled for clang
-> but it is still there for certain architectures, namely ARCH=arm. I
-> would be curious to see if all those -Wframe-larger-than instances
-> disappear with CONFIG_KASAN disabled.
+> I suggest s/%hh/%/ for all the uses here, not just this one.
 
-Almost. This is from powerpc allmodconfig of next-20220715 with
-CONFIG_KASAN disabled.
+I also contemplated this change but I think it might be a bit out of
+scope for https://github.com/ClangBuiltLinux/linux/issues/378  -- What
+do you think?
+It could be argued that every single instance of %hh[dux] should be
+replaced with %[dux].
 
-drivers/block/ublk_drv.c:890:6: error: variable 'io' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (tag >= ubq->q_depth)
-            ^~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:890:2: note: remove the 'if' if its condition
-is always false
-        if (tag >= ubq->q_depth)
-        ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:887:6: error: variable 'io' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (ubq->ubq_daemon && ubq->ubq_daemon != current)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:887:2: note: remove the 'if' if its condition
-is always false
-        if (ubq->ubq_daemon && ubq->ubq_daemon != current)
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:884:6: error: variable 'io' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (!ubq || ub_cmd->q_id != ubq->q_id)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:884:2: note: remove the 'if' if its condition
-is always false
-        if (!ubq || ub_cmd->q_id != ubq->q_id)
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:884:6: error: variable 'io' is used
-uninitialized whenever '||' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (!ubq || ub_cmd->q_id != ubq->q_id)
-            ^~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:884:6: note: remove the '||' if its condition
-is always false
-        if (!ubq || ub_cmd->q_id != ubq->q_id)
-            ^~~~~~~
-drivers/block/ublk_drv.c:880:6: error: variable 'io' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:880:2: note: remove the 'if' if its condition
-is always false
-        if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:877:6: error: variable 'io' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (!(issue_flags & IO_URING_F_SQE128))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-        io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-        ^~
-drivers/block/ublk_drv.c:877:2: note: remove the 'if' if its condition
-is always false
-        if (!(issue_flags & IO_URING_F_SQE128))
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/block/ublk_drv.c:868:20: note: initialize the variable 'io' to
-silence this warning
-        struct ublk_io *io;
-                          ^
-                           = NULL
-drivers/block/ublk_drv.c:1304:6: error: variable 'ret' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (!ub)
-            ^~~
-drivers/block/ublk_drv.c:1330:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
-drivers/block/ublk_drv.c:1304:2: note: remove the 'if' if its
-condition is always false
-        if (!ub)
-        ^~~~~~~~
-drivers/block/ublk_drv.c:1301:9: note: initialize the variable 'ret'
-to silence this warning
-        int ret;
-               ^
-                = 0
-7 errors generated.
-_________________________________________________________________________________________________________________
-
-
-drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is
-not a compile-time constant
-        gpu_cc_parent,
-        ^~~~~~~~~~~~~
-drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is
-not a compile-time constant
-        gpu_cc_parent,
-        ^~~~~~~~~~~~~
-2 errors generated.
-_________________________________________________________________________________________________________________
-
-drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1093:12: error: stack frame size
-(2112) exceeds limit (2048) in 'vcn_v3_0_start'
-[-Werror,-Wframe-larger-than]
-static int vcn_v3_0_start(struct amdgpu_device *adev)
-           ^
-1 error generated.
-_________________________________________________________________________________________________________________
-
-
--- 
-Regards
-Sudip
+> checkpatch could do this somewhat automatically.
+> Of course any changes it suggests need human review.
+>
+> $ ./scripts/checkpatch.pl -f drivers/net/wireless/mediatek/mt7601u/debugfs.c --show-types --types=unnecessary_modifier --fix-inplace
+> $ git diff --stat -p drivers/net/wireless/mediatek/mt7601u/debugfs.c
+> ---
+>  drivers/net/wireless/mediatek/mt7601u/debugfs.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+> index 20669eacb66ea..b7a6376e3352e 100644
+> --- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+> +++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+> @@ -83,28 +83,28 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+>         struct tssi_data *td = &dev->ee->tssi_data;
+>         int i;
+>
+> -       seq_printf(file, "RF freq offset: %hhx\n", dev->ee->rf_freq_off);
+> -       seq_printf(file, "RSSI offset: %hhx %hhx\n",
+> +       seq_printf(file, "RF freq offset: %x\n", dev->ee->rf_freq_off);
+> +       seq_printf(file, "RSSI offset: %x %x\n",
+>                    dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
+> -       seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
+> -       seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
+> -       seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
+> +       seq_printf(file, "Reference temp: %x\n", dev->ee->ref_temp);
+> +       seq_printf(file, "LNA gain: %x\n", dev->ee->lna_gain);
+> +       seq_printf(file, "Reg channels: %u-%u\n", dev->ee->reg.start,
+>                    dev->ee->reg.start + dev->ee->reg.num - 1);
+>
+>         seq_puts(file, "Per rate power:\n");
+>         for (i = 0; i < 2; i++)
+> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
+> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+>                            rp->cck[i].raw, rp->cck[i].bw20, rp->cck[i].bw40);
+>         for (i = 0; i < 4; i++)
+> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
+> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+>                            rp->ofdm[i].raw, rp->ofdm[i].bw20, rp->ofdm[i].bw40);
+>         for (i = 0; i < 4; i++)
+> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
+> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+>                            rp->ht[i].raw, rp->ht[i].bw20, rp->ht[i].bw40);
+>
+>         seq_puts(file, "Per channel power:\n");
+>         for (i = 0; i < 7; i++)
+> -               seq_printf(file, "\t tx_power  ch%u:%02hhx ch%u:%02hhx\n",
+> +               seq_printf(file, "\t tx_power  ch%u:%02x ch%u:%02x\n",
+>                            i * 2 + 1, dev->ee->chan_pwr[i * 2],
+>                            i * 2 + 2, dev->ee->chan_pwr[i * 2 + 1]);
+>
+> @@ -112,8 +112,8 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+>                 return 0;
+>
+>         seq_puts(file, "TSSI:\n");
+> -       seq_printf(file, "\t slope:%02hhx\n", td->slope);
+> -       seq_printf(file, "\t offset=%02hhx %02hhx %02hhx\n",
+> +       seq_printf(file, "\t slope:%02x\n", td->slope);
+> +       seq_printf(file, "\t offset=%02x %02x %02x\n",
+>                    td->offset[0], td->offset[1], td->offset[2]);
+>         seq_printf(file, "\t delta_off:%08x\n", td->tx0_delta_offset);
+>
+>
