@@ -1,225 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAE936D
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 20:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1658003971;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mhSFEuZeknUQVfzPSwX5MfJdkj3OYdP96/1A6PpGU/U=;
-	b=OFyp8fQMJUU7+kj/3utgBQPTSuf5aViodOWsSlFaFIgrSNkfCk0NzlorCRwa5nsTYGRYE8
-	jU7Qwfqjr04vJt5Lp8VrlZs9ZnXXgPhQOCdy0Pd67UAEN2sGswIVlCu5afWZ/Xcaeth5Hq
-	5XbxDWpssAj/MkvWyNYfsjNSk5nxYv0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-8VRExlWENp-iHnbqkFrVkg-1; Sat, 16 Jul 2022 16:39:30 -0400
-X-MC-Unique: 8VRExlWENp-iHnbqkFrVkg-1
-Received: by mail-qk1-f197.google.com with SMTP id t203-20020a3746d4000000b006af1d3e8068so6179100qka.0
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 13:39:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mhSFEuZeknUQVfzPSwX5MfJdkj3OYdP96/1A6PpGU/U=;
-        b=KBujc4RQuSL6N3aFtBZHJp4kRNOUaWSRTOO6y4YjYX87wJvkMN9DSC20tdClNApRQl
-         0iUQGyMOBec91WEaEiXRDWbS7TPKLjbWX3vPJbvnN0nHS7XmNMxaRx8ENUz3ewVeqcX2
-         q/owqh70fLNODY+9xTftojZ06IX9V/r6xh+va4WOXQIZs6SHG9PtC17QTc5bQfmfrngo
-         fe8LnJrTUkHU+xZMjf6Jd00Qs1AngrsTlTWQLl5nOS57rGMo3rY0tjlVc3tMGnAUJeiA
-         yJEY2MGWEdrey8em+m5U08GtXbgh9M8+Z/uVnzKZnO60bcKwQPUwBx52p4Gddm/epgGU
-         8F8Q==
-X-Gm-Message-State: AJIora9jdNkRoUcF/nuEjud5xja/q0paJcL5PWUElMiXZYCwQRlK6SWZ
-	kxrd707V2VjNqHtagrol1bnTuy6D1e4KF/i46jj+HVivk01QSBWbRK8ooIo1mcuKFT2LIcbzS7M
-	Ac3Pdycmf2Y1hag==
-X-Received: by 2002:a05:620a:2a10:b0:6b5:e07b:427f with SMTP id o16-20020a05620a2a1000b006b5e07b427fmr1674265qkp.398.1658003969673;
-        Sat, 16 Jul 2022 13:39:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sB76mCLZRt/21ZXI6v1fh8xyd739UV3uY6W+wFcWGPj9yOrUUwer2A0FmdnFEZjO2sE337kQ==
-X-Received: by 2002:a05:620a:2a10:b0:6b5:e07b:427f with SMTP id o16-20020a05620a2a1000b006b5e07b427fmr1674258qkp.398.1658003969432;
-        Sat, 16 Jul 2022 13:39:29 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05620a404a00b006b2849cdd37sm7716477qko.113.2022.07.16.13.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 13:39:29 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: nathan@kernel.org,
-	ndesaulniers@google.com,
-	sagi@grimberg.me,
-	hare@suse.de
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] nvme-auth: fix input checking
-Date: Sat, 16 Jul 2022 16:39:24 -0400
-Message-Id: <20220716203924.2248841-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5688B136C
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 20:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658004419; x=1689540419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LrmoLtJ1Uggt3F9Z/GHOW0s5sU72zhEL2H8Utx4nz8s=;
+  b=Tcc9Xa9dF9BV1EodVL88ZIiSAhio2D64IAlQFMI4HUsP3px5J4Zj/7QK
+   sdz7XOkmNfkirmyXfTN7T7oAU6hvf02kDj/wB2fn5zLwVpDireq7JTN9A
+   +3uftQqMaZe7CzF7706zEEiDsZgKTwuJ93t4mA5zLhVYAWWAenzK8sP5T
+   xLnqH1Dawt0aC5+Kk7ERGPf4y/W0G6tTh8smXobLmeCMU153BFp8esOTX
+   aTQ72U+5RNr61wYsuaICEZ/B8ovdWpS8IfP+thdYOEF1ATrhj9ruCYpa/
+   BigDjyTx6pf4+NeG6LhRMvmNsLuOMbh9b00Oi3rjpV2mwSqmmULTuQvTT
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266413387"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="266413387"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 13:46:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="739029013"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 13:46:36 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oCogN-00027P-UE;
+	Sat, 16 Jul 2022 20:46:35 +0000
+Date: Sun, 17 Jul 2022 04:46:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>, Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] fs/lock: Don't allocate file_lock in flock_make_lock().
+Message-ID: <202207170400.ddCuQ7sy-lkp@intel.com>
+References: <20220716013140.61445-1-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220716013140.61445-1-kuniyu@amazon.com>
 
-clang build fails with this representative error
-drivers/nvme/common/auth.c:59:31: error: address of array 'dhgroup_map[dhgroup_id].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
-            !dhgroup_map[dhgroup_id].name ||
-            ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+Hi Kuniyuki,
 
-Input is checked with this pattern
-  if (i > ARRAY_SIZE(a))
-    fail
-  return a[i].x
+Thank you for the patch! Perhaps something to improve:
 
-This is an off-by-one bug.  Change to
-  if (i < ARRAY_SIZE(a)
-    return a[i].x
-  return fail
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19-rc6 next-20220715]
+[cannot apply to jlayton/linux-next cel-2.6/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-By specifying the 'name' element of the nvme_auth_dhgroup_map struct as
-a constant, pre sized array, it will be never be NULL.  So this and similar
-pointer checks are not needed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/fs-lock-Don-t-allocate-file_lock-in-flock_make_lock/20220716-225519
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+config: mips-randconfig-r003-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170400.ddCuQ7sy-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7f68b5b24c3d8d371fb96ebe278dabb8c08bbf51
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kuniyuki-Iwashima/fs-lock-Don-t-allocate-file_lock-in-flock_make_lock/20220716-225519
+        git checkout 7f68b5b24c3d8d371fb96ebe278dabb8c08bbf51
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-By inspection, none of the strings are zero length.  So the strlen() check
-is also not needed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The array dhgroup_map[] is unchanging so it should have a const type
-qualifier.
+All warnings (new ones prefixed by >>):
 
-The hash_map[] array has an additional problem.  The zeroth element of the
-array is not explicitly initialized so it is implicitly zero initialized.
-The pointer will be valid but be empty strings.  Instead of calling strlen(),
-check for the zeroth element.
+>> fs/locks.c:2103:6: warning: variable 'error' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!unlock && !(f.file->f_mode & (FMODE_READ|FMODE_WRITE)))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/locks.c:2139:9: note: uninitialized use occurs here
+           return error;
+                  ^~~~~
+   fs/locks.c:2103:2: note: remove the 'if' if its condition is always false
+           if (!unlock && !(f.file->f_mode & (FMODE_READ|FMODE_WRITE)))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/locks.c:2089:11: note: initialize the variable 'error' to silence this warning
+           int error;
+                    ^
+                     = 0
+   1 warning generated.
 
-Fixes: a476416bb57b ("nvme: implement In-Band authentication")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/nvme/common/auth.c | 54 +++++++++++++++-----------------------
- 1 file changed, 21 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
-index 0c86ebce59d2..b7f7ab37786c 100644
---- a/drivers/nvme/common/auth.c
-+++ b/drivers/nvme/common/auth.c
-@@ -35,7 +35,7 @@ u32 nvme_auth_get_seqnum(void)
- }
- EXPORT_SYMBOL_GPL(nvme_auth_get_seqnum);
- 
--static struct nvme_auth_dhgroup_map {
-+static const struct nvme_auth_dhgroup_map {
- 	const char name[16];
- 	const char kpp[16];
- } dhgroup_map[] = {
-@@ -55,21 +55,17 @@ static struct nvme_auth_dhgroup_map {
- 
- const char *nvme_auth_dhgroup_name(u8 dhgroup_id)
- {
--	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
--	    !dhgroup_map[dhgroup_id].name ||
--	    !strlen(dhgroup_map[dhgroup_id].name))
--		return NULL;
--	return dhgroup_map[dhgroup_id].name;
-+	if (dhgroup_id < ARRAY_SIZE(dhgroup_map))
-+		return dhgroup_map[dhgroup_id].name;
-+	return NULL;
- }
- EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_name);
- 
- const char *nvme_auth_dhgroup_kpp(u8 dhgroup_id)
- {
--	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
--	    !dhgroup_map[dhgroup_id].kpp ||
--	    !strlen(dhgroup_map[dhgroup_id].kpp))
--		return NULL;
--	return dhgroup_map[dhgroup_id].kpp;
-+	if (dhgroup_id < ARRAY_SIZE(dhgroup_map))
-+		return dhgroup_map[dhgroup_id].kpp;
-+	return NULL;
- }
- EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_kpp);
- 
-@@ -78,9 +74,6 @@ u8 nvme_auth_dhgroup_id(const char *dhgroup_name)
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(dhgroup_map); i++) {
--		if (!dhgroup_map[i].name ||
--		    !strlen(dhgroup_map[i].name))
--			continue;
- 		if (!strncmp(dhgroup_map[i].name, dhgroup_name,
- 			     strlen(dhgroup_map[i].name)))
- 			return i;
-@@ -89,7 +82,7 @@ u8 nvme_auth_dhgroup_id(const char *dhgroup_name)
- }
- EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_id);
- 
--static struct nvme_dhchap_hash_map {
-+static const struct nvme_dhchap_hash_map {
- 	int len;
- 	const char hmac[15];
- 	const char digest[8];
-@@ -113,21 +106,19 @@ static struct nvme_dhchap_hash_map {
- 
- const char *nvme_auth_hmac_name(u8 hmac_id)
- {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
--	    !hash_map[hmac_id].hmac ||
--	    !strlen(hash_map[hmac_id].hmac))
--		return NULL;
--	return hash_map[hmac_id].hmac;
-+	if ((hmac_id > 0) &&
-+	    (hmac_id < ARRAY_SIZE(hash_map)))
-+		return hash_map[hmac_id].hmac;
-+	return NULL;
- }
- EXPORT_SYMBOL_GPL(nvme_auth_hmac_name);
- 
- const char *nvme_auth_digest_name(u8 hmac_id)
- {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
--	    !hash_map[hmac_id].digest ||
--	    !strlen(hash_map[hmac_id].digest))
--		return NULL;
--	return hash_map[hmac_id].digest;
-+	if ((hmac_id > 0) &&
-+	    (hmac_id < ARRAY_SIZE(hash_map)))
-+		return hash_map[hmac_id].digest;
-+	return NULL;
- }
- EXPORT_SYMBOL_GPL(nvme_auth_digest_name);
- 
-@@ -135,9 +126,7 @@ u8 nvme_auth_hmac_id(const char *hmac_name)
- {
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(hash_map); i++) {
--		if (!hash_map[i].hmac || !strlen(hash_map[i].hmac))
--			continue;
-+	for (i = 1; i < ARRAY_SIZE(hash_map); i++) {
- 		if (!strncmp(hash_map[i].hmac, hmac_name,
- 			     strlen(hash_map[i].hmac)))
- 			return i;
-@@ -148,11 +137,10 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_id);
- 
- size_t nvme_auth_hmac_hash_len(u8 hmac_id)
- {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
--	    !hash_map[hmac_id].hmac ||
--	    !strlen(hash_map[hmac_id].hmac))
--		return 0;
--	return hash_map[hmac_id].len;
-+	if ((hmac_id > 0) &&
-+	    (hmac_id < ARRAY_SIZE(hash_map)))
-+		return hash_map[hmac_id].len;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(nvme_auth_hmac_hash_len);
- 
+vim +2103 fs/locks.c
+
+e55c34a66f87e7 Benjamin Coddington   2015-10-22  2068  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2069  /**
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2070   *	sys_flock: - flock() system call.
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2071   *	@fd: the file descriptor to lock.
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2072   *	@cmd: the type of lock to apply.
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2073   *
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2074   *	Apply a %FL_FLOCK style lock to an open file descriptor.
+80b79dd0e2f29f Mauro Carvalho Chehab 2017-05-27  2075   *	The @cmd can be one of:
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2076   *
+80b79dd0e2f29f Mauro Carvalho Chehab 2017-05-27  2077   *	- %LOCK_SH -- a shared lock.
+80b79dd0e2f29f Mauro Carvalho Chehab 2017-05-27  2078   *	- %LOCK_EX -- an exclusive lock.
+80b79dd0e2f29f Mauro Carvalho Chehab 2017-05-27  2079   *	- %LOCK_UN -- remove an existing lock.
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2080   *	- %LOCK_MAND -- a 'mandatory' flock. (DEPRECATED)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2081   *
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2082   *	%LOCK_MAND support has been removed from the kernel.
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2083   */
+002c8976ee5377 Heiko Carstens        2009-01-14  2084  SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned int, cmd)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2085  {
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2086  	int can_sleep, unlock, type;
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2087  	struct file_lock fl;
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2088  	struct fd f;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2089  	int error;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2090  
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2091  	type = flock_translate_cmd(cmd);
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2092  	if (type < 0)
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2093  		return type;
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2094  
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2095  	f = fdget(fd);
+2903ff019b346a Al Viro               2012-08-28  2096  	if (!f.file)
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2097  		return -EBADF;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2098  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2099  	can_sleep = !(cmd & LOCK_NB);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2100  	cmd &= ~LOCK_NB;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2101  	unlock = (cmd == LOCK_UN);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2102  
+90f7d7a0d0d686 Jeff Layton           2021-09-10 @2103  	if (!unlock && !(f.file->f_mode & (FMODE_READ|FMODE_WRITE)))
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2104  		goto out_putf;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2105  
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2106  	/*
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2107  	 * LOCK_MAND locks were broken for a long time in that they never
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2108  	 * conflicted with one another and didn't prevent any sort of open,
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2109  	 * read or write activity.
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2110  	 *
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2111  	 * Just ignore these requests now, to preserve legacy behavior, but
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2112  	 * throw a warning to let people know that they don't actually work.
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2113  	 */
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2114  	if (cmd & LOCK_MAND) {
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2115  		pr_warn_once("Attempt to set a LOCK_MAND lock via flock(2). This support has been removed and the request ignored.\n");
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2116  		error = 0;
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2117  		goto out_putf;
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2118  	}
+90f7d7a0d0d686 Jeff Layton           2021-09-10  2119  
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2120  	flock_make_lock(f.file, &fl, type);
+6e129d00689c4d Jeff Layton           2014-09-04  2121  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2122  	if (can_sleep)
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2123  		fl.fl_flags |= FL_SLEEP;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2124  
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2125  	error = security_file_lock(f.file, fl.fl_type);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2126  	if (error)
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2127  		goto out_putf;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2128  
+de2a4a501e716b Miklos Szeredi        2018-07-18  2129  	if (f.file->f_op->flock)
+2903ff019b346a Al Viro               2012-08-28  2130  		error = f.file->f_op->flock(f.file,
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2131  					    can_sleep ? F_SETLKW : F_SETLK,
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2132  					    &fl);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2133  	else
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2134  		error = locks_lock_file_wait(f.file, &fl);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2135  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2136   out_putf:
+2903ff019b346a Al Viro               2012-08-28  2137  	fdput(f);
+7f68b5b24c3d8d Kuniyuki Iwashima     2022-07-15  2138  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2139  	return error;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2140  }
+^1da177e4c3f41 Linus Torvalds        2005-04-16  2141  
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
