@@ -1,42 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F72E7A
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 23:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484F27A
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 23:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658014321; x=1689550321;
+  t=1658014921; x=1689550921;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kSMKGwd6jWOtJrME4hiCUa+UtRIyOBYJ06HJnUGBgjE=;
-  b=gHjNwPkm1OE8H1+uBFuw8+P0elWWOQvozlOxh5CiyorTaKXjRFu7WZZQ
-   buCNKI6kNLUForI6jK4X60aY3MafehwzkuKkKVFxd03nz5Hl691nL2IgO
-   o3gVgrQCG4R+YZ6+0dfEYHbJEbLn2EsiA6zqqQn2XgaPC3t8VrKqv8dov
-   00bojIo5dgNaPm/9q6vKg9RILtqTrYPCBM5yAFmGKTFoNULxMpMQjhjd2
-   npMGq2eL2eWZNE/8XDsWqs/ANlEBdQxhktbb7P4jGDDbw4aRTIr7D6m86
-   x//mwofriZShWMHMXDM+385kCWqC3B7+ZQ59T6ZvjOWmGgdZI49o3IAFD
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="287157054"
+  bh=i2dfajdcLMbV7Q4LGYsbmdqWMMel7plYeVaI/o68QLc=;
+  b=lp+LZiw2MdQWAET+L3Mm9+q37Wr+E4prGYLW+NyJGDY/j1zKq+BAfet0
+   fam5xkZw/FwApV7bLZcZIgSLxXJ1iN4R0hLNtiBv4ESplsc/ByWXVUw8B
+   7VfyNtD1Q0YQBbDVirm77uv+fxfkqalQKhu3dN73W0E22QhhLP9QpHh+i
+   6sG6D1i4mX4ckUmjYtaJs2HNJh+5DmRdc+l9QgAxPzf2OOhozRO+/89Fp
+   seSOdEpUhNLhmO3qdcamN+hTNsaVVZcM8kYb3GUxmEJSOPLSrVc0C+Oej
+   syNRFbX/EgzXIJAdx5KKDxzZ343U7+b07PWr2ujAkht9bscDCD+tB30cX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="372324869"
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="287157054"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 16:32:00 -0700
+   d="scan'208";a="372324869"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 16:42:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="664597249"
+   d="scan'208";a="739051242"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jul 2022 16:31:58 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 16:41:58 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCrGQ-0002IM-5E;
-	Sat, 16 Jul 2022 23:31:58 +0000
-Date: Sun, 17 Jul 2022 07:31:08 +0800
+	id 1oCrQ6-0002IY-7X;
+	Sat, 16 Jul 2022 23:41:58 +0000
+Date: Sun, 17 Jul 2022 07:41:24 +0800
 From: kernel test robot <lkp@intel.com>
 To: Usama Arif <usama.arif@bytedance.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
 Subject: fs/io_uring.c:9355:9: warning: variable 'ret' is uninitialized when
  used here
-Message-ID: <202207170730.1iSEta2h-lkp@intel.com>
+Message-ID: <202207170736.NYpEy72b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220716-232000/Us
 head:   a5e1e37e8b4c9ca3f59d11e31910a7f093649d31
 commit: 5c6ec2f45e82c1351622414a938ca16473523b5b io_uring: avoid ring quiesce while registering/unregistering eventfd
 date:   8 hours ago
-config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170730.1iSEta2h-lkp@intel.com/config)
+config: hexagon-randconfig-r031-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170736.NYpEy72b-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
