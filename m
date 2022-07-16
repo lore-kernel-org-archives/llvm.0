@@ -1,75 +1,108 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE9D7A
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 13:22:25 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so13956362pjr.4
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 06:22:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF076659
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 17:34:39 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id w12so10024803edd.13
+        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+HNtxGQD7e4/sLkvDJa6jpv7jycfk922+wnC+RQcTIU=;
-        b=lhLES4fyFR+FYNpd2+gkPC1xS8YjVsmI18JvmW1b4NK9N2QULLu/XV9WmjYaRxewjZ
-         QLJ7fTK69VFbQpsEkQRUi9ClHMliLAYAb6Ww8oQzjGEsT7lo7yL9MpshT0upgJK6roYT
-         yy4kbpalmj7mV69hMxwtHw/OZow1kKV7lw6edrGuedmbuYWbpj8f1bwh66+E4PrvTIa/
-         CMImqd7zDHqhqXWvNFx5oWubqBh03ea3iXZnmy+YSmyvymxi7f7yE75HOo7HA6dkCHiB
-         im8dw3gYWVZk0M79ympBsaBmJm+lO/mkb52N5E6diCmb/5bfjw1XbT1vlK5PWXXXsyZ4
-         b0ig==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8iDiDQdK0Y4Twyf2w6H2yrqrbuVdQeYS04yw6GP8uk4=;
+        b=heW9Qr2XiyY6OqRlLdI2V+LEMMLgw6QKsr5CvO05pRXWfqknCGfEu1MOaT3LQ796sI
+         YOm74UnqUxNmDzHVdAddwWqtIRm6ry2PynKXbKgn7j885PGSl1OXlWeH/5Ie8ljVLmz4
+         NpcIen2TBlI7yD07+24+irawf+bg2LFZA6CIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+HNtxGQD7e4/sLkvDJa6jpv7jycfk922+wnC+RQcTIU=;
-        b=PFaBNzBE5cCXsIe75fQSBHQ6zL9Mi9uITGRlAim69gVmOJKRcG1aRPPoscqVgyzrrZ
-         TgsBQQbDJ39IKICGoNllem1wUZ4Eol+lNJ541GemikyJUUAvcIZcIzq5ZyjmZt3JMFNz
-         gcEljtKfMnARpabvhBGtAJ40cwEzSjJHYGjENRNP2/+zLXaIuidb2OChyo87Irfi0NIh
-         kHzW6S25wOgkLjdZPCblwyrbl22Opha/4TsfiMj3/1epzHvII9+ZE7P5HQhfWSbpICml
-         k4O/ZqkQe0hsdP0+ECfhmU+SYPmZOg5uDU3ZH8eIgT9do1rzra7LGzIYfp1jKrW1cTod
-         argg==
-X-Gm-Message-State: AJIora9GVuV6mrqvIGSiVt/O9nh5noaFdBtniE7DJx/XO7aZhCCJbcrV
-	eO7EkMZrKeEZnLh2r9BVMdAtbQ==
-X-Google-Smtp-Source: AGRyM1s5JiMQgQ6sRddokryRkWqTvb6c6yGQC+X2S0YHRA6yMKI5sOvmxpfsUIbDpdGMP9OcSelNvw==
-X-Received: by 2002:a17:90b:1e04:b0:1f0:61a4:d747 with SMTP id pg4-20020a17090b1e0400b001f061a4d747mr26953849pjb.58.1657977745202;
-        Sat, 16 Jul 2022 06:22:25 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g21-20020aa796b5000000b005289cade5b0sm5807094pfk.124.2022.07.16.06.22.24
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8iDiDQdK0Y4Twyf2w6H2yrqrbuVdQeYS04yw6GP8uk4=;
+        b=KiZywcujob3Wx7qcw/GS7ka6vA9Tbh2k3uxOdvkow1q5t92qyUHa5UOkID2l1XHUd2
+         WEJc0GymCD1mPemBN6rBBXz3wy4i29tLz0Akuvm35GHTXyME0TAFkffinh17mYCIPvRR
+         aS2rPkoY/TvLIPbz+QizoFmF4kQ35HiTzmwW6yZaW2vsVry1iOD/MiXJHgkD5BjHUpNy
+         TcqLU4IZ81CUN+h58CzbS09Mw1lTqUYxIAt2ai1miyIS1EztrpA2nrefESoJhfoj5DGZ
+         8WudqdCO0ee++iqO7xyUqzSpxfsMQPQygHfmlVbpJjv+b2icFAv79e67XcwLbIC4Qv3F
+         cjew==
+X-Gm-Message-State: AJIora9vZPY41ynlZ0//W1dYs3aM/3DDFFCJn01pS/nDIHB5LYvBjwtl
+	hUS4Fp+w5nTgpJaMr7e25ItP20Se6Mq7hiHo
+X-Google-Smtp-Source: AGRyM1ssDLIzoVUj/SBEyGOBZ4RUpSHb0f7B2wz1hVqUWaCSRlWwym881JUMu9ewEoXFFORUKgI/1A==
+X-Received: by 2002:a05:6402:48:b0:43a:caa8:756b with SMTP id f8-20020a056402004800b0043acaa8756bmr26710020edu.112.1657992877116;
+        Sat, 16 Jul 2022 10:34:37 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id o7-20020aa7c507000000b0043ab81e4230sm5100695edq.50.2022.07.16.10.34.34
+        for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 06:22:24 -0700 (PDT)
-Message-ID: <d12332ff-dbe6-6753-f327-588623edda73@kernel.dk>
-Date: Sat, 16 Jul 2022 07:22:23 -0600
+        Sat, 16 Jul 2022 10:34:35 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id b26so10935010wrc.2
+        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:34:34 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
+ bw12-20020a0560001f8c00b0021d7e9851bamr16322329wrb.442.1657992873956; Sat, 16
+ Jul 2022 10:34:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ublk_drv: initialize ret variable
-Content-Language: en-US
-To: Tom Rix <trix@redhat.com>, nathan@kernel.org, ndesaulniers@google.com,
- ming.lei@redhat.com
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220716131555.2014270-1-trix@redhat.com>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220716131555.2014270-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220714205646.4023495-1-ndesaulniers@google.com> <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 16 Jul 2022 10:34:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
+Message-ID: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/16/22 7:15 AM, Tom Rix wrote:
-> clang build fails with
-> drivers/block/ublk_drv.c:1304:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-> 
-> When the call to ublk_get_device_from_id() fails, ret is used without being
-> initized.  So initialize.
+On Thu, Jul 14, 2022 at 4:15 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> There are still the "__ubsan_handle_load_invalid_value() with UACCESS
+> enabled" messages, but those are misfeatures of the kvm cmpxchg
+> implementation.
 
-Should already be fixed:
+Ok, so it really is independent of the non-optimal kvm cmpxchg implementation.
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.20/block&id=f2450f8a2c1ec3e88d6674f747b913aa5f21fa59
+The kvm code is fine - yes, it runs a bit too much code under the
+CLAC/STAC pair, but that "too much code" really is just a few local
+variable assignments.
 
--- 
-Jens Axboe
+So any reasonable compiler will keep them in registers, and even if
+that's not the case, it would just be a stack spill or reload with AC
+set, which is not really a problem.
 
+But calling out to external functions within that SMAP region is
+invalid, and objdump warns about it.  Because we really want to
+minimize the area where user accesses are ok, and it's a "don't do
+this, you now lost the SMAP protection".
+
+ANYWAY.
+
+The reason the clang build warns - but the gcc build does not - is
+simply that clang code generation is just nasty.
+
+I decided to make a non-kernel test-case so that clang people can look
+at it without having to worry about any kernel code issues or the
+details of the SMAP rules, and it really shows how clang generates
+horribly pointless and wrong code.
+
+I'm not sure what the right thing to do is to get this sorted out, but
+I created an "issue" on github for this:
+
+    https://github.com/llvm/llvm-project/issues/56568
+
+in the hope that this can get fixed. Because it's very clearly a clang
+misfeature, where clang basically generates insane code that violates
+the rules we try to enforce with objdump.
+
+Nick / Nathan / clang-built-linux people - if there are other better
+ways than that github issue thing to make people aware of this, that
+would be lovely, and please forward that issue to the right people.
+
+                         Linus
