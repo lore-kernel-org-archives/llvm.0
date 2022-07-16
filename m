@@ -1,166 +1,117 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715D9181
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 00:08:47 +0000 (UTC)
-Received: by mail-ej1-f43.google.com with SMTP id ez10so11499447ejc.13
-        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 17:08:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C2C362
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 00:16:26 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-31cd7ade3d6so50371057b3.3
+        for <llvm@lists.linux.dev>; Fri, 15 Jul 2022 17:16:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yF0qYkuNUhOMnwb9sHzODwkBW5iHpEMQMtEm7GeRBIA=;
-        b=BS6oH5L2ejQrjFIcp4AzXd6YcaSkbptMyBqZLLMeKwDpYPko8vPRFEtEht99LRRGGT
-         K6iWrq2PRnSy6EK3Q6IswNuhFhDDeTW9LEYpyAmJ3eWeP20JyqGdYfmmFBmqy7vzoGsy
-         Ze25JNbCPxNTNh1V3Hg36j33yANMIkxQblFLcYR4Y0+89yuK8cBYflOFjIbpcAsfLShD
-         C4Qn+01ennW2EjDyRAxA7i4761Zq0ImawDtDmXMpnWR5jq0YsGAk9oRjf97EM/XXda/4
-         u/3p/ziM3tmYOFOC0fvL5WOrzjNa4MiRpYucWBIrWUP8OjOnOK4IHPAsJenq75fg+Yy3
-         GhpA==
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=K1u/08k1kHvQ8RIYk0HRaqbL2NYdWoYTw1DMyhtc5Cw=;
+        b=ho4U6QwUwXhpx81KMHiBsPWFgJd29KTWTUHZtpCpwKlYMTwBhoeXodak0kOIHbZ2ir
+         BpGSx7gVS1PPG+NQ2aAFqq0AgMA50X8mXFaW1ql992pf9L3w8vLyF+bdZIWnGJW/YoLX
+         AbeXy+d/mGyc7jUiCNNruhVn6Jf2pqOxbsHLu73faBNIGntKz8usvZy4DSJg/H3MKTUn
+         JhBVt3Rq48h/YgiVHWle7KeEFSaA643KcJxCmU6VsNG8YnWxYm/mkeKg77U6RANWhbUj
+         /xj0aGtFI6Y3ga4QKFY/czxZXcottGTH5osym5cpiBTDhHQmr1mlaIAwSvBJTThmUSRB
+         /LNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yF0qYkuNUhOMnwb9sHzODwkBW5iHpEMQMtEm7GeRBIA=;
-        b=BGYPmYnLh73jxpbmUGcJzMANFzOfz7fl86Zk64xl8M01QKNDXJUTngK5p+FOSQ4Lgl
-         eFqbr8Y+n7958eTxHSJkAP9X0di27NPkx8J/J34RHSsfATZmkRTMWbW3PrIGvt5YXtro
-         H1Lu9KB0KtyYehZO7H/AUotkwopvSoERODCvjnBp7sd4LDRhjOAYV5ShYcmWPdJ6e8B7
-         tO+Un79/M5H4PsU+qvNVzYT2re9JiU08YFhV+4hbuxYka77BjtDp/1ylMS7IPwAlCOrM
-         rQD7cspZaTETQGPQClPCjoWMEdRgAB+3xo8BtViPi4c2U27nvMlb8EgwV5bmes12UHL5
-         U7oA==
-X-Gm-Message-State: AJIora/e352eQUOE+QyxjExgvR/92fpde7LsPe2/db9VYnxu4BuDbrz3
-	5MjexeFwVrIrBztOfSG+g5baaHZxrht5Ex6zaFTq4A==
-X-Google-Smtp-Source: AGRyM1spC6JwR89kxZwG4nhVeU6bfHjOmE3IEYDMJtJEYU9x3nVNTSOepK3dhEdseTGM80Ow8f/gWmafk1TI1WvUpZ0=
-X-Received: by 2002:a17:906:5a67:b0:72b:610d:4aa4 with SMTP id
- my39-20020a1709065a6700b0072b610d4aa4mr16444194ejc.294.1657930125539; Fri, 15
- Jul 2022 17:08:45 -0700 (PDT)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=K1u/08k1kHvQ8RIYk0HRaqbL2NYdWoYTw1DMyhtc5Cw=;
+        b=SH1ntL62T3Wtp+K4zTdkEHMo8kEDN+fgeHr00R98Nx/+VCIv6a28tQq8IO6+1a/Vz2
+         DvravFKjkMRkSYXPWy9TYRk1Urqr/vgU/XBvHV1gDk8QZ9Fm/kf74QQ5ETfns7uj88Vp
+         PAgVboaNXRcBVg7IU8D8hfxPQKap1jtL5cIj6tiy+nrsBy23vyTJurKtUyslButpXITp
+         bp7rnHfCGWUZQGcS55WKRJA9zLbMiZ4/4FW2XGJjYcDotTPmbkVsPlt7HRYtEk+AL4W2
+         hz2KdjBWpVuZ6ZDtdACUsI+/iap8xZDXBdwfIa4DBbyUMC3dXbIYS2DIrrPPA2QdbNmo
+         0y5Q==
+X-Gm-Message-State: AJIora9f+e1ojW6RC03ixzR/z3AiBPLw0dR0MfX1EIKjLu2oNDkiNsmQ
+	n43lmt0viT2d0p4+UqsXA29C3SAh0/yn2nPbTl3wSKJHpDJ23y6luscDcxns66hQHp+mXlbzYbQ
+	uNJ3lPKQ5AF4m33xbnI5vKeIytU/CTbNgGA6roIhHX/p5OZ3ZbDzDDD++nKjXglVFg0XtLuOLLF
+	A=
+X-Google-Smtp-Source: AGRyM1sIdHPQVqAztkcQa3o63z7bs2yVKH4jL3uicRwyLHqvXlO1IHuc1+cZsIt5Hj1UM8MMx63bfZSooMS6oiNnaDU=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:a3e6:c68c:2c0c:ebf6])
+ (user=ndesaulniers job=sendgmr) by 2002:a5b:ecc:0:b0:66e:da0a:7736 with SMTP
+ id a12-20020a5b0ecc000000b0066eda0a7736mr15615949ybs.587.1657930585734; Fri,
+ 15 Jul 2022 17:16:25 -0700 (PDT)
+Date: Fri, 15 Jul 2022 17:16:07 -0700
+Message-Id: <20220716001616.4052225-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220711212932.1501592-1-justinstitt@google.com> <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
-In-Reply-To: <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
-From: Justin Stitt <justinstitt@google.com>
-Date: Fri, 15 Jul 2022 17:08:34 -0700
-Message-ID: <CAFhGd8pJyRYq-3VrKM+6+k0AysfYbVJEJm3FMFt9eAysAKDUpQ@mail.gmail.com>
-Subject: Re: [PATCH] mediatek: mt7601u: fix clang -Wformat warning
-To: Joe Perches <joe@perches.com>
-Cc: Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657930566; l=1743;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=QIu9o/mxb9btODsh6DZRIF2F1BpZvwkAJQhLHDs2c4Y=;
+ b=QdWV52FzNZq1EiGz28q4F2oq+2dQcFXBgbMNZYK/TVuExNteLEHksMhp5aGDF1c1JydpYzq8AL8R
+ O+7hwHWKAJsuMWHDosqLDtYAeYA9XElDWzKsyB0obqe7JCPyMRWB
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH] arm: lib: implement aeabi_uldivmod via div64_u64_rem
+From: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, Arnd Bergmann <arnd@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Ard Biesheuval <ardb@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Gary Guo <gary@garyguo.net>, 
+	Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 14, 2022 at 11:33 PM Joe Perches <joe@perches.com> wrote:
->
-> On Mon, 2022-07-11 at 14:29 -0700, Justin Stitt wrote:
-> > When building with Clang we encounter this warning:
-> > > drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
-> > > specifies type 'unsigned char' but the argument has type 'int'
-> > > [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
-> >
-> > The format specifier used is `%hhu` which describes a u8. Both
-> > `dev->ee->reg.start` and `.num` are u8 as well. However, the expression
-> > as a whole is promoted to an int as you cannot get smaller-than-int from
-> > addition. Therefore, to fix the warning, use the promoted-to-type's
-> > format specifier -- in this case `%d`.
->
-> I think whenever a sizeof(unsigned type) that is less than sizeof(int) is
-> emitted with vsprintf, the preferred format specifier should be %u not %d.
+Compilers frequently need to defer 64b division to a libcall with this
+symbol name. It essentially is div64_u64_rem, just with a different
+signature. Kernel developers know to call div64_u64_rem, but compilers
+don't.
 
-I believe the standard recommends using the promoted-to-type's format
-specifier, in this case integer. I agree, though, that it is quite
-bizarre to represent unsigned types with signed types. I'd be
-interested in hearing more opinions on the matter.
+Link: https://lore.kernel.org/lkml/20220524004156.0000790e@garyguo.net/
+Suggested-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ arch/arm/lib/Makefile         |  1 +
+ arch/arm/lib/aeabi_uldivmod.c | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 arch/arm/lib/aeabi_uldivmod.c
 
-> > diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-> []
-> > @@ -88,7 +88,7 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
-> >                  dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
-> >       seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
-> >       seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
-> > -     seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
-> > +     seq_printf(file, "Reg channels: %hhu-%d\n", dev->ee->reg.start,
-> >                  dev->ee->reg.start + dev->ee->reg.num - 1);
->
-> And this is not a promotion of an argument to int via varargs.
-> The arithmetic did the promotion.
+diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
+index 6d2ba454f25b..3fa273219312 100644
+--- a/arch/arm/lib/Makefile
++++ b/arch/arm/lib/Makefile
+@@ -29,6 +29,7 @@ endif
+ obj-$(CONFIG_UACCESS_WITH_MEMCPY) += uaccess_with_memcpy.o
+ 
+ lib-$(CONFIG_MMU) += $(mmu-y)
++lib-$(CONFIG_AEABI) += aeabi_uldivmod.o
+ 
+ ifeq ($(CONFIG_CPU_32v3),y)
+   lib-y	+= io-readsw-armv3.o io-writesw-armv3.o
+diff --git a/arch/arm/lib/aeabi_uldivmod.c b/arch/arm/lib/aeabi_uldivmod.c
+new file mode 100644
+index 000000000000..310427893195
+--- /dev/null
++++ b/arch/arm/lib/aeabi_uldivmod.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Unsigned 64b division with remainder, as is typically provided by libgcc or
++ * compiler-rt.
++ *
++ * Copyright (C) 2023 Google, LLC.
++ *
++ * Author: Nick Desaulniers <ndesaulniers@google.com>
++ */
++
++#include <linux/math64.h>
++
++struct result {
++	u64 quot, rem;
++};
++
++struct result __aeabi_uldivmod(u64 numerator, u64 denominator)
++{
++	struct result res;
++
++	res.quot = div64_u64_rem(numerator, denominator, &res.rem);
++	return res;
++}
+-- 
+2.37.0.170.g444d1eabd0-goog
 
-Right, I noted in my patch message that the type promotion was due to addition.
-
->
-> I suggest s/%hh/%/ for all the uses here, not just this one.
-
-I also contemplated this change but I think it might be a bit out of
-scope for https://github.com/ClangBuiltLinux/linux/issues/378  -- What
-do you think?
-It could be argued that every single instance of %hh[dux] should be
-replaced with %[dux].
-
-> checkpatch could do this somewhat automatically.
-> Of course any changes it suggests need human review.
->
-> $ ./scripts/checkpatch.pl -f drivers/net/wireless/mediatek/mt7601u/debugfs.c --show-types --types=unnecessary_modifier --fix-inplace
-> $ git diff --stat -p drivers/net/wireless/mediatek/mt7601u/debugfs.c
-> ---
->  drivers/net/wireless/mediatek/mt7601u/debugfs.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-> index 20669eacb66ea..b7a6376e3352e 100644
-> --- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-> +++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-> @@ -83,28 +83,28 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
->         struct tssi_data *td = &dev->ee->tssi_data;
->         int i;
->
-> -       seq_printf(file, "RF freq offset: %hhx\n", dev->ee->rf_freq_off);
-> -       seq_printf(file, "RSSI offset: %hhx %hhx\n",
-> +       seq_printf(file, "RF freq offset: %x\n", dev->ee->rf_freq_off);
-> +       seq_printf(file, "RSSI offset: %x %x\n",
->                    dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
-> -       seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
-> -       seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
-> -       seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
-> +       seq_printf(file, "Reference temp: %x\n", dev->ee->ref_temp);
-> +       seq_printf(file, "LNA gain: %x\n", dev->ee->lna_gain);
-> +       seq_printf(file, "Reg channels: %u-%u\n", dev->ee->reg.start,
->                    dev->ee->reg.start + dev->ee->reg.num - 1);
->
->         seq_puts(file, "Per rate power:\n");
->         for (i = 0; i < 2; i++)
-> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
->                            rp->cck[i].raw, rp->cck[i].bw20, rp->cck[i].bw40);
->         for (i = 0; i < 4; i++)
-> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
->                            rp->ofdm[i].raw, rp->ofdm[i].bw20, rp->ofdm[i].bw40);
->         for (i = 0; i < 4; i++)
-> -               seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-> +               seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
->                            rp->ht[i].raw, rp->ht[i].bw20, rp->ht[i].bw40);
->
->         seq_puts(file, "Per channel power:\n");
->         for (i = 0; i < 7; i++)
-> -               seq_printf(file, "\t tx_power  ch%u:%02hhx ch%u:%02hhx\n",
-> +               seq_printf(file, "\t tx_power  ch%u:%02x ch%u:%02x\n",
->                            i * 2 + 1, dev->ee->chan_pwr[i * 2],
->                            i * 2 + 2, dev->ee->chan_pwr[i * 2 + 1]);
->
-> @@ -112,8 +112,8 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
->                 return 0;
->
->         seq_puts(file, "TSSI:\n");
-> -       seq_printf(file, "\t slope:%02hhx\n", td->slope);
-> -       seq_printf(file, "\t offset=%02hhx %02hhx %02hhx\n",
-> +       seq_printf(file, "\t slope:%02x\n", td->slope);
-> +       seq_printf(file, "\t offset=%02x %02x %02x\n",
->                    td->offset[0], td->offset[1], td->offset[2]);
->         seq_printf(file, "\t delta_off:%08x\n", td->tx0_delta_offset);
->
->
