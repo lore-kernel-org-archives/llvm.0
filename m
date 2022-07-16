@@ -1,70 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4877562F
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 09:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE70C3411C
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 09:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657964838;
-	bh=IynHGG5q6JymFkYQoglPOiRP/qx4+yH1jRl8XAwEMzw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AaPSnBENSQdkdAjhPhDYXLf9cAH6HIg/XRWnuKQqXes9mm12SNwPcamaxBQl3n0tI
-	 o5kpXdilXb1YM9f+khmz2GoECdk373JM6VFEh4qIpdutv+zz+iIqW0fHFmN8TALUd5
-	 /ax+9cQ1RNGBk3m1xVOcGeQP4jsIvNGykFuAxGYBif9SFqWsoV4E91guMNe292icLS
-	 ZYkBh271ndPW5FDdzV6zusYpYNwSEbw6/8QF6qVG5wgMDLaw1IIQDZrTGyjcPtLpv9
-	 vdF8+JKcA5F/9+Cy7knEo3JtJWlXAV4bSrYLG9BP8epABex0wETxm6DtOi9CHvslQJ
-	 v6HkFFbbVyzjg==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31c8a1e9e33so66851997b3.5
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 02:47:17 -0700 (PDT)
-X-Gm-Message-State: AJIora82E5Whg2XmBKYgxYsWCovX4ev/jIhEDFmuaRUEDLv/h1KNoq0k
-	tSwGYraEcHmwlORvEqAkW5b+wecdQfaqhPPBvY0=
-X-Google-Smtp-Source: AGRyM1tw2mk/iLiuB5HDbONldIwG4CBeBwYwMsHWxLXMbm1IOelEDNEswQjYHY9jQYQriZr+qQxREIxYhzDdLy/eUsU=
-X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
- 141-20020a810d93000000b0031cd32d4d76mr21533718ywn.135.1657964836957; Sat, 16
- Jul 2022 02:47:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9911366
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657968309; x=1689504309;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XXoIdsI06ApUFAXOZr8yxTpQ7ca8CjvUBMrdyW0LJ1A=;
+  b=d6TydlVARn2ZusMOCNz34eQdVSGtqDyrxD9HnwU/HMBKIENZ12AD5mDq
+   kuMUEkPwYIfp1dABbNh3pa576KeHOyJK+lWJrfjEW+QVyoHHKTWKdJAB2
+   rX+xN1gGgMKJGynReCiAZAIiOx1lpXoUmZl8MUmAR3n10Hgqo468haRwb
+   VLWQCjcgmap0oRXtgRZZ+5smZsyfWvXhaWGpyiZdmQYXmzC8CG5qPVrKp
+   UwLkRHik3Uz602JdgQ2uqzAo5JzOkvP7ZGsqQFrSpRoP5ud2w9GCTLr4R
+   It9bqXEFh9JSzkm+Cdp6OEIhRO6OijBMDv2zrxc2iMIrKiZ4jMFskeV5a
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="347653754"
+X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
+   d="scan'208";a="347653754"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 03:45:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
+   d="scan'208";a="664483674"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Jul 2022 03:45:06 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oCfII-0001No-6L;
+	Sat, 16 Jul 2022 10:45:06 +0000
+Date: Sat, 16 Jul 2022 18:44:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko]
+ undefined!
+Message-ID: <202207161803.gts1T5UA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220716001616.4052225-1-ndesaulniers@google.com>
-In-Reply-To: <20220716001616.4052225-1-ndesaulniers@google.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sat, 16 Jul 2022 11:46:59 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
-Message-ID: <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
-Subject: Re: [PATCH] arm: lib: implement aeabi_uldivmod via div64_u64_rem
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Ard Biesheuval <ardb@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	Russell King <linux@armlinux.org.uk>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Jul 16, 2022 at 2:16 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Compilers frequently need to defer 64b division to a libcall with this
-> symbol name. It essentially is div64_u64_rem, just with a different
-> signature. Kernel developers know to call div64_u64_rem, but compilers
-> don't.
->
-> Link: https://lore.kernel.org/lkml/20220524004156.0000790e@garyguo.net/
-> Suggested-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Hi Paul,
 
-This has historically been strongly NAK'd, and I don't think that position
-has changed in the meantime. A variable-argument 64-bit division is
-really expensive, especially on 32-bit machines that lack a native
-32-bit division instruction, and we don't want developers to accidentally
-insert one in their driver code.
+First bad commit (maybe != root cause):
 
-Explicitly calling one of the division helpers in linux/math64.h is the
-established way for driver writers to declare that a particular division
-cannot be turned into a cheaper operation and is never run in a
-performance critical code path. The compiler of course cannot know
-about either of those.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   1 year, 10 months ago
+config: mips-buildonly-randconfig-r006-20220715 (https://download.01.org/0day-ci/archive/20220716/202207161803.gts1T5UA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-        Arnd
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
+ERROR: modpost: "vhost_iotlb_itree_next" [drivers/vdpa/mlx5/mlx5_vdpa.ko] undefined!
+ERROR: modpost: "vhost_iotlb_itree_first" [drivers/vdpa/mlx5/mlx5_vdpa.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
