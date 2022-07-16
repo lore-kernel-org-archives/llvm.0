@@ -1,45 +1,48 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620B820FA
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 22:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B9720FA
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 22:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658009999; x=1689545999;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iIBnQezwoIdI5dqXCl3gu8ElC/60sLINT/OHjK/x58k=;
-  b=fdh2UFwd1vGrWjN4vuf3BwOTRf51N7YtIzZX9xFkFiXKBJ6a20XQZIg6
-   Y4TyUWuwLxOpYeK4RBcJZZTQxld3zj30Xukgg3DqeDleuwBBKAAaQ3+AK
-   PFel7836NSX6fP4QghAwb6RA9sk9ADTHp2889rbkTf516WYvvrx9KSLC2
-   bLcgZyhZXK/6EYIaAE/f8WxZjnEFPtU9btTIz8w1/4kHKnxcd5X6bTjx1
-   FcmsjI6jPQmk90qGfsg/dCQGD2SfA2irHzKp2/nWi7YuLEtTA47E0LC0x
-   nTeQsULajfgwS+2xsFxQ9ILg6FUTcgY5W8dTtd7fEbAeJS8Lgm46OVktN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="284766139"
+  t=1658010600; x=1689546600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vdVrKIqLKuu781c8bGUbY3U5ko4MozA4QmJy7sX3wbk=;
+  b=j9YDRMEGFsLXawTnZmODfgEHkOwKPgdXQ90DvWtw1d+nIblu+nSwZ5an
+   OxXWa0wBr+zoGqD9HlS36YtRmus/8764dNhFEajJKOY4qCFbWdL4eMQ5S
+   wChd53t4pYnnUN3QDfrtSxSgzKkn/8fiwGVJn7C7CpDYLunpm8ZwRK9Qr
+   CHx8qsPhrqftGlNVfWA8QZtK7ketRTVRL6Xb7TdrudP1AX/wgkCMR8dOO
+   ztmi9b9KtCUNHRpEuBalc9K9XU6nplgsj8k9ZgTT/4at0wU2UgnUNKKeX
+   Dgcg6bOnOTYaykISXKND47czcnFkt3pbn9OSLTbijFc/pniPCvV+aceoD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="311682568"
 X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="284766139"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:19:58 -0700
+   d="scan'208";a="311682568"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:30:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="723456966"
+   d="scan'208";a="739041817"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Jul 2022 15:19:56 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 15:29:57 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCq8h-0002E8-V9;
-	Sat, 16 Jul 2022 22:19:55 +0000
-Date: Sun, 17 Jul 2022 06:18:59 +0800
+	id 1oCqIO-0002Ek-D7;
+	Sat, 16 Jul 2022 22:29:56 +0000
+Date: Sun, 17 Jul 2022 06:29:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Prashant Malani <pmalani@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-testing 50/55]
- drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to undeclared
- function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202207170614.2HHvAplN-lkp@intel.com>
+To: Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
+	lars@metafoo.de, robh+dt@kernel.org, dmitry.osipenko@collabora.com,
+	Zhigang.Shi@liteon.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, krisman@collabora.com,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel@collabora.com,
+	alvaro.soliverez@collabora.com, andy.shevchenko@gmail.com,
+	Shreeya Patel <shreeya.patel@collabora.com>
+Subject: Re: [PATCH v9 2/2] iio: light: Add support for ltrf216a sensor
+Message-ID: <202207170630.lcfpHu8v-lkp@intel.com>
+References: <20220715111626.1066513-3-shreeya.patel@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,111 +51,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220715111626.1066513-3-shreeya.patel@collabora.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   c76d09da77d69d7f737540985912ad2bca654713
-commit: e54369058f3da181fcc4c893f224a0c5a8a526b6 [50/55] platform/chrome: cros_typec_switch: Add switch driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220717/202207170614.2HHvAplN-lkp@intel.com/config)
+Hi Shreeya,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v5.19-rc6 next-20220715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shreeya-Patel/Add-LTRF216A-Driver/20220716-210741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: s390-randconfig-r023-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170630.lcfpHu8v-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=e54369058f3da181fcc4c893f224a0c5a8a526b6
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-testing
-        git checkout e54369058f3da181fcc4c893f224a0c5a8a526b6
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6db354952f0013dd461d2338761ef8ae3399f2d8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shreeya-Patel/Add-LTRF216A-Driver/20220716-210741
+        git checkout 6db354952f0013dd461d2338761ef8ae3399f2d8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/ drivers/iio/light/ drivers/media/i2c/ drivers/net/pcs/ drivers/pinctrl/nuvoton/ drivers/platform/chrome/ drivers/spmi/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/iio/light/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-                         ^
-   drivers/platform/chrome/cros_typec_switch.c:93:9: note: did you mean 'acpi_evaluate_object'?
-   include/acpi/acpixf.h:550:8: note: 'acpi_evaluate_object' declared here
-                               acpi_evaluate_object(acpi_handle object,
-                               ^
-   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
-           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
-                              ^
->> drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete definition of type 'struct acpi_device'
-                   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-                                               ~~~~^
-   include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   2 errors generated.
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/iio/light/ltrf216a.c:188:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (on) {
+               ^~
+   drivers/iio/light/ltrf216a.c:199:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/iio/light/ltrf216a.c:188:2: note: remove the 'if' if its condition is always true
+           if (on) {
+           ^~~~~~~~
+   drivers/iio/light/ltrf216a.c:186:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   13 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+   Depends on HAS_IOMEM && DRM && OF
+   Selected by
+   - DRM_MSM && HAS_IOMEM && DRM && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST && COMMON_CLK && IOMMU_SUPPORT && (QCOM_OCMEM || QCOM_OCMEM && (QCOM_LLCC || QCOM_LLCC && (QCOM_COMMAND_DB || QCOM_COMMAND_DB
 
 
-vim +/acpi_evaluate_integer +93 drivers/platform/chrome/cros_typec_switch.c
+vim +188 drivers/iio/light/ltrf216a.c
 
-    62	
-    63	static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
-    64	{
-    65		struct cros_typec_port *port = NULL;
-    66		struct device *dev = sdata->dev;
-    67		struct fwnode_handle *fwnode;
-    68		struct acpi_device *adev;
-    69		unsigned long long index;
-    70		int ret = 0;
-    71		int nports;
-    72	
-    73		nports = device_get_child_node_count(dev);
-    74		if (nports == 0) {
-    75			dev_err(dev, "No switch devices found.\n");
-    76			return -ENODEV;
-    77		}
-    78	
-    79		device_for_each_child_node(dev, fwnode) {
-    80			port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
-    81			if (!port) {
-    82				ret = -ENOMEM;
-    83				goto err_switch;
-    84			}
-    85	
-    86			adev = to_acpi_device_node(fwnode);
-    87			if (!adev) {
-    88				dev_err(fwnode->dev, "Couldn't get ACPI device handle\n");
-    89				ret = -ENODEV;
-    90				goto err_switch;
-    91			}
-    92	
-  > 93			ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-    94			if (ACPI_FAILURE(ret)) {
-    95				dev_err(fwnode->dev, "_ADR wasn't evaluated\n");
-    96				ret = -ENODATA;
-    97				goto err_switch;
-    98			}
-    99	
-   100			if (index < 0 || index >= EC_USB_PD_MAX_PORTS) {
-   101				dev_err(fwnode->dev, "Invalid port index number: %llu", index);
-   102				ret = -EINVAL;
-   103				goto err_switch;
-   104			}
-   105			port->sdata = sdata;
-   106			port->port_num = index;
-   107			sdata->ports[index] = port;
-   108	
-   109			ret = cros_typec_register_retimer(port, fwnode);
-   110			if (ret) {
-   111				dev_err(dev, "Retimer switch register failed\n");
-   112				goto err_switch;
-   113			}
-   114	
-   115			dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
-   116		}
-   117	
-   118		return 0;
-   119	err_switch:
-   120		cros_typec_unregister_switches(sdata);
-   121		return ret;
-   122	}
-   123	
+   182	
+   183	static int ltrf216a_set_power_state(struct ltrf216a_data *data, bool on)
+   184	{
+   185		struct device *dev = &data->client->dev;
+   186		int ret;
+   187	
+ > 188		if (on) {
+   189			ret = pm_runtime_resume_and_get(dev);
+   190			if (ret) {
+   191				dev_err(dev, "failed to resume runtime PM: %d\n", ret);
+   192				return ret;
+   193			}
+   194		} else {
+   195			pm_runtime_mark_last_busy(dev);
+   196			pm_runtime_put_autosuspend(dev);
+   197		}
+   198	
+   199		return ret;
+   200	}
+   201	
 
 -- 
 0-DAY CI Kernel Test Service
