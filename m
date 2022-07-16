@@ -1,108 +1,131 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF076659
-	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 17:34:39 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id w12so10024803edd.13
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8iDiDQdK0Y4Twyf2w6H2yrqrbuVdQeYS04yw6GP8uk4=;
-        b=heW9Qr2XiyY6OqRlLdI2V+LEMMLgw6QKsr5CvO05pRXWfqknCGfEu1MOaT3LQ796sI
-         YOm74UnqUxNmDzHVdAddwWqtIRm6ry2PynKXbKgn7j885PGSl1OXlWeH/5Ie8ljVLmz4
-         NpcIen2TBlI7yD07+24+irawf+bg2LFZA6CIw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8iDiDQdK0Y4Twyf2w6H2yrqrbuVdQeYS04yw6GP8uk4=;
-        b=KiZywcujob3Wx7qcw/GS7ka6vA9Tbh2k3uxOdvkow1q5t92qyUHa5UOkID2l1XHUd2
-         WEJc0GymCD1mPemBN6rBBXz3wy4i29tLz0Akuvm35GHTXyME0TAFkffinh17mYCIPvRR
-         aS2rPkoY/TvLIPbz+QizoFmF4kQ35HiTzmwW6yZaW2vsVry1iOD/MiXJHgkD5BjHUpNy
-         TcqLU4IZ81CUN+h58CzbS09Mw1lTqUYxIAt2ai1miyIS1EztrpA2nrefESoJhfoj5DGZ
-         8WudqdCO0ee++iqO7xyUqzSpxfsMQPQygHfmlVbpJjv+b2icFAv79e67XcwLbIC4Qv3F
-         cjew==
-X-Gm-Message-State: AJIora9vZPY41ynlZ0//W1dYs3aM/3DDFFCJn01pS/nDIHB5LYvBjwtl
-	hUS4Fp+w5nTgpJaMr7e25ItP20Se6Mq7hiHo
-X-Google-Smtp-Source: AGRyM1ssDLIzoVUj/SBEyGOBZ4RUpSHb0f7B2wz1hVqUWaCSRlWwym881JUMu9ewEoXFFORUKgI/1A==
-X-Received: by 2002:a05:6402:48:b0:43a:caa8:756b with SMTP id f8-20020a056402004800b0043acaa8756bmr26710020edu.112.1657992877116;
-        Sat, 16 Jul 2022 10:34:37 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id o7-20020aa7c507000000b0043ab81e4230sm5100695edq.50.2022.07.16.10.34.34
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 10:34:35 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id b26so10935010wrc.2
-        for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 10:34:34 -0700 (PDT)
-X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
- bw12-20020a0560001f8c00b0021d7e9851bamr16322329wrb.442.1657992873956; Sat, 16
- Jul 2022 10:34:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E27E665B
+	for <llvm@lists.linux.dev>; Sat, 16 Jul 2022 17:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657994012; x=1689530012;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IUHHIx0fQJs/Cdu9JIBdViTJ9P/27B8e3gxL35x3/so=;
+  b=Rk95zQnnqg91SWQUSDg8lJpi7PwlpRsYfRMnhmxPD6MLYsf1J6K9PfRx
+   1qMbxaBd+wUycxkFfR9N/MW0ep962WNHov6vxnJes+HJHoRiTfBleZLY1
+   nhGNmjucPBceR+Ac6KgZr50BGKCZkl3+fH5/pseaBV/O5W1SYD8rN2S6h
+   0iwLhhTzoB5WrzsOsP1R6d4EI29cEJkZDYNhH1StSCY1AK+U0LnYgf/X2
+   C+kTrwrcLAbYP8/xnC6fE4Rib2YhXpojO86ReQMO7DfxwALE6lMwajT1f
+   62CyUzxcQDyQNHI3CiFCCL4ShvzaLHimpdg5y+tf+wDahYPuy+KVat4EA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="265781970"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="265781970"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 10:53:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="596808733"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 Jul 2022 10:53:29 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oClyr-0001v8-4n;
+	Sat, 16 Jul 2022 17:53:29 +0000
+Date: Sun, 17 Jul 2022 01:53:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 2/5] ALSA: pcm: Drop async signal support
+Message-ID: <202207170141.kyNwoI54-lkp@intel.com>
+References: <20220715102935.4695-3-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714205646.4023495-1-ndesaulniers@google.com> <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 16 Jul 2022 10:34:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
-Message-ID: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715102935.4695-3-tiwai@suse.de>
 
-On Thu, Jul 14, 2022 at 4:15 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> There are still the "__ubsan_handle_load_invalid_value() with UACCESS
-> enabled" messages, but those are misfeatures of the kvm cmpxchg
-> implementation.
+Hi Takashi,
 
-Ok, so it really is independent of the non-optimal kvm cmpxchg implementation.
+I love your patch! Perhaps something to improve:
 
-The kvm code is fine - yes, it runs a bit too much code under the
-CLAC/STAC pair, but that "too much code" really is just a few local
-variable assignments.
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on linus/master v5.19-rc6 next-20220715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So any reasonable compiler will keep them in registers, and even if
-that's not the case, it would just be a stack spill or reload with AC
-set, which is not really a problem.
+url:    https://github.com/intel-lab-lkp/linux/commits/Takashi-Iwai/ALSA-Drop-async-signal-support/20220716-211853
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220717/202207170141.kyNwoI54-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6705167eb6bf093c8a099fa16c0aeb5f3da0dfba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Takashi-Iwai/ALSA-Drop-async-signal-support/20220716-211853
+        git checkout 6705167eb6bf093c8a099fa16c0aeb5f3da0dfba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/core/
 
-But calling out to external functions within that SMAP region is
-invalid, and objdump warns about it.  Because we really want to
-minimize the area where user accesses are ok, and it's a "don't do
-this, you now lost the SMAP protection".
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-ANYWAY.
+All warnings (new ones prefixed by >>):
 
-The reason the clang build warns - but the gcc build does not - is
-simply that clang code generation is just nasty.
+>> sound/core/pcm_lib.c:1810:26: warning: variable 'runtime' set but not used [-Wunused-but-set-variable]
+           struct snd_pcm_runtime *runtime;
+                                   ^
+   1 warning generated.
 
-I decided to make a non-kernel test-case so that clang people can look
-at it without having to worry about any kernel code issues or the
-details of the SMAP rules, and it really shows how clang generates
-horribly pointless and wrong code.
 
-I'm not sure what the right thing to do is to get this sorted out, but
-I created an "issue" on github for this:
+vim +/runtime +1810 sound/core/pcm_lib.c
 
-    https://github.com/llvm/llvm-project/issues/56568
+e88e8ae639a490 Takashi Iwai     2006-04-28  1780  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1781  /**
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1782   * snd_pcm_period_elapsed_under_stream_lock() - update the status of runtime for the next period
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1783   *						under acquired lock of PCM substream.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1784   * @substream: the instance of pcm substream.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1785   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1786   * This function is called when the batch of audio data frames as the same size as the period of
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1787   * buffer is already processed in audio data transmission.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1788   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1789   * The call of function updates the status of runtime with the latest position of audio data
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1790   * transmission, checks overrun and underrun over buffer, awaken user processes from waiting for
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1791   * available audio data frames, sampling audio timestamp, and performs stop or drain the PCM
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1792   * substream according to configured threshold.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1793   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1794   * The function is intended to use for the case that PCM driver operates audio data frames under
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1795   * acquired lock of PCM substream; e.g. in callback of any operation of &snd_pcm_ops in process
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1796   * context. In any interrupt context, it's preferrable to use ``snd_pcm_period_elapsed()`` instead
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1797   * since lock of PCM substream should be acquired in advance.
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1798   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1799   * Developer should pay enough attention that some callbacks in &snd_pcm_ops are done by the call of
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1800   * function:
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1801   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1802   * - .pointer - to retrieve current position of audio data transmission by frame count or XRUN state.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1803   * - .trigger - with SNDRV_PCM_TRIGGER_STOP at XRUN or DRAINING state.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1804   * - .get_time_info - to retrieve audio time stamp if needed.
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1805   *
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1806   * Even if more than one periods have elapsed since the last call, you have to call this only once.
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1807   */
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1808  void snd_pcm_period_elapsed_under_stream_lock(struct snd_pcm_substream *substream)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1809  {
+877211f5e1b119 Takashi Iwai     2005-11-17 @1810  	struct snd_pcm_runtime *runtime;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1811  
+f5cdc9d4003a2f paulhsia         2019-11-13  1812  	if (PCM_RUNTIME_CHECK(substream))
+47271b1b98c980 Takashi Sakamoto 2021-06-10  1813  		return;
+f5cdc9d4003a2f paulhsia         2019-11-13  1814  	runtime = substream->runtime;
+f5cdc9d4003a2f paulhsia         2019-11-13  1815  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1816  	if (!snd_pcm_running(substream) ||
+f240406babfe15 Jaroslav Kysela  2010-01-05  1817  	    snd_pcm_update_hw_ptr0(substream, 1) < 0)
+6705167eb6bf09 Takashi Iwai     2022-07-15  1818  		return;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  1819  
 
-in the hope that this can get fixed. Because it's very clearly a clang
-misfeature, where clang basically generates insane code that violates
-the rules we try to enforce with objdump.
-
-Nick / Nathan / clang-built-linux people - if there are other better
-ways than that github issue thing to make people aware of this, that
-would be lovely, and please forward that issue to the right people.
-
-                         Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
