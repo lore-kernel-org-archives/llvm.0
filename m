@@ -1,121 +1,115 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23C1257A
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 18:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658082362; x=1689618362;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lev7I62R+ZkqbUI7VHug5zWd6VrLgETsZS6J/rKaTh4=;
-  b=fd4mhEviOKTZdNKWjWz1adon0TUAyVZ2rxS7mx8hgFyz8wB3rkAURtJc
-   4fiyw/uxVwqVi5BTteV26NzWeB8aXuxRC2/61ei022S/qm3jCoEDLje7Q
-   bZbQJlkwi3BC1s60Hlmd5PCKL7BgEB0CDYUWfg8Sd3foC9BCE0xkJ5xWw
-   oUTMpom5BL5h+eswURHSuoAG1fe52BuH0sY9Rp5ZNy75tdTH82sK9Np9W
-   wAZQnTdWEF6e7sLnqLk3DJBrFo3FLJKveCZxNIxVDheyqgerE8cssI+10
-   Z6yP0AdeqAKB+KeuQDcdOzqqUGGuscmyWCJts1quov4UfMCf4zO6v2a1W
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286103802"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="286103802"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 11:26:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="624455965"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Jul 2022 11:25:59 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oD8xq-0003ZM-NH;
-	Sun, 17 Jul 2022 18:25:58 +0000
-Date: Mon, 18 Jul 2022 02:25:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org,
-	frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Make RCU Tasks Trace checking for userspace
- execution
-Message-ID: <202207180246.5cKJdGrg-lkp@intel.com>
-References: <20220717143801.189865-1-qiang1.zhang@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B412906
+	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 22:05:41 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id n74so18033157yba.3
+        for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 15:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rPTUmtD0mO4LKrdNJNBcqd3l40tXMwjLHVeP/VIEmwU=;
+        b=MCM+6b6RcoWpklzEm4YevE5Ka2BDNSfA381jQ37WspKtLtFaGtYp4Cn9gkUEzqDX8m
+         lFGst0so5xX874adBrMNfcUGkyDpwFIRbX5vcYIGz4hyplOPzMbgHNZXXXfC5Gt/Qzst
+         wQFIese48HaG1DhH29UOvalnetjuHsZjd6LNXL/Wr1qWbyyBsJra9s1MbmFRbh12+5Ni
+         fWQIPolwOATEMGRKEjm/mnv9QZq1xwqovzrvG1CLDXbIvwPVoShcB0ycsCOOIvooum1V
+         KDoVs6yKnPJ+s51ym/EoSTCutBm3evgfnXnuoGTGmsOnTgDDMSii3gnsf9T70kxyrq75
+         Pzsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rPTUmtD0mO4LKrdNJNBcqd3l40tXMwjLHVeP/VIEmwU=;
+        b=Gm98XklSEC/g8YwH8/lvl7KlOm1LWWnaTiOwsUmr/aIyWAULMBa0AzeDULDQcTR8qS
+         95DUH5MdjmkreHygy1G+S1QmyuKnNQ/Qs/8uvezPjvGSebMgX+XbKK0BC16Gmc0dVZZb
+         n+CAvjeyQcbrm9LBDaJCAtrpN4HfszDVk7ueQ4xYniTM/4xgrlBxJ3H7nClhPwPTBFfA
+         fJQBxYHJkjTepjkIOWS05ZU81WnIJthk2U4q3pqRq5ggJKOyk8qvdx1VgCDxlVwiEtI3
+         dqzIgb9WUkBaY6QhbuEtwRIS7ObSUh2s/gHhSA4YdX+ntCwkM7ONeqyYjMTGKFvXRskU
+         X41w==
+X-Gm-Message-State: AJIora/NmshuXGchc1k7va9PdRVLj0hBE8RaKutkkijMzT6zvx7dvtTJ
+	BxiZ0Znc8WabunYCv14ITFIRUSVSff5Vi6+caAfXZEvx6t8=
+X-Google-Smtp-Source: AGRyM1vatOGsN29IMyMlMqCAZgmigmBQAclp0VpHS4DcJ+4eMm5JYAL3GG92Uq242rPVItViwUScETsgp8LO06POcig=
+X-Received: by 2002:a25:6b0f:0:b0:66e:cba3:8f2d with SMTP id
+ g15-20020a256b0f000000b0066ecba38f2dmr23277092ybc.183.1658095540746; Sun, 17
+ Jul 2022 15:05:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220717143801.189865-1-qiang1.zhang@intel.com>
+References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
+ <YtA+127QgRifnRBZ@dev-arch.thelio-3990X> <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
+ <YtBEXdrsthFamQs8@dev-arch.thelio-3990X> <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
+ <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
+In-Reply-To: <YtCJeieW4Mz1VfRx@dev-arch.thelio-3990X>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date: Sun, 17 Jul 2022 23:05:04 +0100
+Message-ID: <CADVatmONHx5KjODAXWjKDs6OayDr2HJQpP6_mR+xSAADX_eByw@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jul 14
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Zqiang,
+Hi Nathan,
 
-Thank you for the patch! Yet something to improve:
+On Thu, Jul 14, 2022 at 10:24 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Dropping the next list and Stephen as these issues are likely present on
+> mainline as well.
+>
+> On Thu, Jul 14, 2022 at 07:26:27PM +0100, Sudip Mukherjee wrote:
+> > Hi Nathan,
+> >
+> > On Thu, Jul 14, 2022 at 5:29 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
+> > > > Hi Nathan,
+> > > >
+> > > > On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > >
+> > > > > Hi Sudip,
+> > > > >
+> > > > > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
+> > > > > > Hi Stephen,
+> > > > > >
+> > > > > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
+> > > > > > > Hi all,
+> > > > > > >
+> > > > > > > Changes since 20220713:
+> > > > > >
+> > > > > > Build failures on next-20220714:
+> > > > >
+> > > > > <snip>
+> > > > >
+> >
+> > <snip>
+> >
+> > >
+> > > Sure! I am not sure that we have tested mips or powerpc allmodconfig now
+> > > that I am thinking about it but we'll certainly take a look at any
+> > > issues that come from them and see what we can do.
+> >
+> > The build errors from powerpc allmodconfig with clang:
+>
+> Thanks for testing!
+>
+> > 1)
+> > Error: External symbol 'memset' referenced from prom_init.c
+>
+> Good to know this is not clang specific.
 
-[auto build test ERROR on paulmck-rcu/dev]
-[also build test ERROR on linus/master v5.19-rc6 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ok, so clang is also trying to use memset for any array.
+Linus suggested adding volatile. ref:
+https://lore.kernel.org/lkml/CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com/
+for the gcc-12 problem, and with that I can see that clang has worked
+as expected and removed memset from struct prom_args. But now memset
+is still there for other arrays in prom_init_mem() and others. I think
+we will still need a patch for clang, and that will also work when the
+gcc-12 bug is fixed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Make-RCU-Tasks-Trace-checking-for-userspace-execution/20220717-223556
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180246.5cKJdGrg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d078656cad783fefa6506b05e7dfd1ce43f23eb0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zqiang/rcu-tasks-Make-RCU-Tasks-Trace-checking-for-userspace-execution/20220717-223556
-        git checkout d078656cad783fefa6506b05e7dfd1ce43f23eb0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/rcu/tree.c:4638:
->> kernel/rcu/tree_plugin.h:979:3: error: call to undeclared function 'rcu_tasks_trace_qs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   rcu_tasks_trace_qs(current);
-                   ^
-   1 error generated.
-
-
-vim +/rcu_tasks_trace_qs +979 kernel/rcu/tree_plugin.h
-
-   959	
-   960	/*
-   961	 * Check to see if this CPU is in a non-context-switch quiescent state,
-   962	 * namely user mode and idle loop.
-   963	 */
-   964	static void rcu_flavor_sched_clock_irq(int user)
-   965	{
-   966		if (user || rcu_is_cpu_rrupt_from_idle()) {
-   967	
-   968			/*
-   969			 * Get here if this CPU took its interrupt from user
-   970			 * mode or from the idle loop, and if this is not a
-   971			 * nested interrupt.  In this case, the CPU is in
-   972			 * a quiescent state, so note it.
-   973			 *
-   974			 * No memory barrier is required here because rcu_qs()
-   975			 * references only CPU-local variables that other CPUs
-   976			 * neither access nor modify, at least not while the
-   977			 * corresponding CPU is online.
-   978			 */
- > 979			rcu_tasks_trace_qs(current);
-   980			rcu_qs();
-   981		}
-   982	}
-   983	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip
