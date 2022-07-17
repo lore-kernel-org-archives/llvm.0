@@ -1,35 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96417A
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 06:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1A27F6
+	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 10:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1658039527;
+	s=mimecast20190719; t=1658052714;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=7lliU6GkozX5qLM6r31RE6t2CEu6oVc+NOZ2mynv1uU=;
-	b=L6G/5nrYupox2tfYikLWHZ+2YpXzIca6bQnT/zxfGoOVioQeNpDQrEg6GqgF8Or6kBjQje
-	EATrZcS2yDgy2qPqTglxvg+7IzBi5OPhMYSyBnz/t1yP5I5xULdCjWj+3hFWdf5d+3FfgL
-	bj0ieDmlo+e+LDBJtHNjAC7y7dOtVZM=
+	bh=xnlcQt8ay06xZ1T4+YsgFw/gGClpaOEidRs/QrkeBho=;
+	b=Z0KfVubHqleKhQeKaiU/81tYExlexMV6z5m0mlaHpCf2Sl3YbhMe22VhkCMi36Xe/ylni1
+	frzReW0gzHlLJHgCy6wOUUG5uv7/TWV5KqcsFf2iCTzubEu/969o6Oo9CB+w9gFta+qy/Y
+	FSqUtAW1WH3tZ+JrPDMSpw07OC6FxNs=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-1YoR8GqcOaaufcC29A_pUw-1; Sun, 17 Jul 2022 02:31:54 -0400
-X-MC-Unique: 1YoR8GqcOaaufcC29A_pUw-1
+ us-mta-651-_COIhYEfPCyIVNPKR3OtvQ-1; Sun, 17 Jul 2022 06:11:53 -0400
+X-MC-Unique: _COIhYEfPCyIVNPKR3OtvQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 463DD101A586
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 06:31:54 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18F42185A79C
+	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 10:11:53 +0000 (UTC)
 Received: from [172.64.4.17] (unknown [10.30.34.251])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 328BE906B6;
-	Sun, 17 Jul 2022 06:31:54 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0454A909E7;
+	Sun, 17 Jul 2022 10:11:52 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for c658cabb
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 972a278f
  (mainline.kernel.org-clang)
-Date: Sun, 17 Jul 2022 06:31:52 -0000
+Date: Sun, 17 Jul 2022 10:11:52 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <60314.122071702315400181@us-mta-408.us.mimecast.lan>
+Message-Id: <59280.122071706115300109@us-mta-651.us.mimecast.lan>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -54,17 +54,17 @@ Hi, we tested your kernel and here are the results:
 
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/48040
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48047
 
 One or more kernel tests failed:
 
     Unrecognized or new issues:
           x86_64 - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4396087
+4399554
           x86_64 - kselftest build - net
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4396090
+4399557
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -77,6 +77,16 @@ anges:
  filename '/devices/mc0'
                           http://lists.infradead.org/pipermail/linux-arm-ke=
 rnel/2022-June/750380.html
+         aarch64 - Storage - blktests - nvme-tcp
+                   Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecti=
+ng never established after max reconnecting reached
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D189=
+5913
+         aarch64 - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
          aarch64 - LTP - commands
                    Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
                           https://gitlab.com/redhat/centos-stream/tests/ker=
@@ -153,16 +163,6 @@ nel/kernel-tests/-/issues/1235
 mdadm
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1213
-         aarch64 - xfstests - btrfs
-                   Issue: xfstests - _check_xfs_filesystem: filesystem on /=
-dev/nvme0n1p4 is inconsistent (r)
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-9409
-         ppc64le - LTP - commands
-                   Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' fail=
-ed, not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1249
          ppc64le - AMTU (Abstract Machine Test Utility)
                    Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
 AIL
@@ -206,6 +206,11 @@ nel/kernel-tests/-/issues/1213
 nnot find arch/powerpc/lib/crtsavres.o: No such file or directory
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1267
+           s390x - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
            s390x - LTP - commands
                    Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
                           https://gitlab.com/redhat/centos-stream/tests/ker=
@@ -249,11 +254,6 @@ nel/kernel-tests/-/issues/1213
                    Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
 1983
-          x86_64 - Boot test
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
           x86_64 - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
@@ -285,11 +285,21 @@ t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
 =3D1
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
 3604#c3
+          x86_64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
           x86_64 - Storage - block - storage fio numa
                    Issue: Storage block - storage fio numa: Performance com=
 parison: min:40535 * 1.15 < max:81259
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
 2094
+          x86_64 - Storage - blktests - nvmeof-mp
+                   Issue: Storage blktests - nvmeof-mp: FAIL: Configured NV=
+Me target driver
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1168
           x86_64 - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
