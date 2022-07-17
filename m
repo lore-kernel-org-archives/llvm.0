@@ -1,43 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E98659
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 12:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52FA817
+	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 13:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658061573; x=1689597573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zV02xbeEIH6yY+68dK8NLkbs9RpRO+xC4JTzCSk2mjU=;
-  b=fYOScdkc1h1Ub4Q431yAoLMEdme2tl0paXs3T1r+oFo6mXQhgi++m8dW
-   1sV2NOY3XFsdHsbUHv9vfLCojM9Bm0EDLos0643VnVP5rsM0fIAK0anXT
-   EpTLvo69NhrB/z2VzjQZm2ZeA5PgA6K3/01FmYVkwKvif8D5/X6I3QTny
-   eRWlNGqC0G+zw+wsnTErLsEqOmqaNK9/YYI1j5HjmpuEbvdnD9k83Y+3O
-   2QPl//80Z7aWccAiNJ96jTl2j7X835LLQ1eY7HPcuMew4nNkVGY8JOoIS
-   x8snBKPt84jKtMHO+hrxi5uKtWf2QwB1XD+xt3ASuCPb2YE8OUJmQPxbc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="286079461"
+  t=1658062851; x=1689598851;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7DYz/+hXHOyXQ/XcLUsoH4nbwpS2tzcO/qeLi/FhQ44=;
+  b=XM1IEeYcG08LNsUodzXkF5HcAn07Tad7lseZ9ynWBW5S0ldVVCnW/mA3
+   y/+amJgqH3lr4R7PANSbkb2AgYQXs2/D2+TdEkn1PUqRyxCiwNCFB9i0y
+   9apyNqliFIGeEMX0erDOjMeOOFw3KJbYBldP7huSNP4/zcYGIiTe63BJ2
+   Ig6xQO4zCzLguBIubL0N+PzfjdTJJmlbV0jzkFDixd7FKQGOdM8hyeyuU
+   F8SPZpyuOIYBo6pFovvu1i8JjNLpxjhxboSJE40QGUJPJaKpk5cDOXpAT
+   sUesJYCvawFaHPaNMf7bR5Ia5z9wNJZ9gVe6i6fOubGca3+raJrpYaQ0N
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="350022428"
 X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="286079461"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 05:39:32 -0700
+   d="scan'208";a="350022428"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 06:00:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="572083537"
+   d="scan'208";a="686458132"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jul 2022 05:39:31 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Jul 2022 06:00:32 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oD3YY-0003EG-KK;
-	Sun, 17 Jul 2022 12:39:30 +0000
-Date: Sun, 17 Jul 2022 20:39:25 +0800
+	id 1oD3st-0003GJ-TT;
+	Sun, 17 Jul 2022 13:00:31 +0000
+Date: Sun, 17 Jul 2022 20:59:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jim Quinlan <jim2101024@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 5/6] PCI: brcmstb: Add control of subdevice voltage
- regulators
-Message-ID: <202207172037.yy5KaMgA-lkp@intel.com>
-References: <20220716222454.29914-6-jim2101024@gmail.com>
+To: Saeed Mahameed <saeedm@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [saeed:net-next 46/50]
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3867:5: warning: stack
+ frame size (1120) exceeds limit (1024) in 'mlx5e_set_features'
+Message-ID: <202207172048.I1B682Ok-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,105 +46,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220716222454.29914-6-jim2101024@gmail.com>
 
-Hi Jim,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on c5fe7a97f20c7f3070ac870144515c0fabc6b999]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Quinlan/PCI-brcmstb-Re-submit-reverted-patchset/20220717-062726
-base:   c5fe7a97f20c7f3070ac870144515c0fabc6b999
-config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220717/202207172037.yy5KaMgA-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git net-next
+head:   fbb84e645ecffed83efc79743bce152dd7d122a8
+commit: 5f0d554cf45f149e9ecc57b6cb43a49a18968151 [46/50] Merge branch 'patchq/501993' into mlx5-queue
+config: riscv-randconfig-r013-20220717 (https://download.01.org/0day-ci/archive/20220717/202207172048.I1B682Ok-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7b781857074cba16cbcea9d4e3f21681d653f35f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jim-Quinlan/PCI-brcmstb-Re-submit-reverted-patchset/20220717-062726
-        git checkout 7b781857074cba16cbcea9d4e3f21681d653f35f
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=5f0d554cf45f149e9ecc57b6cb43a49a18968151
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed net-next
+        git checkout 5f0d554cf45f149e9ecc57b6cb43a49a18968151
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/controller/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pci/controller/pcie-brcmstb.c:1157:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (dev->of_node) {
-                      ^~~~~~~~~~~~
-   drivers/pci/controller/pcie-brcmstb.c:1176:9: note: uninitialized use occurs here
-           return ret == -ENOMEM ? ret : 0;
-                  ^~~
-   drivers/pci/controller/pcie-brcmstb.c:1157:9: note: remove the 'if' if its condition is always true
-           } else if (dev->of_node) {
-                  ^~~~~~~~~~~~~~~~~~
->> drivers/pci/controller/pcie-brcmstb.c:1147:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (dev->of_node && dev->driver_data) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/pcie-brcmstb.c:1176:9: note: uninitialized use occurs here
-           return ret == -ENOMEM ? ret : 0;
-                  ^~~
-   drivers/pci/controller/pcie-brcmstb.c:1147:2: note: remove the 'if' if its condition is always false
-           if (dev->of_node && dev->driver_data) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/pcie-brcmstb.c:1142:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+>> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3867:5: warning: stack frame size (1120) exceeds limit (1024) in 'mlx5e_set_features' [-Wframe-larger-than]
+   int mlx5e_set_features(struct net_device *netdev, netdev_features_t features)
+       ^
+   drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3438:12: warning: stack frame size (1104) exceeds limit (1024) in 'mlx5e_setup_tc' [-Wframe-larger-than]
+   static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
+              ^
    2 warnings generated.
 
 
-vim +1157 drivers/pci/controller/pcie-brcmstb.c
+vim +/mlx5e_set_features +3867 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
 
-  1137	
-  1138	static int brcm_pcie_add_bus(struct pci_bus *bus)
-  1139	{
-  1140		struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
-  1141		struct device *dev = &bus->dev;
-  1142		int ret;
-  1143	
-  1144		if (!bus->parent || !pci_is_root_bus(bus->parent) || !pcie)
-  1145			return 0;
-  1146	
-> 1147		if (dev->of_node && dev->driver_data) {
-  1148			/*
-  1149			 * Oops, this is unfortunate.  We are using the port
-  1150			 * driver's driver_data field to store our regulator info
-  1151			 * and it appears that another driver started using it as
-  1152			 * well.  If so, be a team player do not overwrite it.  We
-  1153			 * may still be okay if there are no regulators.
-  1154			 */
-  1155			dev_err(dev, "root port dev.driver_data non-NULL; something wrong\n");
-  1156	
-> 1157		} else if (dev->of_node) {
-  1158			ret = pci_subdev_regulators_add_bus(bus);
-  1159			/* Grab the regulators for suspend/resume */
-  1160			pcie->sr = bus->dev.driver_data;
-  1161		}
-  1162	
-  1163		/*
-  1164		 * We return 0 and turn on the "refusal_mode" so that any further
-  1165		 * accesses to the pci_dev just get 0xffffffff
-  1166		 */
-  1167		if (brcm_pcie_start_link(pcie) != 0)
-  1168			pcie->refusal_mode = true;
-  1169	
-  1170		/*
-  1171		 * There is not much of a point to return an error as currently it
-  1172		 * will cause a WARNING() from pci_alloc_child_bus().  So only
-  1173		 * return the error if it is -ENOMEM.  Note that we are always
-  1174		 * doing a dev_err() for other erros.
-  1175		 */
-  1176		return ret == -ENOMEM ? ret : 0;
-  1177	}
-  1178	
+0e405443e803a3c Gal Pressman 2016-04-24  3866  
+d3cbd4254df8817 Chris Mi     2019-05-16 @3867  int mlx5e_set_features(struct net_device *netdev, netdev_features_t features)
+0e405443e803a3c Gal Pressman 2016-04-24  3868  {
+992d8a4e38f0527 Gal Pressman 2021-11-29  3869  	netdev_features_t oper_features = features;
+be0f780bc50a002 Gal Pressman 2018-01-11  3870  	int err = 0;
+be0f780bc50a002 Gal Pressman 2018-01-11  3871  
+
+:::::: The code at line 3867 was first introduced by commit
+:::::: d3cbd4254df881777e2efb68ee10ede0d9dc0647 net/mlx5e: Add ndo_set_feature for uplink representor
+
+:::::: TO: Chris Mi <chrism@mellanox.com>
+:::::: CC: Saeed Mahameed <saeedm@mellanox.com>
 
 -- 
 0-DAY CI Kernel Test Service
