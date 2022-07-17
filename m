@@ -1,42 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB207A
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 00:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD962A
+	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 01:44:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658016722; x=1689552722;
+  t=1658022244; x=1689558244;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HFHgTs6YcSEEVWfkRgiSn0j5/xmOi9Hqq1hD2gQcRO8=;
-  b=NLYVH6sHvE4f4xwSAwFpgI+jZBR342jA1m7ImtYAYL0+RDwklwjtQ6Jh
-   OjOtBUHIHclaoNUyD/0wgnvNW7SPf4gKe0jl79vjTdhRt90G+hjzmBpQ6
-   ioxGglMN+onHUjWATg27I/hS9XnfVI8iZngpHVmXnTtxsWXrE4IWjpBFx
-   CH59v8g5IJPZukfb5vlidsEcY18oJHGo56OlGQ5gM8C6+MQmuskgl7qBw
-   qmQTYNnoh43/CjrTpae3gtw86x/QeZRIaCar3AfJDl3J/lWOGVJ+7kVQN
-   Itjw6uPp5Ogv+jFaiEHf7zDRPTYG+kz6WZzP+uzuBYaJyBu/qxPXmy+2S
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="347703215"
+  bh=KTw1/7rD4CM9ru0woEWvt/samsWn6ttAkZIXhusjOTM=;
+  b=OBlvD/pKqJN9Bo/2MgbyGvKkqKoAtXW43B7iiD5etwlh6z1Gswv74h0l
+   x7Tjw5wc2Sy1fIbPA51HxrEapcUtra65lhqlnTmFVUs+yXLpG6qmP4QOD
+   PwTO65ekngUBq34ZI+MzEbJ9/8d0E4oOkwL2j1rHXddTJ3vS6o2cKzGTH
+   4jst5ncTJr9ZUPcM/ad8YP8ZUmV/Dqvwo9LxMC2orsCYtfHEFTNAjLnEc
+   Qhvb09j/s7whJB56loBUfBVhrIhql/JtqSruSjZPF8VVWateaCubARrGB
+   Swzwf2KslRiWw2Rqsxb3tz3TXJUQDKqvLjlTR3qmmwbw4q1ugY3HONRfV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="265803835"
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="347703215"
+   d="scan'208";a="265803835"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 17:12:01 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 18:44:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="547067558"
+   d="scan'208";a="547078073"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 17:12:00 -0700
+  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 18:44:02 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oCrt9-0002L8-96;
-	Sun, 17 Jul 2022 00:11:59 +0000
-Date: Sun, 17 Jul 2022 08:11:57 +0800
+	id 1oCtKD-0002Qo-Qi;
+	Sun, 17 Jul 2022 01:44:01 +0000
+Date: Sun, 17 Jul 2022 09:43:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
- warning: unused variable 'samsung_jpeg_match'
-Message-ID: <202207170810.jqfLUIpt-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/120-spmi 4/4]
+ drivers/spmi/spmi-apple-controller.c:98:15: warning: variable 'rsp' set but
+ not used
+Message-ID: <202207170930.CP6Weylo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,70 +47,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mauro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   972a278fe60c361eb8f37619f562f092e8786d7c
-commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-date:   4 months ago
-config: hexagon-buildonly-randconfig-r005-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170810.jqfLUIpt-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/120-spmi
+head:   33e9b741cc336eae2465b02a86130c0c3f74e898
+commit: 33e9b741cc336eae2465b02a86130c0c3f74e898 [4/4] spmi: apple: Properly wait for status data after write
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220717/202207170930.CP6Weylo-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # https://github.com/AsahiLinux/linux/commit/33e9b741cc336eae2465b02a86130c0c3f74e898
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/120-spmi
+        git checkout 33e9b741cc336eae2465b02a86130c0c3f74e898
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/samsung/s5p-jpeg/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/ drivers/iio/light/ drivers/media/i2c/ drivers/net/pcs/ drivers/pinctrl/nuvoton/ drivers/spmi/ kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_jpeg_match[] = {
-                                    ^
+>> drivers/spmi/spmi-apple-controller.c:98:15: warning: variable 'rsp' set but not used [-Wunused-but-set-variable]
+           volatile u32 rsp;
+                        ^
    1 warning generated.
 
 
-vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+vim +/rsp +98 drivers/spmi/spmi-apple-controller.c
 
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   92  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   93  static int spmi_write_cmd(struct spmi_controller *ctrl,
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   94  			  u8 opc, u8 slave_id, u16 slave_addr, const u8 *__buf, size_t bc)
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   95  {
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   96      struct apple_spmi *spmi;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04   97  	u32 spmi_cmd = opc|slave_id<<8|slave_addr<<16|(bc-1)|(1<<15);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  @98  	volatile u32 rsp;
+33e9b741cc336e Hector Martin            2022-07-02   99  	volatile u32 status;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  100  	size_t i=0,j;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  101  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  102  	spmi = spmi_controller_get_drvdata(ctrl);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  103  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  104  	write_reg(spmi_cmd, spmi, SPMI_CMD_REG);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  105  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  106  	while (i<bc) {
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  107  		j=0;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  108  		spmi_cmd=0;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  109  		while ((j<4)&(i<bc)) {
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  110  			spmi_cmd |= __buf[i++]<<(j++*8);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  111  		}
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  112  		write_reg(spmi_cmd, spmi, SPMI_CMD_REG);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  113  	}
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  114  
+33e9b741cc336e Hector Martin            2022-07-02  115  	/* Wait for Rx FIFO to have something */
+33e9b741cc336e Hector Martin            2022-07-02  116  	/* Quite ugly msleep, need to find a better way to do it */
+33e9b741cc336e Hector Martin            2022-07-02  117  	i=0;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  118  	do {
+33e9b741cc336e Hector Martin            2022-07-02  119  		status=read_reg(spmi, SPMI_STATUS_REG);
+33e9b741cc336e Hector Martin            2022-07-02  120  		msleep(10);
+33e9b741cc336e Hector Martin            2022-07-02  121  		i+=1;
+33e9b741cc336e Hector Martin            2022-07-02  122  	} while ((status & SPMI_RX_FIFO_EMPTY) && i<5);
+33e9b741cc336e Hector Martin            2022-07-02  123  
+33e9b741cc336e Hector Martin            2022-07-02  124  	if(i>=5){
+33e9b741cc336e Hector Martin            2022-07-02  125  		dev_err(&ctrl->dev,"spmi_write_cmd:took to long to get the status");
+33e9b741cc336e Hector Martin            2022-07-02  126  		return -1;
+33e9b741cc336e Hector Martin            2022-07-02  127  	}
+33e9b741cc336e Hector Martin            2022-07-02  128  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  129  	rsp = read_reg(spmi, SPMI_RSP_REG);
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  130  
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  131  	return 0;
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  132  }
+c6ab839751d160 Jean-Francois Bortolotti 2022-02-04  133  
 
-:::::: The code at line 3126 was first introduced by commit
-:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+:::::: The code at line 98 was first introduced by commit
+:::::: c6ab839751d160e1fcdd94636e4fe40f88a91a42 spmi: add a first basic spmi driver for Apple SoC
 
-:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+:::::: TO: Jean-Francois Bortolotti <jeff@borto.fr>
+:::::: CC: Hector Martin <marcan@marcan.st>
 
 -- 
 0-DAY CI Kernel Test Service
