@@ -1,133 +1,78 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B23E33CC
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 17:29:54 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-2dc7bdd666fso97001577b3.7
-        for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 10:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=suawiw5DlcXpf7bbkJ8PQQ5vzk0PkV6q8VurOqdiYMY=;
-        b=n1z3j0VmLBxQGOrbPRlK8tZbvAdrIiSz2bQYgkNeq91d456+eDiYc/5GFZensGwLHS
-         7JhkuGT1gsar3PIyhhKnulRBxVqnhND67ffrLp/URcjl17F0XFm2d4ye1Qxk32w9T7mI
-         cy5H+ZQZJcU6281/3wjSw6u5KrEv5vtBlH331AMPeXiLa9lmTvS4JfE73jJTvQ2le99k
-         SH32N15YXJcZp0JXFvFRp8Watj160JjzozaI1GpSWp4VCYTkKkCU015f3TaHU3gdFqtD
-         rfXQWyWpzOTiJIxyFl5HS0oOoZsoUbgBvo9mBDgWh28SOwaxjvBu8FhXbkY58Q/bLMIU
-         6e8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=suawiw5DlcXpf7bbkJ8PQQ5vzk0PkV6q8VurOqdiYMY=;
-        b=MXgiuQWu57Uh1+AG3Md5ZSFvKSIgc5TgWRx5gIdjALkJNYEnOvDXSn/RRx28QodPqi
-         3cMTSnlg9Wt7k0pDssGCquzz24hVzucoPcwuXHPsevJ/IBXk+FAEFChXaxd9QdhxKSFC
-         Vz5KnWIoatfFgf6UO5pFpYT3PtC05f31aBdbdXVgvv3kr7MoxFADt3LfAogW0d0bZhcT
-         zNNHIPdZyTIML8lNBFEVM4kKZvx1BjUBA0BWfIqIAxL1NAAkoD8nu4V/RTrCzARdOK9g
-         kHVbcicwtYg4xDFO0dZYaIVEv82QFNA1JVT1pKkTu/ozC6Yn6hqmmSLAy0j/DxcH6lFn
-         /wEw==
-X-Gm-Message-State: AJIora/LjRoSxhFHbeCGb3RRTPTrzjPeWlK8CJx0N6TR2kNY/GyzuwL/
-	JKw1PWsfJ6qNH2Lg0Li1C2dQ/+cJFYxvmPlZGw==
-X-Google-Smtp-Source: AGRyM1vmgl2/mU40hrNgPwoKkTbeprZfiqtsuMWXyJISc3ZqdWtZfqYZaWX9OnKCAm5p/wIsJcS05lXFKYZpdBvngw==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f922:7e91:d8e8:24c4])
- (user=justinstitt job=sendgmr) by 2002:a25:880b:0:b0:66e:3d9e:7dfd with SMTP
- id c11-20020a25880b000000b0066e3d9e7dfdmr25745809ybl.600.1658165393981; Mon,
- 18 Jul 2022 10:29:53 -0700 (PDT)
-Date: Mon, 18 Jul 2022 10:29:34 -0700
-In-Reply-To: <20220629235326.480858-1-justinstitt@google.com>
-Message-Id: <20220718172934.4155189-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C233CC
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 17:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658165496; x=1689701496;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wVE9Xlpc6XOQKRzpAWe2jSfajVz3Ah+KJnh/3d9lT30=;
+  b=eVlCtAE/XkeVTniPcDiO+MnlXBO040lIXMXWL3JzMEEe2V88i89Vrz1m
+   a+/ZhuxI8hH/oaknDHoTyYqDAujrfY8f2pckFyitBi25brFhN6U6X/FZV
+   wCZFap+/MR8q0E4KSgOr0Mq7A6vzAE+oTb4Z8D6j8RlsBbOwPlvUer00A
+   KnktPsKZL99lN//Liojb5LZH0FDkdGDx8KXz9OxKBBODYncwaqBia2JfX
+   y0izBrM/61sPEdgrUOj5Eo33SmTQ4GqRVqM8PS3VoOqUkwp1IlkchtnrG
+   ExkflmTkSr8Sr2kB+SmxKS89hFS6VXBqGFGGNX0LzSQ4xUomANCYrlrEm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="266059980"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="266059980"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 10:31:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="572500852"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jul 2022 10:31:33 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDUai-0004bt-Da;
+	Mon, 18 Jul 2022 17:31:32 +0000
+Date: Tue, 19 Jul 2022 01:31:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ben Dooks <ben.dooks@sifive.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [linux-next:master 8797/11208] reset-simple.c:undefined reference to
+ `devm_ioremap_resource'
+Message-ID: <202207190150.mf4rb4VG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220629235326.480858-1-justinstitt@google.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v3] lib/test_printf.c: fix clang -Wformat warnings
-From: Justin Stitt <justinstitt@google.com>
-To: justinstitt@google.com
-Cc: andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-see warnings:
-| lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
-| but the argument has type 'int' [-Werror,-Wformat]
-test("0|1|1|128|255",
-| "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
--
-| lib/test_printf.c:158:55: error: format specifies type 'char' but the
-| argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
-| "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
--
-| lib/test_printf.c:159:41: error: format specifies type 'unsigned
-short'
-| but the argument has type 'int' [-Werror,-Wformat]
-| test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   036ad6daa8f0fd357af7f50f9da58539eaa6f68c
+commit: 18d1909be3451e1a2e322e9035f03d0a18f7bee8 [8797/11208] reset: allow building of reset simple driver if expert config selected
+config: s390-randconfig-r032-20220718 (https://download.01.org/0day-ci/archive/20220719/202207190150.mf4rb4VG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=18d1909be3451e1a2e322e9035f03d0a18f7bee8
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 18d1909be3451e1a2e322e9035f03d0a18f7bee8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-There's an ongoing movement to eventually enable the -Wformat flag for
-clang. Previous patches have targeted incorrect usage of
-format specifiers. In this case, however, the "incorrect" format
-specifiers are intrinsically part of the test cases. Hence, fixing them
-would be misaligned with their intended purpose. My proposed fix is to
-simply disable the warnings so that one day a clean build of the kernel
-with clang (and -Wformat enabled) would be possible. It would also keep
-us in the green for alot of the CI bots.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-changes from v1 -> v2:
-* moved NOWARN macro definition to a more appropriate location
-* using __diag_ignore_all (thanks Nathan)
-* using local scoping for code blocks instead of __VA_ARGS__ (thanks Nick)
-* indented affected test cases (thanks Andy)
+All errors (new ones prefixed by >>):
 
-changes from v2 -> v3:
-* reinserted commit message
-* remove Andy's Suggested-by tag
-* add issue tracker link
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/reset/reset-simple.o: in function `reset_simple_probe':
+>> reset-simple.c:(.text+0x3aa): undefined reference to `devm_ioremap_resource'
 
- lib/test_printf.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 07309c45f327..1b1755ce9fa7 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -30,6 +30,9 @@
- #define PAD_SIZE 16
- #define FILL_CHAR '$'
-=20
-+#define NOWARN(option, comment, block) \
-+		__diag_push() __diag_ignore_all(#option, comment) block __diag_pop()
-+
- KSTM_MODULE_GLOBALS();
-=20
- static char *test_buffer __initdata;
-@@ -154,9 +157,11 @@ test_number(void)
- 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
- 	test("  0x1234abcd", "%#12x", 0x1234abcd);
- 	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0,=
- 1, 12, 123, 1234, -123, -1234);
--	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
--	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
--	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-+	NOWARN(-Wformat, "Disables clang -Wformat warning", {
-+		test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-+		test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-+		test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-+	})
- 	/*
- 	 * POSIX/C99: =C2=BBThe result of converting zero with an explicit
- 	 * precision of zero shall be no characters.=C2=AB Hence the output
---=20
-2.37.0.rc0.161.g10f37bed90-goog
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
