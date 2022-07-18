@@ -1,49 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC55E7FC
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 01:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A377FC
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 01:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658107469; x=1689643469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2EKYGRxFwOowb+2/VvkXh77NNCMzCGVW6f9edVohmqU=;
-  b=nWRymceehoIfS+fxc+k2dI1UQ+h654LpPDxZxEABr7rCHt2Qs2wNDjAB
-   VPXBxGtqJtC5go2YJWRTQ3jm7Ux173upVpu4aIgFxD4evxYqntHtztOss
-   3fZupdfP2WH5sNphfsBhbCCAKCzfS6NOOj3Wr8FYu2gFBe86TDYIkYvFL
-   yym0oHLJnCnxH/DMzC2JcTlpI5GbhNEZBRw9t4oX0j6c0/tUDkn/VMaeq
-   ShWQtQd2RbvssIa4a6+ku383CMDM3nnhmcdGALPizUmdIX5vApTLX9aU1
-   VNIwumFLa3dqTwQLHPoOFpDXvkpKJIkV+A5HUeJbMHu7FLEHcrNhvGknl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="266512944"
+  t=1658108710; x=1689644710;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K3ZBTCN554S4wyXZeUS8sJhqy6fYcV1h0evtpe655gg=;
+  b=f8zDx8LyaStX/BIkNaiH33tD88y8Dt4KVxLRfpIr1+iTVctjb98S/YCa
+   /OlE2Nzw9s+VMkBqOYLUKj5VqsSwSYai3k5pYnctairqsj2XE4G17HEIZ
+   x4DUBdm4WwO+SS5zgXFQq5T+vGt3pdid1gth3B2H9EEyXNsCHWdGDI+ss
+   QuixuJqb0u6slPQID0upaFsskVC73oAXVs6mPY2fFKHBhynAxgjrc1K7/
+   QEqKUD4Un82PcfUYfnuJbiLtYunetyilq7hUaZ65C6eJ3sHE0zKjQcLXw
+   G+mGI3PYCF7xgp+R2cRbbYarchoB9Bq6XHHpFIgykJf8D+YfbnUGvOFJC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286130231"
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="266512944"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:24:29 -0700
+   d="scan'208";a="286130231"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:45:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="843105175"
+   d="scan'208";a="629746039"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Jul 2022 18:24:25 -0700
+  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2022 18:45:08 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDFUm-0003rU-Q9;
-	Mon, 18 Jul 2022 01:24:24 +0000
-Date: Mon, 18 Jul 2022 09:24:00 +0800
+	id 1oDFop-0003sQ-JK;
+	Mon, 18 Jul 2022 01:45:07 +0000
+Date: Mon, 18 Jul 2022 09:44:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-	tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-	yuenn@google.com, benjaminfair@google.com, linus.walleij@linaro.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	j.neuschaefer@gmx.net, zhengbin13@huawei.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
-Subject: Re: [PATCH v2 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO
- driver
-Message-ID: <202207180959.yy7mZtRy-lkp@intel.com>
-References: <20220714122322.63663-3-tmaimon77@gmail.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:f2fs 2/3] include/linux/f2fs_fs.h:364:1: error:
+ static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) ==
+ 4095':
+Message-ID: <202207180909.eQsJ5h8G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,102 +46,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714122322.63663-3-tmaimon77@gmail.com>
 
-Hi Tomer,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linus/master v5.19-rc7 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tomer-Maimon/pinctrl-nuvoton-add-pinmux-and-GPIO-driver-for-NPCM8XX/20220714-202424
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207180959.yy7mZtRy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+tree:   https://github.com/bvanassche/linux f2fs
+head:   93e015b268055bcd2dc2f03bcb2c1311dff33c5e
+commit: c8670ac5d2e3a0351cefc7ca9722cf532c3fa823 [2/3] Verify structure sizes at compile time
+config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180909.eQsJ5h8G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0a5f158322b21ab2b71cc606adc2ee7573d8be0d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tomer-Maimon/pinctrl-nuvoton-add-pinmux-and-GPIO-driver-for-NPCM8XX/20220714-202424
-        git checkout 0a5f158322b21ab2b71cc606adc2ee7573d8be0d
+        # https://github.com/bvanassche/linux/commit/c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche f2fs
+        git checkout c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/ drivers/net/pcs/ drivers/pinctrl/nuvoton/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c:481:18: warning: unused variable 'smb14b_pins' [-Wunused-const-variable]
-   static const int smb14b_pins[] = { 32, 187 };
-                    ^
-   1 warning generated.
+   In file included from fs/f2fs/dir.c:10:
+>> include/linux/f2fs_fs.h:364:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) == 4095': 
+   static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
+   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ^               ~~~~
+   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                           ^              ~~~~
+   In file included from fs/f2fs/dir.c:10:
+>> include/linux/f2fs_fs.h:407:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_sit_block) == 4070': 
+   static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
+   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ^               ~~~~
+   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                           ^              ~~~~
+   2 errors generated.
 
 
-vim +/smb14b_pins +481 drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c
+vim +364 include/linux/f2fs_fs.h
 
-   439	
-   440	static const int smb0_pins[]  = { 115, 114 };
-   441	static const int smb0b_pins[] = { 195, 194 };
-   442	static const int smb0c_pins[] = { 202, 196 };
-   443	static const int smb0d_pins[] = { 198, 199 };
-   444	static const int smb0den_pins[] = { 197 };
-   445	static const int smb1_pins[]  = { 117, 116 };
-   446	static const int smb1b_pins[] = { 126, 127 };
-   447	static const int smb1c_pins[] = { 124, 125 };
-   448	static const int smb1d_pins[] = { 4, 5 };
-   449	static const int smb2_pins[]  = { 119, 118 };
-   450	static const int smb2b_pins[] = { 122, 123 };
-   451	static const int smb2c_pins[] = { 120, 121 };
-   452	static const int smb2d_pins[] = { 6, 7 };
-   453	static const int smb3_pins[]  = { 30, 31 };
-   454	static const int smb3b_pins[] = { 39, 40 };
-   455	static const int smb3c_pins[] = { 37, 38 };
-   456	static const int smb3d_pins[] = { 59, 60 };
-   457	static const int smb4_pins[]  = { 28, 29 };
-   458	static const int smb4b_pins[] = { 18, 19 };
-   459	static const int smb4c_pins[] = { 20, 21 };
-   460	static const int smb4d_pins[] = { 22, 23 };
-   461	static const int smb4den_pins[] = { 17 };
-   462	static const int smb5_pins[]  = { 26, 27 };
-   463	static const int smb5b_pins[] = { 13, 12 };
-   464	static const int smb5c_pins[] = { 15, 14 };
-   465	static const int smb5d_pins[] = { 94, 93 };
-   466	static const int smb6_pins[]  = { 172, 171 };
-   467	static const int smb6b_pins[] = { 2, 3 };
-   468	static const int smb6c_pins[]  = { 0, 1 };
-   469	static const int smb6d_pins[]  = { 10, 11 };
-   470	static const int smb7_pins[]  = { 174, 173 };
-   471	static const int smb7b_pins[]  = { 16, 141 };
-   472	static const int smb7c_pins[]  = { 24, 25 };
-   473	static const int smb7d_pins[]  = { 142, 143 };
-   474	static const int smb8_pins[]  = { 129, 128 };
-   475	static const int smb9_pins[]  = { 131, 130 };
-   476	static const int smb10_pins[] = { 133, 132 };
-   477	static const int smb11_pins[] = { 135, 134 };
-   478	static const int smb12_pins[] = { 221, 220 };
-   479	static const int smb13_pins[] = { 223, 222 };
-   480	static const int smb14_pins[] = { 22, 23 };
- > 481	static const int smb14b_pins[] = { 32, 187 };
-   482	static const int smb15_pins[] = { 20, 21 };
-   483	static const int smb15b_pins[] = { 192, 191 };
-   484	static const int smb16_pins[] = { 10, 11 };
-   485	static const int smb16b_pins[] = { 218, 219 };
-   486	static const int smb17_pins[] = { 3, 2 };
-   487	static const int smb18_pins[] = { 0, 1 };
-   488	static const int smb19_pins[] = { 60, 59 };
-   489	static const int smb20_pins[] = { 234, 235 };
-   490	static const int smb21_pins[] = { 169, 170 };
-   491	static const int smb22_pins[] = { 40, 39 };
-   492	static const int smb23_pins[] = { 38, 37 };
-   493	static const int smb23b_pins[] = { 134, 134 };
-   494	
+   363	
+ > 364	static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
+   365	
+   366	/*
+   367	 * For SIT entries
+   368	 *
+   369	 * Each segment is 2MB in size by default so that a bitmap for validity of
+   370	 * there-in blocks should occupy 64 bytes, 512 bits.
+   371	 * Not allow to change this.
+   372	 */
+   373	#define SIT_VBLOCK_MAP_SIZE 64
+   374	#define SIT_ENTRY_PER_BLOCK (PAGE_SIZE / sizeof(struct f2fs_sit_entry))
+   375	
+   376	/*
+   377	 * F2FS uses 4 bytes to represent block address. As a result, supported size of
+   378	 * disk is 16 TB and it equals to 16 * 1024 * 1024 / 2 segments.
+   379	 */
+   380	#define F2FS_MAX_SEGMENT       ((16 * 1024 * 1024) / 2)
+   381	
+   382	/*
+   383	 * Note that f2fs_sit_entry->vblocks has the following bit-field information.
+   384	 * [15:10] : allocation type such as CURSEG_XXXX_TYPE
+   385	 * [9:0] : valid block count
+   386	 */
+   387	#define SIT_VBLOCKS_SHIFT	10
+   388	#define SIT_VBLOCKS_MASK	((1 << SIT_VBLOCKS_SHIFT) - 1)
+   389	#define GET_SIT_VBLOCKS(raw_sit)				\
+   390		(le16_to_cpu((raw_sit)->vblocks) & SIT_VBLOCKS_MASK)
+   391	#define GET_SIT_TYPE(raw_sit)					\
+   392		((le16_to_cpu((raw_sit)->vblocks) & ~SIT_VBLOCKS_MASK)	\
+   393		 >> SIT_VBLOCKS_SHIFT)
+   394	
+   395	struct f2fs_sit_entry {
+   396		__le16 vblocks;				/* reference above */
+   397		__u8 valid_map[SIT_VBLOCK_MAP_SIZE];	/* bitmap for valid blocks */
+   398		__le64 mtime;				/* segment age for cleaning */
+   399	} __packed;
+   400	
+   401	static_assert(sizeof(struct f2fs_sit_entry) == 74, "");
+   402	
+   403	struct f2fs_sit_block {
+   404		struct f2fs_sit_entry entries[SIT_ENTRY_PER_BLOCK];
+   405	} __packed;
+   406	
+ > 407	static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
+   408	
 
 -- 
 0-DAY CI Kernel Test Service
