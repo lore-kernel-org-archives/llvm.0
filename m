@@ -1,116 +1,132 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F7E33E7
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 18:58:14 +0000 (UTC)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31caffa4a45so117687667b3.3
-        for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 11:58:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC6CECB
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 20:55:35 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id d12so21439206lfq.12
+        for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 13:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=osBLY7pWKf4zzjIUgrcUY5WBHpct5ScokcNbQfqR2hQ=;
-        b=P6dRuy7rne1mioRFiNj6i9XgkdJCqrxJ6MH88oJTxDggLWxYM7VLzBCuFmUo3KZwMZ
-         RbaAvDffal/7ijOMLPy8aPIi4zAzviylE+YpjOJg8WpzRLjZ01hZSGPZL+0ZIoOAKy4w
-         Jlq6WRAkpYKMHGf3ls/lVfeZzliEAgNf1G+lg=
+         :cc;
+        bh=ngAg2yVO32eBtQbv+5HGxymaiT96wuzbFVwUnPbkYPs=;
+        b=Lekm+r2aRj8xx29RD0wy/9Tl0pPKcs7oHW9Fd98cwNBSfHby25BNUaqXile6+m1W3J
+         YlBpcOTBiSgo4GLV2EkMvz09EnwHmUNnw6N8DrwfOSvrx6y91FkuJ/CZPj2CsH7lDGv0
+         o2tWRKHqhw4fCFTn9zXdMRxsg3zuz5eXOmvdR5+WDd61Z4EhpVK0l964j97jzc7hSIZG
+         q2J1Idq/NpA3PMmskY2EYKBHPMWN+Jp7nFw61/1Ri+T33vzU7cYw9Fynr92ZeC156nXK
+         zk4/C0BlRTyLcmaIVFcYuBR9D2IaW3gHdwiPhzFUrc3rEKXyHE8Kfkxz2QpTlaLG0D8m
+         K/Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=osBLY7pWKf4zzjIUgrcUY5WBHpct5ScokcNbQfqR2hQ=;
-        b=05U7C7UtiZ8/xh7AmPnp92wKsGCom19v35J/a9u+IQyp5vf3TdWCkg084vlHX2gBnK
-         7ZvVLRzlldKS1DmDgoVLFpB4oT7nVu/2lKcl9PeaDzL6FrKVCMiGe5AEAQROSY8jaLDm
-         sn2Yba/nBoP2sUuWGd/U9NJRZjg48OPWPcERi71Uxp0DpzIQBzwJtRTXmby9RWAorh8C
-         fGom7L2yJkizFO1eU49eeviXCP9AyMUzRb/KrrV8FgpFiZrjDaZMgeWK7h/X2BU5oNeI
-         iY3kBcwXb5YNsihoAbKDWK42GGeB0gSokvSHUoXdguqlnhXLt2dHprTdA0Q0bBD8AIrI
-         X7/g==
-X-Gm-Message-State: AJIora9Yh88+v49NUN9SFWQ30iwfZ82uL5e1UYq2KzvwTIjbKVL15Thr
-	/z8uevNKZ1MIcUFKAFLXFLTvXM/gQdIZvQOOZLvmvQ==
-X-Google-Smtp-Source: AGRyM1szq8owamsB9PCWQy97R44KLI8X1kFziZ9xNt3caREOjwAMSrwEC2vVtD1bAz4wKznqzzRFGTD1oTeUFAtS+dE=
-X-Received: by 2002:a81:c0f:0:b0:31c:f619:b02c with SMTP id
- 15-20020a810c0f000000b0031cf619b02cmr30759932ywm.311.1658170693594; Mon, 18
- Jul 2022 11:58:13 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ngAg2yVO32eBtQbv+5HGxymaiT96wuzbFVwUnPbkYPs=;
+        b=0kXpZdmF66uKkdXKJ3EaOs41GlhfFKst5i99k9E/nC5Yd58eHqQPNBzF0vM+dYGB+E
+         j9wyENRIlq0zCWOVwjC6iAhZSl2mmSPCHBdJz2iz+JuWGOYei8IjZxl2bjbXArWVRLR0
+         WZOJWKpkhCrjdW2ZG+QUsUSQOfFqad3/H9gjK5lKycxkhvsgltZUiMTgrg5vGzPY1Npd
+         JcvhqJPXGEohyXHcCenndA30UCJjj/zysCxsa7iL1BgusXO7CZQFv4O8vZuqP1mMrQQm
+         RK/2N8zbjbTEwUsislujFtRCIV9ufZv5frmUxMc0rwzbaiWMWQFaTUhivC4iwtF6bZ2y
+         CBMw==
+X-Gm-Message-State: AJIora892wnrvtVqSm059EoB+FQZGzRRLNkLnAOML0JrMsC/AC7OLxnd
+	F8CiY+Ts0rhkGShTgMcUDT6wWZqN4D7BZfacZPWhcg==
+X-Google-Smtp-Source: AGRyM1tcWZRhnGREO1HBCcsOSiZAmhbB+eNTAxfA1VHqRBIMV5ol//3U7P7L3hH5mPy40BaNkgIjSUUGC1iWFEDtcX4=
+X-Received: by 2002:a05:6512:31d1:b0:489:cfee:3600 with SMTP id
+ j17-20020a05651231d100b00489cfee3600mr15798595lfe.432.1658177732994; Mon, 18
+ Jul 2022 13:55:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207170614.2HHvAplN-lkp@intel.com>
-In-Reply-To: <202207170614.2HHvAplN-lkp@intel.com>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Mon, 18 Jul 2022 11:58:00 -0700
-Message-ID: <CACeCKacewJbE4u-v0KMUTcjEV674MLgQZwU5vgtfY6MNZpfTww@mail.gmail.com>
-Subject: Re: [usb:usb-testing 50/55] drivers/platform/chrome/cros_typec_switch.c:93:9:
- error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later
- do not support implicit function declarations
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-usb@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220708211447.135209-1-justinstitt@google.com> <20220718180421.49697-1-justinstitt@google.com>
+In-Reply-To: <20220718180421.49697-1-justinstitt@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 18 Jul 2022 13:55:21 -0700
+Message-ID: <CAKwvOdn42__0Z4Qrh0rVzotCGFdecfyCY-=C_OE0U3z20A1NmA@mail.gmail.com>
+Subject: Re: [PATCH v2] target: iscsi: fix clang -Wformat warnings
+To: martin.petersen@oracle.com
+Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	llvm@lists.linux.dev, mgurtovoy@nvidia.com, michael.christie@oracle.com, 
+	mingzhe.zou@easystack.cn, nathan@kernel.org, target-devel@vger.kernel.org, 
+	trix@redhat.com, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 16, 2022 at 3:20 PM kernel test robot <lkp@intel.com> wrote:
+On Mon, Jul 18, 2022 at 11:04 AM Justin Stitt <justinstitt@google.com> wrote:
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git us=
-b-testing
-> head:   c76d09da77d69d7f737540985912ad2bca654713
-> commit: e54369058f3da181fcc4c893f224a0c5a8a526b6 [50/55] platform/chrome:=
- cros_typec_switch: Add switch driver
-> config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/202=
-20717/202207170614.2HHvAplN-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0702=
-2e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/=
-commit/?id=3De54369058f3da181fcc4c893f224a0c5a8a526b6
->         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/gregkh/usb.git
->         git fetch --no-tags usb usb-testing
->         git checkout e54369058f3da181fcc4c893f224a0c5a8a526b6
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/block/ drivers/=
-iio/light/ drivers/media/i2c/ drivers/net/pcs/ drivers/pinctrl/nuvoton/ dri=
-vers/platform/chrome/ drivers/spmi/ kernel/trace/
+> When building with Clang we encounter these warnings:
+> | drivers/target/iscsi/iscsi_target_login.c:719:24: error: format
+> | specifies type 'unsigned short' but the argument has type 'int'
+> | [-Werror,-Wformat] " from node: %s\n", atomic_read(&sess->nconn),
+> -
+> | drivers/target/iscsi/iscsi_target_login.c:767:12: error: format
+> | specifies type 'unsigned short' but the argument has type 'int'
+> | [-Werror,-Wformat] " %s\n", atomic_read(&sess->nconn),
+> -
+> | drivers/target/iscsi/iscsi_target.c:4365:12: error: format specifies
+> | type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+> | " %s\n", atomic_read(&sess->nconn)
 >
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> For all warnings, the format specifier is `%hu` which describes an
+> unsigned short. The resulting type of atomic_read is an int. The
+> proposed fix is to listen to Clang and swap the format specifier.
 >
-> All errors (new ones prefixed by >>):
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+> diff from v1->v2:
+> Combined two similar patches into one:
+> * https://lore.kernel.org/all/20220708221314.466294-1-justinstitt@google.com/
+> * https://lore.kernel.org/llvm/20220708211447.135209-1-justinstitt@google.com/
 >
-> >> drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to undec=
-lared function 'acpi_evaluate_integer'; ISO C99 and later do not support im=
-plicit function declarations [-Wimplicit-function-declaration]
->                    ret =3D acpi_evaluate_integer(adev->handle, "_ADR", NU=
-LL, &index);
->                          ^
->    drivers/platform/chrome/cros_typec_switch.c:93:9: note: did you mean '=
-acpi_evaluate_object'?
->    include/acpi/acpixf.h:550:8: note: 'acpi_evaluate_object' declared her=
-e
->                                acpi_evaluate_object(acpi_handle object,
->                                ^
->    include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI=
-_EXTERNAL_RETURN_STATUS'
->            static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
->                               ^
-> >> drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete d=
-efinition of type 'struct acpi_device'
->                    ret =3D acpi_evaluate_integer(adev->handle, "_ADR", NU=
-LL, &index);
->                                                ~~~~^
->    include/linux/acpi.h:790:8: note: forward declaration of 'struct acpi_=
-device'
->    struct acpi_device;
->           ^
->    2 errors generated.
+>  drivers/target/iscsi/iscsi_target.c       | 2 +-
+>  drivers/target/iscsi/iscsi_target_login.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+> index e368f038ff5c..bfb717065344 100644
+> --- a/drivers/target/iscsi/iscsi_target.c
+> +++ b/drivers/target/iscsi/iscsi_target.c
+> @@ -4361,7 +4361,7 @@ int iscsit_close_connection(
+>
+>         spin_lock_bh(&sess->conn_lock);
+>         atomic_dec(&sess->nconn);
+> -       pr_debug("Decremented iSCSI connection count to %hu from node:"
+> +       pr_debug("Decremented iSCSI connection count to %d from node:"
+>                 " %s\n", atomic_read(&sess->nconn),
+>                 sess->sess_ops->InitiatorName);
+>         /*
+> diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/iscsi/iscsi_target_login.c
+> index 6b94eecc4790..0778591abae7 100644
+> --- a/drivers/target/iscsi/iscsi_target_login.c
+> +++ b/drivers/target/iscsi/iscsi_target_login.c
+> @@ -715,7 +715,7 @@ void iscsi_post_login_handler(
+>
+>                 list_add_tail(&conn->conn_list, &sess->sess_conn_list);
+>                 atomic_inc(&sess->nconn);
+> -               pr_debug("Incremented iSCSI Connection count to %hu"
+> +               pr_debug("Incremented iSCSI Connection count to %d"
+>                         " from node: %s\n", atomic_read(&sess->nconn),
+>                         sess->sess_ops->InitiatorName);
+>                 spin_unlock_bh(&sess->conn_lock);
+> @@ -763,7 +763,7 @@ void iscsi_post_login_handler(
+>         spin_lock_bh(&sess->conn_lock);
+>         list_add_tail(&conn->conn_list, &sess->sess_conn_list);
+>         atomic_inc(&sess->nconn);
+> -       pr_debug("Incremented iSCSI Connection count to %hu from node:"
+> +       pr_debug("Incremented iSCSI Connection count to %d from node:"
+>                 " %s\n", atomic_read(&sess->nconn),
+>                 sess->sess_ops->InitiatorName);
+>         spin_unlock_bh(&sess->conn_lock);
+> --
+> 2.37.0.170.g444d1eabd0-goog
 >
 
-Sorry about this, fixed here:
-https://lore.kernel.org/linux-usb/20220718185551.1025288-1-pmalani@chromium=
-.org/
+
+-- 
+Thanks,
+~Nick Desaulniers
