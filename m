@@ -1,72 +1,169 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A57C4683
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 21:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gB0Dyj6KD1xR0J9edWlW2XlEQizibh7QqbUWvK+mgdc=; b=eObLTaTy/3Us0YDbQ5gnsRcwcZ
-	DuDFu+DbE2G2jh6j/NlBzj89vGk9Ot9DsAGhGZXwZxAfFuM3xbPLMzHXqe0n3NiJXDAh+zpSyesu0
-	/yIaXYGLlRJLO48Nr+n3Vnlmc79kCqNiUDMJ6/kq4RR2yDSpknB2nX1fT9NxNE9ekd2lgagl20bVH
-	vkOsh1WPu1uZkxgRXHmhJvTsImpDTfQ4JOzW9BxDlhdY3CASpc+BG1b0r1rdMS7KNI8Towfzug/bx
-	d2SFavJYeWYJIZcPdOxkUhWJ/ovM6TuBKEo2rV1Yu1uzV7fjxk6NsX9Nh0koq5YwNtI5MIjCH5lvL
-	nkIsd8tg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oDYZN-00D3tf-Aq; Mon, 18 Jul 2022 21:46:25 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id AC3489802A7; Mon, 18 Jul 2022 23:46:24 +0200 (CEST)
-Date: Mon, 18 Jul 2022 23:46:24 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v3 00/20] KCFI support
-Message-ID: <YtXUsIjT9IDGKUCv@worktop.programming.kicks-ass.net>
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <202206131001.6BA9933C@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4223D98
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 22:00:37 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id u19so12881782lfs.0
+        for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 15:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4LCLHgQVQuXh0W/cqwPKu45ik98XylTXSBFO2vmTL+g=;
+        b=j5ZRqt6bbWc4wkqolT6AXcJVpi/kkId/WpIKSB2kv3l3leT/RFiY1Juj3mdIudCBHP
+         V2fxKSqCETby/Ndly0e/sKtL5++LF3KC6mRb5hprroZZcMk7KgUr/nmfXNGBU+IXo7/f
+         Lj4wmEYEV7OcorVp315Zwmf45QIVssR3yFJSOTHAh1iFlnWIybUtVwyf5KPMplWED1I3
+         KcifCpwyCcwMs56wjcCQn8TY26dkay+B4YTNt2dCbeR4sq6O/KwYd1NuPMm1bCnqZC/+
+         CS9GyvMNmcEthsrj0qBLy/pkdVJacJ48CW8C2KNON0AnERavShMGU38d4z+TDU2SB0+s
+         2mGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4LCLHgQVQuXh0W/cqwPKu45ik98XylTXSBFO2vmTL+g=;
+        b=cXjGsayA5FSKLePtbnNfDjHDblJo8WMrAs18b6RjYP5mHBv35g5hId2vuDWRm01LpK
+         ds6UkR6zEn2Qy9RjR92if4kJFQ5QaQxbblEOc4TBwy1PeS5TXIk/6YGTUYQmZ2hYNv3G
+         NL3Epoc/JO0iHc39AYxp0rz4FBU9CprEA0AJb4PL0edqaa6dzoHfye++pJeOJzPczWJe
+         lL7kXANKYNyEzKINerIzcnVvBBVZEBcSJXZwXg6GzX9bPlXDEe6IX9xC1yQf4BhEtZV1
+         /waFTjpXGRCqCUr0btdWzDKapDokLIByJDhfwmD6fgZuKbVTiPCVvL8G/l1aYOBu5ou4
+         6zFg==
+X-Gm-Message-State: AJIora+wIYq2B6sytezeIuN2IfZikD3baAYtTc1ovuq34MA9rVKkTtg1
+	LIPCst7camBexsZOS4ZPpnzcbdxl93FoAsh/2lUeMw==
+X-Google-Smtp-Source: AGRyM1sLA1Yy8ek17iu9KSUkDUlL9KugMNkQWspyJLCV7p6tBEDx2AlBJ0xbtaPU3/afk/wiEAE4EzJ9F8P1iJ16gHE=
+X-Received: by 2002:a05:6512:e9a:b0:489:c681:da2b with SMTP id
+ bi26-20020a0565120e9a00b00489c681da2bmr15211089lfb.626.1658181635855; Mon, 18
+ Jul 2022 15:00:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202206131001.6BA9933C@keescook>
+References: <20220629235326.480858-1-justinstitt@google.com> <20220718172934.4155189-1-justinstitt@google.com>
+In-Reply-To: <20220718172934.4155189-1-justinstitt@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 18 Jul 2022 15:00:24 -0700
+Message-ID: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
+Subject: Re: [PATCH v3] lib/test_printf.c: fix clang -Wformat warnings
+To: Justin Stitt <justinstitt@google.com>
+Cc: andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, pmladek@suse.com, 
+	rostedt@goodmis.org, senozhatsky@chromium.org, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 13, 2022 at 10:04:12AM -0700, Kees Cook wrote:
-> On Fri, Jun 10, 2022 at 04:34:53PM -0700, Sami Tolvanen wrote:
-> > KCFI is a proposed forward-edge control-flow integrity scheme for
-> > Clang, which is more suitable for kernel use than the existing CFI
-> > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-> > alter function references to point to a jump table, and won't break
-> > function address equality. The latest LLVM patch is here:
-> > 
-> >   https://reviews.llvm.org/D119296
-> > 
-> > This RFC series replaces the current arm64 CFI implementation with
-> > KCFI and adds support for x86_64.
-> 
-> I think the "RFC" prefix for this series can be dropped. :)
-> 
-> It looks to me like all of Peter's concerns have been addressed. I'd say
-> let's get the Clang side landed, and once that's done, land this via x86
-> -tip?
-> 
-> Peter and Will does this sound right to you? It touches arm64, so if
-> -tip isn't okay, I could take it in one of my trees?
+/On Mon, Jul 18, 2022 at 10:29 AM Justin Stitt <justinstitt@google.com> wro=
+te:
+>
+> see warnings:
+> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> test("0|1|1|128|255",
+> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
+> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
+> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:159:41: error: format specifies type 'unsigned
+> short'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+>
+> There's an ongoing movement to eventually enable the -Wformat flag for
+> clang. Previous patches have targeted incorrect usage of
+> format specifiers. In this case, however, the "incorrect" format
+> specifiers are intrinsically part of the test cases. Hence, fixing them
+> would be misaligned with their intended purpose. My proposed fix is to
+> simply disable the warnings so that one day a clean build of the kernel
+> with clang (and -Wformat enabled) would be possible. It would also keep
+> us in the green for alot of the CI bots.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> changes from v1 -> v2:
+> * moved NOWARN macro definition to a more appropriate location
+> * using __diag_ignore_all (thanks Nathan)
+> * using local scoping for code blocks instead of __VA_ARGS__ (thanks Nick=
+)
+> * indented affected test cases (thanks Andy)
+>
+> changes from v2 -> v3:
+> * reinserted commit message
+> * remove Andy's Suggested-by tag
+> * add issue tracker link
+>
+>  lib/test_printf.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/lib/test_printf.c b/lib/test_printf.c
+> index 07309c45f327..1b1755ce9fa7 100644
+> --- a/lib/test_printf.c
+> +++ b/lib/test_printf.c
+> @@ -30,6 +30,9 @@
+>  #define PAD_SIZE 16
+>  #define FILL_CHAR '$'
+>
+> +#define NOWARN(option, comment, block) \
+> +               __diag_push() __diag_ignore_all(#option, comment) block _=
+_diag_pop()
 
-Sorry, I was a bit pre-occupied with this retbleed crud, I'll try and
-have a look at things shortly.
+Do you mind putting these 4 on distinct lines with \ at the end of the
+lines, and terminate the statements with an additional ; if that
+doesn't produce new warnings about empty statements? Maybe something
+like:
+
++#define NOWARN(option, comment, block) \
++  __diag_push(); \
++  __diag_ignore_all(#option, comment); \
++ block \
++ __diag_pop();
+
+(sorry for not formatting that myself, remember to use tabs vs
+spaces).  To me, it seems more readable from a quick glance to have
+these be distinct lines.  You'll find open coded uses of __diag_push
+and friends add the semicolon, even if not strictly necessary.
+
+> +
+>  KSTM_MODULE_GLOBALS();
+>
+>  static char *test_buffer __initdata;
+> @@ -154,9 +157,11 @@ test_number(void)
+>         test("0x1234abcd  ", "%#-12x", 0x1234abcd);
+>         test("  0x1234abcd", "%#12x", 0x1234abcd);
+>         test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|=
+% d", 0, 1, 12, 123, 1234, -123, -1234);
+> -       test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128,=
+ -1);
+> -       test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128,=
+ -1);
+> -       test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+> +       NOWARN(-Wformat, "Disables clang -Wformat warning", {
+
+Technically, this is disabling -Wformat for all compilers.  How about
+a comment string like "Intentionally test narrowing conversion
+specifiers"?
+
+> +               test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 2=
+57, 128, -1);
+> +               test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 2=
+57, 128, -1);
+> +               test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627=
+);
+> +       })
+>         /*
+>          * POSIX/C99: =C2=BBThe result of converting zero with an explici=
+t
+>          * precision of zero shall be no characters.=C2=AB Hence the outp=
+ut
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
