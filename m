@@ -1,42 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A002906
-	for <llvm@lists.linux.dev>; Sun, 17 Jul 2022 22:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEAB7FC
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 00:54:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658096504; x=1689632504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C7DhG1gCRyqut4/oukU31slxrs5oJt4SJ1WqTZDrCxU=;
-  b=mW7tZx4eMNOFnfLJQ+Hrn1GHxaxDiJ3dmNFXk0BFp6cunxOmfEkxgPx4
-   AH01wIycgXifq08c6x9IA+NQGS8LEmigiJqg3oVvp2LScG7pH7QeQt429
-   sVq02blkPoOrRShGbgWg/vEBLx/sa4hgGl2Qin8ldkaFUZPl5yOOmByb7
-   DKzvAOB+5+XY7D43qre6raqQ4hQBlhBIB7S/x/u0hCqWudxtFr8rqnYH3
-   z+Y2eTCHPpX7DtlzbQ/onlo147lVXWLs8LQ0QQB22F2vUNE0P2WhyKSsF
-   +9tQc60yyiSldDIEyO5K8Vq0rj/mpPEKdjGtSn8rzraEVReKUR7ga++Dq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="284852137"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="284852137"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 15:21:44 -0700
+  t=1658105647; x=1689641647;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Jc86ROYGHBo/fBsnjI6Oe/OdPIIjq6xXT+Lw7unJLG4=;
+  b=Og2dyq69FNMXwKyvFyzqcZjyCaAH0WNILpvRGQlrXx7UDa1rLCDjvLhY
+   cfdxF28dV3qJB3zEjqVHB8bfDWWIBHfh6QrDz5wXKEas6OJX/ZlhDV/yG
+   9ceneUOVnI/g4EZPR5t3Hxrq3vGvweLZ4urHt9uKYsggaiQfeUpP/8GIr
+   BG3oWTFex6oZG6QIv9hAf2Fzm1ef6/LcrF6sCeyXRp2eipVS6K7TkAWJa
+   H5rZB7p5P2aTndaLplwEfFxXXnvyxTe1uVUVhTvUuHIctbLUDmfni9ZIT
+   26PRHQOOtiI8B+kr7qzXGTPGoMJDLu1E5SugJ3IAtQxG2ksV3UT+RKzj3
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="283670287"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="283670287"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 17:54:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="664803449"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="572196329"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jul 2022 15:21:42 -0700
+  by orsmga006.jf.intel.com with ESMTP; 17 Jul 2022 17:54:04 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDCdy-0003kE-2M;
-	Sun, 17 Jul 2022 22:21:42 +0000
-Date: Mon, 18 Jul 2022 06:21:08 +0800
+	id 1oDF1Q-0003qQ-6d;
+	Mon, 18 Jul 2022 00:54:04 +0000
+Date: Mon, 18 Jul 2022 08:53:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] ublk_drv: fix request queue leak
-Message-ID: <202207180650.FHQQqTxN-lkp@intel.com>
-References: <20220714103201.131648-1-ming.lei@redhat.com>
+To: Brent Lu <brent.lu@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set
+ but not used
+Message-ID: <202207180841.Bkm8xoh8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,266 +47,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714103201.131648-1-ming.lei@redhat.com>
 
-Hi Ming,
+Hi Brent,
 
-Thank you for the patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on axboe-block/for-next]
-[cannot apply to linus/master v5.19-rc7 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/ublk_drv-fix-request-queue-leak/20220714-183546
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207180650.FHQQqTxN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ff6992735ade75aae3e35d16b17da1008d753d28
+commit: 2fe14ff61bd6d4fabe313435dd378b5a38eb6102 ASoC: Intel: sof_ssp_amp: rename driver and support cs35l41 amplifier
+date:   5 months ago
+config: i386-randconfig-a006-20220718 (https://download.01.org/0day-ci/archive/20220718/202207180841.Bkm8xoh8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98d681f8eed174b29ee9e72ed6a7d04e1a77835b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ming-Lei/ublk_drv-fix-request-queue-leak/20220714-183546
-        git checkout 98d681f8eed174b29ee9e72ed6a7d04e1a77835b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fe14ff61bd6d4fabe313435dd378b5a38eb6102
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2fe14ff61bd6d4fabe313435dd378b5a38eb6102
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/ drivers/media/i2c/ drivers/net/pcs/ drivers/pinctrl/nuvoton/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/intel/boards/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/block/ublk_drv.c:890:6: warning: variable 'io' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (tag >= ubq->q_depth)
-               ^~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:890:2: note: remove the 'if' if its condition is always false
-           if (tag >= ubq->q_depth)
-           ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:887:6: warning: variable 'io' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (ubq->ubq_daemon && ubq->ubq_daemon != current)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:887:2: note: remove the 'if' if its condition is always false
-           if (ubq->ubq_daemon && ubq->ubq_daemon != current)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:884:6: warning: variable 'io' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!ubq || ub_cmd->q_id != ubq->q_id)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:884:2: note: remove the 'if' if its condition is always false
-           if (!ubq || ub_cmd->q_id != ubq->q_id)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:884:6: warning: variable 'io' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-           if (!ubq || ub_cmd->q_id != ubq->q_id)
-               ^~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:884:6: note: remove the '||' if its condition is always false
-           if (!ubq || ub_cmd->q_id != ubq->q_id)
-               ^~~~~~~
-   drivers/block/ublk_drv.c:880:6: warning: variable 'io' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:880:2: note: remove the 'if' if its condition is always false
-           if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:877:6: warning: variable 'io' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!(issue_flags & IO_URING_F_SQE128))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:940:2: note: uninitialized use occurs here
-           io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-           ^~
-   drivers/block/ublk_drv.c:877:2: note: remove the 'if' if its condition is always false
-           if (!(issue_flags & IO_URING_F_SQE128))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:868:20: note: initialize the variable 'io' to silence this warning
-           struct ublk_io *io;
-                             ^
-                              = NULL
->> drivers/block/ublk_drv.c:1081:2: error: call to undeclared function 'blk_cleanup_queue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           blk_cleanup_queue(ub->ub_queue);
-           ^
->> drivers/block/ublk_drv.c:1177:23: error: call to undeclared function '__alloc_disk_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           disk = ub->ub_disk = __alloc_disk_node(ub->ub_queue, NUMA_NO_NODE,
-                                ^
-   drivers/block/ublk_drv.c:1177:23: note: did you mean '__alloc_pages_node'?
-   include/linux/gfp.h:582:1: note: '__alloc_pages_node' declared here
-   __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
-   ^
->> drivers/block/ublk_drv.c:1177:21: warning: incompatible integer to pointer conversion assigning to 'struct gendisk *' from 'int' [-Wint-conversion]
-           disk = ub->ub_disk = __alloc_disk_node(ub->ub_queue, NUMA_NO_NODE,
-                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/ublk_drv.c:1215:2: error: call to undeclared function 'blk_cleanup_queue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           blk_cleanup_queue(ub->ub_queue);
-           ^
-   7 warnings and 3 errors generated.
+>> sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+           int i = 0;
+               ^
+   1 warning generated.
 
 
-vim +/blk_cleanup_queue +1081 drivers/block/ublk_drv.c
+vim +/i +97 sound/soc/intel/boards/sof_ssp_amp.c
 
-  1076	
-  1077	static void ublk_cdev_rel(struct device *dev)
-  1078	{
-  1079		struct ublk_device *ub = container_of(dev, struct ublk_device, cdev_dev);
-  1080	
-> 1081		blk_cleanup_queue(ub->ub_queue);
-  1082	
-  1083		put_disk(ub->ub_disk);
-  1084	
-  1085		blk_mq_free_tag_set(&ub->tag_set);
-  1086	
-  1087		ublk_deinit_queues(ub);
-  1088	
-  1089		__ublk_destroy_dev(ub);
-  1090	}
-  1091	
-  1092	static int ublk_add_chdev(struct ublk_device *ub)
-  1093	{
-  1094		struct device *dev = &ub->cdev_dev;
-  1095		int minor = ub->ub_number;
-  1096		int ret;
-  1097	
-  1098		dev->parent = ublk_misc.this_device;
-  1099		dev->devt = MKDEV(MAJOR(ublk_chr_devt), minor);
-  1100		dev->class = ublk_chr_class;
-  1101		dev->release = ublk_cdev_rel;
-  1102		device_initialize(dev);
-  1103	
-  1104		ret = dev_set_name(dev, "ublkc%d", minor);
-  1105		if (ret)
-  1106			goto fail;
-  1107	
-  1108		cdev_init(&ub->cdev, &ublk_ch_fops);
-  1109		ret = cdev_device_add(&ub->cdev, dev);
-  1110		if (ret)
-  1111			goto fail;
-  1112		return 0;
-  1113	 fail:
-  1114		put_device(dev);
-  1115		return ret;
-  1116	}
-  1117	
-  1118	static void ublk_stop_work_fn(struct work_struct *work)
-  1119	{
-  1120		struct ublk_device *ub =
-  1121			container_of(work, struct ublk_device, stop_work);
-  1122	
-  1123		ublk_stop_dev(ub);
-  1124	}
-  1125	
-  1126	static void ublk_update_capacity(struct ublk_device *ub)
-  1127	{
-  1128		unsigned int max_rq_bytes;
-  1129	
-  1130		/* make max request buffer size aligned with PAGE_SIZE */
-  1131		max_rq_bytes = round_down(ub->dev_info.rq_max_blocks <<
-  1132				ub->bs_shift, PAGE_SIZE);
-  1133		ub->dev_info.rq_max_blocks = max_rq_bytes >> ub->bs_shift;
-  1134	
-  1135		set_capacity(ub->ub_disk, ub->dev_info.dev_blocks << (ub->bs_shift - 9));
-  1136	}
-  1137	
-  1138	/* add disk & cdev, cleanup everything in case of failure */
-  1139	static int ublk_add_dev(struct ublk_device *ub)
-  1140	{
-  1141		struct gendisk *disk;
-  1142		int err = -ENOMEM;
-  1143		int bsize;
-  1144	
-  1145		/* We are not ready to support zero copy */
-  1146		ub->dev_info.flags[0] &= ~UBLK_F_SUPPORT_ZERO_COPY;
-  1147	
-  1148		bsize = ub->dev_info.block_size;
-  1149		ub->bs_shift = ilog2(bsize);
-  1150	
-  1151		ub->dev_info.nr_hw_queues = min_t(unsigned int,
-  1152				ub->dev_info.nr_hw_queues, nr_cpu_ids);
-  1153	
-  1154		INIT_WORK(&ub->stop_work, ublk_stop_work_fn);
-  1155		INIT_DELAYED_WORK(&ub->monitor_work, ublk_daemon_monitor_work);
-  1156	
-  1157		if (ublk_init_queues(ub))
-  1158			goto out_destroy_dev;
-  1159	
-  1160		ub->tag_set.ops = &ublk_mq_ops;
-  1161		ub->tag_set.nr_hw_queues = ub->dev_info.nr_hw_queues;
-  1162		ub->tag_set.queue_depth = ub->dev_info.queue_depth;
-  1163		ub->tag_set.numa_node = NUMA_NO_NODE;
-  1164		ub->tag_set.cmd_size = sizeof(struct ublk_rq_data);
-  1165		ub->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
-  1166		ub->tag_set.driver_data = ub;
-  1167	
-  1168		err = blk_mq_alloc_tag_set(&ub->tag_set);
-  1169		if (err)
-  1170			goto out_deinit_queues;
-  1171	
-  1172		ub->ub_queue = blk_mq_init_queue(&ub->tag_set);
-  1173		if (IS_ERR(ub->ub_queue))
-  1174			goto out_cleanup_tags;
-  1175		ub->ub_queue->queuedata = ub;
-  1176	
-> 1177		disk = ub->ub_disk = __alloc_disk_node(ub->ub_queue, NUMA_NO_NODE,
-  1178				&ublk_bio_compl_lkclass);
-  1179		if (IS_ERR(disk)) {
-  1180			err = PTR_ERR(disk);
-  1181			goto out_free_request_queue;
-  1182		}
-  1183	
-  1184		blk_queue_logical_block_size(ub->ub_queue, bsize);
-  1185		blk_queue_physical_block_size(ub->ub_queue, bsize);
-  1186		blk_queue_io_min(ub->ub_queue, bsize);
-  1187	
-  1188		blk_queue_max_hw_sectors(ub->ub_queue, ub->dev_info.rq_max_blocks <<
-  1189				(ub->bs_shift - 9));
-  1190	
-  1191		ub->ub_queue->limits.discard_granularity = PAGE_SIZE;
-  1192	
-  1193		blk_queue_max_discard_sectors(ub->ub_queue, UINT_MAX >> 9);
-  1194		blk_queue_max_write_zeroes_sectors(ub->ub_queue, UINT_MAX >> 9);
-  1195	
-  1196		ublk_update_capacity(ub);
-  1197	
-  1198		disk->fops		= &ub_fops;
-  1199		disk->private_data	= ub;
-  1200		disk->queue		= ub->ub_queue;
-  1201		sprintf(disk->disk_name, "ublkb%d", ub->ub_number);
-  1202	
-  1203		mutex_init(&ub->mutex);
-  1204	
-  1205		/* add char dev so that ublksrv daemon can be setup */
-  1206		err = ublk_add_chdev(ub);
-  1207		if (err)
-  1208			return err;
-  1209	
-  1210		/* don't expose disk now until we got start command from cdev */
-  1211	
-  1212		return 0;
-  1213	
-  1214	out_free_request_queue:
-  1215		blk_cleanup_queue(ub->ub_queue);
-  1216	out_cleanup_tags:
-  1217		blk_mq_free_tag_set(&ub->tag_set);
-  1218	out_deinit_queues:
-  1219		ublk_deinit_queues(ub);
-  1220	out_destroy_dev:
-  1221		__ublk_destroy_dev(ub);
-  1222		return err;
-  1223	}
-  1224	
+    89	
+    90	static int sof_card_late_probe(struct snd_soc_card *card)
+    91	{
+    92		struct sof_card_private *ctx = snd_soc_card_get_drvdata(card);
+    93		struct snd_soc_component *component = NULL;
+    94		char jack_name[NAME_SIZE];
+    95		struct sof_hdmi_pcm *pcm;
+    96		int err;
+  > 97		int i = 0;
+    98	
+    99		if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
+   100			return 0;
+   101	
+   102		/* HDMI is not supported by SOF on Baytrail/CherryTrail */
+   103		if (!ctx->idisp_codec)
+   104			return 0;
+   105	
+   106		if (list_empty(&ctx->hdmi_pcm_list))
+   107			return -EINVAL;
+   108	
+   109		if (ctx->common_hdmi_codec_drv) {
+   110			pcm = list_first_entry(&ctx->hdmi_pcm_list, struct sof_hdmi_pcm,
+   111					       head);
+   112			component = pcm->codec_dai->component;
+   113			return hda_dsp_hdmi_build_controls(card, component);
+   114		}
+   115	
+   116		list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
+   117			component = pcm->codec_dai->component;
+   118			snprintf(jack_name, sizeof(jack_name),
+   119				 "HDMI/DP, pcm=%d Jack", pcm->device);
+   120			err = snd_soc_card_jack_new(card, jack_name,
+   121						    SND_JACK_AVOUT, &pcm->sof_hdmi,
+   122						    NULL, 0);
+   123	
+   124			if (err)
+   125				return err;
+   126	
+   127			err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
+   128						  &pcm->sof_hdmi);
+   129			if (err < 0)
+   130				return err;
+   131	
+   132			i++;
+   133		}
+   134	
+   135		return hdac_hdmi_jack_port_init(component, &card->dapm);
+   136	}
+   137	
 
 -- 
 0-DAY CI Kernel Test Service
