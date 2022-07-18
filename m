@@ -1,120 +1,129 @@
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FC8A28
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 08:33:04 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 5F1D04C0202;
-	Mon, 18 Jul 2022 10:24:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-	s=20220209; t=1658132660;
-	bh=vCBvfh0xbfQFSxwOO2I6Ian7DC2jft0gxceubyH4xek=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-	b=QxQOqVW6zrpLESeYIvT8L2CmybEel0CkvWxCu0VVS4PqP8b+s7aDBSS+gm3GoJt3P
-	 okoGCqNqAUS6YQYxw+q1Ju4sQLNthoece2QiqNXMgX741SZT26ZNE8f0fORGdAsLaA
-	 qXo505p0/KGRkHfPGVq/5V0oluoz/JZIxsTSJgm3OYjZNyNNENODnTVc4P6RvwyfGP
-	 KUFgynxVwlEPX3EQ3Vh97lh1c/a/KM70OQXk3vh+/Uyn8IA7EyLNPnNpaNkPpQQisl
-	 MXAZQYACweHX3ky4lWyHUsKAjY2a1pd7zCXhyVnMNPpGwyThdmnbN+1QEAt0IxjKH1
-	 09BZlKtmui60g==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id 5AE2DDD0; Mon, 18 Jul 2022 10:24:20 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 37EAADCD;
-	Mon, 18 Jul 2022 10:24:20 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 321275B5;
-	Mon, 18 Jul 2022 10:24:20 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 2E9144A04E5; Mon, 18 Jul 2022 10:24:20 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 8BD214A038D;
-	Mon, 18 Jul 2022 10:24:19 +0200 (CEST)
-	(Extended-Queue-bit xtech_fm@fff.in.tum.de)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18348EA6
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 08:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658134022; x=1689670022;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OBECoidjbs/b4gjb4vh7yiE3zSs/3k3t1WbIVAmKqjU=;
+  b=k39ng7BQpueGey0f8yVJcAp6BoRAaElyMa1OoVqmMgQZrHw1+I+zq5pZ
+   16k5bXm+e+KJtCLbhpHEeCYanjBK+8iC/SlqlvjrQlvrXLbXBRqxrVefo
+   VUnBWXvpa6FIdTsIhZLmtF8V//m+u00sbPLQ0FCBfdA6vJ4gykxVMGLyy
+   2jSlNuxl6O84USa9Lrt5RIB6Ml5QRpyMqVTjRc+HDfJuaYIG2JGG2RAUg
+   YJTYjv7itlO3eVvFtYYAemTfuhaLkvi4IuMaCe119LfS0d3eNByyX6+ZK
+   zVFgYOoC9932zsfqcTYAdwIhjkS7kEPPrHL/8uvkAAZhSHHLAGG9jX+rp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287316356"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="287316356"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 01:47:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="723785806"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2022 01:46:56 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDMP1-0004Cw-KJ;
+	Mon, 18 Jul 2022 08:46:55 +0000
+Date: Mon, 18 Jul 2022 16:45:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Gabriele Paoloni <gpaoloni@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>, Tao Zhou <tao.zhou@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V5 15/16] rv/reactor: Add the printk reactor
+Message-ID: <202207181646.sRRbkyru-lkp@intel.com>
+References: <5fcf3d21b51bc4c1a6d2968cfd0c60fdbc1d471b.1657745645.git.bristot@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-From: =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <20220715152145.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-Date: Mon, 18 Jul 2022 10:24:19 +0200
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- clang-built-linux <llvm@lists.linux.dev>,
- linux-toolchains@vger.kernel.org,
- Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>,
- Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- LKML <linux-kernel@vger.kernel.org>,
- linux-arch <linux-arch@vger.kernel.org>,
- Marco Elver <elver@google.com>,
- Charalampos Mainas <charalampos.mainas@gmail.com>,
- Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
- Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
- Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <BD651F14-7C88-4553-A4E8-986042271CAD@in.tum.de>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
- <YrHUkfDWsexHRUKj@rowland.harvard.edu>
- <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
- <YrnFCSjESpeQdciv@rowland.harvard.edu>
- <20F4C097-24B4-416B-95EE-AC11F5952B44@in.tum.de>
- <YtFrPoOARrL/etBu@rowland.harvard.edu>
- <20220715152145.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5fcf3d21b51bc4c1a6d2968cfd0c60fdbc1d471b.1657745645.git.bristot@kernel.org>
 
-Paul E. McKenney <paulmck@kernel.org> wrote:
+Hi Daniel,
 
-> On Fri, Jul 15, 2022 at 09:27:26AM -0400, Alan Stern wrote:
->> On Fri, Jul 15, 2022 at 02:27:28PM +0200, Paul Heidekr=C3=BCger =
-wrote:
->>> I have just been thinking about how to word this patch; am I correct =
-in
->>> assuming that the LKMM does not deal with loop conditions? Or in =
-other
->>> words, there is no way for a loop condition to impose a ctrl =
-dependency on
->>> any WRITE_ONCE's in the loop body? It are only if and switch =
-statements the
->>> LKMM is concerned with in the case of ctrl dependencies?
->>=20
->> In theory, the LKMM does say that a loop condition imposes a control=20=
+I love your patch! Perhaps something to improve:
 
->> dependency on any memory accesses within the loop body.  However, the=20=
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on tip/sched/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> herd7 tool has only very limited support for looping constructs, so =
-in=20
->> practice it's not possible to create suitable litmus tests with =
-loops.
->=20
-> And Alan isn't joking.  The closest simulation that I know of is to
-> combine limited loop unrolling with the "filter" clause.  The point of
-> the filter clause is to eliminate from consideration executions that
-> need the more iterations of the loop to be unrolled.
->=20
-> And that means that as far as LKMM is concerned, loop-based control
-> dependencies are similar to those for nested "if" statements.
->=20
-> 							Thanx, Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207181646.sRRbkyru-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d1746223447deb1d1646f968512a065a1cd63a9c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
+        git checkout d1746223447deb1d1646f968512a065a1cd63a9c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/pcs/ kernel/trace/rv/
 
-Makes sense, thank you both!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Paul=
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/rv/reactor_printk.c:26:5: warning: no previous prototype for function 'register_react_printk' [-Wmissing-prototypes]
+   int register_react_printk(void)
+       ^
+   kernel/trace/rv/reactor_printk.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int register_react_printk(void)
+   ^
+   static 
+>> kernel/trace/rv/reactor_printk.c:32:6: warning: no previous prototype for function 'unregister_react_printk' [-Wmissing-prototypes]
+   void unregister_react_printk(void)
+        ^
+   kernel/trace/rv/reactor_printk.c:32:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_react_printk(void)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/register_react_printk +26 kernel/trace/rv/reactor_printk.c
+
+    25	
+  > 26	int register_react_printk(void)
+    27	{
+    28		rv_register_reactor(&rv_printk);
+    29		return 0;
+    30	}
+    31	
+  > 32	void unregister_react_printk(void)
+    33	{
+    34		rv_unregister_reactor(&rv_printk);
+    35	}
+    36	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
