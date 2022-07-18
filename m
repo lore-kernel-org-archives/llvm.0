@@ -1,346 +1,209 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B39EA6
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 08:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1658134314;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F/LVNpfnXKQ4YWA+HCQY16W8LV6u0oEtdZKjXQ6zVKw=;
-	b=I6rntZCwCfuH0sXa1jHxCBt+XHosDTEG8mTzCB0BuIHSIjhLMgxsYuWuAWQRvRsSKOwwmb
-	Uv9fllzGotjWLta8Ddo/sBd0gXn/UFf1C8hRahS4cw0XVMtH5HkMc46vJjzwXftnOK8iur
-	WZo5+c0t6iVEW/uSQe2WsqfQUb3pxJQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-ImRIaTdsNj-qsn1j8OXaSg-1; Mon, 18 Jul 2022 04:51:53 -0400
-X-MC-Unique: ImRIaTdsNj-qsn1j8OXaSg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8DB0102BCDC
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 08:51:52 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.34.251])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D901F492C3B;
-	Mon, 18 Jul 2022 08:51:52 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for ff699273
- (mainline.kernel.org-clang)
-Date: Mon, 18 Jul 2022 08:51:51 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CB6EA6;
+	Mon, 18 Jul 2022 09:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658138304; x=1689674304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=grH6/wPiac37Kup7YPmY7aPnwfH8mf17NyOlSAcmCgY=;
+  b=V4lO7H09qbGRVhgRyauLfdL7xXpFweGtcKbGts3cxxK02FeRXTfZIPaV
+   H0WGEOa66g6XWApOj+eSipQulY+yBqYTCyi46EV7OeFzg9WiNJN7u1bHr
+   MT+lGTQrcr8+XlyOibLuzkxRCzNVBhuji77qbcgIOI+zWnP6qFo6S/JaF
+   kLa8iZuTlsjqwFAWOp0HPprZMyVbh0giDMbtTKsanpWIGW2nxQjACN1OF
+   //Lx0b3FdUuc4YDcGsMQAmYqTl+2Tb0FewhsKl/KhrIQqaMyFnPYIrWFu
+   avufmjLVRclfY2X3myofs/7Fdhnw4L/pafU0xiyETHcMGV94ViGHlVpUP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287329364"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="287329364"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 02:58:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="924283568"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jul 2022 02:58:09 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDNVx-0004FW-7w;
+	Mon, 18 Jul 2022 09:58:09 +0000
+Date: Mon, 18 Jul 2022 17:57:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+	deller@gmx.de, daniel@ffwll.ch, sam@ravnborg.org, maxime@cerno.tech
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2 05/11] fbdev: Convert drivers to aperture helpers
+Message-ID: <202207181701.mB5xBuhX-lkp@intel.com>
+References: <20220718072322.8927-6-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <07167.122071804515300493@us-mta-383.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718072322.8927-6-tzimmermann@suse.de>
 
-Hi, we tested your kernel and here are the results:
+Hi Thomas,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I love your patch! Perhaps something to improve:
 
+[auto build test WARNING on ebea934e2651857c9b56cc80bf99460ee18a3592]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/48062
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/fbdev-Maintain-device-ownership-with-aperture-helpers/20220718-152559
+base:   ebea934e2651857c9b56cc80bf99460ee18a3592
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220718/202207181701.mB5xBuhX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/64ab1ffe4e3accdef429db81ec645a1cbad540df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Zimmermann/fbdev-Maintain-device-ownership-with-aperture-helpers/20220718-152559
+        git checkout 64ab1ffe4e3accdef429db81ec645a1cbad540df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/video/fbdev/
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Unrecognized or new issues:
-          x86_64 - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4405310
-          x86_64 - kselftest build - net
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4405313
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-         aarch64 - LTP - commands
-                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
-not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1264
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - lvm thinp stqe test
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-                   Issue: lvm thinp stqe test: FAIL: rcu: INFO: rcu_preempt=
- detected expedited stalls on CPUs/tasks
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1180
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         aarch64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-         ppc64le - AMTU (Abstract Machine Test Utility)
-                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
-AIL
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1162
-         ppc64le - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         ppc64le - trace: ftrace/tracer
-                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
-error: No such device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/803
-         ppc64le - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         ppc64le - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         ppc64le - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         ppc64le - selinux-policy: serge-testsuite
-                   Issue: (ppc64le) selinux-policy: serge-testsuite: ld: ca=
-nnot find arch/powerpc/lib/crtsavres.o: No such file or directory
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1267
-           s390x - LTP - commands
-                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/972
-                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1251
-                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
-not expected
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1264
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-          x86_64 - Storage - blktests - blk
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
-tch container ID
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1167
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
+>> drivers/video/fbdev/hyperv_fb.c:1080:26: warning: expression which evaluates to zero treated as a null pointer constant of type 'const char *' [-Wnon-literal-null-conversion]
+                                               KBUILD_MODNAME, false);
+                                                               ^~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +1080 drivers/video/fbdev/hyperv_fb.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   987  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   988  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   989  /* Get framebuffer memory from Hyper-V video pci space */
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05   990  static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   991  {
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   992  	struct hvfb_par *par = info->par;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   993  	struct pci_dev *pdev  = NULL;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   994  	void __iomem *fb_virt;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   995  	int gen2vm = efi_enabled(EFI_BOOT);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   996  	phys_addr_t paddr;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   997  	int ret;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   998  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   999  	info->apertures = alloc_apertures(1);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1000  	if (!info->apertures)
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1001  		return -ENOMEM;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1002  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1003  	if (!gen2vm) {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1004  		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1005  			PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1006  		if (!pdev) {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1007  			pr_err("Unable to find PCI Hyper-V video\n");
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1008  			return -ENODEV;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1009  		}
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1010  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1011  		info->apertures->ranges[0].base = pci_resource_start(pdev, 0);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1012  		info->apertures->ranges[0].size = pci_resource_len(pdev, 0);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1013  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1014  		/*
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1015  		 * For Gen 1 VM, we can directly use the contiguous memory
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1016  		 * from VM. If we succeed, deferred IO happens directly
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1017  		 * on this allocated framebuffer memory, avoiding extra
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1018  		 * memory copy.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1019  		 */
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1020  		paddr = hvfb_get_phymem(hdev, screen_fb_size);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1021  		if (paddr != (phys_addr_t) -1) {
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1022  			par->mmio_pp = paddr;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1023  			par->mmio_vp = par->dio_vp = __va(paddr);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1024  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1025  			info->fix.smem_start = paddr;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1026  			info->fix.smem_len = screen_fb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1027  			info->screen_base = par->mmio_vp;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1028  			info->screen_size = screen_fb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1029  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1030  			par->need_docopy = false;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1031  			goto getmem_done;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1032  		}
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1033  		pr_info("Unable to allocate enough contiguous physical memory on Gen 1 VM. Using MMIO instead.\n");
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1034  	} else {
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1035  		info->apertures->ranges[0].base = screen_info.lfb_base;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1036  		info->apertures->ranges[0].size = screen_info.lfb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1037  	}
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1038  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1039  	/*
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1040  	 * Cannot use the contiguous physical memory.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1041  	 * Allocate mmio space for framebuffer.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1042  	 */
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1043  	dio_fb_size =
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1044  		screen_width * screen_height * screen_depth / 8;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1045  
+c4b4d7047f16a8 drivers/video/fbdev/hyperv_fb.c Saurabh Sengar    2022-04-27  1046  	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1047  				  screen_fb_size, 0x100000, true);
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1048  	if (ret != 0) {
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1049  		pr_err("Unable to allocate framebuffer memory\n");
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1050  		goto err1;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1051  	}
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1052  
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1053  	/*
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1054  	 * Map the VRAM cacheable for performance. This is also required for
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1055  	 * VM Connect to display properly for ARM64 Linux VM, as the host also
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1056  	 * maps the VRAM cacheable.
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1057  	 */
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1058  	fb_virt = ioremap_cache(par->mem->start, screen_fb_size);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1059  	if (!fb_virt)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1060  		goto err2;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1061  
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1062  	/* Allocate memory for deferred IO */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1063  	par->dio_vp = vzalloc(round_up(dio_fb_size, PAGE_SIZE));
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1064  	if (par->dio_vp == NULL)
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1065  		goto err3;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1066  
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1067  	/* Physical address of FB device */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1068  	par->mmio_pp = par->mem->start;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1069  	/* Virtual address of FB device */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1070  	par->mmio_vp = (unsigned char *) fb_virt;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1071  
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1072  	info->fix.smem_start = par->mem->start;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1073  	info->fix.smem_len = dio_fb_size;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1074  	info->screen_base = par->dio_vp;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1075  	info->screen_size = dio_fb_size;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1076  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1077  getmem_done:
+64ab1ffe4e3acc drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-07-18  1078  	aperture_remove_conflicting_devices(info->apertures->ranges[0].base,
+64ab1ffe4e3acc drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-07-18  1079  					    info->apertures->ranges[0].size,
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09 @1080  					    KBUILD_MODNAME, false);
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1081  
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1082  	if (gen2vm) {
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1083  		/* framebuffer is reallocated, clear screen_info to avoid misuse from kexec */
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1084  		screen_info.lfb_size = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1085  		screen_info.lfb_base = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1086  		screen_info.orig_video_isVGA = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1087  	} else {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1088  		pci_dev_put(pdev);
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1089  	}
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1090  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1091  	return 0;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1092  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1093  err3:
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1094  	iounmap(fb_virt);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1095  err2:
+696ca5e82c057a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2016-04-05  1096  	vmbus_free_mmio(par->mem->start, screen_fb_size);
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1097  	par->mem = NULL;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1098  err1:
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1099  	if (!gen2vm)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1100  		pci_dev_put(pdev);
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1101  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1102  	return -ENOMEM;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1103  }
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1104  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
