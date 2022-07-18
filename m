@@ -1,143 +1,105 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3B033C0
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 16:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC38C2F26
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 16:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658161478; x=1689697478;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zocwXvw+pBV624et2QOvpDfBJlbPa2su8++4TbEBxL4=;
-  b=IRv/t6BjctGb9nWmdY+LP0rWtmhYjqGms/DXMgzZ54qnzKY0Eu0mSEQy
-   a9EGWrmLyRfzMr74Jm1EIJRASCpa37gDKLtrvkzP2sIevqskQxv1ZNM1i
-   DTB70cilS6WZQHc4x36VWoobaxgsv4GX5Tlc5rWKey6XsHR/lYPolmciZ
-   aYWVgPXSWVcETcnzdWb8L+eiiD+JE+4tKUTpjSe+DhrZ+TyWHGLjfHLip
-   qSxWCqkTy9r7U/n05y7oqy0z33K9sgIU1TryUaP9AB29A7VCPyF/s/RBu
-   JymYRWZW7WH5sNe/QNkZ/6ZX1CwedpopdDE9Mh1YJk46sOOwC0XhFehAK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="311947925"
+  t=1658163046; x=1689699046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aDYDoczxu1m1tRoXPPkFOqlqcyRfDMtpX4LWYu0EDbE=;
+  b=RgHM5AFK/XRkg8IRQ5iMDI2NnuXYPEQrMKI4+ZsXomyrVM/MhwkoTS4g
+   tnTGYajShBWwoRPDr+CtnvnHyB8aUqVknmxr4uYrWz7VEJTwwRdT0Mcez
+   Bv2kRkbnK6OPSnGSQp7qbTfAyhLDxKNRI5i2w3U1cO5v9+hiQVkMkY4BS
+   JGzkyAap1EhoygJE2JZ1Eg07Af11vFytAbTd4quTPEp/T1n4bN3er88JJ
+   qaiY00T4rXu2BH0vWaqL6ysUI07a7u6ce6PAnRPelKeXIyYTZXJC8wheZ
+   sbfHnnD37+0ZPnXNjQxb1EHOcbKJjI43h6ojGLwIJ0f3Zj+rVNN3WTA3o
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="283835365"
 X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="311947925"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:23:53 -0700
+   d="scan'208";a="283835365"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:50:33 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="773793615"
-Received: from astephax-mobl.amr.corp.intel.com (HELO [10.209.134.250]) ([10.209.134.250])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:23:52 -0700
-Message-ID: <443016ec-d597-3f30-874d-c522f457eca0@linux.intel.com>
-Date: Mon, 18 Jul 2022 09:10:27 -0500
+   d="scan'208";a="665086008"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Jul 2022 09:50:31 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDTx0-0004Zy-MN;
+	Mon, 18 Jul 2022 16:50:30 +0000
+Date: Tue, 19 Jul 2022 00:50:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Arnd Bergmann <arnd@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Ard Biesheuval <ardb@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Gary Guo <gary@garyguo.net>, Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm: lib: implement aeabi_uldivmod via div64_u64_rem
+Message-ID: <202207190057.1gn0emAr-lkp@intel.com>
+References: <20220716001616.4052225-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i'
- set but not used
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Brent Lu <brent.lu@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
- Bard Liao <yung-chuan.liao@linux.intel.com>
-References: <202207180841.Bkm8xoh8-lkp@intel.com>
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <202207180841.Bkm8xoh8-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220716001616.4052225-1-ndesaulniers@google.com>
+
+Hi Nick,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on arm/for-next linus/master v5.19-rc7 next-20220718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/arm-lib-implement-aeabi_uldivmod-via-div64_u64_rem/20220716-231205
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm-ixp4xx_defconfig (https://download.01.org/0day-ci/archive/20220719/202207190057.1gn0emAr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/f0441d7a00899e433705accb0da58c94f4ff8808
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nick-Desaulniers/arm-lib-implement-aeabi_uldivmod-via-div64_u64_rem/20220716-231205
+        git checkout f0441d7a00899e433705accb0da58c94f4ff8808
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/lib/aeabi_uldivmod.c:17:15: warning: no previous prototype for function '__aeabi_uldivmod' [-Wmissing-prototypes]
+   struct result __aeabi_uldivmod(u64 numerator, u64 denominator)
+                 ^
+   arch/arm/lib/aeabi_uldivmod.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct result __aeabi_uldivmod(u64 numerator, u64 denominator)
+   ^
+   static 
+   1 warning generated.
 
 
+vim +/__aeabi_uldivmod +17 arch/arm/lib/aeabi_uldivmod.c
 
-On 7/17/22 19:53, kernel test robot wrote:
-> Hi Brent,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   ff6992735ade75aae3e35d16b17da1008d753d28
-> commit: 2fe14ff61bd6d4fabe313435dd378b5a38eb6102 ASoC: Intel: sof_ssp_amp: rename driver and support cs35l41 amplifier
-> date:   5 months ago
-> config: i386-randconfig-a006-20220718 (https://download.01.org/0day-ci/archive/20220718/202207180841.Bkm8xoh8-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fe14ff61bd6d4fabe313435dd378b5a38eb6102
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 2fe14ff61bd6d4fabe313435dd378b5a38eb6102
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/intel/boards/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
->            int i = 0;
->                ^
->    1 warning generated.
+    16	
+  > 17	struct result __aeabi_uldivmod(u64 numerator, u64 denominator)
 
-Already fixed by aa4c06e02b41 ("ASoC: Intel: sof_ssp_amp: remove
-'set-but-not-used' warning
-")
-
-
-> 
-> 
-> vim +/i +97 sound/soc/intel/boards/sof_ssp_amp.c
-> 
->     89	
->     90	static int sof_card_late_probe(struct snd_soc_card *card)
->     91	{
->     92		struct sof_card_private *ctx = snd_soc_card_get_drvdata(card);
->     93		struct snd_soc_component *component = NULL;
->     94		char jack_name[NAME_SIZE];
->     95		struct sof_hdmi_pcm *pcm;
->     96		int err;
->   > 97		int i = 0;
->     98	
->     99		if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
->    100			return 0;
->    101	
->    102		/* HDMI is not supported by SOF on Baytrail/CherryTrail */
->    103		if (!ctx->idisp_codec)
->    104			return 0;
->    105	
->    106		if (list_empty(&ctx->hdmi_pcm_list))
->    107			return -EINVAL;
->    108	
->    109		if (ctx->common_hdmi_codec_drv) {
->    110			pcm = list_first_entry(&ctx->hdmi_pcm_list, struct sof_hdmi_pcm,
->    111					       head);
->    112			component = pcm->codec_dai->component;
->    113			return hda_dsp_hdmi_build_controls(card, component);
->    114		}
->    115	
->    116		list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
->    117			component = pcm->codec_dai->component;
->    118			snprintf(jack_name, sizeof(jack_name),
->    119				 "HDMI/DP, pcm=%d Jack", pcm->device);
->    120			err = snd_soc_card_jack_new(card, jack_name,
->    121						    SND_JACK_AVOUT, &pcm->sof_hdmi,
->    122						    NULL, 0);
->    123	
->    124			if (err)
->    125				return err;
->    126	
->    127			err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
->    128						  &pcm->sof_hdmi);
->    129			if (err < 0)
->    130				return err;
->    131	
->    132			i++;
->    133		}
->    134	
->    135		return hdac_hdmi_jack_port_init(component, &card->dapm);
->    136	}
->    137	
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
