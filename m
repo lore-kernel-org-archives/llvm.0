@@ -1,145 +1,351 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A377FC
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 01:45:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658108710; x=1689644710;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K3ZBTCN554S4wyXZeUS8sJhqy6fYcV1h0evtpe655gg=;
-  b=f8zDx8LyaStX/BIkNaiH33tD88y8Dt4KVxLRfpIr1+iTVctjb98S/YCa
-   /OlE2Nzw9s+VMkBqOYLUKj5VqsSwSYai3k5pYnctairqsj2XE4G17HEIZ
-   x4DUBdm4WwO+SS5zgXFQq5T+vGt3pdid1gth3B2H9EEyXNsCHWdGDI+ss
-   QuixuJqb0u6slPQID0upaFsskVC73oAXVs6mPY2fFKHBhynAxgjrc1K7/
-   QEqKUD4Un82PcfUYfnuJbiLtYunetyilq7hUaZ65C6eJ3sHE0zKjQcLXw
-   G+mGI3PYCF7xgp+R2cRbbYarchoB9Bq6XHHpFIgykJf8D+YfbnUGvOFJC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286130231"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="286130231"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:45:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="629746039"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2022 18:45:08 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oDFop-0003sQ-JK;
-	Mon, 18 Jul 2022 01:45:07 +0000
-Date: Mon, 18 Jul 2022 09:44:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [bvanassche:f2fs 2/3] include/linux/f2fs_fs.h:364:1: error:
- static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) ==
- 4095':
-Message-ID: <202207180909.eQsJ5h8G-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B746E7FC
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 02:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658110320;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kpLLR9/Dguo6xx+jCBZll0z43mVKwr/x4ACtcUAAoIA=;
+	b=U7XwjXttTYTW6pCzvJvv6Lt609Hjy9/HRH3xIlDKyYW8Vfoa7wool+SEg4CM28EyE0Iu5e
+	3pJJ0msl1U3AfLU5bt1JbDJTBHVZDjlMuxRuhdEEEfJMiPuxOxDtX72YLzbZLr0vGgrv/L
+	fD170di8g3DLl1GE9WsMftM1navkmRI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-ujQroBmzNhWq6jFIiASayQ-1; Sun, 17 Jul 2022 22:11:59 -0400
+X-MC-Unique: ujQroBmzNhWq6jFIiASayQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D26EE185A7BA
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 02:11:58 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.34.251])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BE4F62026D64;
+	Mon, 18 Jul 2022 02:11:58 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 2eccaca7
+ (mainline.kernel.org-clang)
+Date: Mon, 18 Jul 2022 02:11:55 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <98157.122071722115900205@us-mta-380.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/bvanassche/linux f2fs
-head:   93e015b268055bcd2dc2f03bcb2c1311dff33c5e
-commit: c8670ac5d2e3a0351cefc7ca9722cf532c3fa823 [2/3] Verify structure sizes at compile time
-config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180909.eQsJ5h8G-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche f2fs
-        git checkout c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/f2fs/dir.c:10:
->> include/linux/f2fs_fs.h:364:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) == 4095': 
-   static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
-   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^               ~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   In file included from fs/f2fs/dir.c:10:
->> include/linux/f2fs_fs.h:407:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_sit_block) == 4070': 
-   static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
-   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^               ~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +364 include/linux/f2fs_fs.h
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48055
 
-   363	
- > 364	static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
-   365	
-   366	/*
-   367	 * For SIT entries
-   368	 *
-   369	 * Each segment is 2MB in size by default so that a bitmap for validity of
-   370	 * there-in blocks should occupy 64 bytes, 512 bits.
-   371	 * Not allow to change this.
-   372	 */
-   373	#define SIT_VBLOCK_MAP_SIZE 64
-   374	#define SIT_ENTRY_PER_BLOCK (PAGE_SIZE / sizeof(struct f2fs_sit_entry))
-   375	
-   376	/*
-   377	 * F2FS uses 4 bytes to represent block address. As a result, supported size of
-   378	 * disk is 16 TB and it equals to 16 * 1024 * 1024 / 2 segments.
-   379	 */
-   380	#define F2FS_MAX_SEGMENT       ((16 * 1024 * 1024) / 2)
-   381	
-   382	/*
-   383	 * Note that f2fs_sit_entry->vblocks has the following bit-field information.
-   384	 * [15:10] : allocation type such as CURSEG_XXXX_TYPE
-   385	 * [9:0] : valid block count
-   386	 */
-   387	#define SIT_VBLOCKS_SHIFT	10
-   388	#define SIT_VBLOCKS_MASK	((1 << SIT_VBLOCKS_SHIFT) - 1)
-   389	#define GET_SIT_VBLOCKS(raw_sit)				\
-   390		(le16_to_cpu((raw_sit)->vblocks) & SIT_VBLOCKS_MASK)
-   391	#define GET_SIT_TYPE(raw_sit)					\
-   392		((le16_to_cpu((raw_sit)->vblocks) & ~SIT_VBLOCKS_MASK)	\
-   393		 >> SIT_VBLOCKS_SHIFT)
-   394	
-   395	struct f2fs_sit_entry {
-   396		__le16 vblocks;				/* reference above */
-   397		__u8 valid_map[SIT_VBLOCK_MAP_SIZE];	/* bitmap for valid blocks */
-   398		__le64 mtime;				/* segment age for cleaning */
-   399	} __packed;
-   400	
-   401	static_assert(sizeof(struct f2fs_sit_entry) == 74, "");
-   402	
-   403	struct f2fs_sit_block {
-   404		struct f2fs_sit_entry entries[SIT_ENTRY_PER_BLOCK];
-   405	} __packed;
-   406	
- > 407	static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
-   408	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+          x86_64 - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4401680
+          x86_64 - kselftest build - net
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4401683
+
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
+ filename '/devices/mc0'
+                          http://lists.infradead.org/pipermail/linux-arm-ke=
+rnel/2022-June/750380.html
+         aarch64 - Storage - blktests - nvme-tcp
+                   Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecti=
+ng never established after max reconnecting reached
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D189=
+5913
+         aarch64 - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+         aarch64 - LTP - commands
+                   Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -=
+P' failed.
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/755
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - lvm thinp stqe test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: lvm thinp stqe test: FAIL: rcu: INFO: rcu_preempt=
+ detected expedited stalls on CPUs/tasks
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1180
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         ppc64le - AMTU (Abstract Machine Test Utility)
+                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
+AIL
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1162
+         ppc64le - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         ppc64le - trace: ftrace/tracer
+                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
+error: No such device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/803
+         ppc64le - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         ppc64le - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         ppc64le - Storage - swraid simple_reshape
+                   Issue: Storage - swraid simple_reshape: mdadm: super1.x =
+cannot open /dev/loop0: Device or resource busy
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1238
+         ppc64le - selinux-policy: serge-testsuite
+                   Issue: (ppc64le) selinux-policy: serge-testsuite: ld: ca=
+nnot find arch/powerpc/lib/crtsavres.o: No such file or directory
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1267
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
