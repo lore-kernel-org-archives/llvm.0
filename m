@@ -1,83 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333C1ECC
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 11:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90053C341C0;
-	Mon, 18 Jul 2022 11:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658145272;
-	bh=JO1/+51IzIqWlRVWa3wn637GFpPwLMpOLbdkHlx7z6s=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=LyhqHG+1nHgHhSWyS0qNHxtwg2KvdDfaLkocSe8qQpmPpduziHZ2lrRXhKkLOyq9r
-	 DXnLHnYom0JqG0h1Kyx5UjCBFoE6Hil+1Bw4Ihe/CLl8/k3AJqnMdXnoGr14BRnKfa
-	 3LGFydaAbvOfagpqm9rZEbVWcsWNEhqpWbzkEFaDvq0BocuJBw00UUajV4zhqENzbL
-	 ijtdjZqzrZ/F4hDItOADXSFs6Cp1jtY1godjsymHtLIqRz2DzXCAuqiim95HV0y21w
-	 fFslpygl9J3WkEBeU+qwUwk7qoBa1pH62ehtVrpOJvXNEIZJOmIclJ/6RaMNtBG7VX
-	 uZAzVyGyQVq7w==
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A98ECC
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 12:18:49 +0000 (UTC)
+Received: by mail-wm1-f42.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so7205433wmb.5
+        for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 05:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=J5+lRET7tmqFyF3iigcZ6MC/zTg0z3IFgd8Q1k7sk14=;
+        b=HWuJl5T1wREE5JhfHFh8FLXqjtzoKg58x5GyurdfrCkMke4NahBlhdTfn++zibJhmi
+         vxQMYe7OVot7rc2rgpcoXISeObZuBeDK6hcivyphQ6Ro3LczrhRnvx2B9KGWgo0gIZtD
+         3Oakki1iEGtLYMofWWG6eVK9M3OCkDQ9Ph33YNkeJRY5NMgFRcFV8n1NgS1iD6IuQC3U
+         FviydQXwWFYFoHgDejdP54ZrCalXGv/j/1YJlixujIjN2ckIVSy8b1ocW2zu17uVve8E
+         BWvqIV8z8GK0Key/sYyZ6knn4QdXldNNguAMwhGhWMk1UBmadWxq4R2UZZ8L91rmVWJu
+         guYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=J5+lRET7tmqFyF3iigcZ6MC/zTg0z3IFgd8Q1k7sk14=;
+        b=lz6eA00SnEfKtM437GSr/ktbrZ4WAnMQ630B2M0RM7jqpgKXpJwd/fdoj0ZGtuOklg
+         4iAZ9HizVd0kmGzOQOz3Gl5vkzKtk1yj9wTREPWHZ9wxyUdU91M9ak0rMwLSjxE/knrM
+         KdxaIpmy4Oqwk4QlsXws7BZjtxm9xTqOA/cfvToJaWKoCMqPquncm+DwJdIxmg7r5CoD
+         poDMX/3upDr8GHxW5+T3OefI1gvMjjjWnqwKZzM/JZ7ZzQMmZv9UK6YCl2vPm0cj6aT7
+         VSuOzqKe22DKJ7R1TuIMnUbt/ELKDingkgZoa1vIo0T4OxMdBCqFqAG9Mc++PwP+4TZS
+         qR8Q==
+X-Gm-Message-State: AJIora9EbhTnpT6dPU4HCcVwdajKB3wgvQ1nNHcOkiftNImKbYPsEd9g
+	Nuwndkg9drMWxajBfgdVs/Y=
+X-Google-Smtp-Source: AGRyM1t4Ce2antjZbHR1q4ags22JCSIitBkfzoicTy1dEkaZ+rnOwyzRNJy2SlyiRTfJO6Z8TSMt5Q==
+X-Received: by 2002:a1c:f607:0:b0:3a0:3dc9:c4db with SMTP id w7-20020a1cf607000000b003a03dc9c4dbmr32559273wmc.30.1658146727489;
+        Mon, 18 Jul 2022 05:18:47 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id k15-20020a7bc30f000000b0039c54bb28f2sm14944938wmj.36.2022.07.18.05.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 05:18:47 -0700 (PDT)
+Date: Mon, 18 Jul 2022 13:18:45 +0100
+From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev
+Subject: x86_64 build failure of next-20220715 and next-20220718 with clang
+Message-ID: <YtVPpVFwy7WhXKPx@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: mt7601u: fix clang -Wformat warning
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220711212932.1501592-1-justinstitt@google.com>
-References: <20220711212932.1501592-1-justinstitt@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Jakub Kicinski <kubakici@wp.pl>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Justin Stitt <justinstitt@google.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165814526751.17539.17204768341511432544.kvalo@kernel.org>
-Date: Mon, 18 Jul 2022 11:54:29 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Justin Stitt <justinstitt@google.com> wrote:
+Hi All,
 
-> When building with Clang we encounter this warning:
-> | drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
-> | specifies type 'unsigned char' but the argument has type 'int'
-> | [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
-> 
-> The format specifier used is `%hhu` which describes a u8. Both
-> `dev->ee->reg.start` and `.num` are u8 as well. However, the expression
-> as a whole is promoted to an int as you cannot get smaller-than-int from
-> addition. Therefore, to fix the warning, use the promoted-to-type's
-> format specifier -- in this case `%d`.
-> 
-> example:
-> ```
-> uint8_t a = 4, b = 7;
-> int size = sizeof(a + b - 1);
-> printf("%d\n", size);
-> // output: 4
-> ```
-> 
-> See more:
-> (https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
-> "Integer types smaller than int are promoted when an operation is
-> performed on them. If all values of the original type can be represented
-> as an int, the value of the smaller type is converted to an int;
-> otherwise, it is converted to an unsigned int."
-> 
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> Acked-by: Jakub Kicinski <kubakici@wp.pl>
+Not sure if its reported, builds of x86_64 allmodconfig of next-20220715
+and next-20220718 with clang are showing lots of new warnings like:
 
-Patch applied to wireless-next.git, thanks.
+warning: objtool: asan.module_dtor+0x15: 'naked' return found in RETHUNK build
 
-68204a696505 wifi: mt7601u: fix clang -Wformat warning
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220711212932.1501592-1-justinstitt@google.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+--
+Regards
+Sudip
