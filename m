@@ -1,52 +1,44 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCF3A46
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 06:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE02361
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 06:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658125290; x=1689661290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UP1Su1i03iUE3Ltwaesy575ZNYed5sPxqxMLM14ke8E=;
-  b=WqO8/pzP/zmEdRCc/GEirDg4xLA5hN0XQXTpcyItJhTII0qg/A3A1ekM
-   PIxoSDqDH0wzaL1rEDdD5Arodq8VnmnJpKVRZRcjxmzMpePpZH9w0TLto
-   YLHbJaht86gmBnWF0iLRP9SIgLGybBpH1weoD/QQrWb73l/t2jTsAtRnc
-   11ncfy20XVReNrMyaxhtxPGn8HQlK2Yi2NDsfM5dZP06wnFdmH3/7+y+a
-   aSZaWVza7XO0AQJXvluJFSdmLTImtUDl1X34KnneP2SRhJqcT8lBvRh9i
-   CCG4rQH6MovIXx0w8DcHPav6lX6PUBLEJtM4xo57UYenqopAEYUfuu+Pr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="269167971"
+  t=1658125889; x=1689661889;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=okrjatJa1D0kwkWfKcg6m75U5AxWNXcokwAOov2aqRo=;
+  b=h9aXLb082rHuCHCPDCN+HqtZwbne7PywCeH0MIVXuTehGbuTIvmx1Dss
+   9chu7drrriBwfdlqVMp2brBBSF4blTYcXmcM2RUnHFNN75s0KIx9eorB2
+   gonD4G8dxC6a8k6vMAmzd6o4VVTY520ovtBDgoPUGP8GbzoZDPQDatM+k
+   Ncd4NkQ7w+ArZBRV2j/5JeAxBydD4mDRpfqBd2T0/ly48BUUr4Vr7KbTS
+   flkYDHhzUiuA2ujvW1hy7ReZ9ogmaqcH4yvy9ak59rU+T1QXz6zq0qufM
+   bZI4L5PwmL36WNSVgFxZrxM5WgMGwDYHa31JdFaEfCKdHAn+1KkdbMWAo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287291481"
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="269167971"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 23:21:30 -0700
+   d="scan'208";a="287291481"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 23:31:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="629801821"
+   d="scan'208";a="572277405"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2022 23:21:27 -0700
+  by orsmga006.jf.intel.com with ESMTP; 17 Jul 2022 23:31:27 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDK8E-00045i-C6;
-	Mon, 18 Jul 2022 06:21:26 +0000
-Date: Mon, 18 Jul 2022 14:20:45 +0800
+	id 1oDKHu-00046A-Ui;
+	Mon, 18 Jul 2022 06:31:26 +0000
+Date: Mon, 18 Jul 2022 14:31:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Volodymyr Kharuk <vkh@melexis.com>, linux-media@vger.kernel.org
+To: Bart Van Assche <bvanassche@acm.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Volodymyr Kharuk <vkh@melexis.com>,
-	Andrii Kyselov <ays@melexis.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Hyun Kwon <hyun.kwon@xilinx.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Michal Simek <monstr@monstr.eu>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] media: i2c: Add driver for mlx7502x ToF sensor
-Message-ID: <202207181432.DwoL0GPb-lkp@intel.com>
-References: <6f9b20bb1946d8a50170963b84e32abfdee14ba7.1657786765.git.vkh@melexis.com>
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:f2fs 4/4] fs/f2fs/segment.h:417:21: warning: comparison
+ of distinct pointer types ('typeof (start + (4096 / sizeof(struct
+ f2fs_sit_entry))) *' (aka 'unsigned int *') and 'typeof ((unsigned
+ long)(SM_I(sbi)->main_segments)) *' (aka 'unsigned long *'))
+Message-ID: <202207181452.urqB2dj0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,121 +47,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6f9b20bb1946d8a50170963b84e32abfdee14ba7.1657786765.git.vkh@melexis.com>
 
-Hi Volodymyr,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on d8e8aa866ed8636fd6c1017c3d9453eab2922496]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Volodymyr-Kharuk/media-i2c-mlx7502x-ToF-camera-support/20220714-163709
-base:   d8e8aa866ed8636fd6c1017c3d9453eab2922496
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207181432.DwoL0GPb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+tree:   https://github.com/bvanassche/linux f2fs
+head:   787811ac4178b6f0a77923aa25c58b4041a52f05
+commit: 787811ac4178b6f0a77923aa25c58b4041a52f05 [4/4] f
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220718/202207181452.urqB2dj0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/59a691c2f449518699a328ea663098aa3ae038b9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Volodymyr-Kharuk/media-i2c-mlx7502x-ToF-camera-support/20220714-163709
-        git checkout 59a691c2f449518699a328ea663098aa3ae038b9
+        # https://github.com/bvanassche/linux/commit/787811ac4178b6f0a77923aa25c58b4041a52f05
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche f2fs
+        git checkout 787811ac4178b6f0a77923aa25c58b4041a52f05
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/ drivers/net/pcs/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/i2c/mlx7502x.c:981:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (!on && sensor->streaming) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/mlx7502x.c:993:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/media/i2c/mlx7502x.c:981:9: note: remove the 'if' if its condition is always true
-           } else if (!on && sensor->streaming) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/media/i2c/mlx7502x.c:981:13: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-           } else if (!on && sensor->streaming) {
-                      ^~~
-   drivers/media/i2c/mlx7502x.c:993:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/media/i2c/mlx7502x.c:981:13: note: remove the '&&' if its condition is always true
-           } else if (!on && sensor->streaming) {
-                      ^~~~~~
-   drivers/media/i2c/mlx7502x.c:945:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+   In file included from fs/f2fs/file.c:31:
+>> fs/f2fs/segment.h:417:21: warning: comparison of distinct pointer types ('typeof (start + (4096 / sizeof(struct f2fs_sit_entry))) *' (aka 'unsigned int *') and 'typeof ((unsigned long)(SM_I(sbi)->main_segments)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           unsigned int end = min(start + SIT_ENTRY_PER_BLOCK,
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+   In file included from fs/f2fs/segment.c:22:
+>> fs/f2fs/segment.h:417:21: warning: comparison of distinct pointer types ('typeof (start + (4096 / sizeof(struct f2fs_sit_entry))) *' (aka 'unsigned int *') and 'typeof ((unsigned long)(SM_I(sbi)->main_segments)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           unsigned int end = min(start + SIT_ENTRY_PER_BLOCK,
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/f2fs/segment.c:4070:22: warning: comparison of distinct pointer types ('typeof (start_segno + (4096 / sizeof(struct f2fs_sit_entry))) *' (aka 'unsigned int *') and 'typeof ((unsigned long)(SM_I(sbi)->main_segments)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   unsigned int end = min(start_segno + SIT_ENTRY_PER_BLOCK,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
    2 warnings generated.
 
 
-vim +981 drivers/media/i2c/mlx7502x.c
+vim +417 fs/f2fs/segment.h
 
-   941	
-   942	static int mlx7502x_s_stream(struct v4l2_subdev *sd, int on)
-   943	{
-   944		struct mlx7502x *sensor = to_mlx7502x(sd);
-   945		int ret;
-   946	
-   947		mutex_lock(&sensor->lock);
-   948	
-   949		if (on && !sensor->streaming) {
-   950			ret = pm_runtime_resume_and_get(sensor->dev);
-   951			if (ret < 0) {
-   952				mutex_unlock(&sensor->lock);
-   953				return ret;
-   954			}
-   955	
-   956			ret = __v4l2_ctrl_handler_setup(sd->ctrl_handler);
-   957			if (ret < 0)
-   958				goto error_stream;
-   959			/* the registers below depends on hmax, which is configured in controls */
-   960			ret = mlx7502x_set_link_freq(sensor);
-   961			if (ret < 0)
-   962				goto error_stream;
-   963			ret = mlx7502x_update_output_format(sensor);
-   964			if (ret < 0)
-   965				goto error_stream;
-   966			ret = mlx7502x_set_trigger_mode(sensor);
-   967			if (ret < 0)
-   968				goto error_stream;
-   969	
-   970			ret = mlx7502x_write8(sd, MLX7502X_STREAM_EN_REG, 1u);
-   971			if (ret < 0)
-   972				goto error_stream;
-   973	
-   974			sensor->streaming = 1u;
-   975			dev_dbg(sensor->dev, "stream enabled\n");
-   976	
-   977			/* we need to wait to stabilize the system after streaming on */
-   978			usleep_range(MLX7502X_STREAMING_DELAY_US, MLX7502X_STREAMING_DELAY_US + 10);
-   979	
-   980			gpiod_set_value_cansleep(sensor->leden, 1);
- > 981		} else if (!on && sensor->streaming) {
-   982			gpiod_set_value_cansleep(sensor->leden, 0);
-   983	
-   984			sensor->streaming = 0u;
-   985			ret = mlx7502x_write8(sd, MLX7502X_STREAM_EN_REG, 0u);
-   986			dev_dbg(sensor->dev, "stream disabled\n");
-   987	
-   988			pm_runtime_mark_last_busy(sensor->dev);
-   989			pm_runtime_put_autosuspend(sensor->dev);
-   990		}
-   991	
-   992		mutex_unlock(&sensor->lock);
-   993		return ret;
-   994	
-   995	error_stream:
-   996		pm_runtime_put(sensor->dev);
-   997		mutex_unlock(&sensor->lock);
-   998		return ret;
-   999	}
-  1000	
+068c3cd8586678 Yunlei He 2018-01-25  410  
+068c3cd8586678 Yunlei He 2018-01-25  411  static inline void seg_info_to_sit_page(struct f2fs_sb_info *sbi,
+068c3cd8586678 Yunlei He 2018-01-25  412  				struct page *page, unsigned int start)
+068c3cd8586678 Yunlei He 2018-01-25  413  {
+068c3cd8586678 Yunlei He 2018-01-25  414  	struct f2fs_sit_block *raw_sit;
+068c3cd8586678 Yunlei He 2018-01-25  415  	struct seg_entry *se;
+068c3cd8586678 Yunlei He 2018-01-25  416  	struct f2fs_sit_entry *rs;
+068c3cd8586678 Yunlei He 2018-01-25 @417  	unsigned int end = min(start + SIT_ENTRY_PER_BLOCK,
+068c3cd8586678 Yunlei He 2018-01-25  418  					(unsigned long)MAIN_SEGS(sbi));
+068c3cd8586678 Yunlei He 2018-01-25  419  	int i;
+068c3cd8586678 Yunlei He 2018-01-25  420  
+068c3cd8586678 Yunlei He 2018-01-25  421  	raw_sit = (struct f2fs_sit_block *)page_address(page);
+81114baa835b59 Chao Yu   2018-04-09  422  	memset(raw_sit, 0, PAGE_SIZE);
+068c3cd8586678 Yunlei He 2018-01-25  423  	for (i = 0; i < end - start; i++) {
+068c3cd8586678 Yunlei He 2018-01-25  424  		rs = &raw_sit->entries[i];
+068c3cd8586678 Yunlei He 2018-01-25  425  		se = get_seg_entry(sbi, start + i);
+068c3cd8586678 Yunlei He 2018-01-25  426  		__seg_info_to_raw_sit(se, rs);
+068c3cd8586678 Yunlei He 2018-01-25  427  	}
+068c3cd8586678 Yunlei He 2018-01-25  428  }
+068c3cd8586678 Yunlei He 2018-01-25  429  
+
+:::::: The code at line 417 was first introduced by commit
+:::::: 068c3cd85866785303f18960a4c00a182515b963 f2fs: rebuild sit page from sit info in mem
+
+:::::: TO: Yunlei He <heyunlei@huawei.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
