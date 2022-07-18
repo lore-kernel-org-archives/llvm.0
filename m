@@ -1,357 +1,361 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9420AA46
-	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 05:46:57 +0000 (UTC)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26HMNfFu024767;
-	Sun, 17 Jul 2022 22:46:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=+7AqXYju7TZaiKE2zn65GC5mf24mGQ6xqXz2yMpw3gM=;
- b=eZ2mmdWQk6eeYPx+PAeVquOX174wdpC9TFB8NSh1kecJF5tA2gJvLYLwB7u6XelAwghs
- Fi4vrKwO0gDD7bAbWIGqD3wjgYwghYYfvDI6BigJz+iDid/5/BVkhMcNKueu3l7YKUQl
- BM23SjEwo4EsApVN6++RlGHp7v/msGw/xxQ= 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hbrnqf27c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 17 Jul 2022 22:46:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f0rhVJVGh6oC839w4LRNUuiVqKKiUIiypc++UWaIm8T+acnBD17IP0Yb/qQ5XX3NO7QaFSjl8UYlj2QQr8P6QuDtm/oSZRje9LRZo42VPsrT5VNJHG4r0DgD1vNmHkdioz2v3LOdofjSuAWcLDKdJ+KGCvHH9dUliELM160KNDW4TvLiejz4hiM0QHrHHYe76q1gspXCVLJuYVozCLEcAAn+6TnSu8C9QfOLATU29JPQmfw6bZYUjvX9UOVMpGEf1ATTQZcLllU6gLOxdNXT0Ww7ujKlZbG5gLt29st87uFKiPc7CXVeMrnJrEzDNbLfdaMMie6EpHGTUvG8FgDdmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+b/DBmo+35ylBqRLLdagVC5A8f200uc9JCKBy5EbPEE=;
- b=J6VVz8RLgv/qsCm3qOP5EzTqxdt4eDwZWaChLuj+HiF63rsNQKylfgjHVfC19m44Ct03oTHjRaGRhflN9B8Q41SnJoP9kP3cxHiP1CyIRv9PPy3zKkKhCXlWs/vC1rVgHsABtcSj63FUMI+0CyQZoBu1hWdK5rTYiTo63OJChVaCWboN+2k6Z1RnKwlGQVROMHQD84QIBho6e4ixxWRXGkNZo1f4nTeamvIWmi9fFMl2C8rG202GbrV8POGd2YBxz49BRBGWwodMruXeq4Em0Ut1ZyGDhhvmB/59ic4UCYsZ6eE/yYy31fHU7FPz0A7CwZRk1KBmi77UQ7QFz42fqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BL0PR1501MB2051.namprd15.prod.outlook.com (2603:10b6:207:32::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Mon, 18 Jul
- 2022 05:46:30 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1%4]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 05:46:30 +0000
-From: Song Liu <songliubraving@fb.com>
-To: kernel test robot <lkp@intel.com>
-CC: Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml
-	<linux-kernel@vger.kernel.org>,
-        "live-patching@vger.kernel.org"
-	<live-patching@vger.kernel.org>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team
-	<Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-Subject: Re: [PATCH v3 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
- the same function
-Thread-Topic: [PATCH v3 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
- the same function
-Thread-Index: AQHYmjtcwdB1Yk/E8EGz1+0tylNQ8a2DesKAgAAkO4A=
-Date: Mon, 18 Jul 2022 05:46:30 +0000
-Message-ID: <4A8A2B45-FD48-4085-9526-2C0031342299@fb.com>
-References: <20220718001405.2236811-3-song@kernel.org>
- <202207181140.tqIgD0Jp-lkp@intel.com>
-In-Reply-To: <202207181140.tqIgD0Jp-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f909b877-0c11-4cfa-e640-08da6880dd18
-x-ms-traffictypediagnostic: BL0PR1501MB2051:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- KK/zSO2nn/XEdoOjMkiqpaO36fCq+ZZ4Nuh1RDnU/auL4bkBa2Df8b2bT3CIpHN1ga6oKsY1WElXiXSX4dlvpYaA0T1mjvS4JTI+U4Z+LzwR0avbfERIMOEu0KV6tX522b6huva2av1FQsSmOJnRT2Q3GNpZoBETt1nnUwIJeXWL6hP1n3pE1xGRuRyIYUrwEEuKC7uPkOqY2dOGan7A5sPiKkZUqw1kalnipULq7kmB6xxYDBkn/bzTKzUHZq0f9j6EsUoOX7aURFsypRKEpmNNZ4NZ5oM2Znq/jumu8JaG2svlRLniWYUt0dcJai8iqiS/Iq4WD9dB2r9diy0esJA62SxjA0DppVdmY7hIfqJveTWqY9OdTy0rrZu7kqvKtgkLroJx5vamhVPq/g3K7NYBLDaWzRa/I8PLb0c4xhf09/1/VOuoDserH8CPONP75+QgnA+dRGBWaLTF9j/mqQyNg/17hPHcdmHzqLmR98r5Rxdpc9tQDcuDyNMCdgMBgqKcgwhcctY3dJXlO741QeXBtwV+Jb6MbKjK92TtiIXco/rLe3i0zFrlMFCYHcP3Aw3SHAzHS0aRSdrNS3Y9MHxMWKAmgzQPURCszqfes2oMGsFVT5us1OLtciW2jG1hXvecntP4ki9rX3p9gXMVHoPyS8hfY5fT5Tod4284LbCp6cc0eT6TZrWaUO9z4RC6FkDAppcdf/7Pk/JEjSttfKdLcVVPnk46mWJHnVsatbosO+lrgI06AiGyLpI0Qml9ImV0pPwaVBI/7X1k0CUwR/tZd7zeCxCGsSO8YyuPhtd1SvioacG0jGNmeWkluXFe+/IBf8riOQ5QWX29UHEiXmpN2r6oFFZxJ/J/UqmpLclRacYN8dvmW5yLgV4Eoo5W0bi/uyB47EoSGwmP5ndLc50ch1ZxEKryyyPZaIy+TWM=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(316002)(91956017)(38100700002)(8936002)(86362001)(76116006)(66946007)(66556008)(66446008)(8676002)(4326008)(6506007)(83380400001)(53546011)(7416002)(38070700005)(5660300002)(54906003)(2616005)(186003)(6512007)(6916009)(122000001)(966005)(478600001)(2906002)(71200400001)(36756003)(33656002)(6486002)(66476007)(64756008)(41300700001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?ZMN7Sn7aaW3ESmrJRLRvGXJWhWkprnQxOa7ZgPnaOI3jexThIceFSoA61LT7?=
- =?us-ascii?Q?Apoo6PJFo3yr5kFbivBxJqmMxgMg1Ktzl+IM0Pn6pdZmbAPXcYGcLuu+MTNe?=
- =?us-ascii?Q?qkNk4kvErchDAafUWOaT5poQEenhHewm7FZo+91Zu7VeK3MjKNDxe/VMMIn0?=
- =?us-ascii?Q?h5UBh1xTk2SkWs6ogybY+DEEgD7VpubT+1N5jTaPEdAtwAVakIITBJt92+FP?=
- =?us-ascii?Q?IwxuBStn9baRxB1Q4yEKkmDmf+7c3W0QmwklQsrLWiogUKFR7UtET+LDfs4n?=
- =?us-ascii?Q?JjZpLtaNrtzKm+NxRue6aVPbhQ3GWvVYcW5fsEKdVOr/HHm6dPeSSlNQK/Pl?=
- =?us-ascii?Q?KzgO4Y1vR2PTDumqjDdAcOjxv2xAaoDJV1aYbdzZu1G2kqKN8ud1kNbgzliO?=
- =?us-ascii?Q?liQB0hjmNvfCH2mY0+b32U1TpTb15LHBrLT2/Ys2WnKc0bmGA1ctIWaunk3X?=
- =?us-ascii?Q?DDr1znESHfeTTz71+T2QoXlIJBieLcwN+8rBgCnoFSHbo/wlqXVG1HTHUhd5?=
- =?us-ascii?Q?yVliCL+Eg6vCNYQuOfzu65c1mXPmwvylnNAotFa07wKqCKDGkhn7NITi/1I0?=
- =?us-ascii?Q?R0oif79tTOx/9KXXqDdAP/naIVuqls/W/CzJpoCkeM06k0gSTIZx3DS6tlPv?=
- =?us-ascii?Q?asbSTyO13OZWaiM41IAQeHzZCGAmAIQ+/ahF1Jc8IPfZrrNRUbbwbUh8N/ks?=
- =?us-ascii?Q?zkZTwZSVyXoYFkfkYkv+8LRXqePCAN8guEgdHYpzCCa+Xj07QQ7ZDjVD0WNB?=
- =?us-ascii?Q?QcrXw6NLqRCpdim8Tic04DTnWgPZHnWUvNkJBWiLCYWeQbDub5PbP9LJETtd?=
- =?us-ascii?Q?y1lrsX6rHGbKh65hs6Q4A5dEjvLJ3RH4Q7sJgOW4vtrs6vfbRa1fg/9WD+Y3?=
- =?us-ascii?Q?B9AHp0KcOovpl9ZK7GPpCOUu9d5JWmRmFoqPPQFBNRWVn25U6OYEEciGE6Zv?=
- =?us-ascii?Q?TbN1V03SjAInGruxHtm8UKUMUpZBxveAPSXGFugQuitFwdfQ2ll0mtWq2ysz?=
- =?us-ascii?Q?ydV9uMOEpD2xOz64zuxMN0eSdnNXTtbebk91XXh0f1T/slU/H1fNdHigyEp2?=
- =?us-ascii?Q?SsHF2NaFPIOmQWa9riNPa9Hj9qHfpttpeVWA7rVtccp3XgOIx09rb+mm9IGo?=
- =?us-ascii?Q?l9Nnq3iEPDKkHs+6ND2KAb1cQVNwsj+giq4JLBoqxkDFJ2h8wuQJwcpSRccT?=
- =?us-ascii?Q?0/vggpbRt/XwvwQhIi8Giq9HF0xae+XR7c6bUDayRve2fhwagjDw4uVD8G+U?=
- =?us-ascii?Q?UvfqJJzdTunFTaTLx+gQrg18sQR7dVgVOqWKLMP+YkdpHMH3gueD62Na61tt?=
- =?us-ascii?Q?b+ojtiXu6jmwDG3cjucodn/qDFapykWYH8/HmS1CXYOAMiL5HPpCJ0UYZgB/?=
- =?us-ascii?Q?z7nI4SQ1pihJawFj1uvTohm5UXHLCKx02VVmO2pWMH50NFvIJnnHihmGpSAh?=
- =?us-ascii?Q?ibAind5MxbfWIm1rrX5TGqFsqaT98k3YSIIzOL1dpaDubiLFiTy4+XlSeW5P?=
- =?us-ascii?Q?Bww21WHOsIqE5oAmho0amBL03CAmwq4X4ztvz9u3axFNCT4O4FzayzxC9f+8?=
- =?us-ascii?Q?evzjWys+0Lm5dErsk8WRhDhgkPO7/Mi7ar+NN7/2veyrPyJBJEi09BKp/6k5?=
- =?us-ascii?Q?pGmpXnMG0gZ5ETqFYP+lhg0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <12711A50851A5E4980C2F470C901C915@namprd15.prod.outlook.com>
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f909b877-0c11-4cfa-e640-08da6880dd18
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 05:46:30.0220
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FpLacHUov+0LYhyxCR0+ZU90pknYlqR3Jqyno9kPfhG9qy94qQMbHwouI7bYP2/C0e9Rx8+F99eBHn48jC2U3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR1501MB2051
-X-Proofpoint-GUID: V2QJwVVFQ5zwutM2gKYAj6EhpVxgjfHv
-X-Proofpoint-ORIG-GUID: V2QJwVVFQ5zwutM2gKYAj6EhpVxgjfHv
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 3 URL's were un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6967A46
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 06:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658124126;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9q6mKLK0Yynhqp0f2WGxat/xLmlujwr59gsQJ7sF8sM=;
+	b=JR+dGV+w/wmWs4etCDW0e+/l67Hq40KZx3o31dv180fKPWuDK0VNSa5JDu3k8mqzWr+P2A
+	HNF//feBrj1ef4mBAXlFcu8wamrwnjoCrx7XNV1HX+lwiIc1GgZ/xwJKv2NDBOdl6r85UX
+	vSzNgR2SaweB8D0C9WMUyPA0m1z+GRs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-548-IJ-aXwKIMp-xaDRnVyrXiQ-1; Mon, 18 Jul 2022 02:01:59 -0400
+X-MC-Unique: IJ-aXwKIMp-xaDRnVyrXiQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA74F3C0D846
+	for <llvm@lists.linux.dev>; Mon, 18 Jul 2022 06:01:58 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.34.251])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D963CC28129;
+	Mon, 18 Jul 2022 06:01:58 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 2b18593e
+ (mainline.kernel.org-clang)
+Date: Mon, 18 Jul 2022 06:01:57 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <68194.122071802015900260@us-mta-548.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48056
 
-> On Jul 17, 2022, at 8:36 PM, kernel test robot <lkp@intel.com> wrote:
->=20
-> Hi Song,
->=20
-> I love your patch! Yet something to improve:
->=20
-> [auto build test ERROR on bpf-next/master]
->=20
-> url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-ho=
-st-klp-and-bpf-trampoline-together/20220718-081533
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
-master
-> config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/2=
-0220718/202207181140.tqIgD0Jp-lkp@intel.com/config )
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b=
-88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-> reproduce (this is a W=3D1 build):
->        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin=
-/make.cross  -O ~/bin/make.cross
->        chmod +x ~/bin/make.cross
->        # https://github.com/intel-lab-lkp/linux/commit/1535f287d288f9b754=
-0ec50f56da1fe437ac6512
->        git remote add linux-review https://github.com/intel-lab-lkp/linux
->        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-=
-trampoline-together/20220718-081533
->        git checkout 1535f287d288f9b7540ec50f56da1fe437ac6512
->        # save the config file
->        mkdir build_dir && cp config build_dir/.config
->        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->>> kernel/trace/ftrace.c:8082:14: error: use of undeclared identifier 'dir=
-ect_mutex'; did you mean 'event_mutex'?
->           mutex_lock(&direct_mutex);
->                       ^~~~~~~~~~~~
->                       event_mutex
+One or more kernel tests failed:
 
-Folded the the fix in. I guess this should also fail on v2, but=20
-the kernel test robot didn't seem to find it.=20
+    Unrecognized or new issues:
+          x86_64 - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4403165
+          x86_64 - kselftest build - net
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4403168
 
-Song
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
+ht-etm4x: probe of ARMHC500:20 failed with error -17
+                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
+BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+         aarch64 - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - xfstests - btrfs
+                   Issue: xfstests - _check_xfs_filesystem: filesystem on /=
+dev/nvme0n1p4 is inconsistent (r)
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+9409
+         ppc64le - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+                   Issue: LTP - syscalls: fanotify10.c:538: TFAIL: group 0 =
+(4) with FAN_MARK_FILESYSTEM did not get event
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1239
+                   Issue: LTP - syscalls: fanotify10.c:538: TFAIL: group 0 =
+(4) with FAN_MARK_MOUNT did not get event
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1248
+         ppc64le - LTP - commands
+                   Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -=
+P' failed.
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/755
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+         ppc64le - AMTU (Abstract Machine Test Utility)
+                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
+AIL
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1162
+         ppc64le - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         ppc64le - trace: ftrace/tracer
+                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
+error: No such device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/803
+         ppc64le - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         ppc64le - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         ppc64le - Storage - swraid simple_reshape
+                   Issue: Storage - swraid simple_reshape: mdadm: super1.x =
+cannot open /dev/loop0: Device or resource busy
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1238
+         ppc64le - selinux-policy: serge-testsuite
+                   Issue: (ppc64le) selinux-policy: serge-testsuite: ld: ca=
+nnot find arch/powerpc/lib/crtsavres.o: No such file or directory
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1267
+           s390x - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1251
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+          x86_64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
 
->   include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
->   #define mutex_lock(lock) mutex_lock_nested(lock, 0)
->                                              ^
->   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
->   extern struct mutex event_mutex;
->                       ^
->>> kernel/trace/ftrace.c:8084:14: error: no member named 'func_hash' in 's=
-truct ftrace_ops'
->           hash =3D ops->func_hash->filter_hash;
->                  ~~~  ^
->>> kernel/trace/ftrace.c:8095:9: error: call to undeclared function 'ops_r=
-eferences_ip'; ISO C99 and later do not support implicit function declarati=
-ons [-Wimplicit-function-declaration]
->                                   if (ops_references_ip(op, ip)) {
->                                       ^
->>> kernel/trace/ftrace.c:8103:14: error: no member named 'ops_func' in 'st=
-ruct ftrace_ops'
->                                   if (!op->ops_func) {
->                                        ~~  ^
->   kernel/trace/ftrace.c:8107:15: error: no member named 'ops_func' in 'st=
-ruct ftrace_ops'
->                                   ret =3D op->ops_func(op, FTRACE_OPS_CMD=
-_ENABLE_SHARE_IPMODIFY_PEER);
->                                         ~~  ^
->   kernel/trace/ftrace.c:8122:16: error: use of undeclared identifier 'dir=
-ect_mutex'; did you mean 'event_mutex'?
->           mutex_unlock(&direct_mutex);
->                         ^~~~~~~~~~~~
->                         event_mutex
->   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
->   extern struct mutex event_mutex;
->                       ^
->   kernel/trace/ftrace.c:8158:17: error: use of undeclared identifier 'dir=
-ect_mutex'; did you mean 'event_mutex'?
->                   mutex_unlock(&direct_mutex);
->                                 ^~~~~~~~~~~~
->                                 event_mutex
->   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
->   extern struct mutex event_mutex;
->                       ^
->   kernel/trace/ftrace.c:8178:14: error: use of undeclared identifier 'dir=
-ect_mutex'; did you mean 'event_mutex'?
->           mutex_lock(&direct_mutex);
->                       ^~~~~~~~~~~~
->                       event_mutex
->   include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
->   #define mutex_lock(lock) mutex_lock_nested(lock, 0)
->                                              ^
->   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
->   extern struct mutex event_mutex;
->                       ^
->   kernel/trace/ftrace.c:8180:14: error: no member named 'func_hash' in 's=
-truct ftrace_ops'
->           hash =3D ops->func_hash->filter_hash;
->                  ~~~  ^
->   kernel/trace/ftrace.c:8191:9: error: call to undeclared function 'ops_r=
-eferences_ip'; ISO C99 and later do not support implicit function declarati=
-ons [-Wimplicit-function-declaration]
->                                   if (ops_references_ip(op, ip)) {
->                                       ^
->   kernel/trace/ftrace.c:8199:24: error: no member named 'ops_func' in 'st=
-ruct ftrace_ops'
->                           if (found_op && op->ops_func)
->                                           ~~  ^
->   kernel/trace/ftrace.c:8200:9: error: no member named 'ops_func' in 'str=
-uct ftrace_ops'
->                                   op->ops_func(op, FTRACE_OPS_CMD_DISABLE=
-_SHARE_IPMODIFY_PEER);
->                                   ~~  ^
->   kernel/trace/ftrace.c:8203:16: error: use of undeclared identifier 'dir=
-ect_mutex'; did you mean 'event_mutex'?
->           mutex_unlock(&direct_mutex);
->                         ^~~~~~~~~~~~
->                         event_mutex
->   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
->   extern struct mutex event_mutex;
->                       ^
->   13 errors generated.
->=20
->=20
-> vim +8082 kernel/trace/ftrace.c
->=20
->  8051=09
->  8052	/*
->  8053	 * When registering ftrace_ops with IPMODIFY, it is necessary to ma=
-ke sure
->  8054	 * it doesn't conflict with any direct ftrace_ops. If there is exis=
-ting
->  8055	 * direct ftrace_ops on a kernel function being patched, call
->  8056	 * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER on it to enable sharin=
-g.
->  8057	 *
->  8058	 * @ops:     ftrace_ops being registered.
->  8059	 *
->  8060	 * Returns:
->  8061	 *         0 - @ops does not have IPMODIFY or @ops itself is DIRECT=
-, no
->  8062	 *             change needed;
->  8063	 *         1 - @ops has IPMODIFY, hold direct_mutex;
->  8064	 *         -EBUSY - currently registered DIRECT ftrace_ops cannot s=
-hare the
->  8065	 *                  same function with IPMODIFY, abort the register.
->  8066	 *         -EAGAIN - cannot make changes to currently registered DI=
-RECT
->  8067	 *                   ftrace_ops due to rare race conditions. Should=
- retry
->  8068	 *                   later. This is needed to avoid potential deadl=
-ocks
->  8069	 *                   on the DIRECT ftrace_ops side.
->  8070	 */
->  8071	static int prepare_direct_functions_for_ipmodify(struct ftrace_ops =
-*ops)
->  8072		__acquires(&direct_mutex)
->  8073	{
->  8074		struct ftrace_func_entry *entry;
->  8075		struct ftrace_hash *hash;
->  8076		struct ftrace_ops *op;
->  8077		int size, i, ret;
->  8078=09
->  8079		if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY))
->  8080			return 0;
->  8081=09
->> 8082		mutex_lock(&direct_mutex);
->  8083=09
->> 8084		hash =3D ops->func_hash->filter_hash;
->  8085		size =3D 1 << hash->size_bits;
->  8086		for (i =3D 0; i < size; i++) {
->  8087			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
->  8088				unsigned long ip =3D entry->ip;
->  8089				bool found_op =3D false;
->  8090=09
->  8091				mutex_lock(&ftrace_lock);
->  8092				do_for_each_ftrace_op(op, ftrace_ops_list) {
->  8093					if (!(op->flags & FTRACE_OPS_FL_DIRECT))
->  8094						continue;
->> 8095					if (ops_references_ip(op, ip)) {
->  8096						found_op =3D true;
->  8097						break;
->  8098					}
->  8099				} while_for_each_ftrace_op(op);
->  8100				mutex_unlock(&ftrace_lock);
->  8101=09
->  8102				if (found_op) {
->> 8103					if (!op->ops_func) {
->  8104						ret =3D -EBUSY;
->  8105						goto err_out;
->  8106					}
->  8107					ret =3D op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_P=
-EER);
->  8108					if (ret)
->  8109						goto err_out;
->  8110				}
->  8111			}
->  8112		}
->  8113=09
->  8114		/*
->  8115		 * Didn't find any overlap with direct ftrace_ops, or the direct
->  8116		 * function can share with ipmodify. Hold direct_mutex to make sure
->  8117		 * this doesn't change until we are done.
->  8118		 */
->  8119		return 1;
->  8120=09
->  8121	err_out:
->  8122		mutex_unlock(&direct_mutex);
->  8123		return ret;
->  8124	}
->  8125=09
->=20
-> --=20
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp=20
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
