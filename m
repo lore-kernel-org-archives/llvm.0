@@ -1,43 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DB41871
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 12:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45621C04
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 13:02:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658234474; x=1689770474;
+  t=1658235737; x=1689771737;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5K9Sn3hjVaN7AmQBmAjNWJyp6DduzsXd9J8X1vrLuYI=;
-  b=NYeTDlf/P0bxJrq8BRZuE3TWJP2vZLTDopty6IfE751tdDpnPjeUOoe9
-   T6DQUvD3DONlJY7Fd6evs4tq8yhNE1+hf+tVcETUZOtZhUGEw/z1Yj7Ll
-   9x5E8UiMUcNsTeL9v2FLK19xnsu++N2NW2jX6Ie+UZbl86S8/rZkw9EqV
-   y2//jouZue7Um71om/CnZ8PN5/eiWJ73BaJ8mVmyfXEs7ADR6qBWI53F8
-   YpwuM34dTW5y/CaXHP1bFlQXBa1eMXRhJA4hQ1TDx9IrRnT+3GCVihTf2
-   dEirNSXTD56/0jWGmVvK7o63qFoWkc3LHTi8JoK2vu//pPgPu00F2C+9V
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287224013"
+  bh=aS+GcxlKC0jA3okV/2u3UIxu+JofoO/qq8pfz+eWpow=;
+  b=Cd44BTJxZ3ZxjCTkLSZSa8VMzsmH5cCf1Y5RpVEqH0VM5VnC+k3V2BIz
+   3kwgnYTUVLUJ6lnsp/fldoT3sUjHI6XJ4moEQwot0Usb+/4Y1+kGM5eis
+   gIBATZFYYfh/BI26PHei7QAljA3s8kZzgu1/gCUnxBpKPyGhbqGHnqXHH
+   Ii3k/I6A5i6CPZkNo5YGVS6GC8+NH2dTojXLvoD6jmJ2wyS1ZsDj4G9D1
+   u3M94ZkmFNMc3dwLaD8mn0G15AOKEsuQpttYL+4l2y9gR3VkKJvGes7B+
+   wI3IeV1oGvKryThq3oJvgoTBgdbrGptqNCg2/bSMKm6Xt874kSkLbuO0/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="350447453"
 X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="287224013"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 05:41:14 -0700
+   d="scan'208";a="350447453"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 06:02:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="630316024"
+   d="scan'208";a="774114823"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Jul 2022 05:41:13 -0700
+  by orsmga005.jf.intel.com with ESMTP; 19 Jul 2022 06:02:14 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDmXI-0005eY-Hy;
-	Tue, 19 Jul 2022 12:41:12 +0000
-Date: Tue, 19 Jul 2022 20:40:47 +0800
+	id 1oDmrd-0005fb-FX;
+	Tue, 19 Jul 2022 13:02:13 +0000
+Date: Tue, 19 Jul 2022 21:01:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Anderson <sean.anderson@seco.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH net-next 3/9] net: pcs: Add helpers for registering
- and finding PCSs
-Message-ID: <202207192022.7RkDOpof-lkp@intel.com>
-References: <20220711160519.741990-4-sean.anderson@seco.com>
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	edumazet@google.com, pabeni@redhat.com, borisp@nvidia.com,
+	john.fastabend@gmail.com, maximmi@nvidia.com, tariqt@nvidia.com,
+	vfedorenko@novek.ru, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net-next 7/7] tls: rx: do not use the standard strparser
+Message-ID: <202207192015.4YzT5lNo-lkp@intel.com>
+References: <20220718194811.1728061-8-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,39 +48,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220711160519.741990-4-sean.anderson@seco.com>
+In-Reply-To: <20220718194811.1728061-8-kuba@kernel.org>
 
-Hi Sean,
+Hi Jakub,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on shawnguo/for-next arm/for-next linus/master v5.19-rc7 next-20220718]
-[cannot apply to net-next/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I love your patch! Perhaps something to improve:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-pcs-Add-support-for-devices-probed-in-the-usual-manner/20220712-001203
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220719/202207192022.7RkDOpof-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/tls-rx-decrypt-from-the-TCP-queue/20220719-035116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 6e693a104207fbf5a22795c987e8964c0a1ffe2d
+config: i386-randconfig-a005-20220718 (https://download.01.org/0day-ci/archive/20220719/202207192015.4YzT5lNo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/344e04b738b5ce1493a6085673309fac376c9763
+        # https://github.com/intel-lab-lkp/linux/commit/2a6e8eea293987aa4507bf82c5952f49752c9be3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-pcs-Add-support-for-devices-probed-in-the-usual-manner/20220712-001203
-        git checkout 344e04b738b5ce1493a6085673309fac376c9763
+        git fetch --no-tags linux-review Jakub-Kicinski/tls-rx-decrypt-from-the-TCP-queue/20220719-035116
+        git checkout 2a6e8eea293987aa4507bf82c5952f49752c9be3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/net/pcs/core.o: error: local symbol 'pcs_get_by_fwnode' was exported
+>> WARNING: modpost: vmlinux.o(.init.text+0x4791a): Section mismatch in reference from the function tls_register() to the function .exit.text:tls_device_cleanup()
+The function __init tls_register() references
+a function __exit tls_device_cleanup().
+This is often seen when error handling in the init function
+uses functionality in the exit path.
+The fix is often to remove the __exit annotation of
+tls_device_cleanup() so it may be used outside an exit section.
 
 -- 
 0-DAY CI Kernel Test Service
