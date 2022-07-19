@@ -1,45 +1,48 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078404A1E
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 17:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90A34C77
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 18:57:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658252846; x=1689788846;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QID1S/HCrnkT3/N5OpddMuCNcG4aYv3bv94xsjNpqYE=;
-  b=NIqpbxJkdbS5rbsLStPR9Ew+lETdmBf56haD4e+idQoxuSMJdBuILVLk
-   082AqFISjDC1ItxUAoRfOWQkn5it6z/TQY10rVSClFExpNyt1PIVaFnIi
-   QaPLUdv7INs+4+hLHa0x96hzAnftQdRqb37LEqAHRF0VJ5ljP5SqfcJB7
-   lrlVB/MM3u+SG3XxtWzpqAE06REJEND6Wj4jdUVSU9bys8BIDOvG6Iu2Y
-   oWTZrVue4+GSI7pm1o/h5NZwIWOCbDDtbz2unNByYpXBVtHrgfRoMPBCM
-   9OOymZnIMgPKw7ynxbeUPOXtI92gVyywzOtiYJWwMMjspnSm1s6J50zXy
+  t=1658257049; x=1689793049;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BqgXG/4LbCtAN57U01YaIg9Myl3LD4Ewp7qmwOT00PM=;
+  b=iwYNgsHOnzgmqP5cMS1baLCjEpNKB0Ap7+itnNuoYTREbQ82OhIf5xCY
+   7iww6YPWcU4oDdKZvcX6HC4KcceFmB95CUXlKXqlM/+Xq2F6YonLPsopu
+   +AaSwMqYT4DBlU4lnu2KI2Ud+hX9ag86UwYZvmbg7Ozl6hyGCRMYYIkeU
+   BwHwId8BepkeZOtma2IXxlff60293n2kGN92LOgHpEz525SqI8iUsQJG2
+   v4ecmmgMSRhWpUknQ7fj4E5uEUHqq+zeb9owlmMACG9DO9r7AUbmgFjsm
+   5bpwvmvpnM91oUc9zemWCXxUxhIFMivSzBk2Dr7Ctd85pcOLNBAuaNWsg
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="287709447"
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="287709447"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 10:47:25 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372874292"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="372874292"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 11:57:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="572947439"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="597776942"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jul 2022 10:47:23 -0700
+  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2022 11:57:25 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDrJa-0005rm-So;
-	Tue, 19 Jul 2022 17:47:22 +0000
-Date: Wed, 20 Jul 2022 01:46:37 +0800
+	id 1oDsPM-0005v3-Vy;
+	Tue, 19 Jul 2022 18:57:24 +0000
+Date: Wed, 20 Jul 2022 02:57:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cristian Pop <cristian.pop@analog.com>
+To: Dan Carpenter <error27@gmail.com>, Juergen Gross <jgross@suse.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/dac/ad5766.c:109:8: warning: Excessive padding in
- 'struct ad5766_state' (44 padding bytes, where 12 is optimal). Optimal
- fields order: data, spi, chip_info, gpio_reset, crt_range, dither_source,
- dither_scale, lock, dither_enable, dither_invert...
-Message-ID: <202207200100.AsG8AClR-lkp@intel.com>
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Andres Lagar-Cavilla <andreslc@gridcentric.ca>,
+	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+	David Vrabel <david.vrabel@citrix.com>,
+	xen-devel@lists.xenproject.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] xen/privcmd:  prevent integer overflow on 32 bit systems
+Message-ID: <202207200236.GeswjpCk-lkp@intel.com>
+References: <YtEjVdG+pp9DGz++@kili>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,272 +51,192 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YtEjVdG+pp9DGz++@kili>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: fd9373e41b9ba5b609f97e98a04687f4ff136aff iio: dac: ad5766: add driver support for AD5766
-date:   1 year, 6 months ago
-config: arm-randconfig-c002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200100.AsG8AClR-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+Hi Dan,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on xen-tip/linux-next]
+[also build test WARNING on linus/master v5.19-rc7 next-20220719]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/xen-privcmd-prevent-integer-overflow-on-32-bit-systems/20220715-162307
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220720/202207200236.GeswjpCk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd9373e41b9ba5b609f97e98a04687f4ff136aff
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fd9373e41b9ba5b609f97e98a04687f4ff136aff
+        # https://github.com/intel-lab-lkp/linux/commit/ea22ebd83753c7181043e69251b78f0be73675ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dan-Carpenter/xen-privcmd-prevent-integer-overflow-on-32-bit-systems/20220715-162307
+        git checkout ea22ebd83753c7181043e69251b78f0be73675ad
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/ drivers/ata/ drivers/rtc/ drivers/thermal/intel/ drivers/xen/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-clang-analyzer warnings: (new ones prefixed by >>)
-   Suppressed 1 warnings (1 with check filters).
-   18 warnings generated.
-   drivers/media/tuners/mxl5005s.c:2668:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2668:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2669:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2669:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2677:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2677:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2678:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2678:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2686:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2686:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2687:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2687:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2695:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2695:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2696:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2696:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2704:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2704:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2705:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2705:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2713:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2713:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2714:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2714:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2722:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2722:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2723:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2723:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2731:3: warning: Value stored to 'Fmax' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2731:3: note: Value stored to 'Fmax' is never read
-                   Fmax = FmaxBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2732:3: warning: Value stored to 'Fmin' is never read [clang-analyzer-deadcode.DeadStores]
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   drivers/media/tuners/mxl5005s.c:2732:3: note: Value stored to 'Fmin' is never read
-                   Fmin = FminBin ;
-                   ^      ~~~~~~~
-   Suppressed 2 warnings (2 with check filters).
-   1 warning generated.
->> drivers/iio/dac/ad5766.c:109:8: warning: Excessive padding in 'struct ad5766_state' (44 padding bytes, where 12 is optimal). Optimal fields order: data, spi, chip_info, gpio_reset, crt_range, dither_source, dither_scale, lock, dither_enable, dither_invert, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad5766_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/dac/ad5766.c:109:8: note: Excessive padding in 'struct ad5766_state' (44 padding bytes, where 12 is optimal). Optimal fields order: data, spi, chip_info, gpio_reset, crt_range, dither_source, dither_scale, lock, dither_enable, dither_invert, consider reordering the fields or adding explicit padding members
-   struct ad5766_state {
-   ~~~~~~~^~~~~~~~~~~~~~
+>> drivers/xen/privcmd.c:459:13: warning: result of comparison of constant 2305843009213693951 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
+                   if (m.num > SIZE_MAX / sizeof(*m.arr))
+                       ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/xen/privcmd.c:469:13: warning: result of comparison of constant 2305843009213693951 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
+                   if (m.num > SIZE_MAX / sizeof(*m.arr))
+                       ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
    2 warnings generated.
-   drivers/iio/dac/ad5770r.c:133:8: warning: Excessive padding in 'struct ad5770r_state' (54 padding bytes, where 22 is optimal). Optimal fields order: transf_buf, internal_ref, external_res, spi, regmap, vref_reg, gpio_reset, vref, ch_pwr_down, output_mode, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad5770r_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:133:8: note: Excessive padding in 'struct ad5770r_state' (54 padding bytes, where 22 is optimal). Optimal fields order: transf_buf, internal_ref, external_res, spi, regmap, vref_reg, gpio_reset, vref, ch_pwr_down, output_mode, consider reordering the fields or adding explicit padding members
-   struct ad5770r_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:544:2: warning: Undefined or garbage value returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
-           return ret;
-           ^
-   drivers/iio/dac/ad5770r.c:609:6: note: Assuming 'indio_dev' is non-null
-           if (!indio_dev)
-               ^~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:609:2: note: Taking false branch
-           if (!indio_dev)
-           ^
-   drivers/iio/dac/ad5770r.c:618:2: note: Taking false branch
-           if (IS_ERR(regmap)) {
-           ^
-   drivers/iio/dac/ad5770r.c:626:2: note: Taking false branch
-           if (!IS_ERR(st->vref_reg)) {
-           ^
-   drivers/iio/dac/ad5770r.c:646:7: note: Assuming the condition is true
-                   if (PTR_ERR(st->vref_reg) == -ENODEV) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:646:3: note: Taking true branch
-                   if (PTR_ERR(st->vref_reg) == -ENODEV) {
-                   ^
-   drivers/iio/dac/ad5770r.c:660:8: note: Calling 'ad5770r_init'
-           ret = ad5770r_init(st);
-                 ^~~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:553:2: note: Taking false branch
-           if (IS_ERR(st->gpio_reset))
-           ^
-   drivers/iio/dac/ad5770r.c:558:6: note: 'ret' is 0
-           if (ret)
-               ^~~
-   drivers/iio/dac/ad5770r.c:558:2: note: Taking false branch
-           if (ret)
-           ^
-   drivers/iio/dac/ad5770r.c:562:8: note: Calling 'ad5770r_channel_config'
-           ret = ad5770r_channel_config(st);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:516:6: note: 'ret' declared without an initial value
-           int ret, tmp[2], min, max;
-               ^~~
-   drivers/iio/dac/ad5770r.c:521:6: note: Assuming 'num' is equal to AD5770R_MAX_CHANNELS
-           if (num != AD5770R_MAX_CHANNELS)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/dac/ad5770r.c:521:2: note: Taking false branch
-           if (num != AD5770R_MAX_CHANNELS)
-           ^
-   drivers/iio/dac/ad5770r.c:524:2: note: Loop condition is false. Execution continues on line 544
-           device_for_each_child_node(&st->spi->dev, child) {
-           ^
-   include/linux/property.h:111:2: note: expanded from macro 'device_for_each_child_node'
-           for (child = device_get_next_child_node(dev, NULL); child;      \
-           ^
-   drivers/iio/dac/ad5770r.c:544:2: note: Undefined or garbage value returned to caller
-           return ret;
-           ^      ~~~
-   1 warning generated.
-   kernel/irq/irqdomain.c:595:2: warning: Value stored to 'of_node' is never read [clang-analyzer-deadcode.DeadStores]
-           of_node = irq_domain_get_of_node(domain);
-           ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/irq/irqdomain.c:595:2: note: Value stored to 'of_node' is never read
-           of_node = irq_domain_get_of_node(domain);
-           ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   2 warnings generated.
-   drivers/mfd/qcom-pm8xxx.c:557:2: warning: Value stored to 'rev' is never read [clang-analyzer-deadcode.DeadStores]
-           rev |= val << BITS_PER_BYTE;
-           ^      ~~~~~~~~~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8xxx.c:557:2: note: Value stored to 'rev' is never read
-           rev |= val << BITS_PER_BYTE;
-           ^      ~~~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   drivers/input/rmi4/rmi_f11.c:1129:2: warning: Value stored to 'query_offset' is never read [clang-analyzer-deadcode.DeadStores]
-           query_offset += rc;
-           ^               ~~
-   drivers/input/rmi4/rmi_f11.c:1129:2: note: Value stored to 'query_offset' is never read
-           query_offset += rc;
-           ^               ~~
 
-vim +109 drivers/iio/dac/ad5766.c
 
-    88	
-    89	/**
-    90	 * struct ad5766_state - driver instance specific data
-    91	 * @spi:		SPI device
-    92	 * @lock:		Lock used to restrict concurent access to SPI device
-    93	 * @chip_info:		Chip model specific constants
-    94	 * @gpio_reset:		Reset GPIO, used to reset the device
-    95	 * @crt_range:		Current selected output range
-    96	 * @dither_enable:	Power enable bit for each channel dither block (for
-    97	 *			example, D15 = DAC 15,D8 = DAC 8, and D0 = DAC 0)
-    98	 *			0 - Normal operation, 1 - Power down
-    99	 * @dither_invert:	Inverts the dither signal applied to the selected DAC
-   100	 *			outputs
-   101	 * @dither_source:	Selects between 2 possible sources:
-   102	 *			1: N0, 2: N1
-   103	 *			Two bits are used for each channel
-   104	 * @dither_scale:	Two bits are used for each of the 16 channels:
-   105	 *			0: 1 SCALING, 1: 0.75 SCALING, 2: 0.5 SCALING,
-   106	 *			3: 0.25 SCALING.
-   107	 * @data:		SPI transfer buffers
-   108	 */
- > 109	struct ad5766_state {
-   110		struct spi_device		*spi;
-   111		struct mutex			lock;
-   112		const struct ad5766_chip_info	*chip_info;
-   113		struct gpio_desc		*gpio_reset;
-   114		enum ad5766_voltage_range	crt_range;
-   115		u16		dither_enable;
-   116		u16		dither_invert;
-   117		u32		dither_source;
-   118		u32		dither_scale;
-   119		union {
-   120			u32	d32;
-   121			u16	w16[2];
-   122			u8	b8[4];
-   123		} data[3] ____cacheline_aligned;
-   124	};
-   125	
+vim +459 drivers/xen/privcmd.c
+
+   441	
+   442	static long privcmd_ioctl_mmap_batch(
+   443		struct file *file, void __user *udata, int version)
+   444	{
+   445		struct privcmd_data *data = file->private_data;
+   446		int ret;
+   447		struct privcmd_mmapbatch_v2 m;
+   448		struct mm_struct *mm = current->mm;
+   449		struct vm_area_struct *vma;
+   450		unsigned long nr_pages;
+   451		LIST_HEAD(pagelist);
+   452		struct mmap_batch_state state;
+   453	
+   454		switch (version) {
+   455		case 1:
+   456			if (copy_from_user(&m, udata, sizeof(struct privcmd_mmapbatch)))
+   457				return -EFAULT;
+   458			/* Returns per-frame error in m.arr. */
+ > 459			if (m.num > SIZE_MAX / sizeof(*m.arr))
+   460				return -EINVAL;
+   461			m.err = NULL;
+   462			if (!access_ok(m.arr, m.num * sizeof(*m.arr)))
+   463				return -EFAULT;
+   464			break;
+   465		case 2:
+   466			if (copy_from_user(&m, udata, sizeof(struct privcmd_mmapbatch_v2)))
+   467				return -EFAULT;
+   468			/* Returns per-frame error code in m.err. */
+   469			if (m.num > SIZE_MAX / sizeof(*m.arr))
+   470				return -EINVAL;
+   471			if (!access_ok(m.err, m.num * (sizeof(*m.err))))
+   472				return -EFAULT;
+   473			break;
+   474		default:
+   475			return -EINVAL;
+   476		}
+   477	
+   478		/* If restriction is in place, check the domid matches */
+   479		if (data->domid != DOMID_INVALID && data->domid != m.dom)
+   480			return -EPERM;
+   481	
+   482		nr_pages = DIV_ROUND_UP(m.num, XEN_PFN_PER_PAGE);
+   483		if ((m.num <= 0) || (nr_pages > (LONG_MAX >> PAGE_SHIFT)))
+   484			return -EINVAL;
+   485	
+   486		ret = gather_array(&pagelist, m.num, sizeof(xen_pfn_t), m.arr);
+   487	
+   488		if (ret)
+   489			goto out;
+   490		if (list_empty(&pagelist)) {
+   491			ret = -EINVAL;
+   492			goto out;
+   493		}
+   494	
+   495		if (version == 2) {
+   496			/* Zero error array now to only copy back actual errors. */
+   497			if (clear_user(m.err, sizeof(int) * m.num)) {
+   498				ret = -EFAULT;
+   499				goto out;
+   500			}
+   501		}
+   502	
+   503		mmap_write_lock(mm);
+   504	
+   505		vma = find_vma(mm, m.addr);
+   506		if (!vma ||
+   507		    vma->vm_ops != &privcmd_vm_ops) {
+   508			ret = -EINVAL;
+   509			goto out_unlock;
+   510		}
+   511	
+   512		/*
+   513		 * Caller must either:
+   514		 *
+   515		 * Map the whole VMA range, which will also allocate all the
+   516		 * pages required for the auto_translated_physmap case.
+   517		 *
+   518		 * Or
+   519		 *
+   520		 * Map unmapped holes left from a previous map attempt (e.g.,
+   521		 * because those foreign frames were previously paged out).
+   522		 */
+   523		if (vma->vm_private_data == NULL) {
+   524			if (m.addr != vma->vm_start ||
+   525			    m.addr + (nr_pages << PAGE_SHIFT) != vma->vm_end) {
+   526				ret = -EINVAL;
+   527				goto out_unlock;
+   528			}
+   529			if (xen_feature(XENFEAT_auto_translated_physmap)) {
+   530				ret = alloc_empty_pages(vma, nr_pages);
+   531				if (ret < 0)
+   532					goto out_unlock;
+   533			} else
+   534				vma->vm_private_data = PRIV_VMA_LOCKED;
+   535		} else {
+   536			if (m.addr < vma->vm_start ||
+   537			    m.addr + (nr_pages << PAGE_SHIFT) > vma->vm_end) {
+   538				ret = -EINVAL;
+   539				goto out_unlock;
+   540			}
+   541			if (privcmd_vma_range_is_mapped(vma, m.addr, nr_pages)) {
+   542				ret = -EINVAL;
+   543				goto out_unlock;
+   544			}
+   545		}
+   546	
+   547		state.domain        = m.dom;
+   548		state.vma           = vma;
+   549		state.va            = m.addr;
+   550		state.index         = 0;
+   551		state.global_error  = 0;
+   552		state.version       = version;
+   553	
+   554		BUILD_BUG_ON(((PAGE_SIZE / sizeof(xen_pfn_t)) % XEN_PFN_PER_PAGE) != 0);
+   555		/* mmap_batch_fn guarantees ret == 0 */
+   556		BUG_ON(traverse_pages_block(m.num, sizeof(xen_pfn_t),
+   557					    &pagelist, mmap_batch_fn, &state));
+   558	
+   559		mmap_write_unlock(mm);
+   560	
+   561		if (state.global_error) {
+   562			/* Write back errors in second pass. */
+   563			state.user_gfn = (xen_pfn_t *)m.arr;
+   564			state.user_err = m.err;
+   565			ret = traverse_pages_block(m.num, sizeof(xen_pfn_t),
+   566						   &pagelist, mmap_return_errors, &state);
+   567		} else
+   568			ret = 0;
+   569	
+   570		/* If we have not had any EFAULT-like global errors then set the global
+   571		 * error to -ENOENT if necessary. */
+   572		if ((ret == 0) && (state.global_error == -ENOENT))
+   573			ret = -ENOENT;
+   574	
+   575	out:
+   576		free_page_list(&pagelist);
+   577		return ret;
+   578	
+   579	out_unlock:
+   580		mmap_write_unlock(mm);
+   581		goto out;
+   582	}
+   583	
 
 -- 
 0-DAY CI Kernel Test Service
