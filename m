@@ -1,300 +1,153 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977E25393
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 19:16:45 +0000 (UTC)
-Received: by mail-il1-f171.google.com with SMTP id s13so905734ilp.13
-        for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 12:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
-        b=rc25gT0hqLHAsoJ90/h35TVtpKkn0P+zKeyZBXWC+h9soMiNLp6BH8OHV8Tvm1VjX9
-         grAFACvXigtURXa9ykURx/Mfz7lT2Q9TqNJydjIhgmat8WPOvau3kiS/6+oA9ADkp2N7
-         uN8Ih68aY3F0EsuJXx1VoVZbJ6gsWzf39Y08wYUfYLoAS5MBt9//0X0xuovElTtCyOSe
-         71DfgBJfn2WyucmLnFQL+nzpdHoS/vAJlZhHhe305A36WZ+Z6dPtPg9olngjR/xNEBpL
-         TxXMY+C1pnY53zyvYFxp/0O7c5Xlr1xUuVkbidWOe9zKp/h5Lbkyx8tFl/BiExc0IvKc
-         kFPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
-        b=C+87P5EPAvZt4N7IdAQZedyKz/NFDMn3/2f8vJTZ25nRf/fv2doiQlplP1gafGq0AG
-         hK9Ky3AUnRil+y6cV9eo6CkX/KSVBx/k1cwk/OPh7dm+Y0WvmZsOrAxKkRXH2MOZ8sef
-         AVp7MoPPKhxnHhV9HvqQGzbcBfYezs9r3tWsJpefYKEeiiUmsX/DtcmFhJ2l8NvaLuTS
-         9P1WRFZC1wyFFIkEem/f2Iaq7KTIeksmRaNyTo7jw72ahDinflCkEdyrfF2IW3ceRWk0
-         0IFgoFl/vVARYmGncqItUqyZYIizNFQ2HQvUhHbdDdu/7hzFHZ/dKSIdo2rXqe1kOhlX
-         MQYw==
-X-Gm-Message-State: AJIora91nbUU6foUfZbDLxC9CzMb+jQDDpWVJpcOc3TaQV6Dd/1MUYAR
-	dFvSgiq5/BaA2WY4vRapWg5A8Q==
-X-Google-Smtp-Source: AGRyM1uyjGECdZVidczMAGXR7PmaLcmRyXPAcqHx8EGXPw5l/fraFnsLVQ2VySfRtipJxgXqSSrdnA==
-X-Received: by 2002:a05:6e02:1a0a:b0:2dc:7a5e:5869 with SMTP id s10-20020a056e021a0a00b002dc7a5e5869mr17168484ild.90.1658258204439;
-        Tue, 19 Jul 2022 12:16:44 -0700 (PDT)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id n1-20020a056638110100b0033ed97119ccsm6977090jal.1.2022.07.19.12.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 12:16:43 -0700 (PDT)
-From: Alex Elder <elder@linaro.org>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	mka@chromium.org,
-	evgreen@chromium.org,
-	bjorn.andersson@linaro.org,
-	quic_cpratapa@quicinc.com,
-	quic_avuyyuru@quicinc.com,
-	quic_jponduru@quicinc.com,
-	quic_subashab@quicinc.com,
-	elder@kernel.org,
-	netdev@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next v4] net: ipa: add an endpoint device attribute group
-Date: Tue, 19 Jul 2022 14:16:39 -0500
-Message-Id: <20220719191639.373249-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251855393
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 20:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658261393; x=1689797393;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HU+JaDG5/QEwe2CMf+ijpKvUkQBooyLHvKXiT4tuquc=;
+  b=GlxpL9jU8pun0qc2wHEhPKbDjHZkTT62AG7bmphCKuB5pXcORCsxfCEi
+   kRSVPc0kN9AusJSd7+MayZC6+ZFnLtcnxNIqR104XVEgfDpzedfQQsyR3
+   2BnLWUyuD3TlcmQOxqGIH9BeKDkNXhZIYaRMpoRQijHEYlJ2m6gozrc6u
+   +l2aEu+IBQLFibNjad1d1DS3oHJwZDupRQk25zAC8uyJc/18SQmqxvt2i
+   KKdo18Rm4iz0ME/WNZUeAnd/MIHkLbO/evD2wVXoKz7nJMuq4EU6iAmdM
+   Z1fPXdaERftaOJpoed5T2fETNewPeNhsUUqtjVUo6dxcFDnuVc+cGMM+h
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="284150988"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="284150988"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 13:09:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="572997162"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jul 2022 13:09:30 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDtX7-0005zy-GD;
+	Tue, 19 Jul 2022 20:09:29 +0000
+Date: Wed, 20 Jul 2022 04:08:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Keith Busch <kbusch@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-register 4/4] drivers/nvme/host/pci.c:1812:7: warning:
+ variable 'pages_per' set but not used
+Message-ID: <202207200447.tQ5AF3SH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Create a new attribute group meant to provide a single place that
-defines endpoint IDs that might be needed by user space.  Not all
-defined endpoints are presented, and only those that are defined
-will be made visible.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-register
+head:   9de6909fed20955193275bbf9c75ccc85553b7d8
+commit: 9de6909fed20955193275bbf9c75ccc85553b7d8 [4/4] dma-prereg: add memory cleanup
+config: arm-randconfig-r013-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200447.tQ5AF3SH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=9de6909fed20955193275bbf9c75ccc85553b7d8
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-register
+        git checkout 9de6909fed20955193275bbf9c75ccc85553b7d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/nvme/host/
 
-The new attributes use "extended" device attributes to hold endpoint
-IDs, which is a little more compact and efficient.  Reimplement the
-existing modem endpoint ID attribute files using common code.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-v4: Identical to v3; added missing addresses on Cc: list.
-v3: Use uintptr_t in a second spot, missed the first time...
-v2: Use uintptr_t to try to avoid a "cast to smaller integer type"
-    warning produced by "clang".
+All warnings (new ones prefixed by >>):
 
- .../testing/sysfs-devices-platform-soc-ipa    | 62 +++++++++++++----
- drivers/net/ipa/ipa_main.c                    |  1 +
- drivers/net/ipa/ipa_sysfs.c                   | 69 ++++++++++++++-----
- drivers/net/ipa/ipa_sysfs.h                   |  1 +
- 4 files changed, 102 insertions(+), 31 deletions(-)
+>> drivers/nvme/host/pci.c:1812:7: warning: variable 'pages_per' set but not used [-Wunused-but-set-variable]
+                   int pages_per = nvme_pages;
+                       ^
+   1 warning generated.
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-index c56dcf15bf29d..364b1ba412427 100644
---- a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-+++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-@@ -46,33 +46,69 @@ Description:
- 		that is supported by the hardware.  The possible values
- 		are "MAPv4" or "MAPv5".
- 
-+What:		.../XXXXXXX.ipa/endpoint_id/
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/ directory contains
-+		attributes that define IDs associated with IPA
-+		endpoints.  The "rx" or "tx" in an endpoint name is
-+		from the perspective of the AP.  An endpoint ID is a
-+		small unsigned integer.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/modem_rx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/modem_rx file contains
-+		the ID of the AP endpoint on which packets originating
-+		from the embedded modem are received.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/modem_tx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/modem_tx file contains
-+		the ID of the AP endpoint on which packets destined
-+		for the embedded modem are sent.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/monitor_rx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/monitor_rx file contains
-+		the ID of the AP endpoint on which IPA "monitor" data is
-+		received.  The monitor endpoint supplies replicas of
-+		packets that enter the IPA hardware for processing.
-+		Each replicated packet is preceded by a fixed-size "ODL"
-+		header (see .../XXXXXXX.ipa/feature/monitor, above).
-+		Large packets are truncated, to reduce the bandwidth
-+		required to provide the monitor function.
-+
- What:		.../XXXXXXX.ipa/modem/
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/modem/ directory contains a set of
--		attributes describing properties of the modem execution
--		environment reachable by the IPA hardware.
-+		The .../XXXXXXX.ipa/modem/ directory contains attributes
-+		describing properties of the modem embedded in the SoC.
- 
- What:		.../XXXXXXX.ipa/modem/rx_endpoint_id
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/feature/rx_endpoint_id file contains
--		the AP endpoint ID that receives packets originating from
--		the modem execution environment.  The "rx" is from the
--		perspective of the AP; this endpoint is considered an "IPA
--		producer".  An endpoint ID is a small unsigned integer.
-+		The .../XXXXXXX.ipa/modem/rx_endpoint_id file duplicates
-+		the value found in .../XXXXXXX.ipa/endpoint_id/modem_rx.
- 
- What:		.../XXXXXXX.ipa/modem/tx_endpoint_id
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/feature/tx_endpoint_id file contains
--		the AP endpoint ID used to transmit packets destined for
--		the modem execution environment.  The "tx" is from the
--		perspective of the AP; this endpoint is considered an "IPA
--		consumer".  An endpoint ID is a small unsigned integer.
-+		The .../XXXXXXX.ipa/modem/tx_endpoint_id file duplicates
-+		the value found in .../XXXXXXX.ipa/endpoint_id/modem_tx.
-diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-index 3757ce3de2c59..b989259b02047 100644
---- a/drivers/net/ipa/ipa_main.c
-+++ b/drivers/net/ipa/ipa_main.c
-@@ -851,6 +851,7 @@ static void ipa_shutdown(struct platform_device *pdev)
- static const struct attribute_group *ipa_attribute_groups[] = {
- 	&ipa_attribute_group,
- 	&ipa_feature_attribute_group,
-+	&ipa_endpoint_id_attribute_group,
- 	&ipa_modem_attribute_group,
- 	NULL,
- };
-diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
-index ff61dbdd70d8c..c0c8641cdd14a 100644
---- a/drivers/net/ipa/ipa_sysfs.c
-+++ b/drivers/net/ipa/ipa_sysfs.c
-@@ -96,38 +96,71 @@ const struct attribute_group ipa_feature_attribute_group = {
- 	.attrs		= ipa_feature_attrs,
- };
- 
--static ssize_t
--ipa_endpoint_id_show(struct ipa *ipa, char *buf, enum ipa_endpoint_name name)
-+static umode_t ipa_endpoint_id_is_visible(struct kobject *kobj,
-+					  struct attribute *attr, int n)
- {
--	u32 endpoint_id = ipa->name_map[name]->endpoint_id;
-+	struct ipa *ipa = dev_get_drvdata(kobj_to_dev(kobj));
-+	struct device_attribute *dev_attr;
-+	struct dev_ext_attribute *ea;
-+	bool visible;
- 
--	return scnprintf(buf, PAGE_SIZE, "%u\n", endpoint_id);
-+	/* An endpoint id attribute is only visible if it's defined */
-+	dev_attr = container_of(attr, struct device_attribute, attr);
-+	ea = container_of(dev_attr, struct dev_ext_attribute, attr);
-+
-+	visible = !!ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
-+
-+	return visible ? attr->mode : 0;
- }
- 
--static ssize_t rx_endpoint_id_show(struct device *dev,
--				   struct device_attribute *attr, char *buf)
-+static ssize_t endpoint_id_attr_show(struct device *dev,
-+				     struct device_attribute *attr, char *buf)
- {
- 	struct ipa *ipa = dev_get_drvdata(dev);
-+	struct ipa_endpoint *endpoint;
-+	struct dev_ext_attribute *ea;
- 
--	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_RX);
-+	ea = container_of(attr, struct dev_ext_attribute, attr);
-+	endpoint = ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
-+
-+	return sysfs_emit(buf, "%u\n", endpoint->endpoint_id);
- }
- 
--static DEVICE_ATTR_RO(rx_endpoint_id);
-+#define ENDPOINT_ID_ATTR(_n, _endpoint_name)				    \
-+	static struct dev_ext_attribute dev_attr_endpoint_id_ ## _n = {	    \
-+		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
-+		.var	= (void *)(_endpoint_name),			    \
-+	}
- 
--static ssize_t tx_endpoint_id_show(struct device *dev,
--				   struct device_attribute *attr, char *buf)
--{
--	struct ipa *ipa = dev_get_drvdata(dev);
-+ENDPOINT_ID_ATTR(modem_rx, IPA_ENDPOINT_AP_MODEM_RX);
-+ENDPOINT_ID_ATTR(modem_tx, IPA_ENDPOINT_AP_MODEM_TX);
- 
--	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_TX);
--}
-+static struct attribute *ipa_endpoint_id_attrs[] = {
-+	&dev_attr_endpoint_id_modem_rx.attr.attr,
-+	&dev_attr_endpoint_id_modem_tx.attr.attr,
-+	NULL
-+};
-+
-+const struct attribute_group ipa_endpoint_id_attribute_group = {
-+	.name		= "endpoint_id",
-+	.is_visible	= ipa_endpoint_id_is_visible,
-+	.attrs		= ipa_endpoint_id_attrs,
-+};
-+
-+/* Reuse endpoint ID attributes for the legacy modem endpoint IDs */
-+#define MODEM_ATTR(_n, _endpoint_name)					    \
-+	static struct dev_ext_attribute dev_attr_modem_ ## _n = {	    \
-+		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
-+		.var	= (void *)(_endpoint_name),			    \
-+	}
- 
--static DEVICE_ATTR_RO(tx_endpoint_id);
-+MODEM_ATTR(rx_endpoint_id, IPA_ENDPOINT_AP_MODEM_RX);
-+MODEM_ATTR(tx_endpoint_id, IPA_ENDPOINT_AP_MODEM_TX);
- 
- static struct attribute *ipa_modem_attrs[] = {
--	&dev_attr_rx_endpoint_id.attr,
--	&dev_attr_tx_endpoint_id.attr,
--	NULL
-+	&dev_attr_modem_rx_endpoint_id.attr.attr,
-+	&dev_attr_modem_tx_endpoint_id.attr.attr,
-+	NULL,
- };
- 
- const struct attribute_group ipa_modem_attribute_group = {
-diff --git a/drivers/net/ipa/ipa_sysfs.h b/drivers/net/ipa/ipa_sysfs.h
-index b34e5650bf8cd..4a3ffd1e4e3fb 100644
---- a/drivers/net/ipa/ipa_sysfs.h
-+++ b/drivers/net/ipa/ipa_sysfs.h
-@@ -10,6 +10,7 @@ struct attribute_group;
- 
- extern const struct attribute_group ipa_attribute_group;
- extern const struct attribute_group ipa_feature_attribute_group;
-+extern const struct attribute_group ipa_endpoint_id_attribute_group;
- extern const struct attribute_group ipa_modem_attribute_group;
- 
- #endif /* _IPA_SYSFS_H_ */
+
+vim +/pages_per +1812 drivers/nvme/host/pci.c
+
+  1782	
+  1783	#ifdef CONFIG_HAS_DMA
+  1784	/*
+  1785	 * Important: bvec must be describing a virtually contiguous buffer.
+  1786	 */
+  1787	static void *nvme_pci_dma_map(struct request_queue *q,
+  1788				       struct bio_vec *bvec, int nr_vecs)
+  1789	{
+  1790		const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
+  1791		struct nvme_ns *ns = q->queuedata;
+  1792		struct nvme_dev *dev = to_nvme_dev(ns->ctrl);
+  1793		struct nvme_dma_mapping *mapping;
+  1794		int i, j, k, size, ret = -ENOMEM;
+  1795	
+  1796		if (!nr_vecs)
+  1797			return ERR_PTR(-EINVAL);
+  1798	
+  1799		mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
+  1800		if (!mapping)
+  1801			return ERR_PTR(-ENOMEM);
+  1802	
+  1803		mapping->nr_pages = nr_vecs * nvme_pages;
+  1804		size = sizeof(*mapping->prps) * mapping->nr_pages;
+  1805		mapping->prps = dma_alloc_coherent(dev->dev, size,
+  1806					&mapping->prp_dma_addr, GFP_KERNEL);
+  1807		if (!mapping->prps)
+  1808			goto free_mapping;
+  1809	
+  1810		for (i = 0, k = 0; i < nr_vecs; i++) {
+  1811			struct bio_vec *bv = bvec + i;
+> 1812			int pages_per = nvme_pages;
+  1813			dma_addr_t dma_addr;
+  1814	
+  1815			if (i == 0) {
+  1816				mapping->offset = bv->bv_offset;
+  1817				pages_per -= mapping->offset >> NVME_CTRL_PAGE_SHIFT;
+  1818			} else if (bv->bv_offset) {
+  1819				ret = -EINVAL;
+  1820				goto err;
+  1821			}
+  1822	
+  1823			dma_addr = dma_map_bvec(dev->dev, bv, 0, 0);
+  1824			if (dma_mapping_error(dev->dev, dma_addr)) {
+  1825				ret = -EIO;
+  1826				goto err;
+  1827			}
+  1828	
+  1829			for (j = 0; j < nvme_pages; j++)
+  1830				mapping->prps[k++] = cpu_to_le64(dma_addr +
+  1831							j * NVME_CTRL_PAGE_SIZE);
+  1832		}
+  1833	
+  1834		get_device(dev->dev);
+  1835		return mapping;
+  1836	
+  1837	err:
+  1838		while (--i > 0) {
+  1839			__u64 dma_addr = le64_to_cpu(mapping->prps[i]);
+  1840	
+  1841			dma_unmap_page(dev->dev, dma_addr,
+  1842				       PAGE_SIZE - offset_in_page(dma_addr), 0);
+  1843		}
+  1844	
+  1845		dma_free_coherent(dev->dev, size, (void *)mapping->prps,
+  1846				  mapping->prp_dma_addr);
+  1847	free_mapping:
+  1848		kfree(mapping);
+  1849		return ERR_PTR(ret);
+  1850	}
+  1851	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
