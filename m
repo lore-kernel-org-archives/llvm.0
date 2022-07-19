@@ -1,40 +1,39 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876A71C04
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 13:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658235760; x=1689771760;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=hTTnQDGg5BYxjZ3w6khjGuRbcAxQHHQREDW4mn3oXbw=;
-  b=fEee9fhmfCDjBtlFY7FIVmabML0rDgx1KKGsmCmUg8qc/CEM0yTSe2L0
-   GU10db4bYoEie8H8mMP86JoH+WHfgpCXuf8yr7mRUYwQw/sYdLLVTJQVU
-   VZQg4C+xGPjsn/dj9E7AeuySBqVJX2XZ1Ot7aL+QBUddrKVhMDGnx4Sih
-   1rsW2MrW/SgbDQPS5PYOD+AF3P7imr0iLoYUJ6IASq4DWTISDLSzo+Raa
-   ceHCO91u7EYFd7oHdiZabklmp2HFtUdMLcI4mFju/wr3ndA1xAMhCEnXk
-   bqVLufzWj1V6Jl4OQzaXtEu/MRpAq0bJPYPjf8fSvGcGSLnUXh5BmG//G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="312172189"
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="312172189"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 06:02:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="630321917"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Jul 2022 06:02:14 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oDmrd-0005fK-CD;
-	Tue, 19 Jul 2022 13:02:13 +0000
-Date: Tue, 19 Jul 2022 21:01:26 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x5d: relocation to
- !ENDBR: machine_kexec_prepare+0x532
-Message-ID: <202207192027.8iVnGfUz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242921C2C
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 13:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5416C341C6;
+	Tue, 19 Jul 2022 13:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658237812;
+	bh=LgIus1vM08oJb7atpj/1Ixv/EE+zSIDg/3ScTjK636I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hc8opsDf62QaLIIbJ/8bhboVP/hhdbVhKBYx6dB3I94dx260mmGeQLkcDze6Gq6xI
+	 JXBxqA2ycpbxSD/4fyvcKM0qPo/o+JKPLAubROYEwZAjB+BKViK1xiYplGR1qidVdq
+	 6dUcaV51IgrKQuzIStBgWxro57Iag2GgeuzVCSQ5FnewwcSZ6aEA1e0PQ3z43iLgH+
+	 MrnO9upkv1JiDLCNxxBla63/46x+ttmowfsWhAnWF4w3Jid7rprrfXpHz4WyMD4pbq
+	 02c+alBWnJuCYyzpIoxjY0iMNOuKBk90iM5QSm5ViMFIBGZu217ibq9PMmrvUx44M/
+	 oV6ts8BZILgzw==
+Date: Tue, 19 Jul 2022 14:36:45 +0100
+From: Will Deacon <will@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v3 00/20] KCFI support
+Message-ID: <20220719133645.GA14089@willie-the-truck>
+References: <20220610233513.1798771-1-samitolvanen@google.com>
+ <202206131001.6BA9933C@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,45 +42,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202206131001.6BA9933C@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Josh Poimboeuf <jpoimboe@kernel.org>
+On Mon, Jun 13, 2022 at 10:04:12AM -0700, Kees Cook wrote:
+> On Fri, Jun 10, 2022 at 04:34:53PM -0700, Sami Tolvanen wrote:
+> > KCFI is a proposed forward-edge control-flow integrity scheme for
+> > Clang, which is more suitable for kernel use than the existing CFI
+> > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+> > alter function references to point to a jump table, and won't break
+> > function address equality. The latest LLVM patch is here:
+> > 
+> >   https://reviews.llvm.org/D119296
+> > 
+> > This RFC series replaces the current arm64 CFI implementation with
+> > KCFI and adds support for x86_64.
+> 
+> I think the "RFC" prefix for this series can be dropped. :)
+> 
+> It looks to me like all of Peter's concerns have been addressed. I'd say
+> let's get the Clang side landed, and once that's done, land this via x86
+> -tip?
+> 
+> Peter and Will does this sound right to you? It touches arm64, so if
+> -tip isn't okay, I could take it in one of my trees?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: 1f001e9da6bbf482311e45e48f53c2bd2179e59c x86/ftrace: Use alternative RET encoding
-date:   3 weeks ago
-config: x86_64-randconfig-a002-20220718 (https://download.01.org/0day-ci/archive/20220719/202207192027.8iVnGfUz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1f001e9da6bbf482311e45e48f53c2bd2179e59c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1f001e9da6bbf482311e45e48f53c2bd2179e59c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The arm64 bits look fine to me. Please just check if it conflicts horribly
+with -next so that we have a chance to figure out a shared branch if
+necessary.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: balance_leaf+0xe70e: stack state mismatch: cfa1=4+400 cfa2=4+416
-   vmlinux.o: warning: objtool: leaf_move_items+0xf9a: stack state mismatch: cfa1=4+160 cfa2=4+152
-   vmlinux.o: warning: objtool: leaf_copy_boundary_item+0x36b2: stack state mismatch: cfa1=4+240 cfa2=4+232
-   vmlinux.o: warning: objtool: leaf_copy_items_entirely+0xd46: stack state mismatch: cfa1=4+256 cfa2=4+248
-   vmlinux.o: warning: objtool: balance_internal+0x4e40: stack state mismatch: cfa1=4+312 cfa2=4+320
-   vmlinux.o: warning: objtool: internal_move_pointers_items+0x7a5: stack state mismatch: cfa1=4+224 cfa2=4+240
-   vmlinux.o: warning: objtool: sync_regs+0x23: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x5d: relocation to !ENDBR: machine_kexec_prepare+0x532
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Will
