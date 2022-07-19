@@ -1,243 +1,300 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90A34C77
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 18:57:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658257049; x=1689793049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BqgXG/4LbCtAN57U01YaIg9Myl3LD4Ewp7qmwOT00PM=;
-  b=iwYNgsHOnzgmqP5cMS1baLCjEpNKB0Ap7+itnNuoYTREbQ82OhIf5xCY
-   7iww6YPWcU4oDdKZvcX6HC4KcceFmB95CUXlKXqlM/+Xq2F6YonLPsopu
-   +AaSwMqYT4DBlU4lnu2KI2Ud+hX9ag86UwYZvmbg7Ozl6hyGCRMYYIkeU
-   BwHwId8BepkeZOtma2IXxlff60293n2kGN92LOgHpEz525SqI8iUsQJG2
-   v4ecmmgMSRhWpUknQ7fj4E5uEUHqq+zeb9owlmMACG9DO9r7AUbmgFjsm
-   5bpwvmvpnM91oUc9zemWCXxUxhIFMivSzBk2Dr7Ctd85pcOLNBAuaNWsg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372874292"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="372874292"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 11:57:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="597776942"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2022 11:57:25 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oDsPM-0005v3-Vy;
-	Tue, 19 Jul 2022 18:57:24 +0000
-Date: Wed, 20 Jul 2022 02:57:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Carpenter <error27@gmail.com>, Juergen Gross <jgross@suse.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Andres Lagar-Cavilla <andreslc@gridcentric.ca>,
-	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-	David Vrabel <david.vrabel@citrix.com>,
-	xen-devel@lists.xenproject.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] xen/privcmd:  prevent integer overflow on 32 bit systems
-Message-ID: <202207200236.GeswjpCk-lkp@intel.com>
-References: <YtEjVdG+pp9DGz++@kili>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977E25393
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 19:16:45 +0000 (UTC)
+Received: by mail-il1-f171.google.com with SMTP id s13so905734ilp.13
+        for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 12:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
+        b=rc25gT0hqLHAsoJ90/h35TVtpKkn0P+zKeyZBXWC+h9soMiNLp6BH8OHV8Tvm1VjX9
+         grAFACvXigtURXa9ykURx/Mfz7lT2Q9TqNJydjIhgmat8WPOvau3kiS/6+oA9ADkp2N7
+         uN8Ih68aY3F0EsuJXx1VoVZbJ6gsWzf39Y08wYUfYLoAS5MBt9//0X0xuovElTtCyOSe
+         71DfgBJfn2WyucmLnFQL+nzpdHoS/vAJlZhHhe305A36WZ+Z6dPtPg9olngjR/xNEBpL
+         TxXMY+C1pnY53zyvYFxp/0O7c5Xlr1xUuVkbidWOe9zKp/h5Lbkyx8tFl/BiExc0IvKc
+         kFPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
+        b=C+87P5EPAvZt4N7IdAQZedyKz/NFDMn3/2f8vJTZ25nRf/fv2doiQlplP1gafGq0AG
+         hK9Ky3AUnRil+y6cV9eo6CkX/KSVBx/k1cwk/OPh7dm+Y0WvmZsOrAxKkRXH2MOZ8sef
+         AVp7MoPPKhxnHhV9HvqQGzbcBfYezs9r3tWsJpefYKEeiiUmsX/DtcmFhJ2l8NvaLuTS
+         9P1WRFZC1wyFFIkEem/f2Iaq7KTIeksmRaNyTo7jw72ahDinflCkEdyrfF2IW3ceRWk0
+         0IFgoFl/vVARYmGncqItUqyZYIizNFQ2HQvUhHbdDdu/7hzFHZ/dKSIdo2rXqe1kOhlX
+         MQYw==
+X-Gm-Message-State: AJIora91nbUU6foUfZbDLxC9CzMb+jQDDpWVJpcOc3TaQV6Dd/1MUYAR
+	dFvSgiq5/BaA2WY4vRapWg5A8Q==
+X-Google-Smtp-Source: AGRyM1uyjGECdZVidczMAGXR7PmaLcmRyXPAcqHx8EGXPw5l/fraFnsLVQ2VySfRtipJxgXqSSrdnA==
+X-Received: by 2002:a05:6e02:1a0a:b0:2dc:7a5e:5869 with SMTP id s10-20020a056e021a0a00b002dc7a5e5869mr17168484ild.90.1658258204439;
+        Tue, 19 Jul 2022 12:16:44 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id n1-20020a056638110100b0033ed97119ccsm6977090jal.1.2022.07.19.12.16.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 12:16:43 -0700 (PDT)
+From: Alex Elder <elder@linaro.org>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	mka@chromium.org,
+	evgreen@chromium.org,
+	bjorn.andersson@linaro.org,
+	quic_cpratapa@quicinc.com,
+	quic_avuyyuru@quicinc.com,
+	quic_jponduru@quicinc.com,
+	quic_subashab@quicinc.com,
+	elder@kernel.org,
+	netdev@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v4] net: ipa: add an endpoint device attribute group
+Date: Tue, 19 Jul 2022 14:16:39 -0500
+Message-Id: <20220719191639.373249-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtEjVdG+pp9DGz++@kili>
+Content-Transfer-Encoding: 8bit
 
-Hi Dan,
+Create a new attribute group meant to provide a single place that
+defines endpoint IDs that might be needed by user space.  Not all
+defined endpoints are presented, and only those that are defined
+will be made visible.
 
-Thank you for the patch! Perhaps something to improve:
+The new attributes use "extended" device attributes to hold endpoint
+IDs, which is a little more compact and efficient.  Reimplement the
+existing modem endpoint ID attribute files using common code.
 
-[auto build test WARNING on xen-tip/linux-next]
-[also build test WARNING on linus/master v5.19-rc7 next-20220719]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+v4: Identical to v3; added missing addresses on Cc: list.
+v3: Use uintptr_t in a second spot, missed the first time...
+v2: Use uintptr_t to try to avoid a "cast to smaller integer type"
+    warning produced by "clang".
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/xen-privcmd-prevent-integer-overflow-on-32-bit-systems/20220715-162307
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220720/202207200236.GeswjpCk-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ea22ebd83753c7181043e69251b78f0be73675ad
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dan-Carpenter/xen-privcmd-prevent-integer-overflow-on-32-bit-systems/20220715-162307
-        git checkout ea22ebd83753c7181043e69251b78f0be73675ad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/ drivers/ata/ drivers/rtc/ drivers/thermal/intel/ drivers/xen/
+ .../testing/sysfs-devices-platform-soc-ipa    | 62 +++++++++++++----
+ drivers/net/ipa/ipa_main.c                    |  1 +
+ drivers/net/ipa/ipa_sysfs.c                   | 69 ++++++++++++++-----
+ drivers/net/ipa/ipa_sysfs.h                   |  1 +
+ 4 files changed, 102 insertions(+), 31 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/xen/privcmd.c:459:13: warning: result of comparison of constant 2305843009213693951 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
-                   if (m.num > SIZE_MAX / sizeof(*m.arr))
-                       ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/xen/privcmd.c:469:13: warning: result of comparison of constant 2305843009213693951 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
-                   if (m.num > SIZE_MAX / sizeof(*m.arr))
-                       ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +459 drivers/xen/privcmd.c
-
-   441	
-   442	static long privcmd_ioctl_mmap_batch(
-   443		struct file *file, void __user *udata, int version)
-   444	{
-   445		struct privcmd_data *data = file->private_data;
-   446		int ret;
-   447		struct privcmd_mmapbatch_v2 m;
-   448		struct mm_struct *mm = current->mm;
-   449		struct vm_area_struct *vma;
-   450		unsigned long nr_pages;
-   451		LIST_HEAD(pagelist);
-   452		struct mmap_batch_state state;
-   453	
-   454		switch (version) {
-   455		case 1:
-   456			if (copy_from_user(&m, udata, sizeof(struct privcmd_mmapbatch)))
-   457				return -EFAULT;
-   458			/* Returns per-frame error in m.arr. */
- > 459			if (m.num > SIZE_MAX / sizeof(*m.arr))
-   460				return -EINVAL;
-   461			m.err = NULL;
-   462			if (!access_ok(m.arr, m.num * sizeof(*m.arr)))
-   463				return -EFAULT;
-   464			break;
-   465		case 2:
-   466			if (copy_from_user(&m, udata, sizeof(struct privcmd_mmapbatch_v2)))
-   467				return -EFAULT;
-   468			/* Returns per-frame error code in m.err. */
-   469			if (m.num > SIZE_MAX / sizeof(*m.arr))
-   470				return -EINVAL;
-   471			if (!access_ok(m.err, m.num * (sizeof(*m.err))))
-   472				return -EFAULT;
-   473			break;
-   474		default:
-   475			return -EINVAL;
-   476		}
-   477	
-   478		/* If restriction is in place, check the domid matches */
-   479		if (data->domid != DOMID_INVALID && data->domid != m.dom)
-   480			return -EPERM;
-   481	
-   482		nr_pages = DIV_ROUND_UP(m.num, XEN_PFN_PER_PAGE);
-   483		if ((m.num <= 0) || (nr_pages > (LONG_MAX >> PAGE_SHIFT)))
-   484			return -EINVAL;
-   485	
-   486		ret = gather_array(&pagelist, m.num, sizeof(xen_pfn_t), m.arr);
-   487	
-   488		if (ret)
-   489			goto out;
-   490		if (list_empty(&pagelist)) {
-   491			ret = -EINVAL;
-   492			goto out;
-   493		}
-   494	
-   495		if (version == 2) {
-   496			/* Zero error array now to only copy back actual errors. */
-   497			if (clear_user(m.err, sizeof(int) * m.num)) {
-   498				ret = -EFAULT;
-   499				goto out;
-   500			}
-   501		}
-   502	
-   503		mmap_write_lock(mm);
-   504	
-   505		vma = find_vma(mm, m.addr);
-   506		if (!vma ||
-   507		    vma->vm_ops != &privcmd_vm_ops) {
-   508			ret = -EINVAL;
-   509			goto out_unlock;
-   510		}
-   511	
-   512		/*
-   513		 * Caller must either:
-   514		 *
-   515		 * Map the whole VMA range, which will also allocate all the
-   516		 * pages required for the auto_translated_physmap case.
-   517		 *
-   518		 * Or
-   519		 *
-   520		 * Map unmapped holes left from a previous map attempt (e.g.,
-   521		 * because those foreign frames were previously paged out).
-   522		 */
-   523		if (vma->vm_private_data == NULL) {
-   524			if (m.addr != vma->vm_start ||
-   525			    m.addr + (nr_pages << PAGE_SHIFT) != vma->vm_end) {
-   526				ret = -EINVAL;
-   527				goto out_unlock;
-   528			}
-   529			if (xen_feature(XENFEAT_auto_translated_physmap)) {
-   530				ret = alloc_empty_pages(vma, nr_pages);
-   531				if (ret < 0)
-   532					goto out_unlock;
-   533			} else
-   534				vma->vm_private_data = PRIV_VMA_LOCKED;
-   535		} else {
-   536			if (m.addr < vma->vm_start ||
-   537			    m.addr + (nr_pages << PAGE_SHIFT) > vma->vm_end) {
-   538				ret = -EINVAL;
-   539				goto out_unlock;
-   540			}
-   541			if (privcmd_vma_range_is_mapped(vma, m.addr, nr_pages)) {
-   542				ret = -EINVAL;
-   543				goto out_unlock;
-   544			}
-   545		}
-   546	
-   547		state.domain        = m.dom;
-   548		state.vma           = vma;
-   549		state.va            = m.addr;
-   550		state.index         = 0;
-   551		state.global_error  = 0;
-   552		state.version       = version;
-   553	
-   554		BUILD_BUG_ON(((PAGE_SIZE / sizeof(xen_pfn_t)) % XEN_PFN_PER_PAGE) != 0);
-   555		/* mmap_batch_fn guarantees ret == 0 */
-   556		BUG_ON(traverse_pages_block(m.num, sizeof(xen_pfn_t),
-   557					    &pagelist, mmap_batch_fn, &state));
-   558	
-   559		mmap_write_unlock(mm);
-   560	
-   561		if (state.global_error) {
-   562			/* Write back errors in second pass. */
-   563			state.user_gfn = (xen_pfn_t *)m.arr;
-   564			state.user_err = m.err;
-   565			ret = traverse_pages_block(m.num, sizeof(xen_pfn_t),
-   566						   &pagelist, mmap_return_errors, &state);
-   567		} else
-   568			ret = 0;
-   569	
-   570		/* If we have not had any EFAULT-like global errors then set the global
-   571		 * error to -ENOENT if necessary. */
-   572		if ((ret == 0) && (state.global_error == -ENOENT))
-   573			ret = -ENOENT;
-   574	
-   575	out:
-   576		free_page_list(&pagelist);
-   577		return ret;
-   578	
-   579	out_unlock:
-   580		mmap_write_unlock(mm);
-   581		goto out;
-   582	}
-   583	
-
+diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+index c56dcf15bf29d..364b1ba412427 100644
+--- a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
++++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+@@ -46,33 +46,69 @@ Description:
+ 		that is supported by the hardware.  The possible values
+ 		are "MAPv4" or "MAPv5".
+ 
++What:		.../XXXXXXX.ipa/endpoint_id/
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/ directory contains
++		attributes that define IDs associated with IPA
++		endpoints.  The "rx" or "tx" in an endpoint name is
++		from the perspective of the AP.  An endpoint ID is a
++		small unsigned integer.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_rx file contains
++		the ID of the AP endpoint on which packets originating
++		from the embedded modem are received.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_tx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_tx file contains
++		the ID of the AP endpoint on which packets destined
++		for the embedded modem are sent.
++
++What:		.../XXXXXXX.ipa/endpoint_id/monitor_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/monitor_rx file contains
++		the ID of the AP endpoint on which IPA "monitor" data is
++		received.  The monitor endpoint supplies replicas of
++		packets that enter the IPA hardware for processing.
++		Each replicated packet is preceded by a fixed-size "ODL"
++		header (see .../XXXXXXX.ipa/feature/monitor, above).
++		Large packets are truncated, to reduce the bandwidth
++		required to provide the monitor function.
++
+ What:		.../XXXXXXX.ipa/modem/
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/modem/ directory contains a set of
+-		attributes describing properties of the modem execution
+-		environment reachable by the IPA hardware.
++		The .../XXXXXXX.ipa/modem/ directory contains attributes
++		describing properties of the modem embedded in the SoC.
+ 
+ What:		.../XXXXXXX.ipa/modem/rx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/rx_endpoint_id file contains
+-		the AP endpoint ID that receives packets originating from
+-		the modem execution environment.  The "rx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		producer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/rx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_rx.
+ 
+ What:		.../XXXXXXX.ipa/modem/tx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/tx_endpoint_id file contains
+-		the AP endpoint ID used to transmit packets destined for
+-		the modem execution environment.  The "tx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		consumer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/tx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_tx.
+diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
+index 3757ce3de2c59..b989259b02047 100644
+--- a/drivers/net/ipa/ipa_main.c
++++ b/drivers/net/ipa/ipa_main.c
+@@ -851,6 +851,7 @@ static void ipa_shutdown(struct platform_device *pdev)
+ static const struct attribute_group *ipa_attribute_groups[] = {
+ 	&ipa_attribute_group,
+ 	&ipa_feature_attribute_group,
++	&ipa_endpoint_id_attribute_group,
+ 	&ipa_modem_attribute_group,
+ 	NULL,
+ };
+diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
+index ff61dbdd70d8c..c0c8641cdd14a 100644
+--- a/drivers/net/ipa/ipa_sysfs.c
++++ b/drivers/net/ipa/ipa_sysfs.c
+@@ -96,38 +96,71 @@ const struct attribute_group ipa_feature_attribute_group = {
+ 	.attrs		= ipa_feature_attrs,
+ };
+ 
+-static ssize_t
+-ipa_endpoint_id_show(struct ipa *ipa, char *buf, enum ipa_endpoint_name name)
++static umode_t ipa_endpoint_id_is_visible(struct kobject *kobj,
++					  struct attribute *attr, int n)
+ {
+-	u32 endpoint_id = ipa->name_map[name]->endpoint_id;
++	struct ipa *ipa = dev_get_drvdata(kobj_to_dev(kobj));
++	struct device_attribute *dev_attr;
++	struct dev_ext_attribute *ea;
++	bool visible;
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", endpoint_id);
++	/* An endpoint id attribute is only visible if it's defined */
++	dev_attr = container_of(attr, struct device_attribute, attr);
++	ea = container_of(dev_attr, struct dev_ext_attribute, attr);
++
++	visible = !!ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
++
++	return visible ? attr->mode : 0;
+ }
+ 
+-static ssize_t rx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
++static ssize_t endpoint_id_attr_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
+ {
+ 	struct ipa *ipa = dev_get_drvdata(dev);
++	struct ipa_endpoint *endpoint;
++	struct dev_ext_attribute *ea;
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_RX);
++	ea = container_of(attr, struct dev_ext_attribute, attr);
++	endpoint = ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
++
++	return sysfs_emit(buf, "%u\n", endpoint->endpoint_id);
+ }
+ 
+-static DEVICE_ATTR_RO(rx_endpoint_id);
++#define ENDPOINT_ID_ATTR(_n, _endpoint_name)				    \
++	static struct dev_ext_attribute dev_attr_endpoint_id_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static ssize_t tx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
+-{
+-	struct ipa *ipa = dev_get_drvdata(dev);
++ENDPOINT_ID_ATTR(modem_rx, IPA_ENDPOINT_AP_MODEM_RX);
++ENDPOINT_ID_ATTR(modem_tx, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_TX);
+-}
++static struct attribute *ipa_endpoint_id_attrs[] = {
++	&dev_attr_endpoint_id_modem_rx.attr.attr,
++	&dev_attr_endpoint_id_modem_tx.attr.attr,
++	NULL
++};
++
++const struct attribute_group ipa_endpoint_id_attribute_group = {
++	.name		= "endpoint_id",
++	.is_visible	= ipa_endpoint_id_is_visible,
++	.attrs		= ipa_endpoint_id_attrs,
++};
++
++/* Reuse endpoint ID attributes for the legacy modem endpoint IDs */
++#define MODEM_ATTR(_n, _endpoint_name)					    \
++	static struct dev_ext_attribute dev_attr_modem_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static DEVICE_ATTR_RO(tx_endpoint_id);
++MODEM_ATTR(rx_endpoint_id, IPA_ENDPOINT_AP_MODEM_RX);
++MODEM_ATTR(tx_endpoint_id, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+ static struct attribute *ipa_modem_attrs[] = {
+-	&dev_attr_rx_endpoint_id.attr,
+-	&dev_attr_tx_endpoint_id.attr,
+-	NULL
++	&dev_attr_modem_rx_endpoint_id.attr.attr,
++	&dev_attr_modem_tx_endpoint_id.attr.attr,
++	NULL,
+ };
+ 
+ const struct attribute_group ipa_modem_attribute_group = {
+diff --git a/drivers/net/ipa/ipa_sysfs.h b/drivers/net/ipa/ipa_sysfs.h
+index b34e5650bf8cd..4a3ffd1e4e3fb 100644
+--- a/drivers/net/ipa/ipa_sysfs.h
++++ b/drivers/net/ipa/ipa_sysfs.h
+@@ -10,6 +10,7 @@ struct attribute_group;
+ 
+ extern const struct attribute_group ipa_attribute_group;
+ extern const struct attribute_group ipa_feature_attribute_group;
++extern const struct attribute_group ipa_endpoint_id_attribute_group;
+ extern const struct attribute_group ipa_modem_attribute_group;
+ 
+ #endif /* _IPA_SYSFS_H_ */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
