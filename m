@@ -1,41 +1,35 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74090185B
+	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 12:17:56 +0000 (UTC)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 46F06201A9;
+	Tue, 19 Jul 2022 12:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1658233069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=13gPMWrRlmdyk8ojlK1rRPdrqyG9NrHs9vtFvS8xT00=;
+	b=mS3OSjlIJCXp1y0uvJD1Dn1BnM8y14fg6LY7hJR2JDXMrCJUorwwOO0QXNqD33sWpwuGMs
+	GMT2kWsRi1PfqWSFYzDaBaBV16pSC3WOIqOfhvCq+byDM16TWcDRuYYcQwbz0thIsDpttb
+	zOkx5I7P4lUmesjf9R6Oaro3i/OvAL8=
+Received: from suse.cz (unknown [10.100.201.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC1C185B
-	for <llvm@lists.linux.dev>; Tue, 19 Jul 2022 12:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658232021; x=1689768021;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=QXwEIE0A+MbIoYbUYEOKlP1d8u685C+b83/0tMtBArY=;
-  b=edQHpy96Y4oM2wjNxD9nraLVdYrtxiCax4fFBn30GCZCDdOZSYnDn6U1
-   BPIE+RGY10fZIxbIa/uhy8lbWQLyYUfHFG+eQXOcItUr7nLhqU2X6daLA
-   qlHISj7SOy+CyIayVNYDuQpZKf/Hmh16Qm/RVnJMDn9k4o3nEOaTKQivX
-   9Drk5YUVj19NC0P+fneipuGqAdpWRnVh47Ao52cW1S8hELaDefKuPLZfb
-   yEg0K8VWMg1SQ4VyEyFvMlPFqG2eau7S+F0huo2wU1c06woZDhuwUqdi7
-   RnKoYp6A95ukcdhqexqJIeRny5xk3mfmtoDY4AJY+oVJtJeUtEv+bRkyO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="286485530"
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="286485530"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 05:00:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="924746584"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 05:00:11 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oDlta-0005co-LG;
-	Tue, 19 Jul 2022 12:00:10 +0000
-Date: Tue, 19 Jul 2022 20:00:08 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 6911/11568] vmlinux.o: warning: objtool:
- enter_from_user_mode+0xcd: call to preempt_count_add() leaves .noinstr.text
- section
-Message-ID: <202207191954.CZ56ehMv-lkp@intel.com>
+	by relay2.suse.de (Postfix) with ESMTPS id D3EA72C141;
+	Tue, 19 Jul 2022 12:17:48 +0000 (UTC)
+Date: Tue, 19 Jul 2022 14:17:47 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: ndesaulniers@google.com, andriy.shevchenko@linux.intel.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	nathan@kernel.org, rostedt@goodmis.org, senozhatsky@chromium.org,
+	trix@redhat.com
+Subject: Re: [PATCH v4] lib/test_printf.c: fix clang -Wformat warnings
+Message-ID: <Ytag6youpnmli3E1@alley>
+References: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
+ <20220718230626.1029318-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,50 +38,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220718230626.1029318-1-justinstitt@google.com>
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+On Mon 2022-07-18 16:06:26, Justin Stitt wrote:
+> see warnings:
+> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> test("0|1|1|128|255",
+> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
+> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
+> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:159:41: error: format specifies type 'unsigned
+> short'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+> 
+> There's an ongoing movement to eventually enable the -Wformat flag for
+> clang. Previous patches have targeted incorrect usage of
+> format specifiers. In this case, however, the "incorrect" format
+> specifiers are intrinsically part of the test cases. Hence, fixing them
+> would be misaligned with their intended purpose. My proposed fix is to
+> simply disable the warnings so that one day a clean build of the kernel
+> with clang (and -Wformat enabled) would be possible. It would also keep
+> us in the green for alot of the CI bots.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   036ad6daa8f0fd357af7f50f9da58539eaa6f68c
-commit: 171476775d32a40bfebf83250136c19b2e842672 [6911/11568] context_tracking: Convert state to atomic_t
-config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220719/202207191954.CZ56ehMv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 171476775d32a40bfebf83250136c19b2e842672
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Looks good to me:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x26: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: enter_from_user_mode+0xcd: call to preempt_count_add() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x266: call to preempt_count_add() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0xd0: call to preempt_count_add() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0xcd: call to preempt_count_add() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: balance_leaf+0x33ac: stack state mismatch: cfa1=4+232 cfa2=4+224
-   vmlinux.o: warning: objtool: balance_internal+0x133c: stack state mismatch: cfa1=4+256 cfa2=4+264
-   vmlinux.o: warning: objtool: .text.exynos_iommu_iova_to_phys: unexpected end of section
-   vmlinux.o: warning: objtool: .text.exynos_iommu_map: unexpected end of section
-   vmlinux.o: warning: objtool: .text.exynos_iommu_unmap: unexpected end of section
-   vmlinux.o: warning: objtool: .text.exynos_iommu_domain_free: unexpected end of section
-   vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3c: relocation to !ENDBR: twofish_enc_blk+0xaf
-
-
-objdump-func vmlinux.o enter_from_user_mode+0xcd: call to preempt_count_add:
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards,
+Petr
