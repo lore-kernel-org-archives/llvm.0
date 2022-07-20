@@ -1,112 +1,129 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484ED7B
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 00:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658277222; x=1689813222;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BTDvz51y7XQjvBmWKxsS4dYwYvBBvN5avdwI2oCYmH0=;
-  b=LPJkiYEr0v46Xicmh/a1kKyAb5bL88isNVpYt6nov479RjoYJM1g/9j6
-   2ljw5QuHlq66j/FC/v3gsN27xuyeCa2XOGUq0A8W4hLneATsZ8SsROSr6
-   /triIaujtoIomZ9zksMr0GFX4MJWGmtoafiXwCXnPKskowiEGxd+TAVlL
-   q19rCNRBs61WHqu2Bz9Mb3XljMAcZA82JcFkYeYwTEppFnRyYYBWJlL68
-   V4OpPwdaRyCCSXLcR7xXjtIlpfO+cpQrBCIGtCyNS1/yfbqFfVR+LTv2M
-   8q+1Fw6HPp8Khu661N1Bw1w47j+bXDjIUMuKMy8ywlWuwSJE/GpWTsF/p
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372943085"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="372943085"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:33:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="665658825"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Jul 2022 17:33:40 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oDxel-0006Gm-DC;
-	Wed, 20 Jul 2022 00:33:39 +0000
-Date: Wed, 20 Jul 2022 08:32:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-	Andi Kleen <ak@linux.intel.com>
-Subject: [intel-tdx:guest-attest 5/8] arch/x86/coco/tdx/attest.c:246:6:
- warning: no previous prototype for function 'terminate_quote_request'
-Message-ID: <202207200845.YVJavepg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEFF7B
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 01:10:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADF1C341CA;
+	Wed, 20 Jul 2022 01:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658279456;
+	bh=U/20YFqLlMrRrkc22gSkRRPl4lFXe6nf5l7fumi5Vww=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=QfYT3JLYBQnrFZ4SKIaMUHE7Qg7r/BWGpmOE3a+5QmP43YxW/7HjC9LUNlZONvo0q
+	 soqrIkVhmIkp3JMKBkU4i1YZeVkjor6yWzVHOsCxgg1odDJ3e6PFOK13AiDfVjXY4H
+	 wmOwXShWuh4aDv/efodnHQUKnBlDnuM3vK2L/GnhWNAT15X5h5gcaKMPUuCIdGx1I5
+	 ffwGjZG1b+EnwMuOEOmdDqQltupEihjp9Vy5u3ENm2bpixAS2PmR/CYYa+eXtWWCMn
+	 4emss/gfTmmfYqHoQuNlJxghIQwN5xInxHHuSPO8SSvf6pJWVlD6MRlMIl27Rss5WV
+	 vcU+8cuJJ6epQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Borislav Petkov <bp@suse.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	nathan@kernel.org,
+	pawan.kumar.gupta@linux.intel.com,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.18 07/54] x86/retpoline: Use -mfunction-return
+Date: Tue, 19 Jul 2022 21:09:44 -0400
+Message-Id: <20220720011031.1023305-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220720011031.1023305-1-sashal@kernel.org>
+References: <20220720011031.1023305-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel/tdx.git guest-attest
-head:   7dd2b3e1f9d655ffb17fafb777d77d860b3a42ea
-commit: 28cd09ae55b12e152d390c37224a15c43f7621e5 [5/8] x86/tdx: Add Quote generation support
-config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200845.YVJavepg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/28cd09ae55b12e152d390c37224a15c43f7621e5
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-attest
-        git checkout 28cd09ae55b12e152d390c37224a15c43f7621e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+From: Peter Zijlstra <peterz@infradead.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[ Upstream commit 0b53c374b9eff2255a386f1f1cfb9a928e52a5ae ]
 
-All warnings (new ones prefixed by >>):
+Utilize -mfunction-return=thunk-extern when available to have the
+compiler replace RET instructions with direct JMPs to the symbol
+__x86_return_thunk. This does not affect assembler (.S) sources, only C
+sources.
 
->> arch/x86/coco/tdx/attest.c:246:6: warning: no previous prototype for function 'terminate_quote_request' [-Wmissing-prototypes]
-   void terminate_quote_request(struct quote_entry *entry)
-        ^
-   arch/x86/coco/tdx/attest.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void terminate_quote_request(struct quote_entry *entry)
-   ^
-   static 
-   1 warning generated.
+-mfunction-return=thunk-extern has been available since gcc 7.3 and
+clang 15.
 
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/Makefile                    |  2 ++
+ arch/x86/include/asm/nospec-branch.h |  2 ++
+ arch/x86/lib/retpoline.S             | 13 +++++++++++++
+ 3 files changed, 17 insertions(+)
 
-vim +/terminate_quote_request +246 arch/x86/coco/tdx/attest.c
-
-   244	
-   245	/* Handles early termination of GetQuote requests */
- > 246	void terminate_quote_request(struct quote_entry *entry)
-   247	{
-   248		struct tdx_quote_hdr *quote_hdr;
-   249	
-   250		/*
-   251		 * For early termination, if the request is not yet
-   252		 * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
-   253		 * still owns the shared buffer, so mark the request
-   254		 * invalid to let quote_callback_handler() handle the
-   255		 * memory cleanup function. If the request is already
-   256		 * processed, then do the cleanup and return.
-   257		 */
-   258	
-   259		mutex_lock(&quote_lock);
-   260		quote_hdr = (struct tdx_quote_hdr *)entry->buf.vmaddr;
-   261		if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
-   262			entry->valid = false;
-   263			mutex_unlock(&quote_lock);
-   264			return;
-   265		}
-   266		_del_quote_entry(entry);
-   267		mutex_unlock(&quote_lock);
-   268	}
-   269	
-
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 63d50f65b828..ca3c0de24bc3 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -15,11 +15,13 @@ endif
+ ifdef CONFIG_CC_IS_GCC
+ RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
+ RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
++RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
+ RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
+ endif
+ ifdef CONFIG_CC_IS_CLANG
+ RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+ RETPOLINE_VDSO_CFLAGS	:= -mretpoline
++RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
+ endif
+ export RETPOLINE_CFLAGS
+ export RETPOLINE_VDSO_CFLAGS
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 5728539a3e77..829c9f827a96 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -123,6 +123,8 @@
+ typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
+ extern retpoline_thunk_t __x86_indirect_thunk_array[];
+ 
++extern void __x86_return_thunk(void);
++
+ #ifdef CONFIG_RETPOLINE
+ 
+ #define GEN(reg) \
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index 2cdd62499d54..4467c21215f4 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -67,3 +67,16 @@ SYM_CODE_END(__x86_indirect_thunk_array)
+ #define GEN(reg) EXPORT_THUNK(reg)
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
++
++/*
++ * This function name is magical and is used by -mfunction-return=thunk-extern
++ * for the compiler to generate JMPs to it.
++ */
++SYM_CODE_START(__x86_return_thunk)
++	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
++	ret
++	int3
++SYM_CODE_END(__x86_return_thunk)
++
++__EXPORT_THUNK(__x86_return_thunk)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
