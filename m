@@ -1,220 +1,121 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B27853A4
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 14:12:06 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id h132so16481771pgc.10
-        for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 07:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=QpZZx7ydIJqtbmjO1/Eh9nIb8LaVqKd2orn8z+o2Ufk=;
-        b=CwbhOuOOOhlKfWnOEDFcbxGG/y3unxh78pR9BWOO6G28nGJG/S7pLgsNtd3Sd03Ozv
-         dOoSez0EzpKUP02Gi2wcS1IHJZmP1QlzwjfrLkvTc9emd3/Z1gjlnCVKqZgdRMTQI7ss
-         n3VpKv6RU4Y9oQc54pn1UzS5hg4DF+YyvQzn+5A7xGu8Ez6jgMxO4/Ii4vRNBVr0e3an
-         bXuJz/4PWkr8x41b84R6ibJVueRvPjRWRRhZGr1RamTp6jhNTjgfNlqMD+nMvUzOvqf7
-         TvmWTpytA+5Xv+hzBlnLajFk+mdtaykH7lTUJVTzHrcmsuypvl4N2rGYQmF0sqJ7P17Z
-         LsXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=QpZZx7ydIJqtbmjO1/Eh9nIb8LaVqKd2orn8z+o2Ufk=;
-        b=Fd1NwufeGr5/5H8kf11BPQi1IykwkcZAjkCoYxyqP4tOMyKgv1m4XU7lfbtYRWXIB5
-         zEuVVJWONMwRVLtK1QvKFhwG+nYdscfVZ0YHM+1/fd5zgS1ZKZ9908uXFBuPb7vtEcCa
-         LIZDI1ZjgJkzptyb5zIny+u/k2/aiEC+GKijTZViwBnUZOuszqcF8TE14w4uUvDV2XQp
-         VaN4Z+acbzEO8Ptu86LBLneSnlbn/XVMS1J7iE95YpQpkPin2fvs3cqpvbMYGbnV7bCt
-         AU745emI3h5dterp2r7zaA1ZbLUIvXf5itxEIjuySpYfnsOkyzGzHB9zDuEsjMXhxzwF
-         lp5g==
-X-Gm-Message-State: AJIora+lYj1lNbOsmPzn1YEpMKfkJ2Z6aI7unnNVihmI89s6XLjpswWS
-	7/SSdeYJH39wOwVeZF/8NBV9GCSFqYTa7LbZfF8=
-X-Google-Smtp-Source: AGRyM1sgVU9sb8vxYy9egroaaBCUV+w8WRWbiiUy/NCb6aRTL7xy66uC3WGwqpgxhe1M4SHq6VFigQ==
-X-Received: by 2002:a63:8bc2:0:b0:41a:3c3:2ee1 with SMTP id j185-20020a638bc2000000b0041a03c32ee1mr17745555pge.142.1658326326009;
-        Wed, 20 Jul 2022 07:12:06 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1709029a0b00b0016bfea13321sm13748000plp.243.2022.07.20.07.12.05
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:12:05 -0700 (PDT)
-Message-ID: <62d80d35.1c69fb81.6c7d9.4ab3@mx.google.com>
-Date: Wed, 20 Jul 2022 07:12:05 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808CB33D5
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 16:37:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658335029; x=1689871029;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OIDH+HrZlHRBE1ZuSvOPWqWqsoLOZVIP03udR607o7E=;
+  b=b0MyFwfi3N4M6giKMHDibvLJDZhV5Z5xmZsqtSLdX3/h3hyreDvvsrAn
+   afqzUKXu3TGa6eeJmZuzS+XyzbwBs++yV0hHmcnN20B6i3fYqgqK9F+bt
+   T8YMwzQ0RbJLIq1Qd02CLDgmcTncESFUN+lPFBfccuRm6UhWzh+Q7Cz0o
+   V8Nq20D7nyoRDwwkHJVpZ1Pd5dxcBTRbj/eSvz8hwTlelJl3vGItmPfv7
+   hpiWn167GcdxjDdYFmAwU46hkSnkTbGUeHgYfGeOIMO4HsLO4JqZKNA1B
+   H1gGIV11TYfJw5wn894DnOFFBuRy9L/Jkx4PWvmMraK2KJ+oMMMh843p5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="284384217"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="284384217"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:36:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="665929373"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 09:36:54 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oECgv-0000iP-Sz;
+	Wed, 20 Jul 2022 16:36:53 +0000
+Date: Thu, 21 Jul 2022 00:36:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Can Guo <quic_cang@quicinc.com>, bvanassche@acm.org,
+	stanley.chu@mediatek.com, adrian.hunter@intel.com,
+	alim.akhtar@samsung.com, avri.altman@wdc.com, beanhuo@micron.com,
+	quic_asutoshd@quicinc.com, quic_nguyenb@quicinc.com,
+	quic_ziqichen@quicinc.com, linux-scsi@vger.kernel.org,
+	kernel-team@android.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Daejun Park <daejun7.park@samsung.com>,
+	Jinyoung Choi <j-young.choi@samsung.com>,
+	Kiwoong Kim <kwmad.kim@samsung.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+Message-ID: <202207210049.FUSfJIAA-lkp@intel.com>
+References: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220720
-Subject: next/master build: 14 builds: 2 failed, 12 passed, 2 errors,
- 10 warnings (next-20220720)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
 
-next/master build: 14 builds: 2 failed, 12 passed, 2 errors, 10 warnings (n=
-ext-20220720)
+Hi Can,
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220720/
+I love your patch! Yet something to improve:
 
-Tree: next
-Branch: master
-Git Describe: next-20220720
-Git Commit: 4ee7eaa411ee24d07fa83d97ca03fa6725c40d04
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next next-20220720]
+[cannot apply to linus/master v5.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Build Failures Detected:
+url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220719-150436
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: i386-randconfig-a005-20220718 (https://download.01.org/0day-ci/archive/20220721/202207210049.FUSfJIAA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2b7356bcd24efd2d6b69f04dd9fd010c4256cc7e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220719-150436
+        git checkout 2b7356bcd24efd2d6b69f04dd9fd010c4256cc7e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/
 
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
-IL
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
-3) FAIL
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Errors and Warnings Detected:
+All errors (new ones prefixed by >>):
 
-arm64:
+>> drivers/ufs/core/ufs-mcq.c:275:4: error: call to undeclared function 'devm_iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           devm_iounmap(hba->dev, res->base);
+                           ^
+   1 error generated.
 
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
-error, 5 warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 1 error, 5 warnings
 
-x86_64:
+vim +/devm_iounmap +275 drivers/ufs/core/ufs-mcq.c
 
-Errors summary:
+   265	
+   266	static void ufshcd_mcq_release_resource(struct ufs_hba *hba)
+   267	{
+   268		struct ufshcd_res_info_t *res;
+   269		int i;
+   270	
+   271		for (i = RES_MCQ; i < RES_MAX; i++) {
+   272			res = &hba->res[i];
+   273	
+   274			if(res->base) {
+ > 275				devm_iounmap(hba->dev, res->base);
+   276				res->base = NULL;
+   277			}
+   278	
+   279			if (res->is_alloc)
+   280				devm_kfree(hba->dev, res->resource);
+   281		}
+   282	}
+   283	
 
-    2    lib/maple_tree.c:4300:20: error: stack frame size (1104) exceeds l=
-imit (1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
-
-Warnings summary:
-
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
-
-Errors:
-    lib/maple_tree.c:4300:20: error: stack frame size (1104) exceeds limit =
-(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
-
-Errors:
-    lib/maple_tree.c:4300:20: error: stack frame size (1104) exceeds limit =
-(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
