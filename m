@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BE27B
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 01:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B2FC341CA;
-	Wed, 20 Jul 2022 01:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99167B
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 01:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E620C385A2;
+	Wed, 20 Jul 2022 01:16:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658279629;
-	bh=Egh1VQkfVR4hJgKeZ5W7DzXJ/JKfm5QXE9/VNfb2h8g=;
+	s=k20201202; t=1658279775;
+	bh=3q1KGC79xM4M51k9jnVzklERtP8wwcR0fIXjBe2Pv7A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OXqDN+8Ml6sK3TicEaLcu23QfIgsaBen0PZqbba2+SMWJXgT+KjcoueWrd1h2c9Q8
-	 ezWyyhEthufd9rdhjsFXlhReHPYF43tqTGccnBRG1vYJporUjbpIoVci18iICq+dze
-	 81+OD0FpfiX/NiR2HxAtEngylRByIoylZmqROrCTZAj/temzXo+eSeqHChcXE3qmt+
-	 B1pH+I1v3nUyyEgZj39G4aDA9AyTz0aKG+Bwj1szD+6Y6UI22wxDyuEAWjKldm+FM5
-	 HKHIPHQQ4A2dB4j57Ijln2xOobsSYfHbItcL7AfjkGTSzjkW8x1wyw6o9C22aEE9Or
-	 X/f6Z1jW2l0bg==
+	b=MvgEivpyEA12jXHfc+sCevBla2f58XppaanSgS4Luhj01yl05KTyXWgMB0O0Pdd3l
+	 WdT6FPlFtID7sPgH6fIvE+eXp3uOnQ47O95zViUodiiFSvGc2t463dwlUXP4sSZ6NC
+	 tTP8OdM+vNKl/mIuBcVJhg4qcI2y/+F/YvEdNcOveEayZ8c36X/gUQiBRShnKiH3gM
+	 ehzqBWSYMCpCrqjL+fmw2nYD0L4U7n5hUSSGT1Fm+Wo5PEgiVUwU5UIP3Cmhur94qc
+	 zvpz6z9fhckhz4hRvkq3THlb52j85fqHYS+UKoG0XN5NdKCLyHvUlgNaLIEfHYeHCA
+	 m6nd3nweQx6Cg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -23,17 +23,17 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	keescook@chromium.org,
 	akpm@linux-foundation.org,
-	jpoimboe@kernel.org,
 	elver@google.com,
+	jpoimboe@kernel.org,
+	keescook@chromium.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.18 54/54] ubsan: disable UBSAN_DIV_ZERO for clang
-Date: Tue, 19 Jul 2022 21:10:31 -0400
-Message-Id: <20220720011031.1023305-54-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 42/42] ubsan: disable UBSAN_DIV_ZERO for clang
+Date: Tue, 19 Jul 2022 21:13:50 -0400
+Message-Id: <20220720011350.1024134-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220720011031.1023305-1-sashal@kernel.org>
-References: <20220720011031.1023305-1-sashal@kernel.org>
+In-Reply-To: <20220720011350.1024134-1-sashal@kernel.org>
+References: <20220720011350.1024134-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index f3c57ed51838..1846e5e70f0b 100644
+index 236c5cefc4cc..641ac2d0477c 100644
 --- a/lib/Kconfig.ubsan
 +++ b/lib/Kconfig.ubsan
-@@ -84,6 +84,9 @@ config UBSAN_SHIFT
+@@ -96,6 +96,9 @@ config UBSAN_SHIFT
  config UBSAN_DIV_ZERO
  	bool "Perform checking for integer divide-by-zero"
  	depends on $(cc-option,-fsanitize=integer-divide-by-zero)
