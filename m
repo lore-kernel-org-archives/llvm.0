@@ -1,127 +1,97 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350FE7B
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 19:01:33 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id l11so33677837ybu.13
-        for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 12:01:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964CA746F
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 20:08:05 +0000 (UTC)
+Received: by mail-qv1-f41.google.com with SMTP id j11so614916qvt.10
+        for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 13:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=58fU8wz/MRnYVvG9hVkJSefKiSbVO5jpOlOekUHdxyg=;
-        b=h7nZiQLWtuuGLQegQZonr3M3nE9fcED2laPjzMO5ZELylj09nTCLfzfRjGYHCOt7dx
-         qbn2/HRiFKBqFhcoTNaM0C1B6wpD13nMZuP0sFbi5cVYDnHI0igdex6RCFQVCa7hj0B8
-         02M4oGZuTCcdXUM2UbXHSmUvRjoByDJCUxUUNEVncCQDNEZCMIOul7fCctFS1LOhUGqf
-         ShGgbAgEll+kQCf5R4Dpqlma0/aJsmheI8bWXiqJvQsjcmiM8wFdmxxq9dQe6na8Ahyc
-         un2XyyIksiw+B/VU8MtYatjEoN8ksuRUpRkx1QFzJPHV972Sipa+urv96R6qOYN+rR+T
-         6uxg==
+         :cc;
+        bh=bBt2aXduXrk3yTFTMljU9bjqy/gjhF70VjHkOj8ezJQ=;
+        b=fpOe6RRt86snubDzij/nij4d7nEXqB7gZ5vUfuXDSb4mEXI7wFsTEUnHWkadGGT+SV
+         qS+CfCoE5Ak9EtNzmTrS+G1bH3Ag74/yRC8BQjNdDixQOlm9cufa8URUF5fsbgKUUeKo
+         WDJw+qHQONYANM93QWG1sw9uf+4Rdn1X+Kjg0VMn+KupawJfnkDA0o8lSk+xWs5+PzUm
+         JwcBAeybMS+er8/b3SvFrgoCVIBIw0mlK80q/LlmAd0ULWTRwDSOkKNN0tqZZdGiGt68
+         Ord3doXJBGbROeZfkwFVjDZhAwsM/enKr7kzThzTHfLsghQ96ifMMzWPIuSxxRMq/kFa
+         DHYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=58fU8wz/MRnYVvG9hVkJSefKiSbVO5jpOlOekUHdxyg=;
-        b=gbze5Iic5plmFA0sG6TFr5OaahnSOvh8cQ3gmKBdlx5K0d02m+mA57Y7KNIEexg5k/
-         ozVz6iNZ0GzCYNtu5F5qSR7KgJlvVrysONxRyDyaiXIWjH/qgvjZc555SOyeCpyit3w3
-         85lCoThu35bSTQPE8K0a2MlOYCmwdZn5id4M9lZiqcsC3fYQ+PqbmoZD/g+BAK/Ow1mm
-         BEvtlxhQvQzeAFic5ij2iTpS9NUybPmfWEMv0fV2B4/u2qhsD7FoHaXOZ2ItS/6skzVj
-         ctdJwmTi4IRh6RzGEjrU39eMS6fE4mV5WheI/3UzQt3GwtejDQlWdV8zIXM4cdUgjZez
-         X4xw==
-X-Gm-Message-State: AJIora+DOWscF22HScyjz5+auk52i4o7ZGH5z/b5pVt50MR/3teVQqPc
-	A83QOIzbgnksTWtIQnZBBuvUa1STGv8vvjnSq9k=
-X-Google-Smtp-Source: AGRyM1uVeEJi1uHSegCvL2QEAIGtzs0Hkr4/MDo5cVfn1Gk7cXF30CvO11Cp6R8nVAll9uv7Of/9yA1x+AmmeaeMnag=
-X-Received: by 2002:a05:6902:38a:b0:670:aa12:8908 with SMTP id
- f10-20020a056902038a00b00670aa128908mr2463061ybs.446.1658343691973; Wed, 20
- Jul 2022 12:01:31 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=bBt2aXduXrk3yTFTMljU9bjqy/gjhF70VjHkOj8ezJQ=;
+        b=Zyp0ykBMFvQZPVH9D+LOtMYCyXGDyIt/ZUPXBrR9LfUC9uZ9qLyzjRirDEBpzDv3hx
+         uM6X7ndhpKOF1bL+Cd5hkz0dU48mGIMR894wyLPfyM0C167xBzt4nu+lqOPUQa01c+3y
+         mWOeBAzW7BQ5eUJex+hkpx6rInQeoUU/zvxKYlPkOWnqJY/Z9/S5BLZChBUnh5u2fQou
+         OkvFpP0ksj9UOV5VunGw1RbYs0eEgklBiUTBfB4+Vpy/QZg5ZCLgw+mGov2pN+Yt95ch
+         2H5nLM6Y5Ha6jtoV6pvxIVMjL9mZvmG4zbBOWZEIlUscfY15mG+Qigx+s4J5Z5L4sJ5P
+         rqmA==
+X-Gm-Message-State: AJIora98PyPGUV9STwYy+VZUlpP3GKt/Fb0x9thIOcg+3sbtGwBrf9w9
+	eECJalG9lXujYwFzEVhqi1TX3KI1MZMuANeCwdPQpQ==
+X-Google-Smtp-Source: AGRyM1vyf1j8XqVCErCglA0UEjOSGZrnbuaSbmW1xdUCg7HF23L5loulxZKywUcdPsvfRbBWorrP7qBY6KYLgxte8fk=
+X-Received: by 2002:a05:6214:761:b0:470:8558:d1c3 with SMTP id
+ f1-20020a056214076100b004708558d1c3mr31210261qvz.107.1658347684520; Wed, 20
+ Jul 2022 13:08:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-In-Reply-To: <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-From: Jason Gerecke <killertofu@gmail.com>
-Date: Wed, 20 Jul 2022 12:01:35 -0700
-Message-ID: <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, Ping Cheng <pinglinux@gmail.com>, 
-	"Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>, Jason Gerecke <jason.gerecke@wacom.com>, 
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-iio@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com> <20220719170555.2576993-2-roberto.sassu@huawei.com>
+In-Reply-To: <20220719170555.2576993-2-roberto.sassu@huawei.com>
+From: Quentin Monnet <quentin@isovalent.com>
+Date: Wed, 20 Jul 2022 21:07:53 +0100
+Message-ID: <CACdoK4LMvLyV2z5quN1BE4VrxGJK-f1YfuHWoQrJaH_eKyHZog@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpftool: Complete libbfd feature detection
+To: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, terrelln@fb.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, bpf <bpf@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev, 
+	open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> w=
-rote:
+On Tue, 19 Jul 2022 at 18:06, Roberto Sassu <roberto.sassu@huawei.com> wrote:
 >
+> Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+> sets the linking flags depending on which flavor of the libbfd feature was
+> detected.
 >
-> Hi Jason,
+> However, the flavors except libbfd cannot be detected, as they are not in
+> the feature list.
 >
-> I love your patch! Yet something to improve:
+> Complete the list of features to detect by adding libbfd-liberty and
+> libbfd-liberty-z.
 >
-> [auto build test ERROR on wsa/i2c/for-next]
-> [also build test ERROR on linus/master v5.19-rc7 next-20220718]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Fixes: 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/bpf/bpftool/Makefile | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> url:
-> https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8-t=
-ype-in-i2c-transfer-calls/20220718-233658
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
-> i2c/for-next
-> config: hexagon-randconfig-r026-20220718
-> (https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz-l=
-kp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
-> d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-> reproduce (this is a W=3D1 build):
->          wget
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          #
-> https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce831=
-96869235a2ea7
->          git remote add linux-review https://github.com/intel-lab-lkp/lin=
-ux
->          git fetch --no-tags linux-review
-> Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
->          git checkout 9732240c23a365c0590f05ce83196869235a2ea7
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1
-> O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/iio/adc/
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 6b5b3a99f79d..4b09a5c3b9f1 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -93,8 +93,10 @@ INSTALL ?= install
+>  RM ?= rm -f
 >
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/iio/adc/max1363.c:1645:12: error: incompatible function pointe=
-r types assigning to 'int (*)(const struct i2c_client *, const char *, int)=
-' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (const =
-struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatible-=
-function-pointer-types]
->                     st->send =3D i2c_master_send;
->                              ^ ~~~~~~~~~~~~~~~
-> >> drivers/iio/adc/max1363.c:1646:12: error: incompatible function pointe=
-r types assigning to 'int (*)(const struct i2c_client *, char *, int)' from=
- 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c_c=
-lient *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer-t=
-ypes]
->                     st->recv =3D i2c_master_recv;
->                              ^ ~~~~~~~~~~~~~~~
->     2 errors generated.
+>  FEATURE_USER = .bpftool
+> -FEATURE_TESTS = libbfd disassembler-four-args libcap clang-bpf-co-re
+> -FEATURE_DISPLAY = libbfd disassembler-four-args libcap clang-bpf-co-re
+> +FEATURE_TESTS = libbfd libbfd-liberty libbfd-liberty-z \
+> +               disassembler-four-args libcap clang-bpf-co-re
+> +FEATURE_DISPLAY = libbfd libbfd-liberty libbfd-liberty-z \
+> +                 disassembler-four-args libcap clang-bpf-co-re
 
-Wolfram and Jonathan,
-
-Writing a patch to fix the new warnings generated by my I2C patch is
-simple enough, but I'd like some help coordinating getting both
-patches landed. Should I wait for the I2C patch to land in "for-next"
-before sending the IIO fix, or would it be preferred to send the IIO
-fix right now so that both patches can be reviewed simultaneously?
+Do you know if there is a way to fold the different feature-libbfd-*
+features into a single one for FEATURE_DISPLAY? Or should the various
+features be all moved under feature-libbfd with multiple attempts,
+like you did for disassembler-four-args in patch 1? My concern is that
+users may think some features could be missing when they compile and
+see that detection fails for some items.
