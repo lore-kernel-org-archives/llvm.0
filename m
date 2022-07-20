@@ -1,313 +1,112 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125BE1857
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 00:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484ED7B
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 00:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658276467; x=1689812467;
-  h=subject:references:in-reply-to:to:cc:from:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=LEVy3y/l9N32ajGDwgM3nSqiQq7GvMSKd1B6jfpuooE=;
-  b=Y0OQlynd5LzsGzKdsniiE0VUpEizonyjOLATrnZtPsdZK3kM3KAXWX0q
-   bgtEIXJQBFIZcjApFRL7+LNPbEu6qynRyYpv4db9JyoBaGoQMoHF0PBiT
-   Av7OB4mRNUr8u3w/8F7xuIanNj4fE+i207qOsIl8ukfuMFk7TGj4kV1jO
-   JYBAKVAAbQQnPyEWUjcfO1pBDG+YBn/y4/I6R+6i5cn0ixsE1S4DPFq0J
-   mUgoioM4jtfe2z8C9Hh+uYzsJWA/xIDn1lQEQdvLw/L7sPZW/BRQDpTUv
-   T85VJ1uOXISbE3ionsLky5QQc+KXfGKNX6YtZxwdYPPHSr9STkEFX/lZH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="267040022"
+  t=1658277222; x=1689813222;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BTDvz51y7XQjvBmWKxsS4dYwYvBBvN5avdwI2oCYmH0=;
+  b=LPJkiYEr0v46Xicmh/a1kKyAb5bL88isNVpYt6nov479RjoYJM1g/9j6
+   2ljw5QuHlq66j/FC/v3gsN27xuyeCa2XOGUq0A8W4hLneATsZ8SsROSr6
+   /triIaujtoIomZ9zksMr0GFX4MJWGmtoafiXwCXnPKskowiEGxd+TAVlL
+   q19rCNRBs61WHqu2Bz9Mb3XljMAcZA82JcFkYeYwTEppFnRyYYBWJlL68
+   V4OpPwdaRyCCSXLcR7xXjtIlpfO+cpQrBCIGtCyNS1/yfbqFfVR+LTv2M
+   8q+1Fw6HPp8Khu661N1Bw1w47j+bXDjIUMuKMy8ywlWuwSJE/GpWTsF/p
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372943085"
 X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="267040022"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:20:58 -0700
+   d="scan'208";a="372943085"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:33:41 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="625419955"
-Received: from fzhai-mobl.ccr.corp.intel.com (HELO [10.255.30.167]) ([10.255.30.167])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:20:55 -0700
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-References: <202207190634.ToyhlXSz-lkp@intel.com>
-In-Reply-To: <202207190634.ToyhlXSz-lkp@intel.com>
-To: Jason Gerecke <killertofu@gmail.com>, linux-i2c@vger.kernel.org,
- Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: Ping Cheng <pinglinux@gmail.com>,
- "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
- Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org
-From: kernel test robot <rong.a.chen@intel.com>
-X-Forwarded-Message-Id: <202207190634.ToyhlXSz-lkp@intel.com>
-Message-ID: <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-Date: Wed, 20 Jul 2022 08:20:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+   d="scan'208";a="665658825"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jul 2022 17:33:40 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDxel-0006Gm-DC;
+	Wed, 20 Jul 2022 00:33:39 +0000
+Date: Wed, 20 Jul 2022 08:32:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+	Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-attest 5/8] arch/x86/coco/tdx/attest.c:246:6:
+ warning: no previous prototype for function 'terminate_quote_request'
+Message-ID: <202207200845.YVJavepg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-
-Hi Jason,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v5.19-rc7 next-20220718]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url: 
-https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git 
-i2c/for-next
-config: hexagon-randconfig-r026-20220718 
-(https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 
-d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+tree:   https://github.com/intel/tdx.git guest-attest
+head:   7dd2b3e1f9d655ffb17fafb777d77d860b3a42ea
+commit: 28cd09ae55b12e152d390c37224a15c43f7621e5 [5/8] x86/tdx: Add Quote generation support
+config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200845.YVJavepg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
 reproduce (this is a W=1 build):
-         wget 
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
--O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # 
-https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce83196869235a2ea7
-         git remote add linux-review https://github.com/intel-lab-lkp/linux
-         git fetch --no-tags linux-review 
-Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
-         git checkout 9732240c23a365c0590f05ce83196869235a2ea7
-         # save the config file
-         mkdir build_dir && cp config build_dir/.config
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
-O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/adc/
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/28cd09ae55b12e152d390c37224a15c43f7621e5
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-attest
+        git checkout 28cd09ae55b12e152d390c37224a15c43f7621e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/max1363.c:1645:12: error: incompatible function pointer types assigning to 'int (*)(const struct i2c_client *, const char *, int)' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (const struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatible-function-pointer-types]
-                    st->send = i2c_master_send;
-                             ^ ~~~~~~~~~~~~~~~
->> drivers/iio/adc/max1363.c:1646:12: error: incompatible function pointer types assigning to 'int (*)(const struct i2c_client *, char *, int)' from 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c_client *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer-types]
-                    st->recv = i2c_master_recv;
-                             ^ ~~~~~~~~~~~~~~~
-    2 errors generated.
+>> arch/x86/coco/tdx/attest.c:246:6: warning: no previous prototype for function 'terminate_quote_request' [-Wmissing-prototypes]
+   void terminate_quote_request(struct quote_entry *entry)
+        ^
+   arch/x86/coco/tdx/attest.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void terminate_quote_request(struct quote_entry *entry)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +1645 drivers/iio/adc/max1363.c
+vim +/terminate_quote_request +246 arch/x86/coco/tdx/attest.c
 
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1584  fc52692c49969e drivers/iio/adc/max1363.c 
-Greg Kroah-Hartman 2012-12-21  1585  static int max1363_probe(struct 
-i2c_client *client,
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1586  			 const struct i2c_device_id *id)
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1587  {
-cd4361c7e2e077 drivers/staging/iio/adc/max1363_core.c Michael Hennerich 
-  2012-02-22  1588  	int ret;
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1589  	struct max1363_state *st;
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1590  	struct iio_dev *indio_dev;
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1591  	struct regulator *vref;
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1592  6917e1d9af2c50 drivers/iio/adc/max1363.c 
-   Sachin Kamat       2013-07-22  1593  	indio_dev = 
-devm_iio_device_alloc(&client->dev,
-6917e1d9af2c50 drivers/iio/adc/max1363.c              Sachin Kamat 
-  2013-07-22  1594  					  sizeof(struct max1363_state));
-6917e1d9af2c50 drivers/iio/adc/max1363.c              Sachin Kamat 
-  2013-07-22  1595  	if (!indio_dev)
-6917e1d9af2c50 drivers/iio/adc/max1363.c              Sachin Kamat 
-  2013-07-22  1596  		return -ENOMEM;
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1597  a1ff6d25261315 drivers/iio/adc/max1363.c 
-   Alexandru Ardelean 2021-09-26  1598  	ret = 
-devm_iio_map_array_register(&client->dev, indio_dev,
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1599  					  client->dev.platform_data);
-0b27d678c7fbeb drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2012-04-10  1600  	if (ret < 0)
-6917e1d9af2c50 drivers/iio/adc/max1363.c              Sachin Kamat 
-  2013-07-22  1601  		return ret;
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1602  3dba81ba803ca0 
-drivers/staging/iio/adc/max1363_core.c Jonathan Cameron   2011-04-15 
-1603  	st = iio_priv(indio_dev);
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1604  bf09cddb2cd402 drivers/iio/adc/max1363.c 
-   Rohit Sarkar       2020-03-15  1605  	mutex_init(&st->lock);
-7c3e8675f37503 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1606  	st->reg = devm_regulator_get(&client->dev, "vcc");
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1607  	if (IS_ERR(st->reg))
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1608  		return PTR_ERR(st->reg);
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1609  b77b8f8c20c83c drivers/staging/iio/adc/max1363.c 
-   Jonathan Cameron   2012-10-06  1610  	ret = regulator_enable(st->reg);
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1611  	if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1612  		return ret;
-b77b8f8c20c83c drivers/staging/iio/adc/max1363.c      Jonathan Cameron 
-  2012-10-06  1613  a1ff6d25261315 drivers/iio/adc/max1363.c 
-   Alexandru Ardelean 2021-09-26  1614  	ret = 
-devm_add_action_or_reset(&client->dev, max1363_reg_disable, st->reg);
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1615  	if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1616  		return ret;
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1617  f84ff467c0ce5b drivers/iio/adc/max1363.c 
-   Jonathan Cameron   2020-06-28  1618  	st->chip_info = 
-device_get_match_data(&client->dev);
-794ac821cc44e4 drivers/iio/adc/max1363.c              Julia Lawall 
-  2018-05-21  1619  	if (!st->chip_info)
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1620  		st->chip_info = 
-&max1363_chip_info_tbl[id->driver_data];
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1621  	st->client = client;
-3dba81ba803ca0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-04-15  1622  a405b00e4470b1 drivers/iio/adc/max1363.c 
-   Guenter Roeck      2013-02-03  1623  	st->vref_uv = 
-st->chip_info->int_vref_mv * 1000;
-55b40d37311807 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2014-01-27  1624  	vref = devm_regulator_get_optional(&client->dev, 
-"vref");
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1625  	if (!IS_ERR(vref)) {
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1626  		int vref_uv;
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1627  a405b00e4470b1 drivers/iio/adc/max1363.c 
-   Guenter Roeck      2013-02-03  1628  		ret = regulator_enable(vref);
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1629  		if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1630  			return ret;
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1631  a1ff6d25261315 drivers/iio/adc/max1363.c 
-Alexandru Ardelean 2021-09-26  1632  		ret = 
-devm_add_action_or_reset(&client->dev, max1363_reg_disable, vref);
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1633  		if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1634  			return ret;
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1635  a405b00e4470b1 drivers/iio/adc/max1363.c 
-Guenter Roeck      2013-02-03  1636  		st->vref = vref;
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1637  		vref_uv = regulator_get_voltage(vref);
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1638  		if (vref_uv <= 0)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1639  			return -EINVAL;
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1640  a405b00e4470b1 drivers/iio/adc/max1363.c 
-Guenter Roeck      2013-02-03  1641  		st->vref_uv = vref_uv;
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1642  	}
-a405b00e4470b1 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1643  61bdda69222c09 drivers/iio/adc/max1363.c 
-   Vivien Didelot     2013-10-20  1644  	if 
-(i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20 @1645  		st->send = i2c_master_send;
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20 @1646  		st->recv = i2c_master_recv;
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1647  	} else if (i2c_check_functionality(client->adapter, 
-I2C_FUNC_SMBUS_BYTE)
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1648  			&& st->chip_info->bits == 8) {
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1649  		st->send = max1363_smbus_send;
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1650  		st->recv = max1363_smbus_recv;
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1651  	} else {
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1652  		return -EOPNOTSUPP;
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1653  	}
-61bdda69222c09 drivers/iio/adc/max1363.c              Vivien Didelot 
-  2013-10-20  1654  cd4361c7e2e077 
-drivers/staging/iio/adc/max1363_core.c Michael Hennerich  2012-02-22 
-1655  	ret = max1363_alloc_scan_masks(indio_dev);
-cd4361c7e2e077 drivers/staging/iio/adc/max1363_core.c Michael Hennerich 
-  2012-02-22  1656  	if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1657  		return ret;
-82020b0ef15de0 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2010-05-04  1658  845bd12ac78f92 
-drivers/staging/iio/adc/max1363_core.c Jonathan Cameron   2011-05-18 
-1659  	indio_dev->name = id->name;
-8e7d967244a8ee drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-08-30  1660  	indio_dev->channels = st->chip_info->channels;
-8e7d967244a8ee drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-08-30  1661  	indio_dev->num_channels = st->chip_info->num_channels;
-6fe8135fccd66a drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1662  	indio_dev->info = st->chip_info->info;
-6fe8135fccd66a drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1663  	indio_dev->modes = INDIO_DIRECT_MODE;
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1664  	ret = max1363_initial_setup(st);
-58f0a255454dc2 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1665  	if (ret < 0)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1666  		return ret;
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1667  a1ff6d25261315 drivers/iio/adc/max1363.c 
-   Alexandru Ardelean 2021-09-26  1668  	ret = 
-devm_iio_triggered_buffer_setup(&client->dev, indio_dev, NULL,
-7a1aeba7ed0d5a drivers/iio/adc/max1363.c              Lars-Peter Clausen 
-2013-09-16  1669  					      &max1363_trigger_handler, NULL);
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1670  	if (ret)
-a1ff6d25261315 drivers/iio/adc/max1363.c              Alexandru Ardelean 
-2021-09-26  1671  		return ret;
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1672  6fe8135fccd66a 
-drivers/staging/iio/adc/max1363_core.c Jonathan Cameron   2011-05-18 
-1673  	if (client->irq) {
-7c3e8675f37503 drivers/iio/adc/max1363.c              Guenter Roeck 
-  2013-02-03  1674  		ret = devm_request_threaded_irq(&client->dev, 
-st->client->irq,
-aaf370db7dad57 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1675  					   NULL,
-aaf370db7dad57 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1676  					   &max1363_event_handler,
-aaf370db7dad57 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1677  					   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-aaf370db7dad57 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1678  					   "max1363_event",
-aaf370db7dad57 drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1679  					   indio_dev);
-298cd976e07f1a drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2011-05-18  1680  440a5200347734 
-drivers/staging/iio/adc/max1363_core.c Jonathan Cameron   2010-06-26 
-1681  		if (ret)
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1682  			return ret;
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1683  	}
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1684  a1ff6d25261315 drivers/iio/adc/max1363.c 
-   Alexandru Ardelean 2021-09-26  1685  	return 
-devm_iio_device_register(&client->dev, indio_dev);
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1686  }
-d1325cf45077bd drivers/staging/iio/adc/max1363_core.c Jonathan Cameron 
-  2009-08-18  1687
+   244	
+   245	/* Handles early termination of GetQuote requests */
+ > 246	void terminate_quote_request(struct quote_entry *entry)
+   247	{
+   248		struct tdx_quote_hdr *quote_hdr;
+   249	
+   250		/*
+   251		 * For early termination, if the request is not yet
+   252		 * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
+   253		 * still owns the shared buffer, so mark the request
+   254		 * invalid to let quote_callback_handler() handle the
+   255		 * memory cleanup function. If the request is already
+   256		 * processed, then do the cleanup and return.
+   257		 */
+   258	
+   259		mutex_lock(&quote_lock);
+   260		quote_hdr = (struct tdx_quote_hdr *)entry->buf.vmaddr;
+   261		if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
+   262			entry->valid = false;
+   263			mutex_unlock(&quote_lock);
+   264			return;
+   265		}
+   266		_del_quote_entry(entry);
+   267		mutex_unlock(&quote_lock);
+   268	}
+   269	
+
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
