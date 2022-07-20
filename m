@@ -1,96 +1,315 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99167B
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 01:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E620C385A2;
-	Wed, 20 Jul 2022 01:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658279775;
-	bh=3q1KGC79xM4M51k9jnVzklERtP8wwcR0fIXjBe2Pv7A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MvgEivpyEA12jXHfc+sCevBla2f58XppaanSgS4Luhj01yl05KTyXWgMB0O0Pdd3l
-	 WdT6FPlFtID7sPgH6fIvE+eXp3uOnQ47O95zViUodiiFSvGc2t463dwlUXP4sSZ6NC
-	 tTP8OdM+vNKl/mIuBcVJhg4qcI2y/+F/YvEdNcOveEayZ8c36X/gUQiBRShnKiH3gM
-	 ehzqBWSYMCpCrqjL+fmw2nYD0L4U7n5hUSSGT1Fm+Wo5PEgiVUwU5UIP3Cmhur94qc
-	 zvpz6z9fhckhz4hRvkq3THlb52j85fqHYS+UKoG0XN5NdKCLyHvUlgNaLIEfHYeHCA
-	 m6nd3nweQx6Cg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	akpm@linux-foundation.org,
-	elver@google.com,
-	jpoimboe@kernel.org,
-	keescook@chromium.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 42/42] ubsan: disable UBSAN_DIV_ZERO for clang
-Date: Tue, 19 Jul 2022 21:13:50 -0400
-Message-Id: <20220720011350.1024134-42-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220720011350.1024134-1-sashal@kernel.org>
-References: <20220720011350.1024134-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525C11360
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 02:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658285087; x=1689821087;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cVDfvDBPD3yp1WqAbOcc7kbEOeXmpI/yis/3fjXS9qw=;
+  b=nGnplGk+DcNoH1dqQA+kdpF3NOnEMcRb9yubANwHmceIiYBxXZUj/hQ0
+   dJp3a5N/pEbAe7JROMQmxb1gicY8cX2Uryoke3/3w2bxUKMbcY0TRgEo7
+   HAuuHnfTrvs1v468PTHacFt/m27Oh1+n/pa6zaxc7Atyl0LuzWWRuYWNX
+   h2hl7Qmy4fLcknbnQ9SnXA70dcxiSICYe7nGg1RX0y92HCUAzn00U5vxs
+   iWGIOhiw843c21yXM7XWe7PVsxfFaMTvzWY/AXfULec56iQm9DCw2kSne
+   ZnvFehC4GCOpFQlzPaq0RixfFf+4v0gcmRjiK0jYHF0UFQ/7lpAbA5UQn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372963441"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="372963441"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 19:44:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="597908114"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2022 19:44:43 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1oDzhb-0006NS-5k;
+	Wed, 20 Jul 2022 02:44:43 +0000
+Date: Wed, 20 Jul 2022 10:44:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liam Beguin <lvb@xiphos.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: drivers/iio/adc/ad7949.c:80:8: warning: Excessive padding in 'struct
+ ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields
+ order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock,
+ buf8b, resolution, consider reordering th...
+Message-ID: <202207201005.LeQJCGFE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
+commit: 37930650604982930c4f516447f0fb3a61cb647f iio: adc: ad7949: add vref selection support
+date:   10 months ago
+config: arm-randconfig-c002-20220717 (https://download.01.org/0day-ci/archive/20220720/202207201005.LeQJCGFE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=37930650604982930c4f516447f0fb3a61cb647f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 37930650604982930c4f516447f0fb3a61cb647f
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
-[ Upstream commit e5d523f1ae8f2cef01f8e071aeee432654166708 ]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Building with UBSAN_DIV_ZERO with clang produces numerous fallthrough
-warnings from objtool.
 
-In the case of uncheck division, UBSAN_DIV_ZERO may introduce new
-control flow to check for division by zero.
+clang-analyzer warnings: (new ones prefixed by >>)
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   drivers/iio/frequency/adf4350.c:33:8: warning: Excessive padding in 'struct adf4350_state' (48 padding bytes, where 16 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, regs, regs_hw, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adf4350_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   drivers/iio/frequency/adf4350.c:33:8: note: Excessive padding in 'struct adf4350_state' (48 padding bytes, where 16 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, regs, regs_hw, lock, consider reordering the fields or adding explicit padding members
+   struct adf4350_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   drivers/iio/frequency/adf4371.c:157:8: warning: Excessive padding in 'struct adf4371_state' (38 padding bytes, where 6 is optimal). Optimal fields order: buf, spi, regmap, clkin, chip_info, clkin_freq, fpfd, integer, fract1, fract2, mod2, rf_div_sel, ref_div_factor, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adf4371_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   drivers/iio/frequency/adf4371.c:157:8: note: Excessive padding in 'struct adf4371_state' (38 padding bytes, where 6 is optimal). Optimal fields order: buf, spi, regmap, clkin, chip_info, clkin_freq, fpfd, integer, fract1, fract2, mod2, rf_div_sel, ref_div_factor, lock, consider reordering the fields or adding explicit padding members
+   struct adf4371_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   drivers/net/usb/rndis_host.c:152:4: warning: Value stored to 'msg_len' is never read [clang-analyzer-deadcode.DeadStores]
+                           msg_len = le32_to_cpu(buf->msg_len);
+                           ^
+   drivers/net/usb/rndis_host.c:152:4: note: Value stored to 'msg_len' is never read
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   drivers/net/usb/usbnet.c:800:2: warning: Value stored to 'temp' is never read [clang-analyzer-deadcode.DeadStores]
+           temp = unlink_urbs(dev, &dev->txq) +
+           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/usbnet.c:800:2: note: Value stored to 'temp' is never read
+           temp = unlink_urbs(dev, &dev->txq) +
+           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/usbnet.c:1386:13: warning: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry') [clang-analyzer-core.NullDereference]
+           entry->urb = urb;
+           ~~~~~      ^
+   drivers/net/usb/usbnet.c:1364:6: note: Assuming 'skb' is null
+           if (skb)
+               ^~~
+   drivers/net/usb/usbnet.c:1364:2: note: Taking false branch
+           if (skb)
+           ^
+   drivers/net/usb/usbnet.c:1369:6: note: Assuming field 'tx_fixup' is null
+           if (info->tx_fixup) {
+               ^~~~~~~~~~~~~~
+   drivers/net/usb/usbnet.c:1369:2: note: Taking false branch
+           if (info->tx_fixup) {
+           ^
+   drivers/net/usb/usbnet.c:1380:8: note: Assuming 'urb' is non-null
+           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
+                 ^~~
+   drivers/net/usb/usbnet.c:1380:2: note: Taking false branch
+           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
+           ^
+   drivers/net/usb/usbnet.c:1385:2: note: Null pointer value stored to 'entry'
+           entry = (struct skb_data *) skb->cb;
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/usbnet.c:1386:13: note: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry')
+           entry->urb = urb;
+           ~~~~~      ^
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+>> drivers/iio/adc/ad7949.c:80:8: warning: Excessive padding in 'struct ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock, buf8b, resolution, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad7949_adc_chip {
+   ~~~~~~~^~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7949.c:80:8: note: Excessive padding in 'struct ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock, buf8b, resolution, consider reordering the fields or adding explicit padding members
+   struct ad7949_adc_chip {
+   ~~~~~~~^~~~~~~~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   drivers/iio/adc/at91-sama5d2_adc.c:1290:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
+                   status = at91_adc_readl(st, AT91_SAMA5D2_XPOSR);
+                   ^
+   drivers/iio/adc/at91-sama5d2_adc.c:1290:3: note: Value stored to 'status' is never read
+   drivers/iio/adc/at91-sama5d2_adc.c:1291:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
+                   status = at91_adc_readl(st, AT91_SAMA5D2_YPOSR);
+                   ^
+   drivers/iio/adc/at91-sama5d2_adc.c:1291:3: note: Value stored to 'status' is never read
+   drivers/iio/adc/at91-sama5d2_adc.c:1292:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
+                   status = at91_adc_readl(st, AT91_SAMA5D2_PRESSR);
+                   ^
+   drivers/iio/adc/at91-sama5d2_adc.c:1292:3: note: Value stored to 'status' is never read
+   drivers/iio/adc/at91-sama5d2_adc.c:1329:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+                   ret = at91_adc_read_position(st, chan->channel,
+                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:1329:3: note: Value stored to 'ret' is never read
+                   ret = at91_adc_read_position(st, chan->channel,
+                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:1343:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+                   ret = at91_adc_read_pressure(st, chan->channel,
+                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:1343:3: note: Value stored to 'ret' is never read
+                   ret = at91_adc_read_pressure(st, chan->channel,
+                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:727:4: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+                           ret = inv_mpu6050_sensor_show(st, st->reg->gyro_offset,
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:727:4: note: Value stored to 'ret' is never read
+                           ret = inv_mpu6050_sensor_show(st, st->reg->gyro_offset,
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:733:4: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+                           ret = inv_mpu6050_sensor_show(st, st->reg->accl_offset,
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:733:4: note: Value stored to 'ret' is never read
+                           ret = inv_mpu6050_sensor_show(st, st->reg->accl_offset,
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   net/ipv4/udp.c:741:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+           err = 0;
+           ^     ~
+   net/ipv4/udp.c:741:2: note: Value stored to 'err' is never read
+           err = 0;
+           ^     ~
+   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   drivers/iio/potentiometer/mcp41010.c:58:8: warning: Excessive padding in 'struct mcp41010_data' (46 padding bytes, where 14 is optimal). Optimal fields order: buf, spi, cfg, value, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct mcp41010_data {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   drivers/iio/potentiometer/mcp41010.c:58:8: note: Excessive padding in 'struct mcp41010_data' (46 padding bytes, where 14 is optimal). Optimal fields order: buf, spi, cfg, value, lock, consider reordering the fields or adding explicit padding members
+   struct mcp41010_data {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
 
-Because the result of the division is undefined, LLVM may optimize the
-control flow such that after the call to __ubsan_handle_divrem_overflow
-doesn't matter.  If panic_on_warn was set,
-__ubsan_handle_divrem_overflow would panic.
+vim +80 drivers/iio/adc/ad7949.c
 
-The problem is is that panic_on_warn is run time configurable.  If it's
-disabled, then we cannot guarantee that we will be able to recover
-safely.  Disable this config for clang until we can come up with a
-solution in LLVM.
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  66  
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  67  /**
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  68   * struct ad7949_adc_chip - AD ADC chip
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  69   * @lock: protects write sequences
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  70   * @vref: regulator generating Vref
+c5e6c649b4c4ed Lee Jones              2020-07-16  71   * @indio_dev: reference to iio structure
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  72   * @spi: reference to spi structure
+37930650604982 Liam Beguin            2021-08-15  73   * @refsel: reference selection
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  74   * @resolution: resolution of the chip
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  75   * @cfg: copy of the configuration register
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  76   * @current_channel: current channel in use
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  77   * @buffer: buffer to send / receive data to / from device
+0b2a740b424e68 Liam Beguin            2021-08-15  78   * @buf8b: be16 buffer to exchange data with the device in 8-bit transfers
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  79   */
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22 @80  struct ad7949_adc_chip {
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  81  	struct mutex lock;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  82  	struct regulator *vref;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  83  	struct iio_dev *indio_dev;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  84  	struct spi_device *spi;
+37930650604982 Liam Beguin            2021-08-15  85  	u32 refsel;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  86  	u8 resolution;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  87  	u16 cfg;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  88  	unsigned int current_channel;
+348eb0b2c4f0f9 Andrea Merello         2019-09-12  89  	u16 buffer ____cacheline_aligned;
+0b2a740b424e68 Liam Beguin            2021-08-15  90  	__be16 buf8b;
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  91  };
+7f40e0614317f2 Charles-Antoine Couret 2018-10-22  92  
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1657
-Link: https://github.com/llvm/llvm-project/issues/56289
-Link: https://lore.kernel.org/lkml/CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com/
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- lib/Kconfig.ubsan | 3 +++
- 1 file changed, 3 insertions(+)
+:::::: The code at line 80 was first introduced by commit
+:::::: 7f40e0614317f20ac07b5aa5cec2eb43737e28d6 iio:adc:ad7949: Add AD7949 ADC driver family
 
-diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index 236c5cefc4cc..641ac2d0477c 100644
---- a/lib/Kconfig.ubsan
-+++ b/lib/Kconfig.ubsan
-@@ -96,6 +96,9 @@ config UBSAN_SHIFT
- config UBSAN_DIV_ZERO
- 	bool "Perform checking for integer divide-by-zero"
- 	depends on $(cc-option,-fsanitize=integer-divide-by-zero)
-+	# https://github.com/ClangBuiltLinux/linux/issues/1657
-+	# https://github.com/llvm/llvm-project/issues/56289
-+	depends on !CC_IS_CLANG
- 	help
- 	  This option enables -fsanitize=integer-divide-by-zero which checks
- 	  for integer division by zero. This is effectively redundant with the
+:::::: TO: Charles-Antoine Couret <charles-antoine.couret@essensium.com>
+:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
