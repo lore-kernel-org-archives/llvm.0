@@ -1,45 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525C11360
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 02:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394063C00
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 06:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658285087; x=1689821087;
+  t=1658299576; x=1689835576;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cVDfvDBPD3yp1WqAbOcc7kbEOeXmpI/yis/3fjXS9qw=;
-  b=nGnplGk+DcNoH1dqQA+kdpF3NOnEMcRb9yubANwHmceIiYBxXZUj/hQ0
-   dJp3a5N/pEbAe7JROMQmxb1gicY8cX2Uryoke3/3w2bxUKMbcY0TRgEo7
-   HAuuHnfTrvs1v468PTHacFt/m27Oh1+n/pa6zaxc7Atyl0LuzWWRuYWNX
-   h2hl7Qmy4fLcknbnQ9SnXA70dcxiSICYe7nGg1RX0y92HCUAzn00U5vxs
-   iWGIOhiw843c21yXM7XWe7PVsxfFaMTvzWY/AXfULec56iQm9DCw2kSne
-   ZnvFehC4GCOpFQlzPaq0RixfFf+4v0gcmRjiK0jYHF0UFQ/7lpAbA5UQn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372963441"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="372963441"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 19:44:45 -0700
+  bh=eVrm6H+aOOB40iO3p23GmHegIyeHrd4VfgRNMDktSqM=;
+  b=LWaMmzoXgxNQlGJo7U2MDorA70ydXw1pbEyzsAFAhO0D9oURlsaNO2Jf
+   +bHe2ubxlRaSg39BC4Mj1oxQiCRTHjVfRwdatrfWVFrWBFDyMoxPhoPq3
+   YibZjiEHxDHDAoDP/378PpWp0oWNt0otcb0pA0Y4fTuRWhLETwdyGP5uA
+   zSM0h4sfvlbWLqmKikEiNYd7ryeXEfmHwFBf4dQmq6Y+3rNhQOo50ScnN
+   UzduqXxP3Xn9GqjVUSnkMJ8rB/eYQlBqjstsaBtZ9OyFJoARMQBFwsRrj
+   PU2BUG8J5SuiPA44ogoHgmMndH/untDysqRP8vCciPxQomGVZ9w8cCJ3U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="312386494"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="312386494"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 23:46:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="597908114"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2022 19:44:43 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="925106437"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 23:46:14 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oDzhb-0006NS-5k;
-	Wed, 20 Jul 2022 02:44:43 +0000
-Date: Wed, 20 Jul 2022 10:44:24 +0800
+	id 1oE3TJ-000091-Dr;
+	Wed, 20 Jul 2022 06:46:13 +0000
+Date: Wed, 20 Jul 2022 14:45:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Liam Beguin <lvb@xiphos.com>
+To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/adc/ad7949.c:80:8: warning: Excessive padding in 'struct
- ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields
- order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock,
- buf8b, resolution, consider reordering th...
-Message-ID: <202207201005.LeQJCGFE-lkp@intel.com>
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 19/23]
+ arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for
+ function 'kvm_unit_test_debug_init'
+Message-ID: <202207201438.I3jn9Bvh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,266 +48,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: 37930650604982930c4f516447f0fb3a61cb647f iio: adc: ad7949: add vref selection support
-date:   10 months ago
-config: arm-randconfig-c002-20220717 (https://download.01.org/0day-ci/archive/20220720/202207201005.LeQJCGFE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   c170462888e1dab8e3e80c1c6e3708dd473ad1ed
+commit: bb5af2b7a84ef8343b56bd2c1c90461635b32bd2 [19/23] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207201438.I3jn9Bvh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=37930650604982930c4f516447f0fb3a61cb647f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 37930650604982930c4f516447f0fb3a61cb647f
+        # https://github.com/intel/tdx/commit/bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-clang-analyzer warnings: (new ones prefixed by >>)
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+>> arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for function 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
+   int __init kvm_unit_test_debug_init(void)
+              ^
+   arch/x86/coco/tdx/tdx-tests.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init kvm_unit_test_debug_init(void)
+   ^
+   static 
    1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/iio/frequency/adf4350.c:33:8: warning: Excessive padding in 'struct adf4350_state' (48 padding bytes, where 16 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, regs, regs_hw, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adf4350_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/frequency/adf4350.c:33:8: note: Excessive padding in 'struct adf4350_state' (48 padding bytes, where 16 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, regs, regs_hw, lock, consider reordering the fields or adding explicit padding members
-   struct adf4350_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/frequency/adf4371.c:157:8: warning: Excessive padding in 'struct adf4371_state' (38 padding bytes, where 6 is optimal). Optimal fields order: buf, spi, regmap, clkin, chip_info, clkin_freq, fpfd, integer, fract1, fract2, mod2, rf_div_sel, ref_div_factor, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adf4371_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/frequency/adf4371.c:157:8: note: Excessive padding in 'struct adf4371_state' (38 padding bytes, where 6 is optimal). Optimal fields order: buf, spi, regmap, clkin, chip_info, clkin_freq, fpfd, integer, fract1, fract2, mod2, rf_div_sel, ref_div_factor, lock, consider reordering the fields or adding explicit padding members
-   struct adf4371_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/net/usb/rndis_host.c:152:4: warning: Value stored to 'msg_len' is never read [clang-analyzer-deadcode.DeadStores]
-                           msg_len = le32_to_cpu(buf->msg_len);
-                           ^
-   drivers/net/usb/rndis_host.c:152:4: note: Value stored to 'msg_len' is never read
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   drivers/net/usb/usbnet.c:800:2: warning: Value stored to 'temp' is never read [clang-analyzer-deadcode.DeadStores]
-           temp = unlink_urbs(dev, &dev->txq) +
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:800:2: note: Value stored to 'temp' is never read
-           temp = unlink_urbs(dev, &dev->txq) +
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1386:13: warning: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry') [clang-analyzer-core.NullDereference]
-           entry->urb = urb;
-           ~~~~~      ^
-   drivers/net/usb/usbnet.c:1364:6: note: Assuming 'skb' is null
-           if (skb)
-               ^~~
-   drivers/net/usb/usbnet.c:1364:2: note: Taking false branch
-           if (skb)
-           ^
-   drivers/net/usb/usbnet.c:1369:6: note: Assuming field 'tx_fixup' is null
-           if (info->tx_fixup) {
-               ^~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1369:2: note: Taking false branch
-           if (info->tx_fixup) {
-           ^
-   drivers/net/usb/usbnet.c:1380:8: note: Assuming 'urb' is non-null
-           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
-                 ^~~
-   drivers/net/usb/usbnet.c:1380:2: note: Taking false branch
-           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
-           ^
-   drivers/net/usb/usbnet.c:1385:2: note: Null pointer value stored to 'entry'
-           entry = (struct skb_data *) skb->cb;
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1386:13: note: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry')
-           entry->urb = urb;
-           ~~~~~      ^
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
->> drivers/iio/adc/ad7949.c:80:8: warning: Excessive padding in 'struct ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock, buf8b, resolution, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad7949_adc_chip {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7949.c:80:8: note: Excessive padding in 'struct ad7949_adc_chip' (37 padding bytes, where 5 is optimal). Optimal fields order: buffer, cfg, vref, indio_dev, spi, refsel, current_channel, lock, buf8b, resolution, consider reordering the fields or adding explicit padding members
-   struct ad7949_adc_chip {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   6 warnings generated.
-   drivers/iio/adc/at91-sama5d2_adc.c:1290:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
-                   status = at91_adc_readl(st, AT91_SAMA5D2_XPOSR);
-                   ^
-   drivers/iio/adc/at91-sama5d2_adc.c:1290:3: note: Value stored to 'status' is never read
-   drivers/iio/adc/at91-sama5d2_adc.c:1291:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
-                   status = at91_adc_readl(st, AT91_SAMA5D2_YPOSR);
-                   ^
-   drivers/iio/adc/at91-sama5d2_adc.c:1291:3: note: Value stored to 'status' is never read
-   drivers/iio/adc/at91-sama5d2_adc.c:1292:3: warning: Value stored to 'status' is never read [clang-analyzer-deadcode.DeadStores]
-                   status = at91_adc_readl(st, AT91_SAMA5D2_PRESSR);
-                   ^
-   drivers/iio/adc/at91-sama5d2_adc.c:1292:3: note: Value stored to 'status' is never read
-   drivers/iio/adc/at91-sama5d2_adc.c:1329:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                   ret = at91_adc_read_position(st, chan->channel,
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:1329:3: note: Value stored to 'ret' is never read
-                   ret = at91_adc_read_position(st, chan->channel,
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:1343:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                   ret = at91_adc_read_pressure(st, chan->channel,
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:1343:3: note: Value stored to 'ret' is never read
-                   ret = at91_adc_read_pressure(st, chan->channel,
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (2 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:727:4: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                           ret = inv_mpu6050_sensor_show(st, st->reg->gyro_offset,
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:727:4: note: Value stored to 'ret' is never read
-                           ret = inv_mpu6050_sensor_show(st, st->reg->gyro_offset,
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:733:4: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                           ret = inv_mpu6050_sensor_show(st, st->reg->accl_offset,
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/imu/inv_mpu6050/inv_mpu_core.c:733:4: note: Value stored to 'ret' is never read
-                           ret = inv_mpu6050_sensor_show(st, st->reg->accl_offset,
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   net/ipv4/udp.c:741:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/ipv4/udp.c:741:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/potentiometer/mcp41010.c:58:8: warning: Excessive padding in 'struct mcp41010_data' (46 padding bytes, where 14 is optimal). Optimal fields order: buf, spi, cfg, value, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct mcp41010_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/potentiometer/mcp41010.c:58:8: note: Excessive padding in 'struct mcp41010_data' (46 padding bytes, where 14 is optimal). Optimal fields order: buf, spi, cfg, value, lock, consider reordering the fields or adding explicit padding members
-   struct mcp41010_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
 
-vim +80 drivers/iio/adc/ad7949.c
 
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  66  
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  67  /**
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  68   * struct ad7949_adc_chip - AD ADC chip
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  69   * @lock: protects write sequences
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  70   * @vref: regulator generating Vref
-c5e6c649b4c4ed Lee Jones              2020-07-16  71   * @indio_dev: reference to iio structure
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  72   * @spi: reference to spi structure
-37930650604982 Liam Beguin            2021-08-15  73   * @refsel: reference selection
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  74   * @resolution: resolution of the chip
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  75   * @cfg: copy of the configuration register
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  76   * @current_channel: current channel in use
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  77   * @buffer: buffer to send / receive data to / from device
-0b2a740b424e68 Liam Beguin            2021-08-15  78   * @buf8b: be16 buffer to exchange data with the device in 8-bit transfers
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  79   */
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22 @80  struct ad7949_adc_chip {
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  81  	struct mutex lock;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  82  	struct regulator *vref;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  83  	struct iio_dev *indio_dev;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  84  	struct spi_device *spi;
-37930650604982 Liam Beguin            2021-08-15  85  	u32 refsel;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  86  	u8 resolution;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  87  	u16 cfg;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  88  	unsigned int current_channel;
-348eb0b2c4f0f9 Andrea Merello         2019-09-12  89  	u16 buffer ____cacheline_aligned;
-0b2a740b424e68 Liam Beguin            2021-08-15  90  	__be16 buf8b;
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  91  };
-7f40e0614317f2 Charles-Antoine Couret 2018-10-22  92  
+vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
 
-:::::: The code at line 80 was first introduced by commit
-:::::: 7f40e0614317f20ac07b5aa5cec2eb43737e28d6 iio:adc:ad7949: Add AD7949 ADC driver family
-
-:::::: TO: Charles-Antoine Couret <charles-antoine.couret@essensium.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
 
 -- 
 0-DAY CI Kernel Test Service
