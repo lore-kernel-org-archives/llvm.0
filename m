@@ -1,44 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394063C00
-	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 06:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EEB23C3
+	for <llvm@lists.linux.dev>; Wed, 20 Jul 2022 07:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658299576; x=1689835576;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eVrm6H+aOOB40iO3p23GmHegIyeHrd4VfgRNMDktSqM=;
-  b=LWaMmzoXgxNQlGJo7U2MDorA70ydXw1pbEyzsAFAhO0D9oURlsaNO2Jf
-   +bHe2ubxlRaSg39BC4Mj1oxQiCRTHjVfRwdatrfWVFrWBFDyMoxPhoPq3
-   YibZjiEHxDHDAoDP/378PpWp0oWNt0otcb0pA0Y4fTuRWhLETwdyGP5uA
-   zSM0h4sfvlbWLqmKikEiNYd7ryeXEfmHwFBf4dQmq6Y+3rNhQOo50ScnN
-   UzduqXxP3Xn9GqjVUSnkMJ8rB/eYQlBqjstsaBtZ9OyFJoARMQBFwsRrj
-   PU2BUG8J5SuiPA44ogoHgmMndH/untDysqRP8vCciPxQomGVZ9w8cCJ3U
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="312386494"
+  t=1658301437; x=1689837437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1nodBnQLzYMmQ5JiDReJknJ4ovopOxI3fMdDU4D3o+A=;
+  b=jQmV/tZ/gIGi4OUh/80xIpjgpvYh4HQXV7I0yINR5kHfUeez/YVpfvEJ
+   iqkvrJSQNE8OSBX4swUjcLz8T75pCS+BWOTiqJMTB38+VBnttEGGN+hbE
+   2mFDHTQSb0IlpF7uFT1sk/2MVWHMLqga8m3QoPoGXsqsYkSp3OnGtjzLy
+   mJ5vXmCfpdC6EVtmFmiLEw83SliHa6nbm2qYChrk3Yp9Vb8nHX8hco9Gr
+   N98X4FcedBsDjUiCjH4868Djr5w4UCUGGfi0enwr/ogJt/ganvWlyhty7
+   8oze9U/iYzJ6fXN9M03uzL17gD96cUBPYHrg/Prk4hC3ERyZ1Zfodm6/l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269728269"
 X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="312386494"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 23:46:15 -0700
+   d="scan'208";a="269728269"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 00:17:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="925106437"
+   d="scan'208";a="665753842"
 Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 23:46:14 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 00:17:15 -0700
 Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1oE3TJ-000091-Dr;
-	Wed, 20 Jul 2022 06:46:13 +0000
-Date: Wed, 20 Jul 2022 14:45:46 +0800
+	id 1oE3xK-0000Aj-9t;
+	Wed, 20 Jul 2022 07:17:14 +0000
+Date: Wed, 20 Jul 2022 15:16:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To: Xu Jia <xujia39@huawei.com>, sdf@google.com, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 19/23]
- arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for
- function 'kvm_unit_test_debug_init'
-Message-ID: <202207201438.I3jn9Bvh-lkp@intel.com>
+	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, xujia39@huawei.com
+Subject: Re: [PATCH bpf-next] bpf: fix bpf compile error caused by
+ CONFIG_CGROUP_BPF
+Message-ID: <202207201518.zmoBBoB6-lkp@intel.com>
+References: <1658221305-35718-1-git-send-email-xujia39@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,42 +49,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1658221305-35718-1-git-send-email-xujia39@huawei.com>
 
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   c170462888e1dab8e3e80c1c6e3708dd473ad1ed
-commit: bb5af2b7a84ef8343b56bd2c1c90461635b32bd2 [19/23] x86/tdx-tests: Add a port of a kvm unit test
-config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207201438.I3jn9Bvh-lkp@intel.com/config)
+Hi Xu,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Jia/bpf-fix-bpf-compile-error-caused-by-CONFIG_CGROUP_BPF/20220719-165058
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: i386-randconfig-a005-20220718 (https://download.01.org/0day-ci/archive/20220720/202207201518.zmoBBoB6-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
+        # https://github.com/intel-lab-lkp/linux/commit/cfd7055cd0be7cfd0de5c24a84c29afe0611cb6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xu-Jia/bpf-fix-bpf-compile-error-caused-by-CONFIG_CGROUP_BPF/20220719-165058
+        git checkout cfd7055cd0be7cfd0de5c24a84c29afe0611cb6c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/core/ kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for function 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
-   int __init kvm_unit_test_debug_init(void)
-              ^
-   arch/x86/coco/tdx/tdx-tests.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init kvm_unit_test_debug_init(void)
-   ^
-   static 
+>> kernel/bpf/trampoline.c:526:34: warning: unused variable 'bpf_shim_tramp_link_lops' [-Wunused-const-variable]
+   static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
+                                    ^
    1 warning generated.
 
 
-vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
+vim +/bpf_shim_tramp_link_lops +526 kernel/bpf/trampoline.c
 
-    65	
-  > 66	int __init kvm_unit_test_debug_init(void)
+69fd337a975c7e Stanislav Fomichev 2022-06-28  525  
+69fd337a975c7e Stanislav Fomichev 2022-06-28 @526  static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
+69fd337a975c7e Stanislav Fomichev 2022-06-28  527  	.release = bpf_shim_tramp_link_release,
+69fd337a975c7e Stanislav Fomichev 2022-06-28  528  	.dealloc = bpf_shim_tramp_link_dealloc,
+69fd337a975c7e Stanislav Fomichev 2022-06-28  529  };
+69fd337a975c7e Stanislav Fomichev 2022-06-28  530  
 
 -- 
 0-DAY CI Kernel Test Service
