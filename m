@@ -1,99 +1,98 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2656C6AB3
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 21:42:24 +0000 (UTC)
-Received: by mail-lj1-f174.google.com with SMTP id r14so3379243ljp.2
-        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:42:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CF86AB3
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 21:57:12 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id o135-20020a25738d000000b0066f58989d75so2241906ybc.13
+        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=wRbqgW25Md992aZiFQNaLfMNuOXLSkIclPSTYF16KUU=;
-        b=kI3RWq6qU86SvhXJ+n4czGx32GlH4FX7gQPfGn/pCa+Z8RzNmoP1Z6qIBESW7Kr+25
-         SpDwme5otXH0/kXwSzId0A2MvBEcMqpD9IN/UpRs+w+9oUS5SEBn9eNYe2plOp0AynYL
-         OjltcH/TTdeL+Bi5wTm9B4D5uh0aZTVp1qKCIbMpti2LAAcCtpT8e/xe9P0SyX/lCH+b
-         X2FSuTg87lwBMuJ4h27KrXBbdJt4kZdMJOHFAQXnY233rTuuM+lNnHTusvpbUicBjdNZ
-         eJzxUSUosPMukXDVLdoGfH2HmvzJkiIwGKydvsOh5RJY5jNHpA4ry1QVsHjXwwMoyOG/
-         uZPg==
+        bh=pKP7CCgXGMWOvGx6gHAf0azIJTDG1kATrVwV3TY6IK4=;
+        b=Y2J6Bchnkv+CY7fj9Wg7lOCkYCImN7mDM66RaF7ySai5rB75A1FN0zw5F+fIPv9T2i
+         XriQ1hOaSoMJ/M/vF/GNwl+97zU2D3oixxzVdYiRYPqltnj+aUBZK2+ugRbgZUQk6/e4
+         eBT189goXoh2IdOFfAPXLycvPQfowcO0oQzEfAN1Rou+7VleNXBJcpxoHanw1EwjSrJz
+         txBT+QMJhq62eoEPVOsz8/fI6snPBcyCZMoc4wJ86mLh6hu3KNt2frJgGAOUnOh3CKjA
+         4w6Tg2NEIauF3wdnBVhZCGmDjYvwbGwa20MzgYOIIpludL8Xgob6vOCiezbmg0OL4axi
+         dyng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wRbqgW25Md992aZiFQNaLfMNuOXLSkIclPSTYF16KUU=;
-        b=VC5ZJ4gzNLIgVCI6hhrU0cpkfBv7aSjb8gz4Cmwc29LUeHpjoWaMivE9B9rRNAgh5R
-         Nxput76J2OdqpvTpyM2H+ky9Ses7z40bGKMqezSdHdOznQDUOlgHWV+QZTgRoCPXtrtM
-         fa5Sq+qA2blLDSzzh4GyxXCaJ5K3Yv8NDJwsWN4UZJvmGQTIqh3NfrxnXpxkr87R4XDD
-         B6yoeMYVRXhbfjTveovNezEx+hH5M+cnwB3rdhCnfn+r05Y5TEAbK7zY2CxnFVAeicYF
-         roO1j3ar/HR3vomGOwKwCSl/OCcBnCM8H58Vbe5OY6Q8rsvUkrF5ft6TwjRkGk1a+Gp3
-         3W5w==
-X-Gm-Message-State: AJIora+HBdMESkILEu7bH1VgeRBDL1fd/JnvtAh2mZfcoEhM5ZMhhTwo
-	xe0x2ShJTbalKcr1HY+ThPt7+j0e9vRZYitc1PfmLw==
-X-Google-Smtp-Source: AGRyM1vOumvDj2RLhisOcU/m0l4DiaopArK0kFTBoJQSufKneeNaEsTSPD2PHZBdOJhBe2j7q/PVSkIkkssHHXRraU4=
-X-Received: by 2002:a2e:3109:0:b0:25a:8a0c:40e2 with SMTP id
- x9-20020a2e3109000000b0025a8a0c40e2mr120698ljx.26.1658439741750; Thu, 21 Jul
- 2022 14:42:21 -0700 (PDT)
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=pKP7CCgXGMWOvGx6gHAf0azIJTDG1kATrVwV3TY6IK4=;
+        b=SpT2ZmeOhFTlmpU533nNKZwPii0nhB8RYbW4VwP4A05Lg5QDOWaQ97weCD5xwUgNgD
+         OBrR1C/SYXAkjfCk2n6XnSut70VUfwkL837nQSE+Sbj2N7xSNeGBAceGCDddTDWmZu67
+         fnL95bnJm8qPY4+88j9GV50mDiF2Zpu9iHWMtN+DazAJDhuMdNjV8EdnMNnryqCUHJ+e
+         hdcNdu3BGSd6u45cCejrmHXRxGhc5P6vNBW+TynmIrKMVzs8qmMPf8h5zFGZm/Zitvps
+         yErWQmeo4uMqZxN6BIpnn04sl19Vm9mOeFftuz7S1XM3xfy772AYsQyqpjdKVAfzvMlC
+         wE/w==
+X-Gm-Message-State: AJIora/6vhWsUbvC6WIKGDVuygFjDX8HJbt97H20+lhlk27h+gl835FG
+	xZ0JovfSpkulIjmVIwHU07ojg1uZZ96gdEn9QQ==
+X-Google-Smtp-Source: AGRyM1ucB1iTL8zgj8W57h3Rx8oXpnUalg0cp4kTWx7rwMHAc+CSjlaYwWcNIv3Tb73PXxLNcck91OaL+08S0h4qTQ==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:21e:d672:5a6a:420e])
+ (user=justinstitt job=sendgmr) by 2002:a81:7c85:0:b0:31e:6c01:f06b with SMTP
+ id x127-20020a817c85000000b0031e6c01f06bmr530100ywc.327.1658440632141; Thu,
+ 21 Jul 2022 14:57:12 -0700 (PDT)
+Date: Thu, 21 Jul 2022 14:57:06 -0700
+In-Reply-To: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
+Message-Id: <20220721215706.4153027-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220721212012.4060328-1-justinstitt@google.com>
-In-Reply-To: <20220721212012.4060328-1-justinstitt@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 21 Jul 2022 14:42:10 -0700
-Message-ID: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: lkdtm: fix clang -Wformat warning
-To: Justin Stitt <justinstitt@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+References: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v2] drivers: lkdtm: fix clang -Wformat warning
+From: Justin Stitt <justinstitt@google.com>
+To: ndesaulniers@google.com
+Cc: arnd@arndb.de, gregkh@linuxfoundation.org, justinstitt@google.com, 
+	keescook@chromium.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	nathan@kernel.org, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 21, 2022 at 2:20 PM Justin Stitt <justinstitt@google.com> wrote:
->
-> When building with Clang we encounter the following warning
-> (ARCH=hexagon + CONFIG_FRAME_WARN=0):
-> | ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
-> | 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
-> |                 REC_STACK_SIZE, recur_count);
-> |                 ^~~~~~~~~~~~~~
->
-> Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
->
->  drivers/misc/lkdtm/bugs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-> index 009239ad1d8a..6381255aaecc 100644
-> --- a/drivers/misc/lkdtm/bugs.c
-> +++ b/drivers/misc/lkdtm/bugs.c
-> @@ -29,7 +29,7 @@ struct lkdtm_list {
->  #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
->  #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
->  #else
-> -#define REC_STACK_SIZE (THREAD_SIZE / 8)
-> +#define REC_STACK_SIZE ((unsigned long)(THREAD_SIZE / 8))
+When building with Clang we encounter the following warning
+(ARCH=hexagon + CONFIG_FRAME_WARN=0):
+| ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
+| 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+|                 REC_STACK_SIZE, recur_count);
+|                 ^~~~~~~~~~~~~~
 
-`THREAD_SIZE / 8UL` might be more concise.
+Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`
+as well as maintain symmetry with `#define REC_STACK_SIZE
+(_AC(CONFIG_FRAME_WARN, UL) / 2)`.
 
->  #endif
->  #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
->
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Reported by Nathan here:
+https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
 
+changes from v1 -> v2:
+* Use implicit division conversion with `/ nUL` instead of verbose
+`(unsigned long)` ~ Thanks Nick
 
+ drivers/misc/lkdtm/bugs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index 009239ad1d8a..48821f4c2b21 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -29,7 +29,7 @@ struct lkdtm_list {
+ #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
+ #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
+ #else
+-#define REC_STACK_SIZE (THREAD_SIZE / 8)
++#define REC_STACK_SIZE (THREAD_SIZE / 8UL)
+ #endif
+ #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
+ 
 -- 
-Thanks,
-~Nick Desaulniers
+2.37.1.359.gd136c6c3e2-goog
+
