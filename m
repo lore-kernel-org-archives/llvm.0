@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F4B3C26
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 15:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F63EC341C6;
-	Thu, 21 Jul 2022 15:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0818D4680
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 15:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9D0C3411E;
+	Thu, 21 Jul 2022 15:27:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658416229;
-	bh=npRLRf/sAWAclkJPA3+ZSmi54RNpxH5tLibZRtjDSNY=;
+	s=k20201202; t=1658417228;
+	bh=gyyq7f1WtZrYIwLvvzePgmh+epDrnTTQoVWF0WkxftI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rere9p3lBvtpZ9MeZTafEhmVfofSA3t2r8VgSgJEjOhdUrv1ijFE31fCt4OYKWPgA
-	 b8NFzdM2pVEWVPCgaIQY1oNAcTXmd4LkollZj1bkNlKmvAOsXFrqMnT3G5/D+e6CfF
-	 LZVnNzMUOEZbFRLFnN9N/xN3RaaKZ3EcIAUMXjlHnBb6p2JJjD6kRzi3/DaiDL9SwP
-	 caJcjxLJMIFzwFu6ELaumXHc+dh/u2cACYc2OzMCJQOJMVXIuI0D0YL5K7+ntUQ2WK
-	 XEWk5QF1Edn9DxdibrCNjD+50/U6ZXzDJKDExFlC7PEyNkMrdnofXJDy2HjE7sSdw+
-	 pNLqBGXbjSWlw==
-Date: Thu, 21 Jul 2022 08:10:27 -0700
+	b=r6IhG9Tmbt7l6uYKEmkZQptbROulaI1Wc2H9VuNo9M0BB7ST55kCP49u3AKt2e/XC
+	 WE/Txcx8jU1zBWlVKL+U2FVfG3OYD9VXi+V/1p5nQ/+Nuthnnh9pw6F2DfD4OrkJWp
+	 UWdHIeA6mp45w/aYjvtWLdel1Baf16p51A32pYD4a+B/NymSY7PfwswuQalC436+zW
+	 5KbPiXkFHI3QsNEg677Byxyw1zLrz5trrZ8qP+g+WRaeCcWyT15TvUUbJ4nLEasOXW
+	 ctlfAUNFdE6bENIPl/2uqJ9vpQCbwWQBL4orNsq2nT1ijOn+P20GorFVU6OTnwpooE
+	 gSA36rxQgi1/Q==
+Date: Thu, 21 Jul 2022 08:27:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Tom Rix <trix@redhat.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-Message-ID: <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
-References: <20220720232332.2720091-1-justinstitt@google.com>
- <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+	linux-can@vger.kernel.org, kernel@pengutronix.de,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
+ rxerr during bus-off
+Message-ID: <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
+References: <20220720081034.3277385-1-mkl@pengutronix.de>
+ <20220720081034.3277385-19-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,92 +34,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+In-Reply-To: <20220720081034.3277385-19-mkl@pengutronix.de>
 
-On Thu, Jul 21, 2022 at 07:27:34AM -0700, Nick Desaulniers wrote:
-> On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
-> >
-> > There's been an ongoing mission to re-enable the -Wformat warning for
-> > Clang. A previous attempt at enabling the warning showed that there were
-> > many instances of this warning throughout the codebase. The sheer amount
-> > of these warnings really polluted builds and thus -Wno-format was added
-> > to _temporarily_ toggle them off.
-> >
-> > After many patches the warning has largely been eradicated for x86,
-> > x86_64, arm, and arm64 on a variety of configs. The time to enable the
-> > warning has never been better as it seems for the first time we are
-> > ahead of them and can now solve them as they appear rather than tackling
-> > from a backlog.
-> >
-> > As to the root cause of this large backlog of warnings, Clang seems to
-> > pickup on some more nuanced cases of format warnings caused by implicit
-> > integer conversion as well as default argument promotions from
-> > printf-like functions.
-> >
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
-> >
-> > Note:
-> > For this patch to land on its feet, the plethora of supporting patches that
-> > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
-> > of them have!
-> >
-> > Here are the patches still waiting to be picked up:
-> > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
-> > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
+On Wed, Jul 20, 2022 at 10:10:23AM +0200, Marc Kleine-Budde wrote:
+> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 > 
-> Hi Masahiro, Nathan, and Tom,
-> What are your thoughts for _when_ in the release cycle this should be
-> picked up?  I worry that if we don't remove this soon, we will
-> backslide, and more -Wformat issues will crop up making removing this
-> in the future like digging in sand.  Justin has chased down many
-> instances of this warning, and I'm happy to help clean up fallout from
-> landing this.
+> During bus off, the error count is greater than 255 and can not fit in
+> a u8.
+> 
+> Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processing")
+> Link: https://lore.kernel.org/all/20220719143550.3681-2-mailhol.vincent@wanadoo.fr
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/pch_can.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
+> index fde3ac516d26..497ef77340ea 100644
+> --- a/drivers/net/can/pch_can.c
+> +++ b/drivers/net/can/pch_can.c
+> @@ -496,6 +496,9 @@ static void pch_can_error(struct net_device *ndev, u32 status)
+>  		cf->can_id |= CAN_ERR_BUSOFF;
+>  		priv->can.can_stats.bus_off++;
+>  		can_bus_off(ndev);
+> +	} else {
+> +		cf->data[6] = errc & PCH_TEC;
+> +		cf->data[7] = (errc & PCH_REC) >> 8;
+>  	}
+>  
+>  	errc = ioread32(&priv->regs->errc);
+> @@ -556,9 +559,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
+>  		break;
+>  	}
+>  
+> -	cf->data[6] = errc & PCH_TEC;
+> -	cf->data[7] = (errc & PCH_REC) >> 8;
+> -
+>  	priv->can.state = state;
+>  	netif_receive_skb(skb);
+>  }
+> -- 
+> 2.35.1
+> 
+> 
+> 
 
-Let me do a series of builds with the two patches above against
-next-20220721 to see if there are any instances of this warning across
-the less frequently tested architectures then I will review/ack this.
+Apologies if this has been reported already, I didn't see anything on
+the mailing lists.
 
-I don't think we need to worry much about backslide, as -Wformat is
-enabled with W=1, which the 0day folks already test with, so new
-instances of this warning should get reported to the authors when they
-are introduced so they can be fixed immediately. However, I would still
-like to see this applied sooner rather than later, although I would also
-like us to be completely warning clean before doing so, especially with
--Werror now being selected with all{mod,yes}config. -rc8 is this Sunday
-and final should be July 31st so I think this could be applied at some
-point between those two dates then maybe sent to Linus for a late pull
-request once all other trees have been merged but that is ultimately up
-to Masahiro.
+This commit is now in -next as commit 3a5c7e4611dd ("can: pch_can: do
+not report txerr and rxerr during bus-off"), where it causes the
+following clang warning:
+
+  ../drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized when used here [-Werror,-Wuninitialized]
+                  cf->data[6] = errc & PCH_TEC;
+                                ^~~~
+  ../drivers/net/can/pch_can.c:484:10: note: initialize the variable 'errc' to silence this warning
+          u32 errc, lec;
+                  ^
+                   = 0
+  1 error generated.
+
+errc is initialized underneath this now, should it be hoisted or is
+there another fix?
 
 Cheers,
 Nathan
-
-> >
-> >  scripts/Makefile.extrawarn | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> > index f5f0d6f09053..9bbaf7112a9b 100644
-> > --- a/scripts/Makefile.extrawarn
-> > +++ b/scripts/Makefile.extrawarn
-> > @@ -47,7 +47,6 @@ else
-> >
-> >  ifdef CONFIG_CC_IS_CLANG
-> >  KBUILD_CFLAGS += -Wno-initializer-overrides
-> > -KBUILD_CFLAGS += -Wno-format
-> >  KBUILD_CFLAGS += -Wno-sign-compare
-> >  KBUILD_CFLAGS += -Wno-format-zero-length
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
-> > --
-> > 2.37.0.170.g444d1eabd0-goog
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
