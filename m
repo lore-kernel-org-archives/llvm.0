@@ -1,118 +1,345 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBA928EA
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 10:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658398310; x=1689934310;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J4gWq4l0Kz9gsRUplQImHNFuVqK6HKqp0nF0DuJOcCw=;
-  b=Q2RwlKZE26v8z6jQiSlkBTUPx8Le3OVGqLYgOjjLq0KmGnCTtVlg0fMd
-   mYaCGhtucXzSLca8vmKWkDw5dsNgaH1tSzdJ223EElTNsflb9uHbnhl9s
-   EnPku4BpbIQEGDvOs9QRpp2J2QiHrLCmA4xd7NigOwPQjtA7BJPzmrnpb
-   HXYbD++HL3vZAAQRf+I1OTcO+PLhSaol0iOOPNgD6IZr4+kCd++a2KgCs
-   fItu/fp/tNZMVJOGUvg5GWskGcTiegnBzwqZH69vO2pSuy6h+WGFiPA6k
-   wn4HukIEgKra4oRUFkskNBKBwvYMk9AHb8ZF7Hjd+AdlVzx9GpjvjEBCQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="284564007"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="284564007"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 03:11:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="548716824"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2022 03:11:47 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oET9n-0001iQ-6F;
-	Thu, 21 Jul 2022 10:11:47 +0000
-Date: Thu, 21 Jul 2022 18:11:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tglx/devel/depthtracking 2/45]
- arch/x86/kernel/cpu/common.c:760:23: error: call to undeclared function
- 'cpu_kernelmode_gs_base'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202207211807.FC1G4J9o-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8659328EA
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 10:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658398375;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T7x0pzB+B2nIQ0XjLwJkx+2Jayz/p7B2jOFLMDc7ykY=;
+	b=Crgj4ZfdEznyd2JWrJXiyP4ewf81zOpxKM+7HA7FlhRDutl/6Pi00jyb2dV45ONoBWgcBY
+	g1YnsR4nnTYMyg8LYsF7h3ZY11TPPdx8KyCO+Sc3nam0uIroyZCl/8P2AS71VU6JZuq5G+
+	OWZoPQ747oxA+VL2hUScKalp3ygqxSk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-673-qP82I54WMrCgay6pbVUj3A-1; Thu, 21 Jul 2022 06:12:54 -0400
+X-MC-Unique: qP82I54WMrCgay6pbVUj3A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BCF9E3801F4A
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 10:12:53 +0000 (UTC)
+Received: from [172.64.12.23] (unknown [10.30.33.248])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AB04A18ECB;
+	Thu, 21 Jul 2022 10:12:53 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (36/492 SKIPPED): Test report for 353f7988
+ (mainline.kernel.org-clang)
+Date: Thu, 21 Jul 2022 10:12:53 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Message-Id: <04702.122072106125400339@us-mta-673.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
-head:   714d29e3e7e3faac27142424ae2533163ddd3a46
-commit: 3adc8d7057cc2f5e8dbbaa4b7d8b68f94dadb6ad [2/45] x86/cpu: Remove segment load from switch_to_new_gdt()
-config: i386-randconfig-a003-20220718 (https://download.01.org/0day-ci/archive/20220721/202207211807.FC1G4J9o-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3adc8d7057cc2f5e8dbbaa4b7d8b68f94dadb6ad
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
-        git checkout 3adc8d7057cc2f5e8dbbaa4b7d8b68f94dadb6ad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> arch/x86/kernel/cpu/common.c:760:23: error: call to undeclared function 'cpu_kernelmode_gs_base'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
-                                       ^
-   1 error generated.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48409
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
+ filename '/devices/mc0'
+                          http://lists.infradead.org/pipermail/linux-arm-ke=
+rnel/2022-June/750380.html
+         aarch64 - Storage - blktests - nvme-tcp
+                   Issue: Storage - blktests - nvme-tcp: nvme/030: failed t=
+o lookup subsystem for controller nvme0
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1274
+         aarch64 - Storage - blktests - nvmeof-mp
+                   Issue: Storage blktests - nvmeof-mp: Timeout
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D201=
+4813
+         aarch64 - LTP - commands
+                   Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -=
+P' failed.
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/755
+                   Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' fail=
+ed, not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1249
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         ppc64le - LTP - syscalls
+                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
+ty bit to be set after writing to mmap()-ed area
+                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
+i/
+         ppc64le - AMTU (Abstract Machine Test Utility)
+                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
+AIL
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1162
+         ppc64le - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         ppc64le - trace: ftrace/tracer
+                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
+error: No such device
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/803
+         ppc64le - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         ppc64le - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         ppc64le - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         ppc64le - selinux-policy: serge-testsuite
+                   Issue: (ppc64le) selinux-policy: serge-testsuite: ld: ca=
+nnot find arch/powerpc/lib/crtsavres.o: No such file or directory
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1267
+           s390x - Storage - blktests - nvme-tcp
+                   Issue: Storage - blktests - nvme-tcp: nvme/030: failed t=
+o lookup subsystem for controller nvme0
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1274
+           s390x - LTP - commands
+                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/972
+                   Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, =
+not expected
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1264
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+          x86_64 - kselftest build - bpf
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
+atal error: 'gnu/stubs-32.h' file not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1222
+          x86_64 - kselftest build - net
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
+atal error: 'gnu/stubs-32.h' file not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1222
+          x86_64 - Boot test
+                   Issue: IBM System X3250 M4 - kernel: irq 16: nobody care=
+d (try booting with the "irqpoll" option)
+                          https://redhat.service-now.com/surl.do?n=3DRITM12=
+02693
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - selinux-policy: serge-testsuite
+                   Issue: selinux-policy: serge-testsuite: libsemanage.sema=
+nage_direct_remove_key: Unable to remove module test_policy at priority 400
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1270
+          x86_64 - Storage - block - storage fio numa
+                   Issue: Storage block - storage fio numa: Performance com=
+parison: min:40535 * 1.15 < max:81259
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
+2094
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
 
 
-vim +/cpu_kernelmode_gs_base +760 arch/x86/kernel/cpu/common.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-   730	
-   731	/**
-   732	 * switch_to_new_gdt - Switch form early GDT to the direct one
-   733	 * @cpu:	The CPU number for which this is invoked
-   734	 *
-   735	 * Invoked during early boot to switch from early GDT and early per CPU
-   736	 * (%fs on 32bit, GS_BASE on 64bit) to the direct GDT and the runtime per
-   737	 * CPU area.
-   738	 */
-   739	void switch_to_new_gdt(int cpu)
-   740	{
-   741		load_direct_gdt(cpu);
-   742	
-   743		/*
-   744		 * No need to load the %gs (%fs for 32bit) segment. It is already
-   745		 * correct, %gs is 0 on 64bit and %fs is __KERNEL_PERCPU on 32 bit.
-   746		 *
-   747		 * Writing %gs on 64bit would zero GSBASE which would make any per
-   748		 * CPU operation up to the point of the wrmsrl() fault.
-   749		 *
-   750		 * 64bit requires to point GSBASE to the new offset. Until the
-   751		 * wrmsrl() happens the early mapping is still valid. That means
-   752		 * the GSBASE update will lose any prior per CPU data which was
-   753		 * not copied over in setup_per_cpu_areas().
-   754		 *
-   755		 * For secondary CPUs this is not a problem because they start
-   756		 * already with the direct GDT and the real GSBASE. This invocation
-   757		 * is pointless and will be removed in a subsequent step.
-   758		 */
-   759		if (IS_ENABLED(CONFIG_X86_64))
- > 760			wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
-   761	}
-   762	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
