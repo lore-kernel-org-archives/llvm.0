@@ -1,136 +1,82 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182CD29AD
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:37:18 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id by8so2040865ljb.13
-        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 07:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UNboldPsa6NL6HkP/uwDWmY1V1v2qEdKxOLHr3lu02Y=;
-        b=ZVvu2qk0IlAhphe1eVCBnTvpyhOOSQMyU+xpDJLvQ9qlxwlG0hmkA8E5d7I4JwXODd
-         l/BfagBbNh+gciltJqzYvBi4XDSQ+XeFsxzBYD9bJmbjaRiqkLhKWaVCpY7hcPss154R
-         8HHgXIhNffDFUBEAKqZ7NwCO0OBaks9Pk/daeX3rfrpQN8ex0PIIROmtjM5TraBaswXg
-         22zWic7d0Q+SNfI3kS4K9MqDfNTLMXMdctjMPTYLTPX4Xgo9Rzgc2L2MGV7WfUEx3rMC
-         R4hVbPoT1zkROkQKXgHdr5T59ehxDWhJhkkyFGj9tWGTjaCuj3y2KHL78bBUbyVevAr2
-         BoIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UNboldPsa6NL6HkP/uwDWmY1V1v2qEdKxOLHr3lu02Y=;
-        b=DyQc+mnH6J+OeOXXeN/YceUn/Dmzvdv7w3vHedZU2/0P33uuQOyjhEckvD1lCGnELl
-         D+23/gHgUHR3T4/vBvdJTVxXW7hFevRs2eQroF5vPgfzO0ic1EltMM79faS+2TXPgqsU
-         NTdP+/KLF2zKrP4xeVClJKmMvQrVYe+JCC9b/prEBmIHO18O54IrKuzIVoSYQ/QB2+bP
-         3+wkPM8Yav4rv796WKi+shIjwmSMq5VXLhQGS5f85Bcm4K6uTPbAFKy1zvCZ+eVHRKsd
-         s4juLS/caLyEXv5nDXB+M2e772N9Idapy4dJG5jR6rJfSwxhzQEAgnt8AubsTifDaqBx
-         kW+Q==
-X-Gm-Message-State: AJIora93Z3xWzJgRxzcJbs7f37tIWJakXyRTI2uAQvcM4Grds/5pu7z7
-	e1r/8G6f2SmHY7TbNIoefimHROcw55TTOkyitKsnfQ==
-X-Google-Smtp-Source: AGRyM1unUkT7KHAbSoQ8LxQrFMd0W4nlZA2BSaWIotCDnTIk04ut6fiwktEBu7yTRhA4MEq29l5ofVGmrS/AEcslm4U=
-X-Received: by 2002:a2e:8609:0:b0:25d:6af0:63b5 with SMTP id
- a9-20020a2e8609000000b0025d6af063b5mr19769192lji.360.1658414236802; Thu, 21
- Jul 2022 07:37:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3313C26;
+	Thu, 21 Jul 2022 14:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FACC3411E;
+	Thu, 21 Jul 2022 14:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658414538;
+	bh=PpnwXm3ZuUhE0qo+2U0StDRkyurCa/SzJ43F3CrCXTg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uYg/9KRGJmSMJp1EMQ7FStO2WEfFJB2wq95YO8tG89hXZL2xaf6ey8FrWtv75v7l+
+	 HtfwaTukDYR/OBSHs8qcEhey5USVBSXAGYlnvGnCEmmX14xOeDI4qoDpkOCG24UnV+
+	 BYrRCB1bcroMGro3QhzItHjvJrilIfXFZKd7a66K1y73XTIsGcysAxQPz61ayA5zQc
+	 1e86NyzPQakngQXdDtMQ8BlqlRAlljLoO4So1ZYb2cj4L1oWfXMGAYPaKc4ZTjuYeh
+	 XlMv7qYh2E2npXXAkoHH0BCOPBC7ApPojl7s0WCLqVUadXoO/g3ZMXE6UBV1x89ulh
+	 qQnrp3w5tb4HQ==
+Date: Thu, 21 Jul 2022 15:42:09 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Cezary Rojewski <cezary.rojewski@intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	alsa-devel@alsa-project.org, Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
+ noinline
+Message-ID: <YtllwRY6F93uYRxz@sirena.org.uk>
+References: <20220720185228.3182663-1-nathan@kernel.org>
+ <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220720232332.2720091-1-justinstitt@google.com> <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
-In-Reply-To: <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 21 Jul 2022 07:37:05 -0700
-Message-ID: <CAKwvOdmtiRb4FRBS3BVNbDmOn3S2sfSrMYrC+5Te9A2jyr=CXQ@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
-Cc: Michal Marek <michal.lkml@markovi.net>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>, youngmin.nam@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, Jul 21, 2022 at 7:27 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
-> >
-> > There's been an ongoing mission to re-enable the -Wformat warning for
-> > Clang. A previous attempt at enabling the warning showed that there were
-> > many instances of this warning throughout the codebase. The sheer amount
-> > of these warnings really polluted builds and thus -Wno-format was added
-> > to _temporarily_ toggle them off.
-> >
-> > After many patches the warning has largely been eradicated for x86,
-> > x86_64, arm, and arm64 on a variety of configs. The time to enable the
-> > warning has never been better as it seems for the first time we are
-> > ahead of them and can now solve them as they appear rather than tackling
-> > from a backlog.
-> >
-> > As to the root cause of this large backlog of warnings, Clang seems to
-> > pickup on some more nuanced cases of format warnings caused by implicit
-> > integer conversion as well as default argument promotions from
-> > printf-like functions.
-> >
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
-> >
-> > Note:
-> > For this patch to land on its feet, the plethora of supporting patches that
-> > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
-> > of them have!
-> >
-> > Here are the patches still waiting to be picked up:
-> > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
-> > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
->
-> Hi Masahiro, Nathan, and Tom,
-> What are your thoughts for _when_ in the release cycle this should be
-> picked up?  I worry that if we don't remove this soon, we will
-> backslide, and more -Wformat issues will crop up making removing this
-> in the future like digging in sand.  Justin has chased down many
-> instances of this warning, and I'm happy to help clean up fallout from
-> landing this.
-
-Otherwise, we probably want to look at picking up Youngmin's patch ASAP.
-https://lore.kernel.org/all/20220716084532.2324050-1-youngmin.nam@samsung.com/
-
-(This thread, for context for Youngmin:
-https://lore.kernel.org/llvm/20220720232332.2720091-1-justinstitt@google.com/)
-
->
-> >
-> >  scripts/Makefile.extrawarn | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> > index f5f0d6f09053..9bbaf7112a9b 100644
-> > --- a/scripts/Makefile.extrawarn
-> > +++ b/scripts/Makefile.extrawarn
-> > @@ -47,7 +47,6 @@ else
-> >
-> >  ifdef CONFIG_CC_IS_CLANG
-> >  KBUILD_CFLAGS += -Wno-initializer-overrides
-> > -KBUILD_CFLAGS += -Wno-format
-> >  KBUILD_CFLAGS += -Wno-sign-compare
-> >  KBUILD_CFLAGS += -Wno-format-zero-length
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
-> > --
-> > 2.37.0.170.g444d1eabd0-goog
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ajHU/ff5Es7EyDXb"
+Content-Disposition: inline
+In-Reply-To: <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
+X-Cookie: Exercise caution in your daily affairs.
 
 
+--ajHU/ff5Es7EyDXb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Thanks,
-~Nick Desaulniers
+On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz S=C5=82awi=C5=84ski wrot=
+e:
+> On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
+
+> > This warning is also visible with allmodconfig on other architectures.
+
+> My first question would be what clang does differently in this configurat=
+ion
+> (ARM) than in all other configurations (x86, etc.) and gcc.
+
+See above from Nathan's commit message...
+
+--ajHU/ff5Es7EyDXb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZZcAACgkQJNaLcl1U
+h9BaqwgAhNdNCBam0uI5GOf9ZPo7T8imcXF+ulBeP3Q0Ve0ZcM5jJKpWyJY/xuKk
+vKGrKJxJu9IU9AXKBppPBM1SxYIBPUCjoLBkrUYKXQyKglTbcx3Oy+lmmwxaLBoo
+jpGuetXcc1czReyBzu8ySfmKkMx9S2z3O8kn8vRJ4jfF4taSE0j6gPJjMTGDdjJq
+weZB3dDZGNEtWT687UK+NcY2HaMDEi/ULMN8p/Z/ZuDPlPhHUotyKBl71GMCuCD+
+Fgquc2rxOUl51tNMTK9h0J3u4CtDsbi/5eC0qHdkebRdwmOhIJssiUiu2b+IEU69
+Rz17RBTZkaL+qs5JW1SFAPJ57tJO2Q==
+=xgGL
+-----END PGP SIGNATURE-----
+
+--ajHU/ff5Es7EyDXb--
