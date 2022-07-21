@@ -1,103 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0818D4680
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 15:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9D0C3411E;
-	Thu, 21 Jul 2022 15:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658417228;
-	bh=gyyq7f1WtZrYIwLvvzePgmh+epDrnTTQoVWF0WkxftI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r6IhG9Tmbt7l6uYKEmkZQptbROulaI1Wc2H9VuNo9M0BB7ST55kCP49u3AKt2e/XC
-	 WE/Txcx8jU1zBWlVKL+U2FVfG3OYD9VXi+V/1p5nQ/+Nuthnnh9pw6F2DfD4OrkJWp
-	 UWdHIeA6mp45w/aYjvtWLdel1Baf16p51A32pYD4a+B/NymSY7PfwswuQalC436+zW
-	 5KbPiXkFHI3QsNEg677Byxyw1zLrz5trrZ8qP+g+WRaeCcWyT15TvUUbJ4nLEasOXW
-	 ctlfAUNFdE6bENIPl/2uqJ9vpQCbwWQBL4orNsq2nT1ijOn+P20GorFVU6OTnwpooE
-	 gSA36rxQgi1/Q==
-Date: Thu, 21 Jul 2022 08:27:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-	linux-can@vger.kernel.org, kernel@pengutronix.de,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
- rxerr during bus-off
-Message-ID: <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
-References: <20220720081034.3277385-1-mkl@pengutronix.de>
- <20220720081034.3277385-19-mkl@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1004680;
+	Thu, 21 Jul 2022 15:28:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658417296; x=1689953296;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WZ59twi+Y234fwpfoBS9XgGliCsgnLhK4MhvmcDYmj0=;
+  b=F08vGvwJVl7p+ONCRn7OJUekDvq/ExADiBDCmAF86Mt5Yck06QA6CjXo
+   b87+hvzFHIpw3BsV41G4zbRljzVAFe+nOJKvU64AcVuMjcR8dwPyVf9+w
+   xFto/38s7nHOzDf15zOAS+FnFa46NTpf343K1Zaa8bB1J6+5rLHqGEBmz
+   BmQS4jzORijktmaSCunWx/K5u7Ox0B1tHvdu2bqIbMeqVRZ7QIU2M1lsj
+   6GjnxLUh622MvF2Hl4Wgg+jX7ZCw7liPNgIW4rGprS6FeIjsnZnPmIwh3
+   ctQi1TdQdwH6zhreLVguuRlI2uHIXGNSUsiR0GYp3816rPh0981rAqey8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="287085991"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="287085991"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:16 -0700
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="656794382"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.149]) ([10.99.249.149])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:11 -0700
+Message-ID: <d8e8e5e5-001d-5f22-b22c-aaea16ed8719@linux.intel.com>
+Date: Thu, 21 Jul 2022 17:28:09 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720081034.3277385-19-mkl@pengutronix.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
+ noinline
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+ Cezary Rojewski <cezary.rojewski@intel.com>,
+ Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+ Bard Liao <yung-chuan.liao@linux.intel.com>, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+ Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ patches@lists.linux.dev, alsa-devel@alsa-project.org,
+ Peter Ujfalusi <peter.ujfalusi@linux.intel.com>, linux-kernel@vger.kernel.org
+References: <20220720185228.3182663-1-nathan@kernel.org>
+ <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
+ <YtllwRY6F93uYRxz@sirena.org.uk>
+From: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <YtllwRY6F93uYRxz@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 20, 2022 at 10:10:23AM +0200, Marc Kleine-Budde wrote:
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On 7/21/2022 4:42 PM, Mark Brown wrote:
+> On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz Sławiński wrote:
+>> On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
 > 
-> During bus off, the error count is greater than 255 and can not fit in
-> a u8.
+>>> This warning is also visible with allmodconfig on other architectures.
 > 
-> Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processing")
-> Link: https://lore.kernel.org/all/20220719143550.3681-2-mailhol.vincent@wanadoo.fr
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/pch_can.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>> My first question would be what clang does differently in this configuration
+>> (ARM) than in all other configurations (x86, etc.) and gcc.
 > 
-> diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-> index fde3ac516d26..497ef77340ea 100644
-> --- a/drivers/net/can/pch_can.c
-> +++ b/drivers/net/can/pch_can.c
-> @@ -496,6 +496,9 @@ static void pch_can_error(struct net_device *ndev, u32 status)
->  		cf->can_id |= CAN_ERR_BUSOFF;
->  		priv->can.can_stats.bus_off++;
->  		can_bus_off(ndev);
-> +	} else {
-> +		cf->data[6] = errc & PCH_TEC;
-> +		cf->data[7] = (errc & PCH_REC) >> 8;
->  	}
->  
->  	errc = ioread32(&priv->regs->errc);
-> @@ -556,9 +559,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
->  		break;
->  	}
->  
-> -	cf->data[6] = errc & PCH_TEC;
-> -	cf->data[7] = (errc & PCH_REC) >> 8;
-> -
->  	priv->can.state = state;
->  	netif_receive_skb(skb);
->  }
-> -- 
-> 2.35.1
-> 
-> 
-> 
+> See above from Nathan's commit message...
 
-Apologies if this has been reported already, I didn't see anything on
-the mailing lists.
+Ah, missed that. Anyway, what about if we replace multiple calls to 
+guid_equal with lookup table and one call in loop?
 
-This commit is now in -next as commit 3a5c7e4611dd ("can: pch_can: do
-not report txerr and rxerr during bus-off"), where it causes the
-following clang warning:
+Do let me know if something like the following works and I will send it 
+as a proper patch:
 
-  ../drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized when used here [-Werror,-Wuninitialized]
-                  cf->data[6] = errc & PCH_TEC;
-                                ^~~~
-  ../drivers/net/can/pch_can.c:484:10: note: initialize the variable 'errc' to silence this warning
-          u32 errc, lec;
-                  ^
-                   = 0
-  1 error generated.
+diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
+index 3d46dd5e5bc4..ce157a8d6552 100644
+--- a/sound/soc/intel/avs/path.c
++++ b/sound/soc/intel/avs/path.c
+@@ -449,35 +449,39 @@ static int avs_modext_create(struct avs_dev *adev, 
+struct avs_path_module *mod)
+         return ret;
+  }
 
-errc is initialized underneath this now, should it be hoisted or is
-there another fix?
++static int avs_probe_create(struct avs_dev *adev, struct 
+avs_path_module *mod)
++{
++       dev_err(adev->dev, "Probe module can't be instantiated by 
+topology");
++       return -EINVAL;
++}
++
++struct avs_module_create {
++       guid_t *guid;
++       int (*create)(struct avs_dev *adev, struct avs_path_module *mod);
++};
++
++static struct avs_module_create avs_module_create[] = {
++       { &AVS_MIXIN_MOD_UUID, avs_modbase_create },
++       { &AVS_MIXOUT_MOD_UUID, avs_modbase_create },
++       { &AVS_KPBUFF_MOD_UUID, avs_modbase_create },
++       { &AVS_COPIER_MOD_UUID, avs_copier_create },
++       { &AVS_MICSEL_MOD_UUID, avs_micsel_create },
++       { &AVS_MUX_MOD_UUID, avs_mux_create },
++       { &AVS_UPDWMIX_MOD_UUID, avs_updown_mix_create },
++       { &AVS_SRCINTC_MOD_UUID, avs_src_create },
++       { &AVS_AEC_MOD_UUID, avs_aec_create },
++       { &AVS_ASRC_MOD_UUID, avs_asrc_create },
++       { &AVS_INTELWOV_MOD_UUID, avs_wov_create },
++       { &AVS_PROBE_MOD_UUID, avs_probe_create },
++};
++
+  static int avs_path_module_type_create(struct avs_dev *adev, struct 
+avs_path_module *mod)
+  {
+         const guid_t *type = &mod->template->cfg_ext->type;
 
-Cheers,
-Nathan
+-       if (guid_equal(type, &AVS_MIXIN_MOD_UUID) ||
+-           guid_equal(type, &AVS_MIXOUT_MOD_UUID) ||
+-           guid_equal(type, &AVS_KPBUFF_MOD_UUID))
+-               return avs_modbase_create(adev, mod);
+-       if (guid_equal(type, &AVS_COPIER_MOD_UUID))
+-               return avs_copier_create(adev, mod);
+-       if (guid_equal(type, &AVS_MICSEL_MOD_UUID))
+-               return avs_micsel_create(adev, mod);
+-       if (guid_equal(type, &AVS_MUX_MOD_UUID))
+-               return avs_mux_create(adev, mod);
+-       if (guid_equal(type, &AVS_UPDWMIX_MOD_UUID))
+-               return avs_updown_mix_create(adev, mod);
+-       if (guid_equal(type, &AVS_SRCINTC_MOD_UUID))
+-               return avs_src_create(adev, mod);
+-       if (guid_equal(type, &AVS_AEC_MOD_UUID))
+-               return avs_aec_create(adev, mod);
+-       if (guid_equal(type, &AVS_ASRC_MOD_UUID))
+-               return avs_asrc_create(adev, mod);
+-       if (guid_equal(type, &AVS_INTELWOV_MOD_UUID))
+-               return avs_wov_create(adev, mod);
+-
+-       if (guid_equal(type, &AVS_PROBE_MOD_UUID)) {
+-               dev_err(adev->dev, "Probe module can't be instantiated 
+by topology");
+-               return -EINVAL;
+-       }
++       for (int i = 0; i < ARRAY_SIZE(avs_module_create); i++)
++               if (guid_equal(type, avs_module_create[i].guid))
++                       return avs_module_create[i].create(adev, mod);
+
+         return avs_modext_create(adev, mod);
+  }
