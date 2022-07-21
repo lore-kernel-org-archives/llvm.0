@@ -1,291 +1,120 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88E43D95
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 13:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658408672; x=1689944672;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VOpAWSHgO32roLjayCYOn6W8eVPRd/m40uVjLWgGaoo=;
-  b=nPMigf7DfRh24PSfliW+kKP29OLSHseJVJkVxHhQxbKv46+HYdEsTHUe
-   zs50EOcGqlZituILpxiOz68jnj6qf3Wbt+HlFk7jM0NQDh2agu0OF4AS/
-   BW7WZ4BNYJqa7ycVa3IsF8IvCgUiCxcowFsZJlHGkwJYB39q3Upp6FsJl
-   bJv747630LiLd67WDVv+G4mOzuzZGBOEuEFRAUmnum7XP/lLH04GUnIz0
-   EEdOTi1KH+gjFsV08m09Kurq6oKblkelLxcBR9znn4+XiKqd1dLlAoZBr
-   KviIB+ctEerrKm8argDYRoZdsBYRgvgsIfTzQx7Rl2onU6Dyhe3sLGgG5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="288203721"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="288203721"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 06:04:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="548759484"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2022 06:04:30 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oEVqv-00008Q-1k;
-	Thu, 21 Jul 2022 13:04:29 +0000
-Date: Thu, 21 Jul 2022 21:03:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Navin Sankar Velliangiri <navin@linumiz.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/temperature/max31865.c:51:8: warning: Excessive padding
- in 'struct max31865_data' (56 padding bytes, where 24 is optimal). Optimal
- fields order: buf, filter_50hz, three_wire, spi, lock, consider reordering
- the fields or adding explicit padding...
-Message-ID: <202207212132.9hoo6bQY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36119441A
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:27:48 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id u13so3075271lfn.5
+        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 07:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vVPqdnUfLoXatTXc15bcg0nhUyjA2e3G5yJNqLlYJCQ=;
+        b=MqOKGHlFubPD3KsBefcVz9F6wXbCvDSAEF4Ezkx7YkU9R3TQO9bDXREtmH/oGHtvod
+         1giSYYH2lrsBuxeDOpfOc/PuuswDwFjosAOjvqaVqV46inoMMJ6HhqErhxWOjX7KS9+A
+         r3bKAxeW9OA98aKOYKGKqim9/qyxfpMD2AqFMv01kFdT/5NqXpdcpj54E8z1e//nEWBu
+         F6fEUywVgpya+D0TvVmnOyrdQHUx/Gd+0BIrhgu/YS1dkFY3ozbr7NxIXE6/GZqbahlX
+         iyouIzFROTE+w99RDbQqdA2PGYvvjDZXwFuLYZW/GUVMXVzXunnU042ha9wxUnRaxQUl
+         01ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vVPqdnUfLoXatTXc15bcg0nhUyjA2e3G5yJNqLlYJCQ=;
+        b=Fot2miMtEas2bJyZ6XguhHoHFGHu1gM3zWnJjxidHvvmHalEMhpTL1rd7imNc+kCr0
+         Pv5IYwsG/dv1r6SBxtoDAmI0/aE5mCwVjgeJZggVSztpdX/XEHkCdTyZnz2ZTI9M2cxC
+         u/bPtwFEI41x1i/bjZIncaJgrQW/QaA6f8fwQJuI0/stGIVrXpBdNbyo2Fouu2yWADUR
+         /93El8/o73gUecaw5a9+TQEG/iJzZ6eKFBiMMHQSH6dRdrxs1biNVqmXhy0xJpL8o6Kq
+         0CNnEkSKc3JhE7GISyAL3uJdqjqTVQx7q2Rv0y/19yzKP1E5Su+yu/fafQ75JgczbEA2
+         ZEpg==
+X-Gm-Message-State: AJIora/la9+j6tCcD/UQoWhziStnUfVKOmI2Nx1Opvg4ynnCxff8Wtxa
+	h5oWxfz2W43UrQrWGFdZfxEJO+Kyb8W0ihCH10yvGw==
+X-Google-Smtp-Source: AGRyM1udVa2irl52OVMBnbqGFxA+aMG+iMRiI2R2lJXR6gMSb6uY94C6ywicucAlyyZxSxAiMOnEbLUPonXlaBWfboM=
+X-Received: by 2002:a19:7902:0:b0:48a:6872:68ab with SMTP id
+ u2-20020a197902000000b0048a687268abmr1918109lfc.626.1658413665896; Thu, 21
+ Jul 2022 07:27:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220720232332.2720091-1-justinstitt@google.com>
+In-Reply-To: <20220720232332.2720091-1-justinstitt@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 21 Jul 2022 07:27:34 -0700
+Message-ID: <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Cc: Michal Marek <michal.lkml@markovi.net>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   353f7988dd8413c47718f7ca79c030b6fb62cfe5
-commit: e112dc4e18eafc5ee9d5700e3c059ac9897ae2a1 iio: temperature: Add MAX31865 RTD Support
-date:   10 months ago
-config: arm-randconfig-c002-20220717 (https://download.01.org/0day-ci/archive/20220721/202207212132.9hoo6bQY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e112dc4e18eafc5ee9d5700e3c059ac9897ae2a1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e112dc4e18eafc5ee9d5700e3c059ac9897ae2a1
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
+>
+> There's been an ongoing mission to re-enable the -Wformat warning for
+> Clang. A previous attempt at enabling the warning showed that there were
+> many instances of this warning throughout the codebase. The sheer amount
+> of these warnings really polluted builds and thus -Wno-format was added
+> to _temporarily_ toggle them off.
+>
+> After many patches the warning has largely been eradicated for x86,
+> x86_64, arm, and arm64 on a variety of configs. The time to enable the
+> warning has never been better as it seems for the first time we are
+> ahead of them and can now solve them as they appear rather than tackling
+> from a backlog.
+>
+> As to the root cause of this large backlog of warnings, Clang seems to
+> pickup on some more nuanced cases of format warnings caused by implicit
+> integer conversion as well as default argument promotions from
+> printf-like functions.
+>
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
+>
+> Note:
+> For this patch to land on its feet, the plethora of supporting patches that
+> fixed various -Wformat warnings need to be picked up. Thanfully, a lot
+> of them have!
+>
+> Here are the patches still waiting to be picked up:
+> * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
+> * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Masahiro, Nathan, and Tom,
+What are your thoughts for _when_ in the release cycle this should be
+picked up?  I worry that if we don't remove this soon, we will
+backslide, and more -Wformat issues will crop up making removing this
+in the future like digging in sand.  Justin has chased down many
+instances of this warning, and I'm happy to help clean up fallout from
+landing this.
 
+>
+>  scripts/Makefile.extrawarn | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index f5f0d6f09053..9bbaf7112a9b 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -47,7 +47,6 @@ else
+>
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CFLAGS += -Wno-initializer-overrides
+> -KBUILD_CFLAGS += -Wno-format
+>  KBUILD_CFLAGS += -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wno-format-zero-length
+>  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>
 
-clang-analyzer warnings: (new ones prefixed by >>)
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/gyro/adxrs450.c:73:8: warning: Excessive padding in 'struct adxrs450_state' (52 padding bytes, where 20 is optimal). Optimal fields order: tx, us, rx, buf_lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adxrs450_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/iio/gyro/adxrs450.c:73:8: note: Excessive padding in 'struct adxrs450_state' (52 padding bytes, where 20 is optimal). Optimal fields order: tx, us, rx, buf_lock, consider reordering the fields or adding explicit padding members
-   struct adxrs450_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   2 warnings generated.
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/net/usb/rndis_host.c:152:4: warning: Value stored to 'msg_len' is never read [clang-analyzer-deadcode.DeadStores]
-                           msg_len = le32_to_cpu(buf->msg_len);
-                           ^
-   drivers/net/usb/rndis_host.c:152:4: note: Value stored to 'msg_len' is never read
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   drivers/net/usb/usbnet.c:800:2: warning: Value stored to 'temp' is never read [clang-analyzer-deadcode.DeadStores]
-           temp = unlink_urbs(dev, &dev->txq) +
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:800:2: note: Value stored to 'temp' is never read
-           temp = unlink_urbs(dev, &dev->txq) +
-           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1386:13: warning: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry') [clang-analyzer-core.NullDereference]
-           entry->urb = urb;
-           ~~~~~      ^
-   drivers/net/usb/usbnet.c:1364:6: note: Assuming 'skb' is null
-           if (skb)
-               ^~~
-   drivers/net/usb/usbnet.c:1364:2: note: Taking false branch
-           if (skb)
-           ^
-   drivers/net/usb/usbnet.c:1369:6: note: Assuming field 'tx_fixup' is null
-           if (info->tx_fixup) {
-               ^~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1369:2: note: Taking false branch
-           if (info->tx_fixup) {
-           ^
-   drivers/net/usb/usbnet.c:1380:8: note: Assuming 'urb' is non-null
-           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
-                 ^~~
-   drivers/net/usb/usbnet.c:1380:2: note: Taking false branch
-           if (!(urb = usb_alloc_urb (0, GFP_ATOMIC))) {
-           ^
-   drivers/net/usb/usbnet.c:1385:2: note: Null pointer value stored to 'entry'
-           entry = (struct skb_data *) skb->cb;
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/usb/usbnet.c:1386:13: note: Access to field 'urb' results in a dereference of a null pointer (loaded from variable 'entry')
-           entry->urb = urb;
-           ~~~~~      ^
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/iio/proximity/vcnl3020.c:76:8: warning: Excessive padding in 'struct vcnl3020_data' (53 padding bytes, where 21 is optimal). Optimal fields order: buf, rev, regmap, dev, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct vcnl3020_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/proximity/vcnl3020.c:76:8: note: Excessive padding in 'struct vcnl3020_data' (53 padding bytes, where 21 is optimal). Optimal fields order: buf, rev, regmap, dev, lock, consider reordering the fields or adding explicit padding members
-   struct vcnl3020_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/resolver/ad2s90.c:24:8: warning: Excessive padding in 'struct ad2s90_state' (58 padding bytes, where 26 is optimal). Optimal fields order: rx, sdev, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad2s90_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/resolver/ad2s90.c:24:8: note: Excessive padding in 'struct ad2s90_state' (58 padding bytes, where 26 is optimal). Optimal fields order: rx, sdev, lock, consider reordering the fields or adding explicit padding members
-   struct ad2s90_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   1 warning generated.
-   drivers/iio/resolver/ad2s1200.c:39:8: warning: Excessive padding in 'struct ad2s1200_state' (50 padding bytes, where 18 is optimal). Optimal fields order: rx, sdev, sample, rdvel, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad2s1200_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/iio/resolver/ad2s1200.c:39:8: note: Excessive padding in 'struct ad2s1200_state' (50 padding bytes, where 18 is optimal). Optimal fields order: rx, sdev, sample, rdvel, lock, consider reordering the fields or adding explicit padding members
-   struct ad2s1200_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   1 warning generated.
->> drivers/iio/temperature/max31865.c:51:8: warning: Excessive padding in 'struct max31865_data' (56 padding bytes, where 24 is optimal). Optimal fields order: buf, filter_50hz, three_wire, spi, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct max31865_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/temperature/max31865.c:51:8: note: Excessive padding in 'struct max31865_data' (56 padding bytes, where 24 is optimal). Optimal fields order: buf, filter_50hz, three_wire, spi, lock, consider reordering the fields or adding explicit padding members
-   struct max31865_data {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   net/ipv4/udp.c:741:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/ipv4/udp.c:741:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/accel/sca3300.c:111:8: warning: Excessive padding in 'struct sca3300_data' (36 padding bytes, where 4 is optimal). Optimal fields order: txbuf, spi, scan, lock, rxbuf, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct sca3300_data {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:111:8: note: Excessive padding in 'struct sca3300_data' (36 padding bytes, where 4 is optimal). Optimal fields order: txbuf, spi, scan, lock, rxbuf, consider reordering the fields or adding explicit padding members
-   struct sca3300_data {
-   ~~~~~~~^~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   Suppressed 2 warnings (2 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/iio/dac/ad5064.c:105:8: warning: Excessive padding in 'struct ad5064_state' (47 padding bytes, where 15 is optimal). Optimal fields order: data, dev, chip_info, write, dac_cache, lock, vref_reg, use_internal_vref, pwr_down, pwr_down_mode, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad5064_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/dac/ad5064.c:105:8: note: Excessive padding in 'struct ad5064_state' (47 padding bytes, where 15 is optimal). Optimal fields order: data, dev, chip_info, write, dac_cache, lock, vref_reg, use_internal_vref, pwr_down, pwr_down_mode, consider reordering the fields or adding explicit padding members
-   struct ad5064_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/iio/dac/ad5504.c:50:8: warning: Excessive padding in 'struct ad5504_state' (42 padding bytes, where 10 is optimal). Optimal fields order: data, spi, reg, pwr_down_mask, pwr_down_mode, vref_mv, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad5504_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/dac/ad5504.c:50:8: note: Excessive padding in 'struct ad5504_state' (42 padding bytes, where 10 is optimal). Optimal fields order: data, spi, reg, pwr_down_mask, pwr_down_mode, vref_mv, consider reordering the fields or adding explicit padding members
-   struct ad5504_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/iio/adc/palmas_gpadc.c:32:8: warning: Excessive padding in 'struct palmas_gpadc_info' (5 padding bytes, where 1 is optimal). Optimal fields order: x1, x2, v1, v2, gain, offset, gain_error, trim1_reg, trim2_reg, is_uncalibrated, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct palmas_gpadc_info {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/palmas_gpadc.c:32:8: note: Excessive padding in 'struct palmas_gpadc_info' (5 padding bytes, where 1 is optimal). Optimal fields order: x1, x2, v1, v2, gain, offset, gain_error, trim1_reg, trim2_reg, is_uncalibrated, consider reordering the fields or adding explicit padding members
-   struct palmas_gpadc_info {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/iio/adc/qcom-spmi-vadc.c:326:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                   ret = vadc_poll_wait_eoc(vadc, timeout);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/qcom-spmi-vadc.c:326:3: note: Value stored to 'ret' is never read
-                   ret = vadc_poll_wait_eoc(vadc, timeout);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-
-vim +51 drivers/iio/temperature/max31865.c
-
-    50	
-  > 51	struct max31865_data {
-    52		struct spi_device *spi;
-    53		struct mutex lock;
-    54		bool filter_50hz;
-    55		bool three_wire;
-    56		u8 buf[2] ____cacheline_aligned;
-    57	};
-    58	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
