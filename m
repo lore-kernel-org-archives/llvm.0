@@ -1,69 +1,66 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2BA4680
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 16:22:00 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31e45527da5so22753647b3.5
-        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 09:22:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4tuVfX9bKKufRa9+rIEczxOme0B9PbnJssWHNEU67L8=;
-        b=nddXXZUblxcqQl35LaB7jXwXaCOr2Zu6UwDWbmQ9vfgZ7LuJUQpffh9J7VyrVuLUtQ
-         F6TytvJvX1pj8wbdnTuGK16jhRNUlcLCl1qKW0zgFX1alQFOp0LCADyrIvbbuTdsHxTn
-         7GdsyINDdG1y8qaimVj9TUF3eBfR1mgEjOrrIFRwQw4ls6wT8B/nU0FxZixA856NhWAA
-         MHddAd+BZclZQff1/C56g2gZ+Gi+1ttfGT66RCNrZ9s9kj2TAFlUbrqPX9prsMzjJeJ7
-         NEdf0PlkvxbrAP+VdKWzcJO+7EzRmDQIBicrpsy1Dw+8BBrwYRxtdEGyd7hVYrUzAG0z
-         yyrA==
-X-Gm-Message-State: AJIora8PlbENEtzKVlESoxRaTiOTmPZ3Ug2GJoIlGcXFkekXhFlHzAyw
-	s6Zs1Q5/CZH5Qh87toHqCaVuc1uJgMjL7/3Ap2A=
-X-Google-Smtp-Source: AGRyM1s0j5C7KrwKVl0xitO8o0mGA4aHRoHTICik/N5JCVKPzDCOlvNHTuvVd9Dlk8MJG/2azgZTjqSgngDu5QqLX3o=
-X-Received: by 2002:a81:8349:0:b0:31e:732a:258a with SMTP id
- t70-20020a818349000000b0031e732a258amr7468400ywf.518.1658420519100; Thu, 21
- Jul 2022 09:21:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031CF2FB2
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 16:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645ABC3411E;
+	Thu, 21 Jul 2022 16:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658422295;
+	bh=9hfSjSU6ZEOEWK+4sagbygAVSU3WAbHmJYkaTJ7NNWc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UMSv/3zccNh7CJYI+Vr63UmnZOWfZTvtgdrCMyw5flAvpN/345DvFqWoAHNDgp+x6
+	 UR/wflk5IpJy3+1Qj8DDFcNswghe6MHZu56pin7eOQblqKtSyiCU4YxgV0stK4Unlv
+	 U5G8Qktiq/2NnwrZuyHVPz6wJwHEx2AGK+bHyk0W/ZO10WZFEkuol1cZgpZ9rR7Wc4
+	 vMF6oUpRzcGj9cEhSC8LGLF9jn6+z2nOJZF+Hu3mCBJ/C53oVEYVUJ1CIpKgzCwrA8
+	 FyCPpZoSYsHMCxp5Z/0maq4raUACS6xzgb7Vg7s+5d1GrWVHJ+R+x5W6XaJCceS8Zn
+	 HB5AIW0hHsc6g==
+Date: Thu, 21 Jul 2022 09:51:34 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>, Vincent MAILHOL
+ <mailhol.vincent@wanadoo.fr>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+ davem@davemloft.net, linux-can@vger.kernel.org, kernel@pengutronix.de,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
+ rxerr during bus-off
+Message-ID: <20220721095134.47ac717e@kernel.org>
+In-Reply-To: <Ytl8x20qmsKyYJpS@dev-arch.thelio-3990X>
+References: <20220720081034.3277385-1-mkl@pengutronix.de>
+	<20220720081034.3277385-19-mkl@pengutronix.de>
+	<YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
+	<20220721154725.ovcsfiio7e6hts2n@pengutronix.de>
+	<CAMZ6RqLdYCqag_MDp7dj=u1SEjx1r=bs_xHG26w11_A_D_SumQ@mail.gmail.com>
+	<Ytl8x20qmsKyYJpS@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220721161526.930416-1-trix@redhat.com>
-In-Reply-To: <20220721161526.930416-1-trix@redhat.com>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Fri, 22 Jul 2022 01:21:48 +0900
-Message-ID: <CAMZ6Rq+di4CYnZ6eDgBS68qGuPLvGHfxP0JYWJFkgH4c-riSmw@mail.gmail.com>
-Subject: Re: [PATCH] can: pch_can: move setting of errc to before use
-To: Tom Rix <trix@redhat.com>
-Cc: wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org, 
-	ndesaulniers@google.com, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri. 22 juil. 2022 =C3=A0 01:18, Tom Rix <trix@redhat.com> wrote:
-> clang build fails with
-> drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized=
- when used here [-Werror,-Wuninitialized]
->                 cf->data[6] =3D errc & PCH_TEC;
->
-> The commit in the fixes moved the use without moving the setting. So move
-> the setting of errc to before the use.
->
-> Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during =
-bus-off")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Thu, 21 Jul 2022 09:20:23 -0700 Nathan Chancellor wrote:
+> > That said, I have one complaint: this type of warning is reported at
+> > W=2 *but* W=2 output is heavily polluted, mostly due to a false
+> > positive on linux/bits.h's GENMASK_INPUT_CHECK(). Under the current
+> > situation, the relevant warings become invisible with all the
+> > flooding.
+> > I tried to send a patch to silence a huge chunk of the W=2 spam in [1]
+> > but it got rejected. I am sorry but even with the best intent, I might
+> > repeat a similar mistake in the future. The W=2 is just not usable.
+> > 
+> > [1] https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/  
+> 
+> Yes, having -Wmaybe-uninitialized in W=2 is unfortunate because these
+> types of mistakes will continue to happen. I have been fighting this for
+> a while and so has Dan Carpenter, who started a thread about it a couple
+> of months ago but it doesn't seem like it really went anywhere:
+> 
+> https://lore.kernel.org/20220506091338.GE4031@kadam/
 
-Sorry, you are a couple minutes late. You are actually the third to
-submit the same patch:
-https://lore.kernel.org/linux-can/20220721155228.3399103-1-mkl@pengutronix.=
-de/
-https://lore.kernel.org/linux-can/20220721160032.9348-1-mailhol.vincent@wan=
-adoo.fr/
-
-But thanks for this!
-
-
-Yours sincerely,
-Vincent Mailhol
+FWIW it's reported by clang and was in fact reported in the netdev
+patchwork:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220720081034.3277385-19-mkl@pengutronix.de/
+DaveM must have not looked before pulling :S
