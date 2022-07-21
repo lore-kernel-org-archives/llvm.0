@@ -1,99 +1,125 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69963C26
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:48:53 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id d17so1009540lfa.12
-        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 07:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b6hct8xCrE6CB9ftodiKvDlwTR0gdrnA5ClwcliBbPY=;
-        b=JMubbrBv1Nd+8w6FEi5or5LUmjlC2ld6RSrBV9zeh4LiULoqJiy9EVpd3jtEFtwJCi
-         PZHnxwTZ1skg3P7ZHuFqsRPmgQuZUhh5qDWu0VuZ/qPk4BjGMeThmvjpzJLjrSpIK2Cm
-         EKrTCSJ7od43H4++62FeYEuZDqMh+oH31imbnETjgycNPi0hBVSySmdfM+XljybFGRBM
-         Z1lu2fA4faSic32ei6AxwHfu2kATgh69lgbGfQy6YffNkFLmFlWU+qpcfDGFmoZEE0Ha
-         fpSY4lN7hB544+d/F4GCctLNlY12yUCNT9vWbPbeYvBd0NBzY3dVsAVs5dgzZrBjtciR
-         pBHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b6hct8xCrE6CB9ftodiKvDlwTR0gdrnA5ClwcliBbPY=;
-        b=zqI7pbCTEDXznQ2m9RMEiUX55EaRVBUewgXFynuTnb3ex1rWnCU53Ssl3+u1J0v/F4
-         sYgpMCRo9YZMQ6ezWMvMrGSY2D3sIMJyonnR3no3+a2W5rI7L0XQQocHVj5Nw8KW7mBx
-         qrVBS0bsS1kkMx/k4mqR8VO2/uiIe7qtB5FqZcfLjGGeLRLV6Mj6/m3QeFcl1qt3kEZm
-         2I7dU4d1K5RspZZbgWSPOVq7/6qIK9YDZg3r23XWdh4u4j5mrJ9xCTesvveXheZ3PNcg
-         SHwWqF5JVyJU1sFJLY8gEU8ukVhORRsrLT71ZtzuRwkjVNzD7X2nNm3pVUv5jHzugjlW
-         3E7A==
-X-Gm-Message-State: AJIora/JyPNIG6cekM9cPnhmsUD71bLl/CW0nmAImkdUr+mDoatj82Tg
-	3DQrR6TScFiZQFQE7iB6dNUlFkvV2XyN1HNMV077ww==
-X-Google-Smtp-Source: AGRyM1viW5VSMgPFgPinMrTL+kpk+XpxDY9JqlD86usXfDLVMuZ2ksntxKfHUq/p0uaQkcha+Bst/d+d0seMWLDTQO0=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr3942194lfr.647.1658414931709; Thu, 21
- Jul 2022 07:48:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F4B3C26
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 15:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F63EC341C6;
+	Thu, 21 Jul 2022 15:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658416229;
+	bh=npRLRf/sAWAclkJPA3+ZSmi54RNpxH5tLibZRtjDSNY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rere9p3lBvtpZ9MeZTafEhmVfofSA3t2r8VgSgJEjOhdUrv1ijFE31fCt4OYKWPgA
+	 b8NFzdM2pVEWVPCgaIQY1oNAcTXmd4LkollZj1bkNlKmvAOsXFrqMnT3G5/D+e6CfF
+	 LZVnNzMUOEZbFRLFnN9N/xN3RaaKZ3EcIAUMXjlHnBb6p2JJjD6kRzi3/DaiDL9SwP
+	 caJcjxLJMIFzwFu6ELaumXHc+dh/u2cACYc2OzMCJQOJMVXIuI0D0YL5K7+ntUQ2WK
+	 XEWk5QF1Edn9DxdibrCNjD+50/U6ZXzDJKDExFlC7PEyNkMrdnofXJDy2HjE7sSdw+
+	 pNLqBGXbjSWlw==
+Date: Thu, 21 Jul 2022 08:10:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Tom Rix <trix@redhat.com>,
+	Michal Marek <michal.lkml@markovi.net>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+Message-ID: <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
+References: <20220720232332.2720091-1-justinstitt@google.com>
+ <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220714205646.4023495-1-ndesaulniers@google.com>
- <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com> <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
-In-Reply-To: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 21 Jul 2022 07:48:39 -0700
-Message-ID: <CAKwvOdn1btTr1DeAJz-xRw4tLcwCMmrXbJChOVrvjAZ1KtnZew@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
 
-On Sat, Jul 16, 2022 at 10:34 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I decided to make a non-kernel test-case so that clang people can look
-> at it without having to worry about any kernel code issues or the
-> details of the SMAP rules, and it really shows how clang generates
-> horribly pointless and wrong code.
+On Thu, Jul 21, 2022 at 07:27:34AM -0700, Nick Desaulniers wrote:
+> On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
+> >
+> > There's been an ongoing mission to re-enable the -Wformat warning for
+> > Clang. A previous attempt at enabling the warning showed that there were
+> > many instances of this warning throughout the codebase. The sheer amount
+> > of these warnings really polluted builds and thus -Wno-format was added
+> > to _temporarily_ toggle them off.
+> >
+> > After many patches the warning has largely been eradicated for x86,
+> > x86_64, arm, and arm64 on a variety of configs. The time to enable the
+> > warning has never been better as it seems for the first time we are
+> > ahead of them and can now solve them as they appear rather than tackling
+> > from a backlog.
+> >
+> > As to the root cause of this large backlog of warnings, Clang seems to
+> > pickup on some more nuanced cases of format warnings caused by implicit
+> > integer conversion as well as default argument promotions from
+> > printf-like functions.
+> >
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > ---
+> > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
+> >
+> > Note:
+> > For this patch to land on its feet, the plethora of supporting patches that
+> > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
+> > of them have!
+> >
+> > Here are the patches still waiting to be picked up:
+> > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
+> > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
+> 
+> Hi Masahiro, Nathan, and Tom,
+> What are your thoughts for _when_ in the release cycle this should be
+> picked up?  I worry that if we don't remove this soon, we will
+> backslide, and more -Wformat issues will crop up making removing this
+> in the future like digging in sand.  Justin has chased down many
+> instances of this warning, and I'm happy to help clean up fallout from
+> landing this.
 
-Perfect, thank you.  I was having a hard time reducing this one.
+Let me do a series of builds with the two patches above against
+next-20220721 to see if there are any instances of this warning across
+the less frequently tested architectures then I will review/ack this.
 
->
-> I'm not sure what the right thing to do is to get this sorted out, but
-> I created an "issue" on github for this:
->
->     https://github.com/llvm/llvm-project/issues/56568
->
-> in the hope that this can get fixed. Because it's very clearly a clang
-> misfeature, where clang basically generates insane code that violates
-> the rules we try to enforce with objdump.
->
-> Nick / Nathan / clang-built-linux people - if there are other better
-> ways than that github issue thing to make people aware of this, that
-> would be lovely, and please forward that issue to the right people.
+I don't think we need to worry much about backslide, as -Wformat is
+enabled with W=1, which the 0day folks already test with, so new
+instances of this warning should get reported to the authors when they
+are introduced so they can be fixed immediately. However, I would still
+like to see this applied sooner rather than later, although I would also
+like us to be completely warning clean before doing so, especially with
+-Werror now being selected with all{mod,yes}config. -rc8 is this Sunday
+and final should be July 31st so I think this could be applied at some
+point between those two dates then maybe sent to Linus for a late pull
+request once all other trees have been merged but that is ultimately up
+to Masahiro.
 
-Perfect, thank you.
+Cheers,
+Nathan
 
-LLVM moved from bugzilla to github for issue tracking last year.  It's
-best to file issues there, or in our issue tracker (also github) which
-is more specific to issues pertaining to the kernel:
-https://github.com/ClangBuiltLinux/linux/issues
-
-You can cc Nathan or myself in bugreports via mentioning @nathanchance
-and @nickdesaulniers explicitly, or just forward us the link and we
-can subscribe.
-
-Putting out some other fires/regressions at the moment; it looks like
-Yuanfang has already started chewing on your bug report.  If they get
-stuck, I'll dive in once these regressions are sorted.  Should be an
-optimization opportunity regardless of UBSAN when we know only certain
-bits are set.
--- 
-Thanks,
-~Nick Desaulniers
+> >
+> >  scripts/Makefile.extrawarn | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > index f5f0d6f09053..9bbaf7112a9b 100644
+> > --- a/scripts/Makefile.extrawarn
+> > +++ b/scripts/Makefile.extrawarn
+> > @@ -47,7 +47,6 @@ else
+> >
+> >  ifdef CONFIG_CC_IS_CLANG
+> >  KBUILD_CFLAGS += -Wno-initializer-overrides
+> > -KBUILD_CFLAGS += -Wno-format
+> >  KBUILD_CFLAGS += -Wno-sign-compare
+> >  KBUILD_CFLAGS += -Wno-format-zero-length
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> > --
+> > 2.37.0.170.g444d1eabd0-goog
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
