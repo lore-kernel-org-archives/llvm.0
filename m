@@ -1,186 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1394680;
-	Thu, 21 Jul 2022 15:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EB8BC341C0;
-	Thu, 21 Jul 2022 15:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658418022;
-	bh=ACCj27BOr1R48MusFeGl2HSWOEE0xoKwIzRbX5aiKL4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PQlypRMW2zxWfY4Bu6/W8sxeu34wdne164ZJePJ6b4A0rq/L2ySDWK9MtbQ/9xsC7
-	 +o1i9f/33ueF0CV8X9Tuw4iUpJNCa4zU+2P8rGlLGrzEKRgeXAXBoW0P18rB2XRrag
-	 LrxGKV1hhAW98eZzf8apZxAwIwDCfpWanSjDyMr/h9g11S+jjBdzlJ1pVadUt5uW/B
-	 r+TyN2v0+wreR4OXdOxhLmhJO6r4+wNZjsGHjH8Os+qEbg38c97juGNVd/OJnQdXzv
-	 LpX7hkNhbkMx+6AzHUbVody3sr1APq8JmL7+cduMDvuxOXFOyohEPF1U83AKfKcuQW
-	 sN3iYc5VLJj+w==
-Date: Thu, 21 Jul 2022 08:40:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-	Cezary Rojewski <cezary.rojewski@intel.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Tom Rix <trix@redhat.com>, patches@lists.linux.dev,
-	alsa-devel@alsa-project.org,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
- noinline
-Message-ID: <YtlzY9aYdbS4Y3+l@dev-arch.thelio-3990X>
-References: <20220720185228.3182663-1-nathan@kernel.org>
- <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
- <YtllwRY6F93uYRxz@sirena.org.uk>
- <d8e8e5e5-001d-5f22-b22c-aaea16ed8719@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588184680
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 16:03:06 +0000 (UTC)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1oEYOg-0005mm-2Y; Thu, 21 Jul 2022 17:47:30 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 344A7B6E79;
+	Thu, 21 Jul 2022 15:47:28 +0000 (UTC)
+Date: Thu, 21 Jul 2022 17:47:25 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+	linux-can@vger.kernel.org, kernel@pengutronix.de,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
+ rxerr during bus-off
+Message-ID: <20220721154725.ovcsfiio7e6hts2n@pengutronix.de>
+References: <20220720081034.3277385-1-mkl@pengutronix.de>
+ <20220720081034.3277385-19-mkl@pengutronix.de>
+ <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6whgrc2hjjl4b7xy"
+Content-Disposition: inline
+In-Reply-To: <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
+
+
+--6whgrc2hjjl4b7xy
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d8e8e5e5-001d-5f22-b22c-aaea16ed8719@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 21, 2022 at 05:28:09PM +0200, Amadeusz Sławiński wrote:
-> On 7/21/2022 4:42 PM, Mark Brown wrote:
-> > On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz Sławiński wrote:
-> > > On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
-> > 
-> > > > This warning is also visible with allmodconfig on other architectures.
-> > 
-> > > My first question would be what clang does differently in this configuration
-> > > (ARM) than in all other configurations (x86, etc.) and gcc.
-> > 
-> > See above from Nathan's commit message...
-> 
-> Ah, missed that. Anyway, what about if we replace multiple calls to
-> guid_equal with lookup table and one call in loop?
-> 
-> Do let me know if something like the following works and I will send it as a
-> proper patch:
+On 21.07.2022 08:27:06, Nathan Chancellor wrote:
+> On Wed, Jul 20, 2022 at 10:10:23AM +0200, Marc Kleine-Budde wrote:
+> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >=20
+> > During bus off, the error count is greater than 255 and can not fit in
+> > a u8.
+> >=20
+> > Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processin=
+g")
+> > Link: https://lore.kernel.org/all/20220719143550.3681-2-mailhol.vincent=
+@wanadoo.fr
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > ---
+> >  drivers/net/can/pch_can.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
+> > index fde3ac516d26..497ef77340ea 100644
+> > --- a/drivers/net/can/pch_can.c
+> > +++ b/drivers/net/can/pch_can.c
+> > @@ -496,6 +496,9 @@ static void pch_can_error(struct net_device *ndev, =
+u32 status)
+> >  		cf->can_id |=3D CAN_ERR_BUSOFF;
+> >  		priv->can.can_stats.bus_off++;
+> >  		can_bus_off(ndev);
+> > +	} else {
+> > +		cf->data[6] =3D errc & PCH_TEC;
+> > +		cf->data[7] =3D (errc & PCH_REC) >> 8;
+> >  	}
+> > =20
+> >  	errc =3D ioread32(&priv->regs->errc);
+> > @@ -556,9 +559,6 @@ static void pch_can_error(struct net_device *ndev, =
+u32 status)
+> >  		break;
+> >  	}
+> > =20
+> > -	cf->data[6] =3D errc & PCH_TEC;
+> > -	cf->data[7] =3D (errc & PCH_REC) >> 8;
+> > -
+> >  	priv->can.state =3D state;
+> >  	netif_receive_skb(skb);
+> >  }
+> > --=20
+> > 2.35.1
+> >=20
+> >=20
+> >=20
+>=20
+> Apologies if this has been reported already, I didn't see anything on
+> the mailing lists.
+>=20
+> This commit is now in -next as commit 3a5c7e4611dd ("can: pch_can: do
+> not report txerr and rxerr during bus-off"), where it causes the
+> following clang warning:
+>=20
+>   ../drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitia=
+lized when used here [-Werror,-Wuninitialized]
+>                   cf->data[6] =3D errc & PCH_TEC;
+>                                 ^~~~
+>   ../drivers/net/can/pch_can.c:484:10: note: initialize the variable 'err=
+c' to silence this warning
+>           u32 errc, lec;
+>                   ^
+>                    =3D 0
+>   1 error generated.
+>=20
+> errc is initialized underneath this now, should it be hoisted or is
+> there another fix?
 
-Yes, that works! With ARCH=arm64 allmodconfig + CONFIG_FRAME_WARN=128,
-there is no single large function, they are all far below the default
-2048 limit.
+Doh! I'll send a fix.
 
-  sound/soc/intel/avs/path.c:819:18: warning: stack frame size (256) exceeds limit (128) in 'avs_path_create' [-Wframe-larger-than]
-  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
-                   ^
-  sound/soc/intel/avs/path.c:877:5: warning: stack frame size (272) exceeds limit (128) in 'avs_path_bind' [-Wframe-larger-than]
-  int avs_path_bind(struct avs_path *path)
-      ^
-  sound/soc/intel/avs/path.c:143:12: warning: stack frame size (144) exceeds limit (128) in 'avs_copier_create' [-Wframe-larger-than]
-  static int avs_copier_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  sound/soc/intel/avs/path.c:379:12: warning: stack frame size (144) exceeds limit (128) in 'avs_micsel_create' [-Wframe-larger-than]
-  static int avs_micsel_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  sound/soc/intel/avs/path.c:344:12: warning: stack frame size (160) exceeds limit (128) in 'avs_mux_create' [-Wframe-larger-than]
-  static int avs_mux_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  sound/soc/intel/avs/path.c:267:12: warning: stack frame size (160) exceeds limit (128) in 'avs_updown_mix_create' [-Wframe-larger-than]
-  static int avs_updown_mix_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  sound/soc/intel/avs/path.c:325:12: warning: stack frame size (176) exceeds limit (128) in 'avs_aec_create' [-Wframe-larger-than]
-  static int avs_aec_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  sound/soc/intel/avs/path.c:306:12: warning: stack frame size (144) exceeds limit (128) in 'avs_asrc_create' [-Wframe-larger-than]
-  static int avs_asrc_create(struct avs_dev *adev, struct avs_path_module *mod)
-             ^
-  8 warnings generated.
+regards,
+Marc
 
-Feel free to add either
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-  Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+--6whgrc2hjjl4b7xy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-or
+-----BEGIN PGP SIGNATURE-----
 
-  Build-tested-by: Nathan Chancellor <nathan@kernel.org>
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLZdQYACgkQrX5LkNig
+013hmwgAnn12oPoDrDC3N5rQawu8IQLoQMmJeDee6ufSLzIqY3BDYF2pIoEkk6Ee
+PANXpP81pcYTrdTAagbOGLH0iRTkiVRZVJzyFVt7wt28s777b9EVHyMAF+mnXY+s
+UmsDhU4mwKnpX4OEu4dJPVS/sfIzdwWffJWLwG56IC7pH8C/PxJEL1CoF0tXY2E4
+tFvWzT6Qv1p18huSMSZghvadrfyEMA0CpBTUZjM5O3nzBLQMnCbCS99YLDn6JN32
+6B+Yhahh7yDrQqeyhyIbkvxSB8WkqeQDaw9+N1WHC6mrWqAYV1CkQji+pMRma/IF
+/3DigVqfVNvndoWez+TNzDq3F6G4Sw==
+=tRaG
+-----END PGP SIGNATURE-----
 
-when formally sending, thank you a lot for the fix!
-
-Cheers,
-Nathan
-
-> diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-> index 3d46dd5e5bc4..ce157a8d6552 100644
-> --- a/sound/soc/intel/avs/path.c
-> +++ b/sound/soc/intel/avs/path.c
-> @@ -449,35 +449,39 @@ static int avs_modext_create(struct avs_dev *adev,
-> struct avs_path_module *mod)
->         return ret;
->  }
-> 
-> +static int avs_probe_create(struct avs_dev *adev, struct avs_path_module
-> *mod)
-> +{
-> +       dev_err(adev->dev, "Probe module can't be instantiated by
-> topology");
-> +       return -EINVAL;
-> +}
-> +
-> +struct avs_module_create {
-> +       guid_t *guid;
-> +       int (*create)(struct avs_dev *adev, struct avs_path_module *mod);
-> +};
-> +
-> +static struct avs_module_create avs_module_create[] = {
-> +       { &AVS_MIXIN_MOD_UUID, avs_modbase_create },
-> +       { &AVS_MIXOUT_MOD_UUID, avs_modbase_create },
-> +       { &AVS_KPBUFF_MOD_UUID, avs_modbase_create },
-> +       { &AVS_COPIER_MOD_UUID, avs_copier_create },
-> +       { &AVS_MICSEL_MOD_UUID, avs_micsel_create },
-> +       { &AVS_MUX_MOD_UUID, avs_mux_create },
-> +       { &AVS_UPDWMIX_MOD_UUID, avs_updown_mix_create },
-> +       { &AVS_SRCINTC_MOD_UUID, avs_src_create },
-> +       { &AVS_AEC_MOD_UUID, avs_aec_create },
-> +       { &AVS_ASRC_MOD_UUID, avs_asrc_create },
-> +       { &AVS_INTELWOV_MOD_UUID, avs_wov_create },
-> +       { &AVS_PROBE_MOD_UUID, avs_probe_create },
-> +};
-> +
->  static int avs_path_module_type_create(struct avs_dev *adev, struct
-> avs_path_module *mod)
->  {
->         const guid_t *type = &mod->template->cfg_ext->type;
-> 
-> -       if (guid_equal(type, &AVS_MIXIN_MOD_UUID) ||
-> -           guid_equal(type, &AVS_MIXOUT_MOD_UUID) ||
-> -           guid_equal(type, &AVS_KPBUFF_MOD_UUID))
-> -               return avs_modbase_create(adev, mod);
-> -       if (guid_equal(type, &AVS_COPIER_MOD_UUID))
-> -               return avs_copier_create(adev, mod);
-> -       if (guid_equal(type, &AVS_MICSEL_MOD_UUID))
-> -               return avs_micsel_create(adev, mod);
-> -       if (guid_equal(type, &AVS_MUX_MOD_UUID))
-> -               return avs_mux_create(adev, mod);
-> -       if (guid_equal(type, &AVS_UPDWMIX_MOD_UUID))
-> -               return avs_updown_mix_create(adev, mod);
-> -       if (guid_equal(type, &AVS_SRCINTC_MOD_UUID))
-> -               return avs_src_create(adev, mod);
-> -       if (guid_equal(type, &AVS_AEC_MOD_UUID))
-> -               return avs_aec_create(adev, mod);
-> -       if (guid_equal(type, &AVS_ASRC_MOD_UUID))
-> -               return avs_asrc_create(adev, mod);
-> -       if (guid_equal(type, &AVS_INTELWOV_MOD_UUID))
-> -               return avs_wov_create(adev, mod);
-> -
-> -       if (guid_equal(type, &AVS_PROBE_MOD_UUID)) {
-> -               dev_err(adev->dev, "Probe module can't be instantiated by
-> topology");
-> -               return -EINVAL;
-> -       }
-> +       for (int i = 0; i < ARRAY_SIZE(avs_module_create); i++)
-> +               if (guid_equal(type, avs_module_create[i].guid))
-> +                       return avs_module_create[i].create(adev, mod);
-> 
->         return avs_modext_create(adev, mod);
->  }
-> 
+--6whgrc2hjjl4b7xy--
