@@ -1,143 +1,72 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391AB23A0
-	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 03:15:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658373333; x=1689909333;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iulKdsPgQfFrWl24JS9SnoJbG4Ic0GKj3Ek47eUYTTk=;
-  b=hL0fcotVLfnS5Uz7Ks5jYGztuKdC93KPxSufjffXaCSIe5mnr+SW/3ny
-   oteNyiJUJG3xj1azWVxbRmumoKhDW8kH1514oUAvXaZxxQyh6KpXVaPNF
-   PsSEBtV113WoAGxd8a1gMMhP0CYcq/O5e5tyIy0I2FBJjUFIyK9/YkXSe
-   Ad6P2BpCHkXNcscSvaGdMgIxQXyR/NH56GPxYXtaGf9cihuMWxIxupCka
-   1qKUmZiBX5yOJxyr/iVxCYfka0S2UdmE4chTeyarze9Yc3p1WWOnQ587C
-   Lgudi/i8b08U3rMVJflwH21olRBB6yLDqCeUk6jIuvQ6lK1QI9tgWqdKR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="312646138"
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="312646138"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 20:15:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="573564986"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jul 2022 20:15:30 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1oEMev-0001OD-F9;
-	Thu, 21 Jul 2022 03:15:29 +0000
-Date: Thu, 21 Jul 2022 11:15:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [linux-stable-rc:linux-5.10.y 3585/7104]
- drivers/gpu/drm/i915/gt/intel_gt.c:732:2: error: format string is not a
- string literal (potentially insecure)
-Message-ID: <202207211126.LnCtB2kQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1248C23A0
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 04:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B491C341C6;
+	Thu, 21 Jul 2022 04:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658376617;
+	bh=hFxcJyK3vIaQmF35EpAVUxl/v6Sy15IF5TRQ64uUByQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=jQQ1ebaLrvPPX/VyiRhiS8g+Rhx7oZuAMUPNcXvUlzoleo8qDmxDOEcw/89l4S0yY
+	 GCUlMevFvUgSsBWGep+3ess2LNM8geR3zryb32glbmsmv8SJcBP9pMFz/mZsj5UMz6
+	 62p/rgxhaSQ5Ckmiqe4fuz6K6Hhi23G1NAkXxGnhWXALrVNbo6aXC5Xn7QmyBswvJu
+	 OhmQSArlXdtcFgqISUIxIqbVpgQtdyQxTCDXsBnD9220ZdNCuM0/vxUmk1xogAnJEO
+	 u4pUDnpz4LSKzxMB4SVzI+zWRSzS7o7fegI7p1Ux7WiCL6LTnWBnR18tfVfR7e4Hhi
+	 b47lN1N6dukNQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7161BE451BE;
+	Thu, 21 Jul 2022 04:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4] net: ipa: add an endpoint device attribute group
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <165837661746.25559.16692832535272405224.git-patchwork-notify@kernel.org>
+Date: Thu, 21 Jul 2022 04:10:17 +0000
+References: <20220719191639.373249-1-elder@linaro.org>
+In-Reply-To: <20220719191639.373249-1-elder@linaro.org>
+To: Alex Elder <elder@linaro.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, mka@chromium.org, evgreen@chromium.org,
+ bjorn.andersson@linaro.org, quic_cpratapa@quicinc.com,
+ quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+ quic_subashab@quicinc.com, elder@kernel.org, netdev@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   024476cf51e88407e84736ff298652322459beb5
-commit: 6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88 [3585/7104] drm/i915: Flush TLBs before releasing backing store
-config: i386-randconfig-a002-20220718 (https://download.01.org/0day-ci/archive/20220721/202207211126.LnCtB2kQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout 6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hello:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-All errors (new ones prefixed by >>):
+On Tue, 19 Jul 2022 14:16:39 -0500 you wrote:
+> Create a new attribute group meant to provide a single place that
+> defines endpoint IDs that might be needed by user space.  Not all
+> defined endpoints are presented, and only those that are defined
+> will be made visible.
+> 
+> The new attributes use "extended" device attributes to hold endpoint
+> IDs, which is a little more compact and efficient.  Reimplement the
+> existing modem endpoint ID attribute files using common code.
+> 
+> [...]
 
->> drivers/gpu/drm/i915/gt/intel_gt.c:732:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt.c:732:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   1 error generated.
+Here is the summary with links:
+  - [net-next,v4] net: ipa: add an endpoint device attribute group
+    https://git.kernel.org/netdev/net-next/c/d79e4164d0d5
 
-
-vim +732 drivers/gpu/drm/i915/gt/intel_gt.c
-
-   693	
-   694	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-   695	{
-   696		static const i915_reg_t gen8_regs[] = {
-   697			[RENDER_CLASS]			= GEN8_RTCR,
-   698			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
-   699			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
-   700			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
-   701		};
-   702		static const i915_reg_t gen12_regs[] = {
-   703			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
-   704			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
-   705			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
-   706			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
-   707		};
-   708		struct drm_i915_private *i915 = gt->i915;
-   709		struct intel_uncore *uncore = gt->uncore;
-   710		struct intel_engine_cs *engine;
-   711		enum intel_engine_id id;
-   712		const i915_reg_t *regs;
-   713		unsigned int num = 0;
-   714	
-   715		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-   716			return;
-   717	
-   718		if (INTEL_GEN(i915) == 12) {
-   719			regs = gen12_regs;
-   720			num = ARRAY_SIZE(gen12_regs);
-   721		} else if (INTEL_GEN(i915) >= 8 && INTEL_GEN(i915) <= 11) {
-   722			regs = gen8_regs;
-   723			num = ARRAY_SIZE(gen8_regs);
-   724		} else if (INTEL_GEN(i915) < 8) {
-   725			return;
-   726		}
-   727	
-   728		if (drm_WARN_ONCE(&i915->drm, !num,
-   729				  "Platform does not implement TLB invalidation!"))
-   730			return;
-   731	
- > 732		GEM_TRACE("\n");
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
