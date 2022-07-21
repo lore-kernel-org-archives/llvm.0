@@ -1,82 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3313C26;
-	Thu, 21 Jul 2022 14:42:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FACC3411E;
-	Thu, 21 Jul 2022 14:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658414538;
-	bh=PpnwXm3ZuUhE0qo+2U0StDRkyurCa/SzJ43F3CrCXTg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uYg/9KRGJmSMJp1EMQ7FStO2WEfFJB2wq95YO8tG89hXZL2xaf6ey8FrWtv75v7l+
-	 HtfwaTukDYR/OBSHs8qcEhey5USVBSXAGYlnvGnCEmmX14xOeDI4qoDpkOCG24UnV+
-	 BYrRCB1bcroMGro3QhzItHjvJrilIfXFZKd7a66K1y73XTIsGcysAxQPz61ayA5zQc
-	 1e86NyzPQakngQXdDtMQ8BlqlRAlljLoO4So1ZYb2cj4L1oWfXMGAYPaKc4ZTjuYeh
-	 XlMv7qYh2E2npXXAkoHH0BCOPBC7ApPojl7s0WCLqVUadXoO/g3ZMXE6UBV1x89ulh
-	 qQnrp3w5tb4HQ==
-Date: Thu, 21 Jul 2022 15:42:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Cezary Rojewski <cezary.rojewski@intel.com>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	alsa-devel@alsa-project.org, Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
- noinline
-Message-ID: <YtllwRY6F93uYRxz@sirena.org.uk>
-References: <20220720185228.3182663-1-nathan@kernel.org>
- <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69963C26
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 14:48:53 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id d17so1009540lfa.12
+        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 07:48:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b6hct8xCrE6CB9ftodiKvDlwTR0gdrnA5ClwcliBbPY=;
+        b=JMubbrBv1Nd+8w6FEi5or5LUmjlC2ld6RSrBV9zeh4LiULoqJiy9EVpd3jtEFtwJCi
+         PZHnxwTZ1skg3P7ZHuFqsRPmgQuZUhh5qDWu0VuZ/qPk4BjGMeThmvjpzJLjrSpIK2Cm
+         EKrTCSJ7od43H4++62FeYEuZDqMh+oH31imbnETjgycNPi0hBVSySmdfM+XljybFGRBM
+         Z1lu2fA4faSic32ei6AxwHfu2kATgh69lgbGfQy6YffNkFLmFlWU+qpcfDGFmoZEE0Ha
+         fpSY4lN7hB544+d/F4GCctLNlY12yUCNT9vWbPbeYvBd0NBzY3dVsAVs5dgzZrBjtciR
+         pBHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b6hct8xCrE6CB9ftodiKvDlwTR0gdrnA5ClwcliBbPY=;
+        b=zqI7pbCTEDXznQ2m9RMEiUX55EaRVBUewgXFynuTnb3ex1rWnCU53Ssl3+u1J0v/F4
+         sYgpMCRo9YZMQ6ezWMvMrGSY2D3sIMJyonnR3no3+a2W5rI7L0XQQocHVj5Nw8KW7mBx
+         qrVBS0bsS1kkMx/k4mqR8VO2/uiIe7qtB5FqZcfLjGGeLRLV6Mj6/m3QeFcl1qt3kEZm
+         2I7dU4d1K5RspZZbgWSPOVq7/6qIK9YDZg3r23XWdh4u4j5mrJ9xCTesvveXheZ3PNcg
+         SHwWqF5JVyJU1sFJLY8gEU8ukVhORRsrLT71ZtzuRwkjVNzD7X2nNm3pVUv5jHzugjlW
+         3E7A==
+X-Gm-Message-State: AJIora/JyPNIG6cekM9cPnhmsUD71bLl/CW0nmAImkdUr+mDoatj82Tg
+	3DQrR6TScFiZQFQE7iB6dNUlFkvV2XyN1HNMV077ww==
+X-Google-Smtp-Source: AGRyM1viW5VSMgPFgPinMrTL+kpk+XpxDY9JqlD86usXfDLVMuZ2ksntxKfHUq/p0uaQkcha+Bst/d+d0seMWLDTQO0=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr3942194lfr.647.1658414931709; Thu, 21
+ Jul 2022 07:48:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ajHU/ff5Es7EyDXb"
-Content-Disposition: inline
-In-Reply-To: <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
-X-Cookie: Exercise caution in your daily affairs.
+References: <20220714205646.4023495-1-ndesaulniers@google.com>
+ <CAHk-=wgf=mrK7KzNh23dGtegSfJZx=423dCwF0hVTPOjfQ7jtQ@mail.gmail.com> <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
+In-Reply-To: <CAHk-=wh6iW0Fv9mbtX9k2=9Kc9pFEEX7unWzmN7vqB4qXhBL+w@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 21 Jul 2022 07:48:39 -0700
+Message-ID: <CAKwvOdn1btTr1DeAJz-xRw4tLcwCMmrXbJChOVrvjAZ1KtnZew@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: disable UBSAN_DIV_ZERO for clang
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Marco Elver <elver@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
+On Sat, Jul 16, 2022 at 10:34 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I decided to make a non-kernel test-case so that clang people can look
+> at it without having to worry about any kernel code issues or the
+> details of the SMAP rules, and it really shows how clang generates
+> horribly pointless and wrong code.
 
---ajHU/ff5Es7EyDXb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Perfect, thank you.  I was having a hard time reducing this one.
 
-On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz S=C5=82awi=C5=84ski wrot=
-e:
-> On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
+>
+> I'm not sure what the right thing to do is to get this sorted out, but
+> I created an "issue" on github for this:
+>
+>     https://github.com/llvm/llvm-project/issues/56568
+>
+> in the hope that this can get fixed. Because it's very clearly a clang
+> misfeature, where clang basically generates insane code that violates
+> the rules we try to enforce with objdump.
+>
+> Nick / Nathan / clang-built-linux people - if there are other better
+> ways than that github issue thing to make people aware of this, that
+> would be lovely, and please forward that issue to the right people.
 
-> > This warning is also visible with allmodconfig on other architectures.
+Perfect, thank you.
 
-> My first question would be what clang does differently in this configurat=
-ion
-> (ARM) than in all other configurations (x86, etc.) and gcc.
+LLVM moved from bugzilla to github for issue tracking last year.  It's
+best to file issues there, or in our issue tracker (also github) which
+is more specific to issues pertaining to the kernel:
+https://github.com/ClangBuiltLinux/linux/issues
 
-See above from Nathan's commit message...
+You can cc Nathan or myself in bugreports via mentioning @nathanchance
+and @nickdesaulniers explicitly, or just forward us the link and we
+can subscribe.
 
---ajHU/ff5Es7EyDXb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZZcAACgkQJNaLcl1U
-h9BaqwgAhNdNCBam0uI5GOf9ZPo7T8imcXF+ulBeP3Q0Ve0ZcM5jJKpWyJY/xuKk
-vKGrKJxJu9IU9AXKBppPBM1SxYIBPUCjoLBkrUYKXQyKglTbcx3Oy+lmmwxaLBoo
-jpGuetXcc1czReyBzu8ySfmKkMx9S2z3O8kn8vRJ4jfF4taSE0j6gPJjMTGDdjJq
-weZB3dDZGNEtWT687UK+NcY2HaMDEi/ULMN8p/Z/ZuDPlPhHUotyKBl71GMCuCD+
-Fgquc2rxOUl51tNMTK9h0J3u4CtDsbi/5eC0qHdkebRdwmOhIJssiUiu2b+IEU69
-Rz17RBTZkaL+qs5JW1SFAPJ57tJO2Q==
-=xgGL
------END PGP SIGNATURE-----
-
---ajHU/ff5Es7EyDXb--
+Putting out some other fires/regressions at the moment; it looks like
+Yuanfang has already started chewing on your bug report.  If they get
+stuck, I'll dive in once these regressions are sorted.  Should be an
+optimization opportunity regardless of UBSAN when we know only certain
+bits are set.
+-- 
+Thanks,
+~Nick Desaulniers
