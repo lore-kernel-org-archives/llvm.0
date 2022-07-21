@@ -1,35 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8EB23CD;
-	Thu, 21 Jul 2022 21:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4B6C3411E;
-	Thu, 21 Jul 2022 21:05:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658437549;
-	bh=um1UDUnWaoZYuOrfSJS2U4SJxNiJE4HvKi20iSdo2pY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pOyDW1eJH30tU0DxQO+zsRiGRXqZkBYqclkyZSaoOCXuf3WPvQy5M+LJ/uqOzwgqF
-	 Zp5s3t/LMWHdrf7p/dAIQYo8Yh/3UrAbpXY/jmZ1jBn96vMnHiFNhWVcsZCeGa4irh
-	 gCUVznrVdzw7PDBvzbrZjNXtQFqjKWp5YhWsiyriLVBYK8jU9RUWGhVLfF62pP1ENw
-	 Tb22Cx22Nm8dCEBNaXw+taG+IReYSgK4qcyuWxmOojwa9lDMJwB0cboFjL3TYNI3Hd
-	 Ep1un40W6ZYuj03aJSsVkP6rfpGPrfGTjzvIROOJ3+ZG3RxMaMNaJJeIP0vn6/XtYy
-	 AGaYOlKJpHZBA==
-Date: Thu, 21 Jul 2022 14:05:46 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-arm-msm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] drivers: iommu: fix clang -wformat warning
-Message-ID: <Ytm/qj2ozeSY0a3Y@dev-arch.thelio-3990X>
-References: <20220721210331.4012015-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7486AB3
+	for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 21:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658437795; x=1689973795;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CH/N6RyqWpi3Q/qSWjS6dgtJnWDqQ+JkIVbStP1cE6Y=;
+  b=E9CCTbiCRGdSwedUsdec/zcfcSvcS0KjBwfE1az/KjcbzOvp7ODCVvkr
+   gPP7BFjwiAZPmVX2O8wiJQwK2mVOJzWUFlJ5XKJQJYqMYxszofNbxL/oH
+   YWxZ3Prt3iKGwKfuEzT2hmlaOocT84Kql5sIhmKQ2B6h/69VPBWN15drl
+   LoAbX5erLvtA5d3gGs11v3tEf9XReEXHuvWockqyyJEYuN9pdgv/wPxRx
+   +1it1veXe85TM0qODP5StDitgGlRmJYNMTbqrqOGsIvZVMYmb4kjC8Nsz
+   8HeGI30Yo2iPdADIU4axFSKbysoKEhfzbYAM0Fwdw6WvVXDKedxSRo4w5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="270208103"
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="270208103"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 14:09:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="548934029"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2022 14:09:53 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oEdQe-0000Ym-2r;
+	Thu, 21 Jul 2022 21:09:52 +0000
+Date: Fri, 22 Jul 2022 05:09:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [arnd-playground:orion-pci-cleanup 2/5]
+ arch/arm/plat-orion/pcie.c:325:26: error: use of undeclared identifier
+ 'pci_common_swizzle'
+Message-ID: <202207220513.e5SXpj51-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,45 +46,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721210331.4012015-1-justinstitt@google.com>
 
-On Thu, Jul 21, 2022 at 02:03:31PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter the following warning:
-> | drivers/iommu/msm_iommu.c:603:6: error: format specifies type 'unsigned
-> | short' but the argument has type 'int' [-Werror,-Wformat] sid);
-> 
-> `sid` is an int, use the proper format specifier `%x`.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git orion-pci-cleanup
+head:   f154fdd063e0f8e231dbe3c06b03fbb1ec0ffb8c
+commit: 1857a2a57968779ee07dae4b4d9f8c6fc73c4547 [2/5] ARM: orion: stop using pci_common_init
+config: arm-randconfig-r021-20220718 (https://download.01.org/0day-ci/archive/20220722/202207220513.e5SXpj51-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=1857a2a57968779ee07dae4b4d9f8c6fc73c4547
+        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
+        git fetch --no-tags arnd-playground orion-pci-cleanup
+        git checkout 1857a2a57968779ee07dae4b4d9f8c6fc73c4547
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks for the patch!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-> ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
-> 
->  drivers/iommu/msm_iommu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-> index 428919a474c1..6a24aa804ea3 100644
-> --- a/drivers/iommu/msm_iommu.c
-> +++ b/drivers/iommu/msm_iommu.c
-> @@ -599,7 +599,7 @@ static int insert_iommu_master(struct device *dev,
->  
->  	for (sid = 0; sid < master->num_mids; sid++)
->  		if (master->mids[sid] == spec->args[0]) {
-> -			dev_warn(dev, "Stream ID 0x%hx repeated; ignoring\n",
-> +			dev_warn(dev, "Stream ID 0x%x repeated; ignoring\n",
->  				 sid);
->  			return 0;
->  		}
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 
-> 
+>> arch/arm/plat-orion/pcie.c:325:26: error: use of undeclared identifier 'pci_common_swizzle'
+                           bridge->swizzle_irq = pci_common_swizzle;
+                                                 ^
+   arch/arm/plat-orion/pcie.c:337:11: error: call to undeclared function 'pci_scan_root_bus_bridge'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   ret = pci_scan_root_bus_bridge(bridge);
+                                         ^
+   arch/arm/plat-orion/pcie.c:379:4: error: call to undeclared function 'pci_bus_claim_resources'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pci_bus_claim_resources(bus);
+                           ^
+   arch/arm/plat-orion/pcie.c:383:4: error: call to undeclared function 'pci_bus_size_bridges'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pci_bus_size_bridges(bus);
+                           ^
+   arch/arm/plat-orion/pcie.c:384:4: error: call to undeclared function 'pci_bus_assign_resources'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pci_bus_assign_resources(bus);
+                           ^
+   arch/arm/plat-orion/pcie.c:384:4: note: did you mean 'pci_assign_resource'?
+   include/linux/pci.h:1810:19: note: 'pci_assign_resource' declared here
+   static inline int pci_assign_resource(struct pci_dev *dev, int i)
+                     ^
+   arch/arm/plat-orion/pcie.c:387:5: error: call to undeclared function 'pcie_bus_configure_settings'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   pcie_bus_configure_settings(child);
+                                   ^
+   arch/arm/plat-orion/pcie.c:390:3: error: call to undeclared function 'pci_bus_add_devices'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pci_bus_add_devices(bus);
+                   ^
+   7 errors generated.
+
+
+vim +/pci_common_swizzle +325 arch/arm/plat-orion/pcie.c
+
+   289	
+   290	static void orion_pcie_init_hw(struct device *parent, struct hw_pci *hw,
+   291				    struct list_head *head)
+   292	{
+   293		struct pci_sys_data *sys = NULL;
+   294		int ret;
+   295		int nr, busnr;
+   296	
+   297		for (nr = busnr = 0; nr < hw->nr_controllers; nr++) {
+   298			struct pci_host_bridge *bridge;
+   299	
+   300			bridge = pci_alloc_host_bridge(sizeof(struct pci_sys_data));
+   301			if (WARN(!bridge, "PCI: unable to allocate bridge!"))
+   302				break;
+   303	
+   304			sys = pci_host_bridge_priv(bridge);
+   305	
+   306			sys->busnr   = busnr;
+   307			sys->swizzle = hw->swizzle;
+   308			sys->map_irq = hw->map_irq;
+   309			INIT_LIST_HEAD(&sys->resources);
+   310	
+   311			if (hw->private_data)
+   312				sys->private_data = hw->private_data[nr];
+   313	
+   314			ret = hw->setup(nr, sys);
+   315	
+   316			if (ret > 0) {
+   317	
+   318				ret = pcibios_init_resource(nr, sys);
+   319				if (ret)  {
+   320					pci_free_host_bridge(bridge);
+   321					break;
+   322				}
+   323	
+   324				bridge->map_irq = sys->map_irq;
+ > 325				bridge->swizzle_irq = pci_common_swizzle;
+   326	
+   327				if (hw->scan)
+   328					ret = hw->scan(nr, bridge);
+   329				else {
+   330					list_splice_init(&sys->resources,
+   331							 &bridge->windows);
+   332					bridge->dev.parent = parent;
+   333					bridge->sysdata = sys;
+   334					bridge->busnr = sys->busnr;
+   335					bridge->ops = hw->ops;
+   336	
+   337					ret = pci_scan_root_bus_bridge(bridge);
+   338				}
+   339	
+   340				if (WARN(ret < 0, "PCI: unable to scan bus!")) {
+   341					pci_free_host_bridge(bridge);
+   342					break;
+   343				}
+   344	
+   345				sys->bus = bridge->bus;
+   346	
+   347				busnr = sys->bus->busn_res.end + 1;
+   348	
+   349				list_add(&sys->node, head);
+   350			} else {
+   351				pci_free_host_bridge(bridge);
+   352				if (ret < 0)
+   353					break;
+   354			}
+   355		}
+   356	}
+   357	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
