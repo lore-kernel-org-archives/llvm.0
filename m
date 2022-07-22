@@ -1,43 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F9C15A4
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 06:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA89115A2
+	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 06:48:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658470046; x=1690006046;
+  t=1658472507; x=1690008507;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LDwcHrdGIJtjN2WCD9w5kzOL67y8ncTxWLvvrUCGAhM=;
-  b=Nq8ocMOSMUxr4txawQ7+V2r8tmX7uR9Hw1NxA4q1j/IVGCGtG1SPmCU4
-   V3Xi+9Ju5Cbljln76U5IHbJUFQ07XhLWCdMI9RvpIzeCyEYRXGsnuU4lN
-   1gqO600AqksgmtjxSE5Dxna2N0LHJezLfsjenZgvFhUytrNf+SbJUpxQG
-   AaKjhqYCszrA7loeFFqvpsf6dUOmmOWbkeDfkXvOAKca/34xIgDDzfEod
-   VTr9AwN3aOII6jkYfg7mE9aKHWmNIFpO7UAq+yLwGGfMGQf7Fwk5f9pyI
-   wZMTi7mvI1jsKGrZPBnKuObqbqmr/ObfpvO6VsccVKdRLNq+jIOkYGb8o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287999625"
+  bh=qrLJjSHnNl593T5koXe6erYE6Q/hVICL/Ib5w3Y98fo=;
+  b=adOA8yX4Xv0SJlV+Pu7CQ5+ZuyQIk9sAT7jvzr5Y+2oLjhNrQvQxIoBR
+   ke4sxDlta6/MAf/3eyydMxbvp+RG5MkZVFX4ma/M9rXg0pJp9Y7uHkir2
+   Me6Km7rFkzCh3G7GnbpbFXtcgqBum8z92zyr0U+no+6pibFk8/8uywvTN
+   4yrlp8tAVCDlZByqd2x5yLjqKqGID+iSwQmaUH4kT3UbS/GkoLRw4JFtq
+   OEmcHHzHDHoOVOBitaI8yopaCzlE2a1Ug40LFFt4oIXWfp6P4RUN6pI7m
+   eSpvvG03V05RwDsEL3bR6OHrnP2I0xak3CyiyLYHJW9gLXZpYarBdi+8E
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="286012577"
 X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="287999625"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 23:07:25 -0700
+   d="scan'208";a="286012577"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 23:48:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="626435405"
+   d="scan'208";a="844675769"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 23:07:22 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jul 2022 23:48:24 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oElon-00013g-1Z;
-	Fri, 22 Jul 2022 06:07:21 +0000
-Date: Fri, 22 Jul 2022 14:07:14 +0800
+	id 1oEmSW-00015d-0d;
+	Fri, 22 Jul 2022 06:48:24 +0000
+Date: Fri, 22 Jul 2022 14:47:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maximilian Luz <luzmaximilian@gmail.com>
+To: Keith Busch <kbusch@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
-Subject: [steev:linux-5.19.0-rc7+thinkpad-x13s 117/122]
- drivers/firmware/qcom_scm.c:176: warning: expecting prototype for
- qcom_scm_call(). Prototype was for __qcom_scm_call() instead
-Message-ID: <202207221331.FOo1C9qW-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-prereg-v3-wip 6/6] drivers/nvme/host/pci.c:967:7:
+ warning: variable 'nprps_left' is uninitialized when used here
+Message-ID: <202207221447.1b5HzBgh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,99 +46,159 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/steev/linux linux-5.19.0-rc7+thinkpad-x13s
-head:   5c9f7a9316d17912ed92e6d6b6b1f89561270896
-commit: 67a79524f0074c3a9abd9c489521ff0647b72192 [117/122] firmware: qcom_scm: Export SCM call functions
-config: hexagon-randconfig-r023-20220721 (https://download.01.org/0day-ci/archive/20220722/202207221331.FOo1C9qW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v3-wip
+head:   4625fa7adf745334c0a2eb635121d587df797b29
+commit: 4625fa7adf745334c0a2eb635121d587df797b29 [6/6] nvme-pci: implement dma_map support
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220722/202207221447.1b5HzBgh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/steev/linux/commit/67a79524f0074c3a9abd9c489521ff0647b72192
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev linux-5.19.0-rc7+thinkpad-x13s
-        git checkout 67a79524f0074c3a9abd9c489521ff0647b72192
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=4625fa7adf745334c0a2eb635121d587df797b29
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-prereg-v3-wip
+        git checkout 4625fa7adf745334c0a2eb635121d587df797b29
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/firmware/qcom_scm.c:176: warning: expecting prototype for qcom_scm_call(). Prototype was for __qcom_scm_call() instead
->> drivers/firmware/qcom_scm.c:211: warning: expecting prototype for qcom_scm_call_atomic(). Prototype was for __qcom_scm_call_atomic() instead
+>> drivers/nvme/host/pci.c:967:7: warning: variable 'nprps_left' is uninitialized when used here [-Wuninitialized]
+                   if (nprps_left <= last_prp + 1) {
+                       ^~~~~~~~~~
+   drivers/nvme/host/pci.c:893:49: note: initialize the variable 'nprps_left' to silence this warning
+           int index, offset, i, length, nprps, nprps_left;
+                                                          ^
+                                                           = 0
+   drivers/nvme/host/pci.c:1935:7: warning: variable 'pages_per' set but not used [-Wunused-but-set-variable]
+                   int pages_per = nvme_pages;
+                       ^
+   2 warnings generated.
 
 
-vim +176 drivers/firmware/qcom_scm.c
+vim +/nprps_left +967 drivers/nvme/host/pci.c
 
-9a434cee773ae1 Elliot Berman  2020-01-07  164  
-9a434cee773ae1 Elliot Berman  2020-01-07  165  /**
-9a434cee773ae1 Elliot Berman  2020-01-07  166   * qcom_scm_call() - Invoke a syscall in the secure world
-9a434cee773ae1 Elliot Berman  2020-01-07  167   * @dev:	device
-9a434cee773ae1 Elliot Berman  2020-01-07  168   * @desc:	Descriptor structure containing arguments and return values
-a5d32f6d2e59a6 Yang Li        2021-12-30  169   * @res:        Structure containing results from SMC/HVC call
-9a434cee773ae1 Elliot Berman  2020-01-07  170   *
-9a434cee773ae1 Elliot Berman  2020-01-07  171   * Sends a command to the SCM and waits for the command to finish processing.
-9a434cee773ae1 Elliot Berman  2020-01-07  172   * This should *only* be called in pre-emptible context.
-9a434cee773ae1 Elliot Berman  2020-01-07  173   */
-67a79524f0074c Maximilian Luz 2022-07-19  174  static int __qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
-9a434cee773ae1 Elliot Berman  2020-01-07  175  			   struct qcom_scm_res *res)
-9a434cee773ae1 Elliot Berman  2020-01-07 @176  {
-9a434cee773ae1 Elliot Berman  2020-01-07  177  	might_sleep();
-9a434cee773ae1 Elliot Berman  2020-01-07  178  	switch (__get_convention()) {
-9a434cee773ae1 Elliot Berman  2020-01-07  179  	case SMC_CONVENTION_ARM_32:
-9a434cee773ae1 Elliot Berman  2020-01-07  180  	case SMC_CONVENTION_ARM_64:
-9a434cee773ae1 Elliot Berman  2020-01-07  181  		return scm_smc_call(dev, desc, res, false);
-9a434cee773ae1 Elliot Berman  2020-01-07  182  	case SMC_CONVENTION_LEGACY:
-9a434cee773ae1 Elliot Berman  2020-01-07  183  		return scm_legacy_call(dev, desc, res);
-9a434cee773ae1 Elliot Berman  2020-01-07  184  	default:
-9a434cee773ae1 Elliot Berman  2020-01-07  185  		pr_err("Unknown current SCM calling convention.\n");
-9a434cee773ae1 Elliot Berman  2020-01-07  186  		return -EINVAL;
-9a434cee773ae1 Elliot Berman  2020-01-07  187  	}
-9a434cee773ae1 Elliot Berman  2020-01-07  188  }
-9a434cee773ae1 Elliot Berman  2020-01-07  189  
-67a79524f0074c Maximilian Luz 2022-07-19  190  int qcom_scm_call(const struct qcom_scm_desc *desc, struct qcom_scm_res *res)
-67a79524f0074c Maximilian Luz 2022-07-19  191  {
-67a79524f0074c Maximilian Luz 2022-07-19  192  	if (!__scm)
-67a79524f0074c Maximilian Luz 2022-07-19  193  		return -ENODEV;
-67a79524f0074c Maximilian Luz 2022-07-19  194  
-67a79524f0074c Maximilian Luz 2022-07-19  195  	return __qcom_scm_call(__scm->dev, desc, res);
-67a79524f0074c Maximilian Luz 2022-07-19  196  }
-67a79524f0074c Maximilian Luz 2022-07-19  197  EXPORT_SYMBOL_GPL(qcom_scm_call);
-67a79524f0074c Maximilian Luz 2022-07-19  198  
-9a434cee773ae1 Elliot Berman  2020-01-07  199  /**
-9a434cee773ae1 Elliot Berman  2020-01-07  200   * qcom_scm_call_atomic() - atomic variation of qcom_scm_call()
-9a434cee773ae1 Elliot Berman  2020-01-07  201   * @dev:	device
-9a434cee773ae1 Elliot Berman  2020-01-07  202   * @desc:	Descriptor structure containing arguments and return values
-9a434cee773ae1 Elliot Berman  2020-01-07  203   * @res:	Structure containing results from SMC/HVC call
-9a434cee773ae1 Elliot Berman  2020-01-07  204   *
-9a434cee773ae1 Elliot Berman  2020-01-07  205   * Sends a command to the SCM and waits for the command to finish processing.
-9a434cee773ae1 Elliot Berman  2020-01-07  206   * This can be called in atomic context.
-9a434cee773ae1 Elliot Berman  2020-01-07  207   */
-67a79524f0074c Maximilian Luz 2022-07-19  208  static int __qcom_scm_call_atomic(struct device *dev,
-9a434cee773ae1 Elliot Berman  2020-01-07  209  				  const struct qcom_scm_desc *desc,
-9a434cee773ae1 Elliot Berman  2020-01-07  210  				  struct qcom_scm_res *res)
-9a434cee773ae1 Elliot Berman  2020-01-07 @211  {
-9a434cee773ae1 Elliot Berman  2020-01-07  212  	switch (__get_convention()) {
-9a434cee773ae1 Elliot Berman  2020-01-07  213  	case SMC_CONVENTION_ARM_32:
-9a434cee773ae1 Elliot Berman  2020-01-07  214  	case SMC_CONVENTION_ARM_64:
-9a434cee773ae1 Elliot Berman  2020-01-07  215  		return scm_smc_call(dev, desc, res, true);
-9a434cee773ae1 Elliot Berman  2020-01-07  216  	case SMC_CONVENTION_LEGACY:
-9a434cee773ae1 Elliot Berman  2020-01-07  217  		return scm_legacy_call_atomic(dev, desc, res);
-9a434cee773ae1 Elliot Berman  2020-01-07  218  	default:
-9a434cee773ae1 Elliot Berman  2020-01-07  219  		pr_err("Unknown current SCM calling convention.\n");
-9a434cee773ae1 Elliot Berman  2020-01-07  220  		return -EINVAL;
-9a434cee773ae1 Elliot Berman  2020-01-07  221  	}
-9a434cee773ae1 Elliot Berman  2020-01-07  222  }
-9a434cee773ae1 Elliot Berman  2020-01-07  223  
-
-:::::: The code at line 176 was first introduced by commit
-:::::: 9a434cee773ae15309ac225f27551b5492618e4a firmware: qcom_scm: Dynamically support SMCCC and legacy conventions
-
-:::::: TO: Elliot Berman <eberman@codeaurora.org>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+   886	
+   887	static blk_status_t nvme_premapped(struct nvme_dev *dev, struct request *req,
+   888					   struct nvme_rw_command *cmnd,
+   889					   struct nvme_iod *iod)
+   890	{
+   891		static const int last_prp = NVME_CTRL_PAGE_SIZE / sizeof(__le64) - 1;
+   892		dma_addr_t prp_list_start, prp_list_end, prp_dma;
+   893		int index, offset, i, length, nprps, nprps_left;
+   894		void **list = nvme_pci_iod_list(req);
+   895		struct nvme_dma_mapping *mapping;
+   896		struct dma_pool *pool;
+   897		__le64 *prp_list;
+   898		bool needs_sync;
+   899	
+   900		mapping = blk_rq_dma_tag(req);
+   901		offset = blk_rq_dma_offset(req) + mapping->offset;
+   902		index = offset >> NVME_CTRL_PAGE_SHIFT;
+   903		offset = offset & (NVME_CTRL_PAGE_SIZE - 1);
+   904		needs_sync = rq_data_dir(req) == WRITE &&
+   905			 dma_need_sync(dev->dev, le64_to_cpu(mapping->prps[index]));
+   906	
+   907		/*
+   908		 * XXX: For PAGE_SIZE > NVME_CTRL_PAGE_SIZE, is it faster to save the
+   909		 * PRP list implementation and sync multiple partial pages, more
+   910		 * efficient to sync PAGE_SIZE and build the PRP list per-IO from a
+   911		 * host PAGE_SIZE representation, or cleverly sync physically
+   912		 * contiguous regions?
+   913		 */
+   914		if (needs_sync) {
+   915			dma_sync_single_for_device(dev->dev,
+   916				le64_to_cpu(mapping->prps[index]),
+   917				NVME_CTRL_PAGE_SIZE - offset, DMA_TO_DEVICE);
+   918		}
+   919	
+   920		length = blk_rq_payload_bytes(req) - (NVME_CTRL_PAGE_SIZE - offset);
+   921		cmnd->dptr.prp1 = cpu_to_le64(le64_to_cpu(mapping->prps[index++]) + offset);
+   922	
+   923		if (length <= 0)
+   924			return BLK_STS_OK;
+   925	
+   926		if (length <= NVME_CTRL_PAGE_SIZE) {
+   927			if (needs_sync)
+   928				dma_sync_single_for_device(dev->dev,
+   929					le64_to_cpu(mapping->prps[index]),
+   930					NVME_CTRL_PAGE_SIZE, DMA_TO_DEVICE);
+   931			cmnd->dptr.prp2 = mapping->prps[index];
+   932			return BLK_STS_OK;
+   933		}
+   934	
+   935		nprps = DIV_ROUND_UP(length, NVME_CTRL_PAGE_SIZE);
+   936		prp_list_start = mapping->prp_dma_addr + 8 * index;
+   937		prp_list_end = prp_list_start + 8 * nprps;
+   938	
+   939		/* Optimization when remaining list fits in one nvme page */
+   940		if ((prp_list_start >> NVME_CTRL_PAGE_SHIFT) ==
+   941		    (prp_list_end >> NVME_CTRL_PAGE_SHIFT)) {
+   942			cmnd->dptr.prp2 = cpu_to_le64(prp_list_start);
+   943			goto sync;
+   944		}
+   945	
+   946		if (nprps <= (256 / 8)) {
+   947			pool = dev->prp_small_pool;
+   948			iod->npages = 0;
+   949		} else {
+   950			pool = dev->prp_page_pool;
+   951			iod->npages = 1;
+   952		}
+   953	
+   954		prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &prp_dma);
+   955		if (!prp_list) {
+   956			iod->npages = -1;
+   957			return BLK_STS_RESOURCE;
+   958		}
+   959	
+   960		list[0] = prp_list;
+   961		iod->first_dma = prp_dma;
+   962		i = 0;
+   963		for (;;) {
+   964			dma_addr_t next_prp_dma;
+   965			__le64 *next_prp_list;
+   966	
+ > 967			if (nprps_left <= last_prp + 1) {
+   968				memcpy(prp_list, &mapping->prps[index], nprps_left * 8);
+   969				break;
+   970			}
+   971	
+   972			memcpy(prp_list, &mapping->prps[index],
+   973			       NVME_CTRL_PAGE_SIZE - 8);
+   974			nprps_left -= last_prp;
+   975			index += last_prp;
+   976	
+   977			next_prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &next_prp_dma);
+   978			if (!next_prp_list)
+   979				goto free_prps;
+   980	
+   981			prp_list[last_prp] = cpu_to_le64(next_prp_dma);
+   982			prp_list = next_prp_list;
+   983			prp_dma = next_prp_dma;
+   984			list[iod->npages++] = prp_list;
+   985		}
+   986		cmnd->dptr.prp2 = cpu_to_le64(iod->first_dma);
+   987	
+   988	sync:
+   989		if (!needs_sync)
+   990			return BLK_STS_OK;
+   991	
+   992		for (i = 0; i < nprps; i++)
+   993			dma_sync_single_for_device(dev->dev,
+   994				le64_to_cpu(mapping->prps[index++]),
+   995				NVME_CTRL_PAGE_SIZE, DMA_TO_DEVICE);
+   996		return BLK_STS_OK;
+   997	
+   998	free_prps:
+   999		nvme_free_prps(dev, req);
+  1000		return BLK_STS_RESOURCE;
+  1001	}
+  1002	
 
 -- 
 0-DAY CI Kernel Test Service
