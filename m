@@ -1,158 +1,150 @@
-Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F63415A5
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 04:24:28 +0000 (UTC)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-01.nifty.com with ESMTP id 26M4IfAY019183
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 13:18:41 +0900
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 26M4IWNp027255
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 13:18:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 26M4IWNp027255
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1658463514;
-	bh=Ok0nOaP8oSs4IsxJgNmxPBZo8Rj007X6d6MNVegX7o4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LILVG5vXh/gx1pg20dkI23AA+joRtwJIvR4opJPw/Wl4OavC6gbljUAo7XGEum154
-	 eyJbT0ofZkTI7qVX1hRJA3UtEV/EkZdIktTXJWX2a0tk3xEWx0NbjsLnqNtI5UINfp
-	 DDNS/gycvdXIlucqTcYJeIBYDweRCLmfyBE2JylmXLhHqKGR8Jb0lusuOgMronzbIf
-	 CBEIKc7irOCA0pQctVPNnaoqcuOkFDkSmDwWq7ae8IjOTWuG8JhQkAjD6JEirK033l
-	 YoIMiEAZcdOFje7hcyI4ij5QJRp1dWSceBg1r9Wnzcd2CE/YHp+a1Cmv47aKps8f8+
-	 SOyrOumC9zAxg==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id d8so4868027wrp.6
-        for <llvm@lists.linux.dev>; Thu, 21 Jul 2022 21:18:33 -0700 (PDT)
-X-Gm-Message-State: AJIora8KMBb1bHx42WAPD0/Wee4b0+/fpURacH7ewkczpnyfgjQ+e0kh
-	GCpQKOAP7GaNiEzoO52jSzIy61SfsItGdU3PeR8=
-X-Google-Smtp-Source: AGRyM1u5nfm43QHHmAHAOm+9cxM7c8Tn1/hWbXKtPajhve+bG846G4KjqKggTUGEwubKaGd3M8kNT3hnvqT8ZbqPwlg=
-X-Received: by 2002:adf:d1e2:0:b0:21d:d40b:d816 with SMTP id
- g2-20020adfd1e2000000b0021dd40bd816mr953262wrd.682.1658463512097; Thu, 21 Jul
- 2022 21:18:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1830F15A4
+	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 05:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658469444; x=1690005444;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Um0ffUX77L/N/JswSJjQanUKab3kt3+NmTAg6H3ENko=;
+  b=l+5eE585HCJ4HpCxFvmv1fonjJro21IXe+o+qBY9S1iuDNwvEW/V6lM3
+   O+JIsQbSAI74TkyuRowUiGmVfrFFlD3k5HcxHlea3kKkSVlQF59FtYC98
+   QnNvmxEiNi/Grf1PyzTOr5D5nAOc+x8Tf1tMsQWjk1mLJZ7rL//IWXMZF
+   /e5UJqqQtQzmPbN/U9YLiD7i/KAHBV+psKjeMNy2nSh0DED3/G2L6l/3h
+   FhsL+uIbeL5idfbnwsN77LkAuAP78ezjS8MC5u98QLnWT17T5kwckkU5D
+   hzv2zYeIQUYEitbExYV+NyZhGNYCrAlnfm0jNCPwIOkLsLu73yLoCqKof
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288412963"
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="288412963"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 22:57:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="626432812"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 22:57:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oElf7-00013E-0n;
+	Fri, 22 Jul 2022 05:57:21 +0000
+Date: Fri, 22 Jul 2022 13:56:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [arnd-playground:orion-pci-cleanup 3/5]
+ arch/arm/plat-orion/pcie.c:301:2: error: call to undeclared function
+ 'pci_add_resource'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202207221319.pet6mCTR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220720232332.2720091-1-justinstitt@google.com>
- <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com> <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
-In-Reply-To: <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 22 Jul 2022 13:17:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
-Message-ID: <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jul 22, 2022 at 12:10 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Jul 21, 2022 at 07:27:34AM -0700, Nick Desaulniers wrote:
-> > On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
-> > >
-> > > There's been an ongoing mission to re-enable the -Wformat warning for
-> > > Clang. A previous attempt at enabling the warning showed that there were
-> > > many instances of this warning throughout the codebase. The sheer amount
-> > > of these warnings really polluted builds and thus -Wno-format was added
-> > > to _temporarily_ toggle them off.
-> > >
-> > > After many patches the warning has largely been eradicated for x86,
-> > > x86_64, arm, and arm64 on a variety of configs. The time to enable the
-> > > warning has never been better as it seems for the first time we are
-> > > ahead of them and can now solve them as they appear rather than tackling
-> > > from a backlog.
-> > >
-> > > As to the root cause of this large backlog of warnings, Clang seems to
-> > > pickup on some more nuanced cases of format warnings caused by implicit
-> > > integer conversion as well as default argument promotions from
-> > > printf-like functions.
-> > >
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > > ---
-> > > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
-> > >
-> > > Note:
-> > > For this patch to land on its feet, the plethora of supporting patches that
-> > > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
-> > > of them have!
-> > >
-> > > Here are the patches still waiting to be picked up:
-> > > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
-> > > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
-> >
-> > Hi Masahiro, Nathan, and Tom,
-> > What are your thoughts for _when_ in the release cycle this should be
-> > picked up?  I worry that if we don't remove this soon, we will
-> > backslide, and more -Wformat issues will crop up making removing this
-> > in the future like digging in sand.  Justin has chased down many
-> > instances of this warning, and I'm happy to help clean up fallout from
-> > landing this.
->
-> Let me do a series of builds with the two patches above against
-> next-20220721 to see if there are any instances of this warning across
-> the less frequently tested architectures then I will review/ack this.
->
-> I don't think we need to worry much about backslide, as -Wformat is
-> enabled with W=1, which the 0day folks already test with, so new
-> instances of this warning should get reported to the authors when they
-> are introduced so they can be fixed immediately. However, I would still
-> like to see this applied sooner rather than later, although I would also
-> like us to be completely warning clean before doing so, especially with
-> -Werror now being selected with all{mod,yes}config. -rc8 is this Sunday
-> and final should be July 31st so I think this could be applied at some
-> point between those two dates then maybe sent to Linus for a late pull
-> request once all other trees have been merged but that is ultimately up
-> to Masahiro.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git orion-pci-cleanup
+head:   f154fdd063e0f8e231dbe3c06b03fbb1ec0ffb8c
+commit: b8537f0e3f6c609d0d723bb8c098919b5f515d5d [3/5] ARM: orion: simplify PCI code
+config: arm-randconfig-r021-20220718 (https://download.01.org/0day-ci/archive/20220722/202207221319.pet6mCTR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=b8537f0e3f6c609d0d723bb8c098919b5f515d5d
+        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
+        git fetch --no-tags arnd-playground orion-pci-cleanup
+        git checkout b8537f0e3f6c609d0d723bb8c098919b5f515d5d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-OK, I think that will be good timing.
-Please ping me if I forget to pick it up.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I still worry about my pull request being rejected.
+All errors (new ones prefixed by >>):
+
+>> arch/arm/plat-orion/pcie.c:301:2: error: call to undeclared function 'pci_add_resource'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           pci_add_resource(&bridge->windows, &iomem_resource);
+           ^
+   arch/arm/plat-orion/pcie.c:301:2: note: did you mean 'pci_find_resource'?
+   include/linux/pci.h:1844:32: note: 'pci_find_resource' declared here
+   static inline struct resource *pci_find_resource(struct pci_dev *dev,
+                                  ^
+   arch/arm/plat-orion/pcie.c:347:26: error: use of undeclared identifier 'pci_common_swizzle'
+                           bridge->swizzle_irq = pci_common_swizzle;
+                                                 ^
+>> arch/arm/plat-orion/pcie.c:349:10: error: call to undeclared function 'pci_host_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ret = pci_host_probe(bridge);
+                                 ^
+   3 errors generated.
 
 
+vim +/pci_add_resource +301 arch/arm/plat-orion/pcie.c
 
-
-
->
-> Cheers,
-> Nathan
->
-> > >
-> > >  scripts/Makefile.extrawarn | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> > > index f5f0d6f09053..9bbaf7112a9b 100644
-> > > --- a/scripts/Makefile.extrawarn
-> > > +++ b/scripts/Makefile.extrawarn
-> > > @@ -47,7 +47,6 @@ else
-> > >
-> > >  ifdef CONFIG_CC_IS_CLANG
-> > >  KBUILD_CFLAGS += -Wno-initializer-overrides
-> > > -KBUILD_CFLAGS += -Wno-format
-> > >  KBUILD_CFLAGS += -Wno-sign-compare
-> > >  KBUILD_CFLAGS += -Wno-format-zero-length
-> > >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
-> > > --
-> > > 2.37.0.170.g444d1eabd0-goog
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
-
-
+   295	
+   296	static int orion_pci_init_resource(int nr, struct pci_host_bridge *bridge)
+   297	{
+   298		struct orion_pci_sys_data *sys = pci_host_bridge_priv(bridge);
+   299		int ret;
+   300	
+ > 301		pci_add_resource(&bridge->windows, &iomem_resource);
+   302	
+   303		sys->io_res.start = (nr * SZ_64K) ?  : pcibios_min_io;
+   304		sys->io_res.end = (nr + 1) * SZ_64K - 1;
+   305		sys->io_res.flags = IORESOURCE_IO;
+   306		sys->io_res.name = sys->io_res_name;
+   307		sprintf(sys->io_res_name, "PCI%d I/O", nr);
+   308	
+   309		ret = request_resource(&ioport_resource, &sys->io_res);
+   310		if (ret) {
+   311			pr_err("PCI: unable to allocate I/O port region (%d)\n", ret);
+   312			return ret;
+   313		}
+   314		pci_add_resource(&bridge->windows, &sys->io_res);
+   315	
+   316		return 0;
+   317	}
+   318	
+   319	void orion_pci_probe(int nr_controllers,
+   320		int (*setup)(int nr, struct pci_host_bridge *),
+   321		int (*map_irq)(const struct pci_dev *dev, u8 slot, u8 pin))
+   322	{
+   323		int ret;
+   324		int nr, busnr;
+   325	
+   326		pci_add_flags(PCI_REASSIGN_ALL_BUS);
+   327	
+   328		for (nr = busnr = 0; nr < nr_controllers; nr++) {
+   329			struct pci_host_bridge *bridge;
+   330	
+   331			bridge = pci_alloc_host_bridge(
+   332					sizeof(struct orion_pci_sys_data));
+   333			if (WARN(!bridge, "PCI: unable to allocate bridge!"))
+   334				break;
+   335	
+   336			bridge->busnr   = busnr;
+   337			ret = setup(nr, bridge);
+   338	
+   339			if (ret > 0) {
+   340				ret = orion_pci_init_resource(nr, bridge);
+   341				if (ret)  {
+   342					pci_free_host_bridge(bridge);
+   343					break;
+   344				}
+   345	
+   346				bridge->map_irq = map_irq;
+   347				bridge->swizzle_irq = pci_common_swizzle;
+   348	
+ > 349				ret = pci_host_probe(bridge);
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
