@@ -1,42 +1,42 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E0A5C85
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 23:48:44 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id m5-20020a2598c5000000b0066faab590c5so4668009ybo.7
-        for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 16:48:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316B85C85
+	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 23:48:47 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-31e6a8e2674so49615027b3.4
+        for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 16:48:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=KFQW7jsAcLHmWp9w2LJQVvYaLlYILuaNUn+12sIyDcY=;
-        b=qxbrGOijKZeV2cD7ZxgNjzGsfWLCuscD/Si2sRkuqHSu8wUOQXPslVMbJSSYHi5WV+
-         u/HvgFWLP/siEPKRUx4ziTzEQfjV2d5L3UuvlCJV9K3ptVIlSVxIQKSE3MG02rfw/iDw
-         lhwjyYlOwSTv/J29vvRVTu8HAfmQIrV3muEmsRAX1KDRoAZD4nHKZvPQXhV23lK9xjsh
-         E9/rln3BX1SRs/9gCiQFyyUAydR3G2hJB4rVIv1vSAblexVGKvYmaXjRbdTez46Aufsr
-         YgUpMKo7UeZR9+ProUmVORWAcH/QmnfYzfumj9HF8aC4d/xGrCmSybQJL/2mqD+JpIWf
-         jdSw==
+        bh=C5vxcKBsXfUKk2MUSnDuijEsY5Uu1XCESOEGFEpHan4=;
+        b=Utdu1V3aRcGKKdAJiX1P6WXcvxoJLpXF8LbdwZgQ2R2R8j/6WsY8HUYm06OrvZY4B9
+         VZDgDdFPliKb2A21kfpagaDCr3hSzuk07GJTzX4xKoYTukGX7X6x+v/OKdMt08DlJQuL
+         cip9S4pmjPz13jQlWcDoQqd98cR7AgfDgYdBZO0qwLNfICob/mXUBOmSEaeKyxCwPhg3
+         Xh7PlWjmdmj8mxZ2E/AZ7Ud1E6YVP1qJ16h2kryDbkLHW+FlihzkrITlgMCXm7fJxHp+
+         pKUyuBIrrv/yMsooOhKXxACpWSPyQ7idgj+jQ0J1T2hWTjCh750l11CsZ1SGFvf+QVPO
+         JZCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=KFQW7jsAcLHmWp9w2LJQVvYaLlYILuaNUn+12sIyDcY=;
-        b=MZzcqYt0JXA+2W5g+NuN12VyP/Oh+pjxDpAIwcP64/m5DXmjnk/0RzUChj96vz8G3N
-         T7Zka/tU6zilrZTy5JdSZJB9ViH+vf5jsrsD2Sxdx3FKnI0FQlqjVc6hiTse5/f4Ok6x
-         Kj5h8+gKFKt+vu/buwr34oSto3spzvYpzElic1vkYZFEGDrnxPDBGCyestyioJIksOyY
-         M94fhRg2Tm0gCAWftgKrg3NqPW9Vd8qhpI+Bogl3w6CwW0T16OXhMOojlCfm4b4UCVBr
-         In7IJeAQ3hO2XZbnDEdGoif/Y17yzFJS9OFo6Ap3hQzJvnBiMj7b0jbnAWLq6k1POUjb
-         rPCA==
-X-Gm-Message-State: AJIora8n+hd7/pfSaE3/6LTsQDTPkzudI/TusMMDPiKp+O2jO44UzaFX
-	gNmzBJEPPR8tq51/+OzABhExnuAdU1PQKA==
-X-Google-Smtp-Source: AGRyM1sOKspIXC3FlbYTAoXrIrzhWcsWZPMFx9n/05iN/AmSnKvxUUNxuiPxUVme/T+yNRebujFPkHOoZl+wog==
+        bh=C5vxcKBsXfUKk2MUSnDuijEsY5Uu1XCESOEGFEpHan4=;
+        b=cpIf5Vy4MLxu/BnOgI9jmJxR67NZS2incmnCxsQLDabXcf33h0LTjXR6F6Je6uYmQN
+         pNyV67U/NXLj7xGp8O2pwHB6tzSLnDbrL7s+0l4cfTbvGnfM9Nzg+j3CSq38ppfOZteP
+         Bkx/I+RipVNjMD0skaHekRAoAl2y1ozwoSvAiHeenvAMKCd4FKNfdQTIIPkUQmtRkeZb
+         xRH6EQ+o0UtiYix8NMAaFR4ORGLDFC/nfQK3asBuHTXv44ZyqYwgVyxedW/M4pYuHRf8
+         MTqMg1uL6HYweSiSOp20AzxpFXL+juAE/2gq8YF1HThJvmR13uXkaHeTnsRBmTmfrCaf
+         rweA==
+X-Gm-Message-State: AJIora+3D5F5LqtZ5xtzTdmE0IU4vX/gpg+fPlF0Xoyu1bpE6DGVnWyX
+	FCGHTXHBQyOqTr1JT4vYIPwLD8cprdHGCQ==
+X-Google-Smtp-Source: AGRyM1tn9WYAdHKqq6lfJAZm8nBg32Zv2QGSkMx1BhgjaHTdJKmr0cWym95nsT9ukBiTU4ZQC0T077veefdMvQ==
 X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
- (user=dmatlack job=sendgmr) by 2002:a25:d606:0:b0:66e:b73d:5de3 with SMTP id
- n6-20020a25d606000000b0066eb73d5de3mr1845516ybg.360.1658533723862; Fri, 22
- Jul 2022 16:48:43 -0700 (PDT)
-Date: Fri, 22 Jul 2022 23:48:37 +0000
+ (user=dmatlack job=sendgmr) by 2002:a0d:c603:0:b0:31e:7d54:17fd with SMTP id
+ i3-20020a0dc603000000b0031e7d5417fdmr1922347ywd.421.1658533726164; Fri, 22
+ Jul 2022 16:48:46 -0700 (PDT)
+Date: Fri, 22 Jul 2022 23:48:38 +0000
 In-Reply-To: <20220722234838.2160385-1-dmatlack@google.com>
-Message-Id: <20220722234838.2160385-2-dmatlack@google.com>
+Message-Id: <20220722234838.2160385-3-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220722234838.2160385-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH 1/2] KVM: selftests: Fix KVM_EXCEPTION_MAGIC build with Clang
+Subject: [PATCH 2/2] KVM: selftests: Fix ambiguous mov in KVM_ASM_SAFE()
 From: David Matlack <dmatlack@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
@@ -55,22 +55,35 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Change KVM_EXCEPTION_MAGIC to use the all-caps "ULL", rather than lower
-case. This fixes a build failure with Clang:
+Change the mov in KVM_ASM_SAFE() that zeroes @vector to a movb to
+make it unambiguous.
+
+This fixes a build failure with Clang since, unlike the GNU assembler,
+the LLVM integrated assembler rejects ambiguous X86 instructions that
+don't have suffixes:
 
   In file included from x86_64/hyperv_features.c:13:
-  include/x86_64/processor.h:825:9: error: unexpected token in argument list
+  include/x86_64/processor.h:825:9: error: ambiguous instructions require an explicit suffix (could be 'movb', 'movw', 'movl', or 'movq')
           return kvm_asm_safe("wrmsr", "a"(val & -1u), "d"(val >> 32), "c"(msr));
                  ^
   include/x86_64/processor.h:802:15: note: expanded from macro 'kvm_asm_safe'
           asm volatile(KVM_ASM_SAFE(insn)                 \
                        ^
-  include/x86_64/processor.h:785:2: note: expanded from macro 'KVM_ASM_SAFE'
-          "mov $" __stringify(KVM_EXCEPTION_MAGIC) ", %%r9\n\t"   \
+  include/x86_64/processor.h:788:16: note: expanded from macro 'KVM_ASM_SAFE'
+          "1: " insn "\n\t"                                       \
+                        ^
+  <inline asm>:5:2: note: instantiated into assembly here
+          mov $0, 15(%rsp)
           ^
-  <inline asm>:1:18: note: instantiated into assembly here
-          mov $0xabacadabaull, %r9
-                          ^
+
+It seems like this change could introduce undesirable behavior in the
+future, e.g. if someone used a type larger than a u8 for @vector, since
+KVM_ASM_SAFE() will only zero the bottom byte. I tried changing the type
+of @vector to an int to see what would happen. GCC failed to compile due
+to a size mismatch between `movb` and `%eax`. Clang succeeded in
+compiling, but the generated code looked correct, so perhaps it will not
+be an issue. That being said it seems like there could be a better
+solution to this issue that does not assume @vector is a u8.
 
 Fixes: 3b23054cd3f5 ("KVM: selftests: Add x86-64 support for exception fixup")
 Signed-off-by: David Matlack <dmatlack@google.com>
@@ -79,18 +92,18 @@ Signed-off-by: David Matlack <dmatlack@google.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 45edf45821d0..51c6661aca77 100644
+index 51c6661aca77..0cbc71b7af50 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -754,7 +754,7 @@ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
- 			void (*handler)(struct ex_regs *));
- 
- /* If a toddler were to say "abracadabra". */
--#define KVM_EXCEPTION_MAGIC 0xabacadabaull
-+#define KVM_EXCEPTION_MAGIC 0xabacadabaULL
- 
- /*
-  * KVM selftest exception fixup uses registers to coordinate with the exception
+@@ -786,7 +786,7 @@ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
+ 	"lea 1f(%%rip), %%r10\n\t"				\
+ 	"lea 2f(%%rip), %%r11\n\t"				\
+ 	"1: " insn "\n\t"					\
+-	"mov $0, %[vector]\n\t"					\
++	"movb $0, %[vector]\n\t"				\
+ 	"jmp 3f\n\t"						\
+ 	"2:\n\t"						\
+ 	"mov  %%r9b, %[vector]\n\t"				\
 -- 
 2.37.1.359.gd136c6c3e2-goog
 
