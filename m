@@ -1,164 +1,106 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from filter2.jijini.com (filter2.jijini.com [65.108.198.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDA55C88
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 21:38:53 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id h132so5391383pgc.10
-        for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 14:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9mfWyaAJoqNRd6CIZWDREmNaOiHWPvGxSlRrdfXmYSk=;
-        b=U6n4pS1S313KjljFYwOWUkusI66upqXtV/G1B7AYdEFBF1ugwrGORaxlnM4AxrCMhL
-         bkiT6VcZCA0qLo2KXsRCIG4zs/cpTY+A1xKtnpQ9LmR7mCnQ8LabZnNsX+xdHCW/ShVJ
-         EMbUL8JVjSuT5MV7mFjeXU2EmLcOS95SH8RheCaMSAcdRB5xir65uyir31WyzSVzVTXM
-         IkjqUtFSTxhMOW22GPaevCXAR+chamMqnwzpBcR5pYEeaHMA0KMq2TVfr/cfb0AbQphH
-         C1gPEAyb7UciJY885hZnDacOM5vLTqruF6Dgx9JpnCO4//Rh7ELVtSvscm2bIYnjJAup
-         HP5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9mfWyaAJoqNRd6CIZWDREmNaOiHWPvGxSlRrdfXmYSk=;
-        b=5TngE6kGStZp0oAeQgRWTHNlVWcxHfqvIRj/1Gjh1yegJABBMBgIMhOsdY1HqBroA7
-         Fo5F7XfdvFAolOqhj+TznmozXeLzn6OIhMbsoQNU/92ukrOzAdsBj5+Jeu1UfUYwkCUy
-         DaOwWNuwGr0oDdl+M2NmC802DB6iQtqHz3OVpZA/baVpkKDtglG9nhO86Djl9bt/4S5z
-         Cq50NQeina4QZbokRTXhkoiPjYy+xEtuVcaskhnm94KVrCut9TanQbjkEg60eoC0EYg9
-         63VXtguYW/oj8+tO1c8I3zIU7qQDDyfePzVrT3kAqwopvDOQKRt1B1rFwz8T9jARg59e
-         Td1Q==
-X-Gm-Message-State: AJIora+zw6oZB//6fyHxV8C9UdP95wGb/A6IC1uCSeiRO/Xk1et/2+bG
-	KPIDYU4pspH6SEkn0KGF3bAP9A==
-X-Google-Smtp-Source: AGRyM1vxW9TitpWGxELq9f+JH5rrVHEPD71/Yq0LYiZ6rY0FKSEsHeQES120sPNMNr6to9yJYb77AA==
-X-Received: by 2002:a63:a748:0:b0:40c:9a36:ff9a with SMTP id w8-20020a63a748000000b0040c9a36ff9amr1402109pgo.545.1658525932834;
-        Fri, 22 Jul 2022 14:38:52 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090a154400b001efa332d365sm3845092pja.33.2022.07.22.14.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 14:38:51 -0700 (PDT)
-Date: Fri, 22 Jul 2022 21:38:47 +0000
-From: Sean Christopherson <seanjc@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>,
-	Maxim Levitsky <mlevitsk@redhat.com>, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 15/25] KVM: VMX: Extend VMX controls macro shenanigans
-Message-ID: <YtsY5xwmlQ6kFtUz@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-16-vkuznets@redhat.com>
- <YtrtdylmyolAHToz@google.com>
- <YtsQ5SkCJXQIuKGS@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B8A5C85
+	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 22:57:32 +0000 (UTC)
+Received: by filter2.jijini.com (Postfix)
+	id 4LqPlg3Yr1zMrVr9; Sat, 23 Jul 2022 01:50:07 +0300 (EAT)
+Date: Sat, 23 Jul 2022 01:50:07 +0300 (EAT)
+From: MAILER-DAEMON@jijini.com (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: llvm@lists.linux.dev
+Auto-Submitted: auto-replied
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtsQ5SkCJXQIuKGS@dev-arch.thelio-3990X>
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="4LqPkt52KkzMrVr8.1658530207/filter2.jijini.com"
+Content-Transfer-Encoding: 8bit
+Message-Id: <4LqPlg3Yr1zMrVr9@filter2.jijini.com>
 
-On Fri, Jul 22, 2022, Nathan Chancellor wrote:
-> On Fri, Jul 22, 2022 at 06:33:27PM +0000, Sean Christopherson wrote:
-> > On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> > > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> > > index 286c88e285ea..89eaab3495a6 100644
-> > > --- a/arch/x86/kvm/vmx/vmx.h
-> > > +++ b/arch/x86/kvm/vmx/vmx.h
-> > > @@ -467,6 +467,113 @@ static inline u8 vmx_get_rvi(void)
-> > >  	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
-> > >  }
-> > >  
-> > > +#define __KVM_REQ_VMX_VM_ENTRY_CONTROLS				\
-> > > +	(VM_ENTRY_LOAD_DEBUG_CONTROLS)
-> > > +#ifdef CONFIG_X86_64
-> > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > +		(__KVM_REQ_VMX_VM_ENTRY_CONTROLS |		\
-> > > +		VM_ENTRY_IA32E_MODE)
-> > 
-> > This breaks 32-bit builds, but at least we know the assert works!
-> > 
-> > vmx_set_efer() toggles VM_ENTRY_IA32E_MODE without a CONFIG_X86_64 guard.  That
-> > should be easy enough to fix since KVM should never allow EFER_LMA.  Compile 
-> > tested patch at the bottom.
-> > 
-> > More problematic is that clang-13 doesn't like the new asserts, and even worse gives
-> > a very cryptic error.  I don't have bandwidth to look into this at the moment, and
-> > probably won't next week either.
-> > 
-> > ERROR: modpost: "__compiletime_assert_533" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_531" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_532" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_530" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
-> > make[1]: *** [Makefile:1753: modules] Error 2
-> > make[1]: *** Waiting for unfinished jobs....
-> 
-> clang-14 added support for the error and warning attributes, which makes
-> the BUILD_BUG_ON failures look like GCC. With allmodconfig, this
-> becomes:
+This is a MIME-encapsulated message.
 
-...
+--4LqPkt52KkzMrVr8.1658530207/filter2.jijini.com
+Content-Description: Notification
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-> As you mentioned in the other comment on this patch, the 'inline'
-> keyword should be '__always_inline' in the BUILD_CONTROLS_SHADOW macro
-> and a couple of other functions need it for BUILD_BUG_ON to see the
-> value all the way through the call chain. The following diff resolves
-> those errors for me, hopefully it is useful!
+This is the mail system at host filter2.jijini.com.
 
-Thanks a ton!  Y'all are like a benevolent Beetlejuice, one needs only to mention
-"clang" and you show up and solve the problem :-)
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
 
-> Cheers,
-> Nathan
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 4ce7ed835e06..b97ed63ece56 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -790,7 +790,7 @@ static bool msr_write_intercepted(struct vcpu_vmx *vmx, u32 msr)
->  					 MSR_IA32_SPEC_CTRL);
->  }
->  
-> -static void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> +static __always_inline void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
->  		unsigned long entry, unsigned long exit)
->  {
->  	vm_entry_controls_clearbit(vmx, entry);
-> @@ -848,7 +848,7 @@ static void clear_atomic_switch_msr(struct vcpu_vmx *vmx, unsigned msr)
->  	vmcs_write32(VM_EXIT_MSR_LOAD_COUNT, m->host.nr);
->  }
->  
-> -static void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> +static __always_inline void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
->  		unsigned long entry, unsigned long exit,
->  		unsigned long guest_val_vmcs, unsigned long host_val_vmcs,
->  		u64 guest_val, u64 host_val)
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 758f80c41beb..acefa5b5e1b9 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -597,12 +597,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)		\
->  {										\
->  	return __##lname##_controls_get(vmx->loaded_vmcs);			\
->  }										\
-> -static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
-> +static __always_inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
->  {										\
->  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
->  	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);		\
->  }										\
-> -static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
-> +static __always_inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
->  {										\
->  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
->  	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);		\
-> 
-> > > +#else
-> > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > +		__KVM_REQ_VMX_VM_ENTRY_CONTROLS
-> > > +#endif
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<Sales@indonesia.or.ke>: host lodwar.jijini.com[95.217.50.228] said: 550 No
+    Such User Here (in reply to RCPT TO command)
+
+--4LqPkt52KkzMrVr8.1658530207/filter2.jijini.com
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; filter2.jijini.com
+X-Postfix-Queue-ID: 4LqPkt52KkzMrVr8
+X-Postfix-Sender: rfc822; llvm@lists.linux.dev
+Arrival-Date: Sat, 23 Jul 2022 01:49:26 +0300 (EAT)
+
+Final-Recipient: rfc822; Sales@indonesia.or.ke
+Original-Recipient: rfc822;Sales@indonesia.or.ke
+Action: failed
+Status: 5.0.0
+Remote-MTA: dns; lodwar.jijini.com
+Diagnostic-Code: smtp; 550 No Such User Here
+
+--4LqPkt52KkzMrVr8.1658530207/filter2.jijini.com
+Content-Description: Undelivered Message Headers
+Content-Type: text/rfc822-headers
+Content-Transfer-Encoding: 8bit
+
+Return-Path: <llvm@lists.linux.dev>
+X-Spam-Status: Yes
+X-CISP-BaruaScanner-Watermark: 1659134965.1332@SPdxN2F0W2vzDxORTvvqHA
+X-CISP-BaruaScanner-From: llvm@lists.linux.dev
+X-CISP-BaruaScanner-SpamScore: sssssssssss
+X-CISP-BaruaScanner-SpamCheck: spam, SpamAssassin (not cached, score=11.032,
+	required 5, BAYES_99 3.50, FORGED_OUTLOOK_HTML 0.02,
+	FORGED_OUTLOOK_TAGS 0.05, FREEMAIL_FORGED_REPLYTO 2.10,
+	FREEMAIL_REPLYTO_END_DIGIT 0.25, HTML_IMAGE_ONLY_04 1.17,
+	HTML_MESSAGE 0.00, HTML_MIME_NO_HTML_TAG 0.38, MIME_HTML_ONLY 0.10,
+	MPART_ALT_DIFF 0.79, PDS_TONAME_EQ_TOLOCAL_FREEM_FORGE 2.00,
+	SPF_HELO_NONE 0.00, SPF_SOFTFAIL 0.67, TVD_SPACE_RATIO 0.00,
+	T_REMOTE_IMAGE 0.01)
+X-CISP-BaruaScanner: Found to be clean
+X-CISP-BaruaScanner-ID: 4LqPkp1WdSzMrVr8
+X-CISP-BaruaScanner-Information: Please contact support@cisp.co.ke for more information
+Received: from aspmx.jijini.com (aspmx.jijini.com [135.181.162.75])
+	(no client certificate requested)
+	by filter2.jijini.com (MailScanner Milter) with SMTP id 4LqPkp1WdSzMrVr8
+	for <Sales@indonesia.or.ke>; Sat, 23 Jul 2022 01:49:22 +0300 (EAT)
+Received: from lists.linux.dev (unknown [106.110.114.62])
+	by aspmx.jijini.com (Postfix) with ESMTP id B4CAF8002E37
+	for <Sales@indonesia.or.ke>; Sat, 23 Jul 2022 01:49:16 +0300 (EAT)
+Thread-Index: AdW0gW6MSw6vhew0aoexyvsVt2RM0g==
+Content-Language: zh-cn
+From: =?GBK?B?0N+22PDQybTF9dfyV1k2Njhv?= <llvm@lists.linux.dev>
+Subject: 1A764e9i
+To: "Sales" <Sales@indonesia.or.ke>
+Content-Type: multipart/mixed; charset=GBK; boundary="----=_NextPart_527_52A4_2F4456A0.91F97999"
+MIME-Version: 1.0
+Reply-To: 15567740604@189.cn
+Date: Sat, 23 Jul 2022 06:49:17 +0800
+Message-Id: <174137574873$429a08b7$970de918$@lists.linux.dev>
+X-Mailer: Microsoft Outlook 16.0
+X-BitDefender-Scanner: Clean, Agent: BitDefender Milter 3.1.7 on aspmx.jijini.com, sigver: 7.92408
+X-BitDefender-Spam: No (0)
+X-BitDefender-SpamStamp: Build: [Engines: 2.16.3.1423, Dats: 871106, Stamp: 3], Multi: [Enabled, t: (0.000006,0.022285)], BW: [Enabled, t: (0.000016)], RBL DNSBL: [Enabled, Score: 0(0), t: (0.000006)], APM: [Enabled, Score: 500, t: (0.001132,0.000003), Flags: BA7B0291; NN_BEGIN_TAG_NOT_OK; NN_FORGED_OUTLOOK_1; NN_FORGED_OUTLOOK_HTML_ADN; NN_EXEC_H_MAIL_HAS_NO_LINK; NN_EXEC_H_HTML_WITHOUT_TP; NN_PIC_WITH_FEW_FEW_WORDS; NN_SUMM_ALL_BLLUE_ADN; NN_LEGIT_MAILING_LIST_FROM], SGN: [Enabled, t: (0.007141)], URL: [Enabled, t: (0.000083)], RTDA: [Enabled, t: (0.069242), Hit: No, Details: v3.19.0; Id: 15.52kbkc.1g8k1jo7g.328246; sign(a58eae8ed3e441dca8ff18888bb730b6:0;)], total: 0(775)
+X-BitDefender-CF-Stamp: none
+
+--4LqPkt52KkzMrVr8.1658530207/filter2.jijini.com--
