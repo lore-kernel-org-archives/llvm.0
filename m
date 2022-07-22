@@ -1,48 +1,51 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699354A09
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 15:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0259615BA
+	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 16:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658504695; x=1690040695;
+  t=1658507736; x=1690043736;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qG2pNjvUpLBoBbPnjxVwoN8K5rzv5eBVte0Uf15BYbc=;
-  b=VkTHZAO+lOwJuuMyHGkAd3UdWSLuaQu6ewKymYCKDZKuFcv8OCV1Aqab
-   KUXzPycXcB+1NYFjTtLuXfsL7ilFxdJst81O17kuyj/JCkQoqdBfoaFXR
-   zcllbEh3k8+Td+jPAhnfQfy9vJCO3nP8tl/5vu74+UuOK4R2JcaJ0YF4Q
-   kAkqK8HzD10UcRjKSfP08qj3CdRq/23KTaLRARbNLCVsL/1sSMEcc441U
-   oPjIPKnvDmsJQ9COG8lgAqu76Nq7uomBUFde0I0jJlb5J4fZ19ON8ZBqL
-   7kCDZiSPaNnWTzjKomN0VjEHV/wSigVlJ8i0Eq9yVuOMTbTp0W8unEFmp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="351332933"
+  bh=wct04tBZUBn/SLi+Q6yHNMxbcUkF4qzPsiApqCX08Nk=;
+  b=URNYOpS6dmSqHOGQ1cXWmotnON4Yg4ClG+a1m9osjuPoc0EPUqACPcZW
+   LVSGYIRkXh01Jq64C5KVG9aUzWMItqcp6/wUO0/y1PgcghL5O5KXw9SO0
+   lM2Fh6a2xMPy4oAlDqkZ4CY7PKbrr/wuFLdbuIh1DfTJbaRPuKjloV9Tn
+   3UY0w8nI2L7I+8RJBHCIzcDx8krPPMwrXVxWlWmx0IeB2r5CGREVodG2G
+   36k+4DcZSOqRgaZ89ciBR4FbsjWcSVgIRgXAnk6cWhgfoGaOS6c8tfgy+
+   r2uhtnpbG8NFo1UTcr5RFur96/STUEgkTur6Rw1LcWz6iCGJiG9YYtvxU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="287357547"
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="351332933"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 08:44:54 -0700
+   d="scan'208";a="287357547"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 09:35:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="631602269"
+   d="scan'208";a="701716621"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jul 2022 08:44:52 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 22 Jul 2022 09:35:27 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oEupf-0001Ya-1g;
-	Fri, 22 Jul 2022 15:44:51 +0000
-Date: Fri, 22 Jul 2022 23:44:36 +0800
+	id 1oEvcd-0001bt-0B;
+	Fri, 22 Jul 2022 16:35:27 +0000
+Date: Sat, 23 Jul 2022 00:35:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Kestrel <kestrelseventyfour@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Daniel Kestrel <kestrelseventyfour@gmail.com>,
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] remoteproc: Add AVM WASP driver
-Message-ID: <202207222313.GAofKYST-lkp@intel.com>
-References: <20220721193455.2717-4-kestrelseventyfour@gmail.com>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, l.stach@pengutronix.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@pengutronix.de,
+	festevam@gmail.com, linux-imx@nxp.com,
+	laurent.pinchart@ideasonboard.com, marex@denx.de,
+	paul.elder@ideasonboard.com, aford173@gmail.com,
+	Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V4 5/8] soc: imx: add i.MX8MP HDMI blk ctrl HDCP/HRV
+Message-ID: <202207230052.uIae3wom-lkp@intel.com>
+References: <20220722125730.3428017-6-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,290 +54,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721193455.2717-4-kestrelseventyfour@gmail.com>
+In-Reply-To: <20220722125730.3428017-6-peng.fan@oss.nxp.com>
 
-Hi Daniel,
+Hi "Peng,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on remoteproc/rproc-next]
-[also build test WARNING on robh/for-next linus/master v5.19-rc7 next-20220721]
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on linus/master v5.19-rc7 next-20220722]
+[cannot apply to robh/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Kestrel/Add-support-for-WASP-SoC-on-AVM-router-boards/20220722-033724
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220722/202207222313.GAofKYST-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: arm-buildonly-randconfig-r004-20220722 (https://download.01.org/0day-ci/archive/20220723/202207230052.uIae3wom-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b737a00511b74767e3eb13b2ddfba8e6dfe8e5c2
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/9f38a755e912ffee8cd2b25002016da6e121f448
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Kestrel/Add-support-for-WASP-SoC-on-AVM-router-boards/20220722-033724
-        git checkout b737a00511b74767e3eb13b2ddfba8e6dfe8e5c2
+        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
+        git checkout 9f38a755e912ffee8cd2b25002016da6e121f448
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/remoteproc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/soc/imx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/remoteproc/avm_wasp.c:582:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!avmwasp->linux_blob) {
-               ^~~~~~~~~~~~~~~~~~~~
-   drivers/remoteproc/avm_wasp.c:776:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/remoteproc/avm_wasp.c:582:2: note: remove the 'if' if its condition is always false
-           if (!avmwasp->linux_blob) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/remoteproc/avm_wasp.c:566:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+>> drivers/soc/imx/imx8mp-blk-ctrl.c:375:4: error: field designator 'path_names' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
+                   .path_names = (const char *[]){"hrv"},
+                    ^
+>> drivers/soc/imx/imx8mp-blk-ctrl.c:376:4: error: field designator 'num_paths' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
+                   .num_paths = 1,
+                    ^
+   drivers/soc/imx/imx8mp-blk-ctrl.c:383:4: error: field designator 'path_names' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
+                   .path_names = (const char *[]){"hdcp"},
+                    ^
+   drivers/soc/imx/imx8mp-blk-ctrl.c:384:4: error: field designator 'num_paths' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
+                   .num_paths = 1,
+                    ^
+>> drivers/soc/imx/imx8mp-blk-ctrl.c:394:17: error: invalid application of 'sizeof' to an incomplete type 'const struct imx8mp_blk_ctrl_domain_data[]'
+           .num_domains = ARRAY_SIZE(imx8mp_hdmi_domain_data),
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   5 errors generated.
 
 
-vim +582 drivers/remoteproc/avm_wasp.c
+vim +375 drivers/soc/imx/imx8mp-blk-ctrl.c
 
-   545	
-   546	/**
-   547	 * avm_wasp_load_initramfs_image() - load initramfs image to WASP
-   548	 * @avmwasp: pointer to drivers private avm_wasp_rproc structure
-   549	 *
-   550	 * Uses the lan port specified from DT to load the initramfs to
-   551	 * WASP after the network boot firmware was successfully started.
-   552	 * Communication is done by using raw sockets.
-   553	 * There are several commands and status values which are checked.
-   554	 * First a discovery packet is received and then each data packet
-   555	 * is acknowledged by the WASP network boot firmware.
-   556	 * First packet needs to prepend the load address and last packet
-   557	 * needs to append the execution address.
-   558	 *
-   559	 * Return: 0 on Success, -EFAULT if errors with the WASP send protocol
-   560	 * have occurred, -EAGAIN if the wasp network interface is down or the
-   561	 * error returned from the failed operating system function or service
-   562	 */
-   563	static int avm_wasp_load_initramfs_image(struct avm_wasp_rproc *avmwasp)
-   564	{
-   565		bool done = false;
-   566		int ret;
-   567		u32 num_chunks, chunk_counter;
-   568		short interface_flags;
-   569		const u8 *firmware, *firmware_end;
-   570		struct device *dev = &avmwasp->pdev->dev;
-   571		struct kvec socket_kvec;
-   572		struct msghdr socket_msghdr;
-   573		struct net_device *send_netdev;
-   574		struct sockaddr send_sock_addr;
-   575		struct sockaddr_ll send_socket_address;
-   576		struct socket *wasp_socket;
-   577		struct wasp_packet *packet = (struct wasp_packet *)
-   578				(avmwasp->buffer);
-   579		struct __kernel_old_timeval timeout;
-   580		time64_t start_time, current_time;
-   581	
- > 582		if (!avmwasp->linux_blob) {
-   583			dev_err(dev, "error accessing initramfs image\n");
-   584			goto err;
-   585		}
-   586	
-   587		firmware = avmwasp->linux_blob->data;
-   588		firmware_end = firmware + avmwasp->linux_blob->size;
-   589	
-   590		ret = sock_create_kern(&init_net, PF_PACKET, SOCK_RAW,
-   591				       htons(ETH_TYPE_ATH_ECPS_FRAME),
-   592				       &wasp_socket);
-   593		if (ret < 0) {
-   594			dev_err(dev, "error opening recv socket: %d\n", ret);
-   595			goto err;
-   596		}
-   597	
-   598		timeout.tv_sec = 10;
-   599		timeout.tv_usec = 0;
-   600		ret = sock_setsockopt(wasp_socket, SOL_SOCKET, SO_RCVTIMEO_OLD,
-   601				      KERNEL_SOCKPTR(&timeout), sizeof(timeout));
-   602		if (ret < 0) {
-   603			dev_err(dev, "error SO_RCVTIMEO recv socket: %d\n", ret);
-   604			goto err_socket;
-   605		}
-   606	
-   607		ret = sock_setsockopt(wasp_socket, SOL_SOCKET, SO_SNDTIMEO_OLD,
-   608				      KERNEL_SOCKPTR(&timeout), sizeof(timeout));
-   609		if (ret < 0) {
-   610			dev_err(dev, "error SO_SNDTIMEO send socket: %d\n", ret);
-   611			goto err_socket;
-   612		}
-   613	
-   614		rcu_read_lock();
-   615		send_netdev = dev_get_by_name_rcu(sock_net(wasp_socket->sk),
-   616						  avmwasp->loader_port);
-   617		if (send_netdev)
-   618			interface_flags = (short)dev_get_flags(send_netdev);
-   619		rcu_read_unlock();
-   620	
-   621		if (IS_ERR_OR_NULL(send_netdev)) {
-   622			dev_err(dev, "error accessing net device\n");
-   623			ret = -ENODEV;
-   624			goto err_socket;
-   625		}
-   626	
-   627		if (!(interface_flags & IFF_UP && interface_flags & IFF_RUNNING)) {
-   628			dev_err(dev, "error wasp interface %s is down\n",
-   629				avmwasp->loader_port);
-   630			ret = -EAGAIN;
-   631			goto err_socket;
-   632		}
-   633	
-   634		avmwasp->ifindex = send_netdev->ifindex;
-   635		ret = dev_get_mac_address(&send_sock_addr, &init_net,
-   636					  avmwasp->loader_port);
-   637		if (ret < 0) {
-   638			dev_err(dev, "error getting mac address: %d\n", ret);
-   639			goto err_socket;
-   640		}
-   641	
-   642		send_socket_address.sll_halen = ETH_ALEN;
-   643		send_socket_address.sll_ifindex = avmwasp->ifindex;
-   644		memset(&socket_msghdr, 0, sizeof(socket_msghdr));
-   645		socket_msghdr.msg_name = (struct sockaddr *)&send_socket_address;
-   646		socket_msghdr.msg_namelen = sizeof(struct sockaddr_ll);
-   647	
-   648		start_time = ktime_get_seconds();
-   649	
-   650		while (!done) {
-   651			current_time = ktime_get_seconds();
-   652			if ((current_time - start_time) > ETH_SEND_LOOP_TIMEOUT_SECS) {
-   653				dev_err(dev,
-   654					"waiting for packet from WASP timed out\n");
-   655				ret = -ETIMEDOUT;
-   656				goto err_socket;
-   657			}
-   658	
-   659			socket_kvec.iov_base = avmwasp->buffer;
-   660			socket_kvec.iov_len = ETH_BUF_SIZE;
-   661			ret = kernel_recvmsg(wasp_socket,
-   662					     &socket_msghdr, &socket_kvec, 1,
-   663					     ETH_BUF_SIZE, 0);
-   664	
-   665			if (ret < 0) {
-   666				dev_err(dev,
-   667					"error receiving any packet or timeout: %d\n",
-   668					ret);
-   669				goto err_socket;
-   670			}
-   671	
-   672			if (ret < (sizeof(struct ethhdr) + sizeof(packet->hdr))) {
-   673				dev_err(dev,
-   674					"packet too small, discard and continue\n");
-   675				continue;
-   676			}
-   677	
-   678			if (packet->eh.h_proto != ETH_TYPE_ATH_ECPS_FRAME)
-   679				continue;
-   680	
-   681			memcpy(wasp_mac, packet->eh.h_source, sizeof(wasp_mac));
-   682	
-   683			if (packet->hdr.packet_start == ETH_WASP_PACKET_ID) {
-   684				switch (packet->hdr.response) {
-   685				case RESP_DISCOVER:
-   686					chunk_counter = 1;
-   687					num_chunks = DIV_ROUND_UP(avmwasp->linux_blob->size,
-   688								  ETH_DATA_SIZE);
-   689					fallthrough;
-   690				case RESP_OK:
-   691					memcpy(packet->eh.h_dest, wasp_mac, sizeof(packet->eh.h_dest));
-   692					packet->eh.h_proto = ETH_TYPE_ATH_ECPS_FRAME;
-   693					memcpy(packet->eh.h_source, send_sock_addr.sa_data,
-   694					       sizeof(packet->eh.h_source));
-   695	
-   696					if (firmware < firmware_end) {
-   697						size_t bytestosend, send_len;
-   698						u32 data_offset = 0;
-   699	
-   700						if (chunk_counter == 1) {
-   701							memcpy(packet->payload,
-   702							       &m_load_addr,
-   703							       sizeof(m_load_addr));
-   704							data_offset = sizeof(m_load_addr);
-   705						}
-   706	
-   707						if ((firmware_end - firmware) >=
-   708						     ETH_DATA_SIZE)
-   709							bytestosend = ETH_DATA_SIZE;
-   710						else
-   711							bytestosend = firmware_end -
-   712										firmware;
-   713						memcpy(&packet->payload[data_offset],
-   714						       firmware, bytestosend);
-   715						firmware = firmware + ETH_DATA_SIZE;
-   716	
-   717						packet->hdr.packet_start =
-   718								ETH_WASP_PACKET_ID;
-   719						if (chunk_counter == num_chunks) {
-   720							packet->hdr.response =
-   721								CMD_START_FIRMWARE;
-   722							memcpy(&packet->payload
-   723							       [data_offset + bytestosend],
-   724							       &m_load_addr,
-   725							       sizeof(m_load_addr));
-   726							bytestosend += sizeof(m_load_addr);
-   727						} else {
-   728							packet->hdr.command =
-   729								CMD_FIRMWARE_DATA;
-   730						}
-   731						packet->hdr.counter =
-   732								(chunk_counter - 1) * 4;
-   733	
-   734						send_len = sizeof(struct ethhdr)
-   735							+ sizeof(packet->hdr) + bytestosend +
-   736							data_offset;
-   737	
-   738						socket_kvec.iov_len = send_len;
-   739						socket_kvec.iov_base = avmwasp->buffer;
-   740	
-   741						ret = kernel_sendmsg(wasp_socket,
-   742								     &socket_msghdr,
-   743								     &socket_kvec,
-   744								     1, send_len);
-   745						if (ret < 0) {
-   746							dev_err(dev,
-   747								"error sending to WASP %d\n",
-   748								ret);
-   749							goto err_socket;
-   750						}
-   751	
-   752						chunk_counter++;
-   753					}
-   754					break;
-   755				case RESP_ERROR:
-   756					dev_err(dev,
-   757						"received an WASP error packet\n");
-   758					ret = -EFAULT;
-   759					goto err_socket;
-   760				case RESP_STARTING:
-   761					done = true;
-   762					ret = 0;
-   763					continue;
-   764					break;
-   765				default:
-   766					dev_err(dev, "unknown packet, continue\n");
-   767					continue;
-   768					break;
-   769				}
-   770			}
-   771		}
-   772	
-   773	err_socket:
-   774		wasp_socket->ops->release(wasp_socket);
-   775	err:
-   776		return ret;
-   777	}
-   778	
+   326	
+   327	static const struct imx8mp_blk_ctrl_domain_data imx8mp_hdmi_domain_data[] = {
+   328		[IMX8MP_HDMIBLK_PD_IRQSTEER] = {
+   329			.name = "hdmiblk-irqsteer",
+   330			.clk_names = (const char *[]){ "apb" },
+   331			.num_clks = 1,
+   332			.gpc_name = "irqsteer",
+   333		},
+   334		[IMX8MP_HDMIBLK_PD_LCDIF] = {
+   335			.name = "hdmiblk-lcdif",
+   336			.clk_names = (const char *[]){ "axi", "apb" },
+   337			.num_clks = 2,
+   338			.gpc_name = "lcdif",
+   339		},
+   340		[IMX8MP_HDMIBLK_PD_PAI] = {
+   341			.name = "hdmiblk-pai",
+   342			.clk_names = (const char *[]){ "apb" },
+   343			.num_clks = 1,
+   344			.gpc_name = "pai",
+   345		},
+   346		[IMX8MP_HDMIBLK_PD_PVI] = {
+   347			.name = "hdmiblk-pvi",
+   348			.clk_names = (const char *[]){ "apb" },
+   349			.num_clks = 1,
+   350			.gpc_name = "pvi",
+   351		},
+   352		[IMX8MP_HDMIBLK_PD_TRNG] = {
+   353			.name = "hdmiblk-trng",
+   354			.clk_names = (const char *[]){ "apb" },
+   355			.num_clks = 1,
+   356			.gpc_name = "trng",
+   357		},
+   358		[IMX8MP_HDMIBLK_PD_HDMI_TX] = {
+   359			.name = "hdmiblk-hdmi-tx",
+   360			.clk_names = (const char *[]){ "apb", "ref_266m" },
+   361			.num_clks = 2,
+   362			.gpc_name = "hdmi-tx",
+   363		},
+   364		[IMX8MP_HDMIBLK_PD_HDMI_TX_PHY] = {
+   365			.name = "hdmiblk-hdmi-tx-phy",
+   366			.clk_names = (const char *[]){ "apb", "ref_24m" },
+   367			.num_clks = 2,
+   368			.gpc_name = "hdmi-tx-phy",
+   369		},
+   370		[IMX8MP_HDMIBLK_PD_HRV] = {
+   371			.name = "hdmiblk-hrv",
+   372			.clk_names = (const char *[]){ "axi", "apb" },
+   373			.num_clks = 2,
+   374			.gpc_name = "hrv",
+ > 375			.path_names = (const char *[]){"hrv"},
+ > 376			.num_paths = 1,
+   377		},
+   378		[IMX8MP_HDMIBLK_PD_HDCP] = {
+   379			.name = "hdmiblk-hdcp",
+   380			.clk_names = (const char *[]){ "axi", "apb" },
+   381			.num_clks = 2,
+   382			.gpc_name = "hdcp",
+   383			.path_names = (const char *[]){"hdcp"},
+   384			.num_paths = 1,
+   385		},
+   386	};
+   387	
+   388	static const struct imx8mp_blk_ctrl_data imx8mp_hdmi_blk_ctl_dev_data = {
+   389		.max_reg = 0x23c,
+   390		.power_on = imx8mp_hdmi_blk_ctrl_power_on,
+   391		.power_off = imx8mp_hdmi_blk_ctrl_power_off,
+   392		.power_notifier_fn = imx8mp_hdmi_power_notifier,
+   393		.domains = imx8mp_hdmi_domain_data,
+ > 394		.num_domains = ARRAY_SIZE(imx8mp_hdmi_domain_data),
+   395	};
+   396	
 
 -- 
 0-DAY CI Kernel Test Service
