@@ -1,205 +1,161 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C9415D9
-	for <llvm@lists.linux.dev>; Fri, 22 Jul 2022 06:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098E32FB3;
+	Fri, 22 Jul 2022 11:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658473111; x=1690009111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=89BMdQXKTe4szvjpaO8JoY0e/6vYgMdJ5USsliuTf+U=;
-  b=NjjnwBrqOmIv3CW/rILjV5E9gaoPrjLhdAyhzbg4fC1f4yAYRxWwAG8O
-   OsldQwj1PKkxgbGfIw/7aMQGa1tffs/c4g3LTro2OxEXshdLC3fGe5gn0
-   jngTicJVTktKc5wqVnBd6FE8CvU7I6WzisbFle13w7RMGTJpeBA987t7W
-   37mDQMnbDtSUcFp+8x6PaGbEyXXiMbb9UP6sFUpwzidWuisqItyrI1OG8
-   pCx4C8rcddNdzy59zaddifM7bt02XCgGM18mkLfyl+pE6JyBkgYpTlkYl
-   QVHSUVXhj8QxaPE2jcJo+PZNx9CVx3hPcTiWbDtvcrehXgmqj8Qgwn2dP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="267648383"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="267648383"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 23:58:27 -0700
+  t=1658488775; x=1690024775;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tT9ALYJSV5LaLx0ox9r9S2itnE9o1KOtWzOII8e5iPk=;
+  b=bV+S0OHubJLSMFk/7xiBqs40p5F1HCrceWT9miA9FgpndQz1BGAonfsB
+   mQvzwHO/Ar55gvcpfW9rPa8lMIVSQQ1QVBh4pucGExox9v/qjghugo8Ke
+   reLDHZ5XNIPVx1ltL3aZZWOY3M4g9Nv0gKUPf3Axh7LGMfzqydKABMS7D
+   1EQukU3aXsTanpsJFVqAM1diRZqnK+YwvUUL9Lue0IjpwPzJwOELxj76H
+   Rh8Hn4Bck1T5uVm1lPyJxntLyvqgrEvOkuA9N4CPl6Ac6r8QI8UrHD5C8
+   yL6KfLYJeh5Kt2lT7QqqtbqgQpec5kphmrzvWnDb7BVsEXrAaZTgOcVb4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="267689528"
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="267689528"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 04:19:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="725325578"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2022 23:58:25 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oEmcC-00016C-2J;
-	Fri, 22 Jul 2022 06:58:24 +0000
-Date: Fri, 22 Jul 2022 14:58:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [kbusch:dma-prereg-v3-wip 6/6] drivers/nvme/host/pci.c:967:7:
- warning: variable 'nprps_left' is uninitialized when used here
-Message-ID: <202207221409.K6MNaHKF-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="657179045"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jul 2022 04:19:30 -0700
+From: =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amadeuszx.slawinski@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Cezary Rojewski <cezary.rojewski@intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	alsa-devel@alsa-project.org,
+	=?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amadeuszx.slawinski@linux.intel.com>
+Subject: [PATCH] ASoC: Intel: avs: Use lookup table to create modules
+Date: Fri, 22 Jul 2022 13:19:59 +0200
+Message-Id: <20220722111959.2588597-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v3-wip
-head:   4625fa7adf745334c0a2eb635121d587df797b29
-commit: 4625fa7adf745334c0a2eb635121d587df797b29 [6/6] nvme-pci: implement dma_map support
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220722/202207221409.K6MNaHKF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=4625fa7adf745334c0a2eb635121d587df797b29
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch dma-prereg-v3-wip
-        git checkout 4625fa7adf745334c0a2eb635121d587df797b29
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+As reported by Nathan, when building avs driver using clang with:
+  CONFIG_COMPILE_TEST=y
+  CONFIG_FORTIFY_SOURCE=y
+  CONFIG_KASAN=y
+  CONFIG_PCI=y
+  CONFIG_SOUND=y
+  CONFIG_SND=y
+  CONFIG_SND_SOC=y
+  CONFIG_SND_SOC_INTEL_AVS=y
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+there are reports of too big stack use, like:
+  sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
+                   ^
+  1 error generated.
 
-All warnings (new ones prefixed by >>):
+This is apparently caused by inlining many calls to guid_equal which
+inlines fortified memcpy, using 2 size_t variables.
 
->> drivers/nvme/host/pci.c:967:7: warning: variable 'nprps_left' is uninitialized when used here [-Wuninitialized]
-                   if (nprps_left <= last_prp + 1) {
-                       ^~~~~~~~~~
-   drivers/nvme/host/pci.c:893:49: note: initialize the variable 'nprps_left' to silence this warning
-           int index, offset, i, length, nprps, nprps_left;
-                                                          ^
-                                                           = 0
-   drivers/nvme/host/pci.c:1935:7: warning: variable 'pages_per' set but not used [-Wunused-but-set-variable]
-                   int pages_per = nvme_pages;
-                       ^
-   2 warnings generated.
+Instead of hardcoding many calls to guid_equal, use lookup table with
+one call, this improves stack usage.
 
+Link: https://lore.kernel.org/alsa-devel/YtlzY9aYdbS4Y3+l@dev-arch.thelio-3990X/T/
+Link: https://github.com/ClangBuiltLinux/linux/issues/1642
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Build-tested-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/intel/avs/path.c | 54 ++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 25 deletions(-)
 
-vim +/nprps_left +967 drivers/nvme/host/pci.c
-
-   886	
-   887	static blk_status_t nvme_premapped(struct nvme_dev *dev, struct request *req,
-   888					   struct nvme_rw_command *cmnd,
-   889					   struct nvme_iod *iod)
-   890	{
-   891		static const int last_prp = NVME_CTRL_PAGE_SIZE / sizeof(__le64) - 1;
-   892		dma_addr_t prp_list_start, prp_list_end, prp_dma;
-   893		int index, offset, i, length, nprps, nprps_left;
-   894		void **list = nvme_pci_iod_list(req);
-   895		struct nvme_dma_mapping *mapping;
-   896		struct dma_pool *pool;
-   897		__le64 *prp_list;
-   898		bool needs_sync;
-   899	
-   900		mapping = blk_rq_dma_tag(req);
-   901		offset = blk_rq_dma_offset(req) + mapping->offset;
-   902		index = offset >> NVME_CTRL_PAGE_SHIFT;
-   903		offset = offset & (NVME_CTRL_PAGE_SIZE - 1);
-   904		needs_sync = rq_data_dir(req) == WRITE &&
-   905			 dma_need_sync(dev->dev, le64_to_cpu(mapping->prps[index]));
-   906	
-   907		/*
-   908		 * XXX: For PAGE_SIZE > NVME_CTRL_PAGE_SIZE, is it faster to save the
-   909		 * PRP list implementation and sync multiple partial pages, more
-   910		 * efficient to sync PAGE_SIZE and build the PRP list per-IO from a
-   911		 * host PAGE_SIZE representation, or cleverly sync physically
-   912		 * contiguous regions?
-   913		 */
-   914		if (needs_sync) {
-   915			dma_sync_single_for_device(dev->dev,
-   916				le64_to_cpu(mapping->prps[index]),
-   917				NVME_CTRL_PAGE_SIZE - offset, DMA_TO_DEVICE);
-   918		}
-   919	
-   920		length = blk_rq_payload_bytes(req) - (NVME_CTRL_PAGE_SIZE - offset);
-   921		cmnd->dptr.prp1 = cpu_to_le64(le64_to_cpu(mapping->prps[index++]) + offset);
-   922	
-   923		if (length <= 0)
-   924			return BLK_STS_OK;
-   925	
-   926		if (length <= NVME_CTRL_PAGE_SIZE) {
-   927			if (needs_sync)
-   928				dma_sync_single_for_device(dev->dev,
-   929					le64_to_cpu(mapping->prps[index]),
-   930					NVME_CTRL_PAGE_SIZE, DMA_TO_DEVICE);
-   931			cmnd->dptr.prp2 = mapping->prps[index];
-   932			return BLK_STS_OK;
-   933		}
-   934	
-   935		nprps = DIV_ROUND_UP(length, NVME_CTRL_PAGE_SIZE);
-   936		prp_list_start = mapping->prp_dma_addr + 8 * index;
-   937		prp_list_end = prp_list_start + 8 * nprps;
-   938	
-   939		/* Optimization when remaining list fits in one nvme page */
-   940		if ((prp_list_start >> NVME_CTRL_PAGE_SHIFT) ==
-   941		    (prp_list_end >> NVME_CTRL_PAGE_SHIFT)) {
-   942			cmnd->dptr.prp2 = cpu_to_le64(prp_list_start);
-   943			goto sync;
-   944		}
-   945	
-   946		if (nprps <= (256 / 8)) {
-   947			pool = dev->prp_small_pool;
-   948			iod->npages = 0;
-   949		} else {
-   950			pool = dev->prp_page_pool;
-   951			iod->npages = 1;
-   952		}
-   953	
-   954		prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &prp_dma);
-   955		if (!prp_list) {
-   956			iod->npages = -1;
-   957			return BLK_STS_RESOURCE;
-   958		}
-   959	
-   960		list[0] = prp_list;
-   961		iod->first_dma = prp_dma;
-   962		i = 0;
-   963		for (;;) {
-   964			dma_addr_t next_prp_dma;
-   965			__le64 *next_prp_list;
-   966	
- > 967			if (nprps_left <= last_prp + 1) {
-   968				memcpy(prp_list, &mapping->prps[index], nprps_left * 8);
-   969				break;
-   970			}
-   971	
-   972			memcpy(prp_list, &mapping->prps[index],
-   973			       NVME_CTRL_PAGE_SIZE - 8);
-   974			nprps_left -= last_prp;
-   975			index += last_prp;
-   976	
-   977			next_prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &next_prp_dma);
-   978			if (!next_prp_list)
-   979				goto free_prps;
-   980	
-   981			prp_list[last_prp] = cpu_to_le64(next_prp_dma);
-   982			prp_list = next_prp_list;
-   983			prp_dma = next_prp_dma;
-   984			list[iod->npages++] = prp_list;
-   985		}
-   986		cmnd->dptr.prp2 = cpu_to_le64(iod->first_dma);
-   987	
-   988	sync:
-   989		if (!needs_sync)
-   990			return BLK_STS_OK;
-   991	
-   992		for (i = 0; i < nprps; i++)
-   993			dma_sync_single_for_device(dev->dev,
-   994				le64_to_cpu(mapping->prps[index++]),
-   995				NVME_CTRL_PAGE_SIZE, DMA_TO_DEVICE);
-   996		return BLK_STS_OK;
-   997	
-   998	free_prps:
-   999		nvme_free_prps(dev, req);
-  1000		return BLK_STS_RESOURCE;
-  1001	}
-  1002	
-
+diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
+index 3d46dd5e5bc4..ce157a8d6552 100644
+--- a/sound/soc/intel/avs/path.c
++++ b/sound/soc/intel/avs/path.c
+@@ -449,35 +449,39 @@ static int avs_modext_create(struct avs_dev *adev, struct avs_path_module *mod)
+ 	return ret;
+ }
+ 
++static int avs_probe_create(struct avs_dev *adev, struct avs_path_module *mod)
++{
++	dev_err(adev->dev, "Probe module can't be instantiated by topology");
++	return -EINVAL;
++}
++
++struct avs_module_create {
++	guid_t *guid;
++	int (*create)(struct avs_dev *adev, struct avs_path_module *mod);
++};
++
++static struct avs_module_create avs_module_create[] = {
++	{ &AVS_MIXIN_MOD_UUID, avs_modbase_create },
++	{ &AVS_MIXOUT_MOD_UUID, avs_modbase_create },
++	{ &AVS_KPBUFF_MOD_UUID, avs_modbase_create },
++	{ &AVS_COPIER_MOD_UUID, avs_copier_create },
++	{ &AVS_MICSEL_MOD_UUID, avs_micsel_create },
++	{ &AVS_MUX_MOD_UUID, avs_mux_create },
++	{ &AVS_UPDWMIX_MOD_UUID, avs_updown_mix_create },
++	{ &AVS_SRCINTC_MOD_UUID, avs_src_create },
++	{ &AVS_AEC_MOD_UUID, avs_aec_create },
++	{ &AVS_ASRC_MOD_UUID, avs_asrc_create },
++	{ &AVS_INTELWOV_MOD_UUID, avs_wov_create },
++	{ &AVS_PROBE_MOD_UUID, avs_probe_create },
++};
++
+ static int avs_path_module_type_create(struct avs_dev *adev, struct avs_path_module *mod)
+ {
+ 	const guid_t *type = &mod->template->cfg_ext->type;
+ 
+-	if (guid_equal(type, &AVS_MIXIN_MOD_UUID) ||
+-	    guid_equal(type, &AVS_MIXOUT_MOD_UUID) ||
+-	    guid_equal(type, &AVS_KPBUFF_MOD_UUID))
+-		return avs_modbase_create(adev, mod);
+-	if (guid_equal(type, &AVS_COPIER_MOD_UUID))
+-		return avs_copier_create(adev, mod);
+-	if (guid_equal(type, &AVS_MICSEL_MOD_UUID))
+-		return avs_micsel_create(adev, mod);
+-	if (guid_equal(type, &AVS_MUX_MOD_UUID))
+-		return avs_mux_create(adev, mod);
+-	if (guid_equal(type, &AVS_UPDWMIX_MOD_UUID))
+-		return avs_updown_mix_create(adev, mod);
+-	if (guid_equal(type, &AVS_SRCINTC_MOD_UUID))
+-		return avs_src_create(adev, mod);
+-	if (guid_equal(type, &AVS_AEC_MOD_UUID))
+-		return avs_aec_create(adev, mod);
+-	if (guid_equal(type, &AVS_ASRC_MOD_UUID))
+-		return avs_asrc_create(adev, mod);
+-	if (guid_equal(type, &AVS_INTELWOV_MOD_UUID))
+-		return avs_wov_create(adev, mod);
+-
+-	if (guid_equal(type, &AVS_PROBE_MOD_UUID)) {
+-		dev_err(adev->dev, "Probe module can't be instantiated by topology");
+-		return -EINVAL;
+-	}
++	for (int i = 0; i < ARRAY_SIZE(avs_module_create); i++)
++		if (guid_equal(type, avs_module_create[i].guid))
++			return avs_module_create[i].create(adev, mod);
+ 
+ 	return avs_modext_create(adev, mod);
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
