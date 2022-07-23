@@ -1,52 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A387E
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 04:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9471B7E
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 08:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658552227; x=1690088227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JMSMekzxd46aJ2CW0m5a7du5wb1V2aYzSQjtKvvhHog=;
-  b=Qh6GbE0jtq5Atey6+BWOvZ+MMeLsMEH4IyJkbw0XI+ENScRXZ+wUq8Zs
-   4D119AQmUfBy0cptFPRlIpQ6rHJR39oHNSIRRtADgBpvl2GZYmfoARGGq
-   CJqcM86hhKpEuuc1MMPV57cv6wNNZb9lIIXVpy/zRDhs+9NhkoHykvCOP
-   dgnlElFT6ED5uTa2lq0f4FvE8fGauuXEJV/L0XKASkwV8iNwAglXpaMQh
-   HDks5ts1kU5scBf99YiR3qNpKaa2TpVhJXOTjW3E+H2zwHrE9O3rUQ43N
-   d45+d0MfO6JPyNh1MQ50gBkTqWA/ZHv48IkkHZRFNqbpGpIYXN7FdsOQC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="287457704"
+  t=1658565014; x=1690101014;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l+WRDwDn8RFs/v3cxwM8NeQyyKRnZQ8u4KQSj/cx4oQ=;
+  b=IeXcyBabDbkXCyIkYMa40pP8gIp/RvsAwN5iS7gg4ocAHPuP4Qyb1VUa
+   gQLVKCYQWnIgl9cmq0NMfGSG3h0eBt/EVHLl0xvyRk+JGAhqFphNX6qK6
+   ERDRwY/iaD37/HBOrvQfuj39NUUgI3Tm5y+by0BQoMXM2Z1CCNb/TcDbh
+   IEtAZwpP0bjMbdrA/9lJLHn4LH9ys4WLCTg+UnUVwW6L0bKTzCswd6+do
+   NsKmIFtM+jsRW0Sfam24GxJlTwHM7Qb7UOUw3/dxiydeSPvw+mhlgLXxN
+   T3uwbOZ4QBhPnwVA/VlzE4Rixhq5de55ie+hpOfloioBtxo+6wlfaiCW1
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="349153038"
 X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="287457704"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 21:57:06 -0700
+   d="scan'208";a="349153038"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 01:30:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="549389809"
+   d="scan'208";a="631817685"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Jul 2022 21:57:03 -0700
+  by orsmga001.jf.intel.com with ESMTP; 23 Jul 2022 01:30:12 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oF7CI-0002Gy-2S;
-	Sat, 23 Jul 2022 04:57:02 +0000
-Date: Sat, 23 Jul 2022 12:56:39 +0800
+	id 1oFAWZ-0002Qn-0z;
+	Sat, 23 Jul 2022 08:30:11 +0000
+Date: Sat, 23 Jul 2022 16:29:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org
+To: Tejun Heo <tj@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH v3 01/10] input: keyboard: adp5588-keys: support gpi key
- events as 'gpio keys'
-Message-ID: <202207231228.n8l077iB-lkp@intel.com>
-References: <20220721080423.156151-2-nuno.sa@analog.com>
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:tj/cgroup/for-next 7/8]
+ kernel/cgroup/cgroup.c:1310:32: error: use of undeclared identifier
+ 'CGRP_ROOT_FAVOR_DYNMODS'
+Message-ID: <202207231608.bk36zznz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,66 +48,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721080423.156151-2-nuno.sa@analog.com>
 
-Hi "Nuno,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on next-20220722]
-[cannot apply to brgl/gpio/for-next hid/for-next linus/master v5.19-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S/adp5588-keys-refactor-and-fw-properties-support/20220721-160531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220723/202207231228.n8l077iB-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block tj/cgroup/for-next
+head:   c87b1452249c69cdec70d5de64ea81f56e1ba3f8
+commit: 79276d9e0dda30071b9a98045a3efa7e0a76938b [7/8] cgroup: Make !percpu threadgroup_rwsem operations optional
+config: hexagon-randconfig-r041-20220722 (https://download.01.org/0day-ci/archive/20220723/202207231608.bk36zznz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/357979f7c2525297178fb321c5793a4bd63dabb6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nuno-S/adp5588-keys-refactor-and-fw-properties-support/20220721-160531
-        git checkout 357979f7c2525297178fb321c5793a4bd63dabb6
+        # https://github.com/ammarfaizi2/linux-block/commit/79276d9e0dda30071b9a98045a3efa7e0a76938b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tj/cgroup/for-next
+        git checkout 79276d9e0dda30071b9a98045a3efa7e0a76938b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/keyboard/ drivers/platform/x86/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/cgroup/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/input/keyboard/adp5588-keys.c:336:9: warning: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Wconstant-conversion]
-           return INVALID_HWIRQ;
-           ~~~~~~ ^~~~~~~~~~~~~
-   include/linux/irq.h:1245:24: note: expanded from macro 'INVALID_HWIRQ'
-   #define INVALID_HWIRQ   (~0UL)
-                            ^~~~
-   1 warning generated.
+>> kernel/cgroup/cgroup.c:1310:32: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+           bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
+                                         ^
+   kernel/cgroup/cgroup.c:1315:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+                                  ^
+   kernel/cgroup/cgroup.c:1318:19: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+                                   ^
+>> kernel/cgroup/cgroup.c:1308:6: warning: no previous prototype for function 'cgroup_favor_dynmods' [-Wmissing-prototypes]
+   void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+        ^
+   kernel/cgroup/cgroup.c:1308:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+   ^
+   static 
+   kernel/cgroup/cgroup.c:1912:17: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+                                 ^
+   kernel/cgroup/cgroup.c:1915:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+                                  ^
+   kernel/cgroup/cgroup.c:1942:23: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                                        root_flags & CGRP_ROOT_FAVOR_DYNMODS);
+                                                     ^
+   kernel/cgroup/cgroup.c:1960:28: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+           if (cgrp_dfl_root.flags & CGRP_ROOT_FAVOR_DYNMODS)
+                                     ^
+   kernel/cgroup/cgroup.c:2013:30: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+           root->flags = ctx->flags & ~CGRP_ROOT_FAVOR_DYNMODS;
+                                       ^
+   1 warning and 8 errors generated.
+--
+>> kernel/cgroup/cgroup-v1.c:878:20: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+           if (root->flags & CGRP_ROOT_FAVOR_DYNMODS)
+                             ^
+   kernel/cgroup/cgroup-v1.c:970:17: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+                                 ^
+   kernel/cgroup/cgroup-v1.c:973:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+                                  ^
+>> kernel/cgroup/cgroup-v1.c:1227:3: error: call to undeclared function 'cgroup_favor_dynmods'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
+                   ^
+   kernel/cgroup/cgroup-v1.c:1227:43: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
+                   cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
+                                                           ^
+   5 errors generated.
 
 
-vim +336 drivers/input/keyboard/adp5588-keys.c
+vim +/CGRP_ROOT_FAVOR_DYNMODS +1310 kernel/cgroup/cgroup.c
 
-   323	
-   324	static int adp5588_gpiomap_get_hwirq(struct device *dev, const u8 *map,
-   325					     unsigned int gpio, unsigned int ngpios)
-   326	{
-   327		unsigned int hwirq;
-   328	
-   329		for (hwirq = 0; hwirq < ngpios; hwirq++)
-   330			if (map[hwirq] == gpio)
-   331				return hwirq;
-   332	
-   333		/* should never happen */
-   334		dev_warn_ratelimited(dev, "could not find the hwirq for gpio(%u)\n", gpio);
-   335	
- > 336		return INVALID_HWIRQ;
-   337	}
-   338	
+  1307	
+> 1308	void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+  1309	{
+> 1310		bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
+  1311	
+  1312		/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
+  1313		if (favor && !favoring) {
+  1314			rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
+  1315			root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+  1316		} else if (!favor && favoring) {
+  1317			rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
+  1318			root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+  1319		}
+  1320	}
+  1321	
 
 -- 
 0-DAY CI Kernel Test Service
