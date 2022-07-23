@@ -1,43 +1,44 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B987E
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 22:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755277E
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 23:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658616718; x=1690152718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jZMMBSO6XzRENTPVXqmNrupg0vbWMzz6op6MGiXOTNU=;
-  b=Z/vjmjQAanHTS3aZSjdoFBAGawr/EIHUOumloN2nerP3WxM68GNmp8B/
-   sK4SQSNQGWEC70mT7z7vwm/+g3mPozI740bkVHooVG29Q2IwrFTXXUlu9
-   pT6cEj9Fh+cefxyDECdp8XAgzg7CvG7yPyuTVq889leD1rNI3lqzRVUfr
-   x1gi1nKLO5PlIsRbyiWLrK7HCVCV7+M5vVKuZdQaVH2GOBVkjvfsOc67f
-   DTlMiM6Gqsbf0U3w1vZptxiEMy67yH3NYpPydzAH96zXUdUHFX4Ixdt8n
-   HDpgBrg8P2wxIw0BSPKr9nszcfr/S2/+CVEiTkWfB0X02N3pZ0mwUjYzn
+  t=1658617318; x=1690153318;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uO14P5Z/HSC5LGiKTRp+TtPiWLCoSqv3tZewvl7+QkU=;
+  b=a2vsvUh5jwgMxvrfYFWzD+ohCgiwyy4rYBhMxe64eC2YfiN5ZMYEGY02
+   HiDuRd1Db68UPkqTOYZ1BnwjSpmC0pytstPZId2fJl3igAMa8AYcXlaKE
+   FPzpCblCQ8QkwWiDPiPihmGzV7RLbhJjes3zetaDmKdIqZCG2uRxke/6Y
+   WkLLnhrzvVavfTkRKM2OIxXz+AvTRA/Gtk05EqvoI7n6AaoMQ5Q99Qm/O
+   mB1a8PYpsSFoktVjxL7p7iqn01AK6C6z9X303fvJslcOar4pEtqu4DFkh
+   cR2AW6HO582DZQk4wZr/KrCVLtQFRIGQLfJOgmA4ALm24dbLK6USpAqXz
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="287511105"
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="287511522"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="287511105"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 15:51:57 -0700
+   d="scan'208";a="287511522"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 16:01:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="603001687"
+   d="scan'208";a="775571802"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jul 2022 15:51:55 -0700
+  by orsmga005.jf.intel.com with ESMTP; 23 Jul 2022 16:01:55 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFNyU-0003C9-2N;
-	Sat, 23 Jul 2022 22:51:54 +0000
-Date: Sun, 24 Jul 2022 06:51:01 +0800
+	id 1oFO8B-0003CX-09;
+	Sat, 23 Jul 2022 23:01:55 +0000
+Date: Sun, 24 Jul 2022 07:01:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, smfrench@gmail.com,
-	pc@cjr.nz, ronniesahlberg@gmail.com, nspmangalore@gmail.com
-Subject: Re: [PATCH] cifs: remove some more dead code
-Message-ID: <202207240608.0JmhVpYu-lkp@intel.com>
-References: <20220723205901.16678-1-ematsumiya@suse.de>
+To: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
+ unused variable 'microchip_xisc_of_match'
+Message-ID: <202207240637.I0U48Kcd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,94 +47,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220723205901.16678-1-ematsumiya@suse.de>
 
-Hi Enzo,
+Hi Eugen,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on cifs/for-next]
-[also build test WARNING on linus/master v5.19-rc7 next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: arm-randconfig-r013-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240608.0JmhVpYu-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   515f71412bb73ebd7f41f90e1684fc80b8730789
+commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
+date:   1 year, 1 month ago
+config: hexagon-randconfig-r035-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240637.I0U48Kcd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
-        git checkout 6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/atmel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/cifs/connect.c:2739:24: warning: variable 'saddr4' set but not used [-Wunused-but-set-variable]
-                           struct sockaddr_in *saddr4;
-                                               ^
+>> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
+   static const struct of_device_id microchip_xisc_of_match[] = {
+                                    ^
    1 warning generated.
---
-   fs/cifs/misc.c:366:9: warning: unused variable 'mid' [-Wunused-variable]
-                   __u16 mid = get_mid(smb);
-                         ^
->> fs/cifs/misc.c:413:35: warning: variable 'pnotify' set but not used [-Wunused-but-set-variable]
-                   struct file_notify_information *pnotify;
-                                                   ^
->> fs/cifs/misc.c:520:21: warning: variable 'tcon' set but not used [-Wunused-but-set-variable]
-                   struct cifs_tcon *tcon = NULL;
-                                     ^
-   3 warnings generated.
---
->> fs/cifs/smb2misc.c:512:6: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
-           int rc = 0;
-               ^
->> fs/cifs/smb2misc.c:812:27: warning: variable 'server' set but not used [-Wunused-but-set-variable]
-                   struct TCP_Server_Info *server = NULL;
-                                           ^
-   2 warnings generated.
 
 
-vim +/saddr4 +2739 fs/cifs/connect.c
+vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  2727  
-3eb9a8893a76cf Ben Greear      2010-09-01  2728  static int
-3eb9a8893a76cf Ben Greear      2010-09-01  2729  bind_socket(struct TCP_Server_Info *server)
-3eb9a8893a76cf Ben Greear      2010-09-01  2730  {
-3eb9a8893a76cf Ben Greear      2010-09-01  2731  	int rc = 0;
-3eb9a8893a76cf Ben Greear      2010-09-01  2732  	if (server->srcaddr.ss_family != AF_UNSPEC) {
-3eb9a8893a76cf Ben Greear      2010-09-01  2733  		/* Bind to the specified local IP address */
-3eb9a8893a76cf Ben Greear      2010-09-01  2734  		struct socket *socket = server->ssocket;
-3eb9a8893a76cf Ben Greear      2010-09-01  2735  		rc = socket->ops->bind(socket,
-3eb9a8893a76cf Ben Greear      2010-09-01  2736  				       (struct sockaddr *) &server->srcaddr,
-3eb9a8893a76cf Ben Greear      2010-09-01  2737  				       sizeof(server->srcaddr));
-3eb9a8893a76cf Ben Greear      2010-09-01  2738  		if (rc < 0) {
-3eb9a8893a76cf Ben Greear      2010-09-01 @2739  			struct sockaddr_in *saddr4;
-3eb9a8893a76cf Ben Greear      2010-09-01  2740  			struct sockaddr_in6 *saddr6;
-3eb9a8893a76cf Ben Greear      2010-09-01  2741  			saddr4 = (struct sockaddr_in *)&server->srcaddr;
-3eb9a8893a76cf Ben Greear      2010-09-01  2742  			saddr6 = (struct sockaddr_in6 *)&server->srcaddr;
-3eb9a8893a76cf Ben Greear      2010-09-01  2743  			if (saddr6->sin6_family == AF_INET6)
-afe6f65353b644 Ronnie Sahlberg 2019-08-28  2744  				cifs_server_dbg(VFS, "Failed to bind to: %pI6c, error: %d\n",
-3eb9a8893a76cf Ben Greear      2010-09-01  2745  					 &saddr6->sin6_addr, rc);
-3eb9a8893a76cf Ben Greear      2010-09-01  2746  			else
-afe6f65353b644 Ronnie Sahlberg 2019-08-28  2747  				cifs_server_dbg(VFS, "Failed to bind to: %pI4, error: %d\n",
-3eb9a8893a76cf Ben Greear      2010-09-01  2748  					 &saddr4->sin_addr.s_addr, rc);
-3eb9a8893a76cf Ben Greear      2010-09-01  2749  		}
-3eb9a8893a76cf Ben Greear      2010-09-01  2750  	}
-3eb9a8893a76cf Ben Greear      2010-09-01  2751  	return rc;
-3eb9a8893a76cf Ben Greear      2010-09-01  2752  }
-^1da177e4c3f41 Linus Torvalds  2005-04-16  2753  
+   609	
+ > 610	static const struct of_device_id microchip_xisc_of_match[] = {
+   611		{ .compatible = "microchip,sama7g5-isc" },
+   612		{ }
+   613	};
+   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
+   615	
 
 -- 
 0-DAY CI Kernel Test Service
