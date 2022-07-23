@@ -1,45 +1,47 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9471B7E
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 08:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E40B7E
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 09:01:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658565014; x=1690101014;
+  t=1658566888; x=1690102888;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l+WRDwDn8RFs/v3cxwM8NeQyyKRnZQ8u4KQSj/cx4oQ=;
-  b=IeXcyBabDbkXCyIkYMa40pP8gIp/RvsAwN5iS7gg4ocAHPuP4Qyb1VUa
-   gQLVKCYQWnIgl9cmq0NMfGSG3h0eBt/EVHLl0xvyRk+JGAhqFphNX6qK6
-   ERDRwY/iaD37/HBOrvQfuj39NUUgI3Tm5y+by0BQoMXM2Z1CCNb/TcDbh
-   IEtAZwpP0bjMbdrA/9lJLHn4LH9ys4WLCTg+UnUVwW6L0bKTzCswd6+do
-   NsKmIFtM+jsRW0Sfam24GxJlTwHM7Qb7UOUw3/dxiydeSPvw+mhlgLXxN
-   T3uwbOZ4QBhPnwVA/VlzE4Rixhq5de55ie+hpOfloioBtxo+6wlfaiCW1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="349153038"
+  bh=4ja/jDyHEvXz8jsMeBaUnUnIFqp744izCIe/8ZoPoDs=;
+  b=RKgYuWVZA4jAOxFfzW/hLnHZU8eX74VCFK8J7semVnms67kBS392YdXQ
+   R/8x74mRIiicG0NEzC8ucVbwupavwVCDosZHF7OH+EbuRcAZ5lYNhmfTx
+   nZpjjciT52crEE9bAkkh5kFOY/ckYztLdOnp4QK7bO6Rwj3CYTLHkJZ96
+   sVAt3CGBEyv25vHhUa81/mw3c8is+6UGliv259CEDipuCINK0RsgZ/pSM
+   8UkJQuhtvLKj6txo5JI+PRKvlxsk73lp3YN7+yGgtGv58SbxpYw7VaSCK
+   cz41b63HeXDPlHgqM9hmiYtmXWkTSaNMu2oih2GjGzAq7C4S6oq5yDkps
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286216682"
 X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="349153038"
+   d="scan'208";a="286216682"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 01:30:13 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 02:01:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="631817685"
+   d="scan'208";a="631821627"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jul 2022 01:30:12 -0700
+  by orsmga001.jf.intel.com with ESMTP; 23 Jul 2022 02:01:14 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFAWZ-0002Qn-0z;
-	Sat, 23 Jul 2022 08:30:11 +0000
-Date: Sat, 23 Jul 2022 16:29:52 +0800
+	id 1oFB0b-0002SX-0u;
+	Sat, 23 Jul 2022 09:01:13 +0000
+Date: Sat, 23 Jul 2022 17:00:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tejun Heo <tj@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tj/cgroup/for-next 7/8]
- kernel/cgroup/cgroup.c:1310:32: error: use of undeclared identifier
- 'CGRP_ROOT_FAVOR_DYNMODS'
-Message-ID: <202207231608.bk36zznz-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
+ undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202207231622.gA1AbtOQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,95 +51,119 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block tj/cgroup/for-next
-head:   c87b1452249c69cdec70d5de64ea81f56e1ba3f8
-commit: 79276d9e0dda30071b9a98045a3efa7e0a76938b [7/8] cgroup: Make !percpu threadgroup_rwsem operations optional
-config: hexagon-randconfig-r041-20220722 (https://download.01.org/0day-ci/archive/20220723/202207231608.bk36zznz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+Hi Arnd,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   70664fc10c0d722ec79d746d8ac1db8546c94114
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   4 months ago
+config: mips-buildonly-randconfig-r005-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231622.gA1AbtOQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/79276d9e0dda30071b9a98045a3efa7e0a76938b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tj/cgroup/for-next
-        git checkout 79276d9e0dda30071b9a98045a3efa7e0a76938b
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/cgroup/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/cgroup/cgroup.c:1310:32: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-           bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
-                                         ^
-   kernel/cgroup/cgroup.c:1315:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-                                  ^
-   kernel/cgroup/cgroup.c:1318:19: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-                                   ^
->> kernel/cgroup/cgroup.c:1308:6: warning: no previous prototype for function 'cgroup_favor_dynmods' [-Wmissing-prototypes]
-   void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
-        ^
-   kernel/cgroup/cgroup.c:1308:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
    ^
-   static 
-   kernel/cgroup/cgroup.c:1912:17: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-                                 ^
-   kernel/cgroup/cgroup.c:1915:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-                                  ^
-   kernel/cgroup/cgroup.c:1942:23: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                                        root_flags & CGRP_ROOT_FAVOR_DYNMODS);
-                                                     ^
-   kernel/cgroup/cgroup.c:1960:28: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-           if (cgrp_dfl_root.flags & CGRP_ROOT_FAVOR_DYNMODS)
-                                     ^
-   kernel/cgroup/cgroup.c:2013:30: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-           root->flags = ctx->flags & ~CGRP_ROOT_FAVOR_DYNMODS;
-                                       ^
-   1 warning and 8 errors generated.
---
->> kernel/cgroup/cgroup-v1.c:878:20: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-           if (root->flags & CGRP_ROOT_FAVOR_DYNMODS)
-                             ^
-   kernel/cgroup/cgroup-v1.c:970:17: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-                                 ^
-   kernel/cgroup/cgroup-v1.c:973:18: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-                                  ^
->> kernel/cgroup/cgroup-v1.c:1227:3: error: call to undeclared function 'cgroup_favor_dynmods'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
-                   ^
-   kernel/cgroup/cgroup-v1.c:1227:43: error: use of undeclared identifier 'CGRP_ROOT_FAVOR_DYNMODS'
-                   cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
-                                                           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+>> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^
+   <scratch space>:171:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:171:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:182:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
    5 errors generated.
 
 
-vim +/CGRP_ROOT_FAVOR_DYNMODS +1310 kernel/cgroup/cgroup.c
+vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
 
-  1307	
-> 1308	void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
-  1309	{
-> 1310		bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
-  1311	
-  1312		/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
-  1313		if (favor && !favoring) {
-  1314			rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
-  1315			root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-  1316		} else if (!favor && favoring) {
-  1317			rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
-  1318			root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-  1319		}
-  1320	}
-  1321	
+0548448b719ac7 Charles Keepax 2019-03-19  199  
+0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
+0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
+0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
+0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
+0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
+0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
+0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
+0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
+0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
+0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
+0548448b719ac7 Charles Keepax 2019-03-19  220  
+
+:::::: The code at line 200 was first introduced by commit
+:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
+
+:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
