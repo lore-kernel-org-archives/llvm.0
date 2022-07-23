@@ -1,187 +1,140 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C30E7E
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 15:15:44 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id g12so6780944pfb.3
-        for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 08:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nyw+kIA5BAs/IWrKxn3GKDGPvGzat8nDAzo2DBLLfVQ=;
-        b=RZE9+srs/ZQzf+6+8iMp8aSA+S4b3XHtaBcIK6cWQOJUIxJVQYnVj1IXBzsP02WL7E
-         +pp2U8Htt9zTu1bRiYFE2dE6852hCRVpwjG9FShI2mWgMd+L4TbkNZtrcBh1hEY98ZD6
-         85MWFxZ4uhWnekb5n77j4yDtDudwFT8tpq0SrFn0NiPeqtkrr0ncPBQFNp95idgQWQA2
-         PAfh0mipOkRRR3HSSYK6IQZWUJGetDgiiNSD8dcK7YcvMnJSB1k0ANx0qlUUDCpPo9JB
-         7v/hNqJaQHCNNmBjU0AYqwALfgc9v/HdOM8XvH/W5RNmKg8CNteWK+O7Hxr69aUO4yvV
-         jAYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=nyw+kIA5BAs/IWrKxn3GKDGPvGzat8nDAzo2DBLLfVQ=;
-        b=S0+BhXuPId4agAt7vgi//5tGrJSQHHQYfS5OkBhlgnVim0Chz+aEz01al7lSr3O8/b
-         lOx7H/Ow6AMU4h8YUnc362UNyAl0a/yFNb8no2V+zVXNKER5dWql9D/UUH0I3YqjbpGF
-         1Jh2vgpZXecho+cIgkeu+SN0EaPci1pRudFnHmQ6B2r/+pYjkOcDDHD4UbJgF3GMtooO
-         TDNtvuOHI8eLN69/x+C4wAri9SkDj4TGXkKxjT7TYh43th0QZkuXj2nPMdggtFdcBBI5
-         SqPEnVuEnC9xcD2WZm6xciN/7oFKp5aHMfs1NY7Y6sC5xKJFmhCHFZKlRXLYTbt1PTYj
-         BaNQ==
-X-Gm-Message-State: AJIora9Cc8VlkpMIkrY5sDjZd1NRqZ48cnO4OIgL7FMhewCsWlYNqSQW
-	IfQtf8K1UJxF1eydxmbowrY=
-X-Google-Smtp-Source: AGRyM1sAYtOF3ID6coRuH3k+muPkfvjnG5dlXIbn2P0RoBCWcX3EXbdpe4PoLRE69uBbjS2c4EAkKw==
-X-Received: by 2002:aa7:9e41:0:b0:52b:b32:ccf0 with SMTP id z1-20020aa79e41000000b0052b0b32ccf0mr5035133pfq.16.1658589344243;
-        Sat, 23 Jul 2022 08:15:44 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa794a5000000b0052ac1af926fsm6071350pfl.20.2022.07.23.08.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 08:15:43 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RESEND PATCH v4 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date: Sun, 24 Jul 2022 00:15:21 +0900
-Message-Id: <20220723151521.51451-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4227E
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 17:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658598402; x=1690134402;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=byfy1VmXoGDD6JStp+2Iq80m79qfFIRVQK/Usn6OZDs=;
+  b=KYTJvDWbt3oGvdYUuW/v0ryKtZeQ9MUr6OZc4Pzhq01ALuRKhamLcHBt
+   Pc1iL91h6YEiwRU6Ur6qkbriPzENkeqg9xTQSAG4+O7QInbkhWjntiQh0
+   Z3Pw5qqPBFSmVaJGj50SU5gDqaKQzKF1VQhFMU7vyHmFvLzmxJrg9ASzX
+   IeFnpJZT9KKhnj1d/gBBrVdZ75PjzBorpES9trq61gP/CiGd3hHeRNF5b
+   Mzfh5EN6HXUg7FrBAyfV0x43jEkJmjXMdJKX0tk417FLAw0552oKhuSCH
+   STfaAhED8iL2iItEx2eWFE1KF9Ax52vfz+vifcH1LJqJ1dvqcyLiypOSb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="274342688"
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="274342688"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 10:46:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="549501718"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 23 Jul 2022 10:46:40 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oFJD5-0002un-2Z;
+	Sat, 23 Jul 2022 17:46:39 +0000
+Date: Sun, 24 Jul 2022 01:46:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+Subject: [avpatel:riscv_sbi_dbcn_v1 8/44] arch/arm64/kvm/mmu.c:789:55: error:
+ incompatible pointer to integer conversion initializing 'gfp_t' (aka
+ 'unsigned int') with an expression of type 'void *'
+Message-ID: <202207240129.rZlQmb0J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+tree:   https://github.com/avpatel/linux.git riscv_sbi_dbcn_v1
+head:   1b3aaa127f01dc1a35b6595c628a38b92832488d
+commit: beca2348d03ad05136b6c2fd20d2fde9b5b0239e [8/44] KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
+config: arm64-randconfig-r024-20220721 (https://download.01.org/0day-ci/archive/20220724/202207240129.rZlQmb0J-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/avpatel/linux/commit/beca2348d03ad05136b6c2fd20d2fde9b5b0239e
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_dbcn_v1
+        git checkout beca2348d03ad05136b6c2fd20d2fde9b5b0239e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() gets simplified into a single
-instruction.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
+All errors (new ones prefixed by >>):
 
-This patch uses the __builtin_constant_p() to select between the
-kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
-the argument is constant or not.
+>> arch/arm64/kvm/mmu.c:789:55: error: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
+           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+                                                                ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   1 error generated.
 
-** Statistics **
 
-On a allyesconfig, before applying this patch...:
+vim +789 arch/arm64/kvm/mmu.c
 
-| $ objdump -d vmlinux.o | grep tzcnt | wc -l
-| 3607
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  774  
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  775  /**
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  776   * kvm_phys_addr_ioremap - map a device range to guest IPA
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  777   *
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  778   * @kvm:	The KVM pointer
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  779   * @guest_ipa:	The IPA at which to insert the mapping
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  780   * @pa:		The physical address of the device
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  781   * @size:	The size of the mapping
+c9c0279cc02b4e arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  782   * @writable:   Whether or not to create a writable mapping
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783   */
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  784  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  785  			  phys_addr_t pa, unsigned long size, bool writable)
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  {
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  	phys_addr_t addr;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  788  	int ret = 0;
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @789  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  				     KVM_PGTABLE_PROT_R |
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  				     (writable ? KVM_PGTABLE_PROT_W : 0);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  795  	if (is_protected_kvm_enabled())
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  796  		return -EPERM;
+bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  797  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  798  	size += offset_in_page(guest_ipa);
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  799  	guest_ipa &= PAGE_MASK;
+c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  800  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  801  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  802  		ret = kvm_mmu_topup_memory_cache(&cache,
+61ffb3a50c4402 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  803  						 kvm_mmu_cache_min_pages(kvm));
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  804  		if (ret)
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  805  			break;
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  806  
+fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  807  		write_lock(&kvm->mmu_lock);
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  808  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  809  					     &cache);
+fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  810  		write_unlock(&kvm->mmu_lock);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  811  		if (ret)
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  812  			break;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  813  
+02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  814  		pa += PAGE_SIZE;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  815  	}
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  816  
+c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  817  	kvm_mmu_free_memory_cache(&cache);
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  818  	return ret;
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  819  }
+d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  820  
 
-...and after:
+:::::: The code at line 789 was first introduced by commit
+:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
 
-| $ objdump -d vmlinux.o | grep tzcnt | wc -l
-| 2600
+:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-constant expressions and could be optimized out.
-
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-
-Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-the ret prefix (which is why we grep tzcnt instead of bsf in above
-benchmark). c.f. [1]
-
-[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 6ed979547086..f88c55b8b37c 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long variable___ffs(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
- 	return word;
- }
- 
--/**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 variable___ffs(word))
-+
-+static __always_inline unsigned long variable_ffz(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 variable_ffz(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
