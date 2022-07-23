@@ -1,37 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0437E
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 01:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA38C341C6;
-	Sat, 23 Jul 2022 01:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658538417;
-	bh=fHNuvB6T+dTuon+utp2CYAjZP2AR8Ky27DFotpM5vCo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pHWDCqhBvsuhaa1x6mo2CrB4y9dUJUEjObl40Lj3Cr0oqExCm8nPjfKrfDhdxhIQ/
-	 VuvfDqcUCdo2dz5kmZdao+yJpbmFZINq709K2dLM9nK3FA5ESORIC0My34XHp9c67u
-	 E9wOaAAnxrHbQiCm7+wwJBaMUhK9t/337/9Cj1NzD9MPDa35GV+IRPt6s/FvsHBVNF
-	 5Fw9I+1M5145zJ8kwKA+0C4M5n4A8/gJDF5Dpk4BhlHeBjY2hMTHu9wCeMPlILgDWs
-	 BogbfgS65HZcjnGynwnN1OmCxzSNOe5aWqqPKVFDRxzTlD9/95+2l2dXGLvAu7UMVM
-	 WnKNIMAtjw7sQ==
-Date: Fri, 22 Jul 2022 18:06:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>,
-	Maxim Levitsky <mlevitsk@redhat.com>, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 15/25] KVM: VMX: Extend VMX controls macro shenanigans
-Message-ID: <YttJrmcuAcL3PXno@dev-arch.thelio-3990X>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-16-vkuznets@redhat.com>
- <YtrtdylmyolAHToz@google.com>
- <YtsQ5SkCJXQIuKGS@dev-arch.thelio-3990X>
- <YtsY5xwmlQ6kFtUz@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915E17E
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 01:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658541233; x=1690077233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7JtBDVGVVgdUslbHkdrQhs/lqMmJRI+S9rhzt0JivF0=;
+  b=AYSxbxEYcLhz7CEZPjszV38ge8tAbgcNQkffUzldJpwtTuYtFLZpD8PC
+   4ThljY8fi4d1ST8lDDzQSg7vbn8nDTQvFxpAmP65tsavGPQYNRWTiUoKW
+   LGmWpNzhCHqthLpbApviFCfi2BSnxM07suNgAyL/Su7XGdXddITfDvDUD
+   ETPTKSv2puq8UnxUabWBSQX7KHA4656bpyjv/NOBiJmwyGLJH3WmdW00j
+   78fBfwp7FL8+ThNpm3BBT1VnJ2lzbEz009MqkUH0vxdKnWBbISC7r5t/u
+   6fu9t8Fjm2K8oz2QUOA5VJ2soD3qYCy4CsNqrkF33PzvABwVLAdcz1Mup
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="267830467"
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="267830467"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 18:53:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="631758819"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Jul 2022 18:53:50 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oF4L0-00022x-0W;
+	Sat, 23 Jul 2022 01:53:50 +0000
+Date: Sat, 23 Jul 2022 09:53:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yuanjun Gong <ruc_gongyuanjun@163.com>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 1/1] drivers/clk/keystone: avoid a memory leak
+Message-ID: <202207230958.CDbs3UDB-lkp@intel.com>
+References: <20220722041343.39492-1-ruc_gongyuanjun@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,113 +47,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtsY5xwmlQ6kFtUz@google.com>
+In-Reply-To: <20220722041343.39492-1-ruc_gongyuanjun@163.com>
 
-On Fri, Jul 22, 2022 at 09:38:47PM +0000, Sean Christopherson wrote:
-> On Fri, Jul 22, 2022, Nathan Chancellor wrote:
-> > On Fri, Jul 22, 2022 at 06:33:27PM +0000, Sean Christopherson wrote:
-> > > On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> > > > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> > > > index 286c88e285ea..89eaab3495a6 100644
-> > > > --- a/arch/x86/kvm/vmx/vmx.h
-> > > > +++ b/arch/x86/kvm/vmx/vmx.h
-> > > > @@ -467,6 +467,113 @@ static inline u8 vmx_get_rvi(void)
-> > > >  	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
-> > > >  }
-> > > >  
-> > > > +#define __KVM_REQ_VMX_VM_ENTRY_CONTROLS				\
-> > > > +	(VM_ENTRY_LOAD_DEBUG_CONTROLS)
-> > > > +#ifdef CONFIG_X86_64
-> > > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > > +		(__KVM_REQ_VMX_VM_ENTRY_CONTROLS |		\
-> > > > +		VM_ENTRY_IA32E_MODE)
-> > > 
-> > > This breaks 32-bit builds, but at least we know the assert works!
-> > > 
-> > > vmx_set_efer() toggles VM_ENTRY_IA32E_MODE without a CONFIG_X86_64 guard.  That
-> > > should be easy enough to fix since KVM should never allow EFER_LMA.  Compile 
-> > > tested patch at the bottom.
-> > > 
-> > > More problematic is that clang-13 doesn't like the new asserts, and even worse gives
-> > > a very cryptic error.  I don't have bandwidth to look into this at the moment, and
-> > > probably won't next week either.
-> > > 
-> > > ERROR: modpost: "__compiletime_assert_533" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > > ERROR: modpost: "__compiletime_assert_531" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > > ERROR: modpost: "__compiletime_assert_532" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > > ERROR: modpost: "__compiletime_assert_530" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > > make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
-> > > make[1]: *** [Makefile:1753: modules] Error 2
-> > > make[1]: *** Waiting for unfinished jobs....
-> > 
-> > clang-14 added support for the error and warning attributes, which makes
-> > the BUILD_BUG_ON failures look like GCC. With allmodconfig, this
-> > becomes:
-> 
-> ...
-> 
-> > As you mentioned in the other comment on this patch, the 'inline'
-> > keyword should be '__always_inline' in the BUILD_CONTROLS_SHADOW macro
-> > and a couple of other functions need it for BUILD_BUG_ON to see the
-> > value all the way through the call chain. The following diff resolves
-> > those errors for me, hopefully it is useful!
-> 
-> Thanks a ton!  Y'all are like a benevolent Beetlejuice, one needs only to mention
-> "clang" and you show up and solve the problem :-)
+Hi Yuanjun,
 
-Praise be to the mightly lei and its filters :)
+Thank you for the patch! Perhaps something to improve:
 
-FWIW, if you ever have a question about clang's behavior or any errors,
-please feel free to cc llvm@lists.linux.dev, we're always happy to look
-into things so that clang stays well supported upstream (and thank you
-for verifying KVM changes with it!).
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linus/master v5.19-rc7 next-20220722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanjun-Gong/drivers-clk-keystone-avoid-a-memory-leak/20220722-121453
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220723/202207230958.CDbs3UDB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/c8db4a192822cdb1e77a32238a893d7a81081f80
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuanjun-Gong/drivers-clk-keystone-avoid-a-memory-leak/20220722-121453
+        git checkout c8db4a192822cdb1e77a32238a893d7a81081f80
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/keystone/
 
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index 4ce7ed835e06..b97ed63ece56 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -790,7 +790,7 @@ static bool msr_write_intercepted(struct vcpu_vmx *vmx, u32 msr)
-> >  					 MSR_IA32_SPEC_CTRL);
-> >  }
-> >  
-> > -static void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> > +static __always_inline void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> >  		unsigned long entry, unsigned long exit)
-> >  {
-> >  	vm_entry_controls_clearbit(vmx, entry);
-> > @@ -848,7 +848,7 @@ static void clear_atomic_switch_msr(struct vcpu_vmx *vmx, unsigned msr)
-> >  	vmcs_write32(VM_EXIT_MSR_LOAD_COUNT, m->host.nr);
-> >  }
-> >  
-> > -static void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> > +static __always_inline void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> >  		unsigned long entry, unsigned long exit,
-> >  		unsigned long guest_val_vmcs, unsigned long host_val_vmcs,
-> >  		u64 guest_val, u64 host_val)
-> > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> > index 758f80c41beb..acefa5b5e1b9 100644
-> > --- a/arch/x86/kvm/vmx/vmx.h
-> > +++ b/arch/x86/kvm/vmx/vmx.h
-> > @@ -597,12 +597,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)		\
-> >  {										\
-> >  	return __##lname##_controls_get(vmx->loaded_vmcs);			\
-> >  }										\
-> > -static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
-> > +static __always_inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
-> >  {										\
-> >  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
-> >  	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);		\
-> >  }										\
-> > -static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
-> > +static __always_inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
-> >  {										\
-> >  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
-> >  	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);		\
-> > 
-> > > > +#else
-> > > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > > +		__KVM_REQ_VMX_VM_ENTRY_CONTROLS
-> > > > +#endif
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/keystone/syscon-clk.c:88:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                   return ERR_PTR(ret);
+                   ^
+   drivers/clk/keystone/syscon-clk.c:86:2: note: previous statement is here
+           if (ret)
+           ^
+   1 warning generated.
+
+
+vim +/if +88 drivers/clk/keystone/syscon-clk.c
+
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  61  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  62  static struct clk_hw
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  63  *ti_syscon_gate_clk_register(struct device *dev, struct regmap *regmap,
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  64  			     const struct ti_syscon_gate_clk_data *data)
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  65  {
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  66  	struct ti_syscon_gate_clk_priv *priv;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  67  	struct clk_init_data init;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  68  	int ret;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  69  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  70  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  71  	if (!priv)
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  72  		return ERR_PTR(-ENOMEM);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  73  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  74  	init.name = data->name;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  75  	init.ops = &ti_syscon_gate_clk_ops;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  76  	init.parent_names = NULL;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  77  	init.num_parents = 0;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  78  	init.flags = 0;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  79  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  80  	priv->regmap = regmap;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  81  	priv->reg = data->offset;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  82  	priv->idx = BIT(data->bit_idx);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  83  	priv->hw.init = &init;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  84  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  85  	ret = devm_clk_hw_register(dev, &priv->hw);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  86  	if (ret)
+c8db4a192822cd Yuanjun Gong        2022-07-22  87  		devm_kfree(dev, priv);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27 @88  		return ERR_PTR(ret);
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  89  
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  90  	return &priv->hw;
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  91  }
+1aa0817e43c525 Vignesh Raghavendra 2020-02-27  92  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
