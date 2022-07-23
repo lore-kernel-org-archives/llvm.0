@@ -1,43 +1,51 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69AB3208
-	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 22:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9B433C5
+	for <llvm@lists.linux.dev>; Sat, 23 Jul 2022 22:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658616718; x=1690152718;
+  t=1658616719; x=1690152719;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Sq8VSrpH8mADgVhehoXwXzgZctNWhJaAT58teun3Jl0=;
-  b=hJR5DsiJWtf1N3fr9RofFZzfCZlNjSSIl1+QM/cfyJgNj7/Mu41Rr9Lp
-   Rlco0/GDS2blVycb04c2ViSTXOB8uqQfpLT3hMieeOy107JPmm1xAOpOP
-   tP+ZNraMt8pNfX1CKTRTjvCpEsV+T/42/GkPTGQHZWswCMoXpiiDXtwgF
-   LoAYDulmGWlnNosVkUErXp8S2HKK1kjqZLvx03y4M+tBga399cT1wCFhc
-   6+dnsR1oKSGPDgJwbHTgumxFk3L6SN9dN52vY4LrdJ0sFqs5DeMkmPjN3
-   mK7B/NfLWUARIMK7hM8dzUMC1QiG8N63kcoLufMHtAZO5xhYAlaoKuNi4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267271957"
+  bh=CcMzN1ngFwzFBUCgmHF+q1Wx9bfh8y0odjoQnUGTIPc=;
+  b=gnwTXKN2VOAS9rl+nMf0gtJdpxXF7J8p0+66iQ/VH+6utP1qtxTUlCmg
+   POjEM4xydXV/CI50jvFk8VC5Ou2TFN/J1wGYOGKjuF48j+zxfvbHkm4ii
+   yt3bbM1PNGf82tFdi0MJ1R5FMJo63efN9/LMU8WoMN02+BSS3kuY0Jw7b
+   AXwM1PemUwFXmeaLjj7LuL60/jzXOq0Nzr1GDy8zfcs8IYVmBvw6Y+m03
+   zYdAkzErcAAZZZcOb7tQ9hIDrtfu00RuQkZ+4Td4zf1lTj79McRHJwXia
+   BkwdupomSHZF1gf8zEs1SqM+h3q10Q5qqE4HlCA1nKy26PGEM/r7XD9+i
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="274356757"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="267271957"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 15:51:57 -0700
+   d="scan'208";a="274356757"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 15:51:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="775570420"
+   d="scan'208";a="688648014"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jul 2022 15:51:55 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 15:51:55 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFNyU-0003C7-2J;
+	id 1oFNyU-0003C5-1x;
 	Sat, 23 Jul 2022 22:51:54 +0000
-Date: Sun, 24 Jul 2022 06:51:00 +0800
+Date: Sun, 24 Jul 2022 06:50:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, smfrench@gmail.com,
-	pc@cjr.nz, ronniesahlberg@gmail.com, nspmangalore@gmail.com
-Subject: Re: [PATCH] cifs: remove some more dead code
-Message-ID: <202207240645.7IYWNiqd-lkp@intel.com>
-References: <20220723205901.16678-1-ematsumiya@suse.de>
+To: Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Angel Iglesias <ang.iglesiasg@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Paul Cercueil <paul@crapouillou.net>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <202207240654.c7cPESiE-lkp@intel.com>
+References: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,122 +54,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220723205901.16678-1-ematsumiya@suse.de>
+In-Reply-To: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
 
-Hi Enzo,
+Hi Angel,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on cifs/for-next]
-[also build test WARNING on linus/master v5.19-rc7 next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 180c6cb6b9b79c55b79e8414f4c0208f2463af7d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220724/202207240645.7IYWNiqd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
+base:   180c6cb6b9b79c55b79e8414f4c0208f2463af7d
+config: arm-buildonly-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240654.c7cPESiE-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/eb385b5ff634acc29a3d9f20847e62ec73484fcb
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Enzo-Matsumiya/cifs-remove-some-more-dead-code/20220724-050054
-        git checkout 6e3f3b9d1abb0ac9a6b161af9ac835d32eed006f
+        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
+        git checkout eb385b5ff634acc29a3d9f20847e62ec73484fcb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/cifs/connect.c:2739:24: warning: variable 'saddr4' set but not used [-Wunused-but-set-variable]
-                           struct sockaddr_in *saddr4;
-                                               ^
-   1 warning generated.
---
->> fs/cifs/misc.c:366:9: warning: unused variable 'mid' [-Wunused-variable]
-                   __u16 mid = get_mid(smb);
-                         ^
->> fs/cifs/misc.c:413:35: warning: variable 'pnotify' set but not used [-Wunused-but-set-variable]
-                   struct file_notify_information *pnotify;
-                                                   ^
->> fs/cifs/misc.c:520:21: warning: variable 'tcon' set but not used [-Wunused-but-set-variable]
-                   struct cifs_tcon *tcon = NULL;
-                                     ^
-   3 warnings generated.
---
->> fs/cifs/sess.c:364:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
-                               ^
->> fs/cifs/sess.c:365:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
-                                ^
-   2 warnings generated.
---
->> fs/cifs/smb2misc.c:512:6: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
-           int rc = 0;
-               ^
->> fs/cifs/smb2misc.c:812:27: warning: variable 'server' set but not used [-Wunused-but-set-variable]
-                   struct TCP_Server_Info *server = NULL;
-                                           ^
-   2 warnings generated.
---
->> fs/cifs/cifs_swn.c:261:7: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-                   int ret;
-                       ^
-   fs/cifs/cifs_swn.c:271:7: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-                   int ret;
-                       ^
->> fs/cifs/cifs_swn.c:511:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)addr;
-                               ^
->> fs/cifs/cifs_swn.c:512:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)addr;
-                                ^
-   4 warnings generated.
---
->> fs/cifs/sess.c:365:23: warning: unused variable 'ipv6' [-Wunused-variable]
-           struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&iface->sockaddr;
-                                ^
->> fs/cifs/sess.c:364:22: warning: unused variable 'ipv4' [-Wunused-variable]
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)&iface->sockaddr;
-                               ^
-   2 warnings generated.
-
-
-vim +/saddr4 +2739 fs/cifs/connect.c
-
-^1da177e4c3f41 Linus Torvalds  2005-04-16  2727  
-3eb9a8893a76cf Ben Greear      2010-09-01  2728  static int
-3eb9a8893a76cf Ben Greear      2010-09-01  2729  bind_socket(struct TCP_Server_Info *server)
-3eb9a8893a76cf Ben Greear      2010-09-01  2730  {
-3eb9a8893a76cf Ben Greear      2010-09-01  2731  	int rc = 0;
-3eb9a8893a76cf Ben Greear      2010-09-01  2732  	if (server->srcaddr.ss_family != AF_UNSPEC) {
-3eb9a8893a76cf Ben Greear      2010-09-01  2733  		/* Bind to the specified local IP address */
-3eb9a8893a76cf Ben Greear      2010-09-01  2734  		struct socket *socket = server->ssocket;
-3eb9a8893a76cf Ben Greear      2010-09-01  2735  		rc = socket->ops->bind(socket,
-3eb9a8893a76cf Ben Greear      2010-09-01  2736  				       (struct sockaddr *) &server->srcaddr,
-3eb9a8893a76cf Ben Greear      2010-09-01  2737  				       sizeof(server->srcaddr));
-3eb9a8893a76cf Ben Greear      2010-09-01  2738  		if (rc < 0) {
-3eb9a8893a76cf Ben Greear      2010-09-01 @2739  			struct sockaddr_in *saddr4;
-3eb9a8893a76cf Ben Greear      2010-09-01  2740  			struct sockaddr_in6 *saddr6;
-3eb9a8893a76cf Ben Greear      2010-09-01  2741  			saddr4 = (struct sockaddr_in *)&server->srcaddr;
-3eb9a8893a76cf Ben Greear      2010-09-01  2742  			saddr6 = (struct sockaddr_in6 *)&server->srcaddr;
-3eb9a8893a76cf Ben Greear      2010-09-01  2743  			if (saddr6->sin6_family == AF_INET6)
-afe6f65353b644 Ronnie Sahlberg 2019-08-28  2744  				cifs_server_dbg(VFS, "Failed to bind to: %pI6c, error: %d\n",
-3eb9a8893a76cf Ben Greear      2010-09-01  2745  					 &saddr6->sin6_addr, rc);
-3eb9a8893a76cf Ben Greear      2010-09-01  2746  			else
-afe6f65353b644 Ronnie Sahlberg 2019-08-28  2747  				cifs_server_dbg(VFS, "Failed to bind to: %pI4, error: %d\n",
-3eb9a8893a76cf Ben Greear      2010-09-01  2748  					 &saddr4->sin_addr.s_addr, rc);
-3eb9a8893a76cf Ben Greear      2010-09-01  2749  		}
-3eb9a8893a76cf Ben Greear      2010-09-01  2750  	}
-3eb9a8893a76cf Ben Greear      2010-09-01  2751  	return rc;
-3eb9a8893a76cf Ben Greear      2010-09-01  2752  }
-^1da177e4c3f41 Linus Torvalds  2005-04-16  2753  
+>> ld.lld: error: undefined symbol: __aeabi_ldivmod
+   >>> referenced by bmp280-core.c:887 (drivers/iio/pressure/bmp280-core.c:887)
+   >>> iio/pressure/bmp280-core.o:(bmp380_read_press) in archive drivers/built-in.a
+   >>> did you mean: __aeabi_idivmod
+   >>> defined in: arch/arm/lib/lib.a(lib1funcs.o)
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
 
 -- 
 0-DAY CI Kernel Test Service
