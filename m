@@ -1,41 +1,41 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4B92F51
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:17 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id c12so4529939ede.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19CC833F2
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:18 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id t3so11934388edd.0
         for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 15:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=WTkj3AvcILSXwvlftWLdz4EYcukiu8gAWij+RfwHYgY=;
-        b=FJAQll9JfZs5Q9guVFclr7sKp9lQz6eh8lWt4cdDot9P6jkylxPHWBg5z2FLTBZZCY
-         Z03ama9yerVDDIzZhwchH4sQohl77c1gxBsEKG37u3y0fYdnCHdMBL4wHq8Jfgjkz89F
-         XLu3RiWGJpw8/xGz1fkaOdkAiE7MQBDuK2w5pFzjj7lcYn3IvPkIsc6JZ9zvh/sAk/Gx
-         R7SoNhQ6cERth+MYN7s0T0ToE6zw9c7aLaSrDVeOyFqKDmtA0gmU/sdITK1eeTxT3cbP
-         3HVe1P0HTUpwhHxNSAKSThl7XwkMK0gig13gE5TW7bQV0vy2+pGbl6nhT62Kz79IhrV7
-         2fsQ==
+        bh=uBc6l9wUgDDf22Xx6q8PZWf/Hd4h/iBtQuuiFTeFacU=;
+        b=Yh1KeAafVdc6nIVRiEug35mh+i5JdJDTXcugcvinYcBEMnW3f/XE4+cb7qHfQoujIk
+         204nZyTlgCHHkhdjOHj8ZtdC73xKmX4/3qv9VKu17Xcg1BG9PFK7Cmt+yq6o5yQTXamp
+         wiAWwmyrpJhGnE32cN1drsZjhhFwqrQboBiX48L7iE5lXV/Ldl4mSGEGfe1opR9PzUAK
+         bDIQOP0HnVigJVsSnJw4Plf+N/BMOBDrfiXMKh6lUWtR04jEzMWjiM9iX95cKEL3wLXv
+         QDKkrUBR7FXf8XgmZuELKx+pqM3TauXuR3uPCZZjeSiyukjYW6sYyRvrqSKR8kLwBc3S
+         jkNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WTkj3AvcILSXwvlftWLdz4EYcukiu8gAWij+RfwHYgY=;
-        b=cRJQDwoAkqnkKUprGduDfkI8t6KYKqbMqynbe1TCMBv+w9WP7ZIpGLLNZgPix7W/Ke
-         KKRd51WvDM6qHuwkr7ZkhmHhlNj0pgouTORS1AXqUfrgWeJRajQO7RS9hdxVT+Ibhsv0
-         soL2XaG9h63hVc4nVdALkJqKiAJcdKfIVYmN8d4iok1A1KyOfckM3Yz0ZJbkq/RFA9EA
-         hQfQaR7KTH6KKlFKK1/iZE9xgh+ZNSDSb4C1Z98LHxQaomC4hf+NEieeJpU+Q+5fFu7D
-         3dvDqRj23XLpzyBWK8rxBdsnfxDDs05YLv8i+b0ucgMPuG63QTlATlM/Usi91egDXUMh
-         o5uw==
-X-Gm-Message-State: AJIora/DmDmYmG5Up3FdUY2KUDzzp2EaV0GonUiAkTy66T8Wq1Ix/bmZ
-	Or8BaaN3zLeegZbvJvpcHUc=
-X-Google-Smtp-Source: AGRyM1tP4vsApb2hhFgycmK1gr6h+z1nEOn5SC38YdkOOyyuTbeITDE86S/v1SVEyC4xcVspxyALsg==
-X-Received: by 2002:a05:6402:4315:b0:43a:d79e:117c with SMTP id m21-20020a056402431500b0043ad79e117cmr10542401edc.194.1658703077410;
-        Sun, 24 Jul 2022 15:51:17 -0700 (PDT)
+        bh=uBc6l9wUgDDf22Xx6q8PZWf/Hd4h/iBtQuuiFTeFacU=;
+        b=4Czjijuz36guRtSUib8oba+hhxeISKoUhfPBgZVNljsuGVrYs+RM784gKENQibEkyK
+         1cvlBGC1Po7miadAZl0weSs8FX3XpRVU6K6oG/jiYqqciHMevrMp1MneyL4BovUfjHfJ
+         aKQ3+RL8W2qopjGCwIO3sZpO2sF/hHGpKmxuLqPWNOOCyxmsQZs9ZV/dJsdh6+FEtODH
+         Qk/Gj9WARKDd9pLlItV7e3ikBJO2K4ES6gVaADFKo69pY/WramlygycG5bCHnO5jhPMN
+         umLTUMnLUt/j+d7VO11v7QlirQWC5ZxDJBp7ftUMRRieD/MKKNAmIIbGTxEeknwHuk/5
+         HTvQ==
+X-Gm-Message-State: AJIora8PrnbG51KJoxGY0Kczzf3WVqRbftYkrpPsRy93hGUzQ7KU6ybg
+	6V/Zdl7dxCKd3WG/80xhb2I=
+X-Google-Smtp-Source: AGRyM1tfW1AUNrUwm37RGqPWrxA5Ardil84hYphJV8ocVCRo1x2i8gGkMCpsJM+VaNNP1DK3NWYBTQ==
+X-Received: by 2002:a05:6402:5418:b0:435:5a48:daa9 with SMTP id ev24-20020a056402541800b004355a48daa9mr10491730edb.304.1658703076216;
+        Sun, 24 Jul 2022 15:51:16 -0700 (PDT)
 Received: from localhost.localdomain (93-42-69-122.ip85.fastwebnet.it. [93.42.69.122])
-        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.16
+        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 15:51:17 -0700 (PDT)
+        Sun, 24 Jul 2022 15:51:15 -0700 (PDT)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Vivien Didelot <vivien.didelot@gmail.com>,
@@ -54,9 +54,9 @@ To: Andrew Lunn <andrew@lunn.ch>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [net-next PATCH v4 11/14] net: dsa: qca8k: move port mirror functions to common code
-Date: Sun, 24 Jul 2022 22:19:35 +0200
-Message-Id: <20220724201938.17387-12-ansuelsmth@gmail.com>
+Subject: [net-next PATCH v4 10/14] net: dsa: qca8k: move port FDB/MDB function to common code
+Date: Sun, 24 Jul 2022 22:19:34 +0200
+Message-Id: <20220724201938.17387-11-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220724201938.17387-1-ansuelsmth@gmail.com>
 References: <20220724201938.17387-1-ansuelsmth@gmail.com>
@@ -68,237 +68,730 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The same port mirror functions are used by drivers based on qca8k family
+The same port FDB/MDB function are used by drivers based on qca8k family
 switch. Move them to common code to make them accessible also by other
 drivers.
+Also drop bulk read/write functions and make them static
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/net/dsa/qca/qca8k-8xxx.c   | 93 ------------------------------
- drivers/net/dsa/qca/qca8k-common.c | 93 ++++++++++++++++++++++++++++++
- drivers/net/dsa/qca/qca8k.h        |  7 +++
- 3 files changed, 100 insertions(+), 93 deletions(-)
+ drivers/net/dsa/qca/qca8k-8xxx.c   | 306 ----------------------------
+ drivers/net/dsa/qca/qca8k-common.c | 309 ++++++++++++++++++++++++++++-
+ drivers/net/dsa/qca/qca8k.h        |  25 ++-
+ 3 files changed, 329 insertions(+), 311 deletions(-)
 
 diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index a322444e3ddf..b891ccc82f7e 100644
+index 75efba7a4fa0..a322444e3ddf 100644
 --- a/drivers/net/dsa/qca/qca8k-8xxx.c
 +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -1687,99 +1687,6 @@ qca8k_get_ethtool_stats_eth(struct dsa_switch *ds, int port, u64 *data)
- 	return ret;
- }
+@@ -441,217 +441,6 @@ static struct regmap_config qca8k_regmap_config = {
+ 	.cache_type = REGCACHE_NONE, /* Explicitly disable CACHE */
+ };
  
 -static int
--qca8k_port_mirror_add(struct dsa_switch *ds, int port,
--		      struct dsa_mall_mirror_tc_entry *mirror,
--		      bool ingress, struct netlink_ext_ack *extack)
+-qca8k_fdb_read(struct qca8k_priv *priv, struct qca8k_fdb *fdb)
 -{
--	struct qca8k_priv *priv = ds->priv;
--	int monitor_port, ret;
--	u32 reg, val;
+-	u32 reg[3];
+-	int ret;
 -
--	/* Check for existent entry */
--	if ((ingress ? priv->mirror_rx : priv->mirror_tx) & BIT(port))
--		return -EEXIST;
--
--	ret = regmap_read(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0, &val);
+-	/* load the ARL table into an array */
+-	ret = qca8k_bulk_read(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
 -	if (ret)
 -		return ret;
 -
--	/* QCA83xx can have only one port set to mirror mode.
--	 * Check that the correct port is requested and return error otherwise.
--	 * When no mirror port is set, the values is set to 0xF
--	 */
--	monitor_port = FIELD_GET(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
--	if (monitor_port != 0xF && monitor_port != mirror->to_local_port)
--		return -EEXIST;
--
--	/* Set the monitor port */
--	val = FIELD_PREP(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM,
--			 mirror->to_local_port);
--	ret = regmap_update_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
--				 QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
--	if (ret)
--		return ret;
--
--	if (ingress) {
--		reg = QCA8K_PORT_LOOKUP_CTRL(port);
--		val = QCA8K_PORT_LOOKUP_ING_MIRROR_EN;
--	} else {
--		reg = QCA8K_REG_PORT_HOL_CTRL1(port);
--		val = QCA8K_PORT_HOL_CTRL1_EG_MIRROR_EN;
--	}
--
--	ret = regmap_update_bits(priv->regmap, reg, val, val);
--	if (ret)
--		return ret;
--
--	/* Track mirror port for tx and rx to decide when the
--	 * mirror port has to be disabled.
--	 */
--	if (ingress)
--		priv->mirror_rx |= BIT(port);
--	else
--		priv->mirror_tx |= BIT(port);
+-	/* vid - 83:72 */
+-	fdb->vid = FIELD_GET(QCA8K_ATU_VID_MASK, reg[2]);
+-	/* aging - 67:64 */
+-	fdb->aging = FIELD_GET(QCA8K_ATU_STATUS_MASK, reg[2]);
+-	/* portmask - 54:48 */
+-	fdb->port_mask = FIELD_GET(QCA8K_ATU_PORT_MASK, reg[1]);
+-	/* mac - 47:0 */
+-	fdb->mac[0] = FIELD_GET(QCA8K_ATU_ADDR0_MASK, reg[1]);
+-	fdb->mac[1] = FIELD_GET(QCA8K_ATU_ADDR1_MASK, reg[1]);
+-	fdb->mac[2] = FIELD_GET(QCA8K_ATU_ADDR2_MASK, reg[0]);
+-	fdb->mac[3] = FIELD_GET(QCA8K_ATU_ADDR3_MASK, reg[0]);
+-	fdb->mac[4] = FIELD_GET(QCA8K_ATU_ADDR4_MASK, reg[0]);
+-	fdb->mac[5] = FIELD_GET(QCA8K_ATU_ADDR5_MASK, reg[0]);
 -
 -	return 0;
 -}
 -
 -static void
--qca8k_port_mirror_del(struct dsa_switch *ds, int port,
--		      struct dsa_mall_mirror_tc_entry *mirror)
+-qca8k_fdb_write(struct qca8k_priv *priv, u16 vid, u8 port_mask, const u8 *mac,
+-		u8 aging)
 -{
--	struct qca8k_priv *priv = ds->priv;
--	u32 reg, val;
+-	u32 reg[3] = { 0 };
+-
+-	/* vid - 83:72 */
+-	reg[2] = FIELD_PREP(QCA8K_ATU_VID_MASK, vid);
+-	/* aging - 67:64 */
+-	reg[2] |= FIELD_PREP(QCA8K_ATU_STATUS_MASK, aging);
+-	/* portmask - 54:48 */
+-	reg[1] = FIELD_PREP(QCA8K_ATU_PORT_MASK, port_mask);
+-	/* mac - 47:0 */
+-	reg[1] |= FIELD_PREP(QCA8K_ATU_ADDR0_MASK, mac[0]);
+-	reg[1] |= FIELD_PREP(QCA8K_ATU_ADDR1_MASK, mac[1]);
+-	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR2_MASK, mac[2]);
+-	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR3_MASK, mac[3]);
+-	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR4_MASK, mac[4]);
+-	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR5_MASK, mac[5]);
+-
+-	/* load the array into the ARL table */
+-	qca8k_bulk_write(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
+-}
+-
+-static int
+-qca8k_fdb_access(struct qca8k_priv *priv, enum qca8k_fdb_cmd cmd, int port)
+-{
+-	u32 reg;
 -	int ret;
 -
--	if (mirror->ingress) {
--		reg = QCA8K_PORT_LOOKUP_CTRL(port);
--		val = QCA8K_PORT_LOOKUP_ING_MIRROR_EN;
--	} else {
--		reg = QCA8K_REG_PORT_HOL_CTRL1(port);
--		val = QCA8K_PORT_HOL_CTRL1_EG_MIRROR_EN;
+-	/* Set the command and FDB index */
+-	reg = QCA8K_ATU_FUNC_BUSY;
+-	reg |= cmd;
+-	if (port >= 0) {
+-		reg |= QCA8K_ATU_FUNC_PORT_EN;
+-		reg |= FIELD_PREP(QCA8K_ATU_FUNC_PORT_MASK, port);
 -	}
 -
--	ret = regmap_clear_bits(priv->regmap, reg, val);
+-	/* Write the function register triggering the table access */
+-	ret = qca8k_write(priv, QCA8K_REG_ATU_FUNC, reg);
 -	if (ret)
--		goto err;
+-		return ret;
 -
--	if (mirror->ingress)
--		priv->mirror_rx &= ~BIT(port);
--	else
--		priv->mirror_tx &= ~BIT(port);
+-	/* wait for completion */
+-	ret = qca8k_busy_wait(priv, QCA8K_REG_ATU_FUNC, QCA8K_ATU_FUNC_BUSY);
+-	if (ret)
+-		return ret;
 -
--	/* No port set to send packet to mirror port. Disable mirror port */
--	if (!priv->mirror_rx && !priv->mirror_tx) {
--		val = FIELD_PREP(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, 0xF);
--		ret = regmap_update_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
--					 QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
--		if (ret)
--			goto err;
+-	/* Check for table full violation when adding an entry */
+-	if (cmd == QCA8K_FDB_LOAD) {
+-		ret = qca8k_read(priv, QCA8K_REG_ATU_FUNC, &reg);
+-		if (ret < 0)
+-			return ret;
+-		if (reg & QCA8K_ATU_FUNC_FULL)
+-			return -1;
 -	}
--err:
--	dev_err(priv->dev, "Failed to del mirror port from %d", port);
+-
+-	return 0;
+-}
+-
+-static int
+-qca8k_fdb_next(struct qca8k_priv *priv, struct qca8k_fdb *fdb, int port)
+-{
+-	int ret;
+-
+-	qca8k_fdb_write(priv, fdb->vid, fdb->port_mask, fdb->mac, fdb->aging);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_NEXT, port);
+-	if (ret < 0)
+-		return ret;
+-
+-	return qca8k_fdb_read(priv, fdb);
+-}
+-
+-static int
+-qca8k_fdb_add(struct qca8k_priv *priv, const u8 *mac, u16 port_mask,
+-	      u16 vid, u8 aging)
+-{
+-	int ret;
+-
+-	mutex_lock(&priv->reg_mutex);
+-	qca8k_fdb_write(priv, vid, port_mask, mac, aging);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
+-	mutex_unlock(&priv->reg_mutex);
+-
+-	return ret;
+-}
+-
+-static int
+-qca8k_fdb_del(struct qca8k_priv *priv, const u8 *mac, u16 port_mask, u16 vid)
+-{
+-	int ret;
+-
+-	mutex_lock(&priv->reg_mutex);
+-	qca8k_fdb_write(priv, vid, port_mask, mac, 0);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
+-	mutex_unlock(&priv->reg_mutex);
+-
+-	return ret;
+-}
+-
+-static void
+-qca8k_fdb_flush(struct qca8k_priv *priv)
+-{
+-	mutex_lock(&priv->reg_mutex);
+-	qca8k_fdb_access(priv, QCA8K_FDB_FLUSH, -1);
+-	mutex_unlock(&priv->reg_mutex);
+-}
+-
+-static int
+-qca8k_fdb_search_and_insert(struct qca8k_priv *priv, u8 port_mask,
+-			    const u8 *mac, u16 vid)
+-{
+-	struct qca8k_fdb fdb = { 0 };
+-	int ret;
+-
+-	mutex_lock(&priv->reg_mutex);
+-
+-	qca8k_fdb_write(priv, vid, 0, mac, 0);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_SEARCH, -1);
+-	if (ret < 0)
+-		goto exit;
+-
+-	ret = qca8k_fdb_read(priv, &fdb);
+-	if (ret < 0)
+-		goto exit;
+-
+-	/* Rule exist. Delete first */
+-	if (!fdb.aging) {
+-		ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
+-		if (ret)
+-			goto exit;
+-	}
+-
+-	/* Add port to fdb portmask */
+-	fdb.port_mask |= port_mask;
+-
+-	qca8k_fdb_write(priv, vid, fdb.port_mask, mac, fdb.aging);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
+-
+-exit:
+-	mutex_unlock(&priv->reg_mutex);
+-	return ret;
+-}
+-
+-static int
+-qca8k_fdb_search_and_del(struct qca8k_priv *priv, u8 port_mask,
+-			 const u8 *mac, u16 vid)
+-{
+-	struct qca8k_fdb fdb = { 0 };
+-	int ret;
+-
+-	mutex_lock(&priv->reg_mutex);
+-
+-	qca8k_fdb_write(priv, vid, 0, mac, 0);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_SEARCH, -1);
+-	if (ret < 0)
+-		goto exit;
+-
+-	/* Rule doesn't exist. Why delete? */
+-	if (!fdb.aging) {
+-		ret = -EINVAL;
+-		goto exit;
+-	}
+-
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
+-	if (ret)
+-		goto exit;
+-
+-	/* Only port in the rule is this port. Don't re insert */
+-	if (fdb.port_mask == port_mask)
+-		goto exit;
+-
+-	/* Remove port from port mask */
+-	fdb.port_mask &= ~port_mask;
+-
+-	qca8k_fdb_write(priv, vid, fdb.port_mask, mac, fdb.aging);
+-	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
+-
+-exit:
+-	mutex_unlock(&priv->reg_mutex);
+-	return ret;
 -}
 -
  static int
- qca8k_port_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering,
- 			  struct netlink_ext_ack *extack)
+ qca8k_vlan_access(struct qca8k_priv *priv, enum qca8k_vlan_cmd cmd, u16 vid)
+ {
+@@ -1898,101 +1687,6 @@ qca8k_get_ethtool_stats_eth(struct dsa_switch *ds, int port, u64 *data)
+ 	return ret;
+ }
+ 
+-static void
+-qca8k_port_fast_age(struct dsa_switch *ds, int port)
+-{
+-	struct qca8k_priv *priv = ds->priv;
+-
+-	mutex_lock(&priv->reg_mutex);
+-	qca8k_fdb_access(priv, QCA8K_FDB_FLUSH_PORT, port);
+-	mutex_unlock(&priv->reg_mutex);
+-}
+-
+-static int
+-qca8k_port_fdb_insert(struct qca8k_priv *priv, const u8 *addr,
+-		      u16 port_mask, u16 vid)
+-{
+-	/* Set the vid to the port vlan id if no vid is set */
+-	if (!vid)
+-		vid = QCA8K_PORT_VID_DEF;
+-
+-	return qca8k_fdb_add(priv, addr, port_mask, vid,
+-			     QCA8K_ATU_STATUS_STATIC);
+-}
+-
+-static int
+-qca8k_port_fdb_add(struct dsa_switch *ds, int port,
+-		   const unsigned char *addr, u16 vid,
+-		   struct dsa_db db)
+-{
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
+-	u16 port_mask = BIT(port);
+-
+-	return qca8k_port_fdb_insert(priv, addr, port_mask, vid);
+-}
+-
+-static int
+-qca8k_port_fdb_del(struct dsa_switch *ds, int port,
+-		   const unsigned char *addr, u16 vid,
+-		   struct dsa_db db)
+-{
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
+-	u16 port_mask = BIT(port);
+-
+-	if (!vid)
+-		vid = QCA8K_PORT_VID_DEF;
+-
+-	return qca8k_fdb_del(priv, addr, port_mask, vid);
+-}
+-
+-static int
+-qca8k_port_fdb_dump(struct dsa_switch *ds, int port,
+-		    dsa_fdb_dump_cb_t *cb, void *data)
+-{
+-	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
+-	struct qca8k_fdb _fdb = { 0 };
+-	int cnt = QCA8K_NUM_FDB_RECORDS;
+-	bool is_static;
+-	int ret = 0;
+-
+-	mutex_lock(&priv->reg_mutex);
+-	while (cnt-- && !qca8k_fdb_next(priv, &_fdb, port)) {
+-		if (!_fdb.aging)
+-			break;
+-		is_static = (_fdb.aging == QCA8K_ATU_STATUS_STATIC);
+-		ret = cb(_fdb.mac, _fdb.vid, is_static, data);
+-		if (ret)
+-			break;
+-	}
+-	mutex_unlock(&priv->reg_mutex);
+-
+-	return 0;
+-}
+-
+-static int
+-qca8k_port_mdb_add(struct dsa_switch *ds, int port,
+-		   const struct switchdev_obj_port_mdb *mdb,
+-		   struct dsa_db db)
+-{
+-	struct qca8k_priv *priv = ds->priv;
+-	const u8 *addr = mdb->addr;
+-	u16 vid = mdb->vid;
+-
+-	return qca8k_fdb_search_and_insert(priv, BIT(port), addr, vid);
+-}
+-
+-static int
+-qca8k_port_mdb_del(struct dsa_switch *ds, int port,
+-		   const struct switchdev_obj_port_mdb *mdb,
+-		   struct dsa_db db)
+-{
+-	struct qca8k_priv *priv = ds->priv;
+-	const u8 *addr = mdb->addr;
+-	u16 vid = mdb->vid;
+-
+-	return qca8k_fdb_search_and_del(priv, BIT(port), addr, vid);
+-}
+-
+ static int
+ qca8k_port_mirror_add(struct dsa_switch *ds, int port,
+ 		      struct dsa_mall_mirror_tc_entry *mirror,
 diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
-index 1b13bf1b5de7..91fb549f2d3f 100644
+index 7e573827dac6..1b13bf1b5de7 100644
 --- a/drivers/net/dsa/qca/qca8k-common.c
 +++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -766,3 +766,96 @@ qca8k_port_mdb_del(struct dsa_switch *ds, int port,
+@@ -102,7 +102,7 @@ const struct regmap_access_table qca8k_readable_table = {
+ };
  
- 	return qca8k_fdb_search_and_del(priv, BIT(port), addr, vid);
+ /* TODO: remove these extra ops when we can support regmap bulk read/write */
+-int qca8k_bulk_read(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
++static int qca8k_bulk_read(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+ {
+ 	int i, count = len / sizeof(u32), ret;
+ 
+@@ -120,7 +120,7 @@ int qca8k_bulk_read(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
  }
-+
-+int
-+qca8k_port_mirror_add(struct dsa_switch *ds, int port,
-+		      struct dsa_mall_mirror_tc_entry *mirror,
-+		      bool ingress, struct netlink_ext_ack *extack)
+ 
+ /* TODO: remove these extra ops when we can support regmap bulk read/write */
+-int qca8k_bulk_write(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
++static int qca8k_bulk_write(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+ {
+ 	int i, count = len / sizeof(u32), ret;
+ 	u32 tmp;
+@@ -149,6 +149,216 @@ qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask)
+ 				       QCA8K_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC);
+ }
+ 
++static int
++qca8k_fdb_read(struct qca8k_priv *priv, struct qca8k_fdb *fdb)
 +{
-+	struct qca8k_priv *priv = ds->priv;
-+	int monitor_port, ret;
-+	u32 reg, val;
++	u32 reg[3];
++	int ret;
 +
-+	/* Check for existent entry */
-+	if ((ingress ? priv->mirror_rx : priv->mirror_tx) & BIT(port))
-+		return -EEXIST;
-+
-+	ret = regmap_read(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0, &val);
++	/* load the ARL table into an array */
++	ret = qca8k_bulk_read(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
 +	if (ret)
 +		return ret;
 +
-+	/* QCA83xx can have only one port set to mirror mode.
-+	 * Check that the correct port is requested and return error otherwise.
-+	 * When no mirror port is set, the values is set to 0xF
-+	 */
-+	monitor_port = FIELD_GET(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
-+	if (monitor_port != 0xF && monitor_port != mirror->to_local_port)
-+		return -EEXIST;
-+
-+	/* Set the monitor port */
-+	val = FIELD_PREP(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM,
-+			 mirror->to_local_port);
-+	ret = regmap_update_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
-+				 QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
-+	if (ret)
-+		return ret;
-+
-+	if (ingress) {
-+		reg = QCA8K_PORT_LOOKUP_CTRL(port);
-+		val = QCA8K_PORT_LOOKUP_ING_MIRROR_EN;
-+	} else {
-+		reg = QCA8K_REG_PORT_HOL_CTRL1(port);
-+		val = QCA8K_PORT_HOL_CTRL1_EG_MIRROR_EN;
-+	}
-+
-+	ret = regmap_update_bits(priv->regmap, reg, val, val);
-+	if (ret)
-+		return ret;
-+
-+	/* Track mirror port for tx and rx to decide when the
-+	 * mirror port has to be disabled.
-+	 */
-+	if (ingress)
-+		priv->mirror_rx |= BIT(port);
-+	else
-+		priv->mirror_tx |= BIT(port);
++	/* vid - 83:72 */
++	fdb->vid = FIELD_GET(QCA8K_ATU_VID_MASK, reg[2]);
++	/* aging - 67:64 */
++	fdb->aging = FIELD_GET(QCA8K_ATU_STATUS_MASK, reg[2]);
++	/* portmask - 54:48 */
++	fdb->port_mask = FIELD_GET(QCA8K_ATU_PORT_MASK, reg[1]);
++	/* mac - 47:0 */
++	fdb->mac[0] = FIELD_GET(QCA8K_ATU_ADDR0_MASK, reg[1]);
++	fdb->mac[1] = FIELD_GET(QCA8K_ATU_ADDR1_MASK, reg[1]);
++	fdb->mac[2] = FIELD_GET(QCA8K_ATU_ADDR2_MASK, reg[0]);
++	fdb->mac[3] = FIELD_GET(QCA8K_ATU_ADDR3_MASK, reg[0]);
++	fdb->mac[4] = FIELD_GET(QCA8K_ATU_ADDR4_MASK, reg[0]);
++	fdb->mac[5] = FIELD_GET(QCA8K_ATU_ADDR5_MASK, reg[0]);
 +
 +	return 0;
 +}
 +
-+void
-+qca8k_port_mirror_del(struct dsa_switch *ds, int port,
-+		      struct dsa_mall_mirror_tc_entry *mirror)
++static void
++qca8k_fdb_write(struct qca8k_priv *priv, u16 vid, u8 port_mask, const u8 *mac,
++		u8 aging)
 +{
-+	struct qca8k_priv *priv = ds->priv;
-+	u32 reg, val;
++	u32 reg[3] = { 0 };
++
++	/* vid - 83:72 */
++	reg[2] = FIELD_PREP(QCA8K_ATU_VID_MASK, vid);
++	/* aging - 67:64 */
++	reg[2] |= FIELD_PREP(QCA8K_ATU_STATUS_MASK, aging);
++	/* portmask - 54:48 */
++	reg[1] = FIELD_PREP(QCA8K_ATU_PORT_MASK, port_mask);
++	/* mac - 47:0 */
++	reg[1] |= FIELD_PREP(QCA8K_ATU_ADDR0_MASK, mac[0]);
++	reg[1] |= FIELD_PREP(QCA8K_ATU_ADDR1_MASK, mac[1]);
++	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR2_MASK, mac[2]);
++	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR3_MASK, mac[3]);
++	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR4_MASK, mac[4]);
++	reg[0] |= FIELD_PREP(QCA8K_ATU_ADDR5_MASK, mac[5]);
++
++	/* load the array into the ARL table */
++	qca8k_bulk_write(priv, QCA8K_REG_ATU_DATA0, reg, sizeof(reg));
++}
++
++static int
++qca8k_fdb_access(struct qca8k_priv *priv, enum qca8k_fdb_cmd cmd, int port)
++{
++	u32 reg;
 +	int ret;
 +
-+	if (mirror->ingress) {
-+		reg = QCA8K_PORT_LOOKUP_CTRL(port);
-+		val = QCA8K_PORT_LOOKUP_ING_MIRROR_EN;
-+	} else {
-+		reg = QCA8K_REG_PORT_HOL_CTRL1(port);
-+		val = QCA8K_PORT_HOL_CTRL1_EG_MIRROR_EN;
++	/* Set the command and FDB index */
++	reg = QCA8K_ATU_FUNC_BUSY;
++	reg |= cmd;
++	if (port >= 0) {
++		reg |= QCA8K_ATU_FUNC_PORT_EN;
++		reg |= FIELD_PREP(QCA8K_ATU_FUNC_PORT_MASK, port);
 +	}
 +
-+	ret = regmap_clear_bits(priv->regmap, reg, val);
++	/* Write the function register triggering the table access */
++	ret = qca8k_write(priv, QCA8K_REG_ATU_FUNC, reg);
 +	if (ret)
-+		goto err;
++		return ret;
 +
-+	if (mirror->ingress)
-+		priv->mirror_rx &= ~BIT(port);
-+	else
-+		priv->mirror_tx &= ~BIT(port);
++	/* wait for completion */
++	ret = qca8k_busy_wait(priv, QCA8K_REG_ATU_FUNC, QCA8K_ATU_FUNC_BUSY);
++	if (ret)
++		return ret;
 +
-+	/* No port set to send packet to mirror port. Disable mirror port */
-+	if (!priv->mirror_rx && !priv->mirror_tx) {
-+		val = FIELD_PREP(QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, 0xF);
-+		ret = regmap_update_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
-+					 QCA8K_GLOBAL_FW_CTRL0_MIRROR_PORT_NUM, val);
-+		if (ret)
-+			goto err;
++	/* Check for table full violation when adding an entry */
++	if (cmd == QCA8K_FDB_LOAD) {
++		ret = qca8k_read(priv, QCA8K_REG_ATU_FUNC, &reg);
++		if (ret < 0)
++			return ret;
++		if (reg & QCA8K_ATU_FUNC_FULL)
++			return -1;
 +	}
-+err:
-+	dev_err(priv->dev, "Failed to del mirror port from %d", port);
++
++	return 0;
++}
++
++static int
++qca8k_fdb_next(struct qca8k_priv *priv, struct qca8k_fdb *fdb, int port)
++{
++	int ret;
++
++	qca8k_fdb_write(priv, fdb->vid, fdb->port_mask, fdb->mac, fdb->aging);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_NEXT, port);
++	if (ret < 0)
++		return ret;
++
++	return qca8k_fdb_read(priv, fdb);
++}
++
++static int
++qca8k_fdb_add(struct qca8k_priv *priv, const u8 *mac, u16 port_mask,
++	      u16 vid, u8 aging)
++{
++	int ret;
++
++	mutex_lock(&priv->reg_mutex);
++	qca8k_fdb_write(priv, vid, port_mask, mac, aging);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
++	mutex_unlock(&priv->reg_mutex);
++
++	return ret;
++}
++
++static int
++qca8k_fdb_del(struct qca8k_priv *priv, const u8 *mac, u16 port_mask, u16 vid)
++{
++	int ret;
++
++	mutex_lock(&priv->reg_mutex);
++	qca8k_fdb_write(priv, vid, port_mask, mac, 0);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
++	mutex_unlock(&priv->reg_mutex);
++
++	return ret;
++}
++
++void qca8k_fdb_flush(struct qca8k_priv *priv)
++{
++	mutex_lock(&priv->reg_mutex);
++	qca8k_fdb_access(priv, QCA8K_FDB_FLUSH, -1);
++	mutex_unlock(&priv->reg_mutex);
++}
++
++static int
++qca8k_fdb_search_and_insert(struct qca8k_priv *priv, u8 port_mask,
++			    const u8 *mac, u16 vid)
++{
++	struct qca8k_fdb fdb = { 0 };
++	int ret;
++
++	mutex_lock(&priv->reg_mutex);
++
++	qca8k_fdb_write(priv, vid, 0, mac, 0);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_SEARCH, -1);
++	if (ret < 0)
++		goto exit;
++
++	ret = qca8k_fdb_read(priv, &fdb);
++	if (ret < 0)
++		goto exit;
++
++	/* Rule exist. Delete first */
++	if (!fdb.aging) {
++		ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
++		if (ret)
++			goto exit;
++	}
++
++	/* Add port to fdb portmask */
++	fdb.port_mask |= port_mask;
++
++	qca8k_fdb_write(priv, vid, fdb.port_mask, mac, fdb.aging);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
++
++exit:
++	mutex_unlock(&priv->reg_mutex);
++	return ret;
++}
++
++static int
++qca8k_fdb_search_and_del(struct qca8k_priv *priv, u8 port_mask,
++			 const u8 *mac, u16 vid)
++{
++	struct qca8k_fdb fdb = { 0 };
++	int ret;
++
++	mutex_lock(&priv->reg_mutex);
++
++	qca8k_fdb_write(priv, vid, 0, mac, 0);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_SEARCH, -1);
++	if (ret < 0)
++		goto exit;
++
++	/* Rule doesn't exist. Why delete? */
++	if (!fdb.aging) {
++		ret = -EINVAL;
++		goto exit;
++	}
++
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_PURGE, -1);
++	if (ret)
++		goto exit;
++
++	/* Only port in the rule is this port. Don't re insert */
++	if (fdb.port_mask == port_mask)
++		goto exit;
++
++	/* Remove port from port mask */
++	fdb.port_mask &= ~port_mask;
++
++	qca8k_fdb_write(priv, vid, fdb.port_mask, mac, fdb.aging);
++	ret = qca8k_fdb_access(priv, QCA8K_FDB_LOAD, -1);
++
++exit:
++	mutex_unlock(&priv->reg_mutex);
++	return ret;
++}
++
+ int qca8k_mib_init(struct qca8k_priv *priv)
+ {
+ 	int ret;
+@@ -374,6 +584,16 @@ void qca8k_port_bridge_leave(struct dsa_switch *ds, int port,
+ 		  QCA8K_PORT_LOOKUP_MEMBER, BIT(cpu_port));
+ }
+ 
++void
++qca8k_port_fast_age(struct dsa_switch *ds, int port)
++{
++	struct qca8k_priv *priv = ds->priv;
++
++	mutex_lock(&priv->reg_mutex);
++	qca8k_fdb_access(priv, QCA8K_FDB_FLUSH_PORT, port);
++	mutex_unlock(&priv->reg_mutex);
++}
++
+ int
+ qca8k_set_ageing_time(struct dsa_switch *ds, unsigned int msecs)
+ {
+@@ -461,3 +681,88 @@ qca8k_port_max_mtu(struct dsa_switch *ds, int port)
+ {
+ 	return QCA8K_MAX_MTU;
+ }
++
++int
++qca8k_port_fdb_insert(struct qca8k_priv *priv, const u8 *addr,
++		      u16 port_mask, u16 vid)
++{
++	/* Set the vid to the port vlan id if no vid is set */
++	if (!vid)
++		vid = QCA8K_PORT_VID_DEF;
++
++	return qca8k_fdb_add(priv, addr, port_mask, vid,
++			     QCA8K_ATU_STATUS_STATIC);
++}
++
++int
++qca8k_port_fdb_add(struct dsa_switch *ds, int port,
++		   const unsigned char *addr, u16 vid,
++		   struct dsa_db db)
++{
++	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
++	u16 port_mask = BIT(port);
++
++	return qca8k_port_fdb_insert(priv, addr, port_mask, vid);
++}
++
++int
++qca8k_port_fdb_del(struct dsa_switch *ds, int port,
++		   const unsigned char *addr, u16 vid,
++		   struct dsa_db db)
++{
++	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
++	u16 port_mask = BIT(port);
++
++	if (!vid)
++		vid = QCA8K_PORT_VID_DEF;
++
++	return qca8k_fdb_del(priv, addr, port_mask, vid);
++}
++
++int
++qca8k_port_fdb_dump(struct dsa_switch *ds, int port,
++		    dsa_fdb_dump_cb_t *cb, void *data)
++{
++	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
++	struct qca8k_fdb _fdb = { 0 };
++	int cnt = QCA8K_NUM_FDB_RECORDS;
++	bool is_static;
++	int ret = 0;
++
++	mutex_lock(&priv->reg_mutex);
++	while (cnt-- && !qca8k_fdb_next(priv, &_fdb, port)) {
++		if (!_fdb.aging)
++			break;
++		is_static = (_fdb.aging == QCA8K_ATU_STATUS_STATIC);
++		ret = cb(_fdb.mac, _fdb.vid, is_static, data);
++		if (ret)
++			break;
++	}
++	mutex_unlock(&priv->reg_mutex);
++
++	return 0;
++}
++
++int
++qca8k_port_mdb_add(struct dsa_switch *ds, int port,
++		   const struct switchdev_obj_port_mdb *mdb,
++		   struct dsa_db db)
++{
++	struct qca8k_priv *priv = ds->priv;
++	const u8 *addr = mdb->addr;
++	u16 vid = mdb->vid;
++
++	return qca8k_fdb_search_and_insert(priv, BIT(port), addr, vid);
++}
++
++int
++qca8k_port_mdb_del(struct dsa_switch *ds, int port,
++		   const struct switchdev_obj_port_mdb *mdb,
++		   struct dsa_db db)
++{
++	struct qca8k_priv *priv = ds->priv;
++	const u8 *addr = mdb->addr;
++	u16 vid = mdb->vid;
++
++	return qca8k_fdb_search_and_del(priv, BIT(port), addr, vid);
 +}
 diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-index 9da7928de83c..3a2131b7abfa 100644
+index e7d4df253b8c..9da7928de83c 100644
 --- a/drivers/net/dsa/qca/qca8k.h
 +++ b/drivers/net/dsa/qca/qca8k.h
-@@ -494,4 +494,11 @@ int qca8k_port_mdb_del(struct dsa_switch *ds, int port,
- 		       const struct switchdev_obj_port_mdb *mdb,
- 		       struct dsa_db db);
+@@ -438,11 +438,9 @@ int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val);
+ int qca8k_write(struct qca8k_priv *priv, u32 reg, u32 val);
+ int qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val);
  
-+/* Common port mirror function */
-+int qca8k_port_mirror_add(struct dsa_switch *ds, int port,
-+			  struct dsa_mall_mirror_tc_entry *mirror,
-+			  bool ingress, struct netlink_ext_ack *extack);
-+void qca8k_port_mirror_del(struct dsa_switch *ds, int port,
-+			   struct dsa_mall_mirror_tc_entry *mirror);
+-int qca8k_bulk_read(struct qca8k_priv *priv, u32 reg, u32 *val, int len);
+-int qca8k_bulk_write(struct qca8k_priv *priv, u32 reg, u32 *val, int len);
+-
+ /* Common ops function */
+ int qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask);
++void qca8k_fdb_flush(struct qca8k_priv *priv);
+ 
+ /* Common ethtool stats function */
+ void qca8k_get_strings(struct dsa_switch *ds, int port, u32 stringset, uint8_t *data);
+@@ -473,6 +471,27 @@ int qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu);
+ int qca8k_port_max_mtu(struct dsa_switch *ds, int port);
+ 
+ /* Common fast age function */
++void qca8k_port_fast_age(struct dsa_switch *ds, int port);
+ int qca8k_set_ageing_time(struct dsa_switch *ds, unsigned int msecs);
+ 
++/* Common FDB function */
++int qca8k_port_fdb_insert(struct qca8k_priv *priv, const u8 *addr,
++			  u16 port_mask, u16 vid);
++int qca8k_port_fdb_add(struct dsa_switch *ds, int port,
++		       const unsigned char *addr, u16 vid,
++		       struct dsa_db db);
++int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
++		       const unsigned char *addr, u16 vid,
++		       struct dsa_db db);
++int qca8k_port_fdb_dump(struct dsa_switch *ds, int port,
++			dsa_fdb_dump_cb_t *cb, void *data);
++
++/* Common MDB function */
++int qca8k_port_mdb_add(struct dsa_switch *ds, int port,
++		       const struct switchdev_obj_port_mdb *mdb,
++		       struct dsa_db db);
++int qca8k_port_mdb_del(struct dsa_switch *ds, int port,
++		       const struct switchdev_obj_port_mdb *mdb,
++		       struct dsa_db db);
 +
  #endif /* __QCA8K_H */
 -- 
