@@ -1,99 +1,99 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7607E
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 06:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658645505; x=1690181505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2NUyPhN/UYQQ9M7d6K0Zy/ra6kwOYG5LKXH/GneiZ18=;
-  b=gvfHWGgFXxei8xuFaAjzZFvryTQ4NvX7L5QY8mFTaoIEaR7MIv97nlgv
-   Ap5VIs3YlJF1SiKrtwflSe45YjCQHs+n97mEL54wajpgXZqRrmfod6mXv
-   MO0qCbTTBhUQD1bUDWretrAO8mPSV9axYe4+joUeizT8vg27y6KHeyhF5
-   j+MdYDQ1fHIOh8Cl32pqG60JtpQR05PqhfHQD7/WZ7ZJzGoMLwR5K6XuZ
-   7e0eFbjGIX9I5SKffl2Iiaf/9TGAA2umvkrhOgl8kzVmkSJQjaBV4dk9n
-   vQC+b+liUBsnnKgdSpGu5FJpCLZZ2bNKngv22YBTJuIeqxAU5IsELN9Bs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="351515305"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="351515305"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 23:51:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="926512947"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2022 23:51:43 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oFVSo-0003eT-2m;
-	Sun, 24 Jul 2022 06:51:42 +0000
-Date: Sun, 24 Jul 2022 14:51:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
- variable 'pxa_camera_of_match'
-Message-ID: <202207241411.UTTuvBZG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD08A7E
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 08:25:13 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id 75so14945670ybf.4
+        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 01:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E0FYQIjcA1ZBeZ4jpcqY+lww1lYDm9o/uZVAHiMgttw=;
+        b=W/aKKpJRcAdZY3UA4E5XDr3fBGbPSmPcS5GCQjN38NRlXhSpzoOA5MJEcVpoeCG8bD
+         EohNCEKLFvV6+7hgOavnJ0fY9pLnyNa8ZxAz5oCA3lntQwAM8pkv8skLj/P/7GeVsN5T
+         rvQdZqfSJCaGGWLuYdop/DMboPWpRu31ETFeWLz9xGUau0r/ZySSSishnC8frmRUpfVE
+         Gvm4959erixZdiPRAnfBgoY0zeiF8gYLFCF9rBhRJRUGOBeo+NjVml9/EMeZBjAVOw9N
+         7gm8fWa7gCidmmLj8fPMSl86MjRk8vtJmQFCTP3sA/P7HZTgkLPkUNNbe9PQqw7PoYIj
+         /u/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E0FYQIjcA1ZBeZ4jpcqY+lww1lYDm9o/uZVAHiMgttw=;
+        b=W2WEvj7fYL2W6JPDpSGzaCdRnTbQ0C3VWI4LncaGulhFt8Dema2hrE75pyVoCMbu++
+         eb20OQ9AYZ/Z3iboD/kqoxjYpu4Uib72TxdcecIN3tgciHbDYnMRnBZfNAGQDpTL2WkN
+         8lcP9fT1KpWsPzXd56FzBFNA1iHhWFHVArgrpRK7Xfft4a0R0br4VzxfWUQgNd4HWFNN
+         QRN4DbWTsYSCVHptBt2wq819wGrDsSKh/XUkrDiW6UsCvnG8+K206EhbWxPuYtBUvhNs
+         aMRY0CTOVrAvtzv1KHWfXmhthKVfx1VKdihxPgMtRG0kuNd7Hyj/JSb+VY7DzAWa1StG
+         m6JQ==
+X-Gm-Message-State: AJIora/SmrVr2mjYbPUjljEPw/NriSL0+fAmAUVmpeMjyCHdfaAAeui9
+	xU8LCzFvhoBYl4vjyM8Zw8/4WK+bTFD05wMHEfGIGHNR
+X-Google-Smtp-Source: AGRyM1v0OD6rWTX6augGS10Tm1obstQSqDr+LlmwQaw0Z4oq4BjE1ahgpNssSUPbl+Ws0uRAOsiGCPfPwVBJ9ypzi68=
+X-Received: by 2002:a05:6902:1109:b0:66e:f386:61ce with SMTP id
+ o9-20020a056902110900b0066ef38661cemr5135859ybu.364.1658651112695; Sun, 24
+ Jul 2022 01:25:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
+ <YtBMNLXEQ4WVJezu@dev-arch.thelio-3990X> <CADVatmNtFYyqk0KwYzB1x6hOPkQ=0gV8mPN1BWp6QWrCs5GaxA@mail.gmail.com>
+ <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X>
+In-Reply-To: <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date: Sun, 24 Jul 2022 09:24:36 +0100
+Message-ID: <CADVatmP2UTd5TG1TShi0yH=S1A6TBoYLGEpbkWmwZiBdS8OTyA@mail.gmail.com>
+Subject: Re: help with clang build for mips
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>, Arnd Bergmann <arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mauro,
+On Fri, Jul 22, 2022 at 4:21 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Sudip,
+>
+> On Fri, Jul 22, 2022 at 02:29:01PM +0100, Sudip Mukherjee wrote:
+> > On Thu, Jul 14, 2022 at 6:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Hi Sudip,
+> > >
+> > > On Thu, Jul 14, 2022 at 05:39:39PM +0100, Sudip Mukherjee wrote:
+> > > > Hi All,
+> > > >
+> > > > I am trying to build the kernel for mips architecture with clang. I
+> > > > see some of the configuration builds properly, but some of the configs
+> > > > fails with the error (fuloong2e_defconfig):
+> > > >
+> >
+> > <snip>
+> >
+> > >
+> > > Unfortunately, I doubt there is much interest in that work, given MIPS
+> > > as an architecture isn't being developed anymore. Might be an
+> > > interesting hobbyist project though. It is probably best to just test
+> > > configurations that work and make sure that those do not regress. Others
+> > > are more than welcome to weigh in though!
+> >
+> > So, I have now disabled those builds with unsupported CPU. But I do
+> > see some others with linux-next and will like to have your feedback on
+> > them please.
+>
+> Thanks for testing!
+>
 
-First bad commit (maybe != root cause):
+<snip>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
-date:   4 months ago
-config: hexagon-randconfig-r035-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241411.UTTuvBZG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/intel/
+>
+> There was a patch to disable this on the kernel side but it was never
+> picked up due to what I read as a soft NAK:
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks Nathan. I have now disabled all these configs in my daily builds.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
-   static const struct of_device_id pxa_camera_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
-
-7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
-
-:::::: The code at line 2449 was first introduced by commit
-:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
-
-:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip
