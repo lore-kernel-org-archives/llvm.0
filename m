@@ -1,41 +1,41 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DAF4A18
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:20 +0000 (UTC)
-Received: by mail-ej1-f46.google.com with SMTP id bp15so17538245ejb.6
-        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 15:51:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CC52F4B
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:21 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id v12so11887620edc.10
+        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 15:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/kKNwD9Y1ZilUKIKf732DnHads/QgOfKwDOzUDWwjes=;
-        b=bLaiFHmk+qIGI5+cKhzbR6IvYrS4spTjMjnPdTfMN9xCk67+jdGbVG0V2MrwNhO+5r
-         +cNr0gQydHV2AMD0I6bliKaWdTLBE6dOOFCem4x97TpFxkBtLIq6R/xO/tT8nmJLUiS4
-         OyQENN6UnpK09n+D8BgGeXI1tl1hzFN8oh4Nn/z/SejRpLnwf3ILJ6RAKY4ON/DB92rQ
-         kNal5wKxvCzJzTWousqfBJGucIUnn9a0W5DPHdBQYjZB6olbg2lt1jTSKR6O53Nw0on5
-         rcGlF6VAbl0mYr4K8o49sJL4KnNtefMY1AL/JyAasisc1rmbNBoTsFT+tXJL+6LtFKl1
-         UO5A==
+        bh=bALwgTLHeiO6tuKyaRsWqPti56pYBe2CtNa9AfdIH8M=;
+        b=ajsVYeRASAcU21lp20aC5IVN88l7vzE2FMgcIoIObtUryejvKcb6x18MJd5GlKr2+W
+         pBmzNRAA7W9Oro/vtzZqdAglNS2mA2nOExABP9cn1CI6NchLp+82GxFrqWTKinNDSI+s
+         /ABNK/NBdrwbTQZbFeMBFbddis9/aEZAojvjLpoUNa8SnhfTCcE9sfuJZ4JLpaJCMgmV
+         ijpOxpV6fgGloC2PeqQH3s0PrTDbaNRNhu5FhxaAXUj+NegO+sXfoZAzjqJuKhRTtHtL
+         Wyq/bUi61uiuSnrapFfDEZ3ClSm5+1aBEg03aH8O7jF2IkltXTUQewm9pEXQrVtsoGcg
+         nEtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/kKNwD9Y1ZilUKIKf732DnHads/QgOfKwDOzUDWwjes=;
-        b=qXutIsBb9kG0m81rQ8qi7C5mbFWBGqraDk6dKoNdSdFgdoEqpZs0ND9XwUmyOgj3H6
-         kVVQnBJZIOnslBrP05b2TGk7pBwhk90jrluHslmtZTqkvkSWNv28hbMMuK6gFxQPlMgc
-         nUtFsf30VXZ4SIdL04alcrMZFYtn44loJNtC/2yWna5OsyOySXPDBvnCAh+DwC1DKb62
-         q7gyIP3w61ll8c638StSmRbBDj6gX4D9SquRxQxf28O4WB3ALCR0fXjG6S74g0K2IQhz
-         7MRBMaQqIlF3qmuVp24iNIzEp//uNaQLEJS/SkS4LvwJ6fb2O7Rbz6v0CUlObD54/JUV
-         ebnw==
-X-Gm-Message-State: AJIora/ShlxKLvHsDwcGU4dwEY9Q841tHSZp+VqXdJ+w6VR+YW9qQqig
-	K4zx/P8sgr9Yck6Bey9EXBM=
-X-Google-Smtp-Source: AGRyM1vOKOC0bmvUr02RgdE9cjPu85KoLbwXcdcuvDf4Rny7X/mJ5iWSk1W8vtckEFlf5JYvPq2LYA==
-X-Received: by 2002:a17:907:1c0c:b0:72e:dd1f:a230 with SMTP id nc12-20020a1709071c0c00b0072edd1fa230mr7944713ejc.8.1658703078600;
-        Sun, 24 Jul 2022 15:51:18 -0700 (PDT)
+        bh=bALwgTLHeiO6tuKyaRsWqPti56pYBe2CtNa9AfdIH8M=;
+        b=q+n93BzXjnADbLq5EKFiev67L1Fa4GNXbGPjqghksBgP5bB3oVXwXGu3XB9BVkORhL
+         e7d2EuBZC5eIrFCO97ZiuTaVBVeo2zhWte2Gt2YzB+8LmWPWX6+1Ef7b6qEn0Or9/6AO
+         dWeJOXn8Q1vBOnM/W1PRPib5c5mqPhfqVaPNQSaVPGZdoqLPnAqo68MSCqcpuxH8FdBu
+         xG6NbBXyrNboqHb8R3kjWsc22nRZ7UU9mNuR9NSLcCDwygflwSMYGc0mLgUVRjkP/ZbO
+         kMXfA2MZv6tBq3h+Yoyse0vw0N5QUwr2NMSMx5GyRBpb+fREJcZu+nyyUGVSw/U5jlUE
+         zw5Q==
+X-Gm-Message-State: AJIora+9OGtoZWpSlYsYirOG9kz3b3rArUX4SbvyfzdH+lz9LnpTJ8t6
+	Y5vL05Z/IOUjvFER4MFBp4QkotLjRsg=
+X-Google-Smtp-Source: AGRyM1tzQub7ANTRemOXl2A43cYZmlTF67/1L4eDbxoIPw9svZASGrEj/p/tL0WOQXYxDC+ho64dxA==
+X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id ec19-20020a0564020d5300b0043ba0cfd970mr10154018edb.277.1658703080971;
+        Sun, 24 Jul 2022 15:51:20 -0700 (PDT)
 Received: from localhost.localdomain (93-42-69-122.ip85.fastwebnet.it. [93.42.69.122])
-        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.17
+        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 15:51:18 -0700 (PDT)
+        Sun, 24 Jul 2022 15:51:20 -0700 (PDT)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Vivien Didelot <vivien.didelot@gmail.com>,
@@ -54,9 +54,9 @@ To: Andrew Lunn <andrew@lunn.ch>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [net-next PATCH v4 12/14] net: dsa: qca8k: move port VLAN functions to common code
-Date: Sun, 24 Jul 2022 22:19:36 +0200
-Message-Id: <20220724201938.17387-13-ansuelsmth@gmail.com>
+Subject: [net-next PATCH v4 14/14] net: dsa: qca8k: move read_switch_id function to common code
+Date: Sun, 24 Jul 2022 22:19:38 +0200
+Message-Id: <20220724201938.17387-15-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220724201938.17387-1-ansuelsmth@gmail.com>
 References: <20220724201938.17387-1-ansuelsmth@gmail.com>
@@ -68,448 +68,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The same port VLAN functions are used by drivers based on qca8k family
-switch. Move them to common code to make them accessible also by other
-drivers.
-Also drop exposing busy_wait and make it static.
+The same function to read the switch id is used by drivers based on
+qca8k family switch. Move them to common code to make them accessible
+also by other drivers.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/net/dsa/qca/qca8k-8xxx.c   | 181 ----------------------------
- drivers/net/dsa/qca/qca8k-common.c | 182 ++++++++++++++++++++++++++++-
- drivers/net/dsa/qca/qca8k.h        |  10 +-
- 3 files changed, 190 insertions(+), 183 deletions(-)
+ drivers/net/dsa/qca/qca8k-8xxx.c   | 30 -----------------------------
+ drivers/net/dsa/qca/qca8k-common.c | 31 ++++++++++++++++++++++++++++++
+ drivers/net/dsa/qca/qca8k.h        |  1 +
+ 3 files changed, 32 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index b891ccc82f7e..7e0e82d6f7cd 100644
+index 82c02491c946..fa91517e930b 100644
 --- a/drivers/net/dsa/qca/qca8k-8xxx.c
 +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -441,122 +441,6 @@ static struct regmap_config qca8k_regmap_config = {
- 	.cache_type = REGCACHE_NONE, /* Explicitly disable CACHE */
+@@ -1877,36 +1877,6 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
+ 	.connect_tag_protocol	= qca8k_connect_tag_protocol,
  };
  
--static int
--qca8k_vlan_access(struct qca8k_priv *priv, enum qca8k_vlan_cmd cmd, u16 vid)
+-static int qca8k_read_switch_id(struct qca8k_priv *priv)
 -{
--	u32 reg;
+-	const struct qca8k_match_data *data;
+-	u32 val;
+-	u8 id;
 -	int ret;
 -
--	/* Set the command and VLAN index */
--	reg = QCA8K_VTU_FUNC1_BUSY;
--	reg |= cmd;
--	reg |= FIELD_PREP(QCA8K_VTU_FUNC1_VID_MASK, vid);
+-	/* get the switches ID from the compatible */
+-	data = of_device_get_match_data(priv->dev);
+-	if (!data)
+-		return -ENODEV;
 -
--	/* Write the function register triggering the table access */
--	ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC1, reg);
--	if (ret)
--		return ret;
+-	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
+-	if (ret < 0)
+-		return -ENODEV;
 -
--	/* wait for completion */
--	ret = qca8k_busy_wait(priv, QCA8K_REG_VTU_FUNC1, QCA8K_VTU_FUNC1_BUSY);
--	if (ret)
--		return ret;
--
--	/* Check for table full violation when adding an entry */
--	if (cmd == QCA8K_VLAN_LOAD) {
--		ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC1, &reg);
--		if (ret < 0)
--			return ret;
--		if (reg & QCA8K_VTU_FUNC1_FULL)
--			return -ENOMEM;
+-	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
+-	if (id != data->id) {
+-		dev_err(priv->dev, "Switch id detected %x but expected %x", id, data->id);
+-		return -ENODEV;
 -	}
+-
+-	priv->switch_id = id;
+-
+-	/* Save revision to communicate to the internal PHY driver */
+-	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
 -
 -	return 0;
 -}
 -
--static int
--qca8k_vlan_add(struct qca8k_priv *priv, u8 port, u16 vid, bool untagged)
--{
--	u32 reg;
--	int ret;
--
--	/*
--	   We do the right thing with VLAN 0 and treat it as untagged while
--	   preserving the tag on egress.
--	 */
--	if (vid == 0)
--		return 0;
--
--	mutex_lock(&priv->reg_mutex);
--	ret = qca8k_vlan_access(priv, QCA8K_VLAN_READ, vid);
--	if (ret < 0)
--		goto out;
--
--	ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC0, &reg);
--	if (ret < 0)
--		goto out;
--	reg |= QCA8K_VTU_FUNC0_VALID | QCA8K_VTU_FUNC0_IVL_EN;
--	reg &= ~QCA8K_VTU_FUNC0_EG_MODE_PORT_MASK(port);
--	if (untagged)
--		reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_UNTAG(port);
--	else
--		reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_TAG(port);
--
--	ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC0, reg);
--	if (ret)
--		goto out;
--	ret = qca8k_vlan_access(priv, QCA8K_VLAN_LOAD, vid);
--
--out:
--	mutex_unlock(&priv->reg_mutex);
--
--	return ret;
--}
--
--static int
--qca8k_vlan_del(struct qca8k_priv *priv, u8 port, u16 vid)
--{
--	u32 reg, mask;
--	int ret, i;
--	bool del;
--
--	mutex_lock(&priv->reg_mutex);
--	ret = qca8k_vlan_access(priv, QCA8K_VLAN_READ, vid);
--	if (ret < 0)
--		goto out;
--
--	ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC0, &reg);
--	if (ret < 0)
--		goto out;
--	reg &= ~QCA8K_VTU_FUNC0_EG_MODE_PORT_MASK(port);
--	reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_NOT(port);
--
--	/* Check if we're the last member to be removed */
--	del = true;
--	for (i = 0; i < QCA8K_NUM_PORTS; i++) {
--		mask = QCA8K_VTU_FUNC0_EG_MODE_PORT_NOT(i);
--
--		if ((reg & mask) != mask) {
--			del = false;
--			break;
--		}
--	}
--
--	if (del) {
--		ret = qca8k_vlan_access(priv, QCA8K_VLAN_PURGE, vid);
--	} else {
--		ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC0, reg);
--		if (ret)
--			goto out;
--		ret = qca8k_vlan_access(priv, QCA8K_VLAN_LOAD, vid);
--	}
--
--out:
--	mutex_unlock(&priv->reg_mutex);
--
--	return ret;
--}
--
  static int
- qca8k_phy_eth_busy_wait(struct qca8k_mgmt_eth_data *mgmt_eth_data,
- 			struct sk_buff *read_skb, u32 *val)
-@@ -1687,71 +1571,6 @@ qca8k_get_ethtool_stats_eth(struct dsa_switch *ds, int port, u64 *data)
- 	return ret;
- }
- 
--static int
--qca8k_port_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering,
--			  struct netlink_ext_ack *extack)
--{
--	struct qca8k_priv *priv = ds->priv;
--	int ret;
--
--	if (vlan_filtering) {
--		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
--				QCA8K_PORT_LOOKUP_VLAN_MODE_MASK,
--				QCA8K_PORT_LOOKUP_VLAN_MODE_SECURE);
--	} else {
--		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
--				QCA8K_PORT_LOOKUP_VLAN_MODE_MASK,
--				QCA8K_PORT_LOOKUP_VLAN_MODE_NONE);
--	}
--
--	return ret;
--}
--
--static int
--qca8k_port_vlan_add(struct dsa_switch *ds, int port,
--		    const struct switchdev_obj_port_vlan *vlan,
--		    struct netlink_ext_ack *extack)
--{
--	bool untagged = vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED;
--	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
--	struct qca8k_priv *priv = ds->priv;
--	int ret;
--
--	ret = qca8k_vlan_add(priv, port, vlan->vid, untagged);
--	if (ret) {
--		dev_err(priv->dev, "Failed to add VLAN to port %d (%d)", port, ret);
--		return ret;
--	}
--
--	if (pvid) {
--		ret = qca8k_rmw(priv, QCA8K_EGRESS_VLAN(port),
--				QCA8K_EGREES_VLAN_PORT_MASK(port),
--				QCA8K_EGREES_VLAN_PORT(port, vlan->vid));
--		if (ret)
--			return ret;
--
--		ret = qca8k_write(priv, QCA8K_REG_PORT_VLAN_CTRL0(port),
--				  QCA8K_PORT_VLAN_CVID(vlan->vid) |
--				  QCA8K_PORT_VLAN_SVID(vlan->vid));
--	}
--
--	return ret;
--}
--
--static int
--qca8k_port_vlan_del(struct dsa_switch *ds, int port,
--		    const struct switchdev_obj_port_vlan *vlan)
--{
--	struct qca8k_priv *priv = ds->priv;
--	int ret;
--
--	ret = qca8k_vlan_del(priv, port, vlan->vid);
--	if (ret)
--		dev_err(priv->dev, "Failed to delete VLAN from port %d (%d)", port, ret);
--
--	return ret;
--}
--
- static u32 qca8k_get_phy_flags(struct dsa_switch *ds, int port)
+ qca8k_sw_probe(struct mdio_device *mdiodev)
  {
- 	struct qca8k_priv *priv = ds->priv;
 diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
-index 91fb549f2d3f..ed94f08014de 100644
+index b982efb721fc..e6294d6a7b8f 100644
 --- a/drivers/net/dsa/qca/qca8k-common.c
 +++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -140,7 +140,7 @@ static int qca8k_bulk_write(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
- 	return 0;
- }
+@@ -8,6 +8,7 @@
  
--int
-+static int
- qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask)
+ #include <linux/netdevice.h>
+ #include <net/dsa.h>
++#include <linux/of_platform.h>
+ #include <linux/if_bridge.h>
+ 
+ #include "qca8k.h"
+@@ -1207,3 +1208,33 @@ qca8k_port_lag_leave(struct dsa_switch *ds, int port,
  {
- 	u32 val;
-@@ -359,6 +359,121 @@ qca8k_fdb_search_and_del(struct qca8k_priv *priv, u8 port_mask,
- 	return ret;
+ 	return qca8k_lag_refresh_portmap(ds, port, lag, true);
  }
- 
-+static int
-+qca8k_vlan_access(struct qca8k_priv *priv, enum qca8k_vlan_cmd cmd, u16 vid)
++
++int qca8k_read_switch_id(struct qca8k_priv *priv)
 +{
-+	u32 reg;
++	const struct qca8k_match_data *data;
++	u32 val;
++	u8 id;
 +	int ret;
 +
-+	/* Set the command and VLAN index */
-+	reg = QCA8K_VTU_FUNC1_BUSY;
-+	reg |= cmd;
-+	reg |= FIELD_PREP(QCA8K_VTU_FUNC1_VID_MASK, vid);
++	/* get the switches ID from the compatible */
++	data = of_device_get_match_data(priv->dev);
++	if (!data)
++		return -ENODEV;
 +
-+	/* Write the function register triggering the table access */
-+	ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC1, reg);
-+	if (ret)
-+		return ret;
++	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
++	if (ret < 0)
++		return -ENODEV;
 +
-+	/* wait for completion */
-+	ret = qca8k_busy_wait(priv, QCA8K_REG_VTU_FUNC1, QCA8K_VTU_FUNC1_BUSY);
-+	if (ret)
-+		return ret;
-+
-+	/* Check for table full violation when adding an entry */
-+	if (cmd == QCA8K_VLAN_LOAD) {
-+		ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC1, &reg);
-+		if (ret < 0)
-+			return ret;
-+		if (reg & QCA8K_VTU_FUNC1_FULL)
-+			return -ENOMEM;
++	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
++	if (id != data->id) {
++		dev_err(priv->dev, "Switch id detected %x but expected %x", id, data->id);
++		return -ENODEV;
 +	}
++
++	priv->switch_id = id;
++
++	/* Save revision to communicate to the internal PHY driver */
++	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
 +
 +	return 0;
 +}
-+
-+static int
-+qca8k_vlan_add(struct qca8k_priv *priv, u8 port, u16 vid, bool untagged)
-+{
-+	u32 reg;
-+	int ret;
-+
-+	/* We do the right thing with VLAN 0 and treat it as untagged while
-+	 * preserving the tag on egress.
-+	 */
-+	if (vid == 0)
-+		return 0;
-+
-+	mutex_lock(&priv->reg_mutex);
-+	ret = qca8k_vlan_access(priv, QCA8K_VLAN_READ, vid);
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC0, &reg);
-+	if (ret < 0)
-+		goto out;
-+	reg |= QCA8K_VTU_FUNC0_VALID | QCA8K_VTU_FUNC0_IVL_EN;
-+	reg &= ~QCA8K_VTU_FUNC0_EG_MODE_PORT_MASK(port);
-+	if (untagged)
-+		reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_UNTAG(port);
-+	else
-+		reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_TAG(port);
-+
-+	ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC0, reg);
-+	if (ret)
-+		goto out;
-+	ret = qca8k_vlan_access(priv, QCA8K_VLAN_LOAD, vid);
-+
-+out:
-+	mutex_unlock(&priv->reg_mutex);
-+
-+	return ret;
-+}
-+
-+static int
-+qca8k_vlan_del(struct qca8k_priv *priv, u8 port, u16 vid)
-+{
-+	u32 reg, mask;
-+	int ret, i;
-+	bool del;
-+
-+	mutex_lock(&priv->reg_mutex);
-+	ret = qca8k_vlan_access(priv, QCA8K_VLAN_READ, vid);
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = qca8k_read(priv, QCA8K_REG_VTU_FUNC0, &reg);
-+	if (ret < 0)
-+		goto out;
-+	reg &= ~QCA8K_VTU_FUNC0_EG_MODE_PORT_MASK(port);
-+	reg |= QCA8K_VTU_FUNC0_EG_MODE_PORT_NOT(port);
-+
-+	/* Check if we're the last member to be removed */
-+	del = true;
-+	for (i = 0; i < QCA8K_NUM_PORTS; i++) {
-+		mask = QCA8K_VTU_FUNC0_EG_MODE_PORT_NOT(i);
-+
-+		if ((reg & mask) != mask) {
-+			del = false;
-+			break;
-+		}
-+	}
-+
-+	if (del) {
-+		ret = qca8k_vlan_access(priv, QCA8K_VLAN_PURGE, vid);
-+	} else {
-+		ret = qca8k_write(priv, QCA8K_REG_VTU_FUNC0, reg);
-+		if (ret)
-+			goto out;
-+		ret = qca8k_vlan_access(priv, QCA8K_VLAN_LOAD, vid);
-+	}
-+
-+out:
-+	mutex_unlock(&priv->reg_mutex);
-+
-+	return ret;
-+}
-+
- int qca8k_mib_init(struct qca8k_priv *priv)
- {
- 	int ret;
-@@ -859,3 +974,68 @@ qca8k_port_mirror_del(struct dsa_switch *ds, int port,
- err:
- 	dev_err(priv->dev, "Failed to del mirror port from %d", port);
- }
-+
-+int
-+qca8k_port_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct qca8k_priv *priv = ds->priv;
-+	int ret;
-+
-+	if (vlan_filtering) {
-+		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-+				QCA8K_PORT_LOOKUP_VLAN_MODE_MASK,
-+				QCA8K_PORT_LOOKUP_VLAN_MODE_SECURE);
-+	} else {
-+		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-+				QCA8K_PORT_LOOKUP_VLAN_MODE_MASK,
-+				QCA8K_PORT_LOOKUP_VLAN_MODE_NONE);
-+	}
-+
-+	return ret;
-+}
-+
-+int
-+qca8k_port_vlan_add(struct dsa_switch *ds, int port,
-+		    const struct switchdev_obj_port_vlan *vlan,
-+		    struct netlink_ext_ack *extack)
-+{
-+	bool untagged = vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED;
-+	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
-+	struct qca8k_priv *priv = ds->priv;
-+	int ret;
-+
-+	ret = qca8k_vlan_add(priv, port, vlan->vid, untagged);
-+	if (ret) {
-+		dev_err(priv->dev, "Failed to add VLAN to port %d (%d)", port, ret);
-+		return ret;
-+	}
-+
-+	if (pvid) {
-+		ret = qca8k_rmw(priv, QCA8K_EGRESS_VLAN(port),
-+				QCA8K_EGREES_VLAN_PORT_MASK(port),
-+				QCA8K_EGREES_VLAN_PORT(port, vlan->vid));
-+		if (ret)
-+			return ret;
-+
-+		ret = qca8k_write(priv, QCA8K_REG_PORT_VLAN_CTRL0(port),
-+				  QCA8K_PORT_VLAN_CVID(vlan->vid) |
-+				  QCA8K_PORT_VLAN_SVID(vlan->vid));
-+	}
-+
-+	return ret;
-+}
-+
-+int
-+qca8k_port_vlan_del(struct dsa_switch *ds, int port,
-+		    const struct switchdev_obj_port_vlan *vlan)
-+{
-+	struct qca8k_priv *priv = ds->priv;
-+	int ret;
-+
-+	ret = qca8k_vlan_del(priv, port, vlan->vid);
-+	if (ret)
-+		dev_err(priv->dev, "Failed to delete VLAN from port %d (%d)", port, ret);
-+
-+	return ret;
-+}
 diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-index 3a2131b7abfa..91f7abc5beb1 100644
+index e87bfee837c1..e36ecc9777f4 100644
 --- a/drivers/net/dsa/qca/qca8k.h
 +++ b/drivers/net/dsa/qca/qca8k.h
-@@ -439,7 +439,6 @@ int qca8k_write(struct qca8k_priv *priv, u32 reg, u32 val);
- int qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val);
+@@ -432,6 +432,7 @@ extern const struct qca8k_mib_desc ar8327_mib[];
+ extern const struct regmap_access_table qca8k_readable_table;
+ int qca8k_mib_init(struct qca8k_priv *priv);
+ void qca8k_port_set_status(struct qca8k_priv *priv, int port, int enable);
++int qca8k_read_switch_id(struct qca8k_priv *priv);
  
- /* Common ops function */
--int qca8k_busy_wait(struct qca8k_priv *priv, u32 reg, u32 mask);
- void qca8k_fdb_flush(struct qca8k_priv *priv);
- 
- /* Common ethtool stats function */
-@@ -501,4 +500,13 @@ int qca8k_port_mirror_add(struct dsa_switch *ds, int port,
- void qca8k_port_mirror_del(struct dsa_switch *ds, int port,
- 			   struct dsa_mall_mirror_tc_entry *mirror);
- 
-+/* Common port VLAN function */
-+int qca8k_port_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering,
-+			      struct netlink_ext_ack *extack);
-+int qca8k_port_vlan_add(struct dsa_switch *ds, int port,
-+			const struct switchdev_obj_port_vlan *vlan,
-+			struct netlink_ext_ack *extack);
-+int qca8k_port_vlan_del(struct dsa_switch *ds, int port,
-+			const struct switchdev_obj_port_vlan *vlan);
-+
- #endif /* __QCA8K_H */
+ /* Common read/write/rmw function */
+ int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val);
 -- 
 2.36.1
 
