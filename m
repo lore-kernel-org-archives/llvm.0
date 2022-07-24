@@ -1,51 +1,45 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B339D7E
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 01:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB447E
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 04:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658627722; x=1690163722;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4IPajJpoNWeNMxggFAz0vEdewrwxNl/rvz1DaS/AiXA=;
-  b=j1L3HR36SHKW0tJJZBOU6tX90SQukPkRcn9WxQV/JskrztscYl8z4bHC
-   Qcp4n5wPPQCzEMOeFs9na3LDOLpp/OV+1+NfJecTzJ78nVCgqnufypU7L
-   Y1a7PV+Z9FY2ZAgWHp3N8PMAxApdWP5T7N3fdAKY7kMGR7NyntiuIUICl
-   5sdNFDiiEX/52fvc8b1A2w13temQ4scJL8zNjlngeEwvmUnQC3GMYQ97X
-   5xekDwKE1iX+6Xd2usc8gul/xWTLOc3I1cEUyyoJ2yWI8BEtIBTdXtjP0
-   gEeR+PAjVNnzhgWCvb5poYs1p9GMvZn2jVn9DOVLdCQtm0TxN8SrlO+TT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288686936"
+  t=1658635708; x=1690171708;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N4GISC7Ap9P2NfIc7y8Hf2aRkTT6Q+cpyIGocquV2P8=;
+  b=RfgTjZvvfE553h70u0QVq9oU4cRhXsc9BTnbFvMQYKxf83h2iBzLMw7S
+   W7aEwtlgjA+e0L46QtBv3voSVWdV9V4F+OPKN7cxEknU+Iv3LsDh2hFwv
+   w7GfWYzTIEL2uAc73kJgNPiHeA0uHFe/9kKsJmz8jx5MzFhRji9h7QcHw
+   KqyJ//tofO5gB7yPrdyfdlZxvA2OiSb+Dnb6a0x2XsVdI75pgJVelaq2E
+   4KjNQxUrx43TEiWZSw2Cezx+G2fFM9r6dJ9HXsAX0NpesOTSyg1WrFiki
+   LsZQhL1Y0C3m/FXP1BBh/QVwRGqnBIfMOU97Img+75eL+p1dyEdKbqlp+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267287024"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="288686936"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 18:55:22 -0700
+   d="scan'208";a="267287024"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 21:08:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="688671411"
+   d="scan'208";a="702102332"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 18:55:18 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 23 Jul 2022 21:08:26 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFQpy-0003Nm-0A;
-	Sun, 24 Jul 2022 01:55:18 +0000
-Date: Sun, 24 Jul 2022 09:54:56 +0800
+	id 1oFSun-0003Wv-1m;
+	Sun, 24 Jul 2022 04:08:25 +0000
+Date: Sun, 24 Jul 2022 12:07:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Cornelia Huck <cohuck@redhat.com>, Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Evgenii Stepanov <eugenis@google.com>, kvm@vger.kernel.org,
-	Steven Price <steven.price@arm.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH v2 1/7] arm64: mte: Fix/clarify the PG_mte_tagged
- semantics
-Message-ID: <202207240907.aR4gvNkj-lkp@intel.com>
-References: <20220722015034.809663-2-pcc@google.com>
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.10.y 499/7253]
+ arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used
+Message-ID: <202207241221.kLqd2seJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,198 +48,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722015034.809663-2-pcc@google.com>
 
-Hi Peter,
+Hi Srikar,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on next-20220722]
-[cannot apply to kvmarm/next arm/for-next soc/for-next xilinx-xlnx/master linus/master v5.19-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/KVM-arm64-permit-MAP_SHARED-mappings-with-MTE-enabled/20220722-095300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-buildonly-randconfig-r004-20220722 (https://download.01.org/0day-ci/archive/20220724/202207240907.aR4gvNkj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   00d1152b116251d5f40936f24f9ef31f52eba544
+commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/7253] powerpc/smp: Update cpu_core_map on all PowerPc systems
+config: powerpc-powernv_defconfig (https://download.01.org/0day-ci/archive/20220724/202207241221.kLqd2seJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3323e416892d6b5326503b9afc2ee835162b819b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peter-Collingbourne/KVM-arm64-permit-MAP_SHARED-mappings-with-MTE-enabled/20220722-095300
-        git checkout 3323e416892d6b5326503b9afc2ee835162b819b
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/arm64/include/asm/uaccess.h:24:
->> arch/arm64/include/asm/mte.h:80:15: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static inline set_page_mte_tagged(struct page *page)
-   ~~~~~~~~~~~~~ ^
-   int
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:456:22: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                               ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:456:10: warning: array index 7 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:456:42: warning: array index 6 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:456:53: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                                                              ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:458:22: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                               ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:458:10: warning: array index 5 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:458:42: warning: array index 4 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:458:53: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                                                              ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:460:22: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                               ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/kexec.h:31:
-   include/linux/compat.h:460:10: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:460:42: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:460:53: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                                                              ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   12 warnings and 1 error generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+           bool ret;
+                ^
+   1 error generated.
 
 
-vim +/int +80 arch/arm64/include/asm/mte.h
+vim +/ret +1380 arch/powerpc/kernel/smp.c
 
-    79	
-  > 80	static inline set_page_mte_tagged(struct page *page)
-    81	{
-    82	}
-    83	static inline bool page_mte_tagged(struct page *page)
-    84	{
-    85		return false;
-    86	}
-    87	static inline void mte_zero_clear_page_tags(void *addr)
-    88	{
-    89	}
-    90	static inline void mte_sync_tags(pte_t old_pte, pte_t pte)
-    91	{
-    92	}
-    93	static inline void mte_copy_page_tags(void *kto, const void *kfrom)
-    94	{
-    95	}
-    96	static inline void mte_thread_init_user(void)
-    97	{
-    98	}
-    99	static inline void mte_thread_switch(struct task_struct *next)
-   100	{
-   101	}
-   102	static inline void mte_suspend_enter(void)
-   103	{
-   104	}
-   105	static inline long set_mte_ctrl(struct task_struct *task, unsigned long arg)
-   106	{
-   107		return 0;
-   108	}
-   109	static inline long get_mte_ctrl(struct task_struct *task)
-   110	{
-   111		return 0;
-   112	}
-   113	static inline int mte_ptrace_copy_tags(struct task_struct *child,
-   114					       long request, unsigned long addr,
-   115					       unsigned long data)
-   116	{
-   117		return -EIO;
-   118	}
-   119	
+b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
+bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
+e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
+425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
+2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
+b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
+e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
+e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
+e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
+e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
+a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
+a8a5356cd511db Paul Mackerras    2013-08-12  1427  
+
+:::::: The code at line 1380 was first introduced by commit
+:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
+
+:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
