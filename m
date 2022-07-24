@@ -1,43 +1,49 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B82A179
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 18:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CBE2F55
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 18:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658685735; x=1690221735;
+  t=1658687597; x=1690223597;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=wlDYF/mA+Dyob8XRa12X+xUPsrRmatzJ8fbOfCTqDPo=;
-  b=ZSvxyGieViIZ2/Nu09wn2oWv5TCW5eqZ0MVJUM7b+lR3EeOqxGtNsvr+
-   puEmlHW4S9MCjW6bbc7SGR4qK614MJjyi4KT8UbHPPRaQroGC3/sjlJiS
-   pox3LEVPRpPOyIuXpOily4B9VhwXQtOJq9KQ5c725Td5Fsj6JdMxcNHzT
-   aTElv9TOD9kPfZHH61tYu1CxmcJATPxdr3seVzreTWhjbEvWXrOH5zoJa
-   2oUPRRVkkDHI3Z95+LLJPKyld+ugz1sASay5qgQCpSQB4qIJwd2nbYpV0
-   1Tz6MrCFBM7iJyRzgOGmSpqjDIcJ/Z8kuDN32T4QhvD/KzFyC6cFx4R9h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="270597436"
+  bh=VnBS4cmtNEdvQdzG3C5h2n5+yQ8J1uEcZpHMuBUSM5U=;
+  b=U6LwWl7VBjOcURWM8nVntyR3AJeRkbfemZ5zvp5C/rENJgnxykN5il66
+   SyRZ23gzQ1lQsoKmfxz5dgKT6eGky3MIB1f2A457fDrpJFpa24gb7TNmT
+   sDAirApp9dZjpossyXmszvxobZZas7LJkEus3gXqi2KnShdhadtR1JRrm
+   18JeC0TRexMfHsOF58AIN9f0CPajaHKeMs7/FL0Isbs9ps0yhjvKx66Fl
+   DJkbbAKTKw+yYUqv69Izo++qdpEPIr0fIJaILJjEl8tE7OaNEYQM4GTRL
+   EUvaVprzGPqmXlZSk9FrE25P/jlmxfMsghrzdnTArfVXKWrspaBBiXKyu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267337135"
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="270597436"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 11:02:14 -0700
+   d="scan'208";a="267337135"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 11:33:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="741595649"
+   d="scan'208";a="688816520"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jul 2022 11:02:12 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2022 11:33:13 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFfvf-000457-29;
-	Sun, 24 Jul 2022 18:02:11 +0000
-Date: Mon, 25 Jul 2022 02:01:49 +0800
+	id 1oFgPh-00047J-0d;
+	Sun, 24 Jul 2022 18:33:13 +0000
+Date: Mon, 25 Jul 2022 02:32:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, smfrench@gmail.com,
-	pc@cjr.nz, ronniesahlberg@gmail.com, nspmangalore@gmail.com
-Subject: Re: [PATCH] cifs: split procfs from debug code
-Message-ID: <202207250111.xRaRSq5I-lkp@intel.com>
-References: <20220724145735.5853-1-ematsumiya@suse.de>
+To: Marek Vasut <marex@denx.de>, linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Marek Vasut <marex@denx.de>,
+	Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Marc Zyngier <maz@kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
+	Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v3 1/2] gpio: mxc: Protect GPIO irqchip RMW with bgpio
+ spinlock
+Message-ID: <202207250224.XFYIB7dF-lkp@intel.com>
+References: <20220724171057.18549-1-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,71 +52,173 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724145735.5853-1-ematsumiya@suse.de>
+In-Reply-To: <20220724171057.18549-1-marex@denx.de>
 
-Hi Enzo,
+Hi Marek,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on cifs/for-next]
-[also build test ERROR on next-20220722]
-[cannot apply to linus/master v5.19-rc7]
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v5.19-rc7 next-20220722]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Enzo-Matsumiya/cifs-split-procfs-from-debug-code/20220724-225846
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220725/202207250111.xRaRSq5I-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/gpio-mxc-Protect-GPIO-irqchip-RMW-with-bgpio-spinlock/20220725-011230
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+config: hexagon-randconfig-r041-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250224.XFYIB7dF-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a9bbb62b87033fb57943ff221160dbf92e84e297
+        # https://github.com/intel-lab-lkp/linux/commit/af6c815e16849c7ec370f755916d06a6b1e5b759
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Enzo-Matsumiya/cifs-split-procfs-from-debug-code/20220724-225846
-        git checkout a9bbb62b87033fb57943ff221160dbf92e84e297
+        git fetch --no-tags linux-review Marek-Vasut/gpio-mxc-Protect-GPIO-irqchip-RMW-with-bgpio-spinlock/20220725-011230
+        git checkout af6c815e16849c7ec370f755916d06a6b1e5b759
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "cifs_dump_mem" [fs/cifs/cifs.ko] undefined!
->> ERROR: modpost: "cifs_dump_detail" [fs/cifs/cifs.ko] undefined!
---
-In file included from fs/cifs/cifssmb.c:31:
->> fs/cifs/debug.h:14:20: warning: function 'cifs_dump_mem' has internal linkage but is not defined [-Wundefined-internal]
-static inline void cifs_dump_mem(char *label, void *data, int length);
-^
-fs/cifs/cifssmb.c:418:2: note: used here
-cifs_dump_mem("Invalid transact2 SMB: ", (char *)pSMB,
-^
-1 warning generated.
---
-In file included from fs/cifs/smb1ops.c:13:
->> fs/cifs/debug.h:15:20: warning: function 'cifs_dump_detail' has internal linkage but is not defined [-Wundefined-internal]
-static inline void cifs_dump_detail(void *buf, struct TCP_Server_Info *ptcp_info);
-^
-fs/cifs/smb1ops.c:1172:17: note: used here
-.dump_detail = cifs_dump_detail,
-^
-1 warning generated.
---
-fs/cifs/connect.c:2739:24: warning: variable 'saddr4' set but not used [-Wunused-but-set-variable]
-struct sockaddr_in *saddr4;
-^
-In file included from fs/cifs/connect.c:39:
->> fs/cifs/debug.h:14:20: warning: function 'cifs_dump_mem' has internal linkage but is not defined [-Wundefined-internal]
-static inline void cifs_dump_mem(char *label, void *data, int length);
-^
-fs/cifs/connect.c:1054:3: note: used here
-cifs_dump_mem("Bad SMB: ", buf,
-^
-2 warnings generated.
+>> drivers/gpio/gpio-mxc.c:189:20: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+           spin_lock_irqsave(&port->gc.bgpio_lock, flags);
+                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:379:39: note: expanded from macro 'spin_lock_irqsave'
+           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+                                                ^~~~
+   include/linux/spinlock.h:264:26: note: expanded from macro 'raw_spin_lock_irqsave'
+                   _raw_spin_lock_irqsave(lock, flags);    \
+                                          ^~~~
+   include/linux/spinlock_api_up.h:69:60: note: expanded from macro '_raw_spin_lock_irqsave'
+   #define _raw_spin_lock_irqsave(lock, flags)     __LOCK_IRQSAVE(lock, flags)
+                                                                  ^~~~
+   include/linux/spinlock_api_up.h:40:38: note: expanded from macro '__LOCK_IRQSAVE'
+     do { local_irq_save(flags); __LOCK(lock); } while (0)
+                                        ^~~~
+   include/linux/spinlock_api_up.h:31:35: note: expanded from macro '__LOCK'
+     do { preempt_disable(); ___LOCK(lock); } while (0)
+                                     ^~~~
+   include/linux/spinlock_api_up.h:28:32: note: expanded from macro '___LOCK'
+     do { __acquire(lock); (void)(lock); } while (0)
+                                  ^~~~
+   include/linux/spinlock.h:322:67: note: passing argument to parameter 'lock' here
+   static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+                                                                     ^
+   drivers/gpio/gpio-mxc.c:210:25: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+           spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+                                  ^~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:402:64: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
+                                                                  ^
+   drivers/gpio/gpio-mxc.c:222:20: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+           spin_lock_irqsave(&port->gc.bgpio_lock, flags);
+                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:379:39: note: expanded from macro 'spin_lock_irqsave'
+           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+                                                ^~~~
+   include/linux/spinlock.h:264:26: note: expanded from macro 'raw_spin_lock_irqsave'
+                   _raw_spin_lock_irqsave(lock, flags);    \
+                                          ^~~~
+   include/linux/spinlock_api_up.h:69:60: note: expanded from macro '_raw_spin_lock_irqsave'
+   #define _raw_spin_lock_irqsave(lock, flags)     __LOCK_IRQSAVE(lock, flags)
+                                                                  ^~~~
+   include/linux/spinlock_api_up.h:40:38: note: expanded from macro '__LOCK_IRQSAVE'
+     do { local_irq_save(flags); __LOCK(lock); } while (0)
+                                        ^~~~
+   include/linux/spinlock_api_up.h:31:35: note: expanded from macro '__LOCK'
+     do { preempt_disable(); ___LOCK(lock); } while (0)
+                                     ^~~~
+   include/linux/spinlock_api_up.h:28:32: note: expanded from macro '___LOCK'
+     do { __acquire(lock); (void)(lock); } while (0)
+                                  ^~~~
+   include/linux/spinlock.h:322:67: note: passing argument to parameter 'lock' here
+   static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+                                                                     ^
+   drivers/gpio/gpio-mxc.c:242:25: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+           spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+                                  ^~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:402:64: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
+                                                                  ^
+   4 errors generated.
+
+
+vim +189 drivers/gpio/gpio-mxc.c
+
+   145	
+   146	static int gpio_set_irq_type(struct irq_data *d, u32 type)
+   147	{
+   148		struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
+   149		struct mxc_gpio_port *port = gc->private;
+   150		unsigned long flags;
+   151		u32 bit, val;
+   152		u32 gpio_idx = d->hwirq;
+   153		int edge;
+   154		void __iomem *reg = port->base;
+   155	
+   156		port->both_edges &= ~(1 << gpio_idx);
+   157		switch (type) {
+   158		case IRQ_TYPE_EDGE_RISING:
+   159			edge = GPIO_INT_RISE_EDGE;
+   160			break;
+   161		case IRQ_TYPE_EDGE_FALLING:
+   162			edge = GPIO_INT_FALL_EDGE;
+   163			break;
+   164		case IRQ_TYPE_EDGE_BOTH:
+   165			if (GPIO_EDGE_SEL >= 0) {
+   166				edge = GPIO_INT_BOTH_EDGES;
+   167			} else {
+   168				val = port->gc.get(&port->gc, gpio_idx);
+   169				if (val) {
+   170					edge = GPIO_INT_LOW_LEV;
+   171					pr_debug("mxc: set GPIO %d to low trigger\n", gpio_idx);
+   172				} else {
+   173					edge = GPIO_INT_HIGH_LEV;
+   174					pr_debug("mxc: set GPIO %d to high trigger\n", gpio_idx);
+   175				}
+   176				port->both_edges |= 1 << gpio_idx;
+   177			}
+   178			break;
+   179		case IRQ_TYPE_LEVEL_LOW:
+   180			edge = GPIO_INT_LOW_LEV;
+   181			break;
+   182		case IRQ_TYPE_LEVEL_HIGH:
+   183			edge = GPIO_INT_HIGH_LEV;
+   184			break;
+   185		default:
+   186			return -EINVAL;
+   187		}
+   188	
+ > 189		spin_lock_irqsave(&port->gc.bgpio_lock, flags);
+   190	
+   191		if (GPIO_EDGE_SEL >= 0) {
+   192			val = readl(port->base + GPIO_EDGE_SEL);
+   193			if (edge == GPIO_INT_BOTH_EDGES)
+   194				writel(val | (1 << gpio_idx),
+   195					port->base + GPIO_EDGE_SEL);
+   196			else
+   197				writel(val & ~(1 << gpio_idx),
+   198					port->base + GPIO_EDGE_SEL);
+   199		}
+   200	
+   201		if (edge != GPIO_INT_BOTH_EDGES) {
+   202			reg += GPIO_ICR1 + ((gpio_idx & 0x10) >> 2); /* lower or upper register */
+   203			bit = gpio_idx & 0xf;
+   204			val = readl(reg) & ~(0x3 << (bit << 1));
+   205			writel(val | (edge << (bit << 1)), reg);
+   206		}
+   207	
+   208		writel(1 << gpio_idx, port->base + GPIO_ISR);
+   209	
+   210		spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+   211	
+   212		return 0;
+   213	}
+   214	
 
 -- 
 0-DAY CI Kernel Test Service
