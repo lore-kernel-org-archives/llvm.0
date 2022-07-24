@@ -1,46 +1,46 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6BE28F3
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 10:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46F23207
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 14:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658657635; x=1690193635;
+  t=1658672285; x=1690208285;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ryy2EMCYYiIeVNQ3AC8OKPJ4BW2C1M6cnMFEnMbS74o=;
-  b=jpQ4NmuH66drgtzxiUB3oIfq68L9uaV9LcUB2fxlAA4A7ThA/JawxPtl
-   U9oWLYLv2aJDGURCqWypEzGQqDsMnRrhHbX31jGJMyh6QXWSmvU8HQMs7
-   TaOK2s9QXpGJz3ROp+fH3Ec5v1y7oxXYVYgmH39JzX5tYKDfiWns53+5o
-   kWC+37W6mtxY72R9YumsCcgFIequ9kRnP0H/6U4Phpw/iO+GL8XwGUXbB
-   ciaKW6mHlCao6hWzrX3iTPhDTzp5vI6Ta68s9/r9dqCUGdQAaxdwWiN+u
-   Eqq16Eu93lbMGfqIchQ6FYr0d7wkEYWmDXMszYATPjjRXFmKxTMlUiMk6
+  bh=QMSKEQPsaX6sUd1evy/RzmlHTG4UJe5r/V6xSrnkUkE=;
+  b=SCfiieHrkDKwfHgc2vPQ1WKanKaF/9gf8KwKfCnKwl2A3yobltJgk4HZ
+   tKxY2mUgMa6HSWqSjhiQvwLKv8CgFjB4uzXpuTnSiZw70EXf18YhaQ2gj
+   m46mh3Eo00EWgDNdpnL+4CPq30M7adeB0x2UAE7VBE/VnATWDNnYbohjf
+   yLHKsdwVavPD+0aNtF9dUj3u/Lk1fOBMcK9xqnEsUCpZ2I3SGMEWkKy3D
+   bnh+Ww7EpAcyvtr8U9++bcg/Z3E1RfjRy9YY5l9VPWJUmMKfre39QXuo2
+   ZcaeB2Mug6he+aykbgqKHmpPiPi6Df1V/yhvcCBENQmKm25rDpYSVOBl3
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288290719"
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267321778"
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="288290719"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 03:13:55 -0700
+   d="scan'208";a="267321778"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 07:18:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="574693086"
+   d="scan'208";a="599336545"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 03:13:53 -0700
+  by orsmga002.jf.intel.com with ESMTP; 24 Jul 2022 07:18:02 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFYcS-0003nN-0t;
-	Sun, 24 Jul 2022 10:13:52 +0000
-Date: Sun, 24 Jul 2022 18:13:47 +0800
+	id 1oFcQk-0003ul-0X;
+	Sun, 24 Jul 2022 14:18:02 +0000
+Date: Sun, 24 Jul 2022 22:17:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To: Nuno Sa <nuno.sa@analog.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Tomas Melin <tomas.melin@vaisala.com>
-Subject: [linux-next:master 2450/12552] drivers/iio/accel/sca3300.c:162:8:
- warning: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes,
- where 1 is optimal). Optimal fields order: name, scan_masks, channels,
- accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, f...
-Message-ID: <202207241857.Z2woeEfC-lkp@intel.com>
+	Lars-Peter Clausen <lars@metafoo.de>
+Subject: drivers/iio/imu/adis16480.c:169:8: warning: Excessive padding in
+ 'struct adis16480' (40 padding bytes, where 8 is optimal). Optimal fields
+ order: adis, data, chip_info, ext_clk, clk_mode, clk_freq, consider
+ reordering the fields or adding explicit padding...
+Message-ID: <202207242232.7eNzaZhG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,258 +50,452 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   18c107a1f120d095404d141dfad8f594bdc44020
-commit: 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53 [2450/12552] iio: accel: sca3300: Add inclination channels
-config: s390-randconfig-c005-20220721 (https://download.01.org/0day-ci/archive/20220724/202207241857.Z2woeEfC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   515f71412bb73ebd7f41f90e1684fc80b8730789
+commit: 941f130881fa9073a32944e69c26cdc15a554d96 iio: adis16480: support burst read function
+date:   1 year, 2 months ago
+config: arm-randconfig-c002-20220717 (https://download.01.org/0day-ci/archive/20220724/202207242232.7eNzaZhG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=941f130881fa9073a32944e69c26cdc15a554d96
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 941f130881fa9073a32944e69c26cdc15a554d96
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=s390 clang-analyzer 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 clang-analyzer warnings: (new ones prefixed by >>)
-                   for (tile = 0; tile < 8; tile++) {
-                   ^
-   drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
-                           if (!fbdata->force && !picolcd_fb_update_tile(
-                               ^~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
-   drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_tile'
-                           if (!fbdata->force && !picolcd_fb_update_tile(
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is equal to 1
-           if (bpp == 1) {
+   #define to_si4713_device(sd)    container_of(sd, struct si4713_device, sd)
+                                   ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   drivers/media/radio/si4713/si4713.c:1351:6: note: Assuming field 'tuner' is 0
+           if (f->tuner)
                ^~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:148:2: note: Taking true branch
-           if (bpp == 1) {
+   drivers/media/radio/si4713/si4713.c:1351:2: note: Taking false branch
+           if (f->tuner)
            ^
-   drivers/hid/hid-picolcd_fb.c:149:3: note: Loop condition is true.  Entering loop body
-                   for (b = 7; b >= 0; b--) {
+   drivers/media/radio/si4713/si4713.c:1354:6: note: Assuming field 'power_state' is not equal to 0
+           if (sdev->power_state) {
+               ^~~~~~~~~~~~~~~~~
+   drivers/media/radio/si4713/si4713.c:1354:2: note: Taking true branch
+           if (sdev->power_state) {
+           ^
+   drivers/media/radio/si4713/si4713.c:1355:3: note: 'freq' declared without an initial value
+                   u16 freq;
+                   ^~~~~~~~
+   drivers/media/radio/si4713/si4713.c:1358:10: note: Calling 'si4713_tx_tune_status'
+                   rval = si4713_tx_tune_status(sdev, 0x00, &freq, &p, &a, &n);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/radio/si4713/si4713.c:698:6: note: Assuming 'err' is not equal to 0
+           if (!err) {
+               ^~~~
+   drivers/media/radio/si4713/si4713.c:698:2: note: Taking false branch
+           if (!err) {
+           ^
+   drivers/media/radio/si4713/si4713.c:711:2: note: Returning without writing to '*frequency'
+           return err;
+           ^
+   drivers/media/radio/si4713/si4713.c:1358:10: note: Returning from 'si4713_tx_tune_status'
+                   rval = si4713_tx_tune_status(sdev, 0x00, &freq, &p, &a, &n);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/radio/si4713/si4713.c:1359:7: note: Assuming 'rval' is >= 0
+                   if (rval < 0)
+                       ^~~~~~~~
+   drivers/media/radio/si4713/si4713.c:1359:3: note: Taking false branch
+                   if (rval < 0)
                    ^
-   drivers/hid/hid-picolcd_fb.c:151:9: note: The value 0 is assigned to 'i'
-                           for (i = 0; i < 64; i++) {
-                                ^~~~~
-   drivers/hid/hid-picolcd_fb.c:151:4: note: Loop condition is true.  Entering loop body
-                           for (i = 0; i < 64; i++) {
-                           ^
-   drivers/hid/hid-picolcd_fb.c:152:14: note: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage
-                                   tdata[i] <<= 1;
-                                   ~~~~~~~~ ^
-   drivers/hid/hid-picolcd_fb.c:160:14: warning: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
-                                   tdata[i] <<= 1;
-                                            ^
-   drivers/hid/hid-picolcd_fb.c:438:2: note: Calling 'picolcd_fb_update'
-           picolcd_fb_update(info);
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Exiting loop
-           spin_lock_irqsave(&fbdata->lock, flags);
+   drivers/media/radio/si4713/si4713.c:1362:19: note: Assigned value is garbage or undefined
+                   sdev->frequency = freq;
+                                   ^ ~~~~
+   Suppressed 2 warnings (1 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (2 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   drivers/iio/imu/adis16400.c:179:8: warning: Excessive padding in 'struct adis16400_state' (48 padding bytes, where 16 is optimal). Optimal fields order: adis, variant, filt_int, avail_scan_mask, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adis16400_state {
+   ~~~~~~~^~~~~~~~~~~~~~~~~
+   drivers/iio/imu/adis16400.c:179:8: note: Excessive padding in 'struct adis16400_state' (48 padding bytes, where 16 is optimal). Optimal fields order: adis, variant, filt_int, avail_scan_mask, consider reordering the fields or adding explicit padding members
+   struct adis16400_state {
+   ~~~~~~~^~~~~~~~~~~~~~~~~
+   1 warning generated.
+   drivers/iio/imu/adis16475.c:100:8: warning: Excessive padding in 'struct adis16475' (41 padding bytes, where 9 is optimal). Optimal fields order: adis, data, info, clk_freq, lsb_flag, sync_mode, burst32, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adis16475 {
+   ~~~~~~~^~~~~~~~~~~
+   drivers/iio/imu/adis16475.c:100:8: note: Excessive padding in 'struct adis16475' (41 padding bytes, where 9 is optimal). Optimal fields order: adis, data, info, clk_freq, lsb_flag, sync_mode, burst32, consider reordering the fields or adding explicit padding members
+   struct adis16475 {
+   ~~~~~~~^~~~~~~~~~~
+   1 warning generated.
+>> drivers/iio/imu/adis16480.c:169:8: warning: Excessive padding in 'struct adis16480' (40 padding bytes, where 8 is optimal). Optimal fields order: adis, data, chip_info, ext_clk, clk_mode, clk_freq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adis16480 {
+   ~~~~~~~^~~~~~~~~~~
+   drivers/iio/imu/adis16480.c:169:8: note: Excessive padding in 'struct adis16480' (40 padding bytes, where 8 is optimal). Optimal fields order: adis, data, chip_info, ext_clk, clk_mode, clk_freq, consider reordering the fields or adding explicit padding members
+   struct adis16480 {
+   ~~~~~~~^~~~~~~~~~~
+   1 warning generated.
+   drivers/hid/hid-kye.c:684:6: warning: Access to field 'maxfield' results in a dereference of an undefined pointer value (loaded from variable 'report') [clang-analyzer-core.NullDereference]
+           if (report->maxfield < 1 || report->field[0]->report_count < 7) {
+               ^
+   drivers/hid/hid-kye.c:708:6: note: Assuming 'ret' is 0
+           if (ret) {
+               ^~~
+   drivers/hid/hid-kye.c:708:2: note: Taking false branch
+           if (ret) {
            ^
-   include/linux/spinlock.h:379:2: note: expanded from macro 'spin_lock_irqsave'
-           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+   drivers/hid/hid-kye.c:714:6: note: Assuming 'ret' is 0
+           if (ret) {
+               ^~~
+   drivers/hid/hid-kye.c:714:2: note: Taking false branch
+           if (ret) {
            ^
-   include/linux/spinlock.h:240:2: note: expanded from macro 'raw_spin_lock_irqsave'
-           do {                                            \
+   drivers/hid/hid-kye.c:719:2: note: Control jumps to 'case 20501:'  at line 725
+           switch (id->product) {
            ^
-   drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Exiting loop
-           spin_lock_irqsave(&fbdata->lock, flags);
+   drivers/hid/hid-kye.c:726:9: note: Calling 'kye_tablet_enable'
+                   ret = kye_tablet_enable(hdev);
+                         ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-kye.c:669:2: note: 'report' declared without an initial value
+           struct hid_report *report;
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-kye.c:673:2: note: Loop condition is false. Execution continues on line 679
+           list_for_each(head, list) {
            ^
-   include/linux/spinlock.h:377:43: note: expanded from macro 'spin_lock_irqsave'
-   #define spin_lock_irqsave(lock, flags)                          \
+   include/linux/list.h:571:2: note: expanded from macro 'list_for_each'
+           for (pos = (head)->next; pos != (head); pos = pos->next)
+           ^
+   drivers/hid/hid-kye.c:679:6: note: Assuming 'head' is not equal to 'list'
+           if (head == list) {
+               ^~~~~~~~~~~~
+   drivers/hid/hid-kye.c:679:2: note: Taking false branch
+           if (head == list) {
+           ^
+   drivers/hid/hid-kye.c:684:6: note: Access to field 'maxfield' results in a dereference of an undefined pointer value (loaded from variable 'report')
+           if (report->maxfield < 1 || report->field[0]->report_count < 7) {
+               ^~~~~~
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   drivers/iio/proximity/sx9310.c:630:17: warning: The left operand of '>>' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
+           *val = pthresh >> (5 - regval);
+                          ^
+   drivers/iio/proximity/sx9310.c:679:6: note: Assuming field 'type' is equal to IIO_PROXIMITY
+           if (chan->type != IIO_PROXIMITY)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/proximity/sx9310.c:679:2: note: Taking false branch
+           if (chan->type != IIO_PROXIMITY)
+           ^
+   drivers/iio/proximity/sx9310.c:682:2: note: Control jumps to 'case IIO_EV_INFO_HYSTERESIS:'  at line 694
+           switch (info) {
+           ^
+   drivers/iio/proximity/sx9310.c:695:10: note: Calling 'sx9310_read_hysteresis'
+                   return sx9310_read_hysteresis(data, chan, val);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/proximity/sx9310.c:614:23: note: 'pthresh' declared without an initial value
+           unsigned int regval, pthresh;
+                                ^~~~~~~
+   drivers/iio/proximity/sx9310.c:617:8: note: Calling 'sx9310_read_thresh'
+           ret = sx9310_read_thresh(data, chan, &pthresh);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/proximity/sx9310.c:596:6: note: 'ret' is >= 0
+           if (ret < 0)
+               ^~~
+   drivers/iio/proximity/sx9310.c:596:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/proximity/sx9310.c:600:6: note: Assuming 'ret' is not equal to 0
+           if (ret)
+               ^~~
+   drivers/iio/proximity/sx9310.c:600:2: note: Taking true branch
+           if (ret)
+           ^
+   drivers/iio/proximity/sx9310.c:617:8: note: Returning from 'sx9310_read_thresh'
+           ret = sx9310_read_thresh(data, chan, &pthresh);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/proximity/sx9310.c:618:6: note: Assuming 'ret' is >= 0
+           if (ret < 0)
+               ^~~~~~~
+   drivers/iio/proximity/sx9310.c:618:2: note: Taking false branch
+           if (ret < 0)
+           ^
+   drivers/iio/proximity/sx9310.c:622:6: note: Assuming 'ret' is 0
+           if (ret)
+               ^~~
+   drivers/iio/proximity/sx9310.c:622:2: note: Taking false branch
+           if (ret)
+           ^
+   drivers/iio/proximity/sx9310.c:625:11: note: Taking false branch
+           regval = FIELD_GET(SX9310_REG_PROX_CTRL10_HYST_MASK, regval);
+                    ^
+--
+   net/caif/cfutill.c:84:2: note: Taking false branch
+           caif_assert(layr != NULL);
+           ^
+   include/net/caif/caif_layer.h:29:2: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
+           ^
+   net/caif/cfutill.c:84:2: note: Loop condition is false.  Exiting loop
+           caif_assert(layr != NULL);
+           ^
+   include/net/caif/caif_layer.h:27:33: note: expanded from macro 'caif_assert'
+   #define caif_assert(assert)                                     \
                                                                    ^
-   drivers/hid/hid-picolcd_fb.c:235:6: note: Assuming field 'ready' is not equal to 0
-           if (!fbdata->ready && fbdata->picolcd)
-               ^~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:235:21: note: Left side of '&&' is false
-           if (!fbdata->ready && fbdata->picolcd)
-                              ^
-   drivers/hid/hid-picolcd_fb.c:247:2: note: Loop condition is true.  Entering loop body
-           for (chip = 0; chip < 4; chip++)
+   net/caif/cfutill.c:85:14: note: Assuming field 'dn' is equal to null
+           caif_assert(layr->dn != NULL);
+                       ^
+   include/net/caif/caif_layer.h:29:8: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
+                 ^~~~~~
+   net/caif/cfutill.c:85:20: note: Field 'dn' is equal to null
+           caif_assert(layr->dn != NULL);
+                             ^
+   net/caif/cfutill.c:85:2: note: Taking true branch
+           caif_assert(layr->dn != NULL);
            ^
-   drivers/hid/hid-picolcd_fb.c:248:3: note: Loop condition is true.  Entering loop body
-                   for (tile = 0; tile < 8; tile++) {
-                   ^
-   drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
-                           if (!fbdata->force && !picolcd_fb_update_tile(
-                               ^~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
-   drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_tile'
-                           if (!fbdata->force && !picolcd_fb_update_tile(
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is not equal to 1
-           if (bpp == 1) {
-               ^~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:148:2: note: Taking false branch
-           if (bpp == 1) {
+   include/net/caif/caif_layer.h:29:2: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
            ^
-   drivers/hid/hid-picolcd_fb.c:156:13: note: Assuming 'bpp' is equal to 8
-           } else if (bpp == 8) {
-                      ^~~~~~~~
-   drivers/hid/hid-picolcd_fb.c:156:9: note: Taking true branch
-           } else if (bpp == 8) {
-                  ^
-   drivers/hid/hid-picolcd_fb.c:157:3: note: Loop condition is true.  Entering loop body
-                   for (b = 7; b >= 0; b--) {
+   net/caif/cfutill.c:85:2: note: Taking true branch
+           caif_assert(layr->dn != NULL);
+           ^
+   include/net/caif/caif_layer.h:31:3: note: expanded from macro 'caif_assert'
+                   WARN_ON(!(assert));                             \
                    ^
-   drivers/hid/hid-picolcd_fb.c:159:9: note: The value 0 is assigned to 'i'
-                           for (i = 0; i < 64; i++) {
-                                ^~~~~
-   drivers/hid/hid-picolcd_fb.c:159:4: note: Loop condition is true.  Entering loop body
-                           for (i = 0; i < 64; i++) {
-                           ^
-   drivers/hid/hid-picolcd_fb.c:160:14: note: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage
-                                   tdata[i] <<= 1;
-                                   ~~~~~~~~ ^
-   drivers/hid/hid-picolcd_fb.c:481:6: warning: Call to function 'sscanf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sscanf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           i = sscanf(buf, "%u", &u);
-               ^~~~~~
-   drivers/hid/hid-picolcd_fb.c:481:6: note: Call to function 'sscanf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sscanf_s' in case of C11
-           i = sscanf(buf, "%u", &u);
-               ^~~~~~
-   Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+   include/asm-generic/bug.h:120:2: note: expanded from macro 'WARN_ON'
+           if (unlikely(__ret_warn_on))                                    \
+           ^
+   net/caif/cfutill.c:85:2: note: Loop condition is false.  Exiting loop
+           caif_assert(layr->dn != NULL);
+           ^
+   include/net/caif/caif_layer.h:31:3: note: expanded from macro 'caif_assert'
+                   WARN_ON(!(assert));                             \
+                   ^
+   include/asm-generic/bug.h:121:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:86:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
+                                   ^
+   include/asm-generic/bug.h:88:3: note: expanded from macro '__WARN_printf'
+                   instrumentation_begin();                                \
+                   ^
+   include/linux/instrumentation.h:53:34: note: expanded from macro 'instrumentation_begin'
+   # define instrumentation_begin()        do { } while(0)
+                                           ^
+   net/caif/cfutill.c:85:2: note: Loop condition is false.  Exiting loop
+           caif_assert(layr->dn != NULL);
+           ^
+   include/net/caif/caif_layer.h:31:3: note: expanded from macro 'caif_assert'
+                   WARN_ON(!(assert));                             \
+                   ^
+   include/asm-generic/bug.h:121:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:86:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
+                                   ^
+   include/asm-generic/bug.h:90:3: note: expanded from macro '__WARN_printf'
+                   instrumentation_end();                                  \
+                   ^
+   include/linux/instrumentation.h:54:33: note: expanded from macro 'instrumentation_end'
+   # define instrumentation_end()          do { } while(0)
+                                           ^
+   net/caif/cfutill.c:85:2: note: Loop condition is false.  Exiting loop
+           caif_assert(layr->dn != NULL);
+           ^
+   include/net/caif/caif_layer.h:31:3: note: expanded from macro 'caif_assert'
+                   WARN_ON(!(assert));                             \
+                   ^
+   include/asm-generic/bug.h:121:3: note: expanded from macro 'WARN_ON'
+                   __WARN();                                               \
+                   ^
+   include/asm-generic/bug.h:86:19: note: expanded from macro '__WARN'
+   #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
+                                   ^
+   include/asm-generic/bug.h:87:38: note: expanded from macro '__WARN_printf'
+   #define __WARN_printf(taint, arg...) do {                               \
+                                        ^
+   net/caif/cfutill.c:85:2: note: Loop condition is false.  Exiting loop
+           caif_assert(layr->dn != NULL);
+           ^
+   include/net/caif/caif_layer.h:27:33: note: expanded from macro 'caif_assert'
+   #define caif_assert(assert)                                     \
+                                                                   ^
+   net/caif/cfutill.c:86:14: note: Access to field 'transmit' results in a dereference of a null pointer (loaded from field 'dn')
+           caif_assert(layr->dn->transmit != NULL);
+                       ^
+   include/net/caif/caif_layer.h:29:8: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
+                 ^~~~~~
+   1 warning generated.
+>> drivers/iio/imu/adis16480.c:169:8: warning: Excessive padding in 'struct adis16480' (40 padding bytes, where 8 is optimal). Optimal fields order: adis, data, chip_info, ext_clk, clk_mode, clk_freq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct adis16480 {
+   ~~~~~~~^~~~~~~~~~~
+   drivers/iio/imu/adis16480.c:169:8: note: Excessive padding in 'struct adis16480' (40 padding bytes, where 8 is optimal). Optimal fields order: adis, data, chip_info, ext_clk, clk_mode, clk_freq, consider reordering the fields or adding explicit padding members
+   struct adis16480 {
+   ~~~~~~~^~~~~~~~~~~
+   1 warning generated.
+   drivers/iio/imu/fxos8700_core.c:167:8: warning: Excessive padding in 'struct fxos8700_data' (50 padding bytes, where 18 is optimal). Optimal fields order: buf, regmap, trig, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct fxos8700_data {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   drivers/iio/imu/fxos8700_core.c:167:8: note: Excessive padding in 'struct fxos8700_data' (50 padding bytes, where 18 is optimal). Optimal fields order: buf, regmap, trig, consider reordering the fields or adding explicit padding members
+   struct fxos8700_data {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   24 warnings generated.
->> drivers/iio/accel/sca3300.c:162:8: warning: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal fields order: name, scan_masks, channels, accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels, num_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, angle_supported, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct sca3300_chip_info {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:162:8: note: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal fields order: name, scan_masks, channels, accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels, num_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, angle_supported, consider reordering the fields or adding explicit padding members
-   struct sca3300_chip_info {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:191:8: warning: Excessive padding in 'struct sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields order: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct sca3300_data {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:191:8: note: Excessive padding in 'struct sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields order: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields or adding explicit padding members
-   struct sca3300_data {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   22 warnings generated.
-   Suppressed 22 warnings (9 in non-user code, 13 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   23 warnings generated.
-   Suppressed 23 warnings (11 in non-user code, 12 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   22 warnings generated.
-   Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   22 warnings generated.
-   Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   22 warnings generated.
-   Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   12 warnings generated.
-   drivers/hwmon/emc6w201.c:186:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%u\n",
-                  ^~~~~~~
-   drivers/hwmon/emc6w201.c:186:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%u\n",
-                  ^~~~~~~
-   drivers/hwmon/emc6w201.c:225:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
-                  ^~~~~~~
-   drivers/hwmon/emc6w201.c:225:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
-                  ^~~~~~~
-   drivers/hwmon/emc6w201.c:270:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%u\n", rpm);
-                  ^~~~~~~
-   drivers/hwmon/emc6w201.c:270:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%u\n", rpm);
-                  ^~~~~~~
-   Suppressed 9 warnings (9 in non-user code).
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   55 warnings generated.
-   drivers/hwmon/f71882fg.c:1382:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%d\n", speed);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1382:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%d\n", speed);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1391:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%d\n", speed);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1391:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%d\n", speed);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1424:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   return sprintf(buf, "1\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1424:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-                   return sprintf(buf, "1\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1426:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   return sprintf(buf, "0\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1426:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-                   return sprintf(buf, "0\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1460:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   return sprintf(buf, "1\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1460:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-                   return sprintf(buf, "1\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1462:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   return sprintf(buf, "0\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1462:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-                   return sprintf(buf, "0\n");
-                          ^~~~~~~
-   drivers/hwmon/f71882fg.c:1471:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%d\n", data->in[nr] * 8);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1471:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%d\n", data->in[nr] * 8);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1479:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           return sprintf(buf, "%d\n", data->in1_max * 8);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1479:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
-           return sprintf(buf, "%d\n", data->in1_max * 8);
-                  ^~~~~~~
-   drivers/hwmon/f71882fg.c:1514:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   return sprintf(buf, "1\n");
+   4 warnings generated.
+   net/caif/cfsrvl.c:99:14: warning: Access to field 'dn' results in a dereference of a null pointer (loaded from variable 'layr') [clang-analyzer-core.NullDereference]
+           caif_assert(layr->dn != NULL);
+                       ^
+   include/net/caif/caif_layer.h:29:8: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
+                 ^~~~~~
+   net/caif/cfsrvl.c:96:27: note: Left side of '&&' is false
+           struct cfsrvl *service = container_obj(layr);
+                                    ^
+   net/caif/cfsrvl.c:25:29: note: expanded from macro 'container_obj'
+   #define container_obj(layr) container_of(layr, struct cfsrvl, layer)
+                               ^
+   include/linux/kernel.h:704:61: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+                                                                      ^
+   net/caif/cfsrvl.c:96:27: note: Taking false branch
+           struct cfsrvl *service = container_obj(layr);
+                                    ^
+   net/caif/cfsrvl.c:25:29: note: expanded from macro 'container_obj'
+   #define container_obj(layr) container_of(layr, struct cfsrvl, layer)
+                               ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:308:3: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ^
+   net/caif/cfsrvl.c:96:27: note: Loop condition is false.  Exiting loop
+           struct cfsrvl *service = container_obj(layr);
+                                    ^
+   net/caif/cfsrvl.c:25:29: note: expanded from macro 'container_obj'
+   #define container_obj(layr) container_of(layr, struct cfsrvl, layer)
+                               ^
+   include/linux/kernel.h:704:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   net/caif/cfsrvl.c:98:14: note: Assuming 'layr' is equal to null
+           caif_assert(layr != NULL);
+                       ^
+   include/net/caif/caif_layer.h:29:8: note: expanded from macro 'caif_assert'
+           if (!(assert)) {                                        \
+                 ^~~~~~
 
-vim +162 drivers/iio/accel/sca3300.c
+vim +169 drivers/iio/imu/adis16480.c
 
-38d5cd1e7ee0b3 LI Qingwu 2022-05-29  161  
-ad985d4d38d7ad LI Qingwu 2022-05-29 @162  struct sca3300_chip_info {
-ad985d4d38d7ad LI Qingwu 2022-05-29  163  	const char *name;
-ad985d4d38d7ad LI Qingwu 2022-05-29  164  	const unsigned long *scan_masks;
-ad985d4d38d7ad LI Qingwu 2022-05-29  165  	const struct iio_chan_spec *channels;
-ad985d4d38d7ad LI Qingwu 2022-05-29  166  	u8 num_channels;
-ad985d4d38d7ad LI Qingwu 2022-05-29  167  	u8 num_accel_scales;
-ad985d4d38d7ad LI Qingwu 2022-05-29  168  	const int (*accel_scale)[2];
-ad985d4d38d7ad LI Qingwu 2022-05-29  169  	const int *accel_scale_map;
-38d5cd1e7ee0b3 LI Qingwu 2022-05-29  170  	const int (*incli_scale)[2];
-38d5cd1e7ee0b3 LI Qingwu 2022-05-29  171  	const int *incli_scale_map;
-38d5cd1e7ee0b3 LI Qingwu 2022-05-29  172  	u8 num_incli_scales;
-ad985d4d38d7ad LI Qingwu 2022-05-29  173  	u8 num_freqs;
-ad985d4d38d7ad LI Qingwu 2022-05-29  174  	const int *freq_table;
-ad985d4d38d7ad LI Qingwu 2022-05-29  175  	const int *freq_map;
-ad985d4d38d7ad LI Qingwu 2022-05-29  176  	const int *avail_modes_table;
-ad985d4d38d7ad LI Qingwu 2022-05-29  177  	u8 num_avail_modes;
-ad985d4d38d7ad LI Qingwu 2022-05-29  178  	u8 chip_id;
-38d5cd1e7ee0b3 LI Qingwu 2022-05-29  179  	bool angle_supported;
-ad985d4d38d7ad LI Qingwu 2022-05-29  180  };
-ad985d4d38d7ad LI Qingwu 2022-05-29  181  
+326e2357553d39 Stefan Popa        2019-03-11  168  
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20 @169  struct adis16480 {
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20  170  	const struct adis16480_chip_info *chip_info;
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20  171  
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20  172  	struct adis adis;
+326e2357553d39 Stefan Popa        2019-03-11  173  	struct clk *ext_clk;
+326e2357553d39 Stefan Popa        2019-03-11  174  	enum adis16480_clock_mode clk_mode;
+326e2357553d39 Stefan Popa        2019-03-11  175  	unsigned int clk_freq;
+941f130881fa90 Nuno Sa            2021-04-22  176  	/* Alignment needed for the timestamp */
+941f130881fa90 Nuno Sa            2021-04-22  177  	__be16 data[ADIS16495_BURST_MAX_DATA] __aligned(8);
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20  178  };
+2f3abe6cbb6c96 Lars-Peter Clausen 2012-11-20  179  
 
-:::::: The code at line 162 was first introduced by commit
-:::::: ad985d4d38d7ad8a83b0ff428ea51a2f41ce12e1 iio: accel: sca3300: modified to support multi chips
+:::::: The code at line 169 was first introduced by commit
+:::::: 2f3abe6cbb6c963ac790b40936b6761c9f0497b4 iio:imu: Add support for the ADIS16480 and similar IMUs
 
-:::::: TO: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
+:::::: CC: Jonathan Cameron <jic23@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
