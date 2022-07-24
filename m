@@ -1,44 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF55A33FE
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 19:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACB53D93
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 19:44:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658690661; x=1690226661;
+  t=1658691862; x=1690227862;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SvohAPZa96BaN4XatnHwvZCfyOEADAbXgNY9qfj6dHM=;
-  b=J3yxLm3u+0Jc8Xj9/D3AO3UdsGt6Ww311meAigJrDOW8WihzXLHK0GqQ
-   eD0GK5TDMN2z1s2HxqPmm3SLy/fJBeAFrxnL8jT58UuGLeZ3zBmLHrm4u
-   qRsg2WRdlJ4vGs4umYCvQi/A3jRZ4HrqSTfNHnM+Dx4IIFR6LWaBVbRmP
-   TBHSKbxLVTpvTpSxGQK7ll//02AMyTNy25VWnBv93I2jnGSAK2IHTXJ76
-   m6x55Z07DhPWfQfL/jGZ+00dgnaapk0tFD3Ravnh3u+Ni2isMcZSSX2fa
-   WM6oiW3EyZ3sV+QaKH1JzC/WXSKqmtsI0eYCayP/MV6P0177owYitWWty
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="274427125"
+  bh=tQKpN6ikynGTSGkv/G/Uuuz7oZm68bMYo/lj8l6Ddc4=;
+  b=nmaBpj9r26wMYiW6nY0ukAOhtIzhNaQW2T2D22gmM0QzSsCUthPAbGcu
+   R6pbV6Tq4Yw5QS0b/dQVR3csK9V5xZ4W6ELvEpE+HtE5dmWhvAh1z8asn
+   qRbGtM9glUYaR+ZWQ+9nNb/y9MfO/tZObjna2mLgXlmVZZSpNQeY8j2ot
+   GgYdNolBIH/cO1v1O+dcQSP7G28EQb19mNA05C48ywYTUObtU8RVur6I5
+   +Yij6o6gerW4sFPJLIyD73WosuBL949F1RV6G8Bw1XOMQmTjQHfcMaqwJ
+   e6T9fecSf0Q49mCmip2qeaszAdf9TZGjmnbtA10bZU+sCr4CKpdREHePr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267340750"
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="274427125"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:24:21 -0700
+   d="scan'208";a="267340750"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:44:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="574789620"
+   d="scan'208";a="845292578"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 12:24:19 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jul 2022 12:44:20 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFhD8-0004B3-1k;
-	Sun, 24 Jul 2022 19:24:18 +0000
-Date: Mon, 25 Jul 2022 03:23:34 +0800
+	id 1oFhWV-0004CX-2M;
+	Sun, 24 Jul 2022 19:44:19 +0000
+Date: Mon, 25 Jul 2022 03:44:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
+To: Dan Carpenter <error27@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org,
-	Anup Patel <anup@brainfault.org>
-Subject: [atishp04:sstc_v5 4/5] drivers/clocksource/timer-riscv.c:185:6:
- error: call to undeclared function 'riscv_isa_extension_available'; ISO C99
- and later do not support implicit function declarations
-Message-ID: <202207250359.HbTGzcp8-lkp@intel.com>
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 3/9]
+ drivers/net/wireless/ath/wil6210/debugfs.c:1030:9: warning: variable 'rc' is
+ uninitialized when used here
+Message-ID: <202207250332.5ud26AGE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,116 +49,80 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/atishp04/linux sstc_v5
-head:   1b65346e11303beea1c67b3557ae56aee68e7a57
-commit: 69d668ba2592b6ce82b8d08c327097ccfd69b600 [4/5] RISC-V: Prefer sstc extension if available
-config: riscv-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250359.HbTGzcp8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   086f67ba21ede199307e78476353bda9ffef982c
+commit: 7a4836560a6198d245d5732e26f94898b12eb760 [3/9] wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()
+config: powerpc-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250332.5ud26AGE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/atishp04/linux/commit/69d668ba2592b6ce82b8d08c327097ccfd69b600
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 sstc_v5
-        git checkout 69d668ba2592b6ce82b8d08c327097ccfd69b600
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/7a4836560a6198d245d5732e26f94898b12eb760
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+        git checkout 7a4836560a6198d245d5732e26f94898b12eb760
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clocksource/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/wireless/ath/wil6210/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/clocksource/timer-riscv.c:185:6: error: call to undeclared function 'riscv_isa_extension_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (riscv_isa_extension_available(NULL, SSTC)) {
-               ^
->> drivers/clocksource/timer-riscv.c:185:42: error: use of undeclared identifier 'SSTC'
-           if (riscv_isa_extension_available(NULL, SSTC)) {
-                                                   ^
-   2 errors generated.
+>> drivers/net/wireless/ath/wil6210/debugfs.c:1030:9: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+           return rc;
+                  ^~
+   drivers/net/wireless/ath/wil6210/debugfs.c:1013:8: note: initialize the variable 'rc' to silence this warning
+           int rc, rc1;
+                 ^
+                  = 0
+   1 warning generated.
 
 
-vim +/riscv_isa_extension_available +185 drivers/clocksource/timer-riscv.c
+vim +/rc +1030 drivers/net/wireless/ath/wil6210/debugfs.c
 
-   117	
-   118	static int __init riscv_timer_init_dt(struct device_node *n)
-   119	{
-   120		int cpuid, hartid, error;
-   121		struct device_node *child;
-   122		struct irq_domain *domain;
-   123	
-   124		hartid = riscv_of_processor_hartid(n);
-   125		if (hartid < 0) {
-   126			pr_warn("Not valid hartid for node [%pOF] error = [%d]\n",
-   127				n, hartid);
-   128			return hartid;
-   129		}
-   130	
-   131		cpuid = riscv_hartid_to_cpuid(hartid);
-   132		if (cpuid < 0) {
-   133			pr_warn("Invalid cpuid for hartid [%d]\n", hartid);
-   134			return cpuid;
-   135		}
-   136	
-   137		if (cpuid != smp_processor_id())
-   138			return 0;
-   139	
-   140		domain = NULL;
-   141		child = of_get_compatible_child(n, "riscv,cpu-intc");
-   142		if (!child) {
-   143			pr_err("Failed to find INTC node [%pOF]\n", n);
-   144			return -ENODEV;
-   145		}
-   146		domain = irq_find_host(child);
-   147		of_node_put(child);
-   148		if (!domain) {
-   149			pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
-   150			return -ENODEV;
-   151		}
-   152	
-   153		riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
-   154		if (!riscv_clock_event_irq) {
-   155			pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
-   156			return -ENODEV;
-   157		}
-   158	
-   159		pr_info("%s: Registering clocksource cpuid [%d] hartid [%d]\n",
-   160		       __func__, cpuid, hartid);
-   161		error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
-   162		if (error) {
-   163			pr_err("RISCV timer register failed [%d] for cpu = [%d]\n",
-   164			       error, cpuid);
-   165			return error;
-   166		}
-   167	
-   168		sched_clock_register(riscv_sched_clock, 64, riscv_timebase);
-   169	
-   170		error = request_percpu_irq(riscv_clock_event_irq,
-   171					    riscv_timer_interrupt,
-   172					    "riscv-timer", &riscv_clock_event);
-   173		if (error) {
-   174			pr_err("registering percpu irq failed [%d]\n", error);
-   175			return error;
-   176		}
-   177	
-   178		error = cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
-   179				 "clockevents/riscv/timer:starting",
-   180				 riscv_timer_starting_cpu, riscv_timer_dying_cpu);
-   181		if (error)
-   182			pr_err("cpu hp setup state failed for RISCV timer [%d]\n",
-   183			       error);
-   184	
- > 185		if (riscv_isa_extension_available(NULL, SSTC)) {
-   186			pr_info("Timer interrupt in S-mode is available via sstc extension\n");
-   187			static_branch_enable(&riscv_sstc_available);
-   188		}
-   189	
-   190		return error;
-   191	}
-   192	
+2be7d22f062535 Vladimir Kondratiev 2012-12-20  1000  
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1001  /* Write WMI command (w/o mbox header) to this file to send it
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1002   * WMI starts from wil6210_mbox_hdr_wmi header
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1003   */
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1004  static ssize_t wil_write_file_wmi(struct file *file, const char __user *buf,
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1005  				  size_t len, loff_t *ppos)
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1006  {
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1007  	struct wil6210_priv *wil = file->private_data;
+e00243fab84b4e Lior David          2018-02-26  1008  	struct wil6210_vif *vif = ndev_to_vif(wil->main_ndev);
+b874ddecae0a08 Lior David          2016-03-01  1009  	struct wmi_cmd_hdr *wmi;
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1010  	void *cmd;
+b874ddecae0a08 Lior David          2016-03-01  1011  	int cmdlen = len - sizeof(struct wmi_cmd_hdr);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1012  	u16 cmdid;
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1013  	int rc, rc1;
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1014  
+7a4836560a6198 Dan Carpenter       2022-07-15  1015  	if (cmdlen < 0 || *ppos != 0)
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1016  		return -EINVAL;
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1017  
+7a4836560a6198 Dan Carpenter       2022-07-15  1018  	wmi = memdup_user(buf, len);
+7a4836560a6198 Dan Carpenter       2022-07-15  1019  	if (IS_ERR(wmi))
+7a4836560a6198 Dan Carpenter       2022-07-15  1020  		return PTR_ERR(wmi);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1021  
+69218a48005d0c Lior David          2016-03-21  1022  	cmd = (cmdlen > 0) ? &wmi[1] : NULL;
+b874ddecae0a08 Lior David          2016-03-01  1023  	cmdid = le16_to_cpu(wmi->command_id);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1024  
+e00243fab84b4e Lior David          2018-02-26  1025  	rc1 = wmi_send(wil, cmdid, vif->mid, cmd, cmdlen);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1026  	kfree(wmi);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1027  
+af3db60a30331d Lazar Alexei        2017-01-20  1028  	wil_info(wil, "0x%04x[%d] -> %d\n", cmdid, cmdlen, rc1);
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1029  
+ff974e40833413 Vladimir Kondratiev 2014-06-16 @1030  	return rc;
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1031  }
+ff974e40833413 Vladimir Kondratiev 2014-06-16  1032  
+
+:::::: The code at line 1030 was first introduced by commit
+:::::: ff974e4083341383d3dd4079e52ed30f57f376f0 wil6210: debugfs interface to send raw WMI command
+
+:::::: TO: Vladimir Kondratiev <qca_vkondrat@qca.qualcomm.com>
+:::::: CC: John W. Linville <linville@tuxdriver.com>
 
 -- 
 0-DAY CI Kernel Test Service
