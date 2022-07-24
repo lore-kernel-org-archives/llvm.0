@@ -1,92 +1,129 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF002F4B
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658702914; x=1690238914;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=qvyEDRnGy2j81gG2C+I0ADeqIH4jC4Hm9IeS5+Yzi9M=;
-  b=Mkzi1/M/xUAzIBgS8fGU6cfjCFlnLg2I3CpzAjCldpX4UEe7FxmZ//B7
-   EhFcwf6t91GJIL36ki2H03l1LmCuavPOhx8RBWo1GnG8cx7en/ZR0HZG+
-   jyn+vzQ61YnQ+PECpQYhos3LnhHlYlm8cQFdGBbZIJ83W4o1HcJmO0p9p
-   0+MjQTh//M8p5iu/9cHIBcPHXkXFcaAidiZUhWQvVrPs5a8KWPnCF4sYQ
-   0ANbGXU1KgldzvHiOaANvsX5rdy5GbcHG1FmARI5/p6EhBciqwIauRC0w
-   c/w+qxNyF4utDOMb74gvDkdbDKnWQ8ToKL2GfXGlhmCa10Fl6CR+XmUrY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="349273548"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="349273548"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 15:48:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="574818511"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 15:48:32 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oFkOm-0004NP-0l;
-	Sun, 24 Jul 2022 22:48:32 +0000
-Date: Mon, 25 Jul 2022 06:48:15 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: .text.exynos_iommu_domain_free:
- unexpected end of section
-Message-ID: <202207250649.8VJotys6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D2F2F4B
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:06 +0000 (UTC)
+Received: by mail-ej1-f50.google.com with SMTP id tk8so17496624ejc.7
+        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 15:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iC8ZFOlLhnkf1prx6yWwk+CQsLZ6WJZa0KwwPQLezfU=;
+        b=YM882+zsJMrMfmw70eDSAawArjCbzvZENlE6m8ovXAoUpp/3LqMx6N1oSy1tBhaacT
+         JRrO4j8fW8QXDpA/VqYyZfr9YwKqsGgTqZxOY/wmQ5PKGwhrFI++z/MXxV6Dye0wKrji
+         1sRMIN5CBje9R9/Kl0f5Q497519MKu+1OWkSnhR1oUR4bXWMw0HU2KfYVNJ1/srrbDu9
+         qDZR7ocRlFb7z9QknxQy03VwFvSYdt6uxXar/iKcWhgh8tcYtIHy/V9/sEWfWm2RKkM3
+         VlB9wusgyJbrYZI2SwOYAFGzWFK6ODnb5gsNIA3wgK7Z86h5UbA30vCZsKz3xRJW01O3
+         wYPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iC8ZFOlLhnkf1prx6yWwk+CQsLZ6WJZa0KwwPQLezfU=;
+        b=25wKWUeXjZX+KBxeveQpkMInff12vjq5m6srOYGQLTmk1iA3D63KT7/GLuMg6E1PXe
+         Igwqz11w4MltrNbWyZakG1dADaZax3Wt4fYH9JVjIpFA1DVKg/VpqDB6yAtpEL5HIbQc
+         PHgIN5aYMCBYxiFcBsUaDwp9x29ZNFwdSfMFyB+YXNJKE2PASnlQ3v/oh9SsSiC2uCbG
+         y8xcIFPDst0Qaj5R1aA8Y9LJ3W7h8etyAqT4QJd8LAxQXA7UcSVJV56TyZR8dk2LrlI0
+         BSKI2W0PFPtmTcmSS9Xps6iS8otS24UKkvTkjGkzVRFMd0wFFMCGMPN7F3gexF8f9B5s
+         YXoA==
+X-Gm-Message-State: AJIora+HUDAFllniClNMJ+XmyBdZOHN4oQKkO6VJNxHAZ1ndjZb+KdkJ
+	zQJyo1RxchtnuPmGk7Gf8fQ=
+X-Google-Smtp-Source: AGRyM1utUH37ezGomhHFXQ/NjekIezTizPa0ydfHEcsaZugnjHb0ju5RaVEbFmWplZ8co3tVh3FYjA==
+X-Received: by 2002:a17:907:94cf:b0:72f:1c2a:d475 with SMTP id dn15-20020a17090794cf00b0072f1c2ad475mr7921257ejc.237.1658703064567;
+        Sun, 24 Jul 2022 15:51:04 -0700 (PDT)
+Received: from localhost.localdomain (93-42-69-122.ip85.fastwebnet.it. [93.42.69.122])
+        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 15:51:04 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Vivien Didelot <vivien.didelot@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [net-next PATCH v4 00/14] net: dsa: qca8k: code split for qca8k
+Date: Sun, 24 Jul 2022 22:19:24 +0200
+Message-Id: <20220724201938.17387-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Nick Desaulniers <ndesaulniers@google.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>
+This is needed ad ipq4019 SoC have an internal switch that is
+based on qca8k with very minor changes. The general function is equal.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: f12b034afeb3a977bbb1c6584dedc0f3dc666f14 scripts/Makefile.clang: default to LLVM_IAS=1
-date:   12 months ago
-config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250649.8VJotys6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f12b034afeb3a977bbb1c6584dedc0f3dc666f14
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f12b034afeb3a977bbb1c6584dedc0f3dc666f14
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Because of this we split the driver to common and specific code.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As the common function needs to be moved to a different file to be
+reused, we had to convert every remaining user of qca8k_read/write/rmw
+to regmap variant.
+We had also to generilized the special handling for the ethtool_stats
+function that makes use of the autocast mib. (ipq4019 will have a
+different tagger and use mmio so it could be quicker to use mmio instead
+of automib feature)
+And we had to convert the regmap read/write to bulk implementation to
+drop the special function that makes use of it. This will be compatible
+with ipq4019 and at the same time permits normal switch to use the eth
+mgmt way to send the entire ATU table read/write in one go.
 
-All warnings (new ones prefixed by >>):
+v4:
+- Fix compilation error with clang compiler reported by kernel
+  test bot
+v3:
+- Squash more patch to skip even more "migration patch"
+- Add new patch to cache match data in priv struct
+- Fix extra space
+- Drop unnecessary cast to qca8k_priv from void pointers
+v2:
+- Rework patch to drop dependency with bulk regmap (will be
+  converted later)
+- Split the split patch to additional patch
+- Rework autocast_mib function and move it to match data
 
-   vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32()+0xaa: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe7: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x22: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack()+0x12: call to cpu_entry_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_setup()+0xa3: call to cpuid_eax() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0xa2: call to mce_gather_info() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: replace_key()+0x19b: stack state mismatch: cfa1=4+64 cfa2=4+80
-   vmlinux.o: warning: objtool: leaf_copy_items_entirely()+0x436: stack state mismatch: cfa1=4+160 cfa2=4+152
->> vmlinux.o: warning: objtool: .text.exynos_iommu_domain_free: unexpected end of section
->> vmlinux.o: warning: objtool: .text.exynos_iommu_map: unexpected end of section
->> vmlinux.o: warning: objtool: .text.exynos_iommu_unmap: unexpected end of section
->> vmlinux.o: warning: objtool: .text.exynos_iommu_iova_to_phys: unexpected end of section
+Christian Marangi (14):
+  net: dsa: qca8k: cache match data to speed up access
+  net: dsa: qca8k: make mib autocast feature optional
+  net: dsa: qca8k: move mib struct to common code
+  net: dsa: qca8k: move qca8k read/write/rmw and reg table to common
+    code
+  net: dsa: qca8k: move qca8k bulk read/write helper to common code
+  net: dsa: qca8k: move mib init function to common code
+  net: dsa: qca8k: move port set status/eee/ethtool stats function to
+    common code
+  net: dsa: qca8k: move bridge functions to common code
+  net: dsa: qca8k: move set age/MTU/port enable/disable functions to
+    common code
+  net: dsa: qca8k: move port FDB/MDB function to common code
+  net: dsa: qca8k: move port mirror functions to common code
+  net: dsa: qca8k: move port VLAN functions to common code
+  net: dsa: qca8k: move port LAG functions to common code
+  net: dsa: qca8k: move read_switch_id function to common code
+
+ drivers/net/dsa/qca/Makefile                  |    1 +
+ drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} | 1716 +++--------------
+ drivers/net/dsa/qca/qca8k-common.c            | 1240 ++++++++++++
+ drivers/net/dsa/qca/qca8k.h                   |  100 +
+ 4 files changed, 1584 insertions(+), 1473 deletions(-)
+ rename drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} (63%)
+ create mode 100644 drivers/net/dsa/qca/qca8k-common.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
