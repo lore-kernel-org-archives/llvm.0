@@ -1,46 +1,39 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2D87E
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 05:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815A07E
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 05:50:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658641243; x=1690177243;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3nI5X01Dh6IyD7hFrhUwCh3/XGjZuDdxbiFmhDVbdQI=;
-  b=EMnmc1ncUjGBqXJeNgIAYrXiUCDE0dnjNzLe4MF6Rf9IPmMUDIG7+hmZ
-   MbjY4DiC23iEZSYKfl1uGdQ8b71S/Ke4lr/+u7XRam9TwOGYUNp+RNrQp
-   TizqRoSNEgkmnNsC/Fgwxi65Qa844h5oPFtQC50p2oYWUcq/G2irYOQkn
-   jdY8blDLQ9ab/XJ05B5bOzdO36yrdXdXMHFR4FUPThIcFCBqpKyzJwIs2
-   kYt+ySkTbLZ+dAiPDd01fPRp5s/AxJjumI4waDYjiDVojeTDPR3/lFhR5
-   4Ci++dNJBFf3U6u4XRYEUqy6uZZxD7+pvfv0oZ3EQiC2yqa9ImPWHII80
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288697093"
+  t=1658641843; x=1690177843;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=PlQ7gVZFBZEgVrn37gS/bBB8s2ImEhBSVWBCzP/XtBY=;
+  b=DOfRxbCYjxm2zSvYE/NrhSFkx9x2P/KlXmYt3VvNJca6WIWu3fpdAWQE
+   +9o5+eNflkmHhe+o5HTyYYTZVR4bQ0DxXtXYcPif9OjTzM9emewOyqrn3
+   8Oy9EXFXlJ8HPluwKh4+jqIbz9FAH12tlfD7JgRics4Mq9ACtu7WqP2+Z
+   WilQAsywaF65e+YHwRpvSxiY4cVGSED0ScrBK52VWG6mWgI14Z+/x8xFJ
+   UypZMzO8UXlZSy6tBF5L543TV1GN2bRvCvwoBGK8eaaU2qwNfJU9tAmpy
+   CT+hfnqnGxnfIwkIjOwD2HomrXlyx6p9eb6KgpaTC1TKystggxCG2Lc1i
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="351512065"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="288697093"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 22:40:43 -0700
+   d="scan'208";a="351512065"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 22:50:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="667104768"
+   d="scan'208";a="657721077"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Jul 2022 22:40:41 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 23 Jul 2022 22:50:41 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFUM4-0003bV-2K;
-	Sun, 24 Jul 2022 05:40:40 +0000
-Date: Sun, 24 Jul 2022 13:39:50 +0800
+	id 1oFUVl-0003c5-0q;
+	Sun, 24 Jul 2022 05:50:41 +0000
+Date: Sun, 24 Jul 2022 13:50:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Rosenberg <drosen@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dennis Cagle <d-cagle@codeaurora.org>,
-	Lee Jones <lee.jones@linaro.org>
-Subject: [linux-stable-rc:linux-4.9.y 967/2229]
- drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202207241311.Dv86CbAo-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+Message-ID: <202207241307.h8S5rqpj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,59 +43,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-head:   65be5f5665a580424a7b1102f1a04c4259c559b5
-commit: a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e [967/2229] ion: Protect kref from userspace manipulation
-config: mips-randconfig-r034-20220719 (https://download.01.org/0day-ci/archive/20220724/202207241311.Dv86CbAo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Tiezhu Yang <yangtiezhu@loongson.cn>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Masahiro Yamada <masahiroy@kernel.org>
+
+Hi Tiezhu,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   515f71412bb73ebd7f41f90e1684fc80b8730789
+commit: 048cc2378c2494519d940597629465b3ea44a96f MIPS: SGI-IP22: Remove unnecessary check of GCC option
+date:   7 months ago
+config: mips-ip28_defconfig (https://download.01.org/0day-ci/archive/20220724/202207241307.h8S5rqpj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-4.9.y
-        git checkout a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
+        # apt-get install binutils-mips64-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=048cc2378c2494519d940597629465b3ea44a96f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 048cc2378c2494519d940597629465b3ea44a96f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/android/ion/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (--handle->user_ref_count == 0)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
-           if (--handle->user_ref_count == 0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +71 drivers/staging/android/ion/ion-ioctl.c
-
-    65	
-    66	/* Must hold the client lock */
-    67	static int user_ion_handle_put_nolock(struct ion_handle *handle)
-    68	{
-    69		int ret;
-    70	
-  > 71		if (--handle->user_ref_count == 0)
-    72			ret = ion_handle_put_nolock(handle);
-    73	
-    74		return ret;
-    75	}
-    76	
+>> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target 'missing-syscalls' not remade because of errors.
+   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
