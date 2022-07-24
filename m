@@ -1,49 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CBE2F55
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 18:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF55A33FE
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 19:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658687597; x=1690223597;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VnBS4cmtNEdvQdzG3C5h2n5+yQ8J1uEcZpHMuBUSM5U=;
-  b=U6LwWl7VBjOcURWM8nVntyR3AJeRkbfemZ5zvp5C/rENJgnxykN5il66
-   SyRZ23gzQ1lQsoKmfxz5dgKT6eGky3MIB1f2A457fDrpJFpa24gb7TNmT
-   sDAirApp9dZjpossyXmszvxobZZas7LJkEus3gXqi2KnShdhadtR1JRrm
-   18JeC0TRexMfHsOF58AIN9f0CPajaHKeMs7/FL0Isbs9ps0yhjvKx66Fl
-   DJkbbAKTKw+yYUqv69Izo++qdpEPIr0fIJaILJjEl8tE7OaNEYQM4GTRL
-   EUvaVprzGPqmXlZSk9FrE25P/jlmxfMsghrzdnTArfVXKWrspaBBiXKyu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267337135"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="267337135"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 11:33:16 -0700
+  t=1658690661; x=1690226661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SvohAPZa96BaN4XatnHwvZCfyOEADAbXgNY9qfj6dHM=;
+  b=J3yxLm3u+0Jc8Xj9/D3AO3UdsGt6Ww311meAigJrDOW8WihzXLHK0GqQ
+   eD0GK5TDMN2z1s2HxqPmm3SLy/fJBeAFrxnL8jT58UuGLeZ3zBmLHrm4u
+   qRsg2WRdlJ4vGs4umYCvQi/A3jRZ4HrqSTfNHnM+Dx4IIFR6LWaBVbRmP
+   TBHSKbxLVTpvTpSxGQK7ll//02AMyTNy25VWnBv93I2jnGSAK2IHTXJ76
+   m6x55Z07DhPWfQfL/jGZ+00dgnaapk0tFD3Ravnh3u+Ni2isMcZSSX2fa
+   WM6oiW3EyZ3sV+QaKH1JzC/WXSKqmtsI0eYCayP/MV6P0177owYitWWty
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="274427125"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="274427125"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:24:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="688816520"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="574789620"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2022 11:33:13 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 12:24:19 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFgPh-00047J-0d;
-	Sun, 24 Jul 2022 18:33:13 +0000
-Date: Mon, 25 Jul 2022 02:32:27 +0800
+	id 1oFhD8-0004B3-1k;
+	Sun, 24 Jul 2022 19:24:18 +0000
+Date: Mon, 25 Jul 2022 03:23:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marex@denx.de>, linux-gpio@vger.kernel.org
+To: Atish Patra <atishp@rivosinc.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Marek Vasut <marex@denx.de>,
-	Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Marc Zyngier <maz@kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-	Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v3 1/2] gpio: mxc: Protect GPIO irqchip RMW with bgpio
- spinlock
-Message-ID: <202207250224.XFYIB7dF-lkp@intel.com>
-References: <20220724171057.18549-1-marex@denx.de>
+	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org,
+	Anup Patel <anup@brainfault.org>
+Subject: [atishp04:sstc_v5 4/5] drivers/clocksource/timer-riscv.c:185:6:
+ error: call to undeclared function 'riscv_isa_extension_available'; ISO C99
+ and later do not support implicit function declarations
+Message-ID: <202207250359.HbTGzcp8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,173 +47,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724171057.18549-1-marex@denx.de>
 
-Hi Marek,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v5.19-rc7 next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/gpio-mxc-Protect-GPIO-irqchip-RMW-with-bgpio-spinlock/20220725-011230
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-config: hexagon-randconfig-r041-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250224.XFYIB7dF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+tree:   https://github.com/atishp04/linux sstc_v5
+head:   1b65346e11303beea1c67b3557ae56aee68e7a57
+commit: 69d668ba2592b6ce82b8d08c327097ccfd69b600 [4/5] RISC-V: Prefer sstc extension if available
+config: riscv-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250359.HbTGzcp8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/af6c815e16849c7ec370f755916d06a6b1e5b759
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Marek-Vasut/gpio-mxc-Protect-GPIO-irqchip-RMW-with-bgpio-spinlock/20220725-011230
-        git checkout af6c815e16849c7ec370f755916d06a6b1e5b759
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/atishp04/linux/commit/69d668ba2592b6ce82b8d08c327097ccfd69b600
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v5
+        git checkout 69d668ba2592b6ce82b8d08c327097ccfd69b600
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clocksource/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpio/gpio-mxc.c:189:20: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-           spin_lock_irqsave(&port->gc.bgpio_lock, flags);
-                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:379:39: note: expanded from macro 'spin_lock_irqsave'
-           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-                                                ^~~~
-   include/linux/spinlock.h:264:26: note: expanded from macro 'raw_spin_lock_irqsave'
-                   _raw_spin_lock_irqsave(lock, flags);    \
-                                          ^~~~
-   include/linux/spinlock_api_up.h:69:60: note: expanded from macro '_raw_spin_lock_irqsave'
-   #define _raw_spin_lock_irqsave(lock, flags)     __LOCK_IRQSAVE(lock, flags)
-                                                                  ^~~~
-   include/linux/spinlock_api_up.h:40:38: note: expanded from macro '__LOCK_IRQSAVE'
-     do { local_irq_save(flags); __LOCK(lock); } while (0)
-                                        ^~~~
-   include/linux/spinlock_api_up.h:31:35: note: expanded from macro '__LOCK'
-     do { preempt_disable(); ___LOCK(lock); } while (0)
-                                     ^~~~
-   include/linux/spinlock_api_up.h:28:32: note: expanded from macro '___LOCK'
-     do { __acquire(lock); (void)(lock); } while (0)
-                                  ^~~~
-   include/linux/spinlock.h:322:67: note: passing argument to parameter 'lock' here
-   static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
-                                                                     ^
-   drivers/gpio/gpio-mxc.c:210:25: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-           spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
-                                  ^~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:402:64: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
-                                                                  ^
-   drivers/gpio/gpio-mxc.c:222:20: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-           spin_lock_irqsave(&port->gc.bgpio_lock, flags);
-                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:379:39: note: expanded from macro 'spin_lock_irqsave'
-           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-                                                ^~~~
-   include/linux/spinlock.h:264:26: note: expanded from macro 'raw_spin_lock_irqsave'
-                   _raw_spin_lock_irqsave(lock, flags);    \
-                                          ^~~~
-   include/linux/spinlock_api_up.h:69:60: note: expanded from macro '_raw_spin_lock_irqsave'
-   #define _raw_spin_lock_irqsave(lock, flags)     __LOCK_IRQSAVE(lock, flags)
-                                                                  ^~~~
-   include/linux/spinlock_api_up.h:40:38: note: expanded from macro '__LOCK_IRQSAVE'
-     do { local_irq_save(flags); __LOCK(lock); } while (0)
-                                        ^~~~
-   include/linux/spinlock_api_up.h:31:35: note: expanded from macro '__LOCK'
-     do { preempt_disable(); ___LOCK(lock); } while (0)
-                                     ^~~~
-   include/linux/spinlock_api_up.h:28:32: note: expanded from macro '___LOCK'
-     do { __acquire(lock); (void)(lock); } while (0)
-                                  ^~~~
-   include/linux/spinlock.h:322:67: note: passing argument to parameter 'lock' here
-   static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
-                                                                     ^
-   drivers/gpio/gpio-mxc.c:242:25: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
-           spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
-                                  ^~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock.h:402:64: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
-                                                                  ^
-   4 errors generated.
+>> drivers/clocksource/timer-riscv.c:185:6: error: call to undeclared function 'riscv_isa_extension_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (riscv_isa_extension_available(NULL, SSTC)) {
+               ^
+>> drivers/clocksource/timer-riscv.c:185:42: error: use of undeclared identifier 'SSTC'
+           if (riscv_isa_extension_available(NULL, SSTC)) {
+                                                   ^
+   2 errors generated.
 
 
-vim +189 drivers/gpio/gpio-mxc.c
+vim +/riscv_isa_extension_available +185 drivers/clocksource/timer-riscv.c
 
-   145	
-   146	static int gpio_set_irq_type(struct irq_data *d, u32 type)
-   147	{
-   148		struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
-   149		struct mxc_gpio_port *port = gc->private;
-   150		unsigned long flags;
-   151		u32 bit, val;
-   152		u32 gpio_idx = d->hwirq;
-   153		int edge;
-   154		void __iomem *reg = port->base;
-   155	
-   156		port->both_edges &= ~(1 << gpio_idx);
-   157		switch (type) {
-   158		case IRQ_TYPE_EDGE_RISING:
-   159			edge = GPIO_INT_RISE_EDGE;
-   160			break;
-   161		case IRQ_TYPE_EDGE_FALLING:
-   162			edge = GPIO_INT_FALL_EDGE;
-   163			break;
-   164		case IRQ_TYPE_EDGE_BOTH:
-   165			if (GPIO_EDGE_SEL >= 0) {
-   166				edge = GPIO_INT_BOTH_EDGES;
-   167			} else {
-   168				val = port->gc.get(&port->gc, gpio_idx);
-   169				if (val) {
-   170					edge = GPIO_INT_LOW_LEV;
-   171					pr_debug("mxc: set GPIO %d to low trigger\n", gpio_idx);
-   172				} else {
-   173					edge = GPIO_INT_HIGH_LEV;
-   174					pr_debug("mxc: set GPIO %d to high trigger\n", gpio_idx);
-   175				}
-   176				port->both_edges |= 1 << gpio_idx;
-   177			}
-   178			break;
-   179		case IRQ_TYPE_LEVEL_LOW:
-   180			edge = GPIO_INT_LOW_LEV;
-   181			break;
-   182		case IRQ_TYPE_LEVEL_HIGH:
-   183			edge = GPIO_INT_HIGH_LEV;
-   184			break;
-   185		default:
-   186			return -EINVAL;
-   187		}
-   188	
- > 189		spin_lock_irqsave(&port->gc.bgpio_lock, flags);
-   190	
-   191		if (GPIO_EDGE_SEL >= 0) {
-   192			val = readl(port->base + GPIO_EDGE_SEL);
-   193			if (edge == GPIO_INT_BOTH_EDGES)
-   194				writel(val | (1 << gpio_idx),
-   195					port->base + GPIO_EDGE_SEL);
-   196			else
-   197				writel(val & ~(1 << gpio_idx),
-   198					port->base + GPIO_EDGE_SEL);
-   199		}
-   200	
-   201		if (edge != GPIO_INT_BOTH_EDGES) {
-   202			reg += GPIO_ICR1 + ((gpio_idx & 0x10) >> 2); /* lower or upper register */
-   203			bit = gpio_idx & 0xf;
-   204			val = readl(reg) & ~(0x3 << (bit << 1));
-   205			writel(val | (edge << (bit << 1)), reg);
-   206		}
-   207	
-   208		writel(1 << gpio_idx, port->base + GPIO_ISR);
-   209	
-   210		spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
-   211	
-   212		return 0;
-   213	}
-   214	
+   117	
+   118	static int __init riscv_timer_init_dt(struct device_node *n)
+   119	{
+   120		int cpuid, hartid, error;
+   121		struct device_node *child;
+   122		struct irq_domain *domain;
+   123	
+   124		hartid = riscv_of_processor_hartid(n);
+   125		if (hartid < 0) {
+   126			pr_warn("Not valid hartid for node [%pOF] error = [%d]\n",
+   127				n, hartid);
+   128			return hartid;
+   129		}
+   130	
+   131		cpuid = riscv_hartid_to_cpuid(hartid);
+   132		if (cpuid < 0) {
+   133			pr_warn("Invalid cpuid for hartid [%d]\n", hartid);
+   134			return cpuid;
+   135		}
+   136	
+   137		if (cpuid != smp_processor_id())
+   138			return 0;
+   139	
+   140		domain = NULL;
+   141		child = of_get_compatible_child(n, "riscv,cpu-intc");
+   142		if (!child) {
+   143			pr_err("Failed to find INTC node [%pOF]\n", n);
+   144			return -ENODEV;
+   145		}
+   146		domain = irq_find_host(child);
+   147		of_node_put(child);
+   148		if (!domain) {
+   149			pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+   150			return -ENODEV;
+   151		}
+   152	
+   153		riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+   154		if (!riscv_clock_event_irq) {
+   155			pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+   156			return -ENODEV;
+   157		}
+   158	
+   159		pr_info("%s: Registering clocksource cpuid [%d] hartid [%d]\n",
+   160		       __func__, cpuid, hartid);
+   161		error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+   162		if (error) {
+   163			pr_err("RISCV timer register failed [%d] for cpu = [%d]\n",
+   164			       error, cpuid);
+   165			return error;
+   166		}
+   167	
+   168		sched_clock_register(riscv_sched_clock, 64, riscv_timebase);
+   169	
+   170		error = request_percpu_irq(riscv_clock_event_irq,
+   171					    riscv_timer_interrupt,
+   172					    "riscv-timer", &riscv_clock_event);
+   173		if (error) {
+   174			pr_err("registering percpu irq failed [%d]\n", error);
+   175			return error;
+   176		}
+   177	
+   178		error = cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
+   179				 "clockevents/riscv/timer:starting",
+   180				 riscv_timer_starting_cpu, riscv_timer_dying_cpu);
+   181		if (error)
+   182			pr_err("cpu hp setup state failed for RISCV timer [%d]\n",
+   183			       error);
+   184	
+ > 185		if (riscv_isa_extension_available(NULL, SSTC)) {
+   186			pr_info("Timer interrupt in S-mode is available via sstc extension\n");
+   187			static_branch_enable(&riscv_sstc_available);
+   188		}
+   189	
+   190		return error;
+   191	}
+   192	
 
 -- 
 0-DAY CI Kernel Test Service
