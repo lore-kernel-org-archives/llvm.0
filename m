@@ -1,99 +1,176 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD08A7E
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 08:25:13 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id 75so14945670ybf.4
-        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 01:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E0FYQIjcA1ZBeZ4jpcqY+lww1lYDm9o/uZVAHiMgttw=;
-        b=W/aKKpJRcAdZY3UA4E5XDr3fBGbPSmPcS5GCQjN38NRlXhSpzoOA5MJEcVpoeCG8bD
-         EohNCEKLFvV6+7hgOavnJ0fY9pLnyNa8ZxAz5oCA3lntQwAM8pkv8skLj/P/7GeVsN5T
-         rvQdZqfSJCaGGWLuYdop/DMboPWpRu31ETFeWLz9xGUau0r/ZySSSishnC8frmRUpfVE
-         Gvm4959erixZdiPRAnfBgoY0zeiF8gYLFCF9rBhRJRUGOBeo+NjVml9/EMeZBjAVOw9N
-         7gm8fWa7gCidmmLj8fPMSl86MjRk8vtJmQFCTP3sA/P7HZTgkLPkUNNbe9PQqw7PoYIj
-         /u/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E0FYQIjcA1ZBeZ4jpcqY+lww1lYDm9o/uZVAHiMgttw=;
-        b=W2WEvj7fYL2W6JPDpSGzaCdRnTbQ0C3VWI4LncaGulhFt8Dema2hrE75pyVoCMbu++
-         eb20OQ9AYZ/Z3iboD/kqoxjYpu4Uib72TxdcecIN3tgciHbDYnMRnBZfNAGQDpTL2WkN
-         8lcP9fT1KpWsPzXd56FzBFNA1iHhWFHVArgrpRK7Xfft4a0R0br4VzxfWUQgNd4HWFNN
-         QRN4DbWTsYSCVHptBt2wq819wGrDsSKh/XUkrDiW6UsCvnG8+K206EhbWxPuYtBUvhNs
-         aMRY0CTOVrAvtzv1KHWfXmhthKVfx1VKdihxPgMtRG0kuNd7Hyj/JSb+VY7DzAWa1StG
-         m6JQ==
-X-Gm-Message-State: AJIora/SmrVr2mjYbPUjljEPw/NriSL0+fAmAUVmpeMjyCHdfaAAeui9
-	xU8LCzFvhoBYl4vjyM8Zw8/4WK+bTFD05wMHEfGIGHNR
-X-Google-Smtp-Source: AGRyM1v0OD6rWTX6augGS10Tm1obstQSqDr+LlmwQaw0Z4oq4BjE1ahgpNssSUPbl+Ws0uRAOsiGCPfPwVBJ9ypzi68=
-X-Received: by 2002:a05:6902:1109:b0:66e:f386:61ce with SMTP id
- o9-20020a056902110900b0066ef38661cemr5135859ybu.364.1658651112695; Sun, 24
- Jul 2022 01:25:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E1B28F3
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 09:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658654033; x=1690190033;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S8yacHJXY1eIaVyYy6ILxmvNuFxGPUTaDRap+4gYMOk=;
+  b=R97U+MgKxpHm8aVXGAfhW6cSfY95nyqRI3iO9lfEZY3UwX/g+ce8Ng8L
+   SRqCPmCd3DQdBW5PIrCL7Kduo8+tLd/bwsxJ/Hjl7DcXS2z5pfnCwZSoA
+   rkkmLXbMXNNc86T5V6YmhXg0XkvQFBI4AFO9DOZqrM6yaI0+h8NJ7PZCA
+   KHfFgm2VHEhvoNJPH5i/y3V9gSPADU73XfWV011oI5XWYsrvBc0urYRYX
+   wobor+qbXFdq2lz1lT48QTrIgFdsHD7conAtyXBXMVrBaxeuYy63TH+Rj
+   NxWvFfNX58m9UJzBMD10qJsndUC/rB9bj+7Wz5llOz4gOTaqRNVbSyM69
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267921375"
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="267921375"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="632033812"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 Jul 2022 02:13:50 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oFXgM-0003kt-0y;
+	Sun, 24 Jul 2022 09:13:50 +0000
+Date: Sun, 24 Jul 2022 17:12:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haijun Liu <haijun.liu@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+	Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Subject: include/asm-generic/io.h:464:31: error: performing pointer
+ arithmetic on a null pointer has undefined behavior
+Message-ID: <202207241754.eU3B7NSo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
- <YtBMNLXEQ4WVJezu@dev-arch.thelio-3990X> <CADVatmNtFYyqk0KwYzB1x6hOPkQ=0gV8mPN1BWp6QWrCs5GaxA@mail.gmail.com>
- <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X>
-In-Reply-To: <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X>
-From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date: Sun, 24 Jul 2022 09:24:36 +0100
-Message-ID: <CADVatmP2UTd5TG1TShi0yH=S1A6TBoYLGEpbkWmwZiBdS8OTyA@mail.gmail.com>
-Subject: Re: help with clang build for mips
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>, Arnd Bergmann <arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jul 22, 2022 at 4:21 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Sudip,
->
-> On Fri, Jul 22, 2022 at 02:29:01PM +0100, Sudip Mukherjee wrote:
-> > On Thu, Jul 14, 2022 at 6:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Sudip,
-> > >
-> > > On Thu, Jul 14, 2022 at 05:39:39PM +0100, Sudip Mukherjee wrote:
-> > > > Hi All,
-> > > >
-> > > > I am trying to build the kernel for mips architecture with clang. I
-> > > > see some of the configuration builds properly, but some of the configs
-> > > > fails with the error (fuloong2e_defconfig):
-> > > >
-> >
-> > <snip>
-> >
-> > >
-> > > Unfortunately, I doubt there is much interest in that work, given MIPS
-> > > as an architecture isn't being developed anymore. Might be an
-> > > interesting hobbyist project though. It is probably best to just test
-> > > configurations that work and make sure that those do not regress. Others
-> > > are more than welcome to weigh in though!
-> >
-> > So, I have now disabled those builds with unsupported CPU. But I do
-> > see some others with linux-next and will like to have your feedback on
-> > them please.
->
-> Thanks for testing!
->
+Hi Haijun,
 
-<snip>
+FYI, the error/warning still remains.
 
->
-> There was a patch to disable this on the kernel side but it was never
-> picked up due to what I read as a soft NAK:
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   515f71412bb73ebd7f41f90e1684fc80b8730789
+commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
+date:   3 months ago
+config: s390-randconfig-r035-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241754.eU3B7NSo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/wwan/t7xx/
 
-Thanks Nathan. I have now disabled all these configs in my daily builds.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+>> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   12 errors generated.
+
+
+vim +464 include/asm-generic/io.h
+
+3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
+9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
+9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
+9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
+9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
+9216efafc52ff9 Thierry Reding 2014-10-01  455   */
+9216efafc52ff9 Thierry Reding 2014-10-01  456  
+f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
+f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
+214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
+9216efafc52ff9 Thierry Reding 2014-10-01  460  {
+87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
+87fe2d543f8173 Sinan Kaya     2018-04-05  462  
+87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
+87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
+abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
+87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
+9216efafc52ff9 Thierry Reding 2014-10-01  467  }
+9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
+9216efafc52ff9 Thierry Reding 2014-10-01  469  
+
+:::::: The code at line 464 was first introduced by commit
+:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+
+:::::: TO: Sinan Kaya <okaya@codeaurora.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
-Regards
-Sudip
+0-DAY CI Kernel Test Service
+https://01.org/lkp
