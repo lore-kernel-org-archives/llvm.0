@@ -1,43 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3E246BF
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AA33D79
+	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658701713; x=1690237713;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JHYSUCSXHO4emwsRBKjCjkEyNlnDkDmGolsQUXxazM8=;
-  b=QJn8kLrp5YPllnJpCmgregLPawH+lFzu+5K/ojDczvJBKrZKpt5/n6UU
-   m4wgjwRK5U8bm9pvcmdxnfd3bMOJQWD8KCoKv+XUMRt+ug9KqzGu3j19n
-   uvvAVrcAjwAtYSfU1cWwCApKA0m1lVyRcKIFlQsTPfl3tQIbxvwSBF++W
-   r/GxQLO/UQ9v1Ax9/YECxuooXrE+GJoaZ9yHu7eGZWwlVzje1faYUYqFt
-   h3U/rsUPdWNd2rSOoKoJ6sE4Q24zdjCAFrtbVqmSEY9KJ8ATmtw9+coGB
-   tfAAILdTcFscahGeFNPCcRZwjfa6xY9W/DPd5DHkFL0idH9b/BfSl1DQh
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="274435648"
+  t=1658702314; x=1690238314;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=reNScEfQcyUavZq2bRqCTCyZw/IJzM6IpoTAYtOWqrA=;
+  b=cKr0OhKFKDW2USAUb6ovGoSmmap88o8KsKlyHEEcKhTrBnMO9xYNaSbf
+   JXtZAT878s5LpuoSnSxczix27wtzUigHVfNszgF/A7rogynWZgH+QvPNH
+   +o/gGxfRROrf4EIMIna7CgDflw95fvpmnwbpYZ/k0Be5YLAn//y9qB1od
+   wX7aiAfKtTbpq1+KiznHpTMrEsADoHt2APVnA34AJ1fSlj3Tb08GYEhkj
+   P6FXl9l9dJvnZ6oAn/cI5f8i7OHOG1QEAAp7gTu6uHO9NxE4lK4KhDHmS
+   W/6v3oHPLjHSxJBPbQGKYtzHCUsFeS0cykWBmBHjAZkpUmBud0C2GYoKd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="287587687"
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="274435648"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 15:28:33 -0700
+   d="scan'208";a="287587687"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 15:38:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="627213712"
+   d="scan'208";a="599407484"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2022 15:28:31 -0700
+  by orsmga002.jf.intel.com with ESMTP; 24 Jul 2022 15:38:32 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFk5P-0004Lh-0B;
-	Sun, 24 Jul 2022 22:28:31 +0000
-Date: Mon, 25 Jul 2022 06:27:44 +0800
+	id 1oFkF5-0004ML-22;
+	Sun, 24 Jul 2022 22:38:31 +0000
+Date: Mon, 25 Jul 2022 06:37:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [arnd-playground:orion-pci-cleanup 4/5]
- arch/arm/mach-orion5x/pci.c:537:10: warning: variable 'ret' is uninitialized
- when used here
-Message-ID: <202207250651.oVxG50vj-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [chrome-os:chromeos-5.10 29087/30000]
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:246:26: warning:
+ taking address of packed member 'width' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+Message-ID: <202207250606.riwCV79P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,117 +45,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c: 246:26: warning:
+ taking address of packed member 'width' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+ [-Waddress-of-packed-member]
+drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c: 249:7: warning:
+ taking address of packed member 'height' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+ [-Waddress-of-packed-member]
+drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c: 306:26: warning:
+ taking address of packed member 'width' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+ [-Waddress-of-packed-member]
+drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c: 309:7: warning:
+ taking address of packed member 'height' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+ [-Waddress-of-packed-member]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git orion-pci-cleanup
-head:   f154fdd063e0f8e231dbe3c06b03fbb1ec0ffb8c
-commit: a6ab62c0b851be42f112f08681f361157dd7466b [4/5] ARM: orion5x: split up PCI/PCIe driver in two
-config: arm-mvebu_v5_defconfig (https://download.01.org/0day-ci/archive/20220725/202207250651.oVxG50vj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
+BCC: lkp@intel.com
+TO: cros-kernel-buildreports@googlegroups.com
+TO: Guenter Roeck <groeck@google.com>
+
+Hi Yunfei,
+
+First bad commit (maybe != root cause):
+
+tree:   https://chromium.googlesource.com/chromiumos/third_party/kernel chromeos-5.10
+head:   2377c81769bf81e7a658ee35a2ee2fa80d03bc8f
+commit: 314787a6fadda343cf8532a3f3707df5d2a4406f [29087/30000] BACKPORT: UPSTREAM: media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+config: mips-randconfig-r023-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250606.riwCV79P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=a6ab62c0b851be42f112f08681f361157dd7466b
-        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
-        git fetch --no-tags arnd-playground orion-pci-cleanup
-        git checkout a6ab62c0b851be42f112f08681f361157dd7466b
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        git remote add chrome-os https://chromium.googlesource.com/chromiumos/third_party/kernel
+        git fetch --no-tags chrome-os chromeos-5.10
+        git checkout 314787a6fadda343cf8532a3f3707df5d2a4406f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/vcodec/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-orion5x/pci.c:537:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   return ret;
-                          ^~~
-   arch/arm/mach-orion5x/pci.c:495:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:246:26: warning: taking address of packed member 'width' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   v4l_bound_align_image(&pix_fmt_mp->width,
+                                          ^~~~~~~~~~~~~~~~~
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:249:7: warning: taking address of packed member 'height' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                           &pix_fmt_mp->height,
+                                            ^~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c:306:26: warning: taking address of packed member 'width' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   v4l_bound_align_image(&pix_fmt_mp->width,
+                                          ^~~~~~~~~~~~~~~~~
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c:309:7: warning: taking address of packed member 'height' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                           &pix_fmt_mp->height,
+                                            ^~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/ret +537 arch/arm/mach-orion5x/pci.c
+vim +246 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
 
-   489	
-   490	int __init orion5x_pci_init(int (*map_irq)(const struct pci_dev *dev, u8 slot, u8 pin))
-   491	{
-   492		struct pci_host_bridge *bridge;
-   493		struct orion5x_pci_sys_data *sys;
-   494		int nr = 1;
-   495		int ret;
-   496	
-   497		pci_add_flags(PCI_REASSIGN_ALL_BUS);
-   498	
-   499		bridge = pci_alloc_host_bridge(sizeof(struct orion5x_pci_sys_data));
-   500		if (!bridge) {
-   501			pr_err("PCI: unable to allocate bridge!");
-   502			return -ENOMEM;
-   503		}
-   504	
-   505		sys = pci_host_bridge_priv(bridge);
-   506	
-   507		bridge->ops = &pci_ops;
-   508		bridge->map_irq = map_irq;
-   509		bridge->swizzle_irq = pci_common_swizzle;
-   510	
-   511		orion5x_pci_set_bus_nr(bridge->busnr);
-   512	
-   513		/*
-   514		 * Point PCI unit MBUS decode windows to DRAM space.
-   515		 */
-   516		orion5x_setup_pci_wins();
-   517	
-   518		/*
-   519		 * Master + Slave enable
-   520		 */
-   521		orion5x_pci_master_slave_enable();
-   522	
-   523		/*
-   524		 * Force ordering
-   525		 */
-   526		orion5x_setbits(PCI_CMD, PCI_CMD_HOST_REORDER);
-   527	
-   528		/*
-   529		 * IORESOURCE_MEM
-   530		 */
-   531		sys->mem_res.name = "PCI Memory Space";
-   532		sys->mem_res.flags = IORESOURCE_MEM;
-   533		sys->mem_res.start = ORION5X_PCI_MEM_PHYS_BASE;
-   534		sys->mem_res.end = sys->mem_res.start + ORION5X_PCI_MEM_SIZE - 1;
-   535		if (request_resource(&iomem_resource, &sys->mem_res)) {
-   536			pr_err("PCI: unable to allocate I/O port region (%d)\n", ret);
- > 537			return ret;
-   538		}
-   539		pci_add_resource(&bridge->windows, &sys->mem_res);
-   540	
-   541		/*
-   542		 * IORESOURCE_IO
-   543		 */
-   544		sys->io_res.start = (nr * SZ_64K) ?  : pcibios_min_io;
-   545		sys->io_res.end = (nr + 1) * SZ_64K - 1;
-   546		sys->io_res.flags = IORESOURCE_IO;
-   547		sys->io_res.name = "PCI I/O";
-   548		ret = request_resource(&ioport_resource, &sys->io_res);
-   549		if (ret) {
-   550			pr_err("PCI: unable to allocate I/O port region (%d)\n", ret);
-   551			return ret;
-   552		}
-   553		pci_remap_iospace(&sys->io_res, ORION5X_PCI_IO_PHYS_BASE);
-   554		pci_add_resource(&bridge->windows, &sys->io_res);
-   555	
-   556		ret = pci_host_probe(bridge);
-   557	
-   558		if (WARN(ret < 0, "PCI: unable to scan bus!"))
-   559			pci_free_host_bridge(bridge);
-   560	
-   561		return ret;
-   562	}
-   563	
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  219  
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  220  static int vidioc_try_fmt(struct v4l2_format *f,
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  221  			  const struct mtk_video_fmt *fmt)
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  222  {
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  223  	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  224  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  225  	pix_fmt_mp->field = V4L2_FIELD_NONE;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  226  
+085b999783ee6f drivers/media/platform/mediatek/mtk-vcodec/mtk_vcodec_dec.c Yunfei Dong       2022-05-24  227  	pix_fmt_mp->width =
+085b999783ee6f drivers/media/platform/mediatek/mtk-vcodec/mtk_vcodec_dec.c Yunfei Dong       2022-05-24  228  		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, MTK_VDEC_MAX_W);
+085b999783ee6f drivers/media/platform/mediatek/mtk-vcodec/mtk_vcodec_dec.c Yunfei Dong       2022-05-24  229  	pix_fmt_mp->height =
+085b999783ee6f drivers/media/platform/mediatek/mtk-vcodec/mtk_vcodec_dec.c Yunfei Dong       2022-05-24  230  		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, MTK_VDEC_MAX_H);
+b5e897639187f1 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Alexandre Courbot 2021-04-27  231  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  232  	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  233  		pix_fmt_mp->num_planes = 1;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  234  		pix_fmt_mp->plane_fmt[0].bytesperline = 0;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  235  	} else if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  236  		int tmp_w, tmp_h;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  237  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  238  		/*
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  239  		 * Find next closer width align 64, heign align 64, size align
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  240  		 * 64 rectangle
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  241  		 * Note: This only get default value, the real HW needed value
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  242  		 *       only available when ctx in MTK_STATE_HEADER state
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  243  		 */
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  244  		tmp_w = pix_fmt_mp->width;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  245  		tmp_h = pix_fmt_mp->height;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02 @246  		v4l_bound_align_image(&pix_fmt_mp->width,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  247  					MTK_VDEC_MIN_W,
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  248  					MTK_VDEC_MAX_W, 6,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02 @249  					&pix_fmt_mp->height,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  250  					MTK_VDEC_MIN_H,
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  251  					MTK_VDEC_MAX_H, 6, 9);
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  252  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  253  		if (pix_fmt_mp->width < tmp_w &&
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  254  			(pix_fmt_mp->width + 64) <= MTK_VDEC_MAX_W)
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  255  			pix_fmt_mp->width += 64;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  256  		if (pix_fmt_mp->height < tmp_h &&
+77076a154531e7 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Yunfei Dong       2022-05-19  257  			(pix_fmt_mp->height + 64) <= MTK_VDEC_MAX_H)
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  258  			pix_fmt_mp->height += 64;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  259  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  260  		mtk_v4l2_debug(0,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  261  			"before resize width=%d, height=%d, after resize width=%d, height=%d, sizeimage=%d",
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  262  			tmp_w, tmp_h, pix_fmt_mp->width,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  263  			pix_fmt_mp->height,
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  264  			pix_fmt_mp->width * pix_fmt_mp->height);
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  265  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  266  		pix_fmt_mp->num_planes = fmt->num_planes;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  267  		pix_fmt_mp->plane_fmt[0].sizeimage =
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  268  				pix_fmt_mp->width * pix_fmt_mp->height;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  269  		pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  270  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  271  		if (pix_fmt_mp->num_planes == 2) {
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  272  			pix_fmt_mp->plane_fmt[1].sizeimage =
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  273  				(pix_fmt_mp->width * pix_fmt_mp->height) / 2;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  274  			pix_fmt_mp->plane_fmt[1].bytesperline =
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  275  				pix_fmt_mp->width;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  276  		}
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  277  	}
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  278  
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  279  	pix_fmt_mp->flags = 0;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  280  	return 0;
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  281  }
+590577a4e5257a drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c          Tiffany Lin       2016-09-02  282  
+
+:::::: The code at line 246 was first introduced by commit
+:::::: 590577a4e5257ac3ed72999a94666ad6ba8f24bc [media] vcodec: mediatek: Add Mediatek V4L2 Video Decoder Driver
+
+:::::: TO: Tiffany Lin <tiffany.lin@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 
 -- 
 0-DAY CI Kernel Test Service
