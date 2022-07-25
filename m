@@ -1,43 +1,45 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7861F7E
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 02:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8DF367
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 03:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658715177; x=1690251177;
+  t=1658721299; x=1690257299;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J/0nExjUwS+y/8SNBhXGqNjhjg5I/y73xdQHb03ycIw=;
-  b=ZWFKEp+4QfmQkiakTAzhymAjTVU+TenKg04GzMD59TM4iANhFQlbAhM/
-   W2BAekPHJJmFyql9myXTamArvEeIhD/VER+9XiQLaQH1gXyU5U1vXuqyy
-   2Bn55ITncdOyOdHc1yweS1K7glJi4ib/1McJVzlwqF7pO86Ox4zDElZg+
-   d2oL4trqFWQk/I7fD+gpYdyls8L4xf9AZ63U4jz7KDAOUpbaxBVbKuiEO
-   aqD/gcNEpniO7WHPCI/aPclffxXCsYEuvw/EeOJ1RwuKrZm5BNw/t0RBg
-   sqsHo29H8HIfpKLfn8qFcvkKnUm7MKsfP5s1rP8c23rUmQRdxTmHIh7n9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="313339184"
+  bh=ec4XM4FM3uNcxeqXUFmyoEcKZzAjNzVO988olMBtawc=;
+  b=HM+zwtxVYqTclu+VwSZbaE79+fyouTwvXUlPCLMj9QWvPs9IHDlzlhM2
+   mMLqvqT4r17ohwiqDCuEVspHC6iMMp4PMR6sono3CEnoMDrXHJgLZLYDk
+   1UYUTv3etUJppIXpEcWhY4zcTX8ljsSJzhsSZb2YMxl24l1UBNAfbydJ1
+   vLUTSi2EFvEFRXd4t7nEk1VlFwmIubJsfpPXgy/31o+Gcjn/idr3xM8op
+   RG36XUuyfziYKI3SJdFjwZiolv/flktYIwxTLXXq2DuTi9ViGrItN/TxU
+   rARhLJkmyTC0flTvU0Xu+F1Mu8QLBRUgwBFSXf2CkKOvS499+1t+pHKgr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="287616069"
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="313339184"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 19:12:54 -0700
+   d="scan'208";a="287616069"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 20:54:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="657971723"
+   d="scan'208";a="627280316"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jul 2022 19:12:52 -0700
+  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2022 20:54:56 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFnaW-0004dB-00;
-	Mon, 25 Jul 2022 02:12:52 +0000
-Date: Mon, 25 Jul 2022 10:12:01 +0800
+	id 1oFpBI-0004h5-0R;
+	Mon, 25 Jul 2022 03:54:56 +0000
+Date: Mon, 25 Jul 2022 11:53:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: net/ipv4/ip_sockglue.c:838:7: warning: taking address of packed
- member 'gf_group' of class or structure 'compat_group_filter::(anonymous
- union)::(anonymous)' may result in an unaligned pointer value
-Message-ID: <202207251043.l8Cq3k4Z-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
+ packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
+ an unaligned pointer value
+Message-ID: <202207251140.M7YAqoLC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,197 +49,111 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Gustavo,
+Hi Oleksij,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: db243b796439c0caba47865564d8acd18a301d18 net/ipv4/ipv6: Replace one-element arraya with flexible-array members
-date:   12 months ago
-config: arm-colibri_pxa300_defconfig (https://download.01.org/0day-ci/archive/20220725/202207251043.l8Cq3k4Z-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
+date:   1 year, 2 months ago
+config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db243b796439c0caba47865564d8acd18a301d18
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout db243b796439c0caba47865564d8acd18a301d18
+        git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/ipv4/ net/ipv6/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/ipv4/ip_sockglue.c:838:7: warning: taking address of packed member 'gf_group' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                    &gf32->gf_group, gf32->gf_slist_flex);
-                                     ^~~~~~~~~~~~~~
->> net/ipv4/ip_sockglue.c:1509:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:388:22: note: expanded from macro '__put_user_switch'
-                   const __typeof__(*(ptr)) __user *__pu_ptr = (ptr);      \
-                                      ^~~
->> net/ipv4/ip_sockglue.c:1509:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:389:16: note: expanded from macro '__put_user_switch'
-                   __typeof__(*(ptr)) __pu_val = (x);                      \
-                                ^~~
->> net/ipv4/ip_sockglue.c:1509:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:393:20: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                                    ^~~
->> net/ipv4/ip_sockglue.c:1510:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:388:22: note: expanded from macro '__put_user_switch'
-                   const __typeof__(*(ptr)) __user *__pu_ptr = (ptr);      \
-                                      ^~~
->> net/ipv4/ip_sockglue.c:1510:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:389:16: note: expanded from macro '__put_user_switch'
-                   __typeof__(*(ptr)) __pu_val = (x);                      \
-                                ^~~
->> net/ipv4/ip_sockglue.c:1510:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:393:20: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                                    ^~~
-   7 warnings generated.
---
->> net/ipv6/ipv6_sockglue.c:1111:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:388:22: note: expanded from macro '__put_user_switch'
-                   const __typeof__(*(ptr)) __user *__pu_ptr = (ptr);      \
-                                      ^~~
->> net/ipv6/ipv6_sockglue.c:1111:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:389:16: note: expanded from macro '__put_user_switch'
-                   __typeof__(*(ptr)) __pu_val = (x);                      \
-                                ^~~
->> net/ipv6/ipv6_sockglue.c:1111:29: warning: taking address of packed member 'gf_fmode' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_fmode, &p->gf_fmode) ||
-                                      ^~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:393:20: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                                    ^~~
->> net/ipv6/ipv6_sockglue.c:1112:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:388:22: note: expanded from macro '__put_user_switch'
-                   const __typeof__(*(ptr)) __user *__pu_ptr = (ptr);      \
-                                      ^~~
->> net/ipv6/ipv6_sockglue.c:1112:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:389:16: note: expanded from macro '__put_user_switch'
-                   __typeof__(*(ptr)) __pu_val = (x);                      \
-                                ^~~
->> net/ipv6/ipv6_sockglue.c:1112:30: warning: taking address of packed member 'gf_numsrc' of class or structure 'compat_group_filter::(anonymous union)::(anonymous)' may result in an unaligned pointer value [-Waddress-of-packed-member]
-               put_user(gf.gf_numsrc, &p->gf_numsrc))
-                                       ^~~~~~~~~~~~
-   arch/arm/include/asm/uaccess.h:406:26: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-                                   ^~~
-   arch/arm/include/asm/uaccess.h:393:20: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                                    ^~~
-   6 warnings generated.
+>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+                                                                       ^~~~~~~~~
+   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+                                           ^~~~
+   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+                                                      ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                                            ^~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+                                                                       ^~~~~~~~~
+   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+                                           ^~~~
+   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+                                                      ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                                            ^~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+                                                                       ^~~~~~~~~
+   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+                                           ^~~~
+   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+                                                      ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                                            ^~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   3 warnings generated.
 
 
-vim +838 net/ipv4/ip_sockglue.c
+vim +242 drivers/iio/adc/ti-tsc2046.c
 
-   799	
-   800	static int compat_ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
-   801			int optlen)
-   802	{
-   803		const int size0 = offsetof(struct compat_group_filter, gf_slist_flex);
-   804		struct compat_group_filter *gf32;
-   805		unsigned int n;
-   806		void *p;
-   807		int err;
-   808	
-   809		if (optlen < size0)
-   810			return -EINVAL;
-   811		if (optlen > sysctl_optmem_max - 4)
-   812			return -ENOBUFS;
-   813	
-   814		p = kmalloc(optlen + 4, GFP_KERNEL);
-   815		if (!p)
-   816			return -ENOMEM;
-   817		gf32 = p + 4; /* we want ->gf_group and ->gf_slist_flex aligned */
-   818	
-   819		err = -EFAULT;
-   820		if (copy_from_sockptr(gf32, optval, optlen))
-   821			goto out_free_gsf;
-   822	
-   823		/* numsrc >= (4G-140)/128 overflow in 32 bits */
-   824		n = gf32->gf_numsrc;
-   825		err = -ENOBUFS;
-   826		if (n >= 0x1ffffff)
-   827			goto out_free_gsf;
-   828	
-   829		err = -EINVAL;
-   830		if (offsetof(struct compat_group_filter, gf_slist_flex[n]) > optlen)
-   831			goto out_free_gsf;
-   832	
-   833		/* numsrc >= (4G-140)/128 overflow in 32 bits */
-   834		err = -ENOBUFS;
-   835		if (n > sock_net(sk)->ipv4.sysctl_igmp_max_msf)
-   836			goto out_free_gsf;
-   837		err = set_mcast_msfilter(sk, gf32->gf_interface, n, gf32->gf_fmode,
- > 838					 &gf32->gf_group, gf32->gf_slist_flex);
-   839	out_free_gsf:
-   840		kfree(p);
-   841		return err;
-   842	}
-   843	
+   239	
+   240	static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
+   241	{
+ > 242		return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+   243	}
+   244	
 
 -- 
 0-DAY CI Kernel Test Service
