@@ -1,128 +1,109 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBB41FA4
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 15:37:55 +0000 (UTC)
-Received: by mail-vk1-f173.google.com with SMTP id y129so5290762vkg.5
-        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 08:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ce9WmTohzte7LfK/wgpV+cfmugHGV3dfc7hkp2BxW9g=;
-        b=A6opXY1LnxKcl7TYevC11kRWAz+qHFwq/nircbsm0snEoA6ut4kcdE/tGdUh+Jt5KW
-         INJU9/gHkfWJpTeWo8Wh82ua8OVkM53wc3oiSHgK2H81H8CoFu/TS6iUn4ZwrRApToAT
-         XSI784cgxe+SNJgvj8ez4Yd5ROzvT0qPio9zsgaoCmrOVIMb4aZp9g+SrAYKrT5S4HPt
-         HMy2hEunfRQF3b99c0ovvdYcrCEykP2n56TSoECy6+ZBjw8mEZXSN69KvQHkv1jMKYPE
-         qZym/bM0uoSXruwJF5YuZZuY3Bk5bGAQ0Dv/cPnHX+djWx+GlEEpZP8hRvbR+mHsHwnL
-         K4pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ce9WmTohzte7LfK/wgpV+cfmugHGV3dfc7hkp2BxW9g=;
-        b=rcTTO6CVzJleyc76DV3WaVGAsdvp9EYml5Arf7NCH3PGMBmc9anrvodogp8umfRKta
-         MtDAQzATyaE2+gMY0Wczp2TIeg4T5wSbYveXoLyTuo++xtLOJBkcGJxc/tFJXQ2V7lFK
-         U15PKr8J54JCkbGCEj47NU28ftzszYxqYD5RA/bpDxtwCICJFyt7en7cAXYJZ+AaV3Ed
-         UrkIeqCySgiWZU5qiztfxsIdiI6svxtK/pJFQ1bGMcP8ciepF9wLqgyiBUEpbTyzmb18
-         gVyEk4CZDBT7GCpeBtDD6wuMis+RJQqwNgaZ2537yHqHG8o8E8jcm72rMCjToJfb7ESO
-         bclA==
-X-Gm-Message-State: AJIora8a7gPDT+omtls/+5REli3VGmXK/RppbVz/jB9nCzYTXP2NMLv/
-	YsuY8xzrr+Cjnl9LOHpSNn2kekKE5QBQ7BXH5l7Oi5NjslWfdg==
-X-Google-Smtp-Source: AGRyM1vy4rm8kAqacz73td2CCjxy38eGBKreL4z/CXUNjiSL15nHrAfEstjPyn/c3wiRQRnztsQmTKBYy/putDJwfyU=
-X-Received: by 2002:a05:6122:68d:b0:376:f68:ec7c with SMTP id
- n13-20020a056122068d00b003760f68ec7cmr3492241vkq.16.1658763474165; Mon, 25
- Jul 2022 08:37:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4DB1FA4
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 15:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBF7C341C8;
+	Mon, 25 Jul 2022 15:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658763550;
+	bh=I+2f4rcs61Dyb3wmT8wcA8SEZMWq+nf8Sj5sreEwkUQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kQ0fe7pk699baIWzuTL5pE8C0nv5LQSHEm7McGpeEpM0BG7HaM7KoyzUnsQPkUDEj
+	 ofBKhMP2BrH+s87XmIczepVT2OngEvK5MGEF52MBdNqT586wh+Se22WWs2rWswKhFx
+	 hsztiutZ7H/9NnHu2Uu0txKIzWb75Sps/bWIN57NFqla8yqlC/DbwvwJJxWH9XESck
+	 uCpYO0U3rY0rwjkvnWU3r0Gon9R9R/GPGlHxgROkfUqnGaqkEkBSECIqBXorT0sJ4Z
+	 QytJ5QSZmFIUHgi637cIwWwheLZtuCEXFMoJwONTZ3s0nbtFv9Z5MM57ob/w2dVmzi
+	 MzOlyCUr4pQ5Q==
+Date: Mon, 25 Jul 2022 08:39:07 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Daniel Rosenberg <drosen@google.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dennis Cagle <d-cagle@codeaurora.org>,
+	Lee Jones <lee.jones@linaro.org>
+Subject: Re: [linux-stable-rc:linux-4.9.y 967/2229]
+ drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <Yt65G3x2Hmoj4q/b@Ryzen-9-3900X.>
+References: <202207241311.Dv86CbAo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1255100749.2407.1658623869025@jenkins.jenkins> <62deb7be.1c69fb81.eeae1.e023SMTPIN_ADDED_BROKEN@mx.google.com>
-In-Reply-To: <62deb7be.1c69fb81.eeae1.e023SMTPIN_ADDED_BROKEN@mx.google.com>
-From: Yury Norov <yury.norov@gmail.com>
-Date: Mon, 25 Jul 2022 08:37:43 -0700
-Message-ID: <CAAH8bW9nm2mv=pvpWn86-VFJoXn3mRx6SP6pFVsvsj8XL-RMzw@mail.gmail.com>
-Subject: Re: [TCWG CI] Regression caused by linux: lib/nodemask: inline
- next_node_in() and node_random()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ci_notify@linaro.org, llvm@lists.linux.dev, arnd@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202207241311.Dv86CbAo-lkp@intel.com>
 
-Hi Nathan,
+On Sun, Jul 24, 2022 at 01:39:50PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> head:   65be5f5665a580424a7b1102f1a04c4259c559b5
+> commit: a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e [967/2229] ion: Protect kref from userspace manipulation
+> config: mips-randconfig-r034-20220719 (https://download.01.org/0day-ci/archive/20220724/202207241311.Dv86CbAo-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mipsel-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
+>         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>         git fetch --no-tags linux-stable-rc linux-4.9.y
+>         git checkout a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/android/ion/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>            if (--handle->user_ref_count == 0)
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
+>            return ret;
+>                   ^~~
+>    drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
+>            if (--handle->user_ref_count == 0)
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
+>            int ret;
+>                   ^
+>                    = 0
+>    1 warning generated.
+> 
+> 
+> vim +71 drivers/staging/android/ion/ion-ioctl.c
+> 
+>     65	
+>     66	/* Must hold the client lock */
+>     67	static int user_ion_handle_put_nolock(struct ion_handle *handle)
+>     68	{
+>     69		int ret;
+>     70	
+>   > 71		if (--handle->user_ref_count == 0)
+>     72			ret = ion_handle_put_nolock(handle);
+>     73	
+>     74		return ret;
+>     75	}
+>     76	
 
-It's not a false positive. The fix is here:
-https://lkml.org/lkml/2022/7/23/456
+Might as well just be
 
-I removed the patch in trouble from -next, so this warning will disappear.
+static void user_ion_handle_put_nolock(struct ion_handle *handle)
+{
+	if (--handle->user_ref_count == 0)
+		ion_handle_put_nolock(handle);
+}
 
-Sorry for the noise.
+since user_ion_free_nolock() doesn't check the return value of
+user_ion_handle_put_nolock()? I can send a patch if people care (I know
+4.9 is a bit on the older side).
 
-Thanks,
-Yury
-
-On Mon, Jul 25, 2022 at 8:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Sun, Jul 24, 2022 at 12:51:08AM +0000, ci_notify@linaro.org wrote:
-> > [TCWG CI] Regression caused by linux: lib/nodemask: inline next_node_in() and node_random():
-> > commit bbe8fb1a3c5301384d54cd6d722850182817358e
-> > Author: Yury Norov <yury.norov@gmail.com>
-> >
-> >     lib/nodemask: inline next_node_in() and node_random()
-> >
-> > Results regressed to
-> > # reset_artifacts:
-> > -10
-> > # build_abe binutils:
-> > -9
-> > # build_kernel_llvm:
-> > -5
-> > # build_abe qemu:
-> > -2
-> > # linux_n_obj:
-> > 20659
-> > # First few build errors in logs:
-> > # 00:04:42 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-> > # 00:04:42 make[1]: *** [crypto/wp512.o] Error 1
-> > # 00:08:42 make: *** [crypto] Error 2
-> > # 00:11:07 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
-> > # 00:11:07 make[4]: *** [drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
-> > # 00:11:32 make[3]: *** [drivers/gpu/drm/selftests] Error 2
-> > # 00:21:27 drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1096) exceeds limit (1024) in 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
-> > # 00:21:27 make[3]: *** [drivers/mtd/chips/cfi_cmdset_0001.o] Error 1
-> > # 00:21:43 make[2]: *** [drivers/mtd/chips] Error 2
-> > # 00:21:43 sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-> >
-> > from
-> > # reset_artifacts:
-> > -10
-> > # build_abe binutils:
-> > -9
-> > # build_kernel_llvm:
-> > -5
-> > # build_abe qemu:
-> > -2
-> > # linux_n_obj:
-> > 20660
->
-> This appears to be a false positive unless I am missing something. The
-> number of artifacts built does drop due to that commit but it is because
-> the code is being shuffled from nodemask.c to nodemask.h, dropping
-> nodemask.c altogether.
->
-> Between the two logs, there are an even number of errors per file.
->
-> $ rg "error: " /tmp/{good,bad}.log | string split -f 2 ' ' | string split -f 1 : | sort | uniq -c
->       2 crypto/wp512.c
->       4 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/calcs/dce_calcs.c
->       2 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c
->       2 drivers/gpu/drm/selftests/test-drm_mm.c
->       2 drivers/mtd/chips/cfi_cmdset_0001.c
->       2 drivers/ntb/hw/idt/ntb_hw_idt.c
->       4 drivers/staging/fbtft/fbtft-core.c
->       2 drivers/staging/rtl8723bs/core/rtw_security.c
->       2 sound/soc/intel/avs/path.c
->
-> Cheers,
-> Nathan
+Cheers,
+Nathan
