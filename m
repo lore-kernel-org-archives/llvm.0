@@ -1,115 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF72B3207
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 20:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1658781032;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
-	b=ZuVBkM87FFykPm+R3alPR2NULAqXz3yWtCmRMhRBLpGoy/xT0BeTIvxP3uS7I02sQuQYUE
-	TO5QYLcP3OEUCosjlRX91f9WI7mk2Z1gjZEek1PGA70PrTJhel6u2BT8ewphGOMKxaqv9K
-	JZ2vthHRzO6pBDWTuh6Ww5+rUzN22So=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-T3mNIKvHO9aU9AyfWeGyJA-1; Mon, 25 Jul 2022 16:30:31 -0400
-X-MC-Unique: T3mNIKvHO9aU9AyfWeGyJA-1
-Received: by mail-oo1-f70.google.com with SMTP id d30-20020a4a3c1e000000b00435d3d030cdso620650ooa.13
-        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 13:30:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCA33207
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 20:32:34 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id j22so22672134ejs.2
+        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 13:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5uTJfbjnCnNY4L/Fr3ZU7lb8k5HMvtMkTOBlXtv0Il0=;
+        b=AQasQ/MSGTbHW6t7ys2gXk6LP7V5bLGKVh0gfNqxetFMDc46uqliQx1vGDyExDaf6i
+         SEM37qO6RpfOq9AAsrjiws9PL6LNDKboDBQzgVIWcGJgdPbtXgPEmlxtQJNFsB7D7AHw
+         OVebDbKFOSLmCnK5DjCnXy8+GsaCQjneXxDoROmzClH+zA1eExpQK+Gcvnj+4++DyadP
+         +sDFI0MkqW4X88dAtYspPnGXB359YsDTrPhhFn2+T0DenlqCaDS9EhBi8YAyRmOPtw3I
+         9Zv2VAw98FeDlIkZQ8VKXwFTrs8EuqsRqxTaGHWX9rxo3XP3//pKMeYl+25vOyiIKmaC
+         LtKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
-        b=xTJEHjSbkPkuF/oMD0HtqIIA9udlwUb8YZXm2RTqV/KWDkCnOyrGAW0+7ggn1DUwwH
-         MgKK3qzvHx83Yffu1SZ5fX83c1ubef0LOp4+VmIScliTLr/l4lMRVvJLSA1klXCrV/fE
-         cZ6S2nnswphNs/KuWfTIjkFTgdgKitr0StDaIn8cG1dhf7HN47jQ5043cpcnJD5+QCRH
-         0rW0y2UvtVTIr1taczALDPHqB9s6LZKPX5Gma3XLNROqp/bVlTptt8G1XB8l1/eYq3KQ
-         xhsuj6CIoFKiAEVH7ohLT1SSPKHLv6XRPZM0+MTcB57CZcmDWC7GKrMKsb+26KkgsBQ0
-         B1qg==
-X-Gm-Message-State: AJIora9NhYx9Z6YBJq2ayGmnl8AL1nFAH7nsHisVMqMZVa2m6CWBXRis
-	/KBXaeSKPEFH37SDGWL7S5iqRl7FEpiQH1doNOLZtK00A50RdlPD2fIlB55fUWAdFlF2EYbLppu
-	zJEjVm2oHoj80WvHKRMEQ3ldoZajoWXSo+vrk7LjsQ64VEqlNEvDMF+/5+yvH
-X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678600oao.55.1658781030788;
-        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vMKdLBsCrpyPFiMwp1I36On67rQNmu7kKIT17kKg4MZ0q/jXm/7VX99Y0AfExWzkcNf7gWrA==
-X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678576oao.55.1658781030337;
-        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id o31-20020a056870911f00b0010c7487aa73sm6507887oae.50.2022.07.25.13.30.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 13:30:29 -0700 (PDT)
-Subject: Re: [PATCH] ASoC: amd: acp: Fix initialization of ext_intr_stat1 in
- i2s_irq_handler()
-To: Nathan Chancellor <nathan@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
- Vijendar Mukunda <Vijendar.Mukunda@amd.com>, alsa-devel@alsa-project.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220725180539.1315066-1-nathan@kernel.org>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <fd7188f2-8e42-3683-0ef5-2ddde56b3efc@redhat.com>
-Date: Mon, 25 Jul 2022 13:30:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5uTJfbjnCnNY4L/Fr3ZU7lb8k5HMvtMkTOBlXtv0Il0=;
+        b=fYs2mWmALGvdXcCJZSc6EQKLr9Fomd45gpDc+mxDiPUnHlQS2ylD/DspoIUxm1SHL7
+         H5ZGzyCz661cGQ11USUdOS5A8lEXlUrDQQ3Zz3UDSU153vVxPl4hXs5hDy7dKfHpjbMf
+         flhyU21tjJBBCa5DKnUnx8MXbn1zuv48HkYGnOq28eAmBO0h+KtesMzzC+ppm3N5BGWa
+         /Ro3DEJxfbf2zLNESY1LQkYIcx/23VgFihBJDXMORoVNvRldTJmgQrdZNSEL/T+/Lf4Y
+         ZOt2+D601Y9dK4KHEFVxhhRf2Emf9U2pQb3p6MYdh93s2UAJg+5Bmi+ZPBMdt3qx0Bjx
+         +TwA==
+X-Gm-Message-State: AJIora+AD5pAdggb2f7MkCY2INt6O8W7RJgAVeT4DqGsAFQum7jK5N+M
+	T3gAhfbI38S2IaIj3wP9xFLTnylSccmJ0rUMhe8=
+X-Google-Smtp-Source: AGRyM1uyBNChG5ECz+p2Fd8YgOxxtmnwutdvyTx8z1E+g68+5PjLrzoMydGgCXDQwbro9Akd5Qttt3/aOY5ERzSxyLE=
+X-Received: by 2002:a17:907:75da:b0:72b:3ce0:2524 with SMTP id
+ jl26-20020a17090775da00b0072b3ce02524mr11434125ejc.394.1658781152514; Mon, 25
+ Jul 2022 13:32:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220725180539.1315066-1-nathan@kernel.org>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20220721080423.156151-2-nuno.sa@analog.com> <202207231228.n8l077iB-lkp@intel.com>
+In-Reply-To: <202207231228.n8l077iB-lkp@intel.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 25 Jul 2022 22:31:56 +0200
+Message-ID: <CAHp75VdY6qikNgvh4K5Ga4D5MHf7sEfm0kbNzN-xNanwj4yQgg@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] input: keyboard: adp5588-keys: support gpi key
+ events as 'gpio keys'
+To: kernel test robot <lkp@intel.com>
+Cc: =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	linux-input <linux-input@vger.kernel.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, devicetree <devicetree@vger.kernel.org>, 
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Linus Walleij <linus.walleij@linaro.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Michael Hennerich <michael.hennerich@analog.com>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Rob Herring <robh+dt@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+
+On Sat, Jul 23, 2022 at 6:57 AM kernel test robot <lkp@intel.com> wrote:
 
 
-On 7/25/22 11:05 AM, Nathan Chancellor wrote:
-> Clang warns:
->
->    ../sound/soc/amd/acp/acp-platform.c:117:19: error: variable 'ext_intr_stat1' is uninitialized when used here [-Werror,-Wuninitialized]
->                            if (stream && (ext_intr_stat1 & stream->irq_bit)) {
->                                           ^~~~~~~~~~~~~~
->    ../sound/soc/amd/acp/acp-platform.c:97:35: note: initialize the variable 'ext_intr_stat1' to silence this warning
->            u32 ext_intr_stat, ext_intr_stat1, i;
->                                             ^
->                                              = 0
->    1 error generated.
->
-> The variable was not properly renamed, correct it to resolve the
-> warning.
->
-> Fixes: 93f53881473c ("ASoC: amd: acp: Modify local variables name to generic")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1675
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Tom Rix <trix@redhat.com>
-> ---
->   sound/soc/amd/acp/acp-platform.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/amd/acp/acp-platform.c b/sound/soc/amd/acp/acp-platform.c
-> index 10730d33c3b0..f561d39b33e2 100644
-> --- a/sound/soc/amd/acp/acp-platform.c
-> +++ b/sound/soc/amd/acp/acp-platform.c
-> @@ -100,7 +100,7 @@ static irqreturn_t i2s_irq_handler(int irq, void *data)
->   		return IRQ_NONE;
->   
->   	if (adata->rsrc->no_of_ctrls == 2)
-> -		ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
-> +		ext_intr_stat1 = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
->   
->   	ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, rsrc->irqp_used));
->   
->
-> base-commit: be0aa8d4b0fcb4532bf7973141e911998ab39508
+...
 
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/input/keyboard/adp5588-keys.c:336:9: warning: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Wconstant-conversion]
+>            return INVALID_HWIRQ;
+>            ~~~~~~ ^~~~~~~~~~~~~
+>    include/linux/irq.h:1245:24: note: expanded from macro 'INVALID_HWIRQ'
+>    #define INVALID_HWIRQ   (~0UL)
+>                             ^~~~
+
+It requires irq.h, but hold on. Marc said that he wants to rather kill
+that definition than having it spread over the kernel. So, please use
+your own custom macro with an appropriate type.
+
+-- 
+With Best Regards,
+Andy Shevchenko
