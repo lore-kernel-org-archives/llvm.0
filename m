@@ -1,183 +1,296 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CC52F4B
-	for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 22:51:21 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id v12so11887620edc.10
-        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 15:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=bALwgTLHeiO6tuKyaRsWqPti56pYBe2CtNa9AfdIH8M=;
-        b=ajsVYeRASAcU21lp20aC5IVN88l7vzE2FMgcIoIObtUryejvKcb6x18MJd5GlKr2+W
-         pBmzNRAA7W9Oro/vtzZqdAglNS2mA2nOExABP9cn1CI6NchLp+82GxFrqWTKinNDSI+s
-         /ABNK/NBdrwbTQZbFeMBFbddis9/aEZAojvjLpoUNa8SnhfTCcE9sfuJZ4JLpaJCMgmV
-         ijpOxpV6fgGloC2PeqQH3s0PrTDbaNRNhu5FhxaAXUj+NegO+sXfoZAzjqJuKhRTtHtL
-         Wyq/bUi61uiuSnrapFfDEZ3ClSm5+1aBEg03aH8O7jF2IkltXTUQewm9pEXQrVtsoGcg
-         nEtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bALwgTLHeiO6tuKyaRsWqPti56pYBe2CtNa9AfdIH8M=;
-        b=q+n93BzXjnADbLq5EKFiev67L1Fa4GNXbGPjqghksBgP5bB3oVXwXGu3XB9BVkORhL
-         e7d2EuBZC5eIrFCO97ZiuTaVBVeo2zhWte2Gt2YzB+8LmWPWX6+1Ef7b6qEn0Or9/6AO
-         dWeJOXn8Q1vBOnM/W1PRPib5c5mqPhfqVaPNQSaVPGZdoqLPnAqo68MSCqcpuxH8FdBu
-         xG6NbBXyrNboqHb8R3kjWsc22nRZ7UU9mNuR9NSLcCDwygflwSMYGc0mLgUVRjkP/ZbO
-         kMXfA2MZv6tBq3h+Yoyse0vw0N5QUwr2NMSMx5GyRBpb+fREJcZu+nyyUGVSw/U5jlUE
-         zw5Q==
-X-Gm-Message-State: AJIora+9OGtoZWpSlYsYirOG9kz3b3rArUX4SbvyfzdH+lz9LnpTJ8t6
-	Y5vL05Z/IOUjvFER4MFBp4QkotLjRsg=
-X-Google-Smtp-Source: AGRyM1tzQub7ANTRemOXl2A43cYZmlTF67/1L4eDbxoIPw9svZASGrEj/p/tL0WOQXYxDC+ho64dxA==
-X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id ec19-20020a0564020d5300b0043ba0cfd970mr10154018edb.277.1658703080971;
-        Sun, 24 Jul 2022 15:51:20 -0700 (PDT)
-Received: from localhost.localdomain (93-42-69-122.ip85.fastwebnet.it. [93.42.69.122])
-        by smtp.googlemail.com with ESMTPSA id nc19-20020a1709071c1300b00722d5b26ecesm4645238ejc.205.2022.07.24.15.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 15:51:20 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>,
-	Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [net-next PATCH v4 14/14] net: dsa: qca8k: move read_switch_id function to common code
-Date: Sun, 24 Jul 2022 22:19:38 +0200
-Message-Id: <20220724201938.17387-15-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220724201938.17387-1-ansuelsmth@gmail.com>
-References: <20220724201938.17387-1-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EC37E
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 00:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658709641; x=1690245641;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z/9yC4CVtJOlKMdZ2hxN3f1lgU4U9wDQV2ytR9vS8r4=;
+  b=kTOaKtviyAiWdlvhqTS7a5R9r75Riz0OrXjNc8+A6mpzjQE0CdgozTh2
+   1ZkdmPfjC8GV1NFMKUPsnT4PTTzyXCm1j/mNs9Q8Rf7QMoPi2OyBV+Fdm
+   WJEBb1hw7FYeNwHQwmShRQ5ijBSwOJ7sccTRTSf29zfCxi3XDKpVgQu71
+   bWAUMpiubBAZtQqrmb64cAAj6hcutBNKd9zlnRJUHprO7eNP4qG5+7rw7
+   4uB7q8Owjo69IaFglKeuc4tZZbLTQVt8fl6LA7kGD3N3O15JlgptiNRv4
+   J2YTyb/vfAJAvi5E8mTqQZZy+qcCAPhNG0gacRt83yAPElRO1rDTfADq7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="270617844"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="270617844"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 17:40:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="845329208"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jul 2022 17:40:38 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oFm9G-0004R7-0T;
+	Mon, 25 Jul 2022 00:40:38 +0000
+Date: Mon, 25 Jul 2022 08:40:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: drivers/clocksource/timer-ixp4xx.c:48:8: warning: Excessive padding
+ in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal
+ fields order: clkevt, base, latch, delay_timer, consider reordering the
+ fields or adding explicit padding members...
+Message-ID: <202207250823.mR3iK7kc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The same function to read the switch id is used by drivers based on
-qca8k family switch. Move them to common code to make them accessible
-also by other drivers.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: 21a0a29d16c672b0c6e3662ea55969dccdbc5547 watchdog: ixp4xx: Rewrite driver to use core
+date:   12 months ago
+config: arm-randconfig-c002-20220721 (https://download.01.org/0day-ci/archive/20220725/202207250823.mR3iK7kc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=21a0a29d16c672b0c6e3662ea55969dccdbc5547
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 21a0a29d16c672b0c6e3662ea55969dccdbc5547
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca/qca8k-8xxx.c   | 30 -----------------------------
- drivers/net/dsa/qca/qca8k-common.c | 31 ++++++++++++++++++++++++++++++
- drivers/net/dsa/qca/qca8k.h        |  1 +
- 3 files changed, 32 insertions(+), 30 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index 82c02491c946..fa91517e930b 100644
---- a/drivers/net/dsa/qca/qca8k-8xxx.c
-+++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -1877,36 +1877,6 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
- 	.connect_tag_protocol	= qca8k_connect_tag_protocol,
- };
- 
--static int qca8k_read_switch_id(struct qca8k_priv *priv)
--{
--	const struct qca8k_match_data *data;
--	u32 val;
--	u8 id;
--	int ret;
--
--	/* get the switches ID from the compatible */
--	data = of_device_get_match_data(priv->dev);
--	if (!data)
--		return -ENODEV;
--
--	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
--	if (ret < 0)
--		return -ENODEV;
--
--	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
--	if (id != data->id) {
--		dev_err(priv->dev, "Switch id detected %x but expected %x", id, data->id);
--		return -ENODEV;
--	}
--
--	priv->switch_id = id;
--
--	/* Save revision to communicate to the internal PHY driver */
--	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
--
--	return 0;
--}
--
- static int
- qca8k_sw_probe(struct mdio_device *mdiodev)
- {
-diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
-index b982efb721fc..e6294d6a7b8f 100644
---- a/drivers/net/dsa/qca/qca8k-common.c
-+++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/netdevice.h>
- #include <net/dsa.h>
-+#include <linux/of_platform.h>
- #include <linux/if_bridge.h>
- 
- #include "qca8k.h"
-@@ -1207,3 +1208,33 @@ qca8k_port_lag_leave(struct dsa_switch *ds, int port,
- {
- 	return qca8k_lag_refresh_portmap(ds, port, lag, true);
- }
-+
-+int qca8k_read_switch_id(struct qca8k_priv *priv)
-+{
-+	const struct qca8k_match_data *data;
-+	u32 val;
-+	u8 id;
-+	int ret;
-+
-+	/* get the switches ID from the compatible */
-+	data = of_device_get_match_data(priv->dev);
-+	if (!data)
-+		return -ENODEV;
-+
-+	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
-+	if (ret < 0)
-+		return -ENODEV;
-+
-+	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
-+	if (id != data->id) {
-+		dev_err(priv->dev, "Switch id detected %x but expected %x", id, data->id);
-+		return -ENODEV;
-+	}
-+
-+	priv->switch_id = id;
-+
-+	/* Save revision to communicate to the internal PHY driver */
-+	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
-+
-+	return 0;
-+}
-diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-index e87bfee837c1..e36ecc9777f4 100644
---- a/drivers/net/dsa/qca/qca8k.h
-+++ b/drivers/net/dsa/qca/qca8k.h
-@@ -432,6 +432,7 @@ extern const struct qca8k_mib_desc ar8327_mib[];
- extern const struct regmap_access_table qca8k_readable_table;
- int qca8k_mib_init(struct qca8k_priv *priv);
- void qca8k_port_set_status(struct qca8k_priv *priv, int port, int enable);
-+int qca8k_read_switch_id(struct qca8k_priv *priv);
- 
- /* Common read/write/rmw function */
- int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val);
+clang-analyzer warnings: (new ones prefixed by >>)
+   3 warnings generated.
+   include/linux/hid.h:1007:9: warning: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'input') [clang-analyzer-core.NullDereference]
+                                       input->name, c, type);
+                                       ^
+   drivers/hid/hid-sunplus.c:39:6: note: Assuming the condition is false
+           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-sunplus.c:39:2: note: Taking false branch
+           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
+           ^
+   drivers/hid/hid-sunplus.c:42:2: note: Control jumps to 'case 8451:'  at line 44
+           switch (usage->hid & HID_USAGE) {
+           ^
+   drivers/hid/hid-sunplus.c:44:15: note: Calling 'hid_map_usage_clear'
+           case 0x2103: sp_map_key_clear(KEY_ZOOMOUT);     break;
+                        ^
+   drivers/hid/hid-sunplus.c:33:29: note: expanded from macro 'sp_map_key_clear'
+   #define sp_map_key_clear(c)     hid_map_usage_clear(hi, usage, bit, max, \
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1035:2: note: Calling 'hid_map_usage'
+           hid_map_usage(hidinput, usage, bit, max, type, c);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:982:2: note: 'input' initialized here
+           struct input_dev *input = hidinput->input;
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:986:2: note: Control jumps to 'case 1:'  at line 995
+           switch (type) {
+           ^
+   include/linux/hid.h:998:3: note:  Execution continues on line 1005
+                   break;
+                   ^
+   include/linux/hid.h:1005:15: note: 'c' is <= 'limit'
+           if (unlikely(c > limit || !bmap)) {
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1005:15: note: Left side of '||' is false
+           if (unlikely(c > limit || !bmap)) {
+                        ^
+   include/linux/hid.h:1005:28: note: Assuming 'bmap' is null
+           if (unlikely(c > limit || !bmap)) {
+                                     ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1005:28: note: Assuming pointer value is null
+           if (unlikely(c > limit || !bmap)) {
+                                     ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   include/linux/hid.h:1005:2: note: Taking true branch
+           if (unlikely(c > limit || !bmap)) {
+           ^
+   include/linux/hid.h:1006:3: note: Assuming the condition is true
+                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
+                   ^
+   include/linux/printk.h:557:2: note: expanded from macro 'pr_warn_ratelimited'
+           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:540:6: note: expanded from macro 'printk_ratelimited'
+           if (__ratelimit(&_rs))                                          \
+               ^~~~~~~~~~~~~~~~~
+   include/linux/ratelimit_types.h:41:28: note: expanded from macro '__ratelimit'
+   #define __ratelimit(state) ___ratelimit(state, __func__)
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1006:3: note: Taking true branch
+                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
+                   ^
+   include/linux/printk.h:557:2: note: expanded from macro 'pr_warn_ratelimited'
+           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:540:2: note: expanded from macro 'printk_ratelimited'
+           if (__ratelimit(&_rs))                                          \
+           ^
+   include/linux/hid.h:1007:9: note: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'input')
+                                       input->name, c, type);
+                                       ^
+   include/linux/printk.h:557:49: note: expanded from macro 'pr_warn_ratelimited'
+           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                                          ^~~~~~~~~~~
+   include/linux/printk.h:541:17: note: expanded from macro 'printk_ratelimited'
+                   printk(fmt, ##__VA_ARGS__);                             \
+                                 ^~~~~~~~~~~
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   12 warnings generated.
+   Suppressed 12 warnings (2 in non-user code, 10 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+   drivers/clocksource/timer-fttmr010.c:99:8: warning: Excessive padding in 'struct fttmr010' (39 padding bytes, where 7 is optimal). Optimal fields order: clkevt, base, tick_rate, t1_enable_val, timer_shutdown, delay_timer, is_aspeed, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct fttmr010 {
+   ~~~~~~~^~~~~~~~~~
+   drivers/clocksource/timer-fttmr010.c:99:8: note: Excessive padding in 'struct fttmr010' (39 padding bytes, where 7 is optimal). Optimal fields order: clkevt, base, tick_rate, t1_enable_val, timer_shutdown, delay_timer, is_aspeed, consider reordering the fields or adding explicit padding members
+   struct fttmr010 {
+   ~~~~~~~^~~~~~~~~~
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+>> drivers/clocksource/timer-ixp4xx.c:48:8: warning: Excessive padding in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal fields order: clkevt, base, latch, delay_timer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ixp4xx_timer {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/clocksource/timer-ixp4xx.c:48:8: note: Excessive padding in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal fields order: clkevt, base, latch, delay_timer, consider reordering the fields or adding explicit padding members
+   struct ixp4xx_timer {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   3 warnings generated.
+   Suppressed 3 warnings (3 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   4 warnings generated.
+   drivers/clocksource/timer-stm32.c:282:9: warning: The result of the left shift is undefined due to shifting by '32', which is greater or equal to the width of type 'int' [clang-analyzer-core.UndefinedBinaryOperatorResult]
+                                           (1 <<  bits) - 1);
+                                              ^
+   drivers/clocksource/timer-stm32.c:295:6: note: Assuming 'to' is non-null
+           if (!to)
+               ^~~
+   drivers/clocksource/timer-stm32.c:295:2: note: Taking false branch
+           if (!to)
+           ^
+   drivers/clocksource/timer-stm32.c:302:6: note: Assuming 'ret' is 0
+           if (ret)
+               ^~~
+   drivers/clocksource/timer-stm32.c:302:2: note: Taking false branch
+           if (ret)
+           ^
+   drivers/clocksource/timer-stm32.c:307:6: note: Assuming field 'private_data' is non-null
+           if (!to->private_data) {
+               ^~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:307:2: note: Taking false branch
+           if (!to->private_data) {
+           ^
+   drivers/clocksource/timer-stm32.c:313:2: note: Taking true branch
+           if (!IS_ERR(rstc)) {
+           ^
+   drivers/clocksource/timer-stm32.c:318:2: note: Calling 'stm32_timer_set_width'
+           stm32_timer_set_width(to);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:196:30: note: Assuming the condition is true
+           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
+                                       ^~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:196:30: note: '?' condition is true
+   drivers/clocksource/timer-stm32.c:196:30: note: Passing the value 32 via 2nd parameter 'bits'
+           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
+                                       ^~~~~
+   drivers/clocksource/timer-stm32.c:196:2: note: Calling 'stm32_timer_of_bits_set'
+           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:66:2: note: The value 32 is assigned to field 'bits'
+           pd->bits = bits;
+           ^~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:196:2: note: Returning from 'stm32_timer_of_bits_set'
+           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:318:2: note: Returning from 'stm32_timer_set_width'
+           stm32_timer_set_width(to);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:323:6: note: Assuming 'ret' is 0
+           if (ret)
+               ^~~
+   drivers/clocksource/timer-stm32.c:323:2: note: Taking false branch
+           if (ret)
+           ^
+   drivers/clocksource/timer-stm32.c:326:2: note: Calling 'stm32_clockevent_init'
+           stm32_clockevent_init(to);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:270:13: note: Calling 'stm32_timer_of_bits_get'
+           u32 bits = stm32_timer_of_bits_get(to);
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:82:2: note: Returning the value 32
+           return pd->bits;
+           ^~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:270:13: note: Returning from 'stm32_timer_of_bits_get'
+           u32 bits = stm32_timer_of_bits_get(to);
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-stm32.c:270:2: note: 'bits' initialized to 32
+
+vim +48 drivers/clocksource/timer-ixp4xx.c
+
+13e0b4059b984a Linus Walleij 2019-01-26  47  
+13e0b4059b984a Linus Walleij 2019-01-26 @48  struct ixp4xx_timer {
+13e0b4059b984a Linus Walleij 2019-01-26  49  	void __iomem *base;
+13e0b4059b984a Linus Walleij 2019-01-26  50  	u32 latch;
+13e0b4059b984a Linus Walleij 2019-01-26  51  	struct clock_event_device clkevt;
+13e0b4059b984a Linus Walleij 2019-01-26  52  #ifdef CONFIG_ARM
+13e0b4059b984a Linus Walleij 2019-01-26  53  	struct delay_timer delay_timer;
+13e0b4059b984a Linus Walleij 2019-01-26  54  #endif
+13e0b4059b984a Linus Walleij 2019-01-26  55  };
+13e0b4059b984a Linus Walleij 2019-01-26  56  
+
+:::::: The code at line 48 was first introduced by commit
+:::::: 13e0b4059b984a1c63cae5604e1f665472751ea1 clocksource/drivers/ixp4xx: Add driver
+
+:::::: TO: Linus Walleij <linus.walleij@linaro.org>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
