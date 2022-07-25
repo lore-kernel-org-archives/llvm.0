@@ -1,110 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076B462D
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 08:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F243CC341C6;
-	Mon, 25 Jul 2022 08:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1658738946;
-	bh=cjzjB+1URjAUpyLs5sc2ikwKmPZiasuZVYvT5zw61Hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JKinLoPNtLc24WbMkn/724aPsznGQcQ4+C+NOoZtL/3/WoNVzz54rVZwWiJ9atutS
-	 RqzU84h7UYz2nm490uqblKS1KWfSw9nih2y9Mrx3bkSYQOSH8y3DZL/WzxO62IY3lX
-	 ad4zqAowEguXfdZ2MgZ4nGNE97nBjaoGx0rVOTXA=
-Date: Mon, 25 Jul 2022 10:49:01 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	kernel test robot <lkp@intel.com>,
-	"Justin M. Forbes" <jforbes@fedoraproject.org>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	"Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
- arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
- 4.6 of GCC
-Message-ID: <Yt5Y/cIKIDlyFWMQ@kroah.com>
-References: <202207250449.BYMZbIA2-lkp@intel.com>
- <Yt3KObFVIUI2mFGt@zx2c4.com>
- <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4528D63B
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 11:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658746819; x=1690282819;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mo9chgy0bi5uG+EZ6kmOhhKH/zG+YyE1Qh3F/VVxZYk=;
+  b=KSB+Y+0gg55a1sq1yf4yamJ13i7TXqykZT3TeXfFCaS5d53Czg0hrHC2
+   VMZ856/3z17ZJIuJEIq7S3T+az37Ek0H5bvvKVRsZ6rssvax/ztbrp8aG
+   PkTMwp7Syr59jMV40EyvmlxNXG/fV+rSw7wAh9vxx32PXSEhg2y5XdslW
+   5xN+qk1LSCnawHtoD96EZFRo547b48FQ7nUEvgdpaDANYZl5I5EE1q7qI
+   qOIUaJUx+Xhdtocuf8hjQ+OedkuCy2aw0MHQdfsfG0SNBvQvApI1xz58q
+   4i21fuJf30yRhcry4aJLKrClC+2QWhC7/HIpTR6v/hBUlChcUop6J0Vud
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="268063098"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="268063098"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:00:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="549949151"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jul 2022 04:00:16 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oFvot-0004yf-34;
+	Mon, 25 Jul 2022 11:00:15 +0000
+Date: Mon, 25 Jul 2022 18:59:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>
+Subject: drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c:262:17:
+ warning: taking address of packed member 'len' of class or structure 'tlv'
+ may result in an unaligned pointer value
+Message-ID: <202207251801.hLXIP9Rh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
 
-On Mon, Jul 25, 2022 at 07:42:07AM +0200, Ard Biesheuvel wrote:
-> On Mon, 25 Jul 2022 at 00:40, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Hi Ard,
-> >
-> > On Mon, Jul 25, 2022 at 04:14:48AM +0800, kernel test robot wrote:
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
-> > >    #warning This code requires at least version 4.6 of GCC
-> > >     ^
-> > >    1 warning generated.
-> > >
-> > >
-> > > vim +30 arch/arm/lib/xor-neon.c
-> > >
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  16
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
-> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  32
-> >
-> > Does this file need a depends on ≥4.6 thing in Kconfig? Or is something
-> > else happening here since 4.6 isn't even supported by the kernel these
-> > days?
-> >
-> 
-> Hi Jason,
-> 
-> This is explained/fixed in
-> 
-> commit a69cb445f7d129abf7c50d48c8a8eca7c8d5df15
-> Author: Ard Biesheuvel <ardb@kernel.org>
-> Date:   Sat Feb 5 16:23:46 2022 +0100
-> 
->     crypto: arm/xor - make vectorized C code Clang-friendly
-> 
->     The ARM version of the accelerated XOR routines are simply the 8-way C
->     routines passed through the auto-vectorizer with SIMD codegen enabled.
->     This used to require GCC version 4.6 at least, but given that 5.1 is now
->     the baseline, this check is no longer necessary, and actually
->     misidentifies Clang as GCC < 4.6 as Clang defines the GCC major/minor as
->     well, but makes no attempt at doing this in a way that conveys feature
->     parity with a certain version of GCC (which would not be a great idea in
->     the first place).
-> 
-> which landed in v5.18. Note that the patch depends on its parent,
-> which touches many different architectures, so it may not be
-> backportable cleanly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: 25702d9c55dc5fda2ad9ad8de115e50dc7394ef9 mt76: connac: rely on le16_add_cpu in mt76_connac_mcu_add_nested_tlv
+date:   7 months ago
+config: arm-buildonly-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251801.hLXIP9Rh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=25702d9c55dc5fda2ad9ad8de115e50dc7394ef9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 25702d9c55dc5fda2ad9ad8de115e50dc7394ef9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/
 
-I would love to backport this as it bugs me to no end on some various
-gerrit systems all the time.  I'll look into it later this week unless
-someone beats me to it :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-thanks,
+All warnings (new ones prefixed by >>):
 
-greg k-h
+>> drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c:262:17: warning: taking address of packed member 'len' of class or structure 'tlv' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   le16_add_cpu(&sta_hdr->len, len);
+                                 ^~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +262 drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
+
+   242	
+   243	struct tlv *
+   244	mt76_connac_mcu_add_nested_tlv(struct sk_buff *skb, int tag, int len,
+   245				       void *sta_ntlv, void *sta_wtbl)
+   246	{
+   247		struct sta_ntlv_hdr *ntlv_hdr = sta_ntlv;
+   248		struct tlv *sta_hdr = sta_wtbl;
+   249		struct tlv *ptlv, tlv = {
+   250			.tag = cpu_to_le16(tag),
+   251			.len = cpu_to_le16(len),
+   252		};
+   253		u16 ntlv;
+   254	
+   255		ptlv = skb_put(skb, len);
+   256		memcpy(ptlv, &tlv, sizeof(tlv));
+   257	
+   258		ntlv = le16_to_cpu(ntlv_hdr->tlv_num);
+   259		ntlv_hdr->tlv_num = cpu_to_le16(ntlv + 1);
+   260	
+   261		if (sta_hdr)
+ > 262			le16_add_cpu(&sta_hdr->len, len);
+   263	
+   264		return ptlv;
+   265	}
+   266	EXPORT_SYMBOL_GPL(mt76_connac_mcu_add_nested_tlv);
+   267	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
