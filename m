@@ -1,44 +1,51 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EC37E
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 00:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374D67E
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 01:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658709641; x=1690245641;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z/9yC4CVtJOlKMdZ2hxN3f1lgU4U9wDQV2ytR9vS8r4=;
-  b=kTOaKtviyAiWdlvhqTS7a5R9r75Riz0OrXjNc8+A6mpzjQE0CdgozTh2
-   1ZkdmPfjC8GV1NFMKUPsnT4PTTzyXCm1j/mNs9Q8Rf7QMoPi2OyBV+Fdm
-   WJEBb1hw7FYeNwHQwmShRQ5ijBSwOJ7sccTRTSf29zfCxi3XDKpVgQu71
-   bWAUMpiubBAZtQqrmb64cAAj6hcutBNKd9zlnRJUHprO7eNP4qG5+7rw7
-   4uB7q8Owjo69IaFglKeuc4tZZbLTQVt8fl6LA7kGD3N3O15JlgptiNRv4
-   J2YTyb/vfAJAvi5E8mTqQZZy+qcCAPhNG0gacRt83yAPElRO1rDTfADq7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="270617844"
+  t=1658712712; x=1690248712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZN74i/3ZpGH8/ngjwC3petHixMlADAmTATCA5C0PFrk=;
+  b=KEzjmN68SJ0uEIgA91/8mAOKn3JWDek/7gNwQWGRh0dqQbzZwKJCdJQB
+   vhz1rZ2XxizxxstZrnLsuwALC8sWGeedN6lWF2bt74lLTd8FKa16D3bsN
+   O7ILYfpM3jESSrsqFdaddKBkdmg1yqDkA4dBTxmW0E0kQjYTgug4WEIS0
+   hhqc90APuxFIXnb7527OT3fxY08c8hcWc8ZeKIPppZM219hnQwW5WE+lz
+   F5eDlDulAfS8PCfX4p3O+z2wNuqdi47QvE64ezeIjH1/Sci0lEw3gSjI1
+   vlDX2Ym/d7tXOsbo7Vd4Y/8mJi2pPv6aat5Rny6QPiw6qyBkBBCgM5BMO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267980025"
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="270617844"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 17:40:40 -0700
+   d="scan'208";a="267980025"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 18:31:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="845329208"
+   d="scan'208";a="574847806"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Jul 2022 17:40:38 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 18:31:46 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFm9G-0004R7-0T;
-	Mon, 25 Jul 2022 00:40:38 +0000
-Date: Mon, 25 Jul 2022 08:40:11 +0800
+	id 1oFmwj-0004aX-2j;
+	Mon, 25 Jul 2022 01:31:45 +0000
+Date: Mon, 25 Jul 2022 09:31:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Jagan Teki <jagan@edgeble.ai>, Heiko Stuebner <heiko@sntech.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Kever Yang <kever.yang@rock-chips.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: drivers/clocksource/timer-ixp4xx.c:48:8: warning: Excessive padding
- in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal
- fields order: clkevt, base, latch, delay_timer, consider reordering the
- fields or adding explicit padding members...
-Message-ID: <202207250823.mR3iK7kc-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+	Jagan Teki <jagan@edgeble.ai>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Finley Xiao <finley.xiao@rock-chips.com>
+Subject: Re: [PATCH 10/22] clk: rockchip: Add RV1126 clock controller
+Message-ID: <202207250930.PM0gI4EI-lkp@intel.com>
+References: <20220723204335.750095-11-jagan@edgeble.ai>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,249 +54,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220723204335.750095-11-jagan@edgeble.ai>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: 21a0a29d16c672b0c6e3662ea55969dccdbc5547 watchdog: ixp4xx: Rewrite driver to use core
-date:   12 months ago
-config: arm-randconfig-c002-20220721 (https://download.01.org/0day-ci/archive/20220725/202207250823.mR3iK7kc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
+Hi Jagan,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rockchip/for-next]
+[also build test WARNING on robh/for-next linusw-pinctrl/devel clk/clk-next lee-mfd/for-mfd-next soc/for-next linus/master v5.19-rc8 next-20220722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jagan-Teki/ARM-Add-Rockchip-RV1126-support/20220724-044645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: arm64-randconfig-r034-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250930.PM0gI4EI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=21a0a29d16c672b0c6e3662ea55969dccdbc5547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 21a0a29d16c672b0c6e3662ea55969dccdbc5547
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/bf47ecd1af07018e35b815e7a40172dce3fffdb6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jagan-Teki/ARM-Add-Rockchip-RV1126-support/20220724-044645
+        git checkout bf47ecd1af07018e35b815e7a40172dce3fffdb6
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/rockchip/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-clang-analyzer warnings: (new ones prefixed by >>)
-   3 warnings generated.
-   include/linux/hid.h:1007:9: warning: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'input') [clang-analyzer-core.NullDereference]
-                                       input->name, c, type);
-                                       ^
-   drivers/hid/hid-sunplus.c:39:6: note: Assuming the condition is false
-           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-sunplus.c:39:2: note: Taking false branch
-           if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
-           ^
-   drivers/hid/hid-sunplus.c:42:2: note: Control jumps to 'case 8451:'  at line 44
-           switch (usage->hid & HID_USAGE) {
-           ^
-   drivers/hid/hid-sunplus.c:44:15: note: Calling 'hid_map_usage_clear'
-           case 0x2103: sp_map_key_clear(KEY_ZOOMOUT);     break;
-                        ^
-   drivers/hid/hid-sunplus.c:33:29: note: expanded from macro 'sp_map_key_clear'
-   #define sp_map_key_clear(c)     hid_map_usage_clear(hi, usage, bit, max, \
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1035:2: note: Calling 'hid_map_usage'
-           hid_map_usage(hidinput, usage, bit, max, type, c);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:982:2: note: 'input' initialized here
-           struct input_dev *input = hidinput->input;
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:986:2: note: Control jumps to 'case 1:'  at line 995
-           switch (type) {
-           ^
-   include/linux/hid.h:998:3: note:  Execution continues on line 1005
-                   break;
-                   ^
-   include/linux/hid.h:1005:15: note: 'c' is <= 'limit'
-           if (unlikely(c > limit || !bmap)) {
-                        ^
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   include/linux/hid.h:1005:15: note: Left side of '||' is false
-           if (unlikely(c > limit || !bmap)) {
-                        ^
-   include/linux/hid.h:1005:28: note: Assuming 'bmap' is null
-           if (unlikely(c > limit || !bmap)) {
-                                     ^
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   include/linux/hid.h:1005:28: note: Assuming pointer value is null
-           if (unlikely(c > limit || !bmap)) {
-                                     ^
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   include/linux/hid.h:1005:2: note: Taking true branch
-           if (unlikely(c > limit || !bmap)) {
-           ^
-   include/linux/hid.h:1006:3: note: Assuming the condition is true
-                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
-                   ^
-   include/linux/printk.h:557:2: note: expanded from macro 'pr_warn_ratelimited'
-           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:540:6: note: expanded from macro 'printk_ratelimited'
-           if (__ratelimit(&_rs))                                          \
-               ^~~~~~~~~~~~~~~~~
-   include/linux/ratelimit_types.h:41:28: note: expanded from macro '__ratelimit'
-   #define __ratelimit(state) ___ratelimit(state, __func__)
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1006:3: note: Taking true branch
-                   pr_warn_ratelimited("%s: Invalid code %d type %d\n",
-                   ^
-   include/linux/printk.h:557:2: note: expanded from macro 'pr_warn_ratelimited'
-           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-           ^
-   include/linux/printk.h:540:2: note: expanded from macro 'printk_ratelimited'
-           if (__ratelimit(&_rs))                                          \
-           ^
-   include/linux/hid.h:1007:9: note: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'input')
-                                       input->name, c, type);
-                                       ^
-   include/linux/printk.h:557:49: note: expanded from macro 'pr_warn_ratelimited'
-           printk_ratelimited(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                                          ^~~~~~~~~~~
-   include/linux/printk.h:541:17: note: expanded from macro 'printk_ratelimited'
-                   printk(fmt, ##__VA_ARGS__);                             \
-                                 ^~~~~~~~~~~
-   Suppressed 2 warnings (2 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   12 warnings generated.
-   Suppressed 12 warnings (2 in non-user code, 10 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   drivers/clocksource/timer-fttmr010.c:99:8: warning: Excessive padding in 'struct fttmr010' (39 padding bytes, where 7 is optimal). Optimal fields order: clkevt, base, tick_rate, t1_enable_val, timer_shutdown, delay_timer, is_aspeed, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct fttmr010 {
-   ~~~~~~~^~~~~~~~~~
-   drivers/clocksource/timer-fttmr010.c:99:8: note: Excessive padding in 'struct fttmr010' (39 padding bytes, where 7 is optimal). Optimal fields order: clkevt, base, tick_rate, t1_enable_val, timer_shutdown, delay_timer, is_aspeed, consider reordering the fields or adding explicit padding members
-   struct fttmr010 {
-   ~~~~~~~^~~~~~~~~~
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
->> drivers/clocksource/timer-ixp4xx.c:48:8: warning: Excessive padding in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal fields order: clkevt, base, latch, delay_timer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ixp4xx_timer {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/clocksource/timer-ixp4xx.c:48:8: note: Excessive padding in 'struct ixp4xx_timer' (48 padding bytes, where 16 is optimal). Optimal fields order: clkevt, base, latch, delay_timer, consider reordering the fields or adding explicit padding members
-   struct ixp4xx_timer {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   Suppressed 3 warnings (3 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   4 warnings generated.
-   drivers/clocksource/timer-stm32.c:282:9: warning: The result of the left shift is undefined due to shifting by '32', which is greater or equal to the width of type 'int' [clang-analyzer-core.UndefinedBinaryOperatorResult]
-                                           (1 <<  bits) - 1);
-                                              ^
-   drivers/clocksource/timer-stm32.c:295:6: note: Assuming 'to' is non-null
-           if (!to)
-               ^~~
-   drivers/clocksource/timer-stm32.c:295:2: note: Taking false branch
-           if (!to)
-           ^
-   drivers/clocksource/timer-stm32.c:302:6: note: Assuming 'ret' is 0
-           if (ret)
-               ^~~
-   drivers/clocksource/timer-stm32.c:302:2: note: Taking false branch
-           if (ret)
-           ^
-   drivers/clocksource/timer-stm32.c:307:6: note: Assuming field 'private_data' is non-null
-           if (!to->private_data) {
-               ^~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:307:2: note: Taking false branch
-           if (!to->private_data) {
-           ^
-   drivers/clocksource/timer-stm32.c:313:2: note: Taking true branch
-           if (!IS_ERR(rstc)) {
-           ^
-   drivers/clocksource/timer-stm32.c:318:2: note: Calling 'stm32_timer_set_width'
-           stm32_timer_set_width(to);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:196:30: note: Assuming the condition is true
-           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
-                                       ^~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:196:30: note: '?' condition is true
-   drivers/clocksource/timer-stm32.c:196:30: note: Passing the value 32 via 2nd parameter 'bits'
-           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
-                                       ^~~~~
-   drivers/clocksource/timer-stm32.c:196:2: note: Calling 'stm32_timer_of_bits_set'
-           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:66:2: note: The value 32 is assigned to field 'bits'
-           pd->bits = bits;
-           ^~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:196:2: note: Returning from 'stm32_timer_of_bits_set'
-           stm32_timer_of_bits_set(to, width == UINT_MAX ? 32 : 16);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:318:2: note: Returning from 'stm32_timer_set_width'
-           stm32_timer_set_width(to);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:323:6: note: Assuming 'ret' is 0
-           if (ret)
-               ^~~
-   drivers/clocksource/timer-stm32.c:323:2: note: Taking false branch
-           if (ret)
-           ^
-   drivers/clocksource/timer-stm32.c:326:2: note: Calling 'stm32_clockevent_init'
-           stm32_clockevent_init(to);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:270:13: note: Calling 'stm32_timer_of_bits_get'
-           u32 bits = stm32_timer_of_bits_get(to);
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:82:2: note: Returning the value 32
-           return pd->bits;
-           ^~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:270:13: note: Returning from 'stm32_timer_of_bits_get'
-           u32 bits = stm32_timer_of_bits_get(to);
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clocksource/timer-stm32.c:270:2: note: 'bits' initialized to 32
+All warnings (new ones prefixed by >>):
 
-vim +48 drivers/clocksource/timer-ixp4xx.c
+>> drivers/clk/rockchip/clk-rv1126.c:176:7: warning: unused variable 'mux_cpll_hpll_gpll_p' [-Wunused-const-variable]
+   PNAME(mux_cpll_hpll_gpll_p)             = { "cpll", "hpll", "gpll" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:177:7: warning: unused variable 'mux_cpll_gpll_hpll_p' [-Wunused-const-variable]
+   PNAME(mux_cpll_gpll_hpll_p)             = { "cpll", "gpll", "hpll" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:178:7: warning: unused variable 'mux_dclk_vop_p' [-Wunused-const-variable]
+   PNAME(mux_dclk_vop_p)                   = { "dclk_vop_div", "dclk_vop_fracdiv", "xin24m" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:179:7: warning: unused variable 'mux_aclk_pdvi_p' [-Wunused-const-variable]
+   PNAME(mux_aclk_pdvi_p)                  = { "aclk_pdvi_div", "aclk_pdvi_np5" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:180:7: warning: unused variable 'mux_gpll_cpll_hpll_p' [-Wunused-const-variable]
+   PNAME(mux_gpll_cpll_hpll_p)             = { "gpll", "cpll", "hpll" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:181:7: warning: unused variable 'mux_clk_isp_p' [-Wunused-const-variable]
+   PNAME(mux_clk_isp_p)                    = { "clk_isp_div", "clk_isp_np5" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:182:7: warning: unused variable 'mux_gpll_usb480m_p' [-Wunused-const-variable]
+   PNAME(mux_gpll_usb480m_p)               = { "gpll", "usb480m" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:183:7: warning: unused variable 'mux_cif_out2io_p' [-Wunused-const-variable]
+   PNAME(mux_cif_out2io_p)                 = { "xin24m", "clk_cif_out2io_div", "clk_cif_out2io_fracdiv" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:184:7: warning: unused variable 'mux_mipicsi_out2io_p' [-Wunused-const-variable]
+   PNAME(mux_mipicsi_out2io_p)             = { "xin24m", "clk_mipicsi_out2io_div", "clk_mipicsi_out2io_fracdiv" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:185:7: warning: unused variable 'mux_aclk_pdispp_p' [-Wunused-const-variable]
+   PNAME(mux_aclk_pdispp_p)                = { "aclk_pdispp_div", "aclk_pdispp_npu" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:186:7: warning: unused variable 'mux_clk_ispp_p' [-Wunused-const-variable]
+   PNAME(mux_clk_ispp_p)                   = { "clk_ispp_div", "clk_ispp_npu" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:195:7: warning: unused variable 'mux_gpll_cpll_apll_hpll_p' [-Wunused-const-variable]
+   PNAME(mux_gpll_cpll_apll_hpll_p)        = { "gpll", "cpll", "dummy_apll", "hpll" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:196:7: warning: unused variable 'mux_aclk_pdnpu_p' [-Wunused-const-variable]
+   PNAME(mux_aclk_pdnpu_p)                 = { "aclk_pdnpu_div", "aclk_pdnpu_np5" };
+         ^
+>> drivers/clk/rockchip/clk-rv1126.c:197:7: warning: unused variable 'mux_clk_npu_p' [-Wunused-const-variable]
+   PNAME(mux_clk_npu_p)                    = { "clk_npu_div", "clk_npu_np5" };
+         ^
+   14 warnings generated.
 
-13e0b4059b984a Linus Walleij 2019-01-26  47  
-13e0b4059b984a Linus Walleij 2019-01-26 @48  struct ixp4xx_timer {
-13e0b4059b984a Linus Walleij 2019-01-26  49  	void __iomem *base;
-13e0b4059b984a Linus Walleij 2019-01-26  50  	u32 latch;
-13e0b4059b984a Linus Walleij 2019-01-26  51  	struct clock_event_device clkevt;
-13e0b4059b984a Linus Walleij 2019-01-26  52  #ifdef CONFIG_ARM
-13e0b4059b984a Linus Walleij 2019-01-26  53  	struct delay_timer delay_timer;
-13e0b4059b984a Linus Walleij 2019-01-26  54  #endif
-13e0b4059b984a Linus Walleij 2019-01-26  55  };
-13e0b4059b984a Linus Walleij 2019-01-26  56  
 
-:::::: The code at line 48 was first introduced by commit
-:::::: 13e0b4059b984a1c63cae5604e1f665472751ea1 clocksource/drivers/ixp4xx: Add driver
+vim +/mux_cpll_hpll_gpll_p +176 drivers/clk/rockchip/clk-rv1126.c
 
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+   142	
+   143	PNAME(mux_pll_p)			= { "xin24m" };
+   144	PNAME(mux_rtc32k_p)			= { "clk_pmupvtm_divout", "xin32k", "clk_osc0_div32k" };
+   145	PNAME(mux_wifi_p)			= { "clk_wifi_osc0", "clk_wifi_div" };
+   146	PNAME(mux_gpll_usb480m_cpll_xin24m_p)	= { "gpll", "usb480m", "cpll", "xin24m" };
+   147	PNAME(mux_uart1_p)			= { "sclk_uart1_div", "sclk_uart1_fracdiv", "xin24m" };
+   148	PNAME(mux_xin24m_gpll_p)		= { "xin24m", "gpll" };
+   149	PNAME(mux_gpll_xin24m_p)		= { "gpll", "xin24m" };
+   150	PNAME(mux_xin24m_32k_p)			= { "xin24m", "clk_rtc32k" };
+   151	PNAME(mux_usbphy_otg_ref_p)		= { "clk_ref12m", "xin_osc0_div2_usbphyref_otg" };
+   152	PNAME(mux_usbphy_host_ref_p)		= { "clk_ref12m", "xin_osc0_div2_usbphyref_host" };
+   153	PNAME(mux_mipidsiphy_ref_p)		= { "clk_ref24m", "xin_osc0_mipiphyref" };
+   154	PNAME(mux_usb480m_p)			= { "xin24m", "usb480m_phy", "clk_rtc32k" };
+   155	PNAME(mux_armclk_p)			= { "gpll", "cpll", "apll" };
+   156	PNAME(mux_gpll_cpll_dpll_p)		= { "gpll", "cpll", "dummy_dpll" };
+   157	PNAME(mux_gpll_cpll_p)			= { "gpll", "cpll" };
+   158	PNAME(mux_hclk_pclk_pdbus_p)		= { "gpll", "dummy_cpll" };
+   159	PNAME(mux_gpll_cpll_usb480m_xin24m_p)	= { "gpll", "cpll", "usb480m", "xin24m" };
+   160	PNAME(mux_uart0_p)			= { "sclk_uart0_div", "sclk_uart0_frac", "xin24m" };
+   161	PNAME(mux_uart2_p)			= { "sclk_uart2_div", "sclk_uart2_frac", "xin24m" };
+   162	PNAME(mux_uart3_p)			= { "sclk_uart3_div", "sclk_uart3_frac", "xin24m" };
+   163	PNAME(mux_uart4_p)			= { "sclk_uart4_div", "sclk_uart4_frac", "xin24m" };
+   164	PNAME(mux_uart5_p)			= { "sclk_uart5_div", "sclk_uart5_frac", "xin24m" };
+   165	PNAME(mux_cpll_gpll_p)			= { "cpll", "gpll" };
+   166	PNAME(mux_i2s0_tx_p)			= { "mclk_i2s0_tx_div", "mclk_i2s0_tx_fracdiv", "i2s0_mclkin", "xin12m" };
+   167	PNAME(mux_i2s0_rx_p)			= { "mclk_i2s0_rx_div", "mclk_i2s0_rx_fracdiv", "i2s0_mclkin", "xin12m" };
+   168	PNAME(mux_i2s0_tx_out2io_p)		= { "mclk_i2s0_tx", "xin12m" };
+   169	PNAME(mux_i2s0_rx_out2io_p)		= { "mclk_i2s0_rx", "xin12m" };
+   170	PNAME(mux_i2s1_p)			= { "mclk_i2s1_div", "mclk_i2s1_fracdiv", "i2s1_mclkin", "xin12m" };
+   171	PNAME(mux_i2s1_out2io_p)		= { "mclk_i2s1", "xin12m" };
+   172	PNAME(mux_i2s2_p)			= { "mclk_i2s2_div", "mclk_i2s2_fracdiv", "i2s2_mclkin", "xin12m" };
+   173	PNAME(mux_i2s2_out2io_p)		= { "mclk_i2s2", "xin12m" };
+   174	PNAME(mux_gpll_cpll_xin24m_p)		= { "gpll", "cpll", "xin24m" };
+   175	PNAME(mux_audpwm_p)			= { "sclk_audpwm_div", "sclk_audpwm_fracdiv", "xin24m" };
+ > 176	PNAME(mux_cpll_hpll_gpll_p)		= { "cpll", "hpll", "gpll" };
+ > 177	PNAME(mux_cpll_gpll_hpll_p)		= { "cpll", "gpll", "hpll" };
+ > 178	PNAME(mux_dclk_vop_p)			= { "dclk_vop_div", "dclk_vop_fracdiv", "xin24m" };
+ > 179	PNAME(mux_aclk_pdvi_p)			= { "aclk_pdvi_div", "aclk_pdvi_np5" };
+ > 180	PNAME(mux_gpll_cpll_hpll_p)		= { "gpll", "cpll", "hpll" };
+ > 181	PNAME(mux_clk_isp_p)			= { "clk_isp_div", "clk_isp_np5" };
+ > 182	PNAME(mux_gpll_usb480m_p)		= { "gpll", "usb480m" };
+ > 183	PNAME(mux_cif_out2io_p)			= { "xin24m", "clk_cif_out2io_div", "clk_cif_out2io_fracdiv" };
+ > 184	PNAME(mux_mipicsi_out2io_p)		= { "xin24m", "clk_mipicsi_out2io_div", "clk_mipicsi_out2io_fracdiv" };
+ > 185	PNAME(mux_aclk_pdispp_p)		= { "aclk_pdispp_div", "aclk_pdispp_npu" };
+ > 186	PNAME(mux_clk_ispp_p)			= { "clk_ispp_div", "clk_ispp_npu" };
+   187	PNAME(mux_usb480m_gpll_p)		= { "usb480m", "gpll" };
+   188	PNAME(clk_gmac_src_m0_p)		= { "clk_gmac_div", "clk_gmac_rgmii_m0" };
+   189	PNAME(clk_gmac_src_m1_p)		= { "clk_gmac_div", "clk_gmac_rgmii_m1" };
+   190	PNAME(mux_clk_gmac_src_p)		= { "clk_gmac_src_m0", "clk_gmac_src_m1" };
+   191	PNAME(mux_rgmii_clk_p)			= { "clk_gmac_tx_div50", "clk_gmac_tx_div5", "clk_gmac_tx_src", "clk_gmac_tx_src"};
+   192	PNAME(mux_rmii_clk_p)			= { "clk_gmac_rx_div20", "clk_gmac_rx_div2" };
+   193	PNAME(mux_gmac_tx_rx_p)			= { "rgmii_mode_clk", "rmii_mode_clk" };
+   194	PNAME(mux_dpll_gpll_p)			= { "dpll", "gpll" };
+ > 195	PNAME(mux_gpll_cpll_apll_hpll_p)	= { "gpll", "cpll", "dummy_apll", "hpll" };
+ > 196	PNAME(mux_aclk_pdnpu_p)			= { "aclk_pdnpu_div", "aclk_pdnpu_np5" };
+ > 197	PNAME(mux_clk_npu_p)			= { "clk_npu_div", "clk_npu_np5" };
+   198	
 
 -- 
 0-DAY CI Kernel Test Service
