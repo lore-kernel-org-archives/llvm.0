@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4DB1FA4
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 15:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBF7C341C8;
-	Mon, 25 Jul 2022 15:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0A820F3
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 16:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA9CC341C8;
+	Mon, 25 Jul 2022 16:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658763550;
-	bh=I+2f4rcs61Dyb3wmT8wcA8SEZMWq+nf8Sj5sreEwkUQ=;
+	s=k20201202; t=1658764957;
+	bh=SMHMCoUk8FoGYD4FUmehAI5iRpDlIiYCqFbZtG+A3Ec=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kQ0fe7pk699baIWzuTL5pE8C0nv5LQSHEm7McGpeEpM0BG7HaM7KoyzUnsQPkUDEj
-	 ofBKhMP2BrH+s87XmIczepVT2OngEvK5MGEF52MBdNqT586wh+Se22WWs2rWswKhFx
-	 hsztiutZ7H/9NnHu2Uu0txKIzWb75Sps/bWIN57NFqla8yqlC/DbwvwJJxWH9XESck
-	 uCpYO0U3rY0rwjkvnWU3r0Gon9R9R/GPGlHxgROkfUqnGaqkEkBSECIqBXorT0sJ4Z
-	 QytJ5QSZmFIUHgi637cIwWwheLZtuCEXFMoJwONTZ3s0nbtFv9Z5MM57ob/w2dVmzi
-	 MzOlyCUr4pQ5Q==
-Date: Mon, 25 Jul 2022 08:39:07 -0700
+	b=nb31y1vv/6qg8tVtcd4m+mLJ/IQKk4uXakftsDer+tvjGM7a4r65VplqTHM9UHnqe
+	 mc8fP6tTiWRClDTSwzqwbdJM3Vdtipp7rgzuT7wfNeZChGNnKbsRe6FNG9MVvyZKDy
+	 VHT9J/Mnx+cjya/3chIvN0zLVTtmnvXe2h8o7LQkz0C3SuQ2b+3HNZkmckiDxhrAV7
+	 VofkXdL1x1mT8HMUhaI5KdjoBgt/3jsjfryPIv58vQyNK9tg9FW7u9ExLf4Ol7M/Yk
+	 9rsZlMYpYmS1WsLeuZvdAHBsWRqu1PVPkdToVBNwnleyOo3xf72ttgZ8vCgRltazB2
+	 Y3EVPtCpHRW6Q==
+Date: Mon, 25 Jul 2022 09:02:35 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Daniel Rosenberg <drosen@google.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dennis Cagle <d-cagle@codeaurora.org>,
-	Lee Jones <lee.jones@linaro.org>
-Subject: Re: [linux-stable-rc:linux-4.9.y 967/2229]
- drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <Yt65G3x2Hmoj4q/b@Ryzen-9-3900X.>
-References: <202207241311.Dv86CbAo-lkp@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: help with clang build for mips
+Message-ID: <Yt6+mxbz0ls+VktG@Ryzen-9-3900X.>
+References: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
+ <YtBMNLXEQ4WVJezu@dev-arch.thelio-3990X>
+ <CADVatmNtFYyqk0KwYzB1x6hOPkQ=0gV8mPN1BWp6QWrCs5GaxA@mail.gmail.com>
+ <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X>
+ <CAK8P3a2YjaCpZPJd7xkDuk_NYZNJK1KJRr0AsfRrm=yXRTY0kw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,74 +35,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202207241311.Dv86CbAo-lkp@intel.com>
+In-Reply-To: <CAK8P3a2YjaCpZPJd7xkDuk_NYZNJK1KJRr0AsfRrm=yXRTY0kw@mail.gmail.com>
 
-On Sun, Jul 24, 2022 at 01:39:50PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> head:   65be5f5665a580424a7b1102f1a04c4259c559b5
-> commit: a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e [967/2229] ion: Protect kref from userspace manipulation
-> config: mips-randconfig-r034-20220719 (https://download.01.org/0day-ci/archive/20220724/202207241311.Dv86CbAo-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
->         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->         git fetch --no-tags linux-stable-rc linux-4.9.y
->         git checkout a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/android/ion/
+On Sun, Jul 24, 2022 at 04:49:56PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 22, 2022 at 5:21 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > On Fri, Jul 22, 2022 at 02:29:01PM +0100, Sudip Mukherjee wrote:
+> > > On Thu, Jul 14, 2022 at 6:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > The o32 ABI is not supported by LLVM and it sounds like it is unlikely
+> > to without someone stepping up:
+> >
+> > https://github.com/ClangBuiltLinux/linux/issues/884
+> >
+> > https://llvm.org/pr38063
+> >
+> > There was a patch to disable this on the kernel side but it was never
+> > picked up due to what I read as a soft NAK:
+> >
+> > https://lore.kernel.org/1614838778-3696-1-git-send-email-yangtiezhu@loongson.cn/
+> >
+> > https://lore.kernel.org/alpine.DEB.2.21.2103042356150.51127@angie.orcam.me.uk/
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->            if (--handle->user_ref_count == 0)
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
->            return ret;
->                   ^~~
->    drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
->            if (--handle->user_ref_count == 0)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    = 0
->    1 warning generated.
-> 
-> 
-> vim +71 drivers/staging/android/ion/ion-ioctl.c
-> 
->     65	
->     66	/* Must hold the client lock */
->     67	static int user_ion_handle_put_nolock(struct ion_handle *handle)
->     68	{
->     69		int ret;
->     70	
->   > 71		if (--handle->user_ref_count == 0)
->     72			ret = ion_handle_put_nolock(handle);
->     73	
->     74		return ret;
->     75	}
->     76	
+> I think we can just give up on the combination of clang and mips in
+> that case, it's
+> just not worth it. As Maciej said, not supporting 32-bit mode on any modern CPU
+> is a joke, as most of the remaining mips machines are 32-bit-only, and
+> many 64-bit
+> machines run 32-bit code because of memory constraints.
 
-Might as well just be
+Doesn't this configuration only impact 64-bit kernels running 32-bit
+binaries, rather than 64-bit chips running 32-bit kernels (which seems
+to be what your last sentence is concerned with, if I understand you
+correctly)? We can still build and boot some 32-bit MIPS configurations
+in QEMU and I believe Paul Cercueil has clang built kernels running on
+real hardware.
 
-static void user_ion_handle_put_nolock(struct ion_handle *handle)
-{
-	if (--handle->user_ref_count == 0)
-		ion_handle_put_nolock(handle);
-}
-
-since user_ion_free_nolock() doesn't check the return value of
-user_ion_handle_put_nolock()? I can send a patch if people care (I know
-4.9 is a bit on the older side).
+Don't get me wrong, of all the architectures that we claim to support,
+MIPS definitely has the weakest support in LLVM, as it is no longer
+being actively developed from what I can see. The couple of crashes I
+have reported have gotten fixed pretty quickly but that is only because
+they were relatively simple. For the more complicated issues, I doubt we
+would have an easy time getting those fixed without more support. Until
+that happens (if it ever does), it probably isn't worth testing MIPS in
+any sort of continuous capacity aside from the few configurations we
+have working already (I test malta_defconfig + the generic 32r*
+configs).
 
 Cheers,
 Nathan
