@@ -1,111 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F08120E0
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 19:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C6AC341CD
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 19:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658777955;
-	bh=D4Ihdgua+l0HAi7W8qDk6GarToM461r2CDrnblJy9VI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tFOF53co3ClMB+rvUjfp/PjXhfuNHiiRGQ2ZUkp5shcsUAxEuooIjcoEWtVvKpCkV
-	 8Vmi6mIWpSoFdUUISM9rtT0Kja/gmkeyMvakLJGtcVQUNTnvUvAW0uMPryqeDSe3r0
-	 GOvZKWHey0kJNV/Jg6yGdhqq/Meqb3JraR5yezh+KPpldzmIXiQSoxz69LvR81W6JC
-	 J7FoN5c2slT+VvipLltCWrEZAHDsB3RSaAj1/6if+Wr+cb+zwn9A7SfM4vx+W0WgnG
-	 21dzf8EgPiPN/utv2tn4XkD+K/pLAbqeqiaAoVJ+AO+U5emh6g0gYffXE3ZWzC83Qd
-	 E/F8E7JilAISQ==
-Received: by mail-ed1-f46.google.com with SMTP id e15so15336722edj.2
-        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 12:39:15 -0700 (PDT)
-X-Gm-Message-State: AJIora/fkMnlTa74gVXYuYh+iQ7uOhL9SLw4NTNq9px7iK5Bwf0DIKNQ
-	jWdYl6w43tKg1rT6EmFNeD5w5x/ywxOCfpHkjD4=
-X-Google-Smtp-Source: AGRyM1tTSMdZKEgPxuibyCdSCrc60peo6eDp6ri26A9PBNJgybVDdwBoqbWM8mUURIw5dt15APKQVAtiX4pw15zi7nY=
-X-Received: by 2002:a05:6402:26c2:b0:43b:e542:9f68 with SMTP id
- x2-20020a05640226c200b0043be5429f68mr11319753edd.227.1658777953489; Mon, 25
- Jul 2022 12:39:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF72B3207
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 20:30:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658781032;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
+	b=ZuVBkM87FFykPm+R3alPR2NULAqXz3yWtCmRMhRBLpGoy/xT0BeTIvxP3uS7I02sQuQYUE
+	TO5QYLcP3OEUCosjlRX91f9WI7mk2Z1gjZEek1PGA70PrTJhel6u2BT8ewphGOMKxaqv9K
+	JZ2vthHRzO6pBDWTuh6Ww5+rUzN22So=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-T3mNIKvHO9aU9AyfWeGyJA-1; Mon, 25 Jul 2022 16:30:31 -0400
+X-MC-Unique: T3mNIKvHO9aU9AyfWeGyJA-1
+Received: by mail-oo1-f70.google.com with SMTP id d30-20020a4a3c1e000000b00435d3d030cdso620650ooa.13
+        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 13:30:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
+        b=xTJEHjSbkPkuF/oMD0HtqIIA9udlwUb8YZXm2RTqV/KWDkCnOyrGAW0+7ggn1DUwwH
+         MgKK3qzvHx83Yffu1SZ5fX83c1ubef0LOp4+VmIScliTLr/l4lMRVvJLSA1klXCrV/fE
+         cZ6S2nnswphNs/KuWfTIjkFTgdgKitr0StDaIn8cG1dhf7HN47jQ5043cpcnJD5+QCRH
+         0rW0y2UvtVTIr1taczALDPHqB9s6LZKPX5Gma3XLNROqp/bVlTptt8G1XB8l1/eYq3KQ
+         xhsuj6CIoFKiAEVH7ohLT1SSPKHLv6XRPZM0+MTcB57CZcmDWC7GKrMKsb+26KkgsBQ0
+         B1qg==
+X-Gm-Message-State: AJIora9NhYx9Z6YBJq2ayGmnl8AL1nFAH7nsHisVMqMZVa2m6CWBXRis
+	/KBXaeSKPEFH37SDGWL7S5iqRl7FEpiQH1doNOLZtK00A50RdlPD2fIlB55fUWAdFlF2EYbLppu
+	zJEjVm2oHoj80WvHKRMEQ3ldoZajoWXSo+vrk7LjsQ64VEqlNEvDMF+/5+yvH
+X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678600oao.55.1658781030788;
+        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vMKdLBsCrpyPFiMwp1I36On67rQNmu7kKIT17kKg4MZ0q/jXm/7VX99Y0AfExWzkcNf7gWrA==
+X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678576oao.55.1658781030337;
+        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id o31-20020a056870911f00b0010c7487aa73sm6507887oae.50.2022.07.25.13.30.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 13:30:29 -0700 (PDT)
+Subject: Re: [PATCH] ASoC: amd: acp: Fix initialization of ext_intr_stat1 in
+ i2s_irq_handler()
+To: Nathan Chancellor <nathan@kernel.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+ Vijendar Mukunda <Vijendar.Mukunda@amd.com>, alsa-devel@alsa-project.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220725180539.1315066-1-nathan@kernel.org>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <fd7188f2-8e42-3683-0ef5-2ddde56b3efc@redhat.com>
+Date: Mon, 25 Jul 2022 13:30:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CADVatmN97T7b1JC=4kkG4XS0Lr8+bLSVCuDjfaYcZKq-TpNutA@mail.gmail.com>
- <YtBMNLXEQ4WVJezu@dev-arch.thelio-3990X> <CADVatmNtFYyqk0KwYzB1x6hOPkQ=0gV8mPN1BWp6QWrCs5GaxA@mail.gmail.com>
- <YtrAhG0o/x9B3rDp@dev-arch.thelio-3990X> <CAK8P3a2YjaCpZPJd7xkDuk_NYZNJK1KJRr0AsfRrm=yXRTY0kw@mail.gmail.com>
- <Yt6+mxbz0ls+VktG@Ryzen-9-3900X.>
-In-Reply-To: <Yt6+mxbz0ls+VktG@Ryzen-9-3900X.>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 25 Jul 2022 21:38:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Ncg3f-D_yJti71t5iOi8JBCRJDJOz+625rpFhv-_ZiQ@mail.gmail.com>
-Message-ID: <CAK8P3a2Ncg3f-D_yJti71t5iOi8JBCRJDJOz+625rpFhv-_ZiQ@mail.gmail.com>
-Subject: Re: help with clang build for mips
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220725180539.1315066-1-nathan@kernel.org>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
-On Mon, Jul 25, 2022 at 6:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Sun, Jul 24, 2022 at 04:49:56PM +0200, Arnd Bergmann wrote:
-> >
-> > I think we can just give up on the combination of clang and mips in
-> > that case, it's
-> > just not worth it. As Maciej said, not supporting 32-bit mode on any modern CPU
-> > is a joke, as most of the remaining mips machines are 32-bit-only, and
-> > many 64-bit
-> > machines run 32-bit code because of memory constraints.
+
+On 7/25/22 11:05 AM, Nathan Chancellor wrote:
+> Clang warns:
 >
-> Doesn't this configuration only impact 64-bit kernels running 32-bit
-> binaries, rather than 64-bit chips running 32-bit kernels (which seems
-> to be what your last sentence is concerned with, if I understand you
-> correctly)? We can still build and boot some 32-bit MIPS configurations
-> in QEMU and I believe Paul Cercueil has clang built kernels running on
-> real hardware.
+>    ../sound/soc/amd/acp/acp-platform.c:117:19: error: variable 'ext_intr_stat1' is uninitialized when used here [-Werror,-Wuninitialized]
+>                            if (stream && (ext_intr_stat1 & stream->irq_bit)) {
+>                                           ^~~~~~~~~~~~~~
+>    ../sound/soc/amd/acp/acp-platform.c:97:35: note: initialize the variable 'ext_intr_stat1' to silence this warning
+>            u32 ext_intr_stat, ext_intr_stat1, i;
+>                                             ^
+>                                              = 0
+>    1 error generated.
+>
+> The variable was not properly renamed, correct it to resolve the
+> warning.
+>
+> Fixes: 93f53881473c ("ASoC: amd: acp: Modify local variables name to generic")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1675
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Tom Rix <trix@redhat.com>
+> ---
+>   sound/soc/amd/acp/acp-platform.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/amd/acp/acp-platform.c b/sound/soc/amd/acp/acp-platform.c
+> index 10730d33c3b0..f561d39b33e2 100644
+> --- a/sound/soc/amd/acp/acp-platform.c
+> +++ b/sound/soc/amd/acp/acp-platform.c
+> @@ -100,7 +100,7 @@ static irqreturn_t i2s_irq_handler(int irq, void *data)
+>   		return IRQ_NONE;
+>   
+>   	if (adata->rsrc->no_of_ctrls == 2)
+> -		ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
+> +		ext_intr_stat1 = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
+>   
+>   	ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, rsrc->irqp_used));
+>   
+>
+> base-commit: be0aa8d4b0fcb4532bf7973141e911998ab39508
 
-It's the same thing, building 32-bit kernels for 64-bit CPUs fails just
-as well:
-
-$ clang --target=mips64-linux -xc /dev/null -o /dev/null  -E
--march=octeon -m32 -mabi=o32
-error: ABI 'o32' is not supported on CPU 'octeon'
-
-And it's not like this is tied to code generation at all, the script that
-does this just needs the preprocessor macros for a 32-bit environment
-in order to generate the compat system call table in the 64-bit kernel.
-
-We could in theory work around this by replacing the -march= flags
-with a lookup table that translates each 64-bit CPU to the closest
-32-bit CPU that is a direct subset, but this is something the kernel
-should not have to do when the clang driver can just do it.
-
-In gcc, these two command lines do the same thing:
-
-$ mips64-linux-gcc -march=mips32r2
-$ mips64-linux-gcc -march=mips64r2 -mabi=32
-
-Whereas in clang, one works as expected and the other one throws
-an error. The explanation given in the bug report was that it would
-be too much work to make llvm generate object code that uses the
-64-bit-only instructions but the 32-bit ABI, but this is not what we
-need, or what gcc does, we just want the command line to be
-interpreted sanely to give 32-bit output, just as it does on x86, powerpc
-and s390 when using the -m32 flag to produce 32-bit code.
-
-Note that a compiler that produces object code with 64-bit instructions
-but the 32-bit ABI would not even work on 32-bit kernels because the
-upper halves of the registers are not saved across context switches.
-
-> Don't get me wrong, of all the architectures that we claim to support,
-> MIPS definitely has the weakest support in LLVM, as it is no longer
-> being actively developed from what I can see. The couple of crashes I
-> have reported have gotten fixed pretty quickly but that is only because
-> they were relatively simple. For the more complicated issues, I doubt we
-> would have an easy time getting those fixed without more support. Until
-> that happens (if it ever does), it probably isn't worth testing MIPS in
-> any sort of continuous capacity aside from the few configurations we
-> have working already (I test malta_defconfig + the generic 32r*
-> configs).
-
-My feeling is more that if nobody can be bothered to implement a
-simple command line flag like this one, there is not much hope of them
-caring about other bugs either.
-
-         Arnd
