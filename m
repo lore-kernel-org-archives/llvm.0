@@ -1,198 +1,477 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374D67E
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 01:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658712712; x=1690248712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZN74i/3ZpGH8/ngjwC3petHixMlADAmTATCA5C0PFrk=;
-  b=KEzjmN68SJ0uEIgA91/8mAOKn3JWDek/7gNwQWGRh0dqQbzZwKJCdJQB
-   vhz1rZ2XxizxxstZrnLsuwALC8sWGeedN6lWF2bt74lLTd8FKa16D3bsN
-   O7ILYfpM3jESSrsqFdaddKBkdmg1yqDkA4dBTxmW0E0kQjYTgug4WEIS0
-   hhqc90APuxFIXnb7527OT3fxY08c8hcWc8ZeKIPppZM219hnQwW5WE+lz
-   F5eDlDulAfS8PCfX4p3O+z2wNuqdi47QvE64ezeIjH1/Sci0lEw3gSjI1
-   vlDX2Ym/d7tXOsbo7Vd4Y/8mJi2pPv6aat5Rny6QPiw6qyBkBBCgM5BMO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="267980025"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="267980025"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 18:31:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="574847806"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 18:31:46 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oFmwj-0004aX-2j;
-	Mon, 25 Jul 2022 01:31:45 +0000
-Date: Mon, 25 Jul 2022 09:31:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jagan Teki <jagan@edgeble.ai>, Heiko Stuebner <heiko@sntech.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Kever Yang <kever.yang@rock-chips.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-	Jagan Teki <jagan@edgeble.ai>, linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Finley Xiao <finley.xiao@rock-chips.com>
-Subject: Re: [PATCH 10/22] clk: rockchip: Add RV1126 clock controller
-Message-ID: <202207250930.PM0gI4EI-lkp@intel.com>
-References: <20220723204335.750095-11-jagan@edgeble.ai>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD717E
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 01:48:09 +0000 (UTC)
+Received: by mail-pf1-f180.google.com with SMTP id w185so9151681pfb.4
+        for <llvm@lists.linux.dev>; Sun, 24 Jul 2022 18:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=tPwwpNDKWJIukmf6vmkDmyK4OoaGjaR7UxeO1IDVjc4=;
+        b=pnOxJQREckItep4NWiBIrmPW9uS5X+Ke/pSt3clNvRIGxY5M79Ekzv/O7/hQqek0lZ
+         vWTy+cUG7Oj4VXNZKGjlz3x8MiHu5jalSlNGx6fqT95bmrytFQGr6UtRWTELHSAY/DVT
+         04JzOC5C66BquuzvYiG8sU2oUXCAL8unT+l3sHz+e4ibo5haoOLNAhF2o3Exp0NVDPDG
+         Uv7YFuvbE+Kj0zffJQhNl1/6wyWLtzAAZxU9Cwqy5ovS/NpcNR6ayPVBYJPYv/3CXaT0
+         NtbNVSEtqPgxaoM7cNLCslK5zJWv6ghmtyGPxwVegsK6h9oKacDL8JyFDgV4uvP8GZ0e
+         b6GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=tPwwpNDKWJIukmf6vmkDmyK4OoaGjaR7UxeO1IDVjc4=;
+        b=FwW7X9o9Yj/ILTRkP6eMTiR28TlmG0Zbpgh0+QC2cWztPKcqtxoiVStE8pUbtKtocg
+         BDyMky9u6GNsJvY7fK3T0UfEHwEEWx+XkOQ+AjGb1eOv6XVUNFDqrysugbr5GRTnRw5Q
+         B6gj+QAgkyZPrVkP7B7HLfxBSDbPQFHnjRlXPcbIwE+g4/TEzgtAs8zf8P7D85rhw8m7
+         FQomALWAdRnYDOSoj1xUcqbX2yZ/TEdSNKwf9or+SWPPnkEhKtP/3Nq6DxvUaR9IxKDW
+         9DNLuAyeose0G5MwfpchLL2NC9QJJUnXKsE6o3DoHCIAeZEmLDqR07vzTknDMh327OXw
+         5FuQ==
+X-Gm-Message-State: AJIora/hH9dfheMMw9lYM0H+OPjvz0D9t7bgGaMnEB4jd+Dy2pZkf2OJ
+	L/mljeMQvuLEu5Al01g2YeSkNKzbp0y0D41KqE4=
+X-Google-Smtp-Source: AGRyM1u2/WDcs5vNGH8NpL+T46EgvO/M38R2EHzmJVeuHZHWENKtE12TWhkY6hwYLcVx/o5YV1SGUnitpNAJxJCIlHY=
+X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id
+ b11-20020a056a000a8b00b004e152db9e5cmr10519056pfl.38.1658713688979; Sun, 24
+ Jul 2022 18:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723204335.750095-11-jagan@edgeble.ai>
+References: <202207241857.Z2woeEfC-lkp@intel.com>
+In-Reply-To: <202207241857.Z2woeEfC-lkp@intel.com>
+From: Souptick Joarder <jrdr.linux@gmail.com>
+Date: Mon, 25 Jul 2022 07:17:57 +0530
+Message-ID: <CAFqt6zajXSzr6pJkBr=zC3UO8+xczvVkgDsHWoDgOTjx2XsFow@mail.gmail.com>
+Subject: Re: [linux-next:master 2450/12552] drivers/iio/accel/sca3300.c:162:8:
+ warning: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes,
+ where 1 is optimal). Optimal fields order: name, scan_masks, channels,
+ accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, f...
+To: kernel test robot <lkp@intel.com>
+Cc: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Tomas Melin <tomas.melin@vaisala.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jagan,
+On Sun, Jul 24, 2022 at 3:44 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it master
+> head:   18c107a1f120d095404d141dfad8f594bdc44020
+> commit: 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53 [2450/12552] iio: accel:=
+ sca3300: Add inclination channels
+> config: s390-randconfig-c005-20220721 (https://download.01.org/0day-ci/ar=
+chive/20220724/202207241857.Z2woeEfC-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fb=
+d2d377e396ad61bce56d71c98a1eb1bebfa9)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install s390 cross compiling tool for clang build
+>         # apt-get install binutils-s390x-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git/commit/?id=3D38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/ke=
+rnel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
+>         # save the config file
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross AR=
+CH=3Ds390 clang-analyzer
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> clang-analyzer warnings: (new ones prefixed by >>)
+>                    for (tile =3D 0; tile < 8; tile++) {
+>                    ^
+>    drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
+>                            if (!fbdata->force && !picolcd_fb_update_tile(
+>                                ^~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
+>    drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_=
+tile'
+>                            if (!fbdata->force && !picolcd_fb_update_tile(
+>                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is equal to 1
+>            if (bpp =3D=3D 1) {
+>                ^~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:148:2: note: Taking true branch
+>            if (bpp =3D=3D 1) {
+>            ^
+>    drivers/hid/hid-picolcd_fb.c:149:3: note: Loop condition is true.  Ent=
+ering loop body
+>                    for (b =3D 7; b >=3D 0; b--) {
+>                    ^
+>    drivers/hid/hid-picolcd_fb.c:151:9: note: The value 0 is assigned to '=
+i'
+>                            for (i =3D 0; i < 64; i++) {
+>                                 ^~~~~
+>    drivers/hid/hid-picolcd_fb.c:151:4: note: Loop condition is true.  Ent=
+ering loop body
+>                            for (i =3D 0; i < 64; i++) {
+>                            ^
+>    drivers/hid/hid-picolcd_fb.c:152:14: note: The left expression of the =
+compound assignment is an uninitialized value. The computed value will also=
+ be garbage
+>                                    tdata[i] <<=3D 1;
+>                                    ~~~~~~~~ ^
+>    drivers/hid/hid-picolcd_fb.c:160:14: warning: The left expression of t=
+he compound assignment is an uninitialized value. The computed value will a=
+lso be garbage [clang-analyzer-core.uninitialized.Assign]
+>                                    tdata[i] <<=3D 1;
+>                                             ^
+>    drivers/hid/hid-picolcd_fb.c:438:2: note: Calling 'picolcd_fb_update'
+>            picolcd_fb_update(info);
+>            ^~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Ex=
+iting loop
+>            spin_lock_irqsave(&fbdata->lock, flags);
+>            ^
+>    include/linux/spinlock.h:379:2: note: expanded from macro 'spin_lock_i=
+rqsave'
+>            raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+>            ^
+>    include/linux/spinlock.h:240:2: note: expanded from macro 'raw_spin_lo=
+ck_irqsave'
+>            do {                                            \
+>            ^
+>    drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Ex=
+iting loop
+>            spin_lock_irqsave(&fbdata->lock, flags);
+>            ^
+>    include/linux/spinlock.h:377:43: note: expanded from macro 'spin_lock_=
+irqsave'
+>    #define spin_lock_irqsave(lock, flags)                          \
+>                                                                    ^
+>    drivers/hid/hid-picolcd_fb.c:235:6: note: Assuming field 'ready' is no=
+t equal to 0
+>            if (!fbdata->ready && fbdata->picolcd)
+>                ^~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:235:21: note: Left side of '&&' is false
+>            if (!fbdata->ready && fbdata->picolcd)
+>                               ^
+>    drivers/hid/hid-picolcd_fb.c:247:2: note: Loop condition is true.  Ent=
+ering loop body
+>            for (chip =3D 0; chip < 4; chip++)
+>            ^
+>    drivers/hid/hid-picolcd_fb.c:248:3: note: Loop condition is true.  Ent=
+ering loop body
+>                    for (tile =3D 0; tile < 8; tile++) {
+>                    ^
+>    drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
+>                            if (!fbdata->force && !picolcd_fb_update_tile(
+>                                ^~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
+>    drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_=
+tile'
+>                            if (!fbdata->force && !picolcd_fb_update_tile(
+>                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is not equal =
+to 1
+>            if (bpp =3D=3D 1) {
+>                ^~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:148:2: note: Taking false branch
+>            if (bpp =3D=3D 1) {
+>            ^
+>    drivers/hid/hid-picolcd_fb.c:156:13: note: Assuming 'bpp' is equal to =
+8
+>            } else if (bpp =3D=3D 8) {
+>                       ^~~~~~~~
+>    drivers/hid/hid-picolcd_fb.c:156:9: note: Taking true branch
+>            } else if (bpp =3D=3D 8) {
+>                   ^
+>    drivers/hid/hid-picolcd_fb.c:157:3: note: Loop condition is true.  Ent=
+ering loop body
+>                    for (b =3D 7; b >=3D 0; b--) {
+>                    ^
+>    drivers/hid/hid-picolcd_fb.c:159:9: note: The value 0 is assigned to '=
+i'
+>                            for (i =3D 0; i < 64; i++) {
+>                                 ^~~~~
+>    drivers/hid/hid-picolcd_fb.c:159:4: note: Loop condition is true.  Ent=
+ering loop body
+>                            for (i =3D 0; i < 64; i++) {
+>                            ^
+>    drivers/hid/hid-picolcd_fb.c:160:14: note: The left expression of the =
+compound assignment is an uninitialized value. The computed value will also=
+ be garbage
+>                                    tdata[i] <<=3D 1;
+>                                    ~~~~~~~~ ^
 
-I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on rockchip/for-next]
-[also build test WARNING on robh/for-next linusw-pinctrl/devel clk/clk-next lee-mfd/for-mfd-next soc/for-next linus/master v5.19-rc8 next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagan-Teki/ARM-Add-Rockchip-RV1126-support/20220724-044645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-config: arm64-randconfig-r034-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250930.PM0gI4EI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bf47ecd1af07018e35b815e7a40172dce3fffdb6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jagan-Teki/ARM-Add-Rockchip-RV1126-support/20220724-044645
-        git checkout bf47ecd1af07018e35b815e7a40172dce3fffdb6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/rockchip/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/rockchip/clk-rv1126.c:176:7: warning: unused variable 'mux_cpll_hpll_gpll_p' [-Wunused-const-variable]
-   PNAME(mux_cpll_hpll_gpll_p)             = { "cpll", "hpll", "gpll" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:177:7: warning: unused variable 'mux_cpll_gpll_hpll_p' [-Wunused-const-variable]
-   PNAME(mux_cpll_gpll_hpll_p)             = { "cpll", "gpll", "hpll" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:178:7: warning: unused variable 'mux_dclk_vop_p' [-Wunused-const-variable]
-   PNAME(mux_dclk_vop_p)                   = { "dclk_vop_div", "dclk_vop_fracdiv", "xin24m" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:179:7: warning: unused variable 'mux_aclk_pdvi_p' [-Wunused-const-variable]
-   PNAME(mux_aclk_pdvi_p)                  = { "aclk_pdvi_div", "aclk_pdvi_np5" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:180:7: warning: unused variable 'mux_gpll_cpll_hpll_p' [-Wunused-const-variable]
-   PNAME(mux_gpll_cpll_hpll_p)             = { "gpll", "cpll", "hpll" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:181:7: warning: unused variable 'mux_clk_isp_p' [-Wunused-const-variable]
-   PNAME(mux_clk_isp_p)                    = { "clk_isp_div", "clk_isp_np5" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:182:7: warning: unused variable 'mux_gpll_usb480m_p' [-Wunused-const-variable]
-   PNAME(mux_gpll_usb480m_p)               = { "gpll", "usb480m" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:183:7: warning: unused variable 'mux_cif_out2io_p' [-Wunused-const-variable]
-   PNAME(mux_cif_out2io_p)                 = { "xin24m", "clk_cif_out2io_div", "clk_cif_out2io_fracdiv" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:184:7: warning: unused variable 'mux_mipicsi_out2io_p' [-Wunused-const-variable]
-   PNAME(mux_mipicsi_out2io_p)             = { "xin24m", "clk_mipicsi_out2io_div", "clk_mipicsi_out2io_fracdiv" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:185:7: warning: unused variable 'mux_aclk_pdispp_p' [-Wunused-const-variable]
-   PNAME(mux_aclk_pdispp_p)                = { "aclk_pdispp_div", "aclk_pdispp_npu" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:186:7: warning: unused variable 'mux_clk_ispp_p' [-Wunused-const-variable]
-   PNAME(mux_clk_ispp_p)                   = { "clk_ispp_div", "clk_ispp_npu" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:195:7: warning: unused variable 'mux_gpll_cpll_apll_hpll_p' [-Wunused-const-variable]
-   PNAME(mux_gpll_cpll_apll_hpll_p)        = { "gpll", "cpll", "dummy_apll", "hpll" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:196:7: warning: unused variable 'mux_aclk_pdnpu_p' [-Wunused-const-variable]
-   PNAME(mux_aclk_pdnpu_p)                 = { "aclk_pdnpu_div", "aclk_pdnpu_np5" };
-         ^
->> drivers/clk/rockchip/clk-rv1126.c:197:7: warning: unused variable 'mux_clk_npu_p' [-Wunused-const-variable]
-   PNAME(mux_clk_npu_p)                    = { "clk_npu_div", "clk_npu_np5" };
-         ^
-   14 warnings generated.
+u8 tdata[64] in picolcd_fb_update_tile() needs to be initialized.
+What should be the initialized value ?
 
 
-vim +/mux_cpll_hpll_gpll_p +176 drivers/clk/rockchip/clk-rv1126.c
-
-   142	
-   143	PNAME(mux_pll_p)			= { "xin24m" };
-   144	PNAME(mux_rtc32k_p)			= { "clk_pmupvtm_divout", "xin32k", "clk_osc0_div32k" };
-   145	PNAME(mux_wifi_p)			= { "clk_wifi_osc0", "clk_wifi_div" };
-   146	PNAME(mux_gpll_usb480m_cpll_xin24m_p)	= { "gpll", "usb480m", "cpll", "xin24m" };
-   147	PNAME(mux_uart1_p)			= { "sclk_uart1_div", "sclk_uart1_fracdiv", "xin24m" };
-   148	PNAME(mux_xin24m_gpll_p)		= { "xin24m", "gpll" };
-   149	PNAME(mux_gpll_xin24m_p)		= { "gpll", "xin24m" };
-   150	PNAME(mux_xin24m_32k_p)			= { "xin24m", "clk_rtc32k" };
-   151	PNAME(mux_usbphy_otg_ref_p)		= { "clk_ref12m", "xin_osc0_div2_usbphyref_otg" };
-   152	PNAME(mux_usbphy_host_ref_p)		= { "clk_ref12m", "xin_osc0_div2_usbphyref_host" };
-   153	PNAME(mux_mipidsiphy_ref_p)		= { "clk_ref24m", "xin_osc0_mipiphyref" };
-   154	PNAME(mux_usb480m_p)			= { "xin24m", "usb480m_phy", "clk_rtc32k" };
-   155	PNAME(mux_armclk_p)			= { "gpll", "cpll", "apll" };
-   156	PNAME(mux_gpll_cpll_dpll_p)		= { "gpll", "cpll", "dummy_dpll" };
-   157	PNAME(mux_gpll_cpll_p)			= { "gpll", "cpll" };
-   158	PNAME(mux_hclk_pclk_pdbus_p)		= { "gpll", "dummy_cpll" };
-   159	PNAME(mux_gpll_cpll_usb480m_xin24m_p)	= { "gpll", "cpll", "usb480m", "xin24m" };
-   160	PNAME(mux_uart0_p)			= { "sclk_uart0_div", "sclk_uart0_frac", "xin24m" };
-   161	PNAME(mux_uart2_p)			= { "sclk_uart2_div", "sclk_uart2_frac", "xin24m" };
-   162	PNAME(mux_uart3_p)			= { "sclk_uart3_div", "sclk_uart3_frac", "xin24m" };
-   163	PNAME(mux_uart4_p)			= { "sclk_uart4_div", "sclk_uart4_frac", "xin24m" };
-   164	PNAME(mux_uart5_p)			= { "sclk_uart5_div", "sclk_uart5_frac", "xin24m" };
-   165	PNAME(mux_cpll_gpll_p)			= { "cpll", "gpll" };
-   166	PNAME(mux_i2s0_tx_p)			= { "mclk_i2s0_tx_div", "mclk_i2s0_tx_fracdiv", "i2s0_mclkin", "xin12m" };
-   167	PNAME(mux_i2s0_rx_p)			= { "mclk_i2s0_rx_div", "mclk_i2s0_rx_fracdiv", "i2s0_mclkin", "xin12m" };
-   168	PNAME(mux_i2s0_tx_out2io_p)		= { "mclk_i2s0_tx", "xin12m" };
-   169	PNAME(mux_i2s0_rx_out2io_p)		= { "mclk_i2s0_rx", "xin12m" };
-   170	PNAME(mux_i2s1_p)			= { "mclk_i2s1_div", "mclk_i2s1_fracdiv", "i2s1_mclkin", "xin12m" };
-   171	PNAME(mux_i2s1_out2io_p)		= { "mclk_i2s1", "xin12m" };
-   172	PNAME(mux_i2s2_p)			= { "mclk_i2s2_div", "mclk_i2s2_fracdiv", "i2s2_mclkin", "xin12m" };
-   173	PNAME(mux_i2s2_out2io_p)		= { "mclk_i2s2", "xin12m" };
-   174	PNAME(mux_gpll_cpll_xin24m_p)		= { "gpll", "cpll", "xin24m" };
-   175	PNAME(mux_audpwm_p)			= { "sclk_audpwm_div", "sclk_audpwm_fracdiv", "xin24m" };
- > 176	PNAME(mux_cpll_hpll_gpll_p)		= { "cpll", "hpll", "gpll" };
- > 177	PNAME(mux_cpll_gpll_hpll_p)		= { "cpll", "gpll", "hpll" };
- > 178	PNAME(mux_dclk_vop_p)			= { "dclk_vop_div", "dclk_vop_fracdiv", "xin24m" };
- > 179	PNAME(mux_aclk_pdvi_p)			= { "aclk_pdvi_div", "aclk_pdvi_np5" };
- > 180	PNAME(mux_gpll_cpll_hpll_p)		= { "gpll", "cpll", "hpll" };
- > 181	PNAME(mux_clk_isp_p)			= { "clk_isp_div", "clk_isp_np5" };
- > 182	PNAME(mux_gpll_usb480m_p)		= { "gpll", "usb480m" };
- > 183	PNAME(mux_cif_out2io_p)			= { "xin24m", "clk_cif_out2io_div", "clk_cif_out2io_fracdiv" };
- > 184	PNAME(mux_mipicsi_out2io_p)		= { "xin24m", "clk_mipicsi_out2io_div", "clk_mipicsi_out2io_fracdiv" };
- > 185	PNAME(mux_aclk_pdispp_p)		= { "aclk_pdispp_div", "aclk_pdispp_npu" };
- > 186	PNAME(mux_clk_ispp_p)			= { "clk_ispp_div", "clk_ispp_npu" };
-   187	PNAME(mux_usb480m_gpll_p)		= { "usb480m", "gpll" };
-   188	PNAME(clk_gmac_src_m0_p)		= { "clk_gmac_div", "clk_gmac_rgmii_m0" };
-   189	PNAME(clk_gmac_src_m1_p)		= { "clk_gmac_div", "clk_gmac_rgmii_m1" };
-   190	PNAME(mux_clk_gmac_src_p)		= { "clk_gmac_src_m0", "clk_gmac_src_m1" };
-   191	PNAME(mux_rgmii_clk_p)			= { "clk_gmac_tx_div50", "clk_gmac_tx_div5", "clk_gmac_tx_src", "clk_gmac_tx_src"};
-   192	PNAME(mux_rmii_clk_p)			= { "clk_gmac_rx_div20", "clk_gmac_rx_div2" };
-   193	PNAME(mux_gmac_tx_rx_p)			= { "rgmii_mode_clk", "rmii_mode_clk" };
-   194	PNAME(mux_dpll_gpll_p)			= { "dpll", "gpll" };
- > 195	PNAME(mux_gpll_cpll_apll_hpll_p)	= { "gpll", "cpll", "dummy_apll", "hpll" };
- > 196	PNAME(mux_aclk_pdnpu_p)			= { "aclk_pdnpu_div", "aclk_pdnpu_np5" };
- > 197	PNAME(mux_clk_npu_p)			= { "clk_npu_div", "clk_npu_np5" };
-   198	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>    drivers/hid/hid-picolcd_fb.c:481:6: warning: Call to function 'sscanf'=
+ is insecure as it does not provide security checks introduced in the C11 s=
+tandard. Replace with analogous functions that support length arguments or =
+provides boundary checks such as 'sscanf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            i =3D sscanf(buf, "%u", &u);
+>                ^~~~~~
+>    drivers/hid/hid-picolcd_fb.c:481:6: note: Call to function 'sscanf' is=
+ insecure as it does not provide security checks introduced in the C11 stan=
+dard. Replace with analogous functions that support length arguments or pro=
+vides boundary checks such as 'sscanf_s' in case of C11
+>            i =3D sscanf(buf, "%u", &u);
+>                ^~~~~~
+>    Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    24 warnings generated.
+> >> drivers/iio/accel/sca3300.c:162:8: warning: Excessive padding in 'stru=
+ct sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal field=
+s order: name, scan_masks, channels, accel_scale, accel_scale_map, incli_sc=
+ale, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels=
+, num_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, =
+angle_supported, consider reordering the fields or adding explicit padding =
+members [clang-analyzer-optin.performance.Padding]
+>    struct sca3300_chip_info {
+>    ~~~~~~~^~~~~~~~~~~~~~~~~~~
+>    drivers/iio/accel/sca3300.c:162:8: note: Excessive padding in 'struct =
+sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal fields o=
+rder: name, scan_masks, channels, accel_scale, accel_scale_map, incli_scale=
+, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels, n=
+um_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, ang=
+le_supported, consider reordering the fields or adding explicit padding mem=
+bers
+>    struct sca3300_chip_info {
+>    ~~~~~~~^~~~~~~~~~~~~~~~~~~
+>    drivers/iio/accel/sca3300.c:191:8: warning: Excessive padding in 'stru=
+ct sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields o=
+rder: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields o=
+r adding explicit padding members [clang-analyzer-optin.performance.Padding=
+]
+>    struct sca3300_data {
+>    ~~~~~~~^~~~~~~~~~~~~~
+>    drivers/iio/accel/sca3300.c:191:8: note: Excessive padding in 'struct =
+sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields orde=
+r: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields or a=
+dding explicit padding members
+>    struct sca3300_data {
+>    ~~~~~~~^~~~~~~~~~~~~~
+>    Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    22 warnings generated.
+>    Suppressed 22 warnings (9 in non-user code, 13 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    23 warnings generated.
+>    Suppressed 23 warnings (11 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    22 warnings generated.
+>    Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    22 warnings generated.
+>    Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    22 warnings generated.
+>    Suppressed 22 warnings (10 in non-user code, 12 with check filters).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    12 warnings generated.
+>    drivers/hwmon/emc6w201.c:186:9: warning: Call to function 'sprintf' is=
+ insecure as it does not provide security checks introduced in the C11 stan=
+dard. Replace with analogous functions that support length arguments or pro=
+vides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-se=
+curity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%u\n",
+>                   ^~~~~~~
+>    drivers/hwmon/emc6w201.c:186:9: note: Call to function 'sprintf' is in=
+secure as it does not provide security checks introduced in the C11 standar=
+d. Replace with analogous functions that support length arguments or provid=
+es boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%u\n",
+>                   ^~~~~~~
+>    drivers/hwmon/emc6w201.c:225:9: warning: Call to function 'sprintf' is=
+ insecure as it does not provide security checks introduced in the C11 stan=
+dard. Replace with analogous functions that support length arguments or pro=
+vides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-se=
+curity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
+>                   ^~~~~~~
+>    drivers/hwmon/emc6w201.c:225:9: note: Call to function 'sprintf' is in=
+secure as it does not provide security checks introduced in the C11 standar=
+d. Replace with analogous functions that support length arguments or provid=
+es boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
+>                   ^~~~~~~
+>    drivers/hwmon/emc6w201.c:270:9: warning: Call to function 'sprintf' is=
+ insecure as it does not provide security checks introduced in the C11 stan=
+dard. Replace with analogous functions that support length arguments or pro=
+vides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-se=
+curity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%u\n", rpm);
+>                   ^~~~~~~
+>    drivers/hwmon/emc6w201.c:270:9: note: Call to function 'sprintf' is in=
+secure as it does not provide security checks introduced in the C11 standar=
+d. Replace with analogous functions that support length arguments or provid=
+es boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%u\n", rpm);
+>                   ^~~~~~~
+>    Suppressed 9 warnings (9 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    55 warnings generated.
+>    drivers/hwmon/f71882fg.c:1382:9: warning: Call to function 'sprintf' i=
+s insecure as it does not provide security checks introduced in the C11 sta=
+ndard. Replace with analogous functions that support length arguments or pr=
+ovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-s=
+ecurity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%d\n", speed);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1382:9: note: Call to function 'sprintf' is i=
+nsecure as it does not provide security checks introduced in the C11 standa=
+rd. Replace with analogous functions that support length arguments or provi=
+des boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%d\n", speed);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1391:9: warning: Call to function 'sprintf' i=
+s insecure as it does not provide security checks introduced in the C11 sta=
+ndard. Replace with analogous functions that support length arguments or pr=
+ovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-s=
+ecurity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%d\n", speed);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1391:9: note: Call to function 'sprintf' is i=
+nsecure as it does not provide security checks introduced in the C11 standa=
+rd. Replace with analogous functions that support length arguments or provi=
+des boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%d\n", speed);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1424:10: warning: Call to function 'sprintf' =
+is insecure as it does not provide security checks introduced in the C11 st=
+andard. Replace with analogous functions that support length arguments or p=
+rovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>                    return sprintf(buf, "1\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1424:10: note: Call to function 'sprintf' is =
+insecure as it does not provide security checks introduced in the C11 stand=
+ard. Replace with analogous functions that support length arguments or prov=
+ides boundary checks such as 'sprintf_s' in case of C11
+>                    return sprintf(buf, "1\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1426:10: warning: Call to function 'sprintf' =
+is insecure as it does not provide security checks introduced in the C11 st=
+andard. Replace with analogous functions that support length arguments or p=
+rovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>                    return sprintf(buf, "0\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1426:10: note: Call to function 'sprintf' is =
+insecure as it does not provide security checks introduced in the C11 stand=
+ard. Replace with analogous functions that support length arguments or prov=
+ides boundary checks such as 'sprintf_s' in case of C11
+>                    return sprintf(buf, "0\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1460:10: warning: Call to function 'sprintf' =
+is insecure as it does not provide security checks introduced in the C11 st=
+andard. Replace with analogous functions that support length arguments or p=
+rovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>                    return sprintf(buf, "1\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1460:10: note: Call to function 'sprintf' is =
+insecure as it does not provide security checks introduced in the C11 stand=
+ard. Replace with analogous functions that support length arguments or prov=
+ides boundary checks such as 'sprintf_s' in case of C11
+>                    return sprintf(buf, "1\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1462:10: warning: Call to function 'sprintf' =
+is insecure as it does not provide security checks introduced in the C11 st=
+andard. Replace with analogous functions that support length arguments or p=
+rovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>                    return sprintf(buf, "0\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1462:10: note: Call to function 'sprintf' is =
+insecure as it does not provide security checks introduced in the C11 stand=
+ard. Replace with analogous functions that support length arguments or prov=
+ides boundary checks such as 'sprintf_s' in case of C11
+>                    return sprintf(buf, "0\n");
+>                           ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1471:9: warning: Call to function 'sprintf' i=
+s insecure as it does not provide security checks introduced in the C11 sta=
+ndard. Replace with analogous functions that support length arguments or pr=
+ovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-s=
+ecurity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%d\n", data->in[nr] * 8);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1471:9: note: Call to function 'sprintf' is i=
+nsecure as it does not provide security checks introduced in the C11 standa=
+rd. Replace with analogous functions that support length arguments or provi=
+des boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%d\n", data->in[nr] * 8);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1479:9: warning: Call to function 'sprintf' i=
+s insecure as it does not provide security checks introduced in the C11 sta=
+ndard. Replace with analogous functions that support length arguments or pr=
+ovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-s=
+ecurity.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>            return sprintf(buf, "%d\n", data->in1_max * 8);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1479:9: note: Call to function 'sprintf' is i=
+nsecure as it does not provide security checks introduced in the C11 standa=
+rd. Replace with analogous functions that support length arguments or provi=
+des boundary checks such as 'sprintf_s' in case of C11
+>            return sprintf(buf, "%d\n", data->in1_max * 8);
+>                   ^~~~~~~
+>    drivers/hwmon/f71882fg.c:1514:10: warning: Call to function 'sprintf' =
+is insecure as it does not provide security checks introduced in the C11 st=
+andard. Replace with analogous functions that support length arguments or p=
+rovides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-=
+security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>                    return sprintf(buf, "1\n");
+>
+> vim +162 drivers/iio/accel/sca3300.c
+>
+> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  161
+> ad985d4d38d7ad LI Qingwu 2022-05-29 @162  struct sca3300_chip_info {
+> ad985d4d38d7ad LI Qingwu 2022-05-29  163        const char *name;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  164        const unsigned long *scan=
+_masks;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  165        const struct iio_chan_spe=
+c *channels;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  166        u8 num_channels;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  167        u8 num_accel_scales;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  168        const int (*accel_scale)[=
+2];
+> ad985d4d38d7ad LI Qingwu 2022-05-29  169        const int *accel_scale_ma=
+p;
+> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  170        const int (*incli_scale)[=
+2];
+> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  171        const int *incli_scale_ma=
+p;
+> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  172        u8 num_incli_scales;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  173        u8 num_freqs;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  174        const int *freq_table;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  175        const int *freq_map;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  176        const int *avail_modes_ta=
+ble;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  177        u8 num_avail_modes;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  178        u8 chip_id;
+> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  179        bool angle_supported;
+> ad985d4d38d7ad LI Qingwu 2022-05-29  180  };
+> ad985d4d38d7ad LI Qingwu 2022-05-29  181
+>
+> :::::: The code at line 162 was first introduced by commit
+> :::::: ad985d4d38d7ad8a83b0ff428ea51a2f41ce12e1 iio: accel: sca3300: modi=
+fied to support multi chips
+>
+> :::::: TO: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> :::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
