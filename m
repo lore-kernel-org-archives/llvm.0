@@ -1,295 +1,139 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07D963B
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 11:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658748624; x=1690284624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0GPWfOIa16ZnEnlEWoqMq+aNPxqOXCxj7erAjQJ2kUQ=;
-  b=iX6mjt2aY+kSe0Ry2KHFrEkLQmK1aYE5c1irluCca7jTG3LYymhzYdmm
-   Xs+nqMb/kgyVU76cFKqRpHVJq7a1MHd2itVjSrOBB4OHkP1bKiqu5kT1e
-   qCbxujk4k2rYlqL+FFIqhis6xNPQvVVmBY9yFEPrFQnAulor2mr/kNY7m
-   WhMdFfEz1+Mp7r8bRKZNlRIo3/w+K/pXMQCquKtYc9yZvag4BcgoAr5b+
-   L/L7at1PJ+YAv7ssF1+nlNuERz+SO45R2tZdK3nbIZ2gT491/DP89KAcy
-   fc+mdDKMkDPvDwORE3UiH/jQYxvdA8vqu35QOTgSfos5n0/UyaHG/Eo0n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="270711060"
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="270711060"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:30:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="575017768"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jul 2022 04:30:22 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oFwI1-000545-2y;
-	Mon, 25 Jul 2022 11:30:21 +0000
-Date: Mon, 25 Jul 2022 19:30:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/frequency/admv1013.c:93:8: warning: Excessive padding in
- 'struct admv1013_state' (48 padding bytes, where 16 is optimal). Optimal
- fields order: data, det_en, spi, clkin, reg, input_mode, quad_se_mode, lock,
- nb, consider reordering the fields o...
-Message-ID: <202207251934.yeNP5kb4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA5A1375
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 12:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA13C36AE3
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 12:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658752915;
+	bh=7DDTMdWn3WP4svQtD7OQOkfSMIfIORyHCjYX5wDTKps=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mPLBmCJsvY0ZzcKKmEBxdDpkFZuaAGIflnNNG+GyZFrWHetkMF6rk5l78m3Nbeda4
+	 0R/qVLqf4ODrbzH/DfcpmiXp0/Nhzl0+MqMRiyQZruHNKUHT4oD0qkgEVvLztW4zlG
+	 3e4a6z6Hzm4IAHa0KMd1xtl1q/OlZLYaWs7IlA1g0r94E9Fu5bQu92x/MuBUtnzBZ5
+	 pJth2PkHRu6C2XmJAefkzgk7SOEEqovYhfUb4Dha29lAh2IENy9+HK36gdLqUVCdPV
+	 O3yFmdG2OLxg0nPNZ9SzwrCe3bpgi7BGg3c1lDb77m+1OKmiYtP66xD1aLi5byFN4p
+	 8ST/SKYM80a+g==
+Received: by mail-oi1-f169.google.com with SMTP id v130so8091082oie.13
+        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 05:41:55 -0700 (PDT)
+X-Gm-Message-State: AJIora+PSPUq/lWZYyUCf3t5prAhK12W7LQFOoUcXx+ugFab4sfJ6xMd
+	G+HHnad7MR0tvM9UCp4Vf2n7eotFPOxIAposGEc=
+X-Google-Smtp-Source: AGRyM1sHU/jyPzyi8t9IH89ICfexqJhDeXevU21NJ8I3gspBuNZS4S6/3nKMdrbGHFlIsb0EFHyyAp3D5+vbWutaVpw=
+X-Received: by 2002:a05:6808:300b:b0:337:b697:b077 with SMTP id
+ ay11-20020a056808300b00b00337b697b077mr5465443oib.126.1658752914321; Mon, 25
+ Jul 2022 05:41:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202207250449.BYMZbIA2-lkp@intel.com> <Yt3KObFVIUI2mFGt@zx2c4.com>
+ <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com> <Yt5Y/cIKIDlyFWMQ@kroah.com>
+In-Reply-To: <Yt5Y/cIKIDlyFWMQ@kroah.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 25 Jul 2022 14:41:42 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+Message-ID: <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723] arch/arm/lib/xor-neon.c:30:2:
+ warning: This code requires at least version 4.6 of GCC
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, kernel test robot <lkp@intel.com>, 
+	"Justin M. Forbes" <jforbes@fedoraproject.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Jason A. Donenfeld" <zx2c4@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: da35a7b526d9b258a2cb8b7816f736a41b32176b iio: frequency: admv1013: add support for ADMV1013
-date:   7 months ago
-config: arm-randconfig-c002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207251934.yeNP5kb4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da35a7b526d9b258a2cb8b7816f736a41b32176b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout da35a7b526d9b258a2cb8b7816f736a41b32176b
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+On Mon, 25 Jul 2022 at 10:49, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 25, 2022 at 07:42:07AM +0200, Ard Biesheuvel wrote:
+> > On Mon, 25 Jul 2022 at 00:40, Jason A. Donenfeld <Jason@zx2c4.com> wrot=
+e:
+> > >
+> > > Hi Ard,
+> > >
+> > > On Mon, Jul 25, 2022 at 04:14:48AM +0800, kernel test robot wrote:
+> > > > All warnings (new ones prefixed by >>):
+> > > >
+> > > > >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at lea=
+st version 4.6 of GCC [-W#warnings]
+> > > >    #warning This code requires at least version 4.6 of GCC
+> > > >     ^
+> > > >    1 warning generated.
+> > > >
+> > > >
+> > > > vim +30 arch/arm/lib/xor-neon.c
+> > > >
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  16
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the refere=
+nce implementations while instructing GCC (through
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) =
+to attempt to exploit implicit parallelism and emit
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (=
+__GNUC__ =3D=3D 4 && __GNUC_MINOR__ >=3D 6)
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize =
+"tree-vectorize"
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versio=
+ns of GCC do not generate incorrect code, they fail to
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the para=
+llel nature of these functions, and emit plain ARM code,
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to =
+be slower than the optimized ARM code in asm-arm/xor.h.
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code re=
+quires at least version 4.6 of GCC
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
+> > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  32
+> > >
+> > > Does this file need a depends on =E2=89=A54.6 thing in Kconfig? Or is=
+ something
+> > > else happening here since 4.6 isn't even supported by the kernel thes=
+e
+> > > days?
+> > >
+> >
+> > Hi Jason,
+> >
+> > This is explained/fixed in
+> >
+> > commit a69cb445f7d129abf7c50d48c8a8eca7c8d5df15
+> > Author: Ard Biesheuvel <ardb@kernel.org>
+> > Date:   Sat Feb 5 16:23:46 2022 +0100
+> >
+> >     crypto: arm/xor - make vectorized C code Clang-friendly
+> >
+> >     The ARM version of the accelerated XOR routines are simply the 8-wa=
+y C
+> >     routines passed through the auto-vectorizer with SIMD codegen enabl=
+ed.
+> >     This used to require GCC version 4.6 at least, but given that 5.1 i=
+s now
+> >     the baseline, this check is no longer necessary, and actually
+> >     misidentifies Clang as GCC < 4.6 as Clang defines the GCC major/min=
+or as
+> >     well, but makes no attempt at doing this in a way that conveys feat=
+ure
+> >     parity with a certain version of GCC (which would not be a great id=
+ea in
+> >     the first place).
+> >
+> > which landed in v5.18. Note that the patch depends on its parent,
+> > which touches many different architectures, so it may not be
+> > backportable cleanly.
+>
+> I would love to backport this as it bugs me to no end on some various
+> gerrit systems all the time.  I'll look into it later this week unless
+> someone beats me to it :)
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-clang-analyzer warnings: (new ones prefixed by >>)
-   drivers/misc/eeprom/at25.c:438:6: note: Left side of '||' is false
-   drivers/misc/eeprom/at25.c:438:16: note: Assuming the condition is false
-           if (sr < 0 || sr & AT25_SR_nRDY) {
-                         ^~~~~~~~~~~~~~~~~
-   drivers/misc/eeprom/at25.c:438:2: note: Taking false branch
-           if (sr < 0 || sr & AT25_SR_nRDY) {
-           ^
-   drivers/misc/eeprom/at25.c:443:2: note: Loop condition is false.  Exiting loop
-           mutex_init(&at25->lock);
-           ^
-   include/linux/mutex.h:101:32: note: expanded from macro 'mutex_init'
-   #define mutex_init(mutex)                                               \
-                                                                           ^
-   drivers/misc/eeprom/at25.c:444:12: note: Access to field 'spi' results in a dereference of a null pointer (loaded from variable 'at25')
-           at25->spi = spi;
-           ~~~~      ^
-   4 warnings generated.
-   drivers/misc/eeprom/idt_89hpesx.c:946:3: warning: Value stored to 'csraddr_len' is never read [clang-analyzer-deadcode.DeadStores]
-                   csraddr_len = strnlen(csraddr_str, count);
-                   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/misc/eeprom/idt_89hpesx.c:946:3: note: Value stored to 'csraddr_len' is never read
-                   csraddr_len = strnlen(csraddr_str, count);
-                   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 3 warnings (3 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   3 warnings generated.
-   fs/fscache/page.c:403:32: warning: Value stored to 'state' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-                   enum fscache_operation_state state = op->state;
-                                                ^~~~~   ~~~~~~~~~
-   fs/fscache/page.c:403:32: note: Value stored to 'state' during its initialization is never read
-                   enum fscache_operation_state state = op->state;
-                                                ^~~~~   ~~~~~~~~~
-   fs/fscache/page.c:992:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-           ret = -ENOBUFS;
-           ^     ~~~~~~~~
-   fs/fscache/page.c:992:2: note: Value stored to 'ret' is never read
-           ret = -ENOBUFS;
-           ^     ~~~~~~~~
-   fs/fscache/page.c:1074:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-           ret = -ENOBUFS;
-           ^     ~~~~~~~~
-   fs/fscache/page.c:1074:2: note: Value stored to 'ret' is never read
-           ret = -ENOBUFS;
-           ^     ~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   drivers/media/i2c/et8ek8/et8ek8_driver.c:531:3: warning: Value stored to 'list' is never read [clang-analyzer-deadcode.DeadStores]
-                   list = meta->reglist[nlists].ptr;
-                   ^      ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/et8ek8/et8ek8_driver.c:531:3: note: Value stored to 'list' is never read
-                   list = meta->reglist[nlists].ptr;
-                   ^      ~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   5 warnings generated.
-   drivers/bus/mhi/core/main.c:284:2: warning: Value stored to 'mhi_cntrl' is never read [clang-analyzer-deadcode.DeadStores]
-           mhi_cntrl = mhi_dev->mhi_cntrl;
-           ^           ~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:284:2: note: Value stored to 'mhi_cntrl' is never read
-           mhi_cntrl = mhi_dev->mhi_cntrl;
-           ^           ~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:467:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:467:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:1047:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:1047:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:1525:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/core/main.c:1525:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &mhi_cntrl->mhi_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   drivers/iio/frequency/adf4350.c:33:8: warning: Excessive padding in 'struct adf4350_state' (36 padding bytes, where 4 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, lock, regs, regs_hw, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adf4350_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   drivers/iio/frequency/adf4350.c:33:8: note: Excessive padding in 'struct adf4350_state' (36 padding bytes, where 4 is optimal). Optimal fields order: val, spi, freq_req, reg, lock_detect_gpiod, pdata, clk, clkin, chspc, fpfd, min_out_freq, r0_fract, r0_int, r1_mod, r4_rf_div_sel, lock, regs, regs_hw, consider reordering the fields or adding explicit padding members
-   struct adf4350_state {
-   ~~~~~~~^~~~~~~~~~~~~~~
-   1 warning generated.
->> drivers/iio/frequency/admv1013.c:93:8: warning: Excessive padding in 'struct admv1013_state' (48 padding bytes, where 16 is optimal). Optimal fields order: data, det_en, spi, clkin, reg, input_mode, quad_se_mode, lock, nb, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct admv1013_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/iio/frequency/admv1013.c:93:8: note: Excessive padding in 'struct admv1013_state' (48 padding bytes, where 16 is optimal). Optimal fields order: data, det_en, spi, clkin, reg, input_mode, quad_se_mode, lock, nb, consider reordering the fields or adding explicit padding members
-   struct admv1013_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   4 warnings generated.
-   drivers/usb/gadget/udc/udc-xilinx.c:635:3: warning: Value stored to 'bufferspace' is never read [clang-analyzer-deadcode.DeadStores]
-                   bufferspace -= count;
-                   ^              ~~~~~
-   drivers/usb/gadget/udc/udc-xilinx.c:635:3: note: Value stored to 'bufferspace' is never read
-                   bufferspace -= count;
-                   ^              ~~~~~
-   drivers/usb/gadget/udc/udc-xilinx.c:680:19: warning: Value stored to 'udc' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct xusb_udc *udc = ep->udc;
-                            ^~~   ~~~~~~~
-   drivers/usb/gadget/udc/udc-xilinx.c:680:19: note: Value stored to 'udc' during its initialization is never read
-           struct xusb_udc *udc = ep->udc;
-                            ^~~   ~~~~~~~
-   drivers/usb/gadget/udc/udc-xilinx.c:695:14: warning: Although the value stored to 'is_short' is used in the enclosing expression, the value is never actually read from 'is_short' [clang-analyzer-deadcode.DeadStores]
-                           is_last = is_short = 1;
-                                     ^          ~
-   drivers/usb/gadget/udc/udc-xilinx.c:695:14: note: Although the value stored to 'is_short' is used in the enclosing expression, the value is never actually read from 'is_short'
-                           is_last = is_short = 1;
-                                     ^          ~
-   drivers/usb/gadget/udc/udc-xilinx.c:1139:19: warning: Value stored to 'req' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct xusb_req *req    = to_xusb_req(_req);
-                            ^~~
-   drivers/usb/gadget/udc/udc-xilinx.c:1139:19: note: Value stored to 'req' during its initialization is never read
-           struct xusb_req *req    = to_xusb_req(_req);
-                            ^~~
-   3 warnings generated.
-   lib/radix-tree.c:1046:3: warning: 4th function call argument is an uninitialized value [clang-analyzer-core.CallAndMessage]
-                   node_tag_clear(root, parent, tag, offset);
-                   ^                                 ~~~~~~
-   lib/radix-tree.c:1032:2: note: 'offset' declared without an initial value
-           int offset;
-           ^~~~~~~~~~
-   lib/radix-tree.c:1035:6: note: Assuming 'index' is <= 'maxindex'
-           if (index > maxindex)
-               ^~~~~~~~~~~~~~~~
-   lib/radix-tree.c:1035:2: note: Taking false branch
-           if (index > maxindex)
-           ^
-   lib/radix-tree.c:1040:2: note: Loop condition is false. Execution continues on line 1045
-           while (radix_tree_is_internal_node(node)) {
-           ^
-   lib/radix-tree.c:1045:6: note: Assuming 'node' is non-null
-           if (node)
-               ^~~~
-   lib/radix-tree.c:1045:2: note: Taking true branch
-           if (node)
-           ^
-   lib/radix-tree.c:1046:3: note: 4th function call argument is an uninitialized value
-                   node_tag_clear(root, parent, tag, offset);
-                   ^                                 ~~~~~~
-   Suppressed 2 warnings (2 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   1 warning generated.
-   drivers/most/most_usb.c:951:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct device *dev = &usb_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~
-   drivers/most/most_usb.c:951:17: note: Value stored to 'dev' during its initialization is never read
-           struct device *dev = &usb_dev->dev;
-                          ^~~   ~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   2 warnings generated.
-   drivers/power/supply/wm831x_power.c:487:17: warning: Value stored to 'wm831x' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct wm831x *wm831x = wm831x_power->wm831x;
-                          ^~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/wm831x_power.c:487:17: note: Value stored to 'wm831x' during its initialization is never read
-           struct wm831x *wm831x = wm831x_power->wm831x;
-                          ^~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/wm831x_power.c:519:17: warning: Value stored to 'wm831x' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct wm831x *wm831x = wm831x_power->wm831x;
-                          ^~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/wm831x_power.c:519:17: note: Value stored to 'wm831x' during its initialization is never read
-           struct wm831x *wm831x = wm831x_power->wm831x;
-                          ^~~~~~   ~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-   drivers/power/supply/88pm860x_battery.c:197:3: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-                   ret = ((buf[4] >> 6) << 10) | ((buf[3] >> 6) << 8)
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/88pm860x_battery.c:197:3: note: Value stored to 'ret' is never read
-                   ret = ((buf[4] >> 6) << 10) | ((buf[3] >> 6) << 8)
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   drivers/iio/adc/ti-ads124s08.c:96:8: warning: Excessive padding in 'struct ads124s_private' (43 padding bytes, where 11 is optimal). Optimal fields order: data, buffer, chip_info, reset_gpio, spi, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ads124s_private {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ti-ads124s08.c:96:8: note: Excessive padding in 'struct ads124s_private' (43 padding bytes, where 11 is optimal). Optimal fields order: data, buffer, chip_info, reset_gpio, spi, lock, consider reordering the fields or adding explicit padding members
-   struct ads124s_private {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   3 warnings generated.
-
-vim +93 drivers/iio/frequency/admv1013.c
-
-    92	
-  > 93	struct admv1013_state {
-    94		struct spi_device	*spi;
-    95		struct clk		*clkin;
-    96		/* Protect against concurrent accesses to the device and to data */
-    97		struct mutex		lock;
-    98		struct regulator	*reg;
-    99		struct notifier_block	nb;
-   100		unsigned int		input_mode;
-   101		unsigned int		quad_se_mode;
-   102		bool			det_en;
-   103		u8			data[3] ____cacheline_aligned;
-   104	};
-   105	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+If backporting is an issue, we could just drop this warning - GCC
+before 4.6 hasn't been supported for a while anyway, and Clang never
+had the SIMD accelerated XOR to begin with (it needs the __restrict
+annotations that the parent patch introduces)
