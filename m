@@ -1,45 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8DF367
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 03:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31DD372
+	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 05:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658721299; x=1690257299;
+  t=1658725511; x=1690261511;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ec4XM4FM3uNcxeqXUFmyoEcKZzAjNzVO988olMBtawc=;
-  b=HM+zwtxVYqTclu+VwSZbaE79+fyouTwvXUlPCLMj9QWvPs9IHDlzlhM2
-   mMLqvqT4r17ohwiqDCuEVspHC6iMMp4PMR6sono3CEnoMDrXHJgLZLYDk
-   1UYUTv3etUJppIXpEcWhY4zcTX8ljsSJzhsSZb2YMxl24l1UBNAfbydJ1
-   vLUTSi2EFvEFRXd4t7nEk1VlFwmIubJsfpPXgy/31o+Gcjn/idr3xM8op
-   RG36XUuyfziYKI3SJdFjwZiolv/flktYIwxTLXXq2DuTi9ViGrItN/TxU
-   rARhLJkmyTC0flTvU0Xu+F1Mu8QLBRUgwBFSXf2CkKOvS499+1t+pHKgr
+  bh=RId4tYUzT4uCGM3S8yyfnve2MhIgzCeQ3nPL7rhNPrI=;
+  b=SyIVNyLLYV15YKegrMqQSfxRQ3y1I36/87KlnCclXF3kcQ9dI+3rCGnu
+   4TD14gNRCMYG9/LAlD1t1qg5MGD4yXdqfx878DletX5Kwv6MDGjfJL5ew
+   aMM8rI1mogUlweqL5qxbweFzIrDTUdDoi/k299joxAlQtorAEudlVsQEH
+   mISBx70eAvmGH+4MyRhTJoW8xLLZy1qYU/uhqCVWz+GqJWpDVkPSn3UDf
+   uM3KiyrT3RzdbVSiH+bG1bNSr/GaqHV6QXAIrQ/xnvMage0n1fpiaTEbr
+   raClBwszNDpNXsvhrqWeo+29dk93bILf1bUfvYL07NmpFgsQoccadlayX
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="287616069"
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="313357999"
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="287616069"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 20:54:58 -0700
+   d="scan'208";a="313357999"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 22:05:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="627280316"
+   d="scan'208";a="632221859"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2022 20:54:56 -0700
+  by orsmga001.jf.intel.com with ESMTP; 24 Jul 2022 22:05:00 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oFpBI-0004h5-0R;
-	Mon, 25 Jul 2022 03:54:56 +0000
-Date: Mon, 25 Jul 2022 11:53:55 +0800
+	id 1oFqH6-0004kd-0Y;
+	Mon, 25 Jul 2022 05:05:00 +0000
+Date: Mon, 25 Jul 2022 13:04:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-Message-ID: <202207251140.M7YAqoLC-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [linux-next:master 1663/12552] lib/crypto/blake2s-selftest.c:548:13:
+ warning: stack frame size (1120) exceeds limit (1024) in 'blake2s_selftest'
+Message-ID: <202207251313.gKhpElEq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,111 +47,98 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Oleksij,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-date:   1 year, 2 months ago
-config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   18c107a1f120d095404d141dfad8f594bdc44020
+commit: 2d16803c562ecc644803d42ba98a8e0aef9c014e [1663/12552] crypto: blake2s - remove shash module
+config: mips-randconfig-c004-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251313.gKhpElEq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=2d16803c562ecc644803d42ba98a8e0aef9c014e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 2d16803c562ecc644803d42ba98a8e0aef9c014e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash lib/crypto/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-                                                                       ^~~~~~~~~
-   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                                           ^~~~
-   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-                                                      ^~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                                            ^~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-                                                                       ^~~~~~~~~
-   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                                           ^~~~
-   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-                                                      ^~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                                            ^~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
->> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-                                                                       ^~~~~~~~~
-   include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                                           ^~~~
-   include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-                                                      ^~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                                            ^~~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   3 warnings generated.
+>> lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size (1120) exceeds limit (1024) in 'blake2s_selftest' [-Wframe-larger-than]
+   bool __init blake2s_selftest(void)
+               ^
+   1 warning generated.
 
 
-vim +242 drivers/iio/adc/ti-tsc2046.c
+vim +/blake2s_selftest +548 lib/crypto/blake2s-selftest.c
 
-   239	
-   240	static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
-   241	{
- > 242		return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-   243	}
-   244	
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  547  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @548  bool __init blake2s_selftest(void)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  549  {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  550  	u8 key[BLAKE2S_KEY_SIZE];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  551  	u8 buf[ARRAY_SIZE(blake2s_testvecs)];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  552  	u8 hash[BLAKE2S_HASH_SIZE];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  553  	struct blake2s_state state;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  554  	bool success = true;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  555  	int i, l;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  556  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  557  	key[0] = key[1] = 1;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  558  	for (i = 2; i < sizeof(key); ++i)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  559  		key[i] = key[i - 2] + key[i - 1];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  560  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  561  	for (i = 0; i < sizeof(buf); ++i)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  562  		buf[i] = (u8)i;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  563  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  564  	for (i = l = 0; i < ARRAY_SIZE(blake2s_testvecs); l = (l + 37) % ++i) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  565  		int outlen = 1 + i % BLAKE2S_HASH_SIZE;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  566  		int keylen = (13 * i) % (BLAKE2S_KEY_SIZE + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  567  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  568  		blake2s(hash, buf, key + BLAKE2S_KEY_SIZE - keylen, outlen, i,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  569  			keylen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  570  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  571  			pr_err("blake2s self-test %d: FAIL\n", i + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  572  			success = false;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  573  		}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  574  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  575  		if (!keylen)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  576  			blake2s_init(&state, outlen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  577  		else
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  578  			blake2s_init_key(&state, outlen,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  579  					 key + BLAKE2S_KEY_SIZE - keylen,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  580  					 keylen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  581  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  582  		blake2s_update(&state, buf, l);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  583  		blake2s_update(&state, buf + l, i - l);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  584  		blake2s_final(&state, hash);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  585  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  586  			pr_err("blake2s init/update/final self-test %d: FAIL\n",
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  587  			       i + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  588  			success = false;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  589  		}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  590  	}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  591  
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  592  	for (i = 0; i < 32; ++i) {
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  593  		enum { TEST_ALIGNMENT = 16 };
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  594  		u8 unaligned_block[BLAKE2S_BLOCK_SIZE + TEST_ALIGNMENT - 1]
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  595  					__aligned(TEST_ALIGNMENT);
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  596  		u8 blocks[BLAKE2S_BLOCK_SIZE * 3];
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  597  		struct blake2s_state state1, state2;
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  598  
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  599  		get_random_bytes(blocks, sizeof(blocks));
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  600  		get_random_bytes(&state, sizeof(state));
+2d16803c562ecc Jason A. Donenfeld 2022-05-28  601  
+
+:::::: The code at line 548 was first introduced by commit
+:::::: 66d7fb94e4ffe5acc589e0b2b4710aecc1f07a28 crypto: blake2s - generic C library implementation and selftest
+
+:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
 
 -- 
 0-DAY CI Kernel Test Service
