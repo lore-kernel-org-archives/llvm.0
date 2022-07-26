@@ -1,123 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D2F4C8B
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 16:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12119C433D6;
-	Tue, 26 Jul 2022 16:24:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658852661;
-	bh=e5WQ82QXiZdaq5B32yptMF6AnsdJVIz/qzufzzfmS/Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lwOg6aQmG22CNWStkrQHr4DLs+p3YhotUzffLeuIsod50WyU9yA5cn4XBvNxtJY7n
-	 dibpTmLbOEGA0/TCJfoa/RAQ94BZXDfIMG6kboFjoUITcGKJ7ZpujBMpIkRqvtnIL9
-	 G9bxZsZHPnMoqDPk7WQ0t1URIR168BBlzWNyS+Cw3b5XMcjLU4ChlESkFzU7DHwFoV
-	 GmYfhqOWIQWSwMH8ST6+f9CiuT+AkvUIwyYIQFl9q0G9Cd4ISXfk2o0ZgIFa0YKlq0
-	 Vt+0wOkm8d9WZnwBZySXiiGfopAduw+k2yefTR3/AxnaC1GCyTQxBY0Y61Hr4hzKua
-	 BU2hV1NC2DbSA==
-Date: Tue, 26 Jul 2022 09:24:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, jikos@kernel.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	benjamin.tissoires@redhat.com, spbnick@gmail.com,
-	j.witteveen@gmail.com, stefanberzl@gmail.com,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
-Message-ID: <YuAVMwTxIo2q6Wgd@dev-arch.thelio-3990X>
-References: <20220717144333.251190-7-jose.exposito89@gmail.com>
- <202207261047.hUEFf74G-lkp@intel.com>
- <YuAMzSBcfsyGMjNy@dev-arch.thelio-3990X>
- <20220726161455.GA3260@elementary>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B965381
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 16:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658852864; x=1690388864;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9GjBYPlA9XVY6pF0hk2l5Vagf5etwclc7jAQNZ1TZC0=;
+  b=QPGQgpDkGvaZv/CBHG+lpMqXQzVW/lWj1JHxq58qwX+hapzD1Y2Fkm0Y
+   2R7GeC09KyrGsaJcqOhXqXuPUleI2Pppj2TrOTy/HS42QGPBXZYDHsXjp
+   J+zoVP7hek7QEgVsJIKf+tE2YBd15u2lfxfNSSAUlHSTj/JJx/uOhlNT7
+   zlZg9pIXN1+rO/3/qGUrzhUgbueTuYLMNs/pJNF92yZ49VyGUCBTySZn/
+   3BWQg36R+nraHf4V7CP9ayALGn7RJ+c65vOuuTSQDXF/8NdjbyrAr+Ogz
+   XIVbmRLEta9PFA+6w9vqQJW9kTfXBfAUCggJtoECfwGm6rl4HavChSxSv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="271035826"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="271035826"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 09:27:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="927398481"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jul 2022 09:27:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oGNPI-0007D0-31;
+	Tue, 26 Jul 2022 16:27:41 +0000
+Date: Wed, 27 Jul 2022 00:26:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kalesh Singh <kaleshsingh@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v6 09/17] KVM: arm64: Prepare non-protected nVHE
+ hypervisor stacktrace
+Message-ID: <202207270011.GnBElFk7-lkp@intel.com>
+References: <20220726073750.3219117-10-kaleshsingh@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220726161455.GA3260@elementary>
+In-Reply-To: <20220726073750.3219117-10-kaleshsingh@google.com>
 
-On Tue, Jul 26, 2022 at 06:14:55PM +0200, José Expósito wrote:
-> On Tue, Jul 26, 2022 at 08:48:29AM -0700, Nathan Chancellor wrote:
-> > On Tue, Jul 26, 2022 at 10:33:25AM +0800, kernel test robot wrote:
-> > > Hi "José,
-> > > 
-> > > Thank you for the patch! Yet something to improve:
-> > > 
-> > > [auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
-> > > base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
-> > > config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
-> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > >         git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
-> > >         git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
-> > 
-> > Unfortunately, LTO makes this warning kind of cryptic but it seems like
-> > the wrong template size is being used? This appears to resolve the
-> > warning for me.
-> > 
-> > Cheers,
-> > Nathan
-> > 
-> > diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-> > index 2407e927d1bf..dd4b1ed6fd1e 100644
-> > --- a/drivers/hid/hid-uclogic-params.c
-> > +++ b/drivers/hid/hid-uclogic-params.c
-> > @@ -1205,7 +1205,7 @@ static int uclogic_params_ugee_v2_init_frame_mouse(struct uclogic_params *p)
-> >  
-> >  	rc = uclogic_params_frame_init_with_desc(&p->frame_list[1],
-> >  						 uclogic_rdesc_ugee_v2_frame_mouse_template_arr,
-> > -						 uclogic_rdesc_ugee_v2_frame_dial_template_size,
-> > +						 uclogic_rdesc_ugee_v2_frame_mouse_template_size,
-> >  						 UCLOGIC_RDESC_V1_FRAME_ID);
-> >  	if (rc)
-> >  		return rc;
-> 
-> Hi Nathan,
-> 
-> Yes, I was about to send v3 fixing it. As you mentioned, I copy-pasted
-> the wrong template size.
+Hi Kalesh,
 
-Good to know! At least we caught it early :)
+Thank you for the patch! Perhaps something to improve:
 
-> I really need to learn how to enable those warnings in my dev
-> environment. My toolchain didn't complain about this.
+[auto build test WARNING on 82a592c13b0aeff94d84d54183dae0b26384c95f]
 
-CONFIG_FORTIFY_SOURCE will be the configuration that can catch these
-issues but I did not see a warning from clang without LTO, so it is
-likely the case that LTO helped the compiler see through translation
-units that the size was not correct.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220726-154355
+base:   82a592c13b0aeff94d84d54183dae0b26384c95f
+config: arm64-buildonly-randconfig-r006-20220724 (https://download.01.org/0day-ci/archive/20220727/202207270011.GnBElFk7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/adb3292a8f22d642d40a5f2f649592a1961fa7da
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220726-154355
+        git checkout adb3292a8f22d642d40a5f2f649592a1961fa7da
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-> Thanks for pointing me to LTO. I didn't know about the CONFIG_LTO_*
-> options, I'll play a bit with them.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you have any questions about it, feel free to reach out to our
-mailing list (llvm@lists.linux.dev), we're always happy to help!
+All warnings (new ones prefixed by >>):
 
-> Thanks a lot for looking into this,
-> Jose
+>> arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:6: warning: no previous prototype for function 'kvm_nvhe_prepare_backtrace' [-Wmissing-prototypes]
+   void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+        ^
+   arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+   ^
+   static 
+   1 warning generated.
 
-Any time!
 
-Cheers,
-Nathan
+vim +/kvm_nvhe_prepare_backtrace +46 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+
+    36	
+    37	/*
+    38	 * kvm_nvhe_prepare_backtrace - prepare to dump the nVHE backtrace
+    39	 *
+    40	 * @fp : frame pointer at which to start the unwinding.
+    41	 * @pc : program counter at which to start the unwinding.
+    42	 *
+    43	 * Saves the information needed by the host to dump the nVHE hypervisor
+    44	 * backtrace.
+    45	 */
+  > 46	void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
