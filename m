@@ -1,87 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24C27E
-	for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 23:37:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C32BBC341C6;
-	Mon, 25 Jul 2022 23:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658792264;
-	bh=+T4z1E56ig294fgsdgVrPcM/eeCX5DkWMlE7eJwNtKk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=AhahugvCsBz3fF3YLZE79oj2+uJabN3WHicYdsOOBSlv2zTtwbdNfZomepBfH7lM0
-	 fTlx4UA7fylq4fh4wDt3Hu0pIY7YJ2Zy4AlGYpB0CQweSNUbERbuepTBagiFSMLc7R
-	 TopTgnt57STx9vSPlwXcx50pIzWv5cEKG6n9Tc3jk1gI5LPJuGsZ7YKblw1NIdR/zb
-	 RAyGEJ4mcVXLUX28FyvYsV+eWX/gby1kZvzSIHtBktMww4wchqwVZyYWqrTlpGbKAM
-	 k1acG0nQlL46SBNJljCUk2M+pGn5FS98XiTeciTLwg+sjqvLWlfRgAsXcDD3LDi4Ha
-	 xRMXAWuSqfSdA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Zimmermann <tzimmermann@suse.de>,
-	Javier Martinez Canillas <javierm@redhat.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	stable@vger.kernel.org,
-	=?UTF-8?q?Tomasz=20Pawe=C5=82=20Gajc?= <tpgxyz@gmail.com>
-Subject: [PATCH] drm/simpledrm: Fix return type of simpledrm_simple_display_pipe_mode_valid()
-Date: Mon, 25 Jul 2022 16:36:29 -0700
-Message-Id: <20220725233629.223223-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230397A
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:10:34 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id n8so3330543yba.2
+        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 17:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2jEuccm+13frSO13F4UbCDTaTKUna0j27ZhD3kYwCOE=;
+        b=JG1XFgHmFM4OuFOHTn6dJ+pnT7DBjuTnLLajlNshh/FVuAMf/Vcgwwn8szGEZ8KruF
+         vQpvV4fPl3wu0AFGuxR+056dIMgw+zWIjX+TffF1DhBaJaFOpdAzRIYDtTKCvoAKjdXj
+         BzVxedIfh40R8VC6K5GWDkdtNRHXbf4k18N/yLNjoKQr4hzcCeJg2x+w1GqNya2gnj8o
+         FfyymnsCfk/iOTTbIXvP24Vt9k2ZpvlqeM2z9LgEMTllqAJj6kzzaqUVsrhi57Yt/BRw
+         x+1HgIa1RKXKE4fimavD8OUII7AuSQOc4PYz6QCzHTzBlw7Phkl4GzrXs0dMWoCEs+LM
+         hZXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2jEuccm+13frSO13F4UbCDTaTKUna0j27ZhD3kYwCOE=;
+        b=yx1+eOaJoaWmSLJuYWrsADKuFWaJ6PENepjfCtYno7wnApCX8uvv4KRJHJ8HPO0+ge
+         86s5xnP1ssMkD5D59nS7+gzg7kwe8CtX9/e8UDrDSV3Yu2HO5b2tDWMp5iiTpA4jfstx
+         fa10f74R31NvqFfNJ0jRpFzeQcquigQhbdHL5VfVp0A/+CaYmVzLeIx+Jxqo+pE1qyid
+         FIdsiCGU408LgYymEAlfdhlru2FqcWmJeQAtCM7TMwornkd592Ru/onsogtYQChLxWe+
+         RZL5mqy0levMyLNhkZshZAcgJCbjVY+rkA98OyWBxW4TGhWVCnYAOFK8uN7vSSgfceYc
+         CqXA==
+X-Gm-Message-State: AJIora9a243Y1YdBO26JR2jRZrsQDuecDPl2wNts+MkXZBcYM6GEyZvu
+	BZFExcVYRmuiqUMxx6PWpUyvNJ1SXbJan8kkoCAE0g==
+X-Google-Smtp-Source: AGRyM1vcor1AoZoF/hJYr87qRlJIfLAt0f7iGROesAM925P5MkdFlgqOJv1cHjTmmUDBGaoOCe+/7SUZgR29WPcH5Y0=
+X-Received: by 2002:a5b:cc6:0:b0:66e:45c6:2a25 with SMTP id
+ e6-20020a5b0cc6000000b0066e45c62a25mr11454535ybr.304.1658794233835; Mon, 25
+ Jul 2022 17:10:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220610233513.1798771-1-samitolvanen@google.com>
+ <20220610233513.1798771-21-samitolvanen@google.com> <YtvZvYHC1BKzEz1p@worktop.programming.kicks-ass.net>
+In-Reply-To: <YtvZvYHC1BKzEz1p@worktop.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 25 Jul 2022 17:09:57 -0700
+Message-ID: <CABCJKucWbN15tH=zJ7HFeNnOPB3v7S=2=oL3pmp89OHOM2=oYw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 20/20] x86: Add support for CONFIG_CFI_CLANG
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-When booting a kernel compiled with clang's CFI protection
-(CONFIG_CFI_CLANG), there is a CFI failure in
-drm_simple_kms_crtc_mode_valid() when trying to call
-simpledrm_simple_display_pipe_mode_valid() through ->mode_valid():
+On Sat, Jul 23, 2022 at 4:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Jun 10, 2022 at 04:35:13PM -0700, Sami Tolvanen wrote:
+>
+> > +#ifdef CONFIG_CFI_CLANG
+> > +#define __CFI_TYPE(name)                                     \
+> > +     .fill 7, 1, 0xCC ASM_NL                                 \
+> > +     SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)        \
+> > +     int3 ASM_NL                                             \
+> > +     int3 ASM_NL                                             \
+> > +     mov __kcfi_typeid_##name, %eax ASM_NL                   \
+> > +     int3 ASM_NL                                             \
+> > +     int3 ASM_NL                                             \
+> > +     SYM_FUNC_END(__cfi_##name)
+> > +#endif
+>
+> Like said on IRC yesterday, this doesn't generate the right mov
+> encoding.
+>
+>         .byte 0xb8 ; .long __kcfi_typeid_##name ;               \
+>
+> works. Your LLVM tree already has the ZExt patch you gave me yesterday
+> to fix up the linker fallout from this change.
 
-[    0.322802] CFI failure (target: simpledrm_simple_display_pipe_mode_valid+0x0/0x8):
-...
-[    0.324928] Call trace:
-[    0.324969]  __ubsan_handle_cfi_check_fail+0x58/0x60
-[    0.325053]  __cfi_check_fail+0x3c/0x44
-[    0.325120]  __cfi_slowpath_diag+0x178/0x200
-[    0.325192]  drm_simple_kms_crtc_mode_valid+0x58/0x80
-[    0.325279]  __drm_helper_update_and_validate+0x31c/0x464
-...
+Indeed, I updated my kernel tree and confirmed that this fixes the
+issue. Thanks for pointing it out.
 
-The ->mode_valid() member in 'struct drm_simple_display_pipe_funcs'
-expects a return type of 'enum drm_mode_status', not 'int'. Correct it
-to fix the CFI failure.
-
-Cc: stable@vger.kernel.org
-Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1647
-Reported-by: Tomasz Paweł Gajc <tpgxyz@gmail.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/tiny/simpledrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-index 768242a78e2b..5422363690e7 100644
---- a/drivers/gpu/drm/tiny/simpledrm.c
-+++ b/drivers/gpu/drm/tiny/simpledrm.c
-@@ -627,7 +627,7 @@ static const struct drm_connector_funcs simpledrm_connector_funcs = {
- 	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
- };
- 
--static int
-+static enum drm_mode_status
- simpledrm_simple_display_pipe_mode_valid(struct drm_simple_display_pipe *pipe,
- 				    const struct drm_display_mode *mode)
- {
-
-base-commit: e0dccc3b76fb35bb257b4118367a883073d7390e
--- 
-2.37.1
-
+Sami
