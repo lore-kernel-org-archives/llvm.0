@@ -1,177 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA21259A
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 15:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747C0C433C1;
-	Tue, 26 Jul 2022 15:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658848637;
-	bh=5SRJ7lsxlITGrYKHbZ9YUt6+dWju5QmVs/XVvuktXxk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E4VX6Ra0PR1scrB2m6YK8pRJJgnkNUBgbwi6MnzpVO0vc8QnrGnsbx57ZsFolXbsN
-	 ODfmSIkAzY9oZNT93iF33wBR4ynVNapMa/evuh+9eAIPdxyPSs/CvK6a6Etn2PlKeI
-	 wqoDeGVJGlDLG6y3tvRVeeSSCLqiuNLvXDDGhC56E8t5xI6yWQKxTL2Zv9uMx9f02i
-	 /MHaujuXgSyCsGdi/DKQp0CusbsEFB4VszgtdvCPjXNQudBKuU9N4i3oQb+PXIhJl1
-	 hWYyBfu8v+0UE+C/19lW+p5wx4PS6uMChVyZmuwxOiXNSDRX2rIplqpZoNEWp4hOms
-	 sTowwG4I2Z9qQ==
-Date: Tue, 26 Jul 2022 08:17:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-Message-ID: <YuAFeyKirrneGPSB@dev-arch.thelio-3990X>
-References: <202207251140.M7YAqoLC-lkp@intel.com>
- <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542EE290D
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 15:38:52 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 78E1838035;
+	Tue, 26 Jul 2022 15:38:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1658849925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ryV1HJCptD0nwoReqYwbenCXh0WLmaSLGVPdKV3OZ14=;
+	b=oxDbM3ouJt673YP87UvBW499CowgY+FeAY/kCRWrqJAQTAWICJIZC7yUWhQ7JY7TKDHuyC
+	/40cBCMyiHSDW6Wd0xi+ETMvlAL8eZ8rgVdh0EWS1Bfe4zkRjGpthrjXHA0en+uBe/kGU7
+	zGV+zyx4S9quiN3P4mRDyHEK9hQ0qAo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1658849925;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ryV1HJCptD0nwoReqYwbenCXh0WLmaSLGVPdKV3OZ14=;
+	b=wVWhmq4c1eki7+2Og2//EDM8hO+eRAgiuV9boY2r1sORV3wDD+rD7d3h4W3ZCsBXv84lfN
+	kNsMhtQy03K+SCBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 498CE13A7C;
+	Tue, 26 Jul 2022 15:38:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id UF4GEYUK4GIkXAAAMHmgww
+	(envelope-from <tzimmermann@suse.de>); Tue, 26 Jul 2022 15:38:45 +0000
+Message-ID: <7ca66bcf-a29a-987c-4606-9209590dae91@suse.de>
+Date: Tue, 26 Jul 2022 17:38:44 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/simpledrm: Fix return type of
+ simpledrm_simple_display_pipe_mode_valid()
+Content-Language: en-US
+To: Sami Tolvanen <samitolvanen@google.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: =?UTF-8?Q?Tomasz_Pawe=c5=82_Gajc?= <tpgxyz@gmail.com>,
+ Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+ LKML <linux-kernel@vger.kernel.org>, dri-devel@lists.freedesktop.org,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ "# 3.4.x" <stable@vger.kernel.org>
+References: <20220725233629.223223-1-nathan@kernel.org>
+ <CABCJKuf1gYZZb9U-zwjkvvRUUh9GvYsHF=8zub=pr9tG4BqtkA@mail.gmail.com>
+From: Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CABCJKuf1gYZZb9U-zwjkvvRUUh9GvYsHF=8zub=pr9tG4BqtkA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SKFncP8NLk0WuC8ZPEwA4780"
 
-On Tue, Jul 26, 2022 at 10:07:09AM +0200, Andy Shevchenko wrote:
-> Seems yet another false positive from Clang.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SKFncP8NLk0WuC8ZPEwA4780
+Content-Type: multipart/mixed; boundary="------------DMeztSdmW47OO0pR4AMxD1YJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sami Tolvanen <samitolvanen@google.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: =?UTF-8?Q?Tomasz_Pawe=c5=82_Gajc?= <tpgxyz@gmail.com>,
+ Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+ LKML <linux-kernel@vger.kernel.org>, dri-devel@lists.freedesktop.org,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ "# 3.4.x" <stable@vger.kernel.org>
+Message-ID: <7ca66bcf-a29a-987c-4606-9209590dae91@suse.de>
+Subject: Re: [PATCH] drm/simpledrm: Fix return type of
+ simpledrm_simple_display_pipe_mode_valid()
+References: <20220725233629.223223-1-nathan@kernel.org>
+ <CABCJKuf1gYZZb9U-zwjkvvRUUh9GvYsHF=8zub=pr9tG4BqtkA@mail.gmail.com>
+In-Reply-To: <CABCJKuf1gYZZb9U-zwjkvvRUUh9GvYsHF=8zub=pr9tG4BqtkA@mail.gmail.com>
 
-This warning should not show up because it is disabled in the main
-Makefile. Unfortunately, a recent change in clang made '-mtune' warn
-when it is not supported in the backend, which is the case for ARM:
+--------------DMeztSdmW47OO0pR4AMxD1YJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-https://github.com/ClangBuiltLinux/linux/issues/1674
+SGkNCg0KQW0gMjYuMDcuMjIgdW0gMDI6MTIgc2NocmllYiBTYW1pIFRvbHZhbmVuOg0KPiBP
+biBNb24sIEp1bCAyNSwgMjAyMiBhdCA0OjM3IFBNIE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRo
+YW5Aa2VybmVsLm9yZz4gd3JvdGU6DQo+Pg0KPj4gV2hlbiBib290aW5nIGEga2VybmVsIGNv
+bXBpbGVkIHdpdGggY2xhbmcncyBDRkkgcHJvdGVjdGlvbg0KPj4gKENPTkZJR19DRklfQ0xB
+TkcpLCB0aGVyZSBpcyBhIENGSSBmYWlsdXJlIGluDQo+PiBkcm1fc2ltcGxlX2ttc19jcnRj
+X21vZGVfdmFsaWQoKSB3aGVuIHRyeWluZyB0byBjYWxsDQo+PiBzaW1wbGVkcm1fc2ltcGxl
+X2Rpc3BsYXlfcGlwZV9tb2RlX3ZhbGlkKCkgdGhyb3VnaCAtPm1vZGVfdmFsaWQoKToNCj4+
+DQo+PiBbICAgIDAuMzIyODAyXSBDRkkgZmFpbHVyZSAodGFyZ2V0OiBzaW1wbGVkcm1fc2lt
+cGxlX2Rpc3BsYXlfcGlwZV9tb2RlX3ZhbGlkKzB4MC8weDgpOg0KPj4gLi4uDQo+PiBbICAg
+IDAuMzI0OTI4XSBDYWxsIHRyYWNlOg0KPj4gWyAgICAwLjMyNDk2OV0gIF9fdWJzYW5faGFu
+ZGxlX2NmaV9jaGVja19mYWlsKzB4NTgvMHg2MA0KPj4gWyAgICAwLjMyNTA1M10gIF9fY2Zp
+X2NoZWNrX2ZhaWwrMHgzYy8weDQ0DQo+PiBbICAgIDAuMzI1MTIwXSAgX19jZmlfc2xvd3Bh
+dGhfZGlhZysweDE3OC8weDIwMA0KPj4gWyAgICAwLjMyNTE5Ml0gIGRybV9zaW1wbGVfa21z
+X2NydGNfbW9kZV92YWxpZCsweDU4LzB4ODANCj4+IFsgICAgMC4zMjUyNzldICBfX2RybV9o
+ZWxwZXJfdXBkYXRlX2FuZF92YWxpZGF0ZSsweDMxYy8weDQ2NA0KPj4gLi4uDQo+Pg0KPj4g
+VGhlIC0+bW9kZV92YWxpZCgpIG1lbWJlciBpbiAnc3RydWN0IGRybV9zaW1wbGVfZGlzcGxh
+eV9waXBlX2Z1bmNzJw0KPj4gZXhwZWN0cyBhIHJldHVybiB0eXBlIG9mICdlbnVtIGRybV9t
+b2RlX3N0YXR1cycsIG5vdCAnaW50Jy4gQ29ycmVjdCBpdA0KPj4gdG8gZml4IHRoZSBDRkkg
+ZmFpbHVyZS4NCj4+DQo+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPj4gRml4ZXM6
+IDExZThmNWZkMjIzYiAoImRybTogQWRkIHNpbXBsZWRybSBkcml2ZXIiKQ0KPj4gTGluazog
+aHR0cHM6Ly9naXRodWIuY29tL0NsYW5nQnVpbHRMaW51eC9saW51eC9pc3N1ZXMvMTY0Nw0K
+Pj4gUmVwb3J0ZWQtYnk6IFRvbWFzeiBQYXdlxYIgR2FqYyA8dHBneHl6QGdtYWlsLmNvbT4N
+Cj4+IFNpZ25lZC1vZmYtYnk6IE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9y
+Zz4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYyB8IDIg
+Ky0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0p
+DQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5j
+IGIvZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4+IGluZGV4IDc2ODI0MmE3
+OGUyYi4uNTQyMjM2MzY5MGU3IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3Rp
+bnkvc2ltcGxlZHJtLmMNCj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRy
+bS5jDQo+PiBAQCAtNjI3LDcgKzYyNyw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZHJtX2Nv
+bm5lY3Rvcl9mdW5jcyBzaW1wbGVkcm1fY29ubmVjdG9yX2Z1bmNzID0gew0KPj4gICAgICAg
+ICAgLmF0b21pY19kZXN0cm95X3N0YXRlID0gZHJtX2F0b21pY19oZWxwZXJfY29ubmVjdG9y
+X2Rlc3Ryb3lfc3RhdGUsDQo+PiAgIH07DQo+Pg0KPj4gLXN0YXRpYyBpbnQNCj4+ICtzdGF0
+aWMgZW51bSBkcm1fbW9kZV9zdGF0dXMNCj4+ICAgc2ltcGxlZHJtX3NpbXBsZV9kaXNwbGF5
+X3BpcGVfbW9kZV92YWxpZChzdHJ1Y3QgZHJtX3NpbXBsZV9kaXNwbGF5X3BpcGUgKnBpcGUs
+DQo+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0
+IGRybV9kaXNwbGF5X21vZGUgKm1vZGUpDQo+PiAgIHsNCj4gDQo+IFRoYW5rcyBmb3IgZml4
+aW5nIHRoaXMsIE5hdGhhbiEgVGhlIHBhdGNoIGxvb2tzIGNvcnJlY3QgdG8gbWUuDQo+IA0K
+PiBSZXZpZXdlZC1ieTogU2FtaSBUb2x2YW5lbiA8c2FtaXRvbHZhbmVuQGdvb2dsZS5jb20+
+DQoNClRoYW5rcyBhIGxvdC4gSSd2ZSBhZGRlZCB0aGUgcGF0Y2ggdG8gZHJtLW1pc2MtZml4
+ZXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFNhbWkNCg0KLS0gDQpUaG9t
+YXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2Fy
+ZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJl
+cmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xo
+cmVyOiBJdm8gVG90ZXYNCg==
 
-As a result, all subsequent cc-option calls fail, which was the root
-cause of this warning last time, just with MIPS:
+--------------DMeztSdmW47OO0pR4AMxD1YJ--
 
-https://lore.kernel.org/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/
+--------------SKFncP8NLk0WuC8ZPEwA4780
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Intel folks, could you update your version of clang or add this
-particular warning to your blocklist? It should be resolved with
-https://github.com/llvm/llvm-project/commit/1d23f6c5a4f6ebb101c282f8f506588fe4d9e92f.
+-----BEGIN PGP SIGNATURE-----
 
-Cheers,
-Nathan
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLgCoQFAwAAAAAACgkQlh/E3EQov+Bc
+Tw/9H50TvFSe7qFoU2rFqatLpiWndYty9se0fN37IM/B852asCzBl/o5FNbJE2M2CU4hU9t74GlZ
+bIOPUJ5yKZAzfFYgqJ2IhwyDvhFMqUxsu7r2P7bcMsSWA+88KfrT1NpKGDdbdsUjfOTCM7TPNaP5
+QJf+0j/KbN9vRBqkxLp7ocRNN7Lim7E1Ub/Wullxpg9rQQxWOLZh6pL3mP4gvQybVx/5qQADsd8G
+feKN5CIYRxFboTn/wErBmop9lTOy5WLnxuqPws90C2xTKHuDxTr88hlcstUMJQFGS71BWNi0MPQo
+K8XVPSo7jXmrGnDYxwqppZGnTo4FjKMhsTTGs6o1cfAr1yCA+OQu0qQLQLKHeVuFvUzVhNeLFlUF
+TmNC9zzcoeI6B2Rv+9sgU6gx9kvAPjwFMTTEe+bz2HzwqvQwxoNNHSKEJeAGyayZd9KANn5INAjb
+NcnIkTQyM7dzXgWC2gohrHL5yYjhIBrkwq3H0Bcjw1/iQQubxJkDAEIDFEyn30LnAP+IKxT0Vy2J
+VHHwWnLJZtUc81e4nI7Gflf1N2GJZAqQoycMrn4ZmLsMb5W7PsNZggakaZlTS86nElIDbdzlqLZz
+4i7aIvdLZAbJKJgFDy+l4Wb0GeI8tCOInDDSiXcicnEhFGm3crKD3vIRpfSa/k4SYIYVNVApEl++
+e28=
+=D0wX
+-----END PGP SIGNATURE-----
 
-> On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Oleksij,
-> >
-> > FYI, the error/warning still remains.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-> > commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-> > date:   1 year, 2 months ago
-> > config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> 
-> What the heck? The get_unaligned_*() is exactly to get unaligned data.
-> 
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-> >                    if (!(condition))                                       \
-> >                          ^~~~~~~~~
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                       ^~~~
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-> >                    if (!(condition))                                       \
-> >                          ^~~~~~~~~
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                                ^~~~
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                                                         ^~~~
-> >    include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-> >            (cond) ?                                        \
-> >             ^~~~
-> >    3 warnings generated.
-> >
-> >
-> > vim +242 drivers/iio/adc/ti-tsc2046.c
-> >
-> >    239
-> >    240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
-> >    241  {
-> >  > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >    243  }
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+--------------SKFncP8NLk0WuC8ZPEwA4780--
