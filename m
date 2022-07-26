@@ -1,50 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1135C2579
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 14:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0371CC433D6;
-	Tue, 26 Jul 2022 14:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA21259A
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 15:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747C0C433C1;
+	Tue, 26 Jul 2022 15:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658845680;
-	bh=tYGaxmOtEWct+hY2SoBnCZGzvOcL/UBUptCOL4UpjVI=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=UE9AOoyfew0LRVvAXnX/z7P9HC5z/3chQoC4Y3lmgaPJCwuGsji/aJoMr8iVnCY6H
-	 Ke9phrGkuaIY1ItJOKTkT5QCMPoPOJup8vfq98c6iGA2NjNjcvEWM/n9hPD1isbgD0
-	 tUdeZL5JgERnrCU9lPl9xq1sclipC9cUyXJaxWowLkORPBX7LU929UR09F7gcUwS52
-	 LkEmBiGr/9qR31PR8nL3EEqsQl4qbvu8aXnBsTP/1btUn2MFrDBVXYLGxIZ7ZvALsO
-	 Kycmnr5E/RXL2MNzC8CEkGg+DcZKufVAFTM5Xv1k+R21EJTNk/CXqc/Bg+AclmEchj
-	 2AlSfSXxwH3hg==
-From: Kalle Valo <kvalo@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Gregory Greenman <gregory.greenman@intel.com>,  "David S . Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Nathan Chancellor <nathan@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,  Tom Rix <trix@redhat.com>,  Luca Coelho <luciano.coelho@intel.com>,  Johannes Berg <johannes.berg@intel.com>,  Avraham Stern <avraham.stern@intel.com>,  Miri Korenblit <miriam.rachel.korenblit@intel.com>,  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: [PATCH] iwlwifi: mvm: fix clang -Wformat warnings
-References: <20220711222919.2043613-1-justinstitt@google.com>
-	<CAFhGd8qRfhQg2k8E7pUm5EYSLp+vmtSd5tZuqtpZUyKud6_Zag@mail.gmail.com>
-Date: Tue, 26 Jul 2022 17:27:53 +0300
-In-Reply-To: <CAFhGd8qRfhQg2k8E7pUm5EYSLp+vmtSd5tZuqtpZUyKud6_Zag@mail.gmail.com>
-	(Justin Stitt's message of "Mon, 18 Jul 2022 10:37:05 -0700")
-Message-ID: <87sfmoq786.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	s=k20201202; t=1658848637;
+	bh=5SRJ7lsxlITGrYKHbZ9YUt6+dWju5QmVs/XVvuktXxk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E4VX6Ra0PR1scrB2m6YK8pRJJgnkNUBgbwi6MnzpVO0vc8QnrGnsbx57ZsFolXbsN
+	 ODfmSIkAzY9oZNT93iF33wBR4ynVNapMa/evuh+9eAIPdxyPSs/CvK6a6Etn2PlKeI
+	 wqoDeGVJGlDLG6y3tvRVeeSSCLqiuNLvXDDGhC56E8t5xI6yWQKxTL2Zv9uMx9f02i
+	 /MHaujuXgSyCsGdi/DKQp0CusbsEFB4VszgtdvCPjXNQudBKuU9N4i3oQb+PXIhJl1
+	 hWYyBfu8v+0UE+C/19lW+p5wx4PS6uMChVyZmuwxOiXNSDRX2rIplqpZoNEWp4hOms
+	 sTowwG4I2Z9qQ==
+Date: Tue, 26 Jul 2022 08:17:15 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
+ packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
+ an unaligned pointer value
+Message-ID: <YuAFeyKirrneGPSB@dev-arch.thelio-3990X>
+References: <202207251140.M7YAqoLC-lkp@intel.com>
+ <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
 
-Justin Stitt <justinstitt@google.com> writes:
+On Tue, Jul 26, 2022 at 10:07:09AM +0200, Andy Shevchenko wrote:
+> Seems yet another false positive from Clang.
 
-> Any chance a maintainer could take a look at this patch? I am trying
-> to get it through this cycle and we are so close to enabling the
-> -Wformat option for Clang. There's only a handful of patches remaining
-> until the patch enabling this warning can be sent!
+This warning should not show up because it is disabled in the main
+Makefile. Unfortunately, a recent change in clang made '-mtune' warn
+when it is not supported in the backend, which is the case for ARM:
 
-Gregory, can I take this directly to wireless-next? I assigned it to me
-in patchwork.
+https://github.com/ClangBuiltLinux/linux/issues/1674
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+As a result, all subsequent cc-option calls fail, which was the root
+cause of this warning last time, just with MIPS:
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+https://lore.kernel.org/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/
+
+Intel folks, could you update your version of clang or add this
+particular warning to your blocklist? It should be resolved with
+https://github.com/llvm/llvm-project/commit/1d23f6c5a4f6ebb101c282f8f506588fe4d9e92f.
+
+Cheers,
+Nathan
+
+> On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Oleksij,
+> >
+> > FYI, the error/warning still remains.
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+> > commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
+> > date:   1 year, 2 months ago
+> > config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm cross compiling tool for clang build
+> >         # apt-get install binutils-arm-linux-gnueabi
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+> 
+> What the heck? The get_unaligned_*() is exactly to get unaligned data.
+> 
+> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+> >                                                                        ^~~~~~~~~
+> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+> >                                            ^~~~
+> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+> >                                                       ^~~~
+> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >                                                             ^~~~
+> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+> >                    if (!(condition))                                       \
+> >                          ^~~~~~~~~
+> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+> >                                                  ^~~~
+> >    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+> >                                                       ^~~~
+> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+> >                                                                        ^~~~~~~~~
+> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+> >                                            ^~~~
+> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+> >                                                       ^~~~
+> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >                                                             ^~~~
+> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+> >                    if (!(condition))                                       \
+> >                          ^~~~~~~~~
+> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+> >                                                  ^~~~
+> >    include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+> >                                                                ^~~~
+> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+> >                                                                        ^~~~~~~~~
+> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+> >                                            ^~~~
+> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+> >                                                       ^~~~
+> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >                                                             ^~~~
+> >    note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+> >                                                  ^~~~
+> >    include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+> >                                                                                         ^~~~
+> >    include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+> >            (cond) ?                                        \
+> >             ^~~~
+> >    3 warnings generated.
+> >
+> >
+> > vim +242 drivers/iio/adc/ti-tsc2046.c
+> >
+> >    239
+> >    240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
+> >    241  {
+> >  > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+> >    243  }
+> 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
