@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682CA363
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 04:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939397E0
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 07:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1658809909;
+	s=mimecast20190719; t=1658821864;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=bqh0YgJ/m6nJn4VNmkHYPMSYiMnQU/wfKKqp2xuTbeY=;
-	b=SRMUFttxd0u5uZl/Wjr/SZZ3uMCw0Re2mf+kHey0BrqHHzzVPe7n6DxPjp03sgYm8efgmA
-	dDwsfTYcTG2deGBOwwLbI/Ijes4SuU327tltPvbVvaZzyh1RSclL3/2yr+Qt3CjalEfCSA
-	cpfAEPKkFv982NXATA3bHHGUOPnptm8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=hISR/bzH45dZ59umlhoTzTpee3Ah5IjgWp10MenbRhQ=;
+	b=WhjqiEZOx+cFAGFPsYLMas7ljEz86xDLScdnK0tqq7ZbLnn1NtwBqi9ZLQvsbWqvp1OfJI
+	z/KxIJPJX1/rzm8JkJR2oyvcvbATHOj4XfD98iSVScE6Gtg4FdEOT7SkBKJEnfy+JoJD+V
+	qky2TRzOPhvUvFs2rctT22ruClkyne4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-1jZzqOyaP1SGvWn0KjPC8w-1; Tue, 26 Jul 2022 00:31:47 -0400
-X-MC-Unique: 1jZzqOyaP1SGvWn0KjPC8w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-500-vmHgRB-nOQCBZzh9wtt0EA-1; Tue, 26 Jul 2022 03:51:02 -0400
+X-MC-Unique: vmHgRB-nOQCBZzh9wtt0EA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6C1A3801F57
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 04:31:47 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83AE9101A586
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 07:51:02 +0000 (UTC)
 Received: from [172.64.4.23] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 99838492CA4;
-	Tue, 26 Jul 2022 04:31:47 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 713BB2026D64;
+	Tue, 26 Jul 2022 07:51:02 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (93/492 SKIPPED): Test report for 5.19.0-rc7
- (mainline.kernel.org-clang) [68e77ffb]
-Date: Tue, 26 Jul 2022 04:31:47 -0000
+Subject: =?utf-8?b?4pyF?= PASS (28/492 SKIPPED): Test report for 5.19.0-rc7
+ (mainline.kernel.org-clang) [e9088629]
+Date: Tue, 26 Jul 2022 07:51:02 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <58211.122072600314800168@us-mta-659.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <25521.122072603510201165@us-mta-500.us.mimecast.lan>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -55,7 +55,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/48533
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48688
 
 One or more kernel tests failed:
 
@@ -77,16 +77,11 @@ l-tests/-/issues/1222
             Affected tests:
                   x86_64 (debug) - kselftest build - bpf
                   x86_64 (debug) - kselftest build - net
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
         Issue: targetcli - module 'inspect' has no attribute 'getargspec'
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
             Affected tests:
                  aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
                    s390x - Storage - targetcli basic
                   x86_64 - Storage - targetcli basic
                   x86_64 (debug) - Storage - targetcli basic
@@ -104,17 +99,20 @@ ion: kaslr
 l-tests/-/issues/1169
             Affected tests:
                  aarch64 - Reboot test
-                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
+                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Upstream: Storage nvme - tcp nvme/012
-            URL: https://marc.info/?l=3Dlinux-block&m=3D160215221708632&w=
-=3D2
+        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
+bsystem for controller nvme0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1274
             Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - blktests - nvme-tcp
         Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
 ser namespace
@@ -122,6 +120,7 @@ ser namespace
 l-tests/-/issues/1166
             Affected tests:
                  aarch64 - Podman system test - as root
+                 ppc64le - Podman system test - as root
                   x86_64 - Podman system test - as root
         Issue: Podman: Error: netavark: failed to configure bridge and veth=
  interface
@@ -129,6 +128,7 @@ l-tests/-/issues/1166
 l-tests/-/issues/1186
             Affected tests:
                  aarch64 - Podman system test - as root
+                 ppc64le - Podman system test - as root
                    s390x - Podman system test - as root
                   x86_64 - Podman system test - as root
         Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
@@ -137,18 +137,6 @@ er ID
 l-tests/-/issues/1167
             Affected tests:
                   x86_64 - Podman system test - as user
-        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
-bsystem for controller nvme0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1274
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
-tablished after max reconnecting reached
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
         Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/972
@@ -159,6 +147,7 @@ d
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1264
             Affected tests:
+                 aarch64 - LTP - commands
                    s390x - LTP - commands
         Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
 rom image history should =3D=3D image list
@@ -167,6 +156,8 @@ l-tests/-/issues/1160
             Affected tests:
                  aarch64 - Podman system test - as root
                  aarch64 - Podman system test - as user
+                 ppc64le - Podman system test - as root
+                 ppc64le - Podman system test - as user
                    s390x - Podman system test - as root
                    s390x - Podman system test - as user
         Issue: storage: software RAID testing: SELinux prevents mdadm
@@ -174,23 +165,31 @@ l-tests/-/issues/1160
 l-tests/-/issues/1213
             Affected tests:
                  aarch64 - Storage - swraid simple_reshape
+                 ppc64le - Storage - swraid simple_reshape
                    s390x - Storage - swraid simple_reshape
+        Issue: LTP - syscalls: fanotify10.c:538: TFAIL: group 0 (4) with FA=
+N_MARK_MOUNT did not get event
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1248
+            Affected tests:
+                 ppc64le - LTP - syscalls
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: trace/ftrace/tracer/include: line 4: echo: write error: No s=
+uch device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/803
+            Affected tests:
+                 ppc64le - trace: ftrace/tracer
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-        Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1251
-            Affected tests:
-                 aarch64 - LTP - commands
         Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
 d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
 tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
@@ -201,6 +200,12 @@ apability permissive=3D0
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
                  aarch64 - Storage - software RAID testing
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
 
 
 If you find a failure unrelated to your changes, please tag it at https://d=
