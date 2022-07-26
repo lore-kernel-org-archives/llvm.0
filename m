@@ -1,172 +1,221 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C326E7E0
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 08:07:47 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id f15so8335286edc.4
-        for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 01:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tPpfPzEfkaH/DAxlv4YpUMCrqo4JJIKHjJP/Tdj1qsc=;
-        b=ZTDShWMSIpO+K5aDdsP3PaORf+TOqh67JQ2rXzK0jh9LoBDfAiELXAfWeBtWdjLlAv
-         UUO9Lq3cAe/0PGrQVj7nKz4GQbSZcJ82lUqMen2NU/9dn7F9ip6UX8oL8zXBrjJoD5Mh
-         fstJDoVK1Wns8OoPmkoooRSoJaRJ2ZqZxGVKy5yl2Rq9sEo5WOsPlUmqNqg147s8M6UG
-         s/eCPigRwpaQw3CYpFVxvMVIfAXtYL4nUeF29ZLMhWnumW/JGYB2tvo6j0o23RzQRlIi
-         382mO0J/d3g+GfzjrvVBUhta4/1p1U2XIJuBuhVhJvYIqeu1cZLnX/K1JDlBNZyVJFpm
-         QSUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tPpfPzEfkaH/DAxlv4YpUMCrqo4JJIKHjJP/Tdj1qsc=;
-        b=mODO5LcfkkXUGf1Nu7LxmRdE66nzv7sL5gOySCYCyMqB+ohA0rWCUJhsSQsyqX1i0r
-         eO1a/TlQYdWpVS5/6hBi/4ja2DOQKtdBymGsQQ/2v+9Pn5nNSpC3psWzzcxQX0Dq/JPr
-         meHjG73p9ASLrbSM0LNXTEQ/3bVs4QYNjq+WasyDh8wtHalB2aaAy0eq3hqVAFz+OLhB
-         3I5uhfEkKj9KzSgTNFx/inz9JZvNoSA6ADBDGM1pZRCvaXifTjGuC9ooSFcbfSQMcvbm
-         1oBe+3dxmN+VnGroGUPdprIKdqS4jXmo8RiQ+Z9wd8ftBn/BMEbG4awU+yqmvEyN3ci3
-         eRYQ==
-X-Gm-Message-State: AJIora9MrUKm05C6uAheJolQlH9zC2Er7ql44PhRaSGIG2L7DyWZQEA3
-	397OVeRllArWbzKrdRfkxkg8Zi6yOCNJ5r+r4JE=
-X-Google-Smtp-Source: AGRyM1va5bJezG2AlV7JDDBBM0PCq1kn7W/ABDMasJ//2+C5ERRcQOFVfGw0sNfXmhwcJb/v8gYhV+jxHi07WE3KWMo=
-X-Received: by 2002:a05:6402:34c5:b0:43a:8f90:e643 with SMTP id
- w5-20020a05640234c500b0043a8f90e643mr16958490edc.88.1658822865859; Tue, 26
- Jul 2022 01:07:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7470C7E0
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 08:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658823072;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Fi3w6japnfip6Kfd3GYa2FPq7eWV+BU5yBOUnumhvWk=;
+	b=eFQoKyClD1dnW31MJid66Ry3GCJxHnUNLWMa+gBtWzx7TP9G8PWpdig4u4LOUxj9+VSGd/
+	iFG7XXk8VqQS6h1bmGrkJ45cu4B+VCAnB2rWsamasZ08j2Z4i5f3OCLNa3nBP1RUTeRUTa
+	WANm3Dp7KLhV7PUBq82dTDSx3wpsgbI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-Zk99g-raOSygpaoGojmrUg-1; Tue, 26 Jul 2022 04:11:05 -0400
+X-MC-Unique: Zk99g-raOSygpaoGojmrUg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEB942806AA7
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 08:11:04 +0000 (UTC)
+Received: from [172.64.4.23] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BFF3D1415118;
+	Tue, 26 Jul 2022 08:11:04 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (91/492 SKIPPED): Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [e0dccc3b]
+Date: Tue, 26 Jul 2022 08:11:04 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207251140.M7YAqoLC-lkp@intel.com>
-In-Reply-To: <202207251140.M7YAqoLC-lkp@intel.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 26 Jul 2022 10:07:09 +0200
-Message-ID: <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
-Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-To: kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <33865.122072604110500223@us-mta-620.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Seems yet another false positive from Clang.
+Hi, we tested your kernel and here are the results:
 
-On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Oleksij,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-> commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-> date:   1 year, 2 months ago
-> config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-What the heck? The get_unaligned_*() is exactly to get unaligned data.
+Tested-by: CKI Project <cki-project@redhat.com>
 
->            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->                                                                        ^~~~~~~~~
->    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->                                            ^~~~
->    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->                                                       ^~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                                             ^~~~
->    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
->                    if (!(condition))                                       \
->                          ^~~~~~~~~
->    include/linux/compiler.h:56:47: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->                                                  ^~~~
->    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->                                                       ^~~~
-> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
->            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->                                                                        ^~~~~~~~~
->    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->                                            ^~~~
->    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->                                                       ^~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                                             ^~~~
->    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
->                    if (!(condition))                                       \
->                          ^~~~~~~~~
->    include/linux/compiler.h:56:47: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->                                                  ^~~~
->    include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->                                                                ^~~~
-> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
->            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->                                                                        ^~~~~~~~~
->    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->                                            ^~~~
->    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->                                                       ^~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                                             ^~~~
->    note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler.h:56:47: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->                                                  ^~~~
->    include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->                                                                                         ^~~~
->    include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
->            (cond) ?                                        \
->             ^~~~
->    3 warnings generated.
->
->
-> vim +242 drivers/iio/adc/ti-tsc2046.c
->
->    239
->    240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
->    241  {
->  > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->    243  }
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48690
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Podman system test - as user
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
+bsystem for controller nvme0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1274
+            Affected tests:
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
+tablished after max reconnecting reached
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: Error: netavark: failed to configure bridge and veth=
+ interface
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1186
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                   s390x - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
+er ID
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1167
+            Affected tests:
+                  x86_64 - Podman system test - as user
+        Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/972
+            Affected tests:
+                   s390x - LTP - commands
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083062
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
