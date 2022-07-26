@@ -1,101 +1,86 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97BA367
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603C7621
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 02:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658796741; x=1690332741;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7MJPprHrWC/22tcVZAr1w0eZz8ntLzaTRRmATdZzq2Q=;
-  b=jwyXAUz5xfD3AHPqCy18wx3TohlKI9OuE8ZVKQfVxis+Hi3Y2mMn9JPk
-   sEdPitINZtO1tDbfuVJtU6g75RJJ5vB8IX5akQHMj4+EeALNpY0r5gbTz
-   jbWpv39rX4Yac+yX68itxFWRKGMAouBIBavym+v2xObwQ+txoDPjDNwmx
-   iYG/qg7tNolYEN6sGanAS2MN1rlU6oG4UbviJkcTTf4OQQxNMxzeHz5l9
-   hLRJrGxdgS51ECSgq4bLTMOZAOalzK33GhY2M59bzfM/Zy+cYqEZ1gZMq
-   AVjOCD3AjzqXlRw8jAa5SUJE9vTqaScF6fG3wj+mU4ZGim+QcJoIx/G/a
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="270863342"
+  t=1658802870; x=1690338870;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oQGLDobYwHi1A02VN+sYCWqkJ5xg453HmlwiMQc6qZQ=;
+  b=Sx6HWrZu6dpUQRlQNpsq+Az7JnokEicO3tr8H8Vjr8sR6h4AGsM8SiZJ
+   Tp4lA6udJONf8pxfKqP+eP2vzwxHbB1WimnPwtyMbEASup/QFWHU3edDN
+   M9kQbeH5FADAl60N0HMMiyYPQavor7Yxgwfb0lVxRrPO71qJ73ujusNPM
+   PIR7Z+WAxmexulWZaCsZekQjZricfhIy78TNcqEYUkzrnfTqCz/nI0oQf
+   h/t+3uTOY+k6KscVL6nrtJAWz5w6//ObzA31Q0q7dx2gbT+NHqpecTIo8
+   0jsdT0B7PJOEPrPMy7JSYynIXeHBsKSXKT0sH5mT3u9huCivev4fuy5m9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="289030170"
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="270863342"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 17:52:21 -0700
+   d="scan'208";a="289030170"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 19:34:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="667690528"
+   d="scan'208";a="742050967"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Jul 2022 17:52:19 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jul 2022 19:34:27 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oG8o6-0005kF-3B;
-	Tue, 26 Jul 2022 00:52:18 +0000
-Date: Tue, 26 Jul 2022 08:51:45 +0800
+	id 1oGAOw-0005sk-2h;
+	Tue, 26 Jul 2022 02:34:26 +0000
+Date: Tue, 26 Jul 2022 10:33:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Yan <andy.yan@rock-chips.com>
+To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+	jikos@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused
- variable 'vop2_dt_match'
-Message-ID: <202207260823.a2e6HBuO-lkp@intel.com>
+	benjamin.tissoires@redhat.com, spbnick@gmail.com,
+	j.witteveen@gmail.com, stefanberzl@gmail.com,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
+Message-ID: <202207261047.hUEFf74G-lkp@intel.com>
+References: <20220717144333.251190-7-jose.exposito89@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220717144333.251190-7-jose.exposito89@gmail.com>
 
-Hi Andy,
+Hi "José,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-commit: 604be85547ce4d61b89292d2f9a78c721b778c16 drm/rockchip: Add VOP2 driver
-date:   3 months ago
-config: arm-randconfig-c002-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260823.a2e6HBuO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+[auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
+config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=604be85547ce4d61b89292d2f9a78c721b778c16
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 604be85547ce4d61b89292d2f9a78c721b778c16
+        # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+        git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/gpu/drm/rockchip/ drivers/usb/gadget/ fs/ntfs3/ net/ceph/ net/ipv6/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused variable 'vop2_dt_match' [-Wunused-const-variable]
-   static const struct of_device_id vop2_dt_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/vop2_dt_match +248 drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
-
-   247	
- > 248	static const struct of_device_id vop2_dt_match[] = {
-   249		{
-   250			.compatible = "rockchip,rk3566-vop",
-   251			.data = &rk3566_vop,
-   252		}, {
-   253			.compatible = "rockchip,rk3568-vop",
-   254			.data = &rk3568_vop,
-   255		}, {
-   256		},
-   257	};
-   258	MODULE_DEVICE_TABLE(of, vop2_dt_match);
-   259	
+>> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
 
 -- 
 0-DAY CI Kernel Test Service
