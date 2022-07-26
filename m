@@ -1,106 +1,226 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10499621
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 02:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658803470; x=1690339470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/TQwusrqif/XtALjB8sGidArsgGL5jiQEVuHnGn7Ahc=;
-  b=ePRczOD5PjiBTja2MoAFvIuiiXee4Br7f1JEw84JW8QGXkjb8R6KOhAF
-   Xud+BPbk0vBBBqrE3AB5t+F0M/wcCW8TD6N9wOPnCQVZybEb5aUsaUbXD
-   8hkIJl+3zeXyq1QOdDCwzWfkZep2e4+lTFGzuJ0LaM0BUEpl70bl04HaN
-   AqZtzbROKpUN44aF4jw11Bu9cLBCJHS5JOLVfO+m6GjALv/xN3eV4rTFX
-   ebHMLJ4EJFLtu2S8XNGyDjdALjJYm94FD6UajCYTtmtMoejGMa3Qdc5mf
-   jiS+KT5Bl9uQYFQnNh4TmaCH4C72NGl86/nK6oxmH2JVoDwSer3yk68ue
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="374146385"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="374146385"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 19:44:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="575305103"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jul 2022 19:44:28 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oGAYd-0005tT-1Z;
-	Tue, 26 Jul 2022 02:44:27 +0000
-Date: Tue, 26 Jul 2022 10:43:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Allison Henderson <allison.henderson@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 18/18] xfs: Add parent pointer ioctl
-Message-ID: <202207261042.ZcgFn423-lkp@intel.com>
-References: <20220718202022.6598-19-allison.henderson@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682CA363
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 04:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658809909;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bqh0YgJ/m6nJn4VNmkHYPMSYiMnQU/wfKKqp2xuTbeY=;
+	b=SRMUFttxd0u5uZl/Wjr/SZZ3uMCw0Re2mf+kHey0BrqHHzzVPe7n6DxPjp03sgYm8efgmA
+	dDwsfTYcTG2deGBOwwLbI/Ijes4SuU327tltPvbVvaZzyh1RSclL3/2yr+Qt3CjalEfCSA
+	cpfAEPKkFv982NXATA3bHHGUOPnptm8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-1jZzqOyaP1SGvWn0KjPC8w-1; Tue, 26 Jul 2022 00:31:47 -0400
+X-MC-Unique: 1jZzqOyaP1SGvWn0KjPC8w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6C1A3801F57
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 04:31:47 +0000 (UTC)
+Received: from [172.64.4.23] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 99838492CA4;
+	Tue, 26 Jul 2022 04:31:47 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (93/492 SKIPPED): Test report for 5.19.0-rc7
+ (mainline.kernel.org-clang) [68e77ffb]
+Date: Tue, 26 Jul 2022 04:31:47 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718202022.6598-19-allison.henderson@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Message-Id: <58211.122072600314800168@us-mta-659.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Allison,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Perhaps something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on next-20220725]
-[cannot apply to linus/master v5.19-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Allison-Henderson/Parent-Pointers/20220719-044053
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220726/202207261042.ZcgFn423-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0a0b167e2b2c2bd8c046de4338abf8bc7f4204f1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Allison-Henderson/Parent-Pointers/20220719-044053
-        git checkout 0a0b167e2b2c2bd8c046de4338abf8bc7f4204f1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48533
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+One or more kernel tests failed:
 
-All warnings (new ones prefixed by >>):
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 (debug) - Memory function: kaslr
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Upstream: Storage nvme - tcp nvme/012
+            URL: https://marc.info/?l=3Dlinux-block&m=3D160215221708632&w=
+=3D2
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: Error: netavark: failed to configure bridge and veth=
+ interface
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1186
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                   s390x - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
+er ID
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1167
+            Affected tests:
+                  x86_64 - Podman system test - as user
+        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
+bsystem for controller nvme0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1274
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
+tablished after max reconnecting reached
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
+            Affected tests:
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/972
+            Affected tests:
+                   s390x - LTP - commands
+        Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, not expecte=
+d
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1264
+            Affected tests:
+                   s390x - LTP - commands
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+        Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1251
+            Affected tests:
+                 aarch64 - LTP - commands
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083062
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
->> fs/xfs/xfs_parent_utils.c:42:1: warning: no previous prototype for function 'xfs_attr_get_parent_pointer' [-Wmissing-prototypes]
-   xfs_attr_get_parent_pointer(struct xfs_inode            *ip,
-   ^
-   fs/xfs/xfs_parent_utils.c:41:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   1 warning generated.
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-vim +/xfs_attr_get_parent_pointer +42 fs/xfs/xfs_parent_utils.c
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-    35	
-    36	/*
-    37	 * Get the parent pointers for a given inode
-    38	 *
-    39	 * Returns 0 on success and non zero on error
-    40	 */
-    41	int
-  > 42	xfs_attr_get_parent_pointer(struct xfs_inode		*ip,
-    43				    struct xfs_pptr_info	*ppi)
-    44	
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
