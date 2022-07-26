@@ -1,58 +1,43 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229917A
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:22:15 +0000 (UTC)
-Received: by mail-ej1-f49.google.com with SMTP id bp15so23417650ejb.6
-        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 17:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6fkE3E+IwWr/jMUVZLcimgZqvTNf8bUrcGGPFWeGqFc=;
-        b=UXiUIlc4jhg/GkpTggAtu/yC1OXku8y/l6jETyO0Y4BEort+Bv2riNeWpduEMGzoh8
-         gwpbWbCm2REVlRSrwhOwC2GpT4LhJCpD+W96w/S9zdBjR4HFK/9+4PZ+AM9Uanio74La
-         d4zsjFmCNYfmx9ynZz8t1XLKYp/9B0Oqfa5AEZTXMlQdegyXszerZJwTPfw0MCbJScTz
-         V5PzSF9VAYVgqtXvBdXKXSFtN7MA90WnN2WAkt2TdCyp10MBMpMmxlgO+DTmuSC9+ub8
-         MBL4QEX76fy7/Bt8A6YfqB8pCP8H7iKOfrx3MSejVybkWp9s/TwopSPAAnW6ZldkobAT
-         emIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6fkE3E+IwWr/jMUVZLcimgZqvTNf8bUrcGGPFWeGqFc=;
-        b=tgrOlvROBsbnzgnQADPXsFy/OSBA1y+jy0Mh67D6rDVumJow9eOsZT9ui3Q4CtceZM
-         AgiJNz/S8FaDObwA0IXTLOYjewghl6IlmrQOmwhGJAha1Cu10h9lwnqn4wkX+d+poGyP
-         WI56bDp1HxzAk+xhPmveBpeVq0/4z2SdznJGvY+Ic1s/QE5QQIZWH1yM81mhvuvtZ29s
-         XlY8GiQLe1EtStF43UQVVGOhpTGPaxQlepKCKuaRHu8U3taJ/LDJm69q8Q4bYnyRpBmt
-         mc4KaPrDlGAy3U16m9MwJcMsm85uW3+nHNdx5kiyKY+NrwnYLLZjl/W7SS5OzNSg7JFd
-         qWWw==
-X-Gm-Message-State: AJIora/eVcufTVNaVV6VnH3A3S+uD8eht7q6bGmgKbq2zUcDlzb1Gunc
-	3HVPvmv92h+dS6dzsJ0qum8=
-X-Google-Smtp-Source: AGRyM1tGTVY8Y62yWUPM6oQzbeimq9TIf1ic2tZr8yzpO+trzKjRWA956uiZyxbNvxugVfNsdhC7Dg==
-X-Received: by 2002:a17:907:a053:b0:72b:3051:b79b with SMTP id gz19-20020a170907a05300b0072b3051b79bmr11497426ejc.690.1658794933431;
-        Mon, 25 Jul 2022 17:22:13 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b0072b1bc9b37fsm5855383ejt.22.2022.07.25.17.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 17:22:12 -0700 (PDT)
-Date: Tue, 26 Jul 2022 03:22:10 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Vivien Didelot <vivien.didelot@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [net-next PATCH v4 00/14] net: dsa: qca8k: code split for qca8k
-Message-ID: <20220726002210.vprs4qwgz7bucrjb@skbuf>
-References: <20220724201938.17387-1-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97BA367
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658796741; x=1690332741;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7MJPprHrWC/22tcVZAr1w0eZz8ntLzaTRRmATdZzq2Q=;
+  b=jwyXAUz5xfD3AHPqCy18wx3TohlKI9OuE8ZVKQfVxis+Hi3Y2mMn9JPk
+   sEdPitINZtO1tDbfuVJtU6g75RJJ5vB8IX5akQHMj4+EeALNpY0r5gbTz
+   jbWpv39rX4Yac+yX68itxFWRKGMAouBIBavym+v2xObwQ+txoDPjDNwmx
+   iYG/qg7tNolYEN6sGanAS2MN1rlU6oG4UbviJkcTTf4OQQxNMxzeHz5l9
+   hLRJrGxdgS51ECSgq4bLTMOZAOalzK33GhY2M59bzfM/Zy+cYqEZ1gZMq
+   AVjOCD3AjzqXlRw8jAa5SUJE9vTqaScF6fG3wj+mU4ZGim+QcJoIx/G/a
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="270863342"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="270863342"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 17:52:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="667690528"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jul 2022 17:52:19 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oG8o6-0005kF-3B;
+	Tue, 26 Jul 2022 00:52:18 +0000
+Date: Tue, 26 Jul 2022 08:51:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Yan <andy.yan@rock-chips.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused
+ variable 'vop2_dt_match'
+Message-ID: <202207260823.a2e6HBuO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,26 +46,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724201938.17387-1-ansuelsmth@gmail.com>
 
-On Sun, Jul 24, 2022 at 10:19:24PM +0200, Christian Marangi wrote:
-> This is needed ad ipq4019 SoC have an internal switch that is
-> based on qca8k with very minor changes. The general function is equal.
-> 
-> Because of this we split the driver to common and specific code.
-> 
-> As the common function needs to be moved to a different file to be
-> reused, we had to convert every remaining user of qca8k_read/write/rmw
-> to regmap variant.
-> We had also to generilized the special handling for the ethtool_stats
-> function that makes use of the autocast mib. (ipq4019 will have a
-> different tagger and use mmio so it could be quicker to use mmio instead
-> of automib feature)
-> And we had to convert the regmap read/write to bulk implementation to
-> drop the special function that makes use of it. This will be compatible
-> with ipq4019 and at the same time permits normal switch to use the eth
-> mgmt way to send the entire ATU table read/write in one go.
+Hi Andy,
 
-I'm done reviewing v4, from my side you can consider addressing the
-style comments as well as the comment on patch 1 from v3 and you can
-resend.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: 604be85547ce4d61b89292d2f9a78c721b778c16 drm/rockchip: Add VOP2 driver
+date:   3 months ago
+config: arm-randconfig-c002-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260823.a2e6HBuO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=604be85547ce4d61b89292d2f9a78c721b778c16
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 604be85547ce4d61b89292d2f9a78c721b778c16
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/gpu/drm/rockchip/ drivers/usb/gadget/ fs/ntfs3/ net/ceph/ net/ipv6/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused variable 'vop2_dt_match' [-Wunused-const-variable]
+   static const struct of_device_id vop2_dt_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/vop2_dt_match +248 drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+
+   247	
+ > 248	static const struct of_device_id vop2_dt_match[] = {
+   249		{
+   250			.compatible = "rockchip,rk3566-vop",
+   251			.data = &rk3566_vop,
+   252		}, {
+   253			.compatible = "rockchip,rk3568-vop",
+   254			.data = &rk3568_vop,
+   255		}, {
+   256		},
+   257	};
+   258	MODULE_DEVICE_TABLE(of, vop2_dt_match);
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
