@@ -1,87 +1,110 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230397A
-	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:10:34 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id n8so3330543yba.2
-        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 17:10:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B977A
+	for <llvm@lists.linux.dev>; Tue, 26 Jul 2022 00:12:39 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id 7so22924350ybw.0
+        for <llvm@lists.linux.dev>; Mon, 25 Jul 2022 17:12:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2jEuccm+13frSO13F4UbCDTaTKUna0j27ZhD3kYwCOE=;
-        b=JG1XFgHmFM4OuFOHTn6dJ+pnT7DBjuTnLLajlNshh/FVuAMf/Vcgwwn8szGEZ8KruF
-         vQpvV4fPl3wu0AFGuxR+056dIMgw+zWIjX+TffF1DhBaJaFOpdAzRIYDtTKCvoAKjdXj
-         BzVxedIfh40R8VC6K5GWDkdtNRHXbf4k18N/yLNjoKQr4hzcCeJg2x+w1GqNya2gnj8o
-         FfyymnsCfk/iOTTbIXvP24Vt9k2ZpvlqeM2z9LgEMTllqAJj6kzzaqUVsrhi57Yt/BRw
-         x+1HgIa1RKXKE4fimavD8OUII7AuSQOc4PYz6QCzHTzBlw7Phkl4GzrXs0dMWoCEs+LM
-         hZXA==
+         :cc:content-transfer-encoding;
+        bh=9JSe3z9pGkzgL7xUiS8Yr/5UR7RYsGogFav7UDOeLH8=;
+        b=E1wN9qXuZl7RNgnoeAdISeng0a2iXHtFQZCmOLLF1QHOR0tb0+irVqrji81HMAKTR3
+         Rf8ApMLfd8zkYF+aepDEdAv42XMa3vj3isKbVJZqTnehX1P4HkgsVpBv6hKvWZcAEwBm
+         Hl/H3J8Zm5ZW7dzJWQgoJ0S5qJCXEChcqnMyQFG6592BeeXaA1AxEB9dzoqdP3r7L/qa
+         ovddjUVMA0LEMQeWNStbGGJTImVO2Iov35ysqKIjAekEQh3d47Xbg86FEkAIRKnAabQz
+         pFzc7m+e5mhq8CoZJp9ccOTpUOgJ14j4Jpk0nIy9jdgFkK4kRvCLbRnSd/3qywUdGYbA
+         CxhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2jEuccm+13frSO13F4UbCDTaTKUna0j27ZhD3kYwCOE=;
-        b=yx1+eOaJoaWmSLJuYWrsADKuFWaJ6PENepjfCtYno7wnApCX8uvv4KRJHJ8HPO0+ge
-         86s5xnP1ssMkD5D59nS7+gzg7kwe8CtX9/e8UDrDSV3Yu2HO5b2tDWMp5iiTpA4jfstx
-         fa10f74R31NvqFfNJ0jRpFzeQcquigQhbdHL5VfVp0A/+CaYmVzLeIx+Jxqo+pE1qyid
-         FIdsiCGU408LgYymEAlfdhlru2FqcWmJeQAtCM7TMwornkd592Ru/onsogtYQChLxWe+
-         RZL5mqy0levMyLNhkZshZAcgJCbjVY+rkA98OyWBxW4TGhWVCnYAOFK8uN7vSSgfceYc
-         CqXA==
-X-Gm-Message-State: AJIora9a243Y1YdBO26JR2jRZrsQDuecDPl2wNts+MkXZBcYM6GEyZvu
-	BZFExcVYRmuiqUMxx6PWpUyvNJ1SXbJan8kkoCAE0g==
-X-Google-Smtp-Source: AGRyM1vcor1AoZoF/hJYr87qRlJIfLAt0f7iGROesAM925P5MkdFlgqOJv1cHjTmmUDBGaoOCe+/7SUZgR29WPcH5Y0=
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9JSe3z9pGkzgL7xUiS8Yr/5UR7RYsGogFav7UDOeLH8=;
+        b=Agc4DWU7exDbeHp4fbsfGRIq3Bb2DsFkCNoHHaDjQoz7Qv+M0nVfoKc1tgZuwVhRpg
+         UOas+zu4srSnALs4MekIUmklF1C9oKS2IE2DmvH7e+vN/ngs+OnLRB6Nf23Ydj8OwCXL
+         5HFC2piGMDSyrRct2Wke3q1wrzvZktT3vQR3LORBtPY/mskXkzYJKTH9yza//veirASd
+         lvbgLRuRgB6436hY10SjBvk4ejtjZuwy8KR3RKpsZ6ajgYrjE1w9l+qaqjRRAQdlwQaZ
+         lfh6Bkruxoiy+HPP8O2ZCuwTFgVeKQMto9NVXigqFcQMZtd/CLCJOfhW0EqJE6VWNG3D
+         YwiA==
+X-Gm-Message-State: AJIora+NK23e3lvYqoPZGH6kVgMVvWeBQu7bOsiP7+cuFctx62umCTY3
+	V3WFq0+d26B416vXAXmomZIesUE3ipJqAoLInvKg8w==
+X-Google-Smtp-Source: AGRyM1vo0SJOssrzz1Zhq2nhkvNWvbLvRZXEWuEx3ZdKz1ghxpU2Qk4orNgieYmRo5PCLyR7iBSsnqME2JzCqF08st8=
 X-Received: by 2002:a5b:cc6:0:b0:66e:45c6:2a25 with SMTP id
- e6-20020a5b0cc6000000b0066e45c62a25mr11454535ybr.304.1658794233835; Mon, 25
- Jul 2022 17:10:33 -0700 (PDT)
+ e6-20020a5b0cc6000000b0066e45c62a25mr11461206ybr.304.1658794358302; Mon, 25
+ Jul 2022 17:12:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <20220610233513.1798771-21-samitolvanen@google.com> <YtvZvYHC1BKzEz1p@worktop.programming.kicks-ass.net>
-In-Reply-To: <YtvZvYHC1BKzEz1p@worktop.programming.kicks-ass.net>
+References: <20220725233629.223223-1-nathan@kernel.org>
+In-Reply-To: <20220725233629.223223-1-nathan@kernel.org>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 25 Jul 2022 17:09:57 -0700
-Message-ID: <CABCJKucWbN15tH=zJ7HFeNnOPB3v7S=2=oL3pmp89OHOM2=oYw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 20/20] x86: Add support for CONFIG_CFI_CLANG
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Date: Mon, 25 Jul 2022 17:12:02 -0700
+Message-ID: <CABCJKuf1gYZZb9U-zwjkvvRUUh9GvYsHF=8zub=pr9tG4BqtkA@mail.gmail.com>
+Subject: Re: [PATCH] drm/simpledrm: Fix return type of simpledrm_simple_display_pipe_mode_valid()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>, Javier Martinez Canillas <javierm@redhat.com>, 
+	Kees Cook <keescook@chromium.org>, dri-devel@lists.freedesktop.org, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	"# 3.4.x" <stable@vger.kernel.org>, =?UTF-8?Q?Tomasz_Pawe=C5=82_Gajc?= <tpgxyz@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 23, 2022 at 4:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, Jul 25, 2022 at 4:37 PM Nathan Chancellor <nathan@kernel.org> wrote=
+:
 >
-> On Fri, Jun 10, 2022 at 04:35:13PM -0700, Sami Tolvanen wrote:
+> When booting a kernel compiled with clang's CFI protection
+> (CONFIG_CFI_CLANG), there is a CFI failure in
+> drm_simple_kms_crtc_mode_valid() when trying to call
+> simpledrm_simple_display_pipe_mode_valid() through ->mode_valid():
 >
-> > +#ifdef CONFIG_CFI_CLANG
-> > +#define __CFI_TYPE(name)                                     \
-> > +     .fill 7, 1, 0xCC ASM_NL                                 \
-> > +     SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)        \
-> > +     int3 ASM_NL                                             \
-> > +     int3 ASM_NL                                             \
-> > +     mov __kcfi_typeid_##name, %eax ASM_NL                   \
-> > +     int3 ASM_NL                                             \
-> > +     int3 ASM_NL                                             \
-> > +     SYM_FUNC_END(__cfi_##name)
-> > +#endif
+> [    0.322802] CFI failure (target: simpledrm_simple_display_pipe_mode_va=
+lid+0x0/0x8):
+> ...
+> [    0.324928] Call trace:
+> [    0.324969]  __ubsan_handle_cfi_check_fail+0x58/0x60
+> [    0.325053]  __cfi_check_fail+0x3c/0x44
+> [    0.325120]  __cfi_slowpath_diag+0x178/0x200
+> [    0.325192]  drm_simple_kms_crtc_mode_valid+0x58/0x80
+> [    0.325279]  __drm_helper_update_and_validate+0x31c/0x464
+> ...
 >
-> Like said on IRC yesterday, this doesn't generate the right mov
-> encoding.
+> The ->mode_valid() member in 'struct drm_simple_display_pipe_funcs'
+> expects a return type of 'enum drm_mode_status', not 'int'. Correct it
+> to fix the CFI failure.
 >
->         .byte 0xb8 ; .long __kcfi_typeid_##name ;               \
+> Cc: stable@vger.kernel.org
+> Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1647
+> Reported-by: Tomasz Pawe=C5=82 Gajc <tpgxyz@gmail.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/tiny/simpledrm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> works. Your LLVM tree already has the ZExt patch you gave me yesterday
-> to fix up the linker fallout from this change.
+> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simp=
+ledrm.c
+> index 768242a78e2b..5422363690e7 100644
+> --- a/drivers/gpu/drm/tiny/simpledrm.c
+> +++ b/drivers/gpu/drm/tiny/simpledrm.c
+> @@ -627,7 +627,7 @@ static const struct drm_connector_funcs simpledrm_con=
+nector_funcs =3D {
+>         .atomic_destroy_state =3D drm_atomic_helper_connector_destroy_sta=
+te,
+>  };
+>
+> -static int
+> +static enum drm_mode_status
+>  simpledrm_simple_display_pipe_mode_valid(struct drm_simple_display_pipe =
+*pipe,
+>                                     const struct drm_display_mode *mode)
+>  {
 
-Indeed, I updated my kernel tree and confirmed that this fixes the
-issue. Thanks for pointing it out.
+Thanks for fixing this, Nathan! The patch looks correct to me.
+
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
 Sami
