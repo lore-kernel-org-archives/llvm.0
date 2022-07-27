@@ -1,106 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC64EA3
-	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 10:08:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38A9C433D6;
-	Wed, 27 Jul 2022 10:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1658916511;
-	bh=XTyMC53zSGPW3G3xLC8IO3gSBxia3L48Jl68lhw05MQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kTrRCqufh3vZqqrAsQLK4+RYldcZVaQcm0KmzVNeoa9bxD7tM7eOBAd43CxxYOHoz
-	 fWk2KhSy7wfb2P6q9sebtVFlavysdra1gilkBporalBxC42GrQR5ch7pP5ynqjId+Y
-	 THyiNYhEIcBE3Er/KHts53u5Cii40LwFbMzMYde0=
-Date: Wed, 27 Jul 2022 12:08:28 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Daniel Rosenberg <drosen@google.com>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Dennis Cagle <d-cagle@codeaurora.org>,
-	Lee Jones <lee.jones@linaro.org>
-Subject: Re: [linux-stable-rc:linux-4.9.y 967/2229]
- drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <YuEOnEIRjWfnPEkW@kroah.com>
-References: <202207241311.Dv86CbAo-lkp@intel.com>
- <62deb91e.1c69fb81.96632.74a9SMTPIN_ADDED_BROKEN@mx.google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B31EA3
+	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 10:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1269C433D6;
+	Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658917246;
+	bh=zInUtRDkP0CInDHQOs4hPEp3ldGko/tXOIpnWeY7TuQ=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=JaGgQ2Zg1rB1DBHAmio7/LzXyQ5VbRV/63eZoEv2bBrCkHxhOiKb225WuOHJsaGuG
+	 1wxx8zpuJ/NQrGYTCbRMl1nWDM2WcV5kKsrkf9CnLQZ3c2hjA30R2nVIA2wpihs9/l
+	 nfAfDmkfVW4rZdVVgg+vOd0tJeXyr5rIx6qfB85rs35fHNKVeb10qin856M1AjEsJ7
+	 D5V7f79hBT7SFeLLVVOz8ex++C0H9n8RS1e/10CThBm2IXjmpTmSAUJXPgtVKSnT8X
+	 vqPFXtah9axurwYZJVxM5TFOFOOpy68/UylL2Sj+RseuD/AuvyKN2p81F8BWAnRcwt
+	 MzU8FfmSL+siw==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62deb91e.1c69fb81.96632.74a9SMTPIN_ADDED_BROKEN@mx.google.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: wil6210: debugfs: fix uninitialized variable use in
+ `wil_write_file_wmi()`
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220724202452.61846-1-ammar.faizi@intel.com>
+References: <20220724202452.61846-1-ammar.faizi@intel.com>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+ Kalle Valo <quic_kvalo@quicinc.com>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Dan Carpenter <dan.carpenter@oracle.com>,
+ Johannes Berg <johannes.berg@intel.com>,
+ Linux Wireless Mailing List <linux-wireless@vger.kernel.org>,
+ netdev Mailing List <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165891724082.18387.16489160205660897757.kvalo@kernel.org>
+Date: Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
 
-On Mon, Jul 25, 2022 at 08:39:07AM -0700, Nathan Chancellor wrote:
-> On Sun, Jul 24, 2022 at 01:39:50PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> > head:   65be5f5665a580424a7b1102f1a04c4259c559b5
-> > commit: a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e [967/2229] ion: Protect kref from userspace manipulation
-> > config: mips-randconfig-r034-20220719 (https://download.01.org/0day-ci/archive/20220724/202207241311.Dv86CbAo-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mipsel-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
-> >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-> >         git fetch --no-tags linux-stable-rc linux-4.9.y
-> >         git checkout a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/android/ion/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >            if (--handle->user_ref_count == 0)
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
-> >            return ret;
-> >                   ^~~
-> >    drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
-> >            if (--handle->user_ref_count == 0)
-> >            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
-> >            int ret;
-> >                   ^
-> >                    = 0
-> >    1 warning generated.
-> > 
-> > 
-> > vim +71 drivers/staging/android/ion/ion-ioctl.c
-> > 
-> >     65	
-> >     66	/* Must hold the client lock */
-> >     67	static int user_ion_handle_put_nolock(struct ion_handle *handle)
-> >     68	{
-> >     69		int ret;
-> >     70	
-> >   > 71		if (--handle->user_ref_count == 0)
-> >     72			ret = ion_handle_put_nolock(handle);
-> >     73	
-> >     74		return ret;
-> >     75	}
-> >     76	
-> 
-> Might as well just be
-> 
-> static void user_ion_handle_put_nolock(struct ion_handle *handle)
-> {
-> 	if (--handle->user_ref_count == 0)
-> 		ion_handle_put_nolock(handle);
-> }
-> 
-> since user_ion_free_nolock() doesn't check the return value of
-> user_ion_handle_put_nolock()? I can send a patch if people care (I know
-> 4.9 is a bit on the older side).
+Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
 
-A patch would be nice, thanks!
+> Commit 7a4836560a61 changes simple_write_to_buffer() with memdup_user()
+> but it forgets to change the value to be returned that came from
+> simple_write_to_buffer() call. It results in the following warning:
+> 
+>   warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+>            return rc;
+>                   ^~
+> 
+> Remove rc variable and just return the passed in length if the
+> memdup_user() succeeds.
+> 
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 7a4836560a6198d245d5732e26f94898b12eb760 ("wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()")
+> Fixes: ff974e4083341383d3dd4079e52ed30f57f376f0 ("wil6210: debugfs interface to send raw WMI command")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+
+Patch applied to ath-next branch of ath.git, thanks.
+
+d578e0af3a00 wifi: wil6210: debugfs: fix uninitialized variable use in `wil_write_file_wmi()`
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220724202452.61846-1-ammar.faizi@intel.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
