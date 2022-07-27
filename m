@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B31EA3
-	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 10:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1269C433D6;
-	Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8C57FD
+	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 10:48:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE9CC433C1;
+	Wed, 27 Jul 2022 10:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658917246;
-	bh=zInUtRDkP0CInDHQOs4hPEp3ldGko/tXOIpnWeY7TuQ=;
+	s=k20201202; t=1658918891;
+	bh=DRFuPn9kMjyTP06/jiDcxlM9zqpGD3R4D5kU/hYwyLk=;
 	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=JaGgQ2Zg1rB1DBHAmio7/LzXyQ5VbRV/63eZoEv2bBrCkHxhOiKb225WuOHJsaGuG
-	 1wxx8zpuJ/NQrGYTCbRMl1nWDM2WcV5kKsrkf9CnLQZ3c2hjA30R2nVIA2wpihs9/l
-	 nfAfDmkfVW4rZdVVgg+vOd0tJeXyr5rIx6qfB85rs35fHNKVeb10qin856M1AjEsJ7
-	 D5V7f79hBT7SFeLLVVOz8ex++C0H9n8RS1e/10CThBm2IXjmpTmSAUJXPgtVKSnT8X
-	 vqPFXtah9axurwYZJVxM5TFOFOOpy68/UylL2Sj+RseuD/AuvyKN2p81F8BWAnRcwt
-	 MzU8FfmSL+siw==
+	b=URFnToo5JzEHl2i3XwSCTggjAVHJj6UFMfKWYLZhpwnkbP2iHgEjljWjwqVWO7KHE
+	 FTxehimMJgfU3WB68HHKbspKpXoIrrPebG/H6vZh/HG7HDNLm3NBJtrl+oKwmepNh8
+	 0LeSVct3uBjdBvyloWoMWuHfWBGr+MUXbevB8mL/C+81ZAJ0w0tuQaD45lg7rX1Ud0
+	 UHG0Ao0OYe4bdAYFYqYInFfGs355tPAhhL6uEbr0gWvL63ZeRGpITgTpdomF3yJRMu
+	 22B50ciqsOEKsCH1prDTWH+121e6voq2zs8auIoksskDEvtvZgI9SB2Qw9Hd5baDTN
+	 R5RD4zk+EsH1A==
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -23,53 +23,64 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: wil6210: debugfs: fix uninitialized variable use in
- `wil_write_file_wmi()`
+Subject: Re: wifi: iwlwifi: mvm: fix clang -Wformat warnings
 From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220724202452.61846-1-ammar.faizi@intel.com>
-References: <20220724202452.61846-1-ammar.faizi@intel.com>
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
- Kalle Valo <quic_kvalo@quicinc.com>, Eric Dumazet <edumazet@google.com>,
+In-Reply-To: <20220711222919.2043613-1-justinstitt@google.com>
+References: <20220711222919.2043613-1-justinstitt@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Gregory Greenman <gregory.greenman@intel.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Dan Carpenter <dan.carpenter@oracle.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Luca Coelho <luciano.coelho@intel.com>,
  Johannes Berg <johannes.berg@intel.com>,
- Linux Wireless Mailing List <linux-wireless@vger.kernel.org>,
- netdev Mailing List <netdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
+ Avraham Stern <avraham.stern@intel.com>,
+ Justin Stitt <justinstitt@google.com>,
+ Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165891724082.18387.16489160205660897757.kvalo@kernel.org>
-Date: Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
+Message-ID: <165891888198.17998.12309173336559232552.kvalo@kernel.org>
+Date: Wed, 27 Jul 2022 10:48:07 +0000 (UTC)
 
-Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+Justin Stitt <justinstitt@google.com> wrote:
 
-> Commit 7a4836560a61 changes simple_write_to_buffer() with memdup_user()
-> but it forgets to change the value to be returned that came from
-> simple_write_to_buffer() call. It results in the following warning:
+> When building with Clang we encounter these warnings:
+> | drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1108:47: error:
+> | format specifies type 'unsigned char' but the argument has type 's16'
+> | (aka 'short') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\tburst index:
+> | %hhu\n", res->ftm.burst_index);
+> -
+> | drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1111:47: error:
+> | format specifies type 'unsigned char' but the argument has type 's32'
+> | (aka 'int') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\trssi spread:
+> | %hhu\n", res->ftm.rssi_spread);
 > 
->   warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
->            return rc;
->                   ^~
+> The previous format specifier `%hhu` describes a u8 but our arguments
+> are wider than this which means bits are potentially being lost.
 > 
-> Remove rc variable and just return the passed in length if the
-> memdup_user() succeeds.
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends using
+> the promoted-to-type's format flag.
 > 
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 7a4836560a6198d245d5732e26f94898b12eb760 ("wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()")
-> Fixes: ff974e4083341383d3dd4079e52ed30f57f376f0 ("wil6210: debugfs interface to send raw WMI command")
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> As per C11 6.3.1.1:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+> can represent all values of the original type ..., the value is
+> converted to an int; otherwise, it is converted to an unsigned int.
+> These are called the integer promotions.` Thus it makes sense to change
+> `%hhu` to `%d` for both instances of the warning.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Patch applied to ath-next branch of ath.git, thanks.
+Patch applied to wireless-next.git, thanks.
 
-d578e0af3a00 wifi: wil6210: debugfs: fix uninitialized variable use in `wil_write_file_wmi()`
+7819b3d1dab5 wifi: iwlwifi: mvm: fix clang -Wformat warnings
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220724202452.61846-1-ammar.faizi@intel.com/
+https://patchwork.kernel.org/project/linux-wireless/patch/20220711222919.2043613-1-justinstitt@google.com/
 
 https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
