@@ -1,101 +1,91 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FAC7A
-	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 16:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658938716; x=1690474716;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tBeOUp/yxaWMe5c9npreqRETmrBhESTwQGPebnMPCV8=;
-  b=ijJu5SQ8GM92qIKzrADpxF7Va7GzkErUi8B5MDWG1ejCowAN/R/NgNFa
-   lxPrOaFNbYijN77URwF1jrAAIGf6Iql2QDJeNgdGRMayvk/zMQjqZch2O
-   sZVGoarsHZB8hRbz8VCgEkmj3TTxGJph0PbJyxwzcWP3jRMGc4EJ7OycK
-   I8mj8XklQBQHKQY8s1zf8A8XCJQ3oXdsPQ+XLNR5c8MHVGskKi6dJeErU
-   aDaZ1c3rbGW8Y1x5pfhoJKRP2E9Dz+v0r6h4Cfp8ZfzXRk68fisMf65gN
-   vARc4fkYk0kPCeI82m1GzJxKpwxEs1aunTH2ypZIR/jELWjy7CaO0gJmp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="374578119"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="374578119"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 09:18:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="927851599"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Jul 2022 09:18:34 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oGjk2-0008tK-0M;
-	Wed, 27 Jul 2022 16:18:34 +0000
-Date: Thu, 28 Jul 2022 00:17:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
- warning: unused variable 'c8sectpfe_match'
-Message-ID: <202207280016.r8tOLF4N-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC1C2566
+	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 16:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABBD2C433C1;
+	Wed, 27 Jul 2022 16:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1658940383;
+	bh=+aATYe2Q8xKTChP7I9LMcEz/l1Q+fQBlrj6RN28eDuw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NeA3MQwAA0k+amYqKN5f8gj2cqpfY1kgRW77IaQEMY+nlHKLsen4Xjo2TcXHP1zwm
+	 bsxM1fnaT6upIzgTXATVX2OeYaEhmU+42Oee8IkzdHM98D6rsAxF3iFbvzlN68Vyxk
+	 WZzptwL7HxyiKx8DdIrivPjQMgvbUrNz6qnKEDOzgV/JgAgRUTT/AxUos0FV4cidpb
+	 yHY0JZHw+5KY2V8vwR9tLJFPAVXdtz4LuT3dEC5ns0hzuooQi8RKlllRO+yhEgGSYF
+	 +z63qiwYLa02zoIyKx3RKSrSRJ9qEzODDw92xCaPplkNYms4XLLzLQ6lbzOAwN21Bd
+	 rRwsXhvNGJCQg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Cc: Daniel Rosenberg <drosen@google.com>,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH 4.9] ion: Make user_ion_handle_put_nolock() a void function
+Date: Wed, 27 Jul 2022 09:46:17 -0700
+Message-Id: <20220727164617.980209-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Mauro,
+Clang warns:
 
-First bad commit (maybe != root cause):
+  drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+          if (--handle->user_ref_count == 0)
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
+          return ret;
+                 ^~~
+  drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
+          if (--handle->user_ref_count == 0)
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
+          int ret;
+                 ^
+                  = 0
+  1 warning generated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   39c3c396f8131f3db454c80e0fcfcdc54ed9ec01
-commit: e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2 media: platform: place stm32/ and sti/ under st/ dir
-date:   4 months ago
-config: mips-buildonly-randconfig-r001-20220727 (https://download.01.org/0day-ci/archive/20220728/202207280016.r8tOLF4N-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/ drivers/tty/serial/
+The return value of user_ion_handle_put_nolock() is not checked in its
+one call site in user_ion_free_nolock() so just make
+user_ion_handle_put_nolock() return void to remove the warning.
 
-If you fix the issue, kindly add following tag where applicable
+Fixes: a8200613c8c9 ("ion: Protect kref from userspace manipulation")
 Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/staging/android/ion/ion-ioctl.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/drivers/staging/android/ion/ion-ioctl.c b/drivers/staging/android/ion/ion-ioctl.c
+index a27865b94416..e020a23d05f2 100644
+--- a/drivers/staging/android/ion/ion-ioctl.c
++++ b/drivers/staging/android/ion/ion-ioctl.c
+@@ -64,14 +64,10 @@ static struct ion_handle *pass_to_user(struct ion_handle *handle)
+ }
+ 
+ /* Must hold the client lock */
+-static int user_ion_handle_put_nolock(struct ion_handle *handle)
++static void user_ion_handle_put_nolock(struct ion_handle *handle)
+ {
+-	int ret;
+-
+ 	if (--handle->user_ref_count == 0)
+-		ret = ion_handle_put_nolock(handle);
+-
+-	return ret;
++		ion_handle_put_nolock(handle);
+ }
+ 
+ static void user_ion_free_nolock(struct ion_client *client,
 
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
-
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
-
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-
+base-commit: 65be5f5665a580424a7b1102f1a04c4259c559b5
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
