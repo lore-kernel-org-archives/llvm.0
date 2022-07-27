@@ -1,170 +1,109 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39F6A20
-	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 03:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658893244; x=1690429244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H3clCfHQ5Hd46X71EZ2SgoDShniIrDMAoWzjfHTbGNE=;
-  b=VMN6He6QriRyhUYY1Mt6vKxRoYQCB1Y4Ts8W51sF5n15E1iU7xBnjI6o
-   OSIwNf6QryY3axWEKALlRQO02rZ0AibtvfgxfTCfPKfMltEgBpGxLJ0ll
-   IEcSRPjb7uPn9r/USiTcD6KDNJ7OKnx0zwvagucEpHW4U/it9k1ejF4uh
-   peJ3yGRu3zcoGoVWRiffvbxOEUwsGbyblv1+vCxroLRFPvJNk/Yr8AXNK
-   TAj4mOX4MOv9FN3+xwcETkVdsE19/5zNWOSsgwDoDMPbuKujUCq22vd3n
-   rFliog7J19idxu8bRwigr+BTMcALneqnYXaZ6rGmFSGNZT91H4hxASZbi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="288897161"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="288897161"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 20:40:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="550686759"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Jul 2022 20:40:41 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oGXub-0008GY-0e;
-	Wed, 27 Jul 2022 03:40:41 +0000
-Date: Wed, 27 Jul 2022 11:39:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeremy Linton <jeremy.linton@arm.com>, linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rafael@kernel.org,
-	lenb@kernel.org, viresh.kumar@linaro.org, robert.moore@intel.com,
-	devel@acpica.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>
-Subject: Re: [PATCH] ACPI: CPPC: Disable FIE if registers in PCC regions
-Message-ID: <202207271136.DESdyKRY-lkp@intel.com>
-References: <20220726145948.2194684-1-jeremy.linton@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8361A3F
+	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 05:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1658898116;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jReBGluUeHDisBKrE67cviYpJumWILn+jXOUQjX0wMQ=;
+	b=CdO/B2w/iXee+bhKxfLVZd2MQplQ4lmOAuSsXgEldyLZGhyitQ86CMUI8R+13twMMkDH11
+	kUQbVa95hPRdThCvUIAs4mKRoowi/THrLfhnCe9hlIpyuX8mT6LGT8OnARAzRUHr3LMc9a
+	8XsW6F+QpAJCVN2CbQ2FiUF8VmpPZA8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-JgESh6UFNsCZi0yRReerww-1; Wed, 27 Jul 2022 01:01:55 -0400
+X-MC-Unique: JgESh6UFNsCZi0yRReerww-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 299363C01E1C
+	for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 05:01:55 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 195D62026D64;
+	Wed, 27 Jul 2022 05:01:55 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (415/492 SKIPPED): Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [39c3c396]
+Date: Wed, 27 Jul 2022 05:01:54 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726145948.2194684-1-jeremy.linton@arm.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <15737.122072701015500343@us-mta-199.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jeremy,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Perhaps something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v5.19-rc8 next-20220726]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220727/202207271136.DESdyKRY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a4dd80cfc857eef429f60e999bdc9479179d495e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
-        git checkout a4dd80cfc857eef429f60e999bdc9479179d495e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/48908
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+One or more kernel tests failed:
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/cpufreq/intel_pstate.c:45:
->> include/acpi/cppc_acpi.h:177:12: warning: no previous prototype for function 'cppc_perf_ctrs_in_pcc' [-Wmissing-prototypes]
-   extern int cppc_perf_ctrs_in_pcc(void)
-              ^
-   include/acpi/cppc_acpi.h:177:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern int cppc_perf_ctrs_in_pcc(void)
-          ^
-   1 warning generated.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Boot test: Failed to extract kernel version from the package
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1002
+            Affected tests:
+                 aarch64 - Boot test
+                 ppc64le - Boot test
+                   s390x - Boot test
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
 
 
-vim +/cppc_perf_ctrs_in_pcc +177 include/acpi/cppc_acpi.h
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-   135	
-   136	#ifdef CONFIG_ACPI_CPPC_LIB
-   137	extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
-   138	extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
-   139	extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
-   140	extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
-   141	extern int cppc_set_enable(int cpu, bool enable);
-   142	extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-   143	extern int cppc_perf_ctrs_in_pcc(void);
-   144	extern bool acpi_cpc_valid(void);
-   145	extern bool cppc_allow_fast_switch(void);
-   146	extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-   147	extern unsigned int cppc_get_transition_latency(int cpu);
-   148	extern bool cpc_ffh_supported(void);
-   149	extern bool cpc_supported_by_cpu(void);
-   150	extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
-   151	extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-   152	#else /* !CONFIG_ACPI_CPPC_LIB */
-   153	static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
-   154	{
-   155		return -ENOTSUPP;
-   156	}
-   157	static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
-   158	{
-   159		return -ENOTSUPP;
-   160	}
-   161	static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
-   162	{
-   163		return -ENOTSUPP;
-   164	}
-   165	static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-   166	{
-   167		return -ENOTSUPP;
-   168	}
-   169	static inline int cppc_set_enable(int cpu, bool enable)
-   170	{
-   171		return -ENOTSUPP;
-   172	}
-   173	static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
-   174	{
-   175		return -ENOTSUPP;
-   176	}
- > 177	extern int cppc_perf_ctrs_in_pcc(void)
-   178	{
-   179		return false;
-   180	}
-   181	static inline bool acpi_cpc_valid(void)
-   182	{
-   183		return false;
-   184	}
-   185	static inline bool cppc_allow_fast_switch(void)
-   186	{
-   187		return false;
-   188	}
-   189	static inline unsigned int cppc_get_transition_latency(int cpu)
-   190	{
-   191		return CPUFREQ_ETERNAL;
-   192	}
-   193	static inline bool cpc_ffh_supported(void)
-   194	{
-   195		return false;
-   196	}
-   197	static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
-   198	{
-   199		return -ENOTSUPP;
-   200	}
-   201	static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
-   202	{
-   203		return -ENOTSUPP;
-   204	}
-   205	#endif /* !CONFIG_ACPI_CPPC_LIB */
-   206	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
