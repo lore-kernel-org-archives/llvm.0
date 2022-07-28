@@ -1,134 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576BE1101
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 08:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EEAC43147
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 08:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658997282;
-	bh=/iqXB4sLqfkAmIly9U+AknKUxpbzNoD0MnbOOsfK7Ng=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TYqJAbqLdN8M3xs9HZReajmGzxvKVejhfd2cQh7aHwiwro+NOjg1KO9lnY2my2gIT
-	 YeJGsbiSn7Js28Nw/4jCJaFbZy3dNBd8G4FGPu6JSbrKSME1wcYtUIf2lLRp3WaUhb
-	 LZptqu8IlAtBZCIW0gzapu+XE15Oy7Z7xjLQcpNDF4KbxNnLNorWEIuj4xri0imEQV
-	 KDvxvL9hi0I3tV/u2niDHalJINw9z1rNcHXIlmAt4XqBqBPqHO/OC2iM0rW8352VR3
-	 1Ay9NbwBwY4rVzQLh+hCiar9lgqkv3ipsw4xSYtr3Ta7iZXo/WcjymT2afo+w+41Ay
-	 Ig63TZEJ2i4zQ==
-Received: by mail-lf1-f46.google.com with SMTP id z25so1833109lfr.2
-        for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 01:34:41 -0700 (PDT)
-X-Gm-Message-State: AJIora+JSoZbP32INxzwnUz7ZhzTQMuRkJZFhHYQcEy6BxbXouuzC8qq
-	d9AiBCNzEIaUv6gKUQ289r13ha9gDksNEjXd3Nk=
-X-Google-Smtp-Source: AGRyM1uXUEQAfs9KiWv7b6I8p+YLZZk8OQY2G+P3Cpr48Xxlen88hCbjTlhYSi9lr0dYrkzKEoSCAWeHCCrd9KwYuI4=
-X-Received: by 2002:a05:6512:1516:b0:48a:3da4:3411 with SMTP id
- bq22-20020a056512151600b0048a3da43411mr9316179lfb.229.1658997279895; Thu, 28
- Jul 2022 01:34:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C2F1101
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 09:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658999704; x=1690535704;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qWGmdHmLrk+oEbVhU7csvrWkmvJ6LR1bxNgJW2W9H18=;
+  b=jp4HtpBpMB5Q4KjczchUDbjA5XDyIjPyMTE4S1hdNJvMYjhJSdf+g8Py
+   94dlbdW89l5VZ8kIOVwRIsEKXcLEARPbmEzZgkR7r1qup8SCKKPhbOJlD
+   R0kAemAoWCSgmX5AznCFQQoV2N7lHJ825AaeG/CWAyn127+lRytt7ZLJr
+   1sV3IWdffRjqPtUujQ4mcf3hfEIW6D3cpGZ8lLX/HkdK3OVsZTcz2/FqD
+   8uGYmzx0WoU66C9IYg3esFFf2BvbNB8kqMj955cSXpPY/FKknF3+D20qT
+   btV+zLeqrnBwBT5GU+KZzLI7KMpSz3Mk+PSpkfMA474vT3ALcbqfFpkGK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="350171070"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="350171070"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 02:15:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="576377651"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 02:15:01 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oGzbh-0009r4-0w;
+	Thu, 28 Jul 2022 09:15:01 +0000
+Date: Thu, 28 Jul 2022 17:14:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: [linux-next:master 4288/13276] coherent.c:undefined reference to
+ `memunmap'
+Message-ID: <202207281724.oBZnmI4E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220724122517.1019187-8-guoren@kernel.org> <202207280822.VHS6qieH-lkp@intel.com>
- <CAJF2gTQRV+6CZVkvhtsY19zv6XVbyDeRY-SdLPhkF0akHqvBWA@mail.gmail.com> <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Thu, 28 Jul 2022 16:34:27 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQDASUaszVL64_D0GeCZ67svko7Grn2zmjmbSqgQoDzXQ@mail.gmail.com>
-Message-ID: <CAJF2gTQDASUaszVL64_D0GeCZ67svko7Grn2zmjmbSqgQoDzXQ@mail.gmail.com>
-Subject: Re: [PATCH V8 07/10] riscv: Add qspinlock support
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Christoph Hellwig <hch@infradead.org>, Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Ingo Molnar <mingo@redhat.com>, Philipp Tomsich <philipp.tomsich@vrull.eu>, 
-	Christoph Muellner <cmuellner@linux.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, David Laight <David.Laight@aculab.com>, 
-	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-csky@vger.kernel.org, 
-	Guo Ren <guoren@linux.alibaba.com>, Niklas Schnelle <schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Jul 28, 2022 at 4:14 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jul 28, 2022 at 5:35 AM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > Hi Palmer,
-> >
-> > The warning is from a clang problem.
-> >
-> > drivers/net/wireguard/queueing.c:
-> > static void __wg_prev_queue_enqueue(struct prev_queue *queue, struct
-> > sk_buff *skb)
-> > {
-> >         WRITE_ONCE(NEXT(skb), NULL);
-> >         WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
-> > }
-> >
-> > The queue->head is 64bit pointer size.
-> >
-> > #define __xchg_relaxed(ptr, new, size)                                  \
-> > ({                                                                      \
-> >         __typeof__(ptr) __ptr = (ptr);                                  \
-> >         __typeof__(new) __new = (new);                                  \
-> >         __typeof__(*(ptr)) __ret;                                       \
-> >         switch (size) {                                                 \
-> >         case 2: {                                                       \
-> > ... Clang shouldn't give warning from here, because code won't enter the path.
-> >                 break;                                                  \
-> >         }                                                               \
-> >         case 4:                                                         \
-> > ...
-> >                 break;                                                  \
-> >         case 8:                                                         \
-> > ... The case would enter this path.
-> >                 break;                                                  \
-> >         default:                                                        \
-> >                 BUILD_BUG();                                            \
-> >         }                                                               \
-> >         __ret;                                                          \
-> > })
->
-> I assume it's this warning you are referring to?
->
-> >> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
->            WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
->
-> I don't consider this a bug in clang, it just performs the normal type checking
-> before dead code elimination and complains about code that clearly violates
-> the type rules.
->
-> I would suggest you split out the 16-bit xchg() into a properly typed inline
-> function and add type casts when calling it.
-Okay, I would try that style.
+Hi Mark-PK,
 
-> In fact, I would love to
-> completely eliminate the 8-bit and 16-bit cases from the regular xchg()
-> and cmpxchg() interface and require all callers to explicitly call the
-> xchg16()/cmpxchg16() instead, as we require for cmpxchg64() on 32-bit
-> architectures already. This is something to do for another time though.
->
-> > >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> > >            val = __raw_readb(PCI_IOBASE + addr);
-> > >                              ~~~~~~~~~~ ^
-> > >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> > >            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->
-> Not your bug, but I see that CONFIG_MMU=n risc-v has the same bug that s390 has
-> with missing I/O space support.  The correct workaround for this is to mark all
-> drivers using PCI I/O space as 'depends on HAS_IO_PORT' or similar and then
-> leaving out the definitions from the asm-generic header. Niklas Schnelle has
-> spent a lot of time working on patches for this, but they are somewhat stuck
-> in review. If RISC-V has the same problem, I hope we can get more people
-> interested in it. I think OpenRISC and C-Sky have this as well, but I'm not
-> sure if there is any plan to upstream clang support for those.
-C-SKY hasn't any plan to support clang, as I know.
+FYI, the error/warning still remains.
 
->
->         Arnd
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
+commit: e61c451476e61450f6771ce03bbc01210a09be16 [4288/13276] dma-mapping: Add dma_release_coherent_memory to DMA API
+config: s390-randconfig-r002-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281724.oBZnmI4E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e61c451476e61450f6771ce03bbc01210a09be16
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout e61c451476e61450f6771ce03bbc01210a09be16
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0x48): undefined reference to `memremap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: coherent.c:(.text+0x14a): undefined reference to `memunmap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: coherent.c:(.text+0x180): undefined reference to `memunmap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_release_coherent_memory':
+>> coherent.c:(.text+0x1e2): undefined reference to `memunmap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `rmem_dma_device_init':
+   coherent.c:(.text+0x634): undefined reference to `memremap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: coherent.c:(.text+0x740): undefined reference to `memunmap'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `ccree_probe':
+   cc_driver.c:(.text+0x3d8): undefined reference to `devm_ioremap_resource'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
+   cc_debugfs.c:(.text+0x94): undefined reference to `debugfs_create_regset32'
+   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: cc_debugfs.c:(.text+0x13a): undefined reference to `debugfs_create_regset32'
 
 -- 
-Best Regards
- Guo Ren
+0-DAY CI Kernel Test Service
+https://01.org/lkp
