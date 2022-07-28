@@ -1,43 +1,27 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB2B7A
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 18:38:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659033520; x=1690569520;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vgrok3srpFw/hYBSRTOFIcO/v/8calaWWqHrcYn3tjE=;
-  b=TrUEAs0ZVy3pzWtS2zdi0cWMX6D2Bb0SIy04X42m4PiCAOrJ1oHEEhJn
-   q3zPWcDRlBgNoQ0E+26eAS0yJ1ZYVn9/jbVubpSuI01nVz00QToguY3Xm
-   R6hosalSlFKG+/lEOD2AMziJwdO19ML1y/Ghx/kKXlNBY9JImnG1aiD4a
-   w4k/G9HZ5biVTn6E7sqAXvFskVDUuR42L/KflsheQ4o5Ifpx6CweaCIX1
-   DOzDuYqNmvBSl/0oEmcZuWBQ0hdvST2VJWTl5tRtvzAWcEZq37eC/sRpW
-   QKd+fGAMaifDc9yuDbDEuysuBjg8tvsccK/P5l4NvzdnGFZXHDfbW6FW6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268352516"
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="268352516"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 11:38:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="576593761"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 11:38:37 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oH8P7-000AUw-06;
-	Thu, 28 Jul 2022 18:38:37 +0000
-Date: Fri, 29 Jul 2022 02:38:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
-Subject: [avpatel:riscv_timer_dt_imp_v2 8/16] arch/arm64/kvm/mmu.c:789:55:
- error: incompatible pointer to integer conversion initializing 'gfp_t' (aka
- 'unsigned int') with an expression of type 'void *'
-Message-ID: <202207290233.HRtZcPRo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598457A
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 19:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFBDC433C1;
+	Thu, 28 Jul 2022 19:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659038276;
+	bh=XOlNLuLdm4ZvUFld4ACY5k6/rEG+ZPPIVQP34aG2ZA0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V3+rkhOPLhlkHWcj0SEQXjkRU5xU3kCdfKgI8ERQZACQbEKirqS7HqL3s+JZVqjMe
+	 /sb/10gig2l8yGR2+5V9abVvCuxBm9REBEIRaMLKurGREW+jlCwvCSJevcarcxBeW7
+	 pBBbn0clTTi9z6kBBGsfiAWWDnxvJtJdttGO+99rFJw2eRfSPyRMGCtnFrUnGbVXs8
+	 kEFcrH81kcQI2P/RrAMBNByz2gLyFvFpSSOoscIP8P7mjIOm82Vsf8A3WOaA/tDylO
+	 SVYXVzMpPqMhwyhKkMm3+4mPW4wqTUO0IqDIdCre02eryzKj28x660f2y0S20GhfwZ
+	 ykzyzdhwDToag==
+Date: Thu, 28 Jul 2022 12:57:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: clang-built-linux <llvm@lists.linux.dev>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: arm ixp4xx_defconfig build failure with linux-next and mainline
+Message-ID: <YuLqQrKtDnTuJdZK@dev-arch.thelio-3990X>
+References: <CADVatmPNCUXqKBoLCpwBA90ocZA6-u+=y1_jz=3C+KwEmN54AA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,95 +30,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CADVatmPNCUXqKBoLCpwBA90ocZA6-u+=y1_jz=3C+KwEmN54AA@mail.gmail.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_timer_dt_imp_v2
-head:   ea3e044608ebdd55aea86cb6fe7fe6e5cbf61e36
-commit: 62961693e39c0cb1df571320918fcda4344bcc9b [8/16] KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
-config: arm64-buildonly-randconfig-r003-20220728 (https://download.01.org/0day-ci/archive/20220729/202207290233.HRtZcPRo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/avpatel/linux/commit/62961693e39c0cb1df571320918fcda4344bcc9b
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_timer_dt_imp_v2
-        git checkout 62961693e39c0cb1df571320918fcda4344bcc9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Thu, Jul 28, 2022 at 06:33:07PM +0100, Sudip Mukherjee wrote:
+> Hi All,
+> 
+> Not sure if its reported, builds of arm ixp4xx_defconfig has been
+> failing with clang with the error:
+> 
+> <instantiation>:1:10: error: invalid hexadecimal number
+> ldr r7, =0x
+>          ^
+> arch/arm/kernel/head.S:319:2: note: while in macro instantiation
+>  addruart r7, r3, r0
+>  ^
+> <instantiation>:2:12: error: invalid hexadecimal number
+>   ldr r3, =0x
+>            ^
+> arch/arm/kernel/head.S:319:2: note: while in macro instantiation
+>  addruart r7, r3, r0
+> 
+> 
+> I tried to find it in the issue tracker but could not find it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the report! We have not tested all of the configs in
+arch/arm/configs so I am not surprised to find one that has an error.
 
-All errors (new ones prefixed by >>):
+I see multiple definitions of addruart. If I preprocess
+arch/arm/kernel/head.S with this configuration, I see it comes from
+arch/arm/include/debug/8250.S:
 
->> arch/arm64/kvm/mmu.c:789:55: error: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
-           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-                                                                ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   1 error generated.
+		.macro	addruart, rp, rv, tmp
+		ldr	\rp, =CONFIG_DEBUG_UART_PHYS
+		ldr	\rv, =CONFIG_DEBUG_UART_VIRT
+		.endm
 
+CONFIG_DEBUG_UART_PHYS and CONFIG_DEBUG_UART_VIRT are both empty for
+this configuration with LLVM=1:
 
-vim +789 arch/arm64/kvm/mmu.c
+$ make -skj"$(nproc)" ARCH=arm LLVM=1 ixp4xx_defconfig
 
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  774  
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  775  /**
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  776   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  777   *
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  778   * @kvm:	The KVM pointer
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  779   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  780   * @pa:		The physical address of the device
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  781   * @size:	The size of the mapping
-c9c0279cc02b4e1 arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  782   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783   */
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  784  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  785  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  {
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  	phys_addr_t addr;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  788  	int ret = 0;
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @789  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  795  	if (is_protected_kvm_enabled())
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  796  		return -EPERM;
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  797  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  798  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  799  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  800  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  801  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  802  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402e arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  803  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  804  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  805  			break;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  806  
-fcc5bf89635a05e arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  807  		write_lock(&kvm->mmu_lock);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  808  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  809  					     &cache);
-fcc5bf89635a05e arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  810  		write_unlock(&kvm->mmu_lock);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  811  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  812  			break;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  813  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  814  		pa += PAGE_SIZE;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  815  	}
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  816  
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  817  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  818  	return ret;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  819  }
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  820  
+$ rg "CONFIG_DEBUG_UART_(PHYS|VIRT)=" .config
+3036:CONFIG_DEBUG_UART_PHYS=
+3037:CONFIG_DEBUG_UART_VIRT=
 
-:::::: The code at line 789 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
+Looking at arch/arm/Kconfig.debug, I see:
 
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+config DEBUG_UART_PHYS
+...
+	default 0xc8000000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
+	default 0xc8000003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
+...
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+config DEBUG_UART_VIRT
+...
+	default 0xfec00000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
+	default 0xfec00003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
+...
+
+Digging further, I don't see how this configuration can work with
+LD=ld.lld (implied by LLVM=1). Commit 5d6f52671e76 ("ARM: rework
+endianess selection") made it so that CONFIG_ARCH_IXP4XX cannot be
+selected without CONFIG_CPU_BIG_ENDIAN due to the "depends" but
+CONFIG_CPU_BIG_ENDIAN in turn cannot be selected with LD=ld.lld due to
+commit 28187dc8ebd9 ("ARM: 9025/1: Kconfig: CPU_BIG_ENDIAN depends on
+!LD_IS_LLD"), meaning that none of these "default" statements can
+trigger.
+
+I see two solutions for the immediate future (I've CC'd Arnd in case he
+has any thoughts):
+
+* Use LD=arm-linux-gnueabi-ld (or whatever your triple is) with this
+  configuration if you want to keep testing it.
+
+* Don't build this configuration altogether.
+
+Maybe we could hack up a sane default value for these configurations but
+that is just going to give the false impression that this kernel will
+work because it builds, when it can't because the ARCH config is not
+even selectable to get all of the other configurations that are needed
+for everything to work properly.
+
+The real solution is either:
+
+* Make ixp4xx work in little endian mode (but commit 3d427228f7370 casts
+  some doubts about whether or not that is possible).
+
+* Make ld.lld work properly with CONFIG_CPU_BIG_ENDIAN but given how
+  little use big endian sees for ARM targets, that probably won't happen
+  for a while, if at all.
+
+As always, I am happy to be proven wrong if I have missed something :)
+
+Cheers,
+Nathan
