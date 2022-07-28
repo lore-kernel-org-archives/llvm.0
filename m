@@ -1,288 +1,132 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6BF1103
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 06:50:53 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id l4so915506wrm.13
-        for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 23:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:cc:message-id:subject:mime-version:list-id;
-        bh=xm4tLB9eH1e9uKOdHWnPyGZf2UuLwImkNYvq/Dcy5kg=;
-        b=UQ11KD8nBqjEEHn+aeDwoo0fRh18exd/i4QUJLBFGzldbB6j7UG1oDbHUZBOL+yvXj
-         /OTXqUKeYhR7l6CPoujyuMbz82MPgd7rNaVfIynamPBPU3Maq1yZNX12wnNN12iH2qLk
-         sH1ijvzxCc2F96XjQYsF1pmgqJ6j108sfB6MMc4B3FspjrplknUlAaMZaIMwQ90CR65i
-         OJ9SVSd4pP6K3VnaIWVj5BiUrFYfqjyB+zeEHT1PoIM1OW5OklXWr1KFOvngfX0ItEyr
-         TNp8khoXxQb8b3qrI5HmS3rlYgWDjtP82D+rPhzUvcNaUK599W3I3ziXb4ElR6SkjoNN
-         9o4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
-         :list-id;
-        bh=xm4tLB9eH1e9uKOdHWnPyGZf2UuLwImkNYvq/Dcy5kg=;
-        b=3k128Q6IkJMv2VcqLUyXqhb1PY9Rnh1hrFCVQnyVKWCB0ccFTcuFOyFJJBbm0M4P9R
-         Hcvo5z/lwLmTCWPqezH0PSWY2vxOP1EpI6klWtThAOs7wr8LrQi0j/+GxoT7fQVudIN7
-         39fXHa0Owj8uC3UJlIxYqZciI5zfgwNb+7KDgOJD33ljadFoQwWsPrdiEyJxcgRee3DO
-         jpnBY/ldl9fKGfwlgYBBSqFZuER6eceeNxwxXqHyuHTaorHUimWau+lSTrE/L3vZDOeG
-         L9R34itKEQJYd1txlFSpdQ4sa/zwuAnV0iJ1uTvhtveNkCGZ+6yI0ulNP5q7naXlM8wD
-         j6JA==
-X-Gm-Message-State: AJIora9iUzRWWaDaJ+5gH6D2B1hrZEqB7SMOJKot3inicqQLdRZ9qOfm
-	RsQQ8gyAhRT0tjPfdosBtsH6tw==
-X-Google-Smtp-Source: AGRyM1vSI0MJpFuHlmPkDR8nB2C0EQM86yDZ0BkrX4ao6tcrWCe4jI8O2PyxToS9yDOk9P3kTYN32A==
-X-Received: by 2002:adf:f7c7:0:b0:21e:fc10:b81b with SMTP id a7-20020adff7c7000000b0021efc10b81bmr842490wrq.51.1658991051753;
-        Wed, 27 Jul 2022 23:50:51 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id u1-20020adfdd41000000b0021d80f53324sm90216wrm.7.2022.07.27.23.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 23:50:51 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 28 Jul 2022 06:50:50 +0000 (UTC)
-To: Yury Norov <yury.norov@gmail.com>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <1788368597.3058.1658991051274@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by linux: lib/nodemask: inline
- next_node_in() and node_random()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F9F7A
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 08:14:31 +0000 (UTC)
+Received: from mail-ej1-f47.google.com ([209.85.218.47]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MBjA4-1oBW4f0Jn2-00C7gJ for <llvm@lists.linux.dev>; Thu, 28 Jul 2022
+ 10:14:29 +0200
+Received: by mail-ej1-f47.google.com with SMTP id fy29so1803010ejc.12
+        for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 01:14:28 -0700 (PDT)
+X-Gm-Message-State: AJIora+gKeT/lLCBu7wL5f68MK7mvY2B2owkqfRJOaR+W+VqbYTQbPIb
+	H1cshNW6AdptwuAWMyNnrgE1NH9smZNug5a+p3g=
+X-Google-Smtp-Source: AGRyM1uZnW6rr1bCPNxIQUdrp0kM6xPGCPcbhZeXfyDuLh9ISG16R0mxcxin51/wlw+v1h4OcmNKLuYUaimGsuAUJj0=
+X-Received: by 2002:a17:907:75d3:b0:72b:48de:e540 with SMTP id
+ jl19-20020a17090775d300b0072b48dee540mr21044634ejc.547.1658996068658; Thu, 28
+ Jul 2022 01:14:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_3057_1223459542.1658991050529"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-release-arm-norov-allyesconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+References: <20220724122517.1019187-8-guoren@kernel.org> <202207280822.VHS6qieH-lkp@intel.com>
+ <CAJF2gTQRV+6CZVkvhtsY19zv6XVbyDeRY-SdLPhkF0akHqvBWA@mail.gmail.com>
+In-Reply-To: <CAJF2gTQRV+6CZVkvhtsY19zv6XVbyDeRY-SdLPhkF0akHqvBWA@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 28 Jul 2022 10:14:12 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
+Message-ID: <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
+Subject: Re: [PATCH V8 07/10] riscv: Add qspinlock support
+To: Guo Ren <guoren@kernel.org>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+	Christoph Hellwig <hch@infradead.org>, Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Ingo Molnar <mingo@redhat.com>, Philipp Tomsich <philipp.tomsich@vrull.eu>, 
+	Christoph Muellner <cmuellner@linux.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, David Laight <David.Laight@aculab.com>, 
+	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-csky@vger.kernel.org, 
+	Guo Ren <guoren@linux.alibaba.com>, Niklas Schnelle <schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:/O5IS52bxe4K2TXaN2cKvLf1WhEqPrOfUqtU4LGV0YpKQ/XZcoR
+ 9iYlaFV40bLFGpTnv5XM8etIn0pS84g1OP/CChUGChj0q8PiSnCTi2mmb27sChJHPVMDd4L
+ of1YWf7+J0ZPE1HUKrVH2WbHKEPjBcX0YvGsSI4FTK9vd3hHNSQkF6NpFmDeEIk+H00cKq3
+ xXz+GpIJQ95B+kn6ZedOg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3aMwZpRzxJM=:UVlVZIA4CShO8BG+KFAshT
+ Fvte5Df/VmAZOQ6ijnf/7qEyKJHG/+hZ9YONfMMyLQ/yLVHDh9U/f84QmI7ceregopRubrHuY
+ 62DAIfy/0MLbj+4L9klaFYw6bH63CjQ38UKr5ivimdwxG8BJ3Rf1ZibygDy37FhvMsX8BThR7
+ /Je69yKOkSoDH7WI4MoBhPcWVkpWfeHRT2lJvw9UU08WeBI2sWC1W4mHXJQv9NozFmwL7cSGc
+ pxZyTTR7DsQ0MneaoLthhRi/05XZTBoB4NJIo1OcdjC5lf8BeyHXPI3wXYWhtlpCgBYsOWWNZ
+ hKe5P6XmtEDmNH99ymgvUIUm4/dbD3JmvDfLvlBi0z4I4HWA08bv954iFlQlapZT7T2iz79dr
+ uclvidnTDAigxOWjHa1VlpoJRHYA8WBtGW3rb4zFHQagLHQHyCipIW7ZwpXv5tUhrP/CUUdhA
+ 1QfFmMv/SVgTAqJKn7DCa9kc0i7XvzKhyGnVIvWx4fAKQANva29isgs/yCi5g15eOxYzff1/Y
+ xnD6Wetz278hwAIbwfa7Tbh4/BT22qUwfhzq6x227z8bnhN/gBMSMAf11qZ0bJbrPqpRnluDS
+ fv1/vceVFO4FL1g1lz1aX8RBwzDzNqVj5bmbG6sgiCb5XgEPkiS/g8pDjQbrtsE8CW8yj3R5Q
+ e8DrAfAxvnBkFW9Z1k/Xkp2kjxMe5/i+KXEqDwlasguDHF8IKJqSmZJY8YnWDr8y73wxkck8J
+ faul/RrGqqgS88R92KuDT2vfaB/wgCqroRapP3hrvTa6A8tfk9XcUui5UwSK4g99v3BWPtClD
+ FlUFeHARu1eImgS/JBdMYePjhBRZaZsryIzQXlukUByMrilkbBmS8ALc5zOygdWZMjJxBQlk1
+ /afgMZh6baZKDCKUzXYQ==
 
-------=_Part_3057_1223459542.1658991050529
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Thu, Jul 28, 2022 at 5:35 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> Hi Palmer,
+>
+> The warning is from a clang problem.
+>
+> drivers/net/wireguard/queueing.c:
+> static void __wg_prev_queue_enqueue(struct prev_queue *queue, struct
+> sk_buff *skb)
+> {
+>         WRITE_ONCE(NEXT(skb), NULL);
+>         WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+> }
+>
+> The queue->head is 64bit pointer size.
+>
+> #define __xchg_relaxed(ptr, new, size)                                  \
+> ({                                                                      \
+>         __typeof__(ptr) __ptr = (ptr);                                  \
+>         __typeof__(new) __new = (new);                                  \
+>         __typeof__(*(ptr)) __ret;                                       \
+>         switch (size) {                                                 \
+>         case 2: {                                                       \
+> ... Clang shouldn't give warning from here, because code won't enter the path.
+>                 break;                                                  \
+>         }                                                               \
+>         case 4:                                                         \
+> ...
+>                 break;                                                  \
+>         case 8:                                                         \
+> ... The case would enter this path.
+>                 break;                                                  \
+>         default:                                                        \
+>                 BUILD_BUG();                                            \
+>         }                                                               \
+>         __ret;                                                          \
+> })
 
-[TCWG CI] Regression caused by linux: lib/nodemask: inline next_node_in() and node_random():
-commit e0281efe11c987e1ff557dad2a56d90484206597
-Author: Yury Norov <yury.norov@gmail.com>
+I assume it's this warning you are referring to?
 
-    lib/nodemask: inline next_node_in() and node_random()
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-20659
-# First few build errors in logs:
-# 00:04:34 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-# 00:04:34 make[1]: *** [crypto/wp512.o] Error 1
-# 00:08:54 make: *** [crypto] Error 2
-# 00:10:45 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
-# 00:10:45 make[4]: *** [drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
-# 00:11:10 make[3]: *** [drivers/gpu/drm/selftests] Error 2
-# 00:16:07 sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-# 00:16:07 make[4]: *** [sound/soc/intel/avs/path.o] Error 1
-# 00:16:24 drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1096) exceeds limit (1024) in 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
-# 00:16:24 make[3]: *** [drivers/mtd/chips/cfi_cmdset_0001.o] Error 1
+I don't consider this a bug in clang, it just performs the normal type checking
+before dead code elimination and complains about code that clearly violates
+the type rules.
 
-from
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-20660
-# First few build errors in logs:
-# 00:05:48 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-# 00:05:48 make[1]: *** [crypto/wp512.o] Error 1
-# 00:10:09 make: *** [crypto] Error 2
-# 00:12:46 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
-# 00:12:46 make[4]: *** [drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
-# 00:13:12 make[3]: *** [drivers/gpu/drm/selftests] Error 2
-# 00:18:08 sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-# 00:18:08 make[4]: *** [sound/soc/intel/avs/path.o] Error 1
-# 00:18:31 make[3]: *** [sound/soc/intel/avs] Error 2
-# 00:18:43 make[2]: *** [sound/soc/intel] Error 2
+I would suggest you split out the 16-bit xchg() into a properly typed inline
+function and add type casts when calling it. In fact, I would love to
+completely eliminate the 8-bit and 16-bit cases from the regular xchg()
+and cmpxchg() interface and require all callers to explicitly call the
+xchg16()/cmpxchg16() instead, as we require for cmpxchg64() on 32-bit
+architectures already. This is something to do for another time though.
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+> >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> >            val = __raw_readb(PCI_IOBASE + addr);
+> >                              ~~~~~~~~~~ ^
+> >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> >            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-release-arm-norov-allyesconfig
+Not your bug, but I see that CONFIG_MMU=n risc-v has the same bug that s390 has
+with missing I/O space support.  The correct workaround for this is to mark all
+drivers using PCI I/O space as 'depends on HAS_IO_PORT' or similar and then
+leaving out the definitions from the asm-generic header. Niklas Schnelle has
+spent a lot of time working on patches for this, but they are somewhat stuck
+in review. If RISC-V has the same problem, I hope we can get more people
+interested in it. I think OpenRISC and C-Sky have this as well, but I'm not
+sure if there is any plan to upstream clang support for those.
 
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-e0281efe11c987e1ff557dad2a56d90484206597/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-2f9905799751b4395c942d33ff600cd924324785/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/
-
-Reproduce builds:
-<cut>
-mkdir investigate-linux-e0281efe11c987e1ff557dad2a56d90484206597
-cd investigate-linux-e0281efe11c987e1ff557dad2a56d90484206597
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests and test.sh script
-mkdir -p artifacts/manifests
-curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/manifests/build-baseline.sh --fail
-curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/manifests/build-parameters.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
-
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
-
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
-
-cd linux
-
-# Reproduce first_bad build
-git checkout --detach e0281efe11c987e1ff557dad2a56d90484206597
-../artifacts/test.sh
-
-# Reproduce last_good build
-git checkout --detach 2f9905799751b4395c942d33ff600cd924324785
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit e0281efe11c987e1ff557dad2a56d90484206597
-Author: Yury Norov <yury.norov@gmail.com>
-Date:   Mon Jul 25 09:39:17 2022 -0700
-
-    lib/nodemask: inline next_node_in() and node_random()
-    
-    The functions are pretty thin wrappers around find_bit engine, and
-    keeping them in c-file prevents compiler from small_const_nbits()
-    optimization, which must take place for all systems with MAX_NUMNODES
-    less than BITS_PER_LONG (default is 16 for me).
-    
-    Moving them to header file doesn't blow up the kernel size:
-    add/remove: 1/2 grow/shrink: 9/5 up/down: 968/-88 (880)
-    
-    CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-    CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-    CC: Michael Ellerman <mpe@ellerman.id.au>
-    CC: Paul Mackerras <paulus@samba.org>
-    CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-    CC: Stephen Rothwell <sfr@canb.auug.org.au>
-    CC: linuxppc-dev@lists.ozlabs.org
-    Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- MAINTAINERS              |  1 -
- include/linux/nodemask.h | 24 +++++++++++++++++++-----
- lib/Makefile             |  2 +-
- lib/nodemask.c           |  8 --------
- 4 files changed, 20 insertions(+), 15 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c0b8f28aa25..19c8d0ef1177 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3540,7 +3540,6 @@ F:	lib/bitmap.c
- F:	lib/cpumask.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
--F:	lib/nodemask.c
- F:	lib/test_bitmap.c
- F:	tools/include/linux/bitmap.h
- F:	tools/include/linux/find.h
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 0f233b76c9ce..4b71a96190a8 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -94,6 +94,7 @@
- #include <linux/bitmap.h>
- #include <linux/minmax.h>
- #include <linux/numa.h>
-+#include <linux/random.h>
- 
- typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
- extern nodemask_t _unused_nodemask_arg_;
-@@ -276,7 +277,14 @@ static inline unsigned int __next_node(int n, const nodemask_t *srcp)
-  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
-  */
- #define next_node_in(n, src) __next_node_in((n), &(src))
--unsigned int __next_node_in(int node, const nodemask_t *srcp);
-+static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
-+{
-+	unsigned int ret = __next_node(node, srcp);
-+
-+	if (ret == MAX_NUMNODES)
-+		ret = __first_node(srcp);
-+	return ret;
-+}
- 
- static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- {
-@@ -493,14 +501,20 @@ static inline int num_node_state(enum node_states state)
- 
- #endif
- 
-+static inline int node_random(const nodemask_t *maskp)
-+{
- #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
--extern int node_random(const nodemask_t *maskp);
-+	int w, bit = NUMA_NO_NODE;
-+
-+	w = nodes_weight(*maskp);
-+	if (w)
-+		bit = bitmap_ord_to_pos(maskp->bits,
-+			get_random_int() % w, MAX_NUMNODES);
-+	return bit;
- #else
--static inline int node_random(const nodemask_t *mask)
--{
- 	return 0;
--}
- #endif
-+}
- 
- #define node_online_map 	node_states[N_ONLINE]
- #define node_possible_map 	node_states[N_POSSIBLE]
-diff --git a/lib/Makefile b/lib/Makefile
-index f99bf61f8bbc..731cea0342d1 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -33,7 +33,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 flex_proportions.o ratelimit.o show_mem.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
--	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
-+	 nmi_backtrace.o win_minmax.o memcat_p.o \
- 	 buildid.o
- 
- lib-$(CONFIG_PRINTK) += dump_stack.o
-diff --git a/lib/nodemask.c b/lib/nodemask.c
-index e22647f5181b..b8a433d16b51 100644
---- a/lib/nodemask.c
-+++ b/lib/nodemask.c
-@@ -3,14 +3,6 @@
- #include <linux/module.h>
- #include <linux/random.h>
- 
--unsigned int __next_node_in(int node, const nodemask_t *srcp)
--{
--	unsigned int ret = __next_node(node, srcp);
--
--	if (ret == MAX_NUMNODES)
--		ret = __first_node(srcp);
--	return ret;
--}
- EXPORT_SYMBOL(__next_node_in);
- 
- #ifdef CONFIG_NUMA
-</cut>
-------=_Part_3057_1223459542.1658991050529--
+        Arnd
