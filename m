@@ -1,77 +1,208 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B9D7A
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 20:48:23 +0000 (UTC)
-Received: by mail-ej1-f48.google.com with SMTP id ss3so5088182ejc.11
-        for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 13:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Hj8U9na81wK1LpQEMnouXXM1glGKZ1/n4yT2ZjBsSPM=;
-        b=FHNnpco0EB5PmciJdUcejUWujO92l7IErU8hH+r9eJGL+4ZGyXBHZHbCkD9e32wy06
-         1yy+YMOnXadzd1otL5afrABZZSMue1wUH/smZuQvSXOvDgYpi1Sso4+TxRh8V7UTaeFS
-         2jh9jjXfxXpfdaJvIFNsykJZxBdogVewZb1s4HJ4vsN7nx15MWJBttrVlVOJkaXbgoIE
-         a3DmjzaMMoRArjRdph1l/T3d9NoJckjzlT8ncjFPB9irwfbuAsJ9cv6pGjvoxZcT2xY5
-         DedO2RNu/CsTpnhpjwpizIr6ARBc22T16zqwyfdEJhRLZqFOu4YiZvimItB513p1JeUV
-         UQEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Hj8U9na81wK1LpQEMnouXXM1glGKZ1/n4yT2ZjBsSPM=;
-        b=y0rR5T021lNzdnylJW9hu6isLAQuL7vTcLrMcpnYT5cAJUPRSFw4ep3e9b5ab41sox
-         u7LHbnISH9exBT9HmjifBEZREU1RojJpw3yZLX0mplq9gh+jsNs0uG/oGll4gm3LGVMc
-         dCWFcufXIRoeXE/NT/qIlj6oi/oPaDtBQIwJtdwAiR433YiU1GkfQ7ZYFQ0S6V96L78f
-         2Yap2Dc8ZGi6rLLayV/s2eZHy/eQ9DQs33Gr0dHHGVpbpZXq81lRvz6axYgvSCdW8RFB
-         Pr+UYR7OZyGcvhnEPQn7lUjKxDe0kayL9mwuOJPGXaF8ez7v8eSytr2NrAMCMHlH9ZW6
-         gdqg==
-X-Gm-Message-State: AJIora8I92wOC4TUQ6osnAb5ggP9fSvNzfQYf2j9HPb8Ecb1hhz2Gsom
-	5m9CloorFMOO0CZ/t4/R2D1y2WDU2MioQe4PwaE=
-X-Google-Smtp-Source: AGRyM1tsKkzS1CT8rCY6o8o9woxCrtMhsRoDBVhGwPNBqSKIaHxvRdCWJuHr+zGfGBcLeXJgsTOMtgmkoB63DfFCf/M=
-X-Received: by 2002:a17:907:6e02:b0:72b:9f16:1bc5 with SMTP id
- sd2-20020a1709076e0200b0072b9f161bc5mr519930ejc.676.1659041301407; Thu, 28
- Jul 2022 13:48:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36067A
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 21:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659042647; x=1690578647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I2Au62Rvw1kXx+AUAd/zCiEABcAEPS7Xf+NZHMX3rvM=;
+  b=Y+K6c61QFsh36bL/ta0W0m22YFc8f7iOiy1Gxw+kMSUwdUlk1OzG37wZ
+   UenazVNCLqg8OvajwWM3duIUtkovH5eKA9830AhdseqLGNCBID8fqCvTJ
+   Bng9ly6iEIp9R0YFx5F6vcoCnnEGP9aqQuFJvhEISmzNrC1ANLBu+ni9F
+   4GfxiyWeikz1QGWAAsBmFJgrEk/fb1lXkB88vpexAuZ7Fu6qfcIX+sf4b
+   YmsIbln5dqIsm9XB5fNT43tBUJVSGaiKTctAORgxp1JxU3tSgww+FFyVV
+   c+j03RINBDIje9LsH3IAQLjuGmrIvUtc+6oyknr9wv1PCZ4CQJN6YFkvu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="352628888"
+X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
+   d="scan'208";a="352628888"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 14:10:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
+   d="scan'208";a="669026254"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jul 2022 14:10:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHAmJ-000AaM-2Q;
+	Thu, 28 Jul 2022 21:10:43 +0000
+Date: Fri, 29 Jul 2022 05:10:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	"Paul J . Murphy" <paul.j.murphy@intel.com>,
+	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	devicetree@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v4 6/7] media: i2c: ov9282: Set v4l2 subdev name
+ according to sensor model
+Message-ID: <202207290518.1D7MVS65-lkp@intel.com>
+References: <20220728130237.3396663-7-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
- <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com> <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
-In-Reply-To: <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 28 Jul 2022 22:47:44 +0200
-Message-ID: <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To: Jason Gerecke <killertofu@gmail.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
-	Wolfram Sang <wsa-dev@sang-engineering.com>, linux-i2c <linux-i2c@vger.kernel.org>, 
-	Ping Cheng <pinglinux@gmail.com>, "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>, 
-	Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-iio <linux-iio@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728130237.3396663-7-alexander.stein@ew.tq-group.com>
 
-On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:
+Hi Alexander,
 
-> > Writing a patch to fix the new warnings generated by my I2C patch is
-> > simple enough, but I'd like some help coordinating getting both
-> > patches landed. Should I wait for the I2C patch to land in "for-next"
-> > before sending the IIO fix, or would it be preferred to send the IIO
-> > fix right now so that both patches can be reviewed simultaneously?
->
-> It's been pretty quiet, so asking again for any thoughts on how to
-> best address this tangle...
+Thank you for the patch! Perhaps something to improve:
 
-The rule of thumb is not to introduce an additional warning or compile error.
-I haven't looked deeply into this case, but it smells to me as if you need a new
-version of your initial patch that includes a fix to IIO.
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/OV9281-support/20220728-210448
+base:   git://linuxtv.org/media_tree.git master
+config: arm-randconfig-r022-20220728 (https://download.01.org/0day-ci/archive/20220729/202207290518.1D7MVS65-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ee28006553d4d23f600b0076ef6066710519f156
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Stein/OV9281-support/20220728-210448
+        git checkout ee28006553d4d23f600b0076ef6066710519f156
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/i2c/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov9282.c:1054:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   return ret;
+                          ^~~
+   drivers/media/i2c/ov9282.c:1041:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +/ret +1054 drivers/media/i2c/ov9282.c
+
+  1030	
+  1031	/**
+  1032	 * ov9282_probe() - I2C client device binding
+  1033	 * @client: pointer to i2c client device
+  1034	 *
+  1035	 * Return: 0 if successful, error code otherwise.
+  1036	 */
+  1037	static int ov9282_probe(struct i2c_client *client)
+  1038	{
+  1039		struct ov9282 *ov9282;
+  1040		const char *sensor_name;
+  1041		int ret;
+  1042	
+  1043		ov9282 = devm_kzalloc(&client->dev, sizeof(*ov9282), GFP_KERNEL);
+  1044		if (!ov9282)
+  1045			return -ENOMEM;
+  1046	
+  1047		ov9282->dev = &client->dev;
+  1048	
+  1049		/* Initialize subdev */
+  1050		v4l2_i2c_subdev_init(&ov9282->sd, client, &ov9282_subdev_ops);
+  1051		sensor_name = device_get_match_data(ov9282->dev);
+  1052		if (!sensor_name) {
+  1053			dev_err(ov9282->dev, "Sensor name is missing");
+> 1054			return ret;
+  1055		}
+  1056		v4l2_i2c_subdev_set_name(&ov9282->sd, client, sensor_name, NULL);
+  1057	
+  1058		ret = ov9282_parse_hw_config(ov9282);
+  1059		if (ret) {
+  1060			dev_err(ov9282->dev, "HW configuration is not supported");
+  1061			return ret;
+  1062		}
+  1063	
+  1064		ret = ov9282_get_regulators(ov9282);
+  1065		if (ret) {
+  1066			dev_err(&client->dev, "Failed to get power regulators\n");
+  1067			return ret;
+  1068		}
+  1069	
+  1070		mutex_init(&ov9282->mutex);
+  1071	
+  1072		ret = ov9282_power_on(ov9282->dev);
+  1073		if (ret) {
+  1074			dev_err(ov9282->dev, "failed to power-on the sensor");
+  1075			goto error_mutex_destroy;
+  1076		}
+  1077	
+  1078		/* Check module identity */
+  1079		ret = ov9282_detect(ov9282);
+  1080		if (ret) {
+  1081			dev_err(ov9282->dev, "failed to find sensor: %d", ret);
+  1082			goto error_power_off;
+  1083		}
+  1084	
+  1085		/* Set default mode to max resolution */
+  1086		ov9282->cur_mode = &supported_mode;
+  1087		ov9282->vblank = ov9282->cur_mode->vblank;
+  1088	
+  1089		ret = ov9282_init_controls(ov9282);
+  1090		if (ret) {
+  1091			dev_err(ov9282->dev, "failed to init controls: %d", ret);
+  1092			goto error_power_off;
+  1093		}
+  1094	
+  1095		/* Initialize subdev */
+  1096		ov9282->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+  1097		ov9282->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+  1098	
+  1099		/* Initialize source pad */
+  1100		ov9282->pad.flags = MEDIA_PAD_FL_SOURCE;
+  1101		ret = media_entity_pads_init(&ov9282->sd.entity, 1, &ov9282->pad);
+  1102		if (ret) {
+  1103			dev_err(ov9282->dev, "failed to init entity pads: %d", ret);
+  1104			goto error_handler_free;
+  1105		}
+  1106	
+  1107		ret = v4l2_async_register_subdev_sensor(&ov9282->sd);
+  1108		if (ret < 0) {
+  1109			dev_err(ov9282->dev,
+  1110				"failed to register async subdev: %d", ret);
+  1111			goto error_media_entity;
+  1112		}
+  1113	
+  1114		pm_runtime_set_active(ov9282->dev);
+  1115		pm_runtime_enable(ov9282->dev);
+  1116		pm_runtime_idle(ov9282->dev);
+  1117	
+  1118		return 0;
+  1119	
+  1120	error_media_entity:
+  1121		media_entity_cleanup(&ov9282->sd.entity);
+  1122	error_handler_free:
+  1123		v4l2_ctrl_handler_free(ov9282->sd.ctrl_handler);
+  1124	error_power_off:
+  1125		ov9282_power_off(ov9282->dev);
+  1126	error_mutex_destroy:
+  1127		mutex_destroy(&ov9282->mutex);
+  1128	
+  1129		return ret;
+  1130	}
+  1131	
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp
