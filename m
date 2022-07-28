@@ -1,43 +1,45 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BBA137B
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 11:17:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038E11399
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 12:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659007037; x=1690543037;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DtIM29pjTxa4VPaINN54wUy0i5N0ICSLry3uEWs/U2Q=;
-  b=hzMluipJCl0Zh9VMn9/S48RIhob4w2oiUSSJ0KCxstyc0YGXpW66gFB8
-   a+CT9Lx6We16Cl3kUXYbzDhXJmx5yH1o2GI2RcfzSlocOlJyW+WT8uGeF
-   2mevgQqTb7l4LfNtiZ9IPWuE+HwNeG3uSp/oefuOKw7UvEYXCQ8wrx6tn
-   SjZnEWpY9byAdRynBpmQLH4PzZQ2CgIlr8RL+0AIQRsR35qkqVwSlOuuf
-   cZbbidDhsOsP7lwW8i//jgquxgvn5ugMx6b4kDoj48y3apxJGxTM2CUAW
-   K74kcjL9HwFNHF7IDXhIaOIUnR7GRAxO1g2gDBg6aEHi3JQ0h9o2aoDyo
+  t=1659013102; x=1690549102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mOBeZUird/F+xHLCKLGIqA+qu0Eq+kakO8OWHHGsyGA=;
+  b=HTWBJZg4m/fDQo54aWLLdHDxt28SpgZ3po1xnRknSKhahjO0pQBx59Zv
+   2ubuTo4qvfUFJugHhKzzMWV6r4J9FPSmRuBWHVu5iOK3ga011n4Q4UMug
+   vg0DAMDB22v/xvNRDK27mntNC0Bj45uf7RMJijbr68BXoNZI9AQOHwsr2
+   jzCnAk7eLNee6IcxUF8GL4oMESakBziqhMeRsUZyUlfIkljn0etIwbHH+
+   7v6yaaRv3+m3ORB1dbD7xLUCxWTiGVikqf78J+ZioshutwCGPcqyhIHun
+   SCU+FoNvogrk/tWhAs0y71SDujEVT2OmQStKPbTLCmhgJbgH6SY5Z5smr
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289682615"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="289682615"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 04:17:08 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289273484"
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="289273484"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 05:58:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="551266936"
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="668819284"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jul 2022 04:17:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jul 2022 05:58:11 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oH1Vq-0009vO-1j;
-	Thu, 28 Jul 2022 11:17:06 +0000
-Date: Thu, 28 Jul 2022 19:16:12 +0800
+	id 1oH35e-000A14-1m;
+	Thu, 28 Jul 2022 12:58:10 +0000
+Date: Thu, 28 Jul 2022 20:57:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
-Subject: [steev:sc8280xp-next-20220722 14/141]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused
- variable 'sc8280xp_regdma'
-Message-ID: <202207281931.tLjk8lkA-lkp@intel.com>
+To: Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
+	vbabka@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, minchan@kernel.org,
+	iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, quic_yingangl@quicinc.com
+Subject: Re: [PATCH v2] mm/page_owner.c: add llseek for page_owner
+Message-ID: <202207282029.T2NTavCf-lkp@intel.com>
+References: <20220727125508.5154-1-quic_yingangl@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,47 +48,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220727125508.5154-1-quic_yingangl@quicinc.com>
 
-tree:   https://github.com/steev/linux sc8280xp-next-20220722
-head:   05eac286762272a5a2e5a5cd797ecb08b8e92741
-commit: 64ab2ccaef7b7adf21c879bae5090e8c0a60135a [14/141] drm/msm/dpu: Introduce sc8280xp
-config: arm64-randconfig-r003-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281931.tLjk8lkA-lkp@intel.com/config)
+Hi Kassey,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220727-205617
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: arm64-randconfig-r025-20220727 (https://download.01.org/0day-ci/archive/20220728/202207282029.T2NTavCf-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/steev/linux/commit/64ab2ccaef7b7adf21c879bae5090e8c0a60135a
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev sc8280xp-next-20220722
-        git checkout 64ab2ccaef7b7adf21c879bae5090e8c0a60135a
+        # https://github.com/intel-lab-lkp/linux/commit/5533df4120ec1703df71542154e8c5b0b21ddb10
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220727-205617
+        git checkout 5533df4120ec1703df71542154e8c5b0b21ddb10
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused variable 'sc8280xp_regdma' [-Wunused-const-variable]
-   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-                                       ^
+>> mm/page_owner.c:573:8: warning: no previous prototype for function 'llseek_page_owner' [-Wmissing-prototypes]
+   loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+          ^
+   mm/page_owner.c:573:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+   ^
+   static 
    1 warning generated.
 
 
-vim +/sc8280xp_regdma +1535 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+vim +/llseek_page_owner +573 mm/page_owner.c
 
-  1534	
-> 1535	static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-  1536		.base = 0x0,
-  1537		.version = 0x00020000,
-  1538		.trigger_sel_off = 0x119c,
-  1539		.xin_id = 7,
-  1540		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-  1541	};
-  1542	
+   572	
+ > 573	loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+   574	{
+   575		loff_t retval = 0;
+   576		switch (whence) {
+   577			case SEEK_CUR:
+   578			case SEEK_SET:
+   579				file->f_pos = offset;
+   580				break;
+   581			default:
+   582				retval = -ENXIO;
+   583		}
+   584	
+   585		return retval;
+   586	}
+   587	
 
 -- 
 0-DAY CI Kernel Test Service
