@@ -1,337 +1,288 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786AD10F6
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 05:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658985655; x=1690521655;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HD4+CaAjihKbuf3BU930eUtTTwQm9V6MlayuL3aVnsE=;
-  b=BBiG0glFmJX4pkAaEeD7LweeVto7vwmrn1ikhyCUTiIGTQKKP7bafnL1
-   LJNZ6es9/diXu1LLKK71rPwetWnoyOIcLtQDBJYTGqpjPC8Bg9wvWWN3M
-   8E3NV8G3GCfpN6JRKyGZFqXvKFXFjoGxnCTVRqxH2+qrOFwbmlHxN7Ffd
-   TJK/i8vSbsgcjsvU08VnnXbgJ+cEDRPCnMaW7t0gyZCzX53PpWxlUopSo
-   NgH4PTii5aKOToVi+Byffs2JSfAxuGnwgwk6dPKDaS4iHFTGNU/H3C+1y
-   /y3Jq4F16uUKUdkz9JY2VCf9+8PomgIxdYsunplYiVHBs2nsxHcyqSyuE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268187942"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="268187942"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 22:20:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="928112590"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Jul 2022 22:20:45 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oGvwy-0009iQ-26;
-	Thu, 28 Jul 2022 05:20:44 +0000
-Date: Thu, 28 Jul 2022 13:19:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tracing_multi_4 24/34] kernel/bpf/syscall.c:3157:15:
- error: call to undeclared function 'bpf_trampoline_multi_detach'; ISO C99
- and later do not support implicit function declarations
-Message-ID: <202207281330.rTwELUls-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6BF1103
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 06:50:53 +0000 (UTC)
+Received: by mail-wr1-f53.google.com with SMTP id l4so915506wrm.13
+        for <llvm@lists.linux.dev>; Wed, 27 Jul 2022 23:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version:list-id;
+        bh=xm4tLB9eH1e9uKOdHWnPyGZf2UuLwImkNYvq/Dcy5kg=;
+        b=UQ11KD8nBqjEEHn+aeDwoo0fRh18exd/i4QUJLBFGzldbB6j7UG1oDbHUZBOL+yvXj
+         /OTXqUKeYhR7l6CPoujyuMbz82MPgd7rNaVfIynamPBPU3Maq1yZNX12wnNN12iH2qLk
+         sH1ijvzxCc2F96XjQYsF1pmgqJ6j108sfB6MMc4B3FspjrplknUlAaMZaIMwQ90CR65i
+         OJ9SVSd4pP6K3VnaIWVj5BiUrFYfqjyB+zeEHT1PoIM1OW5OklXWr1KFOvngfX0ItEyr
+         TNp8khoXxQb8b3qrI5HmS3rlYgWDjtP82D+rPhzUvcNaUK599W3I3ziXb4ElR6SkjoNN
+         9o4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
+         :list-id;
+        bh=xm4tLB9eH1e9uKOdHWnPyGZf2UuLwImkNYvq/Dcy5kg=;
+        b=3k128Q6IkJMv2VcqLUyXqhb1PY9Rnh1hrFCVQnyVKWCB0ccFTcuFOyFJJBbm0M4P9R
+         Hcvo5z/lwLmTCWPqezH0PSWY2vxOP1EpI6klWtThAOs7wr8LrQi0j/+GxoT7fQVudIN7
+         39fXHa0Owj8uC3UJlIxYqZciI5zfgwNb+7KDgOJD33ljadFoQwWsPrdiEyJxcgRee3DO
+         jpnBY/ldl9fKGfwlgYBBSqFZuER6eceeNxwxXqHyuHTaorHUimWau+lSTrE/L3vZDOeG
+         L9R34itKEQJYd1txlFSpdQ4sa/zwuAnV0iJ1uTvhtveNkCGZ+6yI0ulNP5q7naXlM8wD
+         j6JA==
+X-Gm-Message-State: AJIora9iUzRWWaDaJ+5gH6D2B1hrZEqB7SMOJKot3inicqQLdRZ9qOfm
+	RsQQ8gyAhRT0tjPfdosBtsH6tw==
+X-Google-Smtp-Source: AGRyM1vSI0MJpFuHlmPkDR8nB2C0EQM86yDZ0BkrX4ao6tcrWCe4jI8O2PyxToS9yDOk9P3kTYN32A==
+X-Received: by 2002:adf:f7c7:0:b0:21e:fc10:b81b with SMTP id a7-20020adff7c7000000b0021efc10b81bmr842490wrq.51.1658991051753;
+        Wed, 27 Jul 2022 23:50:51 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id u1-20020adfdd41000000b0021d80f53324sm90216wrm.7.2022.07.27.23.50.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 23:50:51 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Thu, 28 Jul 2022 06:50:50 +0000 (UTC)
+To: Yury Norov <yury.norov@gmail.com>
+Cc: llvm@lists.linux.dev, arnd@linaro.org
+Message-ID: <1788368597.3058.1658991051274@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by linux: lib/nodemask: inline
+ next_node_in() and node_random()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_3057_1223459542.1658991050529"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-release-arm-norov-allyesconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_4
-head:   1637b6b5bec11596e52cdc0a6eadfa45a15276c3
-commit: ddb4a6defabce7658e7c6be7397bd5e714279b48 [24/34] bpf: Add support for tracing multi link
-config: hexagon-randconfig-r041-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281330.rTwELUls-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=ddb4a6defabce7658e7c6be7397bd5e714279b48
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tracing_multi_4
-        git checkout ddb4a6defabce7658e7c6be7397bd5e714279b48
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+------=_Part_3057_1223459542.1658991050529
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[TCWG CI] Regression caused by linux: lib/nodemask: inline next_node_in() and node_random():
+commit e0281efe11c987e1ff557dad2a56d90484206597
+Author: Yury Norov <yury.norov@gmail.com>
 
-All errors (new ones prefixed by >>):
+    lib/nodemask: inline next_node_in() and node_random()
 
-   kernel/bpf/syscall.c:2523:15: error: call to undeclared function 'is_tracing_multi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           multi_func = is_tracing_multi(attr->expected_attach_type);
-                        ^
->> kernel/bpf/syscall.c:3157:15: error: call to undeclared function 'bpf_trampoline_multi_detach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
-                        ^
->> kernel/bpf/syscall.c:3165:2: error: call to undeclared function 'bpf_tramp_id_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           bpf_tramp_id_put(tr_link->id);
-           ^
-   kernel/bpf/syscall.c:3165:2: note: did you mean 'bpf_trampoline_put'?
-   include/linux/bpf.h:1021:20: note: 'bpf_trampoline_put' declared here
-   static inline void bpf_trampoline_put(struct bpf_trampoline *tr) {}
-                      ^
->> kernel/bpf/syscall.c:3328:7: error: call to undeclared function 'bpf_tramp_id_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           id = bpf_tramp_id_alloc(cnt);
-                ^
->> kernel/bpf/syscall.c:3328:5: error: incompatible integer to pointer conversion assigning to 'struct bpf_tramp_id *' from 'int' [-Wint-conversion]
-           id = bpf_tramp_id_alloc(cnt);
-              ^ ~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/syscall.c:3369:8: error: call to undeclared function 'bpf_trampoline_multi_attach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = bpf_trampoline_multi_attach(&link->tp, id);
-                 ^
-   kernel/bpf/syscall.c:3369:8: note: did you mean 'bpf_tracing_multi_attach'?
-   kernel/bpf/syscall.c:3313:12: note: 'bpf_tracing_multi_attach' declared here
-   static int bpf_tracing_multi_attach(struct bpf_prog *prog,
-              ^
-   kernel/bpf/syscall.c:4841:12: error: call to undeclared function 'is_tracing_multi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   else if (is_tracing_multi(prog->expected_attach_type))
-                            ^
-   7 errors generated.
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+20659
+# First few build errors in logs:
+# 00:04:34 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+# 00:04:34 make[1]: *** [crypto/wp512.o] Error 1
+# 00:08:54 make: *** [crypto] Error 2
+# 00:10:45 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
+# 00:10:45 make[4]: *** [drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+# 00:11:10 make[3]: *** [drivers/gpu/drm/selftests] Error 2
+# 00:16:07 sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+# 00:16:07 make[4]: *** [sound/soc/intel/avs/path.o] Error 1
+# 00:16:24 drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: error: stack frame size (1096) exceeds limit (1024) in 'cfi_intelext_writev' [-Werror,-Wframe-larger-than]
+# 00:16:24 make[3]: *** [drivers/mtd/chips/cfi_cmdset_0001.o] Error 1
 
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+20660
+# First few build errors in logs:
+# 00:05:48 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+# 00:05:48 make[1]: *** [crypto/wp512.o] Error 1
+# 00:10:09 make: *** [crypto] Error 2
+# 00:12:46 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
+# 00:12:46 make[4]: *** [drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+# 00:13:12 make[3]: *** [drivers/gpu/drm/selftests] Error 2
+# 00:18:08 sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+# 00:18:08 make[4]: *** [sound/soc/intel/avs/path.o] Error 1
+# 00:18:31 make[3]: *** [sound/soc/intel/avs] Error 2
+# 00:18:43 make[2]: *** [sound/soc/intel] Error 2
 
-vim +/bpf_trampoline_multi_detach +3157 kernel/bpf/syscall.c
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
-  3151	
-  3152	static void bpf_tracing_multi_link_release(struct bpf_link *link)
-  3153	{
-  3154		struct bpf_tracing_multi_link *tr_link =
-  3155			container_of(link, struct bpf_tracing_multi_link, link);
-  3156	
-> 3157		WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
-  3158	}
-  3159	
-  3160	static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
-  3161	{
-  3162		struct bpf_tracing_multi_link *tr_link =
-  3163			container_of(link, struct bpf_tracing_multi_link, link);
-  3164	
-> 3165		bpf_tramp_id_put(tr_link->id);
-  3166		kfree(tr_link);
-  3167	}
-  3168	
-  3169	static void bpf_tracing_multi_link_show_fdinfo(const struct bpf_link *link,
-  3170						       struct seq_file *seq)
-  3171	{
-  3172		struct bpf_tracing_multi_link *tr_link =
-  3173			container_of(link, struct bpf_tracing_multi_link, link);
-  3174	
-  3175		seq_printf(seq, "attach_type:\t%d\n", tr_link->attach_type);
-  3176	}
-  3177	
-  3178	static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
-  3179							 struct bpf_link_info *info)
-  3180	{
-  3181		struct bpf_tracing_multi_link *tr_link =
-  3182			container_of(link, struct bpf_tracing_multi_link, link);
-  3183	
-  3184		info->tracing.attach_type = tr_link->attach_type;
-  3185		return 0;
-  3186	}
-  3187	
-  3188	static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
-  3189		.release = bpf_tracing_multi_link_release,
-  3190		.dealloc = bpf_tracing_multi_link_dealloc,
-  3191		.show_fdinfo = bpf_tracing_multi_link_show_fdinfo,
-  3192		.fill_link_info = bpf_tracing_multi_link_fill_link_info,
-  3193	};
-  3194	
-  3195	static int check_multi_prog_type(struct bpf_prog *prog)
-  3196	{
-  3197		if (prog->expected_attach_type != BPF_TRACE_FENTRY_MULTI &&
-  3198		    prog->expected_attach_type != BPF_TRACE_FEXIT_MULTI)
-  3199			return -EINVAL;
-  3200		return 0;
-  3201	}
-  3202	
-  3203	static int btf_ids_cmp(const void *a, const void *b)
-  3204	{
-  3205		const u32 *x = a;
-  3206		const u32 *y = b;
-  3207	
-  3208		if (*x == *y)
-  3209			return 0;
-  3210		return *x < *y ? -1 : 1;
-  3211	}
-  3212	
-  3213	struct resolve_id {
-  3214		const char *name;
-  3215		void *addr;
-  3216		u32 id;
-  3217	};
-  3218	
-  3219	static int rid_name_cmp(const void *a, const void *b)
-  3220	{
-  3221		const struct resolve_id *x = a;
-  3222		const struct resolve_id *y = b;
-  3223	
-  3224		return strcmp(x->name, y->name);
-  3225	}
-  3226	
-  3227	static int rid_id_cmp(const void *a, const void *b)
-  3228	{
-  3229		const struct resolve_id *x = a;
-  3230		const struct resolve_id *y = b;
-  3231	
-  3232		if (x->id == y->id)
-  3233			return 0;
-  3234		return x->id < y->id ? -1 : 1;
-  3235	}
-  3236	
-  3237	struct kallsyms_data {
-  3238		struct resolve_id *rid;
-  3239		u32 cnt;
-  3240		u32 found;
-  3241	};
-  3242	
-  3243	static int kallsyms_callback(void *data, const char *name,
-  3244				     struct module *mod, unsigned long addr)
-  3245	{
-  3246		struct kallsyms_data *args = data;
-  3247		struct resolve_id *rid, id = {
-  3248			.name = name,
-  3249		};
-  3250	
-  3251		rid = bsearch(&id, args->rid, args->cnt, sizeof(*rid), rid_name_cmp);
-  3252		if (rid && !rid->addr) {
-  3253			rid->addr = (void *) addr;
-  3254			args->found++;
-  3255		}
-  3256		return args->found == args->cnt ? 1 : 0;
-  3257	}
-  3258	
-  3259	static int bpf_tramp_id_resolve(struct bpf_tramp_id *id, struct bpf_prog *prog)
-  3260	{
-  3261		struct kallsyms_data args;
-  3262		const struct btf_type *t;
-  3263		struct resolve_id *rid;
-  3264		const char *name;
-  3265		struct btf *btf;
-  3266		int err = 0;
-  3267		u32 i;
-  3268	
-  3269		btf = prog->aux->attach_btf;
-  3270		if (!btf)
-  3271			return -EINVAL;
-  3272	
-  3273		rid = kzalloc(id->cnt * sizeof(*rid), GFP_KERNEL);
-  3274		if (!rid)
-  3275			return -ENOMEM;
-  3276	
-  3277		err = -EINVAL;
-  3278		for (i = 0; i < id->cnt; i++) {
-  3279			t = btf_type_by_id(btf, id->id[i]);
-  3280			if (!t)
-  3281				goto out_free;
-  3282	
-  3283			name = btf_name_by_offset(btf, t->name_off);
-  3284			if (!name)
-  3285				goto out_free;
-  3286	
-  3287			rid[i].name = name;
-  3288			rid[i].id = id->id[i];
-  3289		}
-  3290	
-  3291		sort(rid, id->cnt, sizeof(*rid), rid_name_cmp, NULL);
-  3292	
-  3293		args.rid = rid;
-  3294		args.cnt = id->cnt;
-  3295		args.found = 0;
-  3296		kallsyms_on_each_symbol(kallsyms_callback, &args);
-  3297	
-  3298		sort(rid, id->cnt, sizeof(*rid), rid_id_cmp, NULL);
-  3299	
-  3300		for (i = 0; i < id->cnt; i++) {
-  3301			if (!rid[i].addr) {
-  3302				err = -EINVAL;
-  3303				goto out_free;
-  3304			}
-  3305			id->addr[i] = rid[i].addr;
-  3306		}
-  3307		err = 0;
-  3308	out_free:
-  3309		kfree(rid);
-  3310		return err;
-  3311	}
-  3312	
-  3313	static int bpf_tracing_multi_attach(struct bpf_prog *prog,
-  3314					    const union bpf_attr *attr)
-  3315	{
-  3316		void __user *uids = u64_to_user_ptr(attr->link_create.tracing_multi.btf_ids);
-  3317		u32 cnt_size, cnt = attr->link_create.tracing_multi.btf_ids_cnt;
-  3318		struct bpf_tracing_multi_link *link = NULL;
-  3319		struct bpf_link_primer link_primer;
-  3320		struct bpf_tramp_id *id = NULL;
-  3321		int err = -EINVAL;
-  3322	
-  3323		if (check_multi_prog_type(prog))
-  3324			return -EINVAL;
-  3325		if (!cnt || !uids)
-  3326			return -EINVAL;
-  3327	
-> 3328		id = bpf_tramp_id_alloc(cnt);
-  3329		if (!id)
-  3330			return -ENOMEM;
-  3331	
-  3332		err = -EFAULT;
-  3333		cnt_size = cnt * sizeof(id->id[0]);
-  3334		if (copy_from_user(id->id, uids, cnt_size))
-  3335			goto out_free_id;
-  3336	
-  3337		id->cnt = cnt;
-  3338		id->obj_id = btf_obj_id(prog->aux->attach_btf);
-  3339	
-  3340		/* Sort user provided BTF ids, so we can use memcmp
-  3341		 * and bsearch on top of it later.
-  3342		 */
-  3343		sort(id->id, cnt, sizeof(u32), btf_ids_cmp, NULL);
-  3344	
-  3345		err = bpf_tramp_id_resolve(id, prog);
-  3346		if (err)
-  3347			goto out_free_id;
-  3348	
-  3349		link = kzalloc(sizeof(*link), GFP_KERNEL);
-  3350		if (!link) {
-  3351			err = -ENOMEM;
-  3352			goto out_free_id;
-  3353		}
-  3354	
-  3355		bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING_MULTI,
-  3356			      &bpf_tracing_multi_link_lops, prog);
-  3357		link->attach_type = prog->expected_attach_type;
-  3358	
-  3359		err = bpf_link_prime(&link->link, &link_primer);
-  3360		if (err) {
-  3361			kfree(link);
-  3362			goto out_free_id;
-  3363		}
-  3364	
-  3365		link->id = id;
-  3366		link->tp.cookie = 0;
-  3367		link->tp.prog = prog;
-  3368	
-  3369		err = bpf_trampoline_multi_attach(&link->tp, id);
-  3370		if (err) {
-  3371			bpf_link_cleanup(&link_primer);
-  3372			goto out_free_id;
-  3373		}
-  3374		return bpf_link_settle(&link_primer);
-  3375	out_free_id:
-  3376		kfree(id);
-  3377		return err;
-  3378	}
-  3379	
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-release-arm-norov-allyesconfig
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-e0281efe11c987e1ff557dad2a56d90484206597/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-2f9905799751b4395c942d33ff600cd924324785/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/
+
+Reproduce builds:
+<cut>
+mkdir investigate-linux-e0281efe11c987e1ff557dad2a56d90484206597
+cd investigate-linux-e0281efe11c987e1ff557dad2a56d90484206597
+
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-norov-allyesconfig/3/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
+
+cd linux
+
+# Reproduce first_bad build
+git checkout --detach e0281efe11c987e1ff557dad2a56d90484206597
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach 2f9905799751b4395c942d33ff600cd924324785
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit e0281efe11c987e1ff557dad2a56d90484206597
+Author: Yury Norov <yury.norov@gmail.com>
+Date:   Mon Jul 25 09:39:17 2022 -0700
+
+    lib/nodemask: inline next_node_in() and node_random()
+    
+    The functions are pretty thin wrappers around find_bit engine, and
+    keeping them in c-file prevents compiler from small_const_nbits()
+    optimization, which must take place for all systems with MAX_NUMNODES
+    less than BITS_PER_LONG (default is 16 for me).
+    
+    Moving them to header file doesn't blow up the kernel size:
+    add/remove: 1/2 grow/shrink: 9/5 up/down: 968/-88 (880)
+    
+    CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+    CC: Michael Ellerman <mpe@ellerman.id.au>
+    CC: Paul Mackerras <paulus@samba.org>
+    CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    CC: Stephen Rothwell <sfr@canb.auug.org.au>
+    CC: linuxppc-dev@lists.ozlabs.org
+    Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ MAINTAINERS              |  1 -
+ include/linux/nodemask.h | 24 +++++++++++++++++++-----
+ lib/Makefile             |  2 +-
+ lib/nodemask.c           |  8 --------
+ 4 files changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7c0b8f28aa25..19c8d0ef1177 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3540,7 +3540,6 @@ F:	lib/bitmap.c
+ F:	lib/cpumask.c
+ F:	lib/find_bit.c
+ F:	lib/find_bit_benchmark.c
+-F:	lib/nodemask.c
+ F:	lib/test_bitmap.c
+ F:	tools/include/linux/bitmap.h
+ F:	tools/include/linux/find.h
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index 0f233b76c9ce..4b71a96190a8 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -94,6 +94,7 @@
+ #include <linux/bitmap.h>
+ #include <linux/minmax.h>
+ #include <linux/numa.h>
++#include <linux/random.h>
+ 
+ typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
+ extern nodemask_t _unused_nodemask_arg_;
+@@ -276,7 +277,14 @@ static inline unsigned int __next_node(int n, const nodemask_t *srcp)
+  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
+  */
+ #define next_node_in(n, src) __next_node_in((n), &(src))
+-unsigned int __next_node_in(int node, const nodemask_t *srcp);
++static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
++{
++	unsigned int ret = __next_node(node, srcp);
++
++	if (ret == MAX_NUMNODES)
++		ret = __first_node(srcp);
++	return ret;
++}
+ 
+ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
+ {
+@@ -493,14 +501,20 @@ static inline int num_node_state(enum node_states state)
+ 
+ #endif
+ 
++static inline int node_random(const nodemask_t *maskp)
++{
+ #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
+-extern int node_random(const nodemask_t *maskp);
++	int w, bit = NUMA_NO_NODE;
++
++	w = nodes_weight(*maskp);
++	if (w)
++		bit = bitmap_ord_to_pos(maskp->bits,
++			get_random_int() % w, MAX_NUMNODES);
++	return bit;
+ #else
+-static inline int node_random(const nodemask_t *mask)
+-{
+ 	return 0;
+-}
+ #endif
++}
+ 
+ #define node_online_map 	node_states[N_ONLINE]
+ #define node_possible_map 	node_states[N_POSSIBLE]
+diff --git a/lib/Makefile b/lib/Makefile
+index f99bf61f8bbc..731cea0342d1 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -33,7 +33,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 flex_proportions.o ratelimit.o show_mem.o \
+ 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+ 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+-	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
++	 nmi_backtrace.o win_minmax.o memcat_p.o \
+ 	 buildid.o
+ 
+ lib-$(CONFIG_PRINTK) += dump_stack.o
+diff --git a/lib/nodemask.c b/lib/nodemask.c
+index e22647f5181b..b8a433d16b51 100644
+--- a/lib/nodemask.c
++++ b/lib/nodemask.c
+@@ -3,14 +3,6 @@
+ #include <linux/module.h>
+ #include <linux/random.h>
+ 
+-unsigned int __next_node_in(int node, const nodemask_t *srcp)
+-{
+-	unsigned int ret = __next_node(node, srcp);
+-
+-	if (ret == MAX_NUMNODES)
+-		ret = __first_node(srcp);
+-	return ret;
+-}
+ EXPORT_SYMBOL(__next_node_in);
+ 
+ #ifdef CONFIG_NUMA
+</cut>
+------=_Part_3057_1223459542.1658991050529--
