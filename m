@@ -1,243 +1,217 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B4A7A
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 16:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659025316;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DmEKMBaqQlibMHBA/b1vXGp3K5tuGAzLK9YAmhad1rw=;
-	b=EmYed/eTXMLlVAMWxHp/tbUvLs081dFz/IjDjHjtsYqx+PG4GoDfxbRihcDvM75XQuOVuF
-	Yyc8c1oiDCjJW2GcYAiLVREnY3I1FAwe2tbOcQRTJrWdQmVTpXDRENZp5yg0J36y/jQJMF
-	QYfD8ij1CcNLPBbbCwujlmgO+bmNRWo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-Bwu0q622Nxa4Wysji1kwqw-1; Thu, 28 Jul 2022 12:21:54 -0400
-X-MC-Unique: Bwu0q622Nxa4Wysji1kwqw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D9461C16B46
-	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 16:21:54 +0000 (UTC)
-Received: from [172.64.0.89] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7128C40CFD0A;
-	Thu, 28 Jul 2022 16:21:54 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (91/496 SKIPPED): Test report for 5.19.0-rc8
- (mainline.kernel.org-clang) [6e7765cb]
-Date: Thu, 28 Jul 2022 16:21:54 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705157A
+	for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 17:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659028054; x=1690564054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kURNBGI8zKjMPtixW8T3WHeLX7X04ValgfTzIHfvulQ=;
+  b=ngJhBSUUlamSflfMG2LogVkbz5ZOt/MBFuU4R6CUakto6EJo5iQihUPh
+   yXfDDfG/pn8nYAi5fwsAx8fPp5SUUP4+N9++XLS6+ATAgt+vZJb5KI5Cw
+   tJW55Vaco3U5iYh4HqR4aa8RX9IJyrniwQveJ4XAsZyihfZXa38ZtD6Uz
+   DghOhcX2CubKb9tOjj4tX5rwfNd9hWi2H0wUsQcDP70vnFM2lwFI8nSFP
+   i/BsOW6Txbufq0fQ2rshhD7K7IRA2cI5b0HqLvS1mOg4QtOhCy8YQD++3
+   47rgchs+bSqeBjIg//KW3NPFQ05fNOFpoTHNdE63Ze6epv/AkSeIYzlfp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="271607391"
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="271607391"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 10:07:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="551390744"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jul 2022 10:07:32 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oH6yy-000APa-0d;
+	Thu, 28 Jul 2022 17:07:32 +0000
+Date: Fri, 29 Jul 2022 01:06:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhakrishna Sripada <radhakrishna.sripada@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [PATCH 01/23] drm/i915: Read graphics/media/display
+ arch version from hw
+Message-ID: <202207290003.4201IaYT-lkp@intel.com>
+References: <20220728013420.3750388-2-radhakrishna.sripada@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-Message-Id: <78863.122072812215401261@us-mta-524.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728013420.3750388-2-radhakrishna.sripada@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Radhakrishna,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Yet something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on drm-tip/drm-tip]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/48992
+url:    https://github.com/intel-lab-lkp/linux/commits/Radhakrishna-Sripada/Initial-Meteorlake-Support/20220728-093858
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220729/202207290003.4201IaYT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9c25e8c3f0f22894b5d8e14135eef61c2cf61a2a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Radhakrishna-Sripada/Initial-Meteorlake-Support/20220728-093858
+        git checkout 9c25e8c3f0f22894b5d8e14135eef61c2cf61a2a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
-bsystem for controller nvme0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1274
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Podman: Error: netavark: failed to configure bridge and veth=
- interface
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1186
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                   s390x - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
-er ID
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1167
-            Affected tests:
-                  x86_64 - Podman system test - as user
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/972
-            Affected tests:
-                   s390x - LTP - commands
-        Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1251
-            Affected tests:
-                   s390x - LTP - commands
-        Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, not expecte=
-d
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1264
-            Affected tests:
-                   s390x - LTP - commands
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: LTP - commands: df01 7 TFAIL: 'df -v /dev/loop0 -P' failed.
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/755
-            Affected tests:
-                 aarch64 - LTP - commands
-        Issue: LTP - commands: df01 5 TFAIL: 'df -t xfs -P' failed, not exp=
-ected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1249
-            Affected tests:
-                 aarch64 - LTP - commands
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Podman system test - as user
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/i915_driver.c:929:7: error: use of undeclared identifier 'match_info'
+               !match_info->has_gmd_id && DISPLAY_VER(i915) < 5)
+                ^
+   drivers/gpu/drm/i915/i915_driver.c:944:38: error: use of undeclared identifier 'match_info'; did you mean 'acpi_info'?
+           ret = i915_driver_early_probe(i915, match_info);
+                                               ^~~~~~~~~~
+                                               acpi_info
+   include/acpi/acpixf.h:906:5: note: 'acpi_info' declared here
+                                   acpi_info(const char *format, ...))
+                                   ^
+   2 errors generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/match_info +929 drivers/gpu/drm/i915/i915_driver.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   906	
+   907	/**
+   908	 * i915_driver_probe - setup chip and create an initial config
+   909	 * @pdev: PCI device
+   910	 * @ent: matching PCI ID entry
+   911	 *
+   912	 * The driver probe routine has to do several things:
+   913	 *   - drive output discovery via intel_modeset_init()
+   914	 *   - initialize the memory manager
+   915	 *   - allocate initial config memory
+   916	 *   - setup the DRM framebuffer with the allocated memory
+   917	 */
+   918	int i915_driver_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+   919	{
+   920		struct drm_i915_private *i915;
+   921		int ret;
+   922	
+   923		i915 = i915_driver_create(pdev, ent);
+   924		if (IS_ERR(i915))
+   925			return PTR_ERR(i915);
+   926	
+   927		/* Disable nuclear pageflip by default on pre-ILK */
+   928		if (!i915->params.nuclear_pageflip &&
+ > 929		    !match_info->has_gmd_id && DISPLAY_VER(i915) < 5)
+   930			i915->drm.driver_features &= ~DRIVER_ATOMIC;
+   931	
+   932		ret = pci_enable_device(pdev);
+   933		if (ret)
+   934			goto out_fini;
+   935	
+   936		/*
+   937		 * GRAPHICS_VER() and DISPLAY_VER() will return 0 before this is
+   938		 * called, so we want to take care of this very early in the
+   939		 * initialization process (as soon as we can peek into the MMIO BAR),
+   940		 * even before we setup regular MMIO access.
+   941		 */
+   942		intel_ipver_early_init(i915);
+   943	
+   944		ret = i915_driver_early_probe(i915, match_info);
+   945		if (ret < 0)
+   946			goto out_pci_disable;
+   947	
+   948		disable_rpm_wakeref_asserts(&i915->runtime_pm);
+   949	
+   950		intel_vgpu_detect(i915);
+   951	
+   952		ret = intel_gt_probe_all(i915);
+   953		if (ret < 0)
+   954			goto out_runtime_pm_put;
+   955	
+   956		ret = i915_driver_mmio_probe(i915);
+   957		if (ret < 0)
+   958			goto out_tiles_cleanup;
+   959	
+   960		ret = i915_driver_hw_probe(i915);
+   961		if (ret < 0)
+   962			goto out_cleanup_mmio;
+   963	
+   964		ret = intel_modeset_init_noirq(i915);
+   965		if (ret < 0)
+   966			goto out_cleanup_hw;
+   967	
+   968		ret = intel_irq_install(i915);
+   969		if (ret)
+   970			goto out_cleanup_modeset;
+   971	
+   972		ret = intel_modeset_init_nogem(i915);
+   973		if (ret)
+   974			goto out_cleanup_irq;
+   975	
+   976		ret = i915_gem_init(i915);
+   977		if (ret)
+   978			goto out_cleanup_modeset2;
+   979	
+   980		ret = intel_modeset_init(i915);
+   981		if (ret)
+   982			goto out_cleanup_gem;
+   983	
+   984		i915_driver_register(i915);
+   985	
+   986		enable_rpm_wakeref_asserts(&i915->runtime_pm);
+   987	
+   988		i915_welcome_messages(i915);
+   989	
+   990		i915->do_release = true;
+   991	
+   992		return 0;
+   993	
+   994	out_cleanup_gem:
+   995		i915_gem_suspend(i915);
+   996		i915_gem_driver_remove(i915);
+   997		i915_gem_driver_release(i915);
+   998	out_cleanup_modeset2:
+   999		/* FIXME clean up the error path */
+  1000		intel_modeset_driver_remove(i915);
+  1001		intel_irq_uninstall(i915);
+  1002		intel_modeset_driver_remove_noirq(i915);
+  1003		goto out_cleanup_modeset;
+  1004	out_cleanup_irq:
+  1005		intel_irq_uninstall(i915);
+  1006	out_cleanup_modeset:
+  1007		intel_modeset_driver_remove_nogem(i915);
+  1008	out_cleanup_hw:
+  1009		i915_driver_hw_remove(i915);
+  1010		intel_memory_regions_driver_release(i915);
+  1011		i915_ggtt_driver_release(i915);
+  1012		i915_gem_drain_freed_objects(i915);
+  1013		i915_ggtt_driver_late_release(i915);
+  1014	out_cleanup_mmio:
+  1015		i915_driver_mmio_release(i915);
+  1016	out_tiles_cleanup:
+  1017		intel_gt_release_all(i915);
+  1018	out_runtime_pm_put:
+  1019		enable_rpm_wakeref_asserts(&i915->runtime_pm);
+  1020		i915_driver_late_release(i915);
+  1021	out_pci_disable:
+  1022		pci_disable_device(pdev);
+  1023	out_fini:
+  1024		i915_probe_error(i915, "Device initialization failed (%d)\n", ret);
+  1025		return ret;
+  1026	}
+  1027	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
