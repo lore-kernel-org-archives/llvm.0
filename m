@@ -1,133 +1,89 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C196A4400
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659089130; x=1690625130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ij/DEsIbLiBH4jFrHG/gvtJ5YIPCXP2XupNXfEGHTT0=;
-  b=OMBnER8/s+0Q/fvJXgfRYbEIXfe26Jhq2fO8nVLLdWLd/7RvRAjxqZrX
-   Xvt6wIEkCTpvZRXGAlbXpHB3pnic0Jb5CJtpQUpzvCG/X+UuJrM4eK522
-   KvLiGOfAs9P9PKW8j8M5UFxsH4PqEGCTEXQ5llPyKUO/0DG06sF4eSJJS
-   XF/BkAwH9ZadttgWhpIzm+t5FAgDiKWUlrU4lZd3qZNXA8QmOe+wlEVp8
-   yyA0zFFPD6JMtRWLIWSpUKTdIuEZNCHvouq65jQl9qg5tB1Vu6h8uHtkI
-   7EV9KbqIJOuKvl1L8IsU9C18wn2Gp9ymkBwWWOtblXYmQ1oZMhQGvmTQ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="314535650"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="314535650"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 03:05:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="928692903"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 03:05:29 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oHMs4-000BVF-1n;
-	Fri, 29 Jul 2022 10:05:28 +0000
-Date: Fri, 29 Jul 2022 18:04:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hou Tao <houtao1@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH bpf-next 1/3] bpf: Add support for qp-trie map
-Message-ID: <202207291741.AfRRtqqg-lkp@intel.com>
-References: <20220726130005.3102470-2-houtao1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC8C4400
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:08:51 +0000 (UTC)
+Received: by mail-oi1-f175.google.com with SMTP id l188so5336517oia.4
+        for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 03:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to:cc;
+        bh=FVorsqPmSCV/rHPJEZGeXNnfBrCMbPV4pzYgK1Fz/3s=;
+        b=TyxuA/0mnK6SrcpNYeJSx/oO9pPIvEohRAGEjZBG5YWBF5LMw+FjBoYsDzPYFuK32s
+         MLSB3BksDGrogcWzkZuq80dCBS+9EFFaDNJryDYGQ7VlEfWu1ptjnHJiZgiR4IjtwdYX
+         wi5HWzQwcXwG5CePAiGwfZ7b6i6BGwe7bYTt83oXv0qWsUCJdioPPYqHpH6UezFkOkbz
+         hy7BhBgrXmJNSPOD0FJlIrpCk1A3onHqqKwQONHy0/fgfk5hsQg9ihpZwH9aeuSQNvaO
+         +vcPgh8dN0STu4Itp2DPTuSWmazQ+Lf44pvz8r1iwlarlBuYJYYCIz54rm9wpgALprZo
+         cb+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=FVorsqPmSCV/rHPJEZGeXNnfBrCMbPV4pzYgK1Fz/3s=;
+        b=IJOe9lqKVEMHL4rmngE7AeHFl8X6R3eJcjZAPvdfYXiyO8E4bJ/MY+sxRBclBUboYR
+         EaCHErukKF32TnesirjTu4S6+zed48Vtu5JZ5Lq6/K2arQfffD8JjeCil6O/oUUF1NLG
+         IWBREin7hzECb1sHlGOZ8fBA0/ZPp2O+qafm2yY/whXCbGwrZQe5Kxd4R9PetAow3pBt
+         7V4Vlb/14le1ufc/fuk4Jln42kDHWdN0WMP3+leMrm/YCVg5eF6knROuxxi7K9wU/l3e
+         RS4nwpttvbN9+OkOy2zADDWKepyouQUpV9IySLX8uiywH/2HRE93ChNCiAjzg0lebV1b
+         8eXA==
+X-Gm-Message-State: AJIora8dAZ/x3QQv99m/sVtQ2G2Jusw5De+depe/cFeTaXEhSLUQl4k3
+	CsA46bmEyf5zOTHlebX4aLmhbirMU3SgUhFFmBk=
+X-Google-Smtp-Source: AGRyM1sHF6moKZRseECrKgh+7V1BEcTha3LwEFtT8caGxsj05HVl+vDbK1Bg4y2QE0+0uw+MXsR9/Pv+qu8bhnCLaM4=
+X-Received: by 2002:a05:6808:bd2:b0:33a:c532:54e6 with SMTP id
+ o18-20020a0568080bd200b0033ac53254e6mr1278516oik.252.1659089330211; Fri, 29
+ Jul 2022 03:08:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726130005.3102470-2-houtao1@huawei.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Fri, 29 Jul 2022 12:08:14 +0200
+Message-ID: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
+Subject: LLVM 15 and 16 packages on apt.llvm.org and in Debian
+To: Sylvestre Ledru <sylvestre@debian.org>
+Cc: Nathan Chancellor <natechancellor@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Stellard <tstellar@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Hou,
+Hi Sylvestre,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on bpf-next/master]
+I see some new LLVM 15 and 16 packages on <apt.llvm.org> and
+Debian/experimental:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hou-Tao/Add-support-for-qp-trie-map/20220726-204347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: hexagon-randconfig-r041-20220724 (https://download.01.org/0day-ci/archive/20220729/202207291741.AfRRtqqg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/74890023aaa2d8ffed54d96d4999f10bf14ccfef
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hou-Tao/Add-support-for-qp-trie-map/20220726-204347
-        git checkout 74890023aaa2d8ffed54d96d4999f10bf14ccfef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+# LC_ALL=C apt-cache policy clang-15
+clang-15:
+ Installed: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
+ Candidate: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
+ Version table:
+    1:15~++20220724113059+7feab85df8e8-1~exp1 99
+        99 https://ftp.debian.org/debian experimental/main amd64 Packages
+        99 https://deb.debian.org/debian experimental/main amd64 Packages
+*** 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624 100
+       100 /var/lib/dpkg/status
+    1:15~++20220625103012+3d37e785c77a-1~exp1 99
+        99 https://ftp.debian.org/debian unstable/main amd64 Packages
+        99 https://deb.debian.org/debian unstable/main amd64 Packages
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+# LC_ALL=C apt-cache policy clang-16
+clang-16:
+ Installed: (none)
+ Candidate: 1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647
+ Version table:
+    1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647 99
+        99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
 
-All warnings (new ones prefixed by >>):
+Today, Friday I remember Tom wanted to release LLVM version 15.0.0-rc1.
 
->> kernel/bpf/bpf_qp_trie.c:622:24: warning: bitwise or with non-zero value always evaluates to true [-Wtautological-bitwise-compare]
-           if (!(attr->map_flags | BPF_F_NO_PREALLOC) ||
-                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
->> kernel/bpf/bpf_qp_trie.c:648:18: warning: division by zero is undefined [-Wdivision-by-zero]
-           for (i = 0; i < ARRAY_SIZE(trie->locks); i++)
-                           ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:38: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                        ^ ~~~~~~~~~~~~~~~~
-   2 warnings generated.
+I love to see such a version on any of these two repositories.
 
+And hope to test with it a Linux version 5.19 FINAL (hopefully this sunday).
 
-vim +622 kernel/bpf/bpf_qp_trie.c
+My aim is not to put pressure - I am just curious what your plans are.
 
-   616	
-   617	static int qp_trie_alloc_check(union bpf_attr *attr)
-   618	{
-   619		if (!bpf_capable())
-   620			return -EPERM;
-   621	
- > 622		if (!(attr->map_flags | BPF_F_NO_PREALLOC) ||
-   623		    attr->map_flags & ~QP_TRIE_CREATE_FLAG_MASK ||
-   624		    !bpf_map_flags_access_ok(attr->map_flags))
-   625			return -EINVAL;
-   626	
-   627		if (!attr->max_entries || attr->key_size < QP_TRIE_MIN_KEY_SIZE ||
-   628		    !attr->value_size)
-   629			return -EINVAL;
-   630	
-   631		if (attr->key_size > QP_TRIE_MAX_KEY_SIZE ||
-   632		    !is_valid_k_v_size(attr->key_size, attr->value_size))
-   633			return -E2BIG;
-   634	
-   635		return 0;
-   636	}
-   637	
-   638	static struct bpf_map *qp_trie_alloc(union bpf_attr *attr)
-   639	{
-   640		struct qp_trie *trie;
-   641		unsigned int i;
-   642	
-   643		trie = bpf_map_area_alloc(sizeof(*trie), bpf_map_attr_numa_node(attr));
-   644		if (!trie)
-   645			return ERR_PTR(-ENOMEM);
-   646	
-   647		/* roots are zeroed by bpf_map_area_alloc() */
- > 648		for (i = 0; i < ARRAY_SIZE(trie->locks); i++)
-   649			spin_lock_init(&trie->locks[i]);
-   650	
-   651		atomic_set(&trie->entries, 0);
-   652		bpf_map_init_from_attr(&trie->map, attr);
-   653	
-   654		return &trie->map;
-   655	}
-   656	
+Thanks.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+-Sedat-
