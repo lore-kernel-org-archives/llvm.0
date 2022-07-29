@@ -1,89 +1,223 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC8C4400
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:08:51 +0000 (UTC)
-Received: by mail-oi1-f175.google.com with SMTP id l188so5336517oia.4
-        for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 03:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to:cc;
-        bh=FVorsqPmSCV/rHPJEZGeXNnfBrCMbPV4pzYgK1Fz/3s=;
-        b=TyxuA/0mnK6SrcpNYeJSx/oO9pPIvEohRAGEjZBG5YWBF5LMw+FjBoYsDzPYFuK32s
-         MLSB3BksDGrogcWzkZuq80dCBS+9EFFaDNJryDYGQ7VlEfWu1ptjnHJiZgiR4IjtwdYX
-         wi5HWzQwcXwG5CePAiGwfZ7b6i6BGwe7bYTt83oXv0qWsUCJdioPPYqHpH6UezFkOkbz
-         hy7BhBgrXmJNSPOD0FJlIrpCk1A3onHqqKwQONHy0/fgfk5hsQg9ihpZwH9aeuSQNvaO
-         +vcPgh8dN0STu4Itp2DPTuSWmazQ+Lf44pvz8r1iwlarlBuYJYYCIz54rm9wpgALprZo
-         cb+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=FVorsqPmSCV/rHPJEZGeXNnfBrCMbPV4pzYgK1Fz/3s=;
-        b=IJOe9lqKVEMHL4rmngE7AeHFl8X6R3eJcjZAPvdfYXiyO8E4bJ/MY+sxRBclBUboYR
-         EaCHErukKF32TnesirjTu4S6+zed48Vtu5JZ5Lq6/K2arQfffD8JjeCil6O/oUUF1NLG
-         IWBREin7hzECb1sHlGOZ8fBA0/ZPp2O+qafm2yY/whXCbGwrZQe5Kxd4R9PetAow3pBt
-         7V4Vlb/14le1ufc/fuk4Jln42kDHWdN0WMP3+leMrm/YCVg5eF6knROuxxi7K9wU/l3e
-         RS4nwpttvbN9+OkOy2zADDWKepyouQUpV9IySLX8uiywH/2HRE93ChNCiAjzg0lebV1b
-         8eXA==
-X-Gm-Message-State: AJIora8dAZ/x3QQv99m/sVtQ2G2Jusw5De+depe/cFeTaXEhSLUQl4k3
-	CsA46bmEyf5zOTHlebX4aLmhbirMU3SgUhFFmBk=
-X-Google-Smtp-Source: AGRyM1sHF6moKZRseECrKgh+7V1BEcTha3LwEFtT8caGxsj05HVl+vDbK1Bg4y2QE0+0uw+MXsR9/Pv+qu8bhnCLaM4=
-X-Received: by 2002:a05:6808:bd2:b0:33a:c532:54e6 with SMTP id
- o18-20020a0568080bd200b0033ac53254e6mr1278516oik.252.1659089330211; Fri, 29
- Jul 2022 03:08:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD131360
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659090736;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ooI/Q0hUJmEtnFpbOM1748mQFrI3KO5W8ZlowQ8i6CI=;
+	b=XYHd2zq8Yw4UQ14ax2kaypm098TV59X3M2lFTF5TIBjuo048uJ+JrJPY/HXZKE4TgDDA3Z
+	+LdgjfjOikr2MpeSqaL6bRabpxfAenVgz7evx9/fBivSDSyRRLPhQms3qukWx143yebSBA
+	2FVGcPhJBQXe1SsTSC2y0Iuu6UhuOaI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-20EQwvCfPFaaWFGeXdYJmg-1; Fri, 29 Jul 2022 06:32:14 -0400
+X-MC-Unique: 20EQwvCfPFaaWFGeXdYJmg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9634438164D8
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:32:14 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 88E8940CFD0B;
+	Fri, 29 Jul 2022 10:32:14 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (84/496 SKIPPED): Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [33ea1340]
+Date: Fri, 29 Jul 2022 10:32:14 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 29 Jul 2022 12:08:14 +0200
-Message-ID: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
-Subject: LLVM 15 and 16 packages on apt.llvm.org and in Debian
-To: Sylvestre Ledru <sylvestre@debian.org>
-Cc: Nathan Chancellor <natechancellor@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Stellard <tstellar@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <15512.122072906321400870@us-mta-618.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sylvestre,
+Hi, we tested your kernel and here are the results:
 
-I see some new LLVM 15 and 16 packages on <apt.llvm.org> and
-Debian/experimental:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-# LC_ALL=C apt-cache policy clang-15
-clang-15:
- Installed: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
- Candidate: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
- Version table:
-    1:15~++20220724113059+7feab85df8e8-1~exp1 99
-        99 https://ftp.debian.org/debian experimental/main amd64 Packages
-        99 https://deb.debian.org/debian experimental/main amd64 Packages
-*** 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624 100
-       100 /var/lib/dpkg/status
-    1:15~++20220625103012+3d37e785c77a-1~exp1 99
-        99 https://ftp.debian.org/debian unstable/main amd64 Packages
-        99 https://deb.debian.org/debian unstable/main amd64 Packages
+Tested-by: CKI Project <cki-project@redhat.com>
 
-# LC_ALL=C apt-cache policy clang-16
-clang-16:
- Installed: (none)
- Candidate: 1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647
- Version table:
-    1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647 99
-        99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49118
 
-Today, Friday I remember Tom wanted to release LLVM version 15.0.0-rc1.
+One or more kernel tests failed:
 
-I love to see such a version on any of these two repositories.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
+bsystem for controller nvme0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1274
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
+tablished after max reconnecting reached
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: Error: netavark: failed to configure bridge and veth=
+ interface
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1186
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                   s390x - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
+er ID
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1167
+            Affected tests:
+                  x86_64 - Podman system test - as user
+        Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/972
+            Affected tests:
+                 aarch64 - LTP - commands
+                   s390x - LTP - commands
+        Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, not expecte=
+d
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1264
+            Affected tests:
+                 aarch64 - LTP - commands
+                   s390x - LTP - commands
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1251
+            Affected tests:
+                 aarch64 - LTP - commands
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Podman: 050-stop.bats: FAIL: podman stop: took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1293
+            Affected tests:
+                 aarch64 - Podman system test - as root
 
-And hope to test with it a Linux version 5.19 FINAL (hopefully this sunday).
 
-My aim is not to put pressure - I am just curious what your plans are.
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-Thanks.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Regards,
--Sedat-
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
