@@ -1,42 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34664696
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 14:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BB31113
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 16:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659104405; x=1690640405;
+  t=1659112332; x=1690648332;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XntR2nXH/XI3nnFN0aAuxcBkL9uipGegy9OnSTQ2BYs=;
-  b=JoEHy8S+Ylz7++tvzlVuXFbLJBGaDOmFwcWoOEjaDwds5sJ8aUBAzWEM
-   hMpAqzDqHN8xvutswg6NnRAXzTjLgZaEgWb4r/oYHeFaYnlWgb/5fCMrL
-   v3sTfHnS/XVjb0yHGktilmANtTmknpO1zcKWPoWmHPNL5+5IRAHL7Iq5e
-   eUPZRlBhJEPXVfSX6uZSzqynAZeluXjQrRbUnGBzjkiUPU9z7JVJV6Jut
-   8GuKZ4UCPQD7QHgB+DmiXAE8oKm30nEjgOh+5avManBRVu3mgKp0xIXBI
-   YXcWrfa1y49IJGNc/lEk4rSZUZfQSjBLDP+UfitpV1cI6cJ9vqGOvLNdX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314576575"
+  bh=6tLVOzi5uy23c/11Rwvj/ZNBzCp71yo4iRnHF85mO3U=;
+  b=g8mfCIQnlU1OUlOoVOK6FjbdnBJwSKPi8GT0f7W4d2B+UElY+B76/xD4
+   Zw393F90FTySKBZH3vCQc1BTL0p79T72YFHCwapvQmN23Aw2ABk+6nmsD
+   4Xi2Sg6PBUCq81fbkaCyksrN6KUskJlAHwDcS1vNlXN7Q2+bdDx/nR+oV
+   MWK/qdoW01JEmS0V5fdNuLr5sJqV07/jpAy+GKWgYyUhSFKRbT3fyyvpg
+   2IcZPWWp3FTboSmXAv1tZ9WC4NlIiKPzO+iyrdgtXK2zLF/7wObZDMxwu
+   +Ktk2FIzLRQlBhnBB31hSxUbC+RhCO+ju1ifNwOp2tl7Wyur4CEJyKGlt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288814990"
 X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="314576575"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 07:20:04 -0700
+   d="scan'208";a="288814990"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 09:32:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="928758049"
+   d="scan'208";a="690781679"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 07:20:03 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Jul 2022 09:32:10 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHQqQ-000Bhy-2B;
-	Fri, 29 Jul 2022 14:20:02 +0000
-Date: Fri, 29 Jul 2022 22:19:09 +0800
+	id 1oHSuI-000BrN-04;
+	Fri, 29 Jul 2022 16:32:10 +0000
+Date: Sat, 30 Jul 2022 00:31:17 +0800
 From: kernel test robot <lkp@intel.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC 2/3] netfilter: nf_tables: add string set API
-Message-ID: <202207292232.PDyr6L7O-lkp@intel.com>
-References: <20220729093129.3108-3-pablo@netfilter.org>
+Subject: Re: [PATCH RFC 3/3] netfilter: nf_tables: add string expression
+Message-ID: <202207300046.EwgOKdTk-lkp@intel.com>
+References: <20220729093129.3108-4-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729093129.3108-3-pablo@netfilter.org>
+In-Reply-To: <20220729093129.3108-4-pablo@netfilter.org>
 
 Hi Pablo,
 
@@ -58,15 +58,15 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/nf_tables-string-match-support/20220729-173258
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220729/202207292232.PDyr6L7O-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220730/202207300046.EwgOKdTk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/021bda4d09b7b9be8c40f05b017f885ba3010c02
+        # https://github.com/intel-lab-lkp/linux/commit/1149ccc4ca2617ae8ef8b069f592cf77450a96fe
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Pablo-Neira-Ayuso/nf_tables-string-match-support/20220729-173258
-        git checkout 021bda4d09b7b9be8c40f05b017f885ba3010c02
+        git checkout 1149ccc4ca2617ae8ef8b069f592cf77450a96fe
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
@@ -76,15 +76,16 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ERROR: modpost: "ac_iterate" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_iter_destroy" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_iter_create" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_del" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_add" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_clone" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_create" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_resolve_fail" [net/netfilter/nf_tables.ko] undefined!
->> ERROR: modpost: "ac_destroy" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_iterate" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_iter_destroy" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_iter_create" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_del" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_add" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_clone" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_create" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_resolve_fail" [net/netfilter/nf_tables.ko] undefined!
+ERROR: modpost: "ac_destroy" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "nft_string_type" [net/netfilter/nf_tables.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
