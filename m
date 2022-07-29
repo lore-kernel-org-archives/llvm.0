@@ -1,245 +1,133 @@
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F1C3D81
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 08:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1659083104; x=1690619104;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qxK9Or882JLjrrFVe1gDHj9bt9EKki3mjKpYtizk3OU=;
-  b=Ymr1xUeCsbU+s86kaXNL63HoYc+gEgf/Nd61gDeTdbi/qGjrBsQBU0K6
-   vPoBs098prfWDBBHdPtRuDudfeSf4pDn2bkBTf1vhtOQ/4Hxl+u6CGGah
-   a/Lq0gVKx4MwmLD4rq1UhpNDORi2XCge5zyd6M88LKa+MtDB7bH8/AZyu
-   QQIY1I/Ed6k+62H+iYR1rJpvT/G2KLGh91vEadpMK7zbvIREaxiobmGX+
-   dOIPCVY2I3hpVBuziOqH2jAKIdNVpklqpDPXv89M1UuDxhXd/1EZIEVYy
-   ekrmOeyjZwcaHib9drE440n1BXodHoxSrhRz/2DqQmGtANPMUpZiZXO6D
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,200,1654552800"; 
-   d="scan'208";a="25337495"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 29 Jul 2022 10:23:51 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 29 Jul 2022 10:23:51 +0200
-X-PGP-Universal: processed;
-	by tq-pgp-pr1.tq-net.de on Fri, 29 Jul 2022 10:23:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1659083031; x=1690619031;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qxK9Or882JLjrrFVe1gDHj9bt9EKki3mjKpYtizk3OU=;
-  b=aFSvBr2l6fS80VGYrqaxHaUPMu/fuR/u/2eMyWEqR/2d5JjyfOnCjnX+
-   2m/gXxjNvZqAzcMvP5Lmxq9dx67bys/0wbCQnLwH+dG+xQFxBRJULfJOu
-   IBT5L60RiYb/m51eT4P6M+c+kWpfDHqG1BsaU7ymBhfpI3ojyT066F2RR
-   QiXKqgjSZTwJDifL97DnvfyyR84rDmNpR7W+Ctj6vzRGdbe5KS25GAspP
-   RudYqUU11TDxkLJbGQpsNJCxeF03MAmCdK+dS/YVA/+7gzxe7T+98N+43
-   V6KIzou7N5qJ+FLGIfBduYQ+bMX3qEHsdUYm0bcjFLKt5jWhTDZgqfksJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,200,1654552800"; 
-   d="scan'208";a="25337494"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 29 Jul 2022 10:23:51 +0200
-Received: from steina-w.localnet (unknown [10.123.49.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 407A4280056;
-	Fri, 29 Jul 2022 10:23:51 +0200 (CEST)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: "Paul J . Murphy" <paul.j.murphy@intel.com>, Daniele Alessandrelli <daniele.alessandrelli@intel.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v4 6/7] media: i2c: ov9282: Set v4l2 subdev name according to sensor model
-Date: Fri, 29 Jul 2022 10:23:48 +0200
-Message-ID: <6086686.mvXUDI8C0e@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <202207290518.1D7MVS65-lkp@intel.com>
-References: <20220728130237.3396663-7-alexander.stein@ew.tq-group.com> <202207290518.1D7MVS65-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C196A4400
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659089130; x=1690625130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ij/DEsIbLiBH4jFrHG/gvtJ5YIPCXP2XupNXfEGHTT0=;
+  b=OMBnER8/s+0Q/fvJXgfRYbEIXfe26Jhq2fO8nVLLdWLd/7RvRAjxqZrX
+   Xvt6wIEkCTpvZRXGAlbXpHB3pnic0Jb5CJtpQUpzvCG/X+UuJrM4eK522
+   KvLiGOfAs9P9PKW8j8M5UFxsH4PqEGCTEXQ5llPyKUO/0DG06sF4eSJJS
+   XF/BkAwH9ZadttgWhpIzm+t5FAgDiKWUlrU4lZd3qZNXA8QmOe+wlEVp8
+   yyA0zFFPD6JMtRWLIWSpUKTdIuEZNCHvouq65jQl9qg5tB1Vu6h8uHtkI
+   7EV9KbqIJOuKvl1L8IsU9C18wn2Gp9ymkBwWWOtblXYmQ1oZMhQGvmTQ6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="314535650"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="314535650"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 03:05:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="928692903"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 03:05:29 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHMs4-000BVF-1n;
+	Fri, 29 Jul 2022 10:05:28 +0000
+Date: Fri, 29 Jul 2022 18:04:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hou Tao <houtao1@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH bpf-next 1/3] bpf: Add support for qp-trie map
+Message-ID: <202207291741.AfRRtqqg-lkp@intel.com>
+References: <20220726130005.3102470-2-houtao1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726130005.3102470-2-houtao1@huawei.com>
 
-Am Donnerstag, 28. Juli 2022, 23:10:07 CEST schrieb kernel test robot:
-> Hi Alexander,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on media-tree/master]
-> [also build test WARNING on linus/master v5.19-rc8 next-20220728]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:   
-> https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/OV9281-suppo
-> rt/20220728-210448 base:   git://linuxtv.org/media_tree.git master
-> config: arm-randconfig-r022-20220728
-> (https://download.01.org/0day-ci/archive/20220729/202207290518.1D7MVS65-lkp
-> @intel.com/config) compiler: clang version 15.0.0
-> (https://github.com/llvm/llvm-project
-> 8dfaecc4c24494337933aff9d9166486ca0949f1) reproduce (this is a W=1 build):
->         wget
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O
-> ~/bin/make.cross chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         #
-> https://github.com/intel-lab-lkp/linux/commit/ee28006553d4d23f600b0076ef606
-> 6710519f156 git remote add linux-review
-> https://github.com/intel-lab-lkp/linux git fetch --no-tags linux-review
-> Alexander-Stein/OV9281-support/20220728-210448 git checkout
-> ee28006553d4d23f600b0076ef6066710519f156
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
-> O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/i2c/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> >> drivers/media/i2c/ov9282.c:1054:10: warning: variable 'ret' is
-> >> uninitialized when used here [-Wuninitialized]
->                    return ret;
->                           ^~~
->    drivers/media/i2c/ov9282.c:1041:9: note: initialize the variable 'ret' to
-> silence this warning int ret;
->                   ^
->                    = 0
->    1 warning generated.
-> 
-> 
-> vim +/ret +1054 drivers/media/i2c/ov9282.c
-> 
->   1030
->   1031	/**
->   1032	 * ov9282_probe() - I2C client device binding
->   1033	 * @client: pointer to i2c client device
->   1034	 *
->   1035	 * Return: 0 if successful, error code otherwise.
->   1036	 */
->   1037	static int ov9282_probe(struct i2c_client *client)
->   1038	{
->   1039		struct ov9282 *ov9282;
->   1040		const char *sensor_name;
->   1041		int ret;
->   1042
->   1043		ov9282 = devm_kzalloc(&client->dev, sizeof(*ov9282), 
-GFP_KERNEL);
->   1044		if (!ov9282)
->   1045			return -ENOMEM;
->   1046
->   1047		ov9282->dev = &client->dev;
->   1048
->   1049		/* Initialize subdev */
->   1050		v4l2_i2c_subdev_init(&ov9282->sd, client, 
-&ov9282_subdev_ops);
->   1051		sensor_name = device_get_match_data(ov9282->dev);
->   1052		if (!sensor_name) {
->   1053			dev_err(ov9282->dev, "Sensor name is 
-missing");
-> 
-> > 1054			return ret;
-> 
->   1055		}
->   1056		v4l2_i2c_subdev_set_name(&ov9282->sd, client, 
-sensor_name, NULL);
->   1057
->   1058		ret = ov9282_parse_hw_config(ov9282);
->   1059		if (ret) {
->   1060			dev_err(ov9282->dev, "HW configuration is not 
-supported");
->   1061			return ret;
->   1062		}
->   1063
->   1064		ret = ov9282_get_regulators(ov9282);
->   1065		if (ret) {
->   1066			dev_err(&client->dev, "Failed to get power 
-regulators\n");
->   1067			return ret;
->   1068		}
->   1069
->   1070		mutex_init(&ov9282->mutex);
->   1071
->   1072		ret = ov9282_power_on(ov9282->dev);
->   1073		if (ret) {
->   1074			dev_err(ov9282->dev, "failed to power-on the 
-sensor");
->   1075			goto error_mutex_destroy;
->   1076		}
->   1077
->   1078		/* Check module identity */
->   1079		ret = ov9282_detect(ov9282);
->   1080		if (ret) {
->   1081			dev_err(ov9282->dev, "failed to find sensor: 
-%d", ret);
->   1082			goto error_power_off;
->   1083		}
->   1084
->   1085		/* Set default mode to max resolution */
->   1086		ov9282->cur_mode = &supported_mode;
->   1087		ov9282->vblank = ov9282->cur_mode->vblank;
->   1088
->   1089		ret = ov9282_init_controls(ov9282);
->   1090		if (ret) {
->   1091			dev_err(ov9282->dev, "failed to init 
-controls: %d", ret);
->   1092			goto error_power_off;
->   1093		}
->   1094
->   1095		/* Initialize subdev */
->   1096		ov9282->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->   1097		ov9282->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
->   1098
->   1099		/* Initialize source pad */
->   1100		ov9282->pad.flags = MEDIA_PAD_FL_SOURCE;
->   1101		ret = media_entity_pads_init(&ov9282->sd.entity, 1, 
-&ov9282->pad);
->   1102		if (ret) {
->   1103			dev_err(ov9282->dev, "failed to init entity 
-pads: %d", ret);
->   1104			goto error_handler_free;
->   1105		}
->   1106
->   1107		ret = v4l2_async_register_subdev_sensor(&ov9282->sd);
->   1108		if (ret < 0) {
->   1109			dev_err(ov9282->dev,
->   1110				"failed to register async subdev: 
-%d", ret);
->   1111			goto error_media_entity;
->   1112		}
->   1113
->   1114		pm_runtime_set_active(ov9282->dev);
->   1115		pm_runtime_enable(ov9282->dev);
->   1116		pm_runtime_idle(ov9282->dev);
->   1117
->   1118		return 0;
->   1119
->   1120	error_media_entity:
->   1121		media_entity_cleanup(&ov9282->sd.entity);
->   1122	error_handler_free:
->   1123		v4l2_ctrl_handler_free(ov9282->sd.ctrl_handler);
->   1124	error_power_off:
->   1125		ov9282_power_off(ov9282->dev);
->   1126	error_mutex_destroy:
->   1127		mutex_destroy(&ov9282->mutex);
->   1128
->   1129		return ret;
->   1130	}
->   1131
+Hi Hou,
 
-Meh, I'll come up with a fixed once discussion about the additional compatible 
-has settled. This will also include the missing member documentation in patch 
-5
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on bpf-next/master]
 
-Best regards,
-Alexander
+url:    https://github.com/intel-lab-lkp/linux/commits/Hou-Tao/Add-support-for-qp-trie-map/20220726-204347
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: hexagon-randconfig-r041-20220724 (https://download.01.org/0day-ci/archive/20220729/202207291741.AfRRtqqg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/74890023aaa2d8ffed54d96d4999f10bf14ccfef
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hou-Tao/Add-support-for-qp-trie-map/20220726-204347
+        git checkout 74890023aaa2d8ffed54d96d4999f10bf14ccfef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/bpf_qp_trie.c:622:24: warning: bitwise or with non-zero value always evaluates to true [-Wtautological-bitwise-compare]
+           if (!(attr->map_flags | BPF_F_NO_PREALLOC) ||
+                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/bpf_qp_trie.c:648:18: warning: division by zero is undefined [-Wdivision-by-zero]
+           for (i = 0; i < ARRAY_SIZE(trie->locks); i++)
+                           ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:55:38: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                        ^ ~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
+vim +622 kernel/bpf/bpf_qp_trie.c
 
+   616	
+   617	static int qp_trie_alloc_check(union bpf_attr *attr)
+   618	{
+   619		if (!bpf_capable())
+   620			return -EPERM;
+   621	
+ > 622		if (!(attr->map_flags | BPF_F_NO_PREALLOC) ||
+   623		    attr->map_flags & ~QP_TRIE_CREATE_FLAG_MASK ||
+   624		    !bpf_map_flags_access_ok(attr->map_flags))
+   625			return -EINVAL;
+   626	
+   627		if (!attr->max_entries || attr->key_size < QP_TRIE_MIN_KEY_SIZE ||
+   628		    !attr->value_size)
+   629			return -EINVAL;
+   630	
+   631		if (attr->key_size > QP_TRIE_MAX_KEY_SIZE ||
+   632		    !is_valid_k_v_size(attr->key_size, attr->value_size))
+   633			return -E2BIG;
+   634	
+   635		return 0;
+   636	}
+   637	
+   638	static struct bpf_map *qp_trie_alloc(union bpf_attr *attr)
+   639	{
+   640		struct qp_trie *trie;
+   641		unsigned int i;
+   642	
+   643		trie = bpf_map_area_alloc(sizeof(*trie), bpf_map_attr_numa_node(attr));
+   644		if (!trie)
+   645			return ERR_PTR(-ENOMEM);
+   646	
+   647		/* roots are zeroed by bpf_map_area_alloc() */
+ > 648		for (i = 0; i < ARRAY_SIZE(trie->locks); i++)
+   649			spin_lock_init(&trie->locks[i]);
+   650	
+   651		atomic_set(&trie->entries, 0);
+   652		bpf_map_init_from_attr(&trie->map, attr);
+   653	
+   654		return &trie->map;
+   655	}
+   656	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
