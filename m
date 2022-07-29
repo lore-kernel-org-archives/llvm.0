@@ -1,117 +1,126 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA517A
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 03:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659065175; x=1690601175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=khY2weZVBbRbbzoDJdWxVcjSsc1DekIgDb2bOJfl2YA=;
-  b=YuAwaJW8BfGOCKSAKbafSkYxFFTMWIQ4Sklc+mfe1d9dw5U3mg6E3d+a
-   N86Pw1g3EGhdPsYKPaiHjdgsn6Cxdtf8/fMhYqfhgvshqfA1f9E57Tp/6
-   hb6TG49FphI/moWjKhobMrbNTbboTo8WmKpBWm6zY4z/HR8n//rayVHoK
-   G6rH1QdRX7e9xrqADWF6TKW5ASuQRKhaZTsTeCDto+RHIZesSJmCd1GJx
-   eA59KYq3DZ6EBwS69nZAE0r1rO7T8K5jbii7QkqSxxSjNdcZLMM5XWOMW
-   fRnuJfQ6xPdgF/trDtxdn4Q2Xr++APEcUnq7s3OlyuvIsNuwMDW6nWrNT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="286229184"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="286229184"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 20:26:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="633982421"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jul 2022 20:26:13 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oHGdg-000Azs-2K;
-	Fri, 29 Jul 2022 03:26:12 +0000
-Date: Fri, 29 Jul 2022 11:25:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] ata: libata-scsi: Refactor scsi_6_lba_len() with
- use of get_unaligned_be24()
-Message-ID: <202207291151.npmUhv4C-lkp@intel.com>
-References: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE4F7A
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 03:49:55 +0000 (UTC)
+Received: by mail-pg1-f169.google.com with SMTP id r186so3080246pgr.2
+        for <llvm@lists.linux.dev>; Thu, 28 Jul 2022 20:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=sMdqEEPrHyojVR3jjUYElu1vGrljFd+G9mVLZ0W5ELQ=;
+        b=Kslok9sJJ8LMwzfbMBrKbAUKHGaPv7eVJP/zCA0WlWpgL9CD9VrL9fx7Xxc8sMs2gt
+         XMBk5ATiKsaNGYdvaF4Z8Lp718Ke46Ab0Wdb5py0EGM870pG75ysTRC66cllR2Sr1bs/
+         4+5VViAKUSatsGZhbPxofuXqZ+eqL0p4da2jjgov6+kG11VLMH7jRM3+byYnvjK7yLOq
+         o/Ie0dzaREJ//TNefIB7IqYEYNKox5YMzaJYa9XNnk79qy/iox7g8NTzDg+Hf6wIywYt
+         UryIrWHzGWQ1KQZiXoEFMHaaJmf2Gk4Sgjk8pEhYn5Mt+8MZ/snjdZqTnXtIzzvqS96p
+         ORdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=sMdqEEPrHyojVR3jjUYElu1vGrljFd+G9mVLZ0W5ELQ=;
+        b=bzDKd8XthE16RqjASHVffREQmKV0VCp9JxhPP5tS7kLl5kettGHDfYAfIWB7Y8f2DW
+         osq5yk6h+gQwillcY6iGZ6F3PXY+qexDZstP7Tz2qu807fILJ66T2Elz/nR0jAsLmPPK
+         JLKQf966w7UlquPjpzAO4A4Cr0SFMVBcNl22GZ4yhhYG2VOJxwxfvy+0L2P/xvBEB5ze
+         MBiutkRZ9vIPinuGQq4aoqBtc9ZYFzD9AAa1DSApRzlt4KRmiByLCGxC2dusNXaEmQT8
+         wXyzG9+8RrDRJS/nnMhD1Wy5SseMpizR47F5MGXRgNslK+JrVLlkcGOOqoNVMaQkhdcJ
+         2b8A==
+X-Gm-Message-State: AJIora9i9A648Py2nyBI0xwtcA63Ewxi+V7s8B2TGnmwLTFUGSYlWlJR
+	b3MniLciuVZjOPYm2DO/CrJiGL/GNck=
+X-Google-Smtp-Source: AGRyM1uDYmFNBDKm2ZXrPqM5P3GGFNNKd8FHUViPhxoyIHXLpWCDwYLkH5Pwvuks609ZKVFgA01exw==
+X-Received: by 2002:aa7:8ec2:0:b0:52a:d4f5:20b with SMTP id b2-20020aa78ec2000000b0052ad4f5020bmr1540341pfr.71.1659066594998;
+        Thu, 28 Jul 2022 20:49:54 -0700 (PDT)
+Received: from localhost (193-116-97-43.tpgi.com.au. [193.116.97.43])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902c65200b0016d83ed0a2csm2184117pls.80.2022.07.28.20.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 20:49:54 -0700 (PDT)
+Date: Fri, 29 Jul 2022 13:49:48 +1000
+From: Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 06/12] locking/qspinlock: merge qspinlock_paravirt.h
+ into qspinlock.c
+To: kernel test robot <lkp@intel.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, kbuild-all@lists.01.org,
+	"linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev, Waiman Long <longman@redhat.com>, Ingo Molnar
+	<mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <20220713070704.308394-7-npiggin@gmail.com>
+	<202207142228.8Z4o18rM-lkp@intel.com>
+In-Reply-To: <202207142228.8Z4o18rM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
+Message-Id: <1659066516.mc10tbo8hk.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Excerpts from kernel test robot's message of July 15, 2022 12:16 am:
+> Hi Nicholas,
+>=20
+> I love your patch! Perhaps something to improve:
+>=20
+> [auto build test WARNING on tip/locking/core]
+> [also build test WARNING on tip/x86/core powerpc/next linus/master v5.19-=
+rc6 next-20220714]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/lo=
+cking-qspinlock-simplify-code-generation/20220713-151009
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git eae6d=
+58d67d9739be5f7ae2dbead1d0ef6528243
+> config: i386-randconfig-a004
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61=
+b9c556267086ef9b743a0b57df302eef831b)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/91668ee1ed703d7ea=
+84e314136dc732da05ec9e7
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Nicholas-Piggin/locking-qspinloc=
+k-simplify-code-generation/20220713-151009
+>         git checkout 91668ee1ed703d7ea84e314136dc732da05ec9e7
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash kernel/locking/
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+>    In file included from kernel/locking/qspinlock.c:29:
+>    kernel/locking/qspinlock_stat.h:36:9: warning: no previous prototype f=
+or function 'lockevent_read' [-Wmissing-prototypes]
+>    ssize_t lockevent_read(struct file *file, char __user *user_buf,
+>            ^
+>    kernel/locking/qspinlock_stat.h:36:1: note: declare 'static' if the fu=
+nction is not intended to be used outside of this translation unit
+>    ssize_t lockevent_read(struct file *file, char __user *user_buf,
+>    ^
+>    static=20
+>>> kernel/locking/qspinlock.c:705:1: warning: no previous prototype for fu=
+nction '__pv_queued_spin_unlock_slowpath' [-Wmissing-prototypes]
+>    __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+>    ^
+>    kernel/locking/qspinlock.c:704:11: note: declare 'static' if the funct=
+ion is not intended to be used outside of this translation unit
+>    __visible void
+>              ^
+>              static=20
+>    2 warnings generated.
 
-I love your patch! Yet something to improve:
+These aren't new warnings btw, just existing W=3D1 warnings in code that=20
+moved.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e0dccc3b76fb35bb257b4118367a883073d7390e
-config: mips-randconfig-r011-20220724 (https://download.01.org/0day-ci/archive/20220729/202207291151.npmUhv4C-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-        git checkout ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/ata/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/ata/libata-scsi.c:1320:29: error: incompatible integer to pointer conversion passing 'const u8' (aka 'const unsigned char') to parameter of type 'const void *' [-Wint-conversion]
-           *plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-                                      ^~~~~~
-   include/asm-generic/unaligned.h:90:50: note: passing argument to parameter 'p' here
-   static inline u32 get_unaligned_be24(const void *p)
-                                                    ^
-   1 error generated.
-
-
-vim +1320 drivers/ata/libata-scsi.c
-
-  1307	
-  1308	/**
-  1309	 *	scsi_6_lba_len - Get LBA and transfer length
-  1310	 *	@cdb: SCSI command to translate
-  1311	 *
-  1312	 *	Calculate LBA and transfer length for 6-byte commands.
-  1313	 *
-  1314	 *	RETURNS:
-  1315	 *	@plba: the LBA
-  1316	 *	@plen: the transfer length
-  1317	 */
-  1318	static void scsi_6_lba_len(const u8 *cdb, u64 *plba, u32 *plen)
-  1319	{
-> 1320		*plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-  1321		*plen = cdb[4];
-  1322	}
-  1323	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Nick
