@@ -1,223 +1,122 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD131360
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659090736;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ooI/Q0hUJmEtnFpbOM1748mQFrI3KO5W8ZlowQ8i6CI=;
-	b=XYHd2zq8Yw4UQ14ax2kaypm098TV59X3M2lFTF5TIBjuo048uJ+JrJPY/HXZKE4TgDDA3Z
-	+LdgjfjOikr2MpeSqaL6bRabpxfAenVgz7evx9/fBivSDSyRRLPhQms3qukWx143yebSBA
-	2FVGcPhJBQXe1SsTSC2y0Iuu6UhuOaI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-20EQwvCfPFaaWFGeXdYJmg-1; Fri, 29 Jul 2022 06:32:14 -0400
-X-MC-Unique: 20EQwvCfPFaaWFGeXdYJmg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9634438164D8
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 10:32:14 +0000 (UTC)
-Received: from [172.64.0.89] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 88E8940CFD0B;
-	Fri, 29 Jul 2022 10:32:14 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (84/496 SKIPPED): Test report for 5.19.0-rc8
- (mainline.kernel.org-clang) [33ea1340]
-Date: Fri, 29 Jul 2022 10:32:14 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2321360
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 11:25:10 +0000 (UTC)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-324293f1414so13162187b3.0
+        for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 04:25:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/+Xle1HhYZA4u0BpE2NkhWcW76kE9EOZDKtebTajiOs=;
+        b=321iw0o2CwVFTQlggyRx5qAGEPddX9PJmv66uPHkrWUStDMwBAL4d9xUmMSACvaIee
+         2e3ygQSEykDEOyKlVGEhRerz5KMDqW2hMMt4mKSQ1LqAVaKslxBSH8ZvnljwwrbnWBWH
+         MAk5hvVXe1UKCttSjooU3QFQd3YYAxF8FRJqZ+Sum4rub+u0i4P2IkQ82756EjpE/qfY
+         TO+nCzLkO9QVRYyFnzXRZfJPgg5XsQG2pCJGIFT3rdhOWgwZ56y57DG9yEDTiKwzh7w0
+         oRzW2GcwauWWA56J+pU8v+MBzM9FSelhSboID0RofXxYJzNZo8IjkbVDqhiVjcBPrtws
+         v13A==
+X-Gm-Message-State: ACgBeo3DG3WIG3WxROwPhsbyN60dvyzwgwAxN4RHmk/t9cI9bwmr/RGl
+	McF22zJRF2cjyCsjrnpFGqFwJEHgnGUapWrV1mU=
+X-Google-Smtp-Source: AA6agR4vyF0x47Jgt80gnEl94cVYa+Ot/cwsvfn8nZQ1pVGqtBnuuInF9zUL3vVRiAm9LfYeN3e4a0I/onBCnkpLX2A=
+X-Received: by 2002:a0d:e682:0:b0:322:b5e1:5ed4 with SMTP id
+ p124-20020a0de682000000b00322b5e15ed4mr2611471ywe.220.1659093909158; Fri, 29
+ Jul 2022 04:25:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-Message-Id: <15512.122072906321400870@us-mta-618.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Fri, 29 Jul 2022 20:24:58 +0900
+Message-ID: <CAMZ6Rq+KohWoRurA3cKog18D=NuXNj_k4+ZmPRiakZd7ZPS1OQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions
+ for constant expressions
+To: Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Sun 24 Jul. 2022 at 00:15, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> The compilers provide some builtin expression equivalent to the ffs(),
+> __ffs() and ffz() function of the kernel. The kernel uses optimized
+> assembly which produces better code than the builtin
+> functions. However, such assembly code can not be optimized when used
+> on constant expression.
+>
+> This series relies on __builtin_constant_p to select the optimal solution:
+>
+>   * use kernel assembly for non constant expressions
+>
+>   * use compiler's __builtin function for constant expressions.
+>
+>
+> ** Statistics **
+>
+> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> of __ffs() and ffz() calls (details of the calculation in each patch).
+>
+>
+> ** Changelog **
+>
+> v3 -> v4:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Remove note and link to Nick's message in patch 1/2, c.f.:
+>   https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
+>
+>
+> v2 -> v3:
+>
+>   * Redacted out the instructions after ret and before next function
+>     in the assembly output.
+>
+>   * Added a note and a link to Nick's message on the constant
+>     propagation missed-optimization in clang:
+>     https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+>
+>   * Fix copy/paste typo in statistics of patch 1/2. Number of
+>     occurences before patches are 1081 and not 3607 (percentage
+>     reduction of 26.7% remains correct)
+>
+>   * Rename the functions as follow:
+>     - __varible_ffs() -> variable___ffs()
+>     - __variable_ffz() -> variable_ffz()
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
+>
+> Vincent Mailhol (2):
+>   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+>     expressions
+>   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+>     expressions
+>
+>  arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+>  1 file changed, 38 insertions(+), 26 deletions(-)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Hi Thomas, Ingo, Borislav, Dave and Peter,
 
-Tested-by: CKI Project <cki-project@redhat.com>
+This patch series [1] has been waiting for more than two months
+already. So far, I have not heard back from any of the x86 mainteners.
+Do you see anything wrong with this series? If not, any chances to
+have someone of you to pick it up?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49118
+[1] https://lore.kernel.org/all/20220625072645.251828-1-mailhol.vincent@wanadoo.fr/#t
 
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
-bsystem for controller nvme0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1274
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
-tablished after max reconnecting reached
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Podman: Error: netavark: failed to configure bridge and veth=
- interface
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1186
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                   s390x - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Podman: 500-networking.bats: FAIL: Output does match contain=
-er ID
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1167
-            Affected tests:
-                  x86_64 - Podman system test - as user
-        Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/972
-            Affected tests:
-                 aarch64 - LTP - commands
-                   s390x - LTP - commands
-        Issue: LTP - commands: df01 4 TFAIL: 'df -k -P' failed, not expecte=
-d
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1264
-            Affected tests:
-                 aarch64 - LTP - commands
-                   s390x - LTP - commands
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: LTP - commands: df01 2 TFAIL: 'df -a -P' failed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1251
-            Affected tests:
-                 aarch64 - LTP - commands
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: Podman: 050-stop.bats: FAIL: podman stop: took too long
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1293
-            Affected tests:
-                 aarch64 - Podman system test - as root
+Thank you,
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Yours sincerely,
+Vincent Mailhol
