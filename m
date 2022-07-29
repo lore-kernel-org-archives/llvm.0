@@ -1,43 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757B84C8F;
-	Fri, 29 Jul 2022 19:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC184C8F
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 20:07:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659123982; x=1690659982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZeTC2Z2V9XY34hkFXLjyOjTxWuxGFFJJjrLzqDTmT9A=;
-  b=IABXAdTFKZMqenSsmnFWZp9mOxVtCnzy8P6U1tZWZndkosKEdd9lyYlh
-   qpoEmMGkChKHwzUGW1n4RvDNQXJVXYUgqMGnBHl0GzXaLK9b9+wG2MyYB
-   b/McQGXWjUZRbegceK9Az31PmtTjlAOJTqUmbqsczFG6dY/3IHRPQhbuz
-   8IMpV59gPuyOJ3Q6XZN9+1bCNzwKj3lYtz39/2vDPyTWXoaRh/CVFBaFy
-   yu4zceB818JC9TLXtTU2ZOkYY8Zy+mfo1wrnAJKtUcoii++my8kxSecq/
-   szP0yqzmTL/QAkm3MF5Ov2RBPvy8z/BqgZS/XCd8oLqQThQpPe5NK1rhd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="286392824"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="286392824"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 12:46:21 -0700
+  t=1659125242; x=1690661242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n9VPcmGyb4APXNfilDXyG45keSxqJQDhTPJwEDOtIIY=;
+  b=mE98cIO7PW8u3CxSShpSWT8/GAwo6yJY5DHQWZ2arpMtEJvADxhU/bjA
+   0gj4SfthEUNnfIWsY4oJttog1y+FaeJv46Soi5t9xduAl9AbDWWtlGL7k
+   1glhwi74DAUy7udVX41zQ0H5SvN9suzWsvokONoy7KgnmlsXPn3WFLA6J
+   uqbp7pfC4vj/3WOBCGMeCymBgrjEgVSJ6oxe3kqi/W9FFFtBzi6zsShka
+   uu5PAQfgFEx/S7BdhhKlE3LVMdWG30m4ibpxmzPmfLqDD07FccLIark/E
+   StB5fm/q2fmTu8dHekzvyscz4MFitLnkO/XRTRd2mTQPT7y8NfhmzwLEs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="275726635"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="275726635"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 13:07:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="629490911"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="928857590"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2022 12:46:20 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 13:07:20 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHVwB-000C21-1M;
-	Fri, 29 Jul 2022 19:46:19 +0000
-Date: Sat, 30 Jul 2022 03:45:46 +0800
+	id 1oHWGW-000C3N-1B;
+	Fri, 29 Jul 2022 20:07:20 +0000
+Date: Sat, 30 Jul 2022 04:06:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paolo Abeni <pabeni@redhat.com>, mptcp@lists.linux.dev
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH mptcp-next 3/4] mptcp: move msk input path under full msk
- socket lock
-Message-ID: <202207300345.qUOe9yq9-lkp@intel.com>
-References: <3fdd375269bc0bad45ccadfca268dcb3ac3389c1.1659107989.git.pabeni@redhat.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
+ size (1344) exceeds limit (1280) in 'atags_to_fdt'
+Message-ID: <202207300353.NK0xv7rn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,67 +45,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3fdd375269bc0bad45ccadfca268dcb3ac3389c1.1659107989.git.pabeni@redhat.com>
 
-Hi Paolo,
+Hi Ard,
 
-I love your patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on mptcp/export]
-[cannot apply to linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Abeni/mptcp-just-another-receive-path-refactor/20220729-233501
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-config: hexagon-randconfig-r045-20220729 (https://download.01.org/0day-ci/archive/20220730/202207300345.qUOe9yq9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bb83c99d3d0aa2f51ba0b2abd7115002620118e6
+commit: 672513bf583157cc088a32e75bd850dd9f81564c ARM: decompressor: disable stack protector
+date:   8 months ago
+config: arm-randconfig-r016-20220724 (https://download.01.org/0day-ci/archive/20220730/202207300353.NK0xv7rn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/120ee56b1ad70bbb3d1b35c107110b0f83b2e4e1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paolo-Abeni/mptcp-just-another-receive-path-refactor/20220729-233501
-        git checkout 120ee56b1ad70bbb3d1b35c107110b0f83b2e4e1
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=672513bf583157cc088a32e75bd850dd9f81564c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 672513bf583157cc088a32e75bd850dd9f81564c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/mptcp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/mptcp/protocol.c:798:6: warning: no previous prototype for function '__mptcp_data_ready' [-Wmissing-prototypes]
-   void __mptcp_data_ready(struct sock *sk, struct sock *ssk)
-        ^
-   net/mptcp/protocol.c:798:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __mptcp_data_ready(struct sock *sk, struct sock *ssk)
-   ^
-   static 
+>> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1344) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
    1 warning generated.
 
 
-vim +/__mptcp_data_ready +798 net/mptcp/protocol.c
+vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
 
-   797	
- > 798	void __mptcp_data_ready(struct sock *sk, struct sock *ssk)
-   799	{
-   800		struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
-   801	
-   802		/* The peer can send data while we are shutting down this
-   803		 * subflow at msk destruction time, but we must avoid enqueuing
-   804		 * more data to the msk receive queue
-   805		 */
-   806		if (unlikely(subflow->disposable))
-   807			return;
-   808	
-   809		/* Wake-up the reader only for in-sequence data */
-   810		if (move_skbs_to_msk(mptcp_sk(sk), ssk))
-   811			sk->sk_data_ready(sk);
-   812	}
-   813	
+31d0b9f9982f8e3 Ben Dooks          2018-10-12  120  
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  121  /*
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  123   *
+4716e2e34a22a8c Geert Uytterhoeven 2021-05-19  124   * Return values:
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  128   */
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
+
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Nicolas Pitre <nico@fluxnic.net>
 
 -- 
 0-DAY CI Kernel Test Service
