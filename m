@@ -1,43 +1,46 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6257A
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 02:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA517A
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 03:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659060308; x=1690596308;
+  t=1659065175; x=1690601175;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0FDsnkvuKpibACcfa0olyd8Hk43wGB7lDn4D5TjKdPU=;
-  b=VWMANLiZklfHZ1STbUhglr/LbKkfigvwYXfrtJw7jluSFPX+AQ3C4RrG
-   eZ7BKmiJGGF40KnqZfn3qzpQO2eXAunUaXFK9dMiTjYLNLm3pODmQDNMS
-   kTB8rZqCU1LKMW79U0nRrUTXdB2fqfIc2GIClL+IXXjGJbHfn9zcOVXJZ
-   4Bxn8vbvQupPiBwzEPeHBld9PSXbQMNpExM1mgsc7n9MrI4bUnECrWAfL
-   0XmLw9BxaTjI7tTvT65BiZ2XRj1E+QpWTuJKIZQV1Xzqt77QBJRFqoXFL
-   RMmAiqpCXdFlIhUTsMpVCcHNkWBLXPJmweNZKaGZ2gOMG4L+egjJx1LDc
+  bh=khY2weZVBbRbbzoDJdWxVcjSsc1DekIgDb2bOJfl2YA=;
+  b=YuAwaJW8BfGOCKSAKbafSkYxFFTMWIQ4Sklc+mfe1d9dw5U3mg6E3d+a
+   N86Pw1g3EGhdPsYKPaiHjdgsn6Cxdtf8/fMhYqfhgvshqfA1f9E57Tp/6
+   hb6TG49FphI/moWjKhobMrbNTbboTo8WmKpBWm6zY4z/HR8n//rayVHoK
+   G6rH1QdRX7e9xrqADWF6TKW5ASuQRKhaZTsTeCDto+RHIZesSJmCd1GJx
+   eA59KYq3DZ6EBwS69nZAE0r1rO7T8K5jbii7QkqSxxSjNdcZLMM5XWOMW
+   fRnuJfQ6xPdgF/trDtxdn4Q2Xr++APEcUnq7s3OlyuvIsNuwMDW6nWrNT
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="275551417"
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="286229184"
 X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="275551417"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:05:07 -0700
+   d="scan'208";a="286229184"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 20:26:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="576758980"
+   d="scan'208";a="633982421"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 19:05:06 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Jul 2022 20:26:13 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHFNB-000Ask-2I;
-	Fri, 29 Jul 2022 02:05:05 +0000
-Date: Fri, 29 Jul 2022 10:04:18 +0800
+	id 1oHGdg-000Azs-2K;
+	Fri, 29 Jul 2022 03:26:12 +0000
+Date: Fri, 29 Jul 2022 11:25:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC 8/9] clk: qcom: gcc-sdm845: Switch to macros to collapse
- rcg2 clocks definitions
-Message-ID: <202207290958.UwizN6Ot-lkp@intel.com>
-References: <20220726142303.4126434-9-abel.vesa@linaro.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] ata: libata-scsi: Refactor scsi_6_lba_len() with
+ use of get_unaligned_be24()
+Message-ID: <202207291151.npmUhv4C-lkp@intel.com>
+References: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,54 +49,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220726142303.4126434-9-abel.vesa@linaro.org>
+In-Reply-To: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
 
-Hi Abel,
+Hi Andy,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v5.19-rc8 next-20220728]
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc8 next-20220728]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/clk-qcom-gcc-sdm845-Swicth-from-expanded-definitions-to-compact-macros/20220726-222615
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: arm64-buildonly-randconfig-r004-20220726 (https://download.01.org/0day-ci/archive/20220729/202207290958.UwizN6Ot-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e0dccc3b76fb35bb257b4118367a883073d7390e
+config: mips-randconfig-r011-20220724 (https://download.01.org/0day-ci/archive/20220729/202207291151.npmUhv4C-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/23ba361c478806bde48e3f572ae428dcc8adf3e6
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Abel-Vesa/clk-qcom-gcc-sdm845-Swicth-from-expanded-definitions-to-compact-macros/20220726-222615
-        git checkout 23ba361c478806bde48e3f572ae428dcc8adf3e6
+        git fetch --no-tags linux-review Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
+        git checkout ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/clk/qcom/gcc-sdm845.c:171:37: warning: unused variable 'gcc_parent_data_8' [-Wunused-const-variable]
-   static const struct clk_parent_data gcc_parent_data_8[] = {
-                                       ^
-   1 warning generated.
+>> drivers/ata/libata-scsi.c:1320:29: error: incompatible integer to pointer conversion passing 'const u8' (aka 'const unsigned char') to parameter of type 'const void *' [-Wint-conversion]
+           *plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
+                                      ^~~~~~
+   include/asm-generic/unaligned.h:90:50: note: passing argument to parameter 'p' here
+   static inline u32 get_unaligned_be24(const void *p)
+                                                    ^
+   1 error generated.
 
 
-vim +/gcc_parent_data_8 +171 drivers/clk/qcom/gcc-sdm845.c
+vim +1320 drivers/ata/libata-scsi.c
 
-06391eddb60aa2 Taniya Das       2018-05-07  170  
-ea434d7a92ce02 Dmitry Baryshkov 2021-04-09 @171  static const struct clk_parent_data gcc_parent_data_8[] = {
-ea434d7a92ce02 Dmitry Baryshkov 2021-04-09  172  	{ .fw_name = "bi_tcxo", .name = "bi_tcxo" },
-ea434d7a92ce02 Dmitry Baryshkov 2021-04-09  173  	{ .hw = &gpll0.clkr.hw },
-ea434d7a92ce02 Dmitry Baryshkov 2021-04-09  174  	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
-06391eddb60aa2 Taniya Das       2018-05-07  175  };
-06391eddb60aa2 Taniya Das       2018-05-07  176  
+  1307	
+  1308	/**
+  1309	 *	scsi_6_lba_len - Get LBA and transfer length
+  1310	 *	@cdb: SCSI command to translate
+  1311	 *
+  1312	 *	Calculate LBA and transfer length for 6-byte commands.
+  1313	 *
+  1314	 *	RETURNS:
+  1315	 *	@plba: the LBA
+  1316	 *	@plen: the transfer length
+  1317	 */
+  1318	static void scsi_6_lba_len(const u8 *cdb, u64 *plba, u32 *plen)
+  1319	{
+> 1320		*plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
+  1321		*plen = cdb[4];
+  1322	}
+  1323	
 
 -- 
 0-DAY CI Kernel Test Service
