@@ -1,75 +1,91 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001614696
-	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 14:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=5IjEeQk2j+nPMiWSIvtN9x/RruJpf321jwMLwDJFZTc=; b=BGfR3cb2FkJJ4m916YBe2HiiBQ
-	62mu5kNYyrk4NGLFM08pxuAXb9/zWj8tKfK38OktLZj8XdsbNPAv+cILtLtTZUGyrHQPr1o9q1xML
-	+vxdZwO0PZtgvFxZ4anj7rIypQ2108Z9sQKBkFrKf2kLZT2Dc3wnRIieDQjTuagFAOAOsqzljeRhx
-	EKoWONKa/nQ4MWxO/v4z2h3gyMlkruW3+n7gIYR7rmUo0uA3tWsXWt8LhzXOQKT6vSyijwO7LMfCR
-	uvJTJpK4l/iikzxm3SSXV9s0m6gzfnGppAsz2DU2MlV2dooFJia25MKxg+gUMaQjm+QeXYJCGfLlw
-	DUJerLOQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-	by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oHQdD-005OII-KS; Fri, 29 Jul 2022 14:06:23 +0000
-Message-ID: <607e46e9-1b4d-c8be-899f-185afdc83f42@infradead.org>
-Date: Fri, 29 Jul 2022 07:06:21 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34664696
+	for <llvm@lists.linux.dev>; Fri, 29 Jul 2022 14:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659104405; x=1690640405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XntR2nXH/XI3nnFN0aAuxcBkL9uipGegy9OnSTQ2BYs=;
+  b=JoEHy8S+Ylz7++tvzlVuXFbLJBGaDOmFwcWoOEjaDwds5sJ8aUBAzWEM
+   hMpAqzDqHN8xvutswg6NnRAXzTjLgZaEgWb4r/oYHeFaYnlWgb/5fCMrL
+   v3sTfHnS/XVjb0yHGktilmANtTmknpO1zcKWPoWmHPNL5+5IRAHL7Iq5e
+   eUPZRlBhJEPXVfSX6uZSzqynAZeluXjQrRbUnGBzjkiUPU9z7JVJV6Jut
+   8GuKZ4UCPQD7QHgB+DmiXAE8oKm30nEjgOh+5avManBRVu3mgKp0xIXBI
+   YXcWrfa1y49IJGNc/lEk4rSZUZfQSjBLDP+UfitpV1cI6cJ9vqGOvLNdX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314576575"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="314576575"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 07:20:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="928758049"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 07:20:03 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHQqQ-000Bhy-2B;
+	Fri, 29 Jul 2022 14:20:02 +0000
+Date: Fri, 29 Jul 2022 22:19:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH RFC 2/3] netfilter: nf_tables: add string set API
+Message-ID: <202207292232.PDyr6L7O-lkp@intel.com>
+References: <20220729093129.3108-3-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: drivers/mux/mmio.c:76:20: error: variable has incomplete type
- 'struct reg_field'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Aswath Govindraju <a-govindraju@ti.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-References: <202207292122.eOyFc13E-lkp@intel.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202207292122.eOyFc13E-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729093129.3108-3-pablo@netfilter.org>
 
+Hi Pablo,
 
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on nf/master]
+[also build test ERROR on linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On 7/29/22 06:58, kernel test robot wrote:
-> Hi Aswath,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   6e2c0490769ef8a95b61304389116ccc85c53e12
-> commit: e4d4371253029528c02bfb43a46c252e1c3d035f phy: phy-can-transceiver: Add support for setting mux
-> date:   4 months ago
-> config: s390-randconfig-r022-20220729 (https://download.01.org/0day-ci/archive/20220729/202207292122.eOyFc13E-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e4d4371253029528c02bfb43a46c252e1c3d035f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e4d4371253029528c02bfb43a46c252e1c3d035f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/mux/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/nf_tables-string-match-support/20220729-173258
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220729/202207292232.PDyr6L7O-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/021bda4d09b7b9be8c40f05b017f885ba3010c02
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pablo-Neira-Ayuso/nf_tables-string-match-support/20220729-173258
+        git checkout 021bda4d09b7b9be8c40f05b017f885ba3010c02
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Fix is here:
-https://lore.kernel.org/lkml/20220728000550.10495-1-rdunlap@infradead.org/
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "ac_iterate" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_iter_destroy" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_iter_create" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_del" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_add" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_clone" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_create" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_resolve_fail" [net/netfilter/nf_tables.ko] undefined!
+>> ERROR: modpost: "ac_destroy" [net/netfilter/nf_tables.ko] undefined!
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp
