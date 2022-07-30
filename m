@@ -1,36 +1,36 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA7E3FF1
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 21:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3444410
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 21:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659217255; x=1690753255;
+  t=1659217854; x=1690753854;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V5fo+ZjN6qVh2ehdMQ8scHgdijFwALwamZEruMT0vWg=;
-  b=cZTfbcggU7CLAA+roqFGSEJMFA2/S05aEChG4c7Iwn5poZqgOrsAi4AV
-   wPA7dIAFwE/HdmVwqeTsr6eyGnciNVgZTLJI0vcGVNRjPSs2GgSq9/EJP
-   J0V1axDc+HftGvElwF7WjvvEQe1hRmom8Ut6Ac7K5ON9n096CJy4QsFCK
-   i7m/fNvHIm0PcmAvC9IPYvWGaaJLiO0jVDLl8vU99JtyYbZ1kixQ9ZG3+
-   24Rn0jQyk0cK6X3DTGM3LJ23onHMo9jhgqH2WxQEEPpRGmPNEguqS1f3d
-   jxOJ9GuEDt0EWtOiD3wJMCPQgMhi4qrK8LyHSIGyY8Aoy+QrSgMFIC1b0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269330436"
+  bh=rND8XXV4IHwYTrk9ylOpb5YEXKqPDzYplKhRlcJ1akw=;
+  b=n+AesTf5bBskVAQhzpn2UkEaIoHx2xkr3bPfwGlnYmp46Lg9qcby4mgl
+   mzHTYKwvzOyp4pZiiSWkydvHHCcGuG2fBI8ORflUXiZQ8CLo7FLiuiWB+
+   /2LN6o+2NWGtTgz6I/I4zdmP+t0Rp4snZgxLFxlPTyG5HSTt8it22X4l6
+   pSxEKzXK6vd7SL+kXxgS9j+/10sfDTe4qRP3mii6jgzDISDs9dmAisJmn
+   Y7AcLt1aXdlAhM/p2ZPjpkhc3OqaPIUlyI1UxWfXErbj0SlvQhfh7T/QK
+   Qj0pjN+7K47P/Kt6WXqPJ3aRNoJQWpMBhOZNyBZH+zQFSdxXjMkMRlmU6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="289719543"
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="269330436"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 14:40:53 -0700
+   d="scan'208";a="289719543"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 14:50:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="605278720"
+   d="scan'208";a="704554267"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2022 14:40:49 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jul 2022 14:50:49 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHuCW-000DN9-0o;
-	Sat, 30 Jul 2022 21:40:48 +0000
-Date: Sun, 31 Jul 2022 05:40:05 +0800
+	id 1oHuMC-000DNX-1N;
+	Sat, 30 Jul 2022 21:50:48 +0000
+Date: Sun, 31 Jul 2022 05:50:22 +0800
 From: kernel test robot <lkp@intel.com>
 To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	andriy.shevchenko@linux.intel.com, vee.khee.wong@intel.com,
@@ -50,7 +50,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
  call in intel_eth_pci_remove()
-Message-ID: <202207310531.48IGPx8Z-lkp@intel.com>
+Message-ID: <202207310545.hHU5SagS-lkp@intel.com>
 References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -74,7 +74,7 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 620725263f4222b3c94d4ee19846835feec0ad69
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220731/202207310531.48IGPx8Z-lkp@intel.com/config)
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220731/202207310545.hHU5SagS-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -85,7 +85,7 @@ reproduce (this is a W=1 build):
         git checkout 2d1d09034cc62ee19f799b92bb67640ba86ca557
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
