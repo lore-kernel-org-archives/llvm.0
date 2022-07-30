@@ -1,274 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1240623BB
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 07:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659165061;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8QkQxa6dShdA9olKt+BasM86lqOWqgif9rw1v+wKFyE=;
-	b=fr5asooKDd4I+DTg4nO0dwMqd5tphWUJHSAS8/xg8BUJt8TNZpnCL+P/La+HjaBdZ8/E9/
-	J+8KaYZQwSTc8rInu7aY3MTKLQBrir+zoKXCM4tM6HmXDbk7jDoi/yFsW34ym9bbwuhKeo
-	IvEAJP5lBGiRONXDjMacRU9wzL13VUE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-ANcmGfbZOIq7n-y5s2mhCg-1; Sat, 30 Jul 2022 03:10:59 -0400
-X-MC-Unique: ANcmGfbZOIq7n-y5s2mhCg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E8221C068C1
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 07:10:59 +0000 (UTC)
-Received: from [172.64.0.89] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4F270140EBE3;
-	Sat, 30 Jul 2022 07:10:57 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
- (mainline.kernel.org-clang) [e65c6a46]
-Date: Sat, 30 Jul 2022 07:10:57 -0000
-CC: xzhou@redhat.com, jbastian@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17FE23BB
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 08:04:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659168299; x=1690704299;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i9PZjSKHc8+lT55MmOtDDDgcK8IIEd7ggADGrkaA+sg=;
+  b=AUqg+C6IlAFX8sab3B+f0tkmNPt6RNIVE7h4YZX9WBuTZBKorACKXLkJ
+   4dMr7xk+dq7l0kmWwfB7c9KGrFLL5eKjGDyuLMFHzR10EhwjnVpg6e70d
+   GxtNzRPrW2087kmTk7PMUwiGb52GRomd5+Lj7E/xOpA8PbbxZiiuXwIIv
+   wE40Q8HvlJgMuAQQjreGcvQ9mJNZ13WZv1KSALcnQch12XSHGsWakxo/b
+   2zvzhoPtZCx4IhlGQtsAe7lpoZMM8jHBws45JMfpJsCSpmnioo8D6CIlV
+   /KMkyHAR9M1Qf5L8cep9K6TEEpdJIICinv2U85v3raQ312fxFsBif7Mes
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="286457037"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="286457037"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 01:04:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="928998625"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jul 2022 01:04:56 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHhSy-000Ccl-0X;
+	Sat, 30 Jul 2022 08:04:56 +0000
+Date: Sat, 30 Jul 2022 16:04:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liming Sun <limings@nvidia.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	David Woods <davwoods@nvidia.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Liming Sun <limings@nvidia.com>, linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] mmc: sdhci-of-dwcmshc: add ACPI match data for
+ BlueField-3 SoC
+Message-ID: <202207301544.6K8iGuvp-lkp@intel.com>
+References: <3a50873fdbf69f4a95b931a5d05cade04c1dacd0.1659099154.git.limings@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <75815.122073003105900213@us-mta-159.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a50873fdbf69f4a95b931a5d05cade04c1dacd0.1659099154.git.limings@nvidia.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Liming,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on ulf-hansson-mmc-mirror/next v5.19-rc8]
+[cannot apply to next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49265
+url:    https://github.com/intel-lab-lkp/linux/commits/Liming-Sun/mmc-sdhci-of-dwcmshc-add-ACPI-match-data-for-BlueField-3-SoC/20220729-211808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6e2c0490769ef8a95b61304389116ccc85c53e12
+config: riscv-buildonly-randconfig-r002-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301544.6K8iGuvp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0826c5e41791f253a28b7284805be00108b1f841
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liming-Sun/mmc-sdhci-of-dwcmshc-add-ACPI-match-data-for-BlueField-3-SoC/20220729-211808
+        git checkout 0826c5e41791f253a28b7284805be00108b1f841
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/mmc/host/
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Unrecognized or new issues:
-         aarch64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596213
-         aarch64 - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596214
-          x86_64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596069
-          x86_64 - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596070
-          x86_64 - xfstests - nfsv4.2
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596071
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596072
-          x86_64 (debug) - stress: stress-ng - cpu-cache
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596322
-          x86_64 (debug) - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596428
-          x86_64 (debug) - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596429
-          x86_64 (debug) - xfstests - nfsv4.2
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596430
-          x86_64 (debug) - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4596431
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - LTP - cve
-                 aarch64 - LTP - sched
-                 aarch64 - LTP - syscalls
-                 aarch64 - LTP - can
-                 aarch64 - LTP - commands
-                 aarch64 - LTP - containers
-                 aarch64 - LTP - dio
-                 aarch64 - LTP - fs
-                 aarch64 - LTP - fsx
-                 aarch64 - LTP - math
-                 aarch64 - LTP - hugetlb
-                 aarch64 - LTP - mm
-                 aarch64 - LTP - nptl
-                 aarch64 - LTP - pty
-                 aarch64 - LTP - ipc
-                 aarch64 - LTP - tracing
-                 aarch64 - Firmware test suite
-                   s390x - LTP - cve
-                   s390x - LTP - sched
-                   s390x - LTP - syscalls
-                   s390x - LTP - can
-                   s390x - LTP - commands
-                   s390x - LTP - containers
-                   s390x - LTP - dio
-                   s390x - LTP - fs
-                   s390x - LTP - fsx
-                   s390x - LTP - math
-                   s390x - LTP - hugetlb
-                   s390x - LTP - mm
-                   s390x - LTP - nptl
-                   s390x - LTP - pty
-                   s390x - LTP - ipc
-                   s390x - LTP - tracing
-                  x86_64 - LTP - cve
-                  x86_64 - LTP - sched
-                  x86_64 - LTP - syscalls
-                  x86_64 - LTP - can
-                  x86_64 - LTP - commands
-                  x86_64 - LTP - containers
-                  x86_64 - LTP - dio
-                  x86_64 - LTP - fs
-                  x86_64 - LTP - fsx
-                  x86_64 - LTP - math
-                  x86_64 - LTP - hugetlb
-                  x86_64 - LTP - mm
-                  x86_64 - LTP - nptl
-                  x86_64 - LTP - pty
-                  x86_64 - LTP - ipc
-                  x86_64 - LTP - tracing
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - LTP - cve
-                  x86_64 (debug) - LTP - sched
-                  x86_64 (debug) - LTP - syscalls
-                  x86_64 (debug) - LTP - can
-                  x86_64 (debug) - LTP - commands
-                  x86_64 (debug) - LTP - containers
-                  x86_64 (debug) - LTP - dio
-                  x86_64 (debug) - LTP - fs
-                  x86_64 (debug) - LTP - fsx
-                  x86_64 (debug) - LTP - math
-                  x86_64 (debug) - LTP - hugetlb
-                  x86_64 (debug) - LTP - mm
-                  x86_64 (debug) - LTP - nptl
-                  x86_64 (debug) - LTP - pty
-                  x86_64 (debug) - LTP - ipc
-                  x86_64 (debug) - LTP - tracing
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 (debug) - Boot test
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
+>> drivers/mmc/host/sdhci-of-dwcmshc.c:282:38: warning: unused variable 'sdhci_dwcmshc_bf3_pdata' [-Wunused-const-variable]
+   static const struct sdhci_pltfm_data sdhci_dwcmshc_bf3_pdata = {
+                                        ^
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/sdhci_dwcmshc_bf3_pdata +282 drivers/mmc/host/sdhci-of-dwcmshc.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   281	
+ > 282	static const struct sdhci_pltfm_data sdhci_dwcmshc_bf3_pdata = {
+   283		.ops = &sdhci_dwcmshc_ops,
+   284		.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
+   285		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+   286			   SDHCI_QUIRK2_ACMD23_BROKEN,
+   287	};
+   288	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
