@@ -1,54 +1,48 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4D33D90
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 18:42:21 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id v5so3985892wmj.0
-        for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 11:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H6EoWK2Xkx5f0BaLXMIdK1U61HtbiW4S6pMAj0sBMEU=;
-        b=Cw4Ajigu6wNyUc+igA/HWRNZT0U5EohtvaBtioSfOpz8foDZCRa7z+X0sN4iKX5Bg5
-         GxmKNlC2r3PYQRcd7yOKZWZ5cj5NIA+W5aT5Oz9hBo1FICAYThyQNSoQXvHVnbe9gfA9
-         Z6CiKWGCVvm2VsTGZP3J6X7m96sustGROUfJW04mXqAOYkMNWAFZ8wc+LsSM6TYazgck
-         LAUAquyixb9rnIyVMWaSNemwdSMv2T8kkf8pdIzRX7mHwZ7wK10UdCXXe7sOxEQ+IagD
-         KJKDAeOo/OMTw313Mlm7ToIS2g41+szHlHrjcrQ9FDVu5TKdF7QpL9/kb1Hlh/dehltg
-         CGmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H6EoWK2Xkx5f0BaLXMIdK1U61HtbiW4S6pMAj0sBMEU=;
-        b=GoYNJHf3J+isAqjQc4dwZ/jjQOu7MnQVwcGkaLAvHZyDQI9kZysv1lNn/FkA4n8b3Z
-         ccSG+Br11RLQQZI0QemAnHtYJYnEoJUIom3K13c7qNegA1TFwoaVzf8k4p5zStJD0Vds
-         lvXV/5MQTgp0uJOVrHC4QjjapcOu4xOh0D2CCNUE8FSUL/9i41KzITpVRL5tclO0EPsz
-         5YQ8oWaD6DzoqutGCicryJKljgLRW9qbZyppsN6Ts+3aptid4dV64HAnOq9eQzUNknk1
-         N2qlX5/rZ12Veg/R8+f538tntOC3f4jR7Y1nFaE1x88IohQiFhqqrQjusCZPLsX1krKM
-         dSlQ==
-X-Gm-Message-State: AJIora/Ckmj90toNkskU7SZNv3V2VRADqIVvGeTrz+iRU2DLC+lJJZY4
-	BOhBv6/Fmi/D/FDQOZUgy0xUEA==
-X-Google-Smtp-Source: AGRyM1ugN3c3dGq+f9D6o1FI6UQAIcaystpn1k69gEtqNAdg4fpJvs76Rd6x4TjvfLnPIy0K7hj2Jw==
-X-Received: by 2002:a05:600c:3551:b0:3a3:1d4f:69ed with SMTP id i17-20020a05600c355100b003a31d4f69edmr6204521wmq.188.1659206540118;
-        Sat, 30 Jul 2022 11:42:20 -0700 (PDT)
-Received: from OEMBP14.local (82-132-226-84.dab.02.net. [82.132.226.84])
-        by smtp.gmail.com with ESMTPSA id p15-20020adfce0f000000b0021ee28ff76esm7147601wrn.38.2022.07.30.11.42.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 11:42:19 -0700 (PDT)
-Date: Sat, 30 Jul 2022 19:42:17 +0100
-From: Phillip Potter <phil@philpotter.co.uk>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Phillip Potter <phil@philpotter.co.uk>, devel@driverdev.osuosl.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [staging:staging-testing 54/54]
- drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <YuV7iR53bBecQKMd@OEMBP14.local>
-References: <202207301623.BfMKLfhv-lkp@intel.com>
- <YuURJ8ecN1cN56v/@kroah.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C567B3D98
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 20:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659212370; x=1690748370;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WAw2PV3fWHourLZeCCBkKAd+etiv3C5zoOgmY9QHuQA=;
+  b=dwCKsfy0uGr4DHvfTmLqMqZhLkD8knrct0q0Pl8MKAnYqBeDsbzCXykB
+   AsY2UI1XI8YMUI65hMdKBihCulB3AZT20urUSddOYBSB4iY7hldxdVQJ9
+   0g0IYsgk7Urfz3tVIaYnfGETS5eNy6cGqnSg/bfRHc+IUdBAfp9s7jof/
+   UFGLpwh0lcel3BWx1tFer+nyJw8mtv6WjC+ot4OUHrCejdBqQxvzP4yRf
+   tbkEmG/if6j/h1NMLrURGxdPE7IhFfNIBNsZyp9EXZU5YRZMM379YMTfL
+   kPOjpxJ2WR4YjKTQoy+EeamWZub09+lIamjDTlpY9l65DzOITGEqJFbaY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="375248258"
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="375248258"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:19:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="598558543"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jul 2022 13:19:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHsvm-000DHf-0S;
+	Sat, 30 Jul 2022 20:19:26 +0000
+Date: Sun, 31 Jul 2022 04:18:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>, aroulin@nvidia.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, sbrivio@redhat.com,
+	roopa@nvidia.com, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+	Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Subject: Re: [PATCH net-next 2/3] net: 8021q: fix bridge binding behavior for
+ vlan interfaces
+Message-ID: <202207310415.XN6htXAe-lkp@intel.com>
+References: <2b09fbacde7e8818f4ada4829818fdf015e36b58.1659195179.git.sevinj.aghayeva@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,55 +51,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuURJ8ecN1cN56v/@kroah.com>
+In-Reply-To: <2b09fbacde7e8818f4ada4829818fdf015e36b58.1659195179.git.sevinj.aghayeva@gmail.com>
 
-On Sat, Jul 30, 2022 at 01:08:23PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jul 30, 2022 at 04:14:57PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
-> > head:   f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-> > commit: f3a76018dd55d8ddcd28cb47049f46ae5c0ce557 [54/54] staging: r8188eu: remove initializer from ret in rtw_pwr_wakeup
-> > config: hexagon-randconfig-r015-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301623.BfMKLfhv-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?id=f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-> >         git remote add staging https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-> >         git fetch --no-tags staging staging-testing
-> >         git checkout f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/r8188eu/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >            if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/staging/r8188eu/core/rtw_pwrctrl.c:409:9: note: uninitialized use occurs here
-> >            return ret;
-> >                   ^~~
-> >    drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:2: note: remove the 'if' if its condition is always true
-> >            if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
-> >            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/staging/r8188eu/core/rtw_pwrctrl.c:384:9: note: initialize the variable 'ret' to silence this warning
-> >            int ret;
-> >                   ^
-> >                    = 0
-> >    1 warning generated.
-> 
-> Phillip, can you send a follow-up patch for this issue?
-> 
-> thanks,
-> 
-> greg k-h
+Hi Sevinj,
 
-Yes, of course. It will be a few hours though if that's ok - I've had
-to pop out to send this as someone decided to steal some telecoms cabling,
-thus knocking out DSL for us and three neighbouring towns :-)
+Thank you for the patch! Yet something to improve:
 
-Regards,
-Phil
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sevinj-Aghayeva/net-vlan-fix-bridge-binding-behavior-and-add-selftests/20220731-000455
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 63757225a93353bc2ce4499af5501eabdbbf23f9
+config: hexagon-randconfig-r032-20220729 (https://download.01.org/0day-ci/archive/20220731/202207310415.XN6htXAe-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/993166d2a01876dc92807f74b3d72f63d25c8227
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sevinj-Aghayeva/net-vlan-fix-bridge-binding-behavior-and-add-selftests/20220731-000455
+        git checkout 993166d2a01876dc92807f74b3d72f63d25c8227
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: br_vlan_upper_change
+   >>> referenced by vlan_dev.c:0 (net/8021q/vlan_dev.c:0)
+   >>>               8021q/vlan_dev.o:(vlan_dev_change_flags) in archive net/built-in.a
+   >>> referenced by vlan_dev.c:0 (net/8021q/vlan_dev.c:0)
+   >>>               8021q/vlan_dev.o:(vlan_dev_change_flags) in archive net/built-in.a
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
