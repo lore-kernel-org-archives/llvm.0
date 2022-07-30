@@ -1,46 +1,49 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AA13C26
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 16:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7141523A5
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 18:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659197116; x=1690733116;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8vfdWxwDxynxpmmxMlbGFcJ0z/1sk9zIy3z7yvQA01I=;
-  b=nWbNk/6gtVQ5sdMI2U9FRmbTr6aphsxQxhnTtDVcyRm61/zUQTkD/VAc
-   7T6fMdtGzP9Ca+bi9TuGry/UVsV8PlSg4wuLDspZClO7KEzNT9qihOcAw
-   XNvsxCWuUE4ZH1RScWGjOI+Xb/pRcl70/ie2f5hTcScy+wA4/u5LxZ8cV
-   DyF2W4RBWGhM2FU+P5v7FK1oxN7d6T+dg8UrY5Dc8Vj4Dc9TPtXIQ+2q6
-   uipfPhGGDkmmlghlrkugNqsuZMmmbodSs0B2cyXjAVhfpEAiQeuEkeybZ
-   0LP2ea2UpQT7vgmf/VTHogCe1LZ3h9fFORNsnN8yU1bvO1fjmhv/3VVni
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="271967813"
+  t=1659204441; x=1690740441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GfUPPhycW67KQMvN9iRt1mPvqrm/d/0T+G/wECkqerA=;
+  b=UaMqhtHsRmTfceraarqP8LkwWqBRpH0bK6AuAKJZ6Dlv6EDtlQWSCqJq
+   RspOITB1nNIC5EOfrErxmEjeok8HPIra9b1xT3JTIQ6S9DOunkygUtvqY
+   XyEbP0VUIxtbrHp6w12gZ+GrfgFYYFkc/0zmZyYl9FdHAKO0y9KX1lRxC
+   zpVGf5zcV2MN6jsHh1DZPKPi1VgtTQwIEv3FtZIilOIRhV5oI+HHlh9In
+   Hby+kJPxJY6OIieKXbOfWzxhgWgzfTTpD7b8Hd4b5drR1WPn0NRSLeOnw
+   LHbj4+SYjZgJy26i16agy84xToQ5F7e/Lk44Q3DUQicP/6fZ/JufKNtRm
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269318654"
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="271967813"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 09:05:16 -0700
+   d="scan'208";a="269318654"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 11:07:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="634426724"
+   d="scan'208";a="552071485"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jul 2022 09:05:14 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 11:07:17 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHoxl-000Cxf-2B;
-	Sat, 30 Jul 2022 16:05:13 +0000
-Date: Sun, 31 Jul 2022 00:04:17 +0800
+	id 1oHqrs-000D3H-2h;
+	Sat, 30 Jul 2022 18:07:16 +0000
+Date: Sun, 31 Jul 2022 02:06:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chengming Gui <Jack.Gui@amd.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [agd5f:drm-next-5.20 37/54]
- drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:9: error: call to undeclared
- function 'vmalloc'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202207302311.0n5LnCGv-lkp@intel.com>
+	linux-media@vger.kernel.org, Yong Zhi <yong.zhi@intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>, Dan Scally <djrscally@gmail.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] media: ipu3-cio2: Don't dereference fwnode handle
+Message-ID: <202207310216.JtYAKodB-lkp@intel.com>
+References: <20220730154844.89556-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,172 +52,143 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220730154844.89556-1-andriy.shevchenko@linux.intel.com>
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next-5.20
-head:   64f991590ff4410041a70ee7ec2db079bc953929
-commit: 6fdd2077ec03f4b34d127a1713ca19248539d6e0 [37/54] drm/amd/amdgpu: add memory training support for PSP_V13
-config: mips-buildonly-randconfig-r005-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302311.0n5LnCGv-lkp@intel.com/config)
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/media-ipu3-cio2-Don-t-dereference-fwnode-handle/20220730-235023
+base:   git://linuxtv.org/media_tree.git master
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220731/202207310216.JtYAKodB-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next-5.20
-        git checkout 6fdd2077ec03f4b34d127a1713ca19248539d6e0
+        # https://github.com/intel-lab-lkp/linux/commit/a78ba0da9d77a8fa412604492f931b188e1114d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/media-ipu3-cio2-Don-t-dereference-fwnode-handle/20220730-235023
+        git checkout a78ba0da9d77a8fa412604492f931b188e1114d5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/pci/intel/ipu3/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:9: error: call to undeclared function 'vmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   buf = vmalloc(sz);
-                         ^
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:7: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                   buf = vmalloc(sz);
-                       ^ ~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:545:5: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   vfree(buf);
-                                   ^
-   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:552:4: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           vfree(buf);
-                           ^
-   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:555:4: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           vfree(buf);
-                           ^
-   5 errors generated.
+>> drivers/media/pci/intel/ipu3/cio2-bridge.c:266:33: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+           struct fwnode_handle *fwnode, *current;
+                                          ^
+   arch/x86/include/asm/current.h:18:28: note: expanded from macro 'current'
+   #define current get_current()
+                              ^
+>> drivers/media/pci/intel/ipu3/cio2-bridge.c:266:33: error: conflicting types for 'get_current'
+   arch/x86/include/asm/current.h:18:17: note: expanded from macro 'current'
+   #define current get_current()
+                   ^
+   arch/x86/include/asm/current.h:13:44: note: previous definition is here
+   static __always_inline struct task_struct *get_current(void)
+                                              ^
+   2 errors generated.
 
 
-vim +/vmalloc +534 drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
+vim +266 drivers/media/pci/intel/ipu3/cio2-bridge.c
 
-   457	
-   458	
-   459	static int psp_v13_0_memory_training(struct psp_context *psp, uint32_t ops)
-   460	{
-   461		struct psp_memory_training_context *ctx = &psp->mem_train_ctx;
-   462		uint32_t *pcache = (uint32_t *)ctx->sys_cache;
-   463		struct amdgpu_device *adev = psp->adev;
-   464		uint32_t p2c_header[4];
-   465		uint32_t sz;
-   466		void *buf;
-   467		int ret, idx;
-   468	
-   469		if (ctx->init == PSP_MEM_TRAIN_NOT_SUPPORT) {
-   470			dev_dbg(adev->dev, "Memory training is not supported.\n");
-   471			return 0;
-   472		} else if (ctx->init != PSP_MEM_TRAIN_INIT_SUCCESS) {
-   473			dev_err(adev->dev, "Memory training initialization failure.\n");
-   474			return -EINVAL;
-   475		}
-   476	
-   477		if (psp_v13_0_is_sos_alive(psp)) {
-   478			dev_dbg(adev->dev, "SOS is alive, skip memory training.\n");
-   479			return 0;
-   480		}
-   481	
-   482		amdgpu_device_vram_access(adev, ctx->p2c_train_data_offset, p2c_header, sizeof(p2c_header), false);
-   483		dev_dbg(adev->dev, "sys_cache[%08x,%08x,%08x,%08x] p2c_header[%08x,%08x,%08x,%08x]\n",
-   484			  pcache[0], pcache[1], pcache[2], pcache[3],
-   485			  p2c_header[0], p2c_header[1], p2c_header[2], p2c_header[3]);
-   486	
-   487		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
-   488			dev_dbg(adev->dev, "Short training depends on restore.\n");
-   489			ops |= PSP_MEM_TRAIN_RESTORE;
-   490		}
-   491	
-   492		if ((ops & PSP_MEM_TRAIN_RESTORE) &&
-   493		    pcache[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
-   494			dev_dbg(adev->dev, "sys_cache[0] is invalid, restore depends on save.\n");
-   495			ops |= PSP_MEM_TRAIN_SAVE;
-   496		}
-   497	
-   498		if (p2c_header[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
-   499		    !(pcache[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
-   500		      pcache[3] == p2c_header[3])) {
-   501			dev_dbg(adev->dev, "sys_cache is invalid or out-of-date, need save training data to sys_cache.\n");
-   502			ops |= PSP_MEM_TRAIN_SAVE;
-   503		}
-   504	
-   505		if ((ops & PSP_MEM_TRAIN_SAVE) &&
-   506		    p2c_header[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
-   507			dev_dbg(adev->dev, "p2c_header[0] is invalid, save depends on long training.\n");
-   508			ops |= PSP_MEM_TRAIN_SEND_LONG_MSG;
-   509		}
-   510	
-   511		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
-   512			ops &= ~PSP_MEM_TRAIN_SEND_SHORT_MSG;
-   513			ops |= PSP_MEM_TRAIN_SAVE;
-   514		}
-   515	
-   516		dev_dbg(adev->dev, "Memory training ops:%x.\n", ops);
-   517	
-   518		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
-   519			/*
-   520			 * Long training will encroach a certain amount on the bottom of VRAM;
-   521			 * save the content from the bottom of VRAM to system memory
-   522			 * before training, and restore it after training to avoid
-   523			 * VRAM corruption.
-   524			 */
-   525			sz = GDDR6_MEM_TRAINING_ENCROACHED_SIZE;
-   526	
-   527			if (adev->gmc.visible_vram_size < sz || !adev->mman.aper_base_kaddr) {
-   528				dev_err(adev->dev, "visible_vram_size %llx or aper_base_kaddr %p is not initialized.\n",
-   529					  adev->gmc.visible_vram_size,
-   530					  adev->mman.aper_base_kaddr);
-   531				return -EINVAL;
-   532			}
-   533	
- > 534			buf = vmalloc(sz);
-   535			if (!buf) {
-   536				dev_err(adev->dev, "failed to allocate system memory.\n");
-   537				return -ENOMEM;
-   538			}
-   539	
-   540			if (drm_dev_enter(adev_to_drm(adev), &idx)) {
-   541				memcpy_fromio(buf, adev->mman.aper_base_kaddr, sz);
-   542				ret = psp_v13_0_memory_training_send_msg(psp, PSP_BL__DRAM_LONG_TRAIN);
-   543				if (ret) {
-   544					DRM_ERROR("Send long training msg failed.\n");
- > 545					vfree(buf);
-   546					drm_dev_exit(idx);
-   547					return ret;
-   548				}
-   549	
-   550				memcpy_toio(adev->mman.aper_base_kaddr, buf, sz);
-   551				adev->hdp.funcs->flush_hdp(adev, NULL);
-   552				vfree(buf);
-   553				drm_dev_exit(idx);
-   554			} else {
-   555				vfree(buf);
-   556				return -ENODEV;
-   557			}
-   558		}
-   559	
-   560		if (ops & PSP_MEM_TRAIN_SAVE) {
-   561			amdgpu_device_vram_access(psp->adev, ctx->p2c_train_data_offset, ctx->sys_cache, ctx->train_data_size, false);
-   562		}
-   563	
-   564		if (ops & PSP_MEM_TRAIN_RESTORE) {
-   565			amdgpu_device_vram_access(psp->adev, ctx->c2p_train_data_offset, ctx->sys_cache, ctx->train_data_size, true);
-   566		}
-   567	
-   568		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
-   569			ret = psp_v13_0_memory_training_send_msg(psp, (amdgpu_force_long_training > 0) ?
-   570								 PSP_BL__DRAM_LONG_TRAIN : PSP_BL__DRAM_SHORT_TRAIN);
-   571			if (ret) {
-   572				dev_err(adev->dev, "send training msg failed.\n");
-   573				return ret;
-   574			}
-   575		}
-   576		ctx->training_cnt++;
-   577		return 0;
-   578	}
-   579	
+   261	
+   262	static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+   263					      struct cio2_bridge *bridge,
+   264					      struct pci_dev *cio2)
+   265	{
+ > 266		struct fwnode_handle *fwnode, *current;
+   267		struct cio2_sensor *sensor;
+   268		struct acpi_device *adev;
+   269		acpi_status status;
+   270		int ret;
+   271	
+   272		for_each_acpi_dev_match(adev, cfg->hid, NULL, -1) {
+   273			if (!adev->status.enabled)
+   274				continue;
+   275	
+   276			if (bridge->n_sensors >= CIO2_NUM_PORTS) {
+   277				acpi_dev_put(adev);
+   278				dev_err(&cio2->dev, "Exceeded available CIO2 ports\n");
+   279				return -EINVAL;
+   280			}
+   281	
+   282			sensor = &bridge->sensors[bridge->n_sensors];
+   283			strscpy(sensor->name, cfg->hid, sizeof(sensor->name));
+   284	
+   285			ret = cio2_bridge_read_acpi_buffer(adev, "SSDB",
+   286							   &sensor->ssdb,
+   287							   sizeof(sensor->ssdb));
+   288			if (ret)
+   289				goto err_put_adev;
+   290	
+   291			if (sensor->ssdb.vcmtype > ARRAY_SIZE(cio2_vcm_types)) {
+   292				dev_warn(&adev->dev, "Unknown VCM type %d\n",
+   293					 sensor->ssdb.vcmtype);
+   294				sensor->ssdb.vcmtype = 0;
+   295			}
+   296	
+   297			status = acpi_get_physical_device_location(adev->handle, &sensor->pld);
+   298			if (ACPI_FAILURE(status)) {
+   299				ret = -ENODEV;
+   300				goto err_put_adev;
+   301			}
+   302	
+   303			if (sensor->ssdb.lanes > CIO2_MAX_LANES) {
+   304				dev_err(&adev->dev,
+   305					"Number of lanes in SSDB is invalid\n");
+   306				ret = -EINVAL;
+   307				goto err_free_pld;
+   308			}
+   309	
+   310			cio2_bridge_create_fwnode_properties(sensor, bridge, cfg);
+   311			cio2_bridge_create_connection_swnodes(bridge, sensor);
+   312	
+   313			ret = software_node_register_nodes(sensor->swnodes);
+   314			if (ret)
+   315				goto err_free_pld;
+   316	
+   317			fwnode = software_node_fwnode(&sensor->swnodes[
+   318							      SWNODE_SENSOR_HID]);
+   319			if (!fwnode) {
+   320				ret = -ENODEV;
+   321				goto err_free_swnodes;
+   322			}
+   323	
+   324			sensor->adev = acpi_dev_get(adev);
+   325	
+   326			current = acpi_fwnode_handle(adev);
+   327			current->secondary = fwnode;
+   328	
+   329			cio2_bridge_instantiate_vcm_i2c_client(sensor);
+   330	
+   331			dev_info(&cio2->dev, "Found supported sensor %s\n",
+   332				 acpi_dev_name(adev));
+   333	
+   334			bridge->n_sensors++;
+   335		}
+   336	
+   337		return 0;
+   338	
+   339	err_free_swnodes:
+   340		software_node_unregister_nodes(sensor->swnodes);
+   341	err_free_pld:
+   342		ACPI_FREE(sensor->pld);
+   343	err_put_adev:
+   344		acpi_dev_put(adev);
+   345		return ret;
+   346	}
+   347	
 
 -- 
 0-DAY CI Kernel Test Service
