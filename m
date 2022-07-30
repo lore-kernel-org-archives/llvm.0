@@ -1,43 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB8028E8
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 12:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E2D1FA0
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 13:11:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659183607; x=1690719607;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pCLGv3g2wk0CNIr1FfigMKEt3WZnTGnj6YVJwIPCAmo=;
-  b=XWT7xc3+zOmaLszKJg8EzS8YlFw+P52jOPnrWbyHSUqkG+wPo8GrPAsI
-   S0unk1ygJUFdHukLpy0m5BsPKJTDurSJVJn4ZCr7Uzokd7E6qZ0AepNCc
-   Z1l2TRC94CnA84romUWFeqz5wbWEK1hDEXhiqMjkWJkO+HzNLzxa9t4pq
-   6F5KCTZofu6jAs2R1BNUR7TMpe9bDjW1wj6bQPuHOdWjpTBcyJ3F5EJAe
-   qhMjXDNaiPyriN8Cb8m9AXDgMm0Kp1d/5nwyS0/e00vIjkxEtcYvxAVbi
-   IqYYcK7mJuJnACBhsCxeVdtkaxSA3wy1s6kgzXbEd+kt2g8hf5yBxJDVs
+  t=1659186671; x=1690722671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uSuryMV+764/ne8nNCoPnbffLiJ44XbJvucP19l+3u0=;
+  b=FnowfZdoB69AFBG9RujhoCSZFC8sd/fElCUvWjUvJHzrFUiV2gsRRo7H
+   Uj6/gG1kUdKBlFHokms5u7YF8jYzjJufROvPBZcJOlJjy9VVrqMwUeGQr
+   4i06XrD2YKLjb1vZesrogSFi62xUiFm8/fNlq0q63Kyp9FdrDLimKicCY
+   se9uVrfoiZRk2TNc3y3qWeEtHCfoqI3tNuqK+PxYz4wJ8jgLWnMJbeiiL
+   drjf3sFfNTvf9eY3ljxuNym4SV5H5LPTgrxR+H2rYt8BUt12r4lijhuDi
+   ugdRO83+zgvJeoYCNOqW5sxflCxWQu184ujoo0AtoyJpJ48yLmYWvbrZj
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="286469737"
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="289685080"
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="286469737"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 05:20:06 -0700
+   d="scan'208";a="289685080"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 06:11:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="743798736"
+   d="scan'208";a="690999928"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2022 05:20:04 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jul 2022 06:11:08 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHlRr-000CoZ-3B;
-	Sat, 30 Jul 2022 12:20:03 +0000
-Date: Sat, 30 Jul 2022 20:19:40 +0800
+	id 1oHmFI-000Cqi-0b;
+	Sat, 30 Jul 2022 13:11:08 +0000
+Date: Sat, 30 Jul 2022 21:10:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>
-Subject: [kvm:queue 2/3] arch/riscv/kvm/mmu.c:355:61: error: expected '}'
-Message-ID: <202207302002.opeObPd2-lkp@intel.com>
+To: Liu Chao <liuchao173@huawei.com>, linux-kernel@vger.kernel.org,
+	tglx@linutronix.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, hewenliang4@huawei.com,
+	linfeilong@huawei.com
+Subject: Re: [PATCH] add miss time to CPUTIME_USER when kernel boots with
+ highres=off
+Message-ID: <202207302033.Sreft8cI-lkp@intel.com>
+References: <20220730091456.3741503-1-liuchao173@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,146 +48,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220730091456.3741503-1-liuchao173@huawei.com>
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-head:   93472b79715378a2386598d6632c654a2223267b
-commit: 24688433d2ef9b65af51aa065f649b5f891f6961 [2/3] Merge remote-tracking branch 'kvm/next' into kvm-next-5.20
-config: riscv-randconfig-r012-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302002.opeObPd2-lkp@intel.com/config)
+Hi Liu,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Chao/add-miss-time-to-CPUTIME_USER-when-kernel-boots-with-highres-off/20220730-171718
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git cceeeb6a6d02e7b9a74ddd27a3225013b34174aa
+config: s390-randconfig-r044-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302033.Sreft8cI-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=24688433d2ef9b65af51aa065f649b5f891f6961
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm queue
-        git checkout 24688433d2ef9b65af51aa065f649b5f891f6961
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7ac63e1383163d700eb4212b689a272a4763e185
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liu-Chao/add-miss-time-to-CPUTIME_USER-when-kernel-boots-with-highres-off/20220730-171718
+        git checkout 7ac63e1383163d700eb4212b689a272a4763e185
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/mmu.c:355:61: error: expected '}'
-                   .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0;
-                                                                             ^
-   arch/riscv/kvm/mmu.c:354:39: note: to match this '{'
-           struct kvm_mmu_memory_cache pcache = {
-                                                ^
->> arch/riscv/kvm/mmu.c:356:3: error: expected expression
-                   .gfp_zero = __GFP_ZERO;
-                   ^
->> arch/riscv/kvm/mmu.c:359:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-           end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-           ^
-           int
->> arch/riscv/kvm/mmu.c:359:9: error: use of undeclared identifier 'gpa'
-           end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-                  ^
->> arch/riscv/kvm/mmu.c:359:15: error: use of undeclared identifier 'size'
-           end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
-                        ^
-   arch/riscv/kvm/mmu.c:360:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-           pfn = __phys_to_pfn(hpa);
-           ^
-           int
->> arch/riscv/kvm/mmu.c:360:22: error: use of undeclared identifier 'hpa'
-           pfn = __phys_to_pfn(hpa);
-                               ^
->> arch/riscv/kvm/mmu.c:362:2: error: expected identifier or '('
-           for (addr = gpa; addr < end; addr += PAGE_SIZE) {
-           ^
-   arch/riscv/kvm/mmu.c:381:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   out:
-   ^
-   int
->> arch/riscv/kvm/mmu.c:381:4: error: expected ';' after top level declarator
-   out:
-      ^
-      ;
->> arch/riscv/kvm/mmu.c:382:28: error: expected parameter declarator
-           kvm_mmu_free_memory_cache(&pcache);
-                                     ^
->> arch/riscv/kvm/mmu.c:382:28: error: expected ')'
-   arch/riscv/kvm/mmu.c:382:27: note: to match this '('
-           kvm_mmu_free_memory_cache(&pcache);
-                                    ^
-   arch/riscv/kvm/mmu.c:382:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-           kvm_mmu_free_memory_cache(&pcache);
-           ^
-           int
->> arch/riscv/kvm/mmu.c:382:27: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-           kvm_mmu_free_memory_cache(&pcache);
-                                    ^
-                                            void
->> arch/riscv/kvm/mmu.c:382:2: error: a function declaration without a prototype is deprecated in all versions of C and is treated as a zero-parameter prototype in C2x, conflicting with a previous declaration [-Werror,-Wdeprecated-non-prototype]
-           kvm_mmu_free_memory_cache(&pcache);
-           ^
-   include/linux/kvm_host.h:1356:6: note: conflicting prototype is here
-   void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
-        ^
->> arch/riscv/kvm/mmu.c:382:2: error: conflicting types for 'kvm_mmu_free_memory_cache'
-           kvm_mmu_free_memory_cache(&pcache);
-           ^
-   include/linux/kvm_host.h:1356:6: note: previous declaration is here
-   void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
-        ^
-   arch/riscv/kvm/mmu.c:383:2: error: expected identifier or '('
-           return ret;
-           ^
->> arch/riscv/kvm/mmu.c:384:1: error: extraneous closing brace ('}')
-   }
-   ^
-   18 errors generated.
+   In file included from kernel/time/hrtimer.c:32:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/time/hrtimer.c:32:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/time/hrtimer.c:32:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
+                                     ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:754:19: error: static declaration of 'hrtimer_is_hres_enabled' follows non-static declaration
+   static inline int hrtimer_is_hres_enabled(void) { return 0; }
+                     ^
+   include/linux/hrtimer.h:329:12: note: previous declaration is here
+   extern int hrtimer_is_hres_enabled(void);
+              ^
+   16 warnings and 1 error generated.
 
 
-vim +355 arch/riscv/kvm/mmu.c
+vim +/hrtimer_is_hres_enabled +754 kernel/time/hrtimer.c
 
-   345	
-   346	int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
-   347				     phys_addr_t hpa, unsigned long size,
-   348				     bool writable, bool in_atomic)
-   349	{
-   350		pte_t pte;
-   351		int ret = 0;
-   352		unsigned long pfn;
-   353		phys_addr_t addr, end;
-   354		struct kvm_mmu_memory_cache pcache = {
- > 355			.gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0;
- > 356			.gfp_zero = __GFP_ZERO;
-   357		};
-   358	
- > 359		end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
- > 360		pfn = __phys_to_pfn(hpa);
-   361	
- > 362		for (addr = gpa; addr < end; addr += PAGE_SIZE) {
-   363			pte = pfn_pte(pfn, PAGE_KERNEL_IO);
-   364	
-   365			if (!writable)
-   366				pte = pte_wrprotect(pte);
-   367	
-   368			ret = kvm_mmu_topup_memory_cache(&pcache, gstage_pgd_levels);
-   369			if (ret)
-   370				goto out;
-   371	
-   372			spin_lock(&kvm->mmu_lock);
-   373			ret = gstage_set_pte(kvm, 0, &pcache, addr, &pte);
-   374			spin_unlock(&kvm->mmu_lock);
-   375			if (ret)
-   376				goto out;
-   377	
-   378			pfn++;
-   379		}
-   380	
- > 381	out:
- > 382		kvm_mmu_free_memory_cache(&pcache);
-   383		return ret;
- > 384	}
-   385	
+54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16  753  
+54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16 @754  static inline int hrtimer_is_hres_enabled(void) { return 0; }
+75e3b37d059856 kernel/time/hrtimer.c Luiz Capitulino 2015-08-11  755  static inline void hrtimer_switch_to_hres(void) { }
+54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16  756  
 
 -- 
 0-DAY CI Kernel Test Service
