@@ -1,290 +1,274 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0BB23A0
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 04:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659155140; x=1690691140;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tE4gAhpT+5B9E8BBlS421Ai6+4cwUVd3aJta3K1N360=;
-  b=dm5XnjjWGqR87pzevT7g4rejIJvkk+V6eYgiVTOrPGB2Br2ripdX93TN
-   QXskSi/oK0xz2D6nvTr7eRB+wNVRSIgSlAcghXYtWuAl8J8XApsl4GMfk
-   R7Wd/z+50BstjXsSwYW9vG4KaVXas28ARX4O3+LVOosYcSJUS5k42WH5w
-   VKzfieUFPZ/MACz8ZH8sWXE/PjMPWb85zyMnEcVuU+Hvd9HsRV6J0GBYw
-   lnsWXwJS9qsPBMLoMjOh+9E3oCYQ2hgrn5LA/YcBCh5x1Fnoz2ORIez/S
-   5xvDVOXuns0Ai2pOcvrepgksVdRZHopxyXJC5/QDzrLBSh9SMf20s2SLm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314699389"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="314699389"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 21:25:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="669470303"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Jul 2022 21:25:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oHe2j-000COT-1g;
-	Sat, 30 Jul 2022 04:25:37 +0000
-Date: Sat, 30 Jul 2022 12:25:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Kenny Ho <Kenny.Ho@amd.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [agd5f:amd-staging-drm-next 1241/1278]
- drivers/thunderbolt/test.c:799:2: error: call to undeclared function
- 'KUNIT_ASSERT_NULL'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202207301226.1DMFCdHt-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072D123A4
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 05:11:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659157917;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y4HlmFyGdOtqkaxYVTOMObj3V097xUYQMMYAFTjZs/g=;
+	b=B891yVTCDJFjeES9S6zvxj7duc8L7Bsf/P1sLHWcc4heXGm5OZM2kB3tm/FZRTrMJ4vxIM
+	Tg+Jkq/I3pVQKXsep5jZ01y+kszpiYoejwoqa5xM/7CW/mwSKWAnH0ZED0Izev6NtgF0qf
+	b5BNcTRXvtQv9rY9b+XuIKrOZNLCHa0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-Le-COSfVP22bBVDxcIR64g-1; Sat, 30 Jul 2022 01:11:56 -0400
+X-MC-Unique: Le-COSfVP22bBVDxcIR64g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B4B001C05EB5
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 05:11:55 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A3DD540466AA;
+	Sat, 30 Jul 2022 05:11:55 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [bb83c99d]
+Date: Sat, 30 Jul 2022 05:11:55 -0000
+CC: xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <21669.122073001115600147@us-mta-588.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
-head:   2305916dca043ed69bd464f74a886b0216780aa6
-commit: 53069c3922842db6f01ca9008e6a45d0fd3a083e [1241/1278] thunderbolt: test: use NULL macros
-config: s390-randconfig-r044-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301226.1DMFCdHt-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f amd-staging-drm-next
-        git checkout 53069c3922842db6f01ca9008e6a45d0fd3a083e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/thunderbolt/test.c:799:2: error: call to undeclared function 'KUNIT_ASSERT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NULL(test, path);
-           ^
->> drivers/thunderbolt/test.c:850:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:912:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:992:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1072:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1164:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1256:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1300:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel1);
-           ^
-   drivers/thunderbolt/test.c:1352:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1398:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1448:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1513:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1569:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel1);
-           ^
-   drivers/thunderbolt/test.c:1631:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, dp_tunnel);
-           ^
-   drivers/thunderbolt/test.c:1688:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1731:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1768:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1814:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1860:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   12 warnings and 20 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/KUNIT_ASSERT_NULL +799 drivers/thunderbolt/test.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49235
 
-   783	
-   784	static void tb_test_path_not_connected(struct kunit *test)
-   785	{
-   786		struct tb_switch *host, *dev1, *dev2;
-   787		struct tb_port *down, *up;
-   788		struct tb_path *path;
-   789	
-   790		host = alloc_host(test);
-   791		dev1 = alloc_dev_default(test, host, 0x3, false);
-   792		/* Not connected to anything */
-   793		dev2 = alloc_dev_default(test, NULL, 0x303, false);
-   794	
-   795		down = &dev1->ports[10];
-   796		up = &dev2->ports[9];
-   797	
-   798		path = tb_path_alloc(NULL, down, 8, up, 8, 0, "PCIe Down");
- > 799		KUNIT_ASSERT_NULL(test, path);
-   800		path = tb_path_alloc(NULL, down, 8, up, 8, 1, "PCIe Down");
-   801		KUNIT_ASSERT_NULL(test, path);
-   802	}
-   803	
-   804	struct hop_expectation {
-   805		u64 route;
-   806		u8 in_port;
-   807		enum tb_port_type in_type;
-   808		u8 out_port;
-   809		enum tb_port_type out_type;
-   810	};
-   811	
-   812	static void tb_test_path_not_bonded_lane0(struct kunit *test)
-   813	{
-   814		/*
-   815		 * PCIe path from host to device using lane 0.
-   816		 *
-   817		 *   [Host]
-   818		 *   3 |: 4
-   819		 *   1 |: 2
-   820		 *  [Device]
-   821		 */
-   822		static const struct hop_expectation test_data[] = {
-   823			{
-   824				.route = 0x0,
-   825				.in_port = 9,
-   826				.in_type = TB_TYPE_PCIE_DOWN,
-   827				.out_port = 3,
-   828				.out_type = TB_TYPE_PORT,
-   829			},
-   830			{
-   831				.route = 0x3,
-   832				.in_port = 1,
-   833				.in_type = TB_TYPE_PORT,
-   834				.out_port = 9,
-   835				.out_type = TB_TYPE_PCIE_UP,
-   836			},
-   837		};
-   838		struct tb_switch *host, *dev;
-   839		struct tb_port *down, *up;
-   840		struct tb_path *path;
-   841		int i;
-   842	
-   843		host = alloc_host(test);
-   844		dev = alloc_dev_default(test, host, 0x3, false);
-   845	
-   846		down = &host->ports[9];
-   847		up = &dev->ports[9];
-   848	
-   849		path = tb_path_alloc(NULL, down, 8, up, 8, 0, "PCIe Down");
- > 850		KUNIT_ASSERT_NOT_NULL(test, path);
-   851		KUNIT_ASSERT_EQ(test, path->path_length, ARRAY_SIZE(test_data));
-   852		for (i = 0; i < ARRAY_SIZE(test_data); i++) {
-   853			const struct tb_port *in_port, *out_port;
-   854	
-   855			in_port = path->hops[i].in_port;
-   856			out_port = path->hops[i].out_port;
-   857	
-   858			KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
-   859			KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
-   860			KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-   861					test_data[i].in_type);
-   862			KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
-   863			KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
-   864			KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-   865					test_data[i].out_type);
-   866		}
-   867		tb_path_free(path);
-   868	}
-   869	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+         aarch64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4592977
+         aarch64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4592979
+          x86_64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593249
+          x86_64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593250
+          x86_64 - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593251
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593252
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593034
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593035
+          x86_64 (debug) - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593036
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4593037
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - LTP - cve
+                 aarch64 - LTP - sched
+                 aarch64 - LTP - syscalls
+                 aarch64 - LTP - can
+                 aarch64 - LTP - commands
+                 aarch64 - LTP - containers
+                 aarch64 - LTP - dio
+                 aarch64 - LTP - fs
+                 aarch64 - LTP - fsx
+                 aarch64 - LTP - math
+                 aarch64 - LTP - hugetlb
+                 aarch64 - LTP - mm
+                 aarch64 - LTP - nptl
+                 aarch64 - LTP - pty
+                 aarch64 - LTP - ipc
+                 aarch64 - LTP - tracing
+                 aarch64 - Firmware test suite
+                   s390x - LTP - cve
+                   s390x - LTP - sched
+                   s390x - LTP - syscalls
+                   s390x - LTP - can
+                   s390x - LTP - commands
+                   s390x - LTP - containers
+                   s390x - LTP - dio
+                   s390x - LTP - fs
+                   s390x - LTP - fsx
+                   s390x - LTP - math
+                   s390x - LTP - hugetlb
+                   s390x - LTP - mm
+                   s390x - LTP - nptl
+                   s390x - LTP - pty
+                   s390x - LTP - ipc
+                   s390x - LTP - tracing
+                  x86_64 - LTP - cve
+                  x86_64 - LTP - sched
+                  x86_64 - LTP - syscalls
+                  x86_64 - LTP - can
+                  x86_64 - LTP - commands
+                  x86_64 - LTP - containers
+                  x86_64 - LTP - dio
+                  x86_64 - LTP - fs
+                  x86_64 - LTP - fsx
+                  x86_64 - LTP - math
+                  x86_64 - LTP - hugetlb
+                  x86_64 - LTP - mm
+                  x86_64 - LTP - nptl
+                  x86_64 - LTP - pty
+                  x86_64 - LTP - ipc
+                  x86_64 - LTP - tracing
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - LTP - cve
+                  x86_64 (debug) - LTP - sched
+                  x86_64 (debug) - LTP - syscalls
+                  x86_64 (debug) - LTP - can
+                  x86_64 (debug) - LTP - commands
+                  x86_64 (debug) - LTP - containers
+                  x86_64 (debug) - LTP - dio
+                  x86_64 (debug) - LTP - fs
+                  x86_64 (debug) - LTP - fsx
+                  x86_64 (debug) - LTP - math
+                  x86_64 (debug) - LTP - hugetlb
+                  x86_64 (debug) - LTP - mm
+                  x86_64 (debug) - LTP - nptl
+                  x86_64 (debug) - LTP - pty
+                  x86_64 (debug) - LTP - ipc
+                  x86_64 (debug) - LTP - tracing
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: podman: cannot assign requested address
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/852
+            Affected tests:
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
