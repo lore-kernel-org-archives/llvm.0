@@ -1,45 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E2D1FA0
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 13:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3D933EE
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 14:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659186671; x=1690722671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uSuryMV+764/ne8nNCoPnbffLiJ44XbJvucP19l+3u0=;
-  b=FnowfZdoB69AFBG9RujhoCSZFC8sd/fElCUvWjUvJHzrFUiV2gsRRo7H
-   Uj6/gG1kUdKBlFHokms5u7YF8jYzjJufROvPBZcJOlJjy9VVrqMwUeGQr
-   4i06XrD2YKLjb1vZesrogSFi62xUiFm8/fNlq0q63Kyp9FdrDLimKicCY
-   se9uVrfoiZRk2TNc3y3qWeEtHCfoqI3tNuqK+PxYz4wJ8jgLWnMJbeiiL
-   drjf3sFfNTvf9eY3ljxuNym4SV5H5LPTgrxR+H2rYt8BUt12r4lijhuDi
-   ugdRO83+zgvJeoYCNOqW5sxflCxWQu184ujoo0AtoyJpJ48yLmYWvbrZj
+  t=1659190992; x=1690726992;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v48dWDmofiDc0b3Xl6nQRMlsUqhCRrAcMEGIqFTPk3s=;
+  b=MAL04LE8CVaj6TkzB7GauCp9OuMkFu4p13o5mUxPwuRZUcZtm3KcO04R
+   rtgTMVoc9MKZnWjMvwyY6HkL85X7F0LnQ37cJSuJdrnIlWMPpvivWx3lQ
+   fcvutqk3yLSvv3mjR0qMZLiiC7fl7/pEo4sMgFz9e5FCKtBoGfOpZivOw
+   EcmhSjNtuOBaP11PFI3m1YQTsiNNhL21LPxc3VVMz5GbHXtgB8iCv0DTh
+   kkzwXt1wXzFDaiewOxktUcEtGAnoI2YWUyxS94/tcb/JRM8Q2qHXaeUtp
+   yL+1vstRSY5I2DJ5BYcvOiHcxWxTuj6tQRko+szYcHk14K6ChiNY6gfnn
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="289685080"
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="275811873"
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="289685080"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 06:11:11 -0700
+   d="scan'208";a="275811873"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 07:23:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="690999928"
+   d="scan'208";a="669555901"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Jul 2022 06:11:08 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jul 2022 07:23:10 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHmFI-000Cqi-0b;
-	Sat, 30 Jul 2022 13:11:08 +0000
-Date: Sat, 30 Jul 2022 21:10:17 +0800
+	id 1oHnMz-000CtX-2r;
+	Sat, 30 Jul 2022 14:23:09 +0000
+Date: Sat, 30 Jul 2022 22:22:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Liu Chao <liuchao173@huawei.com>, linux-kernel@vger.kernel.org,
-	tglx@linutronix.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, hewenliang4@huawei.com,
-	linfeilong@huawei.com
-Subject: Re: [PATCH] add miss time to CPUTIME_USER when kernel boots with
- highres=off
-Message-ID: <202207302033.Sreft8cI-lkp@intel.com>
-References: <20220730091456.3741503-1-liuchao173@huawei.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [morimoto:sound2-2022-07-28-v1 40/51]
+ sound/soc/mediatek/mt8183/mt8183-dai-pcm.c:196:8: error: no member named
+ 'playback_widget' in 'struct snd_soc_dai'
+Message-ID: <202207302255.7Ex5FrZf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,142 +46,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220730091456.3741503-1-liuchao173@huawei.com>
 
-Hi Liu,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Chao/add-miss-time-to-CPUTIME_USER-when-kernel-boots-with-highres-off/20220730-171718
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git cceeeb6a6d02e7b9a74ddd27a3225013b34174aa
-config: s390-randconfig-r044-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302033.Sreft8cI-lkp@intel.com/config)
+tree:   https://github.com/morimoto/linux sound2-2022-07-28-v1
+head:   c42e1fe957372fd9252332c31579f684e9b3a4a4
+commit: 963a70b0034020ab469f6b114e92ab53b644e4cb [40/51] ASoC: soc-dai.h: cleanup Playback/Capture data for snd_soc_dai
+config: arm64-randconfig-r025-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302255.7Ex5FrZf-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7ac63e1383163d700eb4212b689a272a4763e185
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Liu-Chao/add-miss-time-to-CPUTIME_USER-when-kernel-boots-with-highres-off/20220730-171718
-        git checkout 7ac63e1383163d700eb4212b689a272a4763e185
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/morimoto/linux/commit/963a70b0034020ab469f6b114e92ab53b644e4cb
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound2-2022-07-28-v1
+        git checkout 963a70b0034020ab469f6b114e92ab53b644e4cb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/time/hrtimer.c:32:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/time/hrtimer.c:32:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/time/hrtimer.c:32:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-                                     ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/hrtimer.c:754:19: error: static declaration of 'hrtimer_is_hres_enabled' follows non-static declaration
-   static inline int hrtimer_is_hres_enabled(void) { return 0; }
-                     ^
-   include/linux/hrtimer.h:329:12: note: previous declaration is here
-   extern int hrtimer_is_hres_enabled(void);
-              ^
-   16 warnings and 1 error generated.
+>> sound/soc/mediatek/mt8183/mt8183-dai-pcm.c:196:8: error: no member named 'playback_widget' in 'struct snd_soc_dai'
+                   dai->playback_widget->active,
+                   ~~~  ^
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+>> sound/soc/mediatek/mt8183/mt8183-dai-pcm.c:197:8: error: no member named 'capture_widget' in 'struct snd_soc_dai'
+                   dai->capture_widget->active);
+                   ~~~  ^
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-pcm.c:199:11: error: no member named 'playback_widget' in 'struct snd_soc_dai'
+           if (dai->playback_widget->active || dai->capture_widget->active)
+               ~~~  ^
+   sound/soc/mediatek/mt8183/mt8183-dai-pcm.c:199:43: error: no member named 'capture_widget' in 'struct snd_soc_dai'
+           if (dai->playback_widget->active || dai->capture_widget->active)
+                                               ~~~  ^
+   4 errors generated.
+--
+>> sound/soc/mediatek/mt8192/mt8192-dai-pcm.c:286:9: error: no member named 'playback_widget' in 'struct snd_soc_dai'
+                    dai->playback_widget->active,
+                    ~~~  ^
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                            ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+>> sound/soc/mediatek/mt8192/mt8192-dai-pcm.c:287:9: error: no member named 'capture_widget' in 'struct snd_soc_dai'
+                    dai->capture_widget->active);
+                    ~~~  ^
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                            ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   sound/soc/mediatek/mt8192/mt8192-dai-pcm.c:289:11: error: no member named 'playback_widget' in 'struct snd_soc_dai'
+           if (dai->playback_widget->active || dai->capture_widget->active)
+               ~~~  ^
+   sound/soc/mediatek/mt8192/mt8192-dai-pcm.c:289:43: error: no member named 'capture_widget' in 'struct snd_soc_dai'
+           if (dai->playback_widget->active || dai->capture_widget->active)
+                                               ~~~  ^
+   4 errors generated.
 
 
-vim +/hrtimer_is_hres_enabled +754 kernel/time/hrtimer.c
+vim +196 sound/soc/mediatek/mt8183/mt8183-dai-pcm.c
 
-54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16  753  
-54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16 @754  static inline int hrtimer_is_hres_enabled(void) { return 0; }
-75e3b37d059856 kernel/time/hrtimer.c Luiz Capitulino 2015-08-11  755  static inline void hrtimer_switch_to_hres(void) { }
-54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner 2007-02-16  756  
+a94aec035a122b Shunli Wang 2019-01-22  179  
+a94aec035a122b Shunli Wang 2019-01-22  180  /* dai ops */
+a94aec035a122b Shunli Wang 2019-01-22  181  static int mtk_dai_pcm_hw_params(struct snd_pcm_substream *substream,
+a94aec035a122b Shunli Wang 2019-01-22  182  				 struct snd_pcm_hw_params *params,
+a94aec035a122b Shunli Wang 2019-01-22  183  				 struct snd_soc_dai *dai)
+a94aec035a122b Shunli Wang 2019-01-22  184  {
+a94aec035a122b Shunli Wang 2019-01-22  185  	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+a94aec035a122b Shunli Wang 2019-01-22  186  	unsigned int rate = params_rate(params);
+a94aec035a122b Shunli Wang 2019-01-22  187  	unsigned int rate_reg = mt8183_rate_transform(afe->dev, rate, dai->id);
+a94aec035a122b Shunli Wang 2019-01-22  188  	unsigned int pcm_con = 0;
+a94aec035a122b Shunli Wang 2019-01-22  189  
+a94aec035a122b Shunli Wang 2019-01-22  190  	dev_dbg(afe->dev, "%s(), id %d, stream %d, rate %d, rate_reg %d, widget active p %d, c %d\n",
+a94aec035a122b Shunli Wang 2019-01-22  191  		__func__,
+a94aec035a122b Shunli Wang 2019-01-22  192  		dai->id,
+a94aec035a122b Shunli Wang 2019-01-22  193  		substream->stream,
+a94aec035a122b Shunli Wang 2019-01-22  194  		rate,
+a94aec035a122b Shunli Wang 2019-01-22  195  		rate_reg,
+a94aec035a122b Shunli Wang 2019-01-22 @196  		dai->playback_widget->active,
+a94aec035a122b Shunli Wang 2019-01-22 @197  		dai->capture_widget->active);
+a94aec035a122b Shunli Wang 2019-01-22  198  
+a94aec035a122b Shunli Wang 2019-01-22  199  	if (dai->playback_widget->active || dai->capture_widget->active)
+a94aec035a122b Shunli Wang 2019-01-22  200  		return 0;
+a94aec035a122b Shunli Wang 2019-01-22  201  
+a94aec035a122b Shunli Wang 2019-01-22  202  	switch (dai->id) {
+a94aec035a122b Shunli Wang 2019-01-22  203  	case MT8183_DAI_PCM_1:
+a94aec035a122b Shunli Wang 2019-01-22  204  		pcm_con |= AUD_BCLK_OUT_INV_NO_INVERSE << PCM_BCLK_OUT_INV_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  205  		pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM_TX_LCH_RPT_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  206  		pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM_VBT_16K_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  207  		pcm_con |= AUD_EXT_MODEM_SELECT_INTERNAL << PCM_EXT_MODEM_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  208  		pcm_con |= 0 << PCM_SYNC_LENGTH_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  209  		pcm_con |= AUD_PCM_ONE_BCK_CYCLE_SYNC << PCM_SYNC_TYPE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  210  		pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM_BT_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  211  		pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM_BYP_ASRC_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  212  		pcm_con |= AUD_PCM_CLOCK_SLAVE_MODE << PCM_SLAVE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  213  		pcm_con |= rate_reg << PCM_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  214  		pcm_con |= AUD_PCM_FMT_PCM_MODE_B << PCM_FMT_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  215  
+a94aec035a122b Shunli Wang 2019-01-22  216  		regmap_update_bits(afe->regmap, PCM_INTF_CON1,
+a94aec035a122b Shunli Wang 2019-01-22  217  				   0xfffffffe, pcm_con);
+a94aec035a122b Shunli Wang 2019-01-22  218  		break;
+a94aec035a122b Shunli Wang 2019-01-22  219  	case MT8183_DAI_PCM_2:
+a94aec035a122b Shunli Wang 2019-01-22  220  		pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM2_TX_LCH_RPT_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  221  		pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM2_VBT_16K_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  222  		pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM2_BT_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  223  		pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM2_AFIFO_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  224  		pcm_con |= AUD_PCM_WLEN_PCM_32_BCK_CYCLES << PCM2_WLEN_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  225  		pcm_con |= rate_reg << PCM2_MODE_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  226  		pcm_con |= AUD_PCM_FMT_PCM_MODE_B << PCM2_FMT_SFT;
+a94aec035a122b Shunli Wang 2019-01-22  227  
+a94aec035a122b Shunli Wang 2019-01-22  228  		regmap_update_bits(afe->regmap, PCM2_INTF_CON,
+a94aec035a122b Shunli Wang 2019-01-22  229  				   0xfffffffe, pcm_con);
+a94aec035a122b Shunli Wang 2019-01-22  230  		break;
+a94aec035a122b Shunli Wang 2019-01-22  231  	default:
+a94aec035a122b Shunli Wang 2019-01-22  232  		dev_warn(afe->dev, "%s(), id %d not support\n",
+a94aec035a122b Shunli Wang 2019-01-22  233  			 __func__, dai->id);
+a94aec035a122b Shunli Wang 2019-01-22  234  		return -EINVAL;
+a94aec035a122b Shunli Wang 2019-01-22  235  	}
+a94aec035a122b Shunli Wang 2019-01-22  236  
+a94aec035a122b Shunli Wang 2019-01-22  237  	return 0;
+a94aec035a122b Shunli Wang 2019-01-22  238  }
+a94aec035a122b Shunli Wang 2019-01-22  239  
+
+:::::: The code at line 196 was first introduced by commit
+:::::: a94aec035a122bf6d1a05b14f02f34c34b99506a ASoC: mediatek: mt8183: add platform driver
+
+:::::: TO: Shunli Wang <shunli.wang@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
