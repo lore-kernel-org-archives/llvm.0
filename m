@@ -1,274 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072D123A4
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 05:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659157917;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Y4HlmFyGdOtqkaxYVTOMObj3V097xUYQMMYAFTjZs/g=;
-	b=B891yVTCDJFjeES9S6zvxj7duc8L7Bsf/P1sLHWcc4heXGm5OZM2kB3tm/FZRTrMJ4vxIM
-	Tg+Jkq/I3pVQKXsep5jZ01y+kszpiYoejwoqa5xM/7CW/mwSKWAnH0ZED0Izev6NtgF0qf
-	b5BNcTRXvtQv9rY9b+XuIKrOZNLCHa0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-Le-COSfVP22bBVDxcIR64g-1; Sat, 30 Jul 2022 01:11:56 -0400
-X-MC-Unique: Le-COSfVP22bBVDxcIR64g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B4B001C05EB5
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 05:11:55 +0000 (UTC)
-Received: from [172.64.0.89] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A3DD540466AA;
-	Sat, 30 Jul 2022 05:11:55 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
- (mainline.kernel.org-clang) [bb83c99d]
-Date: Sat, 30 Jul 2022 05:11:55 -0000
-CC: xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71BE23BB
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 06:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659162767; x=1690698767;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G7OZtJYEwW7lknYm40+K0W+Er9UsWRL6hJ0Mvc/VOVU=;
+  b=e+JhBDuzaDK0x2y+bs+RToImhdjfxy8X1cBQEj9TjJcHGVZudxYP7qAm
+   A+mmiSmT6sZat1/31im884eSOuEM8x3Hl5snG5QNVyw+H8oRP5Ed84kIa
+   rZUH0g5oEU7x7SfAemmzG6soXanxDh904CGtA0DD5xBkBHvNWDF+UpnYb
+   jGX8ju8mv6pwoJnrHYM49Q4rBwW/HMTHMNetc5b8tOIAWAMkXNj6/68mN
+   XWcAesVXWyJzB97U2ew56p8DVWhgN5xtE6gy7DK2fbJqSr2jBDVQ8hGHw
+   sM//0JV6D+THdGhqH/sk4stoyxEYh1RHnCFCNV4Og6hUHb9iixQazlwER
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="352899612"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="352899612"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 23:32:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="669492113"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Jul 2022 23:32:45 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oHg1k-000CWC-2X;
+	Sat, 30 Jul 2022 06:32:44 +0000
+Date: Sat, 30 Jul 2022 14:32:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
+Subject: [atishp04:kvm_perf_rfc_snapshot 25/25]
+ arch/riscv/kernel/vdso.c:22:8: error: redefinition of 'vdso_data'
+Message-ID: <202207301403.BxXhQQKp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-Message-Id: <21669.122073001115600147@us-mta-588.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/atishp04/linux kvm_perf_rfc_snapshot
+head:   42182a0a79a8768e22fd70232c3aca2bc1a26a43
+commit: 42182a0a79a8768e22fd70232c3aca2bc1a26a43 [25/25] RISC-V: PoC for SBI PMU SNAPSHOT
+config: riscv-randconfig-r021-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301403.BxXhQQKp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/atishp04/linux/commit/42182a0a79a8768e22fd70232c3aca2bc1a26a43
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 kvm_perf_rfc_snapshot
+        git checkout 42182a0a79a8768e22fd70232c3aca2bc1a26a43
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49235
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4592977
-         aarch64 - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4592979
-          x86_64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593249
-          x86_64 - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593250
-          x86_64 - xfstests - nfsv4.2
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593251
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593252
-          x86_64 (debug) - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593034
-          x86_64 (debug) - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593035
-          x86_64 (debug) - xfstests - nfsv4.2
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593036
-          x86_64 (debug) - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4593037
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - LTP - cve
-                 aarch64 - LTP - sched
-                 aarch64 - LTP - syscalls
-                 aarch64 - LTP - can
-                 aarch64 - LTP - commands
-                 aarch64 - LTP - containers
-                 aarch64 - LTP - dio
-                 aarch64 - LTP - fs
-                 aarch64 - LTP - fsx
-                 aarch64 - LTP - math
-                 aarch64 - LTP - hugetlb
-                 aarch64 - LTP - mm
-                 aarch64 - LTP - nptl
-                 aarch64 - LTP - pty
-                 aarch64 - LTP - ipc
-                 aarch64 - LTP - tracing
-                 aarch64 - Firmware test suite
-                   s390x - LTP - cve
-                   s390x - LTP - sched
-                   s390x - LTP - syscalls
-                   s390x - LTP - can
-                   s390x - LTP - commands
-                   s390x - LTP - containers
-                   s390x - LTP - dio
-                   s390x - LTP - fs
-                   s390x - LTP - fsx
-                   s390x - LTP - math
-                   s390x - LTP - hugetlb
-                   s390x - LTP - mm
-                   s390x - LTP - nptl
-                   s390x - LTP - pty
-                   s390x - LTP - ipc
-                   s390x - LTP - tracing
-                  x86_64 - LTP - cve
-                  x86_64 - LTP - sched
-                  x86_64 - LTP - syscalls
-                  x86_64 - LTP - can
-                  x86_64 - LTP - commands
-                  x86_64 - LTP - containers
-                  x86_64 - LTP - dio
-                  x86_64 - LTP - fs
-                  x86_64 - LTP - fsx
-                  x86_64 - LTP - math
-                  x86_64 - LTP - hugetlb
-                  x86_64 - LTP - mm
-                  x86_64 - LTP - nptl
-                  x86_64 - LTP - pty
-                  x86_64 - LTP - ipc
-                  x86_64 - LTP - tracing
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - LTP - cve
-                  x86_64 (debug) - LTP - sched
-                  x86_64 (debug) - LTP - syscalls
-                  x86_64 (debug) - LTP - can
-                  x86_64 (debug) - LTP - commands
-                  x86_64 (debug) - LTP - containers
-                  x86_64 (debug) - LTP - dio
-                  x86_64 (debug) - LTP - fs
-                  x86_64 (debug) - LTP - fsx
-                  x86_64 (debug) - LTP - math
-                  x86_64 (debug) - LTP - hugetlb
-                  x86_64 (debug) - LTP - mm
-                  x86_64 (debug) - LTP - nptl
-                  x86_64 (debug) - LTP - pty
-                  x86_64 (debug) - LTP - ipc
-                  x86_64 (debug) - LTP - tracing
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: podman: cannot assign requested address
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/852
-            Affected tests:
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+   In file included from arch/riscv/kernel/vdso.c:17:
+   In file included from arch/riscv/include/asm/vdso/vsyscall.h:8:
+   In file included from include/vdso/datapage.h:137:
+>> arch/riscv/include/asm/vdso/gettimeofday.h:21:31: error: use of undeclared identifier '__NR_gettimeofday'
+           register long nr asm("a7") = __NR_gettimeofday;
+                                        ^
+>> arch/riscv/include/asm/vdso/gettimeofday.h:37:31: error: use of undeclared identifier '__NR_clock_gettime'
+           register long nr asm("a7") = __NR_clock_gettime;
+                                        ^
+>> arch/riscv/include/asm/vdso/gettimeofday.h:53:31: error: use of undeclared identifier '__NR_clock_getres'
+           register long nr asm("a7") = __NR_clock_getres;
+                                        ^
+>> arch/riscv/kernel/vdso.c:22:8: error: redefinition of 'vdso_data'
+   struct vdso_data {
+          ^
+   include/vdso/datapage.h:90:8: note: previous definition is here
+   struct vdso_data {
+          ^
+   4 errors generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/vdso_data +22 arch/riscv/kernel/vdso.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+bb4a23c994aebc Tong Tiangen   2021-09-01  18  
+0aa2ec8a475fb5 Guo Ren        2021-01-02  19  #ifdef CONFIG_GENERIC_TIME_VSYSCALL
+ad5d1122b82fbd Vincent Chen   2020-06-09  20  #include <vdso/datapage.h>
+ad5d1122b82fbd Vincent Chen   2020-06-09  21  #else
+bb4a23c994aebc Tong Tiangen   2021-09-01 @22  struct vdso_data {
+bb4a23c994aebc Tong Tiangen   2021-09-01  23  };
+ad5d1122b82fbd Vincent Chen   2020-06-09  24  #endif
+76d2a0493a17d4 Palmer Dabbelt 2017-07-10  25  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: The code at line 22 was first introduced by commit
+:::::: bb4a23c994aebcd96c567a0be8e964d516bd4a61 riscv/vdso: Refactor asm/vdso.h
 
+:::::: TO: Tong Tiangen <tongtiangen@huawei.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
