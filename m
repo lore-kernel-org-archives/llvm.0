@@ -1,135 +1,295 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECC123BB
-	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 08:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659168960; x=1690704960;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oMLBLUEV0c73UmvX+x0ng5G4mX/0i7sf3gVdg+mllL8=;
-  b=n+X4EAyP8YyDYeGHrDM5rj2SQ4Y1nBAzy/Hh6gB9Ncbv7T97LJzek+g1
-   /5bWkGPfbh5ns28lJGNBpldEvn6YV/M8KXQvIhzx4WVrZoupq0zsyykHk
-   Rkczs7h3F83VQHLPqMFveoURWjJ9xH9Bl4gR4MczSkQb0XQTScOyQo4KU
-   5RWdc9udACEeofwHGFyExtoux3u1vbUcRvmIDz7VgV93+SQ3SljnupsNP
-   WBQRrK8uckhmDHQLbL87t835LBizS1B75g8hQdEDlEBzkB9pPMFA1RWza
-   vuVVOxbtuKei5NmRYGBBaOmLVlDbkg5YJr+VOEShKwIddXh8WXQ64300/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314712512"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="314712512"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 01:15:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="727964734"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 01:15:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oHhdc-000CdU-1v;
-	Sat, 30 Jul 2022 08:15:56 +0000
-Date: Sat, 30 Jul 2022 16:14:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Phillip Potter <phil@philpotter.co.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [staging:staging-testing 54/54]
- drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202207301623.BfMKLfhv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2CF28E8
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 11:02:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659178924;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Z4wQkTnm9WBHnFnipb77nH03LA1kfBMYBHPZY28C4+s=;
+	b=A+e9FP25WLXQXSg6KhQ7Ldn6CF89sDOpmsH5DX62EcAyKpLdRRWDuK4R6OsGteXgF3+MIi
+	iAhc3KSDCOMV0DZLKDsgXXBua3b+Z/zlMtgITNxkY/mOt4JQHL63YyCOzcOHuk/aQJGS6H
+	JV4YiLso038co6v9VTeahTRbrRjGJ64=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-sweubFN8O7ChBPKPEa4VQA-1; Sat, 30 Jul 2022 07:02:03 -0400
+X-MC-Unique: sweubFN8O7ChBPKPEa4VQA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C435E185A7B2
+	for <llvm@lists.linux.dev>; Sat, 30 Jul 2022 11:02:02 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A27BB40CF8E7;
+	Sat, 30 Jul 2022 11:02:02 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [1c8ac1c4]
+Date: Sat, 30 Jul 2022 11:02:02 -0000
+CC: xzhou@redhat.com, omosnace@redhat.com, feliu@redhat.com, mmalik@redhat.com,
+ jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <09469.122073007020301270@us-mta-618.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
-head:   f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-commit: f3a76018dd55d8ddcd28cb47049f46ae5c0ce557 [54/54] staging: r8188eu: remove initializer from ret in rtw_pwr_wakeup
-config: hexagon-randconfig-r015-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301623.BfMKLfhv-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?id=f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-        git remote add staging https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-        git fetch --no-tags staging staging-testing
-        git checkout f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/r8188eu/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/r8188eu/core/rtw_pwrctrl.c:409:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:2: note: remove the 'if' if its condition is always true
-           if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/r8188eu/core/rtw_pwrctrl.c:384:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +400 drivers/staging/r8188eu/core/rtw_pwrctrl.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49257
 
-15865124feed88 Phillip Potter  2021-07-28  376  
-57c27d38ff9379 Michael Straube 2022-04-03  377  /* Wake the NIC up from: 1)IPS 2)USB autosuspend */
-719cf66c8a2b06 Michael Straube 2022-04-03  378  int rtw_pwr_wakeup(struct adapter *padapter)
-15865124feed88 Phillip Potter  2021-07-28  379  {
-15865124feed88 Phillip Potter  2021-07-28  380  	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-15865124feed88 Phillip Potter  2021-07-28  381  	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-3b9d0da6aa08a3 Martin Kaiser   2022-04-13  382  	unsigned long timeout = jiffies + msecs_to_jiffies(3000);
-1dd0ac70494c1d Martin Kaiser   2022-04-13  383  	unsigned long deny_time;
-f3a76018dd55d8 Phillip Potter  2022-07-29  384  	int ret;
-15865124feed88 Phillip Potter  2021-07-28  385  
-3b9d0da6aa08a3 Martin Kaiser   2022-04-13  386  	while (pwrpriv->ps_processing && time_before(jiffies, timeout))
-d21edee5a4276b Larry Finger    2021-08-05  387  		msleep(10);
-15865124feed88 Phillip Potter  2021-07-28  388  
-15865124feed88 Phillip Potter  2021-07-28  389  	/* I think this should be check in IPS, LPS, autosuspend functions... */
-15865124feed88 Phillip Potter  2021-07-28  390  	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
-2b5002e2cc1483 Phillip Potter  2022-07-25  391  		ret = 0;
-15865124feed88 Phillip Potter  2021-07-28  392  		goto exit;
-15865124feed88 Phillip Potter  2021-07-28  393  	}
-294e69c69c4d4a Martin Kaiser   2022-04-13  394  
-294e69c69c4d4a Martin Kaiser   2022-04-13  395  	if (pwrpriv->rf_pwrstate == rf_off && ips_leave(padapter) == _FAIL) {
-2b5002e2cc1483 Phillip Potter  2022-07-25  396  		ret = -ENOMEM;
-15865124feed88 Phillip Potter  2021-07-28  397  		goto exit;
-15865124feed88 Phillip Potter  2021-07-28  398  	}
-15865124feed88 Phillip Potter  2021-07-28  399  
-a9f136fa7e67fd Martin Kaiser   2022-04-13 @400  	if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
-2b5002e2cc1483 Phillip Potter  2022-07-25  401  		ret = -EBUSY;
-15865124feed88 Phillip Potter  2021-07-28  402  		goto exit;
-15865124feed88 Phillip Potter  2021-07-28  403  	}
-15865124feed88 Phillip Potter  2021-07-28  404  
-15865124feed88 Phillip Potter  2021-07-28  405  exit:
-1dd0ac70494c1d Martin Kaiser   2022-04-13  406  	deny_time = jiffies + msecs_to_jiffies(RTW_PWR_STATE_CHK_INTERVAL);
-1dd0ac70494c1d Martin Kaiser   2022-04-13  407  	if (time_before(pwrpriv->ips_deny_time, deny_time))
-1dd0ac70494c1d Martin Kaiser   2022-04-13  408  		pwrpriv->ips_deny_time = deny_time;
-15865124feed88 Phillip Potter  2021-07-28  409  	return ret;
-15865124feed88 Phillip Potter  2021-07-28  410  }
-15865124feed88 Phillip Potter  2021-07-28  411  
+One or more kernel tests failed:
 
-:::::: The code at line 400 was first introduced by commit
-:::::: a9f136fa7e67fdef97ad6c4be5f04f60ad78b5f3 staging: r8188eu: make return values consistent
+    Unrecognized or new issues:
+         aarch64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598770
+         aarch64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598773
+           s390x - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598936
+          x86_64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598527
+          x86_64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598528
+          x86_64 - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598529
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598530
+          x86_64 (debug) - stress: stress-ng - cpu-cache
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598701
+          x86_64 (debug) - Networking MACsec: sanity
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598779
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598842
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598843
+          x86_64 (debug) - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598844
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4598845
 
-:::::: TO: Martin Kaiser <martin@kaiser.cx>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - LTP - cve
+                 aarch64 - LTP - sched
+                 aarch64 - LTP - syscalls
+                 aarch64 - LTP - can
+                 aarch64 - LTP - commands
+                 aarch64 - LTP - containers
+                 aarch64 - LTP - dio
+                 aarch64 - LTP - fs
+                 aarch64 - LTP - fsx
+                 aarch64 - LTP - math
+                 aarch64 - LTP - hugetlb
+                 aarch64 - LTP - mm
+                 aarch64 - LTP - nptl
+                 aarch64 - LTP - pty
+                 aarch64 - LTP - ipc
+                 aarch64 - LTP - tracing
+                 aarch64 - Firmware test suite
+                   s390x - LTP - cve
+                   s390x - LTP - sched
+                   s390x - LTP - syscalls
+                   s390x - LTP - can
+                   s390x - LTP - commands
+                   s390x - LTP - containers
+                   s390x - LTP - dio
+                   s390x - LTP - fs
+                   s390x - LTP - fsx
+                   s390x - LTP - math
+                   s390x - LTP - hugetlb
+                   s390x - LTP - mm
+                   s390x - LTP - nptl
+                   s390x - LTP - pty
+                   s390x - LTP - ipc
+                   s390x - LTP - tracing
+                  x86_64 - LTP - cve
+                  x86_64 - LTP - sched
+                  x86_64 - LTP - syscalls
+                  x86_64 - LTP - can
+                  x86_64 - LTP - commands
+                  x86_64 - LTP - containers
+                  x86_64 - LTP - dio
+                  x86_64 - LTP - fs
+                  x86_64 - LTP - fsx
+                  x86_64 - LTP - math
+                  x86_64 - LTP - hugetlb
+                  x86_64 - LTP - mm
+                  x86_64 - LTP - nptl
+                  x86_64 - LTP - pty
+                  x86_64 - LTP - ipc
+                  x86_64 - LTP - tracing
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - LTP - cve
+                  x86_64 (debug) - LTP - sched
+                  x86_64 (debug) - LTP - syscalls
+                  x86_64 (debug) - LTP - can
+                  x86_64 (debug) - LTP - commands
+                  x86_64 (debug) - LTP - containers
+                  x86_64 (debug) - LTP - dio
+                  x86_64 (debug) - LTP - fs
+                  x86_64 (debug) - LTP - fsx
+                  x86_64 (debug) - LTP - math
+                  x86_64 (debug) - LTP - hugetlb
+                  x86_64 (debug) - LTP - mm
+                  x86_64 (debug) - LTP - nptl
+                  x86_64 (debug) - LTP - pty
+                  x86_64 (debug) - LTP - ipc
+                  x86_64 (debug) - LTP - tracing
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: podman: cannot assign requested address
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/852
+            Affected tests:
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
