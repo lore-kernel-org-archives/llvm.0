@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6088515A9
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 10:46:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7FC17C4
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 11:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659264366; x=1690800366;
+  t=1659268631; x=1690804631;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=b7rPqzWvTB28jUtMPTK/RVgxxjAwMYIvz3AdRth09Os=;
-  b=RG2NEyvY/4VlOAIAQQ5QJWbHzQZXphEF6dIeBax3xfBNnWhA2a59gZRK
-   sU7f/sb4+vNd6dUytQYNYrz42HgUxUD/GxAS7yJJ1YfivqjFZI/fVFNcm
-   XSucONnFi9kxi9O8W2pAMJzmEBrMpO3xV5nvvyg7euYX30NKFToA0IUzZ
-   jwgbYMT+V6Hs57Sa6/qhdf2EB2f88hAczN5Ni5hrzzQaDZCSKMMUwTsrX
-   hatQKjIMCwPj7jz6028Cgoz4BKsAWj9/86MagwmGO7yePxK0W/3YhOZI5
-   OBma351581BVsO0GytCLWciOSe2koqCXRtMsUtCFas7WnaLo2fhaWL4J5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="350691873"
+  bh=4kG6dEiYKhvyL2iIJLg8PKK6cLIviKKJUX39G4/rpd4=;
+  b=V5H10XMlO990lYuWBTzfUiBFNxhu6GZugPOSK648dS/4PDS+y9vFhaiY
+   rvzZSnQkEDNy9G3aflOCiT7KToLWcWsqS/0WR9BEvLXFaOAbPJ6P+RTVd
+   y07qNtNAr4pLpWb1rU7Q27TJPLK9IwgqQJyeN5segtDKDNgshobHZ4cku
+   y+8Rh3+hRd0wnRWESsPDDufiyuA311uvt1KMTLS3f4r+EZxN2gwbpFTUq
+   B2rajK4x3H5kRtkULJVGFPl0y/7UPS28vZfd5kKW11px/Lo5cfDanY1I4
+   yv87C/mvXljsdkiyZx45qv9USYTKPRGguzTUQt0VJpUwWT/YPJ/7pOnGe
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268755507"
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350691873"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 03:46:05 -0700
+   d="scan'208";a="268755507"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 04:57:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634587333"
+   d="scan'208";a="929248697"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 03:46:04 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2022 04:57:09 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oI6SR-000E2u-2C;
-	Sun, 31 Jul 2022 10:46:03 +0000
-Date: Sun, 31 Jul 2022 18:45:25 +0800
+	id 1oI7ZE-000E69-2i;
+	Sun, 31 Jul 2022 11:57:08 +0000
+Date: Sun, 31 Jul 2022 19:56:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
-Subject: [steev:linux-v5.19.0-rc8-tests 116/182]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1747:10: error: initializer
- element is not a compile-time constant
-Message-ID: <202207311819.h1pTmAEB-lkp@intel.com>
+Subject: [steev:linux-v5.19.0-rc8-tests 146/182]
+ drivers/gpu/drm/msm/dsi/dsi_host.c:1997:14: warning: variable 'device_node'
+ is uninitialized when used here
+Message-ID: <202207311957.wVEYCh2c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,18 +49,18 @@ Content-Disposition: inline
 
 tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
 head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
-commit: 2a19272fda8c6e9423a40b3b217a6c75333f48ed [116/182] drm/msm/dpu: make dpu hardware catalog static const
-config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311819.h1pTmAEB-lkp@intel.com/config)
+commit: d99732349a84f6046d58df883c6c68fd7351faa9 [146/182] drm/msm/dsi: switch to DRM_PANEL_BRIDGE
+config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311957.wVEYCh2c-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/steev/linux/commit/2a19272fda8c6e9423a40b3b217a6c75333f48ed
+        # https://github.com/steev/linux/commit/d99732349a84f6046d58df883c6c68fd7351faa9
         git remote add steev https://github.com/steev/linux
         git fetch --no-tags steev linux-v5.19.0-rc8-tests
-        git checkout 2a19272fda8c6e9423a40b3b217a6c75333f48ed
+        git checkout d99732349a84f6046d58df883c6c68fd7351faa9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
@@ -68,92 +68,87 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1747:10: error: initializer element is not a compile-time constant
-           .perf = msm8998_perf_data,
-                   ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1770:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sdm845_regdma,
-                      ^~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1794:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sdm845_regdma,
-                      ^~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1820:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sm8150_regdma,
-                      ^~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1844:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sm8150_regdma,
-                      ^~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1872:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sm8250_regdma,
-                      ^~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1893:10: error: initializer element is not a compile-time constant
-           .perf = sc7280_perf_data,
-                   ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1916:13: error: initializer element is not a compile-time constant
-           .dma_cfg = sdm845_regdma,
-                      ^~~~~~~~~~~~~
-   8 errors generated.
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:1997:14: warning: variable 'device_node' is uninitialized when used here [-Wuninitialized]
+           of_node_put(device_node);
+                       ^~~~~~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_host.c:1964:44: note: initialize the variable 'device_node' to silence this warning
+           struct device_node *endpoint, *device_node;
+                                                     ^
+                                                      = NULL
+   1 warning generated.
+--
+>> drivers/gpu/drm/msm/dsi/dsi_manager.c:533:7: warning: variable 'connector' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (ret < 0)
+                       ^~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_manager.c:551:9: note: uninitialized use occurs here
+           return connector;
+                  ^~~~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_manager.c:533:3: note: remove the 'if' if its condition is always true
+                   if (ret < 0)
+                   ^~~~~~~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_manager.c:509:33: note: initialize the variable 'connector' to silence this warning
+           struct drm_connector *connector;
+                                          ^
+                                           = NULL
+   1 warning generated.
 
 
-vim +1747 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+vim +/device_node +1997 drivers/gpu/drm/msm/dsi/dsi_host.c
 
-591e34a091d17d Krishna Manikandan         2021-04-06  1702  
-5334087ee7438f Loic Poulain               2022-02-14  1703  static const struct dpu_perf_cfg qcm2290_perf_data = {
-5334087ee7438f Loic Poulain               2022-02-14  1704  	.max_bw_low = 2700000,
-5334087ee7438f Loic Poulain               2022-02-14  1705  	.max_bw_high = 2700000,
-5334087ee7438f Loic Poulain               2022-02-14  1706  	.min_core_ib = 1300000,
-5334087ee7438f Loic Poulain               2022-02-14  1707  	.min_llcc_ib = 0,
-5334087ee7438f Loic Poulain               2022-02-14  1708  	.min_dram_ib = 1600000,
-5334087ee7438f Loic Poulain               2022-02-14  1709  	.min_prefill_lines = 24,
-5334087ee7438f Loic Poulain               2022-02-14  1710  	.danger_lut_tbl = {0xff, 0x0, 0x0},
-5334087ee7438f Loic Poulain               2022-02-14  1711  	.safe_lut_tbl = {0xfff0, 0x0, 0x0},
-5334087ee7438f Loic Poulain               2022-02-14  1712  	.qos_lut_tbl = {
-5334087ee7438f Loic Poulain               2022-02-14  1713  		{.nentry = ARRAY_SIZE(qcm2290_qos_linear),
-5334087ee7438f Loic Poulain               2022-02-14  1714  		.entries = qcm2290_qos_linear
-5334087ee7438f Loic Poulain               2022-02-14  1715  		},
-5334087ee7438f Loic Poulain               2022-02-14  1716  	},
-5334087ee7438f Loic Poulain               2022-02-14  1717  	.cdp_cfg = {
-5334087ee7438f Loic Poulain               2022-02-14  1718  		{.rd_enable = 1, .wr_enable = 1},
-5334087ee7438f Loic Poulain               2022-02-14  1719  		{.rd_enable = 1, .wr_enable = 0}
-5334087ee7438f Loic Poulain               2022-02-14  1720  	},
-5334087ee7438f Loic Poulain               2022-02-14  1721  	.clk_inefficiency_factor = 105,
-5334087ee7438f Loic Poulain               2022-02-14  1722  	.bw_inefficiency_factor = 120,
-5334087ee7438f Loic Poulain               2022-02-14  1723  };
-25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1724  /*************************************************************
-2a19272fda8c6e Dmitry Baryshkov           2022-06-01  1725   * Hardware catalog
-25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1726   *************************************************************/
-25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1727  
-2a19272fda8c6e Dmitry Baryshkov           2022-06-01  1728  static const struct dpu_mdss_cfg msm8998_dpu_cfg = {
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1729  	.caps = &msm8998_dpu_caps,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1730  	.mdp_count = ARRAY_SIZE(msm8998_mdp),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1731  	.mdp = msm8998_mdp,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1732  	.ctl_count = ARRAY_SIZE(msm8998_ctl),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1733  	.ctl = msm8998_ctl,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1734  	.sspp_count = ARRAY_SIZE(msm8998_sspp),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1735  	.sspp = msm8998_sspp,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1736  	.mixer_count = ARRAY_SIZE(msm8998_lm),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1737  	.mixer = msm8998_lm,
-6452cbd6f04cd5 Dmitry Baryshkov           2022-02-22  1738  	.dspp_count = ARRAY_SIZE(msm8998_dspp),
-6452cbd6f04cd5 Dmitry Baryshkov           2022-02-22  1739  	.dspp = msm8998_dspp,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1740  	.pingpong_count = ARRAY_SIZE(sdm845_pp),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1741  	.pingpong = sdm845_pp,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1742  	.intf_count = ARRAY_SIZE(msm8998_intf),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1743  	.intf = msm8998_intf,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1744  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1745  	.vbif = msm8998_vbif,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1746  	.reg_dma_count = 0,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13 @1747  	.perf = msm8998_perf_data,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1748  	.mdss_irqs = IRQ_SM8250_MASK,
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1749  };
-94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1750  
+b9080324d6ca24 Vinod Koul    2022-04-06  1959  
+f7009d266d8b2f Archit Taneja 2015-06-25  1960  static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+f7009d266d8b2f Archit Taneja 2015-06-25  1961  {
+f7009d266d8b2f Archit Taneja 2015-06-25  1962  	struct device *dev = &msm_host->pdev->dev;
+f7009d266d8b2f Archit Taneja 2015-06-25  1963  	struct device_node *np = dev->of_node;
+a9ddac9c576571 Archit Taneja 2015-08-03  1964  	struct device_node *endpoint, *device_node;
+a1b1a4f7e4c3cf Archit Taneja 2017-01-04  1965  	int ret = 0;
+f7009d266d8b2f Archit Taneja 2015-06-25  1966  
+f7009d266d8b2f Archit Taneja 2015-06-25  1967  	/*
+b9ac76f6ac9841 Archit Taneja 2016-04-27  1968  	 * Get the endpoint of the output port of the DSI host. In our case,
+b9ac76f6ac9841 Archit Taneja 2016-04-27  1969  	 * this is mapped to port number with reg = 1. Don't return an error if
+b9ac76f6ac9841 Archit Taneja 2016-04-27  1970  	 * the remote endpoint isn't defined. It's possible that there is
+b9ac76f6ac9841 Archit Taneja 2016-04-27  1971  	 * nothing connected to the dsi output.
+f7009d266d8b2f Archit Taneja 2015-06-25  1972  	 */
+b9ac76f6ac9841 Archit Taneja 2016-04-27  1973  	endpoint = of_graph_get_endpoint_by_regs(np, 1, -1);
+f7009d266d8b2f Archit Taneja 2015-06-25  1974  	if (!endpoint) {
+6a41da17e87dee Mamta Shukla  2018-10-20  1975  		DRM_DEV_DEBUG(dev, "%s: no endpoint\n", __func__);
+f7009d266d8b2f Archit Taneja 2015-06-25  1976  		return 0;
+f7009d266d8b2f Archit Taneja 2015-06-25  1977  	}
+f7009d266d8b2f Archit Taneja 2015-06-25  1978  
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1979  	ret = dsi_host_parse_lane_data(msm_host, endpoint);
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1980  	if (ret) {
+6a41da17e87dee Mamta Shukla  2018-10-20  1981  		DRM_DEV_ERROR(dev, "%s: invalid lane configuration %d\n",
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1982  			__func__, ret);
+feb085ec8a3dc1 Sean Paul     2018-07-30  1983  		ret = -EINVAL;
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1984  		goto err;
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1985  	}
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1986  
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1987  	if (of_property_read_bool(np, "syscon-sfpb")) {
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1988  		msm_host->sfpb = syscon_regmap_lookup_by_phandle(np,
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1989  					"syscon-sfpb");
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1990  		if (IS_ERR(msm_host->sfpb)) {
+6a41da17e87dee Mamta Shukla  2018-10-20  1991  			DRM_DEV_ERROR(dev, "%s: failed to get sfpb regmap\n",
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1992  				__func__);
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1993  			ret = PTR_ERR(msm_host->sfpb);
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1994  		}
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1995  	}
+0c7df47f6a4c5d Archit Taneja 2015-10-14  1996  
+26f7d1f4d9ab10 Archit Taneja 2016-02-25 @1997  	of_node_put(device_node);
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1998  
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  1999  err:
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  2000  	of_node_put(endpoint);
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  2001  
+26f7d1f4d9ab10 Archit Taneja 2016-02-25  2002  	return ret;
+f7009d266d8b2f Archit Taneja 2015-06-25  2003  }
+f7009d266d8b2f Archit Taneja 2015-06-25  2004  
 
-:::::: The code at line 1747 was first introduced by commit
-:::::: 94391a14fc27383a60fc9499b631e5b6ccd9f075 drm/msm/dpu1: Add MSM8998 to hw catalog
+:::::: The code at line 1997 was first introduced by commit
+:::::: 26f7d1f4d9ab108b28b8d0f340b98941073c6f4d drm/msm/dsi: Parse DSI lanes via DT
 
-:::::: TO: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-:::::: CC: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+:::::: TO: Archit Taneja <architt@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
