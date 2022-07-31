@@ -1,44 +1,40 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27624A0B
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D6C15D9
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659310261; x=1690846261;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yVHqvUoE5HERyWFBC98VpBqCS2cdtSxp50XlxNO/c30=;
-  b=QANo+JavC0TJmCdi9om6ncrQFvX6ZIInxRqgs0A7ojq8d6rV388Qfd0B
-   Zp6P5tcpNAI5ptfjcF1ku0eJ5McypVpbNfXM7Qib7w7SiO0CbJONWjMlA
-   PiZW5S7wSCA7GIfSNrfvTvUNj9k0KBPVxiG5uzJ0wr/q5cA1GGqxfy2No
-   BhVcIXw7fIFTT0toqN7X0vZx4iWUKGsT6NM79MbWiiSh9i4VSzKw8ev6z
-   Y7sQasYvNDWIprpJNFdOxGbwIHDVq9kHR/MdZ5w9iJPCzXR2QDKN5F66g
-   u9/KOZoKuahm3KtHLYIs0V3xd9BfWVK1td2ClJami00P/ZoUzzUgtY8Mj
+  t=1659310260; x=1690846260;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=L7VXJdPyE/uwoIUSWUiakpLlSR4AbB/wRm3xII3L4OU=;
+  b=VHFcrXFsaRLN7DfRxAUYd22SCP4CjSufsByvFlpyq0dBUZkot9ldxWzH
+   MRKK7F86mGCxvQzM6BqNeKbZ+hY6/gD+0yXG+/fgbBfYgDDazYJDNUvrX
+   wbAb7X5dqvt+TFNyNIkOX+coNb2/noOhljXGziBypVX/c/uZR15lAzl0l
+   FVPKFwA7i/d2CAXUlgPM7iqSEbgBu1a/y9M8nysJjPCeaUCh8Cj4xcBCh
+   gr0/vRxqOUm8azfkLPMVckXbdLE08jR2dPn3UEHi2RIr9NzpG701FDxsF
+   9BAbAshThY8Giw/Dx13OUF0Nxv3lo6iVbpP+WEgcHgTOOVM1l6uAZCb+f
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="375337564"
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="289046986"
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="375337564"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 16:31:00 -0700
+   d="scan'208";a="289046986"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 16:30:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634705046"
+   d="scan'208";a="929353360"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 16:30:59 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2022 16:30:59 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oIIOg-000Ecv-1i;
+	id 1oIIOg-000Ect-1d;
 	Sun, 31 Jul 2022 23:30:58 +0000
-Date: Mon, 1 Aug 2022 07:30:35 +0800
+Date: Mon, 1 Aug 2022 07:30:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [jic23-iio:testing 21/30] drivers/iio/adc/at91-sama5d2_adc.c:790:11:
- warning: variable 'nbits' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202208010745.QZRYCihu-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: net/ipv6/ipv6.o: warning: objtool: seg6_local_fill_encap() falls
+ through to next function seg6_local_get_encap_size()
+Message-ID: <202208010736.vAZ7rWVB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,69 +44,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   e776e5ec0a21cc38f5e853d4dc98845d6e7f76b0
-commit: 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42 [21/30] iio: adc: at91-sama5d2_adc: adjust osr based on specific platform data
-config: arm-randconfig-r026-20220731 (https://download.01.org/0day-ci/archive/20220801/202208010745.QZRYCihu-lkp@intel.com/config)
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Masahiro Yamada <masahiroy@kernel.org>
+CC: Nicolas Schier <nicolas@fjasle.eu>
+CC: Sami Tolvanen <samitolvanen@google.com>
+
+Hi Masahiro,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   334c0ef6429f261c7f53dc035632435ffbc0c60d
+commit: c25e1c55822f9b3b53ccbf88b85644317a525752 kbuild: do not create *.prelink.o for Clang LTO or IBT
+date:   9 weeks ago
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220801/202208010736.vAZ7rWVB-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
-        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-        git fetch --no-tags jic23-iio testing
-        git checkout 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c25e1c55822f9b3b53ccbf88b85644317a525752
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c25e1c55822f9b3b53ccbf88b85644317a525752
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/at91-sama5d2_adc.c:790:11: warning: variable 'nbits' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           else if (st->oversampling_ratio == 16)
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:797:48: note: uninitialized use occurs here
-           diff = st->soc_info.platform->chan_realbits - nbits;
-                                                         ^~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:790:7: note: remove the 'if' if its condition is always true
-           else if (st->oversampling_ratio == 16)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:784:11: note: initialize the variable 'nbits' to silence this warning
-           int nbits, diff;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +790 drivers/iio/adc/at91-sama5d2_adc.c
-
-   781	
-   782	static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
-   783	{
-   784		int nbits, diff;
-   785	
-   786		if (st->oversampling_ratio == 1)
-   787			nbits = 12;
-   788		else if (st->oversampling_ratio == 4)
-   789			nbits = 13;
- > 790		else if (st->oversampling_ratio == 16)
-   791			nbits = 14;
-   792	
-   793		/*
-   794		 * We have nbits of real data and channel is registered as
-   795		 * st->soc_info.platform->chan_realbits, so shift left diff bits.
-   796		 */
-   797		diff = st->soc_info.platform->chan_realbits - nbits;
-   798		*val <<= diff;
-   799	
-   800		return IIO_VAL_INT;
-   801	}
-   802	
+>> net/ipv6/ipv6.o: warning: objtool: seg6_local_fill_encap() falls through to next function seg6_local_get_encap_size()
+>> net/ipv6/ipv6.o: warning: objtool: seg6_local_cmp_encap() falls through to next function input_action_end()
 
 -- 
 0-DAY CI Kernel Test Service
