@@ -1,50 +1,53 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368B95C8B
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 22:20:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659306001; x=1690842001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p4bRi8871G82SLgZMl5mZh7TvdfGyVkBGjPAY460NBQ=;
-  b=hQIw7DCU00l+BUZdgN4aqS7LXTZkqmfnX99ebUYLLQTVHuRGnx06E6Fx
-   J8oVd0cuEgWwnHFO/oPZrjJ0TovoNL9biFf8OaUN1/1au+Nij7hdID45R
-   VDbShNCDZl6NH18JFFWD5ZxnkDh2SIn95qCBK7UykqMCQia/Nm7TCJPZo
-   lOOI7cgAvzMGd1Jh/9/RdNxTJXoEFn3MkOc7TJS62X7QwHJVE0YZ4+JNC
-   CYvHz1oxtpC4CnZJCJuws4S+1vn/69PGv5vKpXrWgdvm0jQO3wE3pSIv3
-   EpWOl7U9ckv3Lg1XAgJ02r3wWrDDoxSa/V+9JgHI5DfdpAXq4cyf/zoGp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="353035430"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="353035430"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 15:20:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634695067"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 15:19:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oIHHx-000Eax-0P;
-	Sun, 31 Jul 2022 22:19:57 +0000
-Date: Mon, 1 Aug 2022 06:19:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Roman Gushchin <roman.gushchin@linux.dev>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Muchun Song <songmuchun@bytedance.com>,
-	Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH] fs/isofs: Replace kmap() with kmap_local_page()
-Message-ID: <202208010650.OP1Bigo2-lkp@intel.com>
-References: <20220731190101.7928-1-fmdefrancesco@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8467015D9
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:02:26 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id g12so9080275pfb.3
+        for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 16:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HiqBkou7TsDXWZ2bZ9jDnOVGt8hHICY7VSsWQ2Opi0I=;
+        b=IS3SvA25XetUr6LNZ+s3A/JfWHVWla1uJ3dL+GWYRa3wB0jbYs2SaFtdR1ONZmuo/7
+         gEQyEVKf8LgB8ubET2nLYEzmlU4jidwAl9vlHXILgkm8ipNaP6p8albKDo3Qd9JjmBFu
+         QvYa2G5IE/CJ69chHtBUWAWPPfdRzKUyOBIcNYxMebCZt4664vxJdhxO5Qn0xaSeit/N
+         hL2/0w+/miUhMW7Vnxg08jCjKTHSbncRsh5JW89AqX4h4uZgmb/Tfet8UdKaASW6DcQQ
+         WaxBj1SIEj0Qt5L1OiML2vPalCr1uzng0aV6wNIWnqFGe4nA0oBkr+/+hRre0G4wKbNm
+         3SHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HiqBkou7TsDXWZ2bZ9jDnOVGt8hHICY7VSsWQ2Opi0I=;
+        b=gBwJ/7Z6a7jZ56OXBO7v1FYM6NSFwF+kq5VDuQ35GViBPQ0+aE6sXaqYQhWze1PLXL
+         B/g8qxy6aK/d/ouKmcQXBcvmkskdWdDl/YwkKMtwUP2OsI6FtHZ7c7TPlOssETcrLa6B
+         MvFRZeweZUjhmuktRSI53da1ZjsKR0DACf3NNNVl4zhihrwjUa93rIZgtev8QvYMXLQA
+         Bp30atELClDhK42DNBe67IXEkA5FQ01u/ptMkWZ7XRwfgYcK7PqTySQSj+pskGyMQz2C
+         N1aElUdVsLdtNW6DuT7aqYFwTciYnzElelLBTze+nTrvpX7JJCmHsTLz/eoKRdFhREI+
+         RCqw==
+X-Gm-Message-State: AJIora8ryaT8arVt3+F0GuoCuVNHwViPtLAsqWLc6wKlgF1j3JN9K0rt
+	fsPno1C34nWxr3YLRXSToHA=
+X-Google-Smtp-Source: AGRyM1sE4jYBZfkZMDOxr5DyoRi73yAzT1WIcsVuRu8+at9KvBjAeMycEocydbJLxo1scKp+wpJ7bQ==
+X-Received: by 2002:a63:d055:0:b0:41b:539c:7125 with SMTP id s21-20020a63d055000000b0041b539c7125mr10860043pgi.461.1659308545891;
+        Sun, 31 Jul 2022 16:02:25 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016d710d8af7sm7957855pln.142.2022.07.31.16.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 16:02:25 -0700 (PDT)
+Date: Mon, 1 Aug 2022 08:02:23 +0900
+From: Stafford Horne <shorne@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-pci@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [helgaas-pci:pci/header-cleanup-immutable 2/6]
+ arch/x86/kernel/cpu/cyrix.c:277:3: error: use of undeclared identifier
+ 'isa_dma_bridge_buggy'
+Message-ID: <YucJ/9tvO1t8EbZs@antec>
+References: <202207301404.VdeSPptt-lkp@intel.com>
+ <CAK8P3a0w4iTQ9p+4Njfk8jPPv6dHn6dv-_VoE90rhToAwHY==A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,218 +56,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220731190101.7928-1-fmdefrancesco@gmail.com>
+In-Reply-To: <CAK8P3a0w4iTQ9p+4Njfk8jPPv6dHn6dv-_VoE90rhToAwHY==A@mail.gmail.com>
 
-Hi "Fabio,
+On Sun, Jul 31, 2022 at 10:29:00PM +0200, Arnd Bergmann wrote:
+> On Sat, Jul 30, 2022 at 8:53 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci/header-cleanup-immutable
+> > head:   933c5a4f87d92a865d1db76caf190f1a4a1927f9
+> > commit: abb4970ac33514c84b143516583eaf8cc47abd67 [2/6] PCI: Move isa_dma_bridge_buggy out of asm/dma.h
+> > config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220730/202207301404.VdeSPptt-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=abb4970ac33514c84b143516583eaf8cc47abd67
+> 
+> > >> arch/x86/kernel/cpu/cyrix.c:277:3: error: use of undeclared identifier 'isa_dma_bridge_buggy'
+> >                    isa_dma_bridge_buggy = 2;
+> >                    ^
+> 
+> 
+> This file now needs to #include the new linux/isa-dma.h header.
 
-Thank you for the patch! Perhaps something to improve:
+There is a patch on the branch that adds the include but it was not added into
+the patch 2/6 as we took the branch to be immutable to allow riscv to have
+branch to resolve a merge conflict.
 
-[auto build test WARNING on jack-fs/for_next]
-[also build test WARNING on akpm-mm/mm-everything linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-isofs-Replace-kmap-with-kmap_local_page/20220801-030233
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
-config: hexagon-randconfig-r041-20220801 (https://download.01.org/0day-ci/archive/20220801/202208010650.OP1Bigo2-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7c25888be273e928336283deae5b57f8ffa78a50
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-isofs-Replace-kmap-with-kmap_local_page/20220801-030233
-        git checkout 7c25888be273e928336283deae5b57f8ffa78a50
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/isofs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/isofs/compress.c:178:24: warning: comparison of distinct pointer types ('Byte *' (aka 'unsigned char *') and 'char *') [-Wcompare-distinct-pointer-types]
-                           if (stream.next_out != (char *)zisofs_sink_page) {
-                               ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/isofs/compress.c:189:41: warning: comparison of distinct pointer types ('Byte *' (aka 'unsigned char *') and 'char *') [-Wcompare-distinct-pointer-types]
-           if (stream.next_out && stream.next_out != (char *)zisofs_sink_page)
-                                  ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +178 fs/isofs/compress.c
-
-    34	
-    35	/*
-    36	 * Read data of @inode from @block_start to @block_end and uncompress
-    37	 * to one zisofs block. Store the data in the @pages array with @pcount
-    38	 * entries. Start storing at offset @poffset of the first page.
-    39	 */
-    40	static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
-    41					      loff_t block_end, int pcount,
-    42					      struct page **pages, unsigned poffset,
-    43					      int *errp)
-    44	{
-    45		unsigned int zisofs_block_shift = ISOFS_I(inode)->i_format_parm[1];
-    46		unsigned int bufsize = ISOFS_BUFFER_SIZE(inode);
-    47		unsigned int bufshift = ISOFS_BUFFER_BITS(inode);
-    48		unsigned int bufmask = bufsize - 1;
-    49		int i, block_size = block_end - block_start;
-    50		z_stream stream = { .total_out = 0,
-    51				    .avail_in = 0,
-    52				    .avail_out = 0, };
-    53		int zerr;
-    54		int needblocks = (block_size + (block_start & bufmask) + bufmask)
-    55					>> bufshift;
-    56		int haveblocks;
-    57		blkcnt_t blocknum;
-    58		struct buffer_head **bhs;
-    59		int curbh, curpage;
-    60	
-    61		if (block_size > deflateBound(1UL << zisofs_block_shift)) {
-    62			*errp = -EIO;
-    63			return 0;
-    64		}
-    65		/* Empty block? */
-    66		if (block_size == 0) {
-    67			for ( i = 0 ; i < pcount ; i++ ) {
-    68				if (!pages[i])
-    69					continue;
-    70				memzero_page(pages[i], 0, PAGE_SIZE);
-    71				SetPageUptodate(pages[i]);
-    72			}
-    73			return ((loff_t)pcount) << PAGE_SHIFT;
-    74		}
-    75	
-    76		/* Because zlib is not thread-safe, do all the I/O at the top. */
-    77		blocknum = block_start >> bufshift;
-    78		bhs = kcalloc(needblocks + 1, sizeof(*bhs), GFP_KERNEL);
-    79		if (!bhs) {
-    80			*errp = -ENOMEM;
-    81			return 0;
-    82		}
-    83		haveblocks = isofs_get_blocks(inode, blocknum, bhs, needblocks);
-    84		ll_rw_block(REQ_OP_READ, 0, haveblocks, bhs);
-    85	
-    86		curbh = 0;
-    87		curpage = 0;
-    88		/*
-    89		 * First block is special since it may be fractional.  We also wait for
-    90		 * it before grabbing the zlib mutex; odds are that the subsequent
-    91		 * blocks are going to come in in short order so we don't hold the zlib
-    92		 * mutex longer than necessary.
-    93		 */
-    94	
-    95		if (!bhs[0])
-    96			goto b_eio;
-    97	
-    98		wait_on_buffer(bhs[0]);
-    99		if (!buffer_uptodate(bhs[0])) {
-   100			*errp = -EIO;
-   101			goto b_eio;
-   102		}
-   103	
-   104		stream.workspace = zisofs_zlib_workspace;
-   105		mutex_lock(&zisofs_zlib_lock);
-   106			
-   107		zerr = zlib_inflateInit(&stream);
-   108		if (zerr != Z_OK) {
-   109			if (zerr == Z_MEM_ERROR)
-   110				*errp = -ENOMEM;
-   111			else
-   112				*errp = -EIO;
-   113			printk(KERN_DEBUG "zisofs: zisofs_inflateInit returned %d\n",
-   114				       zerr);
-   115			goto z_eio;
-   116		}
-   117	
-   118		while (curpage < pcount && curbh < haveblocks &&
-   119		       zerr != Z_STREAM_END) {
-   120			if (!stream.avail_out) {
-   121				if (pages[curpage]) {
-   122					stream.next_out = kmap_local_page(pages[curpage])
-   123							+ poffset;
-   124					stream.avail_out = PAGE_SIZE - poffset;
-   125					poffset = 0;
-   126				} else {
-   127					stream.next_out = (void *)&zisofs_sink_page;
-   128					stream.avail_out = PAGE_SIZE;
-   129				}
-   130			}
-   131			if (!stream.avail_in) {
-   132				wait_on_buffer(bhs[curbh]);
-   133				if (!buffer_uptodate(bhs[curbh])) {
-   134					*errp = -EIO;
-   135					break;
-   136				}
-   137				stream.next_in  = bhs[curbh]->b_data +
-   138							(block_start & bufmask);
-   139				stream.avail_in = min_t(unsigned, bufsize -
-   140							(block_start & bufmask),
-   141							block_size);
-   142				block_size -= stream.avail_in;
-   143				block_start = 0;
-   144			}
-   145	
-   146			while (stream.avail_out && stream.avail_in) {
-   147				zerr = zlib_inflate(&stream, Z_SYNC_FLUSH);
-   148				if (zerr == Z_BUF_ERROR && stream.avail_in == 0)
-   149					break;
-   150				if (zerr == Z_STREAM_END)
-   151					break;
-   152				if (zerr != Z_OK) {
-   153					/* EOF, error, or trying to read beyond end of input */
-   154					if (zerr == Z_MEM_ERROR)
-   155						*errp = -ENOMEM;
-   156					else {
-   157						printk(KERN_DEBUG
-   158						       "zisofs: zisofs_inflate returned"
-   159						       " %d, inode = %lu,"
-   160						       " page idx = %d, bh idx = %d,"
-   161						       " avail_in = %ld,"
-   162						       " avail_out = %ld\n",
-   163						       zerr, inode->i_ino, curpage,
-   164						       curbh, stream.avail_in,
-   165						       stream.avail_out);
-   166						*errp = -EIO;
-   167					}
-   168					goto inflate_out;
-   169				}
-   170			}
-   171	
-   172			if (!stream.avail_out) {
-   173				/* This page completed */
-   174				if (pages[curpage]) {
-   175					flush_dcache_page(pages[curpage]);
-   176					SetPageUptodate(pages[curpage]);
-   177				}
- > 178				if (stream.next_out != (char *)zisofs_sink_page) {
-   179					kunmap_local(stream.next_out);
-   180					stream.next_out = NULL;
-   181				}
-   182				curpage++;
-   183			}
-   184			if (!stream.avail_in)
-   185				curbh++;
-   186		}
-   187	inflate_out:
-   188		zlib_inflateEnd(&stream);
-   189		if (stream.next_out && stream.next_out != (char *)zisofs_sink_page)
-   190			kunmap_local(stream.next_out);
-   191	
-   192	z_eio:
-   193		mutex_unlock(&zisofs_zlib_lock);
-   194	
-   195	b_eio:
-   196		for (i = 0; i < haveblocks; i++)
-   197			brelse(bhs[i]);
-   198		kfree(bhs);
-   199		return stream.total_out;
-   200	}
-   201	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Stafford
