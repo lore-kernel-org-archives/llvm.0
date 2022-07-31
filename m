@@ -1,162 +1,281 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A006F15A3
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 05:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659244162; x=1690780162;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4MkDPWucBtTo8n//4AUx9bX+U8MS5kpW1L2mV3z9Hj0=;
-  b=kTV4kNppqWi0Re9UzjPC0dquGa5U/zTWeah3/kH5y/fwHe+sXKkcZCcr
-   7SgA6x2s3O42QLTX/Zn8q89E5qf1/V2FJ6dQd5V+Bt9cYxhzOqKUuSAph
-   5Cq7OoEwmAhNc2VHlYUxbkhaAU0fA49z//ouBe2RJRnGtpx8N6IRyqtKj
-   bsokRJLQScGbwsayfsLl3jerapLvWbZNWYYPWHN/1YIEVZWNa8U+Pe5i5
-   4QiggrDec5nZhevh5uBAazawASQcj9SvDTPphQR+6EWst+4OXgJ1nMe6x
-   7DdFl5jOCXcuP4qLay0S1dTE1mzH5uZX+YNRXQwQc5keMTxsEG1CjjDVv
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="290174835"
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="290174835"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 22:09:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="728122968"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 22:09:20 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oI1Ca-000DiT-0Z;
-	Sun, 31 Jul 2022 05:09:20 +0000
-Date: Sun, 31 Jul 2022 13:08:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/090-spi-hid 17/21]
- drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to
- undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202207311303.fsxdJJ2i-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F89015AD
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 07:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659253259;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1gxJmRj4jtX24aTxKN7v7nJ0gMF0FzQYidfR1p5IRg8=;
+	b=hdbssyvt64DgVpEn4etOify5urPDB6Pk2mRVzEJTLtjnapw3KKiPPKzSTJD96EnRCrX3E3
+	kyoXTf9DieuZJvGKqB/k454uy3BE1CO96F4pma0JMJQgHLraaX5ZWSidxopNDMUE6j9YvO
+	uo3rSubuj6XQNFBFYoDNrRMltq1Dj+s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-ML5Pv9QROAq15rOdbeoxOA-1; Sun, 31 Jul 2022 03:40:58 -0400
+X-MC-Unique: ML5Pv9QROAq15rOdbeoxOA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 253F385A581
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 07:40:58 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0ED16C15D4F;
+	Sun, 31 Jul 2022 07:40:58 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [62072526]
+Date: Sun, 31 Jul 2022 07:40:57 -0000
+CC: xzhou@redhat.com, feliu@redhat.com, jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <40011.122073103405800397@us-mta-407.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   e784b825a3358d79e5da5d9426c6eb37f79819b3
-commit: fca5de56d067159949909e595e6bf3ee10af0a91 [17/21] hid: Add Apple DockChannel HID transport driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220731/202207311303.fsxdJJ2i-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/fca5de56d067159949909e595e6bf3ee10af0a91
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout fca5de56d067159949909e595e6bf3ee10af0a91
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hid/dockchannel-hid/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-                              ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:569:62: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                   dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-                                                                      ~~~     ^~~~~~
-                                                                      %zu
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
-                      ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:830:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, work->hdr.length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:856:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, hdr->length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:7: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
-           bool defer = false;
-                ^
-   4 warnings and 2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49336
 
-   292	
-   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
-   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
-   295	{
-   296		int ret;
-   297		int report_id = *(u8*)data;
-   298	
-   299		mutex_lock(&iface->out_mutex);
-   300	
-   301		WARN_ON(iface->out_report != -1);
-   302		iface->out_report = report_id;
- > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-   304		iface->resp_buf = resp_buf;
-   305		iface->resp_size = resp_size;
-   306		reinit_completion(&iface->out_complete);
-   307	
-   308		ret = dchid_send(iface, iface->out_flags, data, size);
-   309		if (ret < 0)
-   310			goto done;
-   311	
-   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
-   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
-   314				report_id, iface->index, iface->name);
-   315			ret = -ETIMEDOUT;
-   316			goto done;
-   317		}
-   318	
-   319		ret = iface->resp_size;
-   320		if (iface->retcode) {
-   321			dev_err(iface->dchid->dev,
-   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
-   323				report_id, iface->index, iface->name, iface->retcode);
-   324			ret = -EIO;
-   325		}
-   326	
-   327	done:
-   328		iface->tx_seq++;
-   329		iface->out_report = -1;
-   330		iface->out_flags = 0;
-   331		iface->resp_buf = NULL;
-   332		iface->resp_size = 0;
-   333		mutex_unlock(&iface->out_mutex);
-   334		return ret;
-   335	}
-   336	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+         aarch64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4609043
+         aarch64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4609044
+          x86_64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608776
+          x86_64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608778
+          x86_64 - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608780
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608782
+          x86_64 (debug) - stress: stress-ng - cpu-cache
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608699
+          x86_64 (debug) - Networking MACsec: sanity
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608783
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608871
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608872
+          x86_64 (debug) - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608874
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4608876
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - LTP - cve
+                 aarch64 - LTP - sched
+                 aarch64 - LTP - syscalls
+                 aarch64 - LTP - can
+                 aarch64 - LTP - commands
+                 aarch64 - LTP - containers
+                 aarch64 - LTP - dio
+                 aarch64 - LTP - fs
+                 aarch64 - LTP - fsx
+                 aarch64 - LTP - math
+                 aarch64 - LTP - hugetlb
+                 aarch64 - LTP - mm
+                 aarch64 - LTP - nptl
+                 aarch64 - LTP - pty
+                 aarch64 - LTP - ipc
+                 aarch64 - LTP - tracing
+                 aarch64 - Firmware test suite
+                   s390x - LTP - cve
+                   s390x - LTP - sched
+                   s390x - LTP - syscalls
+                   s390x - LTP - can
+                   s390x - LTP - commands
+                   s390x - LTP - containers
+                   s390x - LTP - dio
+                   s390x - LTP - fs
+                   s390x - LTP - fsx
+                   s390x - LTP - math
+                   s390x - LTP - hugetlb
+                   s390x - LTP - mm
+                   s390x - LTP - nptl
+                   s390x - LTP - pty
+                   s390x - LTP - ipc
+                   s390x - LTP - tracing
+                  x86_64 - LTP - cve
+                  x86_64 - LTP - sched
+                  x86_64 - LTP - syscalls
+                  x86_64 - LTP - can
+                  x86_64 - LTP - commands
+                  x86_64 - LTP - containers
+                  x86_64 - LTP - dio
+                  x86_64 - LTP - fs
+                  x86_64 - LTP - fsx
+                  x86_64 - LTP - math
+                  x86_64 - LTP - hugetlb
+                  x86_64 - LTP - mm
+                  x86_64 - LTP - nptl
+                  x86_64 - LTP - pty
+                  x86_64 - LTP - ipc
+                  x86_64 - LTP - tracing
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - LTP - cve
+                  x86_64 (debug) - LTP - sched
+                  x86_64 (debug) - LTP - syscalls
+                  x86_64 (debug) - LTP - can
+                  x86_64 (debug) - LTP - commands
+                  x86_64 (debug) - LTP - containers
+                  x86_64 (debug) - LTP - dio
+                  x86_64 (debug) - LTP - fs
+                  x86_64 (debug) - LTP - fsx
+                  x86_64 (debug) - LTP - math
+                  x86_64 (debug) - LTP - hugetlb
+                  x86_64 (debug) - LTP - mm
+                  x86_64 (debug) - LTP - nptl
+                  x86_64 (debug) - LTP - pty
+                  x86_64 (debug) - LTP - ipc
+                  x86_64 (debug) - LTP - tracing
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman system integration test: hit timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/702
+            Affected tests:
+                  x86_64 (debug) - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as user
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
