@@ -1,42 +1,44 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8FC15A3
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 03:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A006F15A3
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 05:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659237972; x=1690773972;
+  t=1659244162; x=1690780162;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IcGL+BIy3WMtB5r7XufZHaujFpvkbpL0Knkjx1giuiU=;
-  b=KSCPhIhqhU7Vc9mxBrJMYIrcSDv54HCFkSsKM15NdAcK8/uB4xEQ19VK
-   GUdgmGFQc2eeerkf0Gq0Wc5FMyv6jKusB3xTlIaD7NzYJ9MObUiJgIk50
-   544jhT83z2eKV3845uwZdZsOzxdkDMh8MS0Xs89kFCVdsbV3Rqvx0w0Qr
-   /psn7YrXnef9Wyvq4jBFgKupdnTEYs+pxjJZj9ufyvMgG8LuAImcGtVtj
-   Tix1AA+SweW8aUMGUyCCbMvzDqk0cvBuHAQGw0edYvpI6H3BEFLEMik4x
-   KtAhD4E40r/ntTj+UdR4MPU5sKicvkGAs+8PmclUA+eAeXkax4MWzNuSg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="290170337"
+  bh=4MkDPWucBtTo8n//4AUx9bX+U8MS5kpW1L2mV3z9Hj0=;
+  b=kTV4kNppqWi0Re9UzjPC0dquGa5U/zTWeah3/kH5y/fwHe+sXKkcZCcr
+   7SgA6x2s3O42QLTX/Zn8q89E5qf1/V2FJ6dQd5V+Bt9cYxhzOqKUuSAph
+   5Cq7OoEwmAhNc2VHlYUxbkhaAU0fA49z//ouBe2RJRnGtpx8N6IRyqtKj
+   bsokRJLQScGbwsayfsLl3jerapLvWbZNWYYPWHN/1YIEVZWNa8U+Pe5i5
+   4QiggrDec5nZhevh5uBAazawASQcj9SvDTPphQR+6EWst+4OXgJ1nMe6x
+   7DdFl5jOCXcuP4qLay0S1dTE1mzH5uZX+YNRXQwQc5keMTxsEG1CjjDVv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="290174835"
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="290170337"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 20:26:11 -0700
+   d="scan'208";a="290174835"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 22:09:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="577388396"
+   d="scan'208";a="728122968"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jul 2022 20:26:10 -0700
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 22:09:20 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oHzaj-000Dck-1K;
-	Sun, 31 Jul 2022 03:26:09 +0000
-Date: Sun, 31 Jul 2022 11:25:39 +0800
+	id 1oI1Ca-000DiT-0Z;
+	Sun, 31 Jul 2022 05:09:20 +0000
+Date: Sun, 31 Jul 2022 13:08:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202207311122.TwtWf9R9-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/090-spi-hid 17/21]
+ drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to
+ undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202207311303.fsxdJJ2i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +48,114 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mauro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a010258447d386186ca10cd374d888ac66ffe1a
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   5 months ago
-config: mips-randconfig-r024-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311122.TwtWf9R9-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   e784b825a3358d79e5da5d9426c6eb37f79819b3
+commit: fca5de56d067159949909e595e6bf3ee10af0a91 [17/21] hid: Add Apple DockChannel HID transport driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220731/202207311303.fsxdJJ2i-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
+        # https://github.com/AsahiLinux/linux/commit/fca5de56d067159949909e595e6bf3ee10af0a91
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout fca5de56d067159949909e595e6bf3ee10af0a91
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/marvell/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hid/dockchannel-hid/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   1 warning generated.
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+                              ^
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:569:62: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                   dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
+                                                                      ~~~     ^~~~~~
+                                                                      %zu
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
+                      ^
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:830:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                           shdr->length, work->hdr.length - sizeof(*shdr));
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:856:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                           shdr->length, hdr->length - sizeof(*shdr));
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:7: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
+           bool defer = false;
+                ^
+   4 warnings and 2 errors generated.
 
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
-
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
-
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+   292	
+   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
+   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
+   295	{
+   296		int ret;
+   297		int report_id = *(u8*)data;
+   298	
+   299		mutex_lock(&iface->out_mutex);
+   300	
+   301		WARN_ON(iface->out_report != -1);
+   302		iface->out_report = report_id;
+ > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+   304		iface->resp_buf = resp_buf;
+   305		iface->resp_size = resp_size;
+   306		reinit_completion(&iface->out_complete);
+   307	
+   308		ret = dchid_send(iface, iface->out_flags, data, size);
+   309		if (ret < 0)
+   310			goto done;
+   311	
+   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
+   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
+   314				report_id, iface->index, iface->name);
+   315			ret = -ETIMEDOUT;
+   316			goto done;
+   317		}
+   318	
+   319		ret = iface->resp_size;
+   320		if (iface->retcode) {
+   321			dev_err(iface->dchid->dev,
+   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
+   323				report_id, iface->index, iface->name, iface->retcode);
+   324			ret = -EIO;
+   325		}
+   326	
+   327	done:
+   328		iface->tx_seq++;
+   329		iface->out_report = -1;
+   330		iface->out_flags = 0;
+   331		iface->resp_buf = NULL;
+   332		iface->resp_size = 0;
+   333		mutex_unlock(&iface->out_mutex);
+   334		return ret;
+   335	}
+   336	
 
 -- 
 0-DAY CI Kernel Test Service
