@@ -1,39 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBF25C97
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 10:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB85EC433C1;
-	Sun, 31 Jul 2022 10:13:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1659262397;
-	bh=l1KcgsyDNOlbE9gZMQjdsaDZuWLLdpPFaAzH+3qqmhE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vDz/7PtrR9YpZzsEM75UVFsCsdhLffknxIjX1sjuGSMlM+yhFj6GArpfkDewN0dFD
-	 tCgscT5N/MZ2Pr1RDwkZdCkmn2W9snudd2KDGG7wWSjGpYA3FPi/UJ2uQPCcIf5UoV
-	 JD/n67t3X8x0Z4VqAVr2T8dlkpGT9STHWtYdzYTs=
-Date: Sun, 31 Jul 2022 12:13:14 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	"Justin M. Forbes" <jforbes@fedoraproject.org>,
-	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	"Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
- arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
- 4.6 of GCC
-Message-ID: <YuZVuutjt9HcJuGh@kroah.com>
-References: <202207250449.BYMZbIA2-lkp@intel.com>
- <Yt3KObFVIUI2mFGt@zx2c4.com>
- <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
- <Yt5Y/cIKIDlyFWMQ@kroah.com>
- <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
- <CAK8P3a0g4NT1oDW5gq7YO540Eo0UDoqbK1tmtb8QHteiDNXj5Q@mail.gmail.com>
- <CAK8P3a2ZfEr+4OWWteZHpDYGw8U0dQgMfF_OFwQDEtY=GaTfQA@mail.gmail.com>
- <YuVBOOrdoBDUhRxJ@kroah.com>
- <YuW7r1pyBAeNKlPG@zx2c4.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6088515A9
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 10:46:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659264366; x=1690800366;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b7rPqzWvTB28jUtMPTK/RVgxxjAwMYIvz3AdRth09Os=;
+  b=RG2NEyvY/4VlOAIAQQ5QJWbHzQZXphEF6dIeBax3xfBNnWhA2a59gZRK
+   sU7f/sb4+vNd6dUytQYNYrz42HgUxUD/GxAS7yJJ1YfivqjFZI/fVFNcm
+   XSucONnFi9kxi9O8W2pAMJzmEBrMpO3xV5nvvyg7euYX30NKFToA0IUzZ
+   jwgbYMT+V6Hs57Sa6/qhdf2EB2f88hAczN5Ni5hrzzQaDZCSKMMUwTsrX
+   hatQKjIMCwPj7jz6028Cgoz4BKsAWj9/86MagwmGO7yePxK0W/3YhOZI5
+   OBma351581BVsO0GytCLWciOSe2koqCXRtMsUtCFas7WnaLo2fhaWL4J5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="350691873"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="350691873"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 03:46:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="634587333"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 03:46:04 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oI6SR-000E2u-2C;
+	Sun, 31 Jul 2022 10:46:03 +0000
+Date: Sun, 31 Jul 2022 18:45:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: [steev:linux-v5.19.0-rc8-tests 116/182]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1747:10: error: initializer
+ element is not a compile-time constant
+Message-ID: <202207311819.h1pTmAEB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,44 +46,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuW7r1pyBAeNKlPG@zx2c4.com>
 
-On Sun, Jul 31, 2022 at 01:15:59AM +0200, Jason A. Donenfeld wrote:
-> On Sat, Jul 30, 2022 at 04:33:28PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Jul 25, 2022 at 04:35:38PM +0200, Arnd Bergmann wrote:
-> > > On Mon, Jul 25, 2022 at 2:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > 
-> > > > The other easy workaround would be to just turn off the xor-neon code
-> > > > when building with clang, e.g. using this Makefile hack:
-> > > >
-> > > > diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
-> > > > index 6d2ba454f25b..8e4fe6421dd2 100644
-> > > > --- a/arch/arm/lib/Makefile
-> > > > +++ b/arch/arm/lib/Makefile
-> > > > @@ -43,8 +43,10 @@ endif
-> > > >  $(obj)/csumpartialcopy.o:      $(obj)/csumpartialcopygeneric.S
-> > > >  $(obj)/csumpartialcopyuser.o:  $(obj)/csumpartialcopygeneric.S
-> > > >
-> > > > +ifdef CONFIG_CC_IS_CLANG
-> > > >  ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
-> > > >    NEON_FLAGS                   := -march=armv7-a -mfloat-abi=softfp -mfpu=neon
-> > > >    CFLAGS_xor-neon.o            += $(NEON_FLAGS)
-> > > >    obj-$(CONFIG_XOR_BLOCKS)     += xor-neon.o
-> > > >  endif
-> > > > +endif
-> > > 
-> > > Nevermind, this does not actually work. Just turning off the warning
-> > > is probably best then, as actually disabling this code would still
-> > > be invasive not do much beyond saving a little bit of kernel .text size.
-> > 
-> > Ok, if it triggers again, and I get annoyed, I'll write a patch,
-> > otherwise I'll just leave it alone unless someone else wants to send it
-> > to me...
-> 
-> The patch is trivial, if your idea is just to remove the #warning,
-> right? Might as well just do it now and get it over with.
+tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
+head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
+commit: 2a19272fda8c6e9423a40b3b217a6c75333f48ed [116/182] drm/msm/dpu: make dpu hardware catalog static const
+config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311819.h1pTmAEB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/steev/linux/commit/2a19272fda8c6e9423a40b3b217a6c75333f48ed
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev linux-v5.19.0-rc8-tests
+        git checkout 2a19272fda8c6e9423a40b3b217a6c75333f48ed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
 
-Fine, I was being lazy :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Now sent out:
-	https://lore.kernel.org/all/20220731100551.3679874-1-gregkh@linuxfoundation.org/
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1747:10: error: initializer element is not a compile-time constant
+           .perf = msm8998_perf_data,
+                   ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1770:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sdm845_regdma,
+                      ^~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1794:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sdm845_regdma,
+                      ^~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1820:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sm8150_regdma,
+                      ^~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1844:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sm8150_regdma,
+                      ^~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1872:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sm8250_regdma,
+                      ^~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1893:10: error: initializer element is not a compile-time constant
+           .perf = sc7280_perf_data,
+                   ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1916:13: error: initializer element is not a compile-time constant
+           .dma_cfg = sdm845_regdma,
+                      ^~~~~~~~~~~~~
+   8 errors generated.
+
+
+vim +1747 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+
+591e34a091d17d Krishna Manikandan         2021-04-06  1702  
+5334087ee7438f Loic Poulain               2022-02-14  1703  static const struct dpu_perf_cfg qcm2290_perf_data = {
+5334087ee7438f Loic Poulain               2022-02-14  1704  	.max_bw_low = 2700000,
+5334087ee7438f Loic Poulain               2022-02-14  1705  	.max_bw_high = 2700000,
+5334087ee7438f Loic Poulain               2022-02-14  1706  	.min_core_ib = 1300000,
+5334087ee7438f Loic Poulain               2022-02-14  1707  	.min_llcc_ib = 0,
+5334087ee7438f Loic Poulain               2022-02-14  1708  	.min_dram_ib = 1600000,
+5334087ee7438f Loic Poulain               2022-02-14  1709  	.min_prefill_lines = 24,
+5334087ee7438f Loic Poulain               2022-02-14  1710  	.danger_lut_tbl = {0xff, 0x0, 0x0},
+5334087ee7438f Loic Poulain               2022-02-14  1711  	.safe_lut_tbl = {0xfff0, 0x0, 0x0},
+5334087ee7438f Loic Poulain               2022-02-14  1712  	.qos_lut_tbl = {
+5334087ee7438f Loic Poulain               2022-02-14  1713  		{.nentry = ARRAY_SIZE(qcm2290_qos_linear),
+5334087ee7438f Loic Poulain               2022-02-14  1714  		.entries = qcm2290_qos_linear
+5334087ee7438f Loic Poulain               2022-02-14  1715  		},
+5334087ee7438f Loic Poulain               2022-02-14  1716  	},
+5334087ee7438f Loic Poulain               2022-02-14  1717  	.cdp_cfg = {
+5334087ee7438f Loic Poulain               2022-02-14  1718  		{.rd_enable = 1, .wr_enable = 1},
+5334087ee7438f Loic Poulain               2022-02-14  1719  		{.rd_enable = 1, .wr_enable = 0}
+5334087ee7438f Loic Poulain               2022-02-14  1720  	},
+5334087ee7438f Loic Poulain               2022-02-14  1721  	.clk_inefficiency_factor = 105,
+5334087ee7438f Loic Poulain               2022-02-14  1722  	.bw_inefficiency_factor = 120,
+5334087ee7438f Loic Poulain               2022-02-14  1723  };
+25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1724  /*************************************************************
+2a19272fda8c6e Dmitry Baryshkov           2022-06-01  1725   * Hardware catalog
+25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1726   *************************************************************/
+25fdd5933e4c0f Jeykumar Sankaran          2018-06-27  1727  
+2a19272fda8c6e Dmitry Baryshkov           2022-06-01  1728  static const struct dpu_mdss_cfg msm8998_dpu_cfg = {
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1729  	.caps = &msm8998_dpu_caps,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1730  	.mdp_count = ARRAY_SIZE(msm8998_mdp),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1731  	.mdp = msm8998_mdp,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1732  	.ctl_count = ARRAY_SIZE(msm8998_ctl),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1733  	.ctl = msm8998_ctl,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1734  	.sspp_count = ARRAY_SIZE(msm8998_sspp),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1735  	.sspp = msm8998_sspp,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1736  	.mixer_count = ARRAY_SIZE(msm8998_lm),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1737  	.mixer = msm8998_lm,
+6452cbd6f04cd5 Dmitry Baryshkov           2022-02-22  1738  	.dspp_count = ARRAY_SIZE(msm8998_dspp),
+6452cbd6f04cd5 Dmitry Baryshkov           2022-02-22  1739  	.dspp = msm8998_dspp,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1740  	.pingpong_count = ARRAY_SIZE(sdm845_pp),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1741  	.pingpong = sdm845_pp,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1742  	.intf_count = ARRAY_SIZE(msm8998_intf),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1743  	.intf = msm8998_intf,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1744  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1745  	.vbif = msm8998_vbif,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1746  	.reg_dma_count = 0,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13 @1747  	.perf = msm8998_perf_data,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1748  	.mdss_irqs = IRQ_SM8250_MASK,
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1749  };
+94391a14fc2738 AngeloGioacchino Del Regno 2022-01-13  1750  
+
+:::::: The code at line 1747 was first introduced by commit
+:::::: 94391a14fc27383a60fc9499b631e5b6ccd9f075 drm/msm/dpu1: Add MSM8998 to hw catalog
+
+:::::: TO: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+:::::: CC: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
