@@ -1,90 +1,296 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7076E15BF
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 12:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02166C433D6;
-	Sun, 31 Jul 2022 12:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659270816;
-	bh=Cae8WTn1U5ue2ZooK/ujvkkFamJx/qU5ivCeIdOAFOA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JWfDw6CcxwDzOUPkOLDtFJayTcqjmPA1ymQBktM/jTno3PKJ1N2ys17Wl/kgJBKyK
-	 k0CIG1LG2vTzXUKSng2Bykzj/9vpWSALZ8CKRXq0rbpZwQzfj3RuMeKBNWYzwloYnS
-	 mRqkwdIOxBrAbQvlxsZu48HSsQMsvQeEmzSrg+vkDVFnTtZJ+HkeKGX6VoR+VVkNVu
-	 BI1Whrh4dV5xKZeJ6QunNXScIGY/GocujEaM1e5y+e2MAext1JM+fCmDkc1RMAB5kp
-	 UYQJezSmib3Xwp7dCWCD7S829x/7csMbOoZBq4VDzH2teh+6yT+kU5lwjN/AXki0MX
-	 /1+Bzm6baJ8fg==
-Date: Sun, 31 Jul 2022 13:43:47 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Jason Gerecke <killertofu@gmail.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Lars-Peter Clausen
- <lars@metafoo.de>, Wolfram Sang <wsa-dev@sang-engineering.com>, linux-i2c
- <linux-i2c@vger.kernel.org>, Ping Cheng <pinglinux@gmail.com>, "Tobita,
- Tatsunosuke" <tatsunosuke.tobita@wacom.com>, Jason Gerecke
- <jason.gerecke@wacom.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-iio <linux-iio@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-Message-ID: <20220731134347.19fcfbe7@jic23-huawei>
-In-Reply-To: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-References: <202207190634.ToyhlXSz-lkp@intel.com>
-	<0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
-	<CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
-	<CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
-	<CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-	<CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B883C1C
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 13:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659274918;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WaGRRlrDcnKG9Y4kBFIWuAAQN2k9724Iasm2b2wTARE=;
+	b=fN38lB+9AinoS2P7CQoshVjAHxa88nArO6ICQ019mKGExzSFkZd8c0OGuCCTMqijbAeCmY
+	s0PNHShH58CwPTZUMIvNMlNURJMzy3tH8HlMhZeJdNyAeToBV9vb49/03g3htYjJ1EX8ht
+	+B21C7TX0bQJZ3iH0Xt1ZB2GyZRXmqI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-zRFeDX-wP0O3Z-Q0LAQicg-1; Sun, 31 Jul 2022 09:41:57 -0400
+X-MC-Unique: zRFeDX-wP0O3Z-Q0LAQicg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D24252801765
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 13:41:56 +0000 (UTC)
+Received: from [172.64.0.89] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B6C4C2026D64;
+	Sun, 31 Jul 2022 13:41:56 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0-rc8
+ (mainline.kernel.org-clang) [6a010258]
+Date: Sun, 31 Jul 2022 13:41:56 -0000
+CC: xzhou@redhat.com, feliu@redhat.com, jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <23601.122073109415700167@us-mta-144.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 28 Jul 2022 15:48:59 -0700
-Jason Gerecke <killertofu@gmail.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-> On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:  
-> > > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:  
-> > > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:  
-> >  
-> > > > Writing a patch to fix the new warnings generated by my I2C patch is
-> > > > simple enough, but I'd like some help coordinating getting both
-> > > > patches landed. Should I wait for the I2C patch to land in "for-next"
-> > > > before sending the IIO fix, or would it be preferred to send the IIO
-> > > > fix right now so that both patches can be reviewed simultaneously?  
-> > >
-> > > It's been pretty quiet, so asking again for any thoughts on how to
-> > > best address this tangle...  
-> >
-> > The rule of thumb is not to introduce an additional warning or compile error.
-> > I haven't looked deeply into this case, but it smells to me as if you need a new
-> > version of your initial patch that includes a fix to IIO.
-> >
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko  
-> 
-> Thanks! Since the patch would touch both IIO and I2C I assume I would
-> submit it to both mailinglists. And that whichever maintainer gets to
-> it first would just give their Reviewed-by (if all looks good) and the
-> second applies the Signed-off-by and handles the merge?
-> 
-> I'll work on the updated combined patch...
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-I suspect this will be likely to create merge conflicts, so submit it like
-that and I'll probably ask Wolfram to do an immutable branch that I can
-then pull into IIO.  Hence we'll have exactly the same commits (IDs and all)
-in both IIO and I2C trees.
 
-Jonathan
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49346
 
-> 
-> Jason
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611589
+         aarch64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611590
+          x86_64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611564
+          x86_64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611566
+          x86_64 - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611568
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611571
+          x86_64 (debug) - stress: stress-ng - cpu-cache
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611629
+          x86_64 (debug) - Networking MACsec: sanity
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611716
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611790
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611791
+          x86_64 (debug) - xfstests - nfsv4.2
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611792
+          x86_64 (debug) - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4611793
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - LTP - cve
+                 aarch64 - LTP - sched
+                 aarch64 - LTP - syscalls
+                 aarch64 - LTP - can
+                 aarch64 - LTP - commands
+                 aarch64 - LTP - containers
+                 aarch64 - LTP - dio
+                 aarch64 - LTP - fs
+                 aarch64 - LTP - fsx
+                 aarch64 - LTP - math
+                 aarch64 - LTP - hugetlb
+                 aarch64 - LTP - mm
+                 aarch64 - LTP - nptl
+                 aarch64 - LTP - pty
+                 aarch64 - LTP - ipc
+                 aarch64 - LTP - tracing
+                 aarch64 - Firmware test suite
+                   s390x - LTP - cve
+                   s390x - LTP - sched
+                   s390x - LTP - syscalls
+                   s390x - LTP - can
+                   s390x - LTP - commands
+                   s390x - LTP - containers
+                   s390x - LTP - dio
+                   s390x - LTP - fs
+                   s390x - LTP - fsx
+                   s390x - LTP - math
+                   s390x - LTP - hugetlb
+                   s390x - LTP - mm
+                   s390x - LTP - nptl
+                   s390x - LTP - pty
+                   s390x - LTP - ipc
+                   s390x - LTP - tracing
+                  x86_64 - LTP - cve
+                  x86_64 - LTP - sched
+                  x86_64 - LTP - syscalls
+                  x86_64 - LTP - can
+                  x86_64 - LTP - commands
+                  x86_64 - LTP - containers
+                  x86_64 - LTP - dio
+                  x86_64 - LTP - fs
+                  x86_64 - LTP - fsx
+                  x86_64 - LTP - math
+                  x86_64 - LTP - hugetlb
+                  x86_64 - LTP - mm
+                  x86_64 - LTP - nptl
+                  x86_64 - LTP - pty
+                  x86_64 - LTP - ipc
+                  x86_64 - LTP - tracing
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - LTP - cve
+                  x86_64 (debug) - LTP - sched
+                  x86_64 (debug) - LTP - syscalls
+                  x86_64 (debug) - LTP - can
+                  x86_64 (debug) - LTP - commands
+                  x86_64 (debug) - LTP - containers
+                  x86_64 (debug) - LTP - dio
+                  x86_64 (debug) - LTP - fs
+                  x86_64 (debug) - LTP - fsx
+                  x86_64 (debug) - LTP - math
+                  x86_64 (debug) - LTP - hugetlb
+                  x86_64 (debug) - LTP - mm
+                  x86_64 (debug) - LTP - nptl
+                  x86_64 (debug) - LTP - pty
+                  x86_64 (debug) - LTP - ipc
+                  x86_64 (debug) - LTP - tracing
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Networking cki netfilter test
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
