@@ -1,108 +1,117 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BC815D9
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:27:38 +0000 (UTC)
-Received: by mail-il1-f182.google.com with SMTP id s16so1157117ilp.3
-        for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 16:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=cB5WuvMsmL6F+p20kPSMg4z0wjNtUJa9fTAIeiqeNtg=;
-        b=UwjeSffKQbdKGY38++8RLRXtWE5vnHPXf5aKbUsULqFgamZa7wJBKH/tgNsD/3P/Mb
-         TOrhHiAvNZht6t+P5kI00oooFPMX7Ti4RHffhfxaJjmh8jq0j5ObeP/wgg6AsKe098Rm
-         Vn27F0jGjclnXhHBz3KqVqiovzMzbaqvyrQoOzpN6vAEW84mkm0w5olUtD5LSJhUvwA1
-         5Kpg1MROyplYVMbLlXcB8xq/SXOqIzqWkJyz/gDsBTSxYTECHz75m99rMqlfXYupKHnU
-         HDlSpv3ovD6ag/rWdafkKN3LSEFxj6SohCvuK0IQ0f4deggi2e4qJzqzTap7aBOgXf47
-         xXig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=cB5WuvMsmL6F+p20kPSMg4z0wjNtUJa9fTAIeiqeNtg=;
-        b=cxlU7LjzgDRE5BKtBtO0tsgdqS850+Q76Q1Afip9eLCMJJ/9M9JVc4ZSQYFrmmmo4w
-         pUHfNO4Ib0O8epAQes002BOSxhKV6WIAcR72r+AnBycJYotAiOvj175sqsyb5E0zpkex
-         G6DHGFcP2DOnz+68KYNDTEma5auFUVGOtQiSfCeAfJ0GMuhacXNSmrKSBbVLcX7hCr+R
-         TnLRFOshMp7SGNRZEE9XiLkW9xMLdn4UAfI02VXjSJJVNDtBHzv3ZslvrwJLNYyUGSxE
-         um/pYJm9q4lvFb6fygUYWfJ2GhF7SvpTLctxUmFLcrOoHmRu/dIp7RPgwwLz7gQT4pSJ
-         b5UA==
-X-Gm-Message-State: AJIora/mhb0+ymLtm6Pe0yY6dfxcA4QLADfPqtajGgMhSzSWLjSZaEHw
-	YtV5YDgUuQPU76q55XdUxsQ=
-X-Google-Smtp-Source: AGRyM1t0LOpDqDHWBniiscxsxsIm+A+EEkohFxAgrEOAmTVPyLMMCm+20QPpp0AZwJYHGODQZSIUgQ==
-X-Received: by 2002:a92:d606:0:b0:2dc:e2d1:b75b with SMTP id w6-20020a92d606000000b002dce2d1b75bmr5107679ilm.91.1659310057599;
-        Sun, 31 Jul 2022 16:27:37 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net. [71.33.133.32])
-        by smtp.gmail.com with ESMTPSA id c189-20020a6bb3c6000000b0067b75781af9sm4995861iof.37.2022.07.31.16.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 16:27:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: bpf@vger.kernel.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27624A0B
+	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:31:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659310261; x=1690846261;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yVHqvUoE5HERyWFBC98VpBqCS2cdtSxp50XlxNO/c30=;
+  b=QANo+JavC0TJmCdi9om6ncrQFvX6ZIInxRqgs0A7ojq8d6rV388Qfd0B
+   Zp6P5tcpNAI5ptfjcF1ku0eJ5McypVpbNfXM7Qib7w7SiO0CbJONWjMlA
+   PiZW5S7wSCA7GIfSNrfvTvUNj9k0KBPVxiG5uzJ0wr/q5cA1GGqxfy2No
+   BhVcIXw7fIFTT0toqN7X0vZx4iWUKGsT6NM79MbWiiSh9i4VSzKw8ev6z
+   Y7sQasYvNDWIprpJNFdOxGbwIHDVq9kHR/MdZ5w9iJPCzXR2QDKN5F66g
+   u9/KOZoKuahm3KtHLYIs0V3xd9BfWVK1td2ClJami00P/ZoUzzUgtY8Mj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="375337564"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="375337564"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 16:31:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="634705046"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 16:30:59 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oIIOg-000Ecv-1i;
+	Sun, 31 Jul 2022 23:30:58 +0000
+Date: Mon, 1 Aug 2022 07:30:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] libbpf: skip empty sections in bpf_object__init_global_data_maps
-Date: Sun, 31 Jul 2022 17:26:49 -0600
-Message-Id: <20220731232649.4668-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [jic23-iio:testing 21/30] drivers/iio/adc/at91-sama5d2_adc.c:790:11:
+ warning: variable 'nbits' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202208010745.QZRYCihu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The GNU assembler generates an empty .bss section. This is a well
-established behavior in GAS that happens in all supported targets.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   e776e5ec0a21cc38f5e853d4dc98845d6e7f76b0
+commit: 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42 [21/30] iio: adc: at91-sama5d2_adc: adjust osr based on specific platform data
+config: arm-randconfig-r026-20220731 (https://download.01.org/0day-ci/archive/20220801/202208010745.QZRYCihu-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
+        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+        git fetch --no-tags jic23-iio testing
+        git checkout 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/
 
-The LLVM assembler doesn't generate an empty .bss section.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-bpftool chokes on the empty .bss section.
+All warnings (new ones prefixed by >>):
 
-Additionally in bpf_object__elf_collect the sec_desc->data is not
-initialized when a section is not recognized. In this case, this
-happens with .comment.
+>> drivers/iio/adc/at91-sama5d2_adc.c:790:11: warning: variable 'nbits' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           else if (st->oversampling_ratio == 16)
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:797:48: note: uninitialized use occurs here
+           diff = st->soc_info.platform->chan_realbits - nbits;
+                                                         ^~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:790:7: note: remove the 'if' if its condition is always true
+           else if (st->oversampling_ratio == 16)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/at91-sama5d2_adc.c:784:11: note: initialize the variable 'nbits' to silence this warning
+           int nbits, diff;
+                    ^
+                     = 0
+   1 warning generated.
 
-So we must check that sec_desc->data is initialized before checking
-if the size is 0.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
----
- tools/lib/bpf/libbpf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+vim +790 drivers/iio/adc/at91-sama5d2_adc.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 50d41815f431..77e3797cf75a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1642,6 +1642,10 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
- 	for (sec_idx = 1; sec_idx < obj->efile.sec_cnt; sec_idx++) {
- 		sec_desc = &obj->efile.secs[sec_idx];
- 
-+		/* Skip recognized sections with size 0. */
-+		if (sec_desc->data && sec_desc->data->d_size == 0)
-+			continue;
-+
- 		switch (sec_desc->sec_type) {
- 		case SEC_DATA:
- 			sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
+   781	
+   782	static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
+   783	{
+   784		int nbits, diff;
+   785	
+   786		if (st->oversampling_ratio == 1)
+   787			nbits = 12;
+   788		else if (st->oversampling_ratio == 4)
+   789			nbits = 13;
+ > 790		else if (st->oversampling_ratio == 16)
+   791			nbits = 14;
+   792	
+   793		/*
+   794		 * We have nbits of real data and channel is registered as
+   795		 * st->soc_info.platform->chan_realbits, so shift left diff bits.
+   796		 */
+   797		diff = st->soc_info.platform->chan_realbits - nbits;
+   798		*val <<= diff;
+   799	
+   800		return IIO_VAL_INT;
+   801	}
+   802	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
