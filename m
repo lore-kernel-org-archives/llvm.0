@@ -1,72 +1,95 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C5F7F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 18:41:56 +0000 (UTC)
-Received: by mail-oi1-f175.google.com with SMTP id i4so14070483oif.2
-        for <llvm@lists.linux.dev>; Mon, 01 Aug 2022 11:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=zkq99qMAjwvXGkfSNJyXJX+b2TjDRVvHCxXnxYMawmA=;
-        b=GR/7JpLQVy0bCTRI+ul+w1w+WTS7yWNb6qXVsEXfXkAYLH51Uq55BIz8LUGL8vbB2b
-         cTaJe1WJmdUi66o9AyBlSNt1U61ZZL9rKX+rxWy2zUgcBTXubIbhrCY3lzVs0B6QgfPn
-         oy/jkML4xCDxWe2N0bg88dlZNcRZO12/7r+yIi/ZtFPYaQsU7Qmt/8knZN+VqenZhZ8Q
-         eH+bOWuVC3aTpmeS2s3hNE70dpKpfDtxRGpxYoYWmtWRkxG+h1Hl51uhnXEhDD60bN3y
-         Sb7lb2w/xNO1QC6msk3bDAdDWV4I85I3boKJnzhNO3zTFVQqZ5aD3IiJxTr8vHZQHJIs
-         u/Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=zkq99qMAjwvXGkfSNJyXJX+b2TjDRVvHCxXnxYMawmA=;
-        b=0D+la3y4uKReX8EI10ftkLy0tyC5ok2FhZkTkWq5gp3mlWpOGLU7d4YyNV6fWrxcvD
-         XhBQqkw1NyLhLgWL9usviapQnC26z33dFjFhGf7tPk0APQRVOMgXG3MdCJH4iRiTFyfy
-         ozHwsB26AQeBsk6lJqhxo2y+3y3yfn5E4K4Mj7fnyo/8RCxCIeCJwSc5ArG/1+7A7vuH
-         RafE7X5SVqobx1RHQ+qkmWUQzhEbmMkTD3CHsdZ5XsY4M91/1j+QcZZzsPwvhw7Fxys5
-         7WBLUvShRiI04xp/OCQI+7G/kdYLhUagvnLZVt2D5GWFavL0jHY080TlFkS8q+9l8K6p
-         yNlA==
-X-Gm-Message-State: AJIora8QuYwMjewXV+i2BLWoL2PYelDrlBoBnxkS0KgYGDDl+bSxDqgg
-	ScbMO9cAQXKFziSvYVDV7kp1j41JzaQn3yTC7dr+WYAHUfHXTQ==
-X-Google-Smtp-Source: AGRyM1sL8m9KrhGGOq9mC6hBze+Dx+mdHvuC13FniC/co9q0GB10W5O/YZiaZSh2RVkSs/vyQZYFll3xdlcT9wTDeQg=
-X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
- ay43-20020a056808302b00b002f9eeef0f03mr7053815oib.128.1659379315956; Mon, 01
- Aug 2022 11:41:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E259F7F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 18:48:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659379724; x=1690915724;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5AiKL+DvuSxKnf3kFLABHhMOxVxvLs3s3mUnLtOtRwE=;
+  b=gRhHsaR2Uow1NQkwMNzDonaciv07zZBARqsMickG1JdfNCn745N+NoSV
+   C80lJ3uVbj8e6vClQ4VsZ7zPoz9z1ylEpC+igmxVgJlIzIgiViVDIb1b+
+   EDLBY4A/jaqD+MQhFn99z+dj/+gwUVV4yKMk5tSWctH6tnpOZ60h1IISJ
+   hqWl0L6rhIoqJM0OhVJ92pDpMY8QgRCaXrMBia3HHJNMXrNzlwtLQ/llZ
+   lF9m/aRy56+244i9CDn7XCOCpDyn/DcfT5gCeO8EP4bVClkbEblyg3QFy
+   qBKB8N7mgjrLHNB31rOxdHuCldIDRys98f1eCtyowdndTpQy0q+glvged
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="287975786"
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="287975786"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 11:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="670144043"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Aug 2022 11:48:42 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oIaT4-000FE1-0S;
+	Mon, 01 Aug 2022 18:48:42 +0000
+Date: Tue, 2 Aug 2022 02:48:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 9/9]
+ include/vdso/processor.h:10:10: fatal error: 'asm/vdso/processor.h' file not
+ found
+Message-ID: <202208020231.SlFNUKqj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOd=M3uyJOp-LoP+R=z-GjXUo7RXvTqF7eie7FdFVQ=wf9w@mail.gmail.com>
-In-Reply-To: <CAKwvOd=M3uyJOp-LoP+R=z-GjXUo7RXvTqF7eie7FdFVQ=wf9w@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Mon, 1 Aug 2022 20:41:20 +0200
-Message-ID: <CA+icZUVrYr+9d=tkHakT-LQABFXF3qphdX-Z_8grzWAO-fwuxg@mail.gmail.com>
-Subject: Re: Some 5.19 development statistics [LWN.net]
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Aug 1, 2022 at 8:33 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> https://lwn.net/Articles/902854/
->
-> Thanks to Nathan and Sedat who both made the list of top testers for the 5.19 release! This is a _critical_ role to our team and it is much appreciated!
->
-> Nathan and Sudip we're top reporters.
->
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   352e85344386bb54dc19717319667b114cff5082
+commit: 352e85344386bb54dc19717319667b114cff5082 [9/9] random: implement getrandom() in vDSO
+config: hexagon-randconfig-r041-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020231.SlFNUKqj-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/352e85344386bb54dc19717319667b114cff5082
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout 352e85344386bb54dc19717319667b114cff5082
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/
 
-Hi Nick,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Incredible news for CBL users and developers.
+All errors (new ones prefixed by >>):
 
-...and Linus uses an ARM64 (Apple) notebook...
+   In file included from drivers/char/random.c:62:
+   In file included from include/vdso/datapage.h:17:
+>> include/vdso/processor.h:10:10: fatal error: 'asm/vdso/processor.h' file not found
+   #include <asm/vdso/processor.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Best regards,
--Sedat-
 
-[1] https://lore.kernel.org/all/CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com/#t
+vim +10 include/vdso/processor.h
+
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20   9  
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20 @10  #include <asm/vdso/processor.h>
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20  11  
+
+:::::: The code at line 10 was first introduced by commit
+:::::: d8bb6993d871f5d3cd6d65d3772e4b1f4ef17380 common: Introduce processor.h
+
+:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
