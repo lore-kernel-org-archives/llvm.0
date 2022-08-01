@@ -1,43 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF967F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 12:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CC37F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 14:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659358313; x=1690894313;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oEH9ZvYvCx/3dKmuYTCK9/kphMzYWzwnyuI/8wCWF5I=;
-  b=JY0qXurQGGDVPCDTs1zszT8yRf88cNL6tg+0P4bBNMHHB0i5d7lUrTVu
-   PtvVKSJ+YTxbT65petbxfh/nQPvZ4vArZNQKHMmXfD8xGiv/DNiW8MTY8
-   9W2AyKQxw+UTvDLsQbGkoNk0e4rSuOvkZUELLtqWBROK+NJwNWblaUUI+
-   e3APZ2QJVQiXPNY/i5YCmaRRAwhirMZwxw/CBlrPz9UlJDxJIFp22j8B9
-   himlxHgHLOc9+WfYOBbZcLqLwtka8vPL1Oy6sWcN+6T8gFXs5pL8m0zqh
-   fadaEuS512vOnniUHdcVEJXanTHunuo/K7uCP136TH3R7keznfNpWsOEc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="375439210"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="375439210"
+  t=1659365135; x=1690901135;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N3kJUozwNWYuhBjEeQrJ7y3It/lpGzr+ftVqH3Mq8NQ=;
+  b=awn7xs4VhdUHzxn0do5yPUYEBa/nCHmWH48q9mL2u9l8YBdwXTLgNIWD
+   MPJp1uqPG7PEeR4z4R6+9Tz+8wbXzg/KUjRoWYwIOo4xrdMKZzELZLq5C
+   NB680FbqtQuceMBfUpUgX31inbe/qWTglTQieEeoYdriRdbsf84aDApvN
+   fcOqN6S5+OsQjoVAel0fqJJKaP1IadmoqaeRbDi/4pyZmXcBRZJUfOs3X
+   l9ny13PdPsd1WEYX2TM4TCG2lSFovhQxtiIHqRtzJ4TPnscs0cHWVwGgQ
+   M7V9+zwfV/034sc1j6LQA4tRt8vBb6MOzCP5+wcEWF7YgTPqwvXVpNZwa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="268925744"
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="268925744"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 05:51:52 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 07:45:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="552502356"
+   d="scan'208";a="552532136"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Aug 2022 05:51:30 -0700
+  by orsmga003.jf.intel.com with ESMTP; 01 Aug 2022 07:45:33 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oIUtO-000F53-0R;
-	Mon, 01 Aug 2022 12:51:30 +0000
-Date: Mon, 1 Aug 2022 20:51:19 +0800
+	id 1oIWfk-000F6z-2y;
+	Mon, 01 Aug 2022 14:45:32 +0000
+Date: Mon, 1 Aug 2022 22:44:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- function 'kasan_tag_mismatch'
-Message-ID: <202208012031.pyukKQJC-lkp@intel.com>
+To: Dmytro SHYTYI <dmytro@shytyi.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH mptcp-next v4] mptcp: Fast Open Mechanism
+Message-ID: <202208012231.LBppAj4q-lkp@intel.com>
+References: <20220801024656.397714-1-dmytro@shytyi.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,50 +45,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220801024656.397714-1-dmytro@shytyi.net>
 
-Hi Peter,
+Hi Dmytro,
 
-FYI, the error/warning still remains.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on mptcp/export]
+[cannot apply to linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3d7cb6b04c3f3115719235cc6866b10326de34cd
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   1 year, 2 months ago
-config: arm64-randconfig-r032-20220801 (https://download.01.org/0day-ci/archive/20220801/202208012031.pyukKQJC-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmytro-SHYTYI/mptcp-Fast-Open-Mechanism/20220801-104819
+base:   https://github.com/multipath-tcp/mptcp_net-next.git export
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220801/202208012231.LBppAj4q-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        # https://github.com/intel-lab-lkp/linux/commit/6222c0fe0b73c1e72446173527266777f4ffe855
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmytro-SHYTYI/mptcp-Fast-Open-Mechanism/20220801-104819
+        git checkout 6222c0fe0b73c1e72446173527266777f4ffe855
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/kasan/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: functions only called from assembly code should be annotated with the asmlinkage attribute
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-        ^
-   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+   net/ipv4/tcp_output.c:186:3: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
+                   NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/ip.h:293:41: note: expanded from macro 'NET_ADD_STATS'
+   #define NET_ADD_STATS(net, field, adnd) SNMP_ADD_STATS((net)->mib.net_statistics, field, adnd)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/snmp.h:143:4: note: expanded from macro 'SNMP_ADD_STATS'
+                           this_cpu_add(mib->mibs[field], addend)
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:509:33: note: expanded from macro 'this_cpu_add'
+   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   <scratch space>:186:1: note: expanded from here
+   this_cpu_add_8
    ^
-   static 
-   1 warning generated.
+   arch/x86/include/asm/percpu.h:326:35: note: expanded from macro 'this_cpu_add_8'
+   #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatile, (pcp), val)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
+                                 ((val) == 1 || (val) == -1)) ?            \
+                                                ~~~~~ ^  ~~
+>> net/ipv4/tcp_output.c:747:54: error: too many arguments to function call, expected 3, have 4
+                   if (mptcp_synack_options(req, &size, &opts->mptcp, &opts->options)) {
+                       ~~~~~~~~~~~~~~~~~~~~                           ^~~~~~~~~~~~~~
+   include/net/mptcp.h:249:20: note: 'mptcp_synack_options' declared here
+   static inline bool mptcp_synack_options(const struct request_sock *req,
+                      ^
+   1 warning and 1 error generated.
 
 
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+vim +747 net/ipv4/tcp_output.c
 
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+   739	
+   740	static void mptcp_set_option_cond(const struct request_sock *req,
+   741					  struct tcp_out_options *opts,
+   742					  unsigned int *remaining)
+   743	{
+   744		if (rsk_is_mptcp(req)) {
+   745			unsigned int size;
+   746	
+ > 747			if (mptcp_synack_options(req, &size, &opts->mptcp, &opts->options)) {
+   748				if (*remaining >= size) {
+   749					opts->options |= OPTION_MPTCP;
+   750					*remaining -= size;
+   751				}
+   752			}
+   753		}
+   754	}
+   755	
 
 -- 
 0-DAY CI Kernel Test Service
