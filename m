@@ -1,40 +1,51 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D6C15D9
-	for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 23:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659310260; x=1690846260;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=L7VXJdPyE/uwoIUSWUiakpLlSR4AbB/wRm3xII3L4OU=;
-  b=VHFcrXFsaRLN7DfRxAUYd22SCP4CjSufsByvFlpyq0dBUZkot9ldxWzH
-   MRKK7F86mGCxvQzM6BqNeKbZ+hY6/gD+0yXG+/fgbBfYgDDazYJDNUvrX
-   wbAb7X5dqvt+TFNyNIkOX+coNb2/noOhljXGziBypVX/c/uZR15lAzl0l
-   FVPKFwA7i/d2CAXUlgPM7iqSEbgBu1a/y9M8nysJjPCeaUCh8Cj4xcBCh
-   gr0/vRxqOUm8azfkLPMVckXbdLE08jR2dPn3UEHi2RIr9NzpG701FDxsF
-   9BAbAshThY8Giw/Dx13OUF0Nxv3lo6iVbpP+WEgcHgTOOVM1l6uAZCb+f
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="289046986"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="289046986"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 16:30:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="929353360"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2022 16:30:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oIIOg-000Ect-1d;
-	Sun, 31 Jul 2022 23:30:58 +0000
-Date: Mon, 1 Aug 2022 07:30:37 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: net/ipv6/ipv6.o: warning: objtool: seg6_local_fill_encap() falls
- through to next function seg6_local_get_encap_size()
-Message-ID: <202208010736.vAZ7rWVB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573DC7F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 02:20:56 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id c12so12034661ede.3
+        for <llvm@lists.linux.dev>; Sun, 31 Jul 2022 19:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FL6269pemMpnmRW6a2WYgw7o9Iwarc5gVNQUemen3CE=;
+        b=oQByfmNI24pr79uSmxZ4AT7q3m2Hn0A/YId5eEqPCiLFH2zaHVflt5Ol7XxkurYUCv
+         Ly24dX+8zNf6lOHXfQwCRfempBk6LI+G/WpAXHb+Jj0OHHMQVhmXJS8G8ef7537KfRQv
+         8jNVnZXFzK/AfocAkGq0QUehKQE7l0rDT09GV0zBcyDcbER60JVG667TWNOobDdrmqEA
+         mS3QpSJJH8QiqGM225F4OtIUnuprDyoieZTSeakpBEPZ3l8PlmgY9fJcEcP+tB2Y56sB
+         4x3YQT2CTp6ZVLAO8WU1jmcPXW6+r4CrolqHW7jB/Qj8YME+QhQ6k8yi9W3s3UtYNCbp
+         xfLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FL6269pemMpnmRW6a2WYgw7o9Iwarc5gVNQUemen3CE=;
+        b=fWUa4gBB4aBwERVlKox8zWHRQiqL81WwnAVK30vtBKasH+eCeTcIROPedf7AbohPVM
+         Vf2ROZAv3itLLlJedoqG7877ZguRAjmtAEfXMuvDlO4FlbsL8XE4B4eX4CTAwVSZCZS3
+         juBh47i7wJk38xaxZpe9jh/cDRsns9amPLGmCMMr11bG5SN1tSpvY4sZ0hZW8k0Cp1Mp
+         vEjy4GySjOOEDvI3c16unTD4iRvYk7GZXnuGLhAO1jS67QSvVK0FIQgEE/Y6Yg5eAtaj
+         kXX4KwfYgMc2klfdXVHGD82v7RO75QxEcLByIx6EXewwDNF43aR3HHeqIOirHGu09CVI
+         pFww==
+X-Gm-Message-State: ACgBeo23GZ0n86ZiyCsiQtdUXT/ZdyueQpI07TVrlAkWgXlNMZ/3Ao1M
+	nslMqLsWqpIANV/nzxE/xL21lw==
+X-Google-Smtp-Source: AA6agR4KoEUwwcnlwJzKF6MF312WPGfuGy0TVRtge9Kvx1ilRchqSMgHzbNyGUj2IgAlR16VcDySjw==
+X-Received: by 2002:a05:6402:34cf:b0:43d:96fd:bdfa with SMTP id w15-20020a05640234cf00b0043d96fdbdfamr3905237edc.40.1659320454535;
+        Sun, 31 Jul 2022 19:20:54 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.98.208])
+        by smtp.gmail.com with ESMTPSA id 22-20020a170906311600b0072b13ac9ca3sm4659207ejx.183.2022.07.31.19.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 19:20:54 -0700 (PDT)
+Date: Mon, 1 Aug 2022 10:20:50 +0800
+From: Leo Yan <leo.yan@linaro.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: Re: [steev:linux-v5.19.0-rc8-tests 109/182]
+ drivers/interconnect/qcom/icc-rpm.c:378:16: error: use of undeclared
+ identifier 'src_qn'
+Message-ID: <20220801022050.GC101027@leoy-ThinkPad-X240s>
+References: <202207311834.fM0dvTaU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,42 +54,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202207311834.fM0dvTaU-lkp@intel.com>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nicolas Schier <nicolas@fjasle.eu>
-CC: Sami Tolvanen <samitolvanen@google.com>
+On Sun, Jul 31, 2022 at 06:04:38PM +0800, kernel test robot wrote:
+> tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
+> head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
+> commit: 20386c070c2d12a74092d72aef1c8be37a5f5177 [109/182] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+> config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311834.fM0dvTaU-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/steev/linux/commit/20386c070c2d12a74092d72aef1c8be37a5f5177
+>         git remote add steev https://github.com/steev/linux
+>         git fetch --no-tags steev linux-v5.19.0-rc8-tests
+>         git checkout 20386c070c2d12a74092d72aef1c8be37a5f5177
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/interconnect/qcom/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/interconnect/qcom/icc-rpm.c:378:16: error: use of undeclared identifier 'src_qn'
+>                    do_div(rate, src_qn->buswidth);
+>                                 ^
+>    1 error generated.
 
-Hi Masahiro,
+This is the same issue that merged old version patches on the repo
+https://github.com/steev/linux, branch "linux-v5.19.0-rc8-tests", as I
+described in:
+https://lore.kernel.org/lkml/20220801020945.GB101027@leoy-ThinkPad-X240s/T/#t
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   334c0ef6429f261c7f53dc035632435ffbc0c60d
-commit: c25e1c55822f9b3b53ccbf88b85644317a525752 kbuild: do not create *.prelink.o for Clang LTO or IBT
-date:   9 weeks ago
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220801/202208010736.vAZ7rWVB-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c25e1c55822f9b3b53ccbf88b85644317a525752
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c25e1c55822f9b3b53ccbf88b85644317a525752
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv6/ipv6.o: warning: objtool: seg6_local_fill_encap() falls through to next function seg6_local_get_encap_size()
->> net/ipv6/ipv6.o: warning: objtool: seg6_local_cmp_encap() falls through to next function input_action_end()
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Leo
