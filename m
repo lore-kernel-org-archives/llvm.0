@@ -1,97 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896BB7F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 18:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B144FC433C1;
-	Mon,  1 Aug 2022 18:16:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659377777;
-	bh=ILNZcngc/0DTkB4CXY/R6bcTVDUmSD/QbrmX4P3OgOo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ix2BALo0Uxce3OGW6PwEW1ZFvyNWi+SLhnQ6zM80HE8f9rIJ25CXDIs6/8tt7PD1w
-	 62UjZ+K9evFDMvh0J7ryeU06D7ILv2L/iqPUY8hXYRMCmz/AigLbCIAymd893zdm9l
-	 H0UbIG9ufLIxVP2u5xd/J55a28pQUjCrhRPDUDtEJFFKahYeNzLGurIBfi2U07x5Cy
-	 4jNyGw6J70IIJsHFACT8ZS46GJWgsqmoXvw3jXuym6uEjH4aEE8Dj3rpOsILP7cCWW
-	 FGmNHicJHWEcl0RDR9TQYUP9ATsMKCqrGSp1LKSdG6QzdZofTHTdiBu3KspKMul1s1
-	 tvqKns2jqAwpw==
-Date: Mon, 1 Aug 2022 11:16:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Michal Marek <michal.lkml@markovi.net>,
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-Message-ID: <YugYbvRu1xqnx6mC@dev-arch.thelio-3990X>
-References: <20220720232332.2720091-1-justinstitt@google.com>
- <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
- <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
- <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
- <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C5F7F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 18:41:56 +0000 (UTC)
+Received: by mail-oi1-f175.google.com with SMTP id i4so14070483oif.2
+        for <llvm@lists.linux.dev>; Mon, 01 Aug 2022 11:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=zkq99qMAjwvXGkfSNJyXJX+b2TjDRVvHCxXnxYMawmA=;
+        b=GR/7JpLQVy0bCTRI+ul+w1w+WTS7yWNb6qXVsEXfXkAYLH51Uq55BIz8LUGL8vbB2b
+         cTaJe1WJmdUi66o9AyBlSNt1U61ZZL9rKX+rxWy2zUgcBTXubIbhrCY3lzVs0B6QgfPn
+         oy/jkML4xCDxWe2N0bg88dlZNcRZO12/7r+yIi/ZtFPYaQsU7Qmt/8knZN+VqenZhZ8Q
+         eH+bOWuVC3aTpmeS2s3hNE70dpKpfDtxRGpxYoYWmtWRkxG+h1Hl51uhnXEhDD60bN3y
+         Sb7lb2w/xNO1QC6msk3bDAdDWV4I85I3boKJnzhNO3zTFVQqZ5aD3IiJxTr8vHZQHJIs
+         u/Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=zkq99qMAjwvXGkfSNJyXJX+b2TjDRVvHCxXnxYMawmA=;
+        b=0D+la3y4uKReX8EI10ftkLy0tyC5ok2FhZkTkWq5gp3mlWpOGLU7d4YyNV6fWrxcvD
+         XhBQqkw1NyLhLgWL9usviapQnC26z33dFjFhGf7tPk0APQRVOMgXG3MdCJH4iRiTFyfy
+         ozHwsB26AQeBsk6lJqhxo2y+3y3yfn5E4K4Mj7fnyo/8RCxCIeCJwSc5ArG/1+7A7vuH
+         RafE7X5SVqobx1RHQ+qkmWUQzhEbmMkTD3CHsdZ5XsY4M91/1j+QcZZzsPwvhw7Fxys5
+         7WBLUvShRiI04xp/OCQI+7G/kdYLhUagvnLZVt2D5GWFavL0jHY080TlFkS8q+9l8K6p
+         yNlA==
+X-Gm-Message-State: AJIora8QuYwMjewXV+i2BLWoL2PYelDrlBoBnxkS0KgYGDDl+bSxDqgg
+	ScbMO9cAQXKFziSvYVDV7kp1j41JzaQn3yTC7dr+WYAHUfHXTQ==
+X-Google-Smtp-Source: AGRyM1sL8m9KrhGGOq9mC6hBze+Dx+mdHvuC13FniC/co9q0GB10W5O/YZiaZSh2RVkSs/vyQZYFll3xdlcT9wTDeQg=
+X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
+ ay43-20020a056808302b00b002f9eeef0f03mr7053815oib.128.1659379315956; Mon, 01
+ Aug 2022 11:41:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
+References: <CAKwvOd=M3uyJOp-LoP+R=z-GjXUo7RXvTqF7eie7FdFVQ=wf9w@mail.gmail.com>
+In-Reply-To: <CAKwvOd=M3uyJOp-LoP+R=z-GjXUo7RXvTqF7eie7FdFVQ=wf9w@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Mon, 1 Aug 2022 20:41:20 +0200
+Message-ID: <CA+icZUVrYr+9d=tkHakT-LQABFXF3qphdX-Z_8grzWAO-fwuxg@mail.gmail.com>
+Subject: Re: Some 5.19 development statistics [LWN.net]
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Aug 01, 2022 at 10:40:29AM -0700, Justin Stitt wrote:
-> > OK, I think that will be good timing.
-> > Please ping me if I forget to pick it up.
-> >
-> Hey Masahiro, just pinging to see the state of this PR.
-> 
-> I think we are on pace to re-enable this warning.
-> 
-> I believe there exists only _two_ patches left still needing to go
-> through along with this patch:
-> 1) https://lore.kernel.org/all/20220718050356.227647-1-hch@lst.de/
+On Mon, Aug 1, 2022 at 8:33 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> https://lwn.net/Articles/902854/
+>
+> Thanks to Nathan and Sedat who both made the list of top testers for the 5.19 release! This is a _critical_ role to our team and it is much appreciated!
+>
+> Nathan and Sudip we're top reporters.
+>
 
-This is now in the block tree, so it should be squared away:
+Hi Nick,
 
-https://lore.kernel.org/YuFhR9OoPvM9VsdT@infradead.org/
+Incredible news for CBL users and developers.
 
-Stephen is on vacation so -next hasn't updated for a few days but it
-sounds like Mark is going to provide some coverage:
+...and Linus uses an ARM64 (Apple) notebook...
 
-https://lore.kernel.org/YugAzWWl++ArhhPS@sirena.org.uk/
+Best regards,
+-Sedat-
 
-> 2) https://lore.kernel.org/all/YtnDltqEVeJQQkbW@dev-arch.thelio-3990X/
-
-We need to chase this, as I haven't seen an "applied" email. We have two
-options:
-
-1. Ask the maintainers to apply the change to their branch directly.
-2. Ask them for an "Ack" so that we can apply that change along with
-   this one.
-
-It is worth a ping asking which they prefer. The first option is
-simpler, as the change that introduced the warning is only in -next so
-it can just be applied to the same branch; the only concern is making
-sure that change makes -rc1. The second option gives us more flexibility
-with enabling the warning in the event that the change missed being
-added to the main pull request but it will require basing the change on
-a non-rc base, which most maintainers don't really like.
-
-It is ultimately up to Masahiro but my vision is:
-
-1. Ping the patch, asking how to proceed.
-2. If the maintainers can pick it up and it will make the merge window,
-   let them apply it then apply this patch to the Kbuild tree for -next.
-3. If they prefer the "Ack" route, wait until mainline contains the
-   problematic patch then apply the warning fix patch and this patch to
-   the Kbuild tree on top of the problematic merge.
-4. Wait until all other patches are in mainline (I can watch mainline
-   and build it continuously) then pull request the branch containing
-   whatever changes we need.
-
-Masahiro, does that sound reasonable?
-
-Cheers,
-Nathan
+[1] https://lore.kernel.org/all/CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com/#t
