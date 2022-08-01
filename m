@@ -1,30 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1910E7F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 23:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E957C433C1;
-	Mon,  1 Aug 2022 23:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659394998;
-	bh=hmnaAFL9blqfQs5JS/2/kc/IHMMF1YcLguTNdtX/2cY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Qs1kh/Dfa05U9xSDhJLWQjjDU0FdNuYbuuBzKkyrKOOMmCqP5Vq6glt1TPbJIA9jT
-	 rjHMDvD6fERFY8B+7pJOrjsRYvEDLBqmehu879CV8daWnw+Ud39herge/ekfLy4x8H
-	 FmKMHw08DyCCN7+TtLcKwTAl8STT/5auU61ol6Va745+nMiHaXQOqs8MVBVCgv9vwI
-	 eKHAk57DMK83Rk6dwb6UfGNutJ8jvQIdq9OOsh8HtKanofeH9c5pDbzxvHtmNSzLAE
-	 NGz+MmVfyxdMo8y5bdJi0EpvNTj7pEOuc1v4xJa053OFI58NFpKz9LiZzsCtjP+ABd
-	 aYMzTNHfQEZtw==
-Date: Mon, 1 Aug 2022 16:03:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: arm ixp4xx_defconfig build failure with linux-next and mainline
-Message-ID: <YuhbtB9+1rTYtT23@dev-arch.thelio-3990X>
-References: <CADVatmPNCUXqKBoLCpwBA90ocZA6-u+=y1_jz=3C+KwEmN54AA@mail.gmail.com>
- <YuLqQrKtDnTuJdZK@dev-arch.thelio-3990X>
- <CAK8P3a341-H8uo9oABQCeRvhmKDs5eBwTGxsuZhO6Pt+WD8v6Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65147F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 23:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659395576; x=1690931576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G9bgKXvdBj+4w1asG6gUtTJ6Z+qCX6yLZ9jUh+LTVog=;
+  b=IIWHeNl9I73Zj58abSqwwww8G0vrVW2J7pZoyQ8Dca/zR//yZBoUVKUG
+   Vyu14KUDPoxBXZWx34pChhYoflBD/VGTm424h9snbHimazjsBGho3ZJih
+   kIQF83QTYLbkASWgXcaa64V2eQIea7ebbeZzYlh423ALtaUZh1fPnRVA1
+   bnyOaKm6jTIEXZ66r8G2Uzw2TSxVADQ4CxbvS8HFpZDSnh9/WUVC1shET
+   2L2+j4191IwuO4u8UjEKJA5Gp8VHk0jG/05Os5QOYnIPUZqox7fzJNBSv
+   HOXEQ2dr6TbL2kS0qpqy5yk6f3khvVreqAeyZXdokPl+IVCwRiuX1nKnx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="350979676"
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="350979676"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 16:12:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="744454444"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Aug 2022 16:12:54 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oIeak-000FT6-0h;
+	Mon, 01 Aug 2022 23:12:54 +0000
+Date: Tue, 2 Aug 2022 07:12:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suniel Mahesh <sunil@amarulasolutions.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC 1/2] usb: gadget: f_hid: Extend functionality for
+ GET_REPORT mode
+Message-ID: <202208020708.SdOu2dlp-lkp@intel.com>
+References: <20220801123010.2984864-2-sunil@amarulasolutions.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,161 +46,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a341-H8uo9oABQCeRvhmKDs5eBwTGxsuZhO6Pt+WD8v6Q@mail.gmail.com>
+In-Reply-To: <20220801123010.2984864-2-sunil@amarulasolutions.com>
 
-On Sun, Jul 31, 2022 at 01:57:04PM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 28, 2022 at 9:57 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Jul 28, 2022 at 06:33:07PM +0100, Sudip Mukherjee wrote:
-> > > Hi All,
-> > >
-> > > Not sure if its reported, builds of arm ixp4xx_defconfig has been
-> > > failing with clang with the error:
-> > >
-> > > <instantiation>:1:10: error: invalid hexadecimal number
-> > > ldr r7, =0x
-> > >          ^
-> > > arch/arm/kernel/head.S:319:2: note: while in macro instantiation
-> > >  addruart r7, r3, r0
-> > >  ^
-> > > <instantiation>:2:12: error: invalid hexadecimal number
-> > >   ldr r3, =0x
-> > >            ^
-> > > arch/arm/kernel/head.S:319:2: note: while in macro instantiation
-> > >  addruart r7, r3, r0
-> > >
-> > >
-> > > I tried to find it in the issue tracker but could not find it.
-> >
-> > Thanks for the report! We have not tested all of the configs in
-> > arch/arm/configs so I am not surprised to find one that has an error.
-> >
-> > I see multiple definitions of addruart. If I preprocess
-> > arch/arm/kernel/head.S with this configuration, I see it comes from
-> > arch/arm/include/debug/8250.S:
-> >
-> >                 .macro  addruart, rp, rv, tmp
-> >                 ldr     \rp, =CONFIG_DEBUG_UART_PHYS
-> >                 ldr     \rv, =CONFIG_DEBUG_UART_VIRT
-> >                 .endm
-> >
-> > CONFIG_DEBUG_UART_PHYS and CONFIG_DEBUG_UART_VIRT are both empty for
-> > this configuration with LLVM=1:
-> >
-> > $ make -skj"$(nproc)" ARCH=arm LLVM=1 ixp4xx_defconfig
-> >
-> > $ rg "CONFIG_DEBUG_UART_(PHYS|VIRT)=" .config
-> > 3036:CONFIG_DEBUG_UART_PHYS=
-> > 3037:CONFIG_DEBUG_UART_VIRT=
-> 
-> I had a patch for this a long time ago, to ensure that there is always
-> some default value for these. I wonder if we are just missing something
-> in the long list of defaults.
+Hi Suniel,
 
-I kind of outlined what I think is happening below but I'll see if I can
-rephrase in case I missed something.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on linus/master balbi-usb/testing/next peter-chen-usb/for-usb-next v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Prior to commit 5d6f52671e76 ("ARM: rework endianess selection"),
-CONFIG_ARCH_IXP4XX could be selected with either
-CONFIG_CPU_LITTLE_ENDIAN or CONFIG_CPU_BIG_ENDIAN, meaning that the
-"default" values with "if ARCH_IXP4XX" in CONFIG_DEBUG_UART_{PHYS,VIRT}
-would be used, depending on the endianess.
+url:    https://github.com/intel-lab-lkp/linux/commits/Suniel-Mahesh/Extend-functionality-for-GET_REPORT/20220801-204541
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-randconfig-a002-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020708.SdOu2dlp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9211662f0f3d90b67bd34041c8f292b883345d9d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Suniel-Mahesh/Extend-functionality-for-GET_REPORT/20220801-204541
+        git checkout 9211662f0f3d90b67bd34041c8f292b883345d9d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
-After commit 5d6f52671e76 ("ARM: rework endianess selection"),
-CONFIG_ARCH_IXP4XX can only be selected with CONFIG_CPU_BIG_ENDIAN
-enabled due to the "depends on". When 'LD=ld.lld' is passed to 'make',
-CONFIG_CPU_BIG_ENDIAN is not visible so CONFIG_ARCH_IXP4XX cannot be
-selected, which means neither of the "default" values with "if
-ARCH_IXP4XX" will trigger nor will any of the other "default" values,
-resulting in empty CONFIG_DEBUG_UART_{PHYS,VIRT} like above.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Adding a "fallthrough" default value would prevent the build error that
-Sudip noted in his original report but to me, this build error is good
-because it shows us that building ipx4xx_defconfig is entirely useless
-with 'LD=ld.lld' because CONFIG_ARCH_IXP4XX cannot be selected,
-defeating the purpose of building a kernel for this platform.
+All errors (new ones prefixed by >>):
 
-> Which option is the one that gets selected in the 'choice' statement
-> below CONFIG_DEBUG_LL in this config?
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> error: include/uapi/linux/usb/g_hid.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/linux/usb/g_hid.h] Error 1
+   make[2]: Target '__headers' not remade because of errors.
+   make[1]: *** [Makefile:1286: headers] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-I see
-
-  CONFIG_DEBUG_LL_UART_8250=y
-
-enabled with this configuration.
-
-> > Looking at arch/arm/Kconfig.debug, I see:
-> >
-> > config DEBUG_UART_PHYS
-> > ...
-> >         default 0xc8000000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
-> >         default 0xc8000003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
-> > ...
-> >
-> > config DEBUG_UART_VIRT
-> > ...
-> >         default 0xfec00000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
-> >         default 0xfec00003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
-> > ...
-> >
-> > Digging further, I don't see how this configuration can work with
-> > LD=ld.lld (implied by LLVM=1). Commit 5d6f52671e76 ("ARM: rework
-> > endianess selection") made it so that CONFIG_ARCH_IXP4XX cannot be
-> > selected without CONFIG_CPU_BIG_ENDIAN due to the "depends" but
-> > CONFIG_CPU_BIG_ENDIAN in turn cannot be selected with LD=ld.lld due to
-> > commit 28187dc8ebd9 ("ARM: 9025/1: Kconfig: CPU_BIG_ENDIAN depends on
-> > !LD_IS_LLD"), meaning that none of these "default" statements can
-> > trigger.
-> >
-> > I see two solutions for the immediate future (I've CC'd Arnd in case he
-> > has any thoughts):
-> >
-> > * Use LD=arm-linux-gnueabi-ld (or whatever your triple is) with this
-> >   configuration if you want to keep testing it.
-> >
-> > * Don't build this configuration altogether.
-> 
-> Right, these are both good options. In the long run, we probably
-> want the second one if this is the only thing that can build with
-> clang but not lld.
-> 
-> > Maybe we could hack up a sane default value for these configurations but
-> > that is just going to give the false impression that this kernel will
-> > work because it builds, when it can't because the ARCH config is not
-> > even selectable to get all of the other configurations that are needed
-> > for everything to work properly.
-> >
-> > The real solution is either:
-> >
-> > * Make ixp4xx work in little endian mode (but commit 3d427228f7370 casts
-> >   some doubts about whether or not that is possible).
-> 
-> It clearly worked in the distant past, so it should be possible, I just doubt
-> that it's worth doing this for a 20 year old platform, as there are no
-> new users and the existing users are probably not planning to replace
-> their user space. On the other hand, it is possible that there are users
-> that are only waiting to move to a recent debian armel build.
-
-Right, I don't think there is a point in making this platform work in
-little endian mode just for the sake of the build problem; it should be
-done if there are other users that will take advantage of it because I
-doubt people are going to be using clang to build kernels for this
-platform.
-
-> > * Make ld.lld work properly with CONFIG_CPU_BIG_ENDIAN but given how
-> >   little use big endian sees for ARM targets, that probably won't happen
-> >   for a while, if at all.
-> >
-> > As always, I am happy to be proven wrong if I have missed something :)
-> 
-> For lld, I don't think there is any point in working on the old BE32 format
-> that ixp4xx uses and that I think involves extra work in the linker.
-> If anyone would want to make CONFIG_CPU_BIG_ENDIAN work, they
-> should start with the modern BE8 format that is used on ARMv6 and
-> newer, and should be less work to do in the linker because it does not
-> involve byte-swapping the .text segment.
-
-Ah, good to know!
-
-Cheers,
-Natham
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
