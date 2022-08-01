@@ -1,367 +1,252 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5687F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 11:12:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659352322;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5ED7F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 12:27:20 +0000 (UTC)
+Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by meesny.iki.fi (Postfix) with ESMTPSA id 3D0AA20093;
+	Mon,  1 Aug 2022 15:16:49 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+	t=1659356209;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=diwiBuHSFm2s7JnLjBNOrdxizFPLTyR8sO9KtvxFcsU=;
-	b=AFaEmYb2KHDRsjy7q9siWEFYmtbfEmyt6y6Z0E3tA8AXx9VPcQzsFSeB0108ztwiO26RMS
-	RLaJYus8mjPbMmd8exLdJ9ef5L5Ex13g+ulTw2uXdXx7XjL/Zi41De3QWxP6VQkZG4AuOe
-	bK4SF2L6rfrSqun+juEBBk5POxmD+UY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-BTspi_FkO7-ta9va3yCUAg-1; Mon, 01 Aug 2022 07:12:01 -0400
-X-MC-Unique: BTspi_FkO7-ta9va3yCUAg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	 in-reply-to:in-reply-to:references:references;
+	bh=/Bh14Hk6sa//86NbqJfelnT4ZG7/BMw5JTIu6cE97AM=;
+	b=XA8hThafhSmPdApR5a4xni1OvnlBHbIMm/gUNIm8JA9mt/akVcOyz3hLOWCE2iSiPyt7Dp
+	XMy8AU086198SPHiolFCkWsuBTpCKsZ2hv9/d3+kp+8dH7CS6rG1XKLggUvuS3qZxJK8go
+	Ir8R7HMeFh50LO+Rucu6Y9RWBWldXB4=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 06C48811E80
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 11:12:01 +0000 (UTC)
-Received: from [172.64.5.13] (unknown [10.30.32.252])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DB7174010D27;
-	Mon,  1 Aug 2022 11:12:00 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [3d7cb6b0]
-Date: Mon, 01 Aug 2022 11:12:00 -0000
-CC: mm-qe@redhat.com, jstancek@redhat.com, liwang@redhat.com, feliu@redhat.com
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id AB224634C97;
+	Mon,  1 Aug 2022 15:16:48 +0300 (EEST)
+Date: Mon, 1 Aug 2022 15:16:48 +0300
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: "Paul J . Murphy" <paul.j.murphy@intel.com>,
+	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] media: i2c: ov9282: Set v4l2 subdev name
+ according to sensor model
+Message-ID: <YufEMD8oBLNNewsf@valkosipuli.retiisi.eu>
+References: <20220728130237.3396663-7-alexander.stein@ew.tq-group.com>
+ <202207290518.1D7MVS65-lkp@intel.com>
+ <6086686.mvXUDI8C0e@steina-w>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <80845.122080107120100185@us-mta-100.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6086686.mvXUDI8C0e@steina-w>
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=meesny; t=1659356209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/Bh14Hk6sa//86NbqJfelnT4ZG7/BMw5JTIu6cE97AM=;
+	b=sr9i6Y4w35p+nn6UQualFRbF0kd5EnJTPzkTl+iUSnQBhfIkfsBY+NynJW3Eaw+BubnQmb
+	7SgGIOPdYSp8jRzTMaE2N43EXbOZETkb53U2EmHD0kf1/XUwuCNmJfTODXkhyRzZuGmuke
+	l+QqzROGLPFlVpI7Ulvzp22GXpq1aJE=
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1659356209; a=rsa-sha256; cv=none;
+	b=yOXwmQhhdERA8o8oVHsE/aNiStiyzdmF5L1AK+++S8MP8Whp2Cgy+C5SpIP0AksIxorN0D
+	Nqut8pUnLUZORsCsNrj/om65chCSPnG/UOBwYTdfng858YQZPeNPS+0wn6K9pNyasCQluH
+	78I5hwolxfU79lqrx+KKxYl3TV2uImc=
 
-Hi, we tested your kernel and here are the results:
+Hi Alexander,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Fri, Jul 29, 2022 at 10:23:48AM +0200, Alexander Stein wrote:
+> Am Donnerstag, 28. Juli 2022, 23:10:07 CEST schrieb kernel test robot:
+> > Hi Alexander,
+> > 
+> > Thank you for the patch! Perhaps something to improve:
+> > 
+> > [auto build test WARNING on media-tree/master]
+> > [also build test WARNING on linus/master v5.19-rc8 next-20220728]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:   
+> > https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/OV9281-suppo
+> > rt/20220728-210448 base:   git://linuxtv.org/media_tree.git master
+> > config: arm-randconfig-r022-20220728
+> > (https://download.01.org/0day-ci/archive/20220729/202207290518.1D7MVS65-lkp
+> > @intel.com/config) compiler: clang version 15.0.0
+> > (https://github.com/llvm/llvm-project
+> > 8dfaecc4c24494337933aff9d9166486ca0949f1) reproduce (this is a W=1 build):
+> >         wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O
+> > ~/bin/make.cross chmod +x ~/bin/make.cross
+> >         # install arm cross compiling tool for clang build
+> >         # apt-get install binutils-arm-linux-gnueabi
+> >         #
+> > https://github.com/intel-lab-lkp/linux/commit/ee28006553d4d23f600b0076ef606
+> > 6710519f156 git remote add linux-review
+> > https://github.com/intel-lab-lkp/linux git fetch --no-tags linux-review
+> > Alexander-Stein/OV9281-support/20220728-210448 git checkout
+> > ee28006553d4d23f600b0076ef6066710519f156
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
+> > O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/i2c/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > >> drivers/media/i2c/ov9282.c:1054:10: warning: variable 'ret' is
+> > >> uninitialized when used here [-Wuninitialized]
+> >                    return ret;
+> >                           ^~~
+> >    drivers/media/i2c/ov9282.c:1041:9: note: initialize the variable 'ret' to
+> > silence this warning int ret;
+> >                   ^
+> >                    = 0
+> >    1 warning generated.
+> > 
+> > 
+> > vim +/ret +1054 drivers/media/i2c/ov9282.c
+> > 
+> >   1030
+> >   1031	/**
+> >   1032	 * ov9282_probe() - I2C client device binding
+> >   1033	 * @client: pointer to i2c client device
+> >   1034	 *
+> >   1035	 * Return: 0 if successful, error code otherwise.
+> >   1036	 */
+> >   1037	static int ov9282_probe(struct i2c_client *client)
+> >   1038	{
+> >   1039		struct ov9282 *ov9282;
+> >   1040		const char *sensor_name;
+> >   1041		int ret;
+> >   1042
+> >   1043		ov9282 = devm_kzalloc(&client->dev, sizeof(*ov9282), 
+> GFP_KERNEL);
+> >   1044		if (!ov9282)
+> >   1045			return -ENOMEM;
+> >   1046
+> >   1047		ov9282->dev = &client->dev;
+> >   1048
+> >   1049		/* Initialize subdev */
+> >   1050		v4l2_i2c_subdev_init(&ov9282->sd, client, 
+> &ov9282_subdev_ops);
+> >   1051		sensor_name = device_get_match_data(ov9282->dev);
+> >   1052		if (!sensor_name) {
+> >   1053			dev_err(ov9282->dev, "Sensor name is 
+> missing");
+> > 
+> > > 1054			return ret;
+> > 
+> >   1055		}
+> >   1056		v4l2_i2c_subdev_set_name(&ov9282->sd, client, 
+> sensor_name, NULL);
+> >   1057
+> >   1058		ret = ov9282_parse_hw_config(ov9282);
+> >   1059		if (ret) {
+> >   1060			dev_err(ov9282->dev, "HW configuration is not 
+> supported");
+> >   1061			return ret;
+> >   1062		}
+> >   1063
+> >   1064		ret = ov9282_get_regulators(ov9282);
+> >   1065		if (ret) {
+> >   1066			dev_err(&client->dev, "Failed to get power 
+> regulators\n");
+> >   1067			return ret;
+> >   1068		}
+> >   1069
+> >   1070		mutex_init(&ov9282->mutex);
+> >   1071
+> >   1072		ret = ov9282_power_on(ov9282->dev);
+> >   1073		if (ret) {
+> >   1074			dev_err(ov9282->dev, "failed to power-on the 
+> sensor");
+> >   1075			goto error_mutex_destroy;
+> >   1076		}
+> >   1077
+> >   1078		/* Check module identity */
+> >   1079		ret = ov9282_detect(ov9282);
+> >   1080		if (ret) {
+> >   1081			dev_err(ov9282->dev, "failed to find sensor: 
+> %d", ret);
+> >   1082			goto error_power_off;
+> >   1083		}
+> >   1084
+> >   1085		/* Set default mode to max resolution */
+> >   1086		ov9282->cur_mode = &supported_mode;
+> >   1087		ov9282->vblank = ov9282->cur_mode->vblank;
+> >   1088
+> >   1089		ret = ov9282_init_controls(ov9282);
+> >   1090		if (ret) {
+> >   1091			dev_err(ov9282->dev, "failed to init 
+> controls: %d", ret);
+> >   1092			goto error_power_off;
+> >   1093		}
+> >   1094
+> >   1095		/* Initialize subdev */
+> >   1096		ov9282->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> >   1097		ov9282->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> >   1098
+> >   1099		/* Initialize source pad */
+> >   1100		ov9282->pad.flags = MEDIA_PAD_FL_SOURCE;
+> >   1101		ret = media_entity_pads_init(&ov9282->sd.entity, 1, 
+> &ov9282->pad);
+> >   1102		if (ret) {
+> >   1103			dev_err(ov9282->dev, "failed to init entity 
+> pads: %d", ret);
+> >   1104			goto error_handler_free;
+> >   1105		}
+> >   1106
+> >   1107		ret = v4l2_async_register_subdev_sensor(&ov9282->sd);
+> >   1108		if (ret < 0) {
+> >   1109			dev_err(ov9282->dev,
+> >   1110				"failed to register async subdev: 
+> %d", ret);
+> >   1111			goto error_media_entity;
+> >   1112		}
+> >   1113
+> >   1114		pm_runtime_set_active(ov9282->dev);
+> >   1115		pm_runtime_enable(ov9282->dev);
+> >   1116		pm_runtime_idle(ov9282->dev);
+> >   1117
+> >   1118		return 0;
+> >   1119
+> >   1120	error_media_entity:
+> >   1121		media_entity_cleanup(&ov9282->sd.entity);
+> >   1122	error_handler_free:
+> >   1123		v4l2_ctrl_handler_free(ov9282->sd.ctrl_handler);
+> >   1124	error_power_off:
+> >   1125		ov9282_power_off(ov9282->dev);
+> >   1126	error_mutex_destroy:
+> >   1127		mutex_destroy(&ov9282->mutex);
+> >   1128
+> >   1129		return ret;
+> >   1130	}
+> >   1131
+> 
+> Meh, I'll come up with a fixed once discussion about the additional compatible 
+> has settled. This will also include the missing member documentation in patch 
+> 5
 
+I think you could simply pass device_get_match_data() return value as the
+sensor name. The driver is in direct control of the string so I don't think
+you need error handling here.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49386
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         ppc64le - LTP - cve
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620565
-         ppc64le - LTP - sched
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620566
-         ppc64le - LTP - syscalls
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620567
-         ppc64le - LTP - can
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620568
-         ppc64le - LTP - commands
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620569
-         ppc64le - LTP - containers
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620570
-         ppc64le - LTP - dio
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620571
-         ppc64le - LTP - fs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620572
-         ppc64le - LTP - fsx
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620573
-         ppc64le - LTP - math
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620574
-         ppc64le - LTP - hugetlb
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620575
-         ppc64le - LTP - mm
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620576
-         ppc64le - LTP - nptl
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620577
-         ppc64le - LTP - pty
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620578
-         ppc64le - LTP - ipc
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620579
-         ppc64le - LTP - tracing
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620580
-          x86_64 (debug) - Networking MACsec: sanity
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4620782
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - LTP - cve
-                 aarch64 - LTP - sched
-                 aarch64 - LTP - syscalls
-                 aarch64 - LTP - can
-                 aarch64 - LTP - commands
-                 aarch64 - LTP - containers
-                 aarch64 - LTP - dio
-                 aarch64 - LTP - fs
-                 aarch64 - LTP - fsx
-                 aarch64 - LTP - math
-                 aarch64 - LTP - hugetlb
-                 aarch64 - LTP - mm
-                 aarch64 - LTP - nptl
-                 aarch64 - LTP - pty
-                 aarch64 - LTP - ipc
-                 aarch64 - LTP - tracing
-                 aarch64 - Firmware test suite
-                   s390x - LTP - cve
-                   s390x - LTP - sched
-                   s390x - LTP - syscalls
-                   s390x - LTP - can
-                   s390x - LTP - commands
-                   s390x - LTP - containers
-                   s390x - LTP - dio
-                   s390x - LTP - fs
-                   s390x - LTP - fsx
-                   s390x - LTP - math
-                   s390x - LTP - hugetlb
-                   s390x - LTP - mm
-                   s390x - LTP - nptl
-                   s390x - LTP - pty
-                   s390x - LTP - ipc
-                   s390x - LTP - tracing
-                  x86_64 - LTP - cve
-                  x86_64 - LTP - sched
-                  x86_64 - LTP - syscalls
-                  x86_64 - LTP - can
-                  x86_64 - LTP - commands
-                  x86_64 - LTP - containers
-                  x86_64 - LTP - dio
-                  x86_64 - LTP - fs
-                  x86_64 - LTP - fsx
-                  x86_64 - LTP - math
-                  x86_64 - LTP - hugetlb
-                  x86_64 - LTP - mm
-                  x86_64 - LTP - nptl
-                  x86_64 - LTP - pty
-                  x86_64 - LTP - ipc
-                  x86_64 - LTP - tracing
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - LTP - cve
-                  x86_64 (debug) - LTP - sched
-                  x86_64 (debug) - LTP - syscalls
-                  x86_64 (debug) - LTP - can
-                  x86_64 (debug) - LTP - commands
-                  x86_64 (debug) - LTP - containers
-                  x86_64 (debug) - LTP - dio
-                  x86_64 (debug) - LTP - fs
-                  x86_64 (debug) - LTP - fsx
-                  x86_64 (debug) - LTP - math
-                  x86_64 (debug) - LTP - hugetlb
-                  x86_64 (debug) - LTP - mm
-                  x86_64 (debug) - LTP - nptl
-                  x86_64 (debug) - LTP - pty
-                  x86_64 (debug) - LTP - ipc
-                  x86_64 (debug) - LTP - tracing
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: stress: stress-ng - cpu-cache: fail to build core-affinity: =
-error: redeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                  x86_64 (debug) - stress: stress-ng - cpu-cache
-        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
-already exists and is not an empty directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1301
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 (debug) - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 (debug) - Storage - blktests - nvme-tcp
-                  x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 (debug) - Storage - block - storage fio numa
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Podman: 040-ps.bats: FAIL: podman ps -a --external sees buil=
-dah containers
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1092
-            Affected tests:
-                  x86_64 (debug) - Podman system test - as root
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 ppc64le - Podman system test - as root
-                  x86_64 - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as root
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                 ppc64le - Podman system test - as root
-                 ppc64le - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                 ppc64le - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Sakari Ailus
