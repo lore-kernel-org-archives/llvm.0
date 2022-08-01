@@ -1,108 +1,97 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35EF7F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 17:59:00 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id u1so8265881lfq.4
-        for <llvm@lists.linux.dev>; Mon, 01 Aug 2022 10:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7yJue3wpE46mqMp6WfUlVgKTJyxRggT/HsVWQliUjAA=;
-        b=baZtFM+E8jy0urk7ZQ/53EmacTrKbsBnvC4gnQsFSE4Xor6gw+u3FxpwZ3oOBhnwpW
-         rLj/pVIQZC4/vYyFqDZQCnOTkDIUNeHUIinm/xvmU1t+cJbC6QjCDmIgcBM9yuAehGeR
-         z3jZkpzc/sjT3iR4N5Kw9qPzwsgeSvm3VXBF5sj6kzz7wWaj1kT4oH42lixMmwWy3cEp
-         0hwtc+ML4IqNE5y8J0JxkRWe++b8jbXAvp50q/q4jQmV0JNcSUNY9oI19wEMddsPC7u1
-         aseeDg5zh5jGKprMt726AzYUEB3oc+hRmMHVQwelMzX/IItZKahz9+UTzSCXghGppvNL
-         4FGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7yJue3wpE46mqMp6WfUlVgKTJyxRggT/HsVWQliUjAA=;
-        b=AeXIFNPgkdsuXQiCIg1+Ia8IC1wQrkPRtnSN7lgq/ZR0MmBSuUtzCKzWjPuFerYufa
-         Rso0zZlmBcMXfQfpTu6p6W9z371dJ464mdH+poJuZ3DepGUEZAFpmXMQYljzHGhLVDzW
-         tf+yv4yOsFoayZbcHDPHfCiP84Tku4l3HFXf5jFb3oR+q9hUYopl5lDFpINRmfq++gm7
-         NHcSlVOq6yi4eFFZEWDXB7OR/qiD/cQ11zMcH1r+XGIAiOAsCHbPtZLZQoGHmsyIbmPv
-         VkzWIOBfhn88o6eLkDYQ5GWwW1zB1Zx2NSwbdfBEFUazBnXVN/wBBtFrIns5/ouv54yg
-         PicA==
-X-Gm-Message-State: AJIora9cNfEJY0w6ItJ8vYgUCsX79WT/p+uvJOxzTliMsvIBRNx+W/TW
-	EGODYJKVnMTm6+yPLgJLHBRT1twW8JZy2deWizDRIBpAo5oB/A==
-X-Google-Smtp-Source: AGRyM1tGJjG6mSt41oFvvwn+SA1Zafr1raTgRq9oDWlEyv2VYmo1Yqq8O7EFhbioIhMWJ4CIBLfi7iGbUSCW3bHKpwY=
-X-Received: by 2002:a19:7902:0:b0:48a:6872:68ab with SMTP id
- u2-20020a197902000000b0048a687268abmr5702496lfc.626.1659376738622; Mon, 01
- Aug 2022 10:58:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896BB7F
+	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 18:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B144FC433C1;
+	Mon,  1 Aug 2022 18:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659377777;
+	bh=ILNZcngc/0DTkB4CXY/R6bcTVDUmSD/QbrmX4P3OgOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ix2BALo0Uxce3OGW6PwEW1ZFvyNWi+SLhnQ6zM80HE8f9rIJ25CXDIs6/8tt7PD1w
+	 62UjZ+K9evFDMvh0J7ryeU06D7ILv2L/iqPUY8hXYRMCmz/AigLbCIAymd893zdm9l
+	 H0UbIG9ufLIxVP2u5xd/J55a28pQUjCrhRPDUDtEJFFKahYeNzLGurIBfi2U07x5Cy
+	 4jNyGw6J70IIJsHFACT8ZS46GJWgsqmoXvw3jXuym6uEjH4aEE8Dj3rpOsILP7cCWW
+	 FGmNHicJHWEcl0RDR9TQYUP9ATsMKCqrGSp1LKSdG6QzdZofTHTdiBu3KspKMul1s1
+	 tvqKns2jqAwpw==
+Date: Mon, 1 Aug 2022 11:16:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Michal Marek <michal.lkml@markovi.net>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+Message-ID: <YugYbvRu1xqnx6mC@dev-arch.thelio-3990X>
+References: <20220720232332.2720091-1-justinstitt@google.com>
+ <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+ <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
+ <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
+ <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220728161208.865420-1-yury.norov@gmail.com> <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
- <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 1 Aug 2022 10:58:46 -0700
-Message-ID: <CAKwvOdkigxQUF399-WoWwsg-W2dbMj-mx4sOx91hb9RDodqHmw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] lib/find: optimize find_bit() functions
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
 
-On Thu, Jul 28, 2022 at 2:49 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Jul 28, 2022 at 11:49 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+On Mon, Aug 01, 2022 at 10:40:29AM -0700, Justin Stitt wrote:
+> > OK, I think that will be good timing.
+> > Please ping me if I forget to pick it up.
 > >
-> > It builds for me and seems to generate reasonable code, although I
-> > notice that clang messes up the "__ffs()" inline asm and forces the
-> > source into memory.
->
-> I have created a llvm issue for this at
->
->         https://github.com/llvm/llvm-project/issues/56789
+> Hey Masahiro, just pinging to see the state of this PR.
+> 
+> I think we are on pace to re-enable this warning.
+> 
+> I believe there exists only _two_ patches left still needing to go
+> through along with this patch:
+> 1) https://lore.kernel.org/all/20220718050356.227647-1-hch@lst.de/
 
-Thanks for the report.  I left a response there (in case you have
-notification emails from github filtered; following up here).
-https://github.com/llvm/llvm-project/issues/56789#issuecomment-1201525395
+This is now in the block tree, so it should be squared away:
 
-So it looks like at least 3 things we can clean up:
-1. https://github.com/llvm/llvm-project/issues/20571
-2. https://github.com/llvm/llvm-project/issues/34191
-3. https://github.com/llvm/llvm-project/issues/33216
+https://lore.kernel.org/YuFhR9OoPvM9VsdT@infradead.org/
 
->
-> and while I noticed this while looking at the rather odd code
-> generation for the bit finding functions, it seems to be a general
-> issue with clang inline asm.
->
-> It looks like any instruction that takes a mod/rm input (so a register
-> or memory) will always force the thing to be in memory. Which is very
-> pointless in itself, but it actually causes some functions to have a
-> stack frame that they wouldn't otherwise need or want. So it actually
-> has secondary downsides too.
->
-> And yes, that particular case could be solved with __builtin_ctzl(),
-> which seems to DTRT. But that uses plain bsf, and we seem to really
-> want tzcnt ("rep bsf") here, although I didn't check why (the comment
-> explicitly says "Undefined if no bit exists", which is the main
-> difference between bsf and tzcnt).
->
-> I _think_ it's because tzcnt is faster when it exists exactly because
-> it always writes the destination, so 'bsf' is actually the inferior
-> op, and clang shouldn't generate it.
->
-> But the "rm" thing exists elsewhere too, and I just checked - this
-> same issue seems to happen with "g" too (ie "any general integer
-> input").
->
->                       Linus
+Stephen is on vacation so -next hasn't updated for a few days but it
+sounds like Mark is going to provide some coverage:
 
+https://lore.kernel.org/YugAzWWl++ArhhPS@sirena.org.uk/
 
+> 2) https://lore.kernel.org/all/YtnDltqEVeJQQkbW@dev-arch.thelio-3990X/
 
--- 
-Thanks,
-~Nick Desaulniers
+We need to chase this, as I haven't seen an "applied" email. We have two
+options:
+
+1. Ask the maintainers to apply the change to their branch directly.
+2. Ask them for an "Ack" so that we can apply that change along with
+   this one.
+
+It is worth a ping asking which they prefer. The first option is
+simpler, as the change that introduced the warning is only in -next so
+it can just be applied to the same branch; the only concern is making
+sure that change makes -rc1. The second option gives us more flexibility
+with enabling the warning in the event that the change missed being
+added to the main pull request but it will require basing the change on
+a non-rc base, which most maintainers don't really like.
+
+It is ultimately up to Masahiro but my vision is:
+
+1. Ping the patch, asking how to proceed.
+2. If the maintainers can pick it up and it will make the merge window,
+   let them apply it then apply this patch to the Kbuild tree for -next.
+3. If they prefer the "Ack" route, wait until mainline contains the
+   problematic patch then apply the warning fix patch and this patch to
+   the Kbuild tree on top of the problematic merge.
+4. Wait until all other patches are in mainline (I can watch mainline
+   and build it continuously) then pull request the branch containing
+   whatever changes we need.
+
+Masahiro, does that sound reasonable?
+
+Cheers,
+Nathan
