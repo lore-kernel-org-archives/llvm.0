@@ -1,103 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E967F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 17:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B6BC433B5;
-	Tue,  2 Aug 2022 17:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74B77F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC440C433C1;
+	Tue,  2 Aug 2022 20:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659463183;
-	bh=xpWA7Jpv8r6INPM8eC9dRH0bjB0EBSQdgOjBy0N4/rw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V15liBSsJpZKesOb/8eDlMArbGuucPgpmrtWaDszI2rKEzxMbDCo0O95EcymiP/Gp
-	 hgvNMmLbm1E/ShJPRVRXIXi9EaBllYBTW3GEAjm718erwAGJskfqJORShJdSvPuNbQ
-	 iwAUvD2pCUmKfk3TcIc0HVHOG2CT8xYrYzkhhrOlRbyepLiKpGC5bezksL0I3N+KzC
-	 Jv4qtfYKy9y1e9icY9Kkg9JLXewDMZ4CEcfa1K++dF9fJD6y37IAJgFl4+f0I149YC
-	 edPUIBhg/MRDSCtYNChFU0UpEPNcFAl7jQ87XMhYIPr1NXSx95oRx15uf1S6GtFrhp
-	 5GKo0/IDk4IgQ==
+	s=k20201202; t=1659471927;
+	bh=Ey9Ry8FgMCnLx5z8M7GJPMUkYp4CCdxvX06b5Ic/gt8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hp5bIZmqftWQO7deymF2MqbDs4Muz1xzBpfB8Qizv7v/qYbHWMyoT5Q8mZGcToR0+
+	 n7UNcUOjT6Y+CLHF4lfV75jNPQ0RBZAL7lJ+YmDINn/8WSBYTRUXyflrsaAtOO21nA
+	 gPofzjCstkI0fHxWDtx9bLg5bTMZoQCKqOhUSY489uSgfaX/xb4WqV4ObpTkd0csPV
+	 k/0hlV5ZKlJayvsGYSot7UF15Fc3TR2EYcci/68qNPlx5Jd3w/XdAo49ztP6Gshz1V
+	 Dk6bhhuSpsSotDalr6yONcw66lx8SOKIEsLVl7nCTnA2SR0Hg72WKYsuqDG7xwUD+W
+	 7NVK+8DywYyxQ==
+Date: Tue, 2 Aug 2022 13:25:24 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	torvalds@linux-foundation.org,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
-Date: Tue,  2 Aug 2022 10:59:36 -0700
-Message-Id: <20220802175936.2278362-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <YulSY1pDms0ZyNs9@debian>
-References: <YulSY1pDms0ZyNs9@debian>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Tom Rix <trix@redhat.com>, sound-open-firmware@alsa-project.org,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] soc: sof: fix clang -Wformat warnings
+Message-ID: <YumINAZ4WaM4rG7Q@dev-arch.thelio-3990X>
+References: <20220721211218.4039288-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721211218.4039288-1-justinstitt@google.com>
 
-When CONFIG_XPA is enabled, Clang warns:
+Hi all,
 
-  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
-          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
-                              ^
-  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
-  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
-                                     ^
-  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
-          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
-                                ^
-  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
-  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
-                                     ^
-  2 errors generated.
+On Thu, Jul 21, 2022 at 02:12:18PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter these warnings:
+> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
+> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
+> 
+> Use correct format specifier `%d` since args are of type int.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Reported by Nathan here:
+> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
+> 
+>  sound/soc/sof/ipc3-topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
+> index b2cc046b9f60..65923e7a5976 100644
+> --- a/sound/soc/sof/ipc3-topology.c
+> +++ b/sound/soc/sof/ipc3-topology.c
+> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
+>  	}
+>  
+>  	dev_info(scomp->dev,
+> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
+> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
+>  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
+>  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>  
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 
+> 
 
-_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
-build and runtime configuration, which is what the negation operators
-are trying to convey. To silence the warning, explicitly compare against
-0 so the result of the '<<' operator is not implicitly converted to a
-boolean.
+Is it too late for this patch to make 6.0? We are trying to enable
+-Wformat for clang in 6.0 and this instance of that warning was
+introduced this development cycle by commit 323aa1f093e6 ("ASoC: SOF:
+Add a new IPC op for parsing topology manifest"). If I am tracking all
+my patches correctly, this is the only instance of -Wformat that does
+not have a patch applied to a maintainer's tree so it would be really
+unfortunate if we could not sure it on for -rc1.
 
-According to its documentation, GCC enables -Wint-in-bool-context with
--Wall but this warning is not visible when building the same
-configuration with GCC. It appears GCC only warns when compiling C++,
-not C, although the documentation makes no note of this:
-https://godbolt.org/z/x39q3brxf
+We could probably route this via the Kbuild tree with an Ack along with
+the patch that enables -Wformat if it cannot go via Mark's or Takashi's
+ree.
 
-Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/mm/tlbex.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index 8dbbd99fc7e8..be4d4670d649 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
- 		return;
- 	}
- 
--	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
-+	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
- 		if (fill_includes_sw_bits) {
- 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
- 		} else {
-@@ -2565,7 +2565,7 @@ static void check_pabits(void)
- 	unsigned long entry;
- 	unsigned pabits, fillbits;
- 
--	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
-+	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
- 		/*
- 		 * We'll only be making use of the fact that we can rotate bits
- 		 * into the fill if the CPU supports RIXI, so don't bother
-
-base-commit: 7d0d3fa7339ed5a06d6608b7cde9f079eba62bb1
--- 
-2.37.1
-
+Cheers,
+Nathan
