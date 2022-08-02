@@ -1,133 +1,95 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C546C7F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:38:53 +0000 (UTC)
-Received: by mail-oi1-f180.google.com with SMTP id p132so17802430oif.9
-        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 13:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=7jURqCa4ba2+mKyUWH2adNdXpkP+kvuwIBO9YUGMb6I=;
-        b=P/n+YuvnOltX5zlFbN3shKTljvTDJIGzJJAQWy2pDo3no2NuwAh4jh6jx3GRkCl6Sx
-         64UR7YF6uoIg1epSxgOO3ogWZrYsHQUeoooWKqlBDWq8urKYT48f1kO/DIfp/S0oQkdX
-         +0CK2yhsrhanbe7fFweOpa013YiWO9M3zQVTpRnWhCGilXFJq1s1iauy7RYRcHDt/zHI
-         mmQxjRQtsrZq99xftdYJNQeO0HabhRJsYXA3CkbI3QeiAj2QgmR4ERzNlnhiGIrb2lY+
-         K1MGNlbkFF1r8cI2WWAq1Kqm6oqn4fUdW7lqvryPLpuv7VuX4c3A9YOC2/5BVgoL4VHn
-         xwLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=7jURqCa4ba2+mKyUWH2adNdXpkP+kvuwIBO9YUGMb6I=;
-        b=gbcLWCEp3dgd7wpogTV/tGPsQ6D4WdKp1M3AJtQmREmFGMiJbiF29rwUzzO/RgSvy/
-         BWNhI2ty3oSMJMcQa4+16rUqPL9zoTBO1WvmZc79MmSYCEKlniU3sXzncwBG7Mf9cZ7a
-         7qkzdscs54eK4rC80WPR4Ol9+L01Xiv+7OSqN53rI3xDF1LywFrNfWevttDg6k4YcoqI
-         Ef0jaYojusAT2iCQ72ylJvlBhy5QIukkLzQpXCBPhwZ+Aqa4rCTXGlgXfUA9d+wI/anA
-         bZNJxj5eoaitTcNmNI4Ypsvw7Kwgrn959+i2gURF7hx41xWHKgaPmwu5h8CJ/uzZGoAb
-         Oz8g==
-X-Gm-Message-State: ACgBeo2Tt7wFhyDPg0rd48QAILcAyS2hgO9LneBgKuPYi3vPdOE4EMQq
-	fZa7AOBUZEq2x2tDLFlyzItC/WyWcOQe6o2IS+Y=
-X-Google-Smtp-Source: AA6agR6NSP1G9SYFNi1Uh7hIAxmJWgtm6XLVTA8eWWN9Qju/C0tGlXuaJ37GlW+aVSxTLWTvUI3Tgb5sft1hwHOI2BE=
-X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
- ay43-20020a056808302b00b002f9eeef0f03mr496304oib.128.1659472732577; Tue, 02
- Aug 2022 13:38:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAF77F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 22:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659478301; x=1691014301;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gj1R8PYkuhpliO3kZU490We6AAGLH9lpWLDvSGBIVvM=;
+  b=OWxsodO6afgMwTRYLUa0rOfooq0KNIEvEP6FGj1lFiWHnX6TURr8Mx53
+   Y5sHdDwAXCXJQa118LXjmR8EBG3rtX3V2m8REb7fOKz3FA+Vs+WniiRkT
+   Hm8Kva76uJRnSG0jdmCY3/T6T0HHJAS7/QRDbyORxy9CG2BnvuD7G8tS7
+   Xb1uK4VLHOKpZ6z/A8efEbQLnNW29g84OH8itdhz872SKnVUmpgM/rciS
+   rRTpJMLedlS92iEUvy3U3UwaenF0xI1WnJJETrylsnl4U31mIMrYE2qiL
+   j/ktykVVQMcEKw8sqdZ7a8PoOFcjXSArjOrJ9m97JcHVulGZ7jPpRPbWe
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="290745084"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="290745084"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 15:11:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="635452902"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 15:11:37 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oJ06y-000GVL-0g;
+	Tue, 02 Aug 2022 22:11:36 +0000
+Date: Wed, 3 Aug 2022 06:11:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aaron Tomlin <atomlin@redhat.com>, frederic@kernel.org,
+	mtosatti@redhat.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cl@linux.com,
+	tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+	pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+	atomlin@atomlin.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v5 2/2] tick/sched: Ensure quiet_vmstat() is called when
+ the idle tick was stopped too
+Message-ID: <202208030608.T5WKMCpb-lkp@intel.com>
+References: <20220801234258.134609-3-atomlin@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
-In-Reply-To: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Tue, 2 Aug 2022 22:38:16 +0200
-Message-ID: <CA+icZUWPazhee3=+mxhhyHhZ-8vpcj5FpTLyPbarpeVd0KvO4w@mail.gmail.com>
-Subject: Re: LLVM 15 and 16 packages on apt.llvm.org and in Debian
-To: Sylvestre Ledru <sylvestre@debian.org>
-Cc: Nathan Chancellor <natechancellor@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Stellard <tstellar@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801234258.134609-3-atomlin@redhat.com>
 
-On Fri, Jul 29, 2022 at 12:08 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> Hi Sylvestre,
->
-> I see some new LLVM 15 and 16 packages on <apt.llvm.org> and
-> Debian/experimental:
->
-> # LC_ALL=C apt-cache policy clang-15
-> clang-15:
->  Installed: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
->  Candidate: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
->  Version table:
->     1:15~++20220724113059+7feab85df8e8-1~exp1 99
->         99 https://ftp.debian.org/debian experimental/main amd64 Packages
->         99 https://deb.debian.org/debian experimental/main amd64 Packages
-> *** 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624 100
->        100 /var/lib/dpkg/status
->     1:15~++20220625103012+3d37e785c77a-1~exp1 99
->         99 https://ftp.debian.org/debian unstable/main amd64 Packages
->         99 https://deb.debian.org/debian unstable/main amd64 Packages
->
-> # LC_ALL=C apt-cache policy clang-16
-> clang-16:
->  Installed: (none)
->  Candidate: 1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647
->  Version table:
->     1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647 99
->         99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
->
-> Today, Friday I remember Tom wanted to release LLVM version 15.0.0-rc1.
->
-> I love to see such a version on any of these two repositories.
->
-> And hope to test with it a Linux version 5.19 FINAL (hopefully this sunday).
->
-> My aim is not to put pressure - I am just curious what your plans are.
->
-> Thanks.
->
+Hi Aaron,
 
-Hi,
+Thank you for the patch! Yet something to improve:
 
-I had prepared some APT sources.list to download the latest LLVM
-toolchain packages from <apt.llvm.org>.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19 next-20220728]
+[cannot apply to tip/timers/nohz]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks Sylvestre.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/tick-sched-Ensure-quiet_vmstat-is-called-when-the-idle-tick-was-stopped-too/20220802-074341
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9de1f9c8ca5100a02a2e271bdbde36202e251b4b
+config: i386-randconfig-a002-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030608.T5WKMCpb-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a0d3b9fe31484c4c44c430d10d0b60e2e0551525
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aaron-Tomlin/tick-sched-Ensure-quiet_vmstat-is-called-when-the-idle-tick-was-stopped-too/20220802-074341
+        git checkout a0d3b9fe31484c4c44c430d10d0b60e2e0551525
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Just see on upgrade:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-root# LC_ALL=C apt-get update
-...
-Get:52 https://apt.llvm.org/unstable llvm-toolchain/main amd64
-Packages [21.4 kB]
-Get:53 https://apt.llvm.org/unstable llvm-toolchain-15/main amd64
-Packages [17.8 kB]
-...
+All errors (new ones prefixed by >>):
 
-[ LLVM-15 ]
+>> ld.lld: error: undefined symbol: tick_nohz_user_enter_prepare
+   >>> referenced by common.c
+   >>>               entry/common.o:(exit_to_user_mode_prepare) in archive kernel/built-in.a
+   >>> referenced by common.c
+   >>>               entry/common.o:(exit_to_user_mode_prepare) in archive kernel/built-in.a
 
-root# LC_ALL=C apt-cache policy clang-15
-clang-15:
- Installed: (none)
- Candidate: 1:15.0.0~++20220802093129+08c239e29fb4-1~exp1~20220802093223.5
- Version table:
-    1:15.0.0~++20220802093129+08c239e29fb4-1~exp1~20220802093223.5 99
-        99 https://apt.llvm.org/unstable llvm-toolchain-15/main amd64 Packages
-...
-
-[ LLVM-16 ]
-
-root# LC_ALL=C apt-cache policy clang-16
-clang-16:
- Installed: (none)
- Candidate: 1:16~++20220802111203+8be1197285bd-1~exp1~20220802111307.657
- Version table:
-    1:16~++20220802111203+8be1197285bd-1~exp1~20220802111307.657 99
-        99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
-
-Regards,
--Sedat-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
