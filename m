@@ -1,137 +1,304 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5739B7F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 03:42:57 +0000 (UTC)
-X-UUID: 0ca8b2c3b5e843c8b908ebeeccc10ad8-20220802
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:4a5ce8df-79c2-4797-9e82-b6228ef19010,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:08230025-a982-4824-82d2-9da3b6056c2a,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-	,QS:nil,BEC:nil,COL:0
-X-UUID: 0ca8b2c3b5e843c8b908ebeeccc10ad8-20220802
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <mark-pk.tsai@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1031403654; Tue, 02 Aug 2022 11:42:51 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 2 Aug 2022 11:42:50 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 2 Aug 2022 11:42:50 +0800
-From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
-	<daniel.lezcano@linaro.org>, Amit Kucheria <amitk@kernel.org>, Zhang Rui
-	<rui.zhang@intel.com>, Matthias Brugger <matthias.bgg@gmail.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-CC: <yj.chiang@mediatek.com>, Subbaraman Narayanamurthy
-	<quic_subbaram@quicinc.com>, "Rafael J . Wysocki"
-	<rafael.j.wysocki@intel.com>, <stable@vger.kernel.org>, Mark-PK Tsai
-	<mark-pk.tsai@mediatek.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>
-Subject: [PATCH 5.4] thermal: Fix NULL pointer dereferences in of_thermal_ functions
-Date: Tue, 2 Aug 2022 11:42:16 +0800
-Message-ID: <20220802034238.27127-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE60C7F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 04:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659415687; x=1690951687;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cmvWDelvajwuS0R/wan8vHLEblYgIj33UX79yEux5lg=;
+  b=CEOnYQBRLxAubebDY49Tbnz7GFBO/FQ0UTrk3bI0shQv2Kbx3ozwmmHH
+   D2Jky1zfrUpQZ6U8/vywQTyhmDsHNpnMphphCZZ1SfLE2jvcL3AQx4MkU
+   NSg4uP00OFdmf+pqS6ajiP9UAHbzOWYxqkdt4+TfCPn3+PbI5bb59lasx
+   7QhDAbtHfTznwQG3fZieJFmumZ7dJYPOT+viXqmVtIT7uz5KWB4QvrsQg
+   ONjR+6FhM3NTmABy5iDEYyH9ySkZclsm+jx+Zy3AeJAfbyIY/nGqr3lO1
+   Iz8QGzw/JCtPw92DBQVZEG40N4cBXW5UM/QwxK9BX7dVsalW6T6GmiG9w
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="289332214"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="289332214"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 21:48:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="578065396"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2022 21:48:04 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oIjp6-000FhP-0T;
+	Tue, 02 Aug 2022 04:48:04 +0000
+Date: Tue, 2 Aug 2022 12:47:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, smfrench@gmail.com,
+	pc@cjr.nz, ronniesahlberg@gmail.com, nspmangalore@gmail.com
+Subject: Re: [PATCH] cifs: move some bloat out of cifsfs.c to
+ inode.c/file.c/dir.c
+Message-ID: <202208021251.F3onzjl6-lkp@intel.com>
+References: <20220801213622.18805-1-ematsumiya@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801213622.18805-1-ematsumiya@suse.de>
 
-From: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Hi Enzo,
 
-commit 96cfe05051fd8543cdedd6807ec59a0e6c409195 upstream.
+Thank you for the patch! Perhaps something to improve:
 
-of_parse_thermal_zones() parses the thermal-zones node and registers a
-thermal_zone device for each subnode. However, if a thermal zone is
-consuming a thermal sensor and that thermal sensor device hasn't probed
-yet, an attempt to set trip_point_*_temp for that thermal zone device
-can cause a NULL pointer dereference. Fix it.
+[auto build test WARNING on cifs/for-next]
+[also build test WARNING on linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
- ...
- Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
- ...
- Call trace:
-  of_thermal_set_trip_temp+0x40/0xc4
-  trip_point_temp_store+0xc0/0x1dc
-  dev_attr_store+0x38/0x88
-  sysfs_kf_write+0x64/0xc0
-  kernfs_fop_write_iter+0x108/0x1d0
-  vfs_write+0x2f4/0x368
-  ksys_write+0x7c/0xec
-  __arm64_sys_write+0x20/0x30
-  el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
-  do_el0_svc+0x28/0xa0
-  el0_svc+0x14/0x24
-  el0_sync_handler+0x88/0xec
-  el0_sync+0x1c0/0x200
+url:    https://github.com/intel-lab-lkp/linux/commits/Enzo-Matsumiya/cifs-move-some-bloat-out-of-cifsfs-c-to-inode-c-file-c-dir-c/20220802-053657
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: i386-randconfig-r031-20220801 (https://download.01.org/0day-ci/archive/20220802/202208021251.F3onzjl6-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d7e7fe7f0c75e89b86ce07dfb26774fc11330b61
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Enzo-Matsumiya/cifs-move-some-bloat-out-of-cifsfs-c-to-inode-c-file-c-dir-c/20220802-053657
+        git checkout d7e7fe7f0c75e89b86ce07dfb26774fc11330b61
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
 
-While at it, fix the possible NULL pointer dereference in other
-functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
-of_thermal_get_trend().
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Suggested-by: David Collins <quic_collinsd@quicinc.com>
-Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
----
- drivers/thermal/of-thermal.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
-index 68d0c181ec7b..1f38da5da6e4 100644
---- a/drivers/thermal/of-thermal.c
-+++ b/drivers/thermal/of-thermal.c
-@@ -91,7 +91,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
- {
- 	struct __thermal_zone *data = tz->devdata;
- 
--	if (!data->ops->get_temp)
-+	if (!data->ops || !data->ops->get_temp)
- 		return -EINVAL;
- 
- 	return data->ops->get_temp(data->sensor_data, temp);
-@@ -188,6 +188,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
- {
- 	struct __thermal_zone *data = tz->devdata;
- 
-+	if (!data->ops || !data->ops->set_emul_temp)
-+		return -EINVAL;
-+
- 	return data->ops->set_emul_temp(data->sensor_data, temp);
- }
- 
-@@ -196,7 +199,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
- {
- 	struct __thermal_zone *data = tz->devdata;
- 
--	if (!data->ops->get_trend)
-+	if (!data->ops || !data->ops->get_trend)
- 		return -EINVAL;
- 
- 	return data->ops->get_trend(data->sensor_data, trip, trend);
-@@ -336,7 +339,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
- 	if (trip >= data->ntrips || trip < 0)
- 		return -EDOM;
- 
--	if (data->ops->set_trip_temp) {
-+	if (data->ops && data->ops->set_trip_temp) {
- 		int ret;
- 
- 		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
+>> fs/cifs/file.c:5375:8: warning: no previous prototype for function 'cifs_remap_file_range' [-Wmissing-prototypes]
+   loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
+          ^
+   fs/cifs/file.c:5375:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
+   ^
+   static 
+>> fs/cifs/file.c:5502:9: warning: no previous prototype for function 'cifs_copy_file_range' [-Wmissing-prototypes]
+   ssize_t cifs_copy_file_range(struct file *src_file, loff_t off,
+           ^
+   fs/cifs/file.c:5502:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t cifs_copy_file_range(struct file *src_file, loff_t off,
+   ^
+   static 
+   2 warnings generated.
+--
+>> fs/cifs/inode.c:3087:15: warning: no previous prototype for function 'cifs_alloc_inode' [-Wmissing-prototypes]
+   struct inode *cifs_alloc_inode(struct super_block *sb)
+                 ^
+   fs/cifs/inode.c:3087:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct inode *cifs_alloc_inode(struct super_block *sb)
+   ^
+   static 
+>> fs/cifs/inode.c:3123:6: warning: no previous prototype for function 'cifs_free_inode' [-Wmissing-prototypes]
+   void cifs_free_inode(struct inode *inode)
+        ^
+   fs/cifs/inode.c:3123:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cifs_free_inode(struct inode *inode)
+   ^
+   static 
+>> fs/cifs/inode.c:3128:6: warning: no previous prototype for function 'cifs_evict_inode' [-Wmissing-prototypes]
+   void cifs_evict_inode(struct inode *inode)
+        ^
+   fs/cifs/inode.c:3128:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cifs_evict_inode(struct inode *inode)
+   ^
+   static 
+>> fs/cifs/inode.c:3137:5: warning: no previous prototype for function 'cifs_write_inode' [-Wmissing-prototypes]
+   int cifs_write_inode(struct inode *inode, struct writeback_control *wbc)
+       ^
+   fs/cifs/inode.c:3137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cifs_write_inode(struct inode *inode, struct writeback_control *wbc)
+   ^
+   static 
+>> fs/cifs/inode.c:3143:5: warning: no previous prototype for function 'cifs_drop_inode' [-Wmissing-prototypes]
+   int cifs_drop_inode(struct inode *inode)
+       ^
+   fs/cifs/inode.c:3143:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cifs_drop_inode(struct inode *inode)
+   ^
+   static 
+>> fs/cifs/inode.c:3161:12: warning: no previous prototype for function 'cifs_init_inodecache' [-Wmissing-prototypes]
+   int __init cifs_init_inodecache(void)
+              ^
+   fs/cifs/inode.c:3161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init cifs_init_inodecache(void)
+   ^
+   static 
+>> fs/cifs/inode.c:3174:6: warning: no previous prototype for function 'cifs_destroy_inodecache' [-Wmissing-prototypes]
+   void cifs_destroy_inodecache(void)
+        ^
+   fs/cifs/inode.c:3174:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cifs_destroy_inodecache(void)
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/cifs_remap_file_range +5375 fs/cifs/file.c
+
+  5374	
+> 5375	loff_t cifs_remap_file_range(struct file *src_file, loff_t off,
+  5376				     struct file *dst_file, loff_t destoff, loff_t len,
+  5377				     unsigned int remap_flags)
+  5378	{
+  5379		struct inode *src_inode = file_inode(src_file);
+  5380		struct inode *target_inode = file_inode(dst_file);
+  5381		struct cifsFileInfo *smb_file_src = src_file->private_data;
+  5382		struct cifsFileInfo *smb_file_target;
+  5383		struct cifs_tcon *target_tcon;
+  5384		unsigned int xid;
+  5385		int rc;
+  5386	
+  5387		if (remap_flags & ~(REMAP_FILE_DEDUP | REMAP_FILE_ADVISORY))
+  5388			return -EINVAL;
+  5389	
+  5390		cifs_dbg(FYI, "clone range\n");
+  5391	
+  5392		xid = get_xid();
+  5393	
+  5394		if (!src_file->private_data || !dst_file->private_data) {
+  5395			rc = -EBADF;
+  5396			cifs_dbg(VFS, "missing cifsFileInfo on copy range src file\n");
+  5397			goto out;
+  5398		}
+  5399	
+  5400		smb_file_target = dst_file->private_data;
+  5401		target_tcon = tlink_tcon(smb_file_target->tlink);
+  5402	
+  5403		/*
+  5404		 * Note: cifs case is easier than btrfs since server responsible for
+  5405		 * checks for proper open modes and file type and if it wants
+  5406		 * server could even support copy of range where source = target
+  5407		 */
+  5408		lock_two_nondirectories(target_inode, src_inode);
+  5409	
+  5410		if (len == 0)
+  5411			len = src_inode->i_size - off;
+  5412	
+  5413		cifs_dbg(FYI, "about to flush pages\n");
+  5414		/* should we flush first and last page first */
+  5415		truncate_inode_pages_range(&target_inode->i_data, destoff,
+  5416					   PAGE_ALIGN(destoff + len)-1);
+  5417	
+  5418		if (target_tcon->ses->server->ops->duplicate_extents)
+  5419			rc = target_tcon->ses->server->ops->duplicate_extents(xid,
+  5420				smb_file_src, smb_file_target, off, len, destoff);
+  5421		else
+  5422			rc = -EOPNOTSUPP;
+  5423	
+  5424		/* force revalidate of size and timestamps of target file now
+  5425		   that target is updated on the server */
+  5426		CIFS_I(target_inode)->time = 0;
+  5427		/* although unlocking in the reverse order from locking is not
+  5428		   strictly necessary here it is a little cleaner to be consistent */
+  5429		unlock_two_nondirectories(src_inode, target_inode);
+  5430	out:
+  5431		free_xid(xid);
+  5432		return rc < 0 ? rc : len;
+  5433	}
+  5434	
+  5435	ssize_t cifs_file_copychunk_range(unsigned int xid,
+  5436					struct file *src_file, loff_t off,
+  5437					struct file *dst_file, loff_t destoff,
+  5438					size_t len, unsigned int flags)
+  5439	{
+  5440		struct inode *src_inode = file_inode(src_file);
+  5441		struct inode *target_inode = file_inode(dst_file);
+  5442		struct cifsFileInfo *smb_file_src;
+  5443		struct cifsFileInfo *smb_file_target;
+  5444		struct cifs_tcon *src_tcon;
+  5445		struct cifs_tcon *target_tcon;
+  5446		ssize_t rc;
+  5447	
+  5448		cifs_dbg(FYI, "copychunk range\n");
+  5449	
+  5450		if (!src_file->private_data || !dst_file->private_data) {
+  5451			rc = -EBADF;
+  5452			cifs_dbg(VFS, "missing cifsFileInfo on copy range src file\n");
+  5453			goto out;
+  5454		}
+  5455	
+  5456		rc = -EXDEV;
+  5457		smb_file_target = dst_file->private_data;
+  5458		smb_file_src = src_file->private_data;
+  5459		src_tcon = tlink_tcon(smb_file_src->tlink);
+  5460		target_tcon = tlink_tcon(smb_file_target->tlink);
+  5461	
+  5462		if (src_tcon->ses != target_tcon->ses) {
+  5463			cifs_dbg(VFS, "source and target of copy not on same server\n");
+  5464			goto out;
+  5465		}
+  5466	
+  5467		rc = -EOPNOTSUPP;
+  5468		if (!target_tcon->ses->server->ops->copychunk_range)
+  5469			goto out;
+  5470	
+  5471		/*
+  5472		 * Note: cifs case is easier than btrfs since server responsible for
+  5473		 * checks for proper open modes and file type and if it wants
+  5474		 * server could even support copy of range where source = target
+  5475		 */
+  5476		lock_two_nondirectories(target_inode, src_inode);
+  5477	
+  5478		cifs_dbg(FYI, "about to flush pages\n");
+  5479		/* should we flush first and last page first */
+  5480		truncate_inode_pages(&target_inode->i_data, 0);
+  5481	
+  5482		rc = file_modified(dst_file);
+  5483		if (!rc)
+  5484			rc = target_tcon->ses->server->ops->copychunk_range(xid,
+  5485				smb_file_src, smb_file_target, off, len, destoff);
+  5486	
+  5487		file_accessed(src_file);
+  5488	
+  5489		/* force revalidate of size and timestamps of target file now
+  5490		 * that target is updated on the server
+  5491		 */
+  5492		CIFS_I(target_inode)->time = 0;
+  5493		/* although unlocking in the reverse order from locking is not
+  5494		 * strictly necessary here it is a little cleaner to be consistent
+  5495		 */
+  5496		unlock_two_nondirectories(src_inode, target_inode);
+  5497	
+  5498	out:
+  5499		return rc;
+  5500	}
+  5501	
+> 5502	ssize_t cifs_copy_file_range(struct file *src_file, loff_t off,
+  5503				     struct file *dst_file, loff_t destoff,
+  5504				     size_t len, unsigned int flags)
+  5505	{
+  5506		unsigned int xid = get_xid();
+  5507		ssize_t rc;
+  5508		struct cifsFileInfo *cfile = dst_file->private_data;
+  5509	
+  5510		if (cfile->swapfile)
+  5511			return -EOPNOTSUPP;
+  5512	
+  5513		rc = cifs_file_copychunk_range(xid, src_file, off, dst_file, destoff,
+  5514						len, flags);
+  5515		free_xid(xid);
+  5516	
+  5517		if (rc == -EOPNOTSUPP || rc == -EXDEV)
+  5518			rc = generic_copy_file_range(src_file, off, dst_file,
+  5519						     destoff, len, flags);
+  5520		return rc;
+  5521	}
+  5522	
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
