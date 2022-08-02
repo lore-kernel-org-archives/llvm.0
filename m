@@ -1,48 +1,53 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943EF7F
-	for <llvm@lists.linux.dev>; Mon,  1 Aug 2022 23:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CC27F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 00:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659396178; x=1690932178;
+  t=1659399840; x=1690935840;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=swOJ3l92gUlUnJcNhVxrGy3A01xB1qD4kT3y/6yANsk=;
-  b=jRag4EYCa8aDOfiX752L5AsSYZud6AGT8N6DS7pwsmTulqrtwEDeXyZn
-   yQc4Fhfw9viCMT4jIijILxQv1wmmkzgDMKP8lYgk0+QtLmwBbSEsFkm11
-   b7xOeM/un236qjewDrD/yTKl4Uu/lB34uIS1JbiWK3u00koratIwJzMz5
-   zfe922zcLWfr9pxxmAdbxiBmj/04/xac2Uqp4ynbfbQosZzGhARe6i13c
-   WWdw+CJAZAXEsK/2K9A81edMLNYY8CmE312NVhT4X8uWzQiRJ62ik68VA
-   Y4X6w3ySicht1o0TJD2trrYKtW4LZZkWs2HFQLtnIYNa1Q40/nWDAGG7P
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="315108077"
+  bh=axUDlJzadxSeIRLhebaAK4Au66FF2r3QhjWZs5FUcrU=;
+  b=CgB6OnXWmv3cTFzlHlv0EJbF1xdP71tJF7Z9UG0PUNiLeMMmQEgIpyh8
+   wPqDtBMKApXfMAiDTsbRjffXk7KHHR2XqZHU2WP7ORC0xKLCD80IoJ5kN
+   vxQb1LyGZguB65r5zgSriKVM6ZzA3669L34OR/XDZT1Gdj3rt9XvdpcQv
+   h8nV7F+D2hzJgF9PudfG9upxttxtiLk2H34X1euwTbXpW8cM6VPQprUfH
+   KZ+L7qyIf5EachD+Vv04qNgaXj/7S8+NORcpoFklxTTNYlPR1j6fpxDo3
+   qpCXtAANlThhiwIHBzwRZjGVGLb9WGD46ol+JLLps3VzIe5RTOJfOey/H
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="350990842"
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="315108077"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 16:22:58 -0700
+   d="scan'208";a="350990842"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 17:24:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="744457433"
+   d="scan'208";a="778435481"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Aug 2022 16:22:55 -0700
+  by orsmga005.jf.intel.com with ESMTP; 01 Aug 2022 17:23:57 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oIekR-000FTz-05;
-	Mon, 01 Aug 2022 23:22:55 +0000
-Date: Tue, 2 Aug 2022 07:22:24 +0800
+	id 1oIfhU-000FVw-16;
+	Tue, 02 Aug 2022 00:23:56 +0000
+Date: Tue, 2 Aug 2022 08:23:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-	peterz@infradead.org, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	vschneid@redhat.com
+To: Daniil Lunev <dlunev@chromium.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Stanley Chu <chu.stanley@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Chengming Zhou <zhouchengming@bytedance.com>
-Subject: Re: [PATCH v3 08/10] sched/fair: refactor
- detach/attach_entity_cfs_rq using update_load_avg()
-Message-ID: <202208020758.Ff3SOjvD-lkp@intel.com>
-References: <20220801042745.7794-9-zhouchengming@bytedance.com>
+	Daniil Lunev <dlunev@chromium.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>, Bean Huo <beanhuo@micron.com>,
+	Daejun Park <daejun7.park@samsung.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] ufs: core: ufshcd: use local_clock() for debugging
+ timestamps
+Message-ID: <202208020844.RaNi6Dg0-lkp@intel.com>
+References: <20220801142931.v2.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,142 +56,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801042745.7794-9-zhouchengming@bytedance.com>
+In-Reply-To: <20220801142931.v2.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
 
-Hi Chengming,
+Hi Daniil,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on linus/master next-20220728]
-[cannot apply to v5.19]
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v5.19 next-20220728]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chengming-Zhou/sched-fair-task-load-tracking-optimization-and-cleanup/20220801-122957
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8da3d9b8590bc178752d4b72938745e9a6c4c416
-config: hexagon-randconfig-r012-20220731 (https://download.01.org/0day-ci/archive/20220802/202208020758.Ff3SOjvD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220801-123157
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: x86_64-randconfig-a001-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020844.RaNi6Dg0-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/336247ff1d2b402a18689fd891d79e99d8b444fc
+        # https://github.com/intel-lab-lkp/linux/commit/45a46347597e5c368c27a9fe01e400af675eb5e9
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chengming-Zhou/sched-fair-task-load-tracking-optimization-and-cleanup/20220801-122957
-        git checkout 336247ff1d2b402a18689fd891d79e99d8b444fc
+        git fetch --no-tags linux-review Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220801-123157
+        git checkout 45a46347597e5c368c27a9fe01e400af675eb5e9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ufs/ kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/fair.c:4462:11: error: no member named 'avg' in 'struct sched_entity'
-           if (!se->avg.last_update_time)
-                ~~  ^
-   1 error generated.
+>> drivers/ufs/core/ufshcd.c:2143:39: error: call to undeclared function 'local_clock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           lrbp->issue_time_stamp_local_clock = local_clock();
+                                                ^
+   drivers/ufs/core/ufshcd.c:4227:45: error: call to undeclared function 'local_clock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   hba->ufs_stats.last_hibern8_exit_tstamp = local_clock();
+                                                             ^
+   drivers/ufs/core/ufshcd.c:4729:22: error: call to undeclared function 'local_clock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           e->tstamp[e->pos] = local_clock();
+                               ^
+   drivers/ufs/core/ufshcd.c:5362:40: error: call to undeclared function 'local_clock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   lrbp->compl_time_stamp_local_clock = local_clock();
+                                                        ^
+   drivers/ufs/core/ufshcd.c:6651:32: error: call to undeclared function 'local_clock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           hba->ufs_stats.last_intr_ts = local_clock();
+                                         ^
+   drivers/ufs/core/ufshcd.c:9553:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                                                            ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 5 errors generated.
 
 
-vim +4462 kernel/sched/fair.c
+vim +/local_clock +2143 drivers/ufs/core/ufshcd.c
 
-  4419	
-  4420	/*
-  4421	 * MIGRATION
-  4422	 *
-  4423	 *	dequeue
-  4424	 *	  update_curr()
-  4425	 *	    update_min_vruntime()
-  4426	 *	  vruntime -= min_vruntime
-  4427	 *
-  4428	 *	enqueue
-  4429	 *	  update_curr()
-  4430	 *	    update_min_vruntime()
-  4431	 *	  vruntime += min_vruntime
-  4432	 *
-  4433	 * this way the vruntime transition between RQs is done when both
-  4434	 * min_vruntime are up-to-date.
-  4435	 *
-  4436	 * WAKEUP (remote)
-  4437	 *
-  4438	 *	->migrate_task_rq_fair() (p->state == TASK_WAKING)
-  4439	 *	  vruntime -= min_vruntime
-  4440	 *
-  4441	 *	enqueue
-  4442	 *	  update_curr()
-  4443	 *	    update_min_vruntime()
-  4444	 *	  vruntime += min_vruntime
-  4445	 *
-  4446	 * this way we don't have the most up-to-date min_vruntime on the originating
-  4447	 * CPU and an up-to-date min_vruntime on the destination CPU.
-  4448	 */
-  4449	
-  4450	static void
-  4451	enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-  4452	{
-  4453		bool renorm = !(flags & ENQUEUE_WAKEUP) || (flags & ENQUEUE_MIGRATED);
-  4454		bool curr = cfs_rq->curr == se;
-  4455		int action = UPDATE_TG;
-  4456	
-  4457		/*
-  4458		 * !last_update_time means we've passed through migrate_task_rq_fair()
-  4459		 * or task_change_group_fair() indicating we migrated cfs_rq. IOW we're
-  4460		 * enqueueing a task on a new CPU or moving task to a new cgroup.
-  4461		 */
-> 4462		if (!se->avg.last_update_time)
-  4463			action |= DO_ATTACH;
-  4464	
-  4465		/*
-  4466		 * If we're the current task, we must renormalise before calling
-  4467		 * update_curr().
-  4468		 */
-  4469		if (renorm && curr)
-  4470			se->vruntime += cfs_rq->min_vruntime;
-  4471	
-  4472		update_curr(cfs_rq);
-  4473	
-  4474		/*
-  4475		 * Otherwise, renormalise after, such that we're placed at the current
-  4476		 * moment in time, instead of some random moment in the past. Being
-  4477		 * placed in the past could significantly boost this task to the
-  4478		 * fairness detriment of existing tasks.
-  4479		 */
-  4480		if (renorm && !curr)
-  4481			se->vruntime += cfs_rq->min_vruntime;
-  4482	
-  4483		/*
-  4484		 * When enqueuing a sched_entity, we must:
-  4485		 *   - Update loads to have both entity and cfs_rq synced with now.
-  4486		 *   - For group_entity, update its runnable_weight to reflect the new
-  4487		 *     h_nr_running of its group cfs_rq.
-  4488		 *   - For group_entity, update its weight to reflect the new share of
-  4489		 *     its group cfs_rq
-  4490		 *   - Add its new weight to cfs_rq->load.weight
-  4491		 */
-  4492		update_load_avg(cfs_rq, se, action);
-  4493		se_update_runnable(se);
-  4494		update_cfs_group(se);
-  4495		account_entity_enqueue(cfs_rq, se);
-  4496	
-  4497		if (flags & ENQUEUE_WAKEUP)
-  4498			place_entity(cfs_rq, se, 0);
-  4499	
-  4500		check_schedstat_required();
-  4501		update_stats_enqueue_fair(cfs_rq, se, flags);
-  4502		check_spread(cfs_rq, se);
-  4503		if (!curr)
-  4504			__enqueue_entity(cfs_rq, se);
-  4505		se->on_rq = 1;
-  4506	
-  4507		if (cfs_rq->nr_running == 1) {
-  4508			check_enqueue_throttle(cfs_rq);
-  4509			if (!throttled_hierarchy(cfs_rq))
-  4510				list_add_leaf_cfs_rq(cfs_rq);
-  4511		}
-  4512	}
-  4513	
+  2130	
+  2131	/**
+  2132	 * ufshcd_send_command - Send SCSI or device management commands
+  2133	 * @hba: per adapter instance
+  2134	 * @task_tag: Task tag of the command
+  2135	 */
+  2136	static inline
+  2137	void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
+  2138	{
+  2139		struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
+  2140		unsigned long flags;
+  2141	
+  2142		lrbp->issue_time_stamp = ktime_get();
+> 2143		lrbp->issue_time_stamp_local_clock = local_clock();
+  2144		lrbp->compl_time_stamp = ktime_set(0, 0);
+  2145		lrbp->compl_time_stamp_local_clock = 0;
+  2146		ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
+  2147		ufshcd_clk_scaling_start_busy(hba);
+  2148		if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
+  2149			ufshcd_start_monitor(hba, lrbp);
+  2150	
+  2151		spin_lock_irqsave(&hba->outstanding_lock, flags);
+  2152		if (hba->vops && hba->vops->setup_xfer_req)
+  2153			hba->vops->setup_xfer_req(hba, task_tag, !!lrbp->cmd);
+  2154		__set_bit(task_tag, &hba->outstanding_reqs);
+  2155		ufshcd_writel(hba, 1 << task_tag, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+  2156		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
+  2157	}
+  2158	
 
 -- 
 0-DAY CI Kernel Test Service
