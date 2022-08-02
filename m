@@ -1,39 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74B77F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC440C433C1;
-	Tue,  2 Aug 2022 20:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659471927;
-	bh=Ey9Ry8FgMCnLx5z8M7GJPMUkYp4CCdxvX06b5Ic/gt8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hp5bIZmqftWQO7deymF2MqbDs4Muz1xzBpfB8Qizv7v/qYbHWMyoT5Q8mZGcToR0+
-	 n7UNcUOjT6Y+CLHF4lfV75jNPQ0RBZAL7lJ+YmDINn/8WSBYTRUXyflrsaAtOO21nA
-	 gPofzjCstkI0fHxWDtx9bLg5bTMZoQCKqOhUSY489uSgfaX/xb4WqV4ObpTkd0csPV
-	 k/0hlV5ZKlJayvsGYSot7UF15Fc3TR2EYcci/68qNPlx5Jd3w/XdAo49ztP6Gshz1V
-	 Dk6bhhuSpsSotDalr6yONcw66lx8SOKIEsLVl7nCTnA2SR0Hg72WKYsuqDG7xwUD+W
-	 7NVK+8DywYyxQ==
-Date: Tue, 2 Aug 2022 13:25:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Tom Rix <trix@redhat.com>, sound-open-firmware@alsa-project.org,
-	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: sof: fix clang -Wformat warnings
-Message-ID: <YumINAZ4WaM4rG7Q@dev-arch.thelio-3990X>
-References: <20220721211218.4039288-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022C37F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659472237; x=1691008237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nIRhpTpA5XQopi5Sj/KK5SNSpqzS64Odt58zId2QWZg=;
+  b=OkUlUgXSFUypjkE1ZA2uMP6hugWtoljVlfZM/E/R2ZInoM3iYTYdpnK3
+   bMEe18EYqqbZlGrjag4SxPGRbtH3mAledbExdyKPBi0t5talWq9uPgNQ1
+   PZiMo0HgisZxyxshWCUyuV9uB4p/NGM9rpj7Ki9qyf192wh1IIB7CzH9l
+   OsOMpUwNPVVC3iZyBtSsqkSa0GszCypWxrUZfaNaFYCxPk84AF8ohuYFh
+   2OI1hMsoDYY6jvqkNJoD7xA6GokQe41hJMd99zC72OsaIN4atu4eYHvO3
+   UHA+YXAGvm18BmQJp6hFxHr2qCRLoE2gXOBRNqqzd50shBT3n/pvQU1xQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269283850"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="269283850"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 13:30:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="553055165"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 13:30:32 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oIyXA-000GPP-0s;
+	Tue, 02 Aug 2022 20:30:32 +0000
+Date: Wed, 3 Aug 2022 04:30:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	David Sterba <dsterba@suse.com>
+Subject: Re: [PATCH v2 2/4] btrfs: assign checksum shash slots on init
+Message-ID: <202208030418.x0l9k9HX-lkp@intel.com>
+References: <c637b01a1742d0841b71d67a91aab50ac22539f7.1659443199.git.dsterba@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,59 +46,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721211218.4039288-1-justinstitt@google.com>
+In-Reply-To: <c637b01a1742d0841b71d67a91aab50ac22539f7.1659443199.git.dsterba@suse.com>
 
-Hi all,
+Hi David,
 
-On Thu, Jul 21, 2022 at 02:12:18PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter these warnings:
-> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
-> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
-> 
-> Use correct format specifier `%d` since args are of type int.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
-> 
->  sound/soc/sof/ipc3-topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
-> index b2cc046b9f60..65923e7a5976 100644
-> --- a/sound/soc/sof/ipc3-topology.c
-> +++ b/sound/soc/sof/ipc3-topology.c
-> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
->  	}
->  
->  	dev_info(scomp->dev,
-> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
-> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
->  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
->  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->  
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 
-> 
+I love your patch! Yet something to improve:
 
-Is it too late for this patch to make 6.0? We are trying to enable
--Wformat for clang in 6.0 and this instance of that warning was
-introduced this development cycle by commit 323aa1f093e6 ("ASoC: SOF:
-Add a new IPC op for parsing topology manifest"). If I am tracking all
-my patches correctly, this is the only instance of -Wformat that does
-not have a patch applied to a maintainer's tree so it would be really
-unfortunate if we could not sure it on for -rc1.
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on next-20220728]
+[cannot apply to linus/master v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-We could probably route this via the Kbuild tree with an Ack along with
-the patch that enables -Wformat if it cannot go via Mark's or Takashi's
-ree.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Sterba/Selectable-checksum-implementation/20220802-203426
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+config: arm64-randconfig-r005-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030418.x0l9k9HX-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/335830d3f7aa692840402c4813c125f96f510812
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Sterba/Selectable-checksum-implementation/20220802-203426
+        git checkout 335830d3f7aa692840402c4813c125f96f510812
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/btrfs/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> fs/btrfs/disk-io.c:2438:49: error: too few arguments to function call, expected 2, have 1
+           if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
+               ~~~~~~                                     ^
+>> fs/btrfs/disk-io.c:2438:63: error: expected expression
+           if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
+                                                                        ^
+   2 errors generated.
+
+
+vim +2438 fs/btrfs/disk-io.c
+
+  2419	
+  2420	static int btrfs_init_csum_hash(struct btrfs_fs_info *fs_info, u16 csum_type)
+  2421	{
+  2422		struct crypto_shash *csum_shash;
+  2423		const char *csum_driver = btrfs_super_csum_driver(csum_type);
+  2424	
+  2425		csum_shash = crypto_alloc_shash(csum_driver, 0, 0);
+  2426	
+  2427		if (IS_ERR(csum_shash)) {
+  2428			btrfs_err(fs_info, "error allocating %s hash for checksum",
+  2429				  csum_driver);
+  2430			return PTR_ERR(csum_shash);
+  2431		}
+  2432	
+  2433		/*
+  2434		 * Find the fastest implementation available, but keep the slots
+  2435		 * matching the type.
+  2436		 */
+  2437		fs_info->csum_shash[CSUM_DEFAULT] = csum_shash;
+> 2438		if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
+  2439			fs_info->csum_shash[CSUM_GENERIC] = csum_shash;
+  2440			clear_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
+  2441		} else {
+  2442			fs_info->csum_shash[CSUM_ACCEL] = csum_shash;
+  2443			set_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
+  2444		}
+  2445	
+  2446		btrfs_info(fs_info, "using %s (%s) checksum algorithm",
+  2447				btrfs_super_csum_name(csum_type),
+  2448				crypto_shash_driver_name(csum_shash));
+  2449		return 0;
+  2450	}
+  2451	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
