@@ -1,123 +1,103 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C55F7F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 17:14:45 +0000 (UTC)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-07.nifty.com with ESMTP id 272H9wXw019014
-	for <llvm@lists.linux.dev>; Wed, 3 Aug 2022 02:09:58 +0900
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 272H9h9B027058
-	for <llvm@lists.linux.dev>; Wed, 3 Aug 2022 02:09:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 272H9h9B027058
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1659460184;
-	bh=k1P4L4Zq0ArbMha5Otv1LMYgCz4rKgPwbM+pbr8YQ6w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mj8pW26hiop37aonULz4iNpt7crATDJ024glucbtq7V9iVhLnokR7PWFPMrQuBR3V
-	 dBQW7pWTNNzxvo7z4rFuJ+I19AHP9EfQ1T3SkqmNQz1BJJkWeiNGpDOvY8v42ktlmi
-	 S13VouLCSYhnh7iwjBKA9bCRKzSg3M/uy7tjs3YciFoV1JztuihdzBSDg3WGY3eX61
-	 GdjE/GU1PAYZHhiFY7ZbZdRZpjcWkO6Smu/Tk42bkUhLzoaqw3o6O9d/RuXMRhJsNN
-	 HejtzX6Lgu9y6emkUx8FsS22rMYnScmImVzo4kqyJB8USt/IK+WqbADcyT4xCLZVLN
-	 VGBILg67RFvOg==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id m13so14729619wrq.6
-        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 10:09:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3N4s8AqkzJwlt/uyLHuruL9fb9fOuCzc7OZt7wqW0XbKn6US9p
-	8v2vMxtTIdgGW78ihlPWLWf2nO8WAlS28KjFwso=
-X-Google-Smtp-Source: AA6agR5khXxw1iz8XVPYejddxFayETHG6E8KkezPucecpO9Q0Y2e4XLetPGSmEc+vpVqZgcbXVRdIGkCdW7pfI+UlLA=
-X-Received: by 2002:a5d:54cb:0:b0:220:6426:6219 with SMTP id
- x11-20020a5d54cb000000b0022064266219mr5660179wrv.461.1659460182412; Tue, 02
- Aug 2022 10:09:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E967F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 17:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B6BC433B5;
+	Tue,  2 Aug 2022 17:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659463183;
+	bh=xpWA7Jpv8r6INPM8eC9dRH0bjB0EBSQdgOjBy0N4/rw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=V15liBSsJpZKesOb/8eDlMArbGuucPgpmrtWaDszI2rKEzxMbDCo0O95EcymiP/Gp
+	 hgvNMmLbm1E/ShJPRVRXIXi9EaBllYBTW3GEAjm718erwAGJskfqJORShJdSvPuNbQ
+	 iwAUvD2pCUmKfk3TcIc0HVHOG2CT8xYrYzkhhrOlRbyepLiKpGC5bezksL0I3N+KzC
+	 Jv4qtfYKy9y1e9icY9Kkg9JLXewDMZ4CEcfa1K++dF9fJD6y37IAJgFl4+f0I149YC
+	 edPUIBhg/MRDSCtYNChFU0UpEPNcFAl7jQ87XMhYIPr1NXSx95oRx15uf1S6GtFrhp
+	 5GKo0/IDk4IgQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	torvalds@linux-foundation.org,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Date: Tue,  2 Aug 2022 10:59:36 -0700
+Message-Id: <20220802175936.2278362-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <YulSY1pDms0ZyNs9@debian>
+References: <YulSY1pDms0ZyNs9@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220720232332.2720091-1-justinstitt@google.com>
- <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
- <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X> <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
- <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com> <YugYbvRu1xqnx6mC@dev-arch.thelio-3990X>
-In-Reply-To: <YugYbvRu1xqnx6mC@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 3 Aug 2022 02:08:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQvH=feO_d=0rLGYYQ2YYi=7NRYxGXcYSpYMvqSyOBgew@mail.gmail.com>
-Message-ID: <CAK7LNAQvH=feO_d=0rLGYYQ2YYi=7NRYxGXcYSpYMvqSyOBgew@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 2, 2022 at 3:16 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Aug 01, 2022 at 10:40:29AM -0700, Justin Stitt wrote:
-> > > OK, I think that will be good timing.
-> > > Please ping me if I forget to pick it up.
-> > >
-> > Hey Masahiro, just pinging to see the state of this PR.
-> >
-> > I think we are on pace to re-enable this warning.
-> >
-> > I believe there exists only _two_ patches left still needing to go
-> > through along with this patch:
-> > 1) https://lore.kernel.org/all/20220718050356.227647-1-hch@lst.de/
->
-> This is now in the block tree, so it should be squared away:
->
-> https://lore.kernel.org/YuFhR9OoPvM9VsdT@infradead.org/
->
-> Stephen is on vacation so -next hasn't updated for a few days but it
-> sounds like Mark is going to provide some coverage:
->
-> https://lore.kernel.org/YugAzWWl++ArhhPS@sirena.org.uk/
->
-> > 2) https://lore.kernel.org/all/YtnDltqEVeJQQkbW@dev-arch.thelio-3990X/
->
-> We need to chase this, as I haven't seen an "applied" email. We have two
-> options:
->
-> 1. Ask the maintainers to apply the change to their branch directly.
-> 2. Ask them for an "Ack" so that we can apply that change along with
->    this one.
->
-> It is worth a ping asking which they prefer. The first option is
-> simpler, as the change that introduced the warning is only in -next so
-> it can just be applied to the same branch; the only concern is making
-> sure that change makes -rc1. The second option gives us more flexibility
-> with enabling the warning in the event that the change missed being
-> added to the main pull request but it will require basing the change on
-> a non-rc base, which most maintainers don't really like.
->
-> It is ultimately up to Masahiro but my vision is:
->
-> 1. Ping the patch, asking how to proceed.
-> 2. If the maintainers can pick it up and it will make the merge window,
->    let them apply it then apply this patch to the Kbuild tree for -next.
-> 3. If they prefer the "Ack" route, wait until mainline contains the
->    problematic patch then apply the warning fix patch and this patch to
->    the Kbuild tree on top of the problematic merge.
-> 4. Wait until all other patches are in mainline (I can watch mainline
->    and build it continuously) then pull request the branch containing
->    whatever changes we need.
->
-> Masahiro, does that sound reasonable?
->
-> Cheers,
-> Nathan
+When CONFIG_XPA is enabled, Clang warns:
 
+  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+                              ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+                                ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  2 errors generated.
 
-Now applied to linux-kbuild.
+_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
+build and runtime configuration, which is what the negation operators
+are trying to convey. To silence the warning, explicitly compare against
+0 so the result of the '<<' operator is not implicitly converted to a
+boolean.
 
+According to its documentation, GCC enables -Wint-in-bool-context with
+-Wall but this warning is not visible when building the same
+configuration with GCC. It appears GCC only warns when compiling C++,
+not C, although the documentation makes no note of this:
+https://godbolt.org/z/x39q3brxf
 
-If my pull request is rejected because of some warnings,
-I may end up with dropping this, though.
+Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/mips/mm/tlbex.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 8dbbd99fc7e8..be4d4670d649 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+ 		return;
+ 	}
+ 
+-	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
++	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
+ 		if (fill_includes_sw_bits) {
+ 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+ 		} else {
+@@ -2565,7 +2565,7 @@ static void check_pabits(void)
+ 	unsigned long entry;
+ 	unsigned pabits, fillbits;
+ 
+-	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
++	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
+ 		/*
+ 		 * We'll only be making use of the fact that we can rotate bits
+ 		 * into the fill if the CPU supports RIXI, so don't bother
 
+base-commit: 7d0d3fa7339ed5a06d6608b7cde9f079eba62bb1
 -- 
-Best Regards
-Masahiro Yamada
+2.37.1
+
