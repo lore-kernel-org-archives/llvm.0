@@ -1,307 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95AC7F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 08:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659427863;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gow1HJYVy7ZOKFVpRyX/twdQKPEx+ANoUXhprEOAXcU=;
-	b=FbuUAfLFKZMDr51zjQ8lo69CqWRvo/+JRMItSNtaEtQmSSSaRLlkS9pGmnlAM8mGhAin/t
-	cNH1pzezRdSNrqSSw0KA1CYrIQJdU7ox1dVOZYsArW+xJj3x4c7HNqFTeeCgJ43UKNy4Bk
-	W5EZSyCKApqdInL2mrOvBcp5b0V1buo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-LNintIKMOveW_pamSFuzDQ-1; Tue, 02 Aug 2022 04:11:02 -0400
-X-MC-Unique: LNintIKMOveW_pamSFuzDQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16AAE85A584
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 08:11:02 +0000 (UTC)
-Received: from [172.64.11.38] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F25D118ECC;
-	Tue,  2 Aug 2022 08:11:01 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (79/532 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [60ee49fa]
-Date: Tue, 02 Aug 2022 08:11:01 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52097F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 08:52:29 +0000 (UTC)
+Received: by mail-ej1-f42.google.com with SMTP id uj29so11607326ejc.0
+        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 01:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=47uliyErnA8e09JF9HO7R5O/EfooUkx1RpBi+CvBMiE=;
+        b=gESk1Z8YO4csPW88/Rem8zWlU9ajVumN1NuZOqjSerOtIkAXrYHQ56cZkR7UgStNo3
+         UXsYDEunPb/uP3sFHLlZIBP551F0pHQ6e9R7TtH84bimUs+83hurokCsTGckUcGG+i1F
+         Qxpfh/Ag4uliVOneoUqqH2NEKFPVnFG1yE9OxoL01e/CMSwX6zyhoMotKKQ8B1l8H1DL
+         riTjB5SyJT6OcgwwZu6aQ53S+eCsj8dx6hriN1rLvjv3OHOLxDxW4VKaAaWHCbS3nvzi
+         SwV63szdMEsLfY/I8yu3NF81q7/kTU4xAHAl/qEoXBhsD8y32gGUvN0rlaFgeT+/QriZ
+         gi8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=47uliyErnA8e09JF9HO7R5O/EfooUkx1RpBi+CvBMiE=;
+        b=AHBSg3elXGQsjLIWw40gstwFWOzmVyJwh2bnwhaJ1lA32V+hJF7rDYMMfcZLujBMoy
+         xiQaUxHbkCjO9PEEtriLYXapN2e7usrFNayGLF97cX+lKTwQrIGyimd4C3zLkHrLFx+1
+         45ttNXtP8mcb+7L2xiLpvtMMY798zHffj8txb+2XZOodUvqJCTFp/clMAgCEjO6/QEMR
+         k7PjiThmIgoHay30LG7iQL9Yk5MBXZ7CMVGh28aLmVOneeOJykir46lmUH8Cu4IM02KB
+         G3TwjsfGgtPVwGdo9crv+/1Wu9Gh4uZAd1Kkz+CY2bitkqk1yt8mPXgjHZ03EMj2PLjy
+         xiOQ==
+X-Gm-Message-State: AJIora8VL0BFY11Bz0A2nzmylh2A9/56+RRKSYoZmW9GYLswpj7AHrdM
+	N9bN/lyVmncMjB1YMzUv2N4=
+X-Google-Smtp-Source: AGRyM1smCNL1iF4wy+Op8u1PgSKXaUmky0EFr5tCCngDNbWaVuraIOTO4OFSsjBUoXvfgrpEsPLvmQ==
+X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id f17-20020a1709063f5100b0071239458c0dmr14894052ejj.302.1659430347780;
+        Tue, 02 Aug 2022 01:52:27 -0700 (PDT)
+Received: from krava ([83.240.61.12])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170906841000b0072aa009aa68sm3201297ejx.36.2022.08.02.01.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 01:52:27 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 2 Aug 2022 10:52:25 +0200
+To: David Faust <david.faust@oracle.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	James Hilliard <james.hilliard1@gmail.com>, bpf@vger.kernel.org,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] libbpf: skip empty sections in
+ bpf_object__init_global_data_maps
+Message-ID: <YujlyZevj6RDoOR6@krava>
+References: <20220731232649.4668-1-james.hilliard1@gmail.com>
+ <Yug2iYQyd0TNlnHW@krava>
+ <2dbffe19-6b28-2ce6-b367-960f2250a12a@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <51681.122080204110200399@us-mta-325.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2dbffe19-6b28-2ce6-b367-960f2250a12a@oracle.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Aug 01, 2022 at 03:21:58PM -0700, David Faust wrote:
+> 
+> 
+> On 8/1/22 13:24, Jiri Olsa wrote:
+> > On Sun, Jul 31, 2022 at 05:26:49PM -0600, James Hilliard wrote:
+> >> The GNU assembler generates an empty .bss section. This is a well
+> >> established behavior in GAS that happens in all supported targets.
+> >>
+> >> The LLVM assembler doesn't generate an empty .bss section.
+> >>
+> >> bpftool chokes on the empty .bss section.
+> >>
+> >> Additionally in bpf_object__elf_collect the sec_desc->data is not
+> >> initialized when a section is not recognized. In this case, this
+> >> happens with .comment.
+> >>
+> >> So we must check that sec_desc->data is initialized before checking
+> >> if the size is 0.
+> > 
+> > oops David send same change but I asked him to move the check
+> > to bpf_object__elf_collect [1] .. but with your explanation this
+> > fix actualy looks fine to me
+> 
+> FWIW, I only just got back to actually making that change. This
+> patch has a much better explanation than the one I sent so +1 from
+> me also
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+thanks, I'm acking this one then
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49499
+jirka
 
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - LTP - cve
-                 aarch64 - LTP - sched
-                 aarch64 - LTP - syscalls
-                 aarch64 - LTP - can
-                 aarch64 - LTP - commands
-                 aarch64 - LTP - containers
-                 aarch64 - LTP - dio
-                 aarch64 - LTP - fs
-                 aarch64 - LTP - fsx
-                 aarch64 - LTP - math
-                 aarch64 - LTP - hugetlb
-                 aarch64 - LTP - mm
-                 aarch64 - LTP - nptl
-                 aarch64 - LTP - pty
-                 aarch64 - LTP - ipc
-                 aarch64 - LTP - tracing
-                 aarch64 - Firmware test suite
-                   s390x - LTP - cve
-                   s390x - LTP - sched
-                   s390x - LTP - syscalls
-                   s390x - LTP - can
-                   s390x - LTP - commands
-                   s390x - LTP - containers
-                   s390x - LTP - dio
-                   s390x - LTP - fs
-                   s390x - LTP - fsx
-                   s390x - LTP - math
-                   s390x - LTP - hugetlb
-                   s390x - LTP - mm
-                   s390x - LTP - nptl
-                   s390x - LTP - pty
-                   s390x - LTP - ipc
-                   s390x - LTP - tracing
-                  x86_64 - LTP - cve
-                  x86_64 - LTP - sched
-                  x86_64 - LTP - syscalls
-                  x86_64 - LTP - can
-                  x86_64 - LTP - commands
-                  x86_64 - LTP - containers
-                  x86_64 - LTP - dio
-                  x86_64 - LTP - fs
-                  x86_64 - LTP - fsx
-                  x86_64 - LTP - math
-                  x86_64 - LTP - hugetlb
-                  x86_64 - LTP - mm
-                  x86_64 - LTP - nptl
-                  x86_64 - LTP - pty
-                  x86_64 - LTP - ipc
-                  x86_64 - LTP - tracing
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - LTP - cve
-                  x86_64 (debug) - LTP - sched
-                  x86_64 (debug) - LTP - syscalls
-                  x86_64 (debug) - LTP - can
-                  x86_64 (debug) - LTP - commands
-                  x86_64 (debug) - LTP - containers
-                  x86_64 (debug) - LTP - dio
-                  x86_64 (debug) - LTP - fs
-                  x86_64 (debug) - LTP - fsx
-                  x86_64 (debug) - LTP - math
-                  x86_64 (debug) - LTP - hugetlb
-                  x86_64 (debug) - LTP - mm
-                  x86_64 (debug) - LTP - nptl
-                  x86_64 (debug) - LTP - pty
-                  x86_64 (debug) - LTP - ipc
-                  x86_64 (debug) - LTP - tracing
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                  x86_64 (debug) - stress: stress-ng - cpu-cache
-        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
-already exists and is not an empty directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1301
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 (debug) - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 (debug) - Storage - blktests - nvme-tcp
-                  x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 (debug) - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                  x86_64 (debug) - Networking MACsec: sanity
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as root
-        Issue: Podman system integration test: hit timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/702
-            Affected tests:
-                  x86_64 (debug) - Podman system test - as user
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> 
+> David
+> 
+> > 
+> > jirka
+> > 
+> > 
+> > [1] https://lore.kernel.org/bpf/YuKaFiZ+ksB5f0Ye@krava/
+> > 
+> >>
+> >> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+> >> ---
+> >>  tools/lib/bpf/libbpf.c | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> >> index 50d41815f431..77e3797cf75a 100644
+> >> --- a/tools/lib/bpf/libbpf.c
+> >> +++ b/tools/lib/bpf/libbpf.c
+> >> @@ -1642,6 +1642,10 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+> >>  	for (sec_idx = 1; sec_idx < obj->efile.sec_cnt; sec_idx++) {
+> >>  		sec_desc = &obj->efile.secs[sec_idx];
+> >>  
+> >> +		/* Skip recognized sections with size 0. */
+> >> +		if (sec_desc->data && sec_desc->data->d_size == 0)
+> >> +			continue;
+> >> +
+> >>  		switch (sec_desc->sec_type) {
+> >>  		case SEC_DATA:
+> >>  			sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
+> >> -- 
+> >> 2.34.1
+> >>
