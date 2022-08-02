@@ -1,131 +1,133 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022C37F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659472237; x=1691008237;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nIRhpTpA5XQopi5Sj/KK5SNSpqzS64Odt58zId2QWZg=;
-  b=OkUlUgXSFUypjkE1ZA2uMP6hugWtoljVlfZM/E/R2ZInoM3iYTYdpnK3
-   bMEe18EYqqbZlGrjag4SxPGRbtH3mAledbExdyKPBi0t5talWq9uPgNQ1
-   PZiMo0HgisZxyxshWCUyuV9uB4p/NGM9rpj7Ki9qyf192wh1IIB7CzH9l
-   OsOMpUwNPVVC3iZyBtSsqkSa0GszCypWxrUZfaNaFYCxPk84AF8ohuYFh
-   2OI1hMsoDYY6jvqkNJoD7xA6GokQe41hJMd99zC72OsaIN4atu4eYHvO3
-   UHA+YXAGvm18BmQJp6hFxHr2qCRLoE2gXOBRNqqzd50shBT3n/pvQU1xQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269283850"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="269283850"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 13:30:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="553055165"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 13:30:32 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oIyXA-000GPP-0s;
-	Tue, 02 Aug 2022 20:30:32 +0000
-Date: Wed, 3 Aug 2022 04:30:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH v2 2/4] btrfs: assign checksum shash slots on init
-Message-ID: <202208030418.x0l9k9HX-lkp@intel.com>
-References: <c637b01a1742d0841b71d67a91aab50ac22539f7.1659443199.git.dsterba@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C546C7F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 20:38:53 +0000 (UTC)
+Received: by mail-oi1-f180.google.com with SMTP id p132so17802430oif.9
+        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 13:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=7jURqCa4ba2+mKyUWH2adNdXpkP+kvuwIBO9YUGMb6I=;
+        b=P/n+YuvnOltX5zlFbN3shKTljvTDJIGzJJAQWy2pDo3no2NuwAh4jh6jx3GRkCl6Sx
+         64UR7YF6uoIg1epSxgOO3ogWZrYsHQUeoooWKqlBDWq8urKYT48f1kO/DIfp/S0oQkdX
+         +0CK2yhsrhanbe7fFweOpa013YiWO9M3zQVTpRnWhCGilXFJq1s1iauy7RYRcHDt/zHI
+         mmQxjRQtsrZq99xftdYJNQeO0HabhRJsYXA3CkbI3QeiAj2QgmR4ERzNlnhiGIrb2lY+
+         K1MGNlbkFF1r8cI2WWAq1Kqm6oqn4fUdW7lqvryPLpuv7VuX4c3A9YOC2/5BVgoL4VHn
+         xwLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=7jURqCa4ba2+mKyUWH2adNdXpkP+kvuwIBO9YUGMb6I=;
+        b=gbcLWCEp3dgd7wpogTV/tGPsQ6D4WdKp1M3AJtQmREmFGMiJbiF29rwUzzO/RgSvy/
+         BWNhI2ty3oSMJMcQa4+16rUqPL9zoTBO1WvmZc79MmSYCEKlniU3sXzncwBG7Mf9cZ7a
+         7qkzdscs54eK4rC80WPR4Ol9+L01Xiv+7OSqN53rI3xDF1LywFrNfWevttDg6k4YcoqI
+         Ef0jaYojusAT2iCQ72ylJvlBhy5QIukkLzQpXCBPhwZ+Aqa4rCTXGlgXfUA9d+wI/anA
+         bZNJxj5eoaitTcNmNI4Ypsvw7Kwgrn959+i2gURF7hx41xWHKgaPmwu5h8CJ/uzZGoAb
+         Oz8g==
+X-Gm-Message-State: ACgBeo2Tt7wFhyDPg0rd48QAILcAyS2hgO9LneBgKuPYi3vPdOE4EMQq
+	fZa7AOBUZEq2x2tDLFlyzItC/WyWcOQe6o2IS+Y=
+X-Google-Smtp-Source: AA6agR6NSP1G9SYFNi1Uh7hIAxmJWgtm6XLVTA8eWWN9Qju/C0tGlXuaJ37GlW+aVSxTLWTvUI3Tgb5sft1hwHOI2BE=
+X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
+ ay43-20020a056808302b00b002f9eeef0f03mr496304oib.128.1659472732577; Tue, 02
+ Aug 2022 13:38:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c637b01a1742d0841b71d67a91aab50ac22539f7.1659443199.git.dsterba@suse.com>
+References: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
+In-Reply-To: <CA+icZUXSK1Qxt7osAy3oxvMW+5fVT8b2aBeVGr1TY_1G+N2D7Q@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Tue, 2 Aug 2022 22:38:16 +0200
+Message-ID: <CA+icZUWPazhee3=+mxhhyHhZ-8vpcj5FpTLyPbarpeVd0KvO4w@mail.gmail.com>
+Subject: Re: LLVM 15 and 16 packages on apt.llvm.org and in Debian
+To: Sylvestre Ledru <sylvestre@debian.org>
+Cc: Nathan Chancellor <natechancellor@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Stellard <tstellar@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi David,
+On Fri, Jul 29, 2022 at 12:08 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> Hi Sylvestre,
+>
+> I see some new LLVM 15 and 16 packages on <apt.llvm.org> and
+> Debian/experimental:
+>
+> # LC_ALL=C apt-cache policy clang-15
+> clang-15:
+>  Installed: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
+>  Candidate: 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624
+>  Version table:
+>     1:15~++20220724113059+7feab85df8e8-1~exp1 99
+>         99 https://ftp.debian.org/debian experimental/main amd64 Packages
+>         99 https://deb.debian.org/debian experimental/main amd64 Packages
+> *** 1:15~++20220716100712+45067f8fbf61-1~exp1~20220716220809.624 100
+>        100 /var/lib/dpkg/status
+>     1:15~++20220625103012+3d37e785c77a-1~exp1 99
+>         99 https://ftp.debian.org/debian unstable/main amd64 Packages
+>         99 https://deb.debian.org/debian unstable/main amd64 Packages
+>
+> # LC_ALL=C apt-cache policy clang-16
+> clang-16:
+>  Installed: (none)
+>  Candidate: 1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647
+>  Version table:
+>     1:16~++20220728111245+7eeb468ae5e5-1~exp1~20220728111345.647 99
+>         99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
+>
+> Today, Friday I remember Tom wanted to release LLVM version 15.0.0-rc1.
+>
+> I love to see such a version on any of these two repositories.
+>
+> And hope to test with it a Linux version 5.19 FINAL (hopefully this sunday).
+>
+> My aim is not to put pressure - I am just curious what your plans are.
+>
+> Thanks.
+>
 
-I love your patch! Yet something to improve:
+Hi,
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on next-20220728]
-[cannot apply to linus/master v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I had prepared some APT sources.list to download the latest LLVM
+toolchain packages from <apt.llvm.org>.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Sterba/Selectable-checksum-implementation/20220802-203426
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-config: arm64-randconfig-r005-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030418.x0l9k9HX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/335830d3f7aa692840402c4813c125f96f510812
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Sterba/Selectable-checksum-implementation/20220802-203426
-        git checkout 335830d3f7aa692840402c4813c125f96f510812
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/btrfs/
+Thanks Sylvestre.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Just see on upgrade:
 
-All errors (new ones prefixed by >>):
+root# LC_ALL=C apt-get update
+...
+Get:52 https://apt.llvm.org/unstable llvm-toolchain/main amd64
+Packages [21.4 kB]
+Get:53 https://apt.llvm.org/unstable llvm-toolchain-15/main amd64
+Packages [17.8 kB]
+...
 
->> fs/btrfs/disk-io.c:2438:49: error: too few arguments to function call, expected 2, have 1
-           if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
-               ~~~~~~                                     ^
->> fs/btrfs/disk-io.c:2438:63: error: expected expression
-           if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
-                                                                        ^
-   2 errors generated.
+[ LLVM-15 ]
 
+root# LC_ALL=C apt-cache policy clang-15
+clang-15:
+ Installed: (none)
+ Candidate: 1:15.0.0~++20220802093129+08c239e29fb4-1~exp1~20220802093223.5
+ Version table:
+    1:15.0.0~++20220802093129+08c239e29fb4-1~exp1~20220802093223.5 99
+        99 https://apt.llvm.org/unstable llvm-toolchain-15/main amd64 Packages
+...
 
-vim +2438 fs/btrfs/disk-io.c
+[ LLVM-16 ]
 
-  2419	
-  2420	static int btrfs_init_csum_hash(struct btrfs_fs_info *fs_info, u16 csum_type)
-  2421	{
-  2422		struct crypto_shash *csum_shash;
-  2423		const char *csum_driver = btrfs_super_csum_driver(csum_type);
-  2424	
-  2425		csum_shash = crypto_alloc_shash(csum_driver, 0, 0);
-  2426	
-  2427		if (IS_ERR(csum_shash)) {
-  2428			btrfs_err(fs_info, "error allocating %s hash for checksum",
-  2429				  csum_driver);
-  2430			return PTR_ERR(csum_shash);
-  2431		}
-  2432	
-  2433		/*
-  2434		 * Find the fastest implementation available, but keep the slots
-  2435		 * matching the type.
-  2436		 */
-  2437		fs_info->csum_shash[CSUM_DEFAULT] = csum_shash;
-> 2438		if (strstr(crypto_shash_driver_name(csum_shash)), "generic") != NULL) {
-  2439			fs_info->csum_shash[CSUM_GENERIC] = csum_shash;
-  2440			clear_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
-  2441		} else {
-  2442			fs_info->csum_shash[CSUM_ACCEL] = csum_shash;
-  2443			set_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
-  2444		}
-  2445	
-  2446		btrfs_info(fs_info, "using %s (%s) checksum algorithm",
-  2447				btrfs_super_csum_name(csum_type),
-  2448				crypto_shash_driver_name(csum_shash));
-  2449		return 0;
-  2450	}
-  2451	
+root# LC_ALL=C apt-cache policy clang-16
+clang-16:
+ Installed: (none)
+ Candidate: 1:16~++20220802111203+8be1197285bd-1~exp1~20220802111307.657
+ Version table:
+    1:16~++20220802111203+8be1197285bd-1~exp1~20220802111307.657 99
+        99 https://apt.llvm.org/unstable llvm-toolchain/main amd64 Packages
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+-Sedat-
