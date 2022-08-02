@@ -1,353 +1,297 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255627F
-	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 09:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659431049; x=1690967049;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=PMF11bGx509vldiUWAI9vXrBSnno+o/CVFoQmz3jtDo=;
-  b=MrpTcsxvaGF0YA6Q147ea2SE61VDoL1bXdJ9Ec732C9AhI3iRKujN5Oe
-   QLy1keyVtkjxS/3jOBXHjTXOJ8D+oTXTup0e5WbxbU+6zZdRKZ4YZTkB/
-   RGXNUtI7IewLXO0WJTIPUAzoDhaMI/9fejvKAtZFGVwgPaH0+EddTWDOd
-   AVtJi6++LYd2dDIvLAEgT0zgWwc+XTxUlpzfbJLlhYcxNoOo1hkA97t0i
-   yrtBFNX/fwmW/zNyDVu+G5NKo71hb2jl47B0u2MbjU0AeEPRUrO8L0IYU
-   MDKq/f0A6NdKJFo3/JaF8VmsVhnVFzcY445OtGbZpuG15vm1zSpZqPKwn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="353365803"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="353365803"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 02:04:07 -0700
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="661542492"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.168.243]) ([10.249.168.243])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 02:04:03 -0700
-Subject: Re: [linux-next:master 2450/12552] drivers/iio/accel/sca3300.c:162:8:
- warning: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes,
- where 1 is optimal). Optimal fields order: name, scan_masks, channels,
- accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, f...
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Philip Li <philip.li@intel.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>,
- Tomas Melin <tomas.melin@vaisala.com>
-References: <202207241857.Z2woeEfC-lkp@intel.com>
- <20220801164843.00006228@huawei.com>
- <CAKwvOdkNXxXWCocBkNhb1EzR-QDm+BxuwGRgJ=d7VzWXLQsBKA@mail.gmail.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <8aa31c28-bf97-e791-a053-21ba5af69069@intel.com>
-Date: Tue, 2 Aug 2022 17:04:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D217F
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 09:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659431531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jbzMFl7f9nV2X9wvY4udCGGnksalDRvkn5+O9JHxBts=;
+	b=U51AFVgSB1kcY1WJgfzK6Ox6hP6Thz7IJ1HPmpX/q8NB7UhhLfm+dRkj0UnxSeGGtN2Epy
+	hgSAQzMaK1UBs96hCNcuLdVyrme9y2o3rwTSeC3/MgPCaIDGeg9dKm87nu1tyYPYFXf5/V
+	RoTz3t+TroUBb8mvwSy80dHiNUkNH6s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-_d_tmVYjNdqE19IZ-fGFUw-1; Tue, 02 Aug 2022 05:12:09 -0400
+X-MC-Unique: _d_tmVYjNdqE19IZ-fGFUw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F066518E534E
+	for <llvm@lists.linux.dev>; Tue,  2 Aug 2022 09:12:02 +0000 (UTC)
+Received: from [172.64.11.38] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CD26EC28125;
+	Tue,  2 Aug 2022 09:12:02 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [0cec3f24]
+Date: Tue, 02 Aug 2022 09:12:02 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkNXxXWCocBkNhb1EzR-QDm+BxuwGRgJ=d7VzWXLQsBKA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <20176.122080205120900167@us-mta-283.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49505
 
-On 8/2/2022 1:01 AM, Nick Desaulniers wrote:
-> On Mon, Aug 1, 2022 at 8:49 AM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
->>
->> On Sun, 24 Jul 2022 18:13:47 +0800
->> kernel test robot <lkp@intel.com> wrote:
->>
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->>> head:   18c107a1f120d095404d141dfad8f594bdc44020
->>> commit: 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53 [2450/12552] iio: accel: sca3300: Add inclination channels
->>> config: s390-randconfig-c005-20220721 (https://download.01.org/0day-ci/archive/20220724/202207241857.Z2woeEfC-lkp@intel.com/config)
->>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
->>> reproduce (this is a W=1 build):
->>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          # install s390 cross compiling tool for clang build
->>>          # apt-get install binutils-s390x-linux-gnu
->>>          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
->>>          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>>          git fetch --no-tags linux-next master
->>>          git checkout 38d5cd1e7ee0b3e96f39ed3a93cada1c71352c53
->>>          # save the config file
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=s390 clang-analyzer
->>
->> If there is any way to screen out the Excessive padding messages it would be much appreciated.
->> For the IIO structures that are producing a lot of these, the padding is entirely deliberate
->> and required for correctness (DMA safety).
->>
->> Right now I'm directing all such warnings to the bin but they must be obscuring more useful
->> warnings...
-> 
-> + Philip
-> Philip might be able to set up a filter for these clang-tidy warnings
-> (clang-analyzer-optin.performance.Padding) on your part of the tree.
-> drivers/iio/accel/sca3300.c
+One or more kernel tests failed:
 
-Hi Nick, Jonathan,
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4641226
 
-Sorry for the inconvenience, we have added the warnings to ignore list.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - LTP - cve
+                 aarch64 - LTP - sched
+                 aarch64 - LTP - syscalls
+                 aarch64 - LTP - can
+                 aarch64 - LTP - commands
+                 aarch64 - LTP - containers
+                 aarch64 - LTP - dio
+                 aarch64 - LTP - fs
+                 aarch64 - LTP - fsx
+                 aarch64 - LTP - math
+                 aarch64 - LTP - hugetlb
+                 aarch64 - LTP - mm
+                 aarch64 - LTP - nptl
+                 aarch64 - LTP - pty
+                 aarch64 - LTP - ipc
+                 aarch64 - LTP - tracing
+                 aarch64 - Firmware test suite
+                   s390x - LTP - cve
+                   s390x - LTP - sched
+                   s390x - LTP - syscalls
+                   s390x - LTP - can
+                   s390x - LTP - commands
+                   s390x - LTP - containers
+                   s390x - LTP - dio
+                   s390x - LTP - fs
+                   s390x - LTP - fsx
+                   s390x - LTP - math
+                   s390x - LTP - hugetlb
+                   s390x - LTP - mm
+                   s390x - LTP - nptl
+                   s390x - LTP - pty
+                   s390x - LTP - ipc
+                   s390x - LTP - tracing
+                  x86_64 - LTP - cve
+                  x86_64 - LTP - sched
+                  x86_64 - LTP - syscalls
+                  x86_64 - LTP - can
+                  x86_64 - LTP - commands
+                  x86_64 - LTP - containers
+                  x86_64 - LTP - dio
+                  x86_64 - LTP - fs
+                  x86_64 - LTP - fsx
+                  x86_64 - LTP - math
+                  x86_64 - LTP - hugetlb
+                  x86_64 - LTP - mm
+                  x86_64 - LTP - nptl
+                  x86_64 - LTP - pty
+                  x86_64 - LTP - ipc
+                  x86_64 - LTP - tracing
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - LTP - cve
+                  x86_64 (debug) - LTP - sched
+                  x86_64 (debug) - LTP - syscalls
+                  x86_64 (debug) - LTP - can
+                  x86_64 (debug) - LTP - commands
+                  x86_64 (debug) - LTP - containers
+                  x86_64 (debug) - LTP - dio
+                  x86_64 (debug) - LTP - fs
+                  x86_64 (debug) - LTP - fsx
+                  x86_64 (debug) - LTP - math
+                  x86_64 (debug) - LTP - hugetlb
+                  x86_64 (debug) - LTP - mm
+                  x86_64 (debug) - LTP - nptl
+                  x86_64 (debug) - LTP - pty
+                  x86_64 (debug) - LTP - ipc
+                  x86_64 (debug) - LTP - tracing
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Podman: 050-stop.bats: FAIL: podman stop: took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1293
+            Affected tests:
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Podman system integration test: hit timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/702
+            Affected tests:
+                  x86_64 (debug) - Podman system test - as user
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
+already exists and is not an empty directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1301
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
-Best Regards,
-Rong Chen
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-> 
-> Longer term, I wonder if we can add some clang-tidy flags to the Makefiles...
-> 
->>
->> Thanks
->>
->>
->> Jonathan
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> clang-analyzer warnings: (new ones prefixed by >>)
->>>                     for (tile = 0; tile < 8; tile++) {
->>>                     ^
->>>     drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
->>>                             if (!fbdata->force && !picolcd_fb_update_tile(
->>>                                 ^~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
->>>     drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_tile'
->>>                             if (!fbdata->force && !picolcd_fb_update_tile(
->>>                                                    ^~~~~~~~~~~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is equal to 1
->>>             if (bpp == 1) {
->>>                 ^~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:148:2: note: Taking true branch
->>>             if (bpp == 1) {
->>>             ^
->>>     drivers/hid/hid-picolcd_fb.c:149:3: note: Loop condition is true.  Entering loop body
->>>                     for (b = 7; b >= 0; b--) {
->>>                     ^
->>>     drivers/hid/hid-picolcd_fb.c:151:9: note: The value 0 is assigned to 'i'
->>>                             for (i = 0; i < 64; i++) {
->>>                                  ^~~~~
->>>     drivers/hid/hid-picolcd_fb.c:151:4: note: Loop condition is true.  Entering loop body
->>>                             for (i = 0; i < 64; i++) {
->>>                             ^
->>>     drivers/hid/hid-picolcd_fb.c:152:14: note: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage
->>>                                     tdata[i] <<= 1;
->>>                                     ~~~~~~~~ ^
->>>     drivers/hid/hid-picolcd_fb.c:160:14: warning: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
->>>                                     tdata[i] <<= 1;
->>>                                              ^
->>>     drivers/hid/hid-picolcd_fb.c:438:2: note: Calling 'picolcd_fb_update'
->>>             picolcd_fb_update(info);
->>>             ^~~~~~~~~~~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Exiting loop
->>>             spin_lock_irqsave(&fbdata->lock, flags);
->>>             ^
->>>     include/linux/spinlock.h:379:2: note: expanded from macro 'spin_lock_irqsave'
->>>             raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
->>>             ^
->>>     include/linux/spinlock.h:240:2: note: expanded from macro 'raw_spin_lock_irqsave'
->>>             do {                                            \
->>>             ^
->>>     drivers/hid/hid-picolcd_fb.c:234:2: note: Loop condition is false.  Exiting loop
->>>             spin_lock_irqsave(&fbdata->lock, flags);
->>>             ^
->>>     include/linux/spinlock.h:377:43: note: expanded from macro 'spin_lock_irqsave'
->>>     #define spin_lock_irqsave(lock, flags)                          \
->>>                                                                     ^
->>>     drivers/hid/hid-picolcd_fb.c:235:6: note: Assuming field 'ready' is not equal to 0
->>>             if (!fbdata->ready && fbdata->picolcd)
->>>                 ^~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:235:21: note: Left side of '&&' is false
->>>             if (!fbdata->ready && fbdata->picolcd)
->>>                                ^
->>>     drivers/hid/hid-picolcd_fb.c:247:2: note: Loop condition is true.  Entering loop body
->>>             for (chip = 0; chip < 4; chip++)
->>>             ^
->>>     drivers/hid/hid-picolcd_fb.c:248:3: note: Loop condition is true.  Entering loop body
->>>                     for (tile = 0; tile < 8; tile++) {
->>>                     ^
->>>     drivers/hid/hid-picolcd_fb.c:249:8: note: Assuming field 'force' is 0
->>>                             if (!fbdata->force && !picolcd_fb_update_tile(
->>>                                 ^~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:249:8: note: Left side of '&&' is true
->>>     drivers/hid/hid-picolcd_fb.c:249:27: note: Calling 'picolcd_fb_update_tile'
->>>                             if (!fbdata->force && !picolcd_fb_update_tile(
->>>                                                    ^~~~~~~~~~~~~~~~~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:148:6: note: Assuming 'bpp' is not equal to 1
->>>             if (bpp == 1) {
->>>                 ^~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:148:2: note: Taking false branch
->>>             if (bpp == 1) {
->>>             ^
->>>     drivers/hid/hid-picolcd_fb.c:156:13: note: Assuming 'bpp' is equal to 8
->>>             } else if (bpp == 8) {
->>>                        ^~~~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:156:9: note: Taking true branch
->>>             } else if (bpp == 8) {
->>>                    ^
->>>     drivers/hid/hid-picolcd_fb.c:157:3: note: Loop condition is true.  Entering loop body
->>>                     for (b = 7; b >= 0; b--) {
->>>                     ^
->>>     drivers/hid/hid-picolcd_fb.c:159:9: note: The value 0 is assigned to 'i'
->>>                             for (i = 0; i < 64; i++) {
->>>                                  ^~~~~
->>>     drivers/hid/hid-picolcd_fb.c:159:4: note: Loop condition is true.  Entering loop body
->>>                             for (i = 0; i < 64; i++) {
->>>                             ^
->>>     drivers/hid/hid-picolcd_fb.c:160:14: note: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage
->>>                                     tdata[i] <<= 1;
->>>                                     ~~~~~~~~ ^
->>>     drivers/hid/hid-picolcd_fb.c:481:6: warning: Call to function 'sscanf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sscanf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             i = sscanf(buf, "%u", &u);
->>>                 ^~~~~~
->>>     drivers/hid/hid-picolcd_fb.c:481:6: note: Call to function 'sscanf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sscanf_s' in case of C11
->>>             i = sscanf(buf, "%u", &u);
->>>                 ^~~~~~
->>>     Suppressed 22 warnings (10 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     24 warnings generated.
->>>>> drivers/iio/accel/sca3300.c:162:8: warning: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal fields order: name, scan_masks, channels, accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels, num_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, angle_supported, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
->>>     struct sca3300_chip_info {
->>>     ~~~~~~~^~~~~~~~~~~~~~~~~~~
->>>     drivers/iio/accel/sca3300.c:162:8: note: Excessive padding in 'struct sca3300_chip_info' (17 padding bytes, where 1 is optimal). Optimal fields order: name, scan_masks, channels, accel_scale, accel_scale_map, incli_scale, incli_scale_map, freq_table, freq_map, avail_modes_table, num_channels, num_accel_scales, num_incli_scales, num_freqs, num_avail_modes, chip_id, angle_supported, consider reordering the fields or adding explicit padding members
->>>     struct sca3300_chip_info {
->>>     ~~~~~~~^~~~~~~~~~~~~~~~~~~
->>>     drivers/iio/accel/sca3300.c:191:8: warning: Excessive padding in 'struct sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields order: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
->>>     struct sca3300_data {
->>>     ~~~~~~~^~~~~~~~~~~~~~
->>>     drivers/iio/accel/sca3300.c:191:8: note: Excessive padding in 'struct sca3300_data' (328 padding bytes, where 72 is optimal). Optimal fields order: txbuf, rxbuf, spi, chip, scan, lock, consider reordering the fields or adding explicit padding members
->>>     struct sca3300_data {
->>>     ~~~~~~~^~~~~~~~~~~~~~
->>>     Suppressed 22 warnings (10 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     22 warnings generated.
->>>     Suppressed 22 warnings (9 in non-user code, 13 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     23 warnings generated.
->>>     Suppressed 23 warnings (11 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     22 warnings generated.
->>>     Suppressed 22 warnings (10 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     22 warnings generated.
->>>     Suppressed 22 warnings (10 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     22 warnings generated.
->>>     Suppressed 22 warnings (10 in non-user code, 12 with check filters).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     12 warnings generated.
->>>     drivers/hwmon/emc6w201.c:186:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%u\n",
->>>                    ^~~~~~~
->>>     drivers/hwmon/emc6w201.c:186:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%u\n",
->>>                    ^~~~~~~
->>>     drivers/hwmon/emc6w201.c:225:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
->>>                    ^~~~~~~
->>>     drivers/hwmon/emc6w201.c:225:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
->>>                    ^~~~~~~
->>>     drivers/hwmon/emc6w201.c:270:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%u\n", rpm);
->>>                    ^~~~~~~
->>>     drivers/hwmon/emc6w201.c:270:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%u\n", rpm);
->>>                    ^~~~~~~
->>>     Suppressed 9 warnings (9 in non-user code).
->>>     Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
->>>     55 warnings generated.
->>>     drivers/hwmon/f71882fg.c:1382:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%d\n", speed);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1382:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%d\n", speed);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1391:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%d\n", speed);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1391:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%d\n", speed);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1424:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>                     return sprintf(buf, "1\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1424:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>                     return sprintf(buf, "1\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1426:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>                     return sprintf(buf, "0\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1426:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>                     return sprintf(buf, "0\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1460:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>                     return sprintf(buf, "1\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1460:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>                     return sprintf(buf, "1\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1462:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>                     return sprintf(buf, "0\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1462:10: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>                     return sprintf(buf, "0\n");
->>>                            ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1471:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%d\n", data->in[nr] * 8);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1471:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%d\n", data->in[nr] * 8);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1479:9: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>             return sprintf(buf, "%d\n", data->in1_max * 8);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1479:9: note: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11
->>>             return sprintf(buf, "%d\n", data->in1_max * 8);
->>>                    ^~~~~~~
->>>     drivers/hwmon/f71882fg.c:1514:10: warning: Call to function 'sprintf' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'sprintf_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->>>                     return sprintf(buf, "1\n");
->>>
->>> vim +162 drivers/iio/accel/sca3300.c
->>>
->>> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  161
->>> ad985d4d38d7ad LI Qingwu 2022-05-29 @162  struct sca3300_chip_info {
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  163      const char *name;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  164      const unsigned long *scan_masks;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  165      const struct iio_chan_spec *channels;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  166      u8 num_channels;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  167      u8 num_accel_scales;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  168      const int (*accel_scale)[2];
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  169      const int *accel_scale_map;
->>> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  170      const int (*incli_scale)[2];
->>> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  171      const int *incli_scale_map;
->>> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  172      u8 num_incli_scales;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  173      u8 num_freqs;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  174      const int *freq_table;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  175      const int *freq_map;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  176      const int *avail_modes_table;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  177      u8 num_avail_modes;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  178      u8 chip_id;
->>> 38d5cd1e7ee0b3 LI Qingwu 2022-05-29  179      bool angle_supported;
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  180  };
->>> ad985d4d38d7ad LI Qingwu 2022-05-29  181
->>>
->>> :::::: The code at line 162 was first introduced by commit
->>> :::::: ad985d4d38d7ad8a83b0ff428ea51a2f41ce12e1 iio: accel: sca3300: modified to support multi chips
->>>
->>> :::::: TO: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
->>> :::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>
->>
->>
-> 
-> 
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
