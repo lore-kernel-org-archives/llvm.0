@@ -1,163 +1,98 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62EC7F
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 04:30:14 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id p8so15278084plq.13
-        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 21:30:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB2B7F;
+	Wed,  3 Aug 2022 06:03:40 +0000 (UTC)
+Received: by mail-ej1-f46.google.com with SMTP id tl27so11722283ejc.1;
+        Tue, 02 Aug 2022 23:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
-        b=ZmyJZM/2X6r2WQStOOWb1L8YSe3Wmju8ZPJUypJcy9gN7yp8fCWF63uqX4tKBVerTk
-         ZjGf0FLnrW0/wEIoa4y0T1oFHYmQrykWk9Rmmj6OAUp9J3WASADI62rUJumWFSwTf/8G
-         o88uy0Bvl+Befael+mqciYTIr21Y4KG66ANYtsRAZvuGA8Fb1AKpGlNvruIHB1tsjbo4
-         K7/T7kfVQ57h2CfTACEmXYdPsvXIY0T5Pbeucm6TFCT7CoO1JDxxCURIa45Ob06JNsHj
-         4h0KMcgKGIX//9K+8rV2XZQ22H9kiMEDfDQUK/GLVc1eu3tdOqpAOigpxBTWeRVfKWs2
-         QPFA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yTj4TmBw1tO+s+/E622v1pc0c4D1v+OSObDkqpLLc1Q=;
+        b=Kjtj2j7Rz3OIlku0tpUDJ/ObZMtg4OlvZ2wGAUwzDXRw/S20lSlIiGkgZfS4mBx3Iv
+         WTN9C3cyOfi68EsojmWc3d6iz/tfws8SNd5trGJ+Sz/0VGh0PRY9UojGb5SJpHhSUuMJ
+         k8Cvq3nKK69REeNEcVP+IKi45zM/f1nOsr0my6kTbBm1GtXtASmljWg2eShpGEkIWxFE
+         BRcveCFRXNa/QKYZ0JR8YPGNvnObPPQL/e1Om9YLYocwPRcUY0tPFhJq0rLpnKSrgvpx
+         Fe+CxNA35b45VtEdVkb2VI9wXuyXpsNN4P4h/t/jBsPxkvoCb1GWsbUvP2e6tMTaUX/M
+         Y4yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
-        b=7ju6/BdtPDZl3XqqLUV58KITqDLwR5x98OpCYL4RnC0Y6HtjlKHyOeor3B3vG+M0+9
-         17/Mga+yuDNs1yYobIGkWbtQ6aAVJsS9cM7JRzC+3zxfjkA0RCFupgT4U/4bEL4RG/Ef
-         e2zhZ6kNBNmFZ33uq8W/YzJUG4/iVEGKryvrFWC7E1YQQN4o99cWpRgqczhh1rAL4nb4
-         zj453mLdlq2c4rEnNhMIbYXwvxiYYcLGyY7vH8U90oZwLZi7az9PiokZr2JM3/g+HUlN
-         yXI7A0TNbN1gRE//6ZiG2RNxFdiYFaeviqAXf10AgfQiKI8fpfOEWT7tRryrEnm79jl1
-         t6vw==
-X-Gm-Message-State: ACgBeo1Gb7LetoN+Oe15JOuGdB4CycOsLoHxTAwcrlwDcqlVnD92OcVp
-	RCnBmj3DEKWERfGf3YEOS/Ip/0LySfafY+EEviw=
-X-Google-Smtp-Source: AA6agR5SyjOGv/aZldSjLqg9SnUxxH+alorRSigA/KO8eAyqR6sCOczREDXZTwz8YlO4uAwhACDhBw==
-X-Received: by 2002:a17:90b:3a90:b0:1f3:39fa:166a with SMTP id om16-20020a17090b3a9000b001f339fa166amr2975302pjb.64.1659501013976;
-        Tue, 02 Aug 2022 21:30:13 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f185-20020a6251c2000000b0052b9351737fsm12154066pfb.92.2022.08.02.21.30.11
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
-Message-ID: <62e9f9d4.620a0220.7db3d.3920@mx.google.com>
-Date: Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yTj4TmBw1tO+s+/E622v1pc0c4D1v+OSObDkqpLLc1Q=;
+        b=sgdDrLw1VmMgWI6RlaP8J6mIn6u41cvqWaGnK5/ddlkTr1k0Mf+11pnHE8cZxRmTPv
+         7xyP8fCGCL344ZlSGovZgx/nUiW4a1CtyfDz4OaQKjProk3MqrFBwXuc16heElxX/kns
+         34WWfHhFT28vpGClmD9q3IkarkN0l7Cvvm4tdBlYfwvz+oiq1rizH4t5R5nI0bBl8lOE
+         vG79VWXH4o4msQuq/Vbj6duJHYh5FCI72aMpZGVdA1Ueu3DQw4kTk/HxCoKzP5XwHjcx
+         lamCiYCNrAqVUWB0bMSpWW5T5eoP8hwgSNPsvyNuIjBLZ+KITKbXC1vwLMKK/PRZY4fB
+         WNDQ==
+X-Gm-Message-State: AJIora+j2ZAR8hf58EFrH8Gnn0wqYwZYueWu8VhWcXWjNPPHPOdZYlga
+	m7TagAJvwtgDcUqJqiwLpEsMIOocb8SZTdXQcJI=
+X-Google-Smtp-Source: AGRyM1uCK81RAEqXiBmO2EIzhypQxUIlr239lYiNo/9nXBq0084bUhbDXRpBqWRalkCn3onW4J1LbdDavAsumgDm9uw=
+X-Received: by 2002:a17:907:3e11:b0:72b:49d1:2054 with SMTP id
+ hp17-20020a1709073e1100b0072b49d12054mr19202140ejc.78.1659506618976; Tue, 02
+ Aug 2022 23:03:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220802
-Subject: next/master build: 7 builds: 0 failed, 7 passed,
- 12 warnings (next-20220802)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+References: <CANX2M5Y+98u3R9zATF_VQnxCGzmg59O1sNnTc1sH-wgWFJbLrQ@mail.gmail.com>
+In-Reply-To: <CANX2M5Y+98u3R9zATF_VQnxCGzmg59O1sNnTc1sH-wgWFJbLrQ@mail.gmail.com>
+From: Dipanjan Das <mail.dipanjan.das@gmail.com>
+Date: Tue, 2 Aug 2022 23:03:27 -0700
+Message-ID: <CANX2M5ZEFGToH42rW+yndG59Uebcj-Eiv21Q2ykvHj=eVjpn+w@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in ntfs_get_ea
+To: almaz.alexandrovich@paragon-software.com, nathan@kernel.org, 
+	ndesaulniers@google.com, trix@redhat.com, ntfs3@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: syzkaller@googlegroups.com, fleischermarius@googlemail.com, 
+	its.priyanka.bose@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-next/master build: 7 builds: 0 failed, 7 passed, 12 warnings (next-20220802)
+On Fri, Jul 22, 2022 at 5:51 PM Dipanjan Das
+<mail.dipanjan.das@gmail.com> wrote:
+>
+> Hi,
+>
+> We would like to report the following bug which has been found by our
+> modified version of syzkaller.
+>
+> ======================================================
+> description: KASAN: slab-out-of-bounds Read in ntfs_get_ea
+> affected file: fs/ntfs3/xattr.c
+> kernel version: 5.19-rc6
+> kernel commit: 32346491ddf24599decca06190ebca03ff9de7f8
+> git tree: upstream
+> kernel config: https://syzkaller.appspot.com/text?tag=KernelConfig&x=cd73026ceaed1402
+> crash reproducer: attached
+> ======================================================
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220802/
+Here is our initial analysis and findings regarding this crash (when
+we run the repro attached to our original report):
+In `fs/ntfs3/xattr.c`, the memory size `size` allocated to hold all
+the extended attributes is `60` bytes which is pointed to by `ea_all`
+in `ntfs_get_ea`. `find_ea`  iterates over the `ea_all` by adding an
+`offset` to current `ea` address to find a matching `ea`. The offset
+is calculated either using the size of the extended attribute in
+`ea->size` or using struct size of the `ea`, if `ea->size` is 0. The
+loop terminates if (1) one matched extended attribute `ea` is found or
+(2)  The calculated offset is greater than `size`.
 
-Tree: next
-Branch: master
-Git Describe: next-20220802
-Git Commit: 42d670bda02fdba0f3944c92f545984501e5788d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+In this case, at one point the calculated `offset` becomes `56` which
+does not satisfy any of the terminating conditions and therefore it
+still attempts to find the next `ea`. In order to do that, it
+calculates the size of the current `ea`. Since current `ea->size` is
+0, struct size of the current `ea` is used. During that calculation,
+the field value `ea->name` is dereferenced to calculate the size
+occupied by that field and the address of  `ea->name` falls beyond the
+`60` byte slab range. Hence, the slab out of bound occurs.
 
-Warnings Detected:
+Please let us know if this helps, or we need to dig in further.
 
-arm64:
+-- 
+Thanks and Regards,
 
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    12   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+Dipanjan
