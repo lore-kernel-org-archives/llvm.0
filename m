@@ -1,43 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F8B4A26
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 21:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CF44A26
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 22:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659563046; x=1691099046;
+  t=1659564814; x=1691100814;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=31EkGTKWoJ67xuQHsf9/JeBk/obWAn8p0DWaIUbjN0o=;
-  b=ico2G+nUvqSLYOq4YECMHeiah0r+Hf0IIsIpkpCQQyPwXncB8DcTealm
-   pYTwcm7T1iOtK2UdOuRtOkN8cJU5Y/03yB+1eYwx483mFPjFJKnb0ENkH
-   D2+M7xeTf4KzBGVMF0SJ0f3ShF+/rBgrhQrn3JWBDdgaCdIfZ23WNsdwD
-   +8WrzJRFmEQOzjWkRGOLlcZdsFawDBCnSCBwjwBpLof4HzB7kaBW7bFBn
-   vPodD7qUi9swSNKgv/2CRNU4x8Yogci3KQ1Z761OZ/eUaI+T+F2Cr4cJp
-   fisJcPbgsva1/zF6S6JxAguLijtgPnsml3o6Tl2HE81+9LPzJCc+68H6O
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="376084285"
+  bh=FyZaaNXlO9avdoPUq+PWtAEvmWODROa4pFcuQDEArzM=;
+  b=iZkQG2CgHlt7tSv7s/bAJlTx1lYsR262p7z4tNjKsGmI1hXbWsWcc/Du
+   VPWN9aKGY3fWTHjtg716+QGLspiphZO+SnC7hkOadN4BIuMGFGqiaQ57X
+   MN5Ghb1UztQ1T6sSNatvwlzm8wEma0o0+KOx5eCpLDhu9TdBmnEWOUOZo
+   xf61KAEyQsxN37NsbUK5IfqNC5slI3f5xf4cAUEyFfzhSe5K5XmKGtHNz
+   ge+jyvltT4Gv55WpBydZE2aarOjwOd4x7lPOVgayLFLLpsDML0bs4LJ9N
+   44wjWA65N668jcK+xztavbCqiFHOu+WFP9n0SiuOx/M9P7rrPyfVbhSDB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="291006327"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="376084285"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:43:26 -0700
+   d="scan'208";a="291006327"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:13:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="578818113"
+   d="scan'208";a="692403643"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 14:43:24 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2022 15:13:25 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJM9D-000HgN-2b;
-	Wed, 03 Aug 2022 21:43:23 +0000
-Date: Thu, 4 Aug 2022 05:42:30 +0800
+	id 1oJMcH-000Hid-0U;
+	Wed, 03 Aug 2022 22:13:25 +0000
+Date: Thu, 4 Aug 2022 06:13:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans-Christian Noren Egtvedt <egtvedt@samfundet.no>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [egtvedt-avr32:avr32-cleanup 9/9]
- drivers/net/ethernet/cadence/macb_main.c:4114:9: error: use of undeclared
- identifier 'MACB_MII_OFFSET'
-Message-ID: <202208040507.2IhizbEP-lkp@intel.com>
+Subject: [rmk-arm:zii 42/87] drivers/net/pcs/pcs-xpcs.c:178:9: error: call to
+ undeclared function 'mdiodev_c45_read'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202208040637.Ng1pO69r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,55 +47,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git avr32-cleanup
-head:   127c95b209653b261277d3a6346b6fc5f9a9ef2e
-commit: 127c95b209653b261277d3a6346b6fc5f9a9ef2e [9/9] net:cadence: remove bitfields only used by AVR32
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220804/202208040507.2IhizbEP-lkp@intel.com/config)
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
+head:   315d00812d1f8ed8bbbce4e4fd8d32fc883900a0
+commit: 8994c74ee066d099110807ffcee3f61ffd62d28b [42/87] net: pcs: xpcs: use mdiodev accessors
+config: arm-randconfig-r014-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040637.Ng1pO69r-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git/commit/?id=127c95b209653b261277d3a6346b6fc5f9a9ef2e
-        git remote add egtvedt-avr32 https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git
-        git fetch --no-tags egtvedt-avr32 avr32-cleanup
-        git checkout 127c95b209653b261277d3a6346b6fc5f9a9ef2e
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm zii
+        git checkout 8994c74ee066d099110807ffcee3f61ffd62d28b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/cadence/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/pcs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/cadence/macb_main.c:4114:9: error: use of undeclared identifier 'MACB_MII_OFFSET'
-           .mii = MACB_BIT(MII),
+>> drivers/net/pcs/pcs-xpcs.c:178:9: error: call to undeclared function 'mdiodev_c45_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
                   ^
-   drivers/net/ethernet/cadence/macb.h:725:8: note: expanded from macro 'MACB_BIT'
-           (1 << MACB_##name##_OFFSET)
-                 ^
-   <scratch space>:112:1: note: expanded from here
-   MACB_MII_OFFSET
-   ^
-   1 error generated.
+   drivers/net/pcs/pcs-xpcs.c:178:9: note: did you mean 'mdiobus_c45_read'?
+   include/linux/mdio.h:505:19: note: 'mdiobus_c45_read' declared here
+   static inline int mdiobus_c45_read(struct mii_bus *bus, int prtad, int devad,
+                     ^
+>> drivers/net/pcs/pcs-xpcs.c:183:9: error: call to undeclared function 'mdiodev_c45_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+                  ^
+   drivers/net/pcs/pcs-xpcs.c:183:9: note: did you mean 'mdiobus_c45_write'?
+   include/linux/mdio.h:511:19: note: 'mdiobus_c45_write' declared here
+   static inline int mdiobus_c45_write(struct mii_bus *bus, int prtad, int devad,
+                     ^
+   2 errors generated.
 
 
-vim +/MACB_MII_OFFSET +4114 drivers/net/ethernet/cadence/macb_main.c
+vim +/mdiodev_c45_read +178 drivers/net/pcs/pcs-xpcs.c
 
-421d9df0628be1 drivers/net/ethernet/cadence/macb.c      Cyrille Pitchen 2015-03-07  4112  
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4113  static const struct macb_usrio_config macb_default_usrio = {
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03 @4114  	.mii = MACB_BIT(MII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4115  	.rmii = MACB_BIT(RMII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4116  	.rgmii = GEM_BIT(RGMII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4117  	.refclk = MACB_BIT(CLKEN),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4118  };
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4119  
-
-:::::: The code at line 4114 was first introduced by commit
-:::::: b12422362ce947098ac420ac3c975fc006af4c02 net: macb: Add default usrio config to default gem config
-
-:::::: TO: Atish Patra <atish.patra@wdc.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+   172	
+   173	#define xpcs_linkmode_supported(compat, mode) \
+   174		__xpcs_linkmode_supported(compat, ETHTOOL_LINK_MODE_ ## mode ## _BIT)
+   175	
+   176	int xpcs_read(struct dw_xpcs *xpcs, int dev, u32 reg)
+   177	{
+ > 178		return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
+   179	}
+   180	
+   181	int xpcs_write(struct dw_xpcs *xpcs, int dev, u32 reg, u16 val)
+   182	{
+ > 183		return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+   184	}
+   185	
 
 -- 
 0-DAY CI Kernel Test Service
