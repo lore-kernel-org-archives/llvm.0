@@ -1,272 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AB61364
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 13:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659533454;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pGCC2xkYLO89VCMUOp1FeWtuEdTcHtg+81AV/fSDIb0=;
-	b=JYT8FehDG8ndTOPe/Q3XpT77lKI1NwyuZRgMz2fM7V+lTGJ/ykxd1Zc+qCer+wBxgvkhyY
-	HLYz/6FZmCspM+RKxa5liKxGPJd//vBGc/ZqPJWBAW/r7p7cDrBihNkh89XmM8JImRSMzL
-	hsSoeVLt7tSXpmLaUckmzxXUXVMI+qc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-QKjwW6YZPJCAiyZda_VKQQ-1; Wed, 03 Aug 2022 09:30:53 -0400
-X-MC-Unique: QKjwW6YZPJCAiyZda_VKQQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C102838173D6
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 13:30:52 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B4442492CA2;
-	Wed,  3 Aug 2022 13:30:52 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (12/452 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [e2b54210]
-Date: Wed, 03 Aug 2022 13:30:52 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA3B137D
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 15:32:33 +0000 (UTC)
+Received: by mail-io1-f71.google.com with SMTP id v14-20020a6b5b0e000000b0067bc967a6c0so6976538ioh.5
+        for <llvm@lists.linux.dev>; Wed, 03 Aug 2022 08:32:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=NCQwecGn3xAsWnvGAu1P1ORQUutISsgOm6rWC9dfUm8=;
+        b=Y/I78iwkAOaLOCm4w4qNlBTC9JJi5Hpa7C8vKTxSmiHdr9EwYw01FBVxZF2GTcYIu+
+         ad23SIZ15bykjIdT6PNbxrSTcdwrpiLBBPfF1vsGhIDqEh4T1j29e4oFjBgZq9mGdfwp
+         IsJ/hPXkW2y5NWk1OQ0LJdcL8KIksVHpUiUGOqYbQPi29K1NZPZQl4I7KYsgSZCAlH6T
+         UjeZK44KGgxVtY3xC49qmWhmeke3cuu7SeHIF6o1yM5wXPhB3oUUmHOpgTZ8kY+X34Zz
+         3Iu51daOHFh6qv8h7/jFOTiA6B+F+MRKs3LTDiRhVPc/3G5xOHQWDdVxmvwMEvL6MOdI
+         w66A==
+X-Gm-Message-State: AJIora+4YIVfcGInPmasm/+1i9j8xklIHM66vBJwKNYqvdPqsYIeIr38
+	cM4A0jNXH52bH0/Afw9JmO/ji6VsoUIYbPiXmDBSjSk/OSzZ
+X-Google-Smtp-Source: AGRyM1uylfr03iRWB0jV8Nrfpln7ZEQVnt1BA/lf+cJEAg1cpaxl0KOXF3mAEz66+BbFugtwWpcctxRcrj1S4NShoRABnrdGXwCm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <27889.122080309305300571@us-mta-297.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a92:6504:0:b0:2dd:8201:fdeb with SMTP id
+ z4-20020a926504000000b002dd8201fdebmr10369595ilb.98.1659540752401; Wed, 03
+ Aug 2022 08:32:32 -0700 (PDT)
+Date: Wed, 03 Aug 2022 08:32:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000098a0105e557f130@google.com>
+Subject: [syzbot] WARNING in hugetlb_change_protection
+From: syzbot <syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+syzbot found the following issue on:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+HEAD commit:    e65c6a46df94 Merge tag 'drm-fixes-2022-07-30' of git://ano..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=139cc282080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+dashboard link: https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49684
+Unfortunately, I don't have any reproducer for this issue yet.
 
-One or more kernel tests failed:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                  x86_64 (debug) - stress: stress-ng - cpu-cache
-        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
-already exists and is not an empty directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1301
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 (debug) - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 (debug) - Storage - blktests - nvme-tcp
-                  x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Networking bridge: sanity: Command 'bridge link show dev dum=
-my0 | grep listening' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/583
-            Affected tests:
-                  x86_64 (debug) - Networking bridge: sanity
-        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
-brif/dummy0/state | grep 2' (Expected 0, got 1)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
-            Affected tests:
-                  x86_64 (debug) - Networking bridge: sanity
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                  x86_64 (debug) - Networking MACsec: sanity
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as root
-        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
-emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
-_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
-22,c1023 tclass=3Ddir permissive=3D0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1200#note_990285952
-            Affected tests:
-                  x86_64 (debug) - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                 ppc64le - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: Podman system test: FAIL podman images --all --format {{.Rep=
-ository}}:{{.Tag}} {{.ID}}
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1086
-            Affected tests:
-                 ppc64le - Podman system test - as root
-        Issue: Podman: 040-ps.bats: FAIL: podman ps -a --external sees buil=
-dah containers
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1092
-            Affected tests:
-                 ppc64le - Podman system test - as root
-        Issue: Podman: 070-build.bats: Error: i01: image not known
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1309
-            Affected tests:
-                 ppc64le - Podman system test - as user
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker_entry include/linux/swapops.h:319 [inline]
+WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker include/linux/swapops.h:342 [inline]
+WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
+Modules linked in:
+CPU: 1 PID: 28745 Comm: syz-executor.3 Not tainted 5.19.0-rc8-syzkaller-00146-ge65c6a46df94 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:make_pte_marker_entry include/linux/swapops.h:319 [inline]
+RIP: 0010:make_pte_marker include/linux/swapops.h:342 [inline]
+RIP: 0010:hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
+Code: e8 d0 5a b7 ff 0f b6 94 24 80 00 00 00 48 8b 84 24 98 00 00 00 84 d2 0f 84 ef 02 00 00 49 89 c4 e9 48 fb ff ff e8 ab 5e b7 ff <0f> 0b 48 b9 00 00 00 00 00 fc ff df 48 89 d8 48 c1 e8 03 80 3c 08
+RSP: 0018:ffffc90014cc7780 EFLAGS: 00010212
+RAX: 000000000000082a RBX: ffff88807750e820 RCX: ffffc90006723000
+RDX: 0000000000040000 RSI: ffffffff81c30c25 RDI: 0000000000000007
+RBP: ffff888074de5ea0 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000004 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000004 R15: ffff88801fcc8e00
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0063) knlGS:00000000f7f06b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000020000040 CR3: 000000001b84c000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ change_protection+0x96b/0x3ad0 mm/mprotect.c:463
+ mwriteprotect_range+0x387/0x5c0 mm/userfaultfd.c:759
+ userfaultfd_writeprotect fs/userfaultfd.c:1823 [inline]
+ userfaultfd_ioctl+0x438/0x4340 fs/userfaultfd.c:1997
+ compat_ptr_ioctl+0x67/0x90 fs/ioctl.c:906
+ __do_compat_sys_ioctl+0x1c7/0x290 fs/ioctl.c:968
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7f0b549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f7f065cc EFLAGS: 00000296 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000c018aa06
+RDX: 00000000200000c0 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
