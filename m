@@ -1,114 +1,272 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627D763D
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 12:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659529331; x=1691065331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5vBF8Ok5lBg7xULP4o1v53TnQYulqo1ZFvofkSMmRTc=;
-  b=d65iVlS9RGeCF57afsdPPPuGfjDfPg25oClA0x4eIcd7mS2O31hRnG6a
-   9rgMgEe3LOR8shuP7803f9Wbo+LfQZKQkCU429nKtbmx69Bj42Ru5Qbgw
-   UBor7l0/jG2J0YaCUMGicXPDg5N3G4a6cSjvF6KC2lynyy9uExIhh6IMw
-   h7FH3xMJnLur1TJnfzWexQEFgGNAjKmyPRbCGYvaX8crHOUPTdmeHD/tl
-   WC9zFdfFMprUw9muArrVXy0JJ7YalaXZJOThRjUv4AmBJs4HMYKqz1WzD
-   ljUYx8JnfAsmV5hvwhcUEn4tFekjUhfVsS3BKxw1Xq+7B9oEtszVBK63L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="272705533"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="272705533"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="553301867"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oJDO1-000HFb-0I;
-	Wed, 03 Aug 2022 12:22:05 +0000
-Date: Wed, 3 Aug 2022 20:21:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eddie James <eajames@linux.ibm.com>, joel@jms.id.au
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux@roeck-us.net,
-	jdelvare@suse.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-	devicetree@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH 3/3] hwmon: (occ) Check for device property for setting
- OCC active during probe
-Message-ID: <202208032055.PEvfcqsc-lkp@intel.com>
-References: <20220802194656.240564-4-eajames@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AB61364
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 13:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659533454;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pGCC2xkYLO89VCMUOp1FeWtuEdTcHtg+81AV/fSDIb0=;
+	b=JYT8FehDG8ndTOPe/Q3XpT77lKI1NwyuZRgMz2fM7V+lTGJ/ykxd1Zc+qCer+wBxgvkhyY
+	HLYz/6FZmCspM+RKxa5liKxGPJd//vBGc/ZqPJWBAW/r7p7cDrBihNkh89XmM8JImRSMzL
+	hsSoeVLt7tSXpmLaUckmzxXUXVMI+qc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-QKjwW6YZPJCAiyZda_VKQQ-1; Wed, 03 Aug 2022 09:30:53 -0400
+X-MC-Unique: QKjwW6YZPJCAiyZda_VKQQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C102838173D6
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 13:30:52 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B4442492CA2;
+	Wed,  3 Aug 2022 13:30:52 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (12/452 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [e2b54210]
+Date: Wed, 03 Aug 2022 13:30:52 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802194656.240564-4-eajames@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Message-Id: <27889.122080309305300571@us-mta-297.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eddie,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Yet something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on next-20220728]
-[also build test ERROR on v5.19]
-[cannot apply to groeck-staging/hwmon-next linus/master v5.19 v5.19-rc8 v5.19-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
-base:    7c5e07b73ff3011c9b82d4a3286a3362b951ad2b
-config: arm-randconfig-r021-20220803 (https://download.01.org/0day-ci/archive/20220803/202208032055.PEvfcqsc-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/31dc5bad51ddf22f4e097c0c5862d14341708188
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
-        git checkout 31dc5bad51ddf22f4e097c0c5862d14341708188
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/occ/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49684
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+One or more kernel tests failed:
 
-All errors (new ones prefixed by >>):
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                  x86_64 (debug) - stress: stress-ng - cpu-cache
+        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
+already exists and is not an empty directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1301
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 (debug) - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvme-tcp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Networking bridge: sanity: Command 'bridge link show dev dum=
+my0 | grep listening' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/583
+            Affected tests:
+                  x86_64 (debug) - Networking bridge: sanity
+        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
+brif/dummy0/state | grep 2' (Expected 0, got 1)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
+            Affected tests:
+                  x86_64 (debug) - Networking bridge: sanity
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                  x86_64 (debug) - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                 ppc64le - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: Podman system test: FAIL podman images --all --format {{.Rep=
+ository}}:{{.Tag}} {{.ID}}
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1086
+            Affected tests:
+                 ppc64le - Podman system test - as root
+        Issue: Podman: 040-ps.bats: FAIL: podman ps -a --external sees buil=
+dah containers
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1092
+            Affected tests:
+                 ppc64le - Podman system test - as root
+        Issue: Podman: 070-build.bats: Error: i01: image not known
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1309
+            Affected tests:
+                 ppc64le - Podman system test - as user
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
->> drivers/hwmon/occ/p9_sbe.c:188:25: error: use of undeclared identifier 'p8_i2c_occ_of_match'; did you mean 'p9_sbe_occ_of_match'?
-   MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
-                           ^~~~~~~~~~~~~~~~~~~
-                           p9_sbe_occ_of_match
-   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-   extern typeof(name) __mod_##type##__##name##_device_table               \
-                 ^
-   drivers/hwmon/occ/p9_sbe.c:183:34: note: 'p9_sbe_occ_of_match' declared here
-   static const struct of_device_id p9_sbe_occ_of_match[] = {
-                                    ^
-   1 error generated.
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-vim +188 drivers/hwmon/occ/p9_sbe.c
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-   182	
-   183	static const struct of_device_id p9_sbe_occ_of_match[] = {
-   184		{ .compatible = "ibm,p9-occ-hwmon" },
-   185		{ .compatible = "ibm,p10-occ-hwmon" },
-   186		{}
-   187	};
- > 188	MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
-   189	
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
