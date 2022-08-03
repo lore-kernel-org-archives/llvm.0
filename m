@@ -1,164 +1,277 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1FC7F
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659489404; x=1691025404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z30jiwqxYungx4RUyICnlg/pLFR417/GCMVuPX0HlwI=;
-  b=E3nxrkVvZx83Z7YlqXfFUJI8ZHy9tTxCDnm0siJKppnW1jg320VuWy4s
-   8xh33EthREnl0McC5O+3K0OAQRukrVq9MX1IVtH8ClZVAfH/VZoXoGP+V
-   NJkAZtAm2WThtj/bCvgnoQRAEqmIePTCFGUGURfJKF6ey8nAhPhxvxwah
-   V1VRCtrdfzL+XnFK7cwrVX0+WvwGraALnWQ3o29RpPxS911MbXbas2YnF
-   PngJNE8822BL9ncCjqN/JREFo4ryaqtcioNGkeTBgWtF/V20iywbC1rOX
-   yBIvuBuaMIgSNCNBpfLMPG8Hw5UKIz1j7aLSs4doqoxy3f9YBJC+vg+Cm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="315410972"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="315410972"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:16:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="692058813"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2022 18:16:41 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oJ305-000Ge3-0x;
-	Wed, 03 Aug 2022 01:16:41 +0000
-Date: Wed, 3 Aug 2022 09:16:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: pm8058: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208030942.Sh3TajDz-lkp@intel.com>
-References: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A9E7F
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659489657;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L5TVnYzq1FXOeTYyoifpB2ytk8dUP+88IDP+nWbU6qI=;
+	b=hntk+qcUe2Cb8bvAXi9a2nVgazvFSWBRJarMC29lA59OojB/IT4IgesqYeTs4AkBKm/pgD
+	fs0/qC+0szquDuV8FYQnEgtKI03UOvc7VT0Ei53UNqzvdybwrh87mLQpJzQcJBdFMWmfDW
+	V9ZkzeVWdUjKAdAbcrPhHgIlV6GB8XI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-80MJsBHWMSWLV3T-tHsrag-1; Tue, 02 Aug 2022 21:20:56 -0400
+X-MC-Unique: 80MJsBHWMSWLV3T-tHsrag-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B9638039D0
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:20:56 +0000 (UTC)
+Received: from [172.64.11.38] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0B35640CFD0A;
+	Wed,  3 Aug 2022 01:20:55 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [7d0d3fa7]
+Date: Wed, 03 Aug 2022 01:20:55 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <35894.122080221205600243@us-mta-19.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arm-buildonly-randconfig-r002-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030942.Sh3TajDz-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/58bf03fa835e906a28c49e4aef6060d140239d7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
-        git checkout 58bf03fa835e906a28c49e4aef6060d140239d7f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/leds/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/leds/leds-pm8058.c:130:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           state = led_init_default_state_get(init_data.fwnode);
-                   ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
 
-vim +/led_init_default_state_get +130 drivers/leds/leds-pm8058.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49614
 
-    87	
-    88	static int pm8058_led_probe(struct platform_device *pdev)
-    89	{
-    90		struct led_init_data init_data = {};
-    91		struct device *dev = &pdev->dev;
-    92		struct pm8058_led *led;
-    93		struct device_node *np;
-    94		int ret;
-    95		struct regmap *map;
-    96		enum led_brightness maxbright;
-    97		enum led_default_state state;
-    98	
-    99		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   100		if (!led)
-   101			return -ENOMEM;
-   102	
-   103		led->ledtype = (u32)(unsigned long)of_device_get_match_data(dev);
-   104	
-   105		map = dev_get_regmap(dev->parent, NULL);
-   106		if (!map) {
-   107			dev_err(dev, "Parent regmap unavailable.\n");
-   108			return -ENXIO;
-   109		}
-   110		led->map = map;
-   111	
-   112		np = dev_of_node(dev);
-   113	
-   114		ret = of_property_read_u32(np, "reg", &led->reg);
-   115		if (ret) {
-   116			dev_err(dev, "no register offset specified\n");
-   117			return -EINVAL;
-   118		}
-   119	
-   120		led->cdev.brightness_set = pm8058_led_set;
-   121		led->cdev.brightness_get = pm8058_led_get;
-   122		if (led->ledtype == PM8058_LED_TYPE_COMMON)
-   123			maxbright = 31; /* 5 bits */
-   124		else
-   125			maxbright = 15; /* 4 bits */
-   126		led->cdev.max_brightness = maxbright;
-   127	
-   128		init_data.fwnode = of_fwnode_handle(np);
-   129	
- > 130		state = led_init_default_state_get(init_data.fwnode);
-   131		switch (state) {
-   132		case LEDS_DEFSTATE_ON:
-   133			led->cdev.brightness = maxbright;
-   134			pm8058_led_set(&led->cdev, maxbright);
-   135			break;
-   136		case LEDS_DEFSTATE_KEEP:
-   137			led->cdev.brightness = pm8058_led_get(&led->cdev);
-   138			break;
-   139		default:
-   140			led->cdev.brightness = LED_OFF;
-   141			pm8058_led_set(&led->cdev, LED_OFF);
-   142		}
-   143	
-   144		if (led->ledtype == PM8058_LED_TYPE_KEYPAD ||
-   145		    led->ledtype == PM8058_LED_TYPE_FLASH)
-   146			led->cdev.flags	= LED_CORE_SUSPENDRESUME;
-   147	
-   148		ret = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   149		if (ret)
-   150			dev_err(dev, "Failed to register LED for %pOF\n", np);
-   151	
-   152		return ret;
-   153	}
-   154	
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+          x86_64 - Storage - lvm snapper test
+                   Issue: lvm snapper test: I/O error, dev loop0, sector 0 =
+op 0x0:(READ) flags 0x0 phys_seg 32 prio class 2
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1056
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4658818
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                  x86_64 (debug) - stress: stress-ng - cpu-cache
+        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
+already exists and is not an empty directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1301
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 (debug) - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvme-tcp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+                  x86_64 (debug) - Storage - block - storage fio numa
+        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
+            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
+2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
+brif/dummy0/state | grep 2' (Expected 0, got 1)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
+            Affected tests:
+                  x86_64 (debug) - Networking bridge: sanity
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 (debug) - Memory function: kaslr
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                 ppc64le - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: Podman system test: FAIL podman images --all --format {{.Rep=
+ository}}:{{.Tag}} {{.ID}}
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1086
+            Affected tests:
+                 ppc64le - Podman system test - as root
+        Issue: Podman: 040-ps.bats: FAIL: podman ps -a --external sees buil=
+dah containers
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1092
+            Affected tests:
+                 ppc64le - Podman system test - as root
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
