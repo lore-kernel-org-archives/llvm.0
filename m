@@ -1,46 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C37820E4
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 17:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E688F37B
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 18:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659548899; x=1691084899;
+  t=1659552621; x=1691088621;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rF3OY9Dsb4CCvexrUxd7GJarnmlUWzpt1tT0LjQD9tw=;
-  b=kJ+yJNhuNrjrSQ99I7u5aCXS5+0bT5RQOAtBBDVYRB4XOt0GyhHeYKrp
-   +szg6oDqsWAK1QO4/OB4sduGcStQ97UY5rRj3An8b5zGhKjb3wUf/zs9E
-   PoCqSePnerYy0GMMMwBh1D5zj1OOMzho7nnEjMJxt/G/jV1ubEK3ErXrR
-   EqpNtgpjLpLAw8hygZWvbawqwjn84sx6WR6fSyuFRqpU4goOFmFT/O1Yn
-   SLyNxW+qsgDgBOmxuy5hr831mKbN9wrieWPy6NG2JsUIgLyN/v7qpboiL
-   YsfOC4nsj72VKTGoJcaV8SKRvegWgwzrzU5ADqzFvi7rahwU6LAyhtaJJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="276654729"
+  bh=PZoNbmA1Fb2MlNefOhZyRwr/P3R3JKvVcAAgZO6IGco=;
+  b=eRsHUnH4oCPlrRS4ZgRVjUkoSzVTW7O3D+T5a/Z0MD5FnBK8YoAs63sl
+   rAlNhKlx1kTcgj1Js56FUZDKqz5lysA+ovZvheU8y4t2U3kTo8sz1yXiB
+   i1uugQg7K/suOmRbruSyWGHFZyICcKPUEK6pmEyH+a+jWYZv23L3d1tuq
+   P17+VqjGhTKYc+7oM3yyWCXBKrgUrKLGxSNBtLyxcWyqPNBN/zPG6OkfQ
+   wBQJx8/1IZ0jjU1WshI7hq3l3yv29T7uUQPPZbXoGd+cwx7WIIeXj6bf3
+   Sa/bg0jJlASV5AIiRE02A67MWEXPhrVPpMbMA6mfMD4gYVoA6Nkm38P2G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="288510096"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="276654729"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 10:48:18 -0700
+   d="scan'208";a="288510096"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 11:50:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="930474334"
+   d="scan'208";a="578764377"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2022 10:48:16 -0700
+  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 11:50:19 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJITg-000HWC-0D;
-	Wed, 03 Aug 2022 17:48:16 +0000
-Date: Thu, 4 Aug 2022 01:48:10 +0800
+	id 1oJJRi-000HZT-1k;
+	Wed, 03 Aug 2022 18:50:18 +0000
+Date: Thu, 4 Aug 2022 02:49:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Harrison <John.C.Harrison@intel.com>
+To: Qu Wenruo <wqu@suse.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Jordan Justen <jordan.l.justen@intel.com>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>
-Subject: drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning:
- expecting prototype for intel_guc_hwconfig_init(). Prototype was for
- guc_hwconfig_init() instead
-Message-ID: <202208040157.aQqPWbKV-lkp@intel.com>
+	linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
+	linux-doc@vger.kernel.org
+Subject: fs/btrfs/raid56.c:1000: warning: This comment starts with '/**', but
+ isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202208040217.jYokbVy6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,75 +47,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi John,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
-commit: 8781f0515247f441623a01f6e036a1d7898170e2 drm/i915/guc: Add fetch of hwconfig blob
-date:   5 months ago
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220804/202208040157.aQqPWbKV-lkp@intel.com/config)
+commit: 3e77605d6a81efd39278a5ca2ee57737eb2659d2 btrfs: raid56: make rbio_add_io_page() subpage compatible
+date:   3 months ago
+config: hexagon-randconfig-r002-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040217.jYokbVy6-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8781f0515247f441623a01f6e036a1d7898170e2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e77605d6a81efd39278a5ca2ee57737eb2659d2
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 8781f0515247f441623a01f6e036a1d7898170e2
+        git checkout 3e77605d6a81efd39278a5ca2ee57737eb2659d2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: Function parameter or member 'gt' not described in 'guc_hwconfig_init'
->> drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:143: warning: Function parameter or member 'gt' not described in 'intel_gt_init_hwconfig'
-   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:156: warning: Function parameter or member 'gt' not described in 'intel_gt_fini_hwconfig'
+>> fs/btrfs/raid56.c:1000: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Get a sector pointer specified by its @stripe_nr and @sector_nr
 
 
-vim +110 drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
+vim +1000 fs/btrfs/raid56.c
 
-   102	
-   103	/**
-   104	 * intel_guc_hwconfig_init - Initialize the HWConfig
-   105	 *
-   106	 * Retrieve the HWConfig table from the GuC and save it locally.
-   107	 * It can then be queried on demand by other users later on.
-   108	 */
-   109	static int guc_hwconfig_init(struct intel_gt *gt)
- > 110	{
-   111		struct intel_hwconfig *hwconfig = &gt->info.hwconfig;
-   112		struct intel_guc *guc = &gt->uc.guc;
-   113		int ret;
-   114	
-   115		if (!has_table(gt->i915))
-   116			return 0;
-   117	
-   118		ret = guc_hwconfig_discover_size(guc, hwconfig);
-   119		if (ret)
-   120			return ret;
-   121	
-   122		hwconfig->ptr = kmalloc(hwconfig->size, GFP_KERNEL);
-   123		if (!hwconfig->ptr) {
-   124			hwconfig->size = 0;
-   125			return -ENOMEM;
-   126		}
-   127	
-   128		ret = guc_hwconfig_fill_buffer(guc, hwconfig);
-   129		if (ret < 0) {
-   130			intel_gt_fini_hwconfig(gt);
-   131			return ret;
-   132		}
-   133	
-   134		return 0;
-   135	}
-   136	
+   998	
+   999	/**
+> 1000	 * Get a sector pointer specified by its @stripe_nr and @sector_nr
+  1001	 *
+  1002	 * @rbio:               The raid bio
+  1003	 * @stripe_nr:          Stripe number, valid range [0, real_stripe)
+  1004	 * @sector_nr:		Sector number inside the stripe,
+  1005	 *			valid range [0, stripe_nsectors)
+  1006	 * @bio_list_only:      Whether to use sectors inside the bio list only.
+  1007	 *
+  1008	 * The read/modify/write code wants to reuse the original bio page as much
+  1009	 * as possible, and only use stripe_sectors as fallback.
+  1010	 */
+  1011	static struct sector_ptr *sector_in_rbio(struct btrfs_raid_bio *rbio,
+  1012						 int stripe_nr, int sector_nr,
+  1013						 bool bio_list_only)
+  1014	{
+  1015		struct sector_ptr *sector;
+  1016		int index;
+  1017	
+  1018		ASSERT(stripe_nr >= 0 && stripe_nr < rbio->real_stripes);
+  1019		ASSERT(sector_nr >= 0 && sector_nr < rbio->stripe_nsectors);
+  1020	
+  1021		index = stripe_nr * rbio->stripe_nsectors + sector_nr;
+  1022		ASSERT(index >= 0 && index < rbio->nr_sectors);
+  1023	
+  1024		spin_lock_irq(&rbio->bio_list_lock);
+  1025		sector = &rbio->bio_sectors[index];
+  1026		if (sector->page || bio_list_only) {
+  1027			/* Don't return sector without a valid page pointer */
+  1028			if (!sector->page)
+  1029				sector = NULL;
+  1030			spin_unlock_irq(&rbio->bio_list_lock);
+  1031			return sector;
+  1032		}
+  1033		spin_unlock_irq(&rbio->bio_list_lock);
+  1034	
+  1035		return &rbio->stripe_sectors[index];
+  1036	}
+  1037	
 
 -- 
 0-DAY CI Kernel Test Service
