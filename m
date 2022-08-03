@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B37368
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 07:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F63C368
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 08:01:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659512493;
+	s=mimecast20190719; t=1659513714;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=A6KRjsm5yhqJElanDATd0qZLNGq+8zMguwTwO8Jr5k4=;
-	b=VMd3XkCt+Jtr/6aGIyGh25dn7qXw30wliiRm+Bq8RWpWQr60k8M7Ro1VCaNCEN3CPKiAHo
-	0ejion7yRbgZ23Y1369dp3Ec6piY7NsegotRHx1vQ2k0+hk/0LqDRi7smwbdW2lVWuR1kh
-	MQIwIr5xoMul2dRwKvzfBanjlcb1p2Q=
+	bh=a0vRzCTjOOfJnig5eIjWF/h+cH303iL+tSTZ2T0trYw=;
+	b=SbBhVzmEJTws4PqG/odX5VVsJGXuqE4erN9wuNoUZrlV4bONX7LWxPaKg+qNOLJUWJj/R9
+	lev/KF0ZAACN95DM/ierIr6OKG3wyY7jesNXq1xi95dAsIXUlTEmczvfZAjhVN6POxTzr6
+	gM7Z+ZV6BeGmFNJLvDe/BCJgFwe7epE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-198-OlnK_MQeMTeu-YddY8pEWQ-1; Wed, 03 Aug 2022 03:41:32 -0400
-X-MC-Unique: OlnK_MQeMTeu-YddY8pEWQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-57-iyAo4Zs-PNqn2KPjrK9yrw-1; Wed, 03 Aug 2022 04:01:52 -0400
+X-MC-Unique: iyAo4Zs-PNqn2KPjrK9yrw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B8B7801231
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 07:41:32 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DBAE803520
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 08:01:52 +0000 (UTC)
 Received: from [172.64.11.38] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4E1CB492C3B;
-	Wed,  3 Aug 2022 07:41:32 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6F2011415117;
+	Wed,  3 Aug 2022 08:01:52 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (11/452 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [6991a564]
-Date: Wed, 03 Aug 2022 07:41:32 -0000
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [569bede0]
+Date: Wed, 03 Aug 2022 08:01:52 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <22065.122080303413200179@us-mta-198.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <64829.122080304015200639@us-mta-57.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -45,17 +45,24 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi, we tested your kernel and here are the results:
 
-    Overall result: PASSED
+    Overall result: FAILED
              Merge: OK
            Compile: OK
               Test: OK
 
-Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49661
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49666
 
 One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+          x86_64 (debug) - Networking bridge: sanity
+                   Issue: Networking bridge: sanity: Command 'bridge link s=
+how dev dummy0 | grep listening' (Expected 0, got 1)
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/583
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4668481
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -76,11 +83,6 @@ l-tests/-/issues/1222
             Affected tests:
                   x86_64 (debug) - kselftest build - bpf
                   x86_64 (debug) - kselftest build - net
-        Issue: rcu: INFO: rcu_sched detected expedited stalls on CPUs/tasks
-            URL: https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-63r-xJOFf=
-2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
         Issue: stress: stress-ng: fail to build core-affinity: error: redec=
 laration of enum fsconfig_command
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -129,7 +131,6 @@ l-tests/-/issues/1306
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
             Affected tests:
                  aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
                    s390x - Storage - targetcli basic
                   x86_64 - Storage - targetcli basic
                   x86_64 (debug) - Storage - targetcli basic
@@ -139,23 +140,14 @@ ser namespace
 l-tests/-/issues/1166
             Affected tests:
                  aarch64 - Podman system test - as root
-                 ppc64le - Podman system test - as root
                   x86_64 - Podman system test - as root
                   x86_64 (debug) - Podman system test - as root
-        Issue: Podman system integration test: hit timeout
+        Issue: Podman: 070-build.bats: Error: i01: image not known
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/702
+l-tests/-/issues/1309
             Affected tests:
+                  x86_64 (debug) - Podman system test - as root
                   x86_64 (debug) - Podman system test - as user
-        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
-emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
-_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
-22,c1023 tclass=3Ddir permissive=3D0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1200#note_990285952
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 (debug) - Firmware test suite
         Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
 found
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -172,10 +164,7 @@ l-tests/-/issues/1169
                  aarch64 - Reboot test
                   x86_64 - Memory function: kaslr
                   x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
 redeclaration of 'enum fsconfig_command'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -194,6 +183,14 @@ l-tests/-/issues/1302
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - btrfs
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                  x86_64 - Memory function: kaslr
         Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
 rom image history should =3D=3D image list
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -201,8 +198,6 @@ l-tests/-/issues/1160
             Affected tests:
                  aarch64 - Podman system test - as root
                  aarch64 - Podman system test - as user
-                 ppc64le - Podman system test - as root
-                 ppc64le - Podman system test - as user
                    s390x - Podman system test - as root
                    s390x - Podman system test - as user
         Issue: storage: software RAID testing: SELinux prevents mdadm
@@ -210,7 +205,6 @@ l-tests/-/issues/1160
 l-tests/-/issues/1213
             Affected tests:
                  aarch64 - Storage - swraid simple_reshape
-                 ppc64le - Storage - swraid simple_reshape
                    s390x - Storage - swraid simple_reshape
         Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
