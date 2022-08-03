@@ -1,152 +1,243 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9405C62C
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 10:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659521532; x=1691057532;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wNgibCha+Z5OAGb6BtV0t7PS1bvSgNxYnJ8TaDgsLjI=;
-  b=UcwJ398wbS6hNOMnbEjewGE1YSzlv+ll2NMlrE5zfr+Iva74awIFvrZM
-   EhpJng0t11xPAYrSSK6bfWkAgx2ogF2/NRWqP6V7wyLfFBW7WlGNTvb3p
-   pLABSevJIO+ekQ3zydhTlVLDegiHtCyjD+b/37ekx1LLitBkN5AtYP493
-   G3ta2hCqESoJRskmXu7wyEDJ5Q1PG8/lZgLGBtXYexkGRS9gGDmf5Rppz
-   xaZ9MyfOkZ2zJTRhFwidBu6rP7yeRkDH6dh7DVdIB2VBE7ob1zii5dkJH
-   PRVe3wyZYIL2KkUz8rPBLf5saH6GVw2uyaWibPH1Ltlq1ebDXVdvmWRTF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="351349538"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="351349538"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 03:12:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="578587935"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 03:12:01 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oJBM8-000H8h-1O;
-	Wed, 03 Aug 2022 10:12:00 +0000
-Date: Wed, 3 Aug 2022 18:11:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call
- to 'memcmp'
-Message-ID: <202208031804.qnRvyXLe-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EB462C
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 10:21:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659522114;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1DR1gTA3zGJsdf/JnTPq3SZw+hK6Nb7FeS1JZrqltCE=;
+	b=UG15Ge5gsIuuRR6j9kK6NziE667nf5onsOAvCmuXRGCAYNijwlmB0eYv9zVEIAD8UjS2XA
+	mxAvdkERrHh4bquwtnXAVqo9qJqrMTLDM+s233JoOjhOh3TT905Bqz2iiE8/dhKAuxLbnY
+	HlOCiw6QMbG+TByk9TCU1x0+CA28Blo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-46-mwQoBi2XMTKpq03ZPaaH0A-1; Wed, 03 Aug 2022 06:21:53 -0400
+X-MC-Unique: mwQoBi2XMTKpq03ZPaaH0A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F077E1C05132
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 10:21:52 +0000 (UTC)
+Received: from [172.64.5.49] (unknown [10.30.32.252])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DD8E72166B26;
+	Wed,  3 Aug 2022 10:21:52 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (49/452 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [c2a24a7a]
+Date: Wed, 03 Aug 2022 10:21:52 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+Message-Id: <13601.122080306215301037@us-mta-46.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
-commit: 281d0c962752fb40866dd8d4cade68656f34bd1f fortify: Add Clang support
-date:   6 months ago
-config: mips-randconfig-r023-20220803 (https://download.01.org/0day-ci/archive/20220803/202208031804.qnRvyXLe-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bcm47xx/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49678
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
 
->> arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-   include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument
-   extern int memcmp(const void *,const void *,__kernel_size_t);
-              ^
-   include/linux/fortify-string.h:391:5: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *const' for 1st argument
-   int memcmp(const void * const POS0 p, const void * const POS0 q, __kernel_size_t size)
-       ^
-   1 error generated.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                  x86_64 (debug) - stress: stress-ng - cpu-cache
+        Issue: stress: stress-ng: fatal: destination path '/opt/stress-ng' =
+already exists and is not an empty directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1301
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 (debug) - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvme-tcp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 (debug) - Memory function: kaslr
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
 
-vim +/memcmp +89 arch/mips/bcm47xx/prom.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-6ee1d93455384ce Rafał Miłecki       2014-07-17   55  
-25e5fb97419f73d Aurelien Jarno      2007-09-25   56  static __init void prom_init_mem(void)
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   57  {
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   58  	unsigned long mem;
-aec922255135389 Hauke Mehrtens      2010-07-27   59  	unsigned long max;
-c47cc20ca53e792 Hauke Mehrtens      2012-10-03   60  	unsigned long off;
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   61  	struct cpuinfo_mips *c = &current_cpu_data;
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   62  
-25e5fb97419f73d Aurelien Jarno      2007-09-25   63  	/* Figure out memory size by finding aliases.
-25e5fb97419f73d Aurelien Jarno      2007-09-25   64  	 *
-25e5fb97419f73d Aurelien Jarno      2007-09-25   65  	 * We should theoretically use the mapping from CFE using cfe_enummem().
-25e5fb97419f73d Aurelien Jarno      2007-09-25   66  	 * However as the BCM47XX is mostly used on low-memory systems, we
-25e5fb97419f73d Aurelien Jarno      2007-09-25   67  	 * want to reuse the memory used by CFE (around 4MB). That means cfe_*
-25e5fb97419f73d Aurelien Jarno      2007-09-25   68  	 * functions stop to work at some point during the boot, we should only
-25e5fb97419f73d Aurelien Jarno      2007-09-25   69  	 * call them at the beginning of the boot.
-aec922255135389 Hauke Mehrtens      2010-07-27   70  	 *
-aec922255135389 Hauke Mehrtens      2010-07-27   71  	 * BCM47XX uses 128MB for addressing the ram, if the system contains
-aec922255135389 Hauke Mehrtens      2010-07-27   72  	 * less that that amount of ram it remaps the ram more often into the
-aec922255135389 Hauke Mehrtens      2010-07-27   73  	 * available space.
-25e5fb97419f73d Aurelien Jarno      2007-09-25   74  	 */
-96a8123e5f96582 Rafał Miłecki       2014-04-19   75  
-96a8123e5f96582 Rafał Miłecki       2014-04-19   76  	/* Physical address, without mapping to any kernel segment */
-96a8123e5f96582 Rafał Miłecki       2014-04-19   77  	off = CPHYSADDR((unsigned long)prom_init);
-96a8123e5f96582 Rafał Miłecki       2014-04-19   78  
-96a8123e5f96582 Rafał Miłecki       2014-04-19   79  	/* Accessing memory after 128 MiB will cause an exception */
-96a8123e5f96582 Rafał Miłecki       2014-04-19   80  	max = 128 << 20;
-96a8123e5f96582 Rafał Miłecki       2014-04-19   81  
-96a8123e5f96582 Rafał Miłecki       2014-04-19   82  	for (mem = 1 << 20; mem < max; mem += 1 << 20) {
-96a8123e5f96582 Rafał Miłecki       2014-04-19   83  		/* Loop condition may be not enough, off may be over 1 MiB */
-96a8123e5f96582 Rafał Miłecki       2014-04-19   84  		if (off + mem >= max) {
-96a8123e5f96582 Rafał Miłecki       2014-04-19   85  			mem = max;
-d548ca6b0784a99 Rafał Miłecki       2014-12-10   86  			pr_debug("Assume 128MB RAM\n");
-aec922255135389 Hauke Mehrtens      2010-07-27   87  			break;
-aec922255135389 Hauke Mehrtens      2010-07-27   88  		}
-c47cc20ca53e792 Hauke Mehrtens      2012-10-03  @89  		if (!memcmp(prom_init, prom_init + mem, 32))
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   90  			break;
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   91  	}
-6ee1d93455384ce Rafał Miłecki       2014-07-17   92  	lowmem = mem;
-1c0c13eb935c95f Aurelien Jarno      2007-09-25   93  
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   94  	/* Ignoring the last page when ddr size is 128M. Cached
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   95  	 * accesses to last page is causing the processor to prefetch
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   96  	 * using address above 128M stepping out of the ddr address
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   97  	 * space.
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   98  	 */
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03   99  	if (c->cputype == CPU_74K && (mem == (128  << 20)))
-d3dce3d676373b1 Hauke Mehrtens      2012-10-03  100  		mem -= 0x1000;
-e7ae8d174eec0b3 Thomas Bogendoerfer 2020-10-09  101  	memblock_add(0, mem);
-1c0c13eb935c95f Aurelien Jarno      2007-09-25  102  }
-1c0c13eb935c95f Aurelien Jarno      2007-09-25  103  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: The code at line 89 was first introduced by commit
-:::::: c47cc20ca53e792938556aa29103fa889ce0d858 MIPS: BCM47XX: improve memory size detection
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-:::::: TO: Hauke Mehrtens <hauke@hauke-m.de>
-:::::: CC: John Crispin <blogic@openwrt.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
