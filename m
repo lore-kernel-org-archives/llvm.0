@@ -1,45 +1,46 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A057F
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D38A7F
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659490004; x=1691026004;
+  t=1659490665; x=1691026665;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BH8xdsbiuKShIsJ1RG8m6Kh4+8oFpaixloeAq3Mozfg=;
-  b=oH0/9sKHK8QRWdj/kjnAEnQARh+KOxDF3OwPRkjzVNwcEDrkiekWz6pj
-   Bn0h3fLrGC4omdlhm2ChAkivZue3hn2FVlSEGfC45iQb3tDxt43I66t3k
-   26m2sxAswnZSL0/EeXJegLfTVKvxKDx000GMA/TCZ5oyCHGm7RAhte26Q
-   WtoMmqsYMtN+k8o8bTBmFP9iuFO9ppWwypgD0aaTrumppAE6vBmVX1nI/
-   LP4fK69skNFJ8DLb4jyY23tu+Cy0tgJhwH4ThfqLeWFRBstgSbDhmprtt
-   9fv5OCjad14v/+HTLopXStktL/njM58leIPEFnF7mzuPB1PTyXBf8u0FE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353560168"
+  bh=R1XnHP9VZc1t6FNufDD0Ro2KkfbYmIQOGwG8zw5Pbas=;
+  b=KmYuhmz196G76ahJ4T4M3TP9ZuV25WlFyqsp1mG16Row4LiKwVbwjis0
+   pFNxRlrBZZhd8jh5ULWRENDO1NIeBlSiEkLwC3mlwrUZ+u1Q0gcMFg5MF
+   ETmxY3UZat9LXt1pqLk6/cM3ksVOFv4YgnZ2L7SsTKoWzRDfS8SWWujQD
+   Rct8Dr2+gLb6TdQOcyuWAxuN2FJ8MF8cJbCPxQSysmJcHORbq53uTtJ6/
+   rbO5N6swhAdodbo9i3CqiI0JkcP2x1WZrs/p7X1Lt3dGmkQUM4ZV/b9CD
+   CsHo4e5dOjSBOOGZorAJT6VjF/gy/y79ERgb/fojKyoQEqWfHCDUodDqr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353561612"
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="353560168"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:26:43 -0700
+   d="scan'208";a="353561612"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:37:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="670667902"
+   d="scan'208";a="635500969"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Aug 2022 18:26:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 18:37:42 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJ39l-000GeR-1Q;
-	Wed, 03 Aug 2022 01:26:41 +0000
-Date: Wed, 3 Aug 2022 09:26:33 +0800
+	id 1oJ3KP-000GfD-2h;
+	Wed, 03 Aug 2022 01:37:41 +0000
+Date: Wed, 3 Aug 2022 09:36:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Erling Ljunggren <hljunggr@cisco.com>, linux-media@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: an30259a: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208030939.UxKQfaZY-lkp@intel.com>
-References: <20220802212554.7216-1-andriy.shevchenko@linux.intel.com>
+	Jonathan Selnes <jonathansb1@gmail.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Erling Ljunggren <hljunggr@cisco.com>
+Subject: Re: [PATCH 4/5] media: i2c: cat24c208: driver for the cat24c208 EDID
+ EEPROM
+Message-ID: <202208030925.bp514QvB-lkp@intel.com>
+References: <20220728114050.2400475-5-hljunggr@cisco.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,92 +49,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802212554.7216-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220728114050.2400475-5-hljunggr@cisco.com>
 
-Hi Andy,
+Hi Erling,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220728]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19]
+[cannot apply to next-20220728]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-an30259a-Get-rid-of-custom-led_init_default_state_get/20220803-053038
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: x86_64-randconfig-a005-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030939.UxKQfaZY-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
+base:   git://linuxtv.org/media_tree.git master
+config: s390-randconfig-c005-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030925.bp514QvB-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/757448b8fc5bcbc4303ce9570d5dd555f1e2b22e
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/94ba9bb463937ad05b92c6be56a552894b386774
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-an30259a-Get-rid-of-custom-led_init_default_state_get/20220803-053038
-        git checkout 757448b8fc5bcbc4303ce9570d5dd555f1e2b22e
+        git fetch --no-tags linux-review Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
+        git checkout 94ba9bb463937ad05b92c6be56a552894b386774
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/ drivers/media/i2c/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/leds/leds-an30259a.c:227:24: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   led->default_state = led_init_default_state_get(led->fwnode);
-                                        ^
-   drivers/leds/leds-an30259a.c:204:14: warning: unused variable 'str' [-Wunused-variable]
-           const char *str;
-                       ^
-   1 warning and 1 error generated.
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/i2c/cat24c208.c:407:34: warning: unused variable 'cat24c208_of_match' [-Wunused-const-variable]
+   static const struct of_device_id cat24c208_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
+   Selected by [y]:
+   - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=y] || QCOM_LLCC [=y]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
 
 
-vim +/led_init_default_state_get +227 drivers/leds/leds-an30259a.c
+vim +/cat24c208_of_match +407 drivers/media/i2c/cat24c208.c
 
-   197	
-   198	static int an30259a_dt_init(struct i2c_client *client,
-   199				    struct an30259a *chip)
-   200	{
-   201		struct device_node *np = dev_of_node(&client->dev), *child;
-   202		int count, ret;
-   203		int i = 0;
-   204		const char *str;
-   205		struct an30259a_led *led;
-   206	
-   207		count = of_get_available_child_count(np);
-   208		if (!count || count > AN30259A_MAX_LEDS)
-   209			return -EINVAL;
-   210	
-   211		for_each_available_child_of_node(np, child) {
-   212			u32 source;
-   213	
-   214			ret = of_property_read_u32(child, "reg", &source);
-   215			if (ret != 0 || !source || source > AN30259A_MAX_LEDS) {
-   216				dev_err(&client->dev, "Couldn't read LED address: %d\n",
-   217					ret);
-   218				count--;
-   219				continue;
-   220			}
-   221	
-   222			led = &chip->leds[i];
-   223	
-   224			led->num = source;
-   225			led->chip = chip;
-   226			led->fwnode = of_fwnode_handle(child);
- > 227			led->default_state = led_init_default_state_get(led->fwnode);
-   228	
-   229			i++;
-   230		}
-   231	
-   232		if (!count)
-   233			return -EINVAL;
-   234	
-   235		chip->num_leds = i;
-   236	
-   237		return 0;
-   238	}
-   239	
+   406	
+ > 407	static const struct of_device_id cat24c208_of_match[] = {
+   408		{ .compatible = "onnn,cat24c208"},
+   409		{}
+   410	};
+   411	MODULE_DEVICE_TABLE(of, cat24c208_of_match);
+   412	
 
 -- 
 0-DAY CI Kernel Test Service
