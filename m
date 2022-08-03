@@ -1,46 +1,47 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D38A7F
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 01:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C5A7F
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 02:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659490665; x=1691026665;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R1XnHP9VZc1t6FNufDD0Ro2KkfbYmIQOGwG8zw5Pbas=;
-  b=KmYuhmz196G76ahJ4T4M3TP9ZuV25WlFyqsp1mG16Row4LiKwVbwjis0
-   pFNxRlrBZZhd8jh5ULWRENDO1NIeBlSiEkLwC3mlwrUZ+u1Q0gcMFg5MF
-   ETmxY3UZat9LXt1pqLk6/cM3ksVOFv4YgnZ2L7SsTKoWzRDfS8SWWujQD
-   Rct8Dr2+gLb6TdQOcyuWAxuN2FJ8MF8cJbCPxQSysmJcHORbq53uTtJ6/
-   rbO5N6swhAdodbo9i3CqiI0JkcP2x1WZrs/p7X1Lt3dGmkQUM4ZV/b9CD
-   CsHo4e5dOjSBOOGZorAJT6VjF/gy/y79ERgb/fojKyoQEqWfHCDUodDqr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353561612"
+  t=1659493191; x=1691029191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XvWc6/IhE9bacJZzGsb8jS7BDC9vN0R4MZJc4qnjiyg=;
+  b=bYvT3S/u7SDjGUYf6odwmelxzzKV4enu90pUT6lvvAgJ1ucwtH/bZNze
+   ZWaLf9WpqwZXGovXlkFWox4rHOjssnuDGDydcUVi92/JZ2rDnWFWuwuhJ
+   fdx/WuxMDIFd+L67D+omsBdVF/cx/CnAhztJodsh0wx8S4L/9bheDDH9E
+   4/VVKM5DjE+sbpX70hLvonDMfAGrIWasaHu5nzEYqF3H1kQIlqqdq8Giv
+   okJzpVn7XHWm+pUgj0TphwhiyZRbf01rkIT22cLIrIKrWV4a8or3iSWVw
+   Y+Oec+fz3GVCnNUluapLNSkO83phMh/9kscGhnyBkyXi2GuIwz1DHfmnw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="288319765"
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="353561612"
+   d="scan'208";a="288319765"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:37:44 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 19:19:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="635500969"
+   d="scan'208";a="635510327"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 18:37:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 19:19:43 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJ3KP-000GfD-2h;
-	Wed, 03 Aug 2022 01:37:41 +0000
-Date: Wed, 3 Aug 2022 09:36:50 +0800
+	id 1oJ3z4-000Ggy-2J;
+	Wed, 03 Aug 2022 02:19:42 +0000
+Date: Wed, 3 Aug 2022 10:19:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Erling Ljunggren <hljunggr@cisco.com>, linux-media@vger.kernel.org
+To: Christoph Hellwig <hch@lst.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jonathan Selnes <jonathansb1@gmail.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Erling Ljunggren <hljunggr@cisco.com>
-Subject: Re: [PATCH 4/5] media: i2c: cat24c208: driver for the cat24c208 EDID
- EEPROM
-Message-ID: <202208030925.bp514QvB-lkp@intel.com>
-References: <20220728114050.2400475-5-hljunggr@cisco.com>
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [ammarfaizi2-block:axboe/linux-block/for-5.20/drivers 116/128]
+ drivers/md/dm.c:1019:32: error: no member named 'bio_split' in 'struct
+ request_queue'
+Message-ID: <202208031056.CwBNWtsS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,125 +50,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728114050.2400475-5-hljunggr@cisco.com>
 
-Hi Erling,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v5.19]
-[cannot apply to next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
-base:   git://linuxtv.org/media_tree.git master
-config: s390-randconfig-c005-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030925.bp514QvB-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-5.20/drivers
+head:   4a60e6e655b81b817569ee42f481de06506848b3
+commit: faf18cbbdb8631b48bf103f9e06e944f80e3b6bf [116/128] block: move ->bio_split to the gendisk
+config: hexagon-randconfig-r041-20220801 (https://download.01.org/0day-ci/archive/20220803/202208031056.CwBNWtsS-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/94ba9bb463937ad05b92c6be56a552894b386774
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
-        git checkout 94ba9bb463937ad05b92c6be56a552894b386774
+        # https://github.com/ammarfaizi2/linux-block/commit/faf18cbbdb8631b48bf103f9e06e944f80e3b6bf
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-5.20/drivers
+        git checkout faf18cbbdb8631b48bf103f9e06e944f80e3b6bf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/ drivers/media/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/md/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/i2c/cat24c208.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/i2c/cat24c208.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/i2c/cat24c208.c:19:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/i2c/cat24c208.c:407:34: warning: unused variable 'cat24c208_of_match' [-Wunused-const-variable]
-   static const struct of_device_id cat24c208_of_match[] = {
-                                    ^
-   13 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
-   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
-   Selected by [y]:
-   - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=y] || QCOM_LLCC [=y]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
+>> drivers/md/dm.c:1019:32: error: no member named 'bio_split' in 'struct request_queue'
+                   dm_io_rewind(io, &md->queue->bio_split);
+                                     ~~~~~~~~~  ^
+   1 error generated.
 
 
-vim +/cat24c208_of_match +407 drivers/media/i2c/cat24c208.c
+vim +1019 drivers/md/dm.c
 
-   406	
- > 407	static const struct of_device_id cat24c208_of_match[] = {
-   408		{ .compatible = "onnn,cat24c208"},
-   409		{}
-   410	};
-   411	MODULE_DEVICE_TABLE(of, cat24c208_of_match);
-   412	
+e27363472f9bc9 Mike Snitzer 2022-03-09  1002  
+8b211aaccb915b Ming Lei     2022-06-24  1003  static void dm_wq_requeue_work(struct work_struct *work)
+8b211aaccb915b Ming Lei     2022-06-24  1004  {
+8b211aaccb915b Ming Lei     2022-06-24  1005  	struct mapped_device *md = container_of(work, struct mapped_device,
+8b211aaccb915b Ming Lei     2022-06-24  1006  						requeue_work);
+8b211aaccb915b Ming Lei     2022-06-24  1007  	unsigned long flags;
+8b211aaccb915b Ming Lei     2022-06-24  1008  	struct dm_io *io;
+8b211aaccb915b Ming Lei     2022-06-24  1009  
+8b211aaccb915b Ming Lei     2022-06-24  1010  	/* reuse deferred lock to simplify dm_handle_requeue */
+8b211aaccb915b Ming Lei     2022-06-24  1011  	spin_lock_irqsave(&md->deferred_lock, flags);
+8b211aaccb915b Ming Lei     2022-06-24  1012  	io = md->requeue_list;
+8b211aaccb915b Ming Lei     2022-06-24  1013  	md->requeue_list = NULL;
+8b211aaccb915b Ming Lei     2022-06-24  1014  	spin_unlock_irqrestore(&md->deferred_lock, flags);
+8b211aaccb915b Ming Lei     2022-06-24  1015  
+8b211aaccb915b Ming Lei     2022-06-24  1016  	while (io) {
+8b211aaccb915b Ming Lei     2022-06-24  1017  		struct dm_io *next = io->next;
+8b211aaccb915b Ming Lei     2022-06-24  1018  
+8b211aaccb915b Ming Lei     2022-06-24 @1019  		dm_io_rewind(io, &md->queue->bio_split);
+8b211aaccb915b Ming Lei     2022-06-24  1020  
+8b211aaccb915b Ming Lei     2022-06-24  1021  		io->next = NULL;
+8b211aaccb915b Ming Lei     2022-06-24  1022  		__dm_io_complete(io, false);
+8b211aaccb915b Ming Lei     2022-06-24  1023  		io = next;
+8b211aaccb915b Ming Lei     2022-06-24  1024  	}
+8b211aaccb915b Ming Lei     2022-06-24  1025  }
+8b211aaccb915b Ming Lei     2022-06-24  1026  
+
+:::::: The code at line 1019 was first introduced by commit
+:::::: 8b211aaccb915bbf4f4a68f1910c4de701df393b dm: add two stage requeue mechanism
+
+:::::: TO: Ming Lei <ming.lei@redhat.com>
+:::::: CC: Mike Snitzer <snitzer@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
