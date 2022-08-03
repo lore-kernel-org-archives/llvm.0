@@ -1,129 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E3B7F
-	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 04:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84062C433D6;
-	Wed,  3 Aug 2022 04:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659500406;
-	bh=4XvW6Am+LFtU+beJUyoqbF5SdzyM95956jiHnqhMtGw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fP7OAmnJdeDrH+3lKsGs+j7tgGMMLB/DbAh9jWp67VxaRsmO7QibW7knm2D2iYqZG
-	 dSVQlg7tWQQjiQP2uvEepCh5ML010EhvEJDE6rnIBneJxT3mWexptkIVMdxHaAV9PK
-	 0GEngfIwWPmIHP8Fi2aou9E21t9PuJdIKKksaZuqUSdy5tBFXAiPLM3QVzxB6rTWH8
-	 uLbLhTU3bzqlWeg5Q8xKUlmlh6Owbdvf+LjbUXbJDiTCYyWephMAaEvGelYdg7GiDO
-	 OlG7AH4mP60rel0pO+jvwR0Jy/ng+Vz0sYXEMcntQ2SgFkrnZdDl4V69RvYnSuPOMD
-	 02P7prfEmDn8g==
-Message-ID: <9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
-Date: Tue, 2 Aug 2022 22:20:04 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62EC7F
+	for <llvm@lists.linux.dev>; Wed,  3 Aug 2022 04:30:14 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id p8so15278084plq.13
+        for <llvm@lists.linux.dev>; Tue, 02 Aug 2022 21:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
+        b=ZmyJZM/2X6r2WQStOOWb1L8YSe3Wmju8ZPJUypJcy9gN7yp8fCWF63uqX4tKBVerTk
+         ZjGf0FLnrW0/wEIoa4y0T1oFHYmQrykWk9Rmmj6OAUp9J3WASADI62rUJumWFSwTf/8G
+         o88uy0Bvl+Befael+mqciYTIr21Y4KG66ANYtsRAZvuGA8Fb1AKpGlNvruIHB1tsjbo4
+         K7/T7kfVQ57h2CfTACEmXYdPsvXIY0T5Pbeucm6TFCT7CoO1JDxxCURIa45Ob06JNsHj
+         4h0KMcgKGIX//9K+8rV2XZQ22H9kiMEDfDQUK/GLVc1eu3tdOqpAOigpxBTWeRVfKWs2
+         QPFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
+        b=7ju6/BdtPDZl3XqqLUV58KITqDLwR5x98OpCYL4RnC0Y6HtjlKHyOeor3B3vG+M0+9
+         17/Mga+yuDNs1yYobIGkWbtQ6aAVJsS9cM7JRzC+3zxfjkA0RCFupgT4U/4bEL4RG/Ef
+         e2zhZ6kNBNmFZ33uq8W/YzJUG4/iVEGKryvrFWC7E1YQQN4o99cWpRgqczhh1rAL4nb4
+         zj453mLdlq2c4rEnNhMIbYXwvxiYYcLGyY7vH8U90oZwLZi7az9PiokZr2JM3/g+HUlN
+         yXI7A0TNbN1gRE//6ZiG2RNxFdiYFaeviqAXf10AgfQiKI8fpfOEWT7tRryrEnm79jl1
+         t6vw==
+X-Gm-Message-State: ACgBeo1Gb7LetoN+Oe15JOuGdB4CycOsLoHxTAwcrlwDcqlVnD92OcVp
+	RCnBmj3DEKWERfGf3YEOS/Ip/0LySfafY+EEviw=
+X-Google-Smtp-Source: AA6agR5SyjOGv/aZldSjLqg9SnUxxH+alorRSigA/KO8eAyqR6sCOczREDXZTwz8YlO4uAwhACDhBw==
+X-Received: by 2002:a17:90b:3a90:b0:1f3:39fa:166a with SMTP id om16-20020a17090b3a9000b001f339fa166amr2975302pjb.64.1659501013976;
+        Tue, 02 Aug 2022 21:30:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f185-20020a6251c2000000b0052b9351737fsm12154066pfb.92.2022.08.02.21.30.11
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
+Message-ID: <62e9f9d4.620a0220.7db3d.3920@mx.google.com>
+Date: Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH] net: seg6: initialize induction variable to first valid
- array index
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
- "David S. Miller" <davem@davemloft.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Andrea Mayer <andrea.mayer@uniroma2.it>
-References: <20220802161203.622293-1-ndesaulniers@google.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220802161203.622293-1-ndesaulniers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220802
+Subject: next/master build: 7 builds: 0 failed, 7 passed,
+ 12 warnings (next-20220802)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-[ cc Andrea ]
+next/master build: 7 builds: 0 failed, 7 passed, 12 warnings (next-20220802)
 
-On 8/2/22 10:12 AM, Nick Desaulniers wrote:
-> Fixes the following warnings observed when building
-> CONFIG_IPV6_SEG6_LWTUNNEL=y with clang:
-> 
->   net/ipv6/seg6_local.o: warning: objtool: seg6_local_fill_encap() falls
->   through to next function seg6_local_get_encap_size()
->   net/ipv6/seg6_local.o: warning: objtool: seg6_local_cmp_encap() falls
->   through to next function input_action_end()
-> 
-> LLVM can fully unroll loops in seg6_local_get_encap_size() and
-> seg6_local_cmp_encap(). One issue in those loops is that the induction
-> variable is initialized to 0. The loop iterates over members of
-> seg6_action_params, a global array of struct seg6_action_param calling
-> their put() function pointer members.  seg6_action_param uses an array
-> initializer to initialize SEG6_LOCAL_SRH and later elements, which is
-> the third enumeration of an anonymous union.
-> 
-> The guard `if (attrs & SEG6_F_ATTR(i))` may prevent this from being
-> called at runtime, but it would still be UB for
-> `seg6_action_params[0]->put` to be called; the unrolled loop will make
-> the initial iterations unreachable, which LLVM will later rotate to
-> fallthrough to the next function.
-> 
-> Make this more obvious that this cannot happen to the compiler by
-> initializing the loop induction variable to the minimum valid index that
-> seg6_action_params is initialized to.
-> 
-> Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  net/ipv6/seg6_local.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 2cd4a8d3b30a..b7de5e46fdd8 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -1614,7 +1614,7 @@ static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
->  	 * callback. If the callback is not available, then we skip to the next
->  	 * attribute; otherwise, we call the destroy() callback.
->  	 */
-> -	for (i = 0; i < max_parsed; ++i) {
-> +	for (i = SEG6_LOCAL_SRH; i < max_parsed; ++i) {
->  		if (!(parsed_attrs & SEG6_F_ATTR(i)))
->  			continue;
->  
-> @@ -1643,7 +1643,7 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
->  	struct seg6_action_param *param;
->  	int err, i;
->  
-> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; ++i) {
-> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; ++i) {
->  		if (!(desc->optattrs & SEG6_F_ATTR(i)) || !attrs[i])
->  			continue;
->  
-> @@ -1742,7 +1742,7 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
->  	}
->  
->  	/* parse the required attributes */
-> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
->  		if (desc->attrs & SEG6_F_ATTR(i)) {
->  			if (!attrs[i])
->  				return -EINVAL;
-> @@ -1847,7 +1847,7 @@ static int seg6_local_fill_encap(struct sk_buff *skb,
->  
->  	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
->  
-> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
->  		if (attrs & SEG6_F_ATTR(i)) {
->  			param = &seg6_action_params[i];
->  			err = param->put(skb, slwt);
-> @@ -1927,7 +1927,7 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
->  	if (attrs_a != attrs_b)
->  		return 1;
->  
-> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
->  		if (attrs_a & SEG6_F_ATTR(i)) {
->  			param = &seg6_action_params[i];
->  			if (param->cmp(slwt_a, slwt_b))
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220802/
 
+Tree: next
+Branch: master
+Git Describe: next-20220802
+Git Commit: 42d670bda02fdba0f3944c92f545984501e5788d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
