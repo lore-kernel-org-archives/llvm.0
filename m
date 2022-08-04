@@ -1,252 +1,337 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E487F6
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 12:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659616868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=h2N1s99QE8bfBbYjFwR7TfR7ma2Bwv9U3+jTwvWE6mY=;
-	b=BBGsSR0Q43vNlHgYm8qnYXb+MEn3tLip2YwmUjtSOtbLCfgAHwgPxLi+NLyF78Zu4zOA/B
-	7L7ZzXog2X0Iuy1NtexW85hEL0bNStRp3EaL1Nmhq/5wUskjgQ1dp7eX+V7bT1H5D3YAHt
-	dx6l0drZFHFgJjzVfYHl6ztaPJ8OoAc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-218-7ZePeS1GNCeSqUoSouU9Zg-1; Thu, 04 Aug 2022 08:41:07 -0400
-X-MC-Unique: 7ZePeS1GNCeSqUoSouU9Zg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E590380A0BF
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 12:41:06 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D86AF4010FA5;
-	Thu,  4 Aug 2022 12:41:06 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (16/452 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [b44f2fd8]
-Date: Thu, 04 Aug 2022 12:41:06 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3584B256C
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 12:49:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659617362; x=1691153362;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+7TkLWEOWJUivI6IYIVqO/8bzqNP8U9uCdgPXPZXekI=;
+  b=SbpJqYVdqVD34nn+XNsjxwH0P83TwSZY5i5JaRRVw3hnRk9UwZUdH4J7
+   zKfykX6h1cHoTVGUP/ivYTV+rfSw7evZczFmRoTJwjY/lSE8Mjj9Ywart
+   QUnaX+Hpje60vfYo+jp2VstJetGRZ0vu/Lg/JUg+Y9axn6CJBGN/vGGox
+   HRbdTBEtgMwbIZW4ytPFXJLrzzwuIvJsiF9mof7DbHr3Iy0hEOfW5r9LT
+   t08a8/6SuMkNslwN9G5Fp3nKnmlNNyz+/TRJz7VdXu3/HMXDFL4fk0MqZ
+   +v6WZ1Pfp0+tOv6rqbMN1vbtJC7rLABiyfMDfhsnNnEzllXOdORcPxXI4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="272968438"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="272968438"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 05:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="553709230"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2022 05:49:20 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oJaHu-000IRz-2z;
+	Thu, 04 Aug 2022 12:49:18 +0000
+Date: Thu, 4 Aug 2022 20:49:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadfed@fb.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [kuba:gnl-gen-dpll 111/133] drivers/ptp/ptp_ocp.c:3721:41: error:
+ call to undeclared function 'dpll_priv'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202208042049.C42zYO15-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <36951.122080408410700207@us-mta-218.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git gnl-gen-dpll
+head:   fe9b39bc400264b4403591191c918670b7766de9
+commit: 48c4cd1d7a94aeb6ab460989f1561117291092a5 [111/133] ptp_ocp: implement DPLL ops
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220804/202208042049.C42zYO15-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git/commit/?id=48c4cd1d7a94aeb6ab460989f1561117291092a5
+        git remote add kuba https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git
+        git fetch --no-tags kuba gnl-gen-dpll
+        git checkout 48c4cd1d7a94aeb6ab460989f1561117291092a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49846
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 (debug) - stress: stress-ng - cpu-cache
-                  x86_64 (debug) - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 (debug) - Storage - blktests - nvme-tcp
-                  x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                  x86_64 (debug) - Networking MACsec: sanity
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 ppc64le - Podman system test - as root
-                  x86_64 - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as root
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
-emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
-_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
-22,c1023 tclass=3Ddir permissive=3D0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1200#note_990285952
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 (debug) - Memory function: kaslr
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                 ppc64le - Podman system test - as root
-                 ppc64le - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 ppc64le - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: Podman: 070-build.bats: Error: i01: image not known
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1309
-            Affected tests:
-                 ppc64le - Podman system test - as root
-                 ppc64le - Podman system test - as user
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
-c/0x4c
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1310
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> drivers/ptp/ptp_ocp.c:3721:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                                  ^
+   drivers/ptp/ptp_ocp.c:3721:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ocp.c:3730:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                                  ^
+   drivers/ptp/ptp_ocp.c:3730:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ptp/ptp_ocp.c:3743:7: error: assigning to 'struct ocp_selector *' from 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   tbl = bp->sma_op->tbl[0];
+                       ^ ~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ocp.c:3745:7: error: assigning to 'struct ocp_selector *' from 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   tbl = bp->sma_op->tbl[1];
+                       ^ ~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ocp.c:3753:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                                  ^
+   drivers/ptp/ptp_ocp.c:3753:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ptp/ptp_ocp.c:3754:23: error: initializing 'struct ocp_selector *' with an expression of type 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct ocp_selector *tbl = bp->sma_op->tbl[dir];
+                                ^     ~~~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ocp.c:3766:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                                  ^
+   drivers/ptp/ptp_ocp.c:3766:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ocp.c:3781:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                                  ^
+   drivers/ptp/ptp_ocp.c:3781:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ptp/ptp_ocp.c:3794:31: error: variable has incomplete type 'struct dpll_device_ops'
+   static struct dpll_device_ops dpll_ops = {
+                                 ^
+   drivers/ptp/ptp_ocp.c:3794:15: note: forward declaration of 'struct dpll_device_ops'
+   static struct dpll_device_ops dpll_ops = {
+                 ^
+>> drivers/ptp/ptp_ocp.c:3859:13: error: call to undeclared function 'dpll_device_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma), bp);
+                      ^
+>> drivers/ptp/ptp_ocp.c:3864:2: error: call to undeclared function 'dpll_device_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           dpll_device_register(bp->dpll);
+           ^
+   drivers/ptp/ptp_ocp.c:3864:2: note: did you mean 'device_register'?
+   include/linux/device.h:895:18: note: 'device_register' declared here
+   int __must_check device_register(struct device *dev);
+                    ^
+>> drivers/ptp/ptp_ocp.c:3883:2: error: call to undeclared function 'dpll_device_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           dpll_device_unregister(bp->dpll);
+           ^
+>> drivers/ptp/ptp_ocp.c:3884:2: error: call to undeclared function 'dpll_device_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           dpll_device_free(bp->dpll);
+           ^
+   5 warnings and 13 errors generated.
+--
+>> drivers/dpll/dpll_core.c:77:21: error: conflicting types for 'dpll_device_alloc'
+   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
+                       ^
+   include/linux/dpll.h:23:21: note: previous declaration is here
+   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
+                       ^
+   1 error generated.
+--
+>> drivers/dpll/dpll_netlink.c:227:24: error: initializing 'const struct nlattr **' with an expression of type 'struct nlattr **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           const struct nlattr **attrs = p->attrs;
+                                 ^       ~~~~~~~~
+   drivers/dpll/dpll_netlink.c:252:24: error: initializing 'const struct nlattr **' with an expression of type 'struct nlattr **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           const struct nlattr **attrs = p->attrs;
+                                 ^       ~~~~~~~~
+   drivers/dpll/dpll_netlink.c:600:13: warning: no previous prototype for function 'dpll_netlink_fini' [-Wmissing-prototypes]
+   void __exit dpll_netlink_fini(void)
+               ^
+   drivers/dpll/dpll_netlink.c:600:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __exit dpll_netlink_fini(void)
+   ^
+   static 
+   1 warning and 2 errors generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/dpll_priv +3721 drivers/ptp/ptp_ocp.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  3718	
+  3719	static int ptp_ocp_dpll_get_status(struct dpll_device *dpll)
+  3720	{
+> 3721		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+  3722		int sync;
+  3723	
+  3724		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
+  3725		return sync;
+  3726	}
+  3727	
+  3728	static int ptp_ocp_dpll_get_lock_status(struct dpll_device *dpll)
+  3729	{
+  3730		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+  3731		int sync;
+  3732	
+  3733		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
+  3734		return sync;
+  3735	}
+  3736	
+  3737	static int ptp_ocp_sma_get_dpll_type(struct ptp_ocp *bp, int sma_nr)
+  3738	{
+  3739		struct ocp_selector *tbl;
+  3740		u32 val;
+  3741	
+  3742		if (bp->sma[sma_nr].mode == SMA_MODE_IN)
+> 3743			tbl = bp->sma_op->tbl[0];
+  3744		else
+  3745			tbl = bp->sma_op->tbl[1];
+  3746	
+  3747		val = ptp_ocp_sma_get(bp, sma_nr);
+  3748		return tbl[val].dpll_type;
+  3749	}
+  3750	
+  3751	static int ptp_ocp_dpll_type_supported(struct dpll_device *dpll, int sma, int type, int dir)
+  3752	{
+  3753		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+> 3754		struct ocp_selector *tbl = bp->sma_op->tbl[dir];
+  3755		int i;
+  3756	
+  3757		for (i = 0; i < sizeof(*tbl); i++) {
+  3758			if (tbl[i].dpll_type == type)
+  3759				return 1;
+  3760		}
+  3761		return 0;
+  3762	}
+  3763	
+  3764	static int ptp_ocp_dpll_get_source_type(struct dpll_device *dpll, int sma)
+  3765	{
+  3766		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+  3767	
+  3768		if (bp->sma[sma].mode != SMA_MODE_IN)
+  3769			return -1;
+  3770	
+  3771		return ptp_ocp_sma_get_dpll_type(bp, sma);
+  3772	}
+  3773	
+  3774	static int ptp_ocp_dpll_get_source_supported(struct dpll_device *dpll, int sma, int type)
+  3775	{
+  3776		return ptp_ocp_dpll_type_supported(dpll, sma, type, 0);
+  3777	}
+  3778	
+  3779	static int ptp_ocp_dpll_get_output_type(struct dpll_device *dpll, int sma)
+  3780	{
+  3781		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
+  3782	
+  3783		if (bp->sma[sma].mode != SMA_MODE_OUT)
+  3784			return -1;
+  3785	
+  3786		return ptp_ocp_sma_get_dpll_type(bp, sma);
+  3787	}
+  3788	
+  3789	static int ptp_ocp_dpll_get_output_supported(struct dpll_device *dpll, int sma, int type)
+  3790	{
+  3791		return ptp_ocp_dpll_type_supported(dpll, sma, type, 1);
+  3792	}
+  3793	
+> 3794	static struct dpll_device_ops dpll_ops = {
+  3795		.get_status		= ptp_ocp_dpll_get_status,
+  3796		.get_lock_status	= ptp_ocp_dpll_get_lock_status,
+  3797		.get_source_type	= ptp_ocp_dpll_get_source_type,
+  3798		.get_source_supported	= ptp_ocp_dpll_get_source_supported,
+  3799		.get_output_type	= ptp_ocp_dpll_get_output_type,
+  3800		.get_output_supported	= ptp_ocp_dpll_get_output_supported,
+  3801	};
+  3802	
+  3803	static int
+  3804	ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+  3805	{
+  3806		struct devlink *devlink;
+  3807		struct ptp_ocp *bp;
+  3808		int err;
+  3809	
+  3810		devlink = devlink_alloc(&ptp_ocp_devlink_ops, sizeof(*bp), &pdev->dev);
+  3811		if (!devlink) {
+  3812			dev_err(&pdev->dev, "devlink_alloc failed\n");
+  3813			return -ENOMEM;
+  3814		}
+  3815	
+  3816		err = pci_enable_device(pdev);
+  3817		if (err) {
+  3818			dev_err(&pdev->dev, "pci_enable_device\n");
+  3819			goto out_free;
+  3820		}
+  3821	
+  3822		bp = devlink_priv(devlink);
+  3823		err = ptp_ocp_device_init(bp, pdev);
+  3824		if (err)
+  3825			goto out_disable;
+  3826	
+  3827		/* compat mode.
+  3828		 * Older FPGA firmware only returns 2 irq's.
+  3829		 * allow this - if not all of the IRQ's are returned, skip the
+  3830		 * extra devices and just register the clock.
+  3831		 */
+  3832		err = pci_alloc_irq_vectors(pdev, 1, 17, PCI_IRQ_MSI | PCI_IRQ_MSIX);
+  3833		if (err < 0) {
+  3834			dev_err(&pdev->dev, "alloc_irq_vectors err: %d\n", err);
+  3835			goto out;
+  3836		}
+  3837		bp->n_irqs = err;
+  3838		pci_set_master(pdev);
+  3839	
+  3840		err = ptp_ocp_register_resources(bp, id->driver_data);
+  3841		if (err)
+  3842			goto out;
+  3843	
+  3844		bp->ptp = ptp_clock_register(&bp->ptp_info, &pdev->dev);
+  3845		if (IS_ERR(bp->ptp)) {
+  3846			err = PTR_ERR(bp->ptp);
+  3847			dev_err(&pdev->dev, "ptp_clock_register: %d\n", err);
+  3848			bp->ptp = NULL;
+  3849			goto out;
+  3850		}
+  3851	
+  3852		err = ptp_ocp_complete(bp);
+  3853		if (err)
+  3854			goto out;
+  3855	
+  3856		ptp_ocp_info(bp);
+  3857		devlink_register(devlink);
+  3858	
+> 3859		bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma), bp);
+  3860		if (!bp->dpll) {
+  3861			dev_err(&pdev->dev, "dpll_device_alloc failed\n");
+  3862			return 0;
+  3863		}
+> 3864		dpll_device_register(bp->dpll);
+  3865	
+  3866		return 0;
+  3867	
+  3868	out:
+  3869		ptp_ocp_detach(bp);
+  3870	out_disable:
+  3871		pci_disable_device(pdev);
+  3872	out_free:
+  3873		devlink_free(devlink);
+  3874		return err;
+  3875	}
+  3876	
+  3877	static void
+  3878	ptp_ocp_remove(struct pci_dev *pdev)
+  3879	{
+  3880		struct ptp_ocp *bp = pci_get_drvdata(pdev);
+  3881		struct devlink *devlink = priv_to_devlink(bp);
+  3882	
+> 3883		dpll_device_unregister(bp->dpll);
+> 3884		dpll_device_free(bp->dpll);
+  3885		devlink_unregister(devlink);
+  3886		ptp_ocp_detach(bp);
+  3887		pci_disable_device(pdev);
+  3888	
+  3889		devlink_free(devlink);
+  3890	}
+  3891	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
