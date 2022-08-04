@@ -1,59 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9477F
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 10:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1173F363
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 10:46:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659608710; x=1691144710;
+  t=1659609967; x=1691145967;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TMv41kPjFNwEES+IgD1kd1GmqY4KLGHdI4MsZyeLejA=;
-  b=AazTVLbsvW4NY5ZF2w32Gr0m9LQ5XQ87ZyJWl4DvlMUUanJxOskjsYMk
-   UMz52mV84ZRfudicXmhSFR/1qOO2wQTTvZmOHS5PC6IJwi9hRdg16ituB
-   kqgO9kdd4RoUXOGJ92j3/cCUQvWlLYLf6qH9gT3T52RXcFeckT04r93Ne
-   wirWD2VSLr56hcSuwQSbydyqrGQsbGwApjPMTJu69E8gO3DYefjEzrraj
-   xApq0RG3/PtSgUDRQt+KW8mGz9UrT7Xd902kvZtvzQcLwutFYM4UxXrpp
-   jX7Qpq5QP8CmijU979i3fVXdkIDpQZWZr2xFWsNFUzk28bYdQ3B4ftHJv
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="276817651"
+  bh=zLOOZiWBCb31kaGdsoXKXtvmX/Xl352oLW7ZtSVO9A4=;
+  b=i5oGDMvF2Ey+iptjO4fhU5aHgDvAXEywAiy5TC6sZ6zjGqZRtG74MkSf
+   bvagCvWlCq0qk03WRahv7nyTpvoeMxZb+SbBGNy0OGdfIKMMgR2pHGZrd
+   vUz698axXMKsULVW4B609ThDJEy3cIFpDOT3lDvAch4p1S4D5H/i5qi1T
+   65/tCmqvrdrd3v0diH/J5pKsrSXh5jQvZMJ6ofNy2ca/wXkCzLoOLVBeq
+   dT0mN8/0o/Ia1iqy2lEXzE9GD2yAIYKXR5IXuFwHBNYSjlMzRJb5jYwam
+   gjuZSXQ0Eh/PGWA5d9ff0I/afMltFTofixkMwSSclwcefpXmkzePl131u
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="289913674"
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="276817651"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 03:25:09 -0700
+   d="scan'208";a="289913674"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 03:46:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="779316253"
+   d="scan'208";a="930761086"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 Aug 2022 03:25:04 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 04 Aug 2022 03:46:05 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJY2J-000IIL-13;
-	Thu, 04 Aug 2022 10:25:03 +0000
-Date: Thu, 4 Aug 2022 18:24:55 +0800
+	id 1oJYMe-000IJU-2O;
+	Thu, 04 Aug 2022 10:46:04 +0000
+Date: Thu, 4 Aug 2022 18:45:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	helgaas@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mka@chromium.org,
-	quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-	quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-	swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: Re: [PATCH v5 2/3] PCI: qcom: Restrict pci transactions after pci
- suspend
-Message-ID: <202208041800.BLHfNzzW-lkp@intel.com>
-References: <1659526134-22978-3-git-send-email-quic_krichai@quicinc.com>
+To: Srinivas Aji <srinivas.aji@memverge.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 4/4] device-dax: Add a block device persistent type,
+ BLK, for DAX KMEM
+Message-ID: <202208041827.gXLXUdlo-lkp@intel.com>
+References: <Yulo96W5ofaJranB@memverge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,151 +46,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1659526134-22978-3-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <Yulo96W5ofaJranB@memverge.com>
 
-Hi Krishna,
+Hi Srinivas,
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on next-20220803]
-[cannot apply to linus/master v5.19]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19 next-20220803]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/PCI-Restrict-pci-transactions-after-pci-suspend/20220803-193033
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: s390-randconfig-r044-20220804 (https://download.01.org/0day-ci/archive/20220804/202208041800.BLHfNzzW-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Aji/Allow-persistent-data-on-DAX-device-being-used-as-KMEM/20220803-021320
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 0805c6fb39f66e01cb0adccfae8d9e0615c70fd7
+config: s390-buildonly-randconfig-r005-20220804 (https://download.01.org/0day-ci/archive/20220804/202208041827.gXLXUdlo-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9e799ab52db3245911b15a8903977d99554d900d
+        # https://github.com/intel-lab-lkp/linux/commit/1d821cfc1cd5b2a7034ca77e84b59cf808b09a4f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-chaitanya-chundru/PCI-Restrict-pci-transactions-after-pci-suspend/20220803-193033
-        git checkout 9e799ab52db3245911b15a8903977d99554d900d
+        git fetch --no-tags linux-review Srinivas-Aji/Allow-persistent-data-on-DAX-device-being-used-as-KMEM/20220803-021320
+        git checkout 1d821cfc1cd5b2a7034ca77e84b59cf808b09a4f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/dax/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/pci/controller/dwc/pcie-designware-host.c:11:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/pci/controller/dwc/pcie-designware-host.c:11:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/pci/controller/dwc/pcie-designware-host.c:11:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-designware-host.c:33:24: error: static assertion failed due to requirement '__builtin_types_compatible_p(struct pcie_port, struct dw_pcie_rp) || __builtin_types_compatible_p(struct pcie_port, void)': pointer type mismatch in container_of()
-           struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.h:327:34: note: expanded from macro 'to_dw_pcie_from_pp'
-   #define to_dw_pcie_from_pp(port) container_of((port), struct dw_pcie, pp)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
-           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:44:24: error: static assertion failed due to requirement '__builtin_types_compatible_p(struct pcie_port, struct dw_pcie_rp) || __builtin_types_compatible_p(struct pcie_port, void)': pointer type mismatch in container_of()
-           struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.h:327:34: note: expanded from macro 'to_dw_pcie_from_pp'
-   #define to_dw_pcie_from_pp(port) container_of((port), struct dw_pcie, pp)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:19:2: note: expanded from macro 'container_of'
-           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   12 warnings and 2 errors generated.
+   drivers/dax/kmem_blk.c:338:21: error: use of undeclared identifier 'QUEUE_FLAG_DISCARD'
+           blk_queue_flag_set(QUEUE_FLAG_DISCARD, disk->queue);
+                              ^
+>> drivers/dax/kmem_blk.c:479:3: warning: pointer/integer type mismatch in conditional expression ('unsigned long' and 'void *') [-Wconditional-type-mismatch]
+                   dev_err("KMEM not formatted for blk, magic %lx type %d\n",
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:2: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:109:3: note: expanded from macro 'dev_printk_index_wrap'
+                   dev_printk_index_emit(level, fmt);                      \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:105:2: note: expanded from macro 'dev_printk_index_emit'
+           printk_index_subsys_emit("%s %s: ", level, fmt)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:431:2: note: expanded from macro 'printk_index_subsys_emit'
+           __printk_index_emit(fmt, level, subsys_fmt_prefix)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:397:39: note: expanded from macro '__printk_index_emit'
+                                   .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+                                                                     ^ ~~~~~~   ~~~~
+   drivers/dax/kmem_blk.c:479:11: error: incompatible pointer types passing 'char[47]' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
+                   dev_err("KMEM not formatted for blk, magic %lx type %d\n",
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                     ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   include/linux/dev_printk.h:50:36: note: passing argument to parameter 'dev' here
+   void _dev_err(const struct device *dev, const char *fmt, ...);
+                                      ^
+   drivers/dax/kmem_blk.c:480:4: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const char *' [-Wint-conversion]
+                           super->header.magic, super->header.type);
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:57: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ^~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+   #define dev_fmt(fmt) fmt
+                        ^~~
+   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ^~~
+   include/linux/dev_printk.h:50:53: note: passing argument to parameter 'fmt' here
+   void _dev_err(const struct device *dev, const char *fmt, ...);
+                                                       ^
+   1 warning and 3 errors generated.
 
 
-vim +33 drivers/pci/controller/dwc/pcie-designware-host.c
+vim +479 drivers/dax/kmem_blk.c
 
-    29	
-    30	static void dw_msi_mask_irq(struct irq_data *d)
-    31	{
-    32		struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-  > 33		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-    34	
-    35		if (dw_pcie_link_up(pci))
-    36			pci_msi_mask_irq(d);
-    37	
-    38		irq_chip_mask_parent(d);
-    39	}
-    40	
+   459	
+   460	static int kmem_blk_probe(struct dev_dax *dev_dax, void **persist_data)
+   461	{
+   462		struct device *dev = &dev_dax->dev;
+   463		struct kmem_blk_super *super;
+   464		unsigned long i;
+   465		struct kmem_blk_data *data;
+   466		unsigned long num_pages = dax_kmem_num_pages(dev_dax);
+   467	
+   468		if (num_pages == 0) {
+   469			dev_err(dev, "Dax device for KMEM has no pages\n");
+   470			*persist_data = NULL;
+   471			return -1;
+   472		}
+   473	
+   474		super = kmap(dax_kmem_index_to_page(0, dev_dax));
+   475	
+   476		/* Validate superblock magic and type */
+   477		if (super->header.magic != kmem_persist_magic ||
+   478			super->header.type != KMEM_PERSIST_BLK) {
+ > 479			dev_err("KMEM not formatted for blk, magic %lx type %d\n",
+   480				super->header.magic, super->header.type);
+   481			kunmap(dax_kmem_index_to_page(0, dev_dax));
+   482			*persist_data = NULL;
+   483			return -EINVAL;
+   484		}
+   485	
+   486		/* Validate superblock index page counts */
+   487		if (super->num_index_entries <=
+   488			super->num_index_pages * index_entries_per_page &&
+   489			1 + super->num_index_pages + super->num_index_entries
+   490			== num_pages) {
+   491			dev_info(dev,
+   492				"Found kmem_blk superblock num_index_entries %llu num_index_pages %llu num_pages %lu\n",
+   493				super->num_index_entries,
+   494				super->num_index_pages, num_pages);
+   495		} else {
+   496			dev_warn(dev,
+   497				"Invalid kmem_blk superblock num_index_entries %llu num_index_pages %llu num_pages %lu\n",
+   498				super->num_index_entries,
+   499				super->num_index_pages, num_pages);
+   500			kunmap(dax_kmem_index_to_page(0, dev_dax));
+   501			*persist_data = NULL;
+   502			return -EINVAL;
+   503		}
+   504	
+   505		data = kzalloc(struct_size(data, index_page, super->num_index_pages),
+   506			GFP_KERNEL);
+   507		if (!data) {
+   508			kunmap(dax_kmem_index_to_page(0, dev_dax));
+   509			*persist_data = NULL;
+   510			return -ENOMEM;
+   511		}
+   512	
+   513		*persist_data = data;
+   514		data->dev_dax = dev_dax;
+   515		data->super = super;
+   516		spin_lock_init(&data->index_lock);
+   517	
+   518		for (i = 0; i < super->num_index_pages; i++)
+   519			data->index_page[i] =
+   520				kmap(dax_kmem_index_to_page(i + 1, dev_dax));
+   521	
+   522		kmem_blk_free_unused(data);
+   523	
+   524		kmem_blk_disk_init(data);
+   525	
+   526		return 0;
+   527	}
+   528	
 
 -- 
 0-DAY CI Kernel Test Service
