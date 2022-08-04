@@ -1,86 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727955387
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 19:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1D3C43141
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 19:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659641100;
-	bh=PKX3OoDI0cvLHiN780Nvx2XfYPSh7QWOyU5r9fo/tus=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Anr99FS/HhGiIMrQZqHjDTucQNYDYxoLB9XFxLjXEW60m622qaWVtRpAjd1F/rgMT
-	 3hZwi14NKFQlm/5pGx8ABy6YvrvYkNq5lSiZaMBNNwIBbwKqKclGzCXcYJBHkc02ZP
-	 NnQwbheBjHBH867YJPQEGGcpUNc6AvAdHUyyenFmgJZQOsfmpZULJDAb8M3dPM17lU
-	 7Gm5/z87SY9KhsZhJ8lST7FlQxOxYTEPZ8Ev1Yu0jm6zeMteXpgaCykQaj1v093C1y
-	 ofwyPth9JXp3z40dtBiqu7iT6cXFjsi6dV3h2kB+aq166c4Zm3XjGV5UOIEA7SFZyO
-	 ShfrU7hMNMAUw==
-Received: by mail-wr1-f52.google.com with SMTP id j15so899669wrr.2
-        for <llvm@lists.linux.dev>; Thu, 04 Aug 2022 12:24:59 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2Wf3mUdn5X/GZckWEk8Ysjfs3esMdjbHkaJlZjbBdGWxNM/YN/
-	ML9/ORloBMMBmj+gIGo0n25lzP/uWTRS3uY+SRg=
-X-Google-Smtp-Source: AA6agR5nJ8kOJ1KsbpBldJLoYbuUk4aeTJu478vDdBOLaBoPdwWyuN8lPQSm1sEovhlpc7uIzGpM5Z7/XraejW/ifUo=
-X-Received: by 2002:a5d:6489:0:b0:220:6399:c7c8 with SMTP id
- o9-20020a5d6489000000b002206399c7c8mr2365846wri.655.1659641098259; Thu, 04
- Aug 2022 12:24:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF452F35
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 20:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659645457; x=1691181457;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bqa3OlGACgieIlhMiTXOcDALao/nEaAOXh2tKobFp3A=;
+  b=XppdFAmYdEZHW6QFaKuWhVcAGy4Za0VQ3xwEI9PiIEpdyJlVlURtqrIP
+   TX/Q1uxte81ZtCxrSdiA5jk4Ves/JTF6R2lBp9gO2Q0D/A8XfKyBOdMBM
+   pdFPP0kzo3z+DB5cXlc/SgGx598oYwqK5Z+oGMl2fwgtdRrISmQSAvB3Y
+   ARMnIbtBUqjOcLInOpNF2ho3xl/Oq6s+jyeBPnakLIUrQkxn/ajIia5Hl
+   kBFwAI0P9fjQ5CmWzlDXgAMuKASyfvuKTBpfCwuyP4yzAvlPsKGm2YSaD
+   U2SqcccKRJhjCc+k8M+io87q0uE9UKtqULIU1iJiz6dRmpEPQpZPnL+18
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="276959989"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="276959989"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 13:37:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579223066"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2022 13:37:35 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oJhb4-000Ipr-1d;
+	Thu, 04 Aug 2022 20:37:34 +0000
+Date: Fri, 5 Aug 2022 04:37:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tracing_multi 11/18] kernel/bpf/trampoline.c:259:6:
+ error: call to undeclared function 'key_in_multi_trampoline'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202208050431.OUd5V0rj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 4 Aug 2022 21:24:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
-Message-ID: <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Aug 4, 2022 at 8:52 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Aug 4, 2022 at 11:37 AM Sudip Mukherjee (Codethink)
-> <sudipm.mukherjee@gmail.com> wrote:cov_trace_cmp
-> >
-> > git bisect points to 3876a8b5e241 ("drm/amd/display: Enable building new display engine with KCOV enabled").
->
-> Ahh. So that was presumably why it was disabled before - because it
-> presumably does disgusting things that make KCOV generate even bigger
-> stack frames than it already has.
->
-> Those functions do seem to have fairly big stack footprints already (I
-> didn't try to look into why, I assume it's partly due to aggressive
-> inlining, and probably some automatic structures on stack). But gcc
-> doesn't seem to make it all that much worse with KCOV (and my clang
-> build doesn't enable KCOV).
->
-> So it's presumably some KCOV-vs-clang thing. Nathan?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi
+head:   3f77a2c51293ea19f1ce6a9b06b9fa394beecd13
+commit: fb3e0f80af089fc89a36ad479f7adfc4dd3aa9fb [11/18] bpf: Add support to attach program to multiple trampolines
+config: riscv-randconfig-r042-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050431.OUd5V0rj-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=fb3e0f80af089fc89a36ad479f7adfc4dd3aa9fb
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi
+        git checkout fb3e0f80af089fc89a36ad479f7adfc4dd3aa9fb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/
 
-The dependency was originally added to avoid a link failure in 9d1d02ff3678
- ("drm/amd/display: Don't build DCN1 when kcov is enabled") after I reported the
-problem in https://lists.freedesktop.org/archives/dri-devel/2018-August/186131.html
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The commit from the bisection just turns off KCOV for the entire directory
-to avoid the link failure, so it's not actually a problem with KCOV vs clang,
-but I think a problem with clang vs badly written code that was obscured
-in allmodconfig builds prior to this.
+All errors (new ones prefixed by >>):
 
-The dml30_ModeSupportAndSystemConfigurationFull() function exercises
-a few paths in the compiler that are otherwise rare. On thing it does is to
-pass up to 60 arguments to other functions, and it heavily uses float and
-double variables. Both of these make it rather fragile when it comes to
-unusual compiler options, so the files keep coming up whenever a new
-instrumentation feature gets added. There is probably some other flag
-in allmodconfig that we can disable to improve this again, but I have not
-checked this time.
+>> kernel/bpf/trampoline.c:259:6: error: call to undeclared function 'key_in_multi_trampoline'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (key_in_multi_trampoline(key))
+               ^
+>> kernel/bpf/trampoline.c:1056:13: error: static declaration of 'key_in_multi_trampoline' follows non-static declaration
+   static bool key_in_multi_trampoline(u64 key)
+               ^
+   kernel/bpf/trampoline.c:259:6: note: previous implicit declaration is here
+           if (key_in_multi_trampoline(key))
+               ^
+   kernel/bpf/trampoline.c:1099:9: warning: variable 'rollback_cnt' set but not used [-Wunused-but-set-variable]
+           int i, rollback_cnt = 0, err = -EINVAL;
+                  ^
+   kernel/bpf/trampoline.c:1100:16: warning: variable 'ip' set but not used [-Wunused-but-set-variable]
+           unsigned long ip, image_new, image_old;
+                         ^
+   2 warnings and 2 errors generated.
 
-        Arnd
+
+vim +/key_in_multi_trampoline +259 kernel/bpf/trampoline.c
+
+   252	
+   253	static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+   254	{
+   255		struct bpf_trampoline *tr = NULL;
+   256		struct hlist_head *head;
+   257	
+   258		mutex_lock(&trampoline_mutex);
+ > 259		if (key_in_multi_trampoline(key))
+   260			goto out;
+   261		tr = __bpf_trampoline_lookup(key);
+   262		if (tr) {
+   263			refcount_inc(&tr->refcnt);
+   264			goto out;
+   265		}
+   266		tr = bpf_trampoline_alloc();
+   267		if (!tr)
+   268			goto out;
+   269		tr->key = key;
+   270		head = &trampoline_table[hash_64(key, TRAMPOLINE_HASH_BITS)];
+   271		hlist_add_head(&tr->hlist, head);
+   272	out:
+   273		mutex_unlock(&trampoline_mutex);
+   274		return tr;
+   275	}
+   276	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
