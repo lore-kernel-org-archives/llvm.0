@@ -1,43 +1,44 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7824369
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 06:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1E265C
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 07:02:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659595915;
+	s=mimecast20190719; t=1659596529;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=1+3c06+Cg9xY2E2ubr7HR77AyD0hdO+lP0fzPvC8gjM=;
-	b=VVbQkb0zvin0TKvlKKlRjfkxpXoihgKeCORUdzvTzZsYnVlsOgEziwGrJNNIml+bRRVq87
-	vGKvpc2+BjNAA4ByjuXM4nAA1/ySeX06zwEd1TzFRkGcBroQFpA91MAz88oQg9LgS64maw
-	Fj8stlYqnwnXmb3pYf1utTKMSi/nYAA=
+	bh=Va6fZQeDc9D/hY2I/psICEag5c90qgguEYUwpfAgbBs=;
+	b=MSDel7G5rkYydtwwl9uKifeAHnv+886RooOEieiciafkPfj6AZcaVmtAdTbVZQV/YoTg5N
+	WAmVxZ1DOvbsfSYvzA2CDCusPAuegCZQEhrB0bL2nC/j3R+cj/0cUdQweHDXc6YiALzorA
+	AYBlog+/npgk9TMUp/hOxqljn3HKD8g=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-aShTNxn9MQ6wrEFHAFBg4g-1; Thu, 04 Aug 2022 02:51:54 -0400
-X-MC-Unique: aShTNxn9MQ6wrEFHAFBg4g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-426-s65i0Gq_MqSDyBzqd1PuMA-1; Thu, 04 Aug 2022 03:02:08 -0400
+X-MC-Unique: s65i0Gq_MqSDyBzqd1PuMA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FF12185A79C
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 06:51:54 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5882C811E87
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 07:02:08 +0000 (UTC)
 Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 10F82C15D4F;
-	Thu,  4 Aug 2022 06:51:54 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4763B1415123;
+	Thu,  4 Aug 2022 07:02:08 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (26/452 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [526942b8]
-Date: Thu, 04 Aug 2022 06:51:53 -0000
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [ff89dd08]
+Date: Thu, 04 Aug 2022 07:02:08 -0000
+CC: czhong@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-Message-Id: <44788.122080402515400345@us-mta-434.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <04336.122080403020800602@us-mta-426.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -45,17 +46,21 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi, we tested your kernel and here are the results:
 
-    Overall result: PASSED
+    Overall result: FAILED
              Merge: OK
            Compile: OK
-              Test: OK
+              Test: FAILED
 
-Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49833
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49819
 
 One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - Storage - block - filesystem fio test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4692352
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -110,6 +115,17 @@ n:40535 * 1.15 < max:81259
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
             Affected tests:
                   x86_64 (debug) - Storage - block - storage fio numa
+        Issue: Networking bridge: sanity: Command 'bridge link show dev dum=
+my0 | grep listening' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/583
+            Affected tests:
+                  x86_64 (debug) - Networking bridge: sanity
+        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
+brif/dummy0/state | grep 2' (Expected 0, got 1)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
+            Affected tests:
+                  x86_64 (debug) - Networking bridge: sanity
         Issue: Networking MACsec: sanity: Cannot find device "dummy0"
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1306
@@ -132,12 +148,6 @@ l-tests/-/issues/1166
                  ppc64le - Podman system test - as root
                   x86_64 - Podman system test - as root
                   x86_64 (debug) - Podman system test - as root
-        Issue: Podman: 070-build.bats: Error: i01: image not known
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1309
-            Affected tests:
-                  x86_64 (debug) - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as user
         Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
 found
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -153,6 +163,20 @@ l-tests/-/issues/1169
             Affected tests:
                  aarch64 - Reboot test
                   x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                 ppc64le - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 (debug) - Memory function: kaslr
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
 redeclaration of 'enum fsconfig_command'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -166,6 +190,11 @@ l-tests/-/issues/1302
                   x86_64 - xfstests - nfsv4.2
                   x86_64 - xfstests - cifsv3.11
                   x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
         Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
 rom image history should =3D=3D image list
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -189,11 +218,6 @@ l-tests/-/issues/1213
             Affected tests:
                    s390x - kdump - sysrq-c
                    s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
