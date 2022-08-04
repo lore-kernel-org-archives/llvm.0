@@ -1,69 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F13D6AA4
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D897C43140;
-	Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659649814;
-	bh=sNu4cQ1Hyi93m4J8qIuzka9O/eG+aHKU1ncgeyWSFlc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=RoiOucp3wXFSMlvgvhD3nsCZ7CC46fLqs403sP/muO9qukSiKdlPtfqfgGvSTh8VR
-	 B1nkpxcCbMo9UPYngSwl+JdZcm6LQlvbUPll+ce2+cl5n1UMPZPSX75qF5JPcuCbjG
-	 Uq74ObF4tR6YZPTMXAAUb6rJVy8t0ndeJ78uZfeEvmvLNv69eV32uQiw2hnCWT2fjS
-	 PD/+7HdEGbuj0hnrKMslEWM9p8PIM7fXAqNtVLqcy276+vNfF1xTUK6MzoFl8mf7gk
-	 ishDxkPAPB6Lg8LZ5R3VIyQUm/vs5HhSSVYb/S1KL77x+5hwG/nu3ARIRnXMhKa1ZI
-	 rYEJJh3worCdg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E63D0C43143;
-	Thu,  4 Aug 2022 21:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AB36AA4
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 21:59:20 +0000 (UTC)
+Received: by mail-ej1-f54.google.com with SMTP id y13so1631546ejp.13
+        for <llvm@lists.linux.dev>; Thu, 04 Aug 2022 14:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=IcNrO1+0hMqd184OyaCGXcplDsRzgmMXiA2NSTUXMiA=;
+        b=DgUfEmbFi+7iccqebXv/ZmxHK9r9RdQFXNZ8Dr8nUqVqSFRu1k1i4dkyHQybTDWbVO
+         sp+j5Hqj+Tzo+GWbTEgXuKCuNQljNQ9hMiFfoJp1J9Mgms1GKmSOP/+HzKIHuHs4qy4O
+         3hYvbGIWtatQX31kWhmvlVBT2gIyBbOi9AxB0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=IcNrO1+0hMqd184OyaCGXcplDsRzgmMXiA2NSTUXMiA=;
+        b=OmT9X9pXhexlgqPPz5PHSIwBqZ+Fm7QvtK6aHnlpsBdRFo0JXKZpsIZnMLJ47QrslT
+         h0poPNFMxQM1rB3Q0lNIMf8nkCZ/nY0KVRw+Pw3XjX2rY32ZtnKngr2wmMtsvuq5LocB
+         75Sv7hmmca7nRpMNImaOYfEolkj9bz4YYAYdnP5AAli50fDBn4QJ1u040jasB562kz4A
+         jNHrcz/xtMCiPqRdhrBXZd7OVBCBE+KTHjsxthWEXfdUrJq4t95asVawxzCgwoolTZ7o
+         dBIEe7qxxHeTeiP26kQ9mYiWV8rtQRrjyiowMppbxtohd0omwfTkpjpB1tmKByCvTMg8
+         F2Fg==
+X-Gm-Message-State: ACgBeo2WNMHlrOVUdocVUaOEBlzpclgpdoAUG0KYzszz6sDisTdVmJmk
+	B7LEPE/wYr1e0PH/IeoeDzE973NOCGIDKffn
+X-Google-Smtp-Source: AA6agR6+S6Zb7Nw8L8n76bz7y5js2Px9zkLkCeZWn2+HvkHrGG61kfedG6y1U2hsA1H6TYITlZS0CA==
+X-Received: by 2002:a17:907:2cc8:b0:72b:52b3:68e with SMTP id hg8-20020a1709072cc800b0072b52b3068emr2823834ejc.298.1659650358833;
+        Thu, 04 Aug 2022 14:59:18 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05640206d000b0043d18a875d1sm1210207edy.79.2022.08.04.14.59.17
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 14:59:18 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id h13so1249786wrf.6
+        for <llvm@lists.linux.dev>; Thu, 04 Aug 2022 14:59:17 -0700 (PDT)
+X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
+ p11-20020a5d638b000000b002206e1a8794mr2534090wru.193.1659650357549; Thu, 04
+ Aug 2022 14:59:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libbpf: skip empty sections in
- bpf_object__init_global_data_maps
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <165964981394.20332.4186974338092627002.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Aug 2022 21:50:13 +0000
-References: <20220731232649.4668-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220731232649.4668-1-james.hilliard1@gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: bpf@vger.kernel.org, jose.marchesi@oracle.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, trix@redhat.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com> <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
+In-Reply-To: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 4 Aug 2022 14:59:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whpa_FJjvzWdWdSzecTbVtndbQqg35=_o+ohM3X1_xKTA@mail.gmail.com>
+Message-ID: <CAHk-=whpa_FJjvzWdWdSzecTbVtndbQqg35=_o+ohM3X1_xKTA@mail.gmail.com>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, 
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Thu, Aug 4, 2022 at 1:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
+> in the mode support function") did have a workaround for GCC. It appears
+> clang will still inline mode_support_configuration(). If I mark it as
+> 'noinline', the warning disappears in that file.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+That sounds like probably the best option for now. Gcc does not inline
+that function (at least for allmodconfig builds in my testing), so if
+that makes clang match what gcc does, it seems a reasonable thing to
+do.
 
-On Sun, 31 Jul 2022 17:26:49 -0600 you wrote:
-> The GNU assembler generates an empty .bss section. This is a well
-> established behavior in GAS that happens in all supported targets.
-> 
-> The LLVM assembler doesn't generate an empty .bss section.
-> 
-> bpftool chokes on the empty .bss section.
-> 
-> [...]
-
-Here is the summary with links:
-  - libbpf: skip empty sections in bpf_object__init_global_data_maps
-    https://git.kernel.org/bpf/bpf-next/c/47ea7417b074
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+            Linus
