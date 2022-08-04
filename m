@@ -1,38 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986A62F35
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 20:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF40C433D6;
-	Thu,  4 Aug 2022 20:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659645825;
-	bh=/dBnGEelz0eNZ7ash2KCkOnK42Kq3O9zA1e57MIkXCU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=juU3p2LUjcxjMlM6vTTY1lLZWVXb/mcsQMqGkZ/WHOsek7V0hDFsZrX6Fy+36KdAL
-	 yn6BDe8wUhOCTy+9ZmfJBWS+mP62dLFKmdwlOlB9vlElBwclJg+RepYpdf+Rh/Cr1R
-	 u1r3hEtJJAPuVVjBIr5FfU5oSiL0TI8wqQ8BHsU7AMGN+99rp1KPkm9Dpm3bncEXmC
-	 lYPlURhbpMy9WqPtn0SPIKyz/PKWa3k6Nr+SvcKaVd542jSA8LDJaEgGIFbA2AG+zj
-	 aP9g14qRKxapm+F0brNeG0LRJa69nTT/49cOFbDE96HEXU1PPAUMgBawRt2tazl2La
-	 ZP/6K+bDSkX/w==
-Date: Thu, 4 Aug 2022 13:43:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	amd-gfx list <amd-gfx@lists.freedesktop.org>,
-	dri-devel <dri-devel@lists.freedesktop.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-Message-ID: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-References: <YuwRyQYPCb1FD+mr@debian>
- <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D1D6AA4
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 21:49:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659649778; x=1691185778;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7rt23PMPBzBSBIB2zxEb7Hv++9uljuJHhPCfAnJfZWQ=;
+  b=K0d9VPjJFtzJm73Wd16HW1WJZNVw6+I7L4BRSzZcZsAG668uc7jkY0Pz
+   wZbY8+oTow1SDlg/Fz5jvEnjEKnyo7CW9vfhMlKzjnT5QWi7fHUvTNB+8
+   ntrezVlX9iIKZToPmFnNWCprvND/RnMbndyBVHb2dlBJgg+rqPv6ZUEYC
+   Mz8ag7db9pOS+X9Q0jlkGcTd77pTygaoib2GCBLThWMBFA5vQrqvyRLXE
+   b0aqyH9XFy3rXbcM0N8+6Kxx7oL7pOPlCsc8u3XWXbMp5pntvg+RDdKXx
+   jc5F/BGRAPW9KVqD7xyUdWHFOWltqse4ImvlHoNBYg03WBAENs/ItagIT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="376349840"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="376349840"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 14:49:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="671427889"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2022 14:49:36 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oJiil-000Isj-3D;
+	Thu, 04 Aug 2022 21:49:35 +0000
+Date: Fri, 5 Aug 2022 05:48:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mark:arm64/stacktrace/data-driven 4/4]
+ arch/arm64/include/asm/stacktrace.h:153:13: error: cannot compile this GNU
+ array range designator extension yet
+Message-ID: <202208050544.mUKbvIhP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,114 +46,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
 
-On Thu, Aug 04, 2022 at 09:24:41PM +0200, Arnd Bergmann wrote:
-> On Thu, Aug 4, 2022 at 8:52 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Thu, Aug 4, 2022 at 11:37 AM Sudip Mukherjee (Codethink)
-> > <sudipm.mukherjee@gmail.com> wrote:cov_trace_cmp
-> > >
-> > > git bisect points to 3876a8b5e241 ("drm/amd/display: Enable building new display engine with KCOV enabled").
-> >
-> > Ahh. So that was presumably why it was disabled before - because it
-> > presumably does disgusting things that make KCOV generate even bigger
-> > stack frames than it already has.
-> >
-> > Those functions do seem to have fairly big stack footprints already (I
-> > didn't try to look into why, I assume it's partly due to aggressive
-> > inlining, and probably some automatic structures on stack). But gcc
-> > doesn't seem to make it all that much worse with KCOV (and my clang
-> > build doesn't enable KCOV).
-> >
-> > So it's presumably some KCOV-vs-clang thing. Nathan?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/stacktrace/data-driven
+head:   468d82fe55b7d215b8d1733a8b34a1fc94cd431b
+commit: 468d82fe55b7d215b8d1733a8b34a1fc94cd431b [4/4] WIP: arm64: make stacktrace data-driven
+config: arm64-randconfig-r003-20220803 (https://download.01.org/0day-ci/archive/20220805/202208050544.mUKbvIhP-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=468d82fe55b7d215b8d1733a8b34a1fc94cd431b
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/stacktrace/data-driven
+        git checkout 468d82fe55b7d215b8d1733a8b34a1fc94cd431b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-Looks like Arnd beat me to it :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> The dependency was originally added to avoid a link failure in 9d1d02ff3678
->  ("drm/amd/display: Don't build DCN1 when kcov is enabled") after I reported the
-> problem in https://lists.freedesktop.org/archives/dri-devel/2018-August/186131.html
-> 
-> The commit from the bisection just turns off KCOV for the entire directory
-> to avoid the link failure, so it's not actually a problem with KCOV vs clang,
-> but I think a problem with clang vs badly written code that was obscured
-> in allmodconfig builds prior to this.
+All errors (new ones prefixed by >>):
 
-Right, I do think the sanitizers make things worse here too, as those get
-enabled with allmodconfig. I ran some really quick tests with allmodconfig and
-a few instrumentation options flipped on/off:
+   In file included from arch/arm64/kernel/stacktrace.c:19:
+>> arch/arm64/include/asm/stacktrace.h:153:13: error: cannot compile this GNU array range designator extension yet
+                   .stacks = {
+                             ^
+   1 error generated.
 
-allmodconfig (CONFIG_KASAN=y, CONFIG_KCSAN=n, CONFIG_KCOV=y, and CONFIG_UBSAN=y):
 
-warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+vim +153 arch/arm64/include/asm/stacktrace.h
 
-allmodconfig + CONFIG_KASAN=n:
+   143	
+   144	/*
+   145	 * We can only safely access per-cpu stacks from current in a non-preemptible
+   146	 * context.
+   147	 */
+   148	
+   149	static __always_inline struct kernel_stack_info
+   150	get_accessible_kernel_stacks(const struct task_struct *tsk)
+   151	{
+   152		struct kernel_stack_info info = {
+ > 153			.stacks = {
 
-warning: stack frame size (2112) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KCOV=n:
-
-warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_UBSAN=n:
-
-warning: stack frame size (2584) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2680) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2352) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=y + CONFIG_UBSAN=n:
-
-warning: stack frame size (2504) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2600) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2264) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=n + CONFIG_UBSAN=n:
-
-warning: stack frame size (2072) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-There might be other debugging configurations that make this worse too,
-as I don't see those warnings on my distribution configuration.
-
-> The dml30_ModeSupportAndSystemConfigurationFull() function exercises
-> a few paths in the compiler that are otherwise rare. On thing it does is to
-> pass up to 60 arguments to other functions, and it heavily uses float and
-> double variables. Both of these make it rather fragile when it comes to
-> unusual compiler options, so the files keep coming up whenever a new
-> instrumentation feature gets added. There is probably some other flag
-> in allmodconfig that we can disable to improve this again, but I have not
-> checked this time.
-
-I do notice that these files build with a non-configurable
--Wframe-large-than value:
-
-$ rg frame_warn_flag drivers/gpu/drm/amd/display/dc/dml/Makefile
-54:frame_warn_flag := -Wframe-larger-than=2048
-70:CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
-72:CFLAGS_$(AMDDALPATH)/dc/dml/dcn31/display_mode_vba_31.o := $(dml_ccflags) $(frame_warn_flag)
-76:CFLAGS_$(AMDDALPATH)/dc/dml/dcn32/display_mode_vba_32.o := $(dml_ccflags) $(frame_warn_flag)
-
-I suppose that could just be bumped as a quick workaround? Two of those
-files have a comment that implies modifying them in non-trivial ways is
-not recommended.
-
-/*
- * NOTE:
- *   This file is gcc-parsable HW gospel, coming straight from HW engineers.
- *
- * It doesn't adhere to Linux kernel style and sometimes will do things in odd
- * ways. Unless there is something clearly wrong with it the code should
- * remain as-is as it provides us with a guarantee from HW that it is correct.
- */
-
-I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
-in the mode support function") did have a workaround for GCC. It appears
-clang will still inline mode_support_configuration(). If I mark it as
-'noinline', the warning disappears in that file.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
