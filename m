@@ -1,130 +1,235 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CFA650
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 06:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659593624; x=1691129624;
-  h=subject:references:to:cc:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=keluER8k9LcEIGCnCE9Rn2VCqT3BmU8FUYIaHG9ODJg=;
-  b=YBkZt8lNPnTA7vgM8NAno1w3JNlsKAQ8IHyspBhlhDgPVcBSAbfHxl0H
-   UZuOCl6z/ogICOq9LbBGifdHtNpVomrbWcX9tqqPZbMkaQujT/USFbtCT
-   cihsu1InX/ToElGFIa4dxaqkFYYa8xNfdXLgNrV9VcBBqWm/MtY9ImVpe
-   0vDgHjp01PlG3TQDiDJdr8D4rOLTVVhPiiIFduu/gA6K5fD5LIx4BtgLA
-   wWXWc5tfeVPrUjPUwm2pATzOJK8kCPKWojyaGM/COiq4XENcRyATK+LWg
-   6is0EO2lFFxWSc7pexSsvoa1AgAX3FsGqLbNVHNXBgMpSm57KVtxk+Zbm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="276767556"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="276767556"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:13:42 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="578940823"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.36]) ([10.255.28.36])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:13:40 -0700
-Subject: [mark:arm64/stacktrace/rework-cleanup 3/8]
- arch/arm64/kernel/sdei.c:66:21: error: use of undeclared identifier
- 'sdei_stack_normal_ptr'
-References: <202208040427.vAzlkXzS-lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Kalesh Singh <kaleshsingh@google.com>,
- Mark Brown <broonie@kernel.org>
-From: kernel test robot <rong.a.chen@intel.com>
-X-Forwarded-Message-Id: <202208040427.vAzlkXzS-lkp@intel.com>
-Message-ID: <16ba6649-d680-69d4-dbd3-3b1ffb06319b@intel.com>
-Date: Thu, 4 Aug 2022 14:13:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7824369
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 06:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659595915;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1+3c06+Cg9xY2E2ubr7HR77AyD0hdO+lP0fzPvC8gjM=;
+	b=VVbQkb0zvin0TKvlKKlRjfkxpXoihgKeCORUdzvTzZsYnVlsOgEziwGrJNNIml+bRRVq87
+	vGKvpc2+BjNAA4ByjuXM4nAA1/ySeX06zwEd1TzFRkGcBroQFpA91MAz88oQg9LgS64maw
+	Fj8stlYqnwnXmb3pYf1utTKMSi/nYAA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-aShTNxn9MQ6wrEFHAFBg4g-1; Thu, 04 Aug 2022 02:51:54 -0400
+X-MC-Unique: aShTNxn9MQ6wrEFHAFBg4g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FF12185A79C
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 06:51:54 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 10F82C15D4F;
+	Thu,  4 Aug 2022 06:51:54 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (26/452 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [526942b8]
+Date: Thu, 04 Aug 2022 06:51:53 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202208040427.vAzlkXzS-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <44788.122080402515400345@us-mta-434.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git 
-arm64/stacktrace/rework-cleanup
-head:   ff57049f8e5ec88c03b804c73bb4dd44ffa88896
-commit: 10b1649e7fc666d82f11a5b4463013b3e46a7a53 [3/8] arm64: 
-stacktrace: move SDEI stack helpers to stacktrace code
-config: arm64-buildonly-randconfig-r003-20220803 
-(https://download.01.org/0day-ci/archive/20220804/202208040427.vAzlkXzS-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
-495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-         wget 
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
--O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # install arm64 cross compiling tool for clang build
-         # apt-get install binutils-aarch64-linux-gnu
-         # 
-https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=10b1649e7fc666d82f11a5b4463013b3e46a7a53
-         git remote add mark 
-https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-         git fetch --no-tags mark arm64/stacktrace/rework-cleanup
-         git checkout 10b1649e7fc666d82f11a5b4463013b3e46a7a53
-         # save the config file
-         mkdir build_dir && cp config build_dir/.config
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
-O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> arch/arm64/kernel/sdei.c:66:21: error: use of undeclared identifier 'sdei_stack_normal_ptr'
-                    _free_sdei_stack(&sdei_stack_normal_ptr, cpu);
-                                      ^
->> arch/arm64/kernel/sdei.c:67:21: error: use of undeclared identifier 'sdei_stack_critical_ptr'
-                    _free_sdei_stack(&sdei_stack_critical_ptr, cpu);
-                                      ^
-    arch/arm64/kernel/sdei.c:92:27: error: use of undeclared identifier 
-'sdei_stack_normal_ptr'
-                    err = _init_sdei_stack(&sdei_stack_normal_ptr, cpu);
-                                            ^
-    arch/arm64/kernel/sdei.c:95:27: error: use of undeclared identifier 
-'sdei_stack_critical_ptr'
-                    err = _init_sdei_stack(&sdei_stack_critical_ptr, cpu);
-                                            ^
-    4 errors generated.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49833
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 (debug) - stress: stress-ng - cpu-cache
+                  x86_64 (debug) - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvme-tcp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 (debug) - Storage - block - storage fio numa
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 ppc64le - Podman system test - as root
+                  x86_64 - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as root
+        Issue: Podman: 070-build.bats: Error: i01: image not known
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1309
+            Affected tests:
+                  x86_64 (debug) - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as user
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                 ppc64le - Podman system test - as root
+                 ppc64le - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 aarch64 - Storage - swraid simple_reshape
+                 ppc64le - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
 
-vim +/sdei_stack_normal_ptr +66 arch/arm64/kernel/sdei.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-f5df26961853d6 James Morse 2018-01-08  57  f5df26961853d6 James Morse 
-2018-01-08  58  static void free_sdei_stacks(void)
-f5df26961853d6 James Morse 2018-01-08  59  {
-f5df26961853d6 James Morse 2018-01-08  60  	int cpu;
-f5df26961853d6 James Morse 2018-01-08  61  eec3bf6861a870 Will Deacon 
-2020-12-01  62  	if (!IS_ENABLED(CONFIG_VMAP_STACK))
-eec3bf6861a870 Will Deacon 2020-12-01  63  		return;
-eec3bf6861a870 Will Deacon 2020-12-01  64  f5df26961853d6 James Morse 
-2018-01-08  65  	for_each_possible_cpu(cpu) {
-f5df26961853d6 James Morse 2018-01-08 @66  	 
-_free_sdei_stack(&sdei_stack_normal_ptr, cpu);
-f5df26961853d6 James Morse 2018-01-08 @67  	 
-_free_sdei_stack(&sdei_stack_critical_ptr, cpu);
-f5df26961853d6 James Morse 2018-01-08  68  	}
-f5df26961853d6 James Morse 2018-01-08  69  }
-f5df26961853d6 James Morse 2018-01-08  70
-:::::: The code at line 66 was first introduced by commit
-:::::: f5df26961853d6809d704cedcaf082c57f635a64 arm64: kernel: Add 
-arch-specific SDEI entry code and CPU masking
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: TO: James Morse <james.morse@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
