@@ -1,43 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92482585
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 15:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB587C
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 17:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659627747; x=1691163747;
+  t=1659633283; x=1691169283;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/sO3bK65pKVZ1iDdvnWnZimmDSlRaWOseNM6XOn2moM=;
-  b=U55y2O+oIJeziz/p4xOm3/DauVD8jlKR6pKVnIgBx1XiTIJp0g/RWzcO
-   MsRYqabR/HygutF8dcxz37y2+Y0khxfLxfIvHDEDugvpE24m9VuL420DH
-   A2MkXFxWnJpki1FMhQZulalFt78nuW3iQEBbhv7WSSZDdWNwlf29+wa8M
-   0D0qOR6zXF4sfVLjlC8rWAZOaA/nwUoEXfjk2owNM/udhVdPCspBmavtQ
-   HSciLOokK0Xui2f8QFEkFBlSHcv7XCRy2PEQCZPaKe+GB0O/fKc0zWN+h
-   Uo4d8CFyl4L6WlOo1SFZtiGz1Uh2xkJtcGjHBewiQhbUvaBK2PADsyRFw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="273013086"
+  bh=m9KuNnJt+M35u4eLm0hTGNHmV5vhmpjvlr8FIc4Wd8U=;
+  b=l79JRAuruCczi0H3fVptz48T4R6z9ejinTWlRWztzb1DdoICAcp9sOf3
+   ypRuBSQjWS3jU9yHQr1A+2pJZurdBkOcNsEwlnc+n5nCiUEZphOBP/Xsc
+   Q2iaMw98uySx3135na45KMo66cpSbi5jShkkFO86/V8OClV4XYbojcybG
+   HHiVAANKtNX2DlPOaCJ8ph4LzcAHSAO1kyAy20mYhH+EVa7XwCufqAn35
+   qWGUM65B23vbphoddSzIs0rgLjJ8Qt2y4/LgHF58hqbkjWERWmhaHlq4+
+   frfNiBdXHrE9quE3slt71lAtRrfDlZMjg/HghiK5+dXv9GYjgyJ+MIfgS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="290769595"
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="273013086"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 08:42:27 -0700
+   d="scan'208";a="290769595"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 10:14:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="579119349"
+   d="scan'208";a="553799237"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2022 08:42:26 -0700
+  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2022 10:14:28 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oJczR-000IaF-1N;
-	Thu, 04 Aug 2022 15:42:25 +0000
-Date: Thu, 4 Aug 2022 23:42:11 +0800
+	id 1oJeQV-000Iep-34;
+	Thu, 04 Aug 2022 17:14:27 +0000
+Date: Fri, 5 Aug 2022 01:13:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tony Lindgren <tony@atomide.com>
+To: Dmitry Osipenko <digetx@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: drivers/clocksource/timer-ti-dm.c:1039:34: warning: unused variable
- 'omap_timer_match'
-Message-ID: <202208042325.gDk2PAQf-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/100-shutdown-notifier 4/20] kernel/reboot.c:527:
+ warning: expecting prototype for devm_register_sys_off_handler(). Prototype
+ was for register_sys_off_handler() instead
+Message-ID: <202208050126.i7RtmCyo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,79 +47,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Tony,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
-commit: ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567 clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3
-date:   8 days ago
-config: hexagon-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220804/202208042325.gDk2PAQf-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
+head:   46a27d382539df38bc077d9b5222bc59c5419da3
+commit: a3f4d076562a88f1b59fbb194befc2dd9766838b [4/20] kernel: Add combined power-off+restart handler call chain API
+config: hexagon-randconfig-r045-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050126.i7RtmCyo-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
+        # https://github.com/AsahiLinux/linux/commit/a3f4d076562a88f1b59fbb194befc2dd9766838b
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/100-shutdown-notifier
+        git checkout a3f4d076562a88f1b59fbb194befc2dd9766838b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clocksource/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clocksource/timer-ti-dm.c:1039:34: warning: unused variable 'omap_timer_match' [-Wunused-const-variable]
-   static const struct of_device_id omap_timer_match[] = {
-                                    ^
-   1 warning generated.
+   kernel/reboot.c:231: warning: Function parameter or member 'cmd' not described in 'do_kernel_restart'
+>> kernel/reboot.c:527: warning: expecting prototype for devm_register_sys_off_handler(). Prototype was for register_sys_off_handler() instead
+   kernel/reboot.c:1123: warning: Function parameter or member 'poweroff_delay_ms' not described in 'hw_failure_emergency_poweroff'
 
 
-vim +/omap_timer_match +1039 drivers/clocksource/timer-ti-dm.c
+vim +527 kernel/reboot.c
 
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1038  
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14 @1039  static const struct of_device_id omap_timer_match[] = {
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1040  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1041  		.compatible = "ti,omap2420-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1042  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1043  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1044  		.compatible = "ti,omap3430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1045  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1046  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1047  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1048  		.compatible = "ti,omap4430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1049  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1050  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1051  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1052  		.compatible = "ti,omap5430-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1053  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1054  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1055  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1056  		.compatible = "ti,am335x-timer",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1057  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1058  	},
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1059  	{
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1060  		.compatible = "ti,am335x-timer-1ms",
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1061  		.data = &omap3plus_pdata,
-d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1062  	},
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1063  	{
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1064  		.compatible = "ti,dm816-timer",
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1065  		.data = &omap3plus_pdata,
-8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1066  	},
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1067  	{},
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1068  };
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1069  MODULE_DEVICE_TABLE(of, omap_timer_match);
-9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1070  
-
-:::::: The code at line 1039 was first introduced by commit
-:::::: 9725f4451a9ccd159b1d13f63e05896cd9bce07d ARM: OMAP: Add DT support for timer driver
-
-:::::: TO: Jon Hunter <jon-hunter@ti.com>
-:::::: CC: Jon Hunter <jon-hunter@ti.com>
+   515	
+   516	/**
+   517	 *	devm_register_sys_off_handler - Register system power-off/restart handler
+   518	 *	@dev: Device that registers handler
+   519	 *	@handler: System-off handler
+   520	 *
+   521	 *	Registers handler that will be called as last step of the power-off
+   522	 *	and restart sequences.
+   523	 *
+   524	 *	Returns zero on success, or error code on failure.
+   525	 */
+   526	int register_sys_off_handler(struct sys_off_handler *handler)
+ > 527	{
+   528		struct sys_off_handler_private_data *priv;
+   529		int err, priority;
+   530	
+   531		priv = sys_off_handler_private_data(handler);
+   532	
+   533		/* sanity-check whether handler is registered twice */
+   534		if (priv->registered)
+   535			return -EBUSY;
+   536	
+   537		if (handler->power_off_cb || handler->power_off_prepare_cb) {
+   538			if (handler->power_off_priority == POWEROFF_PRIO_RESERVED)
+   539				priority = POWEROFF_PRIO_DEFAULT;
+   540			else
+   541				priority = handler->power_off_priority;
+   542	
+   543			priv->power_off_nb.notifier_call = sys_off_handler_power_off;
+   544			priv->power_off_nb.priority = priority;
+   545	
+   546			err = register_power_off_handler(&priv->power_off_nb);
+   547			if (err)
+   548				goto reset_sys_off_handler;
+   549		}
+   550	
+   551		if (handler->restart_cb) {
+   552			if (handler->restart_priority == RESTART_PRIO_RESERVED)
+   553				priority = RESTART_PRIO_DEFAULT;
+   554			else
+   555				priority = handler->restart_priority;
+   556	
+   557			priv->restart_nb.notifier_call = sys_off_handler_restart;
+   558			priv->restart_nb.priority = priority;
+   559	
+   560			err = register_restart_handler(&priv->restart_nb);
+   561			if (err)
+   562				goto unreg_power_off_handler;
+   563		}
+   564	
+   565		if (handler->reboot_prepare_cb) {
+   566			priv->reboot_nb.notifier_call = sys_off_handler_reboot;
+   567			priv->reboot_nb.priority = handler->reboot_priority;
+   568	
+   569			err = register_reboot_notifier(&priv->reboot_nb);
+   570			if (err)
+   571				goto unreg_restart_handler;
+   572		}
+   573	
+   574		priv->registered = true;
+   575	
+   576		return 0;
+   577	
+   578	unreg_restart_handler:
+   579		if (handler->restart_cb)
+   580			unregister_restart_handler(&priv->restart_nb);
+   581	
+   582	unreg_power_off_handler:
+   583		if (handler->power_off_cb)
+   584			unregister_power_off_handler(&priv->power_off_nb);
+   585	
+   586	reset_sys_off_handler:
+   587		memset(priv, 0, sizeof(*priv));
+   588	
+   589		return err;
+   590	}
+   591	EXPORT_SYMBOL(register_sys_off_handler);
+   592	
 
 -- 
 0-DAY CI Kernel Test Service
