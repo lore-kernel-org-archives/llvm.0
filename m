@@ -1,259 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1E265C
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 07:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659596529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Va6fZQeDc9D/hY2I/psICEag5c90qgguEYUwpfAgbBs=;
-	b=MSDel7G5rkYydtwwl9uKifeAHnv+886RooOEieiciafkPfj6AZcaVmtAdTbVZQV/YoTg5N
-	WAmVxZ1DOvbsfSYvzA2CDCusPAuegCZQEhrB0bL2nC/j3R+cj/0cUdQweHDXc6YiALzorA
-	AYBlog+/npgk9TMUp/hOxqljn3HKD8g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-s65i0Gq_MqSDyBzqd1PuMA-1; Thu, 04 Aug 2022 03:02:08 -0400
-X-MC-Unique: s65i0Gq_MqSDyBzqd1PuMA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5882C811E87
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 07:02:08 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4763B1415123;
-	Thu,  4 Aug 2022 07:02:08 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [ff89dd08]
-Date: Thu, 04 Aug 2022 07:02:08 -0000
-CC: czhong@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AFF65C
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 07:28:37 +0000 (UTC)
+X-UUID: 42663652d5364946b6fc71cdb283ac3f-20220804
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=s6eZ9y2qrx7ZrYG+FXQ9CA06LT/8Qo618/1S9MkfNoA=;
+	b=KC/c6kFzaI1h3envZtfNi+fBh2fDmiD2jCCoExvRFCk25CrS28XLTWgV5hgDXGLpeen1bfWq0Pi4AkLsHYjX8GHaak32rAckrFdNBFRBIPTG+325j0o5u1L6q+MrKXIJ7l7uqL7te+me1okf82zGhhy/H55iJT1Wb6ERuAac2os=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:3483daaf-144b-47e4-abd2-83e41c747dc1,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:3483daaf-144b-47e4-abd2-83e41c747dc1,OB:0,LOB:
+	0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
+	ION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:f7fd34d1-841b-4e95-ad42-8f86e18f54fc,C
+	OID:2b5789c2834d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 42663652d5364946b6fc71cdb283ac3f-20220804
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 815676661; Thu, 04 Aug 2022 15:28:31 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 4 Aug 2022 15:28:29 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 4 Aug 2022 15:28:29 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v25 4/7] drm/mediatek: add dma dev get function
+Date: Thu, 4 Aug 2022 15:28:24 +0800
+Message-ID: <20220804072827.22383-5-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220804072827.22383-1-nancy.lin@mediatek.com>
+References: <20220804072827.22383-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <04336.122080403020800602@us-mta-426.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK: N
 
-Hi, we tested your kernel and here are the results:
+This is a preparation for adding support for the ovl_adaptor sub driver
+Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
+dma_dev_get function for getting representative dma dev in ovl_adaptor.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioachino Del Regno
+ <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
+ 3 files changed, 24 insertions(+)
 
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/49819
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - Storage - block - filesystem fio test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4692352
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 (debug) - stress: stress-ng - cpu-cache
-                  x86_64 (debug) - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 (debug) - Storage - blktests - nvme-tcp
-                  x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 (debug) - Storage - block - storage fio numa
-        Issue: Networking bridge: sanity: Command 'bridge link show dev dum=
-my0 | grep listening' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/583
-            Affected tests:
-                  x86_64 (debug) - Networking bridge: sanity
-        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
-brif/dummy0/state | grep 2' (Expected 0, got 1)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
-            Affected tests:
-                  x86_64 (debug) - Networking bridge: sanity
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                  x86_64 (debug) - Networking MACsec: sanity
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 ppc64le - Podman system test - as root
-                  x86_64 - Podman system test - as root
-                  x86_64 (debug) - Podman system test - as root
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
-emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
-_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
-22,c1023 tclass=3Ddir permissive=3D0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1200#note_990285952
-            Affected tests:
-                 ppc64le - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 (debug) - Memory function: kaslr
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
-rom image history should =3D=3D image list
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1160
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                 aarch64 - Podman system test - as user
-                 ppc64le - Podman system test - as root
-                 ppc64le - Podman system test - as user
-                   s390x - Podman system test - as root
-                   s390x - Podman system test - as user
-        Issue: storage: software RAID testing: SELinux prevents mdadm
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1213
-            Affected tests:
-                 aarch64 - Storage - swraid simple_reshape
-                 ppc64le - Storage - swraid simple_reshape
-                   s390x - Storage - swraid simple_reshape
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 42cc7052b050..5251bf070e6e 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -59,6 +59,7 @@ struct mtk_drm_crtc {
+ #endif
+ 
+ 	struct device			*mmsys_dev;
++	struct device			*dma_dev;
+ 	struct mtk_mutex		*mutex;
+ 	unsigned int			ddp_comp_nr;
+ 	struct mtk_ddp_comp		**ddp_comp;
+@@ -866,6 +867,13 @@ static int mtk_drm_crtc_init_comp_planes(struct
+ drm_device *drm_dev,
+ 	return 0;
+ }
+ 
++struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
++{
++	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
++
++	return mtk_crtc->dma_dev;
++}
++
+ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
+ {
+@@ -954,6 +962,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 			return ret;
+ 	}
+ 
++	/*
++	 * Default to use the first component as the dma dev.
++	 * In the case of ovl_adaptor sub driver, it needs to use the
++	 * dma_dev_get function to get representative dma dev.
++	 */
++	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
++
+ 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+index cb9a36c48d4f..f5a6e80c5265 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct
+ drm_plane *plane,
+ 			     struct mtk_plane_state *state);
+ void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane
+ *plane,
+ 			       struct drm_atomic_state *plane_state);
++struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
+ 
+ #endif /* MTK_DRM_CRTC_H */
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+index 2d0052c23dcb..364f3f7f59fa 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+@@ -71,6 +71,7 @@ struct mtk_ddp_comp_funcs {
+ 	void (*bgclr_in_off)(struct device *dev);
+ 	void (*ctm_set)(struct device *dev,
+ 			struct drm_crtc_state *state);
++	struct device * (*dma_dev_get)(struct device *dev);
+ };
+ 
+ struct mtk_ddp_comp {
+@@ -203,6 +204,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp
+ *comp,
+ 		comp->funcs->ctm_set(comp->dev, state);
+ }
+ 
++static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp
+ *comp)
++{
++	if (comp->funcs && comp->funcs->dma_dev_get)
++		return comp->funcs->dma_dev_get(comp->dev);
++	return comp->dev;
++}
++
+ int mtk_ddp_comp_get_id(struct device_node *node,
+ 			enum mtk_ddp_comp_type comp_type);
+ unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
+-- 
+2.18.0
 
