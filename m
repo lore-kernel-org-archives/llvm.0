@@ -1,167 +1,117 @@
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C607F
-	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 01:01:25 +0000 (UTC)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 2740qnit002637;
-	Thu, 4 Aug 2022 02:52:54 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 5281012005F;
-	Thu,  4 Aug 2022 02:52:45 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1659574365; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QQXxUxRYonN3DnTiqF9rDc5G08qopkQ454FbGxazTn8=;
-	b=eBd9tjgWPS47PoKCiFZSzaNK767mmz5G9RA/ssJ824Ah4AWK+oNWVvO/sfIrVbcyq73mmL
-	sPCufU/U3o2tmYCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1659574365; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QQXxUxRYonN3DnTiqF9rDc5G08qopkQ454FbGxazTn8=;
-	b=xkfmBoQxpkrVzn6MaBclUIglloslqaqLIL8e+cBI2wQmVE4fRgnz55APYNthrW6vSzwqFY
-	+yOgFFOUw3QL+FZ639FGzNoCSjk4PhHIiHr6bb+CExcx8p2rQfmZEZYJxpbidGptRgSNpf
-	FR38WkW+RXVRzUXgryeI4A46R/uNtlUz9EjsTZOFLxlK/wuOXaOMN2TPoijobGZR2Bh18f
-	CAic4eVD1khhT5IHkQFUsK8KQo8xk/NNJPGQQPqA4FGpkm4Rs5oBdHpp1khna8yygbUImG
-	GcZz5+eLWcumGK6D3jYDqEwKj3Ho3DfpjzjCO3nytZYyu4MN9xbkGjIZff9ebg==
-Date: Thu, 4 Aug 2022 02:52:45 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-        David Ahern
- <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Eric Dumazet
- <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>, Tom Rix
- <trix@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH] net: seg6: initialize induction variable to first valid
- array index
-Message-Id: <20220804025245.b61ebbfd313a49927aa61f9a@uniroma2.it>
-In-Reply-To: <9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
-References: <20220802161203.622293-1-ndesaulniers@google.com>
-	<9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F527F
+	for <llvm@lists.linux.dev>; Thu,  4 Aug 2022 01:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659575255; x=1691111255;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yuMRliv/Xko/CIxE/5Z++R9kKH7OBEKZT7VsN3z1eFM=;
+  b=CfxhOIknh3keshFxon7v8/pqd0kSemF9nY/bSkwbRL2JeShyoic3wbfP
+   lKZFKo0yixto1gWwa+pYmgrbrTW9/361mVk32xyZRg+LjrtAxT7oYCoyF
+   TQmTAejFbz9CWE6Ag/UK32YVI33RfRTdkarjl4+huTRUJLD82xxsUH3FZ
+   COaqgowEEfnWZuJ3tdElVRdK6i9fX0YRHCK5RNnvSirR5nlAD8TTLVZQD
+   zFz3vXFPSM08ZuuBPm0LgUgi1/G4AM5HEyKr5Mz/PQoY0MgXoFyY0G1ee
+   zYPCtXJ3cJ4KMK+5HPgtc0eamyAVipW5LIdZb60lrXclllBokXTnvHWzy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="351525221"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="351525221"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 18:07:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="671069376"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Aug 2022 18:07:33 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oJPKm-000HsC-1K;
+	Thu, 04 Aug 2022 01:07:32 +0000
+Date: Thu, 4 Aug 2022 09:06:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 2/15] drivers/dma/apple-admac.c:260:5:
+ warning: no previous prototype for function 'admac_cyclic_read_residue'
+Message-ID: <202208040845.ssI1CdgG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nick,
-please see below, thanks.
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   ddf6983d9229819248d0373854d32b4e4a0e123d
+commit: 594ea25c7f3f1ee8d0e952c6547bcd06843f9045 [2/15] dmaengine: apple-admac: Add Apple ADMAC driver
+config: arm64-buildonly-randconfig-r002-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040845.ssI1CdgG-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/594ea25c7f3f1ee8d0e952c6547bcd06843f9045
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout 594ea25c7f3f1ee8d0e952c6547bcd06843f9045
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
 
-> [ cc Andrea ]
-@David Ahern: thanks David!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> On 8/2/22 10:12 AM, Nick Desaulniers wrote:
-> > Fixes the following warnings observed when building
-> > CONFIG_IPV6_SEG6_LWTUNNEL=y with clang:
-> > 
-> >   net/ipv6/seg6_local.o: warning: objtool: seg6_local_fill_encap() falls
-> >   through to next function seg6_local_get_encap_size()
-> >   net/ipv6/seg6_local.o: warning: objtool: seg6_local_cmp_encap() falls
-> >   through to next function input_action_end()
-> > 
-> > LLVM can fully unroll loops in seg6_local_get_encap_size() and
-> > seg6_local_cmp_encap(). One issue in those loops is that the induction
-> > variable is initialized to 0. The loop iterates over members of
-> > seg6_action_params, a global array of struct seg6_action_param calling
-> > their put() function pointer members.  seg6_action_param uses an array
-> > initializer to initialize SEG6_LOCAL_SRH and later elements, which is
-> > the third enumeration of an anonymous union.
-> > 
-> > The guard `if (attrs & SEG6_F_ATTR(i))` may prevent this from being
-> > called at runtime, but it would still be UB for
-> > `seg6_action_params[0]->put` to be called; the unrolled loop will make
-> > the initial iterations unreachable, which LLVM will later rotate to
-> > fallthrough to the next function.
-> > 
-> > Make this more obvious that this cannot happen to the compiler by
-> > initializing the loop induction variable to the minimum valid index that
-> > seg6_action_params is initialized to.
+All warnings (new ones prefixed by >>):
 
-By looking at the patch, it looks that your changes seem reasonable.
-The first two SEG6_LOCAL_{UNSPEC,ACTION} attributes are quite "special" in the
-sense that they do not have the seg6_action_param callbacks set.
-The SEG6_LOCAL_UNSPEC attribute is practically not used; while
-SEG6_LOCAL_ACTION is handled out of the several loops.
+>> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for function 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+       ^
+   drivers/dma/apple-admac.c:260:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   ^
+   static 
+   1 warning generated.
 
-Hence, I think we can skip these two attributes (in the loops) by setting the
-induction variable to the value you proposed, i.e. SEG6_LOCAL_SRH.
 
-Ciao,
-Andrea
+vim +/admac_cyclic_read_residue +260 drivers/dma/apple-admac.c
 
-> > 
-> > Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> >  net/ipv6/seg6_local.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> > index 2cd4a8d3b30a..b7de5e46fdd8 100644
-> > --- a/net/ipv6/seg6_local.c
-> > +++ b/net/ipv6/seg6_local.c
-> > @@ -1614,7 +1614,7 @@ static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
-> >  	 * callback. If the callback is not available, then we skip to the next
-> >  	 * attribute; otherwise, we call the destroy() callback.
-> >  	 */
-> > -	for (i = 0; i < max_parsed; ++i) {
-> > +	for (i = SEG6_LOCAL_SRH; i < max_parsed; ++i) {
-> >  		if (!(parsed_attrs & SEG6_F_ATTR(i)))
-> >  			continue;
-> >  
-> > @@ -1643,7 +1643,7 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
-> >  	struct seg6_action_param *param;
-> >  	int err, i;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; ++i) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; ++i) {
-> >  		if (!(desc->optattrs & SEG6_F_ATTR(i)) || !attrs[i])
-> >  			continue;
-> >  
-> > @@ -1742,7 +1742,7 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
-> >  	}
-> >  
-> >  	/* parse the required attributes */
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (desc->attrs & SEG6_F_ATTR(i)) {
-> >  			if (!attrs[i])
-> >  				return -EINVAL;
-> > @@ -1847,7 +1847,7 @@ static int seg6_local_fill_encap(struct sk_buff *skb,
-> >  
-> >  	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (attrs & SEG6_F_ATTR(i)) {
-> >  			param = &seg6_action_params[i];
-> >  			err = param->put(skb, slwt);
-> > @@ -1927,7 +1927,7 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
-> >  	if (attrs_a != attrs_b)
-> >  		return 1;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (attrs_a & SEG6_F_ATTR(i)) {
-> >  			param = &seg6_action_params[i];
-> >  			if (param->cmp(slwt_a, slwt_b))
->
+   256	
+   257	/*
+   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
+   259	 */
+ > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   261	{
+   262		u32 ring1, ring2;
+   263		u32 residue1, residue2;
+   264		int nreports;
+   265		size_t pos;
+   266	
+   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
+   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
+   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
+   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
+   271	
+   272		if (residue2 > residue1) {
+   273			// engine must have loaded next descriptor between the two residue reads
+   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
+   275		} else {
+   276			// no descriptor load between the two reads, ring2 is safe to use
+   277			nreports = admac_ring_noccupied_slots(ring2);
+   278		}
+   279	
+   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
+   281							 - residue2;
+   282	
+   283		return adtx->buf_len - pos % adtx->buf_len;
+   284	}
+   285	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
