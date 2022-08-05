@@ -1,130 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CBB1C03
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 16:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4062CC433B5
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 16:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76CC1C13
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 17:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F893C433D7;
+	Fri,  5 Aug 2022 17:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659716223;
-	bh=8grFLuwlQy0Ot8AOJ3yQKp3FjPtqCsWnDxEz8xLu22U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S1Zay7+AGgZcUCq7wrx5A/C0aep+dKgB5hcEjFtW4tftu/80/B6Q8OcvcwNhq+Otu
-	 o222N5h+m/UXeaeDBok542Ri8zeZAGBgaLJ+Y31oeXxv6WUrdkg5fE5gyoBtFjQtmk
-	 slz8VGRuiJsttzZCXh9Z0zJADXe35fRHrOy/k/qhXYgTTneYaN95kk+9Al5yDGJa6w
-	 7yBzHnwUTcOdXpHxuzYOeTY70INSOjkjzzKg/g7OxKzY1RXLJ0KNZiLIBF+/1WJDjV
-	 Qyd4zMIPm7hw9L2O/QptByvsMheDELqbCm0et8wP2oNga9unCv5w1R9iOgczug9GBK
-	 SAZ8bzhOxoZvQ==
-Received: by mail-ej1-f49.google.com with SMTP id tl27so5895938ejc.1
-        for <llvm@lists.linux.dev>; Fri, 05 Aug 2022 09:17:03 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3aMlX+PzCtUgGcvv+NIelSPPUqEC42/t0unFq6azuoypIYR5v/
-	ZKA34WuO+8h0nyW1YgAaRPI/r2q6TL7wbg2bDrQ=
-X-Google-Smtp-Source: AA6agR4R1JzUUmCUe4J6toqC9u62zKSlRPtv5bfElt/h5Y16RKiwaSKXI4eB4mnRJZxJJ+hBT4gy7eHrda+QQm1kO9Q=
-X-Received: by 2002:a17:907:28d6:b0:731:5d0:4401 with SMTP id
- en22-20020a17090728d600b0073105d04401mr1753624ejc.765.1659716221514; Fri, 05
- Aug 2022 09:17:01 -0700 (PDT)
+	s=k20201202; t=1659719044;
+	bh=eWXE1meMC5J4xw9qLbR0+CRDPLl8AbWzFX2rkav8pDo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OYnzAx8WxgRBoyJFbNtuXWnffj6Lo/eXGY7dLJ9qkyfD1vLZ0DFNTpUfCzkWVUfhs
+	 BFkfZRkVpQ1RzGtR1Vj+71L9+LfUH/a8Mjvsk1NDVAnuHlEP7YTfss93nI5govJ4h9
+	 ur1XURW5L+3omchEpDsaV2hCosgpjm65dePHqhvT2Hb+r4sbcIVAqtDAFz0qwLlw4F
+	 rayh/p5WUb2mdf6xaBSUsrc0aGxwATc2na08QmWWQfwVIONVNmFb6tM/Cn1vQYEjov
+	 F0f0UsYAmsCRLzAJ8PhfvYcKssd4W60LoTbqtQNE+YJL9Rh6DaCtNe0nx/nuJoqb/c
+	 QnagmjM5c3zGg==
+Date: Fri, 5 Aug 2022 10:04:02 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: alexandre.belloni@bootlin.com
+Cc: Alessandro Zummo <a.zummo@towertech.it>,
+	Michal Simek <michal.simek@xilinx.com>, linux-rtc@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] rtc: zynqmp: initialize fract_tick
+Message-ID: <Yu1Ngjr5Ux+CN1Nn@dev-arch.thelio-3990X>
+References: <20220727100018.3301470-1-alexandre.belloni@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
- <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
-In-Reply-To: <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 5 Aug 2022 18:16:45 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
-Message-ID: <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To: Harry Wentland <harry.wentland@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, 
-	clang-built-linux <llvm@lists.linux.dev>, David Airlie <airlied@linux.ie>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, amd-gfx list <amd-gfx@lists.freedesktop.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	dri-devel <dri-devel@lists.freedesktop.org>, Alex Deucher <alexander.deucher@amd.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727100018.3301470-1-alexandre.belloni@bootlin.com>
 
-On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
-> > I do notice that these files build with a non-configurable
-> > -Wframe-large-than value:
-> >
-> > $ rg frame_warn_flag drivers/gpu/drm/amd/display/dc/dml/Makefile
-> > 54:frame_warn_flag := -Wframe-larger-than=2048
->
-> Tbh, I was looking at the history and I can't find a good reason this
-> was added. It should be safe to drop this. I would much rather use
-> the CONFIG_FRAME_WARN value than override it.
->
-> AFAIK most builds use 2048 by default anyways.
+On Wed, Jul 27, 2022 at 12:00:18PM +0200, alexandre.belloni@bootlin.com wrote:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> 
+> fract_tick is used uninitialized when fract_offset is 0
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-I'm fairly sure this was done for 32-bit builds, which default to a lower
-warning limit of 1024 bytes and would otherwise run into this
-problem when 64-bit platforms don't. With the default warning limit,
-clang warns even more about an i386 build:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-display/dc/dml/dcn20/display_rq_dlg_calc_20.c:1549:6: error: stack
-frame size (1324) exceeds limit (1024) in 'dml20_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c:1550:6: error: stack
-frame size (1324) exceeds limit (1024) in 'dml20v2_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn30/display_rq_dlg_calc_30.c:1742:6: error: stack
-frame size (1484) exceeds limit (1024) in 'dml30_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn31/display_rq_dlg_calc_31.c:1571:6: error: stack
-frame size (1548) exceeds limit (1024) in 'dml31_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn21/display_rq_dlg_calc_21.c:1657:6: error: stack
-frame size (1388) exceeds limit (1024) in 'dml21_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn32/display_rq_dlg_calc_32.c:206:6: error: stack
-frame size (1276) exceeds limit (1024) in 'dml32_rq_dlg_get_dlg_reg'
-display/dc/dml/dcn31/display_mode_vba_31.c:2049:13: error: stack frame
-size (1468) exceeds limit (1024) in
-'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-display/dc/dml/dcn20/display_mode_vba_20v2.c:1145:13: error: stack
-frame size (1228) exceeds limit (1024) in
-'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-display/dc/dml/dcn20/display_mode_vba_20.c:1085:13: error: stack frame
-size (1340) exceeds limit (1024) in
-'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame
-size (1996) exceeds limit (1024) in
-'dml31_ModeSupportAndSystemConfigurationFull'
-display/dc/dml/dcn21/display_mode_vba_21.c:1466:13: error: stack frame
-size (1308) exceeds limit (1024) in
-'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-display/dc/dml/dcn20/display_mode_vba_20v2.c:3393:6: error: stack
-frame size (1356) exceeds limit (1024) in
-'dml20v2_ModeSupportAndSystemConfigurationFull'
-display/dc/dml/dcn20/display_mode_vba_20.c:3286:6: error: stack frame
-size (1468) exceeds limit (1024) in
-'dml20_ModeSupportAndSystemConfigurationFull'
-display/dc/dml/dcn21/display_mode_vba_21.c:3518:6: error: stack frame
-size (1228) exceeds limit (1024) in
-'dml21_ModeSupportAndSystemConfigurationFull'
-display/dc/dml/dcn30/display_mode_vba_30.c:1906:13: error: stack frame
-size (1436) exceeds limit (1024) in
-'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
-display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame
-size (2092) exceeds limit (1024) in
-'dml30_ModeSupportAndSystemConfigurationFull'
-> > I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
-> > in the mode support function") did have a workaround for GCC. It appears
-> > clang will still inline mode_support_configuration(). If I mark it as
-> > 'noinline', the warning disappears in that file.
->
-> That'd be the best quick fix. I guess if we split out functions to fix
-> stack usage we should mark them as 'noinline' in the future to avoid
-> agressive compiler optimizations.
+Is this going to be applied soon? This is one of the warnings breaking
+allmodconfig with clang right now:
 
-While splitting out sub-functions can help reduce the maximum stack
-usage, it seems that in this case it makes the actual problem worse:
-I see 2168 bytes for the combined
-dml32_ModeSupportAndSystemConfigurationFull(), but marking
-mode_support_configuration() as noinline gives me 1992 bytes
-for the outer function plus 384 bytes for the inner one. So it does
-avoid the warning (barely), but not the problem that the warning tries
-to point out.
+    drivers/rtc/rtc-zynqmp.c:223:7: error: variable 'fract_tick' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+                    if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:238:6: note: uninitialized use occurs here
+            if (fract_tick)
+                ^~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:223:3: note: remove the 'if' if its condition is always true
+                    if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:218:6: error: variable 'fract_tick' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+            if (fract_offset) {
+                ^~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:238:6: note: uninitialized use occurs here
+            if (fract_tick)
+                ^~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:218:2: note: remove the 'if' if its condition is always true
+            if (fract_offset) {
+            ^~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-zynqmp.c:206:26: note: initialize the variable 'fract_tick' to silence this warning
+            unsigned char fract_tick;
+                                    ^
+                                    = '\0'
+    2 errors generated.
 
-        Arnd
+> ---
+>  drivers/rtc/rtc-zynqmp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+> index 1dd389b891fe..c9b85c838ebe 100644
+> --- a/drivers/rtc/rtc-zynqmp.c
+> +++ b/drivers/rtc/rtc-zynqmp.c
+> @@ -203,7 +203,7 @@ static int xlnx_rtc_set_offset(struct device *dev, long offset)
+>  	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
+>  	unsigned long long rtc_ppb = RTC_PPB;
+>  	unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
+> -	unsigned char fract_tick;
+> +	unsigned char fract_tick = 0;
+>  	unsigned int calibval;
+>  	short int  max_tick;
+>  	int fract_offset;
+> -- 
+> 2.36.1
+> 
+> 
