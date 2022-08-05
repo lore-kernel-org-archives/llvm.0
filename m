@@ -1,130 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42627C
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 19:32:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55008C433B5
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 19:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659727953;
-	bh=mfEh6ybw6rE7/YvSjSNtL1TZqU0Vwg2ccAlpa8gmxCw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LX1rWOzm68paQ6IF/V/Z7Jyc4mrDJMxk18613pIutd20SJHjYfs8ZhEb+NcRWW05d
-	 MXovB+DdlRSYT/gY3UIS7oUWTnQ6Ma47JwlMLJ2KnAmdSKv5rbgaSpS2BtD2/28tq4
-	 rB1JGnZgbQBUwc6ohYPWw+vYSmCvEqBTbnujzgvplYHbExArH2u2i3DUWOv8LBCE7g
-	 ScShm5/Xl1O0DZjH6hn6562iDgdMKwrr3b80zPM5FwwhwBnYEAnjLxH5S+is3Jhp9p
-	 plohILwpbGdi9lOPyJmrVHVYDzrzbXoMNGgzVr7pUDH3A3H1U39o2wxM/bwqRJexqt
-	 3iAmOBvR3Rk3A==
-Received: by mail-ej1-f54.google.com with SMTP id kb8so6705388ejc.4
-        for <llvm@lists.linux.dev>; Fri, 05 Aug 2022 12:32:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo00JIf0cmTpq9ofJO8EMZ+rg7CixkoNErldOSchrO7euK03kPFM
-	MwqYl0I4pQCLFfAtskNCfESDPH0mFa1zQHE8u9E=
-X-Google-Smtp-Source: AA6agR6sufpPn7fKAXba69irZ//FbrrVb5P7LMB5EmBMDbLarfIv7nL6lJv4uXFV2w0bUTCcP1jOVQ494qKG5VTQJm8=
-X-Received: by 2002:a17:907:28d6:b0:731:5d0:4401 with SMTP id
- en22-20020a17090728d600b0073105d04401mr2212923ejc.765.1659727951560; Fri, 05
- Aug 2022 12:32:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4ED290E
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 21:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659735815; x=1691271815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qfg4R2BtXdjYTXw2GPqRYJZIr9XIs5w0XjDVgS2B3Bg=;
+  b=bT8G2tX541uxVgM6y90TcxcwB5vv1N+dwMHB6etrrvgPmJ4vmgyAYKdQ
+   WevqJlyWe0qIqUuHfKJm7Qu9hZsz/dM3tz8z44Xre8ThyOsk73FtHsXKk
+   zYCnd2o3HEHINUS6uQMK2N5+QiVE8zGyvLQyjdpRtG906IRifuu/wE1mp
+   RH3PNO114QBjBkJHAEQvHuE0KrM7/xriijVmfBPxk96tWAq4Y18NnJloq
+   X1553GyY0u52YScoOXsI/htASuUxn+1Eg7X2FvUPJAlvJ8MZLLeDLNqLK
+   QwqiPv/6tDlQtn7qAT8QSjg7nvsf9FcMvMsOadDSVc8unW6bOdvFXr+w3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="270684112"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="270684112"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 14:43:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="745993530"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Aug 2022 14:43:33 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oK56T-000Jl6-0r;
+	Fri, 05 Aug 2022 21:43:33 +0000
+Date: Sat, 6 Aug 2022 05:43:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leonardo Bras <leobras@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 1/1] kvm: Use a new spinlock to avoid atomic
+ operations in kvm_get_dirty_log_protect
+Message-ID: <202208060522.0KJornHh-lkp@intel.com>
+References: <20220805073544.555261-1-leobras@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
- <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
- <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com> <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
-In-Reply-To: <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 5 Aug 2022 21:32:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
-Message-ID: <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>, "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, 
-	clang-built-linux <llvm@lists.linux.dev>, David Airlie <airlied@linux.ie>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, amd-gfx list <amd-gfx@lists.freedesktop.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	dri-devel <dri-devel@lists.freedesktop.org>, Alex Deucher <alexander.deucher@amd.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805073544.555261-1-leobras@redhat.com>
 
-On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
-> > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
-> > While splitting out sub-functions can help reduce the maximum stack
-> > usage, it seems that in this case it makes the actual problem worse:
-> > I see 2168 bytes for the combined
-> > dml32_ModeSupportAndSystemConfigurationFull(), but marking
-> > mode_support_configuration() as noinline gives me 1992 bytes
-> > for the outer function plus 384 bytes for the inner one. So it does
-> > avoid the warning (barely), but not the problem that the warning tries
-> > to point out.
->
-> I haven't had a chance to take a look at splitting things up yet, would
-> you recommend a different approach?
+Hi Leonardo,
 
-Splitting up large functions can help when you have large local variables
-that are used in different parts of the function, and the split gets the
-compiler to reuse stack locations.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on linus/master v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think in this particular function, the problem isn't actually local variables
-but either pushing variables on the stack for argument passing,
-or something that causes the compiler to run out of registers so it
-has to spill registers to the stack.
+url:    https://github.com/intel-lab-lkp/linux/commits/Leonardo-Bras/kvm-Use-a-new-spinlock-to-avoid-atomic-operations-in-kvm_get_dirty_log_protect/20220805-153809
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220806/202208060522.0KJornHh-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6d5c7b373425e7b50ae4f41f21472ae0ae2a031d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Leonardo-Bras/kvm-Use-a-new-spinlock-to-avoid-atomic-operations-in-kvm_get_dirty_log_protect/20220805-153809
+        git checkout 6d5c7b373425e7b50ae4f41f21472ae0ae2a031d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-In either case, one has to actually look at the generated output
-and then try to rearrange the codes so this does not happen.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One thing to try would be to condense a function call like
+All errors (new ones prefixed by >>):
 
-                dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
+>> arch/x86/kvm/../../../virt/kvm/kvm_main.c:3319:14: error: passing 'const spinlock_t *' (aka 'const struct spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           spin_lock(&memslot->bm_switch_lock);
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:347:51: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_lock(spinlock_t *lock)
+                                                     ^
+>> arch/x86/kvm/../../../virt/kvm/kvm_main.c:3322:33: error: passing 'const struct kvm_memory_slot *' to parameter of type 'struct kvm_memory_slot *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                              kvm_second_dirty_bitmap(memslot));
+                                                                      ^~~~~~~
+   include/linux/kvm_host.h:594:78: note: passing argument to parameter 'memslot' here
+   static inline unsigned long *kvm_second_dirty_bitmap(struct kvm_memory_slot *memslot)
+                                                                                ^
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:3326:16: error: passing 'const spinlock_t *' (aka 'const struct spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           spin_unlock(&memslot->bm_switch_lock);
+                                       ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:387:53: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_unlock(spinlock_t *lock)
+                                                       ^
+   3 errors generated.
 
-&v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
-                        mode_lib->vba.USRRetrainingRequiredFinal,
-                        mode_lib->vba.UsesMALLForPStateChange,
 
-mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
-                        mode_lib->vba.NumberOfActiveSurfaces,
-                        mode_lib->vba.MaxLineBufferLines,
-                        mode_lib->vba.LineBufferSizeFinal,
-                        mode_lib->vba.WritebackInterfaceBufferSize,
-                        mode_lib->vba.DCFCLK,
-                        mode_lib->vba.ReturnBW,
-                        mode_lib->vba.SynchronizeTimingsFinal,
+vim +3319 arch/x86/kvm/../../../virt/kvm/kvm_main.c
 
-mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
-                        mode_lib->vba.DRRDisplay,
-                        v->dpte_group_bytes,
-                        v->meta_row_height,
-                        v->meta_row_height_chroma,
+  3310	
+  3311		if (memslot && kvm_slot_dirty_track_enabled(memslot)) {
+  3312			unsigned long rel_gfn = gfn - memslot->base_gfn;
+  3313			u32 slot = (memslot->as_id << 16) | memslot->id;
+  3314	
+  3315			if (kvm->dirty_ring_size) {
+  3316				kvm_dirty_ring_push(&vcpu->dirty_ring,
+  3317						    slot, rel_gfn);
+  3318			} else {
+> 3319				spin_lock(&memslot->bm_switch_lock);
+  3320				if (memslot->use_secondary)
+  3321					set_bit_le(rel_gfn,
+> 3322						   kvm_second_dirty_bitmap(memslot));
+  3323				else
+  3324					set_bit_le(rel_gfn, memslot->dirty_bitmap);
+  3325	
+  3326				spin_unlock(&memslot->bm_switch_lock);
+  3327			}
+  3328		}
+  3329	}
+  3330	EXPORT_SYMBOL_GPL(mark_page_dirty_in_slot);
+  3331	
 
-v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
-                        mode_lib->vba.WritebackChunkSize,
-                        mode_lib->vba.SOCCLK,
-                        v->DCFCLKDeepSleep,
-                        mode_lib->vba.DETBufferSizeY,
-                        mode_lib->vba.DETBufferSizeC,
-                        mode_lib->vba.SwathHeightY,
-                        mode_lib->vba.SwathHeightC,
-                        mode_lib->vba.LBBitPerPixel,
-                        v->SwathWidthY,
-                        v->SwathWidthC,
-                        mode_lib->vba.HRatio,
-                        mode_lib->vba.HRatioChroma,
-                        mode_lib->vba.vtaps,
-                        mode_lib->vba.VTAPsChroma,
-                        mode_lib->vba.VRatio,
-                        mode_lib->vba.VRatioChroma,
-                        mode_lib->vba.HTotal,
-                        mode_lib->vba.VTotal,
-                        mode_lib->vba.VActive,
-                        mode_lib->vba.PixelClock,
-                        mode_lib->vba.BlendingAndTiming,
-                        .... /* more arguments */);
-
-into calling conventions that take a pointer to 'mode_lib->vba' and another
-one to 'v', so these are no longer passed on the stack individually.
-
-       Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
