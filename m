@@ -1,254 +1,256 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B39A3C
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 08:18:37 +0000 (UTC)
-Received: by mail-io1-f41.google.com with SMTP id s7so1470713ioa.0
-        for <llvm@lists.linux.dev>; Fri, 05 Aug 2022 01:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ZWk9ma5M79Z4Wqhxv3DfLZj3YkPOjUsw905Ysq/x12o=;
-        b=NpmAHdMwOklNCLaKhx1KSd5S4DvLO87IMiPPfx2aofLGFcCCC/yvh8K0s+jsIwujgR
-         GEozheo+M2woXmuPYoG4dwBvDF56DdEmgVSjDlD7Flkcds+BaA3YcaY+6175JGS3jvN7
-         G0n7bjLPX9h6W4juZkcoS/eHoGiFARGM8EJu/TD59JezxpnZNbJ6Oy75Sdc4BnyerCLp
-         0JvnPsgZm3j1ALRtZFtbukV0RnCrNn0C/eWmwvaTFWqqWACBcryiQN13qWwPWzKBqfF6
-         r/kRRcnVAk4gJzQ7OaHkjzaSOsdM2G4Cj4NKUbNOTHq+8wizKc7YMMxRIb2avrCA+nRN
-         kkVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ZWk9ma5M79Z4Wqhxv3DfLZj3YkPOjUsw905Ysq/x12o=;
-        b=W9C5rIau4Z87IukhN14o+lEBfD703/olYZOb7MPvvciAWRfpkZYRgkrR5o1XQmI8nb
-         dIYqVuij3vtHVIjnRpTnb+lHRkxpojmtY47A7tkPv6Ohf7I4keREkAe7itWzWUByiAqC
-         lJBaRQFcbzIBAR+ldmwSTHVhw9BYua6qEUOrLNxD67Rk03CTcPZgD+XYlC88PP2+1qC/
-         cr9Vtud/S3cc700gfQVGo0Tiv5N6Ofqrw8tNzXbXn+nBrglGQEMaUu6yUNZSxRsKOUm9
-         UMJpHtsUhYiAxp8q6hmoO9mAYvFAkqQlrJT1GkBXrrNQKW4Fm1/UVZ0l25fzGKVEZHcN
-         ni5w==
-X-Gm-Message-State: ACgBeo1RIjYfasbu1zyQp9iyTMvz5AP1rM2zkwHpkTBL2oQhLDYO5KTH
-	GsqknyCPXcZ8ngFKcqI56go=
-X-Google-Smtp-Source: AA6agR5S+4JoqVlSPTsqskM4MLpfrRizxDDKs4Zg+OjJCYgF4ofsSCCJxb/qQPmy8/Qbc9+ci82TCg==
-X-Received: by 2002:a05:6638:4705:b0:342:74bb:dfa3 with SMTP id cs5-20020a056638470500b0034274bbdfa3mr2570392jab.1.1659687516958;
-        Fri, 05 Aug 2022 01:18:36 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id h3-20020a92d843000000b002de42539fddsm1385624ilq.68.2022.08.05.01.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 01:18:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: bpf@vger.kernel.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v4] bpf/scripts: Generate GCC compatible helper defs header
-Date: Fri,  5 Aug 2022 02:17:12 -0600
-Message-Id: <20220805081713.2182833-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D383EA2
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 08:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659689507;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rDKS5j5RlY3lTrpc+J/WrAPxMmFWLrv87xLMj6zEV2o=;
+	b=NnnLwQ3TC/l3nmu2XMB4HlyefLC0I42EpWIETTje6W+P6R7yZyxY2Vs9E5L7BmivE2iQSW
+	JyjY3JSN2fKZjzc9d4vuuI52vn1Mgtnzegt6hAGgqZGquR20m6nrUHb3nqr8eGCWUe3Gia
+	ca1bbPcWjsDalJ3K1GXgd8XiEhK4T/Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-Dgl6ssCxPD-zf8Gk7H7x1w-1; Fri, 05 Aug 2022 04:51:44 -0400
+X-MC-Unique: Dgl6ssCxPD-zf8Gk7H7x1w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17494185A794
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 08:51:44 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 07BB840CF8E4;
+	Fri,  5 Aug 2022 08:51:44 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [c040862b]
+Date: Fri, 05 Aug 2022 08:51:43 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <57894.122080504514400219@us-mta-157.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The current bpf_helper_defs.h helpers are llvm specific and don't work
-correctly with gcc.
+Hi, we tested your kernel and here are the results:
 
-GCC requires kernel helper funcs to have the following attribute set:
-__attribute__((kernel_helper(NUM)))
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Generate gcc compatible headers based on the format in bpf-helpers.h.
 
-This leaves the bpf_helper_defs.h entirely unchanged and generates a
-fully separate GCC compatible bpf_helper_defs_attr.h header file
-which is conditionally included if the GCC kernel_helper attribute
-is supported.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/49991
 
-This adds GCC attribute style kernel helpers in bpf_helper_defs_attr.h:
-	void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+One or more kernel tests failed:
 
-	long bpf_map_update_elem(void *map, const void *key, const void *value, __u64 flags) __attribute__((kernel_helper(2)));
+    Unrecognized or new issues:
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4716250
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4716347
 
-See:
-https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 (debug) - Storage - blktests - nvmeof-mp
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                  x86_64 (debug) - Networking MACsec: sanity
+        Issue: Podman: 070-build.bats: Error: i01: image not known
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1309
+            Affected tests:
+                  x86_64 (debug) - Podman system test - as root
+                  x86_64 (debug) - Podman system test - as user
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 ppc64le - Podman system test - as root
+                  x86_64 - Podman system test - as root
+        Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
+rom image history should =3D=3D image list
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1160
+            Affected tests:
+                 aarch64 - Podman system test - as root
+                 aarch64 - Podman system test - as user
+                 ppc64le - Podman system test - as root
+                 ppc64le - Podman system test - as user
+                   s390x - Podman system test - as root
+                   s390x - Podman system test - as user
+        Issue: storage: software RAID testing: SELinux prevents mdadm
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1213
+            Affected tests:
+                 ppc64le - Storage - swraid simple_reshape
+                   s390x - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-This fixes the following build error:
-error: indirect call in function, which are not supported by eBPF
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - don't modify bpf_helper_defs.h
-  - generate bpf_helper_defs_attr.h for GCC
-  - check __has_attribute(kernel_helper) for selecting GCC defs
-Changes v2 -> v3:
-  - use a conditional helper macro
-Changes v1 -> v2:
-  - more details in commit log
----
- scripts/bpf_doc.py          | 58 ++++++++++++++++++++++---------------
- tools/lib/bpf/Makefile      |  7 ++++-
- tools/lib/bpf/bpf_helpers.h |  4 +++
- 3 files changed, 45 insertions(+), 24 deletions(-)
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index dfb260de17a8..c4e8fa3619d8 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -570,9 +570,10 @@ class PrinterHelpers(Printer):
-     be included from BPF program.
-     @parser: A HeaderParser with Helper objects to print to standard output
-     """
--    def __init__(self, parser):
-+    def __init__(self, parser, attr_header):
-         self.elements = parser.helpers
-         self.elem_number_check(parser.desc_unique_helpers, parser.define_unique_helpers, 'helper', '__BPF_FUNC_MAPPER')
-+        self.attr_header = attr_header
- 
-     type_fwds = [
-             'struct bpf_fib_lookup',
-@@ -719,6 +720,24 @@ class PrinterHelpers(Printer):
- 
-     seen_helpers = set()
- 
-+    def print_args(self, proto):
-+        comma = ''
-+        for i, a in enumerate(proto['args']):
-+            t = a['type']
-+            n = a['name']
-+            if proto['name'] in self.overloaded_helpers and i == 0:
-+                    t = 'void'
-+                    n = 'ctx'
-+            one_arg = '{}{}'.format(comma, self.map_type(t))
-+            if n:
-+                if a['star']:
-+                    one_arg += ' {}'.format(a['star'])
-+                else:
-+                    one_arg += ' '
-+                one_arg += '{}'.format(n)
-+            comma = ', '
-+            print(one_arg, end='')
-+
-     def print_one(self, helper):
-         proto = helper.proto_break_down()
- 
-@@ -742,26 +761,16 @@ class PrinterHelpers(Printer):
-                 print(' *{}{}'.format(' \t' if line else '', line))
- 
-         print(' */')
--        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
--                                      proto['ret_star'], proto['name']), end='')
--        comma = ''
--        for i, a in enumerate(proto['args']):
--            t = a['type']
--            n = a['name']
--            if proto['name'] in self.overloaded_helpers and i == 0:
--                    t = 'void'
--                    n = 'ctx'
--            one_arg = '{}{}'.format(comma, self.map_type(t))
--            if n:
--                if a['star']:
--                    one_arg += ' {}'.format(a['star'])
--                else:
--                    one_arg += ' '
--                one_arg += '{}'.format(n)
--            comma = ', '
--            print(one_arg, end='')
--
--        print(') = (void *) %d;' % len(self.seen_helpers))
-+        if self.attr_header:
-+            print('%s %s%s(' % (self.map_type(proto['ret_type']),
-+                                          proto['ret_star'], proto['name']), end='')
-+            self.print_args(proto)
-+            print(') __attribute__((kernel_helper(%d)));' % len(self.seen_helpers))
-+        else:
-+            print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
-+                                          proto['ret_star'], proto['name']), end='')
-+            self.print_args(proto)
-+            print(') = (void *) %d;' % len(self.seen_helpers))
-         print('')
- 
- ###############################################################################
-@@ -785,6 +794,8 @@ rst2man utility.
- """)
- argParser.add_argument('--header', action='store_true',
-                        help='generate C header file')
-+argParser.add_argument('--attr-header', action='store_true',
-+                       help='generate GCC attr style C header file')
- if (os.path.isfile(bpfh)):
-     argParser.add_argument('--filename', help='path to include/uapi/linux/bpf.h',
-                            default=bpfh)
-@@ -799,10 +810,11 @@ headerParser = HeaderParser(args.filename)
- headerParser.run()
- 
- # Print formatted output to standard output.
--if args.header:
-+if args.header or args.attr_header:
-     if args.target != 'helpers':
-         raise NotImplementedError('Only helpers header generation is supported')
--    printer = PrinterHelpers(headerParser)
-+    attr_header = True if args.attr_header else False
-+    printer = PrinterHelpers(headerParser, attr_header)
- else:
-     printer = printers[args.target](headerParser)
- printer.print_all()
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 4c904ef0b47e..cf9efe764030 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -116,7 +116,8 @@ STATIC_OBJDIR	:= $(OUTPUT)staticobjs/
- BPF_IN_SHARED	:= $(SHARED_OBJDIR)libbpf-in.o
- BPF_IN_STATIC	:= $(STATIC_OBJDIR)libbpf-in.o
- BPF_HELPER_DEFS	:= $(OUTPUT)bpf_helper_defs.h
--BPF_GENERATED	:= $(BPF_HELPER_DEFS)
-+BPF_HELPER_DEFS_ATTR	:= $(OUTPUT)bpf_helper_defs_attr.h
-+BPF_GENERATED	:= $(BPF_HELPER_DEFS) $(BPF_HELPER_DEFS_ATTR)
- 
- LIB_TARGET	:= $(addprefix $(OUTPUT),$(LIB_TARGET))
- LIB_FILE	:= $(addprefix $(OUTPUT),$(LIB_FILE))
-@@ -160,6 +161,10 @@ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
- 	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --header \
- 		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS)
- 
-+$(BPF_HELPER_DEFS_ATTR): $(srctree)/tools/include/uapi/linux/bpf.h
-+	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --attr-header \
-+		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS_ATTR)
-+
- $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
- 
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED) $(VERSION_SCRIPT)
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 7349b16b8e2f..b7573e7d3feb 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -8,7 +8,11 @@
-  * in advance since bpf_helper_defs.h uses such types
-  * as __u64.
-  */
-+#if __has_attribute(kernel_helper)
-+#include "bpf_helper_defs_attr.h"
-+#else
- #include "bpf_helper_defs.h"
-+#endif
- 
- #define __uint(name, val) int (*name)[val]
- #define __type(name, val) typeof(val) *name
--- 
-2.34.1
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
