@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62427C
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 11:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D1E7C
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 11:41:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659698509;
+	s=mimecast20190719; t=1659699705;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=c2j0FhczhWa2bl/59mwCezFguY6wj0GkF0rE0/wEgR8=;
-	b=Y4T4ZtcLQi4vi7qog9PEWiNZSs5G8Kse6KYP4A4tzCtSsIDE2/OQiZKSH+lYofzO1tdU7H
-	WDCelXnOOm0zXVuKvAobWGhUechgxVy70fOL1xFXLVFv77fevOGm5awqQWn/QhJWUjavAF
-	FBOtq54xAveJVJxkfgAl8COdrrP55uY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=j0jVaWuBxN1bGWjzzZKzxjuCDOcFSCrMSJ0FrMLhINA=;
+	b=UMAD87XNkbzu1CJzFx/dc1bsRm1+9AAvB3iAPG1+hKfyeatA7BcWdX7xlpKmm++rIkGAnt
+	4OfS1gFKWb4YN3H3TuBbhGQg5H06zyEenPcvQVxqAHZpCvUVLc0OOb9u6eLkk4DOPdIh+j
+	pyoiNWNp1sUzyVM/zsydvYOaLa/5+xo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-263-p-ryPsWnOiCDQ1neu_qOZA-1; Fri, 05 Aug 2022 07:21:48 -0400
-X-MC-Unique: p-ryPsWnOiCDQ1neu_qOZA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-527-dzxYAhOHPIeNTqI6jTPfog-1; Fri, 05 Aug 2022 07:41:44 -0400
+X-MC-Unique: dzxYAhOHPIeNTqI6jTPfog-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A0231C05AF3
-	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 11:21:48 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 506DE811E75
+	for <llvm@lists.linux.dev>; Fri,  5 Aug 2022 11:41:44 +0000 (UTC)
 Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3A1622026D4C;
-	Fri,  5 Aug 2022 11:21:48 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3F0F41121314;
+	Fri,  5 Aug 2022 11:41:44 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (30/452 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [31be1d0f]
-Date: Fri, 05 Aug 2022 11:21:48 -0000
+Subject: =?utf-8?b?4pyF?= PASS (17/452 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [5f084819]
+Date: Fri, 05 Aug 2022 11:41:44 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <41062.122080507214800617@us-mta-263.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Message-Id: <75560.122080507414400838@us-mta-527.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50006
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50005
 
 One or more kernel tests failed:
 
@@ -105,16 +105,6 @@ l-tests/-/issues/1300
                   x86_64 - Storage - blktests - nvmeof-mp
                   x86_64 (debug) - Storage - blktests - nvme-tcp
                   x86_64 (debug) - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 (debug) - Storage - block - storage fio numa
-        Issue: Networking bridge: sanity - Command 'cat /sys/class/net/br0/=
-brif/dummy0/state | grep 2' (Expected 0, got 1)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2001797
-            Affected tests:
-                  x86_64 (debug) - Networking bridge: sanity
         Issue: Networking MACsec: sanity: Cannot find device "dummy0"
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1306
@@ -128,36 +118,16 @@ l-tests/-/issues/1235
                  aarch64 - Firmware test suite
                   x86_64 - Firmware test suite
                   x86_64 (debug) - Firmware test suite
-        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
-emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
-_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
-22,c1023 tclass=3Ddir permissive=3D0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1200#note_990285952
-            Affected tests:
-                  x86_64 (debug) - Firmware test suite
         Issue: SELinux prevents sendmail.service while running Memory funct=
 ion: kaslr
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1169
             Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - forwarding
                   x86_64 (debug) - Memory function: kaslr
                   x86_64 (debug) - Reboot test
-        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
-ser namespace
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1166
-            Affected tests:
-                 aarch64 - Podman system test - as root
-                  x86_64 - Podman system test - as root
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
 redeclaration of 'enum fsconfig_command'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -171,6 +141,25 @@ l-tests/-/issues/1302
                   x86_64 - xfstests - nfsv4.2
                   x86_64 - xfstests - cifsv3.11
                   x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: [rawhide] avc:  denied  { read } for  pid=3D589 comm=3D"syst=
+emd-logind" name=3D"/" dev=3D"mqueue" ino=3D6692 scontext=3Dsystem_u:system=
+_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_r:container_file_t:s0:c10=
+22,c1023 tclass=3Ddir permissive=3D0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1200#note_990285952
+            Affected tests:
+                 ppc64le - Reboot test
+                  x86_64 - Memory function: kaslr
+        Issue: targetcli - module 'inspect' has no attribute 'getargspec'
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2102058
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
         Issue: Podman: 110-history.bats: FAIL: CreatedSince and CreatedAt f=
 rom image history should =3D=3D image list
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -212,6 +201,12 @@ apability permissive=3D0
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
                  aarch64 - Storage - software RAID testing
+        Issue: Podman: 170-run-userns.bats: FAIL: Check group leaked into u=
+ser namespace
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1166
+            Affected tests:
+                 aarch64 - Podman system test - as root
         Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
 c/0x4c
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
