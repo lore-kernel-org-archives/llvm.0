@@ -1,44 +1,44 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A944EA8
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 04:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086A8EA0
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 06:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659760904;
+	s=mimecast20190719; t=1659768702;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=g12mRrCoQBu/a1HGi0eA8pET8QDDFuUyQR7OCSAImic=;
-	b=QiC/TO93HX4FUq2/ppPfgR/itRCtzsI5SxoUvJ1KGF262HZEQYytz32DHOr52t+uz6n77r
-	IpEfwt33t7QngIiogAf+kJdjuTOtl0fud+/JabgVdcHGjnLBIWJe6m82r/tWzd4CP5HClC
-	H8bDIo3ZZ17l4ScguFDc7i5RMdIyruE=
+	bh=pcUE4Lqrc8Sc3JqooLJ2IES+K1hiimZ3pkhAhj5mAhQ=;
+	b=Q4gIa/HWzN9HulfzOvXr28PKjzbmAKkOl7VsgAVq/FoRuRhS63nbv9TfX7Kv3bF+l+5YRu
+	+WlIajSGfHZV2dh11M3l0wfxXUYw932iTuZlJqXc/3nVxh9zSYPrMS82TGh/1SH3LCVj61
+	a3qh9qja/ezmEDevF2bsU6yzpxs6Bd4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-xJqQdnBzN4-24zssVGjULg-1; Sat, 06 Aug 2022 00:41:42 -0400
-X-MC-Unique: xJqQdnBzN4-24zssVGjULg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-480-GDyaMLUiN9K_zAZp5bQPTg-1; Sat, 06 Aug 2022 02:51:40 -0400
+X-MC-Unique: GDyaMLUiN9K_zAZp5bQPTg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F04B101A586
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 04:41:42 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE404101A54E
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 06:51:40 +0000 (UTC)
 Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0B9AE492C3B;
-	Sat,  6 Aug 2022 04:41:41 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 90A9F2026D4C;
+	Sat,  6 Aug 2022 06:51:40 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [74cae210]
-Date: Sat, 06 Aug 2022 04:41:41 -0000
-CC: fsuba@redhat.com
+ (mainline.kernel.org-clang) [6614a3c3]
+Date: Sat, 06 Aug 2022 06:51:40 -0000
+CC: mmalik@redhat.com, omosnace@redhat.com, fsuba@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <18472.122080600414200259@us-mta-209.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <19472.122080602514100172@us-mta-480.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,26 +53,32 @@ Hi, we tested your kernel and here are the results:
 
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50129
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50137
 
 One or more kernel tests failed:
 
     Unrecognized or new issues:
          aarch64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4730222
-         ppc64le - Storage - lvm thinp stqe test
+4731145
+         aarch64 - selinux-policy: serge-testsuite
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4729744
+4731167
            s390x - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4729821
+4730758
           x86_64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4729682
+4730669
+          x86_64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4730697
           x86_64 (debug) - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4730293
+4731216
+          x86_64 (debug) - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4731235
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -164,17 +170,12 @@ l-tests/-/issues/1303
             Affected tests:
                    s390x - kdump - sysrq-c
                    s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
+l-tests/-/issues/1047
             Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+                 ppc64le - Boot test
         Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
 .c:5407 __alloc_pages+0x1a0/0x290
             URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
