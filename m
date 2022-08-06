@@ -1,150 +1,229 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EF47C
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 19:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3727C
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 20:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659815950; x=1691351950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w5GY8CwInFXHmEYdXYfEg/5ag7UdS10Qg7uRwbGFNKw=;
-  b=hd7JbC5JxX9gSyU30jWUMcuNCeJdgCsdbfmO62S9C+xQRGIlY0tBYA7D
-   TH8DsBjLp6xhOlSjyn2rjUrME+vY9QBXcV/ne68QoZdtYooLJftc3OeYe
-   +lTYJOJ+ofnS0ydB0iX9MB5E3bhDmNw+2+0MQVo6l2iJLed1YaDX0FXNu
-   wE6YDZYeqKTG18eXQZGj5wPRXWtBCwx2Oh2V4Fj2RuEXgjmNun6dfOe6I
-   lFiH5WjBzIH/G027Vpbp8TzjlsNKME3KLjYl1+dYB68IX54ixoKFP2OVW
-   W+iaMD2/uI5VqSGGpFo1bqj9NiMX4LlmO1RxL6ZMZKaUNN72mOJ1cQKez
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="287953152"
+  t=1659816550; x=1691352550;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KEwOTVoG7ZqDsSp59wGjwyZ1q5J+EUIIvPZliqYQesE=;
+  b=DIrFFoc94bLEJt3u76akuUVaykaMg6q7jxS+Ycs9BD2J0JqA8b4HbhDT
+   9/6LxaUUGj4Eh6Hss85SLpnkR6jaPvOu2dzlobTiw7lhWrapUv0yDyiWa
+   d7l8ufeKhDJPieQG/DlbcE8to83SeJJlAc+zePHhhvKzq9MMkvOlU+QAt
+   Nb7W/GK5ufJ40cVOhmgIPrxXkE+wwQrD1+xurLY21XDutD1+N11UdD5kv
+   1nrHE+GE8kdGEiHhmTc3M4KVpb7jN0uZQ8j7jwsThpfAfzQlez1/n01cO
+   8DdgWxDtyucz3sYM6S8b7nEsUH+MzNdYJiRYAH6ZGPQ0TgEjIO9CiP6eU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="376683195"
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="287953152"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 12:59:09 -0700
+   d="scan'208";a="376683195"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 13:09:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="780070424"
+   d="scan'208";a="672044144"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 Aug 2022 12:59:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 06 Aug 2022 13:09:07 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKPww-000KdV-1u;
-	Sat, 06 Aug 2022 19:59:06 +0000
-Date: Sun, 7 Aug 2022 03:58:40 +0800
+	id 1oKQ6c-000KeD-2z;
+	Sat, 06 Aug 2022 20:09:06 +0000
+Date: Sun, 7 Aug 2022 04:08:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To: Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.10.y 499/7421]
- arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used
-Message-ID: <202208070359.y2vvIVNR-lkp@intel.com>
+	Nathan Chancellor <natechancellor@gmail.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Sean Paul <seanpaul@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>
+Subject: [jsarha:topic/chromeos-4.19-s0ix 6418/9999]
+ drivers/input/keyreset.c:119:5: warning: no previous prototype for function
+ 'keyreset_remove'
+Message-ID: <202208070416.jdFdsESN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Srikar,
+Hi Masahiro,
 
 FYI, the error/warning still remains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   4fd9cb57a3f5e611efde7772643134385de3a5a6
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/7421] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-randconfig-r002-20220807 (https://download.01.org/0day-ci/archive/20220807/202208070359.y2vvIVNR-lkp@intel.com/config)
+tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
+head:   430bdaa0a8c38697780f45a148964d71951df11f
+commit: 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd [6418/9999] UPSTREAM: kbuild: add some extra warning flags unconditionally
+config: mips-randconfig-r012-20220807 (https://download.01.org/0day-ci/archive/20220807/202208070416.jdFdsESN-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/jsarha/linux/commit/4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
+        git checkout 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash M=drivers/input
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-           bool ret;
-                ^
-   1 error generated.
+   In file included from drivers/input/keyreset.c:23:
+   In file included from include/linux/syscalls.h:85:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:7:
+   In file included from include/linux/trace_seq.h:5:
+   include/linux/seq_buf.h:35:12: warning: assigning to 'char *' from 'unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+           s->buffer = buf;
+                     ^ ~~~
+>> drivers/input/keyreset.c:119:5: warning: no previous prototype for function 'keyreset_remove' [-Wmissing-prototypes]
+   int keyreset_remove(struct platform_device *pdev)
+       ^
+   drivers/input/keyreset.c:119:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int keyreset_remove(struct platform_device *pdev)
+   ^
+   static 
+   2 warnings generated.
+   Assembler messages:
+   Fatal error: invalid -march= option: `mips32'
+   clang-16: error: assembler command failed with exit code 1 (use -v to see invocation)
+--
+>> drivers/input/keycombo.c:234:5: warning: no previous prototype for function 'keycombo_remove' [-Wmissing-prototypes]
+   int keycombo_remove(struct platform_device *pdev)
+       ^
+   drivers/input/keycombo.c:234:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int keycombo_remove(struct platform_device *pdev)
+   ^
+   static 
+   1 warning generated.
+   Assembler messages:
+   Fatal error: invalid -march= option: `mips32'
+   clang-16: error: assembler command failed with exit code 1 (use -v to see invocation)
 
 
-vim +/ret +1380 arch/powerpc/kernel/smp.c
+vim +/keyreset_remove +119 drivers/input/keyreset.c
 
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  @23  #include <linux/syscalls.h>
+5f2afc82f504df Daniel Rosenberg 2014-05-07   24  #include <linux/keycombo.h>
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   25  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   26  struct keyreset_state {
+5f2afc82f504df Daniel Rosenberg 2014-05-07   27  	int restart_requested;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   28  	int (*reset_fn)(void);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   29  	struct platform_device *pdev_child;
+595f7ba388d32f Daniel Rosenberg 2014-06-27   30  	struct work_struct restart_work;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   31  };
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   32  
+595f7ba388d32f Daniel Rosenberg 2014-06-27   33  static void do_restart(struct work_struct *unused)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   34  {
+9a6baccec822de Eric Ernst       2016-09-02   35  	orderly_reboot();
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   36  }
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   37  
+5f2afc82f504df Daniel Rosenberg 2014-05-07   38  static void do_reset_fn(void *priv)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   39  {
+5f2afc82f504df Daniel Rosenberg 2014-05-07   40  	struct keyreset_state *state = priv;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   41  	if (state->restart_requested)
+5f2afc82f504df Daniel Rosenberg 2014-05-07   42  		panic("keyboard reset failed, %d", state->restart_requested);
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   43  	if (state->reset_fn) {
+5f2afc82f504df Daniel Rosenberg 2014-05-07   44  		state->restart_requested = state->reset_fn();
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   45  	} else {
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   46  		pr_info("keyboard reset\n");
+595f7ba388d32f Daniel Rosenberg 2014-06-27   47  		schedule_work(&state->restart_work);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   48  		state->restart_requested = 1;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   49  	}
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   50  }
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   51  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   52  static int keyreset_probe(struct platform_device *pdev)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   53  {
+5f2afc82f504df Daniel Rosenberg 2014-05-07   54  	int ret = -ENOMEM;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   55  	struct keycombo_platform_data *pdata_child;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   56  	struct keyreset_platform_data *pdata = pdev->dev.platform_data;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   57  	int up_size = 0, down_size = 0, size;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   58  	int key, *keyp;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   59  	struct keyreset_state *state;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   60  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   61  	if (!pdata)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   62  		return -EINVAL;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   63  	state = devm_kzalloc(&pdev->dev, sizeof(*state), GFP_KERNEL);
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   64  	if (!state)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   65  		return -ENOMEM;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   66  
+5f2afc82f504df Daniel Rosenberg 2014-05-07   67  	state->pdev_child = platform_device_alloc(KEYCOMBO_NAME,
+5f2afc82f504df Daniel Rosenberg 2014-05-07   68  							PLATFORM_DEVID_AUTO);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   69  	if (!state->pdev_child)
+5f2afc82f504df Daniel Rosenberg 2014-05-07   70  		return -ENOMEM;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   71  	state->pdev_child->dev.parent = &pdev->dev;
+595f7ba388d32f Daniel Rosenberg 2014-06-27   72  	INIT_WORK(&state->restart_work, do_restart);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   73  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   74  	keyp = pdata->keys_down;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   75  	while ((key = *keyp++)) {
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   76  		if (key >= KEY_MAX)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   77  			continue;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   78  		down_size++;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   79  	}
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   80  	if (pdata->keys_up) {
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   81  		keyp = pdata->keys_up;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   82  		while ((key = *keyp++)) {
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   83  			if (key >= KEY_MAX)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21   84  				continue;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   85  			up_size++;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   86  		}
+5f2afc82f504df Daniel Rosenberg 2014-05-07   87  	}
+5f2afc82f504df Daniel Rosenberg 2014-05-07   88  	size = sizeof(struct keycombo_platform_data)
+5f2afc82f504df Daniel Rosenberg 2014-05-07   89  			+ sizeof(int) * (down_size + 1);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   90  	pdata_child = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   91  	if (!pdata_child)
+5f2afc82f504df Daniel Rosenberg 2014-05-07   92  		goto error;
+5f2afc82f504df Daniel Rosenberg 2014-05-07   93  	memcpy(pdata_child->keys_down, pdata->keys_down,
+5f2afc82f504df Daniel Rosenberg 2014-05-07   94  						sizeof(int) * down_size);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   95  	if (up_size > 0) {
+5f2afc82f504df Daniel Rosenberg 2014-05-07   96  		pdata_child->keys_up = devm_kzalloc(&pdev->dev, up_size + 1,
+5f2afc82f504df Daniel Rosenberg 2014-05-07   97  								GFP_KERNEL);
+5f2afc82f504df Daniel Rosenberg 2014-05-07   98  		if (!pdata_child->keys_up)
+5f2afc82f504df Daniel Rosenberg 2014-05-07   99  			goto error;
+5f2afc82f504df Daniel Rosenberg 2014-05-07  100  		memcpy(pdata_child->keys_up, pdata->keys_up,
+5f2afc82f504df Daniel Rosenberg 2014-05-07  101  							sizeof(int) * up_size);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  102  		if (!pdata_child->keys_up)
+5f2afc82f504df Daniel Rosenberg 2014-05-07  103  			goto error;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  104  	}
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  105  	state->reset_fn = pdata->reset_fn;
+5f2afc82f504df Daniel Rosenberg 2014-05-07  106  	pdata_child->key_down_fn = do_reset_fn;
+5f2afc82f504df Daniel Rosenberg 2014-05-07  107  	pdata_child->priv = state;
+5f2afc82f504df Daniel Rosenberg 2014-05-07  108  	pdata_child->key_down_delay = pdata->key_down_delay;
+5f2afc82f504df Daniel Rosenberg 2014-05-07  109  	ret = platform_device_add_data(state->pdev_child, pdata_child, size);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  110  	if (ret)
+5f2afc82f504df Daniel Rosenberg 2014-05-07  111  		goto error;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  112  	platform_set_drvdata(pdev, state);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  113  	return platform_device_add(state->pdev_child);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  114  error:
+5f2afc82f504df Daniel Rosenberg 2014-05-07  115  	platform_device_put(state->pdev_child);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  116  	return ret;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  117  }
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  118  
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21 @119  int keyreset_remove(struct platform_device *pdev)
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  120  {
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  121  	struct keyreset_state *state = platform_get_drvdata(pdev);
+5f2afc82f504df Daniel Rosenberg 2014-05-07  122  	platform_device_put(state->pdev_child);
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  123  	return 0;
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  124  }
+fa50e390aa4e9f Arve Hjønnevåg   2008-11-21  125  
 
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
+:::::: The code at line 119 was first introduced by commit
+:::::: fa50e390aa4e9f5596734b01f927e5dca1f19843 ANDROID: input: keyreset: Add keyreset driver.
 
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+:::::: TO: Arve Hjønnevåg <arve@android.com>
+:::::: CC: Guenter Roeck <groeck@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service
