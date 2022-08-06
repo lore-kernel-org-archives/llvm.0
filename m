@@ -1,68 +1,216 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5B57C
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 02:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B81C7C433B5;
-	Sat,  6 Aug 2022 02:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659754213;
-	bh=mZjIUOluJXzR8TpUjV4rU1z6DvZWZxltHJ+5P4t0YsE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nHM/lOG8JvR9Kwn82/2TgyJCyWL0YC6o6A1nTg74GzWoWw7ePZzf7KkdM9KHr4tbC
-	 HGaFsEbQR797QjVm3Pptlkkv3fJEMzJAMO2y8slTheeJ9QcVZPkLAy0ANVhn9dpK5w
-	 tTrqp7CFdiTZb6IbiH1F2cu+c5QicQpOXyS/CW2xayj/u/uLWU4EJe69xH8YM1unoI
-	 RYXnNgTIY/ZqCm6Dce9Qc4N+b7OUqhzBhnCsjYZJoR9mFi2Dm7e4SOStCnvGQgHk5e
-	 +38EfVy2RFTxE02MJPt56WCWhp0gMjbpA0i9uMsr/Jto0YEKi5ejktu5qYghJ3gPRk
-	 nuQaAmsJgoFKA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D6B4C43143;
-	Sat,  6 Aug 2022 02:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A944EA8
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 04:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659760904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=g12mRrCoQBu/a1HGi0eA8pET8QDDFuUyQR7OCSAImic=;
+	b=QiC/TO93HX4FUq2/ppPfgR/itRCtzsI5SxoUvJ1KGF262HZEQYytz32DHOr52t+uz6n77r
+	IpEfwt33t7QngIiogAf+kJdjuTOtl0fud+/JabgVdcHGjnLBIWJe6m82r/tWzd4CP5HClC
+	H8bDIo3ZZ17l4ScguFDc7i5RMdIyruE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-xJqQdnBzN4-24zssVGjULg-1; Sat, 06 Aug 2022 00:41:42 -0400
+X-MC-Unique: xJqQdnBzN4-24zssVGjULg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F04B101A586
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 04:41:42 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0B9AE492C3B;
+	Sat,  6 Aug 2022 04:41:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [74cae210]
+Date: Sat, 06 Aug 2022 04:41:41 -0000
+CC: fsuba@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: seg6: initialize induction variable to first valid array
- index
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <165975421364.14232.3802963353792145443.git-patchwork-notify@kernel.org>
-Date: Sat, 06 Aug 2022 02:50:13 +0000
-References: <20220802161203.622293-1-ndesaulniers@google.com>
-In-Reply-To: <20220802161203.622293-1-ndesaulniers@google.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: yoshfuji@linux-ipv6.org, dsahern@kernel.org, davem@davemloft.net,
- tglx@linutronix.de, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- nathan@kernel.org, trix@redhat.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Message-Id: <18472.122080600414200259@us-mta-209.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi, we tested your kernel and here are the results:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-On Tue,  2 Aug 2022 09:12:03 -0700 you wrote:
-> Fixes the following warnings observed when building
-> CONFIG_IPV6_SEG6_LWTUNNEL=y with clang:
-> 
->   net/ipv6/seg6_local.o: warning: objtool: seg6_local_fill_encap() falls
->   through to next function seg6_local_get_encap_size()
->   net/ipv6/seg6_local.o: warning: objtool: seg6_local_cmp_encap() falls
->   through to next function input_action_end()
-> 
-> [...]
 
-Here is the summary with links:
-  - net: seg6: initialize induction variable to first valid array index
-    https://git.kernel.org/netdev/net/c/ac0dbed9ba4c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50129
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+One or more kernel tests failed:
 
+    Unrecognized or new issues:
+         aarch64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4730222
+         ppc64le - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4729744
+           s390x - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4729821
+          x86_64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4729682
+          x86_64 (debug) - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4730293
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
+            Affected tests:
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
