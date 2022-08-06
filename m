@@ -1,45 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD52F1103
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 16:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8CB1C2D
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 17:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659804245; x=1691340245;
+  t=1659805505; x=1691341505;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jXbt3yEp1PdNwvWnNUWK/iDHpKohU1vrRqIucTRmWws=;
-  b=gt6gvS/PvNVRedsJ7pAcb55C8XArzl3wks4SOvo2BxuNcpeQi25v70i0
-   KcKjOH9PNC3J97INJaVmtyJffB+WhEwNSTREJkU0pz95m80B+ewKdeKPP
-   m5pS54sAcaAe+BgxAgYrGbYdut1svojDBtAu7n8MgkF5ItGQ0R7hbc2mp
-   0l33tF1Wbmksr8d2xcdz1zNHkzQBvE3LL0YWAXAxNRDWUvCIgrnWAER8L
-   wbZu4N+y+6VOGSXvFHDSq576DZPVQf7IBJsz+u+uDRUIkoI6MzMT98oIm
-   4AtfeemeUQVNGoDAP9PY0krsmBNgevshqIDwf6+vINeCXy+PehIUYTURN
+  bh=qOI4ofz8SpEXhi/X1eBtnKtGxpMQiZF2DRWvhoMMWuU=;
+  b=RuA/6yWrzFeWDH6LHX0w4/h8Cv9rkxReVnMcHc8erisbRkBnDWk9yiBZ
+   pRR0P/yEwiJhr5FRB4T+Nlon7QT2EwFoqFloG54coWtly4+TJWchK9KCZ
+   9G/MPXd+8ve3epIZ+bKdPWTw/ws/2ISxHgpmHVi0MrRxRNhI1fsyK7NZ/
+   hfHcNCEyvAebZKjwEuTAv9BAa+NfKSogvzfP459jFycQVeuYkztkR0j2k
+   aV7YIl0kFbBtZCHdHbf9SrO20yNGtP6Oj7UYXD9FTqPzc3j+LGli24HDp
+   pR5AoMlIm/g6vGaeBBsErJV/zT7hEHLOLudvrPZplVNTcN1bnbvryp9B+
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="316278277"
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="291608221"
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="316278277"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 09:44:05 -0700
+   d="scan'208";a="291608221"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 10:05:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="746173900"
+   d="scan'208";a="632367541"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Aug 2022 09:44:03 -0700
+  by orsmga008.jf.intel.com with ESMTP; 06 Aug 2022 10:05:04 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKMuB-000KX3-0L;
-	Sat, 06 Aug 2022 16:44:03 +0000
-Date: Sun, 7 Aug 2022 00:43:11 +0800
+	id 1oKNEV-000KXz-1q;
+	Sat, 06 Aug 2022 17:05:03 +0000
+Date: Sun, 7 Aug 2022 01:04:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: bcm6358: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208070030.kV6Z7e9R-lkp@intel.com>
-References: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
+To: lizhe.67@bytedance.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC] page_ext: move up page_ext_init() to catch early page
+ allocation if DEFERRED_STRUCT_PAGE_INIT is n
+Message-ID: <202208070052.YzUh9Au5-lkp@intel.com>
+References: <20220804065515.85794-1-lizhe.67@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,101 +46,166 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220804065515.85794-1-lizhe.67@bytedance.com>
 
-Hi Andy,
+Hi,
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on pavel-leds/for-next]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on akpm-mm/mm-everything]
 [also build test ERROR on linus/master v5.19 next-20220805]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arm-buildonly-randconfig-r004-20220801 (https://download.01.org/0day-ci/archive/20220807/202208070030.kV6Z7e9R-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+url:    https://github.com/intel-lab-lkp/linux/commits/lizhe-67-bytedance-com/page_ext-move-up-page_ext_init-to-catch-early-page-allocation-if-DEFERRED_STRUCT_PAGE_INIT-is-n/20220804-145549
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: s390-randconfig-r044-20220804 (https://download.01.org/0day-ci/archive/20220807/202208070052.YzUh9Au5-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/ad3083d8ac0e2beb10b75a7d87085911b4f6139a
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/af113104b15444bd5cc6dedfbd60530ff24c4c75
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-        git checkout ad3083d8ac0e2beb10b75a7d87085911b4f6139a
+        git fetch --no-tags linux-review lizhe-67-bytedance-com/page_ext-move-up-page_ext_init-to-catch-early-page-allocation-if-DEFERRED_STRUCT_PAGE_INIT-is-n/20220804-145549
+        git checkout af113104b15444bd5cc6dedfbd60530ff24c4c75
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/leds/leds-bcm6358.c:116:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           state = led_init_default_state_get(init_data.fwnode);
-                   ^
-   1 error generated.
+   In file included from init/main.c:29:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from init/main.c:29:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from init/main.c:29:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   init/main.c:772:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+                      ^
+   init/main.c:772:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+   ^
+   static 
+   init/main.c:784:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:784:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+   init/main.c:786:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
+   void __init __weak poking_init(void) { }
+                      ^
+   init/main.c:786:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak poking_init(void) { }
+   ^
+   static 
+>> init/main.c:850:2: error: call to undeclared function 'page_ext_init_early'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           page_ext_init_early();
+           ^
+   init/main.c:850:2: note: did you mean 'page_ext_init_late'?
+   include/linux/page_ext.h:103:20: note: 'page_ext_init_late' declared here
+   static inline void page_ext_init_late(void)
+                      ^
+   15 warnings and 1 error generated.
 
 
-vim +/led_init_default_state_get +116 drivers/leds/leds-bcm6358.c
+vim +/page_ext_init_early +850 init/main.c
 
-    93	
-    94	static int bcm6358_led(struct device *dev, struct device_node *nc, u32 reg,
-    95			       void __iomem *mem, spinlock_t *lock)
-    96	{
-    97		struct led_init_data init_data = {};
-    98		struct bcm6358_led *led;
-    99		enum led_default_state state;
-   100		unsigned long val;
-   101		int rc;
-   102	
-   103		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   104		if (!led)
-   105			return -ENOMEM;
-   106	
-   107		led->pin = reg;
-   108		led->mem = mem;
-   109		led->lock = lock;
-   110	
-   111		if (of_property_read_bool(nc, "active-low"))
-   112			led->active_low = true;
-   113	
-   114		init_data.fwnode = of_fwnode_handle(nc);
-   115	
- > 116		state = led_init_default_state_get(init_data.fwnode);
-   117		switch (state) {
-   118		case LEDS_DEFSTATE_ON:
-   119			led->cdev.brightness = LED_FULL;
-   120			break;
-   121		case LEDS_DEFSTATE_KEEP:
-   122			val = bcm6358_led_read(led->mem + BCM6358_REG_MODE);
-   123			val &= BIT(led->pin);
-   124			if ((led->active_low && !val) || (!led->active_low && val))
-   125				led->cdev.brightness = LED_FULL;
-   126			else
-   127				led->cdev.brightness = LED_OFF;
-   128			break;
-   129		default:
-   130			led->cdev.brightness = LED_OFF;
-   131		}
-   132	
-   133		bcm6358_led_set(&led->cdev, led->cdev.brightness);
-   134	
-   135		led->cdev.brightness_set = bcm6358_led_set;
-   136	
-   137		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   138		if (rc < 0)
-   139			return rc;
-   140	
-   141		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
-   142	
-   143		return 0;
-   144	}
-   145	
+   827	
+   828	/*
+   829	 * Set up kernel memory allocators
+   830	 */
+   831	static void __init mm_init(void)
+   832	{
+   833		/*
+   834		 * page_ext requires contiguous pages,
+   835		 * bigger than MAX_ORDER unless SPARSEMEM.
+   836		 */
+   837		page_ext_init_flatmem();
+   838		init_mem_debugging_and_hardening();
+   839		kfence_alloc_pool();
+   840		report_meminit();
+   841		stack_depot_early_init();
+   842		mem_init();
+   843		mem_init_print_info();
+   844		kmem_cache_init();
+   845		/*
+   846		 * page_owner must be initialized after buddy is ready, and also after
+   847		 * slab is ready so that stack_depot_init() works properly
+   848		 */
+   849		page_ext_init_flatmem_late();
+ > 850		page_ext_init_early();
+   851		kmemleak_init();
+   852		pgtable_init();
+   853		debug_objects_mem_init();
+   854		vmalloc_init();
+   855		/* Should be run before the first non-init thread is created */
+   856		init_espfix_bsp();
+   857		/* Should be run after espfix64 is set up. */
+   858		pti_init();
+   859	}
+   860	
 
 -- 
 0-DAY CI Kernel Test Service
