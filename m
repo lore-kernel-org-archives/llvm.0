@@ -1,35 +1,35 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079B8EA9
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 00:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E141CEA9
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 01:21:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659745844;
+	s=mimecast20190719; t=1659748905;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=xYuFjmDmfZ4DePjB6MupfAru4fSTaH6lfGVA1Z7TcR0=;
-	b=KiM8vab4yPTOrCbF2KYHFCAol4xhhsrdl3cDF2rB7ME4SZKHYwnojCftGd+ca7peKY+Xgv
-	T75nJNQFgKMMGw8/BtHs786qMCEOJHXtmPJ1c1qk1bRlX70jEWX8gLdpCXW9bSl0EpCRBP
-	7UMRfS4hGeYag36f17G9bOS5rQrwstU=
+	bh=UyI6iTYL/ncDrUBqH0v6lcAu1j9IOk4m1gO6nWGhESw=;
+	b=G3XIt1abloQVcW//ePRfgQyoviFqIOSpd/4Uc5lAxzIFUY7GVJ+a3mz6b/pjZVCAEeCx+P
+	E5q6xYuzuED+WB6asT8PdKymWPXhKIdLKO1+ahhCjRnpyqqlFZG90XXo3hr6zVDBi6IYaJ
+	HtfXOMOGORMt6nJzYBYqhQPIgB5/zI0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-417-bQaAGY_LOfm2ojifzkAkZA-1; Fri, 05 Aug 2022 20:30:44 -0400
-X-MC-Unique: bQaAGY_LOfm2ojifzkAkZA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-607-S9KCw7gdMOaCpvO7u-xuYw-1; Fri, 05 Aug 2022 21:21:44 -0400
+X-MC-Unique: S9KCw7gdMOaCpvO7u-xuYw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACCBD8037AC
-	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 00:30:43 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B849101A54E
+	for <llvm@lists.linux.dev>; Sat,  6 Aug 2022 01:21:44 +0000 (UTC)
 Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 96BAB2026D4C;
-	Sat,  6 Aug 2022 00:30:43 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 390EB40466A6;
+	Sat,  6 Aug 2022 01:21:44 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [3bd6e585]
-Date: Sat, 06 Aug 2022 00:30:43 -0000
+ (mainline.kernel.org-clang) [9e2f4023]
+Date: Sat, 06 Aug 2022 01:21:44 -0000
 CC: fsuba@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,8 +37,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <95331.122080520304400185@us-mta-417.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <26859.122080521214400452@us-mta-607.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,26 +53,26 @@ Hi, we tested your kernel and here are the results:
 
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50115
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50119
 
 One or more kernel tests failed:
 
     Unrecognized or new issues:
          aarch64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4728089
+4729079
          ppc64le - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4728003
+4728928
            s390x - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4727939
+4728827
           x86_64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4727850
+4728977
           x86_64 (debug) - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4728158
+4728747
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -106,11 +106,12 @@ ion: kaslr
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1169
             Affected tests:
-                 aarch64 - Reboot test
                   x86_64 - Memory function: kaslr
                   x86_64 - Reboot test
                   x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
                   x86_64 (debug) - Memory function: kaslr
                   x86_64 (debug) - Reboot test
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
@@ -166,12 +167,23 @@ n:40535 * 1.15 < max:81259
             Affected tests:
                    s390x - kdump - sysrq-c
                    s390x - kdump - file-load
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
         Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
 .c:5407 __alloc_pages+0x1a0/0x290
             URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
