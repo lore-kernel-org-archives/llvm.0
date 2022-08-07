@@ -1,45 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD857A
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 06:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734AA7A
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 07:48:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659855386; x=1691391386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CynN6IOdEbyT0dDFxsN4TGiUIgQcvn6n6Iz55HRlDAw=;
-  b=RF6YPJ6QMdBTrBvAY76D2XZh7FNdkVWMd1VIQowMt3vO78cCbeZ2MeKv
-   RIIeM0wX2YcZ0RabBhiNnRPAG6afpCg1hdFXyF7SZktyFbVu4/hs9A8sB
-   hl9lMe68/opbIOt1BWCWczOOrqAkEGYXrsQxeKTaAOYbMJnAVIjKwK0KM
-   /Cz6YpFm34Mhm+ehKOUdB9OeqIqzuj4LhrR3TzqxXh6Zirxh/SmHi/DUu
-   tUw3L7sYehHeKVPKizitJa0fFdbsAEXURstOc9VBRpr5keRz59m/+CTFg
-   lBysUz+YZD+y4jkrlg4AWYmhzIERlkC1PGcYnATfWLSL58N9YRks1T71m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="273464918"
+  t=1659858507; x=1691394507;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G64bbW5/r6PjmvctJSpsMizCMpVTrSatvL7Aj+NI3Ps=;
+  b=mggRKeyI6tMvpRzGYdBhETMv0SUBLPWYpMw7Yi6u6o3hywVVr9sskiy3
+   DIhA1suPJ6HhdE520unQzUE2zDuVniTjBKpo/DWBjjx5Q9BTB9o2/P/Qc
+   JUZ4HN9KN/5VKCIL/8pydvCks9ki3oG0v94/o6QbXyU8EF/oHbV2PEBb6
+   kgMHvr/HVBwjaBWHmBECThJHTHUE3xfs+Rfli86D9M1YKpCY8/PwmC0pY
+   pqQ3rCFS/w7y1jAmnTTOszaiPlGZDmoVRrEZs7l3cfkd04QMFfcUCo3yH
+   hzMQG/h5ngOHoPD/Ekeq4oNPkj+vNRjSk0jttLSoPquLsWsl4yznot5Wn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="290427252"
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="273464918"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 23:56:26 -0700
+   d="scan'208";a="290427252"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 00:48:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="672124238"
+   d="scan'208";a="931685459"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Aug 2022 23:56:24 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 07 Aug 2022 00:48:25 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKaD1-000L4b-1q;
-	Sun, 07 Aug 2022 06:56:23 +0000
-Date: Sun, 7 Aug 2022 14:55:27 +0800
+	id 1oKb1N-000L7P-09;
+	Sun, 07 Aug 2022 07:48:25 +0000
+Date: Sun, 7 Aug 2022 15:48:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: alexlzhu@fb.com, linux-mm@kvack.org, kernel-team@fb.com,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+To: Keith Busch <kbusch@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alexander Zhu <alexlzhu@fb.com>
-Subject: Re: [PATCH v3] mm: add thp_utilization metrics to
- /proc/thp_utilization
-Message-ID: <202208071415.Aav6LUtf-lkp@intel.com>
-References: <20220805184016.2926168-1-alexlzhu@fb.com>
+	linux-kernel@vger.kernel.org
+Subject: [kbusch:io_uring/dma-register-v2 8/8] drivers/nvme/host/pci.c:927:3:
+ warning: variable 'i' is uninitialized when used here
+Message-ID: <202208071524.swHLNoM7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,61 +45,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805184016.2926168-1-alexlzhu@fb.com>
 
-Hi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19]
-[cannot apply to akpm-mm/mm-everything next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/alexlzhu-fb-com/mm-add-thp_utilization-metrics-to-proc-thp_utilization/20220806-024150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9e2f40233670c70c25e0681cb66d50d1e2742829
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220807/202208071415.Aav6LUtf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v2
+head:   c86a9580d33ff9bf90c685f452b66b929f1dc5fe
+commit: c86a9580d33ff9bf90c685f452b66b929f1dc5fe [8/8] nvme-pci: implement dma_map support
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220807/202208071524.swHLNoM7-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c3896ed4c7d2319ac0880860a6bfc98e6eed3d66
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review alexlzhu-fb-com/mm-add-thp_utilization-metrics-to-proc-thp_utilization/20220806-024150
-        git checkout c3896ed4c7d2319ac0880860a6bfc98e6eed3d66
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=c86a9580d33ff9bf90c685f452b66b929f1dc5fe
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch io_uring/dma-register-v2
+        git checkout c86a9580d33ff9bf90c685f452b66b929f1dc5fe
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/huge_memory.c:601:6: warning: no previous prototype for function 'is_anon_transparent_hugepage' [-Wmissing-prototypes]
-   bool is_anon_transparent_hugepage(struct page *page)
-        ^
-   mm/huge_memory.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool is_anon_transparent_hugepage(struct page *page)
-   ^
-   static 
-   mm/huge_memory.c:3300:22: warning: variable 'head' set but not used [-Wunused-but-set-variable]
-           struct page *page, *head = NULL;
-                               ^
-   2 warnings generated.
+>> drivers/nvme/host/pci.c:927:3: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+                   i += last_prp;
+                   ^
+   drivers/nvme/host/pci.c:892:7: note: initialize the variable 'i' to silence this warning
+           int i;
+                ^
+                 = 0
+   1 warning generated.
 
 
-vim +/is_anon_transparent_hugepage +601 mm/huge_memory.c
+vim +/i +927 drivers/nvme/host/pci.c
 
-   600	
- > 601	bool is_anon_transparent_hugepage(struct page *page)
-   602	{
-   603		return PageAnon(page) && is_transparent_hugepage(page);
-   604	}
-   605	EXPORT_SYMBOL_GPL(is_anon_transparent_hugepage);
-   606	
+   883	
+   884	static blk_status_t nvme_premapped_slow(struct nvme_dev *dev,
+   885					struct request *req,  struct nvme_iod *iod,
+   886					struct nvme_dma_mapping *mapping, int nprps)
+   887	{
+   888		struct dma_pool *pool;
+   889		dma_addr_t prp_dma;
+   890		__le64 *prp_list;
+   891		void **list;
+   892		int i;
+   893	
+   894		iod->sg = mempool_alloc(dev->iod_mempool, GFP_ATOMIC);
+   895		if (!iod->sg)
+   896			return BLK_STS_RESOURCE;
+   897	
+   898		if (nprps <= (256 / 8)) {
+   899			pool = dev->prp_small_pool;
+   900			iod->npages = 0;
+   901		} else {
+   902			pool = dev->prp_page_pool;
+   903			iod->npages = 1;
+   904		}
+   905	
+   906		prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &prp_dma);
+   907		if (!prp_list) {
+   908			iod->npages = -1;
+   909			goto out_free_sg;
+   910		}
+   911	
+   912		list = nvme_pci_iod_list(req);
+   913		list[0] = prp_list;
+   914		iod->first_dma = prp_dma;
+   915	
+   916		for (;;) {
+   917			dma_addr_t next_prp_dma;
+   918			__le64 *next_prp_list;
+   919	
+   920			if (nprps <= last_prp + 1) {
+   921				memcpy(prp_list, &mapping->prps[i], nprps * 8);
+   922				break;
+   923			}
+   924	
+   925			memcpy(prp_list, &mapping->prps[i], NVME_CTRL_PAGE_SIZE - 8);
+   926			nprps -= last_prp;
+ > 927			i += last_prp;
+   928	
+   929			next_prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &next_prp_dma);
+   930			if (!next_prp_list)
+   931				goto free_prps;
+   932	
+   933			prp_list[last_prp] = cpu_to_le64(next_prp_dma);
+   934			prp_list = next_prp_list;
+   935			prp_dma = next_prp_dma;
+   936			list[iod->npages++] = prp_list;
+   937		}
+   938		return BLK_STS_OK;
+   939	
+   940	free_prps:
+   941		nvme_free_prps(dev, req);
+   942	out_free_sg:
+   943		mempool_free(iod->sg, dev->iod_mempool);
+   944		return BLK_STS_RESOURCE;
+   945	}
+   946	
 
 -- 
 0-DAY CI Kernel Test Service
