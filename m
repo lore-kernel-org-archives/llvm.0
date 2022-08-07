@@ -1,46 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B317C
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 10:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0441C1852
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 13:47:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659868413; x=1691404413;
+  t=1659880074; x=1691416074;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=huKBmiZbwa6/9WLHZvDTt/ANaAE+8z4QrM8XJzbCY1k=;
-  b=jT1Ux+zWqYNehsHALphTqb95+vdUM/JimJ4Ae1gh4EzGXRsjlVen95bI
-   QrVxgzPpDQOCv1rwjfKodC4N2Wzp1xAMHpYBlIqo1SL4W8k2RItZgd536
-   ff9uCrrbU/zgFFLcc3P1WHYYqFIe9EaiGSPvIoMiUxLSiPC3pJp5KjiMb
-   QKoinX3H3QQXH9aOVKrTY5Xs3EtHa/stz51CEL+iZFRYijMLsfMPo0yQM
-   NVYtKtTni8DD5ydnKjBCyLRYNPx0p7XB/fl684PQ/9U71f1KBUfMXtKx+
-   VejZlcgOQMc+4652tF+JMB5AzALyAak1fn5QwQitb1FM7EqX5Rv4/6ZM9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="287991203"
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="287991203"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 03:33:32 -0700
+  bh=77FBl3vUx49zjQlv3n6/4RN63oc5IH0eL4s0Jvvhj8Y=;
+  b=jn1ThMPLXLKaj+xVI1Uqykbo0VUj7ayoZmswC1KI1qgoxmaZPqzUFIo8
+   m9xo9QZ6N7jUXeGN5Y1ppYSLW3xtDNYBJ8AMyud9/CIBiR+fB3QMlFkrq
+   OXN+PViI8vfiLXzV1BgDDy137MCnY6RDFMn1EHwzQtOe/4/iRbEUK+Idr
+   N5S4Yxvdoa5R2EZlOuKVjU6SyALHYOhHDdAd5LC/Hi8nzNnSieiSOHOGP
+   udK4JgTh7xVqJdL9yVm+LH4IZqDuSVgsfDYVs6Cb19sPvaxTPJR4sRtnJ
+   LcZNj9scUM7+72EQvxTHJOxeM4zewDSmv7n0d/fC/rkUDywbOr777QxOV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="376733320"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="376733320"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 06:47:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="579998567"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="554620105"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Aug 2022 03:33:29 -0700
+  by orsmga003.jf.intel.com with ESMTP; 07 Aug 2022 06:47:33 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKdb7-000LDx-0n;
-	Sun, 07 Aug 2022 10:33:29 +0000
-Date: Sun, 7 Aug 2022 18:33:22 +0800
+	id 1oKgcv-000LKn-0b;
+	Sun, 07 Aug 2022 13:47:33 +0000
+Date: Sun, 7 Aug 2022 21:47:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Szuying Chen <chensiying21@gmail.com>, andreas.noever@gmail.com,
-	michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Yd_Tseng@asmedia.com.tw,
-	Richard_Hsu@asmedia.com.tw, Chloe_Chen@asmedia.com.tw
-Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
-Message-ID: <202208071845.cTQlPQto-lkp@intel.com>
-References: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
+To: Qi Zheng <zhengqi.arch@bytedance.com>, will@kernel.org, arnd@arndb.de,
+	catalin.marinas@arm.com, mark.rutland@arm.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v2] arm64: run softirqs on the per-CPU IRQ stack
+Message-ID: <202208072125.pTMPctXF-lkp@intel.com>
+References: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,178 +48,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
+In-Reply-To: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
 
-Hi Szuying,
+Hi Qi,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19 next-20220805]
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on v5.19]
+[cannot apply to arm64/for-next/core linus/master next-20220805]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b2a88c212e652e94f1e4b635910972ac57ba4e97
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220807/202208071845.cTQlPQto-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/arm64-run-softirqs-on-the-per-CPU-IRQ-stack/20220802-145547
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm64-randconfig-r032-20220801 (https://download.01.org/0day-ci/archive/20220807/202208072125.pTMPctXF-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/34ac9375ce5e75127084159f724fcb2208c022a3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
-        git checkout cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
+        git fetch --no-tags linux-review Qi-Zheng/arm64-run-softirqs-on-the-per-CPU-IRQ-stack/20220802-145547
+        git checkout 34ac9375ce5e75127084159f724fcb2208c022a3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/thunderbolt/nvm.c:75:3: error: expected expression
-                   struct tb_nvm *nvm;
-                   ^
->> drivers/thunderbolt/nvm.c:79:3: error: use of undeclared identifier 'nvm'
-                   nvm = tb_nvm_alloc(&sw->dev);
-                   ^
-   drivers/thunderbolt/nvm.c:80:14: error: use of undeclared identifier 'nvm'
-                   if (IS_ERR(nvm)) {
-                              ^
-   drivers/thunderbolt/nvm.c:81:18: error: use of undeclared identifier 'nvm'
-                           ret = PTR_ERR(nvm);
-                                         ^
-   drivers/thunderbolt/nvm.c:89:3: error: use of undeclared identifier 'nvm'
-                   nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-                   ^
-   drivers/thunderbolt/nvm.c:94:3: error: use of undeclared identifier 'nvm'
-                   nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
-                   ^
-   drivers/thunderbolt/nvm.c:95:3: error: use of undeclared identifier 'nvm'
-                   nvm->vendor.version = (u8)(val >> 0x10);
-                   ^
-   drivers/thunderbolt/nvm.c:97:27: error: use of undeclared identifier 'nvm'
-                   ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
-                                           ^
-   drivers/thunderbolt/nvm.c:101:31: error: use of undeclared identifier 'nvm'
-                   ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
-                                               ^
-   drivers/thunderbolt/nvm.c:105:13: error: use of undeclared identifier 'nvm'
-                   sw->nvm = nvm;
-                             ^
-   drivers/thunderbolt/nvm.c:109:3: error: expected expression
-                   unsigned int image_size;
-                   ^
->> drivers/thunderbolt/nvm.c:116:3: error: use of undeclared identifier 'image_size'
-                   image_size = sw->nvm->buf_data_size;
-                   ^
-   drivers/thunderbolt/nvm.c:117:7: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
-                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
-                       ^~~~~~~~~~
-                       page_size
-   include/linux/mm.h:927:29: note: 'page_size' declared here
-   static inline unsigned long page_size(struct page *page)
-                               ^
-   drivers/thunderbolt/nvm.c:117:36: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
-                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
-                                                    ^~~~~~~~~~
-                                                    page_size
-   include/linux/mm.h:927:29: note: 'page_size' declared here
-   static inline unsigned long page_size(struct page *page)
-                               ^
-   drivers/thunderbolt/nvm.c:121:43: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
-                   ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
-                                                           ^~~~~~~~~~
-                                                           page_size
-   include/linux/mm.h:927:29: note: 'page_size' declared here
-   static inline unsigned long page_size(struct page *page)
-                               ^
-   drivers/thunderbolt/nvm.c:76:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   u32 val;
-                       ^
-   1 warning and 15 errors generated.
+>> arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function 'do_softirq_own_stack' [-Wmissing-prototypes]
+   void do_softirq_own_stack(void)
+        ^
+   arch/arm64/kernel/irq.c:81:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void do_softirq_own_stack(void)
+   ^
+   static 
+   arch/arm64/kernel/irq.c:120:13: warning: no previous prototype for function 'init_IRQ' [-Wmissing-prototypes]
+   void __init init_IRQ(void)
+               ^
+   arch/arm64/kernel/irq.c:120:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init init_IRQ(void)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +75 drivers/thunderbolt/nvm.c
+vim +/do_softirq_own_stack +81 arch/arm64/kernel/irq.c
 
-    62	
-    63	static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
-    64	{
-    65		int ret = 0;
-    66	
-    67		switch (handle) {
-    68		case 0:
-    69			if (sw->no_nvm_upgrade)
-    70				sw->no_nvm_upgrade = false;
-    71	
-    72			break;
-    73	
-    74		case 1:
-  > 75			struct tb_nvm *nvm;
-    76			u32 val;
-    77			u32 nvm_size;
-    78	
-  > 79			nvm = tb_nvm_alloc(&sw->dev);
-    80			if (IS_ERR(nvm)) {
-    81				ret = PTR_ERR(nvm);
-    82				break;
-    83			}
-    84	
-    85			ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
-    86			if (ret)
-    87				break;
-    88	
-    89			nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-    90			ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
-    91			if (ret)
-    92				break;
-    93	
-    94			nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
-    95			nvm->vendor.version = (u8)(val >> 0x10);
-    96			nvm_size = SZ_512K;
-    97			ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
-    98			if (ret)
-    99				break;
-   100	
-   101			ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
-   102			if (ret)
-   103				break;
-   104	
-   105			sw->nvm = nvm;
-   106			break;
-   107	
-   108		case 2:
-   109			unsigned int image_size;
-   110			const u8 *buf = sw->nvm->buf;
-   111	
-   112			if (!buf) {
-   113				ret = -EINVAL;
-   114				break;
-   115			}
- > 116			image_size = sw->nvm->buf_data_size;
-   117			if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
-   118				ret = -EINVAL;
-   119				break;
-   120			}
-   121			ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
-   122			if (!ret)
-   123				sw->nvm->flushed = true;
-   124	
-   125			break;
-   126	
-   127		default:
-   128			break;
-   129		}
-   130	
-   131		if ((handle == 1) && (ret != 0))
-   132			tb_nvm_free(sw->nvm);
-   133	
-   134		return ret;
-   135	}
-   136	
+    80	
+  > 81	void do_softirq_own_stack(void)
+    82	{
+    83		call_on_irq_stack(NULL, ____do_softirq);
+    84	}
+    85	#endif
+    86	
 
 -- 
 0-DAY CI Kernel Test Service
