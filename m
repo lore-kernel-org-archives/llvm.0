@@ -1,43 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE0533F7
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 18:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813A033F7
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 19:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659898610; x=1691434610;
+  t=1659900472; x=1691436472;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rIQCpedyAorKPn4o7Y0gNAWmu8VDk+xzhxwY/SC3lTA=;
-  b=e7XKlHU0bPZoZWrrXsMM0vtPEKOyairDmWPo1mWdlYhb9lCdPgQtqWKC
-   cPvwwYlFidZJTsbglvDqmC9hWqkytjMkPvT81YCkIQJJcuMG+Q0DSsJwt
-   aFo7ZxMbWzhTpWMFMYCbPWNVdc98DpVSs2fBj6+/pbtCFF6/yvcBLiKvj
-   xJoGksTJ4NVapQ1qqssTtwXLpetM4Es/9WAMWm8Vag7LwlIkVNZcSgGkm
-   LeZl0zLu60zESuUrtzM784rdq1mjQH8iN2EmCDKpxD9cOk73tIHA3I/P+
-   Qu266KxtEtS92Nk9jCg0RpTYaFHBljTEwdSpiPA4UoBn0gR4lbfpOAPa3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291686846"
+  bh=yLahnk8gUpB4eMz6x+NA8cMGlMGLWdheAl+Yb3xVhr4=;
+  b=WHEr8RYPlmsrXMJtefrYSzU5+tItLh24zgwRpc02C8IWbcYfeqNK//Qj
+   DWpGFER9Z+XaZ+fsH1HB2QLPoP8yF71gzZHRTd8Ml7IjoTPxg0pk/l/d/
+   MX/9OQ9K9ROsV2v2Uqtk34qAWgitPO8UoET8a0GX2J7jkyqTJI42TiVNw
+   oyCV4lMVXt9pzuWIbSsIdr9IG/ZCLU5v/PiynpbzsS/gMgpqm9lefOj3b
+   gjbBaXKq2JN66ED6a05n8xh7MJzDScSVwY7oLlgEFWSZCtLa1ob9gOHa8
+   l7HQIhRd6JvuA5AeI7fmt9HOt+G3+VcFgJV/D/Vfn6B/ywTYnu+PEQyDm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="270233777"
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="291686846"
+   d="scan'208";a="270233777"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 11:56:50 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:27:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="746394800"
+   d="scan'208";a="746399315"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2022 11:56:48 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2022 12:27:50 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKlSC-000LaB-0p;
-	Sun, 07 Aug 2022 18:56:48 +0000
-Date: Mon, 8 Aug 2022 02:56:32 +0800
+	id 1oKlwD-000Lb3-2H;
+	Sun, 07 Aug 2022 19:27:49 +0000
+Date: Mon, 8 Aug 2022 03:27:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 2/10] fs/f2fs/gc.c:1578:30: error: no member named
- 'i_dax_task' in 'struct f2fs_inode_info'
-Message-ID: <202208080241.iWx0JT7w-lkp@intel.com>
+Subject: [chao:feature/dax 4/10] fs/f2fs/file.c:585:7: error: call to
+ undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202208080315.WUak48sf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,16 +50,16 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
 head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
-commit: 15bc70a98edfc1462941d6451185a04b70f46fe3 [2/10] f2fs: support dax file operations
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080241.iWx0JT7w-lkp@intel.com/config)
+commit: ceea248a26ac122204ddad5c76b55ff37fbc06b9 [4/10] f2fs: support dax page fault
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080315.WUak48sf-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=15bc70a98edfc1462941d6451185a04b70f46fe3
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=ceea248a26ac122204ddad5c76b55ff37fbc06b9
         git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
         git fetch --no-tags chao feature/dax
-        git checkout 15bc70a98edfc1462941d6451185a04b70f46fe3
+        git checkout ceea248a26ac122204ddad5c76b55ff37fbc06b9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
@@ -68,186 +69,45 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/f2fs/gc.c:1578:30: error: no member named 'i_dax_task' in 'struct f2fs_inode_info'
-                                   if (IS_DAX(inode) && fi->i_dax_task == current)
-                                                        ~~  ^
+>> fs/f2fs/file.c:585:7: error: call to undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+                ^
    1 error generated.
 
 
-vim +1578 fs/f2fs/gc.c
+vim +/daxdev_mapping_supported +585 fs/f2fs/file.c
 
-  1453	
-  1454	/*
-  1455	 * This function tries to get parent node of victim data block, and identifies
-  1456	 * data block validity. If the block is valid, copy that with cold status and
-  1457	 * modify parent node.
-  1458	 * If the parent node is not valid or the data block address is different,
-  1459	 * the victim data block is ignored.
-  1460	 */
-  1461	static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
-  1462			struct gc_inode_list *gc_list, unsigned int segno, int gc_type,
-  1463			bool force_migrate)
-  1464	{
-  1465		struct super_block *sb = sbi->sb;
-  1466		struct f2fs_summary *entry;
-  1467		block_t start_addr;
-  1468		int off;
-  1469		int phase = 0;
-  1470		int submitted = 0;
-  1471		unsigned int usable_blks_in_seg = f2fs_usable_blks_in_seg(sbi, segno);
-  1472	
-  1473		start_addr = START_BLOCK(sbi, segno);
-  1474	
-  1475	next_step:
-  1476		entry = sum;
-  1477	
-  1478		for (off = 0; off < usable_blks_in_seg; off++, entry++) {
-  1479			struct page *data_page;
-  1480			struct inode *inode;
-  1481			struct node_info dni; /* dnode info for the data */
-  1482			unsigned int ofs_in_node, nofs;
-  1483			block_t start_bidx;
-  1484			nid_t nid = le32_to_cpu(entry->nid);
-  1485	
-  1486			/*
-  1487			 * stop BG_GC if there is not enough free sections.
-  1488			 * Or, stop GC if the segment becomes fully valid caused by
-  1489			 * race condition along with SSR block allocation.
-  1490			 */
-  1491			if ((gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) ||
-  1492				(!force_migrate && get_valid_blocks(sbi, segno, true) ==
-  1493								CAP_BLKS_PER_SEC(sbi)))
-  1494				return submitted;
-  1495	
-  1496			if (check_valid_map(sbi, segno, off) == 0)
-  1497				continue;
-  1498	
-  1499			if (phase == 0) {
-  1500				f2fs_ra_meta_pages(sbi, NAT_BLOCK_OFFSET(nid), 1,
-  1501								META_NAT, true);
-  1502				continue;
-  1503			}
-  1504	
-  1505			if (phase == 1) {
-  1506				f2fs_ra_node_page(sbi, nid);
-  1507				continue;
-  1508			}
-  1509	
-  1510			/* Get an inode by ino with checking validity */
-  1511			if (!is_alive(sbi, entry, &dni, start_addr + off, &nofs))
-  1512				continue;
-  1513	
-  1514			if (phase == 2) {
-  1515				f2fs_ra_node_page(sbi, dni.ino);
-  1516				continue;
-  1517			}
-  1518	
-  1519			ofs_in_node = le16_to_cpu(entry->ofs_in_node);
-  1520	
-  1521			if (phase == 3) {
-  1522				int err;
-  1523	
-  1524				inode = f2fs_iget(sb, dni.ino);
-  1525				if (IS_ERR(inode) || is_bad_inode(inode) ||
-  1526						special_file(inode->i_mode))
-  1527					continue;
-  1528	
-  1529				err = f2fs_gc_pinned_control(inode, gc_type, segno);
-  1530				if (err == -EAGAIN) {
-  1531					iput(inode);
-  1532					return submitted;
-  1533				}
-  1534	
-  1535				if (!f2fs_down_write_trylock(
-  1536					&F2FS_I(inode)->i_gc_rwsem[WRITE])) {
-  1537					iput(inode);
-  1538					sbi->skipped_gc_rwsem++;
-  1539					continue;
-  1540				}
-  1541	
-  1542				start_bidx = f2fs_start_bidx_of_node(nofs, inode) +
-  1543									ofs_in_node;
-  1544	
-  1545				if (f2fs_post_read_required(inode)) {
-  1546					int err = ra_data_block(inode, start_bidx);
-  1547	
-  1548					f2fs_up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-  1549					if (err) {
-  1550						iput(inode);
-  1551						continue;
-  1552					}
-  1553					add_gc_inode(gc_list, inode);
-  1554					continue;
-  1555				}
-  1556	
-  1557				data_page = f2fs_get_read_data_page(inode,
-  1558							start_bidx, REQ_RAHEAD, true);
-  1559				f2fs_up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-  1560				if (IS_ERR(data_page)) {
-  1561					iput(inode);
-  1562					continue;
-  1563				}
-  1564	
-  1565				f2fs_put_page(data_page, 0);
-  1566				add_gc_inode(gc_list, inode);
-  1567				continue;
-  1568			}
-  1569	
-  1570			/* phase 4 */
-  1571			inode = find_gc_inode(gc_list, dni.ino);
-  1572			if (inode) {
-  1573				struct f2fs_inode_info *fi = F2FS_I(inode);
-  1574				bool locked = false;
-  1575				int err;
-  1576	
-  1577				if (S_ISREG(inode->i_mode)) {
-> 1578					if (IS_DAX(inode) && fi->i_dax_task == current)
-  1579						goto move_data;
-  1580					if (!f2fs_down_write_trylock(&fi->i_gc_rwsem[READ])) {
-  1581						sbi->skipped_gc_rwsem++;
-  1582						continue;
-  1583					}
-  1584					if (!f2fs_down_write_trylock(
-  1585							&fi->i_gc_rwsem[WRITE])) {
-  1586						sbi->skipped_gc_rwsem++;
-  1587						f2fs_up_write(&fi->i_gc_rwsem[READ]);
-  1588						continue;
-  1589					}
-  1590					locked = true;
-  1591	
-  1592					/* wait for all inflight aio data */
-  1593					inode_dio_wait(inode);
-  1594				}
-  1595	
-  1596	move_data:
-  1597				start_bidx = f2fs_start_bidx_of_node(nofs, inode)
-  1598									+ ofs_in_node;
-  1599				if (f2fs_post_read_required(inode))
-  1600					err = move_data_block(inode, start_bidx,
-  1601								gc_type, segno, off);
-  1602				else
-  1603					err = move_data_page(inode, start_bidx, gc_type,
-  1604									segno, off);
-  1605	
-  1606				if (!err && (gc_type == FG_GC ||
-  1607						f2fs_post_read_required(inode)))
-  1608					submitted++;
-  1609	
-  1610				if (locked) {
-  1611					f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-  1612					f2fs_up_write(&fi->i_gc_rwsem[READ]);
-  1613				}
-  1614	
-  1615				stat_inc_data_blk_count(sbi, 1, gc_type);
-  1616			}
-  1617		}
-  1618	
-  1619		if (++phase < 5)
-  1620			goto next_step;
-  1621	
-  1622		return submitted;
-  1623	}
-  1624	
+   570	
+   571	static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
+   572	{
+   573		struct inode *inode = file_inode(file);
+   574	
+   575		if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
+   576			return -EIO;
+   577	
+   578		if (!f2fs_is_compress_backend_ready(inode))
+   579			return -EOPNOTSUPP;
+   580	
+   581		/*
+   582		 * We don't support synchronous mappings for non-DAX files and
+   583		 * for DAX files if underneath dax_device is not synchronous.
+   584		 */
+ > 585		if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+   586			return -EOPNOTSUPP;
+   587	
+   588		file_accessed(file);
+   589	
+   590		if (IS_DAX(inode)) {
+   591			vma->vm_ops = &f2fs_dax_vm_ops;
+   592			vma->vm_flags |= VM_HUGEPAGE;
+   593		} else {
+   594			vma->vm_ops = &f2fs_file_vm_ops;
+   595		}
+   596	
+   597		set_inode_flag(inode, FI_MMAP_FILE);
+   598		return 0;
+   599	}
+   600	
 
 -- 
 0-DAY CI Kernel Test Service
