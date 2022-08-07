@@ -1,36 +1,36 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CB47A
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 06:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD857A
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 06:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659854734; x=1691390734;
+  t=1659855386; x=1691391386;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=D973tT9ARFoTQuMbyYCIYiHvXSN6FVCn0aUlmTL7OL0=;
-  b=YAqx0CFowuNg+DrhJOrDfQCb0M58XOo7JuFlSqoCYQVNrRZaWeI+OHFM
-   WFNFkVzcPc8vWCHKHGuq3PT2D1za63IZjydPafhCvBwWsP7OjCr+DTvJq
-   TPZnwDJbfyg3Pj6SOdrKWHygKkCyCYdiaETF3bb77kKttdPDo7OIsgwN0
-   Fw3TCuL4e2lsR/ddT05BR6OoZvIiXDA0U33XP+HYZ9t+tq0wTW/BnA39F
-   F3G7V7F+DQygOUGXIyNjH048xegl0sCovss5mx4Ivf7JcXR7OqRseRCaq
-   rDA9BYXQyDwgEn1tnoNACeIQjMuhRDMbbSSlt2OeucATVkBqFI3D6LEV6
+  bh=CynN6IOdEbyT0dDFxsN4TGiUIgQcvn6n6Iz55HRlDAw=;
+  b=RF6YPJ6QMdBTrBvAY76D2XZh7FNdkVWMd1VIQowMt3vO78cCbeZ2MeKv
+   RIIeM0wX2YcZ0RabBhiNnRPAG6afpCg1hdFXyF7SZktyFbVu4/hs9A8sB
+   hl9lMe68/opbIOt1BWCWczOOrqAkEGYXrsQxeKTaAOYbMJnAVIjKwK0KM
+   /Cz6YpFm34Mhm+ehKOUdB9OeqIqzuj4LhrR3TzqxXh6Zirxh/SmHi/DUu
+   tUw3L7sYehHeKVPKizitJa0fFdbsAEXURstOc9VBRpr5keRz59m/+CTFg
+   lBysUz+YZD+y4jkrlg4AWYmhzIERlkC1PGcYnATfWLSL58N9YRks1T71m
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="352140949"
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="273464918"
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="352140949"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 23:45:26 -0700
+   d="scan'208";a="273464918"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 23:56:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="554560263"
+   d="scan'208";a="672124238"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Aug 2022 23:45:23 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 06 Aug 2022 23:56:24 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKa2N-000L49-0t;
-	Sun, 07 Aug 2022 06:45:23 +0000
-Date: Sun, 7 Aug 2022 14:44:55 +0800
+	id 1oKaD1-000L4b-1q;
+	Sun, 07 Aug 2022 06:56:23 +0000
+Date: Sun, 7 Aug 2022 14:55:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: alexlzhu@fb.com, linux-mm@kvack.org, kernel-team@fb.com,
 	linux-kernel@vger.kernel.org, akpm@linux-foundation.org
@@ -38,7 +38,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Alexander Zhu <alexlzhu@fb.com>
 Subject: Re: [PATCH v3] mm: add thp_utilization metrics to
  /proc/thp_utilization
-Message-ID: <202208071442.EIrjgLbV-lkp@intel.com>
+Message-ID: <202208071415.Aav6LUtf-lkp@intel.com>
 References: <20220805184016.2926168-1-alexlzhu@fb.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,7 +63,7 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/alexlzhu-fb-com/mm-add-thp_utilization-metrics-to-proc-thp_utilization/20220806-024150
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9e2f40233670c70c25e0681cb66d50d1e2742829
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220807/202208071442.EIrjgLbV-lkp@intel.com/config)
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220807/202208071415.Aav6LUtf-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
