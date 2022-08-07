@@ -1,35 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794321841
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 02:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36C37C
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 02:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659838906;
+	s=mimecast20190719; t=1659840102;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=vlp1YdMh37lucOqkYUtE67se78dLeVw3PWipMtLOl6c=;
-	b=iSLZOpe6hywH3YfieAA/AFEMiqFxu38D9OfOArvLjZju0vPezDwue2byIqRptNMppwKVZ6
-	W/C/164rBvN1lcYf93rRwI1KwGyXp6bvSijIkxfzOCxIRZgZYOjqqffOR+SDcNEQ+y7QCd
-	NXKnM1AoEMSLGD2cZ2qXXMArqzHGGO8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=/OP5B5ZLj1Bvn5SZt+IPrkkMYB6+3R6QXijzdnBWFpU=;
+	b=IB/MXRkK87q3d9Y7DCJGqunhj1uOdmWi18WdJxx79VJPgMrVI75XlSLpeQ6fzzt+tIWEeH
+	P1JwZBBytf73RKhkj17CweVeB57MPRQW5KJQUy/vgcNp4QWa5WO8zkLgmVt/4MimXgyVCE
+	6Sr8TgEzdTUOHKzWOOGRPDlCOcevS2E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-u6ylu22eN2meVEPPPwKqMw-1; Sat, 06 Aug 2022 22:21:44 -0400
-X-MC-Unique: u6ylu22eN2meVEPPPwKqMw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-209-zuiSsa6FO7O9gxe6aTS57Q-1; Sat, 06 Aug 2022 22:41:41 -0400
+X-MC-Unique: zuiSsa6FO7O9gxe6aTS57Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A37C22800485
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 02:21:44 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF2118037AC
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 02:41:40 +0000 (UTC)
 Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 85C9618EB7;
-	Sun,  7 Aug 2022 02:21:44 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D20722166B26;
+	Sun,  7 Aug 2022 02:41:40 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [20cf903a]
-Date: Sun, 07 Aug 2022 02:21:44 -0000
+ (mainline.kernel.org-clang) [af3e9579]
+Date: Sun, 07 Aug 2022 02:41:40 -0000
 CC: mmalik@redhat.com, omosnace@redhat.com, fsuba@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,8 +37,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <20759.122080622214400105@us-mta-626.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+Message-Id: <55234.122080622414100259@us-mta-209.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,32 +53,32 @@ Hi, we tested your kernel and here are the results:
 
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50157
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50159
 
 One or more kernel tests failed:
 
     Unrecognized or new issues:
          aarch64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732888
+4733129
          aarch64 - selinux-policy: serge-testsuite
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732910
+4733151
            s390x - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732209
+4733044
           x86_64 - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732359
+4733270
           x86_64 - selinux-policy: serge-testsuite
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732387
+4733316
           x86_64 (debug) - Storage - lvm thinp stqe test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732438
+4732964
           x86_64 (debug) - selinux-policy: serge-testsuite
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4732457
+4732983
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -112,16 +112,13 @@ ion: kaslr
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1169
             Affected tests:
-                 aarch64 - Reboot test
                   x86_64 - Memory function: kaslr
                   x86_64 - Reboot test
                   x86_64 (debug) - kselftests upstream - net
                   x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
                   x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
 redeclaration of 'enum fsconfig_command'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -140,11 +137,6 @@ l-tests/-/issues/1302
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - btrfs
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
         Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
 edeclaration of enum fsconfig_command
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -170,6 +162,11 @@ l-tests/-/issues/1303
                    s390x - stress: stress-ng - memory
                   x86_64 - stress: stress-ng - cpu-cache
                   x86_64 - stress: stress-ng - memory
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
         Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
             Affected tests:
@@ -181,12 +178,6 @@ l-tests/-/issues/1303
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
         Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
 d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
 tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
@@ -197,6 +188,18 @@ apability permissive=3D0
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
                  aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
 
 
 If you find a failure unrelated to your changes, please tag it at https://d=
