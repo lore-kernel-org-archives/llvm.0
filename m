@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A4B33F7
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 19:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B143D60
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 20:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659902334; x=1691438334;
+  t=1659904135; x=1691440135;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PNJpUYpS/xBotUnmKKxvLKOVpwfoZX4dbSC11UL+vWU=;
-  b=PogNtlifJUFuB0/RRyU7RZmDuAaz0TlGkY0i855Ld0VYlJHgxdkL0tsq
-   WtPNkzw+ioTHWm9bI40LP8c19Pw6K7iepKgd8+AyJgS1ALkvkwbA+aurI
-   bbFTY2zivnGXZ2U54VdQY2xi7iVylztMKBSKHZJO19+ZZYma573JKeA1p
-   cHU8dCIGmz9eMeaEmDPIK1xVc6xQDn9iIGKKUk6+xu5i0hRqmBn6hVWLK
-   DdAzz8TJlBz6Q6oJSGW5crP3z4k1K8ehHJ3MiaNmsNj5NklY2kSubWL6o
-   AYJyeSMT1iszlFy0/FLCAVet9fgTC8aArmYHdAHPld1KU0/jnbVDUNwAK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288025098"
+  bh=jJY85f0xRbhXpvvmezXbIZ2pZOB5s6SJ0cH5JblyMKI=;
+  b=JWPdiJRFRZ0Bqu9LxDacuY92c5xtjl46dDFqJgQzXYo4FWGR64SUh7IK
+   K0m/HCu2Mc5N9fJyhncyP+0EGxDt+Jctfm00Ggh3qL6t9wRRidDvFnxHI
+   cjpb5LGOeeTnhN8EjNbVTONhTiqF/YQboCCdLw8wQdOw/SrAPDoZELFSD
+   VAstTiFmFX+dDgjpmzpebZW11wOSlrH1YBdbqttsH1NocI8ZpOxkxFtAo
+   8hyq1owwNrHSzRRk0Jnz2IMs/9S948JurhC3Vwd5cuKVOtZIGOFle1n69
+   47suZXTNfNQhi19iV1LaaIEt/lT7BCrrS08xrlBlWnIgPknKPxgYBGfCh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="352187138"
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="288025098"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:58:54 -0700
+   d="scan'208";a="352187138"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 13:28:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="672236363"
+   d="scan'208";a="693532585"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2022 12:58:52 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Aug 2022 13:28:53 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKmQG-000LdZ-07;
-	Sun, 07 Aug 2022 19:58:52 +0000
-Date: Mon, 8 Aug 2022 03:58:05 +0800
+	id 1oKmtJ-000Lel-0a;
+	Sun, 07 Aug 2022 20:28:53 +0000
+Date: Mon, 8 Aug 2022 04:28:35 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 5/10] fs/f2fs/data.c:4269:9: error: call to
- undeclared function 'dax_writeback_mapping_range'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202208080311.PD3w4obC-lkp@intel.com>
+Subject: [chao:feature/dax 8/10] fs/f2fs/file.c:1107:10: error: call to
+ undeclared function 'dax_layout_busy_page'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202208080435.GfrxXKZ0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,16 +50,16 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
 head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
-commit: aaddcbec6617facbd1efa6f3d42747bc9eddcb26 [5/10] f2fs: support dax address space operation
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080311.PD3w4obC-lkp@intel.com/config)
+commit: 59714a25c71315156f6ba8d49b3173915d6943cc [8/10] f2fs: handle layout changes to pinned DAX mappings
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080435.GfrxXKZ0-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=aaddcbec6617facbd1efa6f3d42747bc9eddcb26
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=59714a25c71315156f6ba8d49b3173915d6943cc
         git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
         git fetch --no-tags chao feature/dax
-        git checkout aaddcbec6617facbd1efa6f3d42747bc9eddcb26
+        git checkout 59714a25c71315156f6ba8d49b3173915d6943cc
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
@@ -69,26 +69,43 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/f2fs/data.c:4269:9: error: call to undeclared function 'dax_writeback_mapping_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
-                  ^
-   1 error generated.
+   fs/f2fs/file.c:585:7: error: call to undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+                ^
+>> fs/f2fs/file.c:1107:10: error: call to undeclared function 'dax_layout_busy_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page = dax_layout_busy_page(inode->i_mapping);
+                          ^
+>> fs/f2fs/file.c:1107:8: error: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
+                   page = dax_layout_busy_page(inode->i_mapping);
+                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +/dax_writeback_mapping_range +4269 fs/f2fs/data.c
+vim +/dax_layout_busy_page +1107 fs/f2fs/file.c
 
-  4260	
-  4261	static int f2fs_dax_writepages(struct address_space *mapping,
-  4262						struct writeback_control *wbc)
-  4263	{
-  4264		struct f2fs_sb_info *sbi = F2FS_I_SB(mapping->host);
-  4265	
-  4266		if (unlikely(f2fs_cp_error(sbi)))
-  4267			return -EIO;
-  4268	
-> 4269		return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
-  4270	}
-  4271	
+  1097	
+  1098	int f2fs_break_layouts(struct inode *inode)
+  1099	{
+  1100		struct page *page;
+  1101		int error;
+  1102	
+  1103		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
+  1104			return -EINVAL;
+  1105	
+  1106		do {
+> 1107			page = dax_layout_busy_page(inode->i_mapping);
+  1108			if (!page)
+  1109				return 0;
+  1110	
+  1111			error = ___wait_var_event(&page->_refcount,
+  1112					atomic_read(&page->_refcount) == 1,
+  1113					TASK_INTERRUPTIBLE, 0, 0,
+  1114					f2fs_wait_dax_page(inode));
+  1115		} while (error == 0);
+  1116	
+  1117		return error;
+  1118	}
+  1119	
 
 -- 
 0-DAY CI Kernel Test Service
