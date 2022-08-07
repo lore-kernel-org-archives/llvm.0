@@ -1,41 +1,48 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC347A
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 16:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC912F2E
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 16:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659889302; x=1691425302;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=n/z3JHuSqVhZ927IghrTODdYtS1odaPv8+QDaOdN/ds=;
-  b=M/90ShEduk2A1FxNzdan91sJ4LEQWgmimIw3rihjOCFSuh26cYqo2nis
-   jH9hMK74N5/nwFADqRutD2+WvyKIBSJE/0pKmwsj/8O+VC6HVO/3AMrk3
-   zmFR0Q87ml/RoumTgdVQhl+ZjAefd61WuIxYKNzP/0VGpRrPiYww6XovW
-   lUsifs3e6V0T3cKpkVhWRjgvvykAnJO8XRpwThCexSQJI2ehuNMWHT8rd
-   t38Xnbc/QQdYiHXRy0tozVAymGYjrU9ilM/+nHVnN4JXqH3FIQP8erpua
-   CmpD/LKIeU/NmZBQhtvUS8rPR54d281lDLw3/3MQJoDqdRZP6ZjCYxU0N
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291678361"
+  t=1659890566; x=1691426566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6OhnfoBiaZTWht7GA1P70bu9k1nEE2U220KaOY5t++U=;
+  b=I+o538DMnKwBE6TRfOH7N995fVGxZRqG81pSE3MSrDFyM8rJKLJ8CrfX
+   oPj/QfXZU5zOsuozFx/2HEja7oKUlRGzfwfZPz7FURPq3VO5ILy6HiHEY
+   tCwSeHyIBcnKzklF/+tM6H88Gi1gNu96SGXweeGOg5sTJzCcspa/rdWAG
+   Vhve+CA8kTE+eSYSvaCp6q53dstmF3yzRw7ODPT579P/3F3/dn+msn23U
+   S02uOUYlBzWVc3RfxHuFJbaGJMnzMPV/xk8u81DCFstlVS8IlK0i64QHg
+   ij6nUA2w/dZy7HZA38s+jp2ql3ps5mIH7azv6psC4hbbNwaeRaeOlYqpa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="354449529"
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="291678361"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 09:21:42 -0700
+   d="scan'208";a="354449529"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 09:42:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="632588651"
+   d="scan'208";a="693502765"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 09:21:41 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Aug 2022 09:42:42 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oKj24-000LRx-0j;
-	Sun, 07 Aug 2022 16:21:40 +0000
-Date: Mon, 8 Aug 2022 00:21:08 +0800
+	id 1oKjMP-000LTb-2U;
+	Sun, 07 Aug 2022 16:42:41 +0000
+Date: Mon, 8 Aug 2022 00:41:58 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value
-Message-ID: <202208080041.HUw2YMHq-lkp@intel.com>
+To: Li Jinlin <lijinlin3@huawei.com>, lduncan@suse.com, cleech@redhat.com,
+	michael.christie@oracle.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, mark.mielke@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linfeilong@huawei.com,
+	liuzhiqiang26@huawei.com
+Subject: Re: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
+ getpeername()
+Message-ID: <202208080020.xQk6IIBw-lkp@intel.com>
+References: <20220802101939.3972556-1-lijinlin3@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,236 +51,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-net/mac80211/he.c: 158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 160:12: warning: taking address of packed member
- 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 169:34: warning: taking address of packed member
- 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 171:13: warning: taking address of packed member
- 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 186:34: warning: taking address of packed member
- 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 188:13: warning: taking address of packed member
- 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
+In-Reply-To: <20220802101939.3972556-1-lijinlin3@huawei.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Wen Gong <wgong@codeaurora.org>
-CC: Johannes Berg <johannes.berg@intel.com>
+Hi Li,
 
-Hi Wen,
+Thank you for the patch! Yet something to improve:
 
-FYI, the error/warning still remains.
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next linus/master v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-5.15.y
-head:   d676d6149a2f4b4d66b8ea0a1dfef30a54cf5750
-commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
-date:   1 year, 6 months ago
-config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220808/202208080041.HUw2YMHq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: x86_64-randconfig-r033-20220801 (https://download.01.org/0day-ci/archive/20220808/202208080020.xQk6IIBw-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus linux-stable-rc/linux-5.15.y
-        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        # https://github.com/intel-lab-lkp/linux/commit/ccc367df3fdba07b24eeda721ca928cce50f40d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+        git checkout ccc367df3fdba07b24eeda721ca928cce50f40d2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/net/checksum.h:22:
-   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
-           : "0" ((__force unsigned long)daddr),
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:30:
-   In file included from include/net/mac80211.h:22:
-   In file included from include/net/codel.h:48:
-   In file included from include/net/inet_ecn.h:9:
-   In file included from include/net/inet_sock.h:22:
-   In file included from include/net/sock.h:61:
-   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
->> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   18 warnings and 1 error generated.
+>> drivers/scsi/iscsi_tcp.c:798:8: error: incompatible pointer to integer conversion passing 'struct file *' to parameter of type 'unsigned int' [-Wint-conversion]
+                   fget(sock->file);
+                        ^~~~~~~~~~
+   include/linux/file.h:48:39: note: passing argument to parameter 'fd' here
+   extern struct file *fget(unsigned int fd);
+                                         ^
+   drivers/scsi/iscsi_tcp.c:852:8: error: incompatible pointer to integer conversion passing 'struct file *' to parameter of type 'unsigned int' [-Wint-conversion]
+                   fget(sock->file);
+                        ^~~~~~~~~~
+   include/linux/file.h:48:39: note: passing argument to parameter 'fd' here
+   extern struct file *fget(unsigned int fd);
+                                         ^
+   2 errors generated.
 
 
-vim +158 net/mac80211/he.c
+vim +798 drivers/scsi/iscsi_tcp.c
 
-   105	
-   106	void
-   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
-   108					  struct ieee80211_supported_band *sband,
-   109					  const u8 *he_cap_ie, u8 he_cap_len,
-   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
-   111					  struct sta_info *sta)
-   112	{
-   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
-   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
-   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
-   116		u8 he_ppe_size;
-   117		u8 mcs_nss_size;
-   118		u8 he_total_size;
-   119		bool own_160, peer_160, own_80p80, peer_80p80;
-   120	
-   121		memset(he_cap, 0, sizeof(*he_cap));
-   122	
-   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
-   124			return;
-   125	
-   126		/* Make sure size is OK */
-   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
-   128		he_ppe_size =
-   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
-   130							mcs_nss_size],
-   131					      he_cap_ie_elem->phy_cap_info);
-   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
-   133				he_ppe_size;
-   134		if (he_cap_len < he_total_size)
-   135			return;
-   136	
-   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
-   138	
-   139		/* HE Tx/Rx HE MCS NSS Support Field */
-   140		memcpy(&he_cap->he_mcs_nss_supp,
-   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
-   142	
-   143		/* Check if there are (optional) PPE Thresholds */
-   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
-   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
-   146			memcpy(he_cap->ppe_thres,
-   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
-   148			       he_ppe_size);
-   149	
-   150		he_cap->has_he = true;
-   151	
-   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
-   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
-   154	
-   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
-   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
-   157	
- > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
-   159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
- > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
-   161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
-   162	
-   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
-   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   167	
-   168		if (peer_160 && own_160) {
- > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
- > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
-   172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
-   173		} else if (peer_160 && !own_160) {
-   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
-   175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-   176			he_cap->he_cap_elem.phy_cap_info[0] &=
-   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   178		}
-   179	
-   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
-   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   184	
-   185		if (peer_80p80 && own_80p80) {
- > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
- > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   190		} else if (peer_80p80 && !own_80p80) {
-   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   193			he_cap->he_cap_elem.phy_cap_info[0] &=
-   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   195		}
-   196	}
-   197	
+   777	
+   778	static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+   779					       enum iscsi_param param, char *buf)
+   780	{
+   781		struct iscsi_conn *conn = cls_conn->dd_data;
+   782		struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+   783		struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+   784		struct sockaddr_in6 addr;
+   785		struct socket *sock;
+   786		int rc;
+   787	
+   788		switch(param) {
+   789		case ISCSI_PARAM_CONN_PORT:
+   790		case ISCSI_PARAM_CONN_ADDRESS:
+   791		case ISCSI_PARAM_LOCAL_PORT:
+   792			spin_lock_bh(&conn->session->frwd_lock);
+   793			if (!tcp_sw_conn || !tcp_sw_conn->sock) {
+   794				spin_unlock_bh(&conn->session->frwd_lock);
+   795				return -ENOTCONN;
+   796			}
+   797			sock = tcp_sw_conn->sock;
+ > 798			fget(sock->file);
+   799			spin_unlock_bh(&conn->session->frwd_lock);
+   800	
+   801			if (param == ISCSI_PARAM_LOCAL_PORT)
+   802				rc = kernel_getsockname(sock,
+   803							(struct sockaddr *)&addr);
+   804			else
+   805				rc = kernel_getpeername(sock,
+   806							(struct sockaddr *)&addr);
+   807			spin_lock_bh(&conn->session->frwd_lock);
+   808			sockfd_put(sock);
+   809			spin_unlock_bh(&conn->session->frwd_lock);
+   810			if (rc < 0)
+   811				return rc;
+   812	
+   813			return iscsi_conn_get_addr_param((struct sockaddr_storage *)
+   814							 &addr, param, buf);
+   815		default:
+   816			return iscsi_conn_get_param(cls_conn, param, buf);
+   817		}
+   818	
+   819		return 0;
+   820	}
+   821	
 
 -- 
 0-DAY CI Kernel Test Service
