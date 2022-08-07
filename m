@@ -1,146 +1,82 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3C63C15
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 17:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659894286; x=1691430286;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Of1H8E/U61jRpqPKdtnfJXl+a7rqeT0VYcmCIGZ+rsY=;
-  b=jX2fwWyO81/D8qt24za9SQ4zM45a7h3FQgUiKPzpBfgeST/lZ0aFjTfP
-   Sbl5R2M8J8hM7ga6Q7NUe5LXgDMZAIKxlWWZ3A+bsJuTIwYMo3fj6s26r
-   7lyp9J1J4YOxvORlNgRbrAr97jL1xtTaMphueLjLmX1Dj0TZNnjTeY/Om
-   aljgHujBR5gc80DLhhc6RiRVvguTkIOVbcv6xunvO2waKMNSWBZnwu2U6
-   tN7/lGVPgDj4k+jFEXjJREtpL8YwWJStOeLwldz4O3OlP2PxepvveRG7L
-   KSqOXtn2vSo5lpOD4H2DyJ/Ex1tKi9bKYwOznAWhHLY/Zw5vkRsd1pSC6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="273501598"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="273501598"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 10:44:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="554653513"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Aug 2022 10:44:44 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oKkKS-000LWX-0c;
-	Sun, 07 Aug 2022 17:44:44 +0000
-Date: Mon, 8 Aug 2022 01:44:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [rmk-arm:sa1100 15/51] arch/arm/mach-pxa/mainstone.c:576:30: error:
- no member named 'gpio_power' in 'struct pxamci_platform_data'
-Message-ID: <202208080158.4UtkKbCT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553833C15
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 17:55:25 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id gk3so12811505ejb.8
+        for <llvm@lists.linux.dev>; Sun, 07 Aug 2022 10:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tH9P5Ev6KfldpgA7IyGsP6cuudklMvx95MGD8TKUKT4=;
+        b=C4CL1iu+qx5rdNpY/Qdx3Op6dbE/9zKXo4LCAeV+cbmx/rvLCK+FcObJUilhM226pd
+         qtTxjZWV0gQfDYjqPT/IttAiEKQ6zFvDllkAQkGzhczUFYexBZVFtNxH/hwngF0cEm0M
+         jFXxpFIfpzmNNaiVAKGaWiV4JLbHqQY4j7Qg4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tH9P5Ev6KfldpgA7IyGsP6cuudklMvx95MGD8TKUKT4=;
+        b=ZF/Er7btPD53d/BsveRarupuV0rzCqhwazXkjSqw/PHOfw2vxxrxgX/huhxzVii7no
+         HDn/vgVwObQbk2CCuGjFn1F+tg4YqsqtPrJeeHxHmhDTIqHffmNCxoklBjh4m3SPmcy8
+         HHpJRsOqYtPRlIWwoMJVmLEGIiVcDKZnw4Ewv6vvseSVEsqROrzwZSV89Tz7h02mB94E
+         wN/2wcbeeLRo+vyy53aGM9JriUbOrdpfp70JT6B6Ydyn8XGc152wsoh5LnnTmxFVIepb
+         WYem1w4BZZt8n7hPku+nf7sGfnDy992Cn/RMV3euoKjaNQ6Zbse7VWmKpOXUI8ap31dw
+         oYsg==
+X-Gm-Message-State: ACgBeo2I8zL4ZESnA/YapaYa3hvvFXmVO2h1d62tRBw5Gh1wMVjcyUy9
+	pauu6tQNM3wy4B01h0zf9EJsDsQndN9Az3TA
+X-Google-Smtp-Source: AA6agR6KPCtfw+XqbMi2wbmXvJZ9O7AiWQlzCsr3TcNVkQ4J2QAzeTbSfAU4gDamzRrdeZ3n+Qb+QA==
+X-Received: by 2002:a17:907:c12:b0:731:6473:baf6 with SMTP id ga18-20020a1709070c1200b007316473baf6mr481394ejc.522.1659894923422;
+        Sun, 07 Aug 2022 10:55:23 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170906684100b0072fb3704e49sm4037048ejs.46.2022.08.07.10.55.21
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 10:55:21 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 17-20020a05600c241100b003a536b6d536so1258146wmp.2
+        for <llvm@lists.linux.dev>; Sun, 07 Aug 2022 10:55:21 -0700 (PDT)
+X-Received: by 2002:a05:600c:1d94:b0:3a4:ffd9:bb4a with SMTP id
+ p20-20020a05600c1d9400b003a4ffd9bb4amr10178442wms.8.1659894920750; Sun, 07
+ Aug 2022 10:55:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+ <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+ <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+ <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X> <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
+ <cb3ea155c4e149eca30ca870e3f2546d@AcuMS.aculab.com>
+In-Reply-To: <cb3ea155c4e149eca30ca870e3f2546d@AcuMS.aculab.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 7 Aug 2022 10:55:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wghheK1pKhpu9SuQkjzUvu25-vTu8nyxozooarhAmaXhw@mail.gmail.com>
+Message-ID: <CAHk-=wghheK1pKhpu9SuQkjzUvu25-vTu8nyxozooarhAmaXhw@mail.gmail.com>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+To: David Laight <David.Laight@aculab.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Harry Wentland <harry.wentland@amd.com>, "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, 
+	clang-built-linux <llvm@lists.linux.dev>, David Airlie <airlied@linux.ie>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, amd-gfx list <amd-gfx@lists.freedesktop.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, Alex Deucher <alexander.deucher@amd.com>, 
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm sa1100
-head:   2e73962c8797ccdf52841ea3065779839ac60e0e
-commit: fc2311141ceca0b658cdeb4e8f5eaad322aa54b5 [15/51] ARM: pxa/mainstone: convert mainstone IrDA to use gpiod APIs
-config: arm-mainstone_defconfig (https://download.01.org/0day-ci/archive/20220808/202208080158.4UtkKbCT-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm sa1100
-        git checkout fc2311141ceca0b658cdeb4e8f5eaad322aa54b5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sun, Aug 7, 2022 at 10:36 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> Or just shoot the software engineer who thinks 100 arguments
+> is sane. :-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I suspect the issue is that it's not primarily a software engineer who
+wrote that code.
 
-All errors (new ones prefixed by >>):
+Hardware people writing code are about as scary as software engineers
+with a soldering iron.
 
->> arch/arm/mach-pxa/mainstone.c:576:30: error: no member named 'gpio_power' in 'struct pxamci_platform_data'
-           mainstone_mci_platform_data.gpio_power = mst_mscwr1->base + 11;
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +576 arch/arm/mach-pxa/mainstone.c
-
-   555	
-   556	static void __init mainstone_init(void)
-   557	{
-   558		int SW7 = 0;  /* FIXME: get from SCR (Mst doc section 3.2.1.1) */
-   559	
-   560		pxa2xx_mfp_config(ARRAY_AND_SIZE(mainstone_pin_config));
-   561	
-   562		/* Register board control register(s) as GPIOs */
-   563		gpio_reg_init(NULL, (void __iomem *)&MST_PCMCIA0, -1, 11,
-   564			      "mst-pcmcia0", MST_PCMCIA_INPUTS, 0, NULL,
-   565			      NULL, mst_pcmcia0_irqs);
-   566		gpio_reg_init(NULL, (void __iomem *)&MST_PCMCIA1, -1, 11,
-   567			      "mst-pcmcia1", MST_PCMCIA_INPUTS, 0, NULL,
-   568			      NULL, mst_pcmcia1_irqs);
-   569		gpiod_add_lookup_table(&mainstone_pcmcia_gpio_table);
-   570		gpiod_add_lookup_table(&mainstone_wm97xx_gpio_table);
-   571	
-   572		mst_mscwr1 = gpio_reg_init(NULL, (void __iomem *)&MST_MSCWR1, -1, 16,
-   573					   "mst-mscwr1", 0, 0, NULL, NULL, NULL);
-   574		gpiod_add_lookup_table(&mainstone_ficp_gpio_table);
-   575		/* MCI power on = MST_MSCWR1_MMC_ON */
- > 576		mainstone_mci_platform_data.gpio_power = mst_mscwr1->base + 11;
-   577	
-   578		pxa_set_ffuart_info(NULL);
-   579		pxa_set_btuart_info(NULL);
-   580		pxa_set_stuart_info(NULL);
-   581	
-   582		mst_flash_data[0].width = (__raw_readl(BOOT_DEF) & 1) ? 2 : 4;
-   583		mst_flash_data[1].width = 4;
-   584	
-   585		/* Compensate for SW7 which swaps the flash banks */
-   586		mst_flash_data[SW7].name = "processor-flash";
-   587		mst_flash_data[SW7 ^ 1].name = "mainboard-flash";
-   588	
-   589		printk(KERN_NOTICE "Mainstone configured to boot from %s\n",
-   590		       mst_flash_data[0].name);
-   591	
-   592		/* system bus arbiter setting
-   593		 * - Core_Park
-   594		 * - LCD_wt:DMA_wt:CORE_Wt = 2:3:4
-   595		 */
-   596		ARB_CNTRL = ARB_CORE_PARK | 0x234;
-   597	
-   598		platform_add_devices(platform_devices, ARRAY_SIZE(platform_devices));
-   599	
-   600		/* reading Mainstone's "Virtual Configuration Register"
-   601		   might be handy to select LCD type here */
-   602		if (0)
-   603			mainstone_pxafb_info.modes = &toshiba_ltm04c380k_mode;
-   604		else
-   605			mainstone_pxafb_info.modes = &toshiba_ltm035a776c_mode;
-   606	
-   607		pxa_set_fb_info(NULL, &mainstone_pxafb_info);
-   608		mainstone_backlight_register();
-   609	
-   610		pxa_set_mci_info(&mainstone_mci_platform_data);
-   611		pxa_set_ficp_info(&mainstone_ficp_platform_data);
-   612		pxa_set_ohci_info(&mainstone_ohci_platform_data);
-   613		pxa_set_i2c_info(NULL);
-   614		pxa_set_ac97_info(&mst_audio_ops);
-   615	
-   616		mainstone_init_keypad();
-   617	}
-   618	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+               Linus
