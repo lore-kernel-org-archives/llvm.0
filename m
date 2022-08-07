@@ -1,497 +1,280 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C4E7A
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 15:33:57 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id gk3so12511556ejb.8
-        for <llvm@lists.linux.dev>; Sun, 07 Aug 2022 08:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=T1SYU7I6mTymBKZiiI9UrCv3NPNDGUD3N4sZ7gprDhA=;
-        b=BoNkrBqbT+0WBuPPCD2keZqI/7WVU6CThDjOzC4KYxSWwUGdPg5KQgT2emH1hAj2+S
-         hginABogV2CW97uiFhwGuFhr7T9b3AuxbPhWJUnCdOgpZ6/vu0uBcq9nb04JibbqIayG
-         /YTDu6f5hyzALirLy6KlNJPVobiYCoEJhSMLpSPoX7lVi9dpfxB2TpMo1xDnhLcvYYsR
-         9vKqgIdLbW66Bbbk+yncnthKLzS3BsYnG37Bf5lm5isp6veHKylQTcpxq6BqncoHZS2o
-         aYB7R88KpuB6adt3lTeG5WtepSm3HOV1uVzBfgh0H02A1WMREvR1/OuiGNs4Cxsph5X1
-         IYeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=T1SYU7I6mTymBKZiiI9UrCv3NPNDGUD3N4sZ7gprDhA=;
-        b=RB+Oe0kHU2bScBgzsnk+n5QQ8LvgI/Tuq8YACybFveulfzreGpdQXk1rm/KU+aF71Q
-         fdOmQFwTJXL5E1oRqVA1Zndc7lICfw0M8he8ev0qLVSxM4BGNaYqCSEAzhHAfOG0hcIy
-         69n1OoXuynqj3tDTnWqcPpC2aHeZZE23D7hEuVcY/07j2EQIFgjeW5Me3yrjAHPsUz3U
-         2DZR+sJWgpn0D8jYUZ/XuHOf4XWoU1DII2vlWEansoR8C9F0h1CL1NcdiF7hWkPZS0fi
-         cHtoKFbnPZyS/iQw+JHq92lofPpyY8BBqZ+1R3NsDAT1RuEtridLruLEuL2pGPbD2D4z
-         YoOg==
-X-Gm-Message-State: ACgBeo0qUuai58GiNR5JD9LcHqdLAOO5R1H/ST9jh+aNalvG6E9G5HEz
-	O5jBoP3BaFUq1mSrFEGrOuwLocerIeGYHjp+3vc=
-X-Google-Smtp-Source: AA6agR5B1FrjJynbNg4U69RHfaout06kSpAH3Gg7MjBRZ7aYinFu+RqHpK1N66Eb/0hqKUk3Lfg8CF0fiIRb8XB2n6M=
-X-Received: by 2002:a17:907:7241:b0:72b:347b:17a1 with SMTP id
- ds1-20020a170907724100b0072b347b17a1mr11468434ejc.32.1659886435904; Sun, 07
- Aug 2022 08:33:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC347A
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 16:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659889302; x=1691425302;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=n/z3JHuSqVhZ927IghrTODdYtS1odaPv8+QDaOdN/ds=;
+  b=M/90ShEduk2A1FxNzdan91sJ4LEQWgmimIw3rihjOCFSuh26cYqo2nis
+   jH9hMK74N5/nwFADqRutD2+WvyKIBSJE/0pKmwsj/8O+VC6HVO/3AMrk3
+   zmFR0Q87ml/RoumTgdVQhl+ZjAefd61WuIxYKNzP/0VGpRrPiYww6XovW
+   lUsifs3e6V0T3cKpkVhWRjgvvykAnJO8XRpwThCexSQJI2ehuNMWHT8rd
+   t38Xnbc/QQdYiHXRy0tozVAymGYjrU9ilM/+nHVnN4JXqH3FIQP8erpua
+   CmpD/LKIeU/NmZBQhtvUS8rPR54d281lDLw3/3MQJoDqdRZP6ZjCYxU0N
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291678361"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="291678361"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 09:21:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="632588651"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 09:21:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oKj24-000LRx-0j;
+	Sun, 07 Aug 2022 16:21:40 +0000
+Date: Mon, 8 Aug 2022 00:21:08 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value
+Message-ID: <202208080041.HUw2YMHq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220804074730.GA3269@haolee.io> <202208072309.v3KZUmUA-lkp@intel.com>
-In-Reply-To: <202208072309.v3KZUmUA-lkp@intel.com>
-From: Hao Lee <haolee.swjtu@gmail.com>
-Date: Sun, 7 Aug 2022 23:33:27 +0800
-Message-ID: <CA+PpKP=NTsQ=0FNbSpGPhDvgHFjJeaRTddHMz+rDHhAVv1r6PA@mail.gmail.com>
-Subject: Re: [PATCH] mm: add DEVICE_ZONE to FOR_ALL_ZONES
-To: kernel test robot <lkp@intel.com>
-Cc: akpm@linux-foundation.org, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	david@redhat.com, yang.shi@linux.alibaba.com, hannes@cmpxchg.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+net/mac80211/he.c: 158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 160:12: warning: taking address of packed member
+ 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 169:34: warning: taking address of packed member
+ 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 171:13: warning: taking address of packed member
+ 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 186:34: warning: taking address of packed member
+ 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 188:13: warning: taking address of packed member
+ 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
 
-I missed the situation when CONFIG_ZONE_DEVICE is not defined. Fixed in next v2.
+CC: linux-kernel@vger.kernel.org
+TO: Wen Gong <wgong@codeaurora.org>
+CC: Johannes Berg <johannes.berg@intel.com>
 
-On Sun, Aug 7, 2022 at 11:09 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Hao,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Lee/mm-add-DEVICE_ZONE-to-FOR_ALL_ZONES/20220804-154805
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> config: hexagon-randconfig-r041-20220804 (https://download.01.org/0day-ci/archive/20220807/202208072309.v3KZUmUA-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/dba18359aee97f43008e19ffa78421e652b1b102
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Hao-Lee/mm-add-DEVICE_ZONE-to-FOR_ALL_ZONES/20220804-154805
->         git checkout dba18359aee97f43008e19ffa78421e652b1b102
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/adc/ fs/xfs/ ipc/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from fs/xfs/scrub/agheader.c:6:
->    In file included from fs/xfs/xfs.h:22:
->    In file included from fs/xfs/xfs_linux.h:24:
->    In file included from fs/xfs/kmem.h:11:
->    In file included from include/linux/mm.h:1668:
->    In file included from include/linux/vmstat.h:8:
->    include/linux/vm_event_item.h:33:3: error: expected identifier
->                    FOR_ALL_ZONES(PGALLOC),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:34:3: error: expected identifier
->                    FOR_ALL_ZONES(ALLOCSTALL),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:35:3: error: expected identifier
->                    FOR_ALL_ZONES(PGSCAN_SKIP),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
-> >> fs/xfs/scrub/agheader.c:165:32: warning: implicit conversion from 'int' to '__u16' (aka 'unsigned short') changes value from -49265 to 16271 [-Wconstant-conversion]
->                                      XFS_SB_VERSION_EXTFLGBIT |
->                                      ~~~~~~~~~~~~~~~~~~~~~~~~~^
->    include/linux/byteorder/generic.h:96:21: note: expanded from macro 'cpu_to_be16'
->    #define cpu_to_be16 __cpu_to_be16
->                        ^
->    include/uapi/linux/byteorder/little_endian.h:42:53: note: expanded from macro '__cpu_to_be16'
->    #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
->                                              ~~~~~~~~~~^~~
->    include/uapi/linux/swab.h:107:12: note: expanded from macro '__swab16'
->            __fswab16(x))
->            ~~~~~~~~~ ^
->    1 warning and 3 errors generated.
-> --
->    In file included from ipc/msg.c:30:
->    In file included from include/linux/mm.h:1668:
->    In file included from include/linux/vmstat.h:8:
->    include/linux/vm_event_item.h:33:3: error: expected identifier
->                    FOR_ALL_ZONES(PGALLOC),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:34:3: error: expected identifier
->                    FOR_ALL_ZONES(ALLOCSTALL),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:35:3: error: expected identifier
->                    FOR_ALL_ZONES(PGSCAN_SKIP),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
-> >> ipc/msg.c:496:20: warning: implicit conversion from 'int' to 'unsigned short' changes value from 32768000 to 0 [-Wconstant-conversion]
->            msginfo->msgseg = MSGSEG;
->                            ~ ^~~~~~
->    include/uapi/linux/msg.h:87:38: note: expanded from macro 'MSGSEG'
->    #define MSGSEG (__MSGSEG <= 0xffff ? __MSGSEG : 0xffff)
->                                         ^~~~~~~~
->    include/uapi/linux/msg.h:86:36: note: expanded from macro '__MSGSEG'
->    #define __MSGSEG ((MSGPOOL * 1024) / MSGSSZ) /* max no. of segments */
->                      ~~~~~~~~~~~~~~~~~^~~~~~~~
->    1 warning and 3 errors generated.
-> --
->    In file included from drivers/iio/adc/fsl-imx25-gcq.c:18:
->    In file included from include/linux/regulator/consumer.h:35:
->    In file included from include/linux/suspend.h:5:
->    In file included from include/linux/swap.h:9:
->    In file included from include/linux/memcontrol.h:14:
->    include/linux/vm_event_item.h:33:3: error: expected identifier
->                    FOR_ALL_ZONES(PGALLOC),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:34:3: error: expected identifier
->                    FOR_ALL_ZONES(ALLOCSTALL),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
->    include/linux/vm_event_item.h:35:3: error: expected identifier
->                    FOR_ALL_ZONES(PGSCAN_SKIP),
->                    ^
->    include/linux/vm_event_item.h:29:27: note: expanded from macro 'FOR_ALL_ZONES'
->    #define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
->                              ^
-> >> drivers/iio/adc/fsl-imx25-gcq.c:115:8: warning: shift count is negative [-Wshift-count-negative]
->                         MX25_ADCQ_ITEM(0, chan->channel));
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
->                    _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
->    #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
->                                                 ^  ~~~~~~~~~~~~
->    1 warning and 3 errors generated.
->
->
-> vim +165 fs/xfs/scrub/agheader.c
->
-> 166d76410d7ac0 Darrick J. Wong     2018-01-16   50
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   51  /*
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   52   * Scrub the filesystem superblock.
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   53   *
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   54   * Note: We do /not/ attempt to check AG 0's superblock.  Mount is
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   55   * responsible for validating all the geometry information in sb 0, so
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   56   * if the filesystem is capable of initiating online scrub, then clearly
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   57   * sb 0 is ok and we can use its information to check everything else.
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   58   */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   59  int
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19   60  xchk_superblock(
-> 1d8a748a8aa94a Darrick J. Wong     2018-07-19   61      struct xfs_scrub        *sc)
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   62  {
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   63      struct xfs_mount        *mp = sc->mp;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   64      struct xfs_buf          *bp;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   65      struct xfs_dsb          *sb;
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   66      struct xfs_perag        *pag;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   67      xfs_agnumber_t          agno;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   68      uint32_t                v2_ok;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   69      __be32                  features_mask;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   70      int                     error;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   71      __be16                  vernum_mask;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   72
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   73      agno = sc->sm->sm_agno;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   74      if (agno == 0)
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   75              return 0;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17   76
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   77      /*
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   78       * Grab an active reference to the perag structure.  If we can't get
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   79       * it, we're racing with something that's tearing down the AG, so
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   80       * signal that the AG no longer exists.
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   81       */
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   82      pag = xfs_perag_get(mp, agno);
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   83      if (!pag)
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   84              return -ENOENT;
-> 48c6615cc55759 Darrick J. Wong     2021-08-06   85
-> 689e11c84b1586 Darrick J. Wong     2018-05-14   86      error = xfs_sb_read_secondary(mp, sc->tp, agno, &bp);
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   87      /*
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   88       * The superblock verifier can return several different error codes
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   89       * if it thinks the superblock doesn't look right.  For a mount these
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   90       * would all get bounced back to userspace, but if we're here then the
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   91       * fs mounted successfully, which means that this secondary superblock
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   92       * is simply incorrect.  Treat all these codes the same way we treat
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   93       * any corruption.
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   94       */
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   95      switch (error) {
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   96      case -EINVAL:   /* also -EWRONGFS */
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   97      case -ENOSYS:
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   98      case -EFBIG:
-> e5b37faa932d79 Darrick J. Wong     2018-01-08   99              error = -EFSCORRUPTED;
-> 53004ee78d6273 Gustavo A. R. Silva 2021-04-20  100              fallthrough;
-> e5b37faa932d79 Darrick J. Wong     2018-01-08  101      default:
-> e5b37faa932d79 Darrick J. Wong     2018-01-08  102              break;
-> e5b37faa932d79 Darrick J. Wong     2018-01-08  103      }
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  104      if (!xchk_process_error(sc, agno, XFS_SB_BLOCK(mp), &error))
-> 48c6615cc55759 Darrick J. Wong     2021-08-06  105              goto out_pag;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  106
-> 3e6e8afd3abb74 Christoph Hellwig   2020-03-10  107      sb = bp->b_addr;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  108
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  109      /*
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  110       * Verify the geometries match.  Fields that are permanently
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  111       * set by mkfs are checked; fields that can be updated later
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  112       * (and are not propagated to backup superblocks) are preen
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  113       * checked.
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  114       */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  115      if (sb->sb_blocksize != cpu_to_be32(mp->m_sb.sb_blocksize))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  116              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  117
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  118      if (sb->sb_dblocks != cpu_to_be64(mp->m_sb.sb_dblocks))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  119              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  120
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  121      if (sb->sb_rblocks != cpu_to_be64(mp->m_sb.sb_rblocks))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  122              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  123
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  124      if (sb->sb_rextents != cpu_to_be64(mp->m_sb.sb_rextents))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  125              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  126
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  127      if (!uuid_equal(&sb->sb_uuid, &mp->m_sb.sb_uuid))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  128              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  129
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  130      if (sb->sb_logstart != cpu_to_be64(mp->m_sb.sb_logstart))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  131              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  132
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  133      if (sb->sb_rootino != cpu_to_be64(mp->m_sb.sb_rootino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  134              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  135
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  136      if (sb->sb_rbmino != cpu_to_be64(mp->m_sb.sb_rbmino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  137              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  138
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  139      if (sb->sb_rsumino != cpu_to_be64(mp->m_sb.sb_rsumino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  140              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  141
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  142      if (sb->sb_rextsize != cpu_to_be32(mp->m_sb.sb_rextsize))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  143              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  144
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  145      if (sb->sb_agblocks != cpu_to_be32(mp->m_sb.sb_agblocks))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  146              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  147
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  148      if (sb->sb_agcount != cpu_to_be32(mp->m_sb.sb_agcount))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  149              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  150
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  151      if (sb->sb_rbmblocks != cpu_to_be32(mp->m_sb.sb_rbmblocks))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  152              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  153
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  154      if (sb->sb_logblocks != cpu_to_be32(mp->m_sb.sb_logblocks))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  155              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  156
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  157      /* Check sb_versionnum bits that are set at mkfs time. */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  158      vernum_mask = cpu_to_be16(~XFS_SB_VERSION_OKBITS |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  159                                XFS_SB_VERSION_NUMBITS |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  160                                XFS_SB_VERSION_ALIGNBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  161                                XFS_SB_VERSION_DALIGNBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  162                                XFS_SB_VERSION_SHAREDBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  163                                XFS_SB_VERSION_LOGV2BIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  164                                XFS_SB_VERSION_SECTORBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17 @165                                XFS_SB_VERSION_EXTFLGBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  166                                XFS_SB_VERSION_DIRV2BIT);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  167      if ((sb->sb_versionnum & vernum_mask) !=
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  168          (cpu_to_be16(mp->m_sb.sb_versionnum) & vernum_mask))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  169              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  170
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  171      /* Check sb_versionnum bits that can be set after mkfs time. */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  172      vernum_mask = cpu_to_be16(XFS_SB_VERSION_ATTRBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  173                                XFS_SB_VERSION_NLINKBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  174                                XFS_SB_VERSION_QUOTABIT);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  175      if ((sb->sb_versionnum & vernum_mask) !=
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  176          (cpu_to_be16(mp->m_sb.sb_versionnum) & vernum_mask))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  177              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  178
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  179      if (sb->sb_sectsize != cpu_to_be16(mp->m_sb.sb_sectsize))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  180              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  181
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  182      if (sb->sb_inodesize != cpu_to_be16(mp->m_sb.sb_inodesize))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  183              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  184
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  185      if (sb->sb_inopblock != cpu_to_be16(mp->m_sb.sb_inopblock))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  186              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  187
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  188      if (memcmp(sb->sb_fname, mp->m_sb.sb_fname, sizeof(sb->sb_fname)))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  189              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  190
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  191      if (sb->sb_blocklog != mp->m_sb.sb_blocklog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  192              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  193
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  194      if (sb->sb_sectlog != mp->m_sb.sb_sectlog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  195              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  196
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  197      if (sb->sb_inodelog != mp->m_sb.sb_inodelog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  198              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  199
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  200      if (sb->sb_inopblog != mp->m_sb.sb_inopblog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  201              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  202
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  203      if (sb->sb_agblklog != mp->m_sb.sb_agblklog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  204              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  205
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  206      if (sb->sb_rextslog != mp->m_sb.sb_rextslog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  207              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  208
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  209      if (sb->sb_imax_pct != mp->m_sb.sb_imax_pct)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  210              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  211
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  212      /*
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  213       * Skip the summary counters since we track them in memory anyway.
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  214       * sb_icount, sb_ifree, sb_fdblocks, sb_frexents
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  215       */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  216
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  217      if (sb->sb_uquotino != cpu_to_be64(mp->m_sb.sb_uquotino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  218              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  219
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  220      if (sb->sb_gquotino != cpu_to_be64(mp->m_sb.sb_gquotino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  221              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  222
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  223      /*
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  224       * Skip the quota flags since repair will force quotacheck.
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  225       * sb_qflags
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  226       */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  227
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  228      if (sb->sb_flags != mp->m_sb.sb_flags)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  229              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  230
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  231      if (sb->sb_shared_vn != mp->m_sb.sb_shared_vn)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  232              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  233
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  234      if (sb->sb_inoalignmt != cpu_to_be32(mp->m_sb.sb_inoalignmt))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  235              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  236
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  237      if (sb->sb_unit != cpu_to_be32(mp->m_sb.sb_unit))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  238              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  239
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  240      if (sb->sb_width != cpu_to_be32(mp->m_sb.sb_width))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  241              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  242
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  243      if (sb->sb_dirblklog != mp->m_sb.sb_dirblklog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  244              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  245
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  246      if (sb->sb_logsectlog != mp->m_sb.sb_logsectlog)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  247              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  248
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  249      if (sb->sb_logsectsize != cpu_to_be16(mp->m_sb.sb_logsectsize))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  250              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  251
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  252      if (sb->sb_logsunit != cpu_to_be32(mp->m_sb.sb_logsunit))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  253              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  254
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  255      /* Do we see any invalid bits in sb_features2? */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  256      if (!xfs_sb_version_hasmorebits(&mp->m_sb)) {
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  257              if (sb->sb_features2 != 0)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  258                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  259      } else {
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  260              v2_ok = XFS_SB_VERSION2_OKBITS;
-> d6837c1aab42e7 Dave Chinner        2021-08-18  261              if (xfs_sb_is_v5(&mp->m_sb))
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  262                      v2_ok |= XFS_SB_VERSION2_CRCBIT;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  263
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  264              if (!!(sb->sb_features2 & cpu_to_be32(~v2_ok)))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  265                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  266
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  267              if (sb->sb_features2 != sb->sb_bad_features2)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  268                      xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  269      }
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  270
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  271      /* Check sb_features2 flags that are set at mkfs time. */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  272      features_mask = cpu_to_be32(XFS_SB_VERSION2_LAZYSBCOUNTBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  273                                  XFS_SB_VERSION2_PROJID32BIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  274                                  XFS_SB_VERSION2_CRCBIT |
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  275                                  XFS_SB_VERSION2_FTYPE);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  276      if ((sb->sb_features2 & features_mask) !=
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  277          (cpu_to_be32(mp->m_sb.sb_features2) & features_mask))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  278              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  279
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  280      /* Check sb_features2 flags that can be set after mkfs time. */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  281      features_mask = cpu_to_be32(XFS_SB_VERSION2_ATTR2BIT);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  282      if ((sb->sb_features2 & features_mask) !=
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  283          (cpu_to_be32(mp->m_sb.sb_features2) & features_mask))
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  284              xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  285
-> 38c26bfd90e199 Dave Chinner        2021-08-18  286      if (!xfs_has_crc(mp)) {
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  287              /* all v5 fields must be zero */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  288              if (memchr_inv(&sb->sb_features_compat, 0,
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  289                              sizeof(struct xfs_dsb) -
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  290                              offsetof(struct xfs_dsb, sb_features_compat)))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  291                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  292      } else {
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  293              /* compat features must match */
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  294              if (sb->sb_features_compat !=
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  295                              cpu_to_be32(mp->m_sb.sb_features_compat))
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  296                      xchk_block_set_corrupt(sc, bp);
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  297
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  298              /* ro compat features must match */
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  299              if (sb->sb_features_ro_compat !=
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  300                              cpu_to_be32(mp->m_sb.sb_features_ro_compat))
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  301                      xchk_block_set_corrupt(sc, bp);
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  302
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  303              /*
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  304               * NEEDSREPAIR is ignored on a secondary super, so we should
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  305               * clear it when we find it, though it's not a corruption.
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  306               */
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  307              features_mask = cpu_to_be32(XFS_SB_FEAT_INCOMPAT_NEEDSREPAIR);
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  308              if ((cpu_to_be32(mp->m_sb.sb_features_incompat) ^
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  309                              sb->sb_features_incompat) & features_mask)
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  310                      xchk_block_set_preen(sc, bp);
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  311
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  312              /* all other incompat features must match */
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  313              if ((cpu_to_be32(mp->m_sb.sb_features_incompat) ^
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  314                              sb->sb_features_incompat) & ~features_mask)
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  315                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  316
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  317              /*
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  318               * log incompat features protect newer log record types from
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  319               * older log recovery code.  Log recovery doesn't check the
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  320               * secondary supers, so we can clear these if needed.
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  321               */
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  322              if (sb->sb_features_log_incompat)
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  323                      xchk_block_set_preen(sc, bp);
-> 4a9bca86806fa6 Darrick J. Wong     2022-01-07  324
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  325              /* Don't care about sb_crc */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  326
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  327              if (sb->sb_spino_align != cpu_to_be32(mp->m_sb.sb_spino_align))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  328                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  329
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  330              if (sb->sb_pquotino != cpu_to_be64(mp->m_sb.sb_pquotino))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  331                      xchk_block_set_preen(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  332
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  333              /* Don't care about sb_lsn */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  334      }
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  335
-> 38c26bfd90e199 Dave Chinner        2021-08-18  336      if (xfs_has_metauuid(mp)) {
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  337              /* The metadata UUID must be the same for all supers */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  338              if (!uuid_equal(&sb->sb_meta_uuid, &mp->m_sb.sb_meta_uuid))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  339                      xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  340      }
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  341
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  342      /* Everything else must be zero. */
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  343      if (memchr_inv(sb + 1, 0,
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  344                      BBTOB(bp->b_length) - sizeof(struct xfs_dsb)))
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  345              xchk_block_set_corrupt(sc, bp);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  346
-> c517b3aa02cff1 Darrick J. Wong     2018-07-19  347      xchk_superblock_xref(sc, bp);
-> 48c6615cc55759 Darrick J. Wong     2021-08-06  348  out_pag:
-> 48c6615cc55759 Darrick J. Wong     2021-08-06  349      xfs_perag_put(pag);
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  350      return error;
-> 21fb4cb1981ef7 Darrick J. Wong     2017-10-17  351  }
-> ab9d5dc59fe615 Darrick J. Wong     2017-10-17  352
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Hi Wen,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-5.15.y
+head:   d676d6149a2f4b4d66b8ea0a1dfef30a54cf5750
+commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
+date:   1 year, 6 months ago
+config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20220808/202208080041.HUw2YMHq-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus linux-stable-rc/linux-5.15.y
+        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/net/checksum.h:22:
+   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
+           : "0" ((__force unsigned long)daddr),
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:30:
+   In file included from include/net/mac80211.h:22:
+   In file included from include/net/codel.h:48:
+   In file included from include/net/inet_ecn.h:9:
+   In file included from include/net/inet_sock.h:22:
+   In file included from include/net/sock.h:61:
+   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                           ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                                       ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+>> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 warnings and 1 error generated.
+
+
+vim +158 net/mac80211/he.c
+
+   105	
+   106	void
+   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+   108					  struct ieee80211_supported_band *sband,
+   109					  const u8 *he_cap_ie, u8 he_cap_len,
+   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+   111					  struct sta_info *sta)
+   112	{
+   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
+   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
+   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
+   116		u8 he_ppe_size;
+   117		u8 mcs_nss_size;
+   118		u8 he_total_size;
+   119		bool own_160, peer_160, own_80p80, peer_80p80;
+   120	
+   121		memset(he_cap, 0, sizeof(*he_cap));
+   122	
+   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
+   124			return;
+   125	
+   126		/* Make sure size is OK */
+   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
+   128		he_ppe_size =
+   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
+   130							mcs_nss_size],
+   131					      he_cap_ie_elem->phy_cap_info);
+   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
+   133				he_ppe_size;
+   134		if (he_cap_len < he_total_size)
+   135			return;
+   136	
+   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
+   138	
+   139		/* HE Tx/Rx HE MCS NSS Support Field */
+   140		memcpy(&he_cap->he_mcs_nss_supp,
+   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
+   142	
+   143		/* Check if there are (optional) PPE Thresholds */
+   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
+   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
+   146			memcpy(he_cap->ppe_thres,
+   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
+   148			       he_ppe_size);
+   149	
+   150		he_cap->has_he = true;
+   151	
+   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
+   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
+   154	
+   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
+   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
+   157	
+ > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+   159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
+ > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+   161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
+   162	
+   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
+   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   167	
+   168		if (peer_160 && own_160) {
+ > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
+ > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+   172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
+   173		} else if (peer_160 && !own_160) {
+   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+   175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+   176			he_cap->he_cap_elem.phy_cap_info[0] &=
+   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   178		}
+   179	
+   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
+   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   184	
+   185		if (peer_80p80 && own_80p80) {
+ > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+ > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   190		} else if (peer_80p80 && !own_80p80) {
+   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   193			he_cap->he_cap_elem.phy_cap_info[0] &=
+   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   195		}
+   196	}
+   197	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
