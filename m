@@ -1,221 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2D11C20
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 05:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659851445;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JSdsx+zJYBlsNy/BEaLKdFNW9lOA34SNJ5D+VXjNnpo=;
-	b=B3cWQwre12lPoH5eqWLVZ0yaimHTngiwDCisZgH8cEYIld6Om+uBWow8CjMj0V9SYNu9Kl
-	fTqGi7B761ZijuQttwQD8jy7O+LSKNYhNR/GgOnTI1hOqhQLUtnpmNiG8N8kPrKjaWPhuc
-	x3vPUeZTgvGmZKCs3K31YmkgPA22Qk4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-218-o5oE68rEPdCEIoxaql4Uyg-1; Sun, 07 Aug 2022 01:50:43 -0400
-X-MC-Unique: o5oE68rEPdCEIoxaql4Uyg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D90E8811E76
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 05:50:42 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BBA1D492C3B;
-	Sun,  7 Aug 2022 05:50:42 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [4d1044fc]
-Date: Sun, 07 Aug 2022 05:50:42 -0000
-CC: mmalik@redhat.com, omosnace@redhat.com, fsuba@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CB47A
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 06:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659854734; x=1691390734;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D973tT9ARFoTQuMbyYCIYiHvXSN6FVCn0aUlmTL7OL0=;
+  b=YAqx0CFowuNg+DrhJOrDfQCb0M58XOo7JuFlSqoCYQVNrRZaWeI+OHFM
+   WFNFkVzcPc8vWCHKHGuq3PT2D1za63IZjydPafhCvBwWsP7OjCr+DTvJq
+   TPZnwDJbfyg3Pj6SOdrKWHygKkCyCYdiaETF3bb77kKttdPDo7OIsgwN0
+   Fw3TCuL4e2lsR/ddT05BR6OoZvIiXDA0U33XP+HYZ9t+tq0wTW/BnA39F
+   F3G7V7F+DQygOUGXIyNjH048xegl0sCovss5mx4Ivf7JcXR7OqRseRCaq
+   rDA9BYXQyDwgEn1tnoNACeIQjMuhRDMbbSSlt2OeucATVkBqFI3D6LEV6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="352140949"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="352140949"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 23:45:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="554560263"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 Aug 2022 23:45:23 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oKa2N-000L49-0t;
+	Sun, 07 Aug 2022 06:45:23 +0000
+Date: Sun, 7 Aug 2022 14:44:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: alexlzhu@fb.com, linux-mm@kvack.org, kernel-team@fb.com,
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alexander Zhu <alexlzhu@fb.com>
+Subject: Re: [PATCH v3] mm: add thp_utilization metrics to
+ /proc/thp_utilization
+Message-ID: <202208071442.EIrjgLbV-lkp@intel.com>
+References: <20220805184016.2926168-1-alexlzhu@fb.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <61914.122080701504300107@us-mta-218.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805184016.2926168-1-alexlzhu@fb.com>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19]
+[cannot apply to akpm-mm/mm-everything next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50162
+url:    https://github.com/intel-lab-lkp/linux/commits/alexlzhu-fb-com/mm-add-thp_utilization-metrics-to-proc-thp_utilization/20220806-024150
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9e2f40233670c70c25e0681cb66d50d1e2742829
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220807/202208071442.EIrjgLbV-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c3896ed4c7d2319ac0880860a6bfc98e6eed3d66
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review alexlzhu-fb-com/mm-add-thp_utilization-metrics-to-proc-thp_utilization/20220806-024150
+        git checkout c3896ed4c7d2319ac0880860a6bfc98e6eed3d66
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Unrecognized or new issues:
-         aarch64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4734129
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4734151
-         ppc64le - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4734045
-           s390x - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4733981
-          x86_64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4733892
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4733920
-          x86_64 (debug) - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4734219
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
-            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
-NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-        Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2101983
-            Affected tests:
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+>> mm/huge_memory.c:601:6: warning: no previous prototype for function 'is_anon_transparent_hugepage' [-Wmissing-prototypes]
+   bool is_anon_transparent_hugepage(struct page *page)
+        ^
+   mm/huge_memory.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool is_anon_transparent_hugepage(struct page *page)
+   ^
+   static 
+   mm/huge_memory.c:3300:22: warning: variable 'head' set but not used [-Wunused-but-set-variable]
+           struct page *page, *head = NULL;
+                               ^
+   2 warnings generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/is_anon_transparent_hugepage +601 mm/huge_memory.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   600	
+ > 601	bool is_anon_transparent_hugepage(struct page *page)
+   602	{
+   603		return PageAnon(page) && is_transparent_hugepage(page);
+   604	}
+   605	EXPORT_SYMBOL_GPL(is_anon_transparent_hugepage);
+   606	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
