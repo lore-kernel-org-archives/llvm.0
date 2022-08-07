@@ -1,147 +1,227 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1977D7A
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 08:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659860978; x=1691396978;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zldi7ioVam3SXWkUXMr6S5cw/9YD9h1FQKzs/lHLIFg=;
-  b=M4p4OzYa4yxqKWVt0X75zB7ZmPmDWXFgRsNfNLsEVF7BFINezpRV3BSJ
-   p8wNM2fEazLAs9jzp51mD89twk1jUfqf46aldl4qcJ1hzlNVaK0OaDnsW
-   k6SvM44g4EQPcYBexKp3ZJwoKp+Ic9NzaOYdCN4sFaMvmf82Rh2FMYnGV
-   07OsZN3aJ6A7GrSoOvhzhn3PuNg2AQ/FTKvhYt03NuVRxtp/5P4+qLB4a
-   HTpTWfsv36KmwhpzHFkRsEvu+B2kRpmHX4rkmBJDjueADFEOtQRdgGqQQ
-   7vlUdgAdCHfPuYITs8JpOkapWLT7iaAq5MHgOUgeC56jatpQZNiw0TCF4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="354420723"
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="354420723"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 01:29:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="746301907"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2022 01:29:26 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oKbf4-000L9f-0N;
-	Sun, 07 Aug 2022 08:29:26 +0000
-Date: Sun, 7 Aug 2022 16:29:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: studentxswpy@163.com, jaegeuk@kernel.org, chao@kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Xie Shaowen <studentxswpy@163.com>,
-	Hacash Robot <hacashRobot@santino.com>
-Subject: Re: [PATCH -next] f2fs: Replace kmalloc() with f2fs_kmalloc
-Message-ID: <202208071605.XXehjTqy-lkp@intel.com>
-References: <20220801092202.3134668-1-studentxswpy@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046461363
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 09:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1659864044;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LAtcjTWZDmgKA/vtbH/Knizf63z7I5Tq9Ty4AFbqSEI=;
+	b=dNikaYQ7hKt44WQZB/5A4e5qz1KNGlQRhdDZkPFw0QKq2g6Jcz5M9LJrOAHQ6Rg8rLG/W3
+	uz+egxhIhr3EONfkEUBJqw3e7z5OJuSEF0659v+7kitKyIqjXlCP511axuEme9sTf00LSj
+	5DU6hKfCU/rJJ2T8iuzjIaARFwTRf/U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-151-r3KRb0ICO6SNB6UUlLlr8Q-1; Sun, 07 Aug 2022 05:20:40 -0400
+X-MC-Unique: r3KRb0ICO6SNB6UUlLlr8Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35D223C00088
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 09:20:40 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 179432026D4C;
+	Sun,  7 Aug 2022 09:20:40 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [1612c382]
+Date: Sun, 07 Aug 2022 09:20:39 -0000
+CC: mmalik@redhat.com, omosnace@redhat.com, fsuba@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801092202.3134668-1-studentxswpy@163.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <42893.122080705204000189@us-mta-151.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20220728]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/studentxswpy-163-com/f2fs-Replace-kmalloc-with-f2fs_kmalloc/20220801-172502
-base:    7c5e07b73ff3011c9b82d4a3286a3362b951ad2b
-config: x86_64-randconfig-a002-20220801 (https://download.01.org/0day-ci/archive/20220807/202208071605.XXehjTqy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ca9f7259448a8dc0a2c4a1ae0a34a8109df4d6e1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review studentxswpy-163-com/f2fs-Replace-kmalloc-with-f2fs_kmalloc/20220801-172502
-        git checkout ca9f7259448a8dc0a2c4a1ae0a34a8109df4d6e1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/f2fs/dir.c:235:61: error: too few arguments to function call, expected 3, have 2
-                   decrypted_name.name = f2fs_kmalloc(de_name_len, GFP_KERNEL);
-                                         ~~~~~~~~~~~~                        ^
-   fs/f2fs/f2fs.h:3316:21: note: 'f2fs_kmalloc' declared here
-   static inline void *f2fs_kmalloc(struct f2fs_sb_info *sbi,
-                       ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +235 fs/f2fs/dir.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50163
 
-   211	
-   212	#if IS_ENABLED(CONFIG_UNICODE)
-   213	/*
-   214	 * Test whether a case-insensitive directory entry matches the filename
-   215	 * being searched for.
-   216	 *
-   217	 * Returns 1 for a match, 0 for no match, and -errno on an error.
-   218	 */
-   219	static int f2fs_match_ci_name(const struct inode *dir, const struct qstr *name,
-   220				       const u8 *de_name, u32 de_name_len)
-   221	{
-   222		const struct super_block *sb = dir->i_sb;
-   223		const struct unicode_map *um = sb->s_encoding;
-   224		struct fscrypt_str decrypted_name = FSTR_INIT(NULL, de_name_len);
-   225		struct qstr entry = QSTR_INIT(de_name, de_name_len);
-   226		int res;
-   227	
-   228		if (IS_ENCRYPTED(dir)) {
-   229			const struct fscrypt_str encrypted_name =
-   230				FSTR_INIT((u8 *)de_name, de_name_len);
-   231	
-   232			if (WARN_ON_ONCE(!fscrypt_has_encryption_key(dir)))
-   233				return -EINVAL;
-   234	
- > 235			decrypted_name.name = f2fs_kmalloc(de_name_len, GFP_KERNEL);
-   236			if (!decrypted_name.name)
-   237				return -ENOMEM;
-   238			res = fscrypt_fname_disk_to_usr(dir, 0, 0, &encrypted_name,
-   239							&decrypted_name);
-   240			if (res < 0)
-   241				goto out;
-   242			entry.name = decrypted_name.name;
-   243			entry.len = decrypted_name.len;
-   244		}
-   245	
-   246		res = utf8_strncasecmp_folded(um, name, &entry);
-   247		/*
-   248		 * In strict mode, ignore invalid names.  In non-strict mode,
-   249		 * fall back to treating them as opaque byte sequences.
-   250		 */
-   251		if (res < 0 && !sb_has_strict_encoding(sb)) {
-   252			res = name->len == entry.len &&
-   253					memcmp(name->name, entry.name, name->len) == 0;
-   254		} else {
-   255			/* utf8_strncasecmp_folded returns 0 on match */
-   256			res = (res == 0);
-   257		}
-   258	out:
-   259		kfree(decrypted_name.name);
-   260		return res;
-   261	}
-   262	#endif /* CONFIG_UNICODE */
-   263	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+         aarch64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735597
+         aarch64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735619
+           s390x - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735442
+          x86_64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735290
+          x86_64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735318
+          x86_64 (debug) - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735504
+          x86_64 (debug) - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4735523
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
+            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
+NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
