@@ -1,227 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046461363
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 09:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659864044;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LAtcjTWZDmgKA/vtbH/Knizf63z7I5Tq9Ty4AFbqSEI=;
-	b=dNikaYQ7hKt44WQZB/5A4e5qz1KNGlQRhdDZkPFw0QKq2g6Jcz5M9LJrOAHQ6Rg8rLG/W3
-	uz+egxhIhr3EONfkEUBJqw3e7z5OJuSEF0659v+7kitKyIqjXlCP511axuEme9sTf00LSj
-	5DU6hKfCU/rJJ2T8iuzjIaARFwTRf/U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-r3KRb0ICO6SNB6UUlLlr8Q-1; Sun, 07 Aug 2022 05:20:40 -0400
-X-MC-Unique: r3KRb0ICO6SNB6UUlLlr8Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35D223C00088
-	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 09:20:40 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 179432026D4C;
-	Sun,  7 Aug 2022 09:20:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [1612c382]
-Date: Sun, 07 Aug 2022 09:20:39 -0000
-CC: mmalik@redhat.com, omosnace@redhat.com, fsuba@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224141FBE
+	for <llvm@lists.linux.dev>; Sun,  7 Aug 2022 09:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659865233; x=1691401233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ImgjE4x9iGWz4Eh3hMhl6NN5VLUdjlgb6XpSKzzuwuA=;
+  b=T1lKKoqRwub+mckPwwX0IeVD8bNEG0dCUikGGeEpdWkfVcRQNzusrJzT
+   zrc7/Dm+oSAwJauJ/PWYtE9rhdqFczzMEJtYLx7Ouv17FXl9EK4yt/+hb
+   PcDJA+/Vi3xMWEY//IhBZ9MZ6CjTWSja27JLCKFkrMbM2dz5GwCCyDCrV
+   kh2u6LmMuukI3W/t2KUbMNLPodZojNUeW8AdHHFUsxWrIfYiZ6/oxtrYV
+   XUUQg9Z/MAO5xf7hYPWN6MZuQ++QfCSM00mzF67/JdeyYHM5CqSu8WuO7
+   fGCBMlqGmZA3Sw5eONLz3m2AdZrewugIkI0HAzszc3JmzVZjnotzMTvfB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="287988750"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="287988750"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 02:40:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="636962364"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2022 02:40:29 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oKclo-000LCh-25;
+	Sun, 07 Aug 2022 09:40:28 +0000
+Date: Sun, 7 Aug 2022 17:40:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Szuying Chen <chensiying21@gmail.com>, andreas.noever@gmail.com,
+	michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Yd_Tseng@asmedia.com.tw,
+	Richard_Hsu@asmedia.com.tw, Chloe_Chen@asmedia.com.tw
+Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <202208071758.wZC5VHIZ-lkp@intel.com>
+References: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <42893.122080705204000189@us-mta-151.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
 
-Hi, we tested your kernel and here are the results:
+Hi Szuying,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50163
+url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b2a88c212e652e94f1e4b635910972ac57ba4e97
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220807/202208071758.wZC5VHIZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
+        git checkout cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thunderbolt/
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Unrecognized or new issues:
-         aarch64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735597
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735619
-           s390x - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735442
-          x86_64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735290
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735318
-          x86_64 (debug) - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735504
-          x86_64 (debug) - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4735523
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
-            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
-NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: Internal Network Outage
-            URL: https://docs.cki-project.org/failures/#internal-network-ou=
-tage
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
-c/0x4c
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1310
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
+   drivers/thunderbolt/nvm.c:75:3: error: expected expression
+                   struct tb_nvm *nvm;
+                   ^
+   drivers/thunderbolt/nvm.c:79:3: error: use of undeclared identifier 'nvm'
+                   nvm = tb_nvm_alloc(&sw->dev);
+                   ^
+   drivers/thunderbolt/nvm.c:80:14: error: use of undeclared identifier 'nvm'
+                   if (IS_ERR(nvm)) {
+                              ^
+   drivers/thunderbolt/nvm.c:81:18: error: use of undeclared identifier 'nvm'
+                           ret = PTR_ERR(nvm);
+                                         ^
+   drivers/thunderbolt/nvm.c:89:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+                   ^
+   drivers/thunderbolt/nvm.c:94:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+                   ^
+   drivers/thunderbolt/nvm.c:95:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.version = (u8)(val >> 0x10);
+                   ^
+   drivers/thunderbolt/nvm.c:97:27: error: use of undeclared identifier 'nvm'
+                   ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+                                           ^
+   drivers/thunderbolt/nvm.c:101:31: error: use of undeclared identifier 'nvm'
+                   ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+                                               ^
+   drivers/thunderbolt/nvm.c:105:13: error: use of undeclared identifier 'nvm'
+                   sw->nvm = nvm;
+                             ^
+   drivers/thunderbolt/nvm.c:109:3: error: expected expression
+                   unsigned int image_size;
+                   ^
+   drivers/thunderbolt/nvm.c:116:3: error: use of undeclared identifier 'image_size'
+                   image_size = sw->nvm->buf_data_size;
+                   ^
+   drivers/thunderbolt/nvm.c:117:7: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+                       ^~~~~~~~~~
+                       page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+   drivers/thunderbolt/nvm.c:117:36: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+                                                    ^~~~~~~~~~
+                                                    page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+   drivers/thunderbolt/nvm.c:121:43: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+                                                           ^~~~~~~~~~
+                                                           page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+>> drivers/thunderbolt/nvm.c:76:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                   u32 val;
+                       ^
+   1 warning and 15 errors generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +76 drivers/thunderbolt/nvm.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+    62	
+    63	static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+    64	{
+    65		int ret = 0;
+    66	
+    67		switch (handle) {
+    68		case 0:
+    69			if (sw->no_nvm_upgrade)
+    70				sw->no_nvm_upgrade = false;
+    71	
+    72			break;
+    73	
+    74		case 1:
+    75			struct tb_nvm *nvm;
+  > 76			u32 val;
+    77			u32 nvm_size;
+    78	
+    79			nvm = tb_nvm_alloc(&sw->dev);
+    80			if (IS_ERR(nvm)) {
+    81				ret = PTR_ERR(nvm);
+    82				break;
+    83			}
+    84	
+    85			ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
+    86			if (ret)
+    87				break;
+    88	
+    89			nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+    90			ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
+    91			if (ret)
+    92				break;
+    93	
+    94			nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+    95			nvm->vendor.version = (u8)(val >> 0x10);
+    96			nvm_size = SZ_512K;
+    97			ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+    98			if (ret)
+    99				break;
+   100	
+   101			ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+   102			if (ret)
+   103				break;
+   104	
+   105			sw->nvm = nvm;
+   106			break;
+   107	
+   108		case 2:
+   109			unsigned int image_size;
+   110			const u8 *buf = sw->nvm->buf;
+   111	
+   112			if (!buf) {
+   113				ret = -EINVAL;
+   114				break;
+   115			}
+   116			image_size = sw->nvm->buf_data_size;
+   117			if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+   118				ret = -EINVAL;
+   119				break;
+   120			}
+   121			ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+   122			if (!ret)
+   123				sw->nvm->flushed = true;
+   124	
+   125			break;
+   126	
+   127		default:
+   128			break;
+   129		}
+   130	
+   131		if ((handle == 1) && (ret != 0))
+   132			tb_nvm_free(sw->nvm);
+   133	
+   134		return ret;
+   135	}
+   136	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
