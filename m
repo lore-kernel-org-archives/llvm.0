@@ -1,133 +1,157 @@
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B493D88
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 17:43:19 +0000 (UTC)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-09.nifty.com with ESMTP id 278HbgHa005772
-	for <llvm@lists.linux.dev>; Tue, 9 Aug 2022 02:37:42 +0900
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 278HbJ9U010100
-	for <llvm@lists.linux.dev>; Tue, 9 Aug 2022 02:37:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 278HbJ9U010100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1659980240;
-	bh=BuY1TMSXWdED7zukVvB5l/59DaxxbcqQ2IOZciXPWIY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P7aSEtMvrm0rPN77TPEfS9Fwxu6H4SqYPBOM+Yqn9iXKeuLQpG9dbACaBGz/W04jX
-	 17vcTbboznbJeo8gfBomBvUtXO8dO0hZQ6rSz8+PFYnpuR3LZgXc0Qtw4OgCsYYC80
-	 n76wofFLTf89hE7+t0ixRY2UehFA29CtNWdhHvd2AAyYxloFIpYY2WtqtyBEX/GInf
-	 IR2eo6FRZ7Ww0mu9Cs1D3Gu7dJK/klwaPyZmgKX1Sbl4N0AcnCISvmZPZbjCDQlsgQ
-	 A91G7WzyIyo7vVkBxQNwvXBl65B8jbVQ8NkTT2zBiXoY450RrNOk2+5YY7eOOv5NEG
-	 fDEaL/i65BtDA==
-X-Nifty-SrcIP: [209.85.221.51]
-Received: by mail-wr1-f51.google.com with SMTP id v3so11751983wrp.0
-        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 10:37:20 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3CMX+nlBOKiRf0WREN7inACQ/IhOuSOQg43AULUJKdUWwYoc8V
-	vFM61kdAvk+rhHUjGha39pNgJhGHOryF3f6bM14=
-X-Google-Smtp-Source: AA6agR5TLez3BClNRdpePrpc8q6eKNE0zlD502ux+r07wV1rDelRX/GyGxXX4tLJF8qojzyjNwVqNb0ZK6QfgKdcSTM=
-X-Received: by 2002:a05:6000:1f83:b0:223:60ee:6c08 with SMTP id
- bw3-20020a0560001f8300b0022360ee6c08mr1572173wrb.682.1659980238492; Mon, 08
- Aug 2022 10:37:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C4D3D88
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 18:04:58 +0000 (UTC)
+Received: by mail-qk1-f170.google.com with SMTP id f14so7095328qkm.0
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 11:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=iKTl1boGXs81S0XIZGy9zuT1guUTlkRSt68bNtAyj48=;
+        b=I1giIXQaXzxH7goOQX5E/XNsipIYPuw8rQam8eTB35oVRAp1WJs1nUSQXCxU5Kj/Ms
+         Mr8nKe4A3xA7orOG4APqoOrzzVYZjsbCOnem5ZnZYAkGRtRUev054yPmEPsSsbVGN+b4
+         8P6YqLmqOU5YQkGgmY5YKUNxd55gsihSVg0H/8d0l5PNRvhN/X0Wuma3Zgtz0pHmXKqv
+         a+JVOCG2Np3fNNpyi0SWhFamI48pFOcXMRY0L7g/TPBovXWQqYCqSV+dLDbJ15G+KLk/
+         5TGQi129z584uijis3a0oKfMC9Q7czqEnAUZc2U18fYtgV0IsEZYedX2mdxvDujaHoYp
+         ClIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=iKTl1boGXs81S0XIZGy9zuT1guUTlkRSt68bNtAyj48=;
+        b=p43HtE+SXJ4mi6molrZyy8I8LeusF+e7+ITTFJJpp0h7Xwl7LponTtnSjcJZOaM2uY
+         JHqi8BqxCetNK2prX1VOLU5kla3FCpR5ciJDt7NsAikLczNDTXZ4FdmpgqjZSJOEGrRG
+         T1vEFk+KI6RqGbltQ5bxUOvyfniyMjQ8qyVN2OUZeC33r57OQZ0UZ0F8ZteqnZuAgRXQ
+         0RR0d5IUNZazROiKnPj1kMpRWX2HXdmEYSWIzp3HlmwsBRxm9yf84N9GVvoETuqi15+C
+         XxHzaQxEqcf7dEKp14ZXiA6BXYQup56e+rQxym6Tcqhwjmw56oWguKb3ouexqcaUGLYR
+         T8sA==
+X-Gm-Message-State: ACgBeo1SyETS8JjP5BEPnlwmbJerJ4nXIx+/JGI2PFw29qp5Ob9nom4t
+	MNQK6FOabdFTVTNWVlMXhTUN9WmL13ZZso8Ew1Y=
+X-Google-Smtp-Source: AA6agR4a8AS6ZBY7Z9sWtHuV87khvS3reFLLGtpNLhyD4PMToqruZflY6B1UOYmD7cykvxPVLd9qSltfW+ghkgL6MQE=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr14918080qko.383.1659981897015; Mon, 08
+ Aug 2022 11:04:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <2c496d24174e63b27ec047f383df6700@matoro.tk> <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
- <38a9853e59db8946999316ce3a6b4621@matoro.tk>
-In-Reply-To: <38a9853e59db8946999316ce3a6b4621@matoro.tk>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 9 Aug 2022 02:36:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-Message-ID: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To: matoro <matoro_mailinglist_kernel@matoro.tk>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
+References: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
+ <202208081346.EWHUWCSa-lkp@intel.com> <CAHp75VecMvtHwkA6=JxHbX0oeRg+-fXNraggBCaOxqhf9WUdzQ@mail.gmail.com>
+ <YvEy9uq49ZiBHtFd@dev-arch.thelio-3990X>
+In-Reply-To: <YvEy9uq49ZiBHtFd@dev-arch.thelio-3990X>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 8 Aug 2022 20:04:20 +0200
+Message-ID: <CAHp75VePJ2iKDx0Sj5SErW4nfpx-9KrN3c5yRFyfwgpfnMCkEg@mail.gmail.com>
+Subject: Re: [PATCH v5 09/14] iio: magnetometer: yas530: Introduce "chip_info" structure
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Jakob Hauser <jahau@rocketmail.com>, 
+	Jonathan Cameron <jic23@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Lars-Peter Clausen <lars@metafoo.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Hans de Goede <hdegoede@redhat.com>, linux-iio <linux-iio@vger.kernel.org>, 
+	devicetree <devicetree@vger.kernel.org>, phone-devel@vger.kernel.org, 
+	~postmarketos/upstreaming@lists.sr.ht
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 8, 2022 at 10:27 PM matoro
-<matoro_mailinglist_kernel@matoro.tk> wrote:
+On Mon, Aug 8, 2022 at 5:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> On Mon, Aug 08, 2022 at 01:18:06PM, +0200, Andy Shevchenko wrote:
+> > On Mon, Aug 8, 2022 at 7:40 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > ...
+> >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > >> drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initialize=
+r element is not a compile-time constant
+> > >                    .product_name =3D yas5xx_product_name[yas530],
+> > >                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >    1 error generated.
+> >
+> > What?!
+> >
+> > The yas530 is a part of the enum, how come that compiler can't see
+> > this? Looks like a Clang bug.
 >
-> I have real hardware for all these arches in my collection.  I use it
-> for testing the latest kernel and toolchains on as many of the
-> less-popular arches as possible, exactly to find issues like this one :)
+> That is not what clang is complaining about here, you'll see the same
+> error even if you used '0', '1', or '2' here:
 >
-> Specifically we support all of these in Gentoo.  To double-check this
-> wasn't a config issue, I asked another user who also runs sparc to try
-> building 5.19 with his config (not copying mine), and he observed the
-> same problem.  You can reach us in #gentoo-sparc on Libera.
+>   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer ele=
+ment is not a compile-time constant
+>                   .product_name =3D yas5xx_product_name[0],
+>                                   ^~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
 >
-> As for testing, I make all this hardware available on an as-needed
-> basis.  So if you can't or don't want to fiddle with qemu, just let me
-> know (email or IRC, same username on Libera), and I will get you direct
-> access to my hardware.  Thanks!!
+> It is complaining that the initializer element
+> ('yas5xx_product_name[yas530]', rather than just 'yas530') is not
+> constant, which is a true complaint if I am reading C11 standard 6.6.7
+> correctly.
+>
+> GCC 8+ has chosen to accept const structures as constant expressions in
+> designated initializers, which it is allowed to do per 6.6.10. Nick did
+> have a patch to try and match this behavior in clang but the work that
+> was requested doesn't seem to be trivial so it was never finalized:
+> https://reviews.llvm.org/D76096
+>
+> You'll see the same error with GCC 7:
+>
+>   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer ele=
+ment is not constant
+>      .product_name =3D yas5xx_product_name[yas530],
+>                      ^~~~~~~~~~~~~~~~~~~
+>   drivers/iio/magnetometer/yamaha-yas530.c:933:19: note: (near initializa=
+tion for =E2=80=98yas5xx_chip_info_tbl[0].product_name=E2=80=99)
+>   drivers/iio/magnetometer/yamaha-yas530.c:938:19: error: initializer ele=
+ment is not constant
+>      .product_name =3D yas5xx_product_name[yas532],
+>                      ^~~~~~~~~~~~~~~~~~~
+>   drivers/iio/magnetometer/yamaha-yas530.c:938:19: note: (near initializa=
+tion for =E2=80=98yas5xx_chip_info_tbl[1].product_name=E2=80=99)
+>   drivers/iio/magnetometer/yamaha-yas530.c:943:19: error: initializer ele=
+ment is not constant
+>      .product_name =3D yas5xx_product_name[yas533],
+>                      ^~~~~~~~~~~~~~~~~~~
+>   drivers/iio/magnetometer/yamaha-yas530.c:943:19: note: (near initializa=
+tion for =E2=80=98yas5xx_chip_info_tbl[2].product_name=E2=80=99)
 
+> > >    930  static const struct yas5xx_chip_info yas5xx_chip_info_tbl[] =
+=3D {
+> > >    931          [yas530] =3D {
+> > >    932                  .devid =3D YAS530_DEVICE_ID,
+> > >  > 933                  .product_name =3D yas5xx_product_name[yas530]=
+,
+> > >    934                  .version_name =3D yas5xx_version_names[yas530=
+],
 
-I found the root cause.
+Would then
 
-When I build the sparc kernel, I see a warning
+  .product_name =3D "YAS530 MS-3E",
+  .version_names =3D { "A", "B" },
 
-WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation
-failed, symbol will not be versioned.
+work?
 
+Jakob, note 's' in the field name as well.
 
-Then, modpost missed to write out the entry.
+> > >    935          },
+> > >    936          [yas532] =3D {
+> > >    937                  .devid =3D YAS532_DEVICE_ID,
+> > >    938                  .product_name =3D yas5xx_product_name[yas532]=
+,
+> > >    939                  .version_name =3D yas5xx_version_names[yas532=
+],
+> > >    940          },
+> > >    941          [yas533] =3D {
+> > >    942                  .devid =3D YAS532_DEVICE_ID,
+> > >    943                  .product_name =3D yas5xx_product_name[yas533]=
+,
+> > >    944                  .version_name =3D yas5xx_version_names[yas533=
+],
+> > >    945          },
+> > >    946  };
 
-With the following patch, you will be able to load the module.
-
-I will send a patch with a proper commit log tomorrow. I need some sleep now.
-
-
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 29474cee10b1..337bd36a890a 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2206,13 +2206,11 @@ static void add_exported_symbols(struct buffer
-*buf, struct module *mod)
-        /* record CRCs for exported symbols */
-        buf_printf(buf, "\n");
-        list_for_each_entry(sym, &mod->exported_symbols, list) {
--               if (!sym->crc_valid) {
-+               if (!sym->crc_valid)
-                        warn("EXPORT symbol \"%s\" [%s%s] version
-generation failed, symbol will not be versioned.\n"
-                             "Is \"%s\" prototyped in
-<asm/asm-prototypes.h>?\n",
-                             sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
-                             sym->name);
--                       continue;
--               }
-
-                buf_printf(buf, "SYMBOL_CRC(%s, 0x%08x, \"%s\");\n",
-                           sym->name, sym->crc, sym->is_gpl_only ? "_gpl" : "");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+--=20
+With Best Regards,
+Andy Shevchenko
