@@ -1,133 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838F07A
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 19:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE19C433D6;
-	Mon,  8 Aug 2022 19:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659988142;
-	bh=ZZ0M6DXS3SaOxZnApyi3EjWkCpXQkR2dr1q1XCxuqAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lJ1+SOrGo2hFqonea6BAkFyhxXZPq5ZqCrgcCH1f5KI2Q9SkMVv/s+gK7cDsYpSW7
-	 zc4QiAlAxytem5QvJDnsadgHs1W2tZCCDV70dF3+NawhELdl6+xUHopeOg9SqnERin
-	 7CBSB5Pv+7mS18M6ucULc/Eyz0UcMuZq/3q00wazoj+pf+RObK2zUaCr30xL6dQe5k
-	 prBwB1n8a2LANP+WVWO5zLPvDqQtESM2m/yJK91FPMjjtXVZrZ361+b5cSxKKH4qgQ
-	 xHLqUKZgDSrs8npZab99oUsGxsFkLIDI0sEr5Jhp10obSeStK89sAZZM1DNNUlF3QE
-	 2XPQkkaO0sIBQ==
-Date: Mon, 8 Aug 2022 12:48:59 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Jakob Hauser <jahau@rocketmail.com>,
-	Jonathan Cameron <jic23@kernel.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, Lars-Peter Clausen <lars@metafoo.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	linux-iio <linux-iio@vger.kernel.org>,
-	devicetree <devicetree@vger.kernel.org>,
-	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 09/14] iio: magnetometer: yas530: Introduce
- "chip_info" structure
-Message-ID: <YvFoq9C00GRZVeZR@dev-arch.thelio-3990X>
-References: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
- <202208081346.EWHUWCSa-lkp@intel.com>
- <CAHp75VecMvtHwkA6=JxHbX0oeRg+-fXNraggBCaOxqhf9WUdzQ@mail.gmail.com>
- <YvEy9uq49ZiBHtFd@dev-arch.thelio-3990X>
- <CAHp75VePJ2iKDx0Sj5SErW4nfpx-9KrN3c5yRFyfwgpfnMCkEg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E398D7A
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 20:32:06 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id c17so14314744lfb.3
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 13:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C9afqoEJ3pX/KledohtUjUFflVFqfG6MgRVC4Zz7R1I=;
+        b=GKxkQT6h5cDJQOWDClY40dEwoPzV4EkuXe5xNM524LjnYXpv7PqlxkiK6CC4eR9YjT
+         utJgUkp0+dR8CbfmFok56kKfHs++46jvx8acLeV8XVt2h0IFDx0Z/v6HkVANGbczhQrQ
+         M/F2LhiTHVbSBhUrqxMBbvtMAeMsEykZspXCIr3H4c9HLxYb8PpcLIegY7MPOELuiSkx
+         8BD7VYwUCw20prDaph9QBGzEP2kCV2gWediGY5pX13UZEbz5G71EiLrf06l9Tjv/0uOX
+         U45zV8hTbL3axMPiXm8shtX/xBmiGrhVLTqOzmmIyB/jUWS54AOepTx7uNxgfEDz4Jq5
+         hgYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C9afqoEJ3pX/KledohtUjUFflVFqfG6MgRVC4Zz7R1I=;
+        b=yQxaOgZ+cQVYGf8qhbErYt8TsLhZ6IImpTgORX15GX+BsDgya0ELrT3HDc0EHJ9I0R
+         TQX/qCHiSvjMIHRmmdbSKSMp210NS6h5f0k/dAqDGLiShdITRH/0/R+U4SIK9cmaEBOA
+         j5lvBaWQ2ICaI1OQNIj2zKszJLDQW7ksHDOabmrPXO3Mdc15jqKxoRhXSbNuo3rAi2xz
+         jAaD2eY1JtyjYj8wBlhHp4VivkpWdAyAwXTKiWAtjf7O1MqSKE75G7LQkvLfsBRN2Xk3
+         eI2Y8UuGEzLtIsZ+UVgLfKTK5nO87wPgcjvX4bkkavR4JQisXdl60De4qosU/cHZtyZM
+         bFRw==
+X-Gm-Message-State: ACgBeo0RxKV1JHfrWlFaKmfSLTeipLN6FpsjkqypnVlUKnxBD9jeogPc
+	dp01Jy8liAW5NMCOz8CVfLZvNodRiLf2QgswYpMi4g==
+X-Google-Smtp-Source: AA6agR46qkyX7bDUGyailX3z21cArpXwPMF1t4Fsfj2ILYvF624gplVTkZnJBosL0EMZzYCRz3VWklKTZDNLJ5QEI0k=
+X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id
+ w1-20020a0565120b0100b0048ba0652a8bmr3648405lfu.401.1659990724622; Mon, 08
+ Aug 2022 13:32:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VePJ2iKDx0Sj5SErW4nfpx-9KrN3c5yRFyfwgpfnMCkEg@mail.gmail.com>
+References: <20220808192321.3490995-1-ndesaulniers@google.com> <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
+In-Reply-To: <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 8 Aug 2022 13:31:53 -0700
+Message-ID: <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
+Subject: Re: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39 warning
+To: Nathan Chancellor <nathan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Nick Clifton <nickc@redhat.com>, 
+	Fangrui Song <maskray@google.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Jens Axboe <axboe@kernel.dk>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Nicolas Schier <n.schier@avm.de>, 
+	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Ben Dooks <ben-linux@fluff.org>, 
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Aug 08, 2022 at 08:04:20PM +0200, Andy Shevchenko wrote:
-> On Mon, Aug 8, 2022 at 5:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > On Mon, Aug 08, 2022 at 01:18:06PM, +0200, Andy Shevchenko wrote:
-> > > On Mon, Aug 8, 2022 at 7:40 AM kernel test robot <lkp@intel.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > > >> drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer element is not a compile-time constant
-> > > >                    .product_name = yas5xx_product_name[yas530],
-> > > >                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > >    1 error generated.
-> > >
-> > > What?!
-> > >
-> > > The yas530 is a part of the enum, how come that compiler can't see
-> > > this? Looks like a Clang bug.
+On Mon, Aug 8, 2022 at 12:31 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Aug 08, 2022 at 12:23:05PM -0700, Nick Desaulniers wrote:
+> > Users of GNU ld (BFD) from binutils 2.39+ will observe multiple instance
+> > of a new warning when linking kernels in the form:
 > >
-> > That is not what clang is complaining about here, you'll see the same
-> > error even if you used '0', '1', or '2' here:
+> >   ld: warning: arch/x86/realmode/rm/bioscall.o: missing .note.GNU-stack
+> >   section implies executable stack
+> >   ld: NOTE: This behaviour is deprecated and will be removed in a future
+> >   version of the linker
 > >
-> >   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer element is not a compile-time constant
-> >                   .product_name = yas5xx_product_name[0],
-> >                                   ^~~~~~~~~~~~~~~~~~~~~~
-> >   1 error generated.
+> > The object files producing these all happen to be out of line assembler
+> > sources (*.S files).
 > >
-> > It is complaining that the initializer element
-> > ('yas5xx_product_name[yas530]', rather than just 'yas530') is not
-> > constant, which is a true complaint if I am reading C11 standard 6.6.7
-> > correctly.
+> > Generally, we would like to avoid the stack being executable. Because
+> > there could be a need for the stack to be executable, assembler sources
+> > have to opt-in to this security feature via explicit creation of the
+> > .note.GNU-stack feature (which compilers create by default) or command
+> > line flag --noexecstack.
 > >
-> > GCC 8+ has chosen to accept const structures as constant expressions in
-> > designated initializers, which it is allowed to do per 6.6.10. Nick did
-> > have a patch to try and match this behavior in clang but the work that
-> > was requested doesn't seem to be trivial so it was never finalized:
-> > https://reviews.llvm.org/D76096
+> > Boot tested defconfig and i386_defconfig in QEMU. If any assembler
+> > sources do require executable stack, they can be built with
+> > -Wa,--execstack, though the linker warning would have to be disabled. We
+> > might need to extend this more generally to the top level Makefile for
+> > all architectures, but I'm not equipped to test the result of such a
+> > change.
 > >
-> > You'll see the same error with GCC 7:
+> > LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
+> > strictly necessary when linking with LLD, only BFD, but it doesn't hurt
+> > to be explicit here for all linkers IMO.
 > >
-> >   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer element is not constant
-> >      .product_name = yas5xx_product_name[yas530],
-> >                      ^~~~~~~~~~~~~~~~~~~
-> >   drivers/iio/magnetometer/yamaha-yas530.c:933:19: note: (near initialization for ‘yas5xx_chip_info_tbl[0].product_name’)
-> >   drivers/iio/magnetometer/yamaha-yas530.c:938:19: error: initializer element is not constant
-> >      .product_name = yas5xx_product_name[yas532],
-> >                      ^~~~~~~~~~~~~~~~~~~
-> >   drivers/iio/magnetometer/yamaha-yas530.c:938:19: note: (near initialization for ‘yas5xx_chip_info_tbl[1].product_name’)
-> >   drivers/iio/magnetometer/yamaha-yas530.c:943:19: error: initializer element is not constant
-> >      .product_name = yas5xx_product_name[yas533],
-> >                      ^~~~~~~~~~~~~~~~~~~
-> >   drivers/iio/magnetometer/yamaha-yas530.c:943:19: note: (near initialization for ‘yas5xx_chip_info_tbl[2].product_name’)
-> 
-> > > >    930  static const struct yas5xx_chip_info yas5xx_chip_info_tbl[] = {
-> > > >    931          [yas530] = {
-> > > >    932                  .devid = YAS530_DEVICE_ID,
-> > > >  > 933                  .product_name = yas5xx_product_name[yas530],
-> > > >    934                  .version_name = yas5xx_version_names[yas530],
-> 
-> Would then
-> 
->   .product_name = "YAS530 MS-3E",
->   .version_names = { "A", "B" },
-> 
-> work?
+> > Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
+> > Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
+> > Link: https://github.com/llvm/llvm-project/issues/57009
+> > Reported-by: Jens Axboe <axboe@kernel.dk>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> FWIW, this warning appears for other architectures, as I have seen it
+> with powerpc and s390 and there is also a patch for ARM:
+>
+> https://lore.kernel.org/20220721204709.445216-1-ben-linux@fluff.org/
+>
+> Perhaps this should be done for all architectures in the main Makefile?
 
-I haven't tested it but there is no reason that shouldn't work.
+Thanks for the link; I recall Ard mentioning the ELF segments are
+ignored by the kernels loader in another thread.
 
-> Jakob, note 's' in the field name as well.
-> 
-> > > >    935          },
-> > > >    936          [yas532] = {
-> > > >    937                  .devid = YAS532_DEVICE_ID,
-> > > >    938                  .product_name = yas5xx_product_name[yas532],
-> > > >    939                  .version_name = yas5xx_version_names[yas532],
-> > > >    940          },
-> > > >    941          [yas533] = {
-> > > >    942                  .devid = YAS532_DEVICE_ID,
-> > > >    943                  .product_name = yas5xx_product_name[yas533],
-> > > >    944                  .version_name = yas5xx_version_names[yas533],
-> > > >    945          },
-> > > >    946  };
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Perhaps we should be adding
+--no-warn-execstack
+wrapped in an ld-option check to KBUILD_LDFLAGS at the top level?
+
+>
+> > ---
+> >  arch/x86/Makefile                 | 2 ++
+> >  arch/x86/boot/Makefile            | 2 +-
+> >  arch/x86/boot/compressed/Makefile | 2 +-
+> >  arch/x86/realmode/rm/Makefile     | 2 +-
+> >  4 files changed, 5 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> > index 7854685c5f25..571546775725 100644
+> > --- a/arch/x86/Makefile
+> > +++ b/arch/x86/Makefile
+> > @@ -159,6 +159,8 @@ else
+> >          KBUILD_CFLAGS += -mcmodel=kernel
+> >  endif
+> >
+> > +KBUILD_AFLAGS        += -Wa,--noexecstack
+> > +
+> >  #
+> >  # If the function graph tracer is used with mcount instead of fentry,
+> >  # '-maccumulate-outgoing-args' is needed to prevent a GCC bug
+> > diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+> > index b5aecb524a8a..d7f2130f2277 100644
+> > --- a/arch/x86/boot/Makefile
+> > +++ b/arch/x86/boot/Makefile
+> > @@ -67,7 +67,7 @@ targets += cpustr.h
+> >  # ---------------------------------------------------------------------------
+> >
+> >  KBUILD_CFLAGS        := $(REALMODE_CFLAGS) -D_SETUP
+> > -KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
+> >  KBUILD_CFLAGS        += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+> >  KBUILD_CFLAGS        += -fno-asynchronous-unwind-tables
+> >  GCOV_PROFILE := n
+> > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> > index 19e1905dcbf6..1587a21a132d 100644
+> > --- a/arch/x86/boot/compressed/Makefile
+> > +++ b/arch/x86/boot/compressed/Makefile
+> > @@ -57,7 +57,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+> >  # that the compiler finds it even with out-of-tree builds (make O=/some/path).
+> >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
+> >
+> > -KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
+> >  GCOV_PROFILE := n
+> >  UBSAN_SANITIZE :=n
+> >
+> > diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
+> > index 83f1b6a56449..5f2fdafaa034 100644
+> > --- a/arch/x86/realmode/rm/Makefile
+> > +++ b/arch/x86/realmode/rm/Makefile
+> > @@ -73,7 +73,7 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
+> >
+> >  KBUILD_CFLAGS        := $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
+> >                  -I$(srctree)/arch/x86/boot
+> > -KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
+> >  KBUILD_CFLAGS        += -fno-asynchronous-unwind-tables
+> >  GCOV_PROFILE := n
+> >  UBSAN_SANITIZE := n
+> > --
+> > 2.37.1.559.g78731f0fdb-goog
+> >
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
