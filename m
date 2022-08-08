@@ -1,58 +1,89 @@
-Received: from vps43012.public.cloudvps.com (vps43012.public.cloudvps.com [79.170.88.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D347A
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 20:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=nutritionhealthsupport.nl; s=default; h=Content-Type:MIME-Version:
-	Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=oKkcz+2EogKwZnov7k8WSGxSoGYMtNhfVmbWHAVYojI=; b=AbrPOKpoRcsRFh1WSOsQGu0VAn
-	0YEp1IDcI6qTUWQ5XDQUjQyDSUW/xuBkv3SybNoie3PRYqnFVYWghb7+w8orOZhrc3XoTAJEOhc/v
-	SNJg3ZdcTCxsvrhI3L56PXzd1CsbugG8b76s2yb9wyQe1QxvsQpECdjWSRTM6z3NVGrsVC931NH9m
-	Q/bk6ZqCftM4vzkEtcB+6hvpN8fL7Z0YtzSxm9rWnyemReHxZJzcTvLUFE1GhkKwmNVBhvOkZFsAO
-	p7znN/Zjk8aFgFsna7kMzsl2u1p/0HpwYNgOTp40/nBfVkCGlr/MvO1rwd+ayAKCymyW0StNIYqcb
-	KaayyB7w==;
-Received: from nutrition1 by server1.tuliphost.nl with local (Exim 4.95)
-	(envelope-from <nutrition1@server1.tuliphost.nl>)
-	id 1oL9Cr-0007CM-J6
-	for llvm@lists.linux.dev;
-	Mon, 08 Aug 2022 22:18:33 +0200
-To: llvm@lists.linux.dev
-Subject: =?us-ascii?Q?Nutrition_Health_Support:_Der_Ruckgang_der_Kryp?=  =?us-ascii?Q?towahrung_macht_Sie_zum_Milliardar?=
-X-PHP-Script: nutrition-hs.nl/index.php for 191.101.31.24
-X-PHP-Originating-Script: 1012:PHPMailer.php
-Date: Mon, 8 Aug 2022 20:18:33 +0000
-From: Nutrition Health Support <info@nutritionhealthsupport.nl>
-Reply-To: info@nutritionhealthsupport.nl
-Message-ID: <04W6FoFvucOX1VAYPFm6w5UvvSk3EO1qXdCqcCimPwI@nutrition-hs.nl>
-X-Mailer: PHPMailer 6.1.6 (https://github.com/PHPMailer/PHPMailer)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65597A
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 21:08:47 +0000 (UTC)
+Received: by mail-ed1-f54.google.com with SMTP id r4so12838802edi.8
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 14:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=lv26Q3sNxfEifdTpne61U1pkeE4sDF6GrXRlpPg4PbU=;
+        b=LEuzOqsKGBmJ9I+TFAOXTx5jZrMKvhNvc27x7c9WibTJn3ejHzbKIiP3uVAlx3xwYC
+         k0Y6K/CFzU/4eefSL2CLYD2AAF9U816dVyBiD6KftXoBXJ9IFuGBBB5nIJ+1g/1rrLU1
+         ER9CMr1EyMh1gtywDU+AMIlcocFVVxXErwWNg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lv26Q3sNxfEifdTpne61U1pkeE4sDF6GrXRlpPg4PbU=;
+        b=ec5V6Mp5z2IdjR+r2zy6eSwcAT05XL8mm0X44+JuuKcnNLs/tPi4vUWtxvW9RIhywv
+         VrGPHKuzIyO0QdXXqM08RCL2i5m8Ub56xrHfaBybk0okOSLAbRAuibvswMSDGVMurZ+z
+         ++6PF/KSflQpYS/oIKOk5qWb61bqaXqhHa+A9S8T7VHzZF+90LO0ZN34QqZ50lvzhqPp
+         +A+Sgxb8V/3RO0JcWBcwG15rSzf7kdfSBaDZALclCtxo9YGTIjM3f53MKZx/TBGacTSH
+         0GPot1zgniQ5WXayB9A6IqM6sT2bayN4Y2xXNRsHHg5UvfoGD4Rl2ClL5kvN+k3MDe3c
+         nAEg==
+X-Gm-Message-State: ACgBeo2UcdjBllDJm7oDFiTUJ4KpTgnT249mjYWdaimQ4vmUs2i5t13k
+	jj4U7SZlerarSIlU3E2dtvaRX7Fzcl+a4MOb
+X-Google-Smtp-Source: AA6agR61/jlH/zD7CYA9Xko4hQ6rhJ0zXj6RYgvwKKmshYdYmmvywL37ZXn5IYaz6YnYXq4j4dlBEQ==
+X-Received: by 2002:a05:6402:194d:b0:43d:8001:984b with SMTP id f13-20020a056402194d00b0043d8001984bmr19187830edz.327.1659992925633;
+        Mon, 08 Aug 2022 14:08:45 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id x21-20020a1709064bd500b0073160d570aasm273898ejv.120.2022.08.08.14.08.45
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 14:08:45 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id v131-20020a1cac89000000b003a4bb3f786bso8017272wme.0
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 14:08:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
+ g16-20020a05600c4ed000b003a33ef3c8d1mr18515437wmq.154.1659992913709; Mon, 08
+ Aug 2022 14:08:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-tulip-MailScanner-Information: Please contact the ISP for more information
-X-tulip-MailScanner-ID: 1oL9Cr-0007CM-J6
-X-tulip-MailScanner: Found to be clean
-X-tulip-MailScanner-SpamCheck: 
-X-tulip-MailScanner-From: nutrition1@server1.tuliphost.nl
-X-Spam-Status: No
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server1.tuliphost.nl
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [1012 1013] / [47 12]
-X-AntiAbuse: Sender Address Domain - server1.tuliphost.nl
-X-Get-Message-Sender-Via: server1.tuliphost.nl: authenticated_id: nutrition1/from_h
-X-Authenticated-Sender: server1.tuliphost.nl: info@nutritionhealthsupport.nl
+References: <20220808192321.3490995-1-ndesaulniers@google.com>
+ <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X> <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
+In-Reply-To: <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 8 Aug 2022 14:08:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
+Message-ID: <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
+Subject: Re: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39 warning
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Nick Clifton <nickc@redhat.com>, 
+	Fangrui Song <maskray@google.com>, Jens Axboe <axboe@kernel.dk>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Nicolas Schier <n.schier@avm.de>, 
+	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Ben Dooks <ben-linux@fluff.org>, 
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Bericht inhoud:
-DIE WELTFINANZKRISE KANN SIE REICH MACHEN! https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-428626-Euro-pro-Woche-08-07
+On Mon, Aug 8, 2022 at 1:32 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> Thanks for the link; I recall Ard mentioning the ELF segments are
+> ignored by the kernels loader in another thread.
 
--- 
-Deze e-mail is verzonden vanuit het contactformulier op Nutrition Health Support http://nutritionhealthsupport.nl
+Yeah, the kernel loader is not some generic ELF loader thing.
 
+> Perhaps we should be adding
+> --no-warn-execstack
+> wrapped in an ld-option check to KBUILD_LDFLAGS at the top level?
+
+I think both the linker flag and the assembler flag are the "correct"
+thing to do.
+
+And yes, I don't think there is anything architecture-specific about
+it, and the top-level Makefile is likely the right thing to modify.
+
+I'm a tiny bit worried about "what versions of as/ld accept those
+flags", though.
+
+              Linus
