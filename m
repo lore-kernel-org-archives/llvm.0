@@ -1,141 +1,66 @@
-Received: from matoro.tk (matoro.tk [104.188.251.153])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566397A
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 18:42:38 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256; bh=waso6o/gLxP4dp0Ks9iZGKqqKBgpprYF0f4RtQrgunc=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220801; t=1659984140; v=1; x=1660416140;
- b=tS3+PeZ4x7UIaxySNasrF1pt1JK67oV1k+KCwDmj0FfmR+DyxGPbcI2X7WphaJre39bKKqwz
- JHHhwd6oLizdTJV6NgyrpczO3SD7XlTVqVcnL6cgqepe3shMYX7p62lg0YJ6woTbii34nsJDrD5
- eOQoNKpWsC53wCBzs6RWIliLnoZmrzDF3JWHVVJDnFd8fcDROSqJysd8cEFjOeQbsIfBr4UHFBo
- LIQy4Rrjwa83VBWrL5SQaq0DqHvDe/Ljgv3Fmr5cHjFz38Ijno+QJLZKzG49ext/5lgxMr5AteD
- bBy4oL/zOHYQqabEVQRyF+3ckZnlOKc3Nt9lK0PCScNiCt6vE7LmS1AFo4TOTbcC8GCyJ1mOe14
- VmlPBMQGYi704VFuiifiMn3fuqXfLG/U0ibbkiv+VbNlq+vnrPV4vjOgRCpxukWJRM+uqWw0fju
- qFWmXfnvr2a7HOd3mDkz82Jj0hGCt0ES+LIDJLNXT8XTHqr6I+0gT/QFTQepnTUSJGzNyga1vR7
- jhNBDKOx0VrX50J+vk9fA/Y6/LWH4b0FxNTTEbGYOpnU/xx8XgzcCC7CAH97X/9xFvExnep1m1R
- Db3PJZUJz6muhm1tsfdIvwbp0q3k3TOos2YGryFxa8NKfJudNsdYTachK2NbyBSBwpZHWAFH/+b
- SAD76p7mvNE=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id d390d774; Mon, 08 Aug
- 2022 14:42:20 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1507A
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 18:47:37 +0000 (UTC)
+Received: by mail-lf1-f44.google.com with SMTP id r17so13901297lfm.11
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 11:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=spLx4BmS0ESQuFMLlfBbiEsVcFilYdm6jlWZCb/lP3E=;
+        b=rIwKG1dyJQEyjuMi1QLgibUoOzQIG1Och0sDLUfq6AwqMRaKay8U1ROjw0BPOQfccD
+         ypVPSWEgS6aO1jHxtVHzma4sMfFhmKGIgZNTM7IWPQNYoO4/hIjZB2MSbV2LD4ISmLEB
+         2rJQgmWnWMHsqHk6bQn7cQZ6+BSlQmP9Y0iTz5lgBRmV6cZAQCeUKSfbtAejOW7C6nuj
+         JBiVhW467pd3ToP3UI/g16Cw7hsMJZVfnWvys3vBRc+1Paf+Z5kHa1ZWZ7EYlby7eDtl
+         yc03WR8YamDZ8u/kRiY26QQErFvgCf1qmea0t+hHyYMTfNjhwVvvFAYfkFS0YuCx6xOX
+         4K7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=spLx4BmS0ESQuFMLlfBbiEsVcFilYdm6jlWZCb/lP3E=;
+        b=hbyzEYBaO0fhzl63XchUoypVS3TbKQoZUwhZe4X9xayMbGQYXdwDNbqLR/jyPLg9wI
+         gJZcB1qM42+tTsOvlgaszy9uNgcpEUiXfY8xo3RHrT/iw7ht4ycY8f91tb+1QUmcMjoG
+         x7NQhxppBm/Ub/DIcjppknybwZsOxePGRhP9t2J4ufJFeeQNdrHwMWmb2Db857ADZZzX
+         e4udsaOGtDe9VTlMdi23Nh9w8/NDOvL3L7Rx/weB6PaFndWs8q6pkJO5FuuMHDhz5xBH
+         2CIehBWOGHhmJp6k3qavFUAFiHuhoxIEWr1Lp1d7DT6Jxgctse7laiEW5JlKPg5Yy2Mw
+         YQOQ==
+X-Gm-Message-State: ACgBeo0+ARPC2DVrDkogHVxQ21Mud4vCFZvfmaT9lxFGTjBl4iNxy4H3
+	4QQiBrbRoJVcqc1nD0NQvvKlBy24knWUpBBONJ5O5w==
+X-Google-Smtp-Source: AA6agR7JGTS75eRLb3PpWY05edC4/z5G8WRhg3NMJzHeWfFvV+hZJIJ99SEIAlSxZ00vAdN1IrpEj4h4o4KGIuJ5bqw=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr7629025lfr.647.1659984455809; Mon, 08
+ Aug 2022 11:47:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Mon, 08 Aug 2022 14:42:20 -0400
-From: matoro <matoro_mailinglist_kernel@matoro.tk>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Nicolas
- Schier <nicolas@fjasle.eu>, Peter Zijlstra <peterz@infradead.org>,
- linux-modules <linux-modules@vger.kernel.org>, clang-built-linux
- <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-In-Reply-To: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <2c496d24174e63b27ec047f383df6700@matoro.tk>
- <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
- <38a9853e59db8946999316ce3a6b4621@matoro.tk>
- <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-Message-ID: <d4f30a7313f1ff43d0c919fc556f08fe@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu> <96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 8 Aug 2022 11:47:24 -0700
+Message-ID: <CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
+Subject: Re: [PATCH v3 11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}()
+ common to PPC32 and PPC64
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, naveen.n.rao@linux.vnet.ibm.com
+Cc: llvm@lists.linux.dev, nathan@kernel.org, omosnacek@gmail.com, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
 
-That patch doesn't apply to the v5.19 stable tag, so I just manually 
-edited and it worked perfect!  Thank you!!
+Christ...that's not what I meant to send; sorry, mutt is giving me
+bizarro errors today so I can't insert myself into threads using the
+usual incantation I have in the past.  What I meant to send was:
 
-Sorry I didn't mention that warning - I did see it, but it still showed 
-up even on the old kernel, so I thought it was irrelevant.  Much 
-appreciated!
+Christophe,
+Ondrej reported a regression with ftrace when building w/ clang
+bisected to this commit. Can you PTAL?
+https://github.com/ClangBuiltLinux/linux/issues/1682
 
--------- Original Message --------
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups 
-(modpost, LTO, MODULE_REL_CRCS, export.h)
-Date: 2022-08-08 13:36
- From: Masahiro Yamada <masahiroy@kernel.org>
-To: matoro <matoro_mailinglist_kernel@matoro.tk>
-
-On Mon, Aug 8, 2022 at 10:27 PM matoro
-<matoro_mailinglist_kernel@matoro.tk> wrote:
-> 
-> I have real hardware for all these arches in my collection.  I use it
-> for testing the latest kernel and toolchains on as many of the
-> less-popular arches as possible, exactly to find issues like this one 
-> :)
-> 
-> Specifically we support all of these in Gentoo.  To double-check this
-> wasn't a config issue, I asked another user who also runs sparc to try
-> building 5.19 with his config (not copying mine), and he observed the
-> same problem.  You can reach us in #gentoo-sparc on Libera.
-> 
-> As for testing, I make all this hardware available on an as-needed
-> basis.  So if you can't or don't want to fiddle with qemu, just let me
-> know (email or IRC, same username on Libera), and I will get you direct
-> access to my hardware.  Thanks!!
-
-
-I found the root cause.
-
-When I build the sparc kernel, I see a warning
-
-WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation
-failed, symbol will not be versioned.
-
-
-Then, modpost missed to write out the entry.
-
-With the following patch, you will be able to load the module.
-
-I will send a patch with a proper commit log tomorrow. I need some sleep 
-now.
-
-
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 29474cee10b1..337bd36a890a 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2206,13 +2206,11 @@ static void add_exported_symbols(struct buffer
-*buf, struct module *mod)
-         /* record CRCs for exported symbols */
-         buf_printf(buf, "\n");
-         list_for_each_entry(sym, &mod->exported_symbols, list) {
--               if (!sym->crc_valid) {
-+               if (!sym->crc_valid)
-                         warn("EXPORT symbol \"%s\" [%s%s] version
-generation failed, symbol will not be versioned.\n"
-                              "Is \"%s\" prototyped in
-<asm/asm-prototypes.h>?\n",
-                              sym->name, mod->name, mod->is_vmlinux ? "" 
-: ".ko",
-                              sym->name);
--                       continue;
--               }
-
-                 buf_printf(buf, "SYMBOL_CRC(%s, 0x%08x, \"%s\");\n",
-                            sym->name, sym->crc, sym->is_gpl_only ? 
-"_gpl" : "");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Thanks,
+~Nick
