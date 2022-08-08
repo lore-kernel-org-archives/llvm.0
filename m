@@ -1,157 +1,99 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C4D3D88
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 18:04:58 +0000 (UTC)
-Received: by mail-qk1-f170.google.com with SMTP id f14so7095328qkm.0
-        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 11:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=iKTl1boGXs81S0XIZGy9zuT1guUTlkRSt68bNtAyj48=;
-        b=I1giIXQaXzxH7goOQX5E/XNsipIYPuw8rQam8eTB35oVRAp1WJs1nUSQXCxU5Kj/Ms
-         Mr8nKe4A3xA7orOG4APqoOrzzVYZjsbCOnem5ZnZYAkGRtRUev054yPmEPsSsbVGN+b4
-         8P6YqLmqOU5YQkGgmY5YKUNxd55gsihSVg0H/8d0l5PNRvhN/X0Wuma3Zgtz0pHmXKqv
-         a+JVOCG2Np3fNNpyi0SWhFamI48pFOcXMRY0L7g/TPBovXWQqYCqSV+dLDbJ15G+KLk/
-         5TGQi129z584uijis3a0oKfMC9Q7czqEnAUZc2U18fYtgV0IsEZYedX2mdxvDujaHoYp
-         ClIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=iKTl1boGXs81S0XIZGy9zuT1guUTlkRSt68bNtAyj48=;
-        b=p43HtE+SXJ4mi6molrZyy8I8LeusF+e7+ITTFJJpp0h7Xwl7LponTtnSjcJZOaM2uY
-         JHqi8BqxCetNK2prX1VOLU5kla3FCpR5ciJDt7NsAikLczNDTXZ4FdmpgqjZSJOEGrRG
-         T1vEFk+KI6RqGbltQ5bxUOvyfniyMjQ8qyVN2OUZeC33r57OQZ0UZ0F8ZteqnZuAgRXQ
-         0RR0d5IUNZazROiKnPj1kMpRWX2HXdmEYSWIzp3HlmwsBRxm9yf84N9GVvoETuqi15+C
-         XxHzaQxEqcf7dEKp14ZXiA6BXYQup56e+rQxym6Tcqhwjmw56oWguKb3ouexqcaUGLYR
-         T8sA==
-X-Gm-Message-State: ACgBeo1SyETS8JjP5BEPnlwmbJerJ4nXIx+/JGI2PFw29qp5Ob9nom4t
-	MNQK6FOabdFTVTNWVlMXhTUN9WmL13ZZso8Ew1Y=
-X-Google-Smtp-Source: AA6agR4a8AS6ZBY7Z9sWtHuV87khvS3reFLLGtpNLhyD4PMToqruZflY6B1UOYmD7cykvxPVLd9qSltfW+ghkgL6MQE=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr14918080qko.383.1659981897015; Mon, 08
- Aug 2022 11:04:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981CA7A
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 18:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F40CC433D7;
+	Mon,  8 Aug 2022 18:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659983618;
+	bh=D2XW8J2IVrVhTm9qso0bSI1eB34b3POF3YjI53CNJj4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m9TCF1LblgMJD9S1VkUE1pBE+IEXHKG5gTnWhHoVjYzgmUxhwaysmPAQvRofn/80w
+	 RyDEbWSMcg77uqD8/ygAOFo6i+JcrqbhmrB+sIHzc4iFNGLTsy7Bhuq08Txqm92O8j
+	 +jsZ13tpScJr+DjRmevGyqJQMs4jUiSYh4RhL/Kk7NuokDsjucHxnXHojQxOAoRn2l
+	 mk25fUHPE5q6IvRDFkA4u2JFjEXXo/7/5ZP0unvdPkEvRR3trTvmrwMPIIZM2fG7vb
+	 oDgJ1YM4frZ6AU3rMsdAhwx02Ea7pU8U1mIoDduRDaISAM8rHn90yNplMy+c/vRZJK
+	 T+FQ+5abhb/fg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id F27384035A; Mon,  8 Aug 2022 15:33:34 -0300 (-03)
+Date: Mon, 8 Aug 2022 15:33:34 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>, quentin@isovalent.com,
+	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <YvFW/kBL6YA3Tlnc@kernel.org>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
- <202208081346.EWHUWCSa-lkp@intel.com> <CAHp75VecMvtHwkA6=JxHbX0oeRg+-fXNraggBCaOxqhf9WUdzQ@mail.gmail.com>
- <YvEy9uq49ZiBHtFd@dev-arch.thelio-3990X>
-In-Reply-To: <YvEy9uq49ZiBHtFd@dev-arch.thelio-3990X>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 8 Aug 2022 20:04:20 +0200
-Message-ID: <CAHp75VePJ2iKDx0Sj5SErW4nfpx-9KrN3c5yRFyfwgpfnMCkEg@mail.gmail.com>
-Subject: Re: [PATCH v5 09/14] iio: magnetometer: yas530: Introduce "chip_info" structure
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Jakob Hauser <jahau@rocketmail.com>, 
-	Jonathan Cameron <jic23@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Lars-Peter Clausen <lars@metafoo.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Hans de Goede <hdegoede@redhat.com>, linux-iio <linux-iio@vger.kernel.org>, 
-	devicetree <devicetree@vger.kernel.org>, phone-devel@vger.kernel.org, 
-	~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+X-Url: http://acmel.wordpress.com
 
-On Mon, Aug 8, 2022 at 5:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Mon, Aug 08, 2022 at 01:18:06PM, +0200, Andy Shevchenko wrote:
-> > On Mon, Aug 8, 2022 at 7:40 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > ...
-> >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > > >> drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initialize=
-r element is not a compile-time constant
-> > >                    .product_name =3D yas5xx_product_name[yas530],
-> > >                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    1 error generated.
-> >
-> > What?!
-> >
-> > The yas530 is a part of the enum, how come that compiler can't see
-> > this? Looks like a Clang bug.
->
-> That is not what clang is complaining about here, you'll see the same
-> error even if you used '0', '1', or '2' here:
->
->   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer ele=
-ment is not a compile-time constant
->                   .product_name =3D yas5xx_product_name[0],
->                                   ^~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
->
-> It is complaining that the initializer element
-> ('yas5xx_product_name[yas530]', rather than just 'yas530') is not
-> constant, which is a true complaint if I am reading C11 standard 6.6.7
-> correctly.
->
-> GCC 8+ has chosen to accept const structures as constant expressions in
-> designated initializers, which it is allowed to do per 6.6.10. Nick did
-> have a patch to try and match this behavior in clang but the work that
-> was requested doesn't seem to be trivial so it was never finalized:
-> https://reviews.llvm.org/D76096
->
-> You'll see the same error with GCC 7:
->
->   drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer ele=
-ment is not constant
->      .product_name =3D yas5xx_product_name[yas530],
->                      ^~~~~~~~~~~~~~~~~~~
->   drivers/iio/magnetometer/yamaha-yas530.c:933:19: note: (near initializa=
-tion for =E2=80=98yas5xx_chip_info_tbl[0].product_name=E2=80=99)
->   drivers/iio/magnetometer/yamaha-yas530.c:938:19: error: initializer ele=
-ment is not constant
->      .product_name =3D yas5xx_product_name[yas532],
->                      ^~~~~~~~~~~~~~~~~~~
->   drivers/iio/magnetometer/yamaha-yas530.c:938:19: note: (near initializa=
-tion for =E2=80=98yas5xx_chip_info_tbl[1].product_name=E2=80=99)
->   drivers/iio/magnetometer/yamaha-yas530.c:943:19: error: initializer ele=
-ment is not constant
->      .product_name =3D yas5xx_product_name[yas533],
->                      ^~~~~~~~~~~~~~~~~~~
->   drivers/iio/magnetometer/yamaha-yas530.c:943:19: note: (near initializa=
-tion for =E2=80=98yas5xx_chip_info_tbl[2].product_name=E2=80=99)
+Em Mon, Aug 08, 2022 at 06:14:48PM +0200, Daniel Borkmann escreveu:
+> Hi Arnaldo,
+> 
+> On 7/19/22 7:05 PM, Roberto Sassu wrote:
+> > Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+> > error when it encounters the deprecated function MD5_Init() and the others.
+> > The error would be interpreted as missing libcrypto, while in reality it is
+> > not.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Given rest of the tooling fixes from Andres Freund went via perf tree and the
+> below is perf related as well, I presume you'll pick this up, too?
 
-> > >    930  static const struct yas5xx_chip_info yas5xx_chip_info_tbl[] =
-=3D {
-> > >    931          [yas530] =3D {
-> > >    932                  .devid =3D YAS530_DEVICE_ID,
-> > >  > 933                  .product_name =3D yas5xx_product_name[yas530]=
-,
-> > >    934                  .version_name =3D yas5xx_version_names[yas530=
-],
+Sure.
+ 
+>   [0] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=perf/core
+> 
+> >   tools/build/feature/test-libcrypto.c | 15 +++++++++++----
+> >   1 file changed, 11 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
+> > index a98174e0569c..bc34a5bbb504 100644
+> > --- a/tools/build/feature/test-libcrypto.c
+> > +++ b/tools/build/feature/test-libcrypto.c
+> > @@ -1,16 +1,23 @@
+> >   // SPDX-License-Identifier: GPL-2.0
+> > +#include <openssl/evp.h>
+> >   #include <openssl/sha.h>
+> >   #include <openssl/md5.h>
+> >   int main(void)
+> >   {
+> > -	MD5_CTX context;
+> > +	EVP_MD_CTX *mdctx;
+> >   	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
+> >   	unsigned char dat[] = "12345";
+> > +	unsigned int digest_len;
+> > -	MD5_Init(&context);
+> > -	MD5_Update(&context, &dat[0], sizeof(dat));
+> > -	MD5_Final(&md[0], &context);
+> > +	mdctx = EVP_MD_CTX_new();
+> > +	if (!mdctx)
+> > +		return 0;
+> > +
+> > +	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+> > +	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
+> > +	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
+> > +	EVP_MD_CTX_free(mdctx);
+> >   	SHA1(&dat[0], sizeof(dat), &md[0]);
+> > 
 
-Would then
+-- 
 
-  .product_name =3D "YAS530 MS-3E",
-  .version_names =3D { "A", "B" },
-
-work?
-
-Jakob, note 's' in the field name as well.
-
-> > >    935          },
-> > >    936          [yas532] =3D {
-> > >    937                  .devid =3D YAS532_DEVICE_ID,
-> > >    938                  .product_name =3D yas5xx_product_name[yas532]=
-,
-> > >    939                  .version_name =3D yas5xx_version_names[yas532=
-],
-> > >    940          },
-> > >    941          [yas533] =3D {
-> > >    942                  .devid =3D YAS532_DEVICE_ID,
-> > >    943                  .product_name =3D yas5xx_product_name[yas533]=
-,
-> > >    944                  .version_name =3D yas5xx_version_names[yas533=
-],
-> > >    945          },
-> > >    946  };
-
---=20
-With Best Regards,
-Andy Shevchenko
+- Arnaldo
