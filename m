@@ -1,180 +1,58 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps43012.public.cloudvps.com (vps43012.public.cloudvps.com [79.170.88.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E398D7A
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 20:32:06 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id c17so14314744lfb.3
-        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 13:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C9afqoEJ3pX/KledohtUjUFflVFqfG6MgRVC4Zz7R1I=;
-        b=GKxkQT6h5cDJQOWDClY40dEwoPzV4EkuXe5xNM524LjnYXpv7PqlxkiK6CC4eR9YjT
-         utJgUkp0+dR8CbfmFok56kKfHs++46jvx8acLeV8XVt2h0IFDx0Z/v6HkVANGbczhQrQ
-         M/F2LhiTHVbSBhUrqxMBbvtMAeMsEykZspXCIr3H4c9HLxYb8PpcLIegY7MPOELuiSkx
-         8BD7VYwUCw20prDaph9QBGzEP2kCV2gWediGY5pX13UZEbz5G71EiLrf06l9Tjv/0uOX
-         U45zV8hTbL3axMPiXm8shtX/xBmiGrhVLTqOzmmIyB/jUWS54AOepTx7uNxgfEDz4Jq5
-         hgYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C9afqoEJ3pX/KledohtUjUFflVFqfG6MgRVC4Zz7R1I=;
-        b=yQxaOgZ+cQVYGf8qhbErYt8TsLhZ6IImpTgORX15GX+BsDgya0ELrT3HDc0EHJ9I0R
-         TQX/qCHiSvjMIHRmmdbSKSMp210NS6h5f0k/dAqDGLiShdITRH/0/R+U4SIK9cmaEBOA
-         j5lvBaWQ2ICaI1OQNIj2zKszJLDQW7ksHDOabmrPXO3Mdc15jqKxoRhXSbNuo3rAi2xz
-         jAaD2eY1JtyjYj8wBlhHp4VivkpWdAyAwXTKiWAtjf7O1MqSKE75G7LQkvLfsBRN2Xk3
-         eI2Y8UuGEzLtIsZ+UVgLfKTK5nO87wPgcjvX4bkkavR4JQisXdl60De4qosU/cHZtyZM
-         bFRw==
-X-Gm-Message-State: ACgBeo0RxKV1JHfrWlFaKmfSLTeipLN6FpsjkqypnVlUKnxBD9jeogPc
-	dp01Jy8liAW5NMCOz8CVfLZvNodRiLf2QgswYpMi4g==
-X-Google-Smtp-Source: AA6agR46qkyX7bDUGyailX3z21cArpXwPMF1t4Fsfj2ILYvF624gplVTkZnJBosL0EMZzYCRz3VWklKTZDNLJ5QEI0k=
-X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id
- w1-20020a0565120b0100b0048ba0652a8bmr3648405lfu.401.1659990724622; Mon, 08
- Aug 2022 13:32:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D347A
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 20:35:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=nutritionhealthsupport.nl; s=default; h=Content-Type:MIME-Version:
+	Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=oKkcz+2EogKwZnov7k8WSGxSoGYMtNhfVmbWHAVYojI=; b=AbrPOKpoRcsRFh1WSOsQGu0VAn
+	0YEp1IDcI6qTUWQ5XDQUjQyDSUW/xuBkv3SybNoie3PRYqnFVYWghb7+w8orOZhrc3XoTAJEOhc/v
+	SNJg3ZdcTCxsvrhI3L56PXzd1CsbugG8b76s2yb9wyQe1QxvsQpECdjWSRTM6z3NVGrsVC931NH9m
+	Q/bk6ZqCftM4vzkEtcB+6hvpN8fL7Z0YtzSxm9rWnyemReHxZJzcTvLUFE1GhkKwmNVBhvOkZFsAO
+	p7znN/Zjk8aFgFsna7kMzsl2u1p/0HpwYNgOTp40/nBfVkCGlr/MvO1rwd+ayAKCymyW0StNIYqcb
+	KaayyB7w==;
+Received: from nutrition1 by server1.tuliphost.nl with local (Exim 4.95)
+	(envelope-from <nutrition1@server1.tuliphost.nl>)
+	id 1oL9Cr-0007CM-J6
+	for llvm@lists.linux.dev;
+	Mon, 08 Aug 2022 22:18:33 +0200
+To: llvm@lists.linux.dev
+Subject: =?us-ascii?Q?Nutrition_Health_Support:_Der_Ruckgang_der_Kryp?=  =?us-ascii?Q?towahrung_macht_Sie_zum_Milliardar?=
+X-PHP-Script: nutrition-hs.nl/index.php for 191.101.31.24
+X-PHP-Originating-Script: 1012:PHPMailer.php
+Date: Mon, 8 Aug 2022 20:18:33 +0000
+From: Nutrition Health Support <info@nutritionhealthsupport.nl>
+Reply-To: info@nutritionhealthsupport.nl
+Message-ID: <04W6FoFvucOX1VAYPFm6w5UvvSk3EO1qXdCqcCimPwI@nutrition-hs.nl>
+X-Mailer: PHPMailer 6.1.6 (https://github.com/PHPMailer/PHPMailer)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220808192321.3490995-1-ndesaulniers@google.com> <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
-In-Reply-To: <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 8 Aug 2022 13:31:53 -0700
-Message-ID: <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
-Subject: Re: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39 warning
-To: Nathan Chancellor <nathan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Nick Clifton <nickc@redhat.com>, 
-	Fangrui Song <maskray@google.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Jens Axboe <axboe@kernel.dk>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Nicolas Schier <n.schier@avm.de>, 
-	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Ben Dooks <ben-linux@fluff.org>, 
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-tulip-MailScanner-Information: Please contact the ISP for more information
+X-tulip-MailScanner-ID: 1oL9Cr-0007CM-J6
+X-tulip-MailScanner: Found to be clean
+X-tulip-MailScanner-SpamCheck: 
+X-tulip-MailScanner-From: nutrition1@server1.tuliphost.nl
+X-Spam-Status: No
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server1.tuliphost.nl
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [1012 1013] / [47 12]
+X-AntiAbuse: Sender Address Domain - server1.tuliphost.nl
+X-Get-Message-Sender-Via: server1.tuliphost.nl: authenticated_id: nutrition1/from_h
+X-Authenticated-Sender: server1.tuliphost.nl: info@nutritionhealthsupport.nl
 
-On Mon, Aug 8, 2022 at 12:31 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Aug 08, 2022 at 12:23:05PM -0700, Nick Desaulniers wrote:
-> > Users of GNU ld (BFD) from binutils 2.39+ will observe multiple instance
-> > of a new warning when linking kernels in the form:
-> >
-> >   ld: warning: arch/x86/realmode/rm/bioscall.o: missing .note.GNU-stack
-> >   section implies executable stack
-> >   ld: NOTE: This behaviour is deprecated and will be removed in a future
-> >   version of the linker
-> >
-> > The object files producing these all happen to be out of line assembler
-> > sources (*.S files).
-> >
-> > Generally, we would like to avoid the stack being executable. Because
-> > there could be a need for the stack to be executable, assembler sources
-> > have to opt-in to this security feature via explicit creation of the
-> > .note.GNU-stack feature (which compilers create by default) or command
-> > line flag --noexecstack.
-> >
-> > Boot tested defconfig and i386_defconfig in QEMU. If any assembler
-> > sources do require executable stack, they can be built with
-> > -Wa,--execstack, though the linker warning would have to be disabled. We
-> > might need to extend this more generally to the top level Makefile for
-> > all architectures, but I'm not equipped to test the result of such a
-> > change.
-> >
-> > LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
-> > strictly necessary when linking with LLD, only BFD, but it doesn't hurt
-> > to be explicit here for all linkers IMO.
-> >
-> > Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
-> > Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> > Link: https://github.com/llvm/llvm-project/issues/57009
-> > Reported-by: Jens Axboe <axboe@kernel.dk>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> FWIW, this warning appears for other architectures, as I have seen it
-> with powerpc and s390 and there is also a patch for ARM:
->
-> https://lore.kernel.org/20220721204709.445216-1-ben-linux@fluff.org/
->
-> Perhaps this should be done for all architectures in the main Makefile?
-
-Thanks for the link; I recall Ard mentioning the ELF segments are
-ignored by the kernels loader in another thread.
-
-Perhaps we should be adding
---no-warn-execstack
-wrapped in an ld-option check to KBUILD_LDFLAGS at the top level?
-
->
-> > ---
-> >  arch/x86/Makefile                 | 2 ++
-> >  arch/x86/boot/Makefile            | 2 +-
-> >  arch/x86/boot/compressed/Makefile | 2 +-
-> >  arch/x86/realmode/rm/Makefile     | 2 +-
-> >  4 files changed, 5 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 7854685c5f25..571546775725 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -159,6 +159,8 @@ else
-> >          KBUILD_CFLAGS += -mcmodel=kernel
-> >  endif
-> >
-> > +KBUILD_AFLAGS        += -Wa,--noexecstack
-> > +
-> >  #
-> >  # If the function graph tracer is used with mcount instead of fentry,
-> >  # '-maccumulate-outgoing-args' is needed to prevent a GCC bug
-> > diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-> > index b5aecb524a8a..d7f2130f2277 100644
-> > --- a/arch/x86/boot/Makefile
-> > +++ b/arch/x86/boot/Makefile
-> > @@ -67,7 +67,7 @@ targets += cpustr.h
-> >  # ---------------------------------------------------------------------------
-> >
-> >  KBUILD_CFLAGS        := $(REALMODE_CFLAGS) -D_SETUP
-> > -KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
-> >  KBUILD_CFLAGS        += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
-> >  KBUILD_CFLAGS        += -fno-asynchronous-unwind-tables
-> >  GCOV_PROFILE := n
-> > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> > index 19e1905dcbf6..1587a21a132d 100644
-> > --- a/arch/x86/boot/compressed/Makefile
-> > +++ b/arch/x86/boot/compressed/Makefile
-> > @@ -57,7 +57,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> >  # that the compiler finds it even with out-of-tree builds (make O=/some/path).
-> >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
-> >
-> > -KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
-> >  GCOV_PROFILE := n
-> >  UBSAN_SANITIZE :=n
-> >
-> > diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
-> > index 83f1b6a56449..5f2fdafaa034 100644
-> > --- a/arch/x86/realmode/rm/Makefile
-> > +++ b/arch/x86/realmode/rm/Makefile
-> > @@ -73,7 +73,7 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
-> >
-> >  KBUILD_CFLAGS        := $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
-> >                  -I$(srctree)/arch/x86/boot
-> > -KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > +KBUILD_AFLAGS        := $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
-> >  KBUILD_CFLAGS        += -fno-asynchronous-unwind-tables
-> >  GCOV_PROFILE := n
-> >  UBSAN_SANITIZE := n
-> > --
-> > 2.37.1.559.g78731f0fdb-goog
-> >
-
-
+Bericht inhoud:
+DIE WELTFINANZKRISE KANN SIE REICH MACHEN! https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-428626-Euro-pro-Woche-08-07
 
 -- 
-Thanks,
-~Nick Desaulniers
+Deze e-mail is verzonden vanuit het contactformulier op Nutrition Health Support http://nutritionhealthsupport.nl
+
