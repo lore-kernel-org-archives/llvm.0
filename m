@@ -1,120 +1,207 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6709D7C
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 05:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659937226; x=1691473226;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L0AEyjOdy+rECcp7lQwc01b4Y++VmDWGY8GDnPBcItw=;
-  b=UpbtGXJcChXlu59A5Fy9ciy2lzFlmIaZaFCMkoh9cyjBiZSELDtWazMO
-   kA82amiwtWbK94gPtVTzQn9ysCf4De+vECvYyyNvr//ppKEf1LAGymlJ9
-   PPca/jZKBLcg4yk0/FYWwPuL3su8HKUT7RGcZONbgDqNlWQpN6VZ3eWIb
-   hzOjFDaH3MkPf4P26xGnMFLRgW0d29Vu/V0Fv4/NeDyKPPUkPC6ubX9Q6
-   DFxYU6EzRcMY+epCMEPnvkO+0MFbvwVEwa5jq65+f7xuoYLSNmEic6AKZ
-   Qqp2mZ4NxZVpkz1+s2javoq2Rvi/POsA+ynlcqfVG9av25rjTrl+nFoWp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="273555803"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="273555803"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 22:40:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="637165336"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2022 22:40:09 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oKvUm-000Lwf-1R;
-	Mon, 08 Aug 2022 05:40:08 +0000
-Date: Mon, 8 Aug 2022 13:39:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jakob Hauser <jahau@rocketmail.com>,
-	Jonathan Cameron <jic23@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht,
-	Jakob Hauser <jahau@rocketmail.com>
-Subject: Re: [PATCH v5 09/14] iio: magnetometer: yas530: Introduce
- "chip_info" structure
-Message-ID: <202208081346.EWHUWCSa-lkp@intel.com>
-References: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A35A7C
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 05:59:55 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-01.nifty.com with ESMTP id 2785t8L8007152
+	for <llvm@lists.linux.dev>; Mon, 8 Aug 2022 14:55:08 +0900
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 2785shPZ024394
+	for <llvm@lists.linux.dev>; Mon, 8 Aug 2022 14:54:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2785shPZ024394
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1659938085;
+	bh=qejQ7qBbGWyXlXw+9ltBzYOdnZJ6o0o+M0Ple7B/+Yc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=xf4BG++C4DsMw1wETGD16aAQgXcOyMOxYC2YWW7ygBM7SEqeSyBBPTemr6qeyddWl
+	 wav4+MXO1jLQ+yWnY+H7OJyLkbVwIyGP3QDCPV5Osc8pVfc1+AHHn0lecHbJFdW+MY
+	 uXc2o+8qOrZadUUEvaYJbb8MAWGqgmpVAlC3ZehWTRzSQfuSLhG635F7bwHbgONzoP
+	 7Tszn2Vgn8lwVuqsBRpwQAXvlAeuiO+TPY3m1nC31wuRIniQ/z1MIHpCL7Q2pT6xQb
+	 5XlMHSaEdws5tdcC3fWZiWARshGt7cNzkTOH5vcd1dnmFqhees5B/3AY7xYULe0xnn
+	 mctvHC4lcUI1w==
+X-Nifty-SrcIP: [209.85.128.49]
+Received: by mail-wm1-f49.google.com with SMTP id n185so4257164wmn.4
+        for <llvm@lists.linux.dev>; Sun, 07 Aug 2022 22:54:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3lInPNCbsI1ThOyVKniP6CZgf4qHziGleqDjC+kUd8n/EzZe3x
+	kz4XBonAWTPtUZSvjBF7I6s2W6NR7lbFBilqmWA=
+X-Google-Smtp-Source: AA6agR67yrrIq8MxybypgJHhJrFW1rEbYpjlPy4b/RNP2FAT2d6tNuWjP4sOb5OhWgDNVEW9M61wQ1NMknMtRkFldGA=
+X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
+ r14-20020a05600c35ce00b003a31b7fbbd8mr11090211wmq.22.1659938083218; Sun, 07
+ Aug 2022 22:54:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <2c496d24174e63b27ec047f383df6700@matoro.tk>
+In-Reply-To: <2c496d24174e63b27ec047f383df6700@matoro.tk>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 8 Aug 2022 14:54:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+Message-ID: <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To: matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jakob,
+Hi Matoro,
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on v5.19]
-[also build test ERROR on next-20220805]
-[cannot apply to jic23-iio/togreg linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakob-Hauser/iio-magnetometer-yas530-Change-data-type-of-hard_offsets-to-signed/20220808-080209
-base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
-config: hexagon-randconfig-r045-20220807 (https://download.01.org/0day-ci/archive/20220808/202208081346.EWHUWCSa-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2e5a660a127b0fa7ca71e3e30356dc2254ec13eb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jakob-Hauser/iio-magnetometer-yas530-Change-data-type-of-hard_offsets-to-signed/20220808-080209
-        git checkout 2e5a660a127b0fa7ca71e3e30356dc2254ec13eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/magnetometer/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer element is not a compile-time constant
-                   .product_name = yas5xx_product_name[yas530],
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Thanks for the report.
 
 
-vim +933 drivers/iio/magnetometer/yamaha-yas530.c
+I have qemu-system-sparc installed on my Ubuntu machine,
+so I think I will be able to test it on sparc, at least.
 
-   929	
-   930	static const struct yas5xx_chip_info yas5xx_chip_info_tbl[] = {
-   931		[yas530] = {
-   932			.devid = YAS530_DEVICE_ID,
- > 933			.product_name = yas5xx_product_name[yas530],
-   934			.version_name = yas5xx_version_names[yas530],
-   935		},
-   936		[yas532] = {
-   937			.devid = YAS532_DEVICE_ID,
-   938			.product_name = yas5xx_product_name[yas532],
-   939			.version_name = yas5xx_version_names[yas532],
-   940		},
-   941		[yas533] = {
-   942			.devid = YAS532_DEVICE_ID,
-   943			.product_name = yas5xx_product_name[yas533],
-   944			.version_name = yas5xx_version_names[yas533],
-   945		},
-   946	};
-   947	
+How did you test these 4 architectures (sparc, alpha, riscv, ia64)?
+QEMU?
+
+Thanks
+
+
+
+
+On Sat, Aug 6, 2022 at 8:39 AM matoro
+<matoro_mailinglist_kernel@matoro.tk> wrote:
+>
+> Hi Masahiro, I'm sorry to raise this after release but this seems to be
+> broken on SOME architectures.  So far I have tested:
+>
+> Affected - sparc, alpha
+> Unaffected - riscv, ia64
+>
+> The affected systems are unable to load modules, similar to the
+> previously reported issue.  All module loading fails with "disagrees
+> about version of symbol module_layout".
+>
+> Bisect blames 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b, but this does
+> not revert cleanly.  Presumably CONFIG_MODVERSIONS=n would fix, but this
+> is a pretty core feature.
+>
+> Unlike the issue Sedat reported, this is on a GNU toolchain, no clang
+> involved.
+>
+> Here are the configs I am using (with make olddefconfig on upgrade to
+> 5.19):
+>
+> Broken - sparc - https://dpaste.com/5A8F2JD6U
+> Broken - alpha - https://dpaste.com/FYKK23L9X
+> Working - riscv - https://dpaste.com/HV6Y4V6NT
+> Working - ia64 - https://dpaste.com/HDLDNEAK4
+>
+> Please let me know if there's anything I can do to help track down this
+> regression.
+>
+>
+> -------- Original Message --------
+> Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups
+> (modpost, LTO, MODULE_REL_CRCS, export.h)
+> Date: 2022-05-13 08:20
+>  From: Masahiro Yamada <masahiroy@kernel.org>
+> To: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+>
+> On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org>
+> wrote:
+> >
+> >
+> > This is the third batch of cleanups in this development cycle.
+> >
+>
+>
+> This series is available at
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+>   lto-cleanup-v6
+>
+>
+> >
+> > Changes in v6:
+> >   - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
+> >
+> > Changes in v5:
+> >   - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by
+> > Nathan)
+> >   - Clean up arch/m68k/include/asm/export.h (Nick)
+> >   - Keep gen_symversions (and will be removed by a later patch)
+> >   - Add more comments in the script
+> >
+> > Changes in v4:
+> >   - Rename .vmlinux-symver.c to .vmlinux.export.c
+> >     because I notice this approach is useful for further cleanups,
+> >     not only for modversioning but also for overall EXPORT_SYMBOL.
+> >   - New patch
+> >   - New.
+> >     Resent of my previous submission.
+> >
+> > https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+> >   - New
+> >     Resent of my previous submission
+> >
+> > https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
+> >
+> > Changes in v3:
+> >   - New patch
+> >
+> > Changes in v2:
+> >   - Simplify the implementation (parse .cmd files after ELF)
+> >   - New patch
+> >  - replace the chain of $(if ...) with $(and )
+> >   - New patch
+> >   - New patch
+> >
+> > Masahiro Yamada (10):
+> >   modpost: extract symbol versions from *.cmd files
+> >   kbuild: link symbol CRCs at final link, removing
+> >     CONFIG_MODULE_REL_CRCS
+> >   kbuild: stop merging *.symversions
+> >   genksyms: adjust the output format to modpost
+> >   kbuild: do not create *.prelink.o for Clang LTO or IBT
+> >   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+> >   kbuild: make built-in.a rule robust against too long argument error
+> >   kbuild: make *.mod rule robust against too long argument error
+> >   kbuild: add cmd_and_savecmd macro
+> >   kbuild: rebuild multi-object modules when objtool is updated
+> >
+> >  arch/m68k/include/asm/Kbuild    |   1 +
+> >  arch/m68k/include/asm/export.h  |   2 -
+> >  arch/powerpc/Kconfig            |   1 -
+> >  arch/s390/Kconfig               |   1 -
+> >  arch/um/Kconfig                 |   1 -
+> >  include/asm-generic/export.h    |  22 ++-
+> >  include/linux/export-internal.h |  16 +++
+> >  include/linux/export.h          |  30 ++--
+> >  init/Kconfig                    |   4 -
+> >  kernel/module.c                 |  10 +-
+> >  scripts/Kbuild.include          |  10 +-
+> >  scripts/Makefile.build          | 134 ++++++------------
+> >  scripts/Makefile.lib            |   7 -
+> >  scripts/Makefile.modfinal       |   5 +-
+> >  scripts/Makefile.modpost        |   9 +-
+> >  scripts/check-local-export      |  64 +++++++++
+> >  scripts/genksyms/genksyms.c     |  18 +--
+> >  scripts/link-vmlinux.sh         |  33 ++---
+> >  scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
+> >  19 files changed, 320 insertions(+), 284 deletions(-)
+> >  delete mode 100644 arch/m68k/include/asm/export.h
+> >  create mode 100644 include/linux/export-internal.h
+> >  create mode 100755 scripts/check-local-export
+> >
+> > --
+> > 2.32.0
+> >
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
