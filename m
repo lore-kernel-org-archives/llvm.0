@@ -1,144 +1,218 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from matoro.tk (matoro.tk [104.188.251.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB7B28EA
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 12:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659961105; x=1691497105;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Wd2pPvLYSC64iyI20sY6Z7jVRe5JMeJOBmd2jQh+WO4=;
-  b=KnbOAQz29J6FHGGdIcn451PzypqoIjjVt8QWdFL1iYEwF0GhrQITd6t7
-   QmBHfU5MIppbU5VZYX2R+2mJz3DvBw8AaTSe2BDy+CAnDLpY5QCEnJqK7
-   CA6yO27p/E6vizOMM5JoxHAg80S+/4MQ4BOauQ7f1LXR+HS/fGJQ1Jrz0
-   N+y9SiYoueXq1DAoMWIppazZpa3Iq7CXL0/Z979/ugaU72WbQOAHFKgRq
-   qCOt9PG0qU7zTDqF1bHMCIfZ8sWp8xuxXT1CSGWaLThLOue7zpS0pJ5Pu
-   FtbPnR/QZ8NM7GR+he9g3XyMPOYwOUNqDpAPFuB+Vl6/Fpb0Pa+0KiEJ2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291355976"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="291355976"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 05:18:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="632869289"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Aug 2022 05:18:23 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oL1iB-000MHB-17;
-	Mon, 08 Aug 2022 12:18:23 +0000
-Date: Mon, 8 Aug 2022 20:17:32 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [peterz-queue:sched/idle 15/37] vmlinux.o: warning: objtool:
- rcu_idle_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text
- section
-Message-ID: <202208082021.0ANdsRTq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16DB7C
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 13:27:16 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; bh=ZIqvjc5NoMxfRa+Oc6uGdcqx1OSySZAYVvE2Yfga4gY=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220801; t=1659965198; v=1; x=1660397198;
+ b=qFhmUNgm9PZSUev/6lFCivnnFMSFHtk0lE87Vt8noToPtDaoFut/MT6xKwTup3mySm00c867
+ KqkmXvWHfV1rOQ8teGWNqNQHVItiSB34x408ZMRHri6rOLYLq23uHZ5yAhWutolOVZyZtI7Baha
+ iRGdTaWBpzHw18BvPoxT6vso0FIT572tlHC+xhMegs1sXheB5SamMKDgfxHIvjzL1as9dyM+ZBv
+ Fo5BuQgAFeUw9bD2wpwPrCWZ7FjFF4cD1hwRMlFL/yHUwxJdLPxTiJZB0JiqoB5pXMwzP1eOxIG
+ PoDj3Vd6Co+zOzzTW1JfBXE3nDz5cFG7gzL489jvfKJWZo/0g30QmA7cVXzudmpz9EZIzy9eJwb
+ UhEYXFZsCNZbb00q4+rNe5HqlJziXamhQ1Z+8dbr2eVtCOdEzT8bE4uuRoGrk9DVxDVLDQP9bxk
+ hRM+U2x9G2pbnEeK6hQ8UpNPR0tH3aBdq7uaLeJto9Jds7gRUNmXg7Ljy2etYjifFIb1aQOuSMJ
+ 2r+eYtaT4O0DUREZC4RUPWD7T0dg41LWKC6+4ISwkQB2+PMaCFIYRZCw8xc+iY8nJ1dEx8eEHzf
+ nUS2d4fTuRuQZtDF22vn5AOy93/yCpzACZe009yUW96Uo/Udg8Jj9Ap2Cm+3pkbsWZWrC2zkYSb
+ HhCG+3icoZI=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 27b26a2c; Mon, 08 Aug
+ 2022 09:26:38 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Date: Mon, 08 Aug 2022 09:26:38 -0400
+From: matoro <matoro_mailinglist_kernel@matoro.tk>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Nicolas
+ Schier <nicolas@fjasle.eu>, Peter Zijlstra <peterz@infradead.org>,
+ linux-modules <linux-modules@vger.kernel.org>, clang-built-linux
+ <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+In-Reply-To: <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <2c496d24174e63b27ec047f383df6700@matoro.tk>
+ <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+Message-ID: <38a9853e59db8946999316ce3a6b4621@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
+I have real hardware for all these arches in my collection.  I use it 
+for testing the latest kernel and toolchains on as many of the 
+less-popular arches as possible, exactly to find issues like this one :)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
-head:   769b3ef979a1016d45e34b71df278f51ae32271d
-commit: 78ac8fb445441a053323ad3f259a0dd6b3fa0605 [15/37] rcu: Fix rcu_idle_exit()
-config: x86_64-randconfig-a014-20220808 (https://download.01.org/0day-ci/archive/20220808/202208082021.0ANdsRTq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=78ac8fb445441a053323ad3f259a0dd6b3fa0605
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/idle
-        git checkout 78ac8fb445441a053323ad3f259a0dd6b3fa0605
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Specifically we support all of these in Gentoo.  To double-check this 
+wasn't a config issue, I asked another user who also runs sparc to try 
+building 5.19 with his config (not copying mine), and he observed the 
+same problem.  You can reach us in #gentoo-sparc on Libera.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As for testing, I make all this hardware available on an as-needed 
+basis.  So if you can't or don't want to fiddle with qemu, just let me 
+know (email or IRC, same username on Libera), and I will get you direct 
+access to my hardware.  Thanks!!
 
-All warnings (new ones prefixed by >>):
+-------- Original Message --------
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups 
+(modpost, LTO, MODULE_REL_CRCS, export.h)
+Date: 2022-08-08 01:54
+ From: Masahiro Yamada <masahiroy@kernel.org>
+To: matoro <matoro_mailinglist_kernel@matoro.tk>
 
-   vmlinux.o: warning: objtool: kvm_spurious_fault+0x1c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_update_host_rsp+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x56: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0xbe: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: rcu_idle_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x41: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: rcu_idle_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x3f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x38: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x67: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __context_tracking_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: acpi_idle_enter+0x63: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x84: call to acpi_idle_do_entry() leaves .noinstr.text section
+Hi Matoro,
+
+Thanks for the report.
 
 
-objdump-func vmlinux.o rcu_idle_enter:
-0000 0000000000006530 <rcu_idle_enter>:
-0000     6530:	55                   	push   %rbp
-0001     6531:	48 89 e5             	mov    %rsp,%rbp
-0004     6534:	53                   	push   %rbx
-0005     6535:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 653c <rcu_idle_enter+0xc>	6537: R_X86_64_PC32	debug_locks-0x5
-000c     653c:	74 0b                	je     6549 <rcu_idle_enter+0x19>
-000e     653e:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 6545 <rcu_idle_enter+0x15>	6541: R_X86_64_PC32	lockdep_recursion-0x4
-0015     6545:	85 c0                	test   %eax,%eax
-0017     6547:	74 04                	je     654d <rcu_idle_enter+0x1d>
-0019     6549:	31 c0                	xor    %eax,%eax
-001b     654b:	eb 0c                	jmp    6559 <rcu_idle_enter+0x29>
-001d     654d:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 6554 <rcu_idle_enter+0x24>	6550: R_X86_64_PC32	hardirqs_enabled-0x4
-0024     6554:	85 c0                	test   %eax,%eax
-0026     6556:	0f 95 c0             	setne  %al
-0029     6559:	0f b6 d8             	movzbl %al,%ebx
-002c     655c:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	655f: R_X86_64_32S	_ftrace_annotated_branch+0x408f0
-0033     6563:	89 de                	mov    %ebx,%esi
-0035     6565:	31 d2                	xor    %edx,%edx
-0037     6567:	31 c9                	xor    %ecx,%ecx
-0039     6569:	e8 00 00 00 00       	call   656e <rcu_idle_enter+0x3e>	656a: R_X86_64_PLT32	ftrace_likely_update-0x4
-003e     656e:	84 db                	test   %bl,%bl
-0040     6570:	74 04                	je     6576 <rcu_idle_enter+0x46>
-0042     6572:	90                   	nop
-0043     6573:	0f 0b                	ud2    
-0045     6575:	90                   	nop
-0046     6576:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	6579: R_X86_64_32S	_ftrace_annotated_branch+0x40920
-004d     657d:	89 de                	mov    %ebx,%esi
-004f     657f:	31 d2                	xor    %edx,%edx
-0051     6581:	31 c9                	xor    %ecx,%ecx
-0053     6583:	e8 00 00 00 00       	call   6588 <rcu_idle_enter+0x58>	6584: R_X86_64_PLT32	ftrace_likely_update-0x4
-0058     6588:	e8 03 00 00 00       	call   6590 <rcu_eqs_enter>
-005d     658d:	5b                   	pop    %rbx
-005e     658e:	5d                   	pop    %rbp
-005f     658f:	c3                   	ret    
+I have qemu-system-sparc installed on my Ubuntu machine,
+so I think I will be able to test it on sparc, at least.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+How did you test these 4 architectures (sparc, alpha, riscv, ia64)?
+QEMU?
+
+Thanks
+
+
+
+
+On Sat, Aug 6, 2022 at 8:39 AM matoro
+<matoro_mailinglist_kernel@matoro.tk> wrote:
+> 
+> Hi Masahiro, I'm sorry to raise this after release but this seems to be
+> broken on SOME architectures.  So far I have tested:
+> 
+> Affected - sparc, alpha
+> Unaffected - riscv, ia64
+> 
+> The affected systems are unable to load modules, similar to the
+> previously reported issue.  All module loading fails with "disagrees
+> about version of symbol module_layout".
+> 
+> Bisect blames 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b, but this does
+> not revert cleanly.  Presumably CONFIG_MODVERSIONS=n would fix, but 
+> this
+> is a pretty core feature.
+> 
+> Unlike the issue Sedat reported, this is on a GNU toolchain, no clang
+> involved.
+> 
+> Here are the configs I am using (with make olddefconfig on upgrade to
+> 5.19):
+> 
+> Broken - sparc - https://dpaste.com/5A8F2JD6U
+> Broken - alpha - https://dpaste.com/FYKK23L9X
+> Working - riscv - https://dpaste.com/HV6Y4V6NT
+> Working - ia64 - https://dpaste.com/HDLDNEAK4
+> 
+> Please let me know if there's anything I can do to help track down this
+> regression.
+> 
+> 
+> -------- Original Message --------
+> Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups
+> (modpost, LTO, MODULE_REL_CRCS, export.h)
+> Date: 2022-05-13 08:20
+>  From: Masahiro Yamada <masahiroy@kernel.org>
+> To: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+> 
+> On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org>
+> wrote:
+> >
+> >
+> > This is the third batch of cleanups in this development cycle.
+> >
+> 
+> 
+> This series is available at
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+>   lto-cleanup-v6
+> 
+> 
+> >
+> > Changes in v6:
+> >   - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
+> >
+> > Changes in v5:
+> >   - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by
+> > Nathan)
+> >   - Clean up arch/m68k/include/asm/export.h (Nick)
+> >   - Keep gen_symversions (and will be removed by a later patch)
+> >   - Add more comments in the script
+> >
+> > Changes in v4:
+> >   - Rename .vmlinux-symver.c to .vmlinux.export.c
+> >     because I notice this approach is useful for further cleanups,
+> >     not only for modversioning but also for overall EXPORT_SYMBOL.
+> >   - New patch
+> >   - New.
+> >     Resent of my previous submission.
+> >
+> > https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+> >   - New
+> >     Resent of my previous submission
+> >
+> > https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
+> >
+> > Changes in v3:
+> >   - New patch
+> >
+> > Changes in v2:
+> >   - Simplify the implementation (parse .cmd files after ELF)
+> >   - New patch
+> >  - replace the chain of $(if ...) with $(and )
+> >   - New patch
+> >   - New patch
+> >
+> > Masahiro Yamada (10):
+> >   modpost: extract symbol versions from *.cmd files
+> >   kbuild: link symbol CRCs at final link, removing
+> >     CONFIG_MODULE_REL_CRCS
+> >   kbuild: stop merging *.symversions
+> >   genksyms: adjust the output format to modpost
+> >   kbuild: do not create *.prelink.o for Clang LTO or IBT
+> >   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+> >   kbuild: make built-in.a rule robust against too long argument error
+> >   kbuild: make *.mod rule robust against too long argument error
+> >   kbuild: add cmd_and_savecmd macro
+> >   kbuild: rebuild multi-object modules when objtool is updated
+> >
+> >  arch/m68k/include/asm/Kbuild    |   1 +
+> >  arch/m68k/include/asm/export.h  |   2 -
+> >  arch/powerpc/Kconfig            |   1 -
+> >  arch/s390/Kconfig               |   1 -
+> >  arch/um/Kconfig                 |   1 -
+> >  include/asm-generic/export.h    |  22 ++-
+> >  include/linux/export-internal.h |  16 +++
+> >  include/linux/export.h          |  30 ++--
+> >  init/Kconfig                    |   4 -
+> >  kernel/module.c                 |  10 +-
+> >  scripts/Kbuild.include          |  10 +-
+> >  scripts/Makefile.build          | 134 ++++++------------
+> >  scripts/Makefile.lib            |   7 -
+> >  scripts/Makefile.modfinal       |   5 +-
+> >  scripts/Makefile.modpost        |   9 +-
+> >  scripts/check-local-export      |  64 +++++++++
+> >  scripts/genksyms/genksyms.c     |  18 +--
+> >  scripts/link-vmlinux.sh         |  33 ++---
+> >  scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
+> >  19 files changed, 320 insertions(+), 284 deletions(-)
+> >  delete mode 100644 arch/m68k/include/asm/export.h
+> >  create mode 100644 include/linux/export-internal.h
+> >  create mode 100755 scripts/check-local-export
+> >
+> > --
+> > 2.32.0
+> >
+> 
+
