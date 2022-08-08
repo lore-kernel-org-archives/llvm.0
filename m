@@ -1,213 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DB47A
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 09:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1659951054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XC+he73dayvRAWpkKDL2IRAgtCNA+zfgePmR8Q8eoko=;
-	b=bN5FIXwlPQQXmDgu63RBchxf7LVd8q0hsLeTC2UMsBiN9Pf+vUUfrTbbyZuKzjDVFay7bA
-	nzF+kKeI2nNxlc/WWd7iAykMbb4ncSwHpdHXvmW4rL95foJsQTLezMemM4bFwZvsCUP5OS
-	f3XHk2qbDl2GyNHbKnXYLmsOET/3Gx8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-GcYBD3qTNYi0AxbnjBOdZA-1; Mon, 08 Aug 2022 05:30:53 -0400
-X-MC-Unique: GcYBD3qTNYi0AxbnjBOdZA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C8E01019C8E
-	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 09:30:53 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 96662492CA2;
-	Mon,  8 Aug 2022 09:30:52 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [4e23eeeb]
-Date: Mon, 08 Aug 2022 09:30:52 -0000
-CC: fsuba@redhat.com, omosnace@redhat.com, mmalik@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8F7187F
+	for <llvm@lists.linux.dev>; Mon,  8 Aug 2022 11:18:44 +0000 (UTC)
+Received: by mail-qk1-f175.google.com with SMTP id a2so6166822qkk.2
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 04:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Qo8m4+JaUBO8TwCYugZyrFg+A5kM5JeZCqY5kQmlmyU=;
+        b=Pir+jptX8VRJ8EVAtD6tXT5+75IX0KYzsXb9bbzvlPsJI4v1ChlsSUQ7ERx7dk3IiD
+         6Vyxl01O5eQ+gdH+SLwH5mCCzJk2nG3uFaUOCVQhIDdhFiRP/7/+c97MbodXqF0X55Cu
+         PM/DcIRZOcUy+MYek5vf88HN1bDpUcETG98sx61TJhRbn6Qcx3U+s2smusNgAgbjdsjw
+         96GZKaN4vc8R1s2kk7ysdIh7IcO98gKfWd/EYa9EsgSblJ7s7+LlrSRfkpTS51KVAdYZ
+         Qwym4B0UhzOJtiYK3E7kR5jhR5RchxKxhdf1dSCteua13+7/D5TlUWMILmQcY7M8DCtk
+         +d5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Qo8m4+JaUBO8TwCYugZyrFg+A5kM5JeZCqY5kQmlmyU=;
+        b=AIpVLHZHfSYKSqwtwnhl2yeRVcNiz3w1BepQsaJ+acXnD9lOrgiOaHcTdp99V1L5vw
+         18fyr/Qn9UN6KMRSEsxaGLTD4VQVlQ9X7WoJV3jBNLJ3U2oQFoEVdt4MIzgFueeTAqTN
+         ejLt3Xli15rXvdkTMnIVW8Pln4ka54n9jCXCPiu2MKi7rwztcaGF1qCiCyxw+Yw1cDvS
+         d4h81W1mz2j3ZkgRUvAzCxAS2NZYFsDjEY0GOvjrHSc88gMhDF2FRIklqV5ltSM5/Voj
+         4exvyzcKDOEiz4kRhnMHSFxOPRgXb9Y5Bft4S+b/2xpCt1DZwpZt6hiGCoyiK7D+HreZ
+         DtKA==
+X-Gm-Message-State: ACgBeo2QuDXpW7jb4T/arYk7BWUnwNiEc9GnpVGDXQ+OitXWPLkf9eOD
+	jI8iEsFx2VkvxE6/O/rK5JcZko4W64M5gXhnV00=
+X-Google-Smtp-Source: AA6agR4MPB6bchiE70z1ZxXE04FW0qRuKvTFfYUPlSOk6YpjiOc5I+b4ZgbaiH5i6eC9sCOplXqIf1+FTgSZmM9/U2g=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr13544878qko.383.1659957522822; Mon, 08
+ Aug 2022 04:18:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <48613.122080805305300250@us-mta-452.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <8f5f58c9bf0f4006fabd01b5564af071d20f2a2d.1659909060.git.jahau@rocketmail.com>
+ <202208081346.EWHUWCSa-lkp@intel.com>
+In-Reply-To: <202208081346.EWHUWCSa-lkp@intel.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 8 Aug 2022 13:18:06 +0200
+Message-ID: <CAHp75VecMvtHwkA6=JxHbX0oeRg+-fXNraggBCaOxqhf9WUdzQ@mail.gmail.com>
+Subject: Re: [PATCH v5 09/14] iio: magnetometer: yas530: Introduce "chip_info" structure
+To: kernel test robot <lkp@intel.com>
+Cc: Jakob Hauser <jahau@rocketmail.com>, Jonathan Cameron <jic23@kernel.org>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, Lars-Peter Clausen <lars@metafoo.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>, 
+	linux-iio <linux-iio@vger.kernel.org>, devicetree <devicetree@vger.kernel.org>, 
+	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Mon, Aug 8, 2022 at 7:40 AM kernel test robot <lkp@intel.com> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+...
 
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/iio/magnetometer/yamaha-yas530.c:933:19: error: initializer element is not a compile-time constant
+>                    .product_name = yas5xx_product_name[yas530],
+>                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 error generated.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50188
+What?!
 
-One or more kernel tests failed:
+The yas530 is a part of the enum, how come that compiler can't see
+this? Looks like a Clang bug.
 
-    Unrecognized or new issues:
-         aarch64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4737990
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4738012
-           s390x - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4737567
-          x86_64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4738373
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4738401
-          x86_64 (debug) - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4737629
-          x86_64 (debug) - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4737648
+>    930  static const struct yas5xx_chip_info yas5xx_chip_info_tbl[] = {
+>    931          [yas530] = {
+>    932                  .devid = YAS530_DEVICE_ID,
+>  > 933                  .product_name = yas5xx_product_name[yas530],
+>    934                  .version_name = yas5xx_version_names[yas530],
+>    935          },
+>    936          [yas532] = {
+>    937                  .devid = YAS532_DEVICE_ID,
+>    938                  .product_name = yas5xx_product_name[yas532],
+>    939                  .version_name = yas5xx_version_names[yas532],
+>    940          },
+>    941          [yas533] = {
+>    942                  .devid = YAS532_DEVICE_ID,
+>    943                  .product_name = yas5xx_product_name[yas533],
+>    944                  .version_name = yas5xx_version_names[yas533],
+>    945          },
+>    946  };
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - Memory function: kaslr
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+With Best Regards,
+Andy Shevchenko
