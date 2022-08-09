@@ -1,89 +1,120 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C93323C6
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 08:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660033615; x=1691569615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ITEsOba8k7DFgGz1qirua169vBalTSUHIog7mLDnQ3I=;
-  b=dGP0ntPz/YnZ0xSG9FRAwLPVBAHBWzlP8MRl/kwBTZSXY5amjX+m/Z0m
-   /hx/f8lU8V1ETGSARQbodD5ViL0ogTJRixajHgQM8dIO2NWCHfSECY/Nf
-   dR6tkzhE2cqQlUejlKOXQBNvLDUfpbSPLGQwTvcfYmqrnEPeW0mScM/RK
-   gc1VgQf8wAOcu0U2s5eG+nxubsEgrXkFkRFMJuwfnFNNpyFsEwj51brNj
-   7B1yvU/jH8KcHRKEM6w/wIN3p5abE1TfNdGdRaQ8doX7QcJsqxoaYRcgr
-   c+cRBGwk42Rm+h5On5Fl4fu7h+D8NoapV0rhzLQVXfULa/MCthrqAVaeY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="377075710"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="377075710"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 01:26:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="637633147"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Aug 2022 01:26:44 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLKZY-000Mr7-09;
-	Tue, 09 Aug 2022 08:26:44 +0000
-Date: Tue, 9 Aug 2022 16:25:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matt Flax <flatmax@flatmax.com>, alsa-devel@alsa-project.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org,
-	Matt Flax <flatmax@flatmax.com>
-Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
-Message-ID: <202208091637.XWbySJt5-lkp@intel.com>
-References: <20220808214028.2502801-1-flatmax@flatmax.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D3E23D0
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 09:59:53 +0000 (UTC)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2799AGdS018331;
+	Tue, 9 Aug 2022 09:59:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=A8bozjHr3yqsC2Dp/BQcPwvME2CwrFbox5vOuhfwRfg=;
+ b=hlfs+ppMEnwC1ZN0JIgTqxtKXjMRfkZ2/3EbhFmbKewCyTyZ4F2UreRpkG7Yvag0i3PZ
+ OjooWdFRnTO1zufymSmxklDMfDq9YN2LIbcP4nx9ddWTkNrG+aPzSENVVcR7CV47uPFt
+ FJ55wFOF5/7kvJRweZFpAQWnl9KInP0unOX3c0xF0BQiiKk416z16GTNvPZG+Mvaygbq
+ DsVKYKPce17rWy0n5JMVvyVwPadn0OtZlmBLnxgf9rDSyTYoQKyGybQh2rHjecELS4hX
+ VeeW/7KLnvX1l2jmsn60pw39HKX0zFO0m/wGxusrgr7B1azWifcqfxUPY5TjZTPp7Ion NA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hukyead31-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 09:59:40 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2799DtT5030353;
+	Tue, 9 Aug 2022 09:59:39 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+	by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hukyead2e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 09:59:39 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2799pMej017568;
+	Tue, 9 Aug 2022 09:59:37 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+	by ppma06ams.nl.ibm.com with ESMTP id 3hu4rp8wdg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 09:59:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+	by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2799v7F519661264
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 9 Aug 2022 09:57:07 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4274842045;
+	Tue,  9 Aug 2022 09:59:35 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7358F4203F;
+	Tue,  9 Aug 2022 09:59:33 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.41.164])
+	by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Tue,  9 Aug 2022 09:59:33 +0000 (GMT)
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ondrej Mosnacek <omosnacek@gmail.com>, llvm@lists.linux.dev
+Subject: [PATCH] powerpc64/ftrace: Fix ftrace for clang builds
+Date: Tue,  9 Aug 2022 15:29:07 +0530
+Message-Id: <20220809095907.418764-1-naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808214028.2502801-1-flatmax@flatmax.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jS4ov5WaXGjJrLTc7RdkWG3-KsQCZvu1
+X-Proofpoint-GUID: QbZxPyp7-YKt7BuIPI_3i26laaMzAv2b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ bulkscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ mlxscore=0 priorityscore=1501 mlxlogscore=856 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208090041
 
-Hi Matt,
+Clang doesn't support -mprofile-kernel ABI, so guard the checks against
+CONFIG_DYNAMIC_FTRACE_WITH_REGS, rather than the elf ABI version.
 
-Thank you for the patch! Yet something to improve:
+Fixes: 23b44fc248f420 ("powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and PPC64")
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Reported-by: Ondrej Mosnacek <omosnacek@gmail.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+---
+ arch/powerpc/kernel/trace/ftrace.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on tiwai-sound/for-next linus/master v5.19 next-20220809]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index cb158c32b50b99..7b85c3b460a3c0 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -393,11 +393,11 @@ int ftrace_make_nop(struct module *mod,
+  */
+ static bool expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+ {
+-	if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1))
++	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
++	else
+ 		return ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) &&
+ 		       ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC));
+-	else
+-		return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
+ }
+ 
+ static int
+@@ -412,7 +412,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 	if (copy_inst_from_kernel_nofault(op, ip))
+ 		return -EFAULT;
+ 
+-	if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1) &&
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
+ 	    copy_inst_from_kernel_nofault(op + 1, ip + 4))
+ 		return -EFAULT;
+ 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: hexagon-randconfig-r002-20220808 (https://download.01.org/0day-ci/archive/20220809/202208091637.XWbySJt5-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7a9219a8431d7740c0958e53078820cbfef4f3f7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
-        git checkout 7a9219a8431d7740c0958e53078820cbfef4f3f7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: src4xxx_remove
-   >>> referenced by src4xxx-i2c.c:25 (sound/soc/codecs/src4xxx-i2c.c:25)
-   >>>               soc/codecs/src4xxx-i2c.o:(src4xxx_i2c_remove) in archive sound/built-in.a
-   >>> referenced by src4xxx-i2c.c:25 (sound/soc/codecs/src4xxx-i2c.c:25)
-   >>>               soc/codecs/src4xxx-i2c.o:(src4xxx_i2c_remove) in archive sound/built-in.a
-
+base-commit: ff1ed171e05c971652a0ede3d716997de8ee41c9
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
