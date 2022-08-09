@@ -1,168 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B927B4685
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 19:10:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061F5C433C1;
-	Tue,  9 Aug 2022 19:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660072255;
-	bh=oIx7E1aeFpBP7FxQJEeWu1a5qlcFfnMFvIQQUxlg6M0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TQAkD8W2D7pMBYvP1lYZ+lUMDwDfQd+tMvHVhr6sMgw9oPimMv8D1OrLvPRwz8//Q
-	 bHo4HvbgQjR6fciYhl2dWmPioF69kHodJ5l9T8MtCBWqGcmRoxP+XEH6FhdeBNyITD
-	 G0UoVNcoj3kHE3lNeS76yMBk7FabdOBIJ9JjlmoNdGad+U0OJIXe2Lom+8cnoNljUj
-	 9i7eoqRYgL6PTx5k3jb20HKZ5vUHqXNCxL0NJHrGgepXX+w4yuvLogT954PJFKquOh
-	 QcGJagV1mzB8auxH/PQ9tmnsjmTKs1Hk7lMAGXWNxJLE0cs4uYEgNd0/Kf06l7uAs3
-	 kqREpt9+K+0IA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 1CCDE4035A; Tue,  9 Aug 2022 16:10:52 -0300 (-03)
-Date: Tue, 9 Aug 2022 16:10:52 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Andres Freund <andres@anarazel.de>
-Cc: Roberto Sassu <roberto.sassu@huawei.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
-	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
-	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Message-ID: <YvKxPJLGP1BdsGQ6@kernel.org>
-References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
- <20220719170555.2576993-4-roberto.sassu@huawei.com>
- <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
- <YvFW/kBL6YA3Tlnc@kernel.org>
- <YvJ6DbzBNsAgNZS4@kernel.org>
- <YvJ7awkCVBYaZ2dd@kernel.org>
- <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
- <YvKvzkuUG78q/mkA@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D984403
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 20:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660078203; x=1691614203;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uviM2rRFSTTGO3UMsZJM0M5Z7obIQkn2Dk5IpBiGCew=;
+  b=DyyKp/Zwy4gs61KR/8GPqxOKdnX7caiPZCeMDASwy87RRaxa9/d4KWTY
+   7lKqlL9f2KInFNKc9INnFxhc9uGd1jv17BNB/hrofa7PHWL3b8phx7X68
+   TB6pzw9OGsCn6fJ8zVcl4iMxGPN9aRXoEgI7w3abTDa4LgqgGVCBk2GFE
+   nkQzSqaRfvtRrQLi8AdK1aNfq/z12s7uYrgqJvkXHSMOzFbZpDn1AdaCm
+   6/FaYqdiJZmJaXfvm7aIKTUh6BPBUjK4W0G1e8b8zH77B7MfUt76yMDUY
+   MhJXPuYfUoa/Few5fj+Goaw59zD/ZpoZ7U/wowqHCACOYTiMRRodN8sRb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277869563"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="277869563"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 13:50:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="601577143"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 09 Aug 2022 13:50:00 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLWAq-000NHV-0b;
+	Tue, 09 Aug 2022 20:50:00 +0000
+Date: Wed, 10 Aug 2022 04:49:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Roger Lu <roger.lu@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Kevin Hilman <khilman@baylibre.com>
+Subject: drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
+ 'svs_of_match'
+Message-ID: <202208100401.D7X9SFYs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvKvzkuUG78q/mkA@kernel.org>
-X-Url: http://acmel.wordpress.com
 
-Em Tue, Aug 09, 2022 at 04:04:46PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Aug 09, 2022 at 10:00:34AM -0700, Andres Freund escreveu:
-> > Hi,
-> > 
-> > On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
-> > > So I backtracked, the way it works needs further consideration with
-> > > regard to the patchkit from Andres, that is already upstream, so it
-> > > would be good for Roberto to take a look at what is in torvalds/master
-> > > now and see if we have to removed that styled thing from Andres.
-> > 
-> > Why would it have to be removed - seems to be fairly independent, leaving the
-> > line conflicts aside? Or do you just mean folding it into one-big-test? If so,
-> > that'd make sense, although I'm not sure how ready the infrastructure
-> 
-> So below is the 3rd patch in Roberto's patchkit adapted, I removed the
-> FEATURE_CHECK_LDFLAGS-disassembler-init-styled setting as we now
-> automatically try with multiple sets of libraries, as with
-> disassembler-four-args.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   15205c2829ca2cbb5ece5ceaafe1171a8470e62b
+commit: 681a02e9500073cd8b9c25a04f06166254b5a879 soc: mediatek: SVS: introduce MTK SVS engine
+date:   8 weeks ago
+config: hexagon-randconfig-r006-20220810 (https://download.01.org/0day-ci/archive/20220810/202208100401.D7X9SFYs-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=681a02e9500073cd8b9c25a04f06166254b5a879
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 681a02e9500073cd8b9c25a04f06166254b5a879
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
 
-The following also had to be done:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-⬢[acme@toolbox perf]$ git log --oneline -1
-aa119945023c4ee7 (HEAD) tools, build: Retry detection of bfd-related features
-⬢[acme@toolbox perf]$ git diff
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 928ebc355fb3f2d0..04b07ff8823487a0 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -253,7 +253,8 @@ $(OUTPUT)test-disassembler-four-args.bin:
-        $(BUILD_BFD) -lopcodes -liberty -lz
+All warnings (new ones prefixed by >>):
 
- $(OUTPUT)test-disassembler-init-styled.bin:
--       $(BUILD) -DPACKAGE='"perf"' -lbfd -lopcodes
-+       $(BUILD_BFD) -lopcodes || $(BUILD_BFD) -lopcodes -liberty || \
-+       $(BUILD_BFD) -lopcodes -liberty -lz
+   drivers/soc/mediatek/mtk-svs.c:853:12: warning: unused function 'svs_suspend' [-Wunused-function]
+   static int svs_suspend(struct device *dev)
+              ^
+   drivers/soc/mediatek/mtk-svs.c:880:12: warning: unused function 'svs_resume' [-Wunused-function]
+   static int svs_resume(struct device *dev)
+              ^
+>> drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable 'svs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id svs_of_match[] = {
+                                    ^
+   3 warnings generated.
 
- $(OUTPUT)test-reallocarray.bin:
-        $(BUILD)
-⬢[acme@toolbox perf]$
- 
-> - Arnaldo
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 23648ea54e8d3d2c..0661a1cf98556ed3 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -297,9 +297,6 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
->  
->  FEATURE_CHECK_LDFLAGS-libaio = -lrt
->  
-> -FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
-> -FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
-> -
->  CORE_CFLAGS += -fno-omit-frame-pointer
->  CORE_CFLAGS += -ggdb3
->  CORE_CFLAGS += -funwind-tables
-> @@ -329,8 +326,8 @@ ifneq ($(TCMALLOC),)
->  endif
->  
->  ifeq ($(FEATURES_DUMP),)
-> -# We will display at the end of this Makefile.config, using $(call feature_display_entries)
-> -# As we may retry some feature detection here, see the disassembler-four-args case, for instance
-> +# We will display at the end of this Makefile.config, using $(call feature_display_entries),
-> +# as we may retry some feature detection here.
->    FEATURE_DISPLAY_DEFERRED := 1
->  include $(srctree)/tools/build/Makefile.feature
->  else
-> @@ -924,13 +921,9 @@ ifndef NO_LIBBFD
->  
->      ifeq ($(feature-libbfd-liberty), 1)
->        EXTLIBS += -lbfd -lopcodes -liberty
-> -      FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -ldl
-> -      FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -ldl
->      else
->        ifeq ($(feature-libbfd-liberty-z), 1)
->          EXTLIBS += -lbfd -lopcodes -liberty -lz
-> -        FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -lz -ldl
-> -        FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
->        endif
->      endif
->      $(call feature_check,disassembler-four-args)
-> @@ -1356,7 +1349,7 @@ endif
->  
->  # re-generate FEATURE-DUMP as we may have called feature_check, found out
->  # extra libraries to add to LDFLAGS of some other test and then redo those
-> -# tests, see the block about libbfd, disassembler-four-args, for instance.
-> +# tests.
->  $(shell rm -f $(FEATURE_DUMP_FILENAME))
->  $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
->  
->  
-> > 
-> > FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
-> > FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
-> > easier to resolve.
-> > 
-> > 
-> > > Andres, if you could take a look at Roberto's patchkit as well that
-> > > would be great.
-> > 
-> > I briefly scanned it, and the only real comment I have mirror's Quentin's,
-> > namely that it'd be nice to avoid displaying more tests that don't tell the
-> > user much.
-> > 
-> > Greetings,
-> > 
-> > Andres Freund
-> 
-> -- 
-> 
-> - Arnaldo
+
+vim +/svs_of_match +1287 drivers/soc/mediatek/mtk-svs.c
+
+  1286	
+> 1287	static const struct of_device_id svs_of_match[] = {
+  1288		{
+  1289			.compatible = "mediatek,mt8183-svs",
+  1290			.data = &svs_mt8183_platform_data,
+  1291		}, {
+  1292			/* Sentinel */
+  1293		},
+  1294	};
+  1295	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://01.org/lkp
