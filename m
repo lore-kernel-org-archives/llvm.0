@@ -1,110 +1,230 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816A115A6
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:36:58 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso10815755pjd.3
-        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 18:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Urt9D1pDp7wJLd+Y0cr81FZpsM8CKH8Y5Qhm/oGPRYw=;
-        b=qTFSHOsw7sTmZ8J+3Vb4qHel1OcWTR+DFo3zBm7rejaLneZfzv8fbBlKEI82iKj0RQ
-         e+jrS2zD6zStvsHVIi4JXme6qY59WxDARcN0ESudFKRk3ocs1GP8Q6pG5Veu3MSnPQCI
-         Ayp+NYTBLX5PUqCjo9FrffvUWwBA3AkTebPkkU3jgLOgUV/dsmsbZrYyCipdxjX80j16
-         78/kba/PeHWonaT7WtVi2qr/fHMKNWE57Kriq63D0lw1a3rSu1zzXcNFY53XhoezzhRN
-         JUZLQbOcsCpATHVwB+tcPtk9Iwbfy0eAImwAKBpCg0Qpn1IgCNt7x/o0sHaol+6fPYEg
-         z+3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Urt9D1pDp7wJLd+Y0cr81FZpsM8CKH8Y5Qhm/oGPRYw=;
-        b=L6Eh/j7FO5piGIgms6v1Pj6Jf7Szfzv0RUnUdxAkHHEHTfRzViGsvLWt9YEALgWhCt
-         HbOPl5JsHWff2cm54XSGircN3AxMFbkcG23LkaQawMOs0DF1/Ilf6N8U7iGIxrHSWIL7
-         UwhSxUYLgdwraunP4FvLIdi1+DVghKXrcDX3A5zfm88cp4dzIlDcPS41DQvJW20Yy+jS
-         Q5iD/EweDiKDiAt02s+txpT8xfi5bfbE8fos56ZKJ85ptDy5tHuTEg6DkNtingqzL9ek
-         D6e8kBPWXzJI+xAzpwxqSS2HDJgxXvAWy8CqIhX4GGfDGdB9txyl8Ev89LMBEk+AGBwF
-         l0ZQ==
-X-Gm-Message-State: ACgBeo0AuYPLll8A8cBVC9kyGrnTp+U9jPtRn1UafvDpFO30ipE6JZL3
-	9tIq7bJAk0lb8uIWMAqe9Ur03g==
-X-Google-Smtp-Source: AA6agR5bAuHo4NxgRj11MLPcGSkbKoMA8lxtIH804DW6Jk6LmX8lOJCMo6fGe+dRf1BHF9gyzyPPjw==
-X-Received: by 2002:a17:903:41c4:b0:16d:cb15:290f with SMTP id u4-20020a17090341c400b0016dcb15290fmr20883166ple.47.1660009017786;
-        Mon, 08 Aug 2022 18:36:57 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:200:bab6:334a:f9d5:62ba])
-        by smtp.gmail.com with ESMTPSA id j11-20020a17090aeb0b00b001e29ddf9f4fsm8807037pjz.3.2022.08.08.18.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 18:36:57 -0700 (PDT)
-Date: Mon, 8 Aug 2022 18:36:53 -0700
-From: Fangrui Song <maskray@google.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Nick Clifton <nickc@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nicolas Schier <n.schier@avm.de>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Ben Dooks <ben-linux@fluff.org>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Subject: Re: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39
- warning
-Message-ID: <20220809013653.xtmeekefwkbo46vk@google.com>
-References: <20220808192321.3490995-1-ndesaulniers@google.com>
- <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
- <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
- <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBD915A6
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660009839; x=1691545839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bfm+Hy5TRMfKh/iN9Ih6MfMX7Ek+cF8yQCd31yggBVo=;
+  b=V4LIBBEVHqtD3/BqDzgvowcDTGqU0XTKeBEhS/goNi8hgN4+ZN3oLRhv
+   DipZXBZkrfN3JPYOBS8NygCpx5FumxkocqYXPhr82WMLDu7XwNC0c1blf
+   ejcAgDbaYO5jxhOgO3XgpNPF7S7aRttjX9apysHkCRA20u0Fl53DuX0Nx
+   C3FxnROhGsEMovfg79FMlJ2km4KsEp9VSx8/hrIQ2NXEz1R2OnJL7drmy
+   YAPIsLrx7kvi5ynIhT16U+6byNAYOqteNi+jRTRql3O6kL8SpGr91388w
+   uKAsXJV2H84yUNJCmsL6N4Z+VCL/xiJg7a04Md7kFdEtCi85k22Zh9OcJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="271118025"
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="271118025"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 18:50:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="932298311"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Aug 2022 18:50:37 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLEOD-000Me9-0A;
+	Tue, 09 Aug 2022 01:50:37 +0000
+Date: Tue, 9 Aug 2022 09:49:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matt Flax <flatmax@flatmax.com>, alsa-devel@alsa-project.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org,
+	Matt Flax <flatmax@flatmax.com>
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Message-ID: <202208090909.Pg0BZGie-lkp@intel.com>
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
+In-Reply-To: <20220808214028.2502801-1-flatmax@flatmax.com>
 
-On 2022-08-08, Linus Torvalds wrote:
->On Mon, Aug 8, 2022 at 1:32 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->>
->> Thanks for the link; I recall Ard mentioning the ELF segments are
->> ignored by the kernels loader in another thread.
->
->Yeah, the kernel loader is not some generic ELF loader thing.
->
->> Perhaps we should be adding
->> --no-warn-execstack
->> wrapped in an ld-option check to KBUILD_LDFLAGS at the top level?
->
->I think both the linker flag and the assembler flag are the "correct"
->thing to do.
->
->And yes, I don't think there is anything architecture-specific about
->it, and the top-level Makefile is likely the right thing to modify.
->
->I'm a tiny bit worried about "what versions of as/ld accept those
->flags", though.
->
->              Linus
->
+Hi Matt,
 
-If most ports don't need executable stacks, I think using `-z
-noexecstack` is better than the binutils 2.39 specific
---no-warn-execstack (not recognized by lld and older GNU ld, so a
-configure check will be needed).
+Thank you for the patch! Perhaps something to improve:
 
-Then -Wa,--noexecstack is not necessary: if the built relocatable files
-are destined to be used with ld with -z noexecstack, the input
-.note.GNU-stack sections are really redundant. It would be a difficult
-story if the relocatable files can "leak" to the outside world where a
-GNU ld without -z noexecstack may be used. But IMO this is not the case
-for the kernel.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next linus/master v5.19 next-20220808]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: hexagon-randconfig-r002-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090909.Pg0BZGie-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7a9219a8431d7740c0958e53078820cbfef4f3f7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
+        git checkout 7a9219a8431d7740c0958e53078820cbfef4f3f7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+                   default:
+                   ^~~~~~~
+   sound/soc/codecs/src4xxx.c:294:59: note: uninitialized use occurs here
+                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+                                                                           ^
+   sound/soc/codecs/src4xxx.c:221:20: note: initialize the variable 'd' to silence this warning
+           int val, pj, jd, d;
+                             ^
+                              = 0
+>> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'jd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+                   default:
+                   ^~~~~~~
+   sound/soc/codecs/src4xxx.c:289:59: note: uninitialized use occurs here
+                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+                                                                           ^~
+   sound/soc/codecs/src4xxx.c:221:17: note: initialize the variable 'jd' to silence this warning
+           int val, pj, jd, d;
+                          ^
+                           = 0
+>> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'pj' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+                   default:
+                   ^~~~~~~
+   sound/soc/codecs/src4xxx.c:284:59: note: uninitialized use occurs here
+                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+                                                                           ^~
+   sound/soc/codecs/src4xxx.c:221:13: note: initialize the variable 'pj' to silence this warning
+           int val, pj, jd, d;
+                      ^
+                       = 0
+   3 warnings generated.
+--
+>> sound/soc/codecs/src4xxx-i2c.c:35:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
+   static const struct of_device_id src4xxx_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/d +277 sound/soc/codecs/src4xxx.c
+
+   213	
+   214	static int src4xxx_hw_params(struct snd_pcm_substream *substream,
+   215				struct snd_pcm_hw_params *params,
+   216				struct snd_soc_dai *dai)
+   217	{
+   218		struct snd_soc_component *component = dai->component;
+   219		struct src4xxx *src4xxx = snd_soc_component_get_drvdata(component);
+   220		unsigned int mclk_div;
+   221		int val, pj, jd, d;
+   222		int reg;
+   223		int ret;
+   224	
+   225		switch (dai->id) {
+   226		case SRC4XXX_PORTB:
+   227			reg = SRC4XXX_PORTB_CTL_06;
+   228			break;
+   229		default:
+   230			reg = SRC4XXX_PORTA_CTL_04;
+   231		}
+   232	
+   233		if (src4xxx->master[dai->id]) {
+   234			mclk_div = src4xxx->mclk_hz/params_rate(params);
+   235			if (src4xxx->mclk_hz != mclk_div*params_rate(params)) {
+   236				dev_err(component->dev,
+   237					"mclk %d / rate %d has a remainder.\n",
+   238					src4xxx->mclk_hz, params_rate(params));
+   239				return -EINVAL;
+   240			}
+   241	
+   242			val = ((int)mclk_div - 128) / 128;
+   243			if ((val < 0) | (val > 3)) {
+   244				dev_err(component->dev,
+   245					"div register setting %d is out of range\n",
+   246					val);
+   247				dev_err(component->dev,
+   248					"unsupported sample rate %d Hz for the master clock of %d Hz\n",
+   249					params_rate(params), src4xxx->mclk_hz);
+   250				return -EINVAL;
+   251			}
+   252	
+   253			/* set the TX DIV */
+   254			ret = regmap_update_bits(src4xxx->regmap,
+   255				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
+   256				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+   257			if (ret) {
+   258				dev_err(component->dev,
+   259					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
+   260					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
+   261					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+   262				return ret;
+   263			}
+   264	
+   265			/* set the PLL for the digital receiver */
+   266			switch (src4xxx->mclk_hz) {
+   267			case 24576000:
+   268				pj = 0x22;
+   269				jd = 0x00;
+   270				d = 0x00;
+   271				break;
+   272			case 22579200:
+   273				pj = 0x22;
+   274				jd = 0x1b;
+   275				d = 0xa3;
+   276				break;
+ > 277			default:
+   278				/* don't error out here,
+   279				 * other parts of the chip are still functional
+   280				 */
+   281				dev_info(component->dev,
+   282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+   283			}
+   284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+   285			if (ret < 0)
+   286				dev_err(component->dev,
+   287					"Failed to update PLL register 0x%x\n",
+   288					SRC4XXX_RCV_PLL_0F);
+ > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+   290			if (ret < 0)
+   291				dev_err(component->dev,
+   292					"Failed to update PLL register 0x%x\n",
+   293					SRC4XXX_RCV_PLL_10);
+ > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+   295			if (ret < 0)
+   296				dev_err(component->dev,
+   297					"Failed to update PLL register 0x%x\n",
+   298					SRC4XXX_RCV_PLL_11);
+   299	
+   300			ret = regmap_update_bits(src4xxx->regmap,
+   301				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
+   302				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+   303			if (ret < 0) {
+   304				dev_err(component->dev,
+   305					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
+   306					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
+   307					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+   308				return ret;
+   309			}
+   310	
+   311			return regmap_update_bits(src4xxx->regmap, reg,
+   312						SRC4XXX_MCLK_DIV_MASK, val);
+   313		} else
+   314			dev_info(dai->dev, "not setting up MCLK as not master\n");
+   315	
+   316		return 0;
+   317	};
+   318	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
