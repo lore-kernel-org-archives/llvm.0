@@ -1,232 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B77C15A0
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660027298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uD0Lzwg0Gt1uAZ//hot/EbSqi9+8RzFhu8XsU1Ca9h0=;
-	b=IhQXgHdH3X+AtFZiYV6Gdw0xKzWMslnfor1GrHcIcE+uYv0YToY2kr9hYMxe+5iol2tReY
-	/g2+K304WG6WX6YSh33gfP9MIY4me2BJytdPrB8mynUN01F42MRaYDFk4gYWo/rNLaYaRl
-	D6495Uzbexz9Yiga5v+rxncgphpC8bY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-md-qVbyzNyWEfybV5Tnkbw-1; Tue, 09 Aug 2022 02:41:36 -0400
-X-MC-Unique: md-qVbyzNyWEfybV5Tnkbw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9129B3C0ED57
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:41:36 +0000 (UTC)
-Received: from [172.64.3.80] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 78558140EBE3;
-	Tue,  9 Aug 2022 06:41:36 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [5d5d353b]
-Date: Tue, 09 Aug 2022 06:41:36 -0000
-CC: omosnace@redhat.com, fsuba@redhat.com, mmalik@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2043D23C2
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:42:34 +0000 (UTC)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27960KRQ030598;
+	Tue, 9 Aug 2022 06:25:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0tHR0dUovDdcOcO8mlXS6xxFDZ5pswykHYtMoZ4Vnfw=;
+ b=LU9ZwpMvopkG/pUj2KhQmPuUoBpMhwT7mBcyyBU6J/BMLtqP55PpGG5t9nP6xQv1+8yN
+ G1WKzA609EruqR8IE6vJaWmcYKymDV7LJpmDGoOdvrphVFwwbBWnLhDwdvsRPl83Gdx9
+ jyZszBWDCdI4GWueN1r1D/uo+VFBz/9oqFVO/Jw6SNzlpIgFHMlax6Fgfys+js7K8mDJ
+ 3k09JA2uXNw0gKGbQz0w8gs+a8msSdQcYFwgtSiTRpNEhu0Om6Bg78+llnQg3FdT3JKp
+ c9wmAY9QLLWqqkGZZVzlXtOk6J0uBsHVhWv/nKQG+Tr0GyZEkh1IgqxQlxWpYCqX17Es Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275awa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 06:25:50 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2795WHag003055;
+	Tue, 9 Aug 2022 06:25:49 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275avd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 06:25:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+	by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2796K1O6023372;
+	Tue, 9 Aug 2022 06:25:47 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+	by ppma03ams.nl.ibm.com with ESMTP id 3hsfx8u33r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Aug 2022 06:25:46 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2796PiJD33292760
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 9 Aug 2022 06:25:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A1545A4054;
+	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 38A09A405C;
+	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Received: from localhost (unknown [9.43.41.164])
+	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Date: Tue, 09 Aug 2022 11:55:42 +0530
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v3 11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}()
+ common to PPC32 and PPC64
+To: Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy
+	<christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Mackerras
+	<paulus@samba.org>
+Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, nathan@kernel.org, omosnacek@gmail.com
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+	<96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
+	<CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
+In-Reply-To: 
+	<CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1660026096.me2vg4spl7.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tDeZcGNCEjgVycAYsJJJ4_SQQs0YTm7S
+X-Proofpoint-GUID: 5ZMZNTNRPJ_g1A2Q4T5F4uxokI98MwyY
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <90145.122080902413600353@us-mta-587.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 phishscore=0 clxscore=1011 bulkscore=0 mlxlogscore=887
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208090026
 
-Hi, we tested your kernel and here are the results:
+Nick Desaulniers wrote:
+> Christ...that's not what I meant to send; sorry, mutt is giving me
+> bizarro errors today so I can't insert myself into threads using the
+> usual incantation I have in the past.  What I meant to send was:
+>=20
+> Christophe,
+> Ondrej reported a regression with ftrace when building w/ clang
+> bisected to this commit. Can you PTAL?
+> https://github.com/ClangBuiltLinux/linux/issues/1682
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks for the report. That was my doing - I tend to miss the fact that=20
+clang doesn't support -mprofile-kernel. Can you check if the below patch=20
+fixes it for you?
 
+- Naveen
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50336
+---
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
+/ftrace.c
+index cb158c32b50b99..7b85c3b460a3c0 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -393,11 +393,11 @@ int ftrace_make_nop(struct module *mod,
+  */
+ static bool expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+ {
+-       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1))
++       if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
++       else
+                return ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) &&
+                       ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC));
+-       else
+-               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
+ }
+=20
+ static int
+@@ -412,7 +412,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned lon=
+g addr)
+        if (copy_inst_from_kernel_nofault(op, ip))
+                return -EFAULT;
+=20
+-       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1) &&
++       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
+            copy_inst_from_kernel_nofault(op + 1, ip + 4))
+                return -EFAULT;
+=20
 
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752641
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752663
-           s390x - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752556
-          x86_64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752397
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752425
-          x86_64 (debug) - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752476
-          x86_64 (debug) - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4752495
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
-c/0x4c
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1310
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
