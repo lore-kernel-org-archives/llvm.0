@@ -1,109 +1,90 @@
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5CB4682
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 17:00:39 +0000 (UTC)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.west.internal (Postfix) with ESMTP id AD94C2B05ED3;
-	Tue,  9 Aug 2022 13:00:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 09 Aug 2022 13:00:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-	cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1660064436; x=1660071636; bh=3abss+CoOK
-	3R89WSKxwqP2TXwiB32/7eSMUhPqbISCk=; b=XaejAeLV6YtYoP1m1vp3sV6Mvm
-	ZdnaCdwijII0HCmg7+V2+zSm+cbxWQN+hjTZMwOsFOnhZLoaOadd/hCKY8l2KKSA
-	r2zbfCV1TVF1YC4r0Ot1XIf6DtwvplgIyZ9a6lansDZdyUhaLdqFEBaR2XZk9OXW
-	QW6yvyWNlqAhL/iPjWGTsEgHT67PsNu6H3PUbT7YqH6r5Cb3z3tsNgiHeTTO+QOU
-	KGfidGiu8bhPbMIkXB6lbjww7eRM4ZzM4L51Sd4WCjxXha8iHuU5Z8N5+5z4G/Gd
-	VJYlL+AqgIiwkf1IyXmrq03QG1RmAG5gIvgpHas3+vPGqRicFTICI5SFyEWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1660064436; x=1660071636; bh=3abss+CoOK3R89WSKxwqP2TXwiB3
-	2/7eSMUhPqbISCk=; b=jx5UKs5FR/5TTUMznqXpar493S9pJtqfEXAu+xPgH7Hf
-	MzMI2fmjfNSSorTuQHDBOBldR4iyWi0p20MDIXC1elsESVPfa4pS1EdCE0j+H4Rk
-	e83VFx5gzYbW8/ak76uyvnrrbUXBWp+2tuwkhWOkZTyolK3/2SHT0TJG/IOI0Z+y
-	/YK0Jt7QjO3Yt252jTHOQ6lDu/aZXczZQV54hXVol7tZtwr4H2xYc4shrZmhnktB
-	FnOhqT/KWn9asDcS/w6iCF1+uDFgO+eHst6lNEF3oab5C4Sc3BBNEduWRHLfJ3tN
-	FMNN0vMmuJia78raFkiuEvS/OZaOEnCoDMZCvT3eqw==
-X-ME-Sender: <xms:s5LyYiEDWpP3XIu1fhZ7hW2j1tEJ9_YahHqQaupFDOfN-OgJzL7zeg>
-    <xme:s5LyYjUXhWR0e-TA6b-8eUOKkaSSkT6nQqy5uYmdthUlVQ-argdBUNO1bQ92khVDI
-    8w2xl-r8ydMOzLoWg>
-X-ME-Received: <xmr:s5LyYsLXwLEh-ECGcXC1Ahw1aqBqsTEkFHtD7D0JuYwT7If1v9FZ6DQzDGHecyB1KekGFvrIqjOH2ZjdOv3icxrhSfwu5RcPqwtxDRP_1OxcMTTg7YTwTY0ZCkjX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
-    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
-    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
-    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:s5LyYsGVr1iRxg22r1viLNcxnBb__ip5V9s1GtYOV80LXV1M2lI-0w>
-    <xmx:s5LyYoXtfSskZTRfN8-H9DAnAI6bCPEWjHlCk_nUNBRQki44lyRM8Q>
-    <xmx:s5LyYvM7hnV60DWPFPbU4RyAdGKRHlSYcm8b5g9E3puupVDX2nWwYQ>
-    <xmx:tJLyYjae09X7G4eUbzBHqTzlMX2xyFBOc1WqctEKF7viDjE_x0rHQYLR4RY>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 13:00:35 -0400 (EDT)
-Date: Tue, 9 Aug 2022 10:00:34 -0700
-From: Andres Freund <andres@anarazel.de>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Roberto Sassu <roberto.sassu@huawei.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
-	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
-	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Message-ID: <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
-References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
- <20220719170555.2576993-4-roberto.sassu@huawei.com>
- <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
- <YvFW/kBL6YA3Tlnc@kernel.org>
- <YvJ6DbzBNsAgNZS4@kernel.org>
- <YvJ7awkCVBYaZ2dd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E5A4682
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 17:10:15 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id c17so17873609lfb.3
+        for <llvm@lists.linux.dev>; Tue, 09 Aug 2022 10:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=A9YjzO6pf9jUuipiXd320RsVb+qwVho6k/x9nJJSSr8=;
+        b=KlWeX2Pqpmmm0Ttm2l2VCcsfY9ZqUVUh1HiPtrtKusMk8sThEghUmgtTErO6cmHfhF
+         O70vD96WTLu4znZoxpKzyO7W4KuvBTM0m6eplMh+nMa49J3GUDlWGV7c+yqacRJc39BH
+         Z1LPxVZ/wStTSQ6Ly8qjU00dqlHykxeK8OPVH81321pmphmBE3GSBVJFizApe7+4lB2B
+         30q7fKtl3vo0vbDOS0GIFIFL26aEmZyurQZJpm6k4SxA9pDwearrewCw6FHRSBPinluD
+         W49YWwDEt9FNyO8CfukSCOgOBLWvNAsVh8gby9IM8A7Y/a7xz4LxpEJJjtZ6v7o2rvUN
+         GM7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=A9YjzO6pf9jUuipiXd320RsVb+qwVho6k/x9nJJSSr8=;
+        b=lQelFWYCbsvbKu1xfWUfNFsTMYSK0AAXWBGHJFYtf3ElgoI/DoOpkXFICNEw/XPyIF
+         a4ZYFmtAs7E0b3Tii2/iz6CefmO68fse9EUbU36AlyBeSu0888Pc1r30WIKBUji3EIdt
+         ozUZulqQPGbc9ZQSBZ+jRsY2axPc3FpC2F5rR0NuJORH7/vP5KkhYrLn/V9HmPFqvKS9
+         lKJYbMBog/LZYGfjFNkk8D392gscurnxzhxHtpWDGQLUqMe49COopX/QP75Z9Z6bbhjF
+         u1pIkY9gb5XCYWkaoPIb0J9vjVy8kbucvBaTtGOh5CeYuSPMTSKF/Yg7ZS0lDK/kkf4y
+         4UjQ==
+X-Gm-Message-State: ACgBeo22sOnuoT6AJ1X6cNv69Iip9n977IOn3E6FsNjYSqt1aRryGDw4
+	FmwJA2k2jlRVuvZvLnSgIyWxYP7Jcsl56FepFbOahA==
+X-Google-Smtp-Source: AA6agR6BEEKvSMl+Ivvhp+4oYj2Oi9CGwNxaApycDinRhh+MWc3sKk/e+l5U7pLBntE5A/gb5KQYmxwqP2blZ90KuAA=
+X-Received: by 2002:a05:6512:1317:b0:48c:ed42:5cf4 with SMTP id
+ x23-20020a056512131700b0048ced425cf4mr3117389lfu.103.1660065013239; Tue, 09
+ Aug 2022 10:10:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvJ7awkCVBYaZ2dd@kernel.org>
+References: <20220809095907.418764-1-naveen.n.rao@linux.vnet.ibm.com> <CAAUqJDsAWRedULdKx3rEK7jL4=gHfJebCT4ujzWq4vSXZbju3w@mail.gmail.com>
+In-Reply-To: <CAAUqJDsAWRedULdKx3rEK7jL4=gHfJebCT4ujzWq4vSXZbju3w@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 9 Aug 2022 10:10:01 -0700
+Message-ID: <CAKwvOdkexR9fc3=Dv+D5roJTBjkk6SpgoVd1xZNuuGUh2fUOvA@mail.gmail.com>
+Subject: Re: [PATCH] powerpc64/ftrace: Fix ftrace for clang builds
+To: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Tue, Aug 9, 2022 at 9:59 AM Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.c=
+om> wrote:
+>
+> On Tue, Aug 9, 2022 at 11:59 AM Naveen N. Rao
+> <naveen.n.rao@linux.vnet.ibm.com> wrote:
+> > Clang doesn't support -mprofile-kernel ABI, so guard the checks against
+> > CONFIG_DYNAMIC_FTRACE_WITH_REGS, rather than the elf ABI version.
+> >
+> > Fixes: 23b44fc248f420 ("powerpc/ftrace: Make __ftrace_make_{nop/call}()=
+ common to PPC32 and PPC64")
+> > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Reported-by: Ondrej Mosnacek <omosnacek@gmail.com>
+> > Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> > ---
+> >  arch/powerpc/kernel/trace/ftrace.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> With this patch my reproducer [1] is passing, thanks!
+>
+> Tested-by: Ondrej Mosnacek <omosnacek@gmail.com>
+>
+> [1] https://github.com/ClangBuiltLinux/linux/issues/1682#issue-1330483247
 
-On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
-> So I backtracked, the way it works needs further consideration with
-> regard to the patchkit from Andres, that is already upstream, so it
-> would be good for Roberto to take a look at what is in torvalds/master
-> now and see if we have to removed that styled thing from Andres.
+Thanks for the report and fixup. I filed
+https://github.com/llvm/llvm-project/issues/57031
+as a feature request for -mprofile-kernel in clang.  If there are
+other missing features for this target, let's get bugs filed for them.
 
-Why would it have to be removed - seems to be fairly independent, leaving the
-line conflicts aside? Or do you just mean folding it into one-big-test? If so,
-that'd make sense, although I'm not sure how ready the infrastructure
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://github.com/llvm/llvm-project/issues/57031
+Link: https://github.com/ClangBuiltLinux/linux/issues/1682
 
-
-FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
-FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
-easier to resolve.
-
-
-> Andres, if you could take a look at Roberto's patchkit as well that
-> would be great.
-
-I briefly scanned it, and the only real comment I have mirror's Quentin's,
-namely that it'd be nice to avoid displaying more tests that don't tell the
-user much.
-
-Greetings,
-
-Andres Freund
+MPE: can you please ensure the above two links get added if/when applying?
+--=20
+Thanks,
+~Nick Desaulniers
