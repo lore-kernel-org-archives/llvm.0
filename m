@@ -1,21 +1,20 @@
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F324428
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 15:28:58 +0000 (UTC)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2H326hdJz67hYm;
-	Tue,  9 Aug 2022 23:26:06 +0800 (CST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81734428
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 16:01:35 +0000 (UTC)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2Hqt3L9xz67gtM;
+	Wed, 10 Aug 2022 00:01:30 +0800 (CST)
 Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 17:28:49 +0200
+ 15.1.2375.24; Tue, 9 Aug 2022 18:01:32 +0200
 Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
  fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Tue, 9 Aug 2022 17:28:49 +0200
+ Tue, 9 Aug 2022 18:01:32 +0200
 From: Roberto Sassu <roberto.sassu@huawei.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, Andres Freund
-	<andres@anarazel.de>, Daniel Borkmann <daniel@iogearbox.net>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
 CC: "quentin@isovalent.com" <quentin@isovalent.com>, "ast@kernel.org"
 	<ast@kernel.org>, "andrii@kernel.org" <andrii@kernel.org>,
 	"martin.lau@linux.dev" <martin.lau@linux.dev>, "song@kernel.org"
@@ -27,18 +26,19 @@ CC: "quentin@isovalent.com" <quentin@isovalent.com>, "ast@kernel.org"
 	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
 	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
+	<linux-kernel@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>, Andres Freund
+	<andres@anarazel.de>, Daniel Borkmann <daniel@iogearbox.net>
 Subject: RE: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
 Thread-Topic: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Thread-Index: AQHYm5HfT/KQ8BwklE+dy083QuWM9q2lK0sAgAAmxQCAAVr4gIAAAaGAgAAjZQA=
-Date: Tue, 9 Aug 2022 15:28:49 +0000
-Message-ID: <23f8c56f584b4da8acf15d050c0443b6@huawei.com>
+Thread-Index: AQHYm5HfT/KQ8BwklE+dy083QuWM9q2lK0sAgAAmxQCAAVr4gIAAAaGAgAAjZQCAAAjuAA==
+Date: Tue, 9 Aug 2022 16:01:32 +0000
+Message-ID: <bf906906df714ebb82259539496ec6be@huawei.com>
 References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
  <20220719170555.2576993-4-roberto.sassu@huawei.com>
  <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
  <YvFW/kBL6YA3Tlnc@kernel.org> <YvJ6DbzBNsAgNZS4@kernel.org>
- <YvJ7awkCVBYaZ2dd@kernel.org>
-In-Reply-To: <YvJ7awkCVBYaZ2dd@kernel.org>
+ <YvJ7awkCVBYaZ2dd@kernel.org> <23f8c56f584b4da8acf15d050c0443b6@huawei.com>
+In-Reply-To: <23f8c56f584b4da8acf15d050c0443b6@huawei.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -54,134 +54,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-CFilter-Loop: Reflected
 
-> From: Arnaldo Carvalho de Melo [mailto:acme@kernel.org]
-> Sent: Tuesday, August 9, 2022 5:21 PM
-> Em Tue, Aug 09, 2022 at 12:15:25PM -0300, Arnaldo Carvalho de Melo escrev=
-eu:
-> > Em Mon, Aug 08, 2022 at 03:33:34PM -0300, Arnaldo Carvalho de Melo
+> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> Sent: Tuesday, August 9, 2022 5:29 PM
+> > From: Arnaldo Carvalho de Melo [mailto:acme@kernel.org]
+> > Sent: Tuesday, August 9, 2022 5:21 PM
+> > Em Tue, Aug 09, 2022 at 12:15:25PM -0300, Arnaldo Carvalho de Melo
 > escreveu:
-> > > Em Mon, Aug 08, 2022 at 06:14:48PM +0200, Daniel Borkmann escreveu:
-> > > > Hi Arnaldo,
-> > > >
-> > > > On 7/19/22 7:05 PM, Roberto Sassu wrote:
-> > > > > Switch to new EVP API for detecting libcrypto, as Fedora 36 retur=
-ns an
-> > > > > error when it encounters the deprecated function MD5_Init() and t=
-he
-> others.
-> > > > > The error would be interpreted as missing libcrypto, while in rea=
-lity it is
-> > > > > not.
+> > > Em Mon, Aug 08, 2022 at 03:33:34PM -0300, Arnaldo Carvalho de Melo
+> > escreveu:
+> > > > Em Mon, Aug 08, 2022 at 06:14:48PM +0200, Daniel Borkmann escreveu:
+> > > > > Hi Arnaldo,
 > > > > >
-> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > On 7/19/22 7:05 PM, Roberto Sassu wrote:
+> > > > > > Switch to new EVP API for detecting libcrypto, as Fedora 36 ret=
+urns an
+> > > > > > error when it encounters the deprecated function MD5_Init() and=
+ the
+> > others.
+> > > > > > The error would be interpreted as missing libcrypto, while in r=
+eality it is
+> > > > > > not.
+> > > > > >
+> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > Given rest of the tooling fixes from Andres Freund went via perf =
+tree and
+> > the
+> > > > > below is perf related as well, I presume you'll pick this up, too=
+?
 > > > >
-> > > > Given rest of the tooling fixes from Andres Freund went via perf tr=
-ee and
-> the
-> > > > below is perf related as well, I presume you'll pick this up, too?
-> > >
-> > > Sure.
-> > >
-> > > >   [0]
+> > > > Sure.
+> > > >
+> > > > >   [0]
+> >
 > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=3Dp=
 erf/cor
-> e
-> >
-> > So I fixed up the first one, minor fuzzes, the second I had to fix
-> > conflicts with the patchset from Andres, ended up as below, will test
-> > build it then in my container kit.
->=20
-> So I backtracked, the way it works needs further consideration with
-> regard to the patchkit from Andres, that is already upstream, so it
-> would be good for Roberto to take a look at what is in torvalds/master
-> now and see if we have to removed that styled thing from Andres.
+> > e
+> > >
+> > > So I fixed up the first one, minor fuzzes, the second I had to fix
+> > > conflicts with the patchset from Andres, ended up as below, will test
+> > > build it then in my container kit.
 
-Will do. Thanks Arnaldo for adapting the patch.
+Did you push to a remote branch, so that I start from those?
+
+Thanks
 
 Roberto
 
-> Andres, if you could take a look at Roberto's patchkit as well that
-> would be great.
+> > So I backtracked, the way it works needs further consideration with
+> > regard to the patchkit from Andres, that is already upstream, so it
+> > would be good for Roberto to take a look at what is in torvalds/master
+> > now and see if we have to removed that styled thing from Andres.
 >=20
-> - Arnaldo
+> Will do. Thanks Arnaldo for adapting the patch.
 >=20
-> > commit bea955a0256e20cc18e87087e42f2a903b9a8b84
-> > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > Date:   Tue Jul 19 19:05:53 2022 +0200
-> >
-> >     bpftool: Complete libbfd feature detection
-> >
-> >     Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd varia=
-tions")
-> >     sets the linking flags depending on which flavor of the libbfd feat=
-ure was
-> >     detected.
-> >
-> >     However, the flavors except libbfd cannot be detected, as they are =
-not in
-> >     the feature list.
-> >
-> >     Complete the list of features to detect by adding libbfd-liberty an=
-d
-> >     libbfd-liberty-z.
-> >
-> >     Committer notes:
-> >
-> >     Adjust conflict with with:
-> >
-> >       1e1613f64cc8a09d ("tools bpftool: Don't display disassembler-four=
--args
-> feature test")
-> >       600b7b26c07a070d ("tools bpftool: Fix compilation error with new
-> binutils")
-> >
-> >     Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd va=
-riations")
-> >     Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> >     Cc: Alexei Starovoitov <ast@kernel.org>
-> >     Cc: Andres Freund <andres@anarazel.de>
-> >     Cc: Andrii Nakryiko <andrii@kernel.org>
-> >     Cc: bpf@vger.kernel.org
-> >     Cc: Daniel Borkmann <daniel@iogearbox.net>
-> >     Cc: Ingo Molnar <mingo@redhat.com>
-> >     Cc: John Fastabend <john.fastabend@gmail.com>
-> >     Cc: KP Singh <kpsingh@kernel.org>
-> >     Cc: llvm@lists.linux.dev
-> >     Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> >     Cc: Nathan Chancellor <nathan@kernel.org>
-> >     Cc: Nick Desaulniers <ndesaulniers@google.com>
-> >     Cc: Nick Terrell <terrelln@fb.com>
-> >     Cc: Peter Zijlstra <peterz@infradead.org>
-> >     Cc: Quentin Monnet <quentin@isovalent.com>
-> >     Cc: Song Liu <song@kernel.org>
-> >     Cc: Stanislav Fomichev <sdf@google.com>
-> >     Link: https://lore.kernel.org/r/20220719170555.2576993-2-
-> roberto.sassu@huawei.com
-> >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> >
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index 04d733e98bffbc08..9cc132277150c534 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -93,9 +93,11 @@ INSTALL ?=3D install
-> >  RM ?=3D rm -f
-> >
-> >  FEATURE_USER =3D .bpftool
-> > -FEATURE_TESTS =3D libbfd disassembler-four-args disassembler-init-styl=
-ed
-> libcap \
-> > +FEATURE_TESTS =3D libbfd libbfd-liberty libbfd-liberty-z
-> > +	disassembler-four-args disassembler-init-styled libcap \
-> >  	clang-bpf-co-re
-> > -FEATURE_DISPLAY =3D libbfd libcap clang-bpf-co-re
-> > +FEATURE_DISPLAY =3D libbfd libbfd-liberty libbfd-liberty-z
-> > +	libcap clang-bpf-co-re
-> >
-> >  check_feat :=3D 1
-> >  NON_CHECK_FEAT_TARGETS :=3D clean uninstall doc doc-clean doc-install =
-doc-
-> uninstall
+> Roberto
 >=20
-> --
->=20
-> - Arnaldo
+> > Andres, if you could take a look at Roberto's patchkit as well that
+> > would be great.
+> >
+> > - Arnaldo
+> >
+> > > commit bea955a0256e20cc18e87087e42f2a903b9a8b84
+> > > Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Date:   Tue Jul 19 19:05:53 2022 +0200
+> > >
+> > >     bpftool: Complete libbfd feature detection
+> > >
+> > >     Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd
+> variations")
+> > >     sets the linking flags depending on which flavor of the libbfd fe=
+ature was
+> > >     detected.
+> > >
+> > >     However, the flavors except libbfd cannot be detected, as they ar=
+e not in
+> > >     the feature list.
+> > >
+> > >     Complete the list of features to detect by adding libbfd-liberty =
+and
+> > >     libbfd-liberty-z.
+> > >
+> > >     Committer notes:
+> > >
+> > >     Adjust conflict with with:
+> > >
+> > >       1e1613f64cc8a09d ("tools bpftool: Don't display disassembler-fo=
+ur-args
+> > feature test")
+> > >       600b7b26c07a070d ("tools bpftool: Fix compilation error with ne=
+w
+> > binutils")
+> > >
+> > >     Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd
+> variations")
+> > >     Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > >     Cc: Alexei Starovoitov <ast@kernel.org>
+> > >     Cc: Andres Freund <andres@anarazel.de>
+> > >     Cc: Andrii Nakryiko <andrii@kernel.org>
+> > >     Cc: bpf@vger.kernel.org
+> > >     Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > >     Cc: Ingo Molnar <mingo@redhat.com>
+> > >     Cc: John Fastabend <john.fastabend@gmail.com>
+> > >     Cc: KP Singh <kpsingh@kernel.org>
+> > >     Cc: llvm@lists.linux.dev
+> > >     Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > >     Cc: Nathan Chancellor <nathan@kernel.org>
+> > >     Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > >     Cc: Nick Terrell <terrelln@fb.com>
+> > >     Cc: Peter Zijlstra <peterz@infradead.org>
+> > >     Cc: Quentin Monnet <quentin@isovalent.com>
+> > >     Cc: Song Liu <song@kernel.org>
+> > >     Cc: Stanislav Fomichev <sdf@google.com>
+> > >     Link: https://lore.kernel.org/r/20220719170555.2576993-2-
+> > roberto.sassu@huawei.com
+> > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > >
+> > > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > > index 04d733e98bffbc08..9cc132277150c534 100644
+> > > --- a/tools/bpf/bpftool/Makefile
+> > > +++ b/tools/bpf/bpftool/Makefile
+> > > @@ -93,9 +93,11 @@ INSTALL ?=3D install
+> > >  RM ?=3D rm -f
+> > >
+> > >  FEATURE_USER =3D .bpftool
+> > > -FEATURE_TESTS =3D libbfd disassembler-four-args disassembler-init-st=
+yled
+> > libcap \
+> > > +FEATURE_TESTS =3D libbfd libbfd-liberty libbfd-liberty-z
+> > > +	disassembler-four-args disassembler-init-styled libcap \
+> > >  	clang-bpf-co-re
+> > > -FEATURE_DISPLAY =3D libbfd libcap clang-bpf-co-re
+> > > +FEATURE_DISPLAY =3D libbfd libbfd-liberty libbfd-liberty-z
+> > > +	libcap clang-bpf-co-re
+> > >
+> > >  check_feat :=3D 1
+> > >  NON_CHECK_FEAT_TARGETS :=3D clean uninstall doc doc-clean doc-instal=
+l
+> doc-
+> > uninstall
+> >
+> > --
+> >
+> > - Arnaldo
