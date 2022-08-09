@@ -1,229 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EEE15A6
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660008103;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sbNxsID5sy4bnlHAP0PqHnkQxYWaXipqHwWeR1CHDHE=;
-	b=cm9+lRkA82nzQv+KR0lulbmonrbh/xlGDAvfABdOjHcChMYABf0pd/A2Qney8pSNiPWVxG
-	0DN29XVwVsbB1QTuoZxHG3HEBCk+vVBms2ZDPOvuXqpVWydJJO1KU0aUh4dNeQUf6QTIX5
-	iQXqwygBoT+PAdJWY27Mqgf14w4S9C8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-XZWw4GTpNZaQyWc0hxLMiA-1; Mon, 08 Aug 2022 21:21:42 -0400
-X-MC-Unique: XZWw4GTpNZaQyWc0hxLMiA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00EAF801585
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:21:42 +0000 (UTC)
-Received: from [172.64.3.80] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D72EF9457F;
-	Tue,  9 Aug 2022 01:21:41 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
- (mainline.kernel.org-clang) [c8a684e2]
-Date: Tue, 09 Aug 2022 01:21:38 -0000
-CC: mmalik@redhat.com, fsuba@redhat.com, omosnace@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816A115A6
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:36:58 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso10815755pjd.3
+        for <llvm@lists.linux.dev>; Mon, 08 Aug 2022 18:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Urt9D1pDp7wJLd+Y0cr81FZpsM8CKH8Y5Qhm/oGPRYw=;
+        b=qTFSHOsw7sTmZ8J+3Vb4qHel1OcWTR+DFo3zBm7rejaLneZfzv8fbBlKEI82iKj0RQ
+         e+jrS2zD6zStvsHVIi4JXme6qY59WxDARcN0ESudFKRk3ocs1GP8Q6pG5Veu3MSnPQCI
+         Ayp+NYTBLX5PUqCjo9FrffvUWwBA3AkTebPkkU3jgLOgUV/dsmsbZrYyCipdxjX80j16
+         78/kba/PeHWonaT7WtVi2qr/fHMKNWE57Kriq63D0lw1a3rSu1zzXcNFY53XhoezzhRN
+         JUZLQbOcsCpATHVwB+tcPtk9Iwbfy0eAImwAKBpCg0Qpn1IgCNt7x/o0sHaol+6fPYEg
+         z+3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Urt9D1pDp7wJLd+Y0cr81FZpsM8CKH8Y5Qhm/oGPRYw=;
+        b=L6Eh/j7FO5piGIgms6v1Pj6Jf7Szfzv0RUnUdxAkHHEHTfRzViGsvLWt9YEALgWhCt
+         HbOPl5JsHWff2cm54XSGircN3AxMFbkcG23LkaQawMOs0DF1/Ilf6N8U7iGIxrHSWIL7
+         UwhSxUYLgdwraunP4FvLIdi1+DVghKXrcDX3A5zfm88cp4dzIlDcPS41DQvJW20Yy+jS
+         Q5iD/EweDiKDiAt02s+txpT8xfi5bfbE8fos56ZKJ85ptDy5tHuTEg6DkNtingqzL9ek
+         D6e8kBPWXzJI+xAzpwxqSS2HDJgxXvAWy8CqIhX4GGfDGdB9txyl8Ev89LMBEk+AGBwF
+         l0ZQ==
+X-Gm-Message-State: ACgBeo0AuYPLll8A8cBVC9kyGrnTp+U9jPtRn1UafvDpFO30ipE6JZL3
+	9tIq7bJAk0lb8uIWMAqe9Ur03g==
+X-Google-Smtp-Source: AA6agR5bAuHo4NxgRj11MLPcGSkbKoMA8lxtIH804DW6Jk6LmX8lOJCMo6fGe+dRf1BHF9gyzyPPjw==
+X-Received: by 2002:a17:903:41c4:b0:16d:cb15:290f with SMTP id u4-20020a17090341c400b0016dcb15290fmr20883166ple.47.1660009017786;
+        Mon, 08 Aug 2022 18:36:57 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:bab6:334a:f9d5:62ba])
+        by smtp.gmail.com with ESMTPSA id j11-20020a17090aeb0b00b001e29ddf9f4fsm8807037pjz.3.2022.08.08.18.36.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 18:36:57 -0700 (PDT)
+Date: Mon, 8 Aug 2022 18:36:53 -0700
+From: Fangrui Song <maskray@google.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Nick Clifton <nickc@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Nicolas Schier <n.schier@avm.de>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Ben Dooks <ben-linux@fluff.org>,
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Subject: Re: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39
+ warning
+Message-ID: <20220809013653.xtmeekefwkbo46vk@google.com>
+References: <20220808192321.3490995-1-ndesaulniers@google.com>
+ <YvFkmfHTUYGzeeQs@dev-arch.thelio-3990X>
+ <CAKwvOdk0q1G--S7JhxOdN4KtCgDETDbkMMnfRZoCERfOmVyVyg@mail.gmail.com>
+ <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <32768.122080821214200159@us-mta-117.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiFDPvKZORw228YFWX_QTc7D0EoMEDP58P2pCocRSnsHA@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On 2022-08-08, Linus Torvalds wrote:
+>On Mon, Aug 8, 2022 at 1:32 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>>
+>> Thanks for the link; I recall Ard mentioning the ELF segments are
+>> ignored by the kernels loader in another thread.
+>
+>Yeah, the kernel loader is not some generic ELF loader thing.
+>
+>> Perhaps we should be adding
+>> --no-warn-execstack
+>> wrapped in an ld-option check to KBUILD_LDFLAGS at the top level?
+>
+>I think both the linker flag and the assembler flag are the "correct"
+>thing to do.
+>
+>And yes, I don't think there is anything architecture-specific about
+>it, and the top-level Makefile is likely the right thing to modify.
+>
+>I'm a tiny bit worried about "what versions of as/ld accept those
+>flags", though.
+>
+>              Linus
+>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If most ports don't need executable stacks, I think using `-z
+noexecstack` is better than the binutils 2.39 specific
+--no-warn-execstack (not recognized by lld and older GNU ld, so a
+configure check will be needed).
 
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50314
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750301
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750323
-           s390x - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750543
-          x86_64 - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750397
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750425
-          x86_64 (debug) - Storage - lvm thinp stqe test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750668
-          x86_64 (debug) - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4750687
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
-c/0x4c
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1310
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Then -Wa,--noexecstack is not necessary: if the built relocatable files
+are destined to be used with ld with -z noexecstack, the input
+.note.GNU-stack sections are really redundant. It would be a difficult
+story if the relocatable files can "leak" to the outside world where a
+GNU ld without -z noexecstack may be used. But IMO this is not the case
+for the kernel.
