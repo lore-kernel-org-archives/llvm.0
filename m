@@ -1,71 +1,109 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263B04682
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 16:59:37 +0000 (UTC)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-328a1cff250so118025927b3.6
-        for <llvm@lists.linux.dev>; Tue, 09 Aug 2022 09:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=QrQX8WK96u27I03TXOPBygFMgGD2Ibt/j+HCEDp++fQ=;
-        b=m1M1yMVBnbgi7NhIwjdruOUQemUheuzKcNXghQUoailteEjFRoQBidSZMXENxUrPCj
-         Tp1WnfFrrBzYRcJcIHBpnUbfK2ZAUS46AcAXmAJuFi2rgW5elvTWhoeN8aFmxpcz9XBN
-         FHiFnGD56C2xbnyzh3cgcyMhrdUxL2KlXyoDZWlDQ+4/VaoXKDE0Ar4j99HPpRTgMJMt
-         EZdISeeFd9OdLatpDDdWPxMq6C3v5eKdNyVRERxfF+G3Zbgn/bij81RWXs/uGLGcDAS1
-         my10/om8ROtdy3n5qf2cPcd8JGXGArfLFDDNk8E/dzd/aiNFXa97mpuUBjVHD25kDY5W
-         mrwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QrQX8WK96u27I03TXOPBygFMgGD2Ibt/j+HCEDp++fQ=;
-        b=nzjy7dcOmqcbnc2S4LlJypmmX9osKUYhndA+xgmL9b6cOett7eEMnX32GxYmPQsKzP
-         BNTIa9M80/6P9zk+tOokS8p1Q8ckBwJNSfZogfbwzDabV1sfdLcTE0o81erHx8Vr5ymw
-         b3OQv+s/ZpB8sPiKXEmFRO9Ves5NvJl3uiosGbPnnCOoUhR8jzdD0F0h7Ktayr9I7aYH
-         91DCGwWwtRR/T/3GbkBPHX2IBgrLHrIHbd2embc17b7DJhYY9xNFnhHouCnPCC/maHm/
-         /2hWRDg8zXHMaWtaSOaE1QqVL3qV5HTH1XoPtOyzCLPGg94DErFNYlFUrYNKKiypJVSU
-         2rnA==
-X-Gm-Message-State: ACgBeo0Yb6w6BewYTvm5ikE1G5E76aIKVr8WX9LqEl53Wxe23Oc0VDQ0
-	tVS5NNNVThFfp1l7GmobqPDDr4IgxjySr3digt0=
-X-Google-Smtp-Source: AA6agR7HD7MwWKvSVk7kde+m8xcp73ooya/ogS3zlQNjq0dZm4Jn67V4SprdkkazYRaHVukqADaNGkPcGF4Qdgi/q2E=
-X-Received: by 2002:a81:1d09:0:b0:31d:a40:8332 with SMTP id
- d9-20020a811d09000000b0031d0a408332mr25309035ywd.138.1660064376070; Tue, 09
- Aug 2022 09:59:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5CB4682
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 17:00:39 +0000 (UTC)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailnew.west.internal (Postfix) with ESMTP id AD94C2B05ED3;
+	Tue,  9 Aug 2022 13:00:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 09 Aug 2022 13:00:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+	cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1660064436; x=1660071636; bh=3abss+CoOK
+	3R89WSKxwqP2TXwiB32/7eSMUhPqbISCk=; b=XaejAeLV6YtYoP1m1vp3sV6Mvm
+	ZdnaCdwijII0HCmg7+V2+zSm+cbxWQN+hjTZMwOsFOnhZLoaOadd/hCKY8l2KKSA
+	r2zbfCV1TVF1YC4r0Ot1XIf6DtwvplgIyZ9a6lansDZdyUhaLdqFEBaR2XZk9OXW
+	QW6yvyWNlqAhL/iPjWGTsEgHT67PsNu6H3PUbT7YqH6r5Cb3z3tsNgiHeTTO+QOU
+	KGfidGiu8bhPbMIkXB6lbjww7eRM4ZzM4L51Sd4WCjxXha8iHuU5Z8N5+5z4G/Gd
+	VJYlL+AqgIiwkf1IyXmrq03QG1RmAG5gIvgpHas3+vPGqRicFTICI5SFyEWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1660064436; x=1660071636; bh=3abss+CoOK3R89WSKxwqP2TXwiB3
+	2/7eSMUhPqbISCk=; b=jx5UKs5FR/5TTUMznqXpar493S9pJtqfEXAu+xPgH7Hf
+	MzMI2fmjfNSSorTuQHDBOBldR4iyWi0p20MDIXC1elsESVPfa4pS1EdCE0j+H4Rk
+	e83VFx5gzYbW8/ak76uyvnrrbUXBWp+2tuwkhWOkZTyolK3/2SHT0TJG/IOI0Z+y
+	/YK0Jt7QjO3Yt252jTHOQ6lDu/aZXczZQV54hXVol7tZtwr4H2xYc4shrZmhnktB
+	FnOhqT/KWn9asDcS/w6iCF1+uDFgO+eHst6lNEF3oab5C4Sc3BBNEduWRHLfJ3tN
+	FMNN0vMmuJia78raFkiuEvS/OZaOEnCoDMZCvT3eqw==
+X-ME-Sender: <xms:s5LyYiEDWpP3XIu1fhZ7hW2j1tEJ9_YahHqQaupFDOfN-OgJzL7zeg>
+    <xme:s5LyYjUXhWR0e-TA6b-8eUOKkaSSkT6nQqy5uYmdthUlVQ-argdBUNO1bQ92khVDI
+    8w2xl-r8ydMOzLoWg>
+X-ME-Received: <xmr:s5LyYsLXwLEh-ECGcXC1Ahw1aqBqsTEkFHtD7D0JuYwT7If1v9FZ6DQzDGHecyB1KekGFvrIqjOH2ZjdOv3icxrhSfwu5RcPqwtxDRP_1OxcMTTg7YTwTY0ZCkjX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:s5LyYsGVr1iRxg22r1viLNcxnBb__ip5V9s1GtYOV80LXV1M2lI-0w>
+    <xmx:s5LyYoXtfSskZTRfN8-H9DAnAI6bCPEWjHlCk_nUNBRQki44lyRM8Q>
+    <xmx:s5LyYvM7hnV60DWPFPbU4RyAdGKRHlSYcm8b5g9E3puupVDX2nWwYQ>
+    <xmx:tJLyYjae09X7G4eUbzBHqTzlMX2xyFBOc1WqctEKF7viDjE_x0rHQYLR4RY>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 13:00:35 -0400 (EDT)
+Date: Tue, 9 Aug 2022 10:00:34 -0700
+From: Andres Freund <andres@anarazel.de>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>,
+	Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
+	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+ <YvFW/kBL6YA3Tlnc@kernel.org>
+ <YvJ6DbzBNsAgNZS4@kernel.org>
+ <YvJ7awkCVBYaZ2dd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220809095907.418764-1-naveen.n.rao@linux.vnet.ibm.com>
-In-Reply-To: <20220809095907.418764-1-naveen.n.rao@linux.vnet.ibm.com>
-From: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>
-Date: Tue, 9 Aug 2022 18:59:24 +0200
-Message-ID: <CAAUqJDsAWRedULdKx3rEK7jL4=gHfJebCT4ujzWq4vSXZbju3w@mail.gmail.com>
-Subject: Re: [PATCH] powerpc64/ftrace: Fix ftrace for clang builds
-To: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Nick Desaulniers <ndesaulniers@google.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvJ7awkCVBYaZ2dd@kernel.org>
 
-On Tue, Aug 9, 2022 at 11:59 AM Naveen N. Rao
-<naveen.n.rao@linux.vnet.ibm.com> wrote:
-> Clang doesn't support -mprofile-kernel ABI, so guard the checks against
-> CONFIG_DYNAMIC_FTRACE_WITH_REGS, rather than the elf ABI version.
->
-> Fixes: 23b44fc248f420 ("powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and PPC64")
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reported-by: Ondrej Mosnacek <omosnacek@gmail.com>
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> ---
->  arch/powerpc/kernel/trace/ftrace.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-With this patch my reproducer [1] is passing, thanks!
+On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
+> So I backtracked, the way it works needs further consideration with
+> regard to the patchkit from Andres, that is already upstream, so it
+> would be good for Roberto to take a look at what is in torvalds/master
+> now and see if we have to removed that styled thing from Andres.
 
-Tested-by: Ondrej Mosnacek <omosnacek@gmail.com>
+Why would it have to be removed - seems to be fairly independent, leaving the
+line conflicts aside? Or do you just mean folding it into one-big-test? If so,
+that'd make sense, although I'm not sure how ready the infrastructure
 
-[1] https://github.com/ClangBuiltLinux/linux/issues/1682#issue-1330483247
+
+FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
+FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
+easier to resolve.
+
+
+> Andres, if you could take a look at Roberto's patchkit as well that
+> would be great.
+
+I briefly scanned it, and the only real comment I have mirror's Quentin's,
+namely that it'd be nice to avoid displaying more tests that don't tell the
+user much.
+
+Greetings,
+
+Andres Freund
