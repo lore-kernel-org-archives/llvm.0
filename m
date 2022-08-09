@@ -1,40 +1,39 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863054428
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 14:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660055512; x=1691591512;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=oJMw2NMmWrtRy0aiEbnZdQDUiBjSj4pSFF+2gSioO+M=;
-  b=SyWp54pPBIanlPihbO2j3QidfaeSkfIogMbfWxLKaACx+A9dnayhb0PL
-   yMfEfpj9QgDx1dJ53bJvu33zHKABDB/m4JgoLRlETRzUJxuFJm0BS7JKe
-   zitTk3ePdc+DcrLjKniE66Z18hBzIkUGrgGusj35Z21EHiixBvGBczNI8
-   Lgfs4/+8yL70vcxl5/VZYYagoETgxnChJ6jpwHnbX2fPiAOukVO2UWs5h
-   s2EbX1QyYW1L8aiayhWYLJ7PibO+PrupjCaJgA4PyQtRn5EzU5GEl32D/
-   x0Dr/ZJt/R26wI0ZSTJevz/GvpuGADkcGD0TV3IGuqE659EuWaWECduSB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277782047"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="277782047"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 07:31:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="932502974"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Aug 2022 07:31:49 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLQGq-000Mzb-33;
-	Tue, 09 Aug 2022 14:31:48 +0000
-Date: Tue, 9 Aug 2022 22:31:47 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ct_kernel_exit_state+0x27: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202208092257.KAnEeoR1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9594428
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 15:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06D0C433C1;
+	Tue,  9 Aug 2022 15:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660058128;
+	bh=8MAhwzgDKvXLL9NUx6d1QOtiUnfc6MIStnsocWXT2VI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W+DD2dAK1b6DDCTsNSoPyGT6HFX5nIWvp2F3jAvQiO0eZaqSJEwksndKiTpKaSmea
+	 VE47RREejiEbvKAN3ugdGJXZtA4vQjyex7n53vgm+lulBRFIxBQbivb+/gO/hk07vQ
+	 oGCW+Ubf8ZMd+RVWCQt3wRZZzI9e2Fs6OWqVa0f+K74PvdnrTx/mDywBJ0sRNo9Of2
+	 ObxC6OD5doTjm2Da4dCzzHnZ3k0NcU8jagnCQEcOOgYy9WSNGbkrw+1Bsy87uB2fOT
+	 QHFo5Q+BUcSiI7ET8uHXoli4KjZiE5FSJzrtWekdQS69ksJTODOBIanCaCiou4x2Sg
+	 fscZvo1Gheepg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 680464035A; Tue,  9 Aug 2022 12:15:25 -0300 (-03)
+Date: Tue, 9 Aug 2022 12:15:25 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>, quentin@isovalent.com,
+	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Andres Freund <andres@anarazel.de>, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <YvJ6DbzBNsAgNZS4@kernel.org>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+ <YvFW/kBL6YA3Tlnc@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,89 +42,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YvFW/kBL6YA3Tlnc@kernel.org>
+X-Url: http://acmel.wordpress.com
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Em Mon, Aug 08, 2022 at 03:33:34PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Aug 08, 2022 at 06:14:48PM +0200, Daniel Borkmann escreveu:
+> > Hi Arnaldo,
+> > 
+> > On 7/19/22 7:05 PM, Roberto Sassu wrote:
+> > > Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+> > > error when it encounters the deprecated function MD5_Init() and the others.
+> > > The error would be interpreted as missing libcrypto, while in reality it is
+> > > not.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Given rest of the tooling fixes from Andres Freund went via perf tree and the
+> > below is perf related as well, I presume you'll pick this up, too?
+> 
+> Sure.
+>  
+> >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=perf/core
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eb555cb5b794f4e12a9897f3d46d5a72104cd4a7
-commit: 171476775d32a40bfebf83250136c19b2e842672 context_tracking: Convert state to atomic_t
-date:   5 weeks ago
-config: x86_64-randconfig-a014-20220808 (https://download.01.org/0day-ci/archive/20220809/202208092257.KAnEeoR1-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 171476775d32a40bfebf83250136c19b2e842672
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+So I fixed up the first one, minor fuzzes, the second I had to fix
+conflicts with the patchset from Andres, ended up as below, will test
+build it then in my container kit.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+- Arnaldo
 
-All warnings (new ones prefixed by >>):
+commit bea955a0256e20cc18e87087e42f2a903b9a8b84
+Author: Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue Jul 19 19:05:53 2022 +0200
 
-   vmlinux.o: warning: objtool: kvm_spurious_fault+0x1c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_update_host_rsp+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1c3: call to do_trace_write_msr() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x56: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0xbe: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x67: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5f: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_exit_state+0x27: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_nmi_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_enter_state+0x27: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_exit+0x46: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_idle_exit+0x5d: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_enter+0x2d: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_enter+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_exit+0x3b: call to __kasan_check_read() leaves .noinstr.text section
+    bpftool: Complete libbfd feature detection
+    
+    Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+    sets the linking flags depending on which flavor of the libbfd feature was
+    detected.
+    
+    However, the flavors except libbfd cannot be detected, as they are not in
+    the feature list.
+    
+    Complete the list of features to detect by adding libbfd-liberty and
+    libbfd-liberty-z.
+    
+    Committer notes:
+    
+    Adjust conflict with with:
+    
+      1e1613f64cc8a09d ("tools bpftool: Don't display disassembler-four-args feature test")
+      600b7b26c07a070d ("tools bpftool: Fix compilation error with new binutils")
+    
+    Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
+    Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+    Cc: Alexei Starovoitov <ast@kernel.org>
+    Cc: Andres Freund <andres@anarazel.de>
+    Cc: Andrii Nakryiko <andrii@kernel.org>
+    Cc: bpf@vger.kernel.org
+    Cc: Daniel Borkmann <daniel@iogearbox.net>
+    Cc: Ingo Molnar <mingo@redhat.com>
+    Cc: John Fastabend <john.fastabend@gmail.com>
+    Cc: KP Singh <kpsingh@kernel.org>
+    Cc: llvm@lists.linux.dev
+    Cc: Martin KaFai Lau <martin.lau@linux.dev>
+    Cc: Nathan Chancellor <nathan@kernel.org>
+    Cc: Nick Desaulniers <ndesaulniers@google.com>
+    Cc: Nick Terrell <terrelln@fb.com>
+    Cc: Peter Zijlstra <peterz@infradead.org>
+    Cc: Quentin Monnet <quentin@isovalent.com>
+    Cc: Song Liu <song@kernel.org>
+    Cc: Stanislav Fomichev <sdf@google.com>
+    Link: https://lore.kernel.org/r/20220719170555.2576993-2-roberto.sassu@huawei.com
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-
-objdump-func vmlinux.o ct_kernel_exit_state:
-0000 0000000000007750 <ct_kernel_exit_state>:
-0000     7750:	55                   	push   %rbp
-0001     7751:	48 89 e5             	mov    %rsp,%rbp
-0004     7754:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	7757: R_X86_64_32S	context_tracking+0x8
-000b     775b:	65 48 03 05 00 00 00 00 	add    %gs:0x0(%rip),%rax        # 7763 <ct_kernel_exit_state+0x13>	775f: R_X86_64_PC32	this_cpu_off-0x4
-0013     7763:	f0 0f c1 38          	lock xadd %edi,(%rax)
-0017     7767:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	776a: R_X86_64_32S	_ftrace_annotated_branch+0x59430
-001e     776e:	31 f6                	xor    %esi,%esi
-0020     7770:	31 d2                	xor    %edx,%edx
-0022     7772:	b9 01 00 00 00       	mov    $0x1,%ecx
-0027     7777:	e8 00 00 00 00       	call   777c <ct_kernel_exit_state+0x2c>	7778: R_X86_64_PLT32	ftrace_likely_update-0x4
-002c     777c:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	777f: R_X86_64_32S	_ftrace_annotated_branch+0x59460
-0033     7783:	31 f6                	xor    %esi,%esi
-0035     7785:	31 d2                	xor    %edx,%edx
-0037     7787:	b9 01 00 00 00       	mov    $0x1,%ecx
-003c     778c:	e8 00 00 00 00       	call   7791 <ct_kernel_exit_state+0x41>	778d: R_X86_64_PLT32	ftrace_likely_update-0x4
-0041     7791:	5d                   	pop    %rbp
-0042     7792:	c3                   	ret    
-0043     7793:	66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 04d733e98bffbc08..9cc132277150c534 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -93,9 +93,11 @@ INSTALL ?= install
+ RM ?= rm -f
+ 
+ FEATURE_USER = .bpftool
+-FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled libcap \
++FEATURE_TESTS = libbfd libbfd-liberty libbfd-liberty-z
++	disassembler-four-args disassembler-init-styled libcap \
+ 	clang-bpf-co-re
+-FEATURE_DISPLAY = libbfd libcap clang-bpf-co-re
++FEATURE_DISPLAY = libbfd libbfd-liberty libbfd-liberty-z
++	libcap clang-bpf-co-re
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
