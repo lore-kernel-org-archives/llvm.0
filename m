@@ -1,145 +1,232 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24177A
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 05:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660023823; x=1691559823;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=punBtQKVeEytlPlGdkpTPxFaBHnVt5dHmKOY/2+Kpk4=;
-  b=IwYwIXzf72oHxPEXGVgGLv1XR6r7/Cr8lbZouotSdUXKPvfmRuSBd60H
-   1r9PK5lMbLxirmitn1rYfW5++o4aqxv/A2JwXuZP247DYpkLFOwIJZBYc
-   jOhBBnPOUGYqy3z171fQ9CXE25j8P8Dv0Mh7xe6iajbzG72TizzDcrY7K
-   P9pW9OURdkdQR99BKyLkhTyIS91UUVAdWvCNE2mRqPmatnhUIlJcq65JV
-   2MBc4tmUKRh1P114A16mGR36CzBflgRZjo9/qDMU+UE405mOocwDvBtvT
-   vvdHMlVXgchvKHsqTa9tWFoeWuf+STZpIPy/UGodzFChkKwsUbpuIngjO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="352489747"
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="352489747"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 22:43:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="633199108"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Aug 2022 22:43:42 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLI1l-000MmL-1f;
-	Tue, 09 Aug 2022 05:43:41 +0000
-Date: Tue, 9 Aug 2022 13:42:51 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ct_irq_enter+0x39: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202208091334.7tJ5hj6V-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B77C15A0
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660027298;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uD0Lzwg0Gt1uAZ//hot/EbSqi9+8RzFhu8XsU1Ca9h0=;
+	b=IhQXgHdH3X+AtFZiYV6Gdw0xKzWMslnfor1GrHcIcE+uYv0YToY2kr9hYMxe+5iol2tReY
+	/g2+K304WG6WX6YSh33gfP9MIY4me2BJytdPrB8mynUN01F42MRaYDFk4gYWo/rNLaYaRl
+	D6495Uzbexz9Yiga5v+rxncgphpC8bY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-md-qVbyzNyWEfybV5Tnkbw-1; Tue, 09 Aug 2022 02:41:36 -0400
+X-MC-Unique: md-qVbyzNyWEfybV5Tnkbw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9129B3C0ED57
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:41:36 +0000 (UTC)
+Received: from [172.64.3.80] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 78558140EBE3;
+	Tue,  9 Aug 2022 06:41:36 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [5d5d353b]
+Date: Tue, 09 Aug 2022 06:41:36 -0000
+CC: omosnace@redhat.com, fsuba@redhat.com, mmalik@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <90145.122080902413600353@us-mta-587.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eb555cb5b794f4e12a9897f3d46d5a72104cd4a7
-commit: 3864caafe7c66f01b188ffccb6a4215f3bf56292 rcu/context-tracking: Remove rcu_irq_enter/exit()
-date:   5 weeks ago
-config: x86_64-randconfig-a014-20220808 (https://download.01.org/0day-ci/archive/20220809/202208091334.7tJ5hj6V-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3864caafe7c66f01b188ffccb6a4215f3bf56292
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3864caafe7c66f01b188ffccb6a4215f3bf56292
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: kvm_spurious_fault+0x1c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_update_host_rsp+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1c3: call to do_trace_write_msr() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x56: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0xbe: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x54: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x41: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_exit+0x58: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x38: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x67: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5f: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x43: call to ftrace_likely_update() leaves .noinstr.text section
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-objdump-func vmlinux.o ct_irq_enter:
-0000 0000000000007c70 <ct_irq_enter>:
-0000     7c70:	55                   	push   %rbp
-0001     7c71:	48 89 e5             	mov    %rsp,%rbp
-0004     7c74:	53                   	push   %rbx
-0005     7c75:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 7c7c <ct_irq_enter+0xc>	7c77: R_X86_64_PC32	debug_locks-0x5
-000c     7c7c:	74 0b                	je     7c89 <ct_irq_enter+0x19>
-000e     7c7e:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 7c85 <ct_irq_enter+0x15>	7c81: R_X86_64_PC32	lockdep_recursion-0x4
-0015     7c85:	85 c0                	test   %eax,%eax
-0017     7c87:	74 04                	je     7c8d <ct_irq_enter+0x1d>
-0019     7c89:	31 c0                	xor    %eax,%eax
-001b     7c8b:	eb 0c                	jmp    7c99 <ct_irq_enter+0x29>
-001d     7c8d:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 7c94 <ct_irq_enter+0x24>	7c90: R_X86_64_PC32	hardirqs_enabled-0x4
-0024     7c94:	85 c0                	test   %eax,%eax
-0026     7c96:	0f 95 c0             	setne  %al
-0029     7c99:	0f b6 d8             	movzbl %al,%ebx
-002c     7c9c:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	7c9f: R_X86_64_32S	_ftrace_annotated_branch+0x59550
-0033     7ca3:	89 de                	mov    %ebx,%esi
-0035     7ca5:	31 d2                	xor    %edx,%edx
-0037     7ca7:	31 c9                	xor    %ecx,%ecx
-0039     7ca9:	e8 00 00 00 00       	call   7cae <ct_irq_enter+0x3e>	7caa: R_X86_64_PLT32	ftrace_likely_update-0x4
-003e     7cae:	84 db                	test   %bl,%bl
-0040     7cb0:	74 04                	je     7cb6 <ct_irq_enter+0x46>
-0042     7cb2:	90                   	nop
-0043     7cb3:	0f 0b                	ud2    
-0045     7cb5:	90                   	nop
-0046     7cb6:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	7cb9: R_X86_64_32S	_ftrace_annotated_branch+0x59580
-004d     7cbd:	89 de                	mov    %ebx,%esi
-004f     7cbf:	31 d2                	xor    %edx,%edx
-0051     7cc1:	31 c9                	xor    %ecx,%ecx
-0053     7cc3:	e8 00 00 00 00       	call   7cc8 <ct_irq_enter+0x58>	7cc4: R_X86_64_PLT32	ftrace_likely_update-0x4
-0058     7cc8:	e8 00 00 00 00       	call   7ccd <ct_irq_enter+0x5d>	7cc9: R_X86_64_PLT32	ct_nmi_enter-0x4
-005d     7ccd:	5b                   	pop    %rbx
-005e     7cce:	5d                   	pop    %rbp
-005f     7ccf:	c3                   	ret    
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50336
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752641
+         aarch64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752663
+           s390x - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752556
+          x86_64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752397
+          x86_64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752425
+          x86_64 (debug) - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752476
+          x86_64 (debug) - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4752495
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
