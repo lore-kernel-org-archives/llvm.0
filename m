@@ -1,180 +1,229 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBFA15A6
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660007979; x=1691543979;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WoPvHOGgTEbEzj89e3IV+8HwssBW/QiZ2hqSwPgyHkQ=;
-  b=aV2E3PRlY45dSmJkXFc2SIi3KhnaryYO26k4KGSIhUUqO8ygmyfldhTH
-   grJ7/7GeT2ynDNT5k17It6lmR9gmY2AijBaHGBFBXZO4uw9JWA+7qmDOv
-   6a9EoHgo/9px4r2tfhmqjzxM++uq7z8w3RV6xW1Q1CJXLa+SDFDfc2vlK
-   4kOc5gtqDWBtuBVIQ8Ta/E2I/6gskXzav6D+tj2UdwEmRlaQApO3cIRb4
-   w2U/LYvO6Ei0W+E+xASl90uzfm6ZzNPrpXK1i1ln+VfCkkaWWnOF25ShD
-   256LMk0Gz9LrBky+URkHSlUOe8BQdyzmhhtRPQ1OE5EZsiTruXxdVBewL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="316653370"
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="316653370"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 18:19:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="633135119"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Aug 2022 18:19:37 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLDuC-000MdV-2Q;
-	Tue, 09 Aug 2022 01:19:36 +0000
-Date: Tue, 9 Aug 2022 09:18:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH bpf-next 11/17] bpf: Add support to create tracing
- multi link
-Message-ID: <202208090940.BaqRbrvE-lkp@intel.com>
-References: <20220808140626.422731-12-jolsa@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EEE15A6
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660008103;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sbNxsID5sy4bnlHAP0PqHnkQxYWaXipqHwWeR1CHDHE=;
+	b=cm9+lRkA82nzQv+KR0lulbmonrbh/xlGDAvfABdOjHcChMYABf0pd/A2Qney8pSNiPWVxG
+	0DN29XVwVsbB1QTuoZxHG3HEBCk+vVBms2ZDPOvuXqpVWydJJO1KU0aUh4dNeQUf6QTIX5
+	iQXqwygBoT+PAdJWY27Mqgf14w4S9C8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-117-XZWw4GTpNZaQyWc0hxLMiA-1; Mon, 08 Aug 2022 21:21:42 -0400
+X-MC-Unique: XZWw4GTpNZaQyWc0hxLMiA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00EAF801585
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 01:21:42 +0000 (UTC)
+Received: from [172.64.3.80] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D72EF9457F;
+	Tue,  9 Aug 2022 01:21:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [c8a684e2]
+Date: Tue, 09 Aug 2022 01:21:38 -0000
+CC: mmalik@redhat.com, fsuba@redhat.com, omosnace@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808140626.422731-12-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Message-Id: <32768.122080821214200159@us-mta-117.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jiri,
+Hi, we tested your kernel and here are the results:
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on bpf/master]
-[also build test WARNING on next-20220808]
-[cannot apply to bpf-next/master rostedt-trace/for-next linus/master v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/bpf-Add-tracing-multi-link/20220808-221246
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: hexagon-randconfig-r002-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090940.BaqRbrvE-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c16f49e680e78a8df8ffc125e001217fb8be8e0b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiri-Olsa/bpf-Add-tracing-multi-link/20220808-221246
-        git checkout c16f49e680e78a8df8ffc125e001217fb8be8e0b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/time/time.c:33:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:797:5: warning: no previous prototype for function 'bpf_tracing_multi_attach' [-Wmissing-prototypes]
-   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-       ^
-   include/linux/trace_events.h:797:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-   ^
-   static 
-   1 warning generated.
---
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:797:5: warning: no previous prototype for function 'bpf_tracing_multi_attach' [-Wmissing-prototypes]
-   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-       ^
-   include/linux/trace_events.h:797:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-   ^
-   static 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-                                     ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:147:20: warning: unused function 'is_migration_base' [-Wunused-function]
-   static inline bool is_migration_base(struct hrtimer_clock_base *base)
-                      ^
-   kernel/time/hrtimer.c:1873:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
-   static inline void __hrtimer_peek_ahead_timers(void)
-                      ^
-   7 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/bpf_tracing_multi_attach +797 include/linux/trace_events.h
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50314
 
-   764	
-   765	static inline int
-   766	perf_event_query_prog_array(struct perf_event *event, void __user *info)
-   767	{
-   768		return -EOPNOTSUPP;
-   769	}
-   770	static inline int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   771	{
-   772		return -EOPNOTSUPP;
-   773	}
-   774	static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   775	{
-   776		return -EOPNOTSUPP;
-   777	}
-   778	static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
-   779	{
-   780		return NULL;
-   781	}
-   782	static inline void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
-   783	{
-   784	}
-   785	static inline int bpf_get_perf_event_info(const struct perf_event *event,
-   786						  u32 *prog_id, u32 *fd_type,
-   787						  const char **buf, u64 *probe_offset,
-   788						  u64 *probe_addr)
-   789	{
-   790		return -EOPNOTSUPP;
-   791	}
-   792	static inline int
-   793	bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   794	{
-   795		return -EOPNOTSUPP;
-   796	}
- > 797	int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-   798	{
-   799		return -EOPNOTSUPP;
-   800	}
-   801	#endif
-   802	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+         aarch64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750301
+         aarch64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750323
+           s390x - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750543
+          x86_64 - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750397
+          x86_64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750425
+          x86_64 (debug) - Storage - lvm thinp stqe test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750668
+          x86_64 (debug) - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4750687
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
