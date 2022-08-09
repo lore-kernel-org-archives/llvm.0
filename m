@@ -1,90 +1,140 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E5A4682
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 17:10:15 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id c17so17873609lfb.3
-        for <llvm@lists.linux.dev>; Tue, 09 Aug 2022 10:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=A9YjzO6pf9jUuipiXd320RsVb+qwVho6k/x9nJJSSr8=;
-        b=KlWeX2Pqpmmm0Ttm2l2VCcsfY9ZqUVUh1HiPtrtKusMk8sThEghUmgtTErO6cmHfhF
-         O70vD96WTLu4znZoxpKzyO7W4KuvBTM0m6eplMh+nMa49J3GUDlWGV7c+yqacRJc39BH
-         Z1LPxVZ/wStTSQ6Ly8qjU00dqlHykxeK8OPVH81321pmphmBE3GSBVJFizApe7+4lB2B
-         30q7fKtl3vo0vbDOS0GIFIFL26aEmZyurQZJpm6k4SxA9pDwearrewCw6FHRSBPinluD
-         W49YWwDEt9FNyO8CfukSCOgOBLWvNAsVh8gby9IM8A7Y/a7xz4LxpEJJjtZ6v7o2rvUN
-         GM7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=A9YjzO6pf9jUuipiXd320RsVb+qwVho6k/x9nJJSSr8=;
-        b=lQelFWYCbsvbKu1xfWUfNFsTMYSK0AAXWBGHJFYtf3ElgoI/DoOpkXFICNEw/XPyIF
-         a4ZYFmtAs7E0b3Tii2/iz6CefmO68fse9EUbU36AlyBeSu0888Pc1r30WIKBUji3EIdt
-         ozUZulqQPGbc9ZQSBZ+jRsY2axPc3FpC2F5rR0NuJORH7/vP5KkhYrLn/V9HmPFqvKS9
-         lKJYbMBog/LZYGfjFNkk8D392gscurnxzhxHtpWDGQLUqMe49COopX/QP75Z9Z6bbhjF
-         u1pIkY9gb5XCYWkaoPIb0J9vjVy8kbucvBaTtGOh5CeYuSPMTSKF/Yg7ZS0lDK/kkf4y
-         4UjQ==
-X-Gm-Message-State: ACgBeo22sOnuoT6AJ1X6cNv69Iip9n977IOn3E6FsNjYSqt1aRryGDw4
-	FmwJA2k2jlRVuvZvLnSgIyWxYP7Jcsl56FepFbOahA==
-X-Google-Smtp-Source: AA6agR6BEEKvSMl+Ivvhp+4oYj2Oi9CGwNxaApycDinRhh+MWc3sKk/e+l5U7pLBntE5A/gb5KQYmxwqP2blZ90KuAA=
-X-Received: by 2002:a05:6512:1317:b0:48c:ed42:5cf4 with SMTP id
- x23-20020a056512131700b0048ced425cf4mr3117389lfu.103.1660065013239; Tue, 09
- Aug 2022 10:10:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600A34692
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 19:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D851AC433D6;
+	Tue,  9 Aug 2022 19:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660071890;
+	bh=RB8OyKIO/zahJ9Uiq9plVG31G01V975xaNF+9AbDVIs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oFmiMkyM3i6Ne3bvqoOsnIybe8Ey7mGTCGphB9qdja5pnbIJn87u8X/rQkW8YYFZI
+	 So4RZpHYH9ibY4cdM0KHD17ruP5wCdKZov8nUCmoLTX6KLb5/VLbJU239jy6ueWlQe
+	 2WUH6WpNtqwNuhT1TpxXhtFCsfJKMo57L49LW0s0mtAQNqOsOgDhDqkPABzz9Ish10
+	 g02uBhjp+OUIGo6c4iiE69DRmeVjeMW2qYDgeUPNJUH/Xfar8/N5J2wy99QS2MiOHZ
+	 nVStcfPPAOhgyMewVkOU2++N0HPEDtL+47us8W1vrLE0RJs2xj4FZPmQCHwLAaACt0
+	 xaBrPpga577VA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 39E7D4035A; Tue,  9 Aug 2022 16:04:46 -0300 (-03)
+Date: Tue, 9 Aug 2022 16:04:46 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Andres Freund <andres@anarazel.de>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>,
+	Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
+	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+	terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <YvKvzkuUG78q/mkA@kernel.org>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+ <YvFW/kBL6YA3Tlnc@kernel.org>
+ <YvJ6DbzBNsAgNZS4@kernel.org>
+ <YvJ7awkCVBYaZ2dd@kernel.org>
+ <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220809095907.418764-1-naveen.n.rao@linux.vnet.ibm.com> <CAAUqJDsAWRedULdKx3rEK7jL4=gHfJebCT4ujzWq4vSXZbju3w@mail.gmail.com>
-In-Reply-To: <CAAUqJDsAWRedULdKx3rEK7jL4=gHfJebCT4ujzWq4vSXZbju3w@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 9 Aug 2022 10:10:01 -0700
-Message-ID: <CAKwvOdkexR9fc3=Dv+D5roJTBjkk6SpgoVd1xZNuuGUh2fUOvA@mail.gmail.com>
-Subject: Re: [PATCH] powerpc64/ftrace: Fix ftrace for clang builds
-To: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
+X-Url: http://acmel.wordpress.com
 
-On Tue, Aug 9, 2022 at 9:59 AM Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.c=
-om> wrote:
->
-> On Tue, Aug 9, 2022 at 11:59 AM Naveen N. Rao
-> <naveen.n.rao@linux.vnet.ibm.com> wrote:
-> > Clang doesn't support -mprofile-kernel ABI, so guard the checks against
-> > CONFIG_DYNAMIC_FTRACE_WITH_REGS, rather than the elf ABI version.
-> >
-> > Fixes: 23b44fc248f420 ("powerpc/ftrace: Make __ftrace_make_{nop/call}()=
- common to PPC32 and PPC64")
-> > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Reported-by: Ondrej Mosnacek <omosnacek@gmail.com>
-> > Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> > ---
-> >  arch/powerpc/kernel/trace/ftrace.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> With this patch my reproducer [1] is passing, thanks!
->
-> Tested-by: Ondrej Mosnacek <omosnacek@gmail.com>
->
-> [1] https://github.com/ClangBuiltLinux/linux/issues/1682#issue-1330483247
+Em Tue, Aug 09, 2022 at 10:00:34AM -0700, Andres Freund escreveu:
+> Hi,
+> 
+> On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
+> > So I backtracked, the way it works needs further consideration with
+> > regard to the patchkit from Andres, that is already upstream, so it
+> > would be good for Roberto to take a look at what is in torvalds/master
+> > now and see if we have to removed that styled thing from Andres.
+> 
+> Why would it have to be removed - seems to be fairly independent, leaving the
+> line conflicts aside? Or do you just mean folding it into one-big-test? If so,
+> that'd make sense, although I'm not sure how ready the infrastructure
 
-Thanks for the report and fixup. I filed
-https://github.com/llvm/llvm-project/issues/57031
-as a feature request for -mprofile-kernel in clang.  If there are
-other missing features for this target, let's get bugs filed for them.
+So below is the 3rd patch in Roberto's patchkit adapted, I removed the
+FEATURE_CHECK_LDFLAGS-disassembler-init-styled setting as we now
+automatically try with multiple sets of libraries, as with
+disassembler-four-args.
 
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://github.com/llvm/llvm-project/issues/57031
-Link: https://github.com/ClangBuiltLinux/linux/issues/1682
+- Arnaldo
 
-MPE: can you please ensure the above two links get added if/when applying?
---=20
-Thanks,
-~Nick Desaulniers
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 23648ea54e8d3d2c..0661a1cf98556ed3 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -297,9 +297,6 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
+ 
+ FEATURE_CHECK_LDFLAGS-libaio = -lrt
+ 
+-FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
+-FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
+-
+ CORE_CFLAGS += -fno-omit-frame-pointer
+ CORE_CFLAGS += -ggdb3
+ CORE_CFLAGS += -funwind-tables
+@@ -329,8 +326,8 @@ ifneq ($(TCMALLOC),)
+ endif
+ 
+ ifeq ($(FEATURES_DUMP),)
+-# We will display at the end of this Makefile.config, using $(call feature_display_entries)
+-# As we may retry some feature detection here, see the disassembler-four-args case, for instance
++# We will display at the end of this Makefile.config, using $(call feature_display_entries),
++# as we may retry some feature detection here.
+   FEATURE_DISPLAY_DEFERRED := 1
+ include $(srctree)/tools/build/Makefile.feature
+ else
+@@ -924,13 +921,9 @@ ifndef NO_LIBBFD
+ 
+     ifeq ($(feature-libbfd-liberty), 1)
+       EXTLIBS += -lbfd -lopcodes -liberty
+-      FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -ldl
+-      FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -ldl
+     else
+       ifeq ($(feature-libbfd-liberty-z), 1)
+         EXTLIBS += -lbfd -lopcodes -liberty -lz
+-        FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -lz -ldl
+-        FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+       endif
+     endif
+     $(call feature_check,disassembler-four-args)
+@@ -1356,7 +1349,7 @@ endif
+ 
+ # re-generate FEATURE-DUMP as we may have called feature_check, found out
+ # extra libraries to add to LDFLAGS of some other test and then redo those
+-# tests, see the block about libbfd, disassembler-four-args, for instance.
++# tests.
+ $(shell rm -f $(FEATURE_DUMP_FILENAME))
+ $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
+ 
+ 
+> 
+> FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
+> FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
+> easier to resolve.
+> 
+> 
+> > Andres, if you could take a look at Roberto's patchkit as well that
+> > would be great.
+> 
+> I briefly scanned it, and the only real comment I have mirror's Quentin's,
+> namely that it'd be nice to avoid displaying more tests that don't tell the
+> user much.
+> 
+> Greetings,
+> 
+> Andres Freund
+
+-- 
+
+- Arnaldo
