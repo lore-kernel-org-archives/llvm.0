@@ -1,138 +1,156 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2043D23C2
-	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 06:42:34 +0000 (UTC)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27960KRQ030598;
-	Tue, 9 Aug 2022 06:25:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0tHR0dUovDdcOcO8mlXS6xxFDZ5pswykHYtMoZ4Vnfw=;
- b=LU9ZwpMvopkG/pUj2KhQmPuUoBpMhwT7mBcyyBU6J/BMLtqP55PpGG5t9nP6xQv1+8yN
- G1WKzA609EruqR8IE6vJaWmcYKymDV7LJpmDGoOdvrphVFwwbBWnLhDwdvsRPl83Gdx9
- jyZszBWDCdI4GWueN1r1D/uo+VFBz/9oqFVO/Jw6SNzlpIgFHMlax6Fgfys+js7K8mDJ
- 3k09JA2uXNw0gKGbQz0w8gs+a8msSdQcYFwgtSiTRpNEhu0Om6Bg78+llnQg3FdT3JKp
- c9wmAY9QLLWqqkGZZVzlXtOk6J0uBsHVhWv/nKQG+Tr0GyZEkh1IgqxQlxWpYCqX17Es Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275awa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Aug 2022 06:25:50 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2795WHag003055;
-	Tue, 9 Aug 2022 06:25:49 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275avd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Aug 2022 06:25:49 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-	by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2796K1O6023372;
-	Tue, 9 Aug 2022 06:25:47 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma03ams.nl.ibm.com with ESMTP id 3hsfx8u33r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Aug 2022 06:25:46 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2796PiJD33292760
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 9 Aug 2022 06:25:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A1545A4054;
-	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 38A09A405C;
-	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
-Received: from localhost (unknown [9.43.41.164])
-	by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
-Date: Tue, 09 Aug 2022 11:55:42 +0530
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}()
- common to PPC32 and PPC64
-To: Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy
-	<christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Mackerras
-	<paulus@samba.org>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, nathan@kernel.org, omosnacek@gmail.com
-References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
-	<96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
-	<CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
-In-Reply-To: 
-	<CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1660026096.me2vg4spl7.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tDeZcGNCEjgVycAYsJJJ4_SQQs0YTm7S
-X-Proofpoint-GUID: 5ZMZNTNRPJ_g1A2Q4T5F4uxokI98MwyY
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC0C5C8F
+	for <llvm@lists.linux.dev>; Tue,  9 Aug 2022 07:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660028685; x=1691564685;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c9rz1QFpgr7P8OUQ0jtVXvlcp16HHW9uL6/FaIw9cdc=;
+  b=e5q8DuImGcZ4HtGJcK9nLu6b9nS9Hxib8Y25YziqEX3qo0k/d8FyrHGf
+   qFioB9tl9GFrkbDMQKNHhVnmvi5Zi3ojf1B32XGEMV0I4JPsxs7ij0aur
+   Y075bB7GCFA25d07N3bypymBfkrAyowLuYJPdeA+OJ/ecatgybLrKWnuk
+   lemVVzd8q/QnZ35un4c/vRNB7rJtAOOEOyk62TN5oJGz7xW3lx9rt2Nzs
+   3UryBfh1D1O2jiUZeLEqRV11/3KYi9Ve1V8cwrCQU7UTbMV+QWbNJ5rwX
+   J4zb+C1i0AiQDicrtxY83qKUwbMJj7fNL8C+3oTUe8CU87+P4oVjGf6Up
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="271156186"
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="271156186"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 00:04:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="694041659"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Aug 2022 00:04:43 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLJIA-000Moy-35;
+	Tue, 09 Aug 2022 07:04:42 +0000
+Date: Tue, 9 Aug 2022 15:04:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-amx:init_fpstate 2/3] arch/x86/kernel/fpu/xstate.c:362:24:
+ warning: format specifies type 'unsigned int' but the argument has type
+ 'unsigned long'
+Message-ID: <202208091405.uYHLXk68-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- spamscore=0 phishscore=0 clxscore=1011 bulkscore=0 mlxlogscore=887
- suspectscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208090026
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Nick Desaulniers wrote:
-> Christ...that's not what I meant to send; sorry, mutt is giving me
-> bizarro errors today so I can't insert myself into threads using the
-> usual incantation I have in the past.  What I meant to send was:
->=20
-> Christophe,
-> Ondrej reported a regression with ftrace when building w/ clang
-> bisected to this commit. Can you PTAL?
-> https://github.com/ClangBuiltLinux/linux/issues/1682
+tree:   https://github.com/intel/amx-linux.git init_fpstate
+head:   b1323896658f2b069193a782265a47e3c99611e4
+commit: 86878d20f388dc243b534c20a5de1bedfb534df1 [2/3] x86/fpu: Avoid the init XSTATE buffer overflow
+config: x86_64-randconfig-r023-20220808 (https://download.01.org/0day-ci/archive/20220809/202208091405.uYHLXk68-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/amx-linux/commit/86878d20f388dc243b534c20a5de1bedfb534df1
+        git remote add intel-amx https://github.com/intel/amx-linux.git
+        git fetch --no-tags intel-amx init_fpstate
+        git checkout 86878d20f388dc243b534c20a5de1bedfb534df1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/fpu/
 
-Thanks for the report. That was my doing - I tend to miss the fact that=20
-clang doesn't support -mprofile-kernel. Can you check if the below patch=20
-fixes it for you?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Naveen
+All warnings (new ones prefixed by >>):
 
----
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
-/ftrace.c
-index cb158c32b50b99..7b85c3b460a3c0 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -393,11 +393,11 @@ int ftrace_make_nop(struct module *mod,
-  */
- static bool expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
- {
--       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1))
-+       if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
-+               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
-+       else
-                return ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) &&
-                       ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC));
--       else
--               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
- }
-=20
- static int
-@@ -412,7 +412,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned lon=
-g addr)
-        if (copy_inst_from_kernel_nofault(op, ip))
-                return -EFAULT;
-=20
--       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1) &&
-+       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
-            copy_inst_from_kernel_nofault(op + 1, ip + 4))
-                return -EFAULT;
-=20
+>> arch/x86/kernel/fpu/xstate.c:362:24: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                          "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:507:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
+vim +362 arch/x86/kernel/fpu/xstate.c
+
+   328	
+   329	/*
+   330	 * All supported features have either init state all zeros or are
+   331	 * handled in setup_init_fpu() individually. This is an explicit
+   332	 * feature list and does not use XFEATURE_MASK*SUPPORTED to catch
+   333	 * newly added supported features at build time and make people
+   334	 * actually look at the init state for the new feature.
+   335	 */
+   336	#define XFEATURES_INIT_FPSTATE_HANDLED		\
+   337		(XFEATURE_MASK_FP |			\
+   338		 XFEATURE_MASK_SSE |			\
+   339		 XFEATURE_MASK_YMM |			\
+   340		 XFEATURE_MASK_OPMASK |			\
+   341		 XFEATURE_MASK_ZMM_Hi256 |		\
+   342		 XFEATURE_MASK_Hi16_ZMM	 |		\
+   343		 XFEATURE_MASK_PKRU |			\
+   344		 XFEATURE_MASK_BNDREGS |		\
+   345		 XFEATURE_MASK_BNDCSR |			\
+   346		 XFEATURE_MASK_PASID |			\
+   347		 XFEATURE_MASK_XTILE)
+   348	
+   349	/*
+   350	 * setup the xstate image representing the init state
+   351	 */
+   352	static int __init setup_init_fpu_buf(void)
+   353	{
+   354		BUILD_BUG_ON((XFEATURE_MASK_USER_SUPPORTED |
+   355			      XFEATURE_MASK_SUPERVISOR_SUPPORTED) !=
+   356			     XFEATURES_INIT_FPSTATE_HANDLED);
+   357	
+   358		print_xstate_features();
+   359	
+   360		if (init_fpstate.size > sizeof(union fpregs_state)) {
+   361			pr_err("x86/fpu: init_fpstate (%u bytes) is not enough for the configured size:"
+ > 362			       "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
+   363			return -EINVAL;
+   364		}
+   365	
+   366		xstate_init_xcomp_bv(&init_fpstate.regs.xsave, init_fpstate.xfeatures);
+   367	
+   368		/*
+   369		 * Init all the features state with header.xfeatures being 0x0
+   370		 */
+   371		os_xrstor_booting(&init_fpstate.regs.xsave);
+   372	
+   373		/*
+   374		 * All components are now in init state. Read the state back so
+   375		 * that init_fpstate contains all non-zero init state. This only
+   376		 * works with XSAVE, but not with XSAVEOPT and XSAVEC/S because
+   377		 * those use the init optimization which skips writing data for
+   378		 * components in init state.
+   379		 *
+   380		 * XSAVE could be used, but that would require to reshuffle the
+   381		 * data when XSAVEC/S is available because XSAVEC/S uses xstate
+   382		 * compaction. But doing so is a pointless exercise because most
+   383		 * components have an all zeros init state except for the legacy
+   384		 * ones (FP and SSE). Those can be saved with FXSAVE into the
+   385		 * legacy area. Adding new features requires to ensure that init
+   386		 * state is all zeroes or if not to add the necessary handling
+   387		 * here.
+   388		 */
+   389		fxsave(&init_fpstate.regs.fxsave);
+   390		return 0;
+   391	}
+   392	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
