@@ -1,44 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B090B33C1
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 20:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7767F33C1
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 20:22:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660162327; x=1691698327;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hnavblcy/9Z9lk4G3KmLerA46bJwvJS4f8sUG+q8GaU=;
-  b=MLSGyjk1Untr3mZ8CVZyKdM/iLNmRjqsMVvK/W/DoKUFlf+7Wd3sGLlX
-   Em1WbA7ip+M+FIfmLKeTjo6MVUhnfexdDo+Hs4eaa+uvun1NBsFzIf/QM
-   C8mn+b0KjEZdFMC2UB2KrWEsSyODCFlTU3DmFyiZutq6dZYhDeTtCSNe4
-   Og5KsXT7pk0f8Cj+TFe1ayzGIIrFqGyU8/4KisiDqpEAQIPbny5nLxpwV
-   qHyqFbwQSnIpwmxgIAWjXC38W+6Vng0vEugKCN5rYuLZjUsVPo4nwtCRH
-   BrYTXaYhttlMHfCeDjv1bSPKYwSgN9bnGDsxDCSIiqgQmAuaTdJY6D7d0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="274236638"
+  t=1660162932; x=1691698932;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=750f7XuvpErvsci7/p0aCNeOM029STpzBlMv/AR4oNg=;
+  b=gOnWc/oScg3fjN92oO8ysoOA8pA1i3AujmuBHtMvUpUBrUtULag7+XOh
+   k/Ryuve1sC5rM8Vnpk6Di4vwxVWSK5yqDTfYHtKYdwmNUeamimhFYME+j
+   tkftGnE0Xc5hOwGigdck0b5W3RkWW7WzJ58Ci+YSfAI+AtmfWIMeim1rg
+   UCgLrGqAxLlOp7Yx7VXFqzxYBGlXsqYB4eRxyeovMm1OH27KE0Wzy5aOO
+   IKFdy4Bwp55l0MIRPoq1fJKD6L7s7fZbFPD2wAcvweXC0cphHjlB5xzBu
+   j0l11E1K73kn7BD3wOCev56A1hY9xmskC6dRLU00IDt+YFGohLbBDf4tc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291975123"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="274236638"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:12:07 -0700
+   d="scan'208";a="291975123"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:22:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="747556497"
+   d="scan'208";a="608690599"
 Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2022 13:12:04 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 10 Aug 2022 13:22:05 -0700
 Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oLs3f-0000fl-2z;
-	Wed, 10 Aug 2022 20:12:03 +0000
-Date: Thu, 11 Aug 2022 04:11:33 +0800
+	id 1oLsDN-0000gN-0b;
+	Wed, 10 Aug 2022 20:22:05 +0000
+Date: Thu, 11 Aug 2022 04:21:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:bpf/bpf/master 1/2] kernel/bpf/syscall.c:5089:5:
- warning: no previous prototype for function 'kern_sys_bpf'
-Message-ID: <202208110447.5dGsjBot-lkp@intel.com>
+To: Jian Shen <shenjian15@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFCv7 PATCH net-next 02/36] net: replace general features
+ macroes with global netdev_features variables
+Message-ID: <202208110427.1rTIDNfZ-lkp@intel.com>
+References: <20220810030624.34711-3-shenjian15@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,84 +46,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220810030624.34711-3-shenjian15@huawei.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf/master
-head:   86f44fcec22ce2979507742bc53db8400e454f46
-commit: 86f44fcec22ce2979507742bc53db8400e454f46 [1/2] bpf: Disallow bpf programs call prog_run command.
-config: arm64-randconfig-r003-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110447.5dGsjBot-lkp@intel.com/config)
+Hi Jian,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jian-Shen/net-extend-the-type-of-netdev_features_t-to-bitmap/20220810-111706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f86d1fbbe7858884d6754534a0afbb74fc30bc26
+config: hexagon-randconfig-r023-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110427.1rTIDNfZ-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/86f44fcec22ce2979507742bc53db8400e454f46
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block bpf/bpf/master
-        git checkout 86f44fcec22ce2979507742bc53db8400e454f46
+        # https://github.com/intel-lab-lkp/linux/commit/37294e085e2eafe23ebed9a19e6141256d5ca13e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jian-Shen/net-extend-the-type-of-netdev_features_t-to-bitmap/20220810-111706
+        git checkout 37294e085e2eafe23ebed9a19e6141256d5ca13e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/syscall.c:5089:5: warning: no previous prototype for function 'kern_sys_bpf' [-Wmissing-prototypes]
-   int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
-       ^
-   kernel/bpf/syscall.c:5089:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
+>> net/core/netdev_features.c:9:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_ethtool_features);
    ^
-   static 
-   1 warning generated.
+   int
+>> net/core/netdev_features.c:9:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_ethtool_features);
+                     ^
+   net/core/netdev_features.c:12:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_never_change_features);
+   ^
+   int
+   net/core/netdev_features.c:12:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_never_change_features);
+                     ^
+   net/core/netdev_features.c:15:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_gso_features_mask);
+   ^
+   int
+   net/core/netdev_features.c:15:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_gso_features_mask);
+                     ^
+   net/core/netdev_features.c:18:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_ip_csum_features);
+   ^
+   int
+   net/core/netdev_features.c:18:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_ip_csum_features);
+                     ^
+   net/core/netdev_features.c:21:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_csum_features_mask);
+   ^
+   int
+   net/core/netdev_features.c:21:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_csum_features_mask);
+                     ^
+   net/core/netdev_features.c:24:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_general_tso_features);
+   ^
+   int
+   net/core/netdev_features.c:24:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_general_tso_features);
+                     ^
+   net/core/netdev_features.c:27:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_all_tso_features);
+   ^
+   int
+   net/core/netdev_features.c:27:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_all_tso_features);
+                     ^
+   net/core/netdev_features.c:30:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_tso_ecn_features);
+   ^
+   int
+   net/core/netdev_features.c:30:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_tso_ecn_features);
+                     ^
+   net/core/netdev_features.c:33:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_all_fcoe_features);
+   ^
+   int
+   net/core/netdev_features.c:33:19: error: a parameter list without types is only allowed in a function definition
+   EXPORT_SYMBOL_GPL(netdev_all_fcoe_features);
+                     ^
+   net/core/netdev_features.c:36:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   EXPORT_SYMBOL_GPL(netdev_gso_software_features);
+   ^
+   int
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/kern_sys_bpf +5089 kernel/bpf/syscall.c
+vim +/int +9 net/core/netdev_features.c
 
-  5088	
-> 5089	int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
-  5090	{
-  5091		struct bpf_prog * __maybe_unused prog;
-  5092		struct bpf_tramp_run_ctx __maybe_unused run_ctx;
-  5093	
-  5094		switch (cmd) {
-  5095	#ifdef CONFIG_BPF_JIT /* __bpf_prog_enter_sleepable used by trampoline and JIT */
-  5096		case BPF_PROG_TEST_RUN:
-  5097			if (attr->test.data_in || attr->test.data_out ||
-  5098			    attr->test.ctx_out || attr->test.duration ||
-  5099			    attr->test.repeat || attr->test.flags)
-  5100				return -EINVAL;
-  5101	
-  5102			prog = bpf_prog_get_type(attr->test.prog_fd, BPF_PROG_TYPE_SYSCALL);
-  5103			if (IS_ERR(prog))
-  5104				return PTR_ERR(prog);
-  5105	
-  5106			if (attr->test.ctx_size_in < prog->aux->max_ctx_offset ||
-  5107			    attr->test.ctx_size_in > U16_MAX) {
-  5108				bpf_prog_put(prog);
-  5109				return -EINVAL;
-  5110			}
-  5111	
-  5112			run_ctx.bpf_cookie = 0;
-  5113			run_ctx.saved_run_ctx = NULL;
-  5114			if (!__bpf_prog_enter_sleepable(prog, &run_ctx)) {
-  5115				/* recursion detected */
-  5116				bpf_prog_put(prog);
-  5117				return -EBUSY;
-  5118			}
-  5119			attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
-  5120			__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */, &run_ctx);
-  5121			bpf_prog_put(prog);
-  5122			return 0;
-  5123	#endif
-  5124		default:
-  5125			return ____bpf_sys_bpf(cmd, attr, size);
-  5126		}
-  5127	}
-  5128	EXPORT_SYMBOL(kern_sys_bpf);
-  5129	
+     7	
+     8	netdev_features_t netdev_ethtool_features __ro_after_init;
+   > 9	EXPORT_SYMBOL_GPL(netdev_ethtool_features);
+    10	
 
 -- 
 0-DAY CI Kernel Test Service
