@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF534680
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 22:25:03 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-31f56f635a9so136032917b3.4
-        for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 15:25:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF6D4680
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 22:25:06 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-31f58599ad3so137592597b3.20
+        for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 15:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=6I7ngn4/7OB644m4fycU8fbB2CwnISfb8LBYYNMQmtE=;
-        b=EFMENVP4gsj1ddaG66twAM7LHLhCRb8PaAswRRJAyWIvE7nwWAfgk8dcaBbouz+6yw
-         SMCpNe5KhuQfFD5cc5IeUo9kduUroOD7vfZIrVT2s6tLArPet6dRc10yL0/QKUGnkJwm
-         X+uACW502iYbfFJJmktsWJBsFn0mpDLQw8ZQKVDGft5HwdqXdiWjN3Svt6eivHvr3LK9
-         mYa2UIZxMZYsHOq98oImEPiVbnaeker7SiffhtD6kQoqcCkQtqymKqXhxxMuPRT3LOHp
-         CwepPtXWnQKl87lmCswKvbul2Mim/8svfSir/Rgdk24pvhI75HBXZh8Pc2cEl0WA5dlT
-         cZtA==
+        bh=/a7ZitxlSP2ap4ZvM+L6M2uGM3eiBd8X/p1jSaTtmzc=;
+        b=gvTf7ZWl7bgrQX0FgmznsVlAjRR5g0jVQaFB10FKWShAdbh17YEHiWK30kSMKm0HPw
+         HW4wiUSMa9nQJwRMaKtlXUyElrBe6GmMJ1hgUsNeickejjwUxGYskgRD0+iyqusguQfJ
+         Glt8iQ5CGmdxgrxqACQg0AyuU6Px9CD5gHWOneonqQ9KgOtTmlvnWEz7Q0/0bLxwJfPK
+         RCgqDE50mbP4rSUtlWQMxC+dVHgEISHSji3ZUSz39ak6+g4xUlnpt73P+XiDWYUtIM1N
+         OZ66+phcLM635OtS8AmPwDWiij3da51yMtsdGZyC5aW120qyTHfhNctsQT90i/CQeC1+
+         NYQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=6I7ngn4/7OB644m4fycU8fbB2CwnISfb8LBYYNMQmtE=;
-        b=CpxmZqe24PCyWoL2Ga2cY5XaYOtew6G12QTo38SJU6vYt+jf1i1rG4XywyKouz2YSq
-         WZ4hr7bX4WeIfhY27xnvpo1jNkqV6jtr5P4SJ4atzylnKmTereurnu7JuuofXNPwYNgZ
-         TQeMRFoHuJaZ36zZBAGlV3EF0sj/13ELOcVRslT5tTydn4RaismPHvtvdNZhHMZmAg/F
-         X6YYT21Z0DQW0bTMNqzP4g2/16YLORxjCG2B7h0xsQdWRlpKDRU++pm/3Da/XJ1uOW4I
-         /BSE+KLy51RHnEYr7rgpftdU+3nz5oz+vTxtyZiSCI2OiBb5lh/DeVqtJGb/OmGxuQtv
-         YY0g==
-X-Gm-Message-State: ACgBeo3zqBUsb9QQ1Lx4aCPYfKiPxtN2j6WI5Ms8QfmZ+rOTlHZdFCCB
-	GnxGiL2wpTfGdhV6bvR00RQDFQW1lDLyAl6HTSA=
-X-Google-Smtp-Source: AA6agR5tR6VJL1cBM0+0soZnPSPXBTT5jayRGU/k7oxm6GIrojlqN3RVUkVPcdoImbPu0dg4mh37ttIN3gg3W9iHE2M=
+        bh=/a7ZitxlSP2ap4ZvM+L6M2uGM3eiBd8X/p1jSaTtmzc=;
+        b=o3xDT07Q8p85oeHJdlSRjxx1or5/OrRb3RabGhfwvli/By+4Dg9yKeOgIQflPQhPws
+         H3BFVwPM+Aw4c3S+3Iut4ZBUgSHP2EMJddq/4IMRS8faUiDZpsiJQxD0nL7reIFOiWGf
+         1JNloAxRUGA/TR0F5hD53bAzYyZBFv3CNxhsA574pewqkJCTAe0iPI+QaoRCyzyZER05
+         dSlBQFJsVCJKobL3wXnkKIUiRkpOvl4AX9vuKjBbUr+d3dZ92/klWZGi3XtoATAMKcjz
+         qbypUy3sHhakvAgfJ8ABahksVyBA+KZN0yBBXhUsBBJ6Lf6wPbNA2DRR06k9qeQiF217
+         u7WA==
+X-Gm-Message-State: ACgBeo1dby/oxaKebBpPQjR6gGJ84v9xLYIR5fNvzWx8rBkkA0fZ8jhk
+	wVGknwNMmegbg67dD8zZSSFvoV05y4K0brdgIjI=
+X-Google-Smtp-Source: AA6agR6Qx2DutA4B5/VXTeQA7KbB5NrdRwVnd0DdZ3u1U5+FBw3DD1DBKB+bC8qLADZQx4xe6oH7OoSLXsokOOExg6Y=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:88ad:cd41:8dd7:539])
- (user=ndesaulniers job=sendgmr) by 2002:a81:be0a:0:b0:329:74c3:b7e6 with SMTP
- id i10-20020a81be0a000000b0032974c3b7e6mr21898680ywn.491.1660170302652; Wed,
- 10 Aug 2022 15:25:02 -0700 (PDT)
-Date: Wed, 10 Aug 2022 15:24:41 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a0d:ea57:0:b0:31f:4ebd:99f7 with SMTP
+ id t84-20020a0dea57000000b0031f4ebd99f7mr30093800ywe.280.1660170305693; Wed,
+ 10 Aug 2022 15:25:05 -0700 (PDT)
+Date: Wed, 10 Aug 2022 15:24:42 -0700
 In-Reply-To: <20220810222442.2296651-1-ndesaulniers@google.com>
-Message-Id: <20220810222442.2296651-2-ndesaulniers@google.com>
+Message-Id: <20220810222442.2296651-3-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,12 +45,12 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220809013653.xtmeekefwkbo46vk@google.com> <20220810222442.2296651-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660170282; l=3488;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=kNgQ27/vj8X5tCgiHxgAYMfVSnRb71USHhs7hpHOY8Q=;
- b=DjUQeTNVWxqPr0tBXBc+iQXgebieO233lmR8Y9zFr/FGQt5gk+gXLbJMFqL7HDGnfPNDMKujdFmu
- 4r4C/HfuDU6KnqTkAAmXxJBLCFR5WiK7jAjlQCFIAqAtLIOfVv3X
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660170282; l=1856;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=bGYj2JeGfjSj7Z1PRgZLMWLsr83doiKmqzZ3eFPwnSE=;
+ b=hYwaVIszd2RuykHTL5KdXJ9zfQnjr6aWLj4NwCfF0ol4dJZuHX4vCca4b6BWa2I86izYnA8KvTIP
+ OhwpBiIsDbYB19eTJQjEYdIBWKFxXd0VwKn+1GMK+DG5i5t6OKnb
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v2 2/2] x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments
+Subject: [PATCH v2 0/2] link with -z noexecstack --no-warn-rwx-segments
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
 	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
@@ -60,19 +60,17 @@ Cc: Fangrui Song <maskray@google.com>, Linus Torvalds <torvalds@linux-foundation
 	kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, michael.roth@amd.com, n.schier@avm.de, 
 	nathan@kernel.org, sathyanarayanan.kuppuswamy@linux.intel.com, 
-	trix@redhat.com, x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Andy Lutomirski <luto@kernel.org>
+	trix@redhat.com, x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
 instances of a new warning when linking kernels in the form:
 
-  ld: warning: arch/x86/boot/pmjump.o: missing .note.GNU-stack section
-  implies executable stack
+  ld: warning: vmlinux: missing .note.GNU-stack
+  section implies executable stack
   ld: NOTE: This behaviour is deprecated and will be removed in a future
   version of the linker
-  ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with
-  RWX permissions
+  ld: warning: vmlinux has a LOAD segment with RWX permissions
 
 Generally, we would like to avoid the stack being executable. Because
 there could be a need for the stack to be executable, assembler sources
@@ -90,59 +88,21 @@ so it's wrapped in an ld-option check.
 While the kernel makes extensive usage of ELF sections, it doesn't use
 permissions from ELF segments.
 
-Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
-Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-Link: https://github.com/llvm/llvm-project/issues/57009
-Reported-by: Jens Axboe <axboe@kernel.dk>
-Suggested-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
+Broken up into 2 patches; one for the top level vmlinux, one x86
+specific since a few places in the x86 build reset KBUILD_LDFLAGS.
+
+Nick Desaulniers (2):
+  Makefile: link with -z noexecstack --no-warn-rwx-segments
+  x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments
+
+ Makefile                          | 5 +++++
  arch/x86/boot/Makefile            | 2 +-
  arch/x86/boot/compressed/Makefile | 4 ++++
  arch/x86/entry/vdso/Makefile      | 2 +-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ 4 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-index b5aecb524a8a..ffec8bb01ba8 100644
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -103,7 +103,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmlinux FORCE
- AFLAGS_header.o += -I$(objtree)/$(obj)
- $(obj)/header.o: $(obj)/zoffset.h
- 
--LDFLAGS_setup.elf	:= -m elf_i386 -T
-+LDFLAGS_setup.elf	:= -m elf_i386 -z noexecstack -T
- $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
- 	$(call if_changed,ld)
- 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 19e1905dcbf6..35ce1a64068b 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -69,6 +69,10 @@ LDFLAGS_vmlinux := -pie $(call ld-option, --no-dynamic-linker)
- ifdef CONFIG_LD_ORPHAN_WARN
- LDFLAGS_vmlinux += --orphan-handling=warn
- endif
-+LDFLAGS_vmlinux += -z noexecstack
-+ifeq ($(CONFIG_LD_IS_BFD),y)
-+LDFLAGS_vmlinux += $(call ld-option,--no-warn-rwx-segments)
-+endif
- LDFLAGS_vmlinux += -T
- 
- hostprogs	:= mkpiggy
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 76cd790ed0bd..12f6c4d714cd 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -180,7 +180,7 @@ quiet_cmd_vdso = VDSO    $@
- 		 sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
- 
- VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
--	$(call ld-option, --eh-frame-hdr) -Bsymbolic
-+	$(call ld-option, --eh-frame-hdr) -Bsymbolic -z noexecstack
- GCOV_PROFILE := n
- 
- quiet_cmd_vdso_and_check = VDSO    $@
+
+base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
 -- 
 2.37.1.559.g78731f0fdb-goog
 
