@@ -1,39 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E29C17EC
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 13:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9A1C433B5;
-	Wed, 10 Aug 2022 13:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660137787;
-	bh=w0s1m4MGSnxs9kcotHbnALXm6aRC/xMyXf6EHeBp9qY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vOq6OvMgVGwV6Snk369bzrHvAh0gb/zdWu8CkPHa9OcCEvfiRfBGxSn5H50IwBHaB
-	 VbIFeaiWl7O+WgG+l2iGDIPGgMAPagwt6ifdkjL1eQeWaBHz5bNzXn8uq5BKFRS2C+
-	 waP3wHR5TYM8KUh5Nxg3E+cu8uk2SEfpjCsE384oAfTvbIhI1TeERdPDIm3wbhHdvq
-	 Fzz6Qx3aK/LvWbK10NqlKMwtHRD8nJ9E1bOm2U3oSlooz+IktyhCNG6Ugbvw5LupsJ
-	 Wd02xAUoPLeNl5KaDk7IAejAuMtcyalkZFCqUDvAlb2vLToDJ3U/Hg6MDqG8d8jE+3
-	 4hQy7CVByhh/g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id DAEC04035A; Wed, 10 Aug 2022 10:23:04 -0300 (-03)
-Date: Wed, 10 Aug 2022 10:23:04 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Andrew Kilroy <andrew.kilroy@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/8] perf arm64: Send pointer auth masks to ring buffer
-Message-ID: <YvOxOBzsbjX1rMdY@kernel.org>
-References: <20220704145333.22557-1-andrew.kilroy@arm.com>
- <20220704145333.22557-2-andrew.kilroy@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAF428F1
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 14:29:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660141742; x=1691677742;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JLXzoyOvEjtagIA4zvZCeFvPNymZPUjJlpaPBPMJC7w=;
+  b=VQVHXnNrtkCL4D4WlhRrQQGscRYK87tUnvre7KqwxHGhwnfsePz54w54
+   l2nsZ4X3oazmZtSFfpMgZbF3poDMnaVY0Y7k85n0zT9FUI/0rCopnT++z
+   EJ1b7jqPuH93wg9sUFY1RwlMqvFCrWsuIXTeo4XYQt9XKuuazAHF7G+4t
+   AAkIcuCi8zZtnK+7SNmOLRJ15Lu1KKOvEFQtM4mqxxJK0wXlVVfiaF95E
+   LM5FnE2GKLAWn7tUcqL3kk1dv6QAJoYfMSVwyOZtr+FNw4lPFRnnPcQZF
+   sle84uJYkUE49/8kzKdaJSR3FEMiUoQXaHIYjDjNBlw98dcxAQWsIG7rM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="270869929"
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="270869929"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 07:28:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="781246975"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Aug 2022 07:28:50 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLmhV-0000LO-2y;
+	Wed, 10 Aug 2022 14:28:49 +0000
+Date: Wed, 10 Aug 2022 22:28:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Guy Briggs <rgb@redhat.com>,
+	Linux-Audit Mailing List <linux-audit@redhat.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+	Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
+ decision context
+Message-ID: <202208102231.qSUdYAdb-lkp@intel.com>
+References: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,277 +52,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704145333.22557-2-andrew.kilroy@arm.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
 
-Em Mon, Jul 04, 2022 at 03:53:25PM +0100, Andrew Kilroy escreveu:
-> Perf report cannot produce callgraphs using dwarf on arm64 where pointer
-> authentication is enabled.  This is because libunwind and libdw cannot
-> unmangle instruction pointers that have a pointer authentication code
-> (PAC) embedded in them.
-> 
-> libunwind and libdw need to be given an instruction mask which they can
-> use to arrive at the correct return address that does not contain the
-> PAC.
-> 
-> The bits in the return address that contain the PAC can differ by
-> process, so this patch adds a new sample field PERF_SAMPLE_ARCH_1
-> to allow the kernel to send the masks up to userspace perf.
-> 
-> This field can be used in a architecture specific fashion, but on
-> aarch64, it contains the ptrauth mask information.
+Hi Richard,
 
-I'm not seeing this kernel patch applied to tip/master or
-torvalds/master, what is the status of that part? Then I can look at the
-tooling part.
+Thank you for the patch! Perhaps something to improve:
 
-- Arnaldo
- 
-> Signed-off-by: Andrew Kilroy <andrew.kilroy@arm.com>
-> ---
->  arch/arm64/include/asm/arch_sample_data.h | 38 +++++++++++++++++++++++
->  arch/arm64/kernel/Makefile                |  2 +-
->  arch/arm64/kernel/arch_sample_data.c      | 37 ++++++++++++++++++++++
->  include/linux/perf_event.h                | 24 ++++++++++++++
->  include/uapi/linux/perf_event.h           |  5 ++-
->  kernel/events/core.c                      | 35 +++++++++++++++++++++
->  6 files changed, 139 insertions(+), 2 deletions(-)
->  create mode 100644 arch/arm64/include/asm/arch_sample_data.h
->  create mode 100644 arch/arm64/kernel/arch_sample_data.c
-> 
-> diff --git a/arch/arm64/include/asm/arch_sample_data.h b/arch/arm64/include/asm/arch_sample_data.h
-> new file mode 100644
-> index 000000000000..83fda293b1fc
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/arch_sample_data.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _ASM_ARCH_SAMPLE_DATA_H
-> +#define _ASM_ARCH_SAMPLE_DATA_H
-> +
-> +#include <linux/types.h>
-> +
-> +/*
-> + * Structure holding masks to help userspace stack unwinding
-> + * in the presence of arm64 pointer authentication.
-> + */
-> +struct ptrauth_info {
-> +	/*
-> +	 * Bits 0, 1, 2, 3, 4 may be set to on, to indicate which keys are being used
-> +	 * The APIAKEY, APIBKEY, APDAKEY, APDBKEY, or the APGAKEY respectively.
-> +	 * Where all bits are off, pointer authentication is not in use for the
-> +	 * process.
-> +	 */
-> +	u64 enabled_keys;
-> +
-> +	/*
-> +	 * The on bits represent which bits in an instruction pointer
-> +	 * constitute the pointer authentication code.
-> +	 */
-> +	u64 insn_mask;
-> +
-> +	/*
-> +	 * The on bits represent which bits in a data pointer constitute the
-> +	 * pointer authentication code.
-> +	 */
-> +	u64 data_mask;
-> +};
-> +
-> +struct arch_sample_data {
-> +	struct ptrauth_info ptrauth;
-> +};
-> +
-> +#endif
-> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-> index fa7981d0d917..843c6e0e2393 100644
-> --- a/arch/arm64/kernel/Makefile
-> +++ b/arch/arm64/kernel/Makefile
-> @@ -44,7 +44,7 @@ obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
->  obj-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o entry-ftrace.o
->  obj-$(CONFIG_MODULES)			+= module.o
->  obj-$(CONFIG_ARM64_MODULE_PLTS)		+= module-plts.o
-> -obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o
-> +obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o arch_sample_data.o
->  obj-$(CONFIG_HW_PERF_EVENTS)		+= perf_event.o
->  obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
->  obj-$(CONFIG_CPU_PM)			+= sleep.o suspend.o
-> diff --git a/arch/arm64/kernel/arch_sample_data.c b/arch/arm64/kernel/arch_sample_data.c
-> new file mode 100644
-> index 000000000000..2d47e8db0dbe
-> --- /dev/null
-> +++ b/arch/arm64/kernel/arch_sample_data.c
-> @@ -0,0 +1,37 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <asm/arch_sample_data.h>
-> +#include <linux/perf_event.h>
-> +
-> +inline void perf_output_sample_arch_1(struct perf_output_handle *handle,
-> +				      struct perf_event_header *header,
-> +				      struct perf_sample_data *data,
-> +				      struct perf_event *event)
-> +{
-> +	perf_output_put(handle, data->arch.ptrauth.enabled_keys);
-> +	perf_output_put(handle, data->arch.ptrauth.insn_mask);
-> +	perf_output_put(handle, data->arch.ptrauth.data_mask);
-> +}
-> +
-> +inline void perf_prepare_sample_arch_1(struct perf_event_header *header,
-> +				       struct perf_sample_data *data,
-> +				       struct perf_event *event,
-> +				       struct pt_regs *regs)
-> +{
-> +	struct task_struct *task = current;
-> +	int keys_result = ptrauth_get_enabled_keys(task);
-> +	u64 user_pac_mask = keys_result > 0 ? ptrauth_user_pac_mask() : 0;
-> +
-> +	data->arch.ptrauth.enabled_keys = keys_result > 0 ? keys_result : 0;
-> +	data->arch.ptrauth.insn_mask = user_pac_mask;
-> +	data->arch.ptrauth.data_mask = user_pac_mask;
-> +
-> +	header->size += (3 * sizeof(u64));
-> +}
-> +
-> +inline int perf_event_open_request_arch_1(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index da759560eec5..8a99942989ce 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -999,6 +999,29 @@ int perf_event_read_local(struct perf_event *event, u64 *value,
->  extern u64 perf_event_read_value(struct perf_event *event,
->  				 u64 *enabled, u64 *running);
->  
-> +void perf_output_sample_arch_1(struct perf_output_handle *handle,
-> +			       struct perf_event_header *header,
-> +			       struct perf_sample_data *data,
-> +			       struct perf_event *event);
-> +
-> +void perf_prepare_sample_arch_1(struct perf_event_header *header,
-> +				struct perf_sample_data *data,
-> +				struct perf_event *event,
-> +				struct pt_regs *regs);
-> +
-> +int perf_event_open_request_arch_1(void);
-> +
-> +#if IS_ENABLED(CONFIG_ARM64)
-> +
-> +#define HAS_ARCH_SAMPLE_DATA
-> +#include <asm/arch_sample_data.h>
-> +
-> +#endif
-> +
-> +#ifndef HAS_ARCH_SAMPLE_DATA
-> +struct arch_sample_data {
-> +};
-> +#endif
->  
->  struct perf_sample_data {
->  	/*
-> @@ -1041,6 +1064,7 @@ struct perf_sample_data {
->  	u64				cgroup;
->  	u64				data_page_size;
->  	u64				code_page_size;
-> +	struct arch_sample_data		arch;
->  } ____cacheline_aligned;
->  
->  /* default value for data source */
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index d37629dbad72..821bf5ff6a19 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -162,12 +162,15 @@ enum perf_event_sample_format {
->  	PERF_SAMPLE_DATA_PAGE_SIZE		= 1U << 22,
->  	PERF_SAMPLE_CODE_PAGE_SIZE		= 1U << 23,
->  	PERF_SAMPLE_WEIGHT_STRUCT		= 1U << 24,
-> +	PERF_SAMPLE_ARCH_1			= 1U << 25,
->  
-> -	PERF_SAMPLE_MAX = 1U << 25,		/* non-ABI */
-> +	PERF_SAMPLE_MAX = 1U << 26,		/* non-ABI */
->  
->  	__PERF_SAMPLE_CALLCHAIN_EARLY		= 1ULL << 63, /* non-ABI; internal use */
->  };
->  
-> +#define PERF_SAMPLE_ARM64_PTRAUTH PERF_SAMPLE_ARCH_1
-> +
->  #define PERF_SAMPLE_WEIGHT_TYPE	(PERF_SAMPLE_WEIGHT | PERF_SAMPLE_WEIGHT_STRUCT)
->  /*
->   * values to program into branch_sample_type when PERF_SAMPLE_BRANCH is set
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 80782cddb1da..89ab8120f4f0 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -6957,6 +6957,29 @@ static inline bool perf_sample_save_hw_index(struct perf_event *event)
->  	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
->  }
->  
-> +#ifndef HAS_ARCH_SAMPLE_DATA
-> +
-> +inline void perf_output_sample_arch_1(struct perf_output_handle *handle __maybe_unused,
-> +				      struct perf_event_header *header __maybe_unused,
-> +				      struct perf_sample_data *data __maybe_unused,
-> +				      struct perf_event *event __maybe_unused)
-> +{
-> +}
-> +
-> +inline void perf_prepare_sample_arch_1(struct perf_event_header *header __maybe_unused,
-> +				       struct perf_sample_data *data __maybe_unused,
-> +				       struct perf_event *event __maybe_unused,
-> +				       struct pt_regs *regs __maybe_unused)
-> +{
-> +}
-> +
-> +inline int perf_event_open_request_arch_1(void)
-> +{
-> +	return -EINVAL;
-> +}
-> +
-> +#endif
-> +
->  void perf_output_sample(struct perf_output_handle *handle,
->  			struct perf_event_header *header,
->  			struct perf_sample_data *data,
-> @@ -7125,6 +7148,9 @@ void perf_output_sample(struct perf_output_handle *handle,
->  			perf_aux_sample_output(event, handle, data);
->  	}
->  
-> +	if (sample_type & PERF_SAMPLE_ARCH_1)
-> +		perf_output_sample_arch_1(handle, header, data, event);
-> +
->  	if (!event->attr.watermark) {
->  		int wakeup_events = event->attr.wakeup_events;
->  
-> @@ -7427,6 +7453,9 @@ void perf_prepare_sample(struct perf_event_header *header,
->  	if (sample_type & PERF_SAMPLE_CODE_PAGE_SIZE)
->  		data->code_page_size = perf_get_page_size(data->ip);
->  
-> +	if (sample_type & PERF_SAMPLE_ARCH_1)
-> +		perf_prepare_sample_arch_1(header, data, event, regs);
-> +
->  	if (sample_type & PERF_SAMPLE_AUX) {
->  		u64 size;
->  
-> @@ -12074,6 +12103,12 @@ SYSCALL_DEFINE5(perf_event_open,
->  			return err;
->  	}
->  
-> +	if (attr.sample_type & PERF_SAMPLE_ARCH_1) {
-> +		err = perf_event_open_request_arch_1();
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	/*
->  	 * In cgroup mode, the pid argument is used to pass the fd
->  	 * opened to the cgroup directory in cgroupfs. The cpu argument
-> -- 
-> 2.17.1
+[auto build test WARNING on jack-fs/fsnotify]
+[also build test WARNING on pcmoore-audit/next linus/master v5.19 next-20220810]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208102231.qSUdYAdb-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a943676abc023c094f05b45f4d61936c567507a2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+        git checkout a943676abc023c094f05b45f4d61936c567507a2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/notify/fanotify/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/notify/fanotify/fanotify_user.c:325:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    group, fd, response, info_buf, count);
+                                                   ^~~~~
+   include/linux/printk.h:594:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +325 fs/notify/fanotify/fanotify_user.c
+
+   312	
+   313	static int process_access_response(struct fsnotify_group *group,
+   314					   struct fanotify_response *response_struct,
+   315					   const char __user *buf,
+   316					   size_t count)
+   317	{
+   318		struct fanotify_perm_event *event;
+   319		int fd = response_struct->fd;
+   320		u32 response = response_struct->response;
+   321		struct fanotify_response_info_header info_hdr;
+   322		char *info_buf = NULL;
+   323	
+   324		pr_debug("%s: group=%p fd=%d response=%u buf=%p size=%lu\n", __func__,
+ > 325			 group, fd, response, info_buf, count);
+   326		/*
+   327		 * make sure the response is valid, if invalid we do nothing and either
+   328		 * userspace can send a valid response or we will clean it up after the
+   329		 * timeout
+   330		 */
+   331		if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
+   332			return -EINVAL;
+   333		switch (response & FANOTIFY_RESPONSE_ACCESS) {
+   334		case FAN_ALLOW:
+   335		case FAN_DENY:
+   336			break;
+   337		default:
+   338			return -EINVAL;
+   339		}
+   340		if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+   341			return -EINVAL;
+   342		if (fd < 0)
+   343			return -EINVAL;
+   344		if (response & FAN_INFO) {
+   345			size_t c = count;
+   346			const char __user *ib = buf;
+   347	
+   348			if (c <= 0)
+   349				return -EINVAL;
+   350			while (c >= sizeof(info_hdr)) {
+   351				if (copy_from_user(&info_hdr, ib, sizeof(info_hdr)))
+   352					return -EFAULT;
+   353				if (info_hdr.pad != 0)
+   354					return -EINVAL;
+   355				if (c < info_hdr.len)
+   356					return -EINVAL;
+   357				switch (info_hdr.type) {
+   358				case FAN_RESPONSE_INFO_AUDIT_RULE:
+   359					break;
+   360				case FAN_RESPONSE_INFO_NONE:
+   361				default:
+   362					return -EINVAL;
+   363				}
+   364				c -= info_hdr.len;
+   365				ib += info_hdr.len;
+   366			}
+   367			if (c != 0)
+   368				return -EINVAL;
+   369			/* Simplistic check for now */
+   370			if (count != sizeof(struct fanotify_response_info_audit_rule))
+   371				return -EINVAL;
+   372			info_buf = kmalloc(sizeof(struct fanotify_response_info_audit_rule),
+   373					   GFP_KERNEL);
+   374			if (!info_buf)
+   375				return -ENOMEM;
+   376			if (copy_from_user(info_buf, buf, count))
+   377				return -EFAULT;
+   378		}
+   379		spin_lock(&group->notification_lock);
+   380		list_for_each_entry(event, &group->fanotify_data.access_list,
+   381				    fae.fse.list) {
+   382			if (event->fd != fd)
+   383				continue;
+   384	
+   385			list_del_init(&event->fae.fse.list);
+   386			/* finish_permission_event() eats info_buf */
+   387			finish_permission_event(group, event, response_struct,
+   388						count, info_buf);
+   389			wake_up(&group->fanotify_data.access_waitq);
+   390			return 0;
+   391		}
+   392		spin_unlock(&group->notification_lock);
+   393	
+   394		return -ENOENT;
+   395	}
+   396	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://01.org/lkp
