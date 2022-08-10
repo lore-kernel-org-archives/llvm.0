@@ -1,42 +1,48 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7EB4680
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 21:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808B9443A
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 21:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660167249; x=1691703249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EMnaEs85VG7l65cRfzn3jO1g1NdeH3E9lRLR0IzTnxg=;
-  b=Bvzvm+IPm2EROCF2e5Cscj2StB6DrjiR5cFowN8iwT1kUzg1gtgauElI
-   //HaWceCwG3dLwMRmeLIovEQ18/Cm5WaRaI4ZQDgB14TlSCzOAz2fpccf
-   tHMuT/JjXKTogGgnSo++LjpGjLx41IF0mMuXuuPUvKMuMERqfNfUA7saX
-   DEyd/cvLUgrzz8kNKvb2xlK97VLYGSO/R81KWughAlq5msEnUwyrXmVWa
-   KueT0M87n+fco6R+U75IRuNtdRf+fk4oxjygROo18x+123k2i4Db9iqEY
-   eUdjHLlHF0bHtawhAp3ZqXmddHtFG9CcQjOL0j+cuIuGe7kZO0M8+xKgN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292453781"
+  t=1660168451; x=1691704451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DBd6Xw4ZxzcA53CQMZccIUfpCOANfwB8yn17vPxFfec=;
+  b=avsK4Xo6w/xJCITu1wUYQpg+9oSZMPVCkNUJV48QmZVUbTXINFiQ4kvS
+   8PWV+RYhtpL4sjmBxSjyQ+L2n6kOI/Yk4JOxdjq3KjkPFHTRyhlc2+l9F
+   o/hk4b24YpTLnpvWHFpjgWrYEzt/fev38iObyW5ytnqhKOWT1Q0K/DLi0
+   uQutc67mjrNYeJniOp9XYBwjWhGIh6oRGec5X0FkkunEEB7yrEHUzyo/7
+   Yz+1JhbHNpeWVNGe0kbeUhL8c4hvbatpCAFQcdze/KLCew2z+ANbTw4uP
+   ZCGckrit4zPEkyI22n2mCR/sz9E/NaUXrcYf7Hp0Pz6v9LDfwuyLwwONB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291203194"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="292453781"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:34:09 -0700
+   d="scan'208";a="291203194"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:54:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="638256199"
+   d="scan'208";a="605311355"
 Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Aug 2022 14:34:07 -0700
+  by orsmga002.jf.intel.com with ESMTP; 10 Aug 2022 14:54:08 -0700
 Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oLtL5-0000k7-0E;
-	Wed, 10 Aug 2022 21:34:07 +0000
-Date: Thu, 11 Aug 2022 05:33:25 +0800
+	id 1oLteR-0000lh-2u;
+	Wed, 10 Aug 2022 21:54:07 +0000
+Date: Thu, 11 Aug 2022 05:54:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mikhail Khelik <mkhelik@cisco.com>
+To: Vegard Nossum <vegard.nossum@oracle.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:hdcp 4/4] drivers/media/i2c/adv7604.c:2884:38:
- warning: unused variable 'adv7604_ctrl_hdcp_auth'
-Message-ID: <202208110500.zRUW89QJ-lkp@intel.com>
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+	Serge Hallyn <serge@hallyn.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+	John Haxby <john.haxby@oracle.com>
+Subject: Re: [PATCH] capabilities: new kernel.ns_modules_allowed sysctl
+Message-ID: <202208110524.fN5PNDSo-lkp@intel.com>
+References: <20220809185229.28417-1-vegard.nossum@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,48 +51,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220809185229.28417-1-vegard.nossum@oracle.com>
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git hdcp
-head:   da521c491aa5d01b7a920ef66c8d9aef36f14a02
-commit: da521c491aa5d01b7a920ef66c8d9aef36f14a02 [4/4] Added HDCP support for ADV7604
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220811/202208110500.zRUW89QJ-lkp@intel.com/config)
+Hi Vegard,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on kees/for-next/pstore]
+[also build test ERROR on v5.19]
+[cannot apply to linus/master next-20220810]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+config: arm64-buildonly-randconfig-r006-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110524.fN5PNDSo-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree hdcp
-        git checkout da521c491aa5d01b7a920ef66c8d9aef36f14a02
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/bd78b69455d4b3cac70812bf23a27de310e813cd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
+        git checkout bd78b69455d4b3cac70812bf23a27de310e813cd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/adv7604.c:2884:38: warning: unused variable 'adv7604_ctrl_hdcp_auth' [-Wunused-const-variable]
-   static const struct v4l2_ctrl_config adv7604_ctrl_hdcp_auth = {
-                                        ^
-   1 warning generated.
+>> kernel/kmod.c:213:2: error: call to undeclared function 'register_sysctl_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           register_sysctl_init("kernel", kmod_sysctl_table);
+           ^
+   1 error generated.
 
 
-vim +/adv7604_ctrl_hdcp_auth +2884 drivers/media/i2c/adv7604.c
+vim +/register_sysctl_init +213 kernel/kmod.c
 
-  2883	
-> 2884	static const struct v4l2_ctrl_config adv7604_ctrl_hdcp_auth = {
-  2885		.ops = NULL,
-  2886		.id = V4L2_CID_DV_HDCP_RX_AUTH,
-  2887		.name = "HDCP Authentication Status",
-  2888		.type = V4L2_CTRL_TYPE_BITMASK,
-  2889		.min = 0,
-  2890		.max = 1,
-  2891		.step = 0,
-  2892		.def = 0,
-  2893		.flags = V4L2_CTRL_FLAG_READ_ONLY
-  2894	};
-  2895	
+   210	
+   211	static int __init kmod_sysctl_init(void)
+   212	{
+ > 213		register_sysctl_init("kernel", kmod_sysctl_table);
 
 -- 
 0-DAY CI Kernel Test Service
