@@ -1,119 +1,93 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735F933C1
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 21:14:30 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id e15so23032358lfs.0
-        for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 14:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
-        b=mJ2qrO5MX6fYku8PgLw5AnOtIoBprrurL+nSadvPZ/nI6zBSOd74G8iKYlHjlxhSGK
-         USn07FxYrgyBuEIA+f2Mxh4Oa/e+iiBOCs19euWtk22Fu/Z9qw8oaRo30nQiHAkryS6Y
-         OkGFpD8kk5juBZ0pa8b2rWt/+dgD8gCXmdnRvQK+0MF8N9K8OaD4UraP7imW+XgEtrf+
-         eVDcIqCbW5EuGYwj2bh4+gx/7LwAiCviv4k3pi6iA8Z/WIOSMsyBb/O9EBsYHE7ukUS8
-         xokR0vi2c3FQE9t2Udn3bU0+uZ3i4ejbYLZGKdMm/LrvNqJ66BM5i1pvxlXY91KPTSBE
-         Nynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
-        b=jN+xf6LC3kb77JDBDG2c+EgbVHKNeZ1d92DL4nb6/0pI3JOUO2TVQJeX6vY8Cb/RS7
-         6WTmMxRVuRvoBAhwDXqgTQtJwNWYv19CiyP4JMnnOrGH513Aqgy7nFFT4F4QraVOKgpg
-         6KCKLUeCWGBvbF0Zhvk1fPdoWOsBHV3VKLpYyJWafGe5zVht9ZvpR0ys3ILKitLPrhe/
-         hg362eKmlcXkklQqIomuv+vbUxEZlNVbop1OCopfzgqw+IaQTJzQIlANHgW9whrYvCsN
-         GwhJ0aCdtT/1VmLgKfxrhF4f5f9NamcaWMsL9pVjg0K5+KixlOr1C29wnCmWGvIYMQk/
-         fU0w==
-X-Gm-Message-State: ACgBeo2Fasbg2/YBIMfKGXwoiJ+OqzOEf0oOWiq+iKw2Chkb10Hdkj06
-	7wPJTQQcDlkJSARUeBoLfYjwd8utQoJpVcd+a4WDng==
-X-Google-Smtp-Source: AA6agR7XAy8+dRFXr1tYRU78D2cRU1qIJone22+JuKdzodOZmAEH3tkfVSaACFucoUikH/AMCJJ0BTbB6CoPorjLq5E=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr11290623lfr.647.1660166068361; Wed, 10
- Aug 2022 14:14:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7EB4680
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 21:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660167249; x=1691703249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EMnaEs85VG7l65cRfzn3jO1g1NdeH3E9lRLR0IzTnxg=;
+  b=Bvzvm+IPm2EROCF2e5Cscj2StB6DrjiR5cFowN8iwT1kUzg1gtgauElI
+   //HaWceCwG3dLwMRmeLIovEQ18/Cm5WaRaI4ZQDgB14TlSCzOAz2fpccf
+   tHMuT/JjXKTogGgnSo++LjpGjLx41IF0mMuXuuPUvKMuMERqfNfUA7saX
+   DEyd/cvLUgrzz8kNKvb2xlK97VLYGSO/R81KWughAlq5msEnUwyrXmVWa
+   KueT0M87n+fco6R+U75IRuNtdRf+fk4oxjygROo18x+123k2i4Db9iqEY
+   eUdjHLlHF0bHtawhAp3ZqXmddHtFG9CcQjOL0j+cuIuGe7kZO0M8+xKgN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292453781"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="292453781"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:34:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="638256199"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Aug 2022 14:34:07 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLtL5-0000k7-0E;
+	Wed, 10 Aug 2022 21:34:07 +0000
+Date: Thu, 11 Aug 2022 05:33:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mikhail Khelik <mkhelik@cisco.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [hverkuil-media-tree:hdcp 4/4] drivers/media/i2c/adv7604.c:2884:38:
+ warning: unused variable 'adv7604_ctrl_hdcp_auth'
+Message-ID: <202208110500.zRUW89QJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220810010809.2024482-1-nathan@kernel.org>
-In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 10 Aug 2022 14:14:16 -0700
-Message-ID: <CAKwvOdmZvB_=JTeLg08uMFhEMpWga4FJey50QHjzCv_jMVpwkg@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea@microchip.com>, Tom Rix <trix@redhat.com>, 
-	alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Aug 9, 2022 at 6:08 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> A recent change in clang strengthened its -Wbitfield-constant-conversion
-> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
-> only be 0 or -1, not 1:
->
->   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
->           dev->gclk_enabled = 1;
->                             ^ ~
->   1 error generated.
->
-> The actual value of the field is never checked, just that it is not
-> zero, so there is not a real bug here. However, it is simple enough to
-> silence the warning by making the bitfield unsigned, which matches the
-> mchp-spdifrx driver.
->
-> Fixes: 06ca24e98e6b ("ASoC: mchp-spdiftx: add driver for S/PDIF TX Controller")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1686
-> Link: https://github.com/llvm/llvm-project/commit/82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   git://linuxtv.org/hverkuil/media_tree.git hdcp
+head:   da521c491aa5d01b7a920ef66c8d9aef36f14a02
+commit: da521c491aa5d01b7a920ef66c8d9aef36f14a02 [4/4] Added HDCP support for ADV7604
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220811/202208110500.zRUW89QJ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree hdcp
+        git checkout da521c491aa5d01b7a920ef66c8d9aef36f14a02
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/i2c/
 
-Ah yes, my favorite, signed one bit integers...thanks for the patch.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-grepping for `gclk_enabled`, we see three drivers with similar
-duplication (single bit bitfields):
+All warnings (new ones prefixed by >>):
 
-sound/soc/atmel/mchp-spdifrx.c
-241: unsigned int gclk_enabled:1;
+>> drivers/media/i2c/adv7604.c:2884:38: warning: unused variable 'adv7604_ctrl_hdcp_auth' [-Wunused-const-variable]
+   static const struct v4l2_ctrl_config adv7604_ctrl_hdcp_auth = {
+                                        ^
+   1 warning generated.
 
-sound/soc/atmel/mchp-pdmc.c
-118: u8 gclk_enabled:1;
 
-sound/soc/atmel/mchp-spdiftx.c
-200: int gclk_enabled:1;
+vim +/adv7604_ctrl_hdcp_auth +2884 drivers/media/i2c/adv7604.c
 
-> ---
->  sound/soc/atmel/mchp-spdiftx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/atmel/mchp-spdiftx.c b/sound/soc/atmel/mchp-spdiftx.c
-> index 4850a177803d..ab2d7a791f39 100644
-> --- a/sound/soc/atmel/mchp-spdiftx.c
-> +++ b/sound/soc/atmel/mchp-spdiftx.c
-> @@ -196,7 +196,7 @@ struct mchp_spdiftx_dev {
->         struct clk                              *pclk;
->         struct clk                              *gclk;
->         unsigned int                            fmt;
-> -       int                                     gclk_enabled:1;
-> +       unsigned int                            gclk_enabled:1;
->  };
->
->  static inline int mchp_spdiftx_is_running(struct mchp_spdiftx_dev *dev)
->
-> base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
-> --
-> 2.37.1
->
-
+  2883	
+> 2884	static const struct v4l2_ctrl_config adv7604_ctrl_hdcp_auth = {
+  2885		.ops = NULL,
+  2886		.id = V4L2_CID_DV_HDCP_RX_AUTH,
+  2887		.name = "HDCP Authentication Status",
+  2888		.type = V4L2_CTRL_TYPE_BITMASK,
+  2889		.min = 0,
+  2890		.max = 1,
+  2891		.step = 0,
+  2892		.def = 0,
+  2893		.flags = V4L2_CTRL_FLAG_READ_ONLY
+  2894	};
+  2895	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
