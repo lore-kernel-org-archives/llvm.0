@@ -1,104 +1,120 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808B9443A
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 21:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660168451; x=1691704451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DBd6Xw4ZxzcA53CQMZccIUfpCOANfwB8yn17vPxFfec=;
-  b=avsK4Xo6w/xJCITu1wUYQpg+9oSZMPVCkNUJV48QmZVUbTXINFiQ4kvS
-   8PWV+RYhtpL4sjmBxSjyQ+L2n6kOI/Yk4JOxdjq3KjkPFHTRyhlc2+l9F
-   o/hk4b24YpTLnpvWHFpjgWrYEzt/fev38iObyW5ytnqhKOWT1Q0K/DLi0
-   uQutc67mjrNYeJniOp9XYBwjWhGIh6oRGec5X0FkkunEEB7yrEHUzyo/7
-   Yz+1JhbHNpeWVNGe0kbeUhL8c4hvbatpCAFQcdze/KLCew2z+ANbTw4uP
-   ZCGckrit4zPEkyI22n2mCR/sz9E/NaUXrcYf7Hp0Pz6v9LDfwuyLwwONB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291203194"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="291203194"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:54:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="605311355"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Aug 2022 14:54:08 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLteR-0000lh-2u;
-	Wed, 10 Aug 2022 21:54:07 +0000
-Date: Thu, 11 Aug 2022 05:54:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vegard Nossum <vegard.nossum@oracle.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-	Serge Hallyn <serge@hallyn.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-	John Haxby <john.haxby@oracle.com>
-Subject: Re: [PATCH] capabilities: new kernel.ns_modules_allowed sysctl
-Message-ID: <202208110524.fN5PNDSo-lkp@intel.com>
-References: <20220809185229.28417-1-vegard.nossum@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F284680
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 22:24:50 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id h67-20020a256c46000000b0067c13f8f9f0so6139674ybc.14
+        for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 15:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=SfdBfi7Mx5CiwtaCrFt88m0cxW+5UTO23z89f2bNn7U=;
+        b=lFVVLrMHSHntzCbJbyph7o0sN9PiQWnco1EwL5WqfpRf91tH8qslTCY2g6b5jCOk0Y
+         ylmBq8ftUplOQdBpBqkp3ThkH4lxxi/CVL77eItkBxjPdQuWw83xFeIVqr7U9p17oTkf
+         RuX//pcNkDSuZxN9B4v0bwdy5sxlS409E/UzfLDDS4qa94yMtoSW2wynFs9xpXd+cEe3
+         xgSxkLLZB4x8JIDxwsOOwGJg9eXFqXi3+wwN4DSkMjzJloEX1g1jkMyPMG2Tl59W0Cht
+         YWY1kwvmssEbmYUYUB1IpOkepodDZTcEealsM8/s47LAOtxjmj1zX5RolaHtaZtjjexX
+         CUDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=SfdBfi7Mx5CiwtaCrFt88m0cxW+5UTO23z89f2bNn7U=;
+        b=P/y6NPcyoG9RuKDKR4lXODN/aPx6f+XIeVg/djrETKBw9cyWVNkladl8OBPSEqJKKF
+         HzgX2Tlf1ggV4H73ZGM1KjtW2GD+VSDrAjB2hXMvWSJ/jv1UuHG9FbKsYkjRAyBzWlzd
+         1mmoaoIaU3fRlSBHz3ljTMzhVKNdVYKQToSNeuY9UnOsxp5S0M7xVbpI5Z2hGYJuRmUp
+         uh+cdqI8S8fMCfZ1ZII6CJOAwrEfe7OdQ9htIv9v61/bZokPeYF6NoHox82gAddJROQB
+         5MHjnC5IP3n1fXncSoRl+n6V1eacP+Ma54Uxs3DiIMVdBSVM6a0x/rWAwzRe+DSZPN16
+         J0Zg==
+X-Gm-Message-State: ACgBeo07xPAT6ja2z1tkuK99TEwRIvpKg49PxhxgHEKcG40jqVESECGY
+	Pl9Zeq8lEdl2VlYjvUUxuc2WWNcQnyF/vEPoYJo=
+X-Google-Smtp-Source: AA6agR4QjOycVp/Hc0eH+Ub7N3pwJKBVI05zs+zNFYtKuxseil48HLi4FC6N8tMyPjHVz3IabbpGdRcPn9GV4DRM+Iw=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:88ad:cd41:8dd7:539])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6902:102d:b0:676:d624:ee91 with
+ SMTP id x13-20020a056902102d00b00676d624ee91mr26116199ybt.10.1660170289777;
+ Wed, 10 Aug 2022 15:24:49 -0700 (PDT)
+Date: Wed, 10 Aug 2022 15:24:40 -0700
+In-Reply-To: <20220809013653.xtmeekefwkbo46vk@google.com>
+Message-Id: <20220810222442.2296651-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809185229.28417-1-vegard.nossum@oracle.com>
+Mime-Version: 1.0
+References: <20220809013653.xtmeekefwkbo46vk@google.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660170281; l=2213;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=NinzIQmJcVXIzZMcPO+2uxtDhfBTzMzImrwCDVtvkFI=;
+ b=KwgbZQliMALRYCIiUtuswI2ERGyH/jroMTb2yxtIvxH5YrYQgqdkc82NBm+3bqWUsKHABcX+vMgf
+ ou2NSWLDDw2gBtN4XOxLwNlbbjGhaKdIrRpkZSYVD5Ow5Td6GGTM
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v2 1/2] Makefile: link with -z noexecstack --no-warn-rwx-segments
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Fangrui Song <maskray@google.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nick Clifton <nickc@redhat.com>, axboe@kernel.dk, brijesh.singh@amd.com, hpa@zytor.com, 
+	kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, michael.roth@amd.com, n.schier@avm.de, 
+	nathan@kernel.org, sathyanarayanan.kuppuswamy@linux.intel.com, 
+	trix@redhat.com, x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Michal Marek <michal.lkml@markovi.net>, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Vegard,
+Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
+instances of a new warning when linking kernels in the form:
 
-Thank you for the patch! Yet something to improve:
+  ld: warning: vmlinux: missing .note.GNU-stack
+  section implies executable stack
+  ld: NOTE: This behaviour is deprecated and will be removed in a future
+  version of the linker
+  ld: warning: vmlinux has a LOAD segment with RWX permissions
 
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on v5.19]
-[cannot apply to linus/master next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Generally, we would like to avoid the stack being executable. Because
+there could be a need for the stack to be executable, assembler sources
+have to opt-in to this security feature via explicit creation of the
+.note.GNU-stack feature (which compilers create by default) or command
+line flag --noexecstack. Or we can simply tell the linker the production
+of such sections is irrelevant and to link the stack as --noexecstack.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-config: arm64-buildonly-randconfig-r006-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110524.fN5PNDSo-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bd78b69455d4b3cac70812bf23a27de310e813cd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-        git checkout bd78b69455d4b3cac70812bf23a27de310e813cd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
+strictly necessary when linking with LLD, only BFD, but it doesn't hurt
+to be explicit here for all linkers IMO. --no-warn-rwx-segments is
+currently BFD specific and only available in the current latest release,
+so it's wrapped in an ld-option check.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+While the kernel makes extensive usage of ELF sections, it doesn't use
+permissions from ELF segments.
 
-All errors (new ones prefixed by >>):
+Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
+Link: https://github.com/llvm/llvm-project/issues/57009
+Reported-by: Jens Axboe <axboe@kernel.dk>
+Suggested-by: Fangrui Song <maskray@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
->> kernel/kmod.c:213:2: error: call to undeclared function 'register_sysctl_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           register_sysctl_init("kernel", kmod_sysctl_table);
-           ^
-   1 error generated.
-
-
-vim +/register_sysctl_init +213 kernel/kmod.c
-
-   210	
-   211	static int __init kmod_sysctl_init(void)
-   212	{
- > 213		register_sysctl_init("kernel", kmod_sysctl_table);
-
+diff --git a/Makefile b/Makefile
+index dc6295f91263..230e6e7679f9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1033,6 +1033,11 @@ KBUILD_CFLAGS   += $(KCFLAGS)
+ KBUILD_LDFLAGS_MODULE += --build-id=sha1
+ LDFLAGS_vmlinux += --build-id=sha1
+ 
++KBUILD_LDFLAGS	+= -z noexecstack
++ifeq ($(CONFIG_LD_IS_BFD),y)
++KBUILD_LDFLAGS	+= $(call ld-option,--no-warn-rwx-segments)
++endif
++
+ ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
+ LDFLAGS_vmlinux	+= $(call ld-option, -X,)
+ endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1.559.g78731f0fdb-goog
+
