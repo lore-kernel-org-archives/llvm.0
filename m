@@ -1,52 +1,34 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDCC2F41
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 18:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660154404; x=1691690404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fyz/5NQriJw7zDpiMUgJgMy7EUYhj2aqcm/VIEiNRmc=;
-  b=jg7jXsNr2m2fO+5y6BjhMJLroBReUgH81xCI8nQaxnGOAKyP5b6eSYLC
-   0sggZjJNmjmSs7O6/Bl0dj8UzKIAKBBotUQ9P/YXx9k2JQcdceZM5fUpD
-   zOkTyCoK7B1TfddZJ18auzE6kQ+cN8DG/a+iAgFClzd4BUfjmnbjSiVH1
-   YrnKAZBYZ9CmaoBP+7h5mwTv94GDIUHDDIYogNo1L0AGRH38UoCwaJGTI
-   quZGXN3SFY9ORNkAseNunPNVqxGYAbN2l2zWye7jMbcsRIFKr/Uh0ve0S
-   9sUDjGLgeeLYDbyksYxmk3SR6wYsnA5LYlAgJgHyTrGbF2C7kHIugB7au
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292409464"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="292409464"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:00:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="747523447"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2022 11:00:00 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLpzr-0000Z3-1x;
-	Wed, 10 Aug 2022 17:59:59 +0000
-Date: Thu, 11 Aug 2022 01:59:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Peter Hutterer <peter.hutterer@who-t.net>,
-	"Eric W . Biederman" <ebiederm@xmission.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Bastien Nocera <hadess@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-Message-ID: <202208110101.rbONyPek-lkp@intel.com>
-References: <20220809094300.83116-3-hadess@hadess.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFC517D3
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 18:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EC4C433D6;
+	Wed, 10 Aug 2022 18:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660157809;
+	bh=rcTCkFaa5mnwnbCSMET43K9fqBB3KokZWCSy5dHR5GQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HcWvZR/cP6oJBqzJ9rwSKxG1FjJzBUlrrE/oD/IC3Klzkl4HWAaNgPqZY/dMUMyiL
+	 4OBWnUnbZM67jfvgZ1REdlMc11QNRSLKwap2pXWMSJzHl7w2DMS4JhkAjutQ3zxIYH
+	 QURRecZ4LiXjHkkckWyhenKID3bYBTIwjFp5fL2ebRLAGJiwyBRPogCUIhPaADJmbu
+	 m0VldOfvHey+P5zNVMqbC1nMWU5PuvJi7JlJ+kalY4RXB1Z+ddcKkUNKEiUzFmxBQs
+	 i03AnhVKLsTDHHdIwvZaRTRj+mp4ey4gtU3OOxalEdqSpjPY1wPVagH/1T4/9Wn7ck
+	 IUQbO1QxmypHg==
+Date: Wed, 10 Aug 2022 11:56:46 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Conor.Dooley@microchip.com
+Cc: ndesaulniers@google.com, llvm@lists.linux.dev, mturquette@baylibre.com,
+	sboyd@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+	aou@eecs.berkeley.edu, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, p.zabel@pengutronix.de,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Daire.McNamara@microchip.com, palmer@dabbelt.com
+Subject: Re: [PATCH v2 00/12] PolarFire SoC reset controller & clock cleanups
+Message-ID: <YvP/bjh+wXihlrdG@dev-arch.thelio-3990X>
+References: <20220704121558.2088698-1-conor.dooley@microchip.com>
+ <bd14f1a2-750d-2511-df0a-85a9f5925f84@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,62 +37,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809094300.83116-3-hadess@hadess.net>
+In-Reply-To: <bd14f1a2-750d-2511-df0a-85a9f5925f84@microchip.com>
 
-Hi Bastien,
+Hi Conor,
 
-I love your patch! Yet something to improve:
+On Tue, Aug 09, 2022 at 11:05:32PM +0000, Conor.Dooley@microchip.com wrote:
+> +CC clang people :)
+> 
+> Got an odd one here and would appreciate some pointers for where to
+> look. This code when built with gcc boots fine, for example with:
+> riscv64-unknown-linux-gnu-gcc (g5964b5cd727) 11.1.0
+> The same code but build with clang build it fails to boot but prior to
+> that applying this patchset it boots fine. Specifically it is the patch
+> "clk: microchip: mpfs: move id & offset out of clock structs"
+> 
+> I applied this patchset on top of tonight's master (15205c2829ca) but
+> I've been seeing the same problem for a few weeks on -next too. I tried
+> the following 2 versions of clang/llvm:
+> ClangBuiltLinux clang version 15.0.0 (5b0788fef86ed7008a11f6ee19b9d86d42b6fcfa), LLD 15.0.0
+> ClangBuiltLinux clang version 15.0.0 (bab8af8ea062f6332b5c5d13ae688bb8900f244a), LLD 15.0.0
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on balbi-usb/testing/next peter-chen-usb/for-usb-next linus/master v5.19 next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Good to know that it reproduces with fairly recent versions of LLVM :)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/USB-core-add-a-way-to-revoke-access-to-open-USB-devices/20220809-174609
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: arm64-randconfig-r001-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110101.rbONyPek-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b8d37bab24eee13dfbbb947c6a44f5f363c6bb7a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bastien-Nocera/USB-core-add-a-way-to-revoke-access-to-open-USB-devices/20220809-174609
-        git checkout b8d37bab24eee13dfbbb947c6a44f5f363c6bb7a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/core/
+> It's probably something silly that I've overlooked but I am not au
+> fait with these sort of things unfortunately, but hey - at least I'll
+> learn something then.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I took a quick glance at the patch you mentioned above and I don't
+immediately see anything as problematic... I was going to see if I could
+reproduce this locally in QEMU since I do see there is a machine
+'microchip-icicle-kit' but I am not having much success getting the
+machine past SBI. Does this reproduce in QEMU or are you working with
+the real hardware? If QEMU, do you happen to have a working invocation
+handy?
 
-All error/warnings (new ones prefixed by >>):
+Cheers,
+Nathan
 
->> drivers/usb/core/usb.c:465:1: warning: no previous prototype for function 'usb_revoke_device' [-Wmissing-prototypes]
-   usb_revoke_device(int busnum, int devnum, unsigned int euid)
-   ^
-   drivers/usb/core/usb.c:464:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline int
-            ^
-            static 
->> drivers/usb/core/usb.c:1050:3: error: field designator 'check_set' does not refer to any field in type 'const struct btf_kfunc_id_set'
-           .check_set = &usbdev_kfunc_ids,
-            ^
-   1 warning and 1 error generated.
-
-
-vim +1050 drivers/usb/core/usb.c
-
-  1047	
-  1048	static const struct btf_kfunc_id_set usbdev_kfunc_set = {
-  1049		.owner     = THIS_MODULE,
-> 1050		.check_set = &usbdev_kfunc_ids,
-  1051	};
-  1052	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> The boot log is fairly short so here ya go:
+> 
+> [    0.000000] Linux version 5.19.0-13253-g374b508ee318 (conor@spud) (ClangBuiltLinux clang version 15.0.0 (git@g
+> ithub.com:llvm/llvm-project.git 5b0788fef86ed7008a11f6ee19b9d86d42b6fcfa), LLD 15.0.0) #1 SMP Tue Aug 9 22:42:10 IST 
+> 2022
+> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+> [    0.000000] Machine model: Microchip PolarFire-SoC Icicle Kit
+> [    0.000000] earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
+> [    0.000000] printk: bootconsole [ns16550a0] enabled
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA32    [mem 0x0000000080200000-0x00000000ffffffff]
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x000000103fffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080200000-0x00000000adffffff]
+> [    0.000000]   node   0: [mem 0x0000001000000000-0x000000103fffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x000000103fffffff]
+> [    0.000000] On node 0, zone Normal: 16064512 pages in unavailable ranges
+> [    0.000000] SBI specification v0.3 detected
+> [    0.000000] SBI implementation ID=0x1 Version=0x9
+> [    0.000000] SBI TIME extension detected
+> [    0.000000] SBI IPI extension detected
+> [    0.000000] SBI RFENCE extension detected
+> [    0.000000] SBI HSM extension detected
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] riscv: base ISA extensions acdfim
+> [    0.000000] riscv: ELF capabilities acdfim
+> [    0.000000] percpu: Embedded 18 pages/cpu s34168 r8192 d31368 u73728
+> [    0.000000] pcpu-alloc: s34168 r8192 d31368 u73728 alloc=18*4096
+> [    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3
+> [    0.000000] CPU node for /cpus/cpu@0 exist but the possible cpu range is :0-3
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 224263
+> [    0.000000] Kernel command line: root=/dev/nfs ip=dhcp debug nfsroot=192.168.2.5:/stuff/nfs_share earlycon
+> [    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+> [    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+> [    0.000000] software IO TLB: area num 4.
+> [    0.000000] software IO TLB: mapped [mem 0x00000000aa000000-0x00000000ae000000] (64MB)
+> [    0.000000] Virtual kernel memory layout:
+> [    0.000000]       fixmap : 0xffffffc6fee00000 - 0xffffffc6ff000000   (2048 kB)
+> [    0.000000]       pci io : 0xffffffc6ff000000 - 0xffffffc700000000   (  16 MB)
+> [    0.000000]      vmemmap : 0xffffffc700000000 - 0xffffffc800000000   (4096 MB)
+> [    0.000000]      vmalloc : 0xffffffc800000000 - 0xffffffd800000000   (  64 GB)
+> [    0.000000]       lowmem : 0xffffffd800000000 - 0xffffffe7bfe00000   (  62 GB)
+> [    0.000000]       kernel : 0xffffffff80000000 - 0xffffffffffffffff   (2047 MB)
+> [    0.000000] Memory: 803032K/1800192K available (7485K kernel code, 2858K rwdata, 4096K rodata, 2181K init, 394K bss, 997160K reserved, 0K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+> [    0.000000] rcu: Hierarchical RCU implementation.
+> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+> [    0.000000] rcu:     RCU debug extended QS entry/exit.
+> [    0.000000]  Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] riscv-intc: unable to find hart id for /cpus/cpu@0/interrupt-controller
+> [    0.000000] riscv-intc: 64 local interrupts mapped
+> [    0.000000] plic: interrupt-controller@c000000: mapped 186 interrupts with 4 handlers for 9 contexts.
+> [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> [    0.000000] riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [4]
+> [    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x1d854df40, max_idle_ns: 3526361616960 ns
+> [    0.000003] sched_clock: 64 bits at 1000kHz, resolution 1000ns, wraps every 2199023255500ns
+> [    0.009713] Console: colour dummy device 80x25
+> [    0.014676] printk: console [tty0] enabled
+> [    0.019217] printk: bootconsole [ns16550a0] disabled
+> 
+> FWIW this is right about when the clock driver gets loaded
+> as you might imagine.
+> 
+> My config is here, but it's been reproduced on a few different
+> defconfigs:
+> https://raw.githubusercontent.com/ConchuOD/polarfire-soc-buildroot-sdk/dev/conf/lowmem/defconfig
+> 
+> On 04/07/2022 13:15, Conor Dooley wrote:
+> > Hey all,
+> > I know I have not sat on the RFC I sent about the aux. bus parts
+> > for too long, but figured I'd just send the whole thing anyway to all
+> > lists etc.
+> > 
+> > Kinda two things happening in this series, but I sent it together to
+> > ensure the second part would apply correctly.
+> > 
+> > The first is the reset controller that I promised after discovering the
+> > issue triggered by CONFIG_PM & the phy not coming up correctly. I have
+> > now removed all the messing with resets from clock enable/disable
+> > functions & now use the aux bus to set up a reset controller driver.
+> > Since I needed something to test it, I hooked up the reset for the
+> > Cadence MACB on PolarFire SoC. This has been split into a second series
+> > for v2:
+> > https://lore.kernel.org/all/20220704114511.1892332-1-conor.dooley@microchip.com/
+> > 
+> > The second part adds rate control for the MSS PLL clock, followed by
+> > some simplifications to the driver & conversions of some custom structs
+> > to the corresponding structs in the framework.
+> > 
+> > Thanks,
+> > Conor.
+> > 
+> > Changes since v1:
+> > - split off the net patches
+> > - clk: actually pass the spinlock to the converted dividers & gates
+> > - reset: added a spinlock around RMW access to registers
+> > - reset: switched to BIT(i) macros
+> > - reset: used local copies of some variables as pointed out by Philipp
+> > - reset: dropped the success printout
+> > 
+> > Conor Dooley (12):
+> >   dt-bindings: clk: microchip: mpfs: add reset controller support
+> >   clk: microchip: mpfs: add reset controller
+> >   reset: add polarfire soc reset support
+> >   MAINTAINERS: add polarfire soc reset controller
+> >   riscv: dts: microchip: add mpfs specific macb reset support
+> >   clk: microchip: mpfs: add module_authors entries
+> >   clk: microchip: mpfs: add MSS pll's set & round rate
+> >   clk: microchip: mpfs: move id & offset out of clock structs
+> >   clk: microchip: mpfs: simplify control reg access
+> >   clk: microchip: mpfs: delete 2 line mpfs_clk_register_foo()
+> >   clk: microchip: mpfs: convert cfg_clk to clk_divider
+> >   clk: microchip: mpfs: convert periph_clk to clk_gate
+> > 
+> >  .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+> >  MAINTAINERS                                   |   1 +
+> >  arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+> >  drivers/clk/microchip/Kconfig                 |   1 +
+> >  drivers/clk/microchip/clk-mpfs.c              | 379 +++++++++---------
+> >  drivers/reset/Kconfig                         |   7 +
+> >  drivers/reset/Makefile                        |   2 +-
+> >  drivers/reset/reset-mpfs.c                    | 157 ++++++++
+> >  include/soc/microchip/mpfs.h                  |   8 +
+> >  9 files changed, 386 insertions(+), 193 deletions(-)
+> >  create mode 100644 drivers/reset/reset-mpfs.c
+> > 
+> > 
+> > base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
