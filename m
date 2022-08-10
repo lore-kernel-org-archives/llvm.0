@@ -1,144 +1,1800 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7E15C83
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 03:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660103229; x=1691639229;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=L4cq4RTjlHVbx9WYtgrEikVG3LTQUTuxI/NHk+MoSAg=;
-  b=XoACMWB0G8yzOki+Kjo8o+OVvaHArEjzRjxBBgGeHL0JkrSjdtCflChs
-   IP4ad2uGGr+dYW2N5ERaWR+51rE4V3TN21m5UZEr+o9ClPMvAdxu1IfOg
-   RLwTNPP4kAG6VeV1MXmk8tyAB/Cd9XfewuYXG/sQbVG/3FgkFI2dg+7li
-   bZaiC89KQaNpayJ0nq6ehyYFxk+zsMzLTI0SPic4tFGkwVevUxUsYJlIg
-   t0/lEpp4Em8pJV0tD/09tM8XwbuyuAMnS6a/cqp8k59736tH0JHyzwC5z
-   +mjpmVTidCr4j4Z9ybAiT005SYXKk0WIh7lpLF7jBVqfKKxHeRZjzdY+s
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="352720281"
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="352720281"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 20:47:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="932728357"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Aug 2022 20:47:07 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLcgV-000NU7-0T;
-	Wed, 10 Aug 2022 03:47:07 +0000
-Date: Wed, 10 Aug 2022 11:46:07 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 16/16] objtool/powerpc: Add --mcount specific
- implementation
-Message-ID: <202208101138.8BblKl1L-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8411F5C84
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 03:57:11 +0000 (UTC)
+Received: by mail-pf1-f174.google.com with SMTP id f192so12567071pfa.9
+        for <llvm@lists.linux.dev>; Tue, 09 Aug 2022 20:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc;
+        bh=43DN1GUwYl2NkSdM9DUg4fkBA3hUbov1SYpR3RQv2yg=;
+        b=EsJhjS6hsWx/9OMtrVq4DTm7bnR6TM53RUr7mxMMWLNgQSQ9wXryaXYF3eAVzJOZZB
+         0muGq8jr1S5+imhFb2aCxIdNHJ9p+aKbujJArCCBqAB25+n0Z8GJdtV0ptfulNnUBUxh
+         nFM7lHiuov7Ok1J9LFaxdcKHd2DAD/i/mLcpqthAQjU+5yMvCBH/8+p5DBww3wRA1puL
+         Qx8hlXk6nf5hIXGCeTA0AYp0UCWJ5p3dCvmoUm9FJHFJn79IlvayFIfkbsgMun8KsB88
+         wk6nsizATGaLz4AxCqJo9T/YI+rf3f7TVHxGMCPI0JChR1rZxtaR8KWMbwnMT+dSiu8Q
+         DXQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=43DN1GUwYl2NkSdM9DUg4fkBA3hUbov1SYpR3RQv2yg=;
+        b=g2v5VmRGNj9Hox+qBFI/msh8FUZXE6N1JlWLC2A3F2RqO1TuIA5BOfairzIzgv1KQq
+         Yp+dcOkURRhmDBwd/CkbUwGMQray/v0pxL1H842jKnXe6LdG6h7t9F0QN0f1649ac5FI
+         EurGfUh3QZEoqaANQ2E2hNHqOkQOvciqKiY+MTYxeSeQ05lznGgZaILcUpmVB5hqXG8Q
+         f4kA2O4L5kap/WpduKEm3Vn/cBmYbLJUTw7vOTU8hjgfdgiiSD5quetVprPhHRZrmfjh
+         ARXe9lGYAGFvnYueXm7UWWOtSm1nELuSLdxnyM6S9gsOVnRYtiAM+u2UqNGF2pYN64aE
+         Mlxg==
+X-Gm-Message-State: ACgBeo2hxh/9u2507jQjRNUiEpzlRZAzLbezy9bt5HNfyfrxvtKsriCi
+	25rI6A48Q+o2INTnxDzA9yC6mjSw4aBaYdaFf0Y=
+X-Google-Smtp-Source: AA6agR6Y5+kYl8pIRGDopLUBH/nFk58tZj4AohO2eC2sY9lJliS22fi61wcUWLGRcGfbMGBNhKWpkA==
+X-Received: by 2002:a65:6d9a:0:b0:41c:c77:7b6 with SMTP id bc26-20020a656d9a000000b0041c0c7707b6mr22281685pgb.139.1660103829818;
+        Tue, 09 Aug 2022 20:57:09 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id mp2-20020a17090b190200b001f319e9b9e5sm416393pjb.16.2022.08.09.20.57.08
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 20:57:09 -0700 (PDT)
+Message-ID: <62f32c95.170a0220.c3a77.0e19@mx.google.com>
+Date: Tue, 09 Aug 2022 20:57:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220810
+Subject: next/master build: 219 builds: 8 failed, 211 passed, 102 errors,
+ 77 warnings (next-20220810)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-In-Reply-To: <20220808114908.240813-17-sv@linux.ibm.com>
-References: <20220808114908.240813-17-sv@linux.ibm.com>
-TO: Sathvika Vasireddy <sv@linux.ibm.com>
-TO: linuxppc-dev@lists.ozlabs.org
-CC: jpoimboe@redhat.com
-CC: peterz@infradead.org
-CC: linux-kernel@vger.kernel.org
-CC: aik@ozlabs.ru
-CC: mpe@ellerman.id.au
-CC: mingo@redhat.com
-CC: christophe.leroy@csgroup.eu
-CC: rostedt@goodmis.org
-CC: mbenes@suse.cz
-CC: npiggin@gmail.com
-CC: chenzhongjin@huawei.com
-CC: linux-arm-kernel@lists.infradead.org
-CC: naveen.n.rao@linux.vnet.ibm.com
-CC: sv@linux.ibm.com
+next/master build: 219 builds: 8 failed, 211 passed, 102 errors, 77 warning=
+s (next-20220810)
 
-Hi Sathvika,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220810/
 
-Thank you for the patch! Perhaps something to improve:
+Tree: next
+Branch: master
+Git Describe: next-20220810
+Git Commit: bc6c6584ffb27b62e19ea89553b22b4cad1abaca
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19 next-20220810]
-[cannot apply to powerpc/next powerpc/topic/ppc-kvm masahiroy-kbuild/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Build Failures Detected:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4e23eeebb2e57f5a28b36221aa776b5a1122dde5
-config: powerpc-randconfig-r024-20220808 (https://download.01.org/0day-ci/archive/20220810/202208101138.8BblKl1L-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/eb2c41f83b8e1f2967fd2342fbdc7c116def52c0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
-        git checkout eb2c41f83b8e1f2967fd2342fbdc7c116def52c0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+arm:
+    multi_v5_defconfig: (clang-16) FAIL
+    imx_v4_v5_defconfig: (gcc-10) FAIL
+    imxrt_defconfig: (gcc-10) FAIL
+    multi_v4t_defconfig: (gcc-10) FAIL
+    multi_v5_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    vf610m4_defconfig: (gcc-10) FAIL
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-All warnings (new ones prefixed by >>):
+Errors and Warnings Detected:
 
->> arch/powerpc/kernel/prom_init.o: warning: objtool: prom_init+0x14: unannotated intra-function call
---
->> arch/powerpc/platforms/powermac/bootx_init.o: warning: objtool: bootx_init+0x28: unannotated intra-function call
+arc:
 
+arm64:
 
-objdump-func vmlinux.o prom_init:
-0000 00000004 <prom_init>:
-0000        4:	7c 08 02 a6 	mflr    r0
-0004        8:	90 01 00 04 	stw     r0,4(r1)
-0008        c:	94 21 ff e0 	stwu    r1,-32(r1)
-000c       10:	93 c1 00 18 	stw     r30,24(r1)
-0010       14:	93 a1 00 14 	stw     r29,20(r1)
-0014       18:	48 00 00 05 	bl      1c <prom_init+0x18>
-0018       1c:	7c bd 2b 78 	mr      r29,r5
-001c       20:	7f c8 02 a6 	mflr    r30
-0020       24:	80 7e ff e4 	lwz     r3,-28(r30)
-0024       28:	7f c3 f2 14 	add     r30,r3,r30
-0028       2c:	48 00 00 01 	bl      2c <prom_init+0x28>	2c: R_PPC_PLTREL24	reloc_offset
-002c       30:	48 00 00 01 	bl      30 <prom_init+0x2c>	30: R_PPC_PLTREL24	reloc_got2
-0030       34:	80 9e 80 00 	lwz     r4,-32768(r30)
-0034       38:	80 7e 80 04 	lwz     r3,-32764(r30)
-0038       3c:	7c a3 20 50 	subf    r5,r3,r4
-003c       40:	38 80 00 00 	li      r4,0
-0040       44:	48 00 00 01 	bl      44 <prom_init+0x40>	44: R_PPC_PLTREL24	memset
-0044       48:	7f a3 eb 78 	mr      r3,r29
-0048       4c:	48 00 00 45 	bl      90 <prom_init_client_services>
-004c       50:	48 00 01 01 	bl      150 <prom_find_mmu>
-0050       54:	48 00 02 a9 	bl      2fc <prom_init_stdout>
-0054       58:	80 7e 80 08 	lwz     r3,-32760(r30)
-0058       5c:	80 9e 80 0c 	lwz     r4,-32756(r30)
-005c       60:	4c c6 31 82 	crclr   4*cr1+eq
-0060       64:	48 00 04 39 	bl      49c <prom_printf>
-0064       68:	48 00 08 19 	bl      880 <prom_find_machine_type>
-0068       6c:	80 be 80 10 	lwz     r5,-32752(r30)
-006c       70:	7c 64 1b 78 	mr      r4,r3
-0070       74:	4c c6 31 82 	crclr   4*cr1+eq
-0074       78:	90 65 00 00 	stw     r3,0(r5)
-0078       7c:	80 7e 80 14 	lwz     r3,-32748(r30)
-007c       80:	48 00 04 1d 	bl      49c <prom_printf>
-0080       84:	80 7e 80 18 	lwz     r3,-32744(r30)
-0084       88:	48 00 09 01 	bl      988 <prom_panic>
-0088       8c:	00 00 00 00 	.long 0x0	8c: R_PPC_REL32	.got2+0x7fe4
+arm:
+    aspeed_g4_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-16): 12 warnings
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    imx_v4_v5_defconfig (gcc-10): 19 errors, 5 warnings
+    imxrt_defconfig (gcc-10): 13 errors, 5 warnings
+    multi_v4t_defconfig (gcc-10): 19 errors, 5 warnings
+    multi_v5_defconfig (clang-16): 13 errors
+    multi_v5_defconfig (gcc-10): 19 errors, 5 warnings
+    multi_v7_defconfig (clang-16): 10 warnings
+    rpc_defconfig (gcc-10): 2 errors
+    u8500_defconfig (gcc-10): 2 warnings
+    vf610m4_defconfig (gcc-10): 13 errors, 5 warnings
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 3 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+
+Errors summary:
+
+    5    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declarati=
+on of function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3D=
+implicit-function-declaration]
+    5    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member=
+ =E2=80=98desc=E2=80=99 in something not a structure or union
+    5    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =
+=E2=80=98msi_alloc_info_t=E2=80=99
+    5    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi=
+_domain_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    5    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi=
+_domain_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    5    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_P=
+CI_MSIX=E2=80=99 undeclared here (not in a function)
+    5    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_U=
+SE_DEF_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    5    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi=
+_domain_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    5    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_=
+USE_DEF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    5    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =
+=E2=80=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+    5    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98=
+imx_mu_msi_domain_info=E2=80=99 has initializer but incomplete type
+    5    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =
+=E2=80=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    5    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98=
+its_pmsi_ops=E2=80=99 has initializer but incomplete type
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    3    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: =E2=80=98const stru=
+ct irq_domain_ops=E2=80=99 has no member named =E2=80=98free=E2=80=99
+    3    drivers/irqchip/irq-imx-mu-msi.c:229:10: error: initialization of =
+=E2=80=98int (*)(struct irq_domain *, struct irq_fwspec *, enum irq_domain_=
+bus_token)=E2=80=99 from incompatible pointer type =E2=80=98void (*)(struct=
+ irq_domain *, unsigned int,  unsigned int)=E2=80=99 [-Werror=3Dincompatibl=
+e-pointer-types]
+    3    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: =E2=80=98const stru=
+ct irq_domain_ops=E2=80=99 has no member named =E2=80=98alloc=E2=80=99
+    3    drivers/irqchip/irq-imx-mu-msi.c:228:11: error: initialization of =
+=E2=80=98int (*)(struct irq_domain *, struct device_node *, enum irq_domain=
+_bus_token)=E2=80=99 from incompatible pointer type =E2=80=98int (*)(struct=
+ irq_domain *, unsigned int,  unsigned int,  void *)=E2=80=99 [-Werror=3Din=
+compatible-pointer-types]
+    3    drivers/irqchip/irq-imx-mu-msi.c:126:63: error: =E2=80=98struct ir=
+q_data=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    3    drivers/irqchip/irq-imx-mu-msi.c:118:63: error: =E2=80=98struct ir=
+q_data=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    1    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: call to undeclared=
+ function 'platform_msi_create_irq_domain'; ISO C99 and later do not suppor=
+t implicit function declarations [-Wimplicit-function-declaration]
+    1    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: field designator 'f=
+ree' does not refer to any field in type 'const struct irq_domain_ops'
+    1    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: field designator 'a=
+lloc' does not refer to any field in type 'const struct irq_domain_ops'
+    1    drivers/irqchip/irq-imx-mu-msi.c:197:30: error: use of undeclared =
+identifier 'info'
+    1    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: use of undeclared i=
+dentifier 'msi_alloc_info_t'
+    1    drivers/irqchip/irq-imx-mu-msi.c:179:20: error: use of undeclared =
+identifier 'info'
+    1    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: use of undeclared i=
+dentifier 'MSI_FLAG_PCI_MSIX'
+    1    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: use of undeclared i=
+dentifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
+    1    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: use of undeclared =
+identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
+    1    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: variable has incom=
+plete type 'struct msi_domain_info'
+    1    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: variable has incom=
+plete type 'struct msi_domain_ops'
+    1    drivers/irqchip/irq-imx-mu-msi.c:126:65: error: no member named 'p=
+arent_data' in 'struct irq_data'
+    1    drivers/irqchip/irq-imx-mu-msi.c:118:65: error: no member named 'p=
+arent_data' in 'struct irq_data'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    5    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =
+=E2=80=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes poin=
+ter from integer without a cast [-Wint-conversion]
+    5    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements =
+in struct initializer
+    5    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements i=
+n struct initializer
+    5    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements =
+in struct initializer
+    5    cc1: some warnings being treated as errors
+    2    kernel/trace/ftrace.c:3149:1: warning: =E2=80=98ops_references_rec=
+=E2=80=99 defined but not used [-Wunused-function]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    kernel/trace/ftrace.c:3149:1: warning: unused function 'ops_refere=
+nces_rec' [-Wunused-function]
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98a=
+b8500_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-=
+variable]
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused var=
+iable =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-varia=
+ble]
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    1 warning generated.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/trace/ftrace.c:3149:1: warning: =E2=80=98ops_references_rec=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/trace/ftrace.c:3149:1: warning: =E2=80=98ops_references_rec=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 12 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    kernel/trace/ftrace.c:3149:1: warning: unused function 'ops_references_=
+rec' [-Wunused-function]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 19 errors, 5 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:118:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:126:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98its_p=
+msi_ops=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98imx_m=
+u_msi_domain_info=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_USE_D=
+EF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_USE_DE=
+F_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_PCI_MS=
+IX=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =E2=80=
+=98msi_alloc_info_t=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member =E2=
+=80=98desc=E2=80=99 in something not a structure or union
+    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98alloc=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:228:11: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct device_node *, enum irq_domain_bu=
+s_token)=E2=80=99 from incompatible pointer type =E2=80=98int (*)(struct ir=
+q_domain *, unsigned int,  unsigned int,  void *)=E2=80=99 [-Werror=3Dincom=
+patible-pointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98free=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:229:10: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct irq_fwspec *, enum irq_domain_bus=
+_token)=E2=80=99 from incompatible pointer type =E2=80=98void (*)(struct ir=
+q_domain *, unsigned int,  unsigned int)=E2=80=99 [-Werror=3Dincompatible-p=
+ointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declaration of=
+ function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =E2=80=
+=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =E2=80=
+=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements in str=
+uct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =E2=80=
+=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer fr=
+om integer without a cast [-Wint-conversion]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 FAIL, 13 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98its_p=
+msi_ops=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98imx_m=
+u_msi_domain_info=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_USE_D=
+EF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_USE_DE=
+F_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_PCI_MS=
+IX=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =E2=80=
+=98msi_alloc_info_t=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member =E2=
+=80=98desc=E2=80=99 in something not a structure or union
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declaration of=
+ function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =E2=80=
+=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =E2=80=
+=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements in str=
+uct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =E2=80=
+=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer fr=
+om integer without a cast [-Wint-conversion]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 FAIL, 19 errors, 5 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:118:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:126:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98its_p=
+msi_ops=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98imx_m=
+u_msi_domain_info=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_USE_D=
+EF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_USE_DE=
+F_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_PCI_MS=
+IX=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =E2=80=
+=98msi_alloc_info_t=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member =E2=
+=80=98desc=E2=80=99 in something not a structure or union
+    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98alloc=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:228:11: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct device_node *, enum irq_domain_bu=
+s_token)=E2=80=99 from incompatible pointer type =E2=80=98int (*)(struct ir=
+q_domain *, unsigned int,  unsigned int,  void *)=E2=80=99 [-Werror=3Dincom=
+patible-pointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98free=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:229:10: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct irq_fwspec *, enum irq_domain_bus=
+_token)=E2=80=99 from incompatible pointer type =E2=80=98void (*)(struct ir=
+q_domain *, unsigned int,  unsigned int)=E2=80=99 [-Werror=3Dincompatible-p=
+ointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declaration of=
+ function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =E2=80=
+=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =E2=80=
+=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements in str=
+uct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =E2=80=
+=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer fr=
+om integer without a cast [-Wint-conversion]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-16) =E2=80=94 FAIL, 13 errors, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:118:65: error: no member named 'parent=
+_data' in 'struct irq_data'
+    drivers/irqchip/irq-imx-mu-msi.c:126:65: error: no member named 'parent=
+_data' in 'struct irq_data'
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: variable has incomplete=
+ type 'struct msi_domain_ops'
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: use of undeclared ident=
+ifier 'MSI_FLAG_USE_DEF_DOM_OPS'
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: use of undeclared identi=
+fier 'MSI_FLAG_USE_DEF_CHIP_OPS'
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: use of undeclared identi=
+fier 'MSI_FLAG_PCI_MSIX'
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: variable has incomplete=
+ type 'struct msi_domain_info'
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: use of undeclared identi=
+fier 'msi_alloc_info_t'
+    drivers/irqchip/irq-imx-mu-msi.c:179:20: error: use of undeclared ident=
+ifier 'info'
+    drivers/irqchip/irq-imx-mu-msi.c:197:30: error: use of undeclared ident=
+ifier 'info'
+    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: field designator 'alloc'=
+ does not refer to any field in type 'const struct irq_domain_ops'
+    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: field designator 'free' =
+does not refer to any field in type 'const struct irq_domain_ops'
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: call to undeclared func=
+tion 'platform_msi_create_irq_domain'; ISO C99 and later do not support imp=
+licit function declarations [-Wimplicit-function-declaration]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 19 errors, 5 warnings, 0 s=
+ection mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:118:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:126:63: error: =E2=80=98struct irq_dat=
+a=E2=80=99 has no member named =E2=80=98parent_data=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98its_p=
+msi_ops=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98imx_m=
+u_msi_domain_info=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_USE_D=
+EF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_USE_DE=
+F_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_PCI_MS=
+IX=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =E2=80=
+=98msi_alloc_info_t=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member =E2=
+=80=98desc=E2=80=99 in something not a structure or union
+    drivers/irqchip/irq-imx-mu-msi.c:228:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98alloc=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:228:11: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct device_node *, enum irq_domain_bu=
+s_token)=E2=80=99 from incompatible pointer type =E2=80=98int (*)(struct ir=
+q_domain *, unsigned int,  unsigned int,  void *)=E2=80=99 [-Werror=3Dincom=
+patible-pointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:229:3: error: =E2=80=98const struct ir=
+q_domain_ops=E2=80=99 has no member named =E2=80=98free=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:229:10: error: initialization of =E2=
+=80=98int (*)(struct irq_domain *, struct irq_fwspec *, enum irq_domain_bus=
+_token)=E2=80=99 from incompatible pointer type =E2=80=98void (*)(struct ir=
+q_domain *, unsigned int,  unsigned int)=E2=80=99 [-Werror=3Dincompatible-p=
+ointer-types]
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declaration of=
+ function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =E2=80=
+=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =E2=80=
+=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements in str=
+uct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =E2=80=
+=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer fr=
+om integer without a cast [-Wint-conversion]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused variable=
+ =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-variable]
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98ab8500=
+_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-varia=
+ble]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 FAIL, 13 errors, 5 warnings, 0 se=
+ction mismatches
+
+Errors:
+    drivers/irqchip/irq-imx-mu-msi.c:138:15: error: variable =E2=80=98its_p=
+msi_ops=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:141:15: error: variable =E2=80=98imx_m=
+u_msi_domain_info=E2=80=99 has initializer but incomplete type
+    drivers/irqchip/irq-imx-mu-msi.c:142:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98flags=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:142:12: error: =E2=80=98MSI_FLAG_USE_D=
+EF_DOM_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:143:6: error: =E2=80=98MSI_FLAG_USE_DE=
+F_CHIP_OPS=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:144:6: error: =E2=80=98MSI_FLAG_PCI_MS=
+IX=E2=80=99 undeclared here (not in a function)
+    drivers/irqchip/irq-imx-mu-msi.c:145:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98ops=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:146:3: error: =E2=80=98struct msi_doma=
+in_info=E2=80=99 has no member named =E2=80=98chip=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:179:2: error: unknown type name =E2=80=
+=98msi_alloc_info_t=E2=80=99
+    drivers/irqchip/irq-imx-mu-msi.c:197:34: error: request for member =E2=
+=80=98desc=E2=80=99 in something not a structure or union
+    drivers/irqchip/irq-imx-mu-msi.c:262:25: error: implicit declaration of=
+ function =E2=80=98platform_msi_create_irq_domain=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    drivers/irqchip/irq-imx-mu-msi.c:138:30: error: storage size of =E2=80=
+=98its_pmsi_ops=E2=80=99 isn=E2=80=99t known
+    drivers/irqchip/irq-imx-mu-msi.c:141:31: error: storage size of =E2=80=
+=98imx_mu_msi_domain_info=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    drivers/irqchip/irq-imx-mu-msi.c:142:11: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:145:9: warning: excess elements in str=
+uct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:146:10: warning: excess elements in st=
+ruct initializer
+    drivers/irqchip/irq-imx-mu-msi.c:262:23: warning: assignment to =E2=80=
+=98struct irq_domain *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer fr=
+om integer without a cast [-Wint-conversion]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>
