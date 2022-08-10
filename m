@@ -1,234 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9F9182
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 05:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660108905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SNwzNto4mLIM4QZ6Lrr7jJapuOZbuIR5c2PbQC3sA6M=;
-	b=Rzc6i/BOqENceA8IE6SEKRA2HSPW7zmAGYHroei3dYAnInE12WHbhVHatfWK6kdXooMCrs
-	E9gHvRCMkg+XU/DLAls0feeLQBcR5NwRhROOUA1i0HC1Fd7ffy3yp65zmNaE3jttQDzyoJ
-	HDZ4OQkKH6Y86nMy/XVJUWFzcYStl30=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-Gcy8eIC4OlCmCoHQjtEgZg-1; Wed, 10 Aug 2022 01:21:43 -0400
-X-MC-Unique: Gcy8eIC4OlCmCoHQjtEgZg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E329180F6DF
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 05:21:43 +0000 (UTC)
-Received: from [172.64.3.80] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 80360492C3B;
-	Wed, 10 Aug 2022 05:21:43 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (61/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [d4252071]
-Date: Wed, 10 Aug 2022 05:21:43 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D23417CA
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 06:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660111762; x=1691647762;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4r5i0Y6g9xMaNUs1Xqtf0YMvE9i1mgwbTQx+M/ACgz0=;
+  b=nmsj6Z1aR4fMRGCq3CAx9jrMChb5uiwmZq+KpiYtR1XtTgw3NE5pozsW
+   lgYLsyP63Kf4UK62MnGfvk+m3Uyd6yrccoCiDRNMxWCPjaeyFLiG00bm4
+   Yq/Va8auRYg/kPV44nBV38+5hy2IIuXtPh1ptt7a+W0Mj8bTFpe6wG/Gv
+   VvY5nxvb9EwywrDE0T3sRWosSN7Rv3Kjgjr2SxkD5TkQiAaYYzqkVZ5T5
+   qZTITCSbtiL8vThhWhk6rwdClDYcy3eJ36IWaLQemxMKcxT4Z75o0qygO
+   sGX9iK27vDj235gpKIIDI5rw0KGmJeLTQtN9d4hsj7T4Eu0Kb70FOGEsg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="292256188"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="292256188"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:09:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="673177336"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Aug 2022 23:09:12 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oLetz-000NaL-1u;
+	Wed, 10 Aug 2022 06:09:11 +0000
+Date: Wed, 10 Aug 2022 14:08:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nate Yocom <nate@yocom.org>, dmitry.torokhov@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nate@yocom.org
+Subject: Re: [PATCH] Input: joystick: xpad: Add X-Box Adaptive Controller
+ support
+Message-ID: <202208101406.tS1Uz1FD-lkp@intel.com>
+References: <20220810002024.13686-1-nate@yocom.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <67025.122081001214300651@us-mta-255.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220810002024.13686-1-nate@yocom.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Nate,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on hid/for-next linus/master v5.19 next-20220810]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50468
+url:    https://github.com/intel-lab-lkp/linux/commits/Nate-Yocom/Input-joystick-xpad-Add-X-Box-Adaptive-Controller-support/20220810-082302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220810/202208101406.tS1Uz1FD-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4c3757fab74082cf845405ba8d8b2d60e06572cd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nate-Yocom/Input-joystick-xpad-Add-X-Box-Adaptive-Controller-support/20220810-082302
+        git checkout 4c3757fab74082cf845405ba8d8b2d60e06572cd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/ drivers/input/joystick/
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-                  x86_64 (debug) - Firmware test suite
-        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
- 'gnu/stubs-32.h' file not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1222
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftest build - net
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/joystick/xpad.c:1643:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/input/joystick/xpad.c:1643:2: note: insert '__attribute__((fallthrough));' to silence this warning
+           default:
+           ^
+           __attribute__((fallthrough)); 
+   drivers/input/joystick/xpad.c:1643:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +1643 drivers/input/joystick/xpad.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+^1da177e4c3f41 drivers/usb/input/xpad.c      Linus Torvalds    2005-04-16  1618  
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1619  static void xpad_set_up_abs(struct input_dev *input_dev, signed short abs)
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1620  {
+1a48ff81b3912b drivers/input/joystick/xpad.c Ted Mielczarek    2014-08-08  1621  	struct usb_xpad *xpad = input_get_drvdata(input_dev);
+68c78d0155e379 drivers/input/joystick/xpad.c Leo Sperling      2016-08-03  1622  
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1623  	switch (abs) {
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1624  	case ABS_X:
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1625  	case ABS_Y:
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1626  	case ABS_RX:
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1627  	case ABS_RY:	/* the two sticks */
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1628  		input_set_abs_params(input_dev, abs, -32768, 32767, 16, 128);
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1629  		break;
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1630  	case ABS_Z:
+b45d44e7e00c17 drivers/input/joystick/xpad.c Nicolas Léveillé  2009-12-29  1631  	case ABS_RZ:	/* the triggers (if mapped to axes) */
+1a48ff81b3912b drivers/input/joystick/xpad.c Ted Mielczarek    2014-08-08  1632  		if (xpad->xtype == XTYPE_XBOXONE)
+1a48ff81b3912b drivers/input/joystick/xpad.c Ted Mielczarek    2014-08-08  1633  			input_set_abs_params(input_dev, abs, 0, 1023, 0, 0);
+1a48ff81b3912b drivers/input/joystick/xpad.c Ted Mielczarek    2014-08-08  1634  		else
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1635  			input_set_abs_params(input_dev, abs, 0, 255, 0, 0);
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1636  		break;
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1637  	case ABS_HAT0X:
+b45d44e7e00c17 drivers/input/joystick/xpad.c Nicolas Léveillé  2009-12-29  1638  	case ABS_HAT0Y:	/* the d-pad (only if dpad is mapped to axes */
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1639  		input_set_abs_params(input_dev, abs, -1, 1, 0, 0);
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1640  		break;
+4c3757fab74082 drivers/input/joystick/xpad.c Nate Yocom        2022-08-09  1641  	case ABS_MISC: /* 4 value layer button (such as on the XAC) */
+4c3757fab74082 drivers/input/joystick/xpad.c Nate Yocom        2022-08-09  1642  		input_set_abs_params(input_dev, abs, 0, 4, 0, 0);
+a01308031c2647 drivers/input/joystick/xpad.c Marcus Folkesson  2018-05-08 @1643  	default:
+a01308031c2647 drivers/input/joystick/xpad.c Marcus Folkesson  2018-05-08  1644  		input_set_abs_params(input_dev, abs, 0, 0, 0, 0);
+a01308031c2647 drivers/input/joystick/xpad.c Marcus Folkesson  2018-05-08  1645  		break;
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1646  	}
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1647  }
+deb8ee43a23d48 drivers/usb/input/xpad.c      Dominic Cerquetti 2006-10-10  1648  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
