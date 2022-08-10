@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C030318E
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 01:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90C618E
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 01:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660093302;
+	s=mimecast20190719; t=1660093343;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=AS9/x9CaJ4ryDm87Vgu7084MdXxn4Fh42axjHcnT+2c=;
-	b=czZspMB2CG7AA+UZ8k1YuLXHX9BAe55hH0Abag5ARVlZtiOf4Ytv9k7T1mWRTdt/CVdEAO
-	gd/1HIXEdXvynxT3A5sqkQZ5o1kf0LmYOvuMx0fsGTwxNQQ5kr5EtTFTdT9N6l8GCqCxrT
-	JTjvfp6qVKdiHNAZpP65ohTMa+htG6o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=GH6Kq/5GQN23MSfiqAToQOz+wuvazXGGkq751N4Fowc=;
+	b=R5RMz5okRF0GwBac0/P8u+vUR6YGhN79oOgdw3PH7GWmKspv2womjLecwFuzRbX3iusk5V
+	QslxieYLMztPK7lvKE0GXE7X2FpgF8Mwbvo+b79iU8BMI2snwxQYqKlZPfMTWuYo9bSYze
+	xLQjn2/YnbOS1N3WOg5ixW0/l18vhiw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-FMadBVmkOPOyXIc3uZQUAA-1; Tue, 09 Aug 2022 21:01:41 -0400
-X-MC-Unique: FMadBVmkOPOyXIc3uZQUAA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-193-CuCgFc6bOOCo-Kn1sTpJnQ-1; Tue, 09 Aug 2022 21:02:22 -0400
+X-MC-Unique: CuCgFc6bOOCo-Kn1sTpJnQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5078C823F0F
-	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 01:01:41 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29C291C05192
+	for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 01:02:22 +0000 (UTC)
 Received: from [172.64.3.80] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 43966492C3B;
-	Wed, 10 Aug 2022 01:01:41 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1B48B40CF8EB;
+	Wed, 10 Aug 2022 01:02:22 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (65/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [15205c28]
-Date: Wed, 10 Aug 2022 01:01:41 -0000
+Subject: =?utf-8?b?4pyF?= PASS (60/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [426b4ca2]
+Date: Wed, 10 Aug 2022 01:02:22 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <60044.122080921014101455@us-mta-532.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <85869.122080921022200203@us-mta-193.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50422
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50414
 
 One or more kernel tests failed:
 
@@ -76,11 +76,6 @@ l-tests/-/issues/1222
             Affected tests:
                   x86_64 (debug) - kselftest build - bpf
                   x86_64 (debug) - kselftest build - net
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
         Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
 to resize filesystem
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -112,7 +107,6 @@ l-tests/-/issues/1169
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
                   x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
         Issue: kselftests upstream: FAIL: do_net_forwarding_config
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1318
@@ -182,17 +176,18 @@ l-tests/-/issues/1300
                    s390x - Storage - blktests - nvmeof-mp
                   x86_64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
         Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
 .c:5407 __alloc_pages+0x1a0/0x290
             URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
