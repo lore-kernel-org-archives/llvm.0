@@ -1,48 +1,34 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C38C46A8
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660242516; x=1691778516;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3fA3slRt3QaRDvpFlIyp4A4gcmLnDPb+Je+ZzpvKXpM=;
-  b=lohwRiwF/THstQfrcAW2LdQHC7uad+IpLCK8+fwGNENK82KSpyRD4WSc
-   xCne89zA0Unv6b5AiWzwrIaq3PRDsKveKId7dhCvxDh1bxbBkhLEQh077
-   zn321cGtuCbBhOospOTHxx9Lt1LcaW063Fculy4Ly9WamWtrNx62fswfV
-   +/tqUc9gfhhprMsKr7m2qfAJarCShpYKZp7FJKC0walRuT7Pyn5Vnjz/R
-   RCuhoTepJcN7kWz4sn7Z4Y/BKP+OTkQxnoq+uABJeE45XRmrWXaU2EO2V
-   rHj2rgjPSha5j/ZPriG/+Wzs4muE4oAYlpUy+CR+E2Zfqoctodyi+sKcN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="317395121"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="317395121"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 11:28:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="673799075"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2022 11:28:01 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMCuW-0000VP-13;
-	Thu, 11 Aug 2022 18:28:00 +0000
-Date: Fri, 12 Aug 2022 02:27:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: menglong8.dong@gmail.com, kuba@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ojeda@kernel.org,
-	ndesaulniers@google.com, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, asml.silence@gmail.com, imagedong@tencent.com,
-	luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-	jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] net: skb: prevent the split of
- kfree_skb_reason() by gcc
-Message-ID: <202208120238.cz3RvV74-lkp@intel.com>
-References: <20220811120708.34912-1-imagedong@tencent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43B52114
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093F3C433C1;
+	Thu, 11 Aug 2022 18:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660242683;
+	bh=lkARARzWQLa6i9JTMh4hY0BpWadzELasXTHngRGpmZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KOYlUH6L6VBnX9tFgi/D9JA2iIOR42RuG5uUtrrlKIi4K2ig3qvZJJyII63BeTLox
+	 AHqS4BoEKCw7YfZk8HTG6l+1WvjiAARWkwjEqL1Hg+TsEoE4XKYXzWPtXW17Yr5n3Q
+	 YmBNczlFmivLLHXI1lbIfoE9/FxKquCvXa2kTYWCkackrJIfhFBCoQyejF8WlAY/wA
+	 ogZAErqbROEmHfeRC9kdjRuyGXUJ9fvCkREpOxywcCnAF9lhSb5i4pGJLA3IWgEH/h
+	 q+Iysee8LcypbRgziymGoRHPnK3tVgdBiD4G9iIIyFvQvOCPK31bo4C32AMFn9IbGP
+	 NHwK2aF+YcLpw==
+Date: Thu, 11 Aug 2022 11:31:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-next@vger.kernel.org
+Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
+ ("vdpa_sim_blk: add support for discard and write-zeroes")
+Message-ID: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+References: <YvU67iF4z5gB4ZYk@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,71 +37,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220811120708.34912-1-imagedong@tencent.com>
+In-Reply-To: <YvU67iF4z5gB4ZYk@debian>
 
-Hi,
+On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
+> 
+> Not sure if it has been reported, builds of arm64 with clang failed to
+> build next-20220811 with the error:
+> 
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
+>                 struct virtio_blk_discard_write_zeroes range;
+>                 ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
+>                 if (to_pull != sizeof(range)) {
+>                                       ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
+>                                 to_pull, sizeof(range));
+>                                                 ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
+>                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
+>                                                                          ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
+>                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
+>                                                    ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
+>                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
+>                                                         ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
+>                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
+>                                                   ^
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+>                 u32 num_sectors, flags;
+>                     ^
+> 8 errors generated.
+> 
+> 
+> git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
+> And, reverting that commit has fixed the build failure.
+> 
+> I will be happy to test any patch or provide any extra log if needed.
 
-Thank you for the patch! Perhaps something to improve:
+I am very surprised GCC does not error out in the same way, since as far
+as I understand it, labeled statements have to be followed by a
+statement and a declaration is not a statement in C so braces are
+needed. In fact, it seems like something changed (regressed?) between
+GCC 10.x and 11.x?
 
-[auto build test WARNING on net-next/master]
+https://godbolt.org/z/EYaGa1eE3
 
-url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220811-200919
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f86d1fbbe7858884d6754534a0afbb74fc30bc26
-config: riscv-randconfig-r042-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120238.cz3RvV74-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/8e014b654d9e51abed132155237d855b25da06a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220811-200919
-        git checkout 8e014b654d9e51abed132155237d855b25da06a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
+I am going to bisect GCC to find out whether or not that was
+intentional. At any rate, isn't this the proper fix? I can send it as a
+formal patch if desired.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Cheers,
+Nathan
 
-All warnings (new ones prefixed by >>):
-
->> net/core/skbuff.c:780:6: warning: unknown attribute 'optimize' ignored [-Wunknown-attributes]
-   void __nofnsplit
-        ^~~~~~~~~~~
-   include/linux/compiler_attributes.h:374:56: note: expanded from macro '__nofnsplit'
-   #define __nofnsplit                     __attribute__((optimize("O1")))
-                                                          ^~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/optimize +780 net/core/skbuff.c
-
-   770	
-   771	/**
-   772	 *	kfree_skb_reason - free an sk_buff with special reason
-   773	 *	@skb: buffer to free
-   774	 *	@reason: reason why this skb is dropped
-   775	 *
-   776	 *	Drop a reference to the buffer and free it if the usage count has
-   777	 *	hit zero. Meanwhile, pass the drop reason to 'kfree_skb'
-   778	 *	tracepoint.
-   779	 */
- > 780	void __nofnsplit
-   781	kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
-   782	{
-   783		if (!skb_unref(skb))
-   784			return;
-   785	
-   786		DEBUG_NET_WARN_ON_ONCE(reason <= 0 || reason >= SKB_DROP_REASON_MAX);
-   787	
-   788		trace_kfree_skb(skb, __builtin_return_address(0), reason);
-   789		__kfree_skb(skb);
-   790	}
-   791	EXPORT_SYMBOL(kfree_skb_reason);
-   792	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+index db85df1d5073..067d4c2f7bf4 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+@@ -197,7 +197,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 		break;
+ 
+ 	case VIRTIO_BLK_T_DISCARD:
+-	case VIRTIO_BLK_T_WRITE_ZEROES:
++	case VIRTIO_BLK_T_WRITE_ZEROES: {
+ 		struct virtio_blk_discard_write_zeroes range;
+ 		u32 num_sectors, flags;
+ 
+@@ -253,6 +253,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 		}
+ 
+ 		break;
++	}
+ 
+ 	default:
+ 		dev_dbg(&vdpasim->vdpa.dev,
