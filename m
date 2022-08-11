@@ -1,45 +1,52 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9130C2904
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 06:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660199622; x=1691735622;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9J/Oq2omGg3kV6w9BoLmf9GzWDVOK4bTwVdy4MVPWLY=;
-  b=lOXAIOaEmymaHWIvc2KzgIyQDDflr8dYJ/Ns/1TJGTdZ2Z/uusABywsw
-   f5eeFIS6SKXd7/pxLhE73O/uQaPER92/17yZlXwnh1MOMHolk5fR5GPH9
-   9dFBPJJLdQ26snrDwIWBZN4UX1HGyX7KGPOu1918F/YW9Ea7lSXJDlWBP
-   3wP+9GgaQo1rq8Q296D7BYs1+vLmeKWUZSQym0Iqzy0RvUf45VwzmEYaV
-   XgEQTTaRnH3UmiTsPfoPuyk3y8jcTs9qpLPgoQ0HI+CWwpSsQPCZvG453
-   Er9ocCp0P6t0hj1wwMbJrmusLJ2ZradIFn8UgjCmzHG0DZGGt2C1f+IbV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292529427"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="292529427"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 23:33:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="556018518"
-Received: from lkp-server02.sh.intel.com (HELO d10ab0927833) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Aug 2022 23:33:39 -0700
-Received: from kbuild by d10ab0927833 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oM1lD-000039-0Y;
-	Thu, 11 Aug 2022 06:33:39 +0000
-Date: Thu, 11 Aug 2022 14:33:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: zhoun <zhounan@nfschina.com>, john.johansen@canonical.com,
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zhounan <zhounan@nfschina.com>
-Subject: Re: [PATCH] remove unnecessary type casting
-Message-ID: <202208111453.iWFQgZet-lkp@intel.com>
-References: <20220810083935.83452-1-zhounan@nfschina.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAFC2904
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 07:36:35 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id j1so20401768wrw.1
+        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 00:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=Q+M/Ei4z/9flNNflHidTkNITO8TheJ0Nv943Fts2T+A=;
+        b=LVCH/Ij3Py21juhGxn1b+F6rrhGeClY5kgx0BI50aSwOxC7SW+pr5zxFIcPg07AuSg
+         W7wDN3nCzN1mwDvntQqzrsuVqOksRF0+JKghyafWfZADJxXnJd6pwnOmkKI/dWxv2gvV
+         AnORFv1U/C2OUC5+K4NTay4RdUlfBXXcZNTLf+pVo3zOdp76z2dSzob2E3qxQ2Craj8S
+         vXuPimr5OoB+ksE59Fc7zhiZ6Cnqp28wexBeyPb6dNOCDdzhaRwyCmHJBcCmhHBNrnKs
+         J1K6Ai/oP8+EHSrBJbRjNq1Xb0P67JV1Y4CSaRmXrKBHJwOHnaeqTKU40NGNh0VhkmNf
+         b80w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=Q+M/Ei4z/9flNNflHidTkNITO8TheJ0Nv943Fts2T+A=;
+        b=LdXm2CkVtZ2oJB0wW1Y+2kjNTs+3rOZd/8JNf+0w4lMoGUqq4jHJ4rG2is0ZtT0Wu/
+         /3uMv0bN0JgrfwakOoFvLW7iYkBkjkY+6Obz7yU6V7kRM60bTFsq93AQ4uQwcwfqdcnP
+         aZuHE2mtBYYO3869/TctgtpDvWVtr4ToLAEytDV/wfTZidYmW5TLyh6WobvUbfWKsflh
+         Wl0NWWLoRQpPLQt7Td+GLuP3+nVBHntukgnuZAywk9q2u8BtuJvYtjYni0NyKcHA1Em3
+         MbgqNuA50DfW4WWKJ4cqv72qeJowdVxNaXpAEjvBnbAiwdBqSzeTm4L8+Qh6BZozx3eI
+         +POg==
+X-Gm-Message-State: ACgBeo2C/QfSq/wJn93ia64+HJ06Mst3YT1zHB5MggbAXjS7XfbwIAvT
+	NWgQUGPNYn80xDJuSjo+2WI=
+X-Google-Smtp-Source: AA6agR48A2aRx6lCPQhU0oFLhXbucTR2V2Whf6fqL9yZpK447fFs/42nkfgNMdFzeQEJ2kb+1njhZA==
+X-Received: by 2002:a5d:6d07:0:b0:220:68a1:9ecb with SMTP id e7-20020a5d6d07000000b0022068a19ecbmr19963855wrq.116.1660203394052;
+        Thu, 11 Aug 2022 00:36:34 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id l3-20020a05600c4f0300b003a4bb3f9bc6sm5142085wmq.41.2022.08.11.00.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 00:36:33 -0700 (PDT)
+Date: Thu, 11 Aug 2022 08:36:24 +0100
+From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: mainline build failure for arm64 allmodconfig with clang
+Message-ID: <YvSxeDkmwxcJL+Z0@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,286 +55,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810083935.83452-1-zhounan@nfschina.com>
 
-Hi zhoun,
+Hi All,
 
-Thank you for the patch! Yet something to improve:
+The latest mainline kernel branch fails to build for arm64 allmodconfig
+with clang. The errors are:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+                 ^~~~~~~~~~~~~
+./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+        dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                 ~~~     ^~~~~~~~~~~
+./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                             ~~~    ^~~~~~~~~~~
+./include/uapi/sound/sof/abi.h:30:23: note: expanded from macro 'SOF_ABI_MAJOR'
+#define SOF_ABI_MAJOR 3
+                      ^
+sound/soc/sof/ipc3-topology.c:2343:19: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+                                ^~~~~~~~~~~~~
+./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+        dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                 ~~~     ^~~~~~~~~~~
+./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                             ~~~    ^~~~~~~~~~~
+./include/uapi/sound/sof/abi.h:31:23: note: expanded from macro 'SOF_ABI_MINOR'
+#define SOF_ABI_MINOR 23
+                      ^~
+sound/soc/sof/ipc3-topology.c:2343:34: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+                                               ^~~~~~~~~~~~~
+./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+        dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                 ~~~     ^~~~~~~~~~~
+./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                             ~~~    ^~~~~~~~~~~
+./include/uapi/sound/sof/abi.h:32:23: note: expanded from macro 'SOF_ABI_PATCH'
+#define SOF_ABI_PATCH 0
+                      ^
+3 errors generated.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhoun/remove-unnecessary-type-casting/20220810-164202
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d4252071b97d2027d246f6a82cbee4d52f618b47
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220811/202208111453.iWFQgZet-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/644349c963daf046bc5ed629711825d917f1fcfc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhoun/remove-unnecessary-type-casting/20220810-164202
-        git checkout 644349c963daf046bc5ed629711825d917f1fcfc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                                "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+                                        ~~~~           ^~~~~~~~~~~~~
+                                        %d
+drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                                        "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+                                                ~~~~           ^~~~~~~~~~~~~
+                                                %d
+drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+                        idx, data, src, ndev->peers[src].port);
+                                   ^~~
+3 errors generated.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+For both, git bisect points to 0af5cb349a2c ("Merge tag 'kbuild-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild")
 
-All errors (new ones prefixed by >>):
+The last good build for arm64 clang was with e394ff83bbca ("Merge tag 'nfsd-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux")
 
->> security/apparmor/policy.c:1006:23: error: incompatible pointer types initializing 'struct aa_profile *' with an expression of type 'struct aa_policy *' [-Werror,-Wincompatible-pointer-types]
-                           struct aa_profile *p = policy;
-                                              ^   ~~~~~~
-   1 error generated.
+I will be happy to test any patch or provide any extra log if needed.
 
 
-vim +1006 security/apparmor/policy.c
-
-   882	
-   883	/**
-   884	 * aa_replace_profiles - replace profile(s) on the profile list
-   885	 * @policy_ns: namespace load is occurring on
-   886	 * @label: label that is attempting to load/replace policy
-   887	 * @mask: permission mask
-   888	 * @udata: serialized data stream  (NOT NULL)
-   889	 *
-   890	 * unpack and replace a profile on the profile list and uses of that profile
-   891	 * by any task creds via invalidating the old version of the profile, which
-   892	 * tasks will notice to update their own cred.  If the profile does not exist
-   893	 * on the profile list it is added.
-   894	 *
-   895	 * Returns: size of data consumed else error code on failure.
-   896	 */
-   897	ssize_t aa_replace_profiles(struct aa_ns *policy_ns, struct aa_label *label,
-   898				    u32 mask, struct aa_loaddata *udata)
-   899	{
-   900		const char *ns_name = NULL, *info = NULL;
-   901		struct aa_ns *ns = NULL;
-   902		struct aa_load_ent *ent, *tmp;
-   903		struct aa_loaddata *rawdata_ent;
-   904		const char *op;
-   905		ssize_t count, error;
-   906		LIST_HEAD(lh);
-   907	
-   908		op = mask & AA_MAY_REPLACE_POLICY ? OP_PROF_REPL : OP_PROF_LOAD;
-   909		aa_get_loaddata(udata);
-   910		/* released below */
-   911		error = aa_unpack(udata, &lh, &ns_name);
-   912		if (error)
-   913			goto out;
-   914	
-   915		/* ensure that profiles are all for the same ns
-   916		 * TODO: update locking to remove this constaint. All profiles in
-   917		 *       the load set must succeed as a set or the load will
-   918		 *       fail. Sort ent list and take ns locks in hierarchy order
-   919		 */
-   920		count = 0;
-   921		list_for_each_entry(ent, &lh, list) {
-   922			if (ns_name) {
-   923				if (ent->ns_name &&
-   924				    strcmp(ent->ns_name, ns_name) != 0) {
-   925					info = "policy load has mixed namespaces";
-   926					error = -EACCES;
-   927					goto fail;
-   928				}
-   929			} else if (ent->ns_name) {
-   930				if (count) {
-   931					info = "policy load has mixed namespaces";
-   932					error = -EACCES;
-   933					goto fail;
-   934				}
-   935				ns_name = ent->ns_name;
-   936			} else
-   937				count++;
-   938		}
-   939		if (ns_name) {
-   940			ns = aa_prepare_ns(policy_ns ? policy_ns : labels_ns(label),
-   941					   ns_name);
-   942			if (IS_ERR(ns)) {
-   943				op = OP_PROF_LOAD;
-   944				info = "failed to prepare namespace";
-   945				error = PTR_ERR(ns);
-   946				ns = NULL;
-   947				ent = NULL;
-   948				goto fail;
-   949			}
-   950		} else
-   951			ns = aa_get_ns(policy_ns ? policy_ns : labels_ns(label));
-   952	
-   953		mutex_lock_nested(&ns->lock, ns->level);
-   954		/* check for duplicate rawdata blobs: space and file dedup */
-   955		list_for_each_entry(rawdata_ent, &ns->rawdata_list, list) {
-   956			if (aa_rawdata_eq(rawdata_ent, udata)) {
-   957				struct aa_loaddata *tmp;
-   958	
-   959				tmp = __aa_get_loaddata(rawdata_ent);
-   960				/* check we didn't fail the race */
-   961				if (tmp) {
-   962					aa_put_loaddata(udata);
-   963					udata = tmp;
-   964					break;
-   965				}
-   966			}
-   967		}
-   968		/* setup parent and ns info */
-   969		list_for_each_entry(ent, &lh, list) {
-   970			struct aa_policy *policy;
-   971	
-   972			ent->new->rawdata = aa_get_loaddata(udata);
-   973			error = __lookup_replace(ns, ent->new->base.hname,
-   974						 !(mask & AA_MAY_REPLACE_POLICY),
-   975						 &ent->old, &info);
-   976			if (error)
-   977				goto fail_lock;
-   978	
-   979			if (ent->new->rename) {
-   980				error = __lookup_replace(ns, ent->new->rename,
-   981							!(mask & AA_MAY_REPLACE_POLICY),
-   982							&ent->rename, &info);
-   983				if (error)
-   984					goto fail_lock;
-   985			}
-   986	
-   987			/* released when @new is freed */
-   988			ent->new->ns = aa_get_ns(ns);
-   989	
-   990			if (ent->old || ent->rename)
-   991				continue;
-   992	
-   993			/* no ref on policy only use inside lock */
-   994			policy = __lookup_parent(ns, ent->new->base.hname);
-   995			if (!policy) {
-   996				struct aa_profile *p;
-   997				p = __list_lookup_parent(&lh, ent->new);
-   998				if (!p) {
-   999					error = -ENOENT;
-  1000					info = "parent does not exist";
-  1001					goto fail_lock;
-  1002				}
-  1003				rcu_assign_pointer(ent->new->parent, aa_get_profile(p));
-  1004			} else if (policy != &ns->base) {
-  1005				/* released on profile replacement or free_profile */
-> 1006				struct aa_profile *p = policy;
-  1007				rcu_assign_pointer(ent->new->parent, aa_get_profile(p));
-  1008			}
-  1009		}
-  1010	
-  1011		/* create new fs entries for introspection if needed */
-  1012		if (!udata->dents[AAFS_LOADDATA_DIR]) {
-  1013			error = __aa_fs_create_rawdata(ns, udata);
-  1014			if (error) {
-  1015				info = "failed to create raw_data dir and files";
-  1016				ent = NULL;
-  1017				goto fail_lock;
-  1018			}
-  1019		}
-  1020		list_for_each_entry(ent, &lh, list) {
-  1021			if (!ent->old) {
-  1022				struct dentry *parent;
-  1023				if (rcu_access_pointer(ent->new->parent)) {
-  1024					struct aa_profile *p;
-  1025					p = aa_deref_parent(ent->new);
-  1026					parent = prof_child_dir(p);
-  1027				} else
-  1028					parent = ns_subprofs_dir(ent->new->ns);
-  1029				error = __aafs_profile_mkdir(ent->new, parent);
-  1030			}
-  1031	
-  1032			if (error) {
-  1033				info = "failed to create";
-  1034				goto fail_lock;
-  1035			}
-  1036		}
-  1037	
-  1038		/* Done with checks that may fail - do actual replacement */
-  1039		__aa_bump_ns_revision(ns);
-  1040		__aa_loaddata_update(udata, ns->revision);
-  1041		list_for_each_entry_safe(ent, tmp, &lh, list) {
-  1042			list_del_init(&ent->list);
-  1043			op = (!ent->old && !ent->rename) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1044	
-  1045			if (ent->old && ent->old->rawdata == ent->new->rawdata) {
-  1046				/* dedup actual profile replacement */
-  1047				audit_policy(label, op, ns_name, ent->new->base.hname,
-  1048					     "same as current profile, skipping",
-  1049					     error);
-  1050				/* break refcount cycle with proxy. */
-  1051				aa_put_proxy(ent->new->label.proxy);
-  1052				ent->new->label.proxy = NULL;
-  1053				goto skip;
-  1054			}
-  1055	
-  1056			/*
-  1057			 * TODO: finer dedup based on profile range in data. Load set
-  1058			 * can differ but profile may remain unchanged
-  1059			 */
-  1060			audit_policy(label, op, ns_name, ent->new->base.hname, NULL,
-  1061				     error);
-  1062	
-  1063			if (ent->old) {
-  1064				share_name(ent->old, ent->new);
-  1065				__replace_profile(ent->old, ent->new);
-  1066			} else {
-  1067				struct list_head *lh;
-  1068	
-  1069				if (rcu_access_pointer(ent->new->parent)) {
-  1070					struct aa_profile *parent;
-  1071	
-  1072					parent = update_to_newest_parent(ent->new);
-  1073					lh = &parent->base.profiles;
-  1074				} else
-  1075					lh = &ns->base.profiles;
-  1076				__add_profile(lh, ent->new);
-  1077			}
-  1078		skip:
-  1079			aa_load_ent_free(ent);
-  1080		}
-  1081		__aa_labelset_update_subtree(ns);
-  1082		mutex_unlock(&ns->lock);
-  1083	
-  1084	out:
-  1085		aa_put_ns(ns);
-  1086		aa_put_loaddata(udata);
-  1087		kfree(ns_name);
-  1088	
-  1089		if (error)
-  1090			return error;
-  1091		return udata->size;
-  1092	
-  1093	fail_lock:
-  1094		mutex_unlock(&ns->lock);
-  1095	
-  1096		/* audit cause of failure */
-  1097		op = (ent && !ent->old) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1098	fail:
-  1099		  audit_policy(label, op, ns_name, ent ? ent->new->base.hname : NULL,
-  1100			       info, error);
-  1101		/* audit status that rest of profiles in the atomic set failed too */
-  1102		info = "valid profile in failed atomic policy load";
-  1103		list_for_each_entry(tmp, &lh, list) {
-  1104			if (tmp == ent) {
-  1105				info = "unchecked profile in failed atomic policy load";
-  1106				/* skip entry that caused failure */
-  1107				continue;
-  1108			}
-  1109			op = (!tmp->old) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1110			audit_policy(label, op, ns_name, tmp->new->base.hname, info,
-  1111				     error);
-  1112		}
-  1113		list_for_each_entry_safe(ent, tmp, &lh, list) {
-  1114			list_del_init(&ent->list);
-  1115			aa_load_ent_free(ent);
-  1116		}
-  1117	
-  1118		goto out;
-  1119	}
-  1120	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+Regards
+Sudip
