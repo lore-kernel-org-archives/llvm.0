@@ -1,116 +1,86 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173DF198
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 12:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660221233; x=1691757233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sePsZki6rNGWhBmuPvYhrZYvNbhkUqbQ1QhmhPMXOe8=;
-  b=TeOHxExRAXh1GxjpeNEgc+d49Tm5NwwoURZbQI4wRbxUQrrWp+wFMI6Z
-   SyWNzMyPRxY9hABmV2zi2otO91LJ/sJSTQAxKGsQMWimrlaeA+7QztH6o
-   U385rmxXGL8PVFOm7DBTtauKbLdHfw4yxNLqqf1bngcl7Ck6qdcbXDj0X
-   gWlhytUJmgdUYF5mrNkJ7wOiYzitewivJSc0Z6nl64V1wwMViUC9uIOcE
-   5+jDbbmr8WYZ4WmxqXXbHIsTf0R+XuKjY97denqGWWX6ulNKSdhyglUQi
-   gIHlWREEMinn7tXn31AgsrpWbH/gUi+o518fHYxEvn4wwx1EXw+pu+BnO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="288900956"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="288900956"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 05:33:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="708599120"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Aug 2022 05:33:49 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oM7Nk-0000Bj-1z;
-	Thu, 11 Aug 2022 12:33:48 +0000
-Date: Thu, 11 Aug 2022 20:32:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Will McVicker <willmcvicker@google.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel-team@android.com,
-	Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] PCI: dwc: add support for 64-bit MSI target
- address
-Message-ID: <202208112017.jLSXQXjV-lkp@intel.com>
-References: <20220809180051.1063653-3-willmcvicker@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9008D198
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 12:35:19 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so4985057pjk.1
+        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 05:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5w/KsvKeDQNB0nymQYwJO1nJhxYwskiJAdbQrcwrrws=;
+        b=Ql5TzwacX39R2Jd3F8nwCUw2umD0dCX30wm+NAMytxnOiFhjI29r2fh4KHIe8FbJA5
+         sYz4E0PDwIJi2YWeIZGBi2iV+Kzj0DYdKG+N+MawTLJhdefhUsUcV0ClrlBQcf1+CfbC
+         BhOcyvxJBYHt9jAR2olKMbE/rOdvH8kuymWFoAFCIdQ3O3rDei5TMFoybUL9zX6OoiC6
+         zSf7+O9WlFtOrgZpMoO4efq2+dLIYo4s6604mDZQ2A9zMsGb4t2OqoPcdUh7yyzAL4B5
+         4m2ConxAm3a5QZ2B5OUxbrnEPhFZedReRM5K3lF3hX3flUt9J1LLpTzaRYKOp4znfWwG
+         qROQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5w/KsvKeDQNB0nymQYwJO1nJhxYwskiJAdbQrcwrrws=;
+        b=QUAcUanRFC6KqWhpusFkV91L46FE7ZTcMoH3Fiv+Oo+yqtYZruCMcL9wg8/G61TGxj
+         Nthckm3VYEcydKp558mVuJGqAxfcADdzcwg3txwEdoR3xr+4SqK+lrhzt20T7CVqD6S2
+         b1xHnEohst9/Us1zupuaqHw3OM3DtNlxG+I6vD82ya81L2I6o9gYC3EdO1Cz9u5ZbZeZ
+         1e0r5c/yUbZ12hllA2HSw1ifVpoyXIflr5KsGHQ5aSNUNog7LA425zS4qLeuiCG4GXYY
+         wwFTficBVcSxJp+5/8Gcp83K65Latwisuq5M/WTa/m6tbzRYla/6jkTmVMKvuBrHcQdF
+         jXAQ==
+X-Gm-Message-State: ACgBeo1Zk6nyfERQDP5TbMFfvjapZkkiewhsOGk2RR4fT7JqsFFao00d
+	BwzUpgKt2Eo9WBqJNfNQE9Cnn7NVY/7lXS7WYmCzqg==
+X-Google-Smtp-Source: AA6agR7mxh4xlrHaACk8ACRbYeCnushTJX/xovc1OX340+zRR7qqgn2gIIKem8n7+e/FLEibg6QqXPbdXVxgjeL2ts4=
+X-Received: by 2002:a17:90b:3805:b0:1f4:ebfe:558b with SMTP id
+ mq5-20020a17090b380500b001f4ebfe558bmr8709936pjb.48.1660221318988; Thu, 11
+ Aug 2022 05:35:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809180051.1063653-3-willmcvicker@google.com>
+References: <20220810114318.3220630-1-anders.roxell@linaro.org> <87fsi3ce28.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87fsi3ce28.fsf@mpe.ellerman.id.au>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Thu, 11 Aug 2022 14:35:08 +0200
+Message-ID: <CADYN=9L_Sgd8HTkhtM5t0eoN7ict8zX6fRCJsVvYcgp9H_QsSg@mail.gmail.com>
+Subject: Re: [PATCHv3, resend] powerpc: mm: radix_tlb: rearrange the if-else block
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: nathan@kernel.org, ndesaulniers@google.com, llvm@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Will,
+On Thu, 11 Aug 2022 at 11:41, Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Anders Roxell <anders.roxell@linaro.org> writes:
+> > Clang warns:
+> >
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
+> >                                 __tlbiel_va_range(hstart, hend, pid,
+> >                                                   ^~~~~~
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
+> >                 unsigned long hstart, hend;
+> >                                     ^
+> >                                      = 0
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
+> >                                 __tlbiel_va_range(hstart, hend, pid,
+> >                                                           ^~~~
+> > arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
+> >                 unsigned long hstart, hend;
+> >                                           ^
+> >                                            = 0
+> > 2 errors generated.
+>
+> Which version & config are you building?
 
-Thank you for the patch! Yet something to improve:
+clang-13, clang-14 and clang-nightly, configs are cell_defconfig and
+maple_defconfig
 
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on linus/master next-20220811]
-[cannot apply to v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'm building with tuxmake [1] like this:
+$ tuxmake --runtime podman --target-arch powerpc --toolchain clang-14
+--kconfig cell_defconfig
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Will-McVicker/PCI-dwc-Add-support-for-64-bit-MSI-target-addresses/20220810-020421
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: powerpc-randconfig-c003-20220810 (https://download.01.org/0day-ci/archive/20220811/202208112017.jLSXQXjV-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7a41faa4e02a0a8945f79e7af86d10e371b2fc12
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Will-McVicker/PCI-dwc-Add-support-for-64-bit-MSI-target-addresses/20220810-020421
-        git checkout 7a41faa4e02a0a8945f79e7af86d10e371b2fc12
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/pci/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pcie-designware.c:85:5: error: redefinition of 'dw_pcie_msi_capabilities'
-   u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-       ^
-   drivers/pci/controller/dwc/pcie-designware.h:467:19: note: previous definition is here
-   static inline u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-                     ^
-   1 error generated.
-
-
-vim +/dw_pcie_msi_capabilities +85 drivers/pci/controller/dwc/pcie-designware.c
-
-    84	
-  > 85	u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-    86	{
-    87		u8 offset;
-    88	
-    89		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-    90		return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-    91	}
-    92	EXPORT_SYMBOL_GPL(dw_pcie_msi_capabilities);
-    93	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Anders
+[1] https://tuxmake.org/
