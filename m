@@ -1,180 +1,235 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731A22F28
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 10:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660212580; x=1691748580;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IQJ0ihMHOcIFj3gQha1qaEQVsXUjw0GJBj/xpNMOpCk=;
-  b=F38XBv3dn41lD9WWNuuHupYi0M6QEULEguuIhPq4gcbImTpo8zoKWFZG
-   3OqzJMAL4IKSDcGVgAQWTbahdy7rIy6CRAMTNpAG640qSFHG/PU1JwNiB
-   0Id17YkY+mFuMMq7mu4ahX3+X4q923TTC5jfFKZN3MRlXssYfcTR+0Pyh
-   awo+Qqf1PLDReZVgOWLxEv0i7pvtWuZRksDy8dk8fzHCZ023kN04m11I0
-   AHP1uA/9p0y5rnpS0ie0P67Sd7DxwZgpNnEgMeQOm1gkDxSfu8z5G1aCr
-   upF6aNAODvviCRv9fTGYWYryCs8TgJwTtopX5bvPGeqvP7bpLcSDWYJgb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="288878935"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="288878935"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 03:09:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="634167506"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 11 Aug 2022 03:09:38 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oM58D-00004R-1r;
-	Thu, 11 Aug 2022 10:09:37 +0000
-Date: Thu, 11 Aug 2022 18:09:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:ktext 2/19] arch/arm64/mm/kasan_init.c:250:3: error: call to
- __compiletime_assert_373 declared with 'error' attribute: BUILD_BUG_ON
- failed: VMALLOC_START != MODULES_END
-Message-ID: <202208111846.fJKatlNW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2DA2F5F
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 11:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660217041;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6wFV5xyScXJdsCwFwY54SE8bLAbymuxM2O7yjCaiJMs=;
+	b=MYeDcl/u+u9tGceFYQt4KOLVW915zFIbaN/yE0Cs7j2Su0g7yELGFLKo6tMksmVdP3ZxV2
+	eHYtN+XBGZoxP2lar5bE3wqk0WCFnniQKalnvvMeBp+029aHdiCtulPM7HZ5y+tJZZhSTv
+	yxKUWxoRMNztufTd8ZKIHS9Nd1tos9A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-7LYVO_A2Oc6BNzn32wLTeg-1; Thu, 11 Aug 2022 07:20:45 -0400
+X-MC-Unique: 7LYVO_A2Oc6BNzn32wLTeg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 701AF811E87
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 11:20:45 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63A23C15BA4;
+	Thu, 11 Aug 2022 11:20:45 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (61/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [ffcf9c57]
+Date: Thu, 11 Aug 2022 11:20:45 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <71995.122081107204500247@us-mta-38.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git ktext
-head:   6f969d4aee6bbafad356a7bae6e37d9e2dce9e08
-commit: c05f74c98a295407b27a64d7b54e57e8b9822127 [2/19] arm64: place kernel in its own L0 page table entry
-config: arm64-buildonly-randconfig-r006-20220810 (https://download.01.org/0day-ci/archive/20220811/202208111846.fJKatlNW-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add arm git://git.armlinux.org.uk/~rmk/linux-arm.git
-        git fetch --no-tags arm ktext
-        git checkout c05f74c98a295407b27a64d7b54e57e8b9822127
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> arch/arm64/mm/kasan_init.c:250:3: error: call to __compiletime_assert_373 declared with 'error' attribute: BUILD_BUG_ON failed: VMALLOC_START != MODULES_END
-                   BUILD_BUG_ON(VMALLOC_START != MODULES_END);
-                   ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:354:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:342:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:335:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:105:1: note: expanded from here
-   __compiletime_assert_373
-   ^
-   1 error generated.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50602
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+                  x86_64 (debug) - Firmware test suite
+        Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: fatal error:=
+ 'gnu/stubs-32.h' file not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1222
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftest build - net
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
 
-vim +/error +250 arch/arm64/mm/kasan_init.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-39d114ddc68223 Andrey Ryabinin  2015-10-12  213  
-afe6ef80dcecf2 Andrey Konovalov 2020-12-22  214  static void __init kasan_init_shadow(void)
-39d114ddc68223 Andrey Ryabinin  2015-10-12  215  {
-f9040773b7bbbd Ard Biesheuvel   2016-02-16  216  	u64 kimg_shadow_start, kimg_shadow_end;
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  217  	u64 mod_shadow_start, mod_shadow_end;
-9a0732efa77418 Lecopzer Chen    2021-03-24  218  	u64 vmalloc_shadow_end;
-b10d6bca87204c Mike Rapoport    2020-10-13  219  	phys_addr_t pa_start, pa_end;
-b10d6bca87204c Mike Rapoport    2020-10-13  220  	u64 i;
-39d114ddc68223 Andrey Ryabinin  2015-10-12  221  
-7d7b88ff5f8fd7 Lecopzer Chen    2021-03-24  222  	kimg_shadow_start = (u64)kasan_mem_to_shadow(KERNEL_START) & PAGE_MASK;
-7d7b88ff5f8fd7 Lecopzer Chen    2021-03-24  223  	kimg_shadow_end = PAGE_ALIGN((u64)kasan_mem_to_shadow(KERNEL_END));
-f9040773b7bbbd Ard Biesheuvel   2016-02-16  224  
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  225  	mod_shadow_start = (u64)kasan_mem_to_shadow((void *)MODULES_VADDR);
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  226  	mod_shadow_end = (u64)kasan_mem_to_shadow((void *)MODULES_END);
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  227  
-9a0732efa77418 Lecopzer Chen    2021-03-24  228  	vmalloc_shadow_end = (u64)kasan_mem_to_shadow((void *)VMALLOC_END);
-9a0732efa77418 Lecopzer Chen    2021-03-24  229  
-39d114ddc68223 Andrey Ryabinin  2015-10-12  230  	/*
-39d114ddc68223 Andrey Ryabinin  2015-10-12  231  	 * We are going to perform proper setup of shadow memory.
-0293c8ba807c86 Kyrylo Tkachov   2018-10-04  232  	 * At first we should unmap early shadow (clear_pgds() call below).
-39d114ddc68223 Andrey Ryabinin  2015-10-12  233  	 * However, instrumented code couldn't execute without shadow memory.
-39d114ddc68223 Andrey Ryabinin  2015-10-12  234  	 * tmp_pg_dir used to keep early shadow mapped until full shadow
-39d114ddc68223 Andrey Ryabinin  2015-10-12  235  	 * setup will be finished.
-39d114ddc68223 Andrey Ryabinin  2015-10-12  236  	 */
-39d114ddc68223 Andrey Ryabinin  2015-10-12  237  	memcpy(tmp_pg_dir, swapper_pg_dir, sizeof(tmp_pg_dir));
-c1a88e9124a499 Mark Rutland     2016-01-25  238  	dsb(ishst);
-2077be6783b593 Laura Abbott     2017-01-10  239  	cpu_replace_ttbr1(lm_alias(tmp_pg_dir));
-39d114ddc68223 Andrey Ryabinin  2015-10-12  240  
-39d114ddc68223 Andrey Ryabinin  2015-10-12  241  	clear_pgds(KASAN_SHADOW_START, KASAN_SHADOW_END);
-39d114ddc68223 Andrey Ryabinin  2015-10-12  242  
-e17d8025f07e4f Will Deacon      2017-11-15  243  	kasan_map_populate(kimg_shadow_start, kimg_shadow_end,
-7d7b88ff5f8fd7 Lecopzer Chen    2021-03-24  244  			   early_pfn_to_nid(virt_to_pfn(lm_alias(KERNEL_START))));
-f9040773b7bbbd Ard Biesheuvel   2016-02-16  245  
-77ad4ce69321ab Mark Rutland     2019-08-14  246  	kasan_populate_early_shadow(kasan_mem_to_shadow((void *)PAGE_END),
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  247  				   (void *)mod_shadow_start);
-9a0732efa77418 Lecopzer Chen    2021-03-24  248  
-9a0732efa77418 Lecopzer Chen    2021-03-24  249  	if (IS_ENABLED(CONFIG_KASAN_VMALLOC)) {
-9a0732efa77418 Lecopzer Chen    2021-03-24 @250  		BUILD_BUG_ON(VMALLOC_START != MODULES_END);
-9a0732efa77418 Lecopzer Chen    2021-03-24  251  		kasan_populate_early_shadow((void *)vmalloc_shadow_end,
-9a0732efa77418 Lecopzer Chen    2021-03-24  252  					    (void *)KASAN_SHADOW_END);
-9a0732efa77418 Lecopzer Chen    2021-03-24  253  	} else {
-9577dd74864877 Andrey Konovalov 2018-12-28  254  		kasan_populate_early_shadow((void *)kimg_shadow_end,
-14c127c957c1c6 Steve Capper     2019-08-07  255  					    (void *)KASAN_SHADOW_END);
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  256  		if (kimg_shadow_start > mod_shadow_end)
-9577dd74864877 Andrey Konovalov 2018-12-28  257  			kasan_populate_early_shadow((void *)mod_shadow_end,
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  258  						    (void *)kimg_shadow_start);
-9a0732efa77418 Lecopzer Chen    2021-03-24  259  	}
-f80fb3a3d50843 Ard Biesheuvel   2016-01-26  260  
-b10d6bca87204c Mike Rapoport    2020-10-13  261  	for_each_mem_range(i, &pa_start, &pa_end) {
-b10d6bca87204c Mike Rapoport    2020-10-13  262  		void *start = (void *)__phys_to_virt(pa_start);
-b10d6bca87204c Mike Rapoport    2020-10-13  263  		void *end = (void *)__phys_to_virt(pa_end);
-39d114ddc68223 Andrey Ryabinin  2015-10-12  264  
-39d114ddc68223 Andrey Ryabinin  2015-10-12  265  		if (start >= end)
-39d114ddc68223 Andrey Ryabinin  2015-10-12  266  			break;
-39d114ddc68223 Andrey Ryabinin  2015-10-12  267  
-e17d8025f07e4f Will Deacon      2017-11-15  268  		kasan_map_populate((unsigned long)kasan_mem_to_shadow(start),
-3f9ec80f7b22ec Andrey Ryabinin  2017-07-10  269  				   (unsigned long)kasan_mem_to_shadow(end),
-800cb2e553d445 Mark Rutland     2018-04-16  270  				   early_pfn_to_nid(virt_to_pfn(start)));
-39d114ddc68223 Andrey Ryabinin  2015-10-12  271  	}
-39d114ddc68223 Andrey Ryabinin  2015-10-12  272  
-7b1af9795773d7 Ard Biesheuvel   2016-01-11  273  	/*
-9577dd74864877 Andrey Konovalov 2018-12-28  274  	 * KAsan may reuse the contents of kasan_early_shadow_pte directly,
-9577dd74864877 Andrey Konovalov 2018-12-28  275  	 * so we should make sure that it maps the zero page read-only.
-7b1af9795773d7 Ard Biesheuvel   2016-01-11  276  	 */
-7b1af9795773d7 Ard Biesheuvel   2016-01-11  277  	for (i = 0; i < PTRS_PER_PTE; i++)
-9577dd74864877 Andrey Konovalov 2018-12-28  278  		set_pte(&kasan_early_shadow_pte[i],
-9577dd74864877 Andrey Konovalov 2018-12-28  279  			pfn_pte(sym_to_pfn(kasan_early_shadow_page),
-9577dd74864877 Andrey Konovalov 2018-12-28  280  				PAGE_KERNEL_RO));
-7b1af9795773d7 Ard Biesheuvel   2016-01-11  281  
-080eb83f54cf5b Andrey Konovalov 2018-12-28  282  	memset(kasan_early_shadow_page, KASAN_SHADOW_INIT, PAGE_SIZE);
-2077be6783b593 Laura Abbott     2017-01-10  283  	cpu_replace_ttbr1(lm_alias(swapper_pg_dir));
-afe6ef80dcecf2 Andrey Konovalov 2020-12-22  284  }
-afe6ef80dcecf2 Andrey Konovalov 2020-12-22  285  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: The code at line 250 was first introduced by commit
-:::::: 9a0732efa77418fc85b1bdc5ddee619e62f59545 arm64: kasan: don't populate vmalloc area for CONFIG_KASAN_VMALLOC
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-:::::: TO: Lecopzer Chen <lecopzer.chen@mediatek.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
