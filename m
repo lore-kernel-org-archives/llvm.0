@@ -1,42 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76794179
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 00:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2886360
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 00:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660176433; x=1691712433;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=sH2Fr/am8To4OR+YfB0fk0PpzS0uCH7XysXWpPZjKhA=;
-  b=L8HXjoWAlV6jAPZEabJdqr8e3ugnCbRjo2agc+Zvax98wMjuHxrc8G/z
-   C36Lf8Hh4W19OQ+ib7z0SSxKJ8G7uxa6ntJPEVO4W8H36kxULZ/w4qsdU
-   NXuGNes8Elbh6dZFHOAnLaRUGVYKjpcf543z1wQc0TNraFDo3/40X6nZg
-   UBhe1S1+S9ogrehq9WcLTNXrJfJ/LWP1geahBoHlnhU9RcoO2rBQDskTI
-   rwru0c84vr9nCaUtrwJTJoN0QZBi3vuTAKj7sF6u/Q4KTxyLHumxzaqFx
-   qPcl7usIPSjlPNj/ofCkdvyhHeNtAam2hL9Ugb18nmne3QDuX/+aE0VuL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="352961063"
+  t=1660178838; x=1691714838;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HtnCSZBUVPQUrbSirLmN2r26EpormcJ4svgZ8nxcA7E=;
+  b=SlnhVrMhOAdKMSKBDhgbrYaKusdf3pg+WtHBa1nt2H7UnGH59/IhIIfS
+   7ed3nGqu8qDKqD6lVZQrHWMF9o2ulYHvy3qxM4QAhas1I/XO4cp0Pp2b1
+   zl+XuwtdGx9l5NzVuauOnQoy2cVKiX/Sms3I5VT9qZKL2sej/UcsBhl/f
+   F3k9mHlxfgpbyfFfBY35kC8OZ++8gJGK8w/eFfoF1WAfuAB0hYVBF52JP
+   883eyGO6nfeEapI2LG7q7fFEvYCgXlna0CHQaCQ8hzahKF1BW8vc+FZuX
+   pVOPX62QPfvygxGC3lgJqSsVARHmWCxFyXkhtSYC7F/LyOIeLNgDCWrXO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="289982201"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="352961063"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 17:07:12 -0700
+   d="scan'208";a="289982201"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 17:47:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="673485186"
+   d="scan'208";a="665144608"
 Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Aug 2022 17:07:11 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 17:47:13 -0700
 Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oLvjD-0000se-0S;
-	Thu, 11 Aug 2022 00:07:11 +0000
-Date: Thu, 11 Aug 2022 08:06:10 +0800
+	id 1oLwLw-0000v1-2k;
+	Thu, 11 Aug 2022 00:47:12 +0000
+Date: Thu, 11 Aug 2022 08:46:53 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:linux-5.15.y 8980/9027] ld.lld: error:
- init/built-in.a(main.o):(function rcu_lock_acquire: .text+0x51a): relocation
- R_RISCV_HI20 out of range: 530618 is not in [-524288, 524287]; references
- rcu_lock_map
-Message-ID: <202208110738.IwvFJk7c-lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-const-host-template 12/88]
+ drivers/ata/pata_platform.c:221:20: error: passing 'const struct
+ scsi_host_template *' to parameter of type 'struct scsi_host_template *'
+ discards qualifiers
+Message-ID: <202208110827.RxTOue3F-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,52 +48,290 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Michal Maloszewski <michal.maloszewski@intel.com>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Dawid Lukwinski <dawid.lukwinski@intel.com>
-CC: Tony Nguyen <anthony.l.nguyen@intel.com>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Sasha Levin <sashal@kernel.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   9c5eacc2ad1f605c31c69d9e2436823ada99f1dc
-commit: 186fcdb68f42ef13733cef5d1be4fdfc07b8935d [8980/9027] i40e: Fix interface init with MSI interrupts (no MSI-X)
-config: riscv-randconfig-r002-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110738.IwvFJk7c-lkp@intel.com/config)
+tree:   https://github.com/bvanassche/linux scsi-const-host-template
+head:   13249cc58dd0478af230234f124ec75b5331c348
+commit: 21962245b3c73a5e7c9b7b3c129a83f5c1c31608 [12/88] ata
+config: powerpc-randconfig-r032-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110827.RxTOue3F-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=186fcdb68f42ef13733cef5d1be4fdfc07b8935d
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 186fcdb68f42ef13733cef5d1be4fdfc07b8935d
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/bvanassche/linux/commit/21962245b3c73a5e7c9b7b3c129a83f5c1c31608
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-const-host-template
+        git checkout 21962245b3c73a5e7c9b7b3c129a83f5c1c31608
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: init/built-in.a(main.o):(function rcu_lock_acquire: .text+0x51a): relocation R_RISCV_HI20 out of range: 530618 is not in [-524288, 524287]; references rcu_lock_map
-   >>> referenced by main.c
-   >>> defined in kernel/built-in.a(rcu/update.o)
+   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:220:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_platform.c:16:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:222:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_platform.c:16:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:224:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_platform.c:16:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:226:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_platform.c:16:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:228:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> drivers/ata/pata_platform.c:221:20: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        pio_mask, &pata_platform_sht, false);
+                                                  ^~~~~~~~~~~~~~~~~~
+   drivers/ata/pata_platform.c:183:19: note: passing argument to parameter here
+   EXPORT_SYMBOL_GPL(__pata_platform_probe);
+                     ^
+   6 warnings and 1 error generated.
 --
->> ld.lld: error: init/built-in.a(main.o):(function rcu_lock_acquire: .text+0x522): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references .Ltmp8
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function rcu_lock_release: .text+0x54c): relocation R_RISCV_HI20 out of range: 530618 is not in [-524288, 524287]; references rcu_lock_map
-   >>> referenced by main.c
-   >>> defined in kernel/built-in.a(rcu/update.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function rcu_lock_release: .text+0x554): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references .Ltmp9
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:141:1: note: expanded from here
+   __do_insb
+   ^
+   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
+   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:143:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:145:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:147:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:149:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/ata/pata_of_platform.c:11:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:151:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> drivers/ata/pata_of_platform.c:76:31: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        reg_shift, pio_mask, &pata_platform_sht,
+                                                             ^~~~~~~~~~~~~~~~~~
+   include/linux/ata_platform.h:22:33: note: passing argument to parameter 'sht' here
+                                    struct scsi_host_template *sht,
+                                                               ^
+   6 warnings and 1 error generated.
+
+
+vim +221 drivers/ata/pata_platform.c
+
+a20c9e820864e1 Paul Mundt         2006-10-27  184  
+0ec24914675c48 Greg Kroah-Hartman 2012-12-21  185  static int pata_platform_probe(struct platform_device *pdev)
+cf03613e9662c2 Anton Vorontsov    2008-01-09  186  {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  187  	struct resource *io_res;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  188  	struct resource *ctl_res;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  189  	struct resource *irq_res;
+61b8c345aa8c50 Jingoo Han         2013-07-30  190  	struct pata_platform_info *pp_info = dev_get_platdata(&pdev->dev);
+cf03613e9662c2 Anton Vorontsov    2008-01-09  191  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  192  	/*
+cf03613e9662c2 Anton Vorontsov    2008-01-09  193  	 * Simple resource validation ..
+cf03613e9662c2 Anton Vorontsov    2008-01-09  194  	 */
+cf03613e9662c2 Anton Vorontsov    2008-01-09  195  	if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  196  		dev_err(&pdev->dev, "invalid number of resources\n");
+cf03613e9662c2 Anton Vorontsov    2008-01-09  197  		return -EINVAL;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  198  	}
+cf03613e9662c2 Anton Vorontsov    2008-01-09  199  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  200  	/*
+cf03613e9662c2 Anton Vorontsov    2008-01-09  201  	 * Get the I/O base first
+cf03613e9662c2 Anton Vorontsov    2008-01-09  202  	 */
+8818a5342cb499 Lad Prabhakar      2022-01-17  203  	io_res = platform_get_mem_or_io(pdev, 0);
+8818a5342cb499 Lad Prabhakar      2022-01-17  204  	if (!io_res)
+cf03613e9662c2 Anton Vorontsov    2008-01-09  205  		return -EINVAL;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  206  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  207  	/*
+cf03613e9662c2 Anton Vorontsov    2008-01-09  208  	 * Then the CTL base
+cf03613e9662c2 Anton Vorontsov    2008-01-09  209  	 */
+8818a5342cb499 Lad Prabhakar      2022-01-17  210  	ctl_res = platform_get_mem_or_io(pdev, 1);
+8818a5342cb499 Lad Prabhakar      2022-01-17  211  	if (!ctl_res)
+cf03613e9662c2 Anton Vorontsov    2008-01-09  212  		return -EINVAL;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  213  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  214  	/*
+cf03613e9662c2 Anton Vorontsov    2008-01-09  215  	 * And the IRQ
+cf03613e9662c2 Anton Vorontsov    2008-01-09  216  	 */
+cf03613e9662c2 Anton Vorontsov    2008-01-09  217  	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+cf03613e9662c2 Anton Vorontsov    2008-01-09  218  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  219  	return __pata_platform_probe(&pdev->dev, io_res, ctl_res, irq_res,
+cf03613e9662c2 Anton Vorontsov    2008-01-09  220  				     pp_info ? pp_info->ioport_shift : 0,
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19 @221  				     pio_mask, &pata_platform_sht, false);
+cf03613e9662c2 Anton Vorontsov    2008-01-09  222  }
+cf03613e9662c2 Anton Vorontsov    2008-01-09  223  
+
+:::::: The code at line 221 was first introduced by commit
+:::::: f3d5e4f18dba18d7c2303dda68b9dbcf5ccc05cd ata: pata_of_platform: Allow to use 16-bit wide data transfer
+
+:::::: TO: Alexander Shiyan <shc_work@mail.ru>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service
