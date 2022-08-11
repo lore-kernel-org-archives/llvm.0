@@ -1,106 +1,109 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B488C3222
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 14:59:43 +0000 (UTC)
-Received: from zn.tnic (p200300ea971b9854329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9854:329c:23ff:fea6:a903])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E43F51EC064A;
-	Thu, 11 Aug 2022 16:59:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1660229978;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=GeFK2lgYVqxhWRQuhMQEmc/VC301WwhF62rP4d0xu88=;
-	b=dLaL7GWuRmMHmcxfVxRhTvwSphjJdZG7TKtQK58CjRFYOl36RMjQHxj4vpia0fve4YMh4P
-	PTrMVIuBgYHgyrZWD9Xsw/TzDkaijJ+9x9JuW4tQbTWfvU/RjHRmWvZZKdTSdOrjBJY+Yz
-	MPcDNn0Iwh6W7fNwr04lh6xokt5FTcI=
-Date: Thu, 11 Aug 2022 16:59:33 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND PATCH v4 1/2] x86/asm/bitops: ffs: use __builtin_ffs to
- evaluate constant expressions
-Message-ID: <YvUZVYxbOMcZtR5G@zn.tnic>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
- <20220723151521.51451-2-mailhol.vincent@wanadoo.fr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB5833C6
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 15:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54807C433C1;
+	Thu, 11 Aug 2022 15:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660230141;
+	bh=2+gh8k2LlVNKWFxEu+WPl9ll4HYEyNbUFNiZpgXDGUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jA46IFbUYlcBl2dGV9Jq7CrjslaVz98zknQlszPazfdGk4wzKtUoJJ5b1MbENzJHW
+	 5aspY8ejQaW+oyvA/kBZu+r8VCxN2lujGULnMXO1TK3WyeNlPE3Ps9CKSIJ8guRUyt
+	 vfeT8igf/6BcLLTluwkWFxTeKK3rUNGh5llG24ZElfspS5qeOVrJ+sPaw3k6c1AGXt
+	 woZNRztzkLE/HU4m8vGw3ow6U5WP7x5uaC2h2w11+0W+EMHQRwIBgOAHacW2retu49
+	 sDNb7/+U/wE1f8in/OGoBxTmYQWz2Sb4kSxiRsndlBwFP7nU60P1XFCF4bE8QNelo6
+	 fNCL2h0Pgu0zw==
+Date: Thu, 11 Aug 2022 08:02:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: mainline build failure for arm64 allmodconfig with clang
+Message-ID: <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
+References: <YvSxeDkmwxcJL+Z0@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220723151521.51451-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <YvSxeDkmwxcJL+Z0@debian>
 
-On Sun, Jul 24, 2022 at 12:15:20AM +0900, Vincent Mailhol wrote:
-> For x86_64, the current ffs() implementation does not produce
-> optimized code when called with a constant expression. On the
-> contrary, the __builtin_ffs() function of both GCC and clang is able
-> to simplify the expression into a single instruction.
+Hi Sudip,
+
+On Thu, Aug 11, 2022 at 08:36:24AM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
 > 
-> * Example *
+> The latest mainline kernel branch fails to build for arm64 allmodconfig
+> with clang. The errors are:
 > 
-> Let's consider two dummy functions foo() and bar() as below:
+> sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                  ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:30:23: note: expanded from macro 'SOF_ABI_MAJOR'
+> #define SOF_ABI_MAJOR 3
+>                       ^
+> sound/soc/sof/ipc3-topology.c:2343:19: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                                 ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:31:23: note: expanded from macro 'SOF_ABI_MINOR'
+> #define SOF_ABI_MINOR 23
+>                       ^~
+> sound/soc/sof/ipc3-topology.c:2343:34: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                                                ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:32:23: note: expanded from macro 'SOF_ABI_PATCH'
+> #define SOF_ABI_PATCH 0
+>                       ^
+> 3 errors generated.
 > 
-> | #include <linux/bitops.h>
-> | #define CONST 0x01000000
-
-Those code examples you can simply indent with two spaces.
-
-> In both examples, we clearly see the benefit of using __builtin_ffs()
-
-Who's "we"?
-
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-> instead of the kernel's asm implementation for constant expressions.
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                                 "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+>                                         ~~~~           ^~~~~~~~~~~~~
+>                                         %d
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                                         "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+>                                                 ~~~~           ^~~~~~~~~~~~~
+>                                                 %d
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                         idx, data, src, ndev->peers[src].port);
+>                                    ^~~
+> 3 errors generated.
 > 
-> However, for non constant expressions, the ffs() asm version of the
-> kernel remains better for x86_64 because, contrary to GCC, it doesn't
-> emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-> able optimize out the CMOV call).
-> 
-> This patch uses the __builtin_constant_p() to select between the
+> For both, git bisect points to 0af5cb349a2c ("Merge tag 'kbuild-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild")
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+Right, these are exposed by commit 258fafcd0683 ("Makefile.extrawarn:
+re-enable -Wformat for clang"). They both have fixes in -next so I am
+hoping they will be in Linus's tree soon:
 
-Also, do
+b7bf23c0865f ("ASoC: SOF: ipc3-topology: Fix clang -Wformat warning")
+a44252d5c3bb ("ntb: idt: fix clang -Wformat warnings")
 
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-> kernel's ffs() and the __builtin_ffs() depending on whether the
-> argument is constant or not.
-
-In general, you don't have to say what the patch does - that should be
-visible from the diff. The more important part is the *why*. And that
-you do.
-
-Rest looks ok.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Nathan
