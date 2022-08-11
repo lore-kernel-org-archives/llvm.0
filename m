@@ -1,338 +1,107 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2886360
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 00:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660178838; x=1691714838;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HtnCSZBUVPQUrbSirLmN2r26EpormcJ4svgZ8nxcA7E=;
-  b=SlnhVrMhOAdKMSKBDhgbrYaKusdf3pg+WtHBa1nt2H7UnGH59/IhIIfS
-   7ed3nGqu8qDKqD6lVZQrHWMF9o2ulYHvy3qxM4QAhas1I/XO4cp0Pp2b1
-   zl+XuwtdGx9l5NzVuauOnQoy2cVKiX/Sms3I5VT9qZKL2sej/UcsBhl/f
-   F3k9mHlxfgpbyfFfBY35kC8OZ++8gJGK8w/eFfoF1WAfuAB0hYVBF52JP
-   883eyGO6nfeEapI2LG7q7fFEvYCgXlna0CHQaCQ8hzahKF1BW8vc+FZuX
-   pVOPX62QPfvygxGC3lgJqSsVARHmWCxFyXkhtSYC7F/LyOIeLNgDCWrXO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="289982201"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="289982201"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 17:47:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="665144608"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 17:47:13 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oLwLw-0000v1-2k;
-	Thu, 11 Aug 2022 00:47:12 +0000
-Date: Thu, 11 Aug 2022 08:46:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [bvanassche:scsi-const-host-template 12/88]
- drivers/ata/pata_platform.c:221:20: error: passing 'const struct
- scsi_host_template *' to parameter of type 'struct scsi_host_template *'
- discards qualifiers
-Message-ID: <202208110827.RxTOue3F-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B397F17D2
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 01:06:03 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id r69so9305546pgr.2
+        for <llvm@lists.linux.dev>; Wed, 10 Aug 2022 18:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=qhmWZeCsJqnoVO/4I2HwU7vBh5Ud9ehabi2slZ+OMXA=;
+        b=czd/vDTVvda6KZUe547hGPrqW6j/oPibFGcMv5Ju4naIyPN5+WftwBAOtO9knYBBvo
+         I5jB4g+nnPGq1BrTyADevnOrvpxnlDOQwwBr0y0qd4UJ841eTsaMKn+U/YngqEf7dag7
+         2ysKxAxO39BeBxMmX2SDLCWW+W9IMI1xkYxmeVtVgB1G1lOfLhbfrieLeJ6UaEZtmiuE
+         f+ncNwpfIdjC7eg8teK07EcvvYtCQRukL9N/pGJjV2Vrio4Cp8qTaaRVmpbqxwgHe4Qj
+         4SvG0SU8U1wbD+CA82/DHrJGSUqGyhKOJ+kMtCsAkh++lu6kG7RSjq50jiYw1ORm3ugE
+         Vc0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qhmWZeCsJqnoVO/4I2HwU7vBh5Ud9ehabi2slZ+OMXA=;
+        b=gC4scz4/a4H24gp40cPE6h8voFd86w7bcoEXJu648Uodkh/sBRHq1A6JTT/n8etRCp
+         R5UpQ5/d2YF/8IbmjVWmFJ+qtwCCSvsNZBuIjKR2nX8tVeZp2G/6clrvOB+ES6q3vxvW
+         AklOWr4MozR12SVrLHFiunqHQfjEtAbiQRK/eNPBqiSW6sSKvCFfDAj66VfLiReErFMe
+         PR5WfIy8ZC0T5mZICZN43kbZQm6S52ppPyTL6/ROtRYVv2qWvuSUz8cCAS1c1Qrv6//3
+         eNYzjS/erqLRqW6C4xBSRQ4zEBxC4+wJOv9umFLWUqcVHBbFZCRGhO0X8WQtmioMc2WA
+         AdBg==
+X-Gm-Message-State: ACgBeo23TnMXJVzoeQAsm6f+oW1RQwrDt9xOs6rgxlshGYMHRgIZnUh+
+	W7p0Mz0Q7T+cFGBrZbY9kbQrEw==
+X-Google-Smtp-Source: AA6agR7Y+m5SQRx3CxOTCGuD1TjkYJX4IebNcEiCYYik42BmCmjB4gbh8/MtxkeBRwKROOvb3Y+EuA==
+X-Received: by 2002:a63:6642:0:b0:41b:51af:63d with SMTP id a63-20020a636642000000b0041b51af063dmr25089583pgc.358.1660179962852;
+        Wed, 10 Aug 2022 18:06:02 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170903028400b0016ed20eacd2sm13484492plr.150.2022.08.10.18.06.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 18:06:02 -0700 (PDT)
+Message-ID: <c01cb530-a937-4eba-92d0-0e7cc497929e@kernel.dk>
+Date: Wed, 10 Aug 2022 19:06:00 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/2] link with -z noexecstack --no-warn-rwx-segments
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Fangrui Song <maskray@google.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Nick Clifton <nickc@redhat.com>, brijesh.singh@amd.com, hpa@zytor.com,
+ kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, michael.roth@amd.com, n.schier@avm.de,
+ nathan@kernel.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+ trix@redhat.com, x86@kernel.org
+References: <20220809013653.xtmeekefwkbo46vk@google.com>
+ <20220810222442.2296651-1-ndesaulniers@google.com>
+ <20220810222442.2296651-3-ndesaulniers@google.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220810222442.2296651-3-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/bvanassche/linux scsi-const-host-template
-head:   13249cc58dd0478af230234f124ec75b5331c348
-commit: 21962245b3c73a5e7c9b7b3c129a83f5c1c31608 [12/88] ata
-config: powerpc-randconfig-r032-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110827.RxTOue3F-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/bvanassche/linux/commit/21962245b3c73a5e7c9b7b3c129a83f5c1c31608
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-const-host-template
-        git checkout 21962245b3c73a5e7c9b7b3c129a83f5c1c31608
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/ata/
+On 8/10/22 4:24 PM, Nick Desaulniers wrote:
+> Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
+> instances of a new warning when linking kernels in the form:
+> 
+>   ld: warning: vmlinux: missing .note.GNU-stack
+>   section implies executable stack
+>   ld: NOTE: This behaviour is deprecated and will be removed in a future
+>   version of the linker
+>   ld: warning: vmlinux has a LOAD segment with RWX permissions
+> 
+> Generally, we would like to avoid the stack being executable. Because
+> there could be a need for the stack to be executable, assembler sources
+> have to opt-in to this security feature via explicit creation of the
+> .note.GNU-stack feature (which compilers create by default) or command
+> line flag --noexecstack. Or we can simply tell the linker the production
+> of such sections is irrelevant and to link the stack as --noexecstack.
+> 
+> LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
+> strictly necessary when linking with LLD, only BFD, but it doesn't hurt
+> to be explicit here for all linkers IMO. --no-warn-rwx-segments is
+> currently BFD specific and only available in the current latest release,
+> so it's wrapped in an ld-option check.
+> 
+> While the kernel makes extensive usage of ELF sections, it doesn't use
+> permissions from ELF segments.
+> 
+> Broken up into 2 patches; one for the top level vmlinux, one x86
+> specific since a few places in the x86 build reset KBUILD_LDFLAGS.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+For x86-64:
 
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:220:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_platform.c:16:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:222:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_platform.c:16:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:224:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_platform.c:16:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:226:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_platform.c:16:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:228:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/ata/pata_platform.c:221:20: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                        pio_mask, &pata_platform_sht, false);
-                                                  ^~~~~~~~~~~~~~~~~~
-   drivers/ata/pata_platform.c:183:19: note: passing argument to parameter here
-   EXPORT_SYMBOL_GPL(__pata_platform_probe);
-                     ^
-   6 warnings and 1 error generated.
---
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:141:1: note: expanded from here
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:143:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:145:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:147:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:149:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/ata/pata_of_platform.c:11:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:151:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/ata/pata_of_platform.c:76:31: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                        reg_shift, pio_mask, &pata_platform_sht,
-                                                             ^~~~~~~~~~~~~~~~~~
-   include/linux/ata_platform.h:22:33: note: passing argument to parameter 'sht' here
-                                    struct scsi_host_template *sht,
-                                                               ^
-   6 warnings and 1 error generated.
-
-
-vim +221 drivers/ata/pata_platform.c
-
-a20c9e820864e1 Paul Mundt         2006-10-27  184  
-0ec24914675c48 Greg Kroah-Hartman 2012-12-21  185  static int pata_platform_probe(struct platform_device *pdev)
-cf03613e9662c2 Anton Vorontsov    2008-01-09  186  {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  187  	struct resource *io_res;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  188  	struct resource *ctl_res;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  189  	struct resource *irq_res;
-61b8c345aa8c50 Jingoo Han         2013-07-30  190  	struct pata_platform_info *pp_info = dev_get_platdata(&pdev->dev);
-cf03613e9662c2 Anton Vorontsov    2008-01-09  191  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  192  	/*
-cf03613e9662c2 Anton Vorontsov    2008-01-09  193  	 * Simple resource validation ..
-cf03613e9662c2 Anton Vorontsov    2008-01-09  194  	 */
-cf03613e9662c2 Anton Vorontsov    2008-01-09  195  	if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  196  		dev_err(&pdev->dev, "invalid number of resources\n");
-cf03613e9662c2 Anton Vorontsov    2008-01-09  197  		return -EINVAL;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  198  	}
-cf03613e9662c2 Anton Vorontsov    2008-01-09  199  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  200  	/*
-cf03613e9662c2 Anton Vorontsov    2008-01-09  201  	 * Get the I/O base first
-cf03613e9662c2 Anton Vorontsov    2008-01-09  202  	 */
-8818a5342cb499 Lad Prabhakar      2022-01-17  203  	io_res = platform_get_mem_or_io(pdev, 0);
-8818a5342cb499 Lad Prabhakar      2022-01-17  204  	if (!io_res)
-cf03613e9662c2 Anton Vorontsov    2008-01-09  205  		return -EINVAL;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  206  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  207  	/*
-cf03613e9662c2 Anton Vorontsov    2008-01-09  208  	 * Then the CTL base
-cf03613e9662c2 Anton Vorontsov    2008-01-09  209  	 */
-8818a5342cb499 Lad Prabhakar      2022-01-17  210  	ctl_res = platform_get_mem_or_io(pdev, 1);
-8818a5342cb499 Lad Prabhakar      2022-01-17  211  	if (!ctl_res)
-cf03613e9662c2 Anton Vorontsov    2008-01-09  212  		return -EINVAL;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  213  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  214  	/*
-cf03613e9662c2 Anton Vorontsov    2008-01-09  215  	 * And the IRQ
-cf03613e9662c2 Anton Vorontsov    2008-01-09  216  	 */
-cf03613e9662c2 Anton Vorontsov    2008-01-09  217  	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-cf03613e9662c2 Anton Vorontsov    2008-01-09  218  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  219  	return __pata_platform_probe(&pdev->dev, io_res, ctl_res, irq_res,
-cf03613e9662c2 Anton Vorontsov    2008-01-09  220  				     pp_info ? pp_info->ioport_shift : 0,
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19 @221  				     pio_mask, &pata_platform_sht, false);
-cf03613e9662c2 Anton Vorontsov    2008-01-09  222  }
-cf03613e9662c2 Anton Vorontsov    2008-01-09  223  
-
-:::::: The code at line 221 was first introduced by commit
-:::::: f3d5e4f18dba18d7c2303dda68b9dbcf5ccc05cd ata: pata_of_platform: Allow to use 16-bit wide data transfer
-
-:::::: TO: Alexander Shiyan <shc_work@mail.ru>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+Tested-by: Jens Axboe <axboe@kernel.dk>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+
