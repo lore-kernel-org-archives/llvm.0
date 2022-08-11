@@ -1,66 +1,89 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64DD2F28
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 09:48:33 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4M3MJf6BgNz4x1K;
-	Thu, 11 Aug 2022 19:41:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1660210899;
-	bh=QvU3Ii0mNqZHfLnF6Zfdgva2T6Ppk7BMjH3eteu8YK0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kEbdDLRB31+agt8BJ/TeC6VhWX4NEHL3dNzlAAHEaVglBt/IPlWyXaQbYxPzDNupK
-	 VN/OxNUYdRcFRQDTumj6IpYsWApJkiEfNpC+xnmIW800GnzemkKLeC69T1tQDdt8VF
-	 N7ZCOmwhsPZ/rEPktpKlVXB8XRLL1+e3e8xvPPtbPYv8B1cuKUJqti67ADjcR04r7/
-	 Y1outOTSoXOrmVjpBPII2/A3K4LG5K8L611udCZY904nczWqIKDMpdnIh2o61ChM2Z
-	 faTpKkkrkJqfZLzfaY+uD9NVhnVPIC956S7DAIQ5p6oSzyY80OGjQKaLQxpqU42AnZ
-	 LMao+0e4mYQHQ==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Anders Roxell <anders.roxell@linaro.org>, nathan@kernel.org,
- ndesaulniers@google.com
-Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, Anders Roxell <anders.roxell@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Christophe Leroy
- <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCHv3, resend] powerpc: mm: radix_tlb: rearrange the if-else
- block
-In-Reply-To: <20220810114318.3220630-1-anders.roxell@linaro.org>
-References: <20220810114318.3220630-1-anders.roxell@linaro.org>
-Date: Thu, 11 Aug 2022 19:41:35 +1000
-Message-ID: <87fsi3ce28.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9157D2F28
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 09:49:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660211341; x=1691747341;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PfSVymXx3rlWDe40i32xS/OIc4bbPwP8X01DN5B4Wa0=;
+  b=J9+S3IIGGCSKmg0vcBaQRbYwJjbZUBppxiYdTXtaspBbGr/7h3pWkx+9
+   8bkmtc4V5Qp7dkIRCedfHeGYmGse+WDdefnS+IjhQbIdYLx4hTvZVITop
+   02ZYD2jd3A4fkPAyBb8AS9SvfoTKj6rCmqXpE2b8hDqKSa43RmR8KCI+u
+   ICiOMEZrf+mDwLeHuPaUki6+wOpOPX06w2P5EbCaNnfU/BiEvRH/l7KG2
+   zhOSPhaULFLvr8c+2O4xvExG7GEzTx0csfM8facBKP66ngBkxQmk+rbou
+   8SPGpDmB8c7WzDuH+v0D93Uf25FCbJFo7RPjBGpSPCP/smS03wVOrbdg+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="290061504"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="290061504"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 02:48:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="581606795"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Aug 2022 02:48:37 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oM4ns-00003b-27;
+	Thu, 11 Aug 2022 09:48:36 +0000
+Date: Thu, 11 Aug 2022 17:48:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [linux-next:master 14970/15097] ld.lld: error: undefined symbol:
+ dc_dsc_get_policy_for_timing
+Message-ID: <202208111743.035rR9Wb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Anders Roxell <anders.roxell@linaro.org> writes:
-> Clang warns:
->
-> arch/powerpc/mm/book3s64/radix_tlb.c:1191:23: error: variable 'hstart' is uninitialized when used here [-Werror,-Wuninitialized]
->                                 __tlbiel_va_range(hstart, hend, pid,
->                                                   ^~~~~~
-> arch/powerpc/mm/book3s64/radix_tlb.c:1175:23: note: initialize the variable 'hstart' to silence this warning
->                 unsigned long hstart, hend;
->                                     ^
->                                      = 0
-> arch/powerpc/mm/book3s64/radix_tlb.c:1191:31: error: variable 'hend' is uninitialized when used here [-Werror,-Wuninitialized]
->                                 __tlbiel_va_range(hstart, hend, pid,
->                                                           ^~~~
-> arch/powerpc/mm/book3s64/radix_tlb.c:1175:29: note: initialize the variable 'hend' to silence this warning
->                 unsigned long hstart, hend;
->                                           ^
->                                            = 0
-> 2 errors generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   40d43a7507e1547dd45cb02af2e40d897c591870
+commit: b1a63a0b48add192908b578a3c5a566586d49e4e [14970/15097] drm/amd/display: consider DSC pass-through during mode validation
+config: powerpc-randconfig-r003-20220810 (https://download.01.org/0day-ci/archive/20220811/202208111743.035rR9Wb-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b1a63a0b48add192908b578a3c5a566586d49e4e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout b1a63a0b48add192908b578a3c5a566586d49e4e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Which version & config are you building?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I don't see this warning in my test builds.
+All errors (new ones prefixed by >>):
 
-cheers
+>> ld.lld: error: undefined symbol: dc_dsc_get_policy_for_timing
+   >>> referenced by amdgpu_dm_mst_types.c:1409 (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1409)
+   >>>               gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.o:(dm_dp_mst_is_port_support_mode) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dc_dsc_compute_bandwidth_range
+   >>> referenced by amdgpu_dm_mst_types.c:1410 (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1410)
+   >>>               gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.o:(dm_dp_mst_is_port_support_mode) in archive drivers/built-in.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
