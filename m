@@ -1,43 +1,35 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3982F5F
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 20:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660251068; x=1691787068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1guxBjV4L2/kscYiefwYB2PAaUnqMQ49wnw1CGKJhcU=;
-  b=C+gnMuErcaq5ZQBIDBmlrbR6WFj7RT7YC/b46Nd74/Ik9WSl7Iza2q6Y
-   89pT+eXfyICNB0Y4BbePWKVqBg4JbdK6BRmik713FjzOBaZ/wfkP0yyGC
-   sWsnG5f7qoDKPC+/NDTcRCZqvduuPIpztabeU1L9zCx78d19b6y7Gp0oJ
-   UGDXWceKZu8+SC+4oGgl7XHlf4c6K98sIskReaq+ceGBcD6SdFQ9/8C7W
-   4/+f6XI+AuLGKW6ju7AX2CvWa7Mkdcj4oDL1TcRhXo2eCi9sWXV0Kg8t0
-   1sZlUpLuevie933/CzPkPf++VQBzm6g767AbQC0psbTWZDzj1jkPHIxM8
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="317425069"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="317425069"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 13:51:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="747961723"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Aug 2022 13:51:06 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMF8z-0000eO-2u;
-	Thu, 11 Aug 2022 20:51:05 +0000
-Date: Fri, 12 Aug 2022 04:50:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [broonie-misc:arm64-sme-fixes 3/4]
- arch/arm64/kernel/fpsimd.c:1394:21: error: too many arguments to function
- call, expected single argument 'task', have 2 arguments
-Message-ID: <202208120424.12sjZabd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5042F5F
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 20:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77796C433C1;
+	Thu, 11 Aug 2022 20:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660251280;
+	bh=oebE/ZPJ9Yj7bSNVEycbEf7rL+LPEK7fxBeOLpOj3Tk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gnQJdahlCu9k6pVqo6O4Gq2KQcO6YKiDsub1ObEWjOeNSLYhRSdfoMW7WC26+hZtk
+	 2Xnl+eZIbfkX3UoSr67jx+HZc1P31U0UD+ZEcXJkqQ2n7TTr74t4PDkvht6L8BP1XI
+	 o19hxOMfdoZSrNZuez9F1qGYc+u6baPQGgth/ZaEwdy10bb/9lclxg+KwNog9Muvgu
+	 nke1UNVIQC0AIAtBlKs/Aa2KhMs0MxZOvUXqJxJOm9YujHkc9yBCMmOw+RgxHJ33+/
+	 9vpiGopWM931Ye7ovS3H7DXJDaH5eKFuDUpTEnG9YoBg57pHyTDcpNbsbfjWtg3Fcd
+	 HoRmKKSaNvz4g==
+Date: Thu, 11 Aug 2022 13:54:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-next@vger.kernel.org
+Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
+ ("vdpa_sim_blk: add support for discard and write-zeroes")
+Message-ID: <YvVsjWAWRyJzQ2V7@dev-arch.thelio-3990X>
+References: <YvU67iF4z5gB4ZYk@debian>
+ <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,91 +38,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-sme-fixes
-head:   faced24c84ad18ee30b91d041299519ce6190f28
-commit: 6c9a05d1aa66fd95573944dc9bc0f7ce09785129 [3/4] arm64/sme: Don't flush SVE register state when allocating SME storage
-config: arm64-randconfig-r026-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120424.12sjZabd-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=6c9a05d1aa66fd95573944dc9bc0f7ce09785129
-        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
-        git fetch --no-tags broonie-misc arm64-sme-fixes
-        git checkout 6c9a05d1aa66fd95573944dc9bc0f7ce09785129
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+On Thu, Aug 11, 2022 at 11:31:21AM -0700, Nathan Chancellor wrote:
+> On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
+> > Hi All,
+> > 
+> > Not sure if it has been reported, builds of arm64 with clang failed to
+> > build next-20220811 with the error:
+> > 
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
+> >                 struct virtio_blk_discard_write_zeroes range;
+> >                 ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
+> >                 if (to_pull != sizeof(range)) {
+> >                                       ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
+> >                                 to_pull, sizeof(range));
+> >                                                 ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
+> >                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
+> >                                                                          ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
+> >                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
+> >                                                    ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
+> >                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
+> >                                                         ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
+> >                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
+> >                                                   ^
+> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+> >                 u32 num_sectors, flags;
+> >                     ^
+> > 8 errors generated.
+> > 
+> > 
+> > git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
+> > And, reverting that commit has fixed the build failure.
+> > 
+> > I will be happy to test any patch or provide any extra log if needed.
+> 
+> I am very surprised GCC does not error out in the same way, since as far
+> as I understand it, labeled statements have to be followed by a
+> statement and a declaration is not a statement in C so braces are
+> needed. In fact, it seems like something changed (regressed?) between
+> GCC 10.x and 11.x?
+> 
+> https://godbolt.org/z/EYaGa1eE3
+> 
+> I am going to bisect GCC to find out whether or not that was
+> intentional.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Just for the record, it was:
 
-All errors (new ones prefixed by >>):
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=8b7a9a249a63e066cff6e95db05a3158b4cc56cc
 
->> arch/arm64/kernel/fpsimd.c:1394:21: error: too many arguments to function call, expected single argument 'task', have 2 arguments
-           sve_alloc(current, true);
-           ~~~~~~~~~          ^~~~
-   arch/arm64/include/asm/fpsimd.h:259:20: note: 'sve_alloc' declared here
-   static inline void sve_alloc(struct task_struct *task) { }
-                      ^
-   arch/arm64/kernel/fpsimd.c:1445:21: error: too many arguments to function call, expected single argument 'task', have 2 arguments
-           sve_alloc(current, false);
-           ~~~~~~~~~          ^~~~~
-   arch/arm64/include/asm/fpsimd.h:259:20: note: 'sve_alloc' declared here
-   static inline void sve_alloc(struct task_struct *task) { }
-                      ^
-   2 errors generated.
+The clang developers are aware, it seems it will get implemented at some
+point:
 
+https://github.com/llvm/llvm-project/issues/56040
 
-vim +/task +1394 arch/arm64/kernel/fpsimd.c
-
-  1374	
-  1375	/*
-  1376	 * Trapped SVE access
-  1377	 *
-  1378	 * Storage is allocated for the full SVE state, the current FPSIMD
-  1379	 * register contents are migrated across, and the access trap is
-  1380	 * disabled.
-  1381	 *
-  1382	 * TIF_SVE should be clear on entry: otherwise, fpsimd_restore_current_state()
-  1383	 * would have disabled the SVE access trap for userspace during
-  1384	 * ret_to_user, making an SVE access trap impossible in that case.
-  1385	 */
-  1386	void do_sve_acc(unsigned long esr, struct pt_regs *regs)
-  1387	{
-  1388		/* Even if we chose not to use SVE, the hardware could still trap: */
-  1389		if (unlikely(!system_supports_sve()) || WARN_ON(is_compat_task())) {
-  1390			force_signal_inject(SIGILL, ILL_ILLOPC, regs->pc, 0);
-  1391			return;
-  1392		}
-  1393	
-> 1394		sve_alloc(current, true);
-  1395		if (!current->thread.sve_state) {
-  1396			force_sig(SIGKILL);
-  1397			return;
-  1398		}
-  1399	
-  1400		get_cpu_fpsimd_context();
-  1401	
-  1402		if (test_and_set_thread_flag(TIF_SVE))
-  1403			WARN_ON(1); /* SVE access shouldn't have trapped */
-  1404	
-  1405		/*
-  1406		 * Even if the task can have used streaming mode we can only
-  1407		 * generate SVE access traps in normal SVE mode and
-  1408		 * transitioning out of streaming mode may discard any
-  1409		 * streaming mode state.  Always clear the high bits to avoid
-  1410		 * any potential errors tracking what is properly initialised.
-  1411		 */
-  1412		sve_init_regs();
-  1413	
-  1414		put_cpu_fpsimd_context();
-  1415	}
-  1416	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
