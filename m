@@ -1,139 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7772D4A15
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660243817;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZCkYKX+YocCFfhSB40Lllh1ri1NcE9eoUatp18CalQU=;
-	b=hPcy44jQlNf8ncXtzwgVh2Q1vpNLxF8zDAQVhwbv3/BR9cU8BtKyG142TJyZgSCpyHNNiE
-	YPBGPjh6Fgy4YwXO9HO318thMulyYdUgfCe8bZ3E97tzj+WXFg6GlNz27kr9jbecYQZ0PM
-	cZKPEAZjELHlMrkHOEOagaSKpkRBsdE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-617-coDLYUfHPRKzVEMvJT9kig-1; Thu, 11 Aug 2022 14:50:16 -0400
-X-MC-Unique: coDLYUfHPRKzVEMvJT9kig-1
-Received: by mail-wm1-f69.google.com with SMTP id v64-20020a1cac43000000b003a4bea31b4dso3054594wme.3
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 11:50:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ZCkYKX+YocCFfhSB40Lllh1ri1NcE9eoUatp18CalQU=;
-        b=2AxTDJkseDUGVXQrE9lVn1kcNjwgggvIhc+qsA9steDG0tAJN8FBG78bJcRo7K5VMo
-         SG77gJXBJUGuSt44rCqVG/DYJ1NG2LDYXQzUJnzLLprbMixxwORpWlDpwe7QfGIoNbQc
-         FkmLbEfZF7J8MKtqLsYCx2ICnknNrB/PlrXxYYAgYgJl22uCH8ldQrT35mCFZKRs2BV7
-         7URgyXVa0Djr3lgj797ppcTwbYWLB/Umyl3P2I8Ye72G+nVuNk82m6GFDRDqwrZLawKA
-         w7NTOMpFD9gOoHMtR0U/X9S3KqmfG/JXylOiFd9cX87a8O/n0faMxoUBDJVMNSrnzgdu
-         itaA==
-X-Gm-Message-State: ACgBeo01L/plOE9e6RV13hV37W8ur9GJhkvGEl2duZPseH4iK9LV8b1V
-	ccE08+9Zs/GjlLl+wrLEGKWXPrJrdLafxWZ4s1oo9UHWYXpTXq+H2luDNnUUBt4nyPNzru5lFNz
-	L37OVQuw9V4Lj6Q==
-X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id f7-20020a0560001a8700b002222c852f5bmr195953wry.654.1660243815347;
-        Thu, 11 Aug 2022 11:50:15 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6LBiM5dQ9y7fRQHZ7uhmIZyZmCby6c7ic+mJTmauceGDSlYOfL1ZVjf7Fmwgdj57rpPaPTwQ==
-X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id f7-20020a0560001a8700b002222c852f5bmr195948wry.654.1660243815164;
-        Thu, 11 Aug 2022 11:50:15 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b003a545ff43c5sm172878wmc.45.2022.08.11.11.50.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 11:50:14 -0700 (PDT)
-Date: Thu, 11 Aug 2022 20:50:08 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
- ("vdpa_sim_blk: add support for discard and write-zeroes")
-Message-ID: <20220811185008.jiqcv4ovv4sglsap@sgarzare-redhat>
-References: <YvU67iF4z5gB4ZYk@debian>
- <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E8D4A15
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660244344; x=1691780344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OgRPmckFG0TtMVAfj/fjsMBpWluP7n5nc5q0S29fQ70=;
+  b=B9Co7/MzMkBXuUDwiRgvaz1hGeuSi3tRJdLy7JR5Gw99hPJvGXmpvZM8
+   PMWcsow2ZL5W/4z1GIDqZIMuQRGALLeFlFLvF4oyp8YcoxHeLxKN9Puvg
+   04dbTMMbGrQH1qsNS2W0jR1SsHKt8jnoBTd1JRo9b4QWwiZY9DMYvHeWu
+   LJS37z6x3hsrYbkV9lepY2lkl2e0LULISQ6rhKIoS+BOcxWZpSniE1euV
+   /1gjQdLvTBz3w53vInvu/XKf1Q3FuVejrOXkepr7U0S1IAYROjTTzGJAO
+   CWahFFt0OrGVpbWcHhx0yQVCWQqhjzvEMNpUN+Ysm7FDsQkTWGfOgX+17
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="377729199"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="377729199"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 11:59:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="673810482"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2022 11:59:01 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMDOX-0000Xr-0K;
+	Thu, 11 Aug 2022 18:59:01 +0000
+Date: Fri, 12 Aug 2022 02:58:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vinicius Costa Gomes <vinicius.gomes@intel.com>, jhogan@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [Intel-wired-lan] [PATCH] igc: fix deadlock caused by taking
+ RTNL in RPM resume path
+Message-ID: <202208120244.a7CKRiFy-lkp@intel.com>
+References: <20220811151342.19059-1-vinicius.gomes@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220811151342.19059-1-vinicius.gomes@intel.com>
 
-On Thu, Aug 11, 2022 at 11:31:21AM -0700, Nathan Chancellor wrote:
->On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
->> Hi All,
->>
->> Not sure if it has been reported, builds of arm64 with clang failed to
->> build next-20220811 with the error:
->>
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
->>                 struct virtio_blk_discard_write_zeroes range;
->>                 ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
->>                 if (to_pull != sizeof(range)) {
->>                                       ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
->>                                 to_pull, sizeof(range));
->>                                                 ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
->>                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
->>                                                                          ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
->>                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
->>                                                    ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
->>                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
->>                                                         ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
->>                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
->>                                                   ^
->> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
->>                 u32 num_sectors, flags;
->>                     ^
->> 8 errors generated.
->>
->>
->> git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
->> And, reverting that commit has fixed the build failure.
->>
->> I will be happy to test any patch or provide any extra log if needed.
->
->I am very surprised GCC does not error out in the same way, since as far
->as I understand it, labeled statements have to be followed by a
->statement and a declaration is not a statement in C so braces are
->needed. In fact, it seems like something changed (regressed?) between
->GCC 10.x and 11.x?
->
->https://godbolt.org/z/EYaGa1eE3
+Hi Vinicius,
 
-Interesting, I confirm that also gcc 12 does not warns/error.
-This is my version:
+I love your patch! Yet something to improve:
 
-     $ gcc --version
-     gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1)
+[auto build test ERROR on tnguy-next-queue/dev-queue]
+[also build test ERROR on linus/master v5.19 next-20220811]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->I am going to bisect GCC to find out whether or not that was
->intentional. At any rate, isn't this the proper fix? I can send it as a
->formal patch if desired.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Costa-Gomes/igc-fix-deadlock-caused-by-taking-RTNL-in-RPM-resume-path/20220811-232032
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220812/202208120244.a7CKRiFy-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/61ed7ed758f23a10549c5d4fdc82ef9356281cbf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vinicius-Costa-Gomes/igc-fix-deadlock-caused-by-taking-RTNL-in-RPM-resume-path/20220811-232032
+        git checkout 61ed7ed758f23a10549c5d4fdc82ef9356281cbf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/igc/
 
-Yep, that was the fix and I already re-sent a new series with the patch
-fixed:
-https://lore.kernel.org/virtualization/20220811083632.77525-1-sgarzare@redhat.com/T/#t
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Michael already queued the new version in his tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+All errors (new ones prefixed by >>):
 
-Thanks,
-Stefano
+>> drivers/net/ethernet/intel/igc/igc_main.c:6838:26: error: use of undeclared identifier 'igc_suspend'; did you mean '__igc_suspend'?
+           SET_SYSTEM_SLEEP_PM_OPS(igc_suspend, igc_resume)
+                                   ^~~~~~~~~~~
+                                   __igc_suspend
+   include/linux/pm.h:343:22: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+           SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+                               ^
+   include/linux/pm.h:313:26: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+           .suspend = pm_sleep_ptr(suspend_fn), \
+                                   ^
+   include/linux/pm.h:439:65: note: expanded from macro 'pm_sleep_ptr'
+   #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+                                                                   ^
+   include/linux/kernel.h:57:38: note: expanded from macro 'PTR_IF'
+   #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+                                              ^
+   drivers/net/ethernet/intel/igc/igc_main.c:6706:27: note: '__igc_suspend' declared here
+   static int __maybe_unused __igc_suspend(struct device *dev)
+                             ^
+>> drivers/net/ethernet/intel/igc/igc_main.c:6838:26: error: use of undeclared identifier 'igc_suspend'; did you mean '__igc_suspend'?
+           SET_SYSTEM_SLEEP_PM_OPS(igc_suspend, igc_resume)
+                                   ^~~~~~~~~~~
+                                   __igc_suspend
+   include/linux/pm.h:343:22: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+           SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+                               ^
+   include/linux/pm.h:315:25: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+           .freeze = pm_sleep_ptr(suspend_fn), \
+                                  ^
+   include/linux/pm.h:439:65: note: expanded from macro 'pm_sleep_ptr'
+   #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+                                                                   ^
+   include/linux/kernel.h:57:38: note: expanded from macro 'PTR_IF'
+   #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+                                              ^
+   drivers/net/ethernet/intel/igc/igc_main.c:6706:27: note: '__igc_suspend' declared here
+   static int __maybe_unused __igc_suspend(struct device *dev)
+                             ^
+>> drivers/net/ethernet/intel/igc/igc_main.c:6838:26: error: use of undeclared identifier 'igc_suspend'; did you mean '__igc_suspend'?
+           SET_SYSTEM_SLEEP_PM_OPS(igc_suspend, igc_resume)
+                                   ^~~~~~~~~~~
+                                   __igc_suspend
+   include/linux/pm.h:343:22: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+           SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+                               ^
+   include/linux/pm.h:317:27: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+           .poweroff = pm_sleep_ptr(suspend_fn), \
+                                    ^
+   include/linux/pm.h:439:65: note: expanded from macro 'pm_sleep_ptr'
+   #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+                                                                   ^
+   include/linux/kernel.h:57:38: note: expanded from macro 'PTR_IF'
+   #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+                                              ^
+   drivers/net/ethernet/intel/igc/igc_main.c:6706:27: note: '__igc_suspend' declared here
+   static int __maybe_unused __igc_suspend(struct device *dev)
+                             ^
+   3 errors generated.
 
+
+vim +6838 drivers/net/ethernet/intel/igc/igc_main.c
+
+bc23aa949aeba0 Sasha Neftin 2020-01-29  6835  
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6836  #ifdef CONFIG_PM
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6837  static const struct dev_pm_ops igc_pm_ops = {
+9513d2a5dc7f3f Sasha Neftin 2019-11-14 @6838  	SET_SYSTEM_SLEEP_PM_OPS(igc_suspend, igc_resume)
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6839  	SET_RUNTIME_PM_OPS(igc_runtime_suspend, igc_runtime_resume,
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6840  			   igc_runtime_idle)
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6841  };
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6842  #endif
+9513d2a5dc7f3f Sasha Neftin 2019-11-14  6843  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
