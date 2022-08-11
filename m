@@ -1,94 +1,138 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4004C74
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 22:28:31 +0000 (UTC)
-Received: by mail-ej1-f46.google.com with SMTP id uj29so36004765ejc.0
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 15:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PAb2yvZK0Azo5fYoLsSkJfhNFnrLBlWmRLOEh1fEo6U=;
-        b=Esms5UFKrq+sy3bMqEsnXEBAzrb1Z4PlxF4f1306MBOPocD9GZhkWOMGTMMWtP1ZKl
-         yW5NJw9YfyBE/2nA7zZSAx3T6C/+J7LJdx+oGUQhIKFZXTIWU5yVxfIVwy01zjl2HbLM
-         8urB3rWUKKGEL7AHHfqV/YUUOm3BcXCVKghgc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PAb2yvZK0Azo5fYoLsSkJfhNFnrLBlWmRLOEh1fEo6U=;
-        b=eiy004wz3CEHBnDHCTYBb0vIFUcIyrU+LMizQ7JBF1gsjYzY8zRYt6E8JbTE4Py0I6
-         fLFSM3cfuanTYiw83aaoUnOy6jU0HWex0fRKQJGBbSVeqZ9uDmTEmwyPBRKeySFFuWy6
-         wNgq09/C/hETfKyzAMJmXqIw2gVP9Tvgk+p/jxEdE0KvXsIqJmCBaHlONG9twm+JFi4a
-         eOkT7kR8EKpf0x8QLpw2THCnFhNZDD5JhI5x0cvsd90PFLkz2PM68eIukUP1PZmRp0zM
-         bAICzkFt5sqqxlHc+lpHM/F2cjdXrAbMvko3dIdLO6N1bvgSx4/vVse/+yaID2px075T
-         Ps8w==
-X-Gm-Message-State: ACgBeo3rAFNu6FTW5fCI3lemzKIL8K9UKZFwYtWr+TdH9g6K+HZeZD5N
-	5gKew0N2fxqHm8/ODnWY9Ni+AXAhbVR2d9bT
-X-Google-Smtp-Source: AA6agR5LKjs6QlAknsb/8eiU78rg0DG45jxW4pgOyBhb/0oQehKUrhPKT/tyOYw6yuE6vLnLh6vhtg==
-X-Received: by 2002:a17:907:1688:b0:730:b3ae:347 with SMTP id hc8-20020a170907168800b00730b3ae0347mr779694ejc.756.1660256910072;
-        Thu, 11 Aug 2022 15:28:30 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170906d00700b00726c0e63b94sm144024ejy.27.2022.08.11.15.28.28
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 15:28:28 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id z12so22804658wrs.9
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 15:28:28 -0700 (PDT)
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr500346wrv.97.1660256907686; Thu, 11 Aug
- 2022 15:28:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475C328F7
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 22:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660257733; x=1691793733;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/U6rzMO88TQdePdqFGiKcIg5zqKeKBvTMkqsW6yj2Fc=;
+  b=Mte66H9Xdgs30vL/VUWRobR0Mb7+fDVdygewbnJVrmiXQL8M9ZYQiIMS
+   aBFx6JfgSr2OSx7/B56iDYfSzRQbcItwx10kExLXd9fRb6SUz85O5hwYV
+   1KjosNkYb/Ip3ePkP6Mlsj4eruHjsuOeqOMqhMnj6SzCvxXo0W+RLP9el
+   wEXzWtYQl1lB3pZ1FIaVBKTVGspF2PkDgs+1AYXg9Zz0rdon87Rart0kT
+   QFkKtUgVEpnSUSeP4YF8Hh1NXMyydggRcLf4BBPBPZQ2IhMmv43b7kn3p
+   K9x7z7Pc1wFutXR1oP9h+UhzhtNSTWBaxXUC/4KKASQFthd/kbnPfl9y7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="278425155"
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="278425155"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 15:42:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="581851451"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Aug 2022 15:42:11 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMGsU-0000kT-37;
+	Thu, 11 Aug 2022 22:42:10 +0000
+Date: Fri, 12 Aug 2022 06:42:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [riscv:for-next 3/14] arch/riscv/mm/dma-noncoherent.c:107:6:
+ warning: variable 'cbom_hartid' is uninitialized when used here
+Message-ID: <202208120635.bMNAowDE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YvSxeDkmwxcJL+Z0@debian> <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
- <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
- <CAKwvOdnQjgtwqFXLv+QtWPfpHosM5fxE5oqbX0VUD53F8L6bRg@mail.gmail.com>
- <CAHk-=wgJA=e-CLcvU5LRKu0bMLeAewXtOM6as1hFVeQAVkMPbg@mail.gmail.com> <CAKwvOdkUc=8DD938in5PMeGYAn3PEWp4E_W8qEHq_y7Smy8+mQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkUc=8DD938in5PMeGYAn3PEWp4E_W8qEHq_y7Smy8+mQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 11 Aug 2022 15:28:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiW_LjFRE9wFMj-j2gp9=u8jqrMVZtT3n4-oJWtQ6E0iQ@mail.gmail.com>
-Message-ID: <CAHk-=wiW_LjFRE9wFMj-j2gp9=u8jqrMVZtT3n4-oJWtQ6E0iQ@mail.gmail.com>
-Subject: Re: mainline build failure for arm64 allmodconfig with clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Joe Perches <joe@perches.com>, Nathan Chancellor <nathan@kernel.org>, 
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Aug 11, 2022 at 3:04 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Yeah, I guess adding a truncate to the caller is kind of unnecessary
-> if you're still going to use %hhd anyways.  What are your thoughts on
-> this bug I've filed?
-> https://github.com/llvm/llvm-project/issues/57102
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git for-next
+head:   d8357e3bf8f7aabd98bf4dc2709ee877b741cefc
+commit: 3aefb2ee5bdd4a8976298415a5a017bf9844bfd5 [3/14] riscv: implement Zicbom-based CMO instructions + the t-head variant
+config: riscv-randconfig-r042-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120635.bMNAowDE-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?id=3aefb2ee5bdd4a8976298415a5a017bf9844bfd5
+        git remote add riscv https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+        git fetch --no-tags riscv for-next
+        git checkout 3aefb2ee5bdd4a8976298415a5a017bf9844bfd5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
-I really wish that bug report was about how *wrong* it is to warn
-about that thing.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sure, a cast adds pointless code to the caller, and is overhead, but
-that isn't really the argument here.
+All warnings (new ones prefixed by >>):
 
-The argument really is that "if you force the value to always be a
-char, then %hhd is pointless"
+>> arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_hartid' is uninitialized when used here [-Wuninitialized]
+                                           cbom_hartid, hartid);
+                                           ^~~~~~~~~~~
+   include/linux/printk.h:517:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                              ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variable 'cbom_hartid' to silence this warning
+                   int cbom_hartid;
+                                  ^
+                                   = 0
+   1 warning generated.
 
-Basically, %hhu and %hhd simply do not make sense if you always
-require the value to be cast to the right range, because for those
-cases the much simpler and more straightforward %d and %u already
-work.
 
-So a warning that says "you didn't cast it to the rigth range" is
-truly fundamentally broken.
+vim +/cbom_hartid +107 arch/riscv/mm/dma-noncoherent.c
 
-So it's not about "a cast generates worse code". It's really about
-"that warning is WRONG".
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   77  
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   78  #ifdef CONFIG_RISCV_ISA_ZICBOM
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   79  void riscv_init_cbom_blocksize(void)
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   80  {
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   81  	struct device_node *node;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   82  	int ret;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   83  	u32 val;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   84  
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   85  	for_each_of_cpu_node(node) {
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   86  		unsigned long hartid;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   87  		int cbom_hartid;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   88  
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   89  		ret = riscv_of_processor_hartid(node, &hartid);
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   90  		if (ret)
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   91  			continue;
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   92  
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   93  		if (hartid < 0)
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   94  			continue;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   95  
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   96  		/* set block-size for cbom extension if available */
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   97  		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   98  		if (ret)
+1631ba1259d6d7 Heiko Stuebner 2022-07-07   99  			continue;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  100  
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  101  		if (!riscv_cbom_block_size) {
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  102  			riscv_cbom_block_size = val;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  103  			cbom_hartid = hartid;
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  104  		} else {
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  105  			if (riscv_cbom_block_size != val)
+3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10  106  				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
+1631ba1259d6d7 Heiko Stuebner 2022-07-07 @107  					cbom_hartid, hartid);
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  108  		}
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  109  	}
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  110  }
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  111  #endif
+1631ba1259d6d7 Heiko Stuebner 2022-07-07  112  
 
-          Linus
+:::::: The code at line 107 was first introduced by commit
+:::::: 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a riscv: Add support for non-coherent devices using zicbom extension
+
+:::::: TO: Heiko Stuebner <heiko@sntech.de>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
