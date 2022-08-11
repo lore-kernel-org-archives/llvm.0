@@ -1,143 +1,99 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB64A2CA7
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660238821; x=1691774821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9sI4oxnww2fiOkHy8m67wJBameA5pi7QXPxfqb0WHaI=;
-  b=GWPXhD4QBTnr9JNlYdS81WSqST8R1qrh7wboY7+aVU0Sv91B1ZeUaeWX
-   W+Bood5SjI1AksOzeRR4V8Wh//+Wtluzr3S9+GBV1xcDNdPyZxPDT9mFP
-   BGT8BRM1847v+8htj8rd4x5VeEDU3uRsI2KxJ4bJDyWPpU2ET1ue5Ld15
-   BwyHStNJe101Ec/cmpK0c/ZEpFh+4cF0InQqdoDFtqUkwipaYbhHzxDrd
-   Fd8Hr86eIuj+/ieaZskCfweH2EN3MJTH83QTxQuBwzDNI3GYqYHgE4XHt
-   FoyW6x8IBoF5Ca4TnMX9WsXyaudJ6EvWHGEqSWL4nNBe7rnTJ8yckycYs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="288981364"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="288981364"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 10:27:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="933406465"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2022 10:26:59 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMBxS-0000SR-1J;
-	Thu, 11 Aug 2022 17:26:58 +0000
-Date: Fri, 12 Aug 2022 01:26:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: oushixiong <oushixiong@kylinos.cn>, Dave Airlie <airlied@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	oushixiong <oushixiong@kylinos.cn>
-Subject: Re: [PATCH] drm/ast: radeon amdgpu for ast add prime
-Message-ID: <202208120134.9nXiGv1Q-lkp@intel.com>
-References: <20220809114439.2063863-1-oushixiong@kylinos.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDD046A8
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:00:47 +0000 (UTC)
+Received: by mail-pl1-f201.google.com with SMTP id d3-20020a170902cec300b0016f04e2e730so11646898plg.1
+        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
+        b=hUouphILeY+7ZcreKxlU1ukdbwKI/z0PLnXdxgXRyGG+IFml1nB8pn1mmAe2cXc0XR
+         FMB3hhPzAuGQtoJxfAw5hwOsTQmpXmtOFkydYbAXW7d6pcehx4QDo49aKDsCj5o8A324
+         /VCxSnrbNVogJeIsO+bCb970/vWvnt5k/acHwbkLauSk5dpHDBgRKIdR2Bkj4PH/QF37
+         ypfexny7+yt3N7PuLCfp3J9Tmb25wfvkeAm7zojmAueiEHE+y+xz1lf/57Ohd4orIeK5
+         k+zd6pTc3V3h7Ji5hdleQh8BRWqLkmVw5x17GN10XTcnp6/GW/uMVMsVg/H2DMpjWpZY
+         3ieg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
+        b=KsVF9oYYY0kqy38d3vR3E5+PlF5nvtLcCxnZkgyZdLnoPvO5uURX9G2zK9lBqMfvIG
+         qJQXMyxZj9To5Zs9DF7dOg/TgJaACBwRbnTUNoyD+AIt2BZkG/XmUGBZ+OMJ/uhBgBLz
+         PchmlSc/gBf01BiRrargIWQv5VSJ9SWme0lcf9D/xP95mHdfSksRsc7INmo+7TH9owcr
+         HMquKpsDbzAZ2r3PrPnacW6kvBEDXD4PYOwFvWaF/qxWnWlFOUvkK4trHWPOx7AF/92U
+         eX84lY98uQBODZs4KS422w/jH68YsW8zn+RkJ82HPYQDb9JTIfh8MxaVepDw8FdWslqY
+         ma5w==
+X-Gm-Message-State: ACgBeo2CLz1fK7h72ZjQM0P0GWt/lgq45SlauYzS2vYq9dt2Ev2/4kpF
+	WtNkPnIK19aV1ANjw1+BD72dYl6W0eLyMQ==
+X-Google-Smtp-Source: AA6agR6WWvqchDPxP5kAGNu/Ulq/79XUJejAqx8e373GcLQEy+qt6A+bV5PazXaTWuXtO6rWlR/bUqmxn0Ytqg==
+X-Received: from acdunlap03.bve.corp.google.com ([2620:15c:29:203:7899:c3d8:a49a:7086])
+ (user=acdunlap job=sendgmr) by 2002:a17:90b:20e:b0:1f5:26b0:f506 with SMTP id
+ fy14-20020a17090b020e00b001f526b0f506mr187731pjb.65.1660240847029; Thu, 11
+ Aug 2022 11:00:47 -0700 (PDT)
+Date: Thu, 11 Aug 2022 11:00:10 -0700
+Message-Id: <20220811180010.3067457-1-acdunlap@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809114439.2063863-1-oushixiong@kylinos.cn>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH] x86/asm: Force native_apic_mem_read to use mov
+From: Adam Dunlap <acdunlap@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, 
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
+	Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
+	Marc Orr <marcorr@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi oushixiong,
+Previously, when compiled with clang, native_apic_mem_read gets inlined
+into __xapic_wait_icr_idle and optimized to a testl instruction. When
+run in a VM with SEV-ES enabled, it attempts to emulate this
+instruction, but the emulator does not support it. Instead, use inline
+assembly to force native_apic_mem_read to use the mov instruction which
+is supported by the emulator.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Adam Dunlap <acdunlap@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
+Reviewed-by: Jacob Xu <jacobhxu@google.com>
+---
+ arch/x86/include/asm/apic.h | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next linus/master v5.19 next-20220811]
-[cannot apply to drm-misc/drm-misc-next drm-tip/drm-tip]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220811-115710
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm64-randconfig-r033-20220810 (https://download.01.org/0day-ci/archive/20220812/202208120134.9nXiGv1Q-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/1b9b79a00132f2917ca66bea714a6f21fc939b0f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220811-115710
-        git checkout 1b9b79a00132f2917ca66bea714a6f21fc939b0f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/ast/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/ast/ast_drv.c:54:24: warning: no previous prototype for function 'ast_gem_prime_import_sg_table' [-Wmissing-prototypes]
-   struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-                          ^
-   drivers/gpu/drm/ast/ast_drv.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-   ^
-   static 
-   1 warning generated.
---
->> drivers/gpu/drm/ast/ast_mode.c:1713:5: warning: no previous prototype for function 'ast_handle_damage' [-Wmissing-prototypes]
-   int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-       ^
-   drivers/gpu/drm/ast/ast_mode.c:1713:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-   ^
-   static 
->> drivers/gpu/drm/ast/ast_mode.c:1772:5: warning: no previous prototype for function 'ast_user_framebuffer_dirty' [-Wmissing-prototypes]
-   int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-       ^
-   drivers/gpu/drm/ast/ast_mode.c:1772:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-   ^
-   static 
->> drivers/gpu/drm/ast/ast_mode.c:1815:1: warning: no previous prototype for function 'ast_gem_fb_create_with_dirty' [-Wmissing-prototypes]
-   ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-   ^
-   drivers/gpu/drm/ast/ast_mode.c:1814:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct drm_framebuffer *
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/ast_gem_prime_import_sg_table +54 drivers/gpu/drm/ast/ast_drv.c
-
-    53	
-  > 54	struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-    55						struct dma_buf_attachment *attach,
-    56						struct sg_table *sg)
-    57	{
-    58		struct drm_gem_vram_object *gbo;
-    59		struct dma_resv *resv = attach->dmabuf->resv;
-    60	
-    61		ww_mutex_lock(&resv->lock, NULL);
-    62		gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0, sg, resv);
-    63		ww_mutex_unlock(&resv->lock);
-    64	
-    65		if (IS_ERR(gbo))
-    66			return NULL;
-    67	
-    68		return &gbo->bo.base;
-    69	}
-    70	
-
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 3415321c8240..281db79e76a9 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+ 
+ static inline u32 native_apic_mem_read(u32 reg)
+ {
+-	return *((volatile u32 *)(APIC_BASE + reg));
++	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
++	u32 out;
++
++	/*
++	 * Functionally, what we want to do is simply return *addr. However,
++	 * this accesses an MMIO which may need to be emulated in some cases.
++	 * The emulator doesn't necessarily support all instructions, so we
++	 * force the read from addr to use a mov instruction.
++	 */
++	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
++
++	return out;
+ }
+ 
+ extern void native_apic_wait_icr_idle(void);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1.559.g78731f0fdb-goog
+
