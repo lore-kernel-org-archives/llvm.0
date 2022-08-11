@@ -1,42 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475C328F7
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 22:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC70F4A02
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 23:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660257733; x=1691793733;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/U6rzMO88TQdePdqFGiKcIg5zqKeKBvTMkqsW6yj2Fc=;
-  b=Mte66H9Xdgs30vL/VUWRobR0Mb7+fDVdygewbnJVrmiXQL8M9ZYQiIMS
-   aBFx6JfgSr2OSx7/B56iDYfSzRQbcItwx10kExLXd9fRb6SUz85O5hwYV
-   1KjosNkYb/Ip3ePkP6Mlsj4eruHjsuOeqOMqhMnj6SzCvxXo0W+RLP9el
-   wEXzWtYQl1lB3pZ1FIaVBKTVGspF2PkDgs+1AYXg9Zz0rdon87Rart0kT
-   QFkKtUgVEpnSUSeP4YF8Hh1NXMyydggRcLf4BBPBPZQ2IhMmv43b7kn3p
-   K9x7z7Pc1wFutXR1oP9h+UhzhtNSTWBaxXUC/4KKASQFthd/kbnPfl9y7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="278425155"
+  t=1660259601; x=1691795601;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cso+kljKDXtgwByuJu5WyCUuLX2kq7rS/XUGJ5gLcsI=;
+  b=O1ugOdAy2E2WReKv2OFRDmwO/BdiWYO4u5L13jlfxhUukmD+h0B1GEEx
+   6f66NHlvonEbmyrylVJtOWgboFk9Ytb2/tsG4zMq017TWQuwQ3bksQR5p
+   TzxkOBoFTAyna/A/2lwxDhuZRr5+UDMEUvQIjlaMyEHp6kIaYD6Im8X9y
+   sDw92KwIsoOn8Uy6M/7RI+WqEisGIYUPtP9o+Q828kI3gtwTyURQHnJZ7
+   TU4B9HgzzkQTvyF2PR+p0ykOmafxMbrY6Wf/stJsss64b+lczsXFLkWC5
+   WiNYjQk4FTGI1tWZzLBGilmZcBtGsJfq/OYWVjkb662k4dAak+pstsw7V
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="292275918"
 X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="278425155"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 15:42:12 -0700
+   d="scan'208";a="292275918"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 16:13:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="581851451"
+   d="scan'208";a="673883992"
 Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Aug 2022 15:42:11 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2022 16:13:12 -0700
 Received: from kbuild by cfab306db114 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMGsU-0000kT-37;
-	Thu, 11 Aug 2022 22:42:10 +0000
-Date: Fri, 12 Aug 2022 06:42:00 +0800
+	id 1oMHMV-0000mN-2X;
+	Thu, 11 Aug 2022 23:13:11 +0000
+Date: Fri, 12 Aug 2022 07:12:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [riscv:for-next 3/14] arch/riscv/mm/dma-noncoherent.c:107:6:
- warning: variable 'cbom_hartid' is uninitialized when used here
-Message-ID: <202208120635.bMNAowDE-lkp@intel.com>
+To: Bo Liu <liubo03@inspur.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] virtio_vdpa: support the arg sizes of find_vqs()
+Message-ID: <202208120746.SFwH7EXv-lkp@intel.com>
+References: <20220810085151.7251-1-liubo03@inspur.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,93 +45,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220810085151.7251-1-liubo03@inspur.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git for-next
-head:   d8357e3bf8f7aabd98bf4dc2709ee877b741cefc
-commit: 3aefb2ee5bdd4a8976298415a5a017bf9844bfd5 [3/14] riscv: implement Zicbom-based CMO instructions + the t-head variant
-config: riscv-randconfig-r042-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120635.bMNAowDE-lkp@intel.com/config)
+Hi Bo,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19]
+[cannot apply to next-20220811]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Liu/virtio_vdpa-support-the-arg-sizes-of-find_vqs/20220810-165406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d4252071b97d2027d246f6a82cbee4d52f618b47
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220812/202208120746.SFwH7EXv-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?id=3aefb2ee5bdd4a8976298415a5a017bf9844bfd5
-        git remote add riscv https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-        git fetch --no-tags riscv for-next
-        git checkout 3aefb2ee5bdd4a8976298415a5a017bf9844bfd5
+        # https://github.com/intel-lab-lkp/linux/commit/49428ec00a2ac66aac1f626fe412aaac952353f3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bo-Liu/virtio_vdpa-support-the-arg-sizes-of-find_vqs/20220810-165406
+        git checkout 49428ec00a2ac66aac1f626fe412aaac952353f3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_hartid' is uninitialized when used here [-Wuninitialized]
-                                           cbom_hartid, hartid);
-                                           ^~~~~~~~~~~
-   include/linux/printk.h:517:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                              ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variable 'cbom_hartid' to silence this warning
-                   int cbom_hartid;
-                                  ^
-                                   = 0
-   1 warning generated.
+>> drivers/virtio/virtio_vdpa.c:289:27: error: use of undeclared identifier 'sizes'
+                                                     names[i], sizes ? sizes[i] : 0,
+                                                                       ^
+   drivers/virtio/virtio_vdpa.c:289:19: error: use of undeclared identifier 'sizes'
+                                                     names[i], sizes ? sizes[i] : 0,
+                                                               ^
+   2 errors generated.
 
 
-vim +/cbom_hartid +107 arch/riscv/mm/dma-noncoherent.c
+vim +/sizes +289 drivers/virtio/virtio_vdpa.c
 
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   77  
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   78  #ifdef CONFIG_RISCV_ISA_ZICBOM
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   79  void riscv_init_cbom_blocksize(void)
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   80  {
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   81  	struct device_node *node;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   82  	int ret;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   83  	u32 val;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   84  
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   85  	for_each_of_cpu_node(node) {
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   86  		unsigned long hartid;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   87  		int cbom_hartid;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   88  
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   89  		ret = riscv_of_processor_hartid(node, &hartid);
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   90  		if (ret)
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   91  			continue;
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10   92  
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   93  		if (hartid < 0)
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   94  			continue;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   95  
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   96  		/* set block-size for cbom extension if available */
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   97  		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   98  		if (ret)
-1631ba1259d6d7 Heiko Stuebner 2022-07-07   99  			continue;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  100  
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  101  		if (!riscv_cbom_block_size) {
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  102  			riscv_cbom_block_size = val;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  103  			cbom_hartid = hartid;
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  104  		} else {
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  105  			if (riscv_cbom_block_size != val)
-3aefb2ee5bdd4a Palmer Dabbelt 2022-08-10  106  				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
-1631ba1259d6d7 Heiko Stuebner 2022-07-07 @107  					cbom_hartid, hartid);
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  108  		}
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  109  	}
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  110  }
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  111  #endif
-1631ba1259d6d7 Heiko Stuebner 2022-07-07  112  
-
-:::::: The code at line 107 was first introduced by commit
-:::::: 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a riscv: Add support for non-coherent devices using zicbom extension
-
-:::::: TO: Heiko Stuebner <heiko@sntech.de>
-:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+   268	
+   269	static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+   270					struct virtqueue *vqs[],
+   271					vq_callback_t *callbacks[],
+   272					const char * const names[],
+   273					const bool *ctx,
+   274					struct irq_affinity *desc)
+   275	{
+   276		struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
+   277		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+   278		const struct vdpa_config_ops *ops = vdpa->config;
+   279		struct vdpa_callback cb;
+   280		int i, err, queue_idx = 0;
+   281	
+   282		for (i = 0; i < nvqs; ++i) {
+   283			if (!names[i]) {
+   284				vqs[i] = NULL;
+   285				continue;
+   286			}
+   287	
+   288			vqs[i] = virtio_vdpa_setup_vq(vdev, queue_idx++, callbacks[i],
+ > 289							  names[i], sizes ? sizes[i] : 0,
+   290							  ctx ? ctx[i] : false);
+   291			if (IS_ERR(vqs[i])) {
+   292				err = PTR_ERR(vqs[i]);
+   293				goto err_setup_vq;
+   294			}
+   295		}
+   296	
+   297		cb.callback = virtio_vdpa_config_cb;
+   298		cb.private = vd_dev;
+   299		ops->set_config_cb(vdpa, &cb);
+   300	
+   301		return 0;
+   302	
+   303	err_setup_vq:
+   304		virtio_vdpa_del_vqs(vdev);
+   305		return err;
+   306	}
+   307	
 
 -- 
 0-DAY CI Kernel Test Service
