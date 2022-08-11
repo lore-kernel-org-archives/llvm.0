@@ -1,43 +1,53 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC062CA7
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660237630; x=1691773630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hECvO7Fdc4M8tAdkGpZzwdSY9HXo0T7T/J/5VkraXNo=;
-  b=LHxJJv/ALeb78YSsc02lFx3Xl1gLGa4n1i+YvabGQRP2McYw1iuP/8mj
-   0Kjby0nnuBj5ve6ZdoW/MR14wWfzZvtuF9GhB4g8WAeKKWFZn18njCipF
-   DQqmRQ/CzNEaWFpKlzYKblU8wG4i5aA2xhqsINT/PABipFlggFB3aC6+C
-   ndgGV5gft+U2KtO8R3O9uhxcaBxUImA8Sb1fu7hf1cJiFHK7dLC4LXq6h
-   xQ1Ak5loLshjbX8aZH6ZMNvvLfQn4MrjXnhiDTTZiJpCCvTHMcYeSfn0t
-   /IouEJNrHCC1IXWwh8yuLtpUWhNLi1VCqSph/JXAjpdA7GpQPXv7Wnfdj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="355411375"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="355411375"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 10:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="638590021"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Aug 2022 10:06:57 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMBe5-0000Qx-0E;
-	Thu, 11 Aug 2022 17:06:57 +0000
-Date: Fri, 12 Aug 2022 01:06:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Stultz <jstultz@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC][PATCH 1/2] sched: Avoid placing RT threads on cores
- handling long softirqs
-Message-ID: <202208120033.qCqng8xp-lkp@intel.com>
-References: <20220811015758.3001641-2-jstultz@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0B12CA7
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:23:06 +0000 (UTC)
+Received: by mail-wr1-f50.google.com with SMTP id l4so22034030wrm.13
+        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 10:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=j6b8kTrT56pwiU/IWqIOVmZdn5YfEPHXgPdh8M5ebwU=;
+        b=h7L4neJIrIWcIOjwXfQEB9hwJK4xq6R+BiWBrtmxIksUhSNdQH7p/IZXM9NG/eSM0h
+         hLy9cVMlPI6SVm2QoJ1zzD7Gd6wSFI6/G6O+rDkuaS9WlYydFZoX2rYKpCi+x7IPcC++
+         q/TYrO9uxaqzIZzdL+odlDYDp74eWkbaepATdxwmBwCfOs2zrTyDfpkmOfUYuPxzXgbM
+         g5sk4lNQFZLRaJQAoVmCUlpeACUBFmJjwo8ovs3BUn9HrcCPg7vju1kmtt4ByxF2mYln
+         bnQdbwD5EfXAeXR8VozOrflRRy3ZxW2+WSdWPruAFDr5XlVVWNQ4MNBSCs8LWx2HxJ48
+         CtOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=j6b8kTrT56pwiU/IWqIOVmZdn5YfEPHXgPdh8M5ebwU=;
+        b=fUYD04RL+lgf5CRsPCnswTGJx5lMknozS9O3HkLFcg2GHb3GDZunSq4YzYmAdYdXxx
+         fZSTkNt6MNJTbUoajwzEjXRx925p8EtLUhk6l3RMZVtG20v7/cWBN7j+/6slxwI3hO2e
+         euFk6sc7WM07MO7Vfi93QkcYiDc+RJA1/NGB44IvmbKpJuo3NPOMXliOXjn8DzgoGQrQ
+         pe/vhu/7WXqBpucuyfsr1mXdxRsvykEKgzzCnMQPdoxhuTnRHMeMA7kM8s1Z3lsIeefh
+         MfAsezGpwOE+aIKDjoWBHhFFAVytjjlN6wYvg8m3WlhlqDiwybjet5ZHvoVMj/Ip63jZ
+         1R9g==
+X-Gm-Message-State: ACgBeo2LjLoLKkySKbi0j6IZH+2B6wZ18+AtE10rE21E046rl9n6lUDT
+	QJP1esodKurQ1+G8unCYjNU=
+X-Google-Smtp-Source: AA6agR7icK2jhFDxh4B/98tzwNsmxNFF++Z70qopjEziOWND2bqMvSdWSrJzRBBJ2glEiKAihkZd2g==
+X-Received: by 2002:adf:f286:0:b0:21e:f0dc:3df0 with SMTP id k6-20020adff286000000b0021ef0dc3df0mr21793wro.377.1660238584739;
+        Thu, 11 Aug 2022 10:23:04 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id h4-20020a1ccc04000000b003a545ff43c5sm6362884wmb.45.2022.08.11.10.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 10:23:03 -0700 (PDT)
+Date: Thu, 11 Aug 2022 18:22:54 +0100
+From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>
+Cc: virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-next@vger.kernel.org
+Subject: build failure of next-20220811 due to d79b32c2e4a4 ("vdpa_sim_blk:
+ add support for discard and write-zeroes")
+Message-ID: <YvU67iF4z5gB4ZYk@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,59 +56,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220811015758.3001641-2-jstultz@google.com>
 
-Hi John,
+Hi All,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on linus/master v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Not sure if it has been reported, builds of arm64 with clang failed to
+build next-20220811 with the error:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/Softirq-rt-Optimizations/20220811-100030
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8648f92a66a323ed01903d2cbb248cdbe2f312d9
-config: arm64-randconfig-r002-20220810 (https://download.01.org/0day-ci/archive/20220812/202208120033.qCqng8xp-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3fceb870d95188903796394cbe5fd2493ee872c6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Stultz/Softirq-rt-Optimizations/20220811-100030
-        git checkout 3fceb870d95188903796394cbe5fd2493ee872c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_policy.c:45:
->> kernel/sched/rt.c:1634:6: warning: no previous prototype for function 'rt_task_fits_capacity_and_may_preempt' [-Wmissing-prototypes]
-   bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
-        ^
-   kernel/sched/rt.c:1634:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
-   ^
-   static 
-   1 warning generated.
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
+                struct virtio_blk_discard_write_zeroes range;
+                ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
+                if (to_pull != sizeof(range)) {
+                                      ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
+                                to_pull, sizeof(range));
+                                                ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
+                bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
+                                                                         ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
+                sector = vdpasim64_to_cpu(vdpasim, range.sector);
+                                                   ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
+                num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
+                                                        ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
+                flags = vdpasim32_to_cpu(vdpasim, range.flags);
+                                                  ^
+drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+                u32 num_sectors, flags;
+                    ^
+8 errors generated.
 
 
-vim +/rt_task_fits_capacity_and_may_preempt +1634 kernel/sched/rt.c
+git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
+And, reverting that commit has fixed the build failure.
 
-  1633	
-> 1634	bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
-  1635	{
-  1636		return task_may_preempt(p, cpu) && rt_task_fits_capacity(p, cpu);
-  1637	}
-  1638	
+I will be happy to test any patch or provide any extra log if needed.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+--
+Regards
+Sudip
