@@ -1,105 +1,104 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959E233C6
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 15:39:57 +0000 (UTC)
-Received: by mail-ej1-f42.google.com with SMTP id fy5so3387024ejc.3
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 08:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=x6h3ZUYE+fSHbOcAtnhM53hC5fi6FUTsoF2x5uuPJ2I=;
-        b=HeMQ8zAXI4QJmplndokyGN4KBA2GRue+xq74R5DjkSz15v0bKh6AhytDDiX37HKdpR
-         ho0aHxKcelq9/L6PPYv9w2sMZURJjljYqPVMZ8dH8/fres9luFz8AHpK4pO9dGonPjXy
-         0MmrvWv42qdBW0TVMQOjQ0rRic8iIwEMO3R/Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=x6h3ZUYE+fSHbOcAtnhM53hC5fi6FUTsoF2x5uuPJ2I=;
-        b=7VQp/NRh1iMhnws70w6p1+Rv5wiFZW1wY+WO23cZUC3zbciV+JLXzEGbZ/XpbLxkUJ
-         NwKxvfBNfOg0pSaSGDgWGdcEaI5Nivtze3/kItwWrO5CO1KG3Jqnaj9MGIDjzKiRvLwV
-         x+gt6TWQ2z67BZx8NE7CCUUp0RMQ1tlt8IQjSeg7WOOtqa1s0XKpGpCn+ji9uaMB62st
-         EpBvtcMJksllM0QICTv//1TAcxRCSERBqgiuB26sbhmyH/uCmvzCO0gPjXtDKUpcyFRK
-         QFhUHgEYABpVqLaZyo0umOXN1O6ZGn/NexA5l0Q72qHi1uA7NLtweU1H0EK2yJn8HA21
-         6grg==
-X-Gm-Message-State: ACgBeo3We/omku1g/51sIMUIE7k+7uWzF5G443zpbdNgMK0l5dtESPgT
-	3YXonqpDLofteWpoNUDtCCViimNn7tiTCy6G
-X-Google-Smtp-Source: AA6agR4pUVdgXFsB70wOH5lcPEDFF6ZYRN8d9BbTYQzToz7Pe/oOwJ/Qt3yBArZHizuwFiJBH59+4g==
-X-Received: by 2002:a17:906:98c8:b0:730:7ada:87a7 with SMTP id zd8-20020a17090698c800b007307ada87a7mr25169098ejb.748.1660232395589;
-        Thu, 11 Aug 2022 08:39:55 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id q17-20020a17090676d100b007308bebce51sm3644770ejn.171.2022.08.11.08.39.53
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 08:39:53 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id l22so21780729wrz.7
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 08:39:53 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr11935404wri.442.1660232392668; Thu, 11
- Aug 2022 08:39:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC062CA7
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660237630; x=1691773630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hECvO7Fdc4M8tAdkGpZzwdSY9HXo0T7T/J/5VkraXNo=;
+  b=LHxJJv/ALeb78YSsc02lFx3Xl1gLGa4n1i+YvabGQRP2McYw1iuP/8mj
+   0Kjby0nnuBj5ve6ZdoW/MR14wWfzZvtuF9GhB4g8WAeKKWFZn18njCipF
+   DQqmRQ/CzNEaWFpKlzYKblU8wG4i5aA2xhqsINT/PABipFlggFB3aC6+C
+   ndgGV5gft+U2KtO8R3O9uhxcaBxUImA8Sb1fu7hf1cJiFHK7dLC4LXq6h
+   xQ1Ak5loLshjbX8aZH6ZMNvvLfQn4MrjXnhiDTTZiJpCCvTHMcYeSfn0t
+   /IouEJNrHCC1IXWwh8yuLtpUWhNLi1VCqSph/JXAjpdA7GpQPXv7Wnfdj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="355411375"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="355411375"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 10:06:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="638590021"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Aug 2022 10:06:57 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMBe5-0000Qx-0E;
+	Thu, 11 Aug 2022 17:06:57 +0000
+Date: Fri, 12 Aug 2022 01:06:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Stultz <jstultz@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC][PATCH 1/2] sched: Avoid placing RT threads on cores
+ handling long softirqs
+Message-ID: <202208120033.qCqng8xp-lkp@intel.com>
+References: <20220811015758.3001641-2-jstultz@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YvSxeDkmwxcJL+Z0@debian> <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
-In-Reply-To: <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 11 Aug 2022 08:39:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
-Message-ID: <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
-Subject: Re: mainline build failure for arm64 allmodconfig with clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811015758.3001641-2-jstultz@google.com>
 
-On Thu, Aug 11, 2022 at 8:05 AM Nathan Chancellor <nathan@kernel.org> wrote=
-:
->
-> Right, these are exposed by commit 258fafcd0683 ("Makefile.extrawarn:
-> re-enable -Wformat for clang").
+Hi John,
 
-Christ. Why is clang's format warning SO COMPLETELY BROKEN?
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linus/master v5.19 next-20220811]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The warning is *WRONG*, for chrissake. Printing an 'int' with '%hhu'
-is perfectly fine, and has well-defined semantics, and is what you
-*want* to do in some cases.
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/Softirq-rt-Optimizations/20220811-100030
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8648f92a66a323ed01903d2cbb248cdbe2f312d9
+config: arm64-randconfig-r002-20220810 (https://download.01.org/0day-ci/archive/20220812/202208120033.qCqng8xp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3fceb870d95188903796394cbe5fd2493ee872c6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review John-Stultz/Softirq-rt-Optimizations/20220811-100030
+        git checkout 3fceb870d95188903796394cbe5fd2493ee872c6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/
 
-I'm going to turn it off again, because honestly, this is a clang bug.
-I don't care one whit if there are pending "fixes" for this clang bug,
-until those fixes are in *clang*, not in the correct kernel code.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-For chrissake, the value it is trying to print out as a char is '3'.
+All warnings (new ones prefixed by >>):
 
-But even if it wasn't, and even if you wanted to print out "0xf365" as
-a "char" value, then that is how C varargs *work*. It's an "int".
+   In file included from kernel/sched/build_policy.c:45:
+>> kernel/sched/rt.c:1634:6: warning: no previous prototype for function 'rt_task_fits_capacity_and_may_preempt' [-Wmissing-prototypes]
+   bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
+        ^
+   kernel/sched/rt.c:1634:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
+   ^
+   static 
+   1 warning generated.
 
-In fact, even a *character* is an "int". This program:
 
-        #include <stdio.h>
+vim +/rt_task_fits_capacity_and_may_preempt +1634 kernel/sched/rt.c
 
-        int main(int argc, char **argv)
-        {
-                printf("%hhu\n", 'a');
-        }
+  1633	
+> 1634	bool rt_task_fits_capacity_and_may_preempt(struct task_struct *p, int cpu)
+  1635	{
+  1636		return task_may_preempt(p, cpu) && rt_task_fits_capacity(p, cpu);
+  1637	}
+  1638	
 
-generates a warning with "clang -Wformat", and dammit, if you are a
-clang developer and you see no problem with that warning, then I don't
-know what to say.
-
-Nathan, please make clang people see some sense.
-
-Because no, I'm not in the least interested in getting kernel "fixes"
-for this issue. -Wformat for clang goes away until people have gotten
-their heads extracted from their derri=C3=A8res.
-
-This is ridiculous.
-
-              Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
