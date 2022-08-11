@@ -1,97 +1,136 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1BF2F5F
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 20:43:54 +0000 (UTC)
-Received: from [127.0.0.1] ([12.0.243.163])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 27BJs2nF568664
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 11 Aug 2022 12:54:02 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 27BJs2nF568664
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2022080501; t=1660247645;
-	bh=pmf6BMEHJK5PK7BNKtSJh7WF6hlmWzZhuKR8Hozwx5g=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=iBOr2Wpk9AMENOiksLgBGwDaGjrFDubQGmCUx5HZLynAluG4ahFuDZvwQcIW0dhZ2
-	 iHoup1YrmiBlJpE5vmi6peH5/Skh8LG+d6DL9h6F6lUluF3iJujPd9shrRsHyZHuzo
-	 sfK+yQsmvrPoLv7dLi62uF5DzMm5HcykymnCDOjjsi3AkghbVgs/Hdn6dBXMM2a2e2
-	 jlRog8Nte2oLpacw7d2kGLaBk1uInNpONWU82WTDH5jVSZnAvJLV0cuUjOAhBzlpn+
-	 NHz54cW8E1qBYTw95A8ey4varnvEiRE1xsS/zeDFtN9UZuiK+uOd4jof95qdzWWEXd
-	 Fdo8VGu5WlqUA==
-Date: Thu, 11 Aug 2022 12:53:56 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Adam Dunlap <acdunlap@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Ben Dooks <ben-linux@fluff.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-CC: Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
-        Marc Orr <marcorr@google.com>
-Subject: Re: [PATCH] x86/asm: Force native_apic_mem_read to use mov
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220811180010.3067457-1-acdunlap@google.com>
-References: <20220811180010.3067457-1-acdunlap@google.com>
-Message-ID: <657243C6-8EC8-4B44-BC74-8723BEC7B580@zytor.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3982F5F
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 20:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660251068; x=1691787068;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1guxBjV4L2/kscYiefwYB2PAaUnqMQ49wnw1CGKJhcU=;
+  b=C+gnMuErcaq5ZQBIDBmlrbR6WFj7RT7YC/b46Nd74/Ik9WSl7Iza2q6Y
+   89pT+eXfyICNB0Y4BbePWKVqBg4JbdK6BRmik713FjzOBaZ/wfkP0yyGC
+   sWsnG5f7qoDKPC+/NDTcRCZqvduuPIpztabeU1L9zCx78d19b6y7Gp0oJ
+   UGDXWceKZu8+SC+4oGgl7XHlf4c6K98sIskReaq+ceGBcD6SdFQ9/8C7W
+   4/+f6XI+AuLGKW6ju7AX2CvWa7Mkdcj4oDL1TcRhXo2eCi9sWXV0Kg8t0
+   1sZlUpLuevie933/CzPkPf++VQBzm6g767AbQC0psbTWZDzj1jkPHIxM8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="317425069"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="317425069"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 13:51:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="747961723"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Aug 2022 13:51:06 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMF8z-0000eO-2u;
+	Thu, 11 Aug 2022 20:51:05 +0000
+Date: Fri, 12 Aug 2022 04:50:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [broonie-misc:arm64-sme-fixes 3/4]
+ arch/arm64/kernel/fpsimd.c:1394:21: error: too many arguments to function
+ call, expected single argument 'task', have 2 arguments
+Message-ID: <202208120424.12sjZabd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On August 11, 2022 11:00:10 AM PDT, Adam Dunlap <acdunlap@google=2Ecom> wro=
-te:
->Previously, when compiled with clang, native_apic_mem_read gets inlined
->into __xapic_wait_icr_idle and optimized to a testl instruction=2E When
->run in a VM with SEV-ES enabled, it attempts to emulate this
->instruction, but the emulator does not support it=2E Instead, use inline
->assembly to force native_apic_mem_read to use the mov instruction which
->is supported by the emulator=2E
->
->Signed-off-by: Adam Dunlap <acdunlap@google=2Ecom>
->Reviewed-by: Marc Orr <marcorr@google=2Ecom>
->Reviewed-by: Jacob Xu <jacobhxu@google=2Ecom>
->---
-> arch/x86/include/asm/apic=2Eh | 13 ++++++++++++-
-> 1 file changed, 12 insertions(+), 1 deletion(-)
->
->diff --git a/arch/x86/include/asm/apic=2Eh b/arch/x86/include/asm/apic=2E=
-h
->index 3415321c8240=2E=2E281db79e76a9 100644
->--- a/arch/x86/include/asm/apic=2Eh
->+++ b/arch/x86/include/asm/apic=2Eh
->@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u3=
-2 v)
->=20
-> static inline u32 native_apic_mem_read(u32 reg)
-> {
->-	return *((volatile u32 *)(APIC_BASE + reg));
->+	volatile u32 *addr =3D (volatile u32 *)(APIC_BASE + reg);
->+	u32 out;
->+
->+	/*
->+	 * Functionally, what we want to do is simply return *addr=2E However,
->+	 * this accesses an MMIO which may need to be emulated in some cases=2E
->+	 * The emulator doesn't necessarily support all instructions, so we
->+	 * force the read from addr to use a mov instruction=2E
->+	 */
->+	asm_inline("movl %1, %0" : "=3Dr"(out) : "m"(*addr));
->+
->+	return out;
-> }
->=20
-> extern void native_apic_wait_icr_idle(void);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-sme-fixes
+head:   faced24c84ad18ee30b91d041299519ce6190f28
+commit: 6c9a05d1aa66fd95573944dc9bc0f7ce09785129 [3/4] arm64/sme: Don't flush SVE register state when allocating SME storage
+config: arm64-randconfig-r026-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120424.12sjZabd-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=6c9a05d1aa66fd95573944dc9bc0f7ce09785129
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc arm64-sme-fixes
+        git checkout 6c9a05d1aa66fd95573944dc9bc0f7ce09785129
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-As I recall, there are some variants which only support using the ax regis=
-ter, so if you are going to do this might as well go all the way and force =
-a specific instruction with specific registers, like mov (%rdx),%rax (by an=
-alogy with the I/O registers=2E)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/kernel/fpsimd.c:1394:21: error: too many arguments to function call, expected single argument 'task', have 2 arguments
+           sve_alloc(current, true);
+           ~~~~~~~~~          ^~~~
+   arch/arm64/include/asm/fpsimd.h:259:20: note: 'sve_alloc' declared here
+   static inline void sve_alloc(struct task_struct *task) { }
+                      ^
+   arch/arm64/kernel/fpsimd.c:1445:21: error: too many arguments to function call, expected single argument 'task', have 2 arguments
+           sve_alloc(current, false);
+           ~~~~~~~~~          ^~~~~
+   arch/arm64/include/asm/fpsimd.h:259:20: note: 'sve_alloc' declared here
+   static inline void sve_alloc(struct task_struct *task) { }
+                      ^
+   2 errors generated.
+
+
+vim +/task +1394 arch/arm64/kernel/fpsimd.c
+
+  1374	
+  1375	/*
+  1376	 * Trapped SVE access
+  1377	 *
+  1378	 * Storage is allocated for the full SVE state, the current FPSIMD
+  1379	 * register contents are migrated across, and the access trap is
+  1380	 * disabled.
+  1381	 *
+  1382	 * TIF_SVE should be clear on entry: otherwise, fpsimd_restore_current_state()
+  1383	 * would have disabled the SVE access trap for userspace during
+  1384	 * ret_to_user, making an SVE access trap impossible in that case.
+  1385	 */
+  1386	void do_sve_acc(unsigned long esr, struct pt_regs *regs)
+  1387	{
+  1388		/* Even if we chose not to use SVE, the hardware could still trap: */
+  1389		if (unlikely(!system_supports_sve()) || WARN_ON(is_compat_task())) {
+  1390			force_signal_inject(SIGILL, ILL_ILLOPC, regs->pc, 0);
+  1391			return;
+  1392		}
+  1393	
+> 1394		sve_alloc(current, true);
+  1395		if (!current->thread.sve_state) {
+  1396			force_sig(SIGKILL);
+  1397			return;
+  1398		}
+  1399	
+  1400		get_cpu_fpsimd_context();
+  1401	
+  1402		if (test_and_set_thread_flag(TIF_SVE))
+  1403			WARN_ON(1); /* SVE access shouldn't have trapped */
+  1404	
+  1405		/*
+  1406		 * Even if the task can have used streaming mode we can only
+  1407		 * generate SVE access traps in normal SVE mode and
+  1408		 * transitioning out of streaming mode may discard any
+  1409		 * streaming mode state.  Always clear the high bits to avoid
+  1410		 * any potential errors tracking what is properly initialised.
+  1411		 */
+  1412		sve_init_regs();
+  1413	
+  1414		put_cpu_fpsimd_context();
+  1415	}
+  1416	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
