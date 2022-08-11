@@ -1,103 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5042F5F
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 20:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77796C433C1;
-	Thu, 11 Aug 2022 20:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660251280;
-	bh=oebE/ZPJ9Yj7bSNVEycbEf7rL+LPEK7fxBeOLpOj3Tk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gnQJdahlCu9k6pVqo6O4Gq2KQcO6YKiDsub1ObEWjOeNSLYhRSdfoMW7WC26+hZtk
-	 2Xnl+eZIbfkX3UoSr67jx+HZc1P31U0UD+ZEcXJkqQ2n7TTr74t4PDkvht6L8BP1XI
-	 o19hxOMfdoZSrNZuez9F1qGYc+u6baPQGgth/ZaEwdy10bb/9lclxg+KwNog9Muvgu
-	 nke1UNVIQC0AIAtBlKs/Aa2KhMs0MxZOvUXqJxJOm9YujHkc9yBCMmOw+RgxHJ33+/
-	 9vpiGopWM931Ye7ovS3H7DXJDaH5eKFuDUpTEnG9YoBg57pHyTDcpNbsbfjWtg3Fcd
-	 HoRmKKSaNvz4g==
-Date: Thu, 11 Aug 2022 13:54:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
- ("vdpa_sim_blk: add support for discard and write-zeroes")
-Message-ID: <YvVsjWAWRyJzQ2V7@dev-arch.thelio-3990X>
-References: <YvU67iF4z5gB4ZYk@debian>
- <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F1A4C74
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 22:04:43 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id x10so3018558ljq.4
+        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 15:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ClZkoO2gn+DuUwd5gSUHUhC51CqF9F+Etb4xaf+Veuw=;
+        b=ECo/2V/B4Jxi39vXhbgAVoVni5Tl4lyXTJNAbps09XA4bYPzvhGFjOKvONZm7PPno9
+         Vm9jA1szyjrbyO/z2+hFDQDt26sb2UM5FbHYOwuWbVm7fRYl1rDxnoJeah8VdQdiNF5I
+         WYn5UCPS6aaPj+h8JTcPaxzffePTgkkFV5C8rPfUBgA4aiv1Ef+Zj2+din/8of1nxhG8
+         4ZsW0bjoqKS0LHrwifjKx+2dMYV19bb6d48eURgEzHM1vMgiessUYX8m+7gv7Y/1vz6c
+         c9cZCB8Agjs6rqOon1Vka2Mh2nXDbuKvYgMXPQ/zbLG2VaJYHOLt/zjUuk5I6msuwlfv
+         0rtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ClZkoO2gn+DuUwd5gSUHUhC51CqF9F+Etb4xaf+Veuw=;
+        b=j0bXv+vxhUDaj+e9bdNBtLqyR7gH1Bf9NtQb6ous0bgM3vGydW0ZCEoc+cvCKhQRTn
+         9dciZpYw/RcMjsfb9nyHjJOd+HbaBG5jZ7zuGjsX7G7MnIoFADxq59htbCAp2X/aRt1F
+         kwxorEJQGnKCwRiyRCJiYLitS80U+dl5G75TRGsItIXq9wB2GYegR94s5eU/GrmFRW40
+         elg4xkynJnp7yCRyJjoVjzLgPHhZC81gAL4KkXSl2VdhLtpMwggEWjSH9wUN4Brf5Oz2
+         zQRjNXoWrZ7fLp48GX59eC4BEaZ5T+IZstv0wk+QmmNsRBsxp739nEBuLP2MlNF8x8N8
+         EJgA==
+X-Gm-Message-State: ACgBeo0QcacVWV6LjdO/RcnttOqJhgnbfkOuwFlRM1Af+5V04b+w3v8n
+	+buL/pbv6IBADP3Fy5xmFiPHNUkhkNzQnDx+8NJV0A==
+X-Google-Smtp-Source: AA6agR4vdLsL/8BbE8c/lUrun/dyty7m/tzj2+iJcItMzwC2sdqfehgEsYupuwaPy9xzYjaCyDdFP8XXiAFGjr4s3eM=
+X-Received: by 2002:a05:651c:98f:b0:25f:e61c:c12 with SMTP id
+ b15-20020a05651c098f00b0025fe61c0c12mr327173ljq.26.1660255481412; Thu, 11 Aug
+ 2022 15:04:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+References: <YvSxeDkmwxcJL+Z0@debian> <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
+ <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
+ <CAKwvOdnQjgtwqFXLv+QtWPfpHosM5fxE5oqbX0VUD53F8L6bRg@mail.gmail.com> <CAHk-=wgJA=e-CLcvU5LRKu0bMLeAewXtOM6as1hFVeQAVkMPbg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgJA=e-CLcvU5LRKu0bMLeAewXtOM6as1hFVeQAVkMPbg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 11 Aug 2022 15:04:29 -0700
+Message-ID: <CAKwvOdkUc=8DD938in5PMeGYAn3PEWp4E_W8qEHq_y7Smy8+mQ@mail.gmail.com>
+Subject: Re: mainline build failure for arm64 allmodconfig with clang
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Joe Perches <joe@perches.com>, Nathan Chancellor <nathan@kernel.org>, 
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Aug 11, 2022 at 11:31:21AM -0700, Nathan Chancellor wrote:
-> On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > Hi All,
-> > 
-> > Not sure if it has been reported, builds of arm64 with clang failed to
-> > build next-20220811 with the error:
-> > 
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
-> >                 struct virtio_blk_discard_write_zeroes range;
-> >                 ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
-> >                 if (to_pull != sizeof(range)) {
-> >                                       ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
-> >                                 to_pull, sizeof(range));
-> >                                                 ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
-> >                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
-> >                                                                          ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
-> >                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
-> >                                                    ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
-> >                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
-> >                                                         ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
-> >                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
-> >                                                   ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
-> >                 u32 num_sectors, flags;
-> >                     ^
-> > 8 errors generated.
-> > 
-> > 
-> > git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
-> > And, reverting that commit has fixed the build failure.
-> > 
-> > I will be happy to test any patch or provide any extra log if needed.
-> 
-> I am very surprised GCC does not error out in the same way, since as far
-> as I understand it, labeled statements have to be followed by a
-> statement and a declaration is not a statement in C so braces are
-> needed. In fact, it seems like something changed (regressed?) between
-> GCC 10.x and 11.x?
-> 
-> https://godbolt.org/z/EYaGa1eE3
-> 
-> I am going to bisect GCC to find out whether or not that was
-> intentional.
+On Thu, Aug 11, 2022 at 12:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Aug 11, 2022 at 11:39 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Generally, printing an int with %hhu may truncate depending on the
+> > value of the int.
+>
+> Yes.
+>
+> HOWEVER.
+>
+> That truncation is *LITERALLY THE MAIN REASON TO EVER USE %hhu IN THE
+> FIRST PLACE*.
+>
+> See the issue?
+>
+> Warning about "this may truncate bits" when the main reason to use
+> that format string in the first place is said bit truncation is kind
+> of stupid, isn't it?
 
-Just for the record, it was:
+Yeah, I guess adding a truncate to the caller is kind of unnecessary
+if you're still going to use %hhd anyways.  What are your thoughts on
+this bug I've filed?
+https://github.com/llvm/llvm-project/issues/57102
 
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=8b7a9a249a63e066cff6e95db05a3158b4cc56cc
-
-The clang developers are aware, it seems it will get implemented at some
-point:
-
-https://github.com/llvm/llvm-project/issues/56040
-
-Cheers,
-Nathan
+-- 
+Thanks,
+~Nick Desaulniers
