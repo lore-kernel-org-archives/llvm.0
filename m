@@ -1,99 +1,121 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDD046A8
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:00:47 +0000 (UTC)
-Received: by mail-pl1-f201.google.com with SMTP id d3-20020a170902cec300b0016f04e2e730so11646898plg.1
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
-        b=hUouphILeY+7ZcreKxlU1ukdbwKI/z0PLnXdxgXRyGG+IFml1nB8pn1mmAe2cXc0XR
-         FMB3hhPzAuGQtoJxfAw5hwOsTQmpXmtOFkydYbAXW7d6pcehx4QDo49aKDsCj5o8A324
-         /VCxSnrbNVogJeIsO+bCb970/vWvnt5k/acHwbkLauSk5dpHDBgRKIdR2Bkj4PH/QF37
-         ypfexny7+yt3N7PuLCfp3J9Tmb25wfvkeAm7zojmAueiEHE+y+xz1lf/57Ohd4orIeK5
-         k+zd6pTc3V3h7Ji5hdleQh8BRWqLkmVw5x17GN10XTcnp6/GW/uMVMsVg/H2DMpjWpZY
-         3ieg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
-        b=KsVF9oYYY0kqy38d3vR3E5+PlF5nvtLcCxnZkgyZdLnoPvO5uURX9G2zK9lBqMfvIG
-         qJQXMyxZj9To5Zs9DF7dOg/TgJaACBwRbnTUNoyD+AIt2BZkG/XmUGBZ+OMJ/uhBgBLz
-         PchmlSc/gBf01BiRrargIWQv5VSJ9SWme0lcf9D/xP95mHdfSksRsc7INmo+7TH9owcr
-         HMquKpsDbzAZ2r3PrPnacW6kvBEDXD4PYOwFvWaF/qxWnWlFOUvkK4trHWPOx7AF/92U
-         eX84lY98uQBODZs4KS422w/jH68YsW8zn+RkJ82HPYQDb9JTIfh8MxaVepDw8FdWslqY
-         ma5w==
-X-Gm-Message-State: ACgBeo2CLz1fK7h72ZjQM0P0GWt/lgq45SlauYzS2vYq9dt2Ev2/4kpF
-	WtNkPnIK19aV1ANjw1+BD72dYl6W0eLyMQ==
-X-Google-Smtp-Source: AA6agR6WWvqchDPxP5kAGNu/Ulq/79XUJejAqx8e373GcLQEy+qt6A+bV5PazXaTWuXtO6rWlR/bUqmxn0Ytqg==
-X-Received: from acdunlap03.bve.corp.google.com ([2620:15c:29:203:7899:c3d8:a49a:7086])
- (user=acdunlap job=sendgmr) by 2002:a17:90b:20e:b0:1f5:26b0:f506 with SMTP id
- fy14-20020a17090b020e00b001f526b0f506mr187731pjb.65.1660240847029; Thu, 11
- Aug 2022 11:00:47 -0700 (PDT)
-Date: Thu, 11 Aug 2022 11:00:10 -0700
-Message-Id: <20220811180010.3067457-1-acdunlap@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C38C46A8
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 18:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660242516; x=1691778516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3fA3slRt3QaRDvpFlIyp4A4gcmLnDPb+Je+ZzpvKXpM=;
+  b=lohwRiwF/THstQfrcAW2LdQHC7uad+IpLCK8+fwGNENK82KSpyRD4WSc
+   xCne89zA0Unv6b5AiWzwrIaq3PRDsKveKId7dhCvxDh1bxbBkhLEQh077
+   zn321cGtuCbBhOospOTHxx9Lt1LcaW063Fculy4Ly9WamWtrNx62fswfV
+   +/tqUc9gfhhprMsKr7m2qfAJarCShpYKZp7FJKC0walRuT7Pyn5Vnjz/R
+   RCuhoTepJcN7kWz4sn7Z4Y/BKP+OTkQxnoq+uABJeE45XRmrWXaU2EO2V
+   rHj2rgjPSha5j/ZPriG/+Wzs4muE4oAYlpUy+CR+E2Zfqoctodyi+sKcN
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="317395121"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="317395121"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 11:28:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="673799075"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2022 11:28:01 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMCuW-0000VP-13;
+	Thu, 11 Aug 2022 18:28:00 +0000
+Date: Fri, 12 Aug 2022 02:27:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: menglong8.dong@gmail.com, kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ojeda@kernel.org,
+	ndesaulniers@google.com, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, asml.silence@gmail.com, imagedong@tencent.com,
+	luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+	jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+Message-ID: <202208120238.cz3RvV74-lkp@intel.com>
+References: <20220811120708.34912-1-imagedong@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH] x86/asm: Force native_apic_mem_read to use mov
-From: Adam Dunlap <acdunlap@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, 
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
-	Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
-	Marc Orr <marcorr@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811120708.34912-1-imagedong@tencent.com>
 
-Previously, when compiled with clang, native_apic_mem_read gets inlined
-into __xapic_wait_icr_idle and optimized to a testl instruction. When
-run in a VM with SEV-ES enabled, it attempts to emulate this
-instruction, but the emulator does not support it. Instead, use inline
-assembly to force native_apic_mem_read to use the mov instruction which
-is supported by the emulator.
+Hi,
 
-Signed-off-by: Adam Dunlap <acdunlap@google.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Reviewed-by: Jacob Xu <jacobhxu@google.com>
----
- arch/x86/include/asm/apic.h | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 3415321c8240..281db79e76a9 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
- 
- static inline u32 native_apic_mem_read(u32 reg)
- {
--	return *((volatile u32 *)(APIC_BASE + reg));
-+	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
-+	u32 out;
-+
-+	/*
-+	 * Functionally, what we want to do is simply return *addr. However,
-+	 * this accesses an MMIO which may need to be emulated in some cases.
-+	 * The emulator doesn't necessarily support all instructions, so we
-+	 * force the read from addr to use a mov instruction.
-+	 */
-+	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
-+
-+	return out;
- }
- 
- extern void native_apic_wait_icr_idle(void);
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220811-200919
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f86d1fbbe7858884d6754534a0afbb74fc30bc26
+config: riscv-randconfig-r042-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120238.cz3RvV74-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/8e014b654d9e51abed132155237d855b25da06a0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220811-200919
+        git checkout 8e014b654d9e51abed132155237d855b25da06a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/core/skbuff.c:780:6: warning: unknown attribute 'optimize' ignored [-Wunknown-attributes]
+   void __nofnsplit
+        ^~~~~~~~~~~
+   include/linux/compiler_attributes.h:374:56: note: expanded from macro '__nofnsplit'
+   #define __nofnsplit                     __attribute__((optimize("O1")))
+                                                          ^~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/optimize +780 net/core/skbuff.c
+
+   770	
+   771	/**
+   772	 *	kfree_skb_reason - free an sk_buff with special reason
+   773	 *	@skb: buffer to free
+   774	 *	@reason: reason why this skb is dropped
+   775	 *
+   776	 *	Drop a reference to the buffer and free it if the usage count has
+   777	 *	hit zero. Meanwhile, pass the drop reason to 'kfree_skb'
+   778	 *	tracepoint.
+   779	 */
+ > 780	void __nofnsplit
+   781	kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
+   782	{
+   783		if (!skb_unref(skb))
+   784			return;
+   785	
+   786		DEBUG_NET_WARN_ON_ONCE(reason <= 0 || reason >= SKB_DROP_REASON_MAX);
+   787	
+   788		trace_kfree_skb(skb, __builtin_return_address(0), reason);
+   789		__kfree_skb(skb);
+   790	}
+   791	EXPORT_SYMBOL(kfree_skb_reason);
+   792	
+
 -- 
-2.37.1.559.g78731f0fdb-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
