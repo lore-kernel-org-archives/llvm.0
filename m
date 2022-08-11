@@ -1,53 +1,46 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0B12CA7
-	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:23:06 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id l4so22034030wrm.13
-        for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 10:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=j6b8kTrT56pwiU/IWqIOVmZdn5YfEPHXgPdh8M5ebwU=;
-        b=h7L4neJIrIWcIOjwXfQEB9hwJK4xq6R+BiWBrtmxIksUhSNdQH7p/IZXM9NG/eSM0h
-         hLy9cVMlPI6SVm2QoJ1zzD7Gd6wSFI6/G6O+rDkuaS9WlYydFZoX2rYKpCi+x7IPcC++
-         q/TYrO9uxaqzIZzdL+odlDYDp74eWkbaepATdxwmBwCfOs2zrTyDfpkmOfUYuPxzXgbM
-         g5sk4lNQFZLRaJQAoVmCUlpeACUBFmJjwo8ovs3BUn9HrcCPg7vju1kmtt4ByxF2mYln
-         bnQdbwD5EfXAeXR8VozOrflRRy3ZxW2+WSdWPruAFDr5XlVVWNQ4MNBSCs8LWx2HxJ48
-         CtOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=j6b8kTrT56pwiU/IWqIOVmZdn5YfEPHXgPdh8M5ebwU=;
-        b=fUYD04RL+lgf5CRsPCnswTGJx5lMknozS9O3HkLFcg2GHb3GDZunSq4YzYmAdYdXxx
-         fZSTkNt6MNJTbUoajwzEjXRx925p8EtLUhk6l3RMZVtG20v7/cWBN7j+/6slxwI3hO2e
-         euFk6sc7WM07MO7Vfi93QkcYiDc+RJA1/NGB44IvmbKpJuo3NPOMXliOXjn8DzgoGQrQ
-         pe/vhu/7WXqBpucuyfsr1mXdxRsvykEKgzzCnMQPdoxhuTnRHMeMA7kM8s1Z3lsIeefh
-         MfAsezGpwOE+aIKDjoWBHhFFAVytjjlN6wYvg8m3WlhlqDiwybjet5ZHvoVMj/Ip63jZ
-         1R9g==
-X-Gm-Message-State: ACgBeo2LjLoLKkySKbi0j6IZH+2B6wZ18+AtE10rE21E046rl9n6lUDT
-	QJP1esodKurQ1+G8unCYjNU=
-X-Google-Smtp-Source: AA6agR7icK2jhFDxh4B/98tzwNsmxNFF++Z70qopjEziOWND2bqMvSdWSrJzRBBJ2glEiKAihkZd2g==
-X-Received: by 2002:adf:f286:0:b0:21e:f0dc:3df0 with SMTP id k6-20020adff286000000b0021ef0dc3df0mr21793wro.377.1660238584739;
-        Thu, 11 Aug 2022 10:23:04 -0700 (PDT)
-Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
-        by smtp.gmail.com with ESMTPSA id h4-20020a1ccc04000000b003a545ff43c5sm6362884wmb.45.2022.08.11.10.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 10:23:03 -0700 (PDT)
-Date: Thu, 11 Aug 2022 18:22:54 +0100
-From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>
-Cc: virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-next@vger.kernel.org
-Subject: build failure of next-20220811 due to d79b32c2e4a4 ("vdpa_sim_blk:
- add support for discard and write-zeroes")
-Message-ID: <YvU67iF4z5gB4ZYk@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB64A2CA7
+	for <llvm@lists.linux.dev>; Thu, 11 Aug 2022 17:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660238821; x=1691774821;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9sI4oxnww2fiOkHy8m67wJBameA5pi7QXPxfqb0WHaI=;
+  b=GWPXhD4QBTnr9JNlYdS81WSqST8R1qrh7wboY7+aVU0Sv91B1ZeUaeWX
+   W+Bood5SjI1AksOzeRR4V8Wh//+Wtluzr3S9+GBV1xcDNdPyZxPDT9mFP
+   BGT8BRM1847v+8htj8rd4x5VeEDU3uRsI2KxJ4bJDyWPpU2ET1ue5Ld15
+   BwyHStNJe101Ec/cmpK0c/ZEpFh+4cF0InQqdoDFtqUkwipaYbhHzxDrd
+   Fd8Hr86eIuj+/ieaZskCfweH2EN3MJTH83QTxQuBwzDNI3GYqYHgE4XHt
+   FoyW6x8IBoF5Ca4TnMX9WsXyaudJ6EvWHGEqSWL4nNBe7rnTJ8yckycYs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="288981364"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="288981364"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 10:27:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="933406465"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2022 10:26:59 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMBxS-0000SR-1J;
+	Thu, 11 Aug 2022 17:26:58 +0000
+Date: Fri, 12 Aug 2022 01:26:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: oushixiong <oushixiong@kylinos.cn>, Dave Airlie <airlied@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	oushixiong <oushixiong@kylinos.cn>
+Subject: Re: [PATCH] drm/ast: radeon amdgpu for ast add prime
+Message-ID: <202208120134.9nXiGv1Q-lkp@intel.com>
+References: <20220809114439.2063863-1-oushixiong@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,45 +49,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220809114439.2063863-1-oushixiong@kylinos.cn>
 
-Hi All,
+Hi oushixiong,
 
-Not sure if it has been reported, builds of arm64 with clang failed to
-build next-20220811 with the error:
+Thank you for the patch! Perhaps something to improve:
 
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
-                struct virtio_blk_discard_write_zeroes range;
-                ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
-                if (to_pull != sizeof(range)) {
-                                      ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
-                                to_pull, sizeof(range));
-                                                ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
-                bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
-                                                                         ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
-                sector = vdpasim64_to_cpu(vdpasim, range.sector);
-                                                   ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
-                num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
-                                                        ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
-                flags = vdpasim32_to_cpu(vdpasim, range.flags);
-                                                  ^
-drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
-                u32 num_sectors, flags;
-                    ^
-8 errors generated.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next linus/master v5.19 next-20220811]
+[cannot apply to drm-misc/drm-misc-next drm-tip/drm-tip]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220811-115710
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm64-randconfig-r033-20220810 (https://download.01.org/0day-ci/archive/20220812/202208120134.9nXiGv1Q-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/1b9b79a00132f2917ca66bea714a6f21fc939b0f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220811-115710
+        git checkout 1b9b79a00132f2917ca66bea714a6f21fc939b0f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/ast/
 
-git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
-And, reverting that commit has fixed the build failure.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I will be happy to test any patch or provide any extra log if needed.
+All warnings (new ones prefixed by >>):
 
-
+>> drivers/gpu/drm/ast/ast_drv.c:54:24: warning: no previous prototype for function 'ast_gem_prime_import_sg_table' [-Wmissing-prototypes]
+   struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
+                          ^
+   drivers/gpu/drm/ast/ast_drv.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
+   ^
+   static 
+   1 warning generated.
 --
-Regards
-Sudip
+>> drivers/gpu/drm/ast/ast_mode.c:1713:5: warning: no previous prototype for function 'ast_handle_damage' [-Wmissing-prototypes]
+   int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
+       ^
+   drivers/gpu/drm/ast/ast_mode.c:1713:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
+   ^
+   static 
+>> drivers/gpu/drm/ast/ast_mode.c:1772:5: warning: no previous prototype for function 'ast_user_framebuffer_dirty' [-Wmissing-prototypes]
+   int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
+       ^
+   drivers/gpu/drm/ast/ast_mode.c:1772:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
+   ^
+   static 
+>> drivers/gpu/drm/ast/ast_mode.c:1815:1: warning: no previous prototype for function 'ast_gem_fb_create_with_dirty' [-Wmissing-prototypes]
+   ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
+   ^
+   drivers/gpu/drm/ast/ast_mode.c:1814:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct drm_framebuffer *
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/ast_gem_prime_import_sg_table +54 drivers/gpu/drm/ast/ast_drv.c
+
+    53	
+  > 54	struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
+    55						struct dma_buf_attachment *attach,
+    56						struct sg_table *sg)
+    57	{
+    58		struct drm_gem_vram_object *gbo;
+    59		struct dma_resv *resv = attach->dmabuf->resv;
+    60	
+    61		ww_mutex_lock(&resv->lock, NULL);
+    62		gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0, sg, resv);
+    63		ww_mutex_unlock(&resv->lock);
+    64	
+    65		if (IS_ERR(gbo))
+    66			return NULL;
+    67	
+    68		return &gbo->bo.base;
+    69	}
+    70	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
