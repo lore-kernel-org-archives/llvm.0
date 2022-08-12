@@ -1,40 +1,51 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7EC46AB
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 19:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A6546AB
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 19:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660331394; x=1691867394;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=fPOWvNaouFHaEXBLeHMJCnfFrQ2HIJXfWcVY9MHrTV0=;
-  b=NrmvvomZSKWLSzu3x8lP9jyIRLPo1AU/we8ptg4N98ayB2Ep1JeXqpMi
-   QbJPQf3BFdn4av/TBw0ynVxc3l1oPyrA4ueUeo762xTajmr90TEroYChb
-   4LrztI9qmL9E+TmFz4TtpQJieJdePLk5+T7H4IrEeN6VSoFXD4uquyacs
-   71a755e25ilxquP+zlR6uijVDEhQZHPQ6Qta+tpwxIwcG0pQ0dkeGSTb3
-   siwJSrTUN9EF/58Jx42mQwhFCBldnjDMc0lsqkOgrdSeV/OK5Xck/wIuK
-   YcozH1Vo1M6/oWr5w2MYA8JVOwE4/PTgoaAcOb25uSPAf65YkX64Q50GI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290424244"
+  t=1660331405; x=1691867405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8jOYdsTjIERgCZgii8GvHSE+RxiWxjjphILTOFIsJA0=;
+  b=Cp2K4D8TAh3V+DyiiRGXLysAj1u4fAvY3S6bFfsZlNBnFRyPWYuYH8V5
+   qjXFjyRbjZoA5A5fNeYVoHSQGZC0P8Rg3SGoNVxjSoe/aUWrnfVyU722Q
+   ljnp7xH/x1PCBQHEyqYBYq+QqzrtSsoWYmgx+X62LOoGcrZaOj+8Loq4u
+   nO5+JqA5fyB62TN2yEUpmnkHMGz1r21R73BGKByBMlv1U5wj1aAZ0OWG/
+   ZRURjyg9kKyhCbhajX0egPZ6q/lIwbrVYB4q6UIumCPoI5RKxb7wS4PX/
+   YOEbWhf5IyDtqg0GcdUFaXQYapms/0Y+x6pMWWmjzc/zebwEnFYS9i+ll
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317644472"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="290424244"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:09:53 -0700
+   d="scan'208";a="317644472"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:09:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="851665292"
+   d="scan'208";a="556628845"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Aug 2022 12:09:52 -0700
+  by orsmga003.jf.intel.com with ESMTP; 12 Aug 2022 12:09:52 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMa2a-0000qZ-0L;
+	id 1oMa2a-0000qc-0Q;
 	Fri, 12 Aug 2022 19:09:52 +0000
-Date: Sat, 13 Aug 2022 03:09:42 +0800
+Date: Sat, 13 Aug 2022 03:09:40 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [Intel-wired-lan] [PATCH net v5 4/4] ice: Ignore error message
- when setting same promiscuous mode
-Message-ID: <202208130335.KFEhPChm-lkp@intel.com>
+To: Sean Hong <sean.hong@quanta.corp-partner.google.com>, perex@perex.cz,
+	tiwai@suse.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+	liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
+	yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
+	kai.vehmanen@linux.intel.com, broonie@kernel.org,
+	brent.lu@intel.com, yong.zhi@intel.com, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org,
+	Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: Add support for
+ jsl_rt5682_rt1019
+Message-ID: <202208130220.892ZS1bh-lkp@intel.com>
+References: <20220812114804.550809-1-sean.hong@quanta.corp-partner.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,49 +54,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220812114804.550809-1-sean.hong@quanta.corp-partner.google.com>
 
-In-Reply-To: <1660310750-290943-5-git-send-email-grzegorz.siwik@intel.com>
-References: <1660310750-290943-5-git-send-email-grzegorz.siwik@intel.com>
-TO: Grzegorz Siwik <grzegorz.siwik@intel.com>
-TO: intel-wired-lan@lists.osuosl.org
-CC: Benjamin Mikailenko <benjamin.mikailenko@intel.com>
-CC: Grzegorz Siwik <grzegorz.siwik@intel.com>
-
-Hi Grzegorz,
+Hi Sean,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on net/master]
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on tiwai-sound/for-next linus/master next-20220812]
+[cannot apply to v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Grzegorz-Siwik/ice-Fixes-for-double-vlan-promiscuous-mode/20220812-212847
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 40b4ac880e21d917da7f3752332fa57564a4c202
-config: riscv-randconfig-r031-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130335.KFEhPChm-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Hong/ASoC-Intel-sof_rt5682-Add-support-for-jsl_rt5682_rt1019/20220812-195139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220813/202208130220.892ZS1bh-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/54c8cc1f59ac62b3293ef19c2cf35fcd546041a0
+        # https://github.com/intel-lab-lkp/linux/commit/5ab680d85b9dbcaa1929ab9beace3c9622e46d19
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Grzegorz-Siwik/ice-Fixes-for-double-vlan-promiscuous-mode/20220812-212847
-        git checkout 54c8cc1f59ac62b3293ef19c2cf35fcd546041a0
+        git fetch --no-tags linux-review Sean-Hong/ASoC-Intel-sof_rt5682-Add-support-for-jsl_rt5682_rt1019/20220812-195139
+        git checkout 5ab680d85b9dbcaa1929ab9beace3c9622e46d19
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/intel/common/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: kernel/built-in.a(bpf/btf.o):(function btf_parse_vmlinux: .text+0x2974): relocation R_RISCV_PCREL_HI20 out of range: -524728 is not in [-524288, 524287]; references __stop_BTF
-   >>> referenced by btf.c:817 (kernel/bpf/btf.c:817)
-   >>> defined in kernel/built-in.a(bpf/btf.o)
---
->> ld.lld: error: kernel/built-in.a(bpf/btf.o):(function btf_parse_vmlinux: .text+0x296a): relocation R_RISCV_PCREL_HI20 out of range: -524728 is not in [-524288, 524287]; references __start_BTF
-   >>> referenced by btf.c:817 (kernel/bpf/btf.c:817)
-   >>> defined in kernel/built-in.a(bpf/btf.o)
+>> sound/soc/intel/common/soc-acpi-intel-jsl-match.c:35:2: error: expected ';' after top level declarator
+   }
+    ^
+    ;
+>> sound/soc/intel/common/soc-acpi-intel-jsl-match.c:89:4: error: field designator 'sof_fw_filename' does not refer to any field in type 'struct snd_soc_acpi_mach'
+                   .sof_fw_filename = "sof-jsl.ri",
+                    ^
+   2 errors generated.
+
+
+vim +35 sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+
+    31	
+    32	static struct snd_soc_acpi_codecs rt1019p_spk = {
+    33		.num_codecs = 1,
+    34		.codecs = {"RTL1019"}
+  > 35	}
+    36	
+    37	static const struct snd_soc_acpi_codecs mx98360a_spk = {
+    38		.num_codecs = 1,
+    39		.codecs = {"MX98360A"}
+    40	};
+    41	
+    42	static const struct snd_soc_acpi_codecs rt5682_rt5682s_hp = {
+    43		.num_codecs = 2,
+    44		.codecs = {"10EC5682", "RTL5682"},
+    45	};
+    46	
+    47	/*
+    48	 * When adding new entry to the snd_soc_acpi_intel_jsl_machines array,
+    49	 * use .quirk_data member to distinguish different machine driver,
+    50	 * and keep ACPI .id field unchanged for the common codec.
+    51	 */
+    52	struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+    53		{
+    54			.id = "DLGS7219",
+    55			.drv_name = "sof_da7219_mx98373",
+    56			.sof_tplg_filename = "sof-jsl-da7219.tplg",
+    57			.machine_quirk = snd_soc_acpi_codec_list,
+    58			.quirk_data = &jsl_7219_98373_codecs,
+    59		},
+    60		{
+    61			.id = "DLGS7219",
+    62			.drv_name = "sof_da7219_mx98360a",
+    63			.sof_tplg_filename = "sof-jsl-da7219-mx98360a.tplg",
+    64		},
+    65		{
+    66			.comp_ids = &rt5682_rt5682s_hp,
+    67			.drv_name = "jsl_rt5682_rt1015",
+    68			.machine_quirk = snd_soc_acpi_codec_list,
+    69			.quirk_data = &rt1015_spk,
+    70			.sof_tplg_filename = "sof-jsl-rt5682-rt1015.tplg",
+    71		},
+    72		{
+    73			.comp_ids = &rt5682_rt5682s_hp,
+    74			.drv_name = "jsl_rt5682_rt1015p",
+    75			.machine_quirk = snd_soc_acpi_codec_list,
+    76			.quirk_data = &rt1015p_spk,
+    77			.sof_tplg_filename = "sof-jsl-rt5682-rt1015.tplg",
+    78		},
+    79		{
+    80			.comp_ids = &rt5682_rt5682s_hp,
+    81			.drv_name = "jsl_rt5682_mx98360",
+    82			.machine_quirk = snd_soc_acpi_codec_list,
+    83			.quirk_data = &mx98360a_spk,
+    84			.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+    85		},
+    86		{
+    87			.comp_ids = &rt5682_rt5682s_hp,
+    88			.drv_name = "jsl_rt5682_rt1019",
+  > 89			.sof_fw_filename = "sof-jsl.ri",
 
 -- 
 0-DAY CI Kernel Test Service
