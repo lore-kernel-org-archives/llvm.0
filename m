@@ -1,227 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CEB365
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 06:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660285300;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uff+fxhWN0PDVQSyOtTEFQDYJqGuxP6ICibrpVQggxc=;
-	b=W8HAk8ikSj7aEU/yaYefitP6IUiDqEJMFQjVKb72CHZdaYwl2/Si8ZqbADVp/acQVivztq
-	RyOIHnlafw4V4wEo0MYaPvLY1H62X3A30an/Rfn1wpy4FCVX57PDfOrW7DeXaZgBgkvNJC
-	T0Kt9zu15DGHcWMN3l7smuikqQv25ys=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ECSV297SNzSUxHOyKDqE3Q-1; Fri, 12 Aug 2022 02:21:38 -0400
-X-MC-Unique: ECSV297SNzSUxHOyKDqE3Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E062380452E
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 06:21:38 +0000 (UTC)
-Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6E476112131B;
-	Fri, 12 Aug 2022 06:21:38 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (59/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [7ebfc85e]
-Date: Fri, 12 Aug 2022 06:21:38 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3E3181
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 06:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660286376; x=1691822376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UG5gNWHoSyOb7+iWS4sLh7rYt1PWINaomN54ut/va/w=;
+  b=DMJyCDI+7aXgFiasL/WWYGMf0a7z+1a5TWbjBdcRnsQPrtgfCfnr6w1u
+   LtfPlV+W/EHvxYcM5JgiDy+zdTQ9LC2rlRk901c0n6bRU3uw3WcM5sFTc
+   dCkhGoVpQTGydPe2Kv5x7GWlJA5z1Ytz1tpSxqkkFyVwISyJieKj4+pAe
+   wvA6h0dOQe2cHveaKBYqCJ/KP60PomM9uOTXZjxMblZf9kXIGlgwS2+Ut
+   TDW3FLwIMulNgbP7UCn/BHjkWKLVMtOgT3gi8eSDg/Sfp8B/drKzS/kVq
+   OMihFTCOclJd4H9012xE0NKxMh1RjyBjx1yjHKpHWd4Z+xYfyVxNzEvhd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="271918960"
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="271918960"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 23:39:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="748099829"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Aug 2022 23:39:34 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMOKU-0000Fe-16;
+	Fri, 12 Aug 2022 06:39:34 +0000
+Date: Fri, 12 Aug 2022 14:39:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Can Guo <quic_cang@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH v2 1/2] scsi: ufs: Add Multi-Circular Queue support
+Message-ID: <202208121414.5E6v9hTz-lkp@intel.com>
+References: <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <06093.122081202213800127@us-mta-192.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Can,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on mkp-scsi/for-next]
+[cannot apply to jejb-scsi/for-next linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Tested-by: CKI Project <cki-project@redhat.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220811-183747
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: hexagon-randconfig-r041-20220811 (https://download.01.org/0day-ci/archive/20220812/202208121414.5E6v9hTz-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e5504cb5816e9118b2e7d7720919bb3cb61c34da
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220811-183747
+        git checkout e5504cb5816e9118b2e7d7720919bb3cb61c34da
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50686
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All error/warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - Firmware test suite
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+>> drivers/ufs/core/ufshcd.c:5464:13: warning: no previous prototype for function 'ufshcd_transfer_req_compl' [-Wmissing-prototypes]
+   irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+               ^
+   drivers/ufs/core/ufshcd.c:5464:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/ufs/core/ufs-mcq.c:252:33: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                           dev_err(hba->dev, "Resource %s not provided\n");
+                                                       ~^
+   include/linux/dev_printk.h:144:57: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ^~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+   #define dev_fmt(fmt) fmt
+                        ^~~
+   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ^~~
+>> drivers/ufs/core/ufs-mcq.c:265:18: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                                            res->name, PTR_ERR(res->base));
+                                                       ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/ufs/core/ufs-mcq.c:301:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                           PTR_ERR(res->base));
+                           ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+>> drivers/ufs/core/ufs-mcq.c:481:3: error: call to undeclared function 'sizeof_utp_transfer_cmd_desc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   sizeof_utp_transfer_cmd_desc(hba);
+                   ^
+   3 warnings and 1 error generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/sizeof_utp_transfer_cmd_desc +481 drivers/ufs/core/ufs-mcq.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   470	
+   471	static inline int ufshcd_mcq_get_tag(struct ufs_hba *hba,
+   472					     struct ufs_hw_queue *hwq,
+   473					     struct cq_entry *cqe)
+   474	{
+   475		dma_addr_t dma_addr;
+   476	
+   477		dma_addr = ((u64)le32_to_cpu(cqe->command_desc_base_addr_hi) << 32) |
+   478			   (le32_to_cpu(cqe->command_desc_base_addr_lo) & 0xffffff80);
+   479	
+   480		return (dma_addr - hba->ucdl_dma_addr) /
+ > 481			sizeof_utp_transfer_cmd_desc(hba);
+   482	}
+   483	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
