@@ -1,143 +1,93 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3E3181
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 06:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660286376; x=1691822376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UG5gNWHoSyOb7+iWS4sLh7rYt1PWINaomN54ut/va/w=;
-  b=DMJyCDI+7aXgFiasL/WWYGMf0a7z+1a5TWbjBdcRnsQPrtgfCfnr6w1u
-   LtfPlV+W/EHvxYcM5JgiDy+zdTQ9LC2rlRk901c0n6bRU3uw3WcM5sFTc
-   dCkhGoVpQTGydPe2Kv5x7GWlJA5z1Ytz1tpSxqkkFyVwISyJieKj4+pAe
-   wvA6h0dOQe2cHveaKBYqCJ/KP60PomM9uOTXZjxMblZf9kXIGlgwS2+Ut
-   TDW3FLwIMulNgbP7UCn/BHjkWKLVMtOgT3gi8eSDg/Sfp8B/drKzS/kVq
-   OMihFTCOclJd4H9012xE0NKxMh1RjyBjx1yjHKpHWd4Z+xYfyVxNzEvhd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="271918960"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="271918960"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 23:39:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="748099829"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Aug 2022 23:39:34 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMOKU-0000Fe-16;
-	Fri, 12 Aug 2022 06:39:34 +0000
-Date: Fri, 12 Aug 2022 14:39:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Can Guo <quic_cang@quicinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v2 1/2] scsi: ufs: Add Multi-Circular Queue support
-Message-ID: <202208121414.5E6v9hTz-lkp@intel.com>
-References: <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A372626
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 07:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660290553;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P9aXlR/Mplh04GQrDWgRazGoxB/j8ggsCOd7dQOiifk=;
+	b=N9SGhwdL/F97Ndjir5hSfC2kftqzFY879YzdXgyezATiS1JhCaypaczBhOGUkF3Sk5Ie3X
+	ArKM9bMwgkUgVs3NWosUkN9V4SJtbdarbPDQA6H1oyHajus+QwoWoN8QLdZwUosQzU+S55
+	2JVGkkGiRE83xDQyaeSMGuEMgpPUCk8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-634-qv7mCe5oOEm3FAZsWxyctw-1; Fri, 12 Aug 2022 03:49:11 -0400
+X-MC-Unique: qv7mCe5oOEm3FAZsWxyctw-1
+Received: by mail-ed1-f69.google.com with SMTP id z6-20020a05640240c600b0043e1d52fd98so166043edb.22
+        for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 00:49:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=P9aXlR/Mplh04GQrDWgRazGoxB/j8ggsCOd7dQOiifk=;
+        b=zRCx9GNN0emXlsVPzMHCMZksZIe7QcJ4BYPis7sJJ+MOqyzOV5aTSJVEzO+nnwnOyG
+         w9TAqZFtBiFbbSRGiWNYwlwGhw9oHWwDpnDE100JJNBokOVcc09dUZZsMbEsig30bjEc
+         kpb1KKEak7/2OiFIISQN5NsVfcYdrjN2/R1OkLaLJM9sO7facHzCmXFu8EAc+u/hHH+x
+         cgJKq4WI+DY6QSlxkScwX51mniVxejJOJf1p/hOuF5Mt5wx+NeIr55EJ9hGZ2guIZNf7
+         xeeGtITJb1m2vrS/xH3Jw+um0lSw6Mk4R5Hw7tlw2hpvDnBUealUqwcj0UB+V+24OCLB
+         BqWA==
+X-Gm-Message-State: ACgBeo1PrwYO/hE7je4fkEOEK2rvCAriKFEgkI/exCy2quyDWfZEk3ih
+	U5+fRQg2JDsqW6G35bzXUQlRGjrnn+U0nHNIwYyfkG7w2J7mN4XltZDVxUDS4k48g9vQd5QoMiZ
+	yRmDsXKX/lM2Z6g==
+X-Received: by 2002:a17:906:7309:b0:731:5c2:a9a6 with SMTP id di9-20020a170906730900b0073105c2a9a6mr1927018ejc.486.1660290550930;
+        Fri, 12 Aug 2022 00:49:10 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR73en81mvQ3rlFGU0JoyKHAlXz7aryxpJTcMdrGUL8WTRn6f+/V2wLGkqFs5NiqLB0R0djPNw==
+X-Received: by 2002:a17:906:7309:b0:731:5c2:a9a6 with SMTP id di9-20020a170906730900b0073105c2a9a6mr1927001ejc.486.1660290550764;
+        Fri, 12 Aug 2022 00:49:10 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id f7-20020a056402068700b0043ce97fe4f7sm937094edy.44.2022.08.12.00.49.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 00:49:10 -0700 (PDT)
+Message-ID: <a9035e7c-4587-6df7-c16c-e656d1734145@redhat.com>
+Date: Fri, 12 Aug 2022 09:49:07 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/2] KVM: selftests: Fix Clang build issues in
+ KVM_ASM_SAFE()
+To: David Matlack <dmatlack@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Peter Xu <peterx@redhat.com>,
+ Jim Mattson <jmattson@google.com>, Oliver Upton <oupton@google.com>,
+ "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
+ kvm list <kvm@vger.kernel.org>
+References: <20220722234838.2160385-1-dmatlack@google.com>
+ <CALzav=frNna1fZYTxwz+Lo=1=zsOLAKoAd3pntXfUiDNdJ_PoA@mail.gmail.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CALzav=frNna1fZYTxwz+Lo=1=zsOLAKoAd3pntXfUiDNdJ_PoA@mail.gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Can,
+On 8/11/22 00:53, David Matlack wrote:
+> On Fri, Jul 22, 2022 at 4:48 PM David Matlack <dmatlack@google.com> wrote:
+>>
+>> The LLVM integrated assembler has some differences from the GNU
+>> assembler, and recent commit 3b23054cd3f5 ("KVM: selftests: Add x86-64
+>> support for exception fixup") seems to be tripping over a few of those
+>> differences.
+> 
+> Paolo, what do you think about these changes? I'm still hitting the
+> mentioned Clang build issues on kvm/master, commit 93472b797153
+> ("Merge tag 'kvmarm-5.20' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into
+> HEAD").
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on mkp-scsi/for-next]
-[cannot apply to jejb-scsi/for-next linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I had missed them, so thanks for pinging.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220811-183747
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-config: hexagon-randconfig-r041-20220811 (https://download.01.org/0day-ci/archive/20220812/202208121414.5E6v9hTz-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e5504cb5816e9118b2e7d7720919bb3cb61c34da
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220811-183747
-        git checkout e5504cb5816e9118b2e7d7720919bb3cb61c34da
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/
+Paolo
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/ufs/core/ufshcd.c:5464:13: warning: no previous prototype for function 'ufshcd_transfer_req_compl' [-Wmissing-prototypes]
-   irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
-               ^
-   drivers/ufs/core/ufshcd.c:5464:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
-   ^
-   static 
-   1 warning generated.
---
->> drivers/ufs/core/ufs-mcq.c:252:33: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-                           dev_err(hba->dev, "Resource %s not provided\n");
-                                                       ~^
-   include/linux/dev_printk.h:144:57: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-   #define dev_fmt(fmt) fmt
-                        ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ^~~
->> drivers/ufs/core/ufs-mcq.c:265:18: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                                            res->name, PTR_ERR(res->base));
-                                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/ufs/core/ufs-mcq.c:301:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                           PTR_ERR(res->base));
-                           ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
->> drivers/ufs/core/ufs-mcq.c:481:3: error: call to undeclared function 'sizeof_utp_transfer_cmd_desc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   sizeof_utp_transfer_cmd_desc(hba);
-                   ^
-   3 warnings and 1 error generated.
-
-
-vim +/sizeof_utp_transfer_cmd_desc +481 drivers/ufs/core/ufs-mcq.c
-
-   470	
-   471	static inline int ufshcd_mcq_get_tag(struct ufs_hba *hba,
-   472					     struct ufs_hw_queue *hwq,
-   473					     struct cq_entry *cqe)
-   474	{
-   475		dma_addr_t dma_addr;
-   476	
-   477		dma_addr = ((u64)le32_to_cpu(cqe->command_desc_base_addr_hi) << 32) |
-   478			   (le32_to_cpu(cqe->command_desc_base_addr_lo) & 0xffffff80);
-   479	
-   480		return (dma_addr - hba->ucdl_dma_addr) /
- > 481			sizeof_utp_transfer_cmd_desc(hba);
-   482	}
-   483	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
