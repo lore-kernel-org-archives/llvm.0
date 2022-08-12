@@ -1,42 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F1A2F28
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 21:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D592F28
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 21:24:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660338781; x=1691874781;
+  t=1660339455; x=1691875455;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7848sidLDarT6j7aY2jOGTPG6hFO16Fh4N33HSPH+Xo=;
-  b=OtTOM+g7GiquPSfz1dwYw3PfWKk0dqiIQIMFehUELTTCzRHzP1jr0F9A
-   D7lux020n6H2D03l5PZjui5MtwbrWHE8iiPO03TfhwBop11wzdtWlajme
-   UBD1N5NvMmqW0NO0adJS2pxLg5/PVEuHZfMwwGmAWpUvlD7oVbtTbVvJ7
-   CTzadMNU1r/7H/QZ3/UoPyhwm5QeU5OfBCL8/r6Dgy2Pv7fcgpcHJTCq3
-   QML6/7Ph7PKbaobnIbRoPmyDRjhFtI5xtgwXWqc2fNnxnfQeYe5R4p4W/
-   EaEleD/azEBXU7gpkoOqfYzNSI5QE3gVU9cdXlHByC1nsE6HnIhLn253m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292957684"
+  bh=E5wH/HDtGvZxjOWsBANoq8k/TU0gaAbz6fHXCwRwwN0=;
+  b=Isa/8Vgx4eD78dx7j1cKCQD1+AS/fZwIaH9GQZgVyXzIq19WAGqDHeeU
+   7fbWcRegMsZl7+Dmx17MFqtIlZsES81K5HJGUul90sAlXzaGOIdjK+f6b
+   IAyKyHJmz+fmj0lcdJo8ayxBhdiCld6jH32lnIH9eqVVgWD27VgmRH7D0
+   t0Rz9FdF9+zHSgB8hrf4s8wcmkrVYEFu/dNm3KoPM67RpOJwfbsjQXuG4
+   zcdBEtXERiI3VsrmXa8wHu+x7cHQLB4el1IhkmuYkBCV1ffMSDmXptKnR
+   WQp0gcaat44Hn8Fih5RYeHK8kwvzKae1VxScyf7jH47gA26XxridWlQa5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="377981459"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="292957684"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:12:58 -0700
+   d="scan'208";a="377981459"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:23:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="609377472"
+   d="scan'208";a="606049905"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 14:12:56 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 14:23:57 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMbxg-0000wp-0m;
-	Fri, 12 Aug 2022 21:12:56 +0000
-Date: Sat, 13 Aug 2022 05:12:47 +0800
+	id 1oMc8K-0000xT-1g;
+	Fri, 12 Aug 2022 21:23:56 +0000
+Date: Sat, 13 Aug 2022 05:23:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Pirko <jiri@nvidia.com>
+To: "Justin M. Forbes" <jforbes@fedoraproject.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 33/40]
- drivers/net/netdevsim/netdev.c:363:2: error: expected expression
-Message-ID: <202208130537.EKYjXYLm-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: [stable:linux-5.15.y 6874/9027] arch/arm/include/asm/xor.h:60:3:
+ error: write to reserved register 'R7'
+Message-ID: <202208130550.28NTRtkj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,108 +48,118 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
-head:   3752df45a64c94afd110eeb956cd9adaeec586c1
-commit: 95a8f1859e438effd49d5c1ae7828e87b8471180 [33/40] net: make drivers to use SET_NETDEV_DEVLINK_PORT to set devlink_port
-config: hexagon-randconfig-r041-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130537.EKYjXYLm-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
+commit: e16cc79b0f916069de223bdb567fa0bc2ccd18a5 [6874/9027] lib/crypto: add prompts back to crypto libraries
+config: arm-randconfig-r021-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130550.28NTRtkj-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/95a8f1859e438effd49d5c1ae7828e87b8471180
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
-        git checkout 95a8f1859e438effd49d5c1ae7828e87b8471180
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=e16cc79b0f916069de223bdb567fa0bc2ccd18a5
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout e16cc79b0f916069de223bdb567fa0bc2ccd18a5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/netdevsim/ net/dsa/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/net/netdevsim/netdev.c:363:2: error: expected ';' after expression
-           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
-           ^
-   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-           ((dev)->devlink_port = (_devlink_port))                 \
-                                                                   ^
->> drivers/net/netdevsim/netdev.c:363:2: error: expected expression
-   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-           ((dev)->devlink_port = (_devlink_port))                 \
-                                                                   ^
->> drivers/net/netdevsim/netdev.c:363:60: error: expected ')'
-           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
-                                                                     ^
-   drivers/net/netdevsim/netdev.c:363:2: note: to match this '('
-           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
-           ^
-   include/linux/netdevice.h:2345:53: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-   #define SET_NETDEV_DEVLINK_PORT(dev, _devlink_port) ({          \
-                                                       ^
-   3 errors generated.
---
-   net/dsa/slave.c:2367:2: error: expected ';' after expression
-           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
-           ^
-   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-           ((dev)->devlink_port = (_devlink_port))                 \
-                                                                   ^
->> net/dsa/slave.c:2367:2: error: expected expression
-   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-           ((dev)->devlink_port = (_devlink_port))                 \
-                                                                   ^
->> net/dsa/slave.c:2367:57: error: expected ')'
-           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
-                                                                  ^
-   net/dsa/slave.c:2367:2: note: to match this '('
-           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
-           ^
-   include/linux/netdevice.h:2345:53: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
-   #define SET_NETDEV_DEVLINK_PORT(dev, _devlink_port) ({          \
-                                                       ^
-   3 errors generated.
+   In file included from crypto/xor.c:17:
+>> arch/arm/include/asm/xor.h:60:3: error: write to reserved register 'R7'
+                   GET_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                   ^
+   arch/arm/include/asm/xor.h:62:3: error: write to reserved register 'R7'
+                   PUT_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                                ^
+   arch/arm/include/asm/xor.h:81:3: error: write to reserved register 'R7'
+                   GET_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                   ^
+   arch/arm/include/asm/xor.h:84:3: error: write to reserved register 'R7'
+                   PUT_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                                ^
+   4 errors generated.
 
 
-vim +363 drivers/net/netdevsim/netdev.c
+vim +/R7 +60 arch/arm/include/asm/xor.h
 
-   342	
-   343	struct netdevsim *
-   344	nsim_create(struct nsim_dev *nsim_dev, struct nsim_dev_port *nsim_dev_port)
-   345	{
-   346		struct net_device *dev;
-   347		struct netdevsim *ns;
-   348		int err;
-   349	
-   350		dev = alloc_netdev_mq(sizeof(*ns), "eth%d", NET_NAME_UNKNOWN, nsim_setup,
-   351				      nsim_dev->nsim_bus_dev->num_queues);
-   352		if (!dev)
-   353			return ERR_PTR(-ENOMEM);
-   354	
-   355		dev_net_set(dev, nsim_dev_net(nsim_dev));
-   356		ns = netdev_priv(dev);
-   357		ns->netdev = dev;
-   358		u64_stats_init(&ns->syncp);
-   359		ns->nsim_dev = nsim_dev;
-   360		ns->nsim_dev_port = nsim_dev_port;
-   361		ns->nsim_bus_dev = nsim_dev->nsim_bus_dev;
-   362		SET_NETDEV_DEV(dev, &ns->nsim_bus_dev->dev);
- > 363		SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
-   364		nsim_ethtool_init(ns);
-   365		if (nsim_dev_port_is_pf(nsim_dev_port))
-   366			err = nsim_init_netdevsim(ns);
-   367		else
-   368			err = nsim_init_netdevsim_vf(ns);
-   369		if (err)
-   370			goto err_free_netdev;
-   371		return ns;
-   372	
-   373	err_free_netdev:
-   374		free_netdev(dev);
-   375		return ERR_PTR(err);
-   376	}
-   377	
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  13  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  14  #define GET_BLOCK_2(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  15  	__asm__("ldmia	%0, {%1, %2}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  16  		: "=r" (dst), "=r" (a1), "=r" (a2) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  17  		: "0" (dst))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  18  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  19  #define GET_BLOCK_4(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  20  	__asm__("ldmia	%0, {%1, %2, %3, %4}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  21  		: "=r" (dst), "=r" (a1), "=r" (a2), "=r" (a3), "=r" (a4) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  22  		: "0" (dst))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  23  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  24  #define XOR_BLOCK_2(src) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  25  	__asm__("ldmia	%0!, {%1, %2}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  26  		: "=r" (src), "=r" (b1), "=r" (b2) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  27  		: "0" (src)); \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  28  	__XOR(a1, b1); __XOR(a2, b2);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  29  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  30  #define XOR_BLOCK_4(src) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  31  	__asm__("ldmia	%0!, {%1, %2, %3, %4}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  32  		: "=r" (src), "=r" (b1), "=r" (b2), "=r" (b3), "=r" (b4) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  33  		: "0" (src)); \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  34  	__XOR(a1, b1); __XOR(a2, b2); __XOR(a3, b3); __XOR(a4, b4)
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  35  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  36  #define PUT_BLOCK_2(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  37  	__asm__ __volatile__("stmia	%0!, {%2, %3}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  38  		: "=r" (dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  39  		: "0" (dst), "r" (a1), "r" (a2))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  40  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  41  #define PUT_BLOCK_4(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  42  	__asm__ __volatile__("stmia	%0!, {%2, %3, %4, %5}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  43  		: "=r" (dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  44  		: "0" (dst), "r" (a1), "r" (a2), "r" (a3), "r" (a4))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  45  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  46  static void
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  47  xor_arm4regs_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  48  {
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  49  	unsigned int lines = bytes / sizeof(unsigned long) / 4;
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  50  	register unsigned int a1 __asm__("r4");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  51  	register unsigned int a2 __asm__("r5");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  52  	register unsigned int a3 __asm__("r6");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  53  	register unsigned int a4 __asm__("r7");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  54  	register unsigned int b1 __asm__("r8");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  55  	register unsigned int b2 __asm__("r9");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  56  	register unsigned int b3 __asm__("ip");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  57  	register unsigned int b4 __asm__("lr");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  58  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  59  	do {
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16 @60  		GET_BLOCK_4(p1);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  61  		XOR_BLOCK_4(p2);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  62  		PUT_BLOCK_4(p1);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  63  	} while (--lines);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  64  }
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  65  
+
+:::::: The code at line 60 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service
