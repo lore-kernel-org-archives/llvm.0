@@ -1,45 +1,51 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2214A03;
-	Fri, 12 Aug 2022 19:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764DF4A03
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 20:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660332656; x=1691868656;
+  t=1660334518; x=1691870518;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GlbJXtp1pQ/j4T73SprLl7OSfQKxTVMN6a3ZI775+EA=;
-  b=BdqGG+W0Cc+8lXYCnvIdTVg7M1Fi0+SuNhAEP6jsDJYPYOo9mH2bg01V
-   IpErTKcfCzxvttMCxJiL9G5/TS6eqcBQQOA1HNV/AsxSf314RgPB9tlVX
-   XV5nPHtgLTfPoexl7gChhc4ks6eerZBz/fvIAIXgNWWXr/RPa+eq3k5mG
-   6Frv2RQySb3HY8KMixUv/V1JaMeKYP+0Tg0tcqS7wagh59zmqBt8840Rn
-   Vx2d7s20fvBfobuCV48AB6GkFo3HJzcC6euAfyIrNq4pelOCYswEyKNpR
-   KEA7bsAY3Bg2SnShB5GaZ5D26pQcSal9W0q8Pty4LQjW+w6jSVfL4yWA3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278627338"
+  bh=rObx9CQiZ9p/Xt7cKP+MPNTbdMgI9rNEvHssjBplX/w=;
+  b=ntYj8qVQV3QmxhO+7T6Pt1s+R7tc1UpQtQ8X7/Hvw9ugijgbWAarm9wV
+   JvI2nygMPKMmKGeH/qBSGVS6snq0D12rbE1yZ5nZvY+vuKSKP054z4Ivx
+   imL4DkMSrdgW4Hd3J2wB0fAwRwEdzEzOkkahiBY1ywFq3AMW+gfOTd2JW
+   X0kf8telgCOPdu4yqGdoX0j5qrPjj/pReQF2lbmUAqO7prcylQz7N87LP
+   +HXFIxqCCCy+H1tBcbTBNmZjjG8pqQdBJLOTdmiBVMG/HRBcISxXNfCxX
+   0WjFZe0cYZztHEuRWPsk/9ITZ/cD3Od6daLuQQlyjhaN7PJdtPrg/Lw0B
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317653022"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="278627338"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:30:55 -0700
+   d="scan'208";a="317653022"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 13:01:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="695370860"
+   d="scan'208";a="782069924"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 12:30:53 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 13:01:54 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMaMu-0000rZ-2y;
-	Fri, 12 Aug 2022 19:30:52 +0000
-Date: Sat, 13 Aug 2022 03:30:18 +0800
+	id 1oMaqv-0000sm-1J;
+	Fri, 12 Aug 2022 20:01:53 +0000
+Date: Sat, 13 Aug 2022 04:00:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: xiakaixu1987@gmail.com, sj@kernel.org, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, damon@lists.linux.dev,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
- split operation
-Message-ID: <202208130308.8rYWTL9U-lkp@intel.com>
-References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
+To: Zhenneng Li <lizhenneng@kylinos.cn>,
+	Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Jack Xiao <Jack.Xiao@amd.com>, Tao Zhou <tao.zhou1@amd.com>,
+	David Airlie <airlied@linux.ie>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, Zhenneng Li <lizhenneng@kylinos.cn>,
+	dri-devel@lists.freedesktop.org,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: Re: [PATCH] drm/amdgpu: use native mode for dp aux transfer
+Message-ID: <202208130320.NDvnbeVL-lkp@intel.com>
+References: <20220811072012.962460-1-lizhenneng@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,82 +54,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
+In-Reply-To: <20220811072012.962460-1-lizhenneng@kylinos.cn>
 
-Hi,
+Hi Zhenneng,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r045-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130308.8rYWTL9U-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+config: s390-randconfig-r034-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130320.NDvnbeVL-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/26b7d93b0f64c71d6d324a4a37d85641b55eaec2
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/1098c6fecb4292d634dbdccff9e720400dc7138d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-        git checkout 26b7d93b0f64c71d6d324a4a37d85641b55eaec2
+        git fetch --no-tags linux-review Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
+        git checkout 1098c6fecb4292d634dbdccff9e720400dc7138d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/damon/core.c:1218:
->> mm/damon/core-test.h:129:33: error: too many arguments to function call, expected 3, have 4
-           damon_split_region_at(c, t, r, 25);
-           ~~~~~~~~~~~~~~~~~~~~~          ^~
-   mm/damon/core.c:930:13: note: 'damon_split_region_at' declared here
-   static void damon_split_region_at(struct damon_target *t,
-               ^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:222:31: error: too many arguments to function call, expected 2, have 3
-           damon_split_regions_of(c, t, 2);
-           ~~~~~~~~~~~~~~~~~~~~~~       ^
-   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
-   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-               ^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:229:31: error: too many arguments to function call, expected 2, have 3
-           damon_split_regions_of(c, t, 4);
-           ~~~~~~~~~~~~~~~~~~~~~~       ^
-   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
-   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-               ^
-   3 errors generated.
+   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
+   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
+   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
+   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:73:10: warning: no previous prototype for function 'venus_mm_rreg_slow' [-Wmissing-prototypes]
+   uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
+            ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:73:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:84:6: warning: no previous prototype for function 'venus_mm_wreg_slow' [-Wmissing-prototypes]
+   void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
+        ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
+   ^
+   static 
+   14 warnings generated.
 
 
-vim +129 mm/damon/core-test.h
+vim +/venus_mm_rreg_slow +73 drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
 
-17ccae8bb5c928 SeongJae Park 2021-09-07  119  
-17ccae8bb5c928 SeongJae Park 2021-09-07  120  static void damon_test_split_at(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  121  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  122  	struct damon_ctx *c = damon_new_ctx();
-17ccae8bb5c928 SeongJae Park 2021-09-07  123  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  124  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  125  
-1971bd630452e9 SeongJae Park 2022-03-22  126  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  127  	r = damon_new_region(0, 100);
-17ccae8bb5c928 SeongJae Park 2021-09-07  128  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07 @129  	damon_split_region_at(c, t, r, 25);
-17ccae8bb5c928 SeongJae Park 2021-09-07  130  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  131  	KUNIT_EXPECT_EQ(test, r->ar.end, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  132  
-17ccae8bb5c928 SeongJae Park 2021-09-07  133  	r = damon_next_region(r);
-17ccae8bb5c928 SeongJae Park 2021-09-07  134  	KUNIT_EXPECT_EQ(test, r->ar.start, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  135  	KUNIT_EXPECT_EQ(test, r->ar.end, 100ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  136  
-17ccae8bb5c928 SeongJae Park 2021-09-07  137  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  138  	damon_destroy_ctx(c);
-17ccae8bb5c928 SeongJae Park 2021-09-07  139  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  140  
+    69	
+    70	#define R100_MM_INDEX                   0x0000
+    71	#define R100_MM_DATA                      0x0004
+    72	#define AMDGPU_MIN_MMIO_SIZE 0x10000
+  > 73	uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
+    74	{
+    75	        unsigned long flags;
+    76	        uint32_t ret;
+    77	
+    78	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
+    79	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
+    80	        ret = readl(((void __iomem *)adev->rmmio) + R100_MM_DATA);
+    81	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
+    82	        return ret;
+    83	}
+  > 84	void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
+    85	{
+    86	        unsigned long flags;
+    87	
+    88	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
+    89	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
+    90	        writel(v, ((void __iomem *)adev->rmmio) + R100_MM_DATA);
+    91	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
+    92	}
+    93	static inline uint32_t venus_mm_rreg(struct amdgpu_device *adev, uint32_t reg,
+    94	                                    bool always_indirect)
+    95	{
+    96	        /* The mmio size is 64kb at minimum. Allows the if to be optimized out. */
+    97	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
+    98	                return readl(((void __iomem *)adev->rmmio) + reg);
+    99	        else
+   100	                return venus_mm_rreg_slow(adev, reg);
+   101	}
+   102	static inline void venus_mm_wreg(struct amdgpu_device *adev, uint32_t reg, uint32_t v,
+   103	                                bool always_indirect)
+   104	{
+   105	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
+   106	                writel(v, ((void __iomem *)adev->rmmio) + reg);
+   107	        else
+   108	                venus_mm_wreg_slow(adev, reg, v);
+   109	}
+   110	
 
 -- 
 0-DAY CI Kernel Test Service
