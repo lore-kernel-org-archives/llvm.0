@@ -1,44 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D592F28
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 21:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842B62F28
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 22:25:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660339455; x=1691875455;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E5wH/HDtGvZxjOWsBANoq8k/TU0gaAbz6fHXCwRwwN0=;
-  b=Isa/8Vgx4eD78dx7j1cKCQD1+AS/fZwIaH9GQZgVyXzIq19WAGqDHeeU
-   7fbWcRegMsZl7+Dmx17MFqtIlZsES81K5HJGUul90sAlXzaGOIdjK+f6b
-   IAyKyHJmz+fmj0lcdJo8ayxBhdiCld6jH32lnIH9eqVVgWD27VgmRH7D0
-   t0Rz9FdF9+zHSgB8hrf4s8wcmkrVYEFu/dNm3KoPM67RpOJwfbsjQXuG4
-   zcdBEtXERiI3VsrmXa8wHu+x7cHQLB4el1IhkmuYkBCV1ffMSDmXptKnR
-   WQp0gcaat44Hn8Fih5RYeHK8kwvzKae1VxScyf7jH47gA26XxridWlQa5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="377981459"
+  t=1660343100; x=1691879100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VEgVRf6TYWdVH0mP7ghEBCpBCyfAj9357kruzs7PA0Q=;
+  b=cj9Kcfo0GPqjsiNwVVxGgMycl1xMaeYoGxwiYEPvJyOBF72Gb347960F
+   7Ft1U7vG6byLnsc89kGYnyJLmbjaR5QlpTOZpTLOPUS3O4r5CRzFtflE1
+   nkOgWvYZxHHM1UQDXm3TBrDTk/XfFtLYLTckh6PIxPQhEQace3KCSlD8Y
+   0bPu7caItB4qFEYEOgDnEDTgyMfJl+AnGez6iCrGpHl9FiBLGHSQ7+FCu
+   TdGT7PLLp/z+IixD7zVIegEsqrGtwjBMyUkchsHZY639DV0LSX8k0R7/H
+   /GHF5Xm+N7sTHiD1yHmfrfDADayslVg07AOOVjYQ895r03Hm0l5G/bijl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274754710"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="377981459"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:23:59 -0700
+   d="scan'208";a="274754710"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 15:24:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="606049905"
+   d="scan'208";a="851709994"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 14:23:57 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 Aug 2022 15:24:58 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMc8K-0000xT-1g;
-	Fri, 12 Aug 2022 21:23:56 +0000
-Date: Sat, 13 Aug 2022 05:23:03 +0800
+	id 1oMd5O-00010f-0E;
+	Fri, 12 Aug 2022 22:24:58 +0000
+Date: Sat, 13 Aug 2022 06:24:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Justin M. Forbes" <jforbes@fedoraproject.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: [stable:linux-5.15.y 6874/9027] arch/arm/include/asm/xor.h:60:3:
- error: write to reserved register 'R7'
-Message-ID: <202208130550.28NTRtkj-lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 3/4] cxl: CXL Performance Monitoring Unit driver
+Message-ID: <202208130612.shIDJG3a-lkp@intel.com>
+References: <20220812151214.2025-4-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,119 +45,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220812151214.2025-4-Jonathan.Cameron@huawei.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
-commit: e16cc79b0f916069de223bdb567fa0bc2ccd18a5 [6874/9027] lib/crypto: add prompts back to crypto libraries
-config: arm-randconfig-r021-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130550.28NTRtkj-lkp@intel.com/config)
+Hi Jonathan,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linus/master]
+[also build test WARNING on next-20220812]
+[cannot apply to arm-perf/for-next/perf v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/CXL-3-0-Performance-Monitoring-Unit-support/20220812-231616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7ebfc85e2cd7b08f518b526173e9a33b56b3913b
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220813/202208130612.shIDJG3a-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=e16cc79b0f916069de223bdb567fa0bc2ccd18a5
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout e16cc79b0f916069de223bdb567fa0bc2ccd18a5
+        # https://github.com/intel-lab-lkp/linux/commit/4776483ba3a4979cc318906623d23fc1e02148a7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cameron/CXL-3-0-Performance-Monitoring-Unit-support/20220812-231616
+        git checkout 4776483ba3a4979cc318906623d23fc1e02148a7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cxl/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from crypto/xor.c:17:
->> arch/arm/include/asm/xor.h:60:3: error: write to reserved register 'R7'
-                   GET_BLOCK_4(p1);
-                   ^
-   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
-           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
-                   ^
-   arch/arm/include/asm/xor.h:62:3: error: write to reserved register 'R7'
-                   PUT_BLOCK_4(p1);
-                   ^
-   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
-           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
-                                ^
-   arch/arm/include/asm/xor.h:81:3: error: write to reserved register 'R7'
-                   GET_BLOCK_4(p1);
-                   ^
-   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
-           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
-                   ^
-   arch/arm/include/asm/xor.h:84:3: error: write to reserved register 'R7'
-                   PUT_BLOCK_4(p1);
-                   ^
-   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
-           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
-                                ^
-   4 errors generated.
+>> drivers/cxl/cpmu.c:168:12: warning: address of array 'info->conf_counter_bm' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (info->conf_counter_bm) {
+           ~~  ~~~~~~^~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/R7 +60 arch/arm/include/asm/xor.h
+vim +168 drivers/cxl/cpmu.c
 
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  13  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  14  #define GET_BLOCK_2(dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  15  	__asm__("ldmia	%0, {%1, %2}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  16  		: "=r" (dst), "=r" (a1), "=r" (a2) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  17  		: "0" (dst))
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  18  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  19  #define GET_BLOCK_4(dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  20  	__asm__("ldmia	%0, {%1, %2, %3, %4}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  21  		: "=r" (dst), "=r" (a1), "=r" (a2), "=r" (a3), "=r" (a4) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  22  		: "0" (dst))
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  23  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  24  #define XOR_BLOCK_2(src) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  25  	__asm__("ldmia	%0!, {%1, %2}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  26  		: "=r" (src), "=r" (b1), "=r" (b2) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  27  		: "0" (src)); \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  28  	__XOR(a1, b1); __XOR(a2, b2);
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  29  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  30  #define XOR_BLOCK_4(src) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  31  	__asm__("ldmia	%0!, {%1, %2, %3, %4}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  32  		: "=r" (src), "=r" (b1), "=r" (b2), "=r" (b3), "=r" (b4) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  33  		: "0" (src)); \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  34  	__XOR(a1, b1); __XOR(a2, b2); __XOR(a3, b3); __XOR(a4, b4)
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  35  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  36  #define PUT_BLOCK_2(dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  37  	__asm__ __volatile__("stmia	%0!, {%2, %3}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  38  		: "=r" (dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  39  		: "0" (dst), "r" (a1), "r" (a2))
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  40  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  41  #define PUT_BLOCK_4(dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  42  	__asm__ __volatile__("stmia	%0!, {%2, %3, %4, %5}" \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  43  		: "=r" (dst) \
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  44  		: "0" (dst), "r" (a1), "r" (a2), "r" (a3), "r" (a4))
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  45  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  46  static void
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  47  xor_arm4regs_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  48  {
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  49  	unsigned int lines = bytes / sizeof(unsigned long) / 4;
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  50  	register unsigned int a1 __asm__("r4");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  51  	register unsigned int a2 __asm__("r5");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  52  	register unsigned int a3 __asm__("r6");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  53  	register unsigned int a4 __asm__("r7");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  54  	register unsigned int b1 __asm__("r8");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  55  	register unsigned int b2 __asm__("r9");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  56  	register unsigned int b3 __asm__("ip");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  57  	register unsigned int b4 __asm__("lr");
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  58  
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  59  	do {
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16 @60  		GET_BLOCK_4(p1);
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  61  		XOR_BLOCK_4(p2);
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  62  		PUT_BLOCK_4(p1);
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  63  	} while (--lines);
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  64  }
-^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  65  
-
-:::::: The code at line 60 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+    91	
+    92	/*
+    93	 * All CPMU counters are discoverable via the Event Capabilities Registers.
+    94	 * Each Event Capability register contains a a VID / GroupID.
+    95	 * A counter may then count any combination (by summing) of events in
+    96	 * that group which are in the Supported Events Bitmask.
+    97	 * However, there are some complexities to the scheme.
+    98	 *  - Fixed function counters refer to an Event Capabilities register.
+    99	 *    That event capability register is not then used for Configurable
+   100	 *    counters.
+   101	 * TODO: Support summed events.
+   102	 */
+   103	static int cpmu_parse_caps(struct device *dev, struct cpmu_info *info)
+   104	{
+   105		DECLARE_BITMAP(fixed_counter_event_cap_bm, 32) = {0};
+   106		void __iomem *base = info->base;
+   107		u64 val, eval;
+   108		int i;
+   109	
+   110		val = readq(base + CPMU_CAP_REG);
+   111		info->freeze_for_enable = FIELD_GET(CPMU_CAP_WRITEABLE_WHEN_FROZEN, val) &
+   112			FIELD_GET(CPMU_CAP_FREEZE, val);
+   113		if (!info->freeze_for_enable) {
+   114			dev_err(dev, "Driver does not support CPMUs that do not support freeze for enable\n");
+   115			return -ENODEV;
+   116		}
+   117	
+   118		info->num_counters = FIELD_GET(CPMU_CAP_NUM_COUNTERS_MSK, val) + 1;
+   119		info->counter_width = FIELD_GET(CPMU_CAP_COUNTER_WIDTH_MSK, val);
+   120		info->num_event_capabilities = FIELD_GET(CPMU_CAP_NUM_EVN_CAP_REG_SUP_MSK, val) + 1;
+   121	
+   122		info->filter_hdm = FIELD_GET(CPMU_CAP_FILTERS_SUP_MSK, val);
+   123		if (FIELD_GET(CPMU_CAP_INT, val))
+   124			info->irq = FIELD_GET(CPMU_CAP_MSI_N_MSK, val);
+   125		else
+   126			info->irq = -1;
+   127	
+   128		/* First handle fixed function counters; note if configurable counters found */
+   129		for (i = 0; i < info->num_counters; i++) {
+   130			struct cpmu_event *cpmu_ev;
+   131			u32 events_msk;
+   132			u8 group_idx;
+   133	
+   134			val = readq(base + CPMU_COUNTER_CFG_REG(i));
+   135	
+   136			if (FIELD_GET(CPMU_COUNTER_CFG_TYPE_MSK, val) ==
+   137				CPMU_COUNTER_CFG_TYPE_CONFIGURABLE) {
+   138				set_bit(i, info->conf_counter_bm);
+   139			}
+   140	
+   141			if (FIELD_GET(CPMU_COUNTER_CFG_TYPE_MSK, val) !=
+   142			    CPMU_COUNTER_CFG_TYPE_FIXED_FUN)
+   143				continue;
+   144	
+   145			/* In this case we know which fields are const */
+   146			group_idx = FIELD_GET(CPMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK, val);
+   147			events_msk = FIELD_GET(CPMU_COUNTER_CFG_EVENTS_MSK, val);
+   148			eval = readq(base + CPMU_EVENT_CAP_REG(group_idx));
+   149			cpmu_ev = devm_kzalloc(dev, sizeof(*cpmu_ev), GFP_KERNEL);
+   150			if (!cpmu_ev)
+   151				return -ENOMEM;
+   152	
+   153			cpmu_ev->vid = FIELD_GET(CPMU_EVENT_CAP_VENDOR_ID_MSK, eval);
+   154			cpmu_ev->gid = FIELD_GET(CPMU_EVENT_CAP_GROUP_ID_MSK, eval);
+   155			/* For a fixed purpose counter use the events mask from the counter CFG */
+   156			cpmu_ev->msk = events_msk;
+   157			cpmu_ev->configurable = false;
+   158			cpmu_ev->counter_idx = i;
+   159			/* This list add is never unwound as all entries deleted on remove */
+   160			list_add(&cpmu_ev->node, &info->cpmu_events);
+   161			/*
+   162			 * Configurable counters must not use an Event Capability registers that
+   163			 * is in use for a Fixed counter
+   164			 */
+   165			set_bit(group_idx, fixed_counter_event_cap_bm);
+   166		}
+   167	
+ > 168		if (info->conf_counter_bm) {
+   169			struct cpmu_event *cpmu_ev;
+   170			int j;
+   171			/* Walk event capabilities unused by fixed counters */
+   172			for_each_clear_bit(j, fixed_counter_event_cap_bm,
+   173					   info->num_event_capabilities) {
+   174				cpmu_ev = devm_kzalloc(dev, sizeof(*cpmu_ev), GFP_KERNEL);
+   175				if (!cpmu_ev)
+   176					return -ENOMEM;
+   177	
+   178				eval = readq(base + CPMU_EVENT_CAP_REG(j));
+   179				cpmu_ev->vid = FIELD_GET(CPMU_EVENT_CAP_VENDOR_ID_MSK, eval);
+   180				cpmu_ev->gid = FIELD_GET(CPMU_EVENT_CAP_GROUP_ID_MSK, eval);
+   181				cpmu_ev->msk = FIELD_GET(CPMU_EVENT_CAP_SUPPORTED_EVENTS_MSK, eval);
+   182				cpmu_ev->event_idx = j;
+   183				cpmu_ev->configurable = true;
+   184				list_add(&cpmu_ev->node, &info->cpmu_events);
+   185			}
+   186		}
+   187	
+   188		return 0;
+   189	}
+   190	
 
 -- 
 0-DAY CI Kernel Test Service
