@@ -1,217 +1,168 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764DF4A03
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 20:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E714A03
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 20:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660334518; x=1691870518;
+  t=1660335117; x=1691871117;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rObx9CQiZ9p/Xt7cKP+MPNTbdMgI9rNEvHssjBplX/w=;
-  b=ntYj8qVQV3QmxhO+7T6Pt1s+R7tc1UpQtQ8X7/Hvw9ugijgbWAarm9wV
-   JvI2nygMPKMmKGeH/qBSGVS6snq0D12rbE1yZ5nZvY+vuKSKP054z4Ivx
-   imL4DkMSrdgW4Hd3J2wB0fAwRwEdzEzOkkahiBY1ywFq3AMW+gfOTd2JW
-   X0kf8telgCOPdu4yqGdoX0j5qrPjj/pReQF2lbmUAqO7prcylQz7N87LP
-   +HXFIxqCCCy+H1tBcbTBNmZjjG8pqQdBJLOTdmiBVMG/HRBcISxXNfCxX
-   0WjFZe0cYZztHEuRWPsk/9ITZ/cD3Od6daLuQQlyjhaN7PJdtPrg/Lw0B
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=U7VKJ/YR4r6dt1TIieIa50ZssYXbZQFLKweTbIbNLBI=;
+  b=CCa3dMjjMxcQM3b/9Aq3lAK5xISjDDTpIYiEunC7yL+k5umAwSPBnnoC
+   Hm4BhnxWYRPGOkeBo/Qs25+nsvjWoLTz4O9e5W+2NmC0MQC5tEDmoW7Wo
+   CpmvWnIJpfQO84OROVtm5N7x8iv2e3dCqftDz9Q4mPSXLnl0e09p/IzqW
+   DCUtuQOlnkcGO26FjApGigrbbdOJdZutUotb4ngRKLIvy7ZqEPmOvduQz
+   Mx0L10F4s3m3fe1brSrCDIUvtK0Ab5HdInmCK6gkJXd7dsDRkYsOsJqxj
+   J7HK5Qq5RuM7DfkVrqYdjketnDdXnlmhAKsODvjj96K/vqZA+tTFX/ock
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317653022"
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274734474"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="317653022"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 13:01:57 -0700
+   d="scan'208";a="274734474"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 13:11:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="782069924"
+   d="scan'208";a="748312267"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 13:01:54 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 13:11:54 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMaqv-0000sm-1J;
-	Fri, 12 Aug 2022 20:01:53 +0000
-Date: Sat, 13 Aug 2022 04:00:53 +0800
+	id 1oMb0b-0000tF-1q;
+	Fri, 12 Aug 2022 20:11:53 +0000
+Date: Sat, 13 Aug 2022 04:11:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhenneng Li <lizhenneng@kylinos.cn>,
-	Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jack Xiao <Jack.Xiao@amd.com>, Tao Zhou <tao.zhou1@amd.com>,
-	David Airlie <airlied@linux.ie>,
-	Felix Kuehling <Felix.Kuehling@amd.com>,
-	Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, Zhenneng Li <lizhenneng@kylinos.cn>,
-	dri-devel@lists.freedesktop.org,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [PATCH] drm/amdgpu: use native mode for dp aux transfer
-Message-ID: <202208130320.NDvnbeVL-lkp@intel.com>
-References: <20220811072012.962460-1-lizhenneng@kylinos.cn>
+To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, wenqingliu0120@gmail.com,
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+	Baokun Li <libaokun1@huawei.com>
+Subject: Re: [PATCH v3] ext4: fix bug in extents parsing when eh_entries == 0
+ and eh_depth > 0
+Message-ID: <202208130421.BZpzWWRK-lkp@intel.com>
+References: <20220812141329.9501-1-lhenriques@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220811072012.962460-1-lizhenneng@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220812141329.9501-1-lhenriques@suse.de>
 
-Hi Zhenneng,
+Hi "Luís,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v5.19 next-20220812]
+[auto build test ERROR on tytso-ext4/dev]
+[also build test ERROR on linus/master v5.19 next-20220812]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: s390-randconfig-r034-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130320.NDvnbeVL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+config: arm64-buildonly-randconfig-r002-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130421.BZpzWWRK-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/1098c6fecb4292d634dbdccff9e720400dc7138d
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/ef3617646de6e939d29961099c7c8adcaa0d9fd9
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
-        git checkout 1098c6fecb4292d634dbdccff9e720400dc7138d
+        git fetch --no-tags linux-review Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
+        git checkout ef3617646de6e939d29961099c7c8adcaa0d9fd9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/ext4/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:25:
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:52:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:73:10: warning: no previous prototype for function 'venus_mm_rreg_slow' [-Wmissing-prototypes]
-   uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-            ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:73:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:84:6: warning: no previous prototype for function 'venus_mm_wreg_slow' [-Wmissing-prototypes]
-   void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-        ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-   ^
-   static 
-   14 warnings generated.
+>> fs/ext4/extents.c:463:41: error: use of undeclared identifier 'eh_depth'; did you mean 'ext_depth'?
+           if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
+                                                  ^~~~~~~~
+                                                  ext_depth
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   fs/ext4/ext4_extents.h:192:30: note: 'ext_depth' declared here
+   static inline unsigned short ext_depth(struct inode *inode)
+                                ^
+   1 error generated.
 
 
-vim +/venus_mm_rreg_slow +73 drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+vim +463 fs/ext4/extents.c
 
-    69	
-    70	#define R100_MM_INDEX                   0x0000
-    71	#define R100_MM_DATA                      0x0004
-    72	#define AMDGPU_MIN_MMIO_SIZE 0x10000
-  > 73	uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-    74	{
-    75	        unsigned long flags;
-    76	        uint32_t ret;
-    77	
-    78	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-    79	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-    80	        ret = readl(((void __iomem *)adev->rmmio) + R100_MM_DATA);
-    81	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-    82	        return ret;
-    83	}
-  > 84	void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-    85	{
-    86	        unsigned long flags;
-    87	
-    88	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-    89	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-    90	        writel(v, ((void __iomem *)adev->rmmio) + R100_MM_DATA);
-    91	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-    92	}
-    93	static inline uint32_t venus_mm_rreg(struct amdgpu_device *adev, uint32_t reg,
-    94	                                    bool always_indirect)
-    95	{
-    96	        /* The mmio size is 64kb at minimum. Allows the if to be optimized out. */
-    97	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-    98	                return readl(((void __iomem *)adev->rmmio) + reg);
-    99	        else
-   100	                return venus_mm_rreg_slow(adev, reg);
-   101	}
-   102	static inline void venus_mm_wreg(struct amdgpu_device *adev, uint32_t reg, uint32_t v,
-   103	                                bool always_indirect)
-   104	{
-   105	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-   106	                writel(v, ((void __iomem *)adev->rmmio) + reg);
-   107	        else
-   108	                venus_mm_wreg_slow(adev, reg, v);
-   109	}
-   110	
+   434	
+   435	static int __ext4_ext_check(const char *function, unsigned int line,
+   436				    struct inode *inode, struct ext4_extent_header *eh,
+   437				    int depth, ext4_fsblk_t pblk, ext4_lblk_t lblk)
+   438	{
+   439		const char *error_msg;
+   440		int max = 0, err = -EFSCORRUPTED;
+   441	
+   442		if (unlikely(eh->eh_magic != EXT4_EXT_MAGIC)) {
+   443			error_msg = "invalid magic";
+   444			goto corrupted;
+   445		}
+   446		if (unlikely(le16_to_cpu(eh->eh_depth) != depth)) {
+   447			error_msg = "unexpected eh_depth";
+   448			goto corrupted;
+   449		}
+   450		if (unlikely(eh->eh_max == 0)) {
+   451			error_msg = "invalid eh_max";
+   452			goto corrupted;
+   453		}
+   454		max = ext4_ext_max_entries(inode, depth);
+   455		if (unlikely(le16_to_cpu(eh->eh_max) > max)) {
+   456			error_msg = "too large eh_max";
+   457			goto corrupted;
+   458		}
+   459		if (unlikely(le16_to_cpu(eh->eh_entries) > le16_to_cpu(eh->eh_max))) {
+   460			error_msg = "invalid eh_entries";
+   461			goto corrupted;
+   462		}
+ > 463		if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
+   464			error_msg = "eh_entries is 0 but eh_depth is > 0";
+   465			goto corrupted;
+   466		}
+   467		if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+   468			error_msg = "invalid extent entries";
+   469			goto corrupted;
+   470		}
+   471		if (unlikely(depth > 32)) {
+   472			error_msg = "too large eh_depth";
+   473			goto corrupted;
+   474		}
+   475		/* Verify checksum on non-root extent tree nodes */
+   476		if (ext_depth(inode) != depth &&
+   477		    !ext4_extent_block_csum_verify(inode, eh)) {
+   478			error_msg = "extent tree corrupted";
+   479			err = -EFSBADCRC;
+   480			goto corrupted;
+   481		}
+   482		return 0;
+   483	
+   484	corrupted:
+   485		ext4_error_inode_err(inode, function, line, 0, -err,
+   486				     "pblk %llu bad header/extent: %s - magic %x, "
+   487				     "entries %u, max %u(%u), depth %u(%u)",
+   488				     (unsigned long long) pblk, error_msg,
+   489				     le16_to_cpu(eh->eh_magic),
+   490				     le16_to_cpu(eh->eh_entries),
+   491				     le16_to_cpu(eh->eh_max),
+   492				     max, le16_to_cpu(eh->eh_depth), depth);
+   493		return err;
+   494	}
+   495	
 
 -- 
 0-DAY CI Kernel Test Service
