@@ -1,50 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A417F138C
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 14:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DC2138C
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 15:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660316090; x=1691852090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=omkE3NQsYWGVI5ohyEwid1FFrhnD+QvscZYysRHXkes=;
-  b=KW9ox1H7xyToi61IZpGfWJfc4QXLBxZAMSsIbJq9TMH0IFJ8cuall/Af
-   0FMW0WdNQC8dLaPOrMi/uqnJTc8GGBy0oERhhccsBI6xZ3orUTvVm2WAs
-   5Rn0UIHR+b915Ze9AlzkaBGBdssuEeZRd/ETc31tebeUxxcLOl7ierGCo
-   XKMRdFlj5xYjzvEHvAIfR3F/ToDoxHbV6T5fnX9VPKmkWEIlJiYS8pZsE
-   TnXC5EwK7ybW3uIx4a3Qt2ojmjILEwAoNqnT5lzsQ481EL07uEEta3nbe
-   Upmg1lKECog7x/YEUSdERGyq1bX7RDh3m+fhOa7VwfOaS0aVDmM8leQ8y
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292402704"
+  t=1660316690; x=1691852690;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xtqehn2jqKyu0+Re9kL0AWZ6gXaqxuj5FPfav9EaBmo=;
+  b=UBQbtBzGRnvmxoRdo0NlYOlhISNWiJYt4rjBRjf3Tl1MAxQ75mvuEUyE
+   TOIfn9GFUzpvU9dornCYJAMMdcWthyGkarbBH9IgrP6n/BF3NK9WWIPcU
+   G4sz8Yh+x7n9JJn0QhdZFy4o3ImelGOBn4ahTb1mU6xz4be8lrOlYPr9X
+   Mm3wY712wz4yJ3Pqai3xlYIi+f9pWXwGaMmibj2AVgxWfZ7qtUs8SVUbc
+   f8yrkPJOsmITtGu0WLfatdb3EBuDmZ4QmqEjI0sF1xBwGPAJ2RrOCeY4X
+   hACT06F+RBylEB0MWAHFQ6eLWPKmyLihhJW49LgmeBfm1GBI2y6U1xwp9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292876358"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="292402704"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 07:54:50 -0700
+   d="scan'208";a="292876358"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 08:04:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="605935187"
+   d="scan'208";a="748218850"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 07:54:46 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 08:04:46 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMW3i-0000ed-08;
-	Fri, 12 Aug 2022 14:54:46 +0000
-Date: Fri, 12 Aug 2022 22:54:07 +0800
+	id 1oMWDO-0000fD-0u;
+	Fri, 12 Aug 2022 15:04:46 +0000
+Date: Fri, 12 Aug 2022 23:04:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Jim Mattson <jmattson@google.com>,
-	Jon Cargille <jcargill@google.com>, Peter Shier <pshier@google.com>,
-	Oliver Upton <oupton@google.com>,
-	Yuan Yao <yuan.yao@linux.intel.com>
-Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
- pointer for non-root mode VM{READ,WRITE}
-Message-ID: <202208122237.cw837245-lkp@intel.com>
-References: <20220812014706.43409-1-yuan.yao@intel.com>
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:totally-untested/remaining-fam0 2/2]
+ ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
+ 'target' with variable sized type 'struct ebt_entry_target' not at the end
+ of a struct or class is a GNU extension
+Message-ID: <202208122201.SveGt1yt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,205 +48,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812014706.43409-1-yuan.yao@intel.com>
 
-Hi Yuan,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on mst-vhost/linux-next linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220812/202208122237.cw837245-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git totally-untested/remaining-fam0
+head:   b0684d2f714f4ae515c283697c48d14e3ccef21b
+commit: b0684d2f714f4ae515c283697c48d14e3ccef21b [2/2] totally-untested: remaining zero-length arrays in structs in next-20220811
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220812/202208122201.SveGt1yt-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
-        git checkout b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=b0684d2f714f4ae515c283697c48d14e3ccef21b
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars totally-untested/remaining-fam0
+        git checkout b0684d2f714f4ae515c283697c48d14e3ccef21b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                        nested_cpu_has_shadow_vmcs(vcpu) &&
-                                                   ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
->> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                        nested_cpu_has_shadow_vmcs(vcpu) &&
-                                                   ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
->> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                        nested_cpu_has_shadow_vmcs(vcpu) &&
-                                                   ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
-   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                nested_cpu_has_shadow_vmcs(vcpu) &&
-                                           ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
-   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                nested_cpu_has_shadow_vmcs(vcpu) &&
-                                           ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
-   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
-                nested_cpu_has_shadow_vmcs(vcpu) &&
-                                           ^~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                                        ^~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
-   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
-                                                                ^
-   6 errors generated.
-
-
-vim +5126 arch/x86/kvm/vmx/nested.c
-
-  5098	
-  5099	static int handle_vmread(struct kvm_vcpu *vcpu)
-  5100	{
-  5101		struct vmcs12 *vmcs12 = is_guest_mode(vcpu) ? get_shadow_vmcs12(vcpu)
-  5102							    : get_vmcs12(vcpu);
-  5103		unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
-  5104		u32 instr_info = vmcs_read32(VMX_INSTRUCTION_INFO);
-  5105		struct vcpu_vmx *vmx = to_vmx(vcpu);
-  5106		struct x86_exception e;
-  5107		unsigned long field;
-  5108		u64 value;
-  5109		gva_t gva = 0;
-  5110		short offset;
-  5111		int len, r;
-  5112	
-  5113		if (!nested_vmx_check_permission(vcpu))
-  5114			return 1;
-  5115	
-  5116		/* Decode instruction info and find the field to read */
-  5117		field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
-  5118	
-  5119		if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
-  5120			/*
-  5121			 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
-  5122			 * any VMREAD sets the ALU flags for VMfailInvalid.
-  5123			 */
-  5124			if (vmx->nested.current_vmptr == INVALID_GPA ||
-  5125			    (is_guest_mode(vcpu) &&
-> 5126			     nested_cpu_has_shadow_vmcs(vcpu) &&
-  5127			     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-  5128				return nested_vmx_failInvalid(vcpu);
-  5129	
-  5130			offset = get_vmcs12_field_offset(field);
-  5131			if (offset < 0)
-  5132				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-  5133	
-  5134			if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
-  5135				copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-  5136	
-  5137			/* Read the field, zero-extended to a u64 value */
-  5138			value = vmcs12_read_any(vmcs12, field, offset);
-  5139		} else {
-  5140			/*
-  5141			 * Hyper-V TLFS (as of 6.0b) explicitly states, that while an
-  5142			 * enlightened VMCS is active VMREAD/VMWRITE instructions are
-  5143			 * unsupported. Unfortunately, certain versions of Windows 11
-  5144			 * don't comply with this requirement which is not enforced in
-  5145			 * genuine Hyper-V. Allow VMREAD from an enlightened VMCS as a
-  5146			 * workaround, as misbehaving guests will panic on VM-Fail.
-  5147			 * Note, enlightened VMCS is incompatible with shadow VMCS so
-  5148			 * all VMREADs from L2 should go to L1.
-  5149			 */
-  5150			if (WARN_ON_ONCE(is_guest_mode(vcpu)))
-  5151				return nested_vmx_failInvalid(vcpu);
-  5152	
-  5153			offset = evmcs_field_offset(field, NULL);
-  5154			if (offset < 0)
-  5155				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-  5156	
-  5157			/* Read the field, zero-extended to a u64 value */
-  5158			value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
-  5159		}
-  5160	
-  5161		/*
-  5162		 * Now copy part of this value to register or memory, as requested.
-  5163		 * Note that the number of bits actually copied is 32 or 64 depending
-  5164		 * on the guest's mode (32 or 64 bit), not on the given field's length.
-  5165		 */
-  5166		if (instr_info & BIT(10)) {
-  5167			kvm_register_write(vcpu, (((instr_info) >> 3) & 0xf), value);
-  5168		} else {
-  5169			len = is_64_bit_mode(vcpu) ? 8 : 4;
-  5170			if (get_vmx_mem_address(vcpu, exit_qualification,
-  5171						instr_info, true, len, &gva))
-  5172				return 1;
-  5173			/* _system ok, nested_vmx_check_permission has verified cpl=0 */
-  5174			r = kvm_write_guest_virt_system(vcpu, gva, &value, len, &e);
-  5175			if (r != X86EMUL_CONTINUE)
-  5176				return kvm_handle_memory_failure(vcpu, r, &e);
-  5177		}
-  5178	
-  5179		return nested_vmx_succeed(vcpu);
-  5180	}
-  5181	
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ebt_entry_target target;
+                                   ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   ./usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   2 warnings generated.
+--
+   In file included from <built-in>:1:
+   In file included from ./usr/include/rdma/ib_user_ioctl_verbs.h:38:
+>> usr/include/rdma/ib_user_verbs.h:436:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_cq_resp base;
+                                           ^
+>> usr/include/rdma/ib_user_verbs.h:644:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_qp_resp base;
+                                           ^
+>> usr/include/rdma/ib_user_verbs.h:740:29: warning: field 'base' with variable sized type 'struct ib_uverbs_modify_qp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_modify_qp base;
+                                      ^
+>> usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   14 warnings generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/rdma/ib_user_verbs.h:436:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_cq_resp base;
+                                           ^
+>> ./usr/include/rdma/ib_user_verbs.h:644:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_qp_resp base;
+                                           ^
+>> ./usr/include/rdma/ib_user_verbs.h:740:29: warning: field 'base' with variable sized type 'struct ib_uverbs_modify_qp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_modify_qp base;
+                                      ^
+>> ./usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at ./usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at ./usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at ./usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at ./usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   14 warnings generated.
+--
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/netfilter_ipv6/ip6_tables.h:24:
+   usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter_ipv6/ip6_tables.h:131:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ip6t_entry entry;
+                             ^
+   ./usr/include/linux/netfilter_ipv6/ip6_tables.h:136:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ip6t_entry entry;
+                             ^
+   4 warnings generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/linux/seg6_hmac.h:12:17: warning: field 'tlvhdr' with variable sized type 'struct sr6_tlv' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct sr6_tlv tlvhdr;
+                          ^
+   1 warning generated.
 
 -- 
 0-DAY CI Kernel Test Service
