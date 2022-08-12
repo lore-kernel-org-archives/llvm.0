@@ -1,59 +1,185 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB68E626
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 07:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660291085;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-	b=dj2bXyw69Ca1K4Y6juCkgJbZvwbNi5nv6jrOQoviFpqbOho2M2HwM8FISjJnvxp1ROoikM
-	2r5BpYsIxJjn4lSpaF6A0ZYFUKwwYh7WGGpUlONUl2mYFx3QH3EI7YUledjLX9fr3Ax0fO
-	0hzhTzWkOALlkM41C7PbMR1K4W/WJkc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-PeT3p9eYMt6n7y6obxaLKQ-1; Fri, 12 Aug 2022 03:58:01 -0400
-X-MC-Unique: PeT3p9eYMt6n7y6obxaLKQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C3838032E3;
-	Fri, 12 Aug 2022 07:58:01 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BBAFDC15BA8;
-	Fri, 12 Aug 2022 07:58:00 +0000 (UTC)
-From: Paolo Bonzini <pbonzini@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	David Matlack <dmatlack@google.com>
-Cc: Jim Mattson <jmattson@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Oliver Upton <oupton@google.com>,
-	Tom Rix <trix@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788A5366
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 11:45:38 +0000 (UTC)
+Received: from YC20090004.ad.ts.tri-ad.global ([109.190.253.11])
+	by smtp.orange.fr with ESMTPA
+	id MT5eouHcQeT4cMT6MoVeQP; Fri, 12 Aug 2022 13:45:36 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 13:45:36 +0200
+X-ME-IP: 109.190.253.11
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 0/2] KVM: selftests: Fix Clang build issues in KVM_ASM_SAFE()
-Date: Fri, 12 Aug 2022 03:57:58 -0400
-Message-Id: <166029101189.410868.1013034335296183657.b4-ty@redhat.com>
-In-Reply-To: <20220722234838.2160385-1-dmatlack@google.com>
-References: <20220722234838.2160385-1-dmatlack@google.com>
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v5 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
+Date: Fri, 12 Aug 2022 20:44:37 +0900
+Message-Id: <20220812114438.1574-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
 
-Queued, thanks.
+For x86_64, the current ffs() implementation does not produce
+optimized code when called with a constant expression. On the
+contrary, the __builtin_ffs() function of both GCC and clang is able
+to fold the expression into a single instruction.
 
-Paolo
+** Example **
+
+Let's consider two dummy functions foo() and bar() as below:
+
+  #include <linux/bitops.h>
+  #define CONST 0x01000000
+
+  unsigned int foo(void)
+  {
+  	return ffs(CONST);
+  }
+
+  unsigned int bar(void)
+  {
+  	return __builtin_ffs(CONST);
+  }
+
+GCC would produce below assembly code:
+
+  0000000000000000 <foo>:
+     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
+     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     a:	0f bc c2             	bsf    %edx,%eax
+     d:	83 c0 01             	add    $0x1,%eax
+    10:	c3                   	ret
+  <Instructions after ret and before next function were redacted>
+
+  0000000000000020 <bar>:
+    20:	b8 19 00 00 00       	mov    $0x19,%eax
+    25:	c3                   	ret
+
+And clang would produce:
+
+  0000000000000000 <foo>:
+     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
+     c:	83 c0 01             	add    $0x1,%eax
+     f:	c3                   	ret
+
+  0000000000000010 <bar>:
+    10:	b8 19 00 00 00       	mov    $0x19,%eax
+    15:	c3                   	ret
+
+Both examples clearly demonstrate the benefit of using __builtin_ffs()
+instead of the kernel's asm implementation for constant expressions.
+
+However, for non constant expressions, the ffs() asm version of the
+kernel remains better for x86_64 because, contrary to GCC, it doesn't
+emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+able optimize out the CMOV call).
+
+Use __builtin_constant_p() to select between the kernel's ffs() and
+the __builtin_ffs() depending on whether the argument is constant or
+not.
+
+As a side benefit, replacing the ffs() function declaration by a macro
+also removes below -Wshadow warning:
+
+  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+    283 | static __always_inline int ffs(int x)
+
+** Statistics **
+
+On a allyesconfig, before...:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  1081
+
+...and after:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  792
+
+So, roughly 26.7% of the calls to ffs() were using constant
+expressions and could be optimized out.
+
+(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+
+[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
+Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index a288ecd230ab..6ed979547086 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigned long word)
+ #undef ADDR
+ 
+ #ifdef __KERNEL__
+-/**
+- * ffs - find first set bit in word
+- * @x: the word to search
+- *
+- * This is defined the same way as the libc and compiler builtin ffs
+- * routines, therefore differs in spirit from the other bitops.
+- *
+- * ffs(value) returns 0 if value is 0 or the position of the first
+- * set bit if value is nonzero. The first (least significant) bit
+- * is at position 1.
+- */
+-static __always_inline int ffs(int x)
++static __always_inline int variable_ffs(int x)
+ {
+ 	int r;
+ 
+@@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
+ 	return r + 1;
+ }
+ 
++/**
++ * ffs - find first set bit in word
++ * @x: the word to search
++ *
++ * This is defined the same way as the libc and compiler builtin ffs
++ * routines, therefore differs in spirit from the other bitops.
++ *
++ * ffs(value) returns 0 if value is 0 or the position of the first
++ * set bit if value is nonzero. The first (least significant) bit
++ * is at position 1.
++ */
++#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
++
+ /**
+  * fls - find last set bit in word
+  * @x: the word to search
+-- 
+2.35.1
 
