@@ -1,35 +1,35 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED5F36C
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391C236C
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660266704;
+	s=mimecast20190719; t=1660267901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=Y+XR6Kmhd3zxERGfBTz0uB17DnFjpLlbds78VCoKp1I=;
-	b=Ine+9GE2YXWsW01SLiKIbrokMdOJw/9gMyAAjr8Ri4y3mkwFB233HHgMNxyZWH9bTiL/mO
-	dj77taUNHJSz5wulYHNt5tmEGsfcC26kfjPZDGuBEY02jN5/CTp+evFjU2Kfg3DsoSzFSO
-	ZxBxnSAmdi35lUg5TdMUSYuMIq7YP2I=
+	bh=gw5y0NKhONyyo4l9K3WhWdd7kTmNu0wZ3q0xFDCtNJg=;
+	b=KnSoAcoK/5Jz3Hy1vkiGrsdfA4wUeibDWL7ovNnzvYp+7VP9YNzytv5hi9xkd40kQehrz2
+	p29gISvm5QgvmhnDiukPvvPLG1QMKNrfsCnPMqJzogLgmczJMf/q0VfNU8PGiJ3tNEWItD
+	QrDDi6/qXpGOgZurqxVKxNCO6LEUZmk=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-d7PXUbXPPCO62YQJDPuOFA-1; Thu, 11 Aug 2022 21:11:43 -0400
-X-MC-Unique: d7PXUbXPPCO62YQJDPuOFA-1
+ us-mta-492-fJ2-RUycNrK3chnAmh2pkA-1; Thu, 11 Aug 2022 21:31:40 -0400
+X-MC-Unique: fJ2-RUycNrK3chnAmh2pkA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A7691C13957
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:11:43 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BA973C106B0
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:31:40 +0000 (UTC)
 Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 28E90112131B;
-	Fri, 12 Aug 2022 01:11:43 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3B56D112131B;
+	Fri, 12 Aug 2022 01:31:40 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (62/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [2ae08b36]
-Date: Fri, 12 Aug 2022 01:11:43 -0000
+Subject: =?utf-8?b?4pyF?= PASS (57/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [21f9c8a1]
+Date: Fri, 12 Aug 2022 01:31:40 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <27976.122081121114300861@us-mta-524.us.mimecast.lan>
+Message-Id: <91743.122081121314000201@us-mta-492.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50671
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50668
 
 One or more kernel tests failed:
 
@@ -68,11 +68,6 @@ l-tests/-/issues/513
                   x86_64 - Firmware test suite
                   x86_64 (debug) - kselftest build - bpf
                   x86_64 (debug) - Firmware test suite
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
         Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
 to resize filesystem
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -101,9 +96,12 @@ ion: kaslr
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1169
             Affected tests:
+                 aarch64 - Reboot test
                   x86_64 - Memory function: kaslr
                   x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
                   x86_64 (debug) - Memory function: kaslr
                   x86_64 (debug) - Reboot test
         Issue: kselftests upstream: FAIL: do_net_forwarding_config
@@ -175,11 +173,6 @@ l-tests/-/issues/1300
                    s390x - Storage - blktests - nvmeof-mp
                   x86_64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -196,12 +189,6 @@ apability permissive=3D0
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
                  aarch64 - Storage - software RAID testing
-        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
-c/0x4c
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1310
-            Affected tests:
-                 aarch64 - Firmware test suite
         Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
 .c:5407 __alloc_pages+0x1a0/0x290
             URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
