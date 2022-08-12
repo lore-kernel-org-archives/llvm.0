@@ -1,168 +1,153 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E714A03
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 20:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F1A2F28
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 21:13:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660335117; x=1691871117;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=U7VKJ/YR4r6dt1TIieIa50ZssYXbZQFLKweTbIbNLBI=;
-  b=CCa3dMjjMxcQM3b/9Aq3lAK5xISjDDTpIYiEunC7yL+k5umAwSPBnnoC
-   Hm4BhnxWYRPGOkeBo/Qs25+nsvjWoLTz4O9e5W+2NmC0MQC5tEDmoW7Wo
-   CpmvWnIJpfQO84OROVtm5N7x8iv2e3dCqftDz9Q4mPSXLnl0e09p/IzqW
-   DCUtuQOlnkcGO26FjApGigrbbdOJdZutUotb4ngRKLIvy7ZqEPmOvduQz
-   Mx0L10F4s3m3fe1brSrCDIUvtK0Ab5HdInmCK6gkJXd7dsDRkYsOsJqxj
-   J7HK5Qq5RuM7DfkVrqYdjketnDdXnlmhAKsODvjj96K/vqZA+tTFX/ock
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274734474"
+  t=1660338781; x=1691874781;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7848sidLDarT6j7aY2jOGTPG6hFO16Fh4N33HSPH+Xo=;
+  b=OtTOM+g7GiquPSfz1dwYw3PfWKk0dqiIQIMFehUELTTCzRHzP1jr0F9A
+   D7lux020n6H2D03l5PZjui5MtwbrWHE8iiPO03TfhwBop11wzdtWlajme
+   UBD1N5NvMmqW0NO0adJS2pxLg5/PVEuHZfMwwGmAWpUvlD7oVbtTbVvJ7
+   CTzadMNU1r/7H/QZ3/UoPyhwm5QeU5OfBCL8/r6Dgy2Pv7fcgpcHJTCq3
+   QML6/7Ph7PKbaobnIbRoPmyDRjhFtI5xtgwXWqc2fNnxnfQeYe5R4p4W/
+   EaEleD/azEBXU7gpkoOqfYzNSI5QE3gVU9cdXlHByC1nsE6HnIhLn253m
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292957684"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="274734474"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 13:11:56 -0700
+   d="scan'208";a="292957684"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:12:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="748312267"
+   d="scan'208";a="609377472"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 13:11:54 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 14:12:56 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMb0b-0000tF-1q;
-	Fri, 12 Aug 2022 20:11:53 +0000
-Date: Sat, 13 Aug 2022 04:11:49 +0800
+	id 1oMbxg-0000wp-0m;
+	Fri, 12 Aug 2022 21:12:56 +0000
+Date: Sat, 13 Aug 2022 05:12:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, wenqingliu0120@gmail.com,
-	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-	=?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-	Baokun Li <libaokun1@huawei.com>
-Subject: Re: [PATCH v3] ext4: fix bug in extents parsing when eh_entries == 0
- and eh_depth > 0
-Message-ID: <202208130421.BZpzWWRK-lkp@intel.com>
-References: <20220812141329.9501-1-lhenriques@suse.de>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 33/40]
+ drivers/net/netdevsim/netdev.c:363:2: error: expected expression
+Message-ID: <202208130537.EKYjXYLm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220812141329.9501-1-lhenriques@suse.de>
 
-Hi "Luís,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: arm64-buildonly-randconfig-r002-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130421.BZpzWWRK-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
+head:   3752df45a64c94afd110eeb956cd9adaeec586c1
+commit: 95a8f1859e438effd49d5c1ae7828e87b8471180 [33/40] net: make drivers to use SET_NETDEV_DEVLINK_PORT to set devlink_port
+config: hexagon-randconfig-r041-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130537.EKYjXYLm-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ef3617646de6e939d29961099c7c8adcaa0d9fd9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
-        git checkout ef3617646de6e939d29961099c7c8adcaa0d9fd9
+        # https://github.com/jpirko/linux_mlxsw/commit/95a8f1859e438effd49d5c1ae7828e87b8471180
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
+        git checkout 95a8f1859e438effd49d5c1ae7828e87b8471180
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/netdevsim/ net/dsa/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/ext4/extents.c:463:41: error: use of undeclared identifier 'eh_depth'; did you mean 'ext_depth'?
-           if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
-                                                  ^~~~~~~~
-                                                  ext_depth
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   fs/ext4/ext4_extents.h:192:30: note: 'ext_depth' declared here
-   static inline unsigned short ext_depth(struct inode *inode)
-                                ^
-   1 error generated.
+   drivers/net/netdevsim/netdev.c:363:2: error: expected ';' after expression
+           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
+           ^
+   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+           ((dev)->devlink_port = (_devlink_port))                 \
+                                                                   ^
+>> drivers/net/netdevsim/netdev.c:363:2: error: expected expression
+   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+           ((dev)->devlink_port = (_devlink_port))                 \
+                                                                   ^
+>> drivers/net/netdevsim/netdev.c:363:60: error: expected ')'
+           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
+                                                                     ^
+   drivers/net/netdevsim/netdev.c:363:2: note: to match this '('
+           SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
+           ^
+   include/linux/netdevice.h:2345:53: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+   #define SET_NETDEV_DEVLINK_PORT(dev, _devlink_port) ({          \
+                                                       ^
+   3 errors generated.
+--
+   net/dsa/slave.c:2367:2: error: expected ';' after expression
+           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
+           ^
+   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+           ((dev)->devlink_port = (_devlink_port))                 \
+                                                                   ^
+>> net/dsa/slave.c:2367:2: error: expected expression
+   include/linux/netdevice.h:2347:44: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+           ((dev)->devlink_port = (_devlink_port))                 \
+                                                                   ^
+>> net/dsa/slave.c:2367:57: error: expected ')'
+           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
+                                                                  ^
+   net/dsa/slave.c:2367:2: note: to match this '('
+           SET_NETDEV_DEVLINK_PORT(slave_dev, &port->devlink_port);
+           ^
+   include/linux/netdevice.h:2345:53: note: expanded from macro 'SET_NETDEV_DEVLINK_PORT'
+   #define SET_NETDEV_DEVLINK_PORT(dev, _devlink_port) ({          \
+                                                       ^
+   3 errors generated.
 
 
-vim +463 fs/ext4/extents.c
+vim +363 drivers/net/netdevsim/netdev.c
 
-   434	
-   435	static int __ext4_ext_check(const char *function, unsigned int line,
-   436				    struct inode *inode, struct ext4_extent_header *eh,
-   437				    int depth, ext4_fsblk_t pblk, ext4_lblk_t lblk)
-   438	{
-   439		const char *error_msg;
-   440		int max = 0, err = -EFSCORRUPTED;
-   441	
-   442		if (unlikely(eh->eh_magic != EXT4_EXT_MAGIC)) {
-   443			error_msg = "invalid magic";
-   444			goto corrupted;
-   445		}
-   446		if (unlikely(le16_to_cpu(eh->eh_depth) != depth)) {
-   447			error_msg = "unexpected eh_depth";
-   448			goto corrupted;
-   449		}
-   450		if (unlikely(eh->eh_max == 0)) {
-   451			error_msg = "invalid eh_max";
-   452			goto corrupted;
-   453		}
-   454		max = ext4_ext_max_entries(inode, depth);
-   455		if (unlikely(le16_to_cpu(eh->eh_max) > max)) {
-   456			error_msg = "too large eh_max";
-   457			goto corrupted;
-   458		}
-   459		if (unlikely(le16_to_cpu(eh->eh_entries) > le16_to_cpu(eh->eh_max))) {
-   460			error_msg = "invalid eh_entries";
-   461			goto corrupted;
-   462		}
- > 463		if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
-   464			error_msg = "eh_entries is 0 but eh_depth is > 0";
-   465			goto corrupted;
-   466		}
-   467		if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
-   468			error_msg = "invalid extent entries";
-   469			goto corrupted;
-   470		}
-   471		if (unlikely(depth > 32)) {
-   472			error_msg = "too large eh_depth";
-   473			goto corrupted;
-   474		}
-   475		/* Verify checksum on non-root extent tree nodes */
-   476		if (ext_depth(inode) != depth &&
-   477		    !ext4_extent_block_csum_verify(inode, eh)) {
-   478			error_msg = "extent tree corrupted";
-   479			err = -EFSBADCRC;
-   480			goto corrupted;
-   481		}
-   482		return 0;
-   483	
-   484	corrupted:
-   485		ext4_error_inode_err(inode, function, line, 0, -err,
-   486				     "pblk %llu bad header/extent: %s - magic %x, "
-   487				     "entries %u, max %u(%u), depth %u(%u)",
-   488				     (unsigned long long) pblk, error_msg,
-   489				     le16_to_cpu(eh->eh_magic),
-   490				     le16_to_cpu(eh->eh_entries),
-   491				     le16_to_cpu(eh->eh_max),
-   492				     max, le16_to_cpu(eh->eh_depth), depth);
-   493		return err;
-   494	}
-   495	
+   342	
+   343	struct netdevsim *
+   344	nsim_create(struct nsim_dev *nsim_dev, struct nsim_dev_port *nsim_dev_port)
+   345	{
+   346		struct net_device *dev;
+   347		struct netdevsim *ns;
+   348		int err;
+   349	
+   350		dev = alloc_netdev_mq(sizeof(*ns), "eth%d", NET_NAME_UNKNOWN, nsim_setup,
+   351				      nsim_dev->nsim_bus_dev->num_queues);
+   352		if (!dev)
+   353			return ERR_PTR(-ENOMEM);
+   354	
+   355		dev_net_set(dev, nsim_dev_net(nsim_dev));
+   356		ns = netdev_priv(dev);
+   357		ns->netdev = dev;
+   358		u64_stats_init(&ns->syncp);
+   359		ns->nsim_dev = nsim_dev;
+   360		ns->nsim_dev_port = nsim_dev_port;
+   361		ns->nsim_bus_dev = nsim_dev->nsim_bus_dev;
+   362		SET_NETDEV_DEV(dev, &ns->nsim_bus_dev->dev);
+ > 363		SET_NETDEV_DEVLINK_PORT(dev, &nsim_dev_port->devlink_port);
+   364		nsim_ethtool_init(ns);
+   365		if (nsim_dev_port_is_pf(nsim_dev_port))
+   366			err = nsim_init_netdevsim(ns);
+   367		else
+   368			err = nsim_init_netdevsim_vf(ns);
+   369		if (err)
+   370			goto err_free_netdev;
+   371		return ns;
+   372	
+   373	err_free_netdev:
+   374		free_netdev(dev);
+   375		return ERR_PTR(err);
+   376	}
+   377	
 
 -- 
 0-DAY CI Kernel Test Service
