@@ -1,41 +1,50 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CED1371
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 14:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A417F138C
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 14:54:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660313627; x=1691849627;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=22YQUqkc0i/CvWkkdtsS780mUlph5ByO4MPEPu5nFgg=;
-  b=Bly8+8RX0SFdNP3Aogv2ieRMPsBlzg/ttqlV4Drb9PmKAbjG5wCBlUx+
-   g/HMZRUoalnug5nKr0lcSxsSK3PpADS3RE5b3J7LbnWPYHopB3iK7tUu6
-   GqqaZGU6UNPDKTd862t+Sj8gS50HanO+LcFFn8ip8nb5Ly02YX3UoVtrn
-   PMa7ratDcFWhR2qGNXHkv46AWVr5HLmJh33vpxE1M1bZ4K5r7n0G7EKpJ
-   rtJQ3Qp/W72QtQBJf2Lj1gTxENqwSkNi+NVLMAXXO+HRebjLPg8g2pVEK
-   N//KGo0JloN0LIO0mVCgFxleyLsbZwf2gm+TwJPhDoVTdsHDS2ndvIjj3
+  t=1660316090; x=1691852090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=omkE3NQsYWGVI5ohyEwid1FFrhnD+QvscZYysRHXkes=;
+  b=KW9ox1H7xyToi61IZpGfWJfc4QXLBxZAMSsIbJq9TMH0IFJ8cuall/Af
+   0FMW0WdNQC8dLaPOrMi/uqnJTc8GGBy0oERhhccsBI6xZ3orUTvVm2WAs
+   5Rn0UIHR+b915Ze9AlzkaBGBdssuEeZRd/ETc31tebeUxxcLOl7ierGCo
+   XKMRdFlj5xYjzvEHvAIfR3F/ToDoxHbV6T5fnX9VPKmkWEIlJiYS8pZsE
+   TnXC5EwK7ybW3uIx4a3Qt2ojmjILEwAoNqnT5lzsQ481EL07uEEta3nbe
+   Upmg1lKECog7x/YEUSdERGyq1bX7RDh3m+fhOa7VwfOaS0aVDmM8leQ8y
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289171367"
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292402704"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="289171367"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 07:13:46 -0700
+   d="scan'208";a="292402704"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 07:54:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="634654362"
+   d="scan'208";a="605935187"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Aug 2022 07:13:45 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 07:54:46 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMVQ0-0000bz-23;
-	Fri, 12 Aug 2022 14:13:44 +0000
-Date: Fri, 12 Aug 2022 22:12:54 +0800
+	id 1oMW3i-0000ed-08;
+	Fri, 12 Aug 2022 14:54:46 +0000
+Date: Fri, 12 Aug 2022 22:54:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+To: Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: block/blk-map.c:254:16: warning: variable 'added' set but not used
-Message-ID: <202208122209.qe4Bg8hH-lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Jim Mattson <jmattson@google.com>,
+	Jon Cargille <jcargill@google.com>, Peter Shier <pshier@google.com>,
+	Oliver Upton <oupton@google.com>,
+	Yuan Yao <yuan.yao@linux.intel.com>
+Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
+ pointer for non-root mode VM{READ,WRITE}
+Message-ID: <202208122237.cw837245-lkp@intel.com>
+References: <20220812014706.43409-1-yuan.yao@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,123 +53,205 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220812014706.43409-1-yuan.yao@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7ebfc85e2cd7b08f518b526173e9a33b56b3913b
-commit: 480cb846c27bda4e14d98a45a9f50c250f38f266 block: convert to advancing variants of iov_iter_get_pages{,_alloc}()
-date:   4 days ago
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220812/202208122209.qe4Bg8hH-lkp@intel.com/config)
+Hi Yuan,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on mst-vhost/linux-next linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220812/202208122237.cw837245-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=480cb846c27bda4e14d98a45a9f50c250f38f266
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 480cb846c27bda4e14d98a45a9f50c250f38f266
+        # https://github.com/intel-lab-lkp/linux/commit/b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
+        git checkout b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> block/blk-map.c:254:16: warning: variable 'added' set but not used [-Wunused-but-set-variable]
-                   size_t offs, added = 0;
-                                ^
-   1 warning generated.
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   6 errors generated.
 
 
-vim +/added +254 block/blk-map.c
+vim +5126 arch/x86/kvm/vmx/nested.c
 
-130879f1ee0e25 Christoph Hellwig 2020-03-27  233  
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  234  static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  235  		gfp_t gfp_mask)
-130879f1ee0e25 Christoph Hellwig 2020-03-27  236  {
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  237  	unsigned int max_sectors = queue_max_hw_sectors(rq->q);
-066ff571011d84 Christoph Hellwig 2022-04-06  238  	unsigned int nr_vecs = iov_iter_npages(iter, BIO_MAX_VECS);
-393bb12e00580a Christoph Hellwig 2021-03-31  239  	struct bio *bio;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  240  	int ret;
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  241  	int j;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  242  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  243  	if (!iov_iter_count(iter))
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  244  		return -EINVAL;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  245  
-066ff571011d84 Christoph Hellwig 2022-04-06  246  	bio = bio_kmalloc(nr_vecs, gfp_mask);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  247  	if (!bio)
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  248  		return -ENOMEM;
-066ff571011d84 Christoph Hellwig 2022-04-06  249  	bio_init(bio, NULL, bio->bi_inline_vecs, nr_vecs, req_op(rq));
-130879f1ee0e25 Christoph Hellwig 2020-03-27  250  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  251  	while (iov_iter_count(iter)) {
-130879f1ee0e25 Christoph Hellwig 2020-03-27  252  		struct page **pages;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  253  		ssize_t bytes;
-130879f1ee0e25 Christoph Hellwig 2020-03-27 @254  		size_t offs, added = 0;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  255  		int npages;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  256  
-480cb846c27bda Al Viro           2022-06-09  257  		bytes = iov_iter_get_pages_alloc2(iter, &pages, LONG_MAX, &offs);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  258  		if (unlikely(bytes <= 0)) {
-130879f1ee0e25 Christoph Hellwig 2020-03-27  259  			ret = bytes ? bytes : -EFAULT;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  260  			goto out_unmap;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  261  		}
-130879f1ee0e25 Christoph Hellwig 2020-03-27  262  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  263  		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  264  
-7ab89db9790172 Michal Orzel      2022-04-23  265  		if (unlikely(offs & queue_dma_alignment(rq->q)))
-130879f1ee0e25 Christoph Hellwig 2020-03-27  266  			j = 0;
-7ab89db9790172 Michal Orzel      2022-04-23  267  		else {
-130879f1ee0e25 Christoph Hellwig 2020-03-27  268  			for (j = 0; j < npages; j++) {
-130879f1ee0e25 Christoph Hellwig 2020-03-27  269  				struct page *page = pages[j];
-130879f1ee0e25 Christoph Hellwig 2020-03-27  270  				unsigned int n = PAGE_SIZE - offs;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  271  				bool same_page = false;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  272  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  273  				if (n > bytes)
-130879f1ee0e25 Christoph Hellwig 2020-03-27  274  					n = bytes;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  275  
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  276  				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
-e4581105771b35 Christoph Hellwig 2020-05-12  277  						     max_sectors, &same_page)) {
-130879f1ee0e25 Christoph Hellwig 2020-03-27  278  					if (same_page)
-130879f1ee0e25 Christoph Hellwig 2020-03-27  279  						put_page(page);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  280  					break;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  281  				}
-130879f1ee0e25 Christoph Hellwig 2020-03-27  282  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  283  				added += n;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  284  				bytes -= n;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  285  				offs = 0;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  286  			}
-130879f1ee0e25 Christoph Hellwig 2020-03-27  287  		}
-130879f1ee0e25 Christoph Hellwig 2020-03-27  288  		/*
-130879f1ee0e25 Christoph Hellwig 2020-03-27  289  		 * release the pages we didn't map into the bio, if any
-130879f1ee0e25 Christoph Hellwig 2020-03-27  290  		 */
-130879f1ee0e25 Christoph Hellwig 2020-03-27  291  		while (j < npages)
-130879f1ee0e25 Christoph Hellwig 2020-03-27  292  			put_page(pages[j++]);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  293  		kvfree(pages);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  294  		/* couldn't stuff something into bio? */
-480cb846c27bda Al Viro           2022-06-09  295  		if (bytes) {
-480cb846c27bda Al Viro           2022-06-09  296  			iov_iter_revert(iter, bytes);
-130879f1ee0e25 Christoph Hellwig 2020-03-27  297  			break;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  298  		}
-480cb846c27bda Al Viro           2022-06-09  299  	}
-130879f1ee0e25 Christoph Hellwig 2020-03-27  300  
-393bb12e00580a Christoph Hellwig 2021-03-31  301  	ret = blk_rq_append_bio(rq, bio);
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  302  	if (ret)
-393bb12e00580a Christoph Hellwig 2021-03-31  303  		goto out_unmap;
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  304  	return 0;
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  305  
-130879f1ee0e25 Christoph Hellwig 2020-03-27  306   out_unmap:
-130879f1ee0e25 Christoph Hellwig 2020-03-27  307  	bio_release_pages(bio, false);
-066ff571011d84 Christoph Hellwig 2022-04-06  308  	bio_uninit(bio);
-066ff571011d84 Christoph Hellwig 2022-04-06  309  	kfree(bio);
-7589ad6729d6a7 Christoph Hellwig 2020-08-27  310  	return ret;
-130879f1ee0e25 Christoph Hellwig 2020-03-27  311  }
-130879f1ee0e25 Christoph Hellwig 2020-03-27  312  
-
-:::::: The code at line 254 was first introduced by commit
-:::::: 130879f1ee0e25b0391b8c78b3baac6fe41f4d38 block: move bio_map_* to blk-map.c
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+  5098	
+  5099	static int handle_vmread(struct kvm_vcpu *vcpu)
+  5100	{
+  5101		struct vmcs12 *vmcs12 = is_guest_mode(vcpu) ? get_shadow_vmcs12(vcpu)
+  5102							    : get_vmcs12(vcpu);
+  5103		unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+  5104		u32 instr_info = vmcs_read32(VMX_INSTRUCTION_INFO);
+  5105		struct vcpu_vmx *vmx = to_vmx(vcpu);
+  5106		struct x86_exception e;
+  5107		unsigned long field;
+  5108		u64 value;
+  5109		gva_t gva = 0;
+  5110		short offset;
+  5111		int len, r;
+  5112	
+  5113		if (!nested_vmx_check_permission(vcpu))
+  5114			return 1;
+  5115	
+  5116		/* Decode instruction info and find the field to read */
+  5117		field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
+  5118	
+  5119		if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
+  5120			/*
+  5121			 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
+  5122			 * any VMREAD sets the ALU flags for VMfailInvalid.
+  5123			 */
+  5124			if (vmx->nested.current_vmptr == INVALID_GPA ||
+  5125			    (is_guest_mode(vcpu) &&
+> 5126			     nested_cpu_has_shadow_vmcs(vcpu) &&
+  5127			     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
+  5128				return nested_vmx_failInvalid(vcpu);
+  5129	
+  5130			offset = get_vmcs12_field_offset(field);
+  5131			if (offset < 0)
+  5132				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
+  5133	
+  5134			if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
+  5135				copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
+  5136	
+  5137			/* Read the field, zero-extended to a u64 value */
+  5138			value = vmcs12_read_any(vmcs12, field, offset);
+  5139		} else {
+  5140			/*
+  5141			 * Hyper-V TLFS (as of 6.0b) explicitly states, that while an
+  5142			 * enlightened VMCS is active VMREAD/VMWRITE instructions are
+  5143			 * unsupported. Unfortunately, certain versions of Windows 11
+  5144			 * don't comply with this requirement which is not enforced in
+  5145			 * genuine Hyper-V. Allow VMREAD from an enlightened VMCS as a
+  5146			 * workaround, as misbehaving guests will panic on VM-Fail.
+  5147			 * Note, enlightened VMCS is incompatible with shadow VMCS so
+  5148			 * all VMREADs from L2 should go to L1.
+  5149			 */
+  5150			if (WARN_ON_ONCE(is_guest_mode(vcpu)))
+  5151				return nested_vmx_failInvalid(vcpu);
+  5152	
+  5153			offset = evmcs_field_offset(field, NULL);
+  5154			if (offset < 0)
+  5155				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
+  5156	
+  5157			/* Read the field, zero-extended to a u64 value */
+  5158			value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
+  5159		}
+  5160	
+  5161		/*
+  5162		 * Now copy part of this value to register or memory, as requested.
+  5163		 * Note that the number of bits actually copied is 32 or 64 depending
+  5164		 * on the guest's mode (32 or 64 bit), not on the given field's length.
+  5165		 */
+  5166		if (instr_info & BIT(10)) {
+  5167			kvm_register_write(vcpu, (((instr_info) >> 3) & 0xf), value);
+  5168		} else {
+  5169			len = is_64_bit_mode(vcpu) ? 8 : 4;
+  5170			if (get_vmx_mem_address(vcpu, exit_qualification,
+  5171						instr_info, true, len, &gva))
+  5172				return 1;
+  5173			/* _system ok, nested_vmx_check_permission has verified cpl=0 */
+  5174			r = kvm_write_guest_virt_system(vcpu, gva, &value, len, &e);
+  5175			if (r != X86EMUL_CONTINUE)
+  5176				return kvm_handle_memory_failure(vcpu, r, &e);
+  5177		}
+  5178	
+  5179		return nested_vmx_succeed(vcpu);
+  5180	}
+  5181	
 
 -- 
 0-DAY CI Kernel Test Service
