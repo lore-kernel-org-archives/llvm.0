@@ -1,92 +1,233 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9413936C
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660266258; x=1691802258;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=9Wjh13aRsKaFZc80S2ieNBoHJsM5YoXKeRcpgZ9cxUA=;
-  b=MGburpfS3YdLQHE1JshAHf3uWFcORkS5VyUT0jGTeUI0AhBccwkcK/Il
-   l/dJlxkZWM5rtVlo6jB66c4DxGWiiSfhVBaCg+sf3SilL4VQ2zCauRcQv
-   wFncAfB+fcJOJ/yFJmcyjj4KneYtlv4oKZb7vMZwQB3aoiMpzG3w6sl0x
-   YQRfu4XE8p/2HEY1dft04ZTbmnq2niN78bnaGJHzbge2P6GHRlHa8W2Ie
-   42Jmb5guKIM4QPQQp1Hi3+bLwI6ur4PVAzloY40kR8lKD3sHBJDPoCJ7h
-   DhtRd+zRiaKneERCkjNoBfDrrYCivzIsMjb1Vhm1YNvfD8Q/I6UMuc7mh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="353237383"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="353237383"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 18:04:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="748029062"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Aug 2022 18:04:16 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMJ60-0000u1-09;
-	Fri, 12 Aug 2022 01:04:16 +0000
-Date: Fri, 12 Aug 2022 09:04:03 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [pdx86-platform-drivers-x86:review-hans 116/124] ld.lld: error:
- arch/riscv/built-in.a(kernel/sys_riscv.o):(function __se_sys_mmap:
- .text+0x60): relocation R_RISCV_HI20 out of range: 534389 is not in
- [-524288, 524287]; references riscv_sys_mmap.______f
-Message-ID: <202208120846.jLpPIBjX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED5F36C
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:11:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660266704;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y+XR6Kmhd3zxERGfBTz0uB17DnFjpLlbds78VCoKp1I=;
+	b=Ine+9GE2YXWsW01SLiKIbrokMdOJw/9gMyAAjr8Ri4y3mkwFB233HHgMNxyZWH9bTiL/mO
+	dj77taUNHJSz5wulYHNt5tmEGsfcC26kfjPZDGuBEY02jN5/CTp+evFjU2Kfg3DsoSzFSO
+	ZxBxnSAmdi35lUg5TdMUSYuMIq7YP2I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-524-d7PXUbXPPCO62YQJDPuOFA-1; Thu, 11 Aug 2022 21:11:43 -0400
+X-MC-Unique: d7PXUbXPPCO62YQJDPuOFA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A7691C13957
+	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 01:11:43 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 28E90112131B;
+	Fri, 12 Aug 2022 01:11:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (62/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [2ae08b36]
+Date: Fri, 12 Aug 2022 01:11:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Message-Id: <27976.122081121114300861@us-mta-524.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Hans de Goede <hdegoede@redhat.com>
-CC: linux-kernel@vger.kernel.org
-TO: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-CC: Hans de Goede <hdegoede@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-head:   0059c13eb43750ec454e048c2cbf757e793c667f
-commit: c59bb4c73c57f4a90b227490c5e1f07d4a4fec95 [116/124] platform/x86/amd/pmf: Get performance metrics from PMFW
-config: riscv-randconfig-r024-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120846.jLpPIBjX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=c59bb4c73c57f4a90b227490c5e1f07d4a4fec95
-        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
-        git checkout c59bb4c73c57f4a90b227490c5e1f07d4a4fec95
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: CKI Project <cki-project@redhat.com>
 
-All errors (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50671
 
->> ld.lld: error: arch/riscv/built-in.a(kernel/sys_riscv.o):(function __se_sys_mmap: .text+0x60): relocation R_RISCV_HI20 out of range: 534389 is not in [-524288, 524287]; references riscv_sys_mmap.______f
-   >>> referenced by sys_riscv.c:30 (arch/riscv/kernel/sys_riscv.c:30)
-   >>> defined in arch/riscv/built-in.a(kernel/sys_riscv.o)
---
->> ld.lld: error: arch/riscv/built-in.a(kernel/sys_riscv.o):(function __se_sys_mmap: .text+0xc8): relocation R_RISCV_HI20 out of range: 534389 is not in [-524288, 524287]; references riscv_sys_mmap.______f.2
-   >>> referenced by sys_riscv.c:18 (arch/riscv/kernel/sys_riscv.c:18)
-   >>> defined in arch/riscv/built-in.a(kernel/sys_riscv.o)
---
->> ld.lld: error: arch/riscv/built-in.a(kernel/sys_riscv.o):(function __se_sys_riscv_flush_icache: .text+0x17c): relocation R_RISCV_HI20 out of range: 534389 is not in [-524288, 524287]; references __do_sys_riscv_flush_icache.______f
-   >>> referenced by sys_riscv.c:18 (arch/riscv/kernel/sys_riscv.c:18)
-   >>> defined in arch/riscv/built-in.a(kernel/sys_riscv.o)
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: (Kernel panic) __efi_rt_asm_wrapper+0x2=
+c/0x4c
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1310
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
