@@ -1,60 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AB746AB
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 19:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2214A03;
+	Fri, 12 Aug 2022 19:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660332059; x=1691868059;
+  t=1660332656; x=1691868656;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=X86N0nV9+nnd+RlOJabsYI8N21x/2z/Ujtbmr0Rz6VU=;
-  b=SdW7SZJSv8aZdPBLIy012/uwAXbGP8shXfI3+FD7pmWMZKj8O3zptgib
-   viLM1Cs0bF8PsvmeYw0A0NVurNFWfy28p9Q/ozQOWqRCaG01HqHdRpPww
-   cLSlDD1o1ZsJUkJavYiV4IzE7uOTmxhUwBmq250CKrJD+b0TY8Vc5Vs9H
-   5EV566e9e0pjvRM4mcd5rduzQz2WDH+QOzxDtT+IerZnt+NGTtAxdo5d/
-   nvm6jVN8zVMkepsA5mkuxtMpHXs0D+pWINmSeKZE5x0hAIl9UsZgYAEq2
-   JrMgQ+2cTpF+PzS7BH2IEN7KlgOnVNjLcqrkLgw5FMJT3zaqgtsF+fuYV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291671155"
+  bh=GlbJXtp1pQ/j4T73SprLl7OSfQKxTVMN6a3ZI775+EA=;
+  b=BdqGG+W0Cc+8lXYCnvIdTVg7M1Fi0+SuNhAEP6jsDJYPYOo9mH2bg01V
+   IpErTKcfCzxvttMCxJiL9G5/TS6eqcBQQOA1HNV/AsxSf314RgPB9tlVX
+   XV5nPHtgLTfPoexl7gChhc4ks6eerZBz/fvIAIXgNWWXr/RPa+eq3k5mG
+   6Frv2RQySb3HY8KMixUv/V1JaMeKYP+0Tg0tcqS7wagh59zmqBt8840Rn
+   Vx2d7s20fvBfobuCV48AB6GkFo3HJzcC6euAfyIrNq4pelOCYswEyKNpR
+   KEA7bsAY3Bg2SnShB5GaZ5D26pQcSal9W0q8Pty4LQjW+w6jSVfL4yWA3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278627338"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="291671155"
+   d="scan'208";a="278627338"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:20:57 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:30:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="695368011"
+   d="scan'208";a="695370860"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 12:20:53 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 12:30:53 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMaDE-0000r5-1F;
-	Fri, 12 Aug 2022 19:20:52 +0000
-Date: Sat, 13 Aug 2022 03:19:59 +0800
+	id 1oMaMu-0000rZ-2y;
+	Fri, 12 Aug 2022 19:30:52 +0000
+Date: Sat, 13 Aug 2022 03:30:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manish Mandlik <mmandlik@google.com>,
-	Arend van Spriel <aspriel@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	marcel@holtmann.org, luiz.dentz@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	"Signed-off-by : Manish Mandlik" <mmandlik@google.com>,
-	linux-bluetooth@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	chromeos-bluetooth-upstreaming@chromium.org,
-	Won Chung <wonchung@google.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v5 3/5] Bluetooth: Add support for hci devcoredump
-Message-ID: <202208130346.2UmF05bO-lkp@intel.com>
-References: <20220810085753.v5.3.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
+To: xiakaixu1987@gmail.com, sj@kernel.org, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, damon@lists.linux.dev,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
+ split operation
+Message-ID: <202208130308.8rYWTL9U-lkp@intel.com>
+References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,239 +48,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810085753.v5.3.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
+In-Reply-To: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
 
-Hi Manish,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on bluetooth/master]
-[also build test WARNING on bluetooth-next/master driver-core/driver-core-testing linus/master next-20220812]
-[cannot apply to v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/sysfs-Add-attribute-info-for-sys-devices-coredump_disabled/20220811-000313
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220813/202208130346.2UmF05bO-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r045-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130308.8rYWTL9U-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6fe2192077ebdca91aef91e907f79d9e38960a21
+        # https://github.com/intel-lab-lkp/linux/commit/26b7d93b0f64c71d6d324a4a37d85641b55eaec2
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manish-Mandlik/sysfs-Add-attribute-info-for-sys-devices-coredump_disabled/20220811-000313
-        git checkout 6fe2192077ebdca91aef91e907f79d9e38960a21
+        git fetch --no-tags linux-review xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
+        git checkout 26b7d93b0f64c71d6d324a4a37d85641b55eaec2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bluetooth/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/bluetooth/coredump.c:301:20: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-                                       dump_size, hdev->dump.alloc_size);
-                                                  ^~~~~~~~~~~~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:255:43: note: expanded from macro 'bt_dev_info'
-           BT_INFO("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
-                          ~~~                       ^~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:242:47: note: expanded from macro 'BT_INFO'
-   #define BT_INFO(fmt, ...)       bt_info(fmt "\n", ##__VA_ARGS__)
-                                           ~~~         ^~~~~~~~~~~
-   net/bluetooth/coredump.c:320:20: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-                                       dump_size, hdev->dump.alloc_size);
-                                                  ^~~~~~~~~~~~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:255:43: note: expanded from macro 'bt_dev_info'
-           BT_INFO("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
-                          ~~~                       ^~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:242:47: note: expanded from macro 'BT_INFO'
-   #define BT_INFO(fmt, ...)       bt_info(fmt "\n", ##__VA_ARGS__)
-                                           ~~~         ^~~~~~~~~~~
-   net/bluetooth/coredump.c:365:18: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-                       dump_size, hdev->dump.alloc_size);
-                                  ^~~~~~~~~~~~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:255:43: note: expanded from macro 'bt_dev_info'
-           BT_INFO("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
-                          ~~~                       ^~~~~~~~~~~
-   include/net/bluetooth/bluetooth.h:242:47: note: expanded from macro 'BT_INFO'
-   #define BT_INFO(fmt, ...)       bt_info(fmt "\n", ##__VA_ARGS__)
-                                           ~~~         ^~~~~~~~~~~
-   3 warnings generated.
+   In file included from mm/damon/core.c:1218:
+>> mm/damon/core-test.h:129:33: error: too many arguments to function call, expected 3, have 4
+           damon_split_region_at(c, t, r, 25);
+           ~~~~~~~~~~~~~~~~~~~~~          ^~
+   mm/damon/core.c:930:13: note: 'damon_split_region_at' declared here
+   static void damon_split_region_at(struct damon_target *t,
+               ^
+   In file included from mm/damon/core.c:1218:
+   mm/damon/core-test.h:222:31: error: too many arguments to function call, expected 2, have 3
+           damon_split_regions_of(c, t, 2);
+           ~~~~~~~~~~~~~~~~~~~~~~       ^
+   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
+   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
+               ^
+   In file included from mm/damon/core.c:1218:
+   mm/damon/core-test.h:229:31: error: too many arguments to function call, expected 2, have 3
+           damon_split_regions_of(c, t, 4);
+           ~~~~~~~~~~~~~~~~~~~~~~       ^
+   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
+   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
+               ^
+   3 errors generated.
 
 
-vim +301 net/bluetooth/coredump.c
+vim +129 mm/damon/core-test.h
 
-   182	
-   183	/* Bluetooth devcoredump state machine.
-   184	 *
-   185	 * Devcoredump states:
-   186	 *
-   187	 *      HCI_DEVCOREDUMP_IDLE: The default state.
-   188	 *
-   189	 *      HCI_DEVCOREDUMP_ACTIVE: A devcoredump will be in this state once it has
-   190	 *              been initialized using hci_devcoredump_init(). Once active, the
-   191	 *              driver can append data using hci_devcoredump_append() or insert
-   192	 *              a pattern using hci_devcoredump_append_pattern().
-   193	 *
-   194	 *      HCI_DEVCOREDUMP_DONE: Once the dump collection is complete, the drive
-   195	 *              can signal the completion using hci_devcoredump_complete(). A
-   196	 *              devcoredump is generated indicating the completion event and
-   197	 *              then the state machine is reset to the default state.
-   198	 *
-   199	 *      HCI_DEVCOREDUMP_ABORT: The driver can cancel ongoing dump collection in
-   200	 *              case of any error using hci_devcoredump_abort(). A devcoredump
-   201	 *              is still generated with the available data indicating the abort
-   202	 *              event and then the state machine is reset to the default state.
-   203	 *
-   204	 *      HCI_DEVCOREDUMP_TIMEOUT: A timeout timer for HCI_DEVCOREDUMP_TIMEOUT sec
-   205	 *              is started during devcoredump initialization. Once the timeout
-   206	 *              occurs, the driver is notified, a devcoredump is generated with
-   207	 *              the available data indicating the timeout event and then the
-   208	 *              state machine is reset to the default state.
-   209	 *
-   210	 * The driver must register using hci_devcoredump_register() before using the
-   211	 * hci devcoredump APIs.
-   212	 */
-   213	void hci_devcoredump_rx(struct work_struct *work)
-   214	{
-   215		struct hci_dev *hdev = container_of(work, struct hci_dev, dump.dump_rx);
-   216		struct sk_buff *skb;
-   217		struct hci_devcoredump_skb_pattern *pattern;
-   218		u32 dump_size;
-   219		int start_state;
-   220	
-   221	#define DBG_UNEXPECTED_STATE() \
-   222			bt_dev_dbg(hdev, \
-   223				   "Unexpected packet (%d) for state (%d). ", \
-   224				   hci_dmp_cb(skb)->pkt_type, hdev->dump.state)
-   225	
-   226		while ((skb = skb_dequeue(&hdev->dump.dump_q))) {
-   227			hci_dev_lock(hdev);
-   228			start_state = hdev->dump.state;
-   229	
-   230			switch (hci_dmp_cb(skb)->pkt_type) {
-   231			case HCI_DEVCOREDUMP_PKT_INIT:
-   232				if (hdev->dump.state != HCI_DEVCOREDUMP_IDLE) {
-   233					DBG_UNEXPECTED_STATE();
-   234					goto loop_continue;
-   235				}
-   236	
-   237				if (skb->len != sizeof(dump_size)) {
-   238					bt_dev_dbg(hdev, "Invalid dump init pkt");
-   239					goto loop_continue;
-   240				}
-   241	
-   242				dump_size = *((u32 *)skb->data);
-   243				if (!dump_size) {
-   244					bt_dev_err(hdev, "Zero size dump init pkt");
-   245					goto loop_continue;
-   246				}
-   247	
-   248				if (hci_devcoredump_prepare(hdev, dump_size)) {
-   249					bt_dev_err(hdev, "Failed to prepare for dump");
-   250					goto loop_continue;
-   251				}
-   252	
-   253				hci_devcoredump_update_state(hdev,
-   254							     HCI_DEVCOREDUMP_ACTIVE);
-   255				queue_delayed_work(hdev->workqueue,
-   256						   &hdev->dump.dump_timeout,
-   257						   DEVCOREDUMP_TIMEOUT);
-   258				break;
-   259	
-   260			case HCI_DEVCOREDUMP_PKT_SKB:
-   261				if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-   262					DBG_UNEXPECTED_STATE();
-   263					goto loop_continue;
-   264				}
-   265	
-   266				if (!hci_devcoredump_copy(hdev, skb->data, skb->len))
-   267					bt_dev_dbg(hdev, "Failed to insert skb");
-   268				break;
-   269	
-   270			case HCI_DEVCOREDUMP_PKT_PATTERN:
-   271				if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-   272					DBG_UNEXPECTED_STATE();
-   273					goto loop_continue;
-   274				}
-   275	
-   276				if (skb->len != sizeof(*pattern)) {
-   277					bt_dev_dbg(hdev, "Invalid pattern skb");
-   278					goto loop_continue;
-   279				}
-   280	
-   281				pattern = (void *)skb->data;
-   282	
-   283				if (!hci_devcoredump_memset(hdev, pattern->pattern,
-   284							    pattern->len))
-   285					bt_dev_dbg(hdev, "Failed to set pattern");
-   286				break;
-   287	
-   288			case HCI_DEVCOREDUMP_PKT_COMPLETE:
-   289				if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-   290					DBG_UNEXPECTED_STATE();
-   291					goto loop_continue;
-   292				}
-   293	
-   294				hci_devcoredump_update_state(hdev,
-   295							     HCI_DEVCOREDUMP_DONE);
-   296				dump_size = hdev->dump.tail - hdev->dump.head;
-   297	
-   298				bt_dev_info(hdev,
-   299					    "Devcoredump complete with size %u "
-   300					    "(expect %u)",
- > 301					    dump_size, hdev->dump.alloc_size);
-   302	
-   303				dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-   304					      GFP_KERNEL);
-   305				break;
-   306	
-   307			case HCI_DEVCOREDUMP_PKT_ABORT:
-   308				if (hdev->dump.state != HCI_DEVCOREDUMP_ACTIVE) {
-   309					DBG_UNEXPECTED_STATE();
-   310					goto loop_continue;
-   311				}
-   312	
-   313				hci_devcoredump_update_state(hdev,
-   314							     HCI_DEVCOREDUMP_ABORT);
-   315				dump_size = hdev->dump.tail - hdev->dump.head;
-   316	
-   317				bt_dev_info(hdev,
-   318					    "Devcoredump aborted with size %u "
-   319					    "(expect %u)",
-   320					    dump_size, hdev->dump.alloc_size);
-   321	
-   322				/* Emit a devcoredump with the available data */
-   323				dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size,
-   324					      GFP_KERNEL);
-   325				break;
-   326	
-   327			default:
-   328				bt_dev_dbg(hdev,
-   329					   "Unknown packet (%d) for state (%d). ",
-   330					   hci_dmp_cb(skb)->pkt_type, hdev->dump.state);
-   331				break;
-   332			}
-   333	
-   334	loop_continue:
-   335			kfree_skb(skb);
-   336			hci_dev_unlock(hdev);
-   337	
-   338			if (start_state != hdev->dump.state)
-   339				hci_devcoredump_notify(hdev, hdev->dump.state);
-   340	
-   341			hci_dev_lock(hdev);
-   342			if (hdev->dump.state == HCI_DEVCOREDUMP_DONE ||
-   343			    hdev->dump.state == HCI_DEVCOREDUMP_ABORT)
-   344				hci_devcoredump_reset(hdev);
-   345			hci_dev_unlock(hdev);
-   346		}
-   347	}
-   348	EXPORT_SYMBOL(hci_devcoredump_rx);
-   349	
+17ccae8bb5c928 SeongJae Park 2021-09-07  119  
+17ccae8bb5c928 SeongJae Park 2021-09-07  120  static void damon_test_split_at(struct kunit *test)
+17ccae8bb5c928 SeongJae Park 2021-09-07  121  {
+17ccae8bb5c928 SeongJae Park 2021-09-07  122  	struct damon_ctx *c = damon_new_ctx();
+17ccae8bb5c928 SeongJae Park 2021-09-07  123  	struct damon_target *t;
+17ccae8bb5c928 SeongJae Park 2021-09-07  124  	struct damon_region *r;
+17ccae8bb5c928 SeongJae Park 2021-09-07  125  
+1971bd630452e9 SeongJae Park 2022-03-22  126  	t = damon_new_target();
+17ccae8bb5c928 SeongJae Park 2021-09-07  127  	r = damon_new_region(0, 100);
+17ccae8bb5c928 SeongJae Park 2021-09-07  128  	damon_add_region(r, t);
+17ccae8bb5c928 SeongJae Park 2021-09-07 @129  	damon_split_region_at(c, t, r, 25);
+17ccae8bb5c928 SeongJae Park 2021-09-07  130  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  131  	KUNIT_EXPECT_EQ(test, r->ar.end, 25ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  132  
+17ccae8bb5c928 SeongJae Park 2021-09-07  133  	r = damon_next_region(r);
+17ccae8bb5c928 SeongJae Park 2021-09-07  134  	KUNIT_EXPECT_EQ(test, r->ar.start, 25ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  135  	KUNIT_EXPECT_EQ(test, r->ar.end, 100ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  136  
+17ccae8bb5c928 SeongJae Park 2021-09-07  137  	damon_free_target(t);
+17ccae8bb5c928 SeongJae Park 2021-09-07  138  	damon_destroy_ctx(c);
+17ccae8bb5c928 SeongJae Park 2021-09-07  139  }
+17ccae8bb5c928 SeongJae Park 2021-09-07  140  
 
 -- 
 0-DAY CI Kernel Test Service
