@@ -1,43 +1,47 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99375803
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 18:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4263D257D
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 18:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660415790; x=1691951790;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z9vmo3oouOg13TEelcgv+Ek1MmzLAcDcfCyaj5ae2hg=;
-  b=iL7uML8AITNv4TRcBXlUcUBOQyIJgblHvmbGJ/KViWCfiSxaJMetXEh6
-   UKCFM/m/AQHPcPyylQWw1gxuy+67bHtnLuC04xxaH5DsPMPIpb+/mkzcW
-   0hZI5FNZhCfFgAIDBFfWK/gxvco+oE6FvH+9+Cvwi/y7H9IZfD+AFzapp
-   H25fMFuSVUnFqkVePViRStAvTDcI1AAf5HmB0OcUU8POGruGGGBiHt3Je
-   CMZJlFeBiHy1nuJEGffDrw7SewUCS5PDDK/lUjWJEfhuQkfxBljsxsgpm
-   +NXv9fENshVqpDC9MTELGVhnzOI828LmZ7USh87YXlb2gL/PycCt6+Tuu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271543171"
+  t=1660416992; x=1691952992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZBPDfSeBK9w+B+8JdjaWQ3ncVRB2cbox7kKTBR+j8R4=;
+  b=dEP2+eEdKhmmctEGz84g3tT48RuWWkUQQ+zpKfAoK14b7WzmeL/zIfq3
+   kHPdhbinIPOzAOpxSoMuBcFGJP0OXJLkPrY6P1JYO5Zy6UcblFB3wSi35
+   tXFcSJlVoxu/TRnwO3JoZaSOnjhBkXPZg2Tc96r4EFdZ7BZdOFN8AYHUX
+   HpKmUVWPy6LXE0G5jMBatZzHN3ng5eCEVZaZmc9fDn6J3w0PZvvG/cAk9
+   krLh4zza9XzF2SvqddTcigZGzYZD3oPu3bIccvVMfhaNb4qIwflY8Fqqr
+   Nyh6R5cO0zVTNE8PKA/3NfSE5LJpIHF/0Em9kT5x1Z9gTj8mbSsq5gxFs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289339992"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="271543171"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:36:29 -0700
+   d="scan'208";a="289339992"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:56:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="635018771"
+   d="scan'208";a="709345965"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Aug 2022 11:36:27 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 13 Aug 2022 11:56:28 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMvzn-0001zF-0O;
-	Sat, 13 Aug 2022 18:36:27 +0000
-Date: Sun, 14 Aug 2022 02:35:27 +0800
+	id 1oMwJ9-00020D-1R;
+	Sat, 13 Aug 2022 18:56:27 +0000
+Date: Sun, 14 Aug 2022 02:55:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sc8280xp-next-20220720-nonworking-gpu 9/143]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused
- variable 'sc8280xp_regdma'
-Message-ID: <202208140224.llj1D2O5-lkp@intel.com>
+To: Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org
+Subject: Re: [PATCH bpf-next 2/3] bpf: use cgroup_{common,current}_func_proto
+ in more hooks
+Message-ID: <202208140239.yjzPuMmv-lkp@intel.com>
+References: <20220812190241.3544528-3-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,47 +50,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220812190241.3544528-3-sdf@google.com>
 
-tree:   https://github.com/andersson/kernel wip/sc8280xp-next-20220720-nonworking-gpu
-head:   50749fc985b5eb2036a6139b10182a05e42ce4b0
-commit: 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd [9/143] drm/msm/dpu: Introduce sc8280xp
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220814/202208140224.llj1D2O5-lkp@intel.com/config)
+Hi Stanislav,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/bpf-expose-bpf_-g-s-et_retval-to-more-cgroup-hooks/20220813-030615
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220814/202208140239.yjzPuMmv-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/andersson/kernel/commit/4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sc8280xp-next-20220720-nonworking-gpu
-        git checkout 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
+        # https://github.com/intel-lab-lkp/linux/commit/0429824054f7a843ee976d48432e825e493a0a7e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stanislav-Fomichev/bpf-expose-bpf_-g-s-et_retval-to-more-cgroup-hooks/20220813-030615
+        git checkout 0429824054f7a843ee976d48432e825e493a0a7e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused variable 'sc8280xp_regdma' [-Wunused-const-variable]
-   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-                                       ^
-   1 warning generated.
+>> kernel/bpf/helpers.c:1817:11: error: use of undeclared identifier 'bpf_get_cgroup_classid_curr_proto'
+                   return &bpf_get_cgroup_classid_curr_proto;
+                           ^
+   1 error generated.
 
 
-vim +/sc8280xp_regdma +1535 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+vim +/bpf_get_cgroup_classid_curr_proto +1817 kernel/bpf/helpers.c
 
-  1534	
-> 1535	static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-  1536		.base = 0x0,
-  1537		.version = 0x00020000,
-  1538		.trigger_sel_off = 0x119c,
-  1539		.xin_id = 7,
-  1540		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-  1541	};
-  1542	
+  1797	
+  1798	/* Common helpers for cgroup hooks with valid process context. */
+  1799	const struct bpf_func_proto *
+  1800	cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+  1801	{
+  1802		switch (func_id) {
+  1803	#ifdef CONFIG_CGROUPS
+  1804		case BPF_FUNC_get_current_uid_gid:
+  1805			return &bpf_get_current_uid_gid_proto;
+  1806		case BPF_FUNC_get_current_pid_tgid:
+  1807			return &bpf_get_current_pid_tgid_proto;
+  1808		case BPF_FUNC_get_current_comm:
+  1809			return &bpf_get_current_comm_proto;
+  1810		case BPF_FUNC_get_current_cgroup_id:
+  1811			return &bpf_get_current_cgroup_id_proto;
+  1812		case BPF_FUNC_get_current_ancestor_cgroup_id:
+  1813			return &bpf_get_current_ancestor_cgroup_id_proto;
+  1814	#endif
+  1815	#ifdef CONFIG_CGROUP_NET_CLASSID
+  1816		case BPF_FUNC_get_cgroup_classid:
+> 1817			return &bpf_get_cgroup_classid_curr_proto;
+  1818	#endif
+  1819		default:
+  1820			return NULL;
+  1821		}
+  1822	}
+  1823	
 
 -- 
 0-DAY CI Kernel Test Service
