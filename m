@@ -1,298 +1,224 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CFA7EC
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660382597; x=1691918597;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YNBQvrYvdzZE0AgajE/iB5ni0WRyW7xZGldh/BfmSpM=;
-  b=Z8RYWAibqKzmV1+mmxqllY3AHUkj1pvdV23dkAiESP0mOsCbeQ2yOSVx
-   nQUP1r70y4QW5yeyhfODFPtscoQSw1Yt6Cn1qwwEEUpLebfP0MHOFMcsF
-   GRvico3L2glyv9OqwKYxuhPR6wY9Vai9IfNOeFmHL1uRthku2aK4AQ7VR
-   /698pE9YA/4UWraJo+jZih9VSo0OCNTkrYUss4NM3Id51+KNnUs/OwylZ
-   Q1xooANZbycAj3pNbl7pr0KLDeOsMUlmeRS/5En77GG1BywQ/aSk9Q1EF
-   CnQkl5zXuvvb3E6T9YT1CRUvcBebDfm+pxS2a6hvTaHIjWQpwGuX9TBcl
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274795446"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="274795446"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 02:23:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="556781879"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 13 Aug 2022 02:23:14 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMnMP-0001WN-1e;
-	Sat, 13 Aug 2022 09:23:13 +0000
-Date: Sat, 13 Aug 2022 17:22:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Trevor Wu <trevor.wu@mediatek.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: sound/soc/mediatek/mt8195/mt8195-audsys-clk.c:17:8: warning:
- Excessive padding in 'struct afe_gate' (6 padding bytes, where 2 is
- optimal). Optimal fields order: id, name, parent_name, reg, ops, flags, bit,
- cg_flags, consider reordering the fields or addin...
-Message-ID: <202208131740.YujhyUNT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38C77EC
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660383102;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ismZHj9bejsLJKsEsQ2YezI2Jy5Bd9QDzBPQBUOx4v8=;
+	b=XYzp01qlj/nUUkTL+Zf4GKrraJwf7XRXmvfBJbD8h75ZandDxvu662/c4eS9NhZzTypBH8
+	KcMVoAQhRioYZimbXq1LMJB/ZZ5XyD8g/28p9D1/sh9W13PZrgRL/a9GHCyqheAQoQbQns
+	PYjOPjSRvZbGchmGm9MRuyZphsg5I5I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-178-B8jD6d8JOrSU71u-jZYfow-1; Sat, 13 Aug 2022 05:31:41 -0400
+X-MC-Unique: B8jD6d8JOrSU71u-jZYfow-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53AE285A581
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:31:41 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4655C40D2827;
+	Sat, 13 Aug 2022 09:31:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (61/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [69dac8e4]
+Date: Sat, 13 Aug 2022 09:31:41 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Message-Id: <57636.122081305314100203@us-mta-178.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69dac8e431af26173ca0a1ebc87054e01c585bcc
-commit: 6746cc858259985a945a07075a19ec4d24352407 ASoC: mediatek: mt8195: add platform driver
-date:   12 months ago
-config: arm-randconfig-c002-20220810 (https://download.01.org/0day-ci/archive/20220813/202208131740.YujhyUNT-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6746cc858259985a945a07075a19ec4d24352407
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6746cc858259985a945a07075a19ec4d24352407
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-clang-analyzer warnings: (new ones prefixed by >>)
-           unsigned int space = cdma->slots_free;
-                        ^~~~~   ~~~~~~~~~~~~~~~~
-   1 warning generated.
-   sound/soc/atmel/mchp-i2s-mcc.c:633:9: warning: The result of the left shift is undefined because the left operand is negative [clang-analyzer-core.UndefinedBinaryOperatorResult]
-           mrb |= MCHP_I2SMCC_MRB_DMACHUNK(channels);
-                  ^
-   sound/soc/atmel/mchp-i2s-mcc.c:183:24: note: expanded from macro 'MCHP_I2SMCC_MRB_DMACHUNK'
-           (((fls(no_words) - 1) << 8) & MCHP_I2SMCC_MRB_DMACHUNK_MASK)
-             ~~~~~~~~~~~~~~~~~~~ ^
-   sound/soc/atmel/mchp-i2s-mcc.c:520:22: note: Assuming field 'stream' is not equal to SNDRV_PCM_STREAM_PLAYBACK
-           bool is_playback = (substream->stream == SNDRV_PCM_STREAM_PLAYBACK);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/atmel/mchp-i2s-mcc.c:522:2: note: Taking false branch
-           dev_dbg(dev->dev, "%s() rate=%u format=%#x width=%u channels=%u\n",
-           ^
-   include/linux/dev_printk.h:130:2: note: expanded from macro 'dev_dbg'
-           if (0)                                                          \
-           ^
-   sound/soc/atmel/mchp-i2s-mcc.c:526:2: note: Control jumps to 'case 4:'  at line 541
-           switch (dev->fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
-           ^
-   sound/soc/atmel/mchp-i2s-mcc.c:543:3: note:  Execution continues on line 549
-                   break;
-                   ^
-   sound/soc/atmel/mchp-i2s-mcc.c:549:2: note: Control jumps to 'case 4096:'  at line 562
-           switch (dev->fmt & SND_SOC_DAIFMT_MASTER_MASK) {
-           ^
-   sound/soc/atmel/mchp-i2s-mcc.c:565:7: note: Assuming field 'sysclk' is 0
-                   if (dev->sysclk)
-                       ^~~~~~~~~~~
-   sound/soc/atmel/mchp-i2s-mcc.c:565:3: note: Taking false branch
-                   if (dev->sysclk)
-                   ^
-   sound/soc/atmel/mchp-i2s-mcc.c:567:3: note:  Execution continues on line 573
-                   break;
-                   ^
-   sound/soc/atmel/mchp-i2s-mcc.c:573:6: note: Assuming the condition is false
-           if (dev->fmt & (SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_LEFT_J)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/atmel/mchp-i2s-mcc.c:573:2: note: Taking false branch
-           if (dev->fmt & (SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_LEFT_J)) {
-           ^
-   sound/soc/atmel/mchp-i2s-mcc.c:607:13: note: Assuming the condition is false
-           } else if (dev->fmt & SND_SOC_DAIFMT_DSP_A) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/atmel/mchp-i2s-mcc.c:607:9: note: Taking false branch
-           } else if (dev->fmt & SND_SOC_DAIFMT_DSP_A) {
-                  ^
-   sound/soc/atmel/mchp-i2s-mcc.c:633:9: note: The result of the left shift is undefined because the left operand is negative
-           mrb |= MCHP_I2SMCC_MRB_DMACHUNK(channels);
-                  ^
-   sound/soc/atmel/mchp-i2s-mcc.c:183:24: note: expanded from macro 'MCHP_I2SMCC_MRB_DMACHUNK'
-           (((fls(no_words) - 1) << 8) & MCHP_I2SMCC_MRB_DMACHUNK_MASK)
-             ~~~~~~~~~~~~~~~~~~~ ^
-   1 warning generated.
-   Suppressed 1 warnings (1 with check filters).
-   1 warning generated.
-   Suppressed 1 warnings (1 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   2 warnings generated.
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:126:29: warning: Value stored to 'memif' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-           struct mtk_base_afe_memif *memif = &afe->memif[id];
-                                      ^~~~~   ~~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:126:29: note: Value stored to 'memif' during its initialization is never read
-           struct mtk_base_afe_memif *memif = &afe->memif[id];
-                                      ^~~~~   ~~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:364:6: warning: Array access (via field 'reg_back_up') results in a null pointer dereference [clang-analyzer-core.NullDereference]
-                                    afe->reg_back_up[i]);
-                                    ^    ~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:354:6: note: Left side of '||' is false
-           if (pm_runtime_status_suspended(dev) || !afe->suspended)
-               ^
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:354:42: note: Assuming field 'suspended' is true
-           if (pm_runtime_status_suspended(dev) || !afe->suspended)
-                                                   ^~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:354:2: note: Taking false branch
-           if (pm_runtime_status_suspended(dev) || !afe->suspended)
-           ^
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:359:6: note: Assuming field 'reg_back_up' is null
-           if (!afe->reg_back_up)
-               ^~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:359:2: note: Taking true branch
-           if (!afe->reg_back_up)
-           ^
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:360:3: note: Taking false branch
-                   dev_dbg(dev, "%s no reg_backup\n", __func__);
-                   ^
-   include/linux/dev_printk.h:130:2: note: expanded from macro 'dev_dbg'
-           if (0)                                                          \
-           ^
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:362:14: note: Assuming 'i' is < field 'reg_back_up_list_num'
-           for (i = 0; i < afe->reg_back_up_list_num; i++)
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:362:2: note: Loop condition is true.  Entering loop body
-           for (i = 0; i < afe->reg_back_up_list_num; i++)
-           ^
-   sound/soc/mediatek/common/mtk-afe-fe-dai.c:364:6: note: Array access (via field 'reg_back_up') results in a null pointer dereference
-                                    afe->reg_back_up[i]);
-                                    ^    ~~~~~~~~~~~
-   1 warning generated.
->> sound/soc/mediatek/mt8195/mt8195-audsys-clk.c:17:8: warning: Excessive padding in 'struct afe_gate' (6 padding bytes, where 2 is optimal). Optimal fields order: id, name, parent_name, reg, ops, flags, bit, cg_flags, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct afe_gate {
-   ~~~~~~~^~~~~~~~~~
-   sound/soc/mediatek/mt8195/mt8195-audsys-clk.c:17:8: note: Excessive padding in 'struct afe_gate' (6 padding bytes, where 2 is optimal). Optimal fields order: id, name, parent_name, reg, ops, flags, bit, cg_flags, consider reordering the fields or adding explicit padding members
-   struct afe_gate {
-   ~~~~~~~^~~~~~~~~~
-   1 warning generated.
-   drivers/hwmon/npcm750-pwm-fan.c:876:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-           ret = npcm7xx_pwm_config_set(data, pwm_port,
-           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/npcm750-pwm-fan.c:876:2: note: Value stored to 'ret' is never read
-           ret = npcm7xx_pwm_config_set(data, pwm_port,
-           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-   drivers/hwmon/pc87360.c:1450:12: warning: The right operand of '>=' is a garbage value due to array index out of bounds [clang-analyzer-core.UndefinedBinaryOperatorResult]
-                   if (init >= init_temp[i]) {
-                            ^
-   drivers/hwmon/pc87360.c:1203:6: note: Assuming 'data' is non-null
-           if (!data)
-               ^~~~~
-   drivers/hwmon/pc87360.c:1203:2: note: Taking false branch
-           if (!data)
-           ^
-   drivers/hwmon/pc87360.c:1206:2: note: Control jumps to the 'default' case at line 1207
-           switch (devid) {
-           ^
-   drivers/hwmon/pc87360.c:1210:3: note:  Execution continues on line 1233
-                   break;
-                   ^
-   drivers/hwmon/pc87360.c:1234:2: note: Loop condition is false.  Exiting loop
-           mutex_init(&data->lock);
-           ^
-   include/linux/mutex.h:113:32: note: expanded from macro 'mutex_init'
-   #define mutex_init(mutex)                                               \
-                                                                           ^
-   drivers/hwmon/pc87360.c:1235:2: note: Loop condition is false.  Exiting loop
-           mutex_init(&data->update_lock);
-           ^
-   include/linux/mutex.h:113:32: note: expanded from macro 'mutex_init'
-   #define mutex_init(mutex)                                               \
-                                                                           ^
-   drivers/hwmon/pc87360.c:1238:2: note: Loop condition is true.  Entering loop body
-           for (i = 0; i < LDNI_MAX; i++) {
-           ^
-   drivers/hwmon/pc87360.c:1240:7: note: Assuming the condition is false
-                   if (data->address[i]
-                       ^~~~~~~~~~~~~~~~
-   drivers/hwmon/pc87360.c:1241:4: note: Left side of '&&' is false
-                    && !devm_request_region(dev, extra_isa[i], PC87360_EXTENT,
-                    ^
-   drivers/hwmon/pc87360.c:1238:2: note: Loop condition is true.  Entering loop body
-           for (i = 0; i < LDNI_MAX; i++) {
-           ^
-   drivers/hwmon/pc87360.c:1240:7: note: Assuming the condition is false
-                   if (data->address[i]
-                       ^~~~~~~~~~~~~~~~
-   drivers/hwmon/pc87360.c:1241:4: note: Left side of '&&' is false
-                    && !devm_request_region(dev, extra_isa[i], PC87360_EXTENT,
-                    ^
-   drivers/hwmon/pc87360.c:1238:2: note: Loop condition is true.  Entering loop body
-           for (i = 0; i < LDNI_MAX; i++) {
-           ^
-   drivers/hwmon/pc87360.c:1240:7: note: Assuming the condition is false
-                   if (data->address[i]
-                       ^~~~~~~~~~~~~~~~
-   drivers/hwmon/pc87360.c:1241:4: note: Left side of '&&' is false
-                    && !devm_request_region(dev, extra_isa[i], PC87360_EXTENT,
-                    ^
-   drivers/hwmon/pc87360.c:1238:2: note: Loop condition is false. Execution continues on line 1251
-           for (i = 0; i < LDNI_MAX; i++) {
-           ^
-   drivers/hwmon/pc87360.c:1251:6: note: Assuming field 'fannr' is 0
-           if (data->fannr)
-               ^~~~~~~~~~~
-   drivers/hwmon/pc87360.c:1251:2: note: Taking false branch
-           if (data->fannr)
-           ^
-   drivers/hwmon/pc87360.c:1259:6: note: Assuming field 'innr' is 0
-           if (data->innr) {
-               ^~~~~~~~~~
-   drivers/hwmon/pc87360.c:1259:2: note: Taking false branch
-           if (data->innr) {
-           ^
-   drivers/hwmon/pc87360.c:1275:2: note: Loop condition is false. Execution continues on line 1282
-           for (i = 0; i < data->fannr; i++) {
-           ^
-   drivers/hwmon/pc87360.c:1282:6: note: Assuming 'init' is > 0
-           if (init > 0) {
-               ^~~~~~~~
-   drivers/hwmon/pc87360.c:1282:2: note: Taking true branch
-           if (init > 0) {
-           ^
-   drivers/hwmon/pc87360.c:1283:7: note: Assuming 'devid' is not equal to 233
-                   if (devid == 0xe9 && data->address[1]) /* PC87366 */
-                       ^~~~~~~~~~~~~
-   drivers/hwmon/pc87360.c:1283:21: note: Left side of '&&' is false
-                   if (devid == 0xe9 && data->address[1]) /* PC87366 */
-                                     ^
-   drivers/hwmon/pc87360.c:1286:3: note: Calling 'pc87360_init_device'
-                   pc87360_init_device(pdev, use_thermistors);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tested-by: CKI Project <cki-project@redhat.com>
 
-vim +17 sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50724
 
-d62ad762f67585 Trevor Wu 2021-08-19  16  
-d62ad762f67585 Trevor Wu 2021-08-19 @17  struct afe_gate {
-d62ad762f67585 Trevor Wu 2021-08-19  18  	int id;
-d62ad762f67585 Trevor Wu 2021-08-19  19  	const char *name;
-d62ad762f67585 Trevor Wu 2021-08-19  20  	const char *parent_name;
-d62ad762f67585 Trevor Wu 2021-08-19  21  	int reg;
-d62ad762f67585 Trevor Wu 2021-08-19  22  	u8 bit;
-d62ad762f67585 Trevor Wu 2021-08-19  23  	const struct clk_ops *ops;
-d62ad762f67585 Trevor Wu 2021-08-19  24  	unsigned long flags;
-d62ad762f67585 Trevor Wu 2021-08-19  25  	u8 cg_flags;
-d62ad762f67585 Trevor Wu 2021-08-19  26  };
-d62ad762f67585 Trevor Wu 2021-08-19  27  
+One or more kernel tests failed:
 
-:::::: The code at line 17 was first introduced by commit
-:::::: d62ad762f67585acfb5e03f71b28a52dc4604cf2 ASoC: mediatek: mt8195: support audsys clock control
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
-:::::: TO: Trevor Wu <trevor.wu@mediatek.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
