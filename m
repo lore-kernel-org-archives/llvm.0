@@ -1,42 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F0E4C64
-	for <llvm@lists.linux.dev>; Fri, 12 Aug 2022 23:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D901367
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 00:58:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660348022; x=1691884022;
+  t=1660352286; x=1691888286;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qwIwX1R+92MPVUF+kAtGy3B804JyvH61ZOmppnLH7gs=;
-  b=BLIDDDuUFRfRMTy1nSLlOlZSZS8oOvGfxSlhZ/IgRkeF9htHtvacT4UQ
-   YRsvH7NT66PYRV+N5VjBDfVMkJf9Kvht76Fi8nnq2Gal5a7hik2YYnt9E
-   yF/BIrwfuRVWKGUxkj35HkGFhWjv0Cq8wyIWk+1uOCAKRxWTv6k7ZHT0v
-   Hflh7Pc2OVKbU+T0a0ZKTlRQyQd+nAfkpKlrnA0A8yhQwLQpK1tiNK+mh
-   q2Abak3rejcUtu7Ank1n82ZWGEq5pZOEidXrocpg0hProGKzLh9Ydm/Fk
-   r1v/oiULzy1n23ZoKASOmY69O3CoQvtPjRSnGH8uX222G9nv06F9ILA+u
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317684550"
+  bh=p0lq8pAlLxDsJstetxbWP2fNSNOWHlbrdqrjxTDoBmI=;
+  b=GTdyH4YxUNR/fXSUsHPF6DDpR1y9pgFs9Pow8migDPIcLpfbELA18e+G
+   XmbLbZhbixL7a9t3tbPrmVWA6NTI9/qPyDNDn7wFSSQFwD5PP/fUomOKj
+   XqvfLE/x1LZfCF7Csc6A+fj5L+ITEUTUJfyvuykaGmpN4ZwoM06s+BL6I
+   jThMbXkXntZL6as4Anw0NcUZmwPLfZTYxYRpjMtHicDRElTNx4jSm2XD0
+   G9HGpfacmxXEnzCPTeMBShF8ClnZZja0LZ3aQlJGYatdw5eJKwduFFi1A
+   /es/FrK/SWf/rZ8DyavdNuij7vT2uLHVJ02US77CCSvFwWcQ22H0tnRVV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291713462"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="317684550"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 16:47:01 -0700
+   d="scan'208";a="291713462"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 17:58:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="609410191"
+   d="scan'208";a="606098191"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 16:47:00 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 17:58:02 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMeMl-00014f-2j;
-	Fri, 12 Aug 2022 23:46:59 +0000
-Date: Sat, 13 Aug 2022 07:46:13 +0800
+	id 1oMfTV-00018W-1I;
+	Sat, 13 Aug 2022 00:58:01 +0000
+Date: Sat, 13 Aug 2022 08:57:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-Message-ID: <202208130745.4ViTKCiC-lkp@intel.com>
-References: <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
+To: Ravi Gunasekaran <r-gunasekaran@ti.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, andrew@lunn.ch,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	linux-omap@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kishon@ti.com, vigneshr@ti.com, r-gunasekaran@ti.com
+Subject: Re: [PATCH v2 net-next] net: ethernet: ti: davinci_mdio: Add
+ workaround for errata i2329
+Message-ID: <202208130814.216FrNfX-lkp@intel.com>
+References: <20220810111345.31200-1-r-gunasekaran@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,276 +50,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20220810111345.31200-1-r-gunasekaran@ti.com>
 
-Hi Jonathan,
+Hi Ravi,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on linus/master]
-[also build test WARNING on next-20220812]
-[cannot apply to arm-perf/for-next/perf v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you for the patch! Yet something to improve:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/CXL-3-0-Performance-Monitoring-Unit-support/20220812-231616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7ebfc85e2cd7b08f518b526173e9a33b56b3913b
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220813/202208130745.4ViTKCiC-lkp@intel.com/config)
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ravi-Gunasekaran/net-ethernet-ti-davinci_mdio-Add-workaround-for-errata-i2329/20220810-191718
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f86d1fbbe7858884d6754534a0afbb74fc30bc26
+config: arm-randconfig-r026-20220810 (https://download.01.org/0day-ci/archive/20220813/202208130814.216FrNfX-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7cf02b82d964e4cb9937ee6ce8b4d36e24807544
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/c62c93111418d5468f6add98d244f0a594dbe352
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jonathan-Cameron/CXL-3-0-Performance-Monitoring-Unit-support/20220812-231616
-        git checkout 7cf02b82d964e4cb9937ee6ce8b4d36e24807544
+        git fetch --no-tags linux-review Ravi-Gunasekaran/net-ethernet-ti-davinci_mdio-Add-workaround-for-errata-i2329/20220810-191718
+        git checkout c62c93111418d5468f6add98d244f0a594dbe352
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/ti/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:128:20: note: expanded from macro 'FIELD_GET'
-                   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:129:30: note: expanded from macro 'FIELD_GET'
-                   (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-                                              ^~~~~
->> drivers/cxl/core/regs.c:357:16: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (FIELD_GET(CPMU_CAP_INT, val))
-               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/cxl/cpmu.h:17:27: note: expanded from macro 'CPMU_CAP_INT'
-   #define   CPMU_CAP_INT                          BIT(50)
-                                                   ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   include/linux/bitfield.h:129:50: note: expanded from macro 'FIELD_GET'
-                   (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-                                                         ~~~~~~~~~^~~~~~
-   include/linux/bitfield.h:45:38: note: expanded from macro '__bf_shf'
-   #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+>> drivers/net/ethernet/ti/davinci_mdio.c:548:37: error: use of undeclared identifier 'k3_mdio_socinfo'
+                   soc_match_data = soc_device_match(k3_mdio_socinfo);
+                                                     ^
+>> drivers/net/ethernet/ti/davinci_mdio.c:553:31: error: incomplete definition of type 'struct k3_mdio_soc_data'
+                           data->manual_mode = socdata->manual_mode;
+                                               ~~~~~~~^
+   drivers/net/ethernet/ti/davinci_mdio.c:550:17: note: forward declaration of 'struct k3_mdio_soc_data'
+                           const struct k3_mdio_soc_data *socdata =
                                         ^
-   11 warnings generated.
+   2 errors generated.
 
 
-vim +357 drivers/cxl/core/regs.c
+vim +/k3_mdio_socinfo +548 drivers/net/ethernet/ti/davinci_mdio.c
 
-   350	
-   351	int cxl_cpmu_get_irq(struct cxl_cpmu_regs *regs)
-   352	{
-   353		int irq = -1;
-   354		u64 val;
-   355	
-   356		val = readq(regs->cpmu + CPMU_CAP_REG);
- > 357		if (FIELD_GET(CPMU_CAP_INT, val))
+   528	
+   529	static int davinci_mdio_probe(struct platform_device *pdev)
+   530	{
+   531		struct mdio_platform_data *pdata = dev_get_platdata(&pdev->dev);
+   532		struct device *dev = &pdev->dev;
+   533		struct davinci_mdio_data *data;
+   534		struct resource *res;
+   535		struct phy_device *phy;
+   536		int ret, addr;
+   537		int autosuspend_delay_ms = -1;
+   538		const struct soc_device_attribute *soc_match_data;
+   539	
+   540		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   541		if (!data)
+   542			return -ENOMEM;
+   543	
+   544		data->manual_mode = false;
+   545		data->bb_ctrl.ops = &davinci_mdiobb_ops;
+   546	
+   547		if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
+ > 548			soc_match_data = soc_device_match(k3_mdio_socinfo);
+   549			if (soc_match_data && soc_match_data->data) {
+   550				const struct k3_mdio_soc_data *socdata =
+   551							soc_match_data->data;
+   552	
+ > 553				data->manual_mode = socdata->manual_mode;
+   554			}
+   555		}
+   556	
+   557		if (data->manual_mode)
+   558			data->bus = alloc_mdio_bitbang(&data->bb_ctrl);
+   559		else
+   560			data->bus = devm_mdiobus_alloc(dev);
+   561	
+   562		if (!data->bus) {
+   563			dev_err(dev, "failed to alloc mii bus\n");
+   564			return -ENOMEM;
+   565		}
+   566	
+   567		if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
+   568			const struct davinci_mdio_of_param *of_mdio_data;
+   569	
+   570			ret = davinci_mdio_probe_dt(&data->pdata, pdev);
+   571			if (ret)
+   572				return ret;
+   573			snprintf(data->bus->id, MII_BUS_ID_SIZE, "%s", pdev->name);
+   574	
+   575			of_mdio_data = of_device_get_match_data(&pdev->dev);
+   576			if (of_mdio_data) {
+   577				autosuspend_delay_ms =
+   578						of_mdio_data->autosuspend_delay_ms;
+   579			}
+   580		} else {
+   581			data->pdata = pdata ? (*pdata) : default_pdata;
+   582			snprintf(data->bus->id, MII_BUS_ID_SIZE, "%s-%x",
+   583				 pdev->name, pdev->id);
+   584		}
+   585	
+   586		data->bus->name		= dev_name(dev);
+   587	
+   588		if (data->manual_mode) {
+   589			data->bus->read		= davinci_mdiobb_read;
+   590			data->bus->write	= davinci_mdiobb_write;
+   591			data->bus->reset	= davinci_mdiobb_reset;
+   592	
+   593			dev_info(dev, "Configuring MDIO in manual mode\n");
+   594		} else {
+   595			data->bus->read		= davinci_mdio_read;
+   596			data->bus->write	= davinci_mdio_write;
+   597			data->bus->reset	= davinci_mdio_reset;
+   598			data->bus->priv		= data;
+   599		}
+   600		data->bus->parent	= dev;
+   601	
+   602		data->clk = devm_clk_get(dev, "fck");
+   603		if (IS_ERR(data->clk)) {
+   604			dev_err(dev, "failed to get device clock\n");
+   605			return PTR_ERR(data->clk);
+   606		}
+   607	
+   608		dev_set_drvdata(dev, data);
+   609		data->dev = dev;
+   610	
+   611		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   612		if (!res)
+   613			return -EINVAL;
+   614		data->regs = devm_ioremap(dev, res->start, resource_size(res));
+   615		if (!data->regs)
+   616			return -ENOMEM;
+   617	
+   618		davinci_mdio_init_clk(data);
+   619	
+   620		pm_runtime_set_autosuspend_delay(&pdev->dev, autosuspend_delay_ms);
+   621		pm_runtime_use_autosuspend(&pdev->dev);
+   622		pm_runtime_enable(&pdev->dev);
+   623	
+   624		/* register the mii bus
+   625		 * Create PHYs from DT only in case if PHY child nodes are explicitly
+   626		 * defined to support backward compatibility with DTs which assume that
+   627		 * Davinci MDIO will always scan the bus for PHYs detection.
+   628		 */
+   629		if (dev->of_node && of_get_child_count(dev->of_node))
+   630			data->skip_scan = true;
+   631	
+   632		ret = of_mdiobus_register(data->bus, dev->of_node);
+   633		if (ret)
+   634			goto bail_out;
+   635	
+   636		/* scan and dump the bus */
+   637		for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
+   638			phy = mdiobus_get_phy(data->bus, addr);
+   639			if (phy) {
+   640				dev_info(dev, "phy[%d]: device %s, driver %s\n",
+   641					 phy->mdio.addr, phydev_name(phy),
+   642					 phy->drv ? phy->drv->name : "unknown");
+   643			}
+   644		}
+   645	
+   646		return 0;
+   647	
+   648	bail_out:
+   649		pm_runtime_dont_use_autosuspend(&pdev->dev);
+   650		pm_runtime_disable(&pdev->dev);
+   651		return ret;
+   652	}
+   653	
 
 -- 
 0-DAY CI Kernel Test Service
