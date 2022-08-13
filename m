@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6F9622
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 01:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE175622
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 02:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660353645;
+	s=mimecast20190719; t=1660356102;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=2s/Ohe2IfVcjCem8G538BO6t6qcTfnGfvEOXCWQjjIk=;
-	b=c/Ca+J/dQnlBYt0Vy3LY+3eHxJxuzf0GYgQd70hZeaB0DgL7xQLNg1mlvMNyXRenbMFSSP
-	J310fp7QIxdBFgSITmntew9HHMP3bV81wgL+BoZSN9c45kcgfJEuPVIk9qVKMMsJgch9Xp
-	tSfwtEMFP4gQ04rFl64FhpfV0AxRV84=
+	bh=9UaB0nEoFvQaJ3JI/RHwc/XqswQ+1zLMOgLw+XLKFdo=;
+	b=g/aXzI9fwCcFN03H2X/gaJ/m1JQEuROWyrz/fY+g2MOz1JWxfNrh8afNSUnqqHy2Fwas2+
+	yxAXLQsJ47WUaOZVjoI9n88T/bGdv6HN+ojcgCZt4y5hX0U7B9GGDKY1XfCPsc9sGYhZ7j
+	bcSVTQHTjIotMrzC1hXGi0HZ8X3u3dg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-536-hviQSAmOM1CJAJr8csUoqQ-1; Fri, 12 Aug 2022 21:20:44 -0400
-X-MC-Unique: hviQSAmOM1CJAJr8csUoqQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-376-dvyi0wUINKOeGIuN0_bK0Q-1; Fri, 12 Aug 2022 22:01:41 -0400
+X-MC-Unique: dvyi0wUINKOeGIuN0_bK0Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E37EC811E76
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 01:20:43 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A700185A794
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 02:01:41 +0000 (UTC)
 Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D70A7C15BA8;
-	Sat, 13 Aug 2022 01:20:43 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F213E14152E0;
+	Sat, 13 Aug 2022 02:01:40 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (61/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [c3adefb5]
-Date: Sat, 13 Aug 2022 01:20:43 -0000
+Subject: =?utf-8?b?4pyF?= PASS (69/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [4a935059]
+Date: Sat, 13 Aug 2022 02:01:40 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-Message-Id: <51120.122081221204400202@us-mta-536.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <37253.122081222014100423@us-mta-376.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50717
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50720
 
 One or more kernel tests failed:
 
@@ -68,6 +68,11 @@ l-tests/-/issues/513
                   x86_64 - Firmware test suite
                   x86_64 (debug) - kselftest build - bpf
                   x86_64 (debug) - Firmware test suite
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
         Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
 to resize filesystem
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -91,6 +96,21 @@ le
 l-tests/-/issues/914
             Affected tests:
                   x86_64 (debug) - kselftests upstream - net
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
         Issue: kselftests upstream: FAIL: do_net_forwarding_config
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1318
@@ -101,18 +121,6 @@ l-tests/-/issues/1318
 l-tests/-/issues/1319
             Affected tests:
                   x86_64 (debug) - kselftests upstream - tc
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
         Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
 test_progs_run' (Expected 0, got 1)
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -125,7 +133,6 @@ l-tests/-/issues/1322
 l-tests/-/issues/1327
             Affected tests:
                  aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
                   x86_64 (debug) - selinux-policy: serge-testsuite
         Issue: xfstests: fail to build detached_mounts_propagation: error: =
 redeclaration of 'enum fsconfig_command'
@@ -145,11 +152,6 @@ l-tests/-/issues/1302
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - btrfs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
         Issue: stress: stress-ng: fail to build core-affinity: error: redec=
 laration of enum fsconfig_command
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -177,11 +179,11 @@ n:40535 * 1.15 < max:81259
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
             Affected tests:
                   x86_64 - Storage - block - storage fio numa
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
             Affected tests:
-                  x86_64 - Boot test
+                   s390x - Storage - blktests - blk
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
