@@ -1,121 +1,226 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729C37EC
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660383796; x=1691919796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ajoVJ+xOWkkTuv3AAjY1HB5x1d++MyD4zkAJ6N9lY7M=;
-  b=Nz6GSNufkzR12gVnAomgUsBQGvhrWfzP4ANLlWVWvGEF46X9tjRtSU+Z
-   8N4nMViMx+AUuPntu1DQFrmHAfpDlq6YJQZxQfaF9ASV5/Tkx2yBgnUQq
-   +gwUQo3iW9R1TSicKr21qd627s+oGRQ78xLyuqVwPbcKswpgQVUqwVKEh
-   9vdcHe6E9DsvfbpnWUqEEUu2m6nrm89vMZOZx2bORtCkYRNenCG31fwCQ
-   TC7RXiMCpCVEX9aiIXnyvcoEU33GiZvJSWGRZE5Mknw/VRIB/KDGe5fVu
-   bJVJ0NMTvzOssakoP2fLlXlHGCQno4b3dCg6zRVOYUCEs0231MO58cq1e
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278696784"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="278696784"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 02:43:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="782194957"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Aug 2022 02:43:14 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oMnfl-0001XF-2m;
-	Sat, 13 Aug 2022 09:43:13 +0000
-Date: Sat, 13 Aug 2022 17:42:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: kernel/dma/coherent.c:82: undefined reference to `memunmap'
-Message-ID: <202208131746.fBYALPxR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84077EC
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660384305;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WkUstm2FGVuu0/a2UbKlycM7Io5wt59iDZYA8PB+Fqw=;
+	b=AbxjQnpBqqgRroBB9hj5Kuwj/I7+2XL6A2j7wiWXa5TjMTTUBU0/yMNAnXwwPLUfdCxWPX
+	K+YvFTRZD8q1Ilqc8G43uIcM2K8Fh30Q3WNg9Ie3EbUGVj4WTDQRR8z+9KUJmzYlZzuznA
+	NhmZtqx9qq8wk5EqG8FOHBtvABB0w9U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-fag1pCeWMSCOTvKZr1A1sQ-1; Sat, 13 Aug 2022 05:51:44 -0400
+X-MC-Unique: fag1pCeWMSCOTvKZr1A1sQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2AE729AA388
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 09:51:43 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A2B08909FE;
+	Sat, 13 Aug 2022 09:51:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (70/408 SKIPPED): Test report for 5.19.0
+ (mainline.kernel.org-clang) [6c833c05]
+Date: Sat, 13 Aug 2022 09:51:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Message-Id: <37737.122081305514400183@us-mta-201.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69dac8e431af26173ca0a1ebc87054e01c585bcc
-commit: e61c451476e61450f6771ce03bbc01210a09be16 dma-mapping: Add dma_release_coherent_memory to DMA API
-date:   7 weeks ago
-config: s390-randconfig-r031-20220812 (https://download.01.org/0day-ci/archive/20220813/202208131746.fBYALPxR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e61c451476e61450f6771ce03bbc01210a09be16
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e61c451476e61450f6771ce03bbc01210a09be16
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   kernel/dma/coherent.c:48: undefined reference to `memremap'
->> /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.c:82: undefined reference to `memunmap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.c:71: undefined reference to `memunmap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_release_coherent_memory':
->> kernel/dma/coherent.c:82: undefined reference to `memunmap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `rmem_dma_device_init':
-   kernel/dma/coherent.c:48: undefined reference to `memremap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.c:71: undefined reference to `memunmap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
-   drivers/dma/fsl-edma.c:302: undefined reference to `devm_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/dma/fsl-edma.c:327: undefined reference to `devm_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
-   drivers/dma/idma64.c:644: undefined reference to `devm_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-   drivers/dma/qcom/hidma.c:770: undefined reference to `devm_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/dma/qcom/hidma.c:777: undefined reference to `devm_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
-   drivers/char/xillybus/xillybus_of.c:50: undefined reference to `devm_platform_ioremap_resource'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
-   drivers/clocksource/timer-of.c:159: undefined reference to `of_iomap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/clocksource/timer-of.c:151: undefined reference to `iounmap'
-   /opt/cross/gcc-12.1.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
-   drivers/clocksource/timer-of.c:151: undefined reference to `iounmap'
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50722
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: SELinux prevents sendmail.service while running Memory funct=
+ion: kaslr
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1169
+            Affected tests:
+                 aarch64 - Reboot test
+                  x86_64 - Memory function: kaslr
+                  x86_64 - Reboot test
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - Memory function: kaslr
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: FATAL: Module scsi_debug i=
+s in use
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1182
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
 
 
-vim +82 kernel/dma/coherent.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  76  
-e61c451476e614 kernel/dma/coherent.c       Mark-PK Tsai       2022-04-22  77  static void _dma_release_coherent_memory(struct dma_coherent_mem *mem)
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  78  {
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  79  	if (!mem)
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  80  		return;
-6b03ae0d42bfec drivers/base/dma-coherent.c Brian Starkey      2016-03-22  81  
-6b03ae0d42bfec drivers/base/dma-coherent.c Brian Starkey      2016-03-22 @82  	memunmap(mem->virt_base);
-9fbd8dc19aa57e kernel/dma/coherent.c       Christophe JAILLET 2021-10-24  83  	bitmap_free(mem->bitmap);
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  84  	kfree(mem);
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  85  }
-7bfa5ab6fa1b18 drivers/base/dma-coherent.c Marek Szyprowski   2014-10-13  86  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: The code at line 82 was first introduced by commit
-:::::: 6b03ae0d42bfecf2536f7967d37e471d98c0b3d2 drivers: dma-coherent: use MEMREMAP_WC for DMA_MEMORY_MAP
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-:::::: TO: Brian Starkey <brian.starkey@arm.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
