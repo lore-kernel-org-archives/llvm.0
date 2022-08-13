@@ -1,43 +1,43 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF3D7E
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 15:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD737E
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 15:52:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660404744; x=1691940744;
+  t=1660405944; x=1691941944;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v8iAzPZKVm8YyLTFPNZdYdxY3uj1CLNh49Qrsm7poEQ=;
-  b=kZwImv006lcnEB57FTM74LdQmF12kQCZTyNkQoXhTwncOx6s4DElMlgR
-   2Tv33Xj0DCG80EvWU5IWmLw0LXryWU1FvlrZtZPOx6PybDgxeCHUkXaWG
-   Z2ZjY7/PNKopDJ2oxfTJ+6DEAuo0mlLDkHTCHznCmG5HMskWBnwwV69B6
-   17AEQgbNEf1n5iTjeD6jBnqQV6KA2/EsbRPrZ5XAvOKjKFJ3jaCSGkOpg
-   7jedKQrec4RxAg3Dlnrz8EfdQUlwCkXRnz2LRjsc2ertnYxhcpHVYacf3
-   /ozvD9S2jP/zutFKsX2LLsV8GPDRtDPSQEri1lHPonoRX1+ulqfLXsasL
+  bh=QWYh8FleGsJrLnm5D7v3X6m4k4HjaG9y2I0dn4fjDD0=;
+  b=MxPnsMSQOuSBNfr9iC1wgYdrES5x9KMy29rrQp5Q82IrP9wSbQhc1VGP
+   BwMB7Zt3gKxQyglscv1KS7iEbciHXyHXYt01nbpvRyl++/deicQLr4q93
+   tbTM/vxVPy5vFU/LGuVvREDrnNVkj2S34mcvHtH4GDtj8pBd8t2VMaETz
+   PTrQaYGNtMyEm9iIC5GeY5Xzte3GcmCHhc9CuauG8B4oxNJm0lkkXUB9v
+   hmQyU+602rKlFw26ZuE5a5wzaOCZTlXW8m+mT42QyoVV2qQZAnIRXqzn5
+   b+eGikvmHLv80oUrHi2p6XSRNupDSIbIbtO8gk42F6IwfmkU6PuiSZ4UQ
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317736981"
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317738029"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="317736981"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:32:23 -0700
+   d="scan'208";a="317738029"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:52:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="606215747"
+   d="scan'208";a="851854507"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2022 08:32:22 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 13 Aug 2022 08:52:22 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMt7d-0001oU-1A;
-	Sat, 13 Aug 2022 15:32:21 +0000
-Date: Sat, 13 Aug 2022 23:31:30 +0800
+	id 1oMtQz-0001po-2m;
+	Sat, 13 Aug 2022 15:52:21 +0000
+Date: Sat, 13 Aug 2022 23:52:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [bvanassche:scsi-const-host-template 11/86]
- drivers/ata/pata_platform.c:97:5: error: conflicting types for
- '__pata_platform_probe'
-Message-ID: <202208132333.QdRbhHNh-lkp@intel.com>
+Subject: [jolsa-perf:bpf/tracing_multi_new_2 4/21]
+ arch/arm64/net/bpf_jit_comp.c:1642:57: warning: declaration of 'struct
+ bpf_tramp_link' will not be visible outside of this function
+Message-ID: <202208132334.OnxznuN5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,168 +47,213 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/bvanassche/linux scsi-const-host-template
-head:   6d6e5cf2f6e93f909e73e468fd5888431de61f13
-commit: 24ce874bd15b6e1e45942c02db623e7e19b6cc81 [11/86] ata
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220813/202208132333.QdRbhHNh-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_new_2
+head:   c0620f064b5146578de80c7bb00febc697cc4890
+commit: 9b9520851a227843b7e43a337281093a5d13ca71 [4/21] bpf: Store trampoline progs in arrays
+config: arm64-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220813/202208132334.OnxznuN5-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/24ce874bd15b6e1e45942c02db623e7e19b6cc81
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-const-host-template
-        git checkout 24ce874bd15b6e1e45942c02db623e7e19b6cc81
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=9b9520851a227843b7e43a337281093a5d13ca71
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi_new_2
+        git checkout 9b9520851a227843b7e43a337281093a5d13ca71
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/net/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/ata/pata_platform.c:97:5: error: conflicting types for '__pata_platform_probe'
-   int __pata_platform_probe(struct device *dev, struct resource *io_res,
-       ^
-   include/linux/ata_platform.h:16:12: note: previous declaration is here
-   extern int __pata_platform_probe(struct device *dev,
-              ^
-   drivers/ata/pata_platform.c:221:20: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                                        pio_mask, &pata_platform_sht, false);
-                                                  ^~~~~~~~~~~~~~~~~~
-   include/linux/ata_platform.h:22:33: note: passing argument to parameter 'sht' here
-                                    struct scsi_host_template *sht,
-                                                               ^
-   2 errors generated.
+>> arch/arm64/net/bpf_jit_comp.c:1642:57: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type 'struct bpf_tramp_link'
+           struct bpf_prog *p = l->link.prog;
+                                ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1660:7: error: incomplete definition of type 'struct bpf_tramp_link'
+           if (l->cookie == 0) {
+               ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1664:32: error: incomplete definition of type 'struct bpf_tramp_link'
+                   emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+                                               ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1724:20: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < tl->nr_links; i++) {
+                           ~~^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1725:26: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
+                                        ~~^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1783:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+                                             ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1784:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+                                            ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1785:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+                                               ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1889:24: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fentry->nr_links; i++)
+                           ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1890:30: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, fentry->links[i], args_off,
+                                        ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1894:14: error: incomplete definition of type 'struct bpf_tramp_links'
+           if (fmod_ret->nr_links) {
+               ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1895:30: error: incomplete definition of type 'struct bpf_tramp_links'
+                   branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
+                                      ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1900:27: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
+                   invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
+                                           ^~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c:1714:77: note: passing argument to parameter 'tl' here
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                                               ^
+   arch/arm64/net/bpf_jit_comp.c:1917:26: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
+                           ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1922:23: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fexit->nr_links; i++)
+                           ~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1923:29: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
 
 
-vim +/__pata_platform_probe +97 drivers/ata/pata_platform.c
+vim +1642 arch/arm64/net/bpf_jit_comp.c
 
-a20c9e820864e1 Paul Mundt         2006-10-27   67  
-a20c9e820864e1 Paul Mundt         2006-10-27   68  /**
-cf03613e9662c2 Anton Vorontsov    2008-01-09   69   *	__pata_platform_probe		-	attach a platform interface
-cf03613e9662c2 Anton Vorontsov    2008-01-09   70   *	@dev: device
-cf03613e9662c2 Anton Vorontsov    2008-01-09   71   *	@io_res: Resource representing I/O base
-cf03613e9662c2 Anton Vorontsov    2008-01-09   72   *	@ctl_res: Resource representing CTL base
-cf03613e9662c2 Anton Vorontsov    2008-01-09   73   *	@irq_res: Resource representing IRQ and its flags
-cf03613e9662c2 Anton Vorontsov    2008-01-09   74   *	@ioport_shift: I/O port shift
-cf03613e9662c2 Anton Vorontsov    2008-01-09   75   *	@__pio_mask: PIO mask
-17263905399471 Akinobu Mita       2015-01-29   76   *	@sht: scsi_host_template to use when registering
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19   77   *	@use16bit: Flag to indicate 16-bit IO instead of 32-bit
-a20c9e820864e1 Paul Mundt         2006-10-27   78   *
-a20c9e820864e1 Paul Mundt         2006-10-27   79   *	Register a platform bus IDE interface. Such interfaces are PIO and we
-a20c9e820864e1 Paul Mundt         2006-10-27   80   *	assume do not support IRQ sharing.
-a20c9e820864e1 Paul Mundt         2006-10-27   81   *
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   82   *	Platform devices are expected to contain at least 2 resources per port:
-a20c9e820864e1 Paul Mundt         2006-10-27   83   *
-a20c9e820864e1 Paul Mundt         2006-10-27   84   *		- I/O Base (IORESOURCE_IO or IORESOURCE_MEM)
-a20c9e820864e1 Paul Mundt         2006-10-27   85   *		- CTL Base (IORESOURCE_IO or IORESOURCE_MEM)
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   86   *
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   87   *	and optionally:
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   88   *
-a20c9e820864e1 Paul Mundt         2006-10-27   89   *		- IRQ	   (IORESOURCE_IRQ)
-a20c9e820864e1 Paul Mundt         2006-10-27   90   *
-a20c9e820864e1 Paul Mundt         2006-10-27   91   *	If the base resources are both mem types, the ioremap() is handled
-a20c9e820864e1 Paul Mundt         2006-10-27   92   *	here. For IORESOURCE_IO, it's assumed that there's no remapping
-a20c9e820864e1 Paul Mundt         2006-10-27   93   *	necessary.
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   94   *
-f7fc0ceb4d72ea Paul Mundt         2007-11-08   95   *	If no IRQ resource is present, PIO polling mode is used instead.
-a20c9e820864e1 Paul Mundt         2006-10-27   96   */
-0ec24914675c48 Greg Kroah-Hartman 2012-12-21  @97  int __pata_platform_probe(struct device *dev, struct resource *io_res,
-0ec24914675c48 Greg Kroah-Hartman 2012-12-21   98  			  struct resource *ctl_res, struct resource *irq_res,
-17263905399471 Akinobu Mita       2015-01-29   99  			  unsigned int ioport_shift, int __pio_mask,
-24ce874bd15b6e Bart Van Assche    2022-08-09  100  			  const struct scsi_host_template *sht, bool use16bit)
-a20c9e820864e1 Paul Mundt         2006-10-27  101  {
-5d728824efeda6 Tejun Heo          2007-04-17  102  	struct ata_host *host;
-5d728824efeda6 Tejun Heo          2007-04-17  103  	struct ata_port *ap;
-a20c9e820864e1 Paul Mundt         2006-10-27  104  	unsigned int mmio;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  105  	int irq = 0;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  106  	int irq_flags = 0;
-a20c9e820864e1 Paul Mundt         2006-10-27  107  
-a20c9e820864e1 Paul Mundt         2006-10-27  108  	/*
-a20c9e820864e1 Paul Mundt         2006-10-27  109  	 * Check for MMIO
-a20c9e820864e1 Paul Mundt         2006-10-27  110  	 */
-a20c9e820864e1 Paul Mundt         2006-10-27  111  	mmio = (( io_res->flags == IORESOURCE_MEM) &&
-a20c9e820864e1 Paul Mundt         2006-10-27  112  		(ctl_res->flags == IORESOURCE_MEM));
-a20c9e820864e1 Paul Mundt         2006-10-27  113  
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  114  	/*
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  115  	 * And the IRQ
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  116  	 */
-cf03613e9662c2 Anton Vorontsov    2008-01-09  117  	if (irq_res && irq_res->start > 0) {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  118  		irq = irq_res->start;
-baac9ce1f33326 Alexander Shiyan   2019-01-19  119  		irq_flags = (irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
-cf03613e9662c2 Anton Vorontsov    2008-01-09  120  	}
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  121  
-a20c9e820864e1 Paul Mundt         2006-10-27  122  	/*
-a20c9e820864e1 Paul Mundt         2006-10-27  123  	 * Now that that's out of the way, wire up the port..
-a20c9e820864e1 Paul Mundt         2006-10-27  124  	 */
-cf03613e9662c2 Anton Vorontsov    2008-01-09  125  	host = ata_host_alloc(dev, 1);
-5d728824efeda6 Tejun Heo          2007-04-17  126  	if (!host)
-5d728824efeda6 Tejun Heo          2007-04-17  127  		return -ENOMEM;
-5d728824efeda6 Tejun Heo          2007-04-17  128  	ap = host->ports[0];
-5d728824efeda6 Tejun Heo          2007-04-17  129  
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  130  	ap->ops = devm_kzalloc(dev, sizeof(*ap->ops), GFP_KERNEL);
-9b6d90e2085ca2 Zhou Qingyang      2022-01-25  131  	if (!ap->ops)
-9b6d90e2085ca2 Zhou Qingyang      2022-01-25  132  		return -ENOMEM;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  133  	ap->ops->inherits = &ata_sff_port_ops;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  134  	ap->ops->cable_detect = ata_cable_unknown;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  135  	ap->ops->set_mode = pata_platform_set_mode;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  136  	if (use16bit)
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  137  		ap->ops->sff_data_xfer = ata_sff_data_xfer;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  138  	else
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  139  		ap->ops->sff_data_xfer = ata_sff_data_xfer32;
-f3d5e4f18dba18 Alexander Shiyan   2019-01-19  140  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  141  	ap->pio_mask = __pio_mask;
-5d728824efeda6 Tejun Heo          2007-04-17  142  	ap->flags |= ATA_FLAG_SLAVE_POSS;
-a20c9e820864e1 Paul Mundt         2006-10-27  143  
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  144  	/*
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  145  	 * Use polling mode if there's no IRQ
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  146  	 */
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  147  	if (!irq) {
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  148  		ap->flags |= ATA_FLAG_PIO_POLLING;
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  149  		ata_port_desc(ap, "no IRQ, using PIO polling");
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  150  	}
-f7fc0ceb4d72ea Paul Mundt         2007-11-08  151  
-a20c9e820864e1 Paul Mundt         2006-10-27  152  	/*
-a20c9e820864e1 Paul Mundt         2006-10-27  153  	 * Handle the MMIO case
-a20c9e820864e1 Paul Mundt         2006-10-27  154  	 */
-a20c9e820864e1 Paul Mundt         2006-10-27  155  	if (mmio) {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  156  		ap->ioaddr.cmd_addr = devm_ioremap(dev, io_res->start,
-041b5eac254107 Julia Lawall       2009-08-06  157  				resource_size(io_res));
-cf03613e9662c2 Anton Vorontsov    2008-01-09  158  		ap->ioaddr.ctl_addr = devm_ioremap(dev, ctl_res->start,
-041b5eac254107 Julia Lawall       2009-08-06  159  				resource_size(ctl_res));
-a20c9e820864e1 Paul Mundt         2006-10-27  160  	} else {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  161  		ap->ioaddr.cmd_addr = devm_ioport_map(dev, io_res->start,
-041b5eac254107 Julia Lawall       2009-08-06  162  				resource_size(io_res));
-cf03613e9662c2 Anton Vorontsov    2008-01-09  163  		ap->ioaddr.ctl_addr = devm_ioport_map(dev, ctl_res->start,
-041b5eac254107 Julia Lawall       2009-08-06  164  				resource_size(ctl_res));
-0d5ff566779f89 Tejun Heo          2007-02-01  165  	}
-5d728824efeda6 Tejun Heo          2007-04-17  166  	if (!ap->ioaddr.cmd_addr || !ap->ioaddr.ctl_addr) {
-cf03613e9662c2 Anton Vorontsov    2008-01-09  167  		dev_err(dev, "failed to map IO/CTL base\n");
-0d5ff566779f89 Tejun Heo          2007-02-01  168  		return -ENOMEM;
-a20c9e820864e1 Paul Mundt         2006-10-27  169  	}
-a20c9e820864e1 Paul Mundt         2006-10-27  170  
-5d728824efeda6 Tejun Heo          2007-04-17  171  	ap->ioaddr.altstatus_addr = ap->ioaddr.ctl_addr;
-a20c9e820864e1 Paul Mundt         2006-10-27  172  
-cf03613e9662c2 Anton Vorontsov    2008-01-09  173  	pata_platform_setup_port(&ap->ioaddr, ioport_shift);
-a20c9e820864e1 Paul Mundt         2006-10-27  174  
-cbcdd87593a1d8 Tejun Heo          2007-08-18  175  	ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
-cbcdd87593a1d8 Tejun Heo          2007-08-18  176  		      (unsigned long long)io_res->start,
-cbcdd87593a1d8 Tejun Heo          2007-08-18  177  		      (unsigned long long)ctl_res->start);
-cbcdd87593a1d8 Tejun Heo          2007-08-18  178  
-5d728824efeda6 Tejun Heo          2007-04-17  179  	/* activate */
-9363c3825ea9ad Tejun Heo          2008-04-07  180  	return ata_host_activate(host, irq, irq ? ata_sff_interrupt : NULL,
-17263905399471 Akinobu Mita       2015-01-29  181  				 irq_flags, sht);
-a20c9e820864e1 Paul Mundt         2006-10-27  182  }
-cf03613e9662c2 Anton Vorontsov    2008-01-09  183  EXPORT_SYMBOL_GPL(__pata_platform_probe);
-a20c9e820864e1 Paul Mundt         2006-10-27  184  
+b2ad54e1533e9144 Xu Kuohai 2022-07-11  1641  
+efc9909fdce00a82 Xu Kuohai 2022-07-11 @1642  static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1643  			    int args_off, int retval_off, int run_ctx_off,
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1644  			    bool save_ret)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1645  {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1646  	u32 *branch;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1647  	u64 enter_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1648  	u64 exit_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1649  	struct bpf_prog *p = l->link.prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1650  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1651  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1652  	if (p->aux->sleepable) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1653  		enter_prog = (u64)__bpf_prog_enter_sleepable;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1654  		exit_prog = (u64)__bpf_prog_exit_sleepable;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1655  	} else {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1656  		enter_prog = (u64)__bpf_prog_enter;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1657  		exit_prog = (u64)__bpf_prog_exit;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1658  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1659  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1660  	if (l->cookie == 0) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1661  		/* if cookie is zero, one instruction is enough to store it */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1662  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1663  	} else {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1664  		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1665  		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1666  		     ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1667  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1668  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1669  	/* save p to callee saved register x19 to avoid loading p with mov_i64
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1670  	 * each time.
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1671  	 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1672  	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1673  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1674  	/* arg1: prog */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1675  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1676  	/* arg2: &run_ctx */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1677  	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1678  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1679  	emit_call(enter_prog, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1680  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1681  	/* if (__bpf_prog_enter(prog) == 0)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1682  	 *         goto skip_exec_of_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1683  	 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1684  	branch = ctx->image + ctx->idx;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1685  	emit(A64_NOP, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1686  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1687  	/* save return value to callee saved register x20 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1688  	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1689  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1690  	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1691  	if (!p->jited)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1692  		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1693  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1694  	emit_call((const u64)p->bpf_func, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1695  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1696  	if (save_ret)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1697  		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1698  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1699  	if (ctx->image) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1700  		int offset = &ctx->image[ctx->idx] - branch;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1701  		*branch = A64_CBZ(1, A64_R(0), offset);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1702  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1703  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1704  	/* arg1: prog */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1705  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1706  	/* arg2: start time */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1707  	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1708  	/* arg3: &run_ctx */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1709  	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1710  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1711  	emit_call(exit_prog, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1712  }
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1713  
 
-:::::: The code at line 97 was first introduced by commit
-:::::: 0ec24914675c48213378da550db494bf154f0f6c Drivers: ata: remove __dev* attributes.
+:::::: The code at line 1642 was first introduced by commit
+:::::: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
 
-:::::: TO: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+:::::: TO: Xu Kuohai <xukuohai@huawei.com>
+:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
 
 -- 
 0-DAY CI Kernel Test Service
