@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433F723AF
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 17:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99375803
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 18:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660410267; x=1691946267;
+  t=1660415790; x=1691951790;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZpoYR05WUTkDSdKnEvxsVSUi0VfCnLw/lr38DEc3SxE=;
-  b=gZfBvw2szr2xjFC3skFoajytipY8TcgAmZkC39mZQrqdDUi3v0Gym/qp
-   D5/BJvsQU9pzoCL5beeR7BgleviNXVvRpb9vYwDorP177FIZ3bqN95/gI
-   88dr26JgcDOREVC9L9KzeOB7yKfwyN4+y3cKTDhmteuv7Y4dzz9RGWDDP
-   muqFF5af41Wg8IPTchFg1/tyl6EcKmzyspsBND6hdspteE25ty/+8JBnS
-   3CAnLsRJtLbNH9i6wUYGCwEl+wCteUWTQPDDFLFyyp75wIMoLsJKGYidu
-   obZ+JGvbpvOIJdgL5P2bhu0OsvJfnqr9sdkgkufbZxEi59a4rV+mYIU4T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353508229"
+  bh=z9vmo3oouOg13TEelcgv+Ek1MmzLAcDcfCyaj5ae2hg=;
+  b=iL7uML8AITNv4TRcBXlUcUBOQyIJgblHvmbGJ/KViWCfiSxaJMetXEh6
+   UKCFM/m/AQHPcPyylQWw1gxuy+67bHtnLuC04xxaH5DsPMPIpb+/mkzcW
+   0hZI5FNZhCfFgAIDBFfWK/gxvco+oE6FvH+9+Cvwi/y7H9IZfD+AFzapp
+   H25fMFuSVUnFqkVePViRStAvTDcI1AAf5HmB0OcUU8POGruGGGBiHt3Je
+   CMZJlFeBiHy1nuJEGffDrw7SewUCS5PDDK/lUjWJEfhuQkfxBljsxsgpm
+   +NXv9fENshVqpDC9MTELGVhnzOI828LmZ7USh87YXlb2gL/PycCt6+Tuu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271543171"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="353508229"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:04:26 -0700
+   d="scan'208";a="271543171"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:36:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="782253735"
+   d="scan'208";a="635018771"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Aug 2022 10:04:25 -0700
+  by orsmga008.jf.intel.com with ESMTP; 13 Aug 2022 11:36:27 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oMuYi-0001tL-1O;
-	Sat, 13 Aug 2022 17:04:24 +0000
-Date: Sun, 14 Aug 2022 01:03:35 +0800
+	id 1oMvzn-0001zF-0O;
+	Sat, 13 Aug 2022 18:36:27 +0000
+Date: Sun, 14 Aug 2022 02:35:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tracing_multi_new_2 4/21]
- arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type
- 'struct bpf_tramp_link'
-Message-ID: <202208140107.9veo0Cp0-lkp@intel.com>
+Subject: [andersson:wip/sc8280xp-next-20220720-nonworking-gpu 9/143]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused
+ variable 'sc8280xp_regdma'
+Message-ID: <202208140224.llj1D2O5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,216 +47,46 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_new_2
-head:   c0620f064b5146578de80c7bb00febc697cc4890
-commit: 9b9520851a227843b7e43a337281093a5d13ca71 [4/21] bpf: Store trampoline progs in arrays
-config: arm64-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220814/202208140107.9veo0Cp0-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+tree:   https://github.com/andersson/kernel wip/sc8280xp-next-20220720-nonworking-gpu
+head:   50749fc985b5eb2036a6139b10182a05e42ce4b0
+commit: 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd [9/143] drm/msm/dpu: Introduce sc8280xp
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220814/202208140224.llj1D2O5-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=9b9520851a227843b7e43a337281093a5d13ca71
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tracing_multi_new_2
-        git checkout 9b9520851a227843b7e43a337281093a5d13ca71
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/andersson/kernel/commit/4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8280xp-next-20220720-nonworking-gpu
+        git checkout 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/arm64/net/bpf_jit_comp.c:1642:57: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
->> arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type 'struct bpf_tramp_link'
-           struct bpf_prog *p = l->link.prog;
-                                ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1660:7: error: incomplete definition of type 'struct bpf_tramp_link'
-           if (l->cookie == 0) {
-               ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1664:32: error: incomplete definition of type 'struct bpf_tramp_link'
-                   emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
-                                               ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1724:20: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < tl->nr_links; i++) {
-                           ~~^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1725:26: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
-                                        ~~^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1783:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-                                             ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1784:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-                                            ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1785:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-                                               ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1889:24: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fentry->nr_links; i++)
-                           ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1890:30: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, fentry->links[i], args_off,
-                                        ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1894:14: error: incomplete definition of type 'struct bpf_tramp_links'
-           if (fmod_ret->nr_links) {
-               ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1895:30: error: incomplete definition of type 'struct bpf_tramp_links'
-                   branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
-                                      ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1900:27: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
-                   invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
-                                           ^~~~~~~~
-   arch/arm64/net/bpf_jit_comp.c:1714:77: note: passing argument to parameter 'tl' here
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                                               ^
-   arch/arm64/net/bpf_jit_comp.c:1917:26: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
-                           ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1922:23: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fexit->nr_links; i++)
-                           ~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1923:29: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
-                                        ~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused variable 'sc8280xp_regdma' [-Wunused-const-variable]
+   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
+                                       ^
+   1 warning generated.
 
 
-vim +1649 arch/arm64/net/bpf_jit_comp.c
+vim +/sc8280xp_regdma +1535 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
 
-b2ad54e1533e9144 Xu Kuohai 2022-07-11  1641  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1642  static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1643  			    int args_off, int retval_off, int run_ctx_off,
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1644  			    bool save_ret)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1645  {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1646  	u32 *branch;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1647  	u64 enter_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1648  	u64 exit_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11 @1649  	struct bpf_prog *p = l->link.prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1650  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1651  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1652  	if (p->aux->sleepable) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1653  		enter_prog = (u64)__bpf_prog_enter_sleepable;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1654  		exit_prog = (u64)__bpf_prog_exit_sleepable;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1655  	} else {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1656  		enter_prog = (u64)__bpf_prog_enter;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1657  		exit_prog = (u64)__bpf_prog_exit;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1658  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1659  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1660  	if (l->cookie == 0) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1661  		/* if cookie is zero, one instruction is enough to store it */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1662  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1663  	} else {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1664  		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1665  		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1666  		     ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1667  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1668  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1669  	/* save p to callee saved register x19 to avoid loading p with mov_i64
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1670  	 * each time.
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1671  	 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1672  	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1673  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1674  	/* arg1: prog */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1675  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1676  	/* arg2: &run_ctx */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1677  	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1678  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1679  	emit_call(enter_prog, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1680  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1681  	/* if (__bpf_prog_enter(prog) == 0)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1682  	 *         goto skip_exec_of_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1683  	 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1684  	branch = ctx->image + ctx->idx;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1685  	emit(A64_NOP, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1686  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1687  	/* save return value to callee saved register x20 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1688  	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1689  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1690  	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1691  	if (!p->jited)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1692  		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1693  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1694  	emit_call((const u64)p->bpf_func, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1695  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1696  	if (save_ret)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1697  		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1698  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1699  	if (ctx->image) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1700  		int offset = &ctx->image[ctx->idx] - branch;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1701  		*branch = A64_CBZ(1, A64_R(0), offset);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1702  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1703  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1704  	/* arg1: prog */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1705  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1706  	/* arg2: start time */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1707  	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1708  	/* arg3: &run_ctx */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1709  	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1710  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1711  	emit_call(exit_prog, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1712  }
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1713  
-
-:::::: The code at line 1649 was first introduced by commit
-:::::: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
-
-:::::: TO: Xu Kuohai <xukuohai@huawei.com>
-:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
+  1534	
+> 1535	static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
+  1536		.base = 0x0,
+  1537		.version = 0x00020000,
+  1538		.trigger_sel_off = 0x119c,
+  1539		.xin_id = 7,
+  1540		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
+  1541	};
+  1542	
 
 -- 
 0-DAY CI Kernel Test Service
