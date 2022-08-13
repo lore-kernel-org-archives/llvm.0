@@ -1,231 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE175622
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 02:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660356102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9UaB0nEoFvQaJ3JI/RHwc/XqswQ+1zLMOgLw+XLKFdo=;
-	b=g/aXzI9fwCcFN03H2X/gaJ/m1JQEuROWyrz/fY+g2MOz1JWxfNrh8afNSUnqqHy2Fwas2+
-	yxAXLQsJ47WUaOZVjoI9n88T/bGdv6HN+ojcgCZt4y5hX0U7B9GGDKY1XfCPsc9sGYhZ7j
-	bcSVTQHTjIotMrzC1hXGi0HZ8X3u3dg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-376-dvyi0wUINKOeGIuN0_bK0Q-1; Fri, 12 Aug 2022 22:01:41 -0400
-X-MC-Unique: dvyi0wUINKOeGIuN0_bK0Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A700185A794
-	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 02:01:41 +0000 (UTC)
-Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F213E14152E0;
-	Sat, 13 Aug 2022 02:01:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (69/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [4a935059]
-Date: Sat, 13 Aug 2022 02:01:40 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CC3622
+	for <llvm@lists.linux.dev>; Sat, 13 Aug 2022 02:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660356548; x=1691892548;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K1sPmUlSGlZdpd8fyqcmHRHve+qzuq97ORygXjVcVjk=;
+  b=EsEGK7ox/yG3habdL+miQBI+Tjr9PtXZnxyPmIq2aZPXc5JOA0buQueI
+   vMZAHRiBoBZ9gQjFjkn+X9IRlghbJLKlZVsMz4av082P/E4AfhE8VSLuI
+   /VVlqwE5f6STUmWhiAHG7MA0DZeqdd8jpV5Aj3nSW3o9SSW4R2y2Thbrg
+   b0zQ9Kfbw65aG9v21FrTDPmx5NMdEYh6FM4IFI+Rd1vU4AfZndULuN4NO
+   gZU0GFhIUHXiQ70ntgmtXQQOqe7W7V20A7cdkHjBjsPZ5CoPUkKbX5uyL
+   2jhpamzAkH7K6YRnZchnKZwTLmbPIM0bQMebGkFLtzsAhckSgeAgybGxS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292514928"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="292514928"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 19:09:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="609430908"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 19:09:04 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oMgaF-0001Cw-2D;
+	Sat, 13 Aug 2022 02:09:03 +0000
+Date: Sat, 13 Aug 2022 10:09:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: menglong8.dong@gmail.com, kuba@kernel.org,
+	miguel.ojeda.sandonis@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ojeda@kernel.org,
+	ndesaulniers@google.com, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, asml.silence@gmail.com, imagedong@tencent.com,
+	luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+	jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+Message-ID: <202208131003.M7FBGBna-lkp@intel.com>
+References: <20220812025015.316609-1-imagedong@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <37253.122081222014100423@us-mta-376.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812025015.316609-1-imagedong@tencent.com>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on net-next/master]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50720
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220812-105214
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7ebfc85e2cd7b08f518b526173e9a33b56b3913b
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220813/202208131003.M7FBGBna-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ec98116fd4b985103e65c71d47f9390fee025cb9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-skb-prevent-the-split-of-kfree_skb_reason-by-gcc/20220812-105214
+        git checkout ec98116fd4b985103e65c71d47f9390fee025cb9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/core/
 
-One or more kernel tests failed:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - Firmware test suite
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                 aarch64 - Reboot test
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+All warnings (new ones prefixed by >>):
+
+>> net/core/skbuff.c:780:6: warning: unknown attribute '__optimize__' ignored [-Wunknown-attributes]
+   void __nofnsplit
+        ^~~~~~~~~~~
+   include/linux/compiler_attributes.h:273:56: note: expanded from macro '__nofnsplit'
+   #define __nofnsplit                     __attribute__((__optimize__("O1")))
+                                                          ^~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/__optimize__ +780 net/core/skbuff.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   770	
+   771	/**
+   772	 *	kfree_skb_reason - free an sk_buff with special reason
+   773	 *	@skb: buffer to free
+   774	 *	@reason: reason why this skb is dropped
+   775	 *
+   776	 *	Drop a reference to the buffer and free it if the usage count has
+   777	 *	hit zero. Meanwhile, pass the drop reason to 'kfree_skb'
+   778	 *	tracepoint.
+   779	 */
+ > 780	void __nofnsplit
+   781	kfree_skb_reason(struct sk_buff *skb, enum skb_drop_reason reason)
+   782	{
+   783		if (!skb_unref(skb))
+   784			return;
+   785	
+   786		DEBUG_NET_WARN_ON_ONCE(reason <= 0 || reason >= SKB_DROP_REASON_MAX);
+   787	
+   788		trace_kfree_skb(skb, __builtin_return_address(0), reason);
+   789		__kfree_skb(skb);
+   790	}
+   791	EXPORT_SYMBOL(kfree_skb_reason);
+   792	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
