@@ -1,124 +1,159 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFDFA23
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 14:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660488962; x=1692024962;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=czZNwNyF44q4MpFyYozZIShlWN8EghQWPau8SuEK2XY=;
-  b=OzqQus0XXSr/ORodWE+J9UMFSSuH9w1e51IUbUSs3jGS1OPGcfEVrMs1
-   3EbfRk272NjLhPTsxepdaytp/bMC10TOazUJisMf5WT/Nr9ozT5MNCcYI
-   RSPEWeyV2TUn6WIAXtLTcCAHE5HdhfpRhIOSttX0If/AQAVKC72jsWAkJ
-   FEYrdk5KXn+TVSugD/Knfdq7gxd83XdlHWzlkaWEC+/uF+EklMIxVmAfz
-   Var8yGI1ZvZxQVxaKcIY0kWXttbQ3PlYm6iHtqFiumhGArLjNk6abhv1L
-   iorgWlwhgqqiVKotZJKRYHhrob3GtSwmoaYLyZdsC5PQ5Lzn+sOGOGoVD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="293100893"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="293100893"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 07:56:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="934228661"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Aug 2022 07:56:00 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNF1z-0000Bz-29;
-	Sun, 14 Aug 2022 14:55:59 +0000
-Date: Sun, 14 Aug 2022 22:55:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@fb.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCHv2 7/7] nvme-pci: implement dma_map support
-Message-ID: <202208142218.6F204p6b-lkp@intel.com>
-References: <20220802193633.289796-8-kbusch@fb.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A51C01
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 15:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0712C433C1;
+	Sun, 14 Aug 2022 15:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660490937;
+	bh=mDDod5hoK9zUIp4GLrFxdxCIQSI8HzlisO5aPIIpYBk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BmVsbBFU/j93P+ja3YK1lSuc+16nTMIgn6iLNGT1lbqb7Gpbriw5Xx4XeO8EN3lqk
+	 FNYj8TSTV/yyMHfhpA/FgiF9WfCobQApoMdH3clhMMqjIGJCQoDxyhb4nOf/SyUN96
+	 S6fU2Wuuxnq7gAxRUFPYNDx4OEsjJ3DiwLSwoLknlBZBIl1VUnJrTQGnodZysIsore
+	 gVvtzA01RENGo0WhzAeDLzf4CNYwVbm8Ntzo516Ng7+tZpvYua1hgd3DVNKEX5bv/C
+	 oLIJ3xlAFLB7t/tDk492ZLiefhiIy51NPub6SxiwQh8Vxxp032Qo+C5VXAgHkB+aAS
+	 Qp/uKbUaamKqw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Tao Zhang <quic_taozha@quicinc.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Sasha Levin <sashal@kernel.org>,
+	mathieu.poirier@linaro.org,
+	alexander.shishkin@linux.intel.com,
+	nathan@kernel.org,
+	coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.19 32/64] coresight: etm4x: avoid build failure with unrolled loops
+Date: Sun, 14 Aug 2022 11:24:05 -0400
+Message-Id: <20220814152437.2374207-32-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
+References: <20220814152437.2374207-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802193633.289796-8-kbusch@fb.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi Keith,
+From: Nick Desaulniers <ndesaulniers@google.com>
 
-I love your patch! Perhaps something to improve:
+[ Upstream commit 4d45bc82df667ad9e9cb8361830e54fc1264e993 ]
 
-[auto build test WARNING on axboe-block/for-next]
-[cannot apply to linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+When the following configs are enabled:
+* CORESIGHT
+* CORESIGHT_SOURCE_ETM4X
+* UBSAN
+* UBSAN_TRAP
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/dma-mapping-optimisations/20220803-034125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220814/202208142218.6F204p6b-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fa76dbaaa42ba2c354d69638edefd09550d5fb38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Keith-Busch/dma-mapping-optimisations/20220803-034125
-        git checkout fa76dbaaa42ba2c354d69638edefd09550d5fb38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/host/
+Clang fails assemble the kernel with the error:
+<instantiation>:1:7: error: expected constant expression in '.inst' directive
+.inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
+      ^
+drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
+macro instantiation
+etm4x_relaxed_read32(csa, TRCCNTVRn(i));
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
+macro 'etm4x_relaxed_read32'
+read_etm4x_sysreg_offset((offset), false)))
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
+from macro 'read_etm4x_sysreg_offset'
+__val = read_etm4x_sysreg_const_offset((offset));       \
+        ^
+drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
+macro 'read_etm4x_sysreg_const_offset'
+READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
+^
+drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
+macro 'READ_ETM4x_REG'
+read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
+^
+arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
+'read_sysreg_s'
+asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
+             ^
+arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
+"       mrs_s " v ", " __stringify(r) "\n"                      \
+ ^
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Consider the definitions of TRCSSCSRn and TRCCNTVRn:
+drivers/hwtracing/coresight/coresight-etm4x.h:56
+ #define TRCCNTVRn(n)      (0x160 + (n * 4))
+drivers/hwtracing/coresight/coresight-etm4x.h:81
+ #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
 
-All warnings (new ones prefixed by >>):
+Where the macro parameter is expanded to i; a loop induction variable
+from etm4_disable_hw.
 
-   drivers/nvme/host/pci.c:964:7: warning: variable 'nprps_left' is uninitialized when used here [-Wuninitialized]
-                   if (nprps_left <= last_prp + 1) {
-                       ^~~~~~~~~~
-   drivers/nvme/host/pci.c:894:45: note: initialize the variable 'nprps_left' to silence this warning
-           int i, offset, j, length, nprps, nprps_left;
-                                                      ^
-                                                       = 0
->> drivers/nvme/host/pci.c:1994:9: warning: variable 'ppv' set but not used [-Wunused-but-set-variable]
-           int i, ppv;
-                  ^
-   2 warnings generated.
+When any compiler can determine that loops may be unrolled, then the
+__builtin_constant_p check in read_etm4x_sysreg_offset() defined in
+drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
+can lead to the expression `(0x160 + (i * 4))` being passed to
+read_etm4x_sysreg_const_offset. Via the trace above, this is passed
+through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
+is string-ified and used directly in inline asm.
 
+Regardless of which compiler or compiler options determine whether a
+loop can or can't be unrolled, which determines whether
+__builtin_constant_p evaluates to true when passed an expression using a
+loop induction variable, it is NEVER safe to allow the preprocessor to
+construct inline asm like:
+  asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
+                                 ^ expected constant expression
 
-vim +/ppv +1994 drivers/nvme/host/pci.c
+Instead of read_etm4x_sysreg_offset() using __builtin_constant_p(), use
+__is_constexpr from include/linux/const.h instead to ensure only
+expressions that are valid integer constant expressions get passed
+through to read_sysreg_s().
 
-  1987	
-  1988	static void nvme_pci_dma_unmap(struct request_queue *q, void *dma_tag)
-  1989	{
-  1990		const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
-  1991		struct nvme_ns *ns = q->queuedata;
-  1992		struct nvme_dev *dev = to_nvme_dev(ns->ctrl);
-  1993		struct nvme_dma_mapping *mapping = dma_tag;
-> 1994		int i, ppv;
-  1995	
-  1996		for (i = 0; i < mapping->nr_pages; i += nvme_pages) {
-  1997			__u64 dma_addr = le64_to_cpu(mapping->prps[i]);
-  1998			ppv = nvme_pages;
-  1999	
-  2000			if (i == 0)
-  2001				ppv -= mapping->offset >> NVME_CTRL_PAGE_SHIFT;
-  2002			dma_unmap_page(dev->dev, dma_addr,
-  2003				       PAGE_SIZE - offset_in_page(dma_addr), 0);
-  2004		}
-  2005	
-  2006		dma_free_coherent(dev->dev, mapping->nr_pages * sizeof(*mapping->prps),
-  2007				  (void *)mapping->prps, mapping->prp_dma_addr);
-  2008		kfree(mapping);
-  2009		put_device(dev->dev);
-  2010	}
-  2011	#endif
-  2012	
+This is not a bug in clang; it's a potentially unsafe use of the macro
+arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1310
+Reported-by: Arnd Bergmann <arnd@kernel.org>
+Reported-by: Tao Zhang <quic_taozha@quicinc.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Link: https://lore.kernel.org/r/20220708231520.3958391-1-ndesaulniers@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwtracing/coresight/coresight-etm4x.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+index 33869c1d20c3..a7bfea31f7d8 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x.h
++++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+@@ -7,6 +7,7 @@
+ #define _CORESIGHT_CORESIGHT_ETM_H
+ 
+ #include <asm/local.h>
++#include <linux/const.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ #include "coresight-priv.h"
+@@ -515,7 +516,7 @@
+ 	({									\
+ 		u64 __val;							\
+ 										\
+-		if (__builtin_constant_p((offset)))				\
++		if (__is_constexpr((offset)))					\
+ 			__val = read_etm4x_sysreg_const_offset((offset));	\
+ 		else								\
+ 			__val = etm4x_sysreg_read((offset), true, (_64bit));	\
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
