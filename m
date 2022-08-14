@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C261C01
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 16:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8C1C433D6;
-	Sun, 14 Aug 2022 16:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01C223A1
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 16:27:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79702C433C1;
+	Sun, 14 Aug 2022 16:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660494368;
-	bh=pVh0kY2dRG6Xb0FG85icTj2NW55fBngQJ94RJpxzoGQ=;
+	s=k20201202; t=1660494457;
+	bh=7fWuYtg1B+J9a2WfNzdv9rvcTUNgHSU4aummuoGeZCw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KYBlrNsvF5Syh5JAYJegXIP3v/LdbzOXfry41IW6Zm56ucwDH/JqtijF0E6BI3Qf/
-	 3MsTlyS0AIxItj3r5SJg1x+VEj1lAaD19+umKl+wob2hp/zGvL1+uo0VYiYNlGe8g8
-	 JjVLgWwIN55qXYcI79QILXGrsVNn9IDZjFJIgJEGo9hTN04tD8MS1RzhWiHuzB33Gw
-	 MZ9CWpRBrKXCGke7++IXC2q/rUjN2GR2ThoogxC283h3NWj3KW72/3rbzRwfxkic0d
-	 yWUUGGfsdYzSiKxHrTblEKoWnxUTiabZBVdV/hIvEX51m+29GXtVOwE9s+Wyve6s+w
-	 o4K2WPcK/YBbw==
+	b=BQq9OA2avyDPz5JFFs2emYl2Vw24fxPySUwCDrU/aNFLY1w44UF1rA+HGaUTgYZ79
+	 FcpvKf3gGPtRCQSx1hcAsgQDyXopfnYVjus3u7Nrvk30xLcuwCMLEis/+bKNGxcgPD
+	 xC33Fes8Oo2TWzHts6istBFO8fKD1zoxQ/7E3Tv7/sdFU8XzhoQtqKr7w0svXbhWx1
+	 B8GHXydBpljc+O3KqUjJYV8GlXGxwI8AEsMOpHxOvcbUipX6IfvnpwPjT5pgIX88UU
+	 JVpq4ZbgMMYMYH2Ras8T47EgMGIuCLhAPXdog/RAuEEP1615Be3v3vqTowRChCi6MC
+	 uEcaX58SutjWw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	macro@orcam.me.uk,
 	linux-mips@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.18 39/39] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
-Date: Sun, 14 Aug 2022 12:23:28 -0400
-Message-Id: <20220814162332.2396012-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 28/28] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Date: Sun, 14 Aug 2022 12:26:08 -0400
+Message-Id: <20220814162610.2397644-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814162332.2396012-1-sashal@kernel.org>
-References: <20220814162332.2396012-1-sashal@kernel.org>
+In-Reply-To: <20220814162610.2397644-1-sashal@kernel.org>
+References: <20220814162610.2397644-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index 8dbbd99fc7e8..be4d4670d649 100644
+index 046d51a454af..3471a089bc05 100644
 --- a/arch/mips/mm/tlbex.c
 +++ b/arch/mips/mm/tlbex.c
-@@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+@@ -634,7 +634,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
  		return;
  	}
  
@@ -95,7 +95,7 @@ index 8dbbd99fc7e8..be4d4670d649 100644
  		if (fill_includes_sw_bits) {
  			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
  		} else {
-@@ -2565,7 +2565,7 @@ static void check_pabits(void)
+@@ -2573,7 +2573,7 @@ static void check_pabits(void)
  	unsigned long entry;
  	unsigned pabits, fillbits;
  
