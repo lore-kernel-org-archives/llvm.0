@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A1A1C01
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 16:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035C7C433C1;
-	Sun, 14 Aug 2022 16:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C261C01
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 16:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8C1C433D6;
+	Sun, 14 Aug 2022 16:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660494201;
+	s=k20201202; t=1660494368;
 	bh=pVh0kY2dRG6Xb0FG85icTj2NW55fBngQJ94RJpxzoGQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Bov+EfIjR+vFYpJM22MvIQtmozjkkUDBS5lzXVB8CqR220d6+NoMFdiwDZcHopLe1
-	 +oOj1OJOhIJdMzy+iXLHPuuoaeSs+ZYxafmFNvvumx8NOMa+GwukPu4SAydhCB3KcW
-	 BzpjJzPJu7fVtV+SCedFs4DqN27fr8LbdPSm1zg8lC/uKhWDg6Ealr8UCOu6Y5MozB
-	 dr85QLSFMB61bCptpGSO3oxBJz4ILZRdymUTIxEtO7Nu051arDsREgwE1YJFhIbtjn
-	 vCOy9ihYrK7Wq3z2FluE6havOW+SWk4TfgGTzcqI9GxfGM+YdFknue3azCL9KMcXTp
-	 MtZANNjPDYHjw==
+	b=KYBlrNsvF5Syh5JAYJegXIP3v/LdbzOXfry41IW6Zm56ucwDH/JqtijF0E6BI3Qf/
+	 3MsTlyS0AIxItj3r5SJg1x+VEj1lAaD19+umKl+wob2hp/zGvL1+uo0VYiYNlGe8g8
+	 JjVLgWwIN55qXYcI79QILXGrsVNn9IDZjFJIgJEGo9hTN04tD8MS1RzhWiHuzB33Gw
+	 MZ9CWpRBrKXCGke7++IXC2q/rUjN2GR2ThoogxC283h3NWj3KW72/3rbzRwfxkic0d
+	 yWUUGGfsdYzSiKxHrTblEKoWnxUTiabZBVdV/hIvEX51m+29GXtVOwE9s+Wyve6s+w
+	 o4K2WPcK/YBbw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	macro@orcam.me.uk,
 	linux-mips@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.19 46/48] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
-Date: Sun, 14 Aug 2022 12:19:39 -0400
-Message-Id: <20220814161943.2394452-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 39/39] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Date: Sun, 14 Aug 2022 12:23:28 -0400
+Message-Id: <20220814162332.2396012-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814161943.2394452-1-sashal@kernel.org>
-References: <20220814161943.2394452-1-sashal@kernel.org>
+In-Reply-To: <20220814162332.2396012-1-sashal@kernel.org>
+References: <20220814162332.2396012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
