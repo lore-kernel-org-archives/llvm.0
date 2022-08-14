@@ -1,133 +1,190 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448F828E2
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 20:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660510096; x=1692046096;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WfzRpYDt3Xe8kcRJakKeO57VmiHMSmyYPO0Q4unxeYE=;
-  b=HhURFePN36uNOPky6KwrS0CVOdPfnyw1vu14/WF3GyyPzelAUQiXd3Qk
-   8WnJw6Xvnd/+Sd5N2ZYfDrPDPwJjQ5iLWMcUku0EEmBlRj8RS29xX0Hao
-   qvHVgbRXpnEib2BMWvh5HY1HNWBpnJeLY2BXUwjxStuU49CZ+KKWxI5Se
-   IvpZgrB22XsamK1NxrzhJ+8iQ32kVXC3s4rmpFpMI3Cjqb/hm9cy3A7OP
-   nayboVl53te7i3Kx2zPG8B5QLLdKf3qP0DU4Nff63n0dya3neiYWKTQci
-   zXBFudjAhuZfTLNPDJzAFQEiD+6eihYeaZSe+41F2Fux06qENdqJP7w84
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="278809422"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="278809422"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 13:48:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="934277480"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Aug 2022 13:48:14 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNKWr-0000Wh-2Z;
-	Sun, 14 Aug 2022 20:48:13 +0000
-Date: Mon, 15 Aug 2022 04:47:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/media/dvb-frontends/nxt200x.c:1087:12: warning: stack frame
- size (15160) exceeds limit (8192) in 'nxt200x_init'
-Message-ID: <202208150405.dJa74zEz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61CDEA2
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 21:14:28 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id tl27so10675407ejc.1
+        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 14:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=Q3rxfxfhyGA2AUg4ZGZuVw0wPS1+PYg+Nvu3rOct/ZI=;
+        b=ApWQ4x42OQeA+KH06JfSUCYmPkUBMH87sd6c/gBlW/w5OJ84FReYQXibCA3KO4dWHN
+         QReeRlrLBcI8uzwW/cArNEPq7OYpPDalsGzvqlOEb8XQdt8+u7pLG1b+/2rFlL9cBgiR
+         4CmeoFXzhECb6bn1K00PNqRN9M15hjeKshquk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Q3rxfxfhyGA2AUg4ZGZuVw0wPS1+PYg+Nvu3rOct/ZI=;
+        b=IuWbQ4mZ5WIITOSeLgtT8hC5obduVsS35p+GjKQ8fs7wprOCE63cnpXdI8pPcmnfHy
+         DekpL0TRcEAJ1VjcAfFV8GFin24Y7iHe+JlEzWxNB/bxvBPgJ0YzF8wvVmVuiaiBkg1x
+         NKuFl76f4LpjuYA1CT5DvzAmMsW6BMJ3oxuoVW5bxhxHbqC3a4oHggnD2FuN34aV3fvx
+         /JfC0G5vTMXnkJ9U97sEFU1tWBLm/TDD7pboCYLims2xPPjsE2t8foh8wYZRPXDGNrUk
+         m6NRosr4EjcAPyqDQyTVXQE0wq6tSzCIqg2Vy9oc50EJJagQLZBxCYZapi4TR6EGnM0t
+         HxGg==
+X-Gm-Message-State: ACgBeo17XPcyXm6L9x/3JPzPZ+X/ox4x9QbgzGBVeHBY3m5DnLqOnLib
+	a0K+kqXEwVf3tevDydtvAMrohLTwIVMTx8Nl
+X-Google-Smtp-Source: AA6agR7C6ihhud7FobdBYEIfUiIEoNN+xS/vRBtrtBy7MTIrCymcLans/Jc9MZ26QlAXFPxaBMKKNw==
+X-Received: by 2002:a17:907:75ec:b0:738:4c20:4f73 with SMTP id jz12-20020a17090775ec00b007384c204f73mr1725833ejc.98.1660511666640;
+        Sun, 14 Aug 2022 14:14:26 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056402032800b00435651c4a01sm5382815edw.56.2022.08.14.14.14.25
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Aug 2022 14:14:25 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id l4so7049049wrm.13
+        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 14:14:25 -0700 (PDT)
+X-Received: by 2002:a05:6000:178d:b0:222:c7ad:2d9a with SMTP id
+ e13-20020a056000178d00b00222c7ad2d9amr7067605wrg.274.1660511665009; Sun, 14
+ Aug 2022 14:14:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 14 Aug 2022 14:14:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+Message-ID: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+Subject: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph updates
+ for 5.20-rc1)
+To: Al Viro <viro@zeniv.linux.org.uk>, Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: multipart/mixed; boundary="000000000000f109c905e639ff71"
 
-Hi Kees,
+--000000000000f109c905e639ff71
+Content-Type: text/plain; charset="UTF-8"
 
-FYI, the error/warning still remains.
+On Sun, Aug 14, 2022 at 1:29 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I dug into it some more, and it is really "load_unaligned_zeropad()"
+> that makes clang really uncomfortable.
+>
+> The problem ends up being that clang sees that it's inside that inner
+> loop, and tries very hard to optimize the shift-and-mask that happens
+> if the exception happens.
+>
+> The fact that the exception *never* happens unless DEBUG_PAGEALLOC is
+> enabled - and very very seldom even then - is not something we can
+> really explain to clang.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5d6a0f4da9275f6c212de33777778673ba91241a
-commit: a52f8a59aef46b59753e583bf4b28fccb069ce64 fortify: Explicitly disable Clang support
-date:   11 months ago
-config: x86_64-randconfig-a013-20220815 (https://download.01.org/0day-ci/archive/20220815/202208150405.dJa74zEz-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a52f8a59aef46b59753e583bf4b28fccb069ce64
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a52f8a59aef46b59753e583bf4b28fccb069ce64
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/ drivers/media/dvb-frontends/ drivers/usb/host/
+Hmm.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The solution to that is actually to move the 'zeropad' part into the
+exception handler.
 
-All warnings (new ones prefixed by >>):
+That makes both gcc and clang generate quite nice code for this all.
+But perhaps equally importantly, it actually simplifies the code
+noticeably:
 
->> drivers/media/dvb-frontends/nxt200x.c:1087:12: warning: stack frame size (15160) exceeds limit (8192) in 'nxt200x_init' [-Wframe-larger-than]
-   static int nxt200x_init(struct dvb_frontend* fe)
-              ^
->> drivers/media/dvb-frontends/nxt200x.c:519:12: warning: stack frame size (9624) exceeds limit (8192) in 'nxt200x_setup_frontend_parameters' [-Wframe-larger-than]
-   static int nxt200x_setup_frontend_parameters(struct dvb_frontend *fe)
-              ^
-   2 warnings generated.
---
->> drivers/media/dvb-frontends/stv0367.c:995:12: warning: stack frame size (9464) exceeds limit (8192) in 'stv0367ter_algo' [-Wframe-larger-than]
-   static int stv0367ter_algo(struct dvb_frontend *fe)
-              ^
->> drivers/media/dvb-frontends/stv0367.c:2540:12: warning: stack frame size (9368) exceeds limit (8192) in 'stv0367cab_set_frontend' [-Wframe-larger-than]
-   static int stv0367cab_set_frontend(struct dvb_frontend *fe)
-              ^
-   2 warnings generated.
---
-   drivers/usb/host/max3421-hcd.c:1968:34: warning: unused variable 'max3421_of_match_table' [-Wunused-const-variable]
-   static const struct of_device_id max3421_of_match_table[] = {
-                                    ^
->> drivers/usb/host/max3421-hcd.c:1378:1: warning: stack frame size (11288) exceeds limit (8192) in 'max3421_spi_thread' [-Wframe-larger-than]
-   max3421_spi_thread(void *dev_id)
-   ^
-   2 warnings generated.
+ arch/x86/include/asm/extable_fixup_types.h |  2 ++
+ arch/x86/include/asm/word-at-a-time.h      | 50 +++---------------------------
+ arch/x86/mm/extable.c                      | 30 ++++++++++++++++++
+ 3 files changed, 37 insertions(+), 45 deletions(-)
 
+and that's with 11 of those 37 new lines being a new block comment.
 
-vim +/nxt200x_init +1087 drivers/media/dvb-frontends/nxt200x.c
+It's mainly because now there's no need to worry about
+CONFIG_CC_HAS_ASM_GOTO_OUTPUT in load_unaligned_zeropad(), because the
+asm becomes a simple "address in, data out" thing.
 
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1086  
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08 @1087  static int nxt200x_init(struct dvb_frontend* fe)
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1088  {
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1089  	struct nxt200x_state* state = fe->demodulator_priv;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1090  	int ret = 0;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1091  
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1092  	if (!state->initialised) {
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1093  		switch (state->demod_chip) {
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1094  			case NXT2002:
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1095  				ret = nxt2002_init(fe);
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1096  				break;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1097  			case NXT2004:
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1098  				ret = nxt2004_init(fe);
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1099  				break;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1100  			default:
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1101  				return -EINVAL;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1102  		}
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1103  		state->initialised = 1;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1104  	}
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1105  	return ret;
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1106  }
-04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1107  
+And to make the fixup code simple and straightforward, I just made
+"load_unaligned_zeropad()" use fixed registers for address and output,
+which doesn't bother the compilers at all, they'll happily adjust
+their register allocation. The code generation ends up much better
+than with the goto and the subtle address games that never trigger
+anyway.
 
-:::::: The code at line 1087 was first introduced by commit
-:::::: 04a45929e7f00ed4fc7b1d375397f808c8a5d0eb [PATCH] dvb: add nxt200x frontend module
+PeterZ - you've touched both the load_unaligned_zeropad() and the
+exception code last, so let's run this past you, but this really does
+seem to not only fix the code generation issue in fs/dcache.s, it just
+looks simpler too. Comments?
 
-:::::: TO: Kirk Lapray <kirk.lapray@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+             Linus
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--000000000000f109c905e639ff71
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l6ttpmer0>
+X-Attachment-Id: f_l6ttpmer0
+
+IGFyY2gveDg2L2luY2x1ZGUvYXNtL2V4dGFibGVfZml4dXBfdHlwZXMuaCB8ICAyICsrCiBhcmNo
+L3g4Ni9pbmNsdWRlL2FzbS93b3JkLWF0LWEtdGltZS5oICAgICAgfCA1MCArKystLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0KIGFyY2gveDg2L21tL2V4dGFibGUuYyAgICAgICAgICAgICAgICAg
+ICAgICB8IDMwICsrKysrKysrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCAzNyBpbnNlcnRp
+b25zKCspLCA0NSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2Fz
+bS9leHRhYmxlX2ZpeHVwX3R5cGVzLmggYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9leHRhYmxlX2Zp
+eHVwX3R5cGVzLmgKaW5kZXggNTAzNjIyNjI3NDAwLi5iNTNmMTkxOTcxMGIgMTAwNjQ0Ci0tLSBh
+L2FyY2gveDg2L2luY2x1ZGUvYXNtL2V4dGFibGVfZml4dXBfdHlwZXMuaAorKysgYi9hcmNoL3g4
+Ni9pbmNsdWRlL2FzbS9leHRhYmxlX2ZpeHVwX3R5cGVzLmgKQEAgLTY0LDQgKzY0LDYgQEAKICNk
+ZWZpbmUJRVhfVFlQRV9VQ09QWV9MRU40CQkoRVhfVFlQRV9VQ09QWV9MRU4gfCBFWF9EQVRBX0lN
+TSg0KSkKICNkZWZpbmUJRVhfVFlQRV9VQ09QWV9MRU44CQkoRVhfVFlQRV9VQ09QWV9MRU4gfCBF
+WF9EQVRBX0lNTSg4KSkKIAorI2RlZmluZSBFWF9UWVBFX1pFUk9QQUQJCQkyMCAvKiBsb2FkIGF4
+IGZyb20gZHggemVyby1wYWRkZWQgKi8KKwogI2VuZGlmCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9p
+bmNsdWRlL2FzbS93b3JkLWF0LWEtdGltZS5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vd29yZC1h
+dC1hLXRpbWUuaAppbmRleCA4MzM4YjA0MzJiNTAuLjQ4OTNmMWIzMGRkNiAxMDA2NDQKLS0tIGEv
+YXJjaC94ODYvaW5jbHVkZS9hc20vd29yZC1hdC1hLXRpbWUuaAorKysgYi9hcmNoL3g4Ni9pbmNs
+dWRlL2FzbS93b3JkLWF0LWEtdGltZS5oCkBAIC03Nyw1OCArNzcsMTggQEAgc3RhdGljIGlubGlu
+ZSB1bnNpZ25lZCBsb25nIGZpbmRfemVybyh1bnNpZ25lZCBsb25nIG1hc2spCiAgKiBhbmQgdGhl
+IG5leHQgcGFnZSBub3QgYmVpbmcgbWFwcGVkLCB0YWtlIHRoZSBleGNlcHRpb24gYW5kCiAgKiBy
+ZXR1cm4gemVyb2VzIGluIHRoZSBub24tZXhpc3RpbmcgcGFydC4KICAqLwotI2lmZGVmIENPTkZJ
+R19DQ19IQVNfQVNNX0dPVE9fT1VUUFVUCi0KIHN0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZyBs
+b2FkX3VuYWxpZ25lZF96ZXJvcGFkKGNvbnN0IHZvaWQgKmFkZHIpCiB7Ci0JdW5zaWduZWQgbG9u
+ZyBvZmZzZXQsIGRhdGE7CiAJdW5zaWduZWQgbG9uZyByZXQ7CiAKLQlhc21fdm9sYXRpbGVfZ290
+bygKLQkJIjE6CW1vdiAlW21lbV0sICVbcmV0XVxuIgotCi0JCV9BU01fRVhUQUJMRSgxYiwgJWxb
+ZG9fZXhjZXB0aW9uXSkKLQotCQk6IFtyZXRdICI9ciIgKHJldCkKLQkJOiBbbWVtXSAibSIgKCoo
+dW5zaWduZWQgbG9uZyAqKWFkZHIpCi0JCTogOiBkb19leGNlcHRpb24pOwotCi0JcmV0dXJuIHJl
+dDsKLQotZG9fZXhjZXB0aW9uOgotCW9mZnNldCA9ICh1bnNpZ25lZCBsb25nKWFkZHIgJiAoc2l6
+ZW9mKGxvbmcpIC0gMSk7Ci0JYWRkciA9ICh2b2lkICopKCh1bnNpZ25lZCBsb25nKWFkZHIgJiB+
+KHNpemVvZihsb25nKSAtIDEpKTsKLQlkYXRhID0gKih1bnNpZ25lZCBsb25nICopYWRkcjsKLQly
+ZXQgPSBkYXRhID4+IG9mZnNldCAqIDg7Ci0KLQlyZXR1cm4gcmV0OwotfQotCi0jZWxzZSAvKiAh
+Q09ORklHX0NDX0hBU19BU01fR09UT19PVVRQVVQgKi8KLQotc3RhdGljIGlubGluZSB1bnNpZ25l
+ZCBsb25nIGxvYWRfdW5hbGlnbmVkX3plcm9wYWQoY29uc3Qgdm9pZCAqYWRkcikKLXsKLQl1bnNp
+Z25lZCBsb25nIG9mZnNldCwgZGF0YTsKLQl1bnNpZ25lZCBsb25nIHJldCwgZXJyID0gMDsKLQot
+CWFzbSgJIjE6CW1vdiAlW21lbV0sICVbcmV0XVxuIgorCWFzbSB2b2xhdGlsZSgKKwkJIjE6CW1v
+diAoJVthZGRyXSksICVbcmV0XVxuIgogCQkiMjpcbiIKLQotCQlfQVNNX0VYVEFCTEVfRkFVTFQo
+MWIsIDJiKQotCi0JCTogW3JldF0gIj0mciIgKHJldCksICIrYSIgKGVycikKLQkJOiBbbWVtXSAi
+bSIgKCoodW5zaWduZWQgbG9uZyAqKWFkZHIpKTsKLQotCWlmICh1bmxpa2VseShlcnIpKSB7Ci0J
+CW9mZnNldCA9ICh1bnNpZ25lZCBsb25nKWFkZHIgJiAoc2l6ZW9mKGxvbmcpIC0gMSk7Ci0JCWFk
+ZHIgPSAodm9pZCAqKSgodW5zaWduZWQgbG9uZylhZGRyICYgfihzaXplb2YobG9uZykgLSAxKSk7
+Ci0JCWRhdGEgPSAqKHVuc2lnbmVkIGxvbmcgKilhZGRyOwotCQlyZXQgPSBkYXRhID4+IG9mZnNl
+dCAqIDg7Ci0JfQorCQlfQVNNX0VYVEFCTEVfVFlQRSgxYiwgMmIsIEVYX1RZUEVfWkVST1BBRCkK
+KwkJOiBbcmV0XSAiPWEiIChyZXQpCisJCTogW2FkZHJdICJkIiAoYWRkcikpOwogCiAJcmV0dXJu
+IHJldDsKIH0KIAotI2VuZGlmIC8qIENPTkZJR19DQ19IQVNfQVNNX0dPVE9fT1VUUFVUICovCi0K
+ICNlbmRpZiAvKiBfQVNNX1dPUkRfQVRfQV9USU1FX0ggKi8KZGlmZiAtLWdpdCBhL2FyY2gveDg2
+L21tL2V4dGFibGUuYyBiL2FyY2gveDg2L21tL2V4dGFibGUuYwppbmRleCAzMzEzMTBjMjkzNDku
+LjU4Yzc5MDc3YTQ5NiAxMDA2NDQKLS0tIGEvYXJjaC94ODYvbW0vZXh0YWJsZS5jCisrKyBiL2Fy
+Y2gveDg2L21tL2V4dGFibGUuYwpAQCAtNDEsNiArNDEsMzQgQEAgc3RhdGljIGJvb2wgZXhfaGFu
+ZGxlcl9kZWZhdWx0KGNvbnN0IHN0cnVjdCBleGNlcHRpb25fdGFibGVfZW50cnkgKmUsCiAJcmV0
+dXJuIHRydWU7CiB9CiAKKy8qCisgKiBUaGlzIGlzIHRoZSAqdmVyeSogcmFyZSBjYXNlIHdoZXJl
+IHdlIGRvIGEgImxvYWRfdW5hbGlnbmVkX3plcm9wYWQoKSIKKyAqIGFuZCBpdCdzIGEgcGFnZSBj
+cm9zc2VyIGludG8gYSBub24tZXhpc3RlbnQgcGFnZS4KKyAqCisgKiBUaGlzIGhhcHBlbnMgd2hl
+biB3ZSBvcHRpbWlzdGljYWxseSBsb2FkIGEgcGF0aG5hbWUgYSB3b3JkLWF0LWEtdGltZQorICog
+YW5kIHRoZSBuYW1lIGlzIGxlc3MgdGhhbiB0aGUgZnVsbCB3b3JkIGFuZCB0aGUgIG5leHQgcGFn
+ZSBpcyBub3QKKyAqIG1hcHBlZC4gVHlwaWNhbGx5IHRoYXQgb25seSBoYXBwZW5zIGZvciBDT05G
+SUdfREVCVUdfUEFHRUFMTE9DLgorICoKKyAqIE5PVEUhIFRoZSBsb2FkIGlzIGFsd2F5cyBvZiB0
+aGUgZm9ybSAibW92ICglZWR4KSwlZWF4IiB0byBtYWtlIHRoZQorICogZml4dXAgc2ltcGxlLgor
+ICovCitzdGF0aWMgYm9vbCBleF9oYW5kbGVyX3plcm9wYWQoY29uc3Qgc3RydWN0IGV4Y2VwdGlv
+bl90YWJsZV9lbnRyeSAqZSwKKwkJCSAgICAgICBzdHJ1Y3QgcHRfcmVncyAqcmVncywKKwkJCSAg
+ICAgICB1bnNpZ25lZCBsb25nIGZhdWx0X2FkZHIpCit7CisJY29uc3QgdW5zaWduZWQgbG9uZyBt
+YXNrID0gc2l6ZW9mKGxvbmcpIC0gMTsKKwl1bnNpZ25lZCBsb25nIG9mZnNldCwgYWRkcjsKKwor
+CW9mZnNldCA9IHJlZ3MtPmR4ICYgbWFzazsKKwlhZGRyID0gcmVncy0+ZHggJiB+bWFzazsKKwlp
+ZiAoZmF1bHRfYWRkciAhPSBhZGRyICsgc2l6ZW9mKGxvbmcpKQorCQlyZXR1cm4gZmFsc2U7CisK
+KwlyZWdzLT5heCA9ICoodW5zaWduZWQgbG9uZyAqKWFkZHIgPj4gKG9mZnNldCAqIDgpOworCXJl
+Z3MtPmlwID0gZXhfZml4dXBfYWRkcihlKTsKKwlyZXR1cm4gdHJ1ZTsKK30KKwogc3RhdGljIGJv
+b2wgZXhfaGFuZGxlcl9mYXVsdChjb25zdCBzdHJ1Y3QgZXhjZXB0aW9uX3RhYmxlX2VudHJ5ICpm
+aXh1cCwKIAkJCSAgICAgc3RydWN0IHB0X3JlZ3MgKnJlZ3MsIGludCB0cmFwbnIpCiB7CkBAIC0y
+MTcsNiArMjQ1LDggQEAgaW50IGZpeHVwX2V4Y2VwdGlvbihzdHJ1Y3QgcHRfcmVncyAqcmVncywg
+aW50IHRyYXBuciwgdW5zaWduZWQgbG9uZyBlcnJvcl9jb2RlLAogCQlyZXR1cm4gZXhfaGFuZGxl
+cl9zZ3goZSwgcmVncywgdHJhcG5yKTsKIAljYXNlIEVYX1RZUEVfVUNPUFlfTEVOOgogCQlyZXR1
+cm4gZXhfaGFuZGxlcl91Y29weV9sZW4oZSwgcmVncywgdHJhcG5yLCByZWcsIGltbSk7CisJY2Fz
+ZSBFWF9UWVBFX1pFUk9QQUQ6CisJCXJldHVybiBleF9oYW5kbGVyX3plcm9wYWQoZSwgcmVncywg
+ZmF1bHRfYWRkcik7CiAJfQogCUJVRygpOwogfQo=
+--000000000000f109c905e639ff71--
