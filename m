@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EA61C01
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 15:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29780C43140;
-	Sun, 14 Aug 2022 15:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27C41C01
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 15:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB0BC43143;
+	Sun, 14 Aug 2022 15:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660491093;
-	bh=Q4hjaR+IYs/PFnY9qgGlhGGILqDAhAY4rlhsBrqnGI8=;
+	s=k20201202; t=1660491217;
+	bh=jUkAJE7/Y8YQ4Nx6v1v38JNhEtb9m+JA5U0akmvdf3Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mWHPCwkbDsrze08YJPM2ovROta8W+BGp8F7hrAett4hQAHwdfgf4faKjsAFv8avVr
-	 QaVSZ8OO6OwZtj4nnfzU8XHXZDwGYMmCDdneIAfrCsIJAsGR49wkwtOmm6QM+AKjlO
-	 flC3nG0PCz50dp/gJVtU6FHzBJjGOW18Nk5Oepq9eOnp1NnqbmUlEPontYJdrSCnJF
-	 aeKrW4CXdJfeKJ6jqt2uX7rL/fIwfB8P8enjuh0di9EYzsfRP47+e1Xwv3ABE7weU3
-	 wX3twfrvbHhI4N/VsMYnntQs0YZ2ooHz3BuS9x2UBaFFwtjEC1tJRkUM+x6VIyChr8
-	 C2XD28m+3QR7w==
+	b=OqmRE4YoEslcm+2RyRmlwl2tQWUymbPA9+kBaTo1jThmBimq6aPe8MBf8OS5Mlph6
+	 UW8XpcQpxWtEkzql2sRp3XNDGbNGxrqgCBwnUxzriRkl2Uq542jXowe5twj5QmImvD
+	 sIg+GmJORnUosAiHwBLViDPPVnK1FPoPtsh2r/um9KNYlJ9BJhHqI7g84v9XDPLhSs
+	 u0BBjyWF8aHpbG7Cta4OoCAYEcbE1+d13+Acd0N6TllC4HImiTiitZvMkCQlhLJswK
+	 bliyBmPeUbTpYVWKoD6El1M51CdKH8WLP7GLV6vnYDQv3qW5pSFhpB6arvgO5MNyZu
+	 RMtPD7frAtfNQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -30,12 +30,12 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	coresight@lists.linaro.org,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.18 28/56] coresight: etm4x: avoid build failure with unrolled loops
-Date: Sun, 14 Aug 2022 11:29:58 -0400
-Message-Id: <20220814153026.2377377-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 24/46] coresight: etm4x: avoid build failure with unrolled loops
+Date: Sun, 14 Aug 2022 11:32:25 -0400
+Message-Id: <20220814153247.2378312-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
-References: <20220814153026.2377377-1-sashal@kernel.org>
+In-Reply-To: <20220814153247.2378312-1-sashal@kernel.org>
+References: <20220814153247.2378312-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -134,7 +134,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 3c4d69b096ca..dcd52a64fc21 100644
+index e5b79bdb9851..794b29639035 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x.h
 +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
 @@ -7,6 +7,7 @@
