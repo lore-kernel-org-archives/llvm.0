@@ -1,44 +1,44 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FA3257C
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 20:03:47 +0000 (UTC)
-Received: by mail-ed1-f47.google.com with SMTP id r4so7325745edi.8
-        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:03:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FACC28F8
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 20:29:47 +0000 (UTC)
+Received: by mail-ed1-f45.google.com with SMTP id r4so7371674edi.8
+        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=EQf+dWgsYoxxd2dvzOjUZKth6ahCt1jz8pAa/2/RQdU=;
-        b=Z34M9+Q1uuvvvI+KYw/avRL2yyUA1m8DGjvaprLJbVuoikvV5MBvcGm2QdAoO6deNq
-         GU6cmr8JZETRMdUSJPeQ/TNKqz4kQLXn/KwQnzaD96e1EokSnzXcJtM1v45F7UVSDS2+
-         JwQdCJohE3gveqyFlczZ8JXPsxpLBEglcSYyE=
+        bh=xfOGomlI+wNDkGCVf2j5gRZIqtfFV7kG9Gxf0h/VnxU=;
+        b=D1Y6bxPBDIzqq1QHg8NrNOVPs/qLN7TnjpcqjIhu/3KiooSJamYyL11iJeBHUGuw4Z
+         /zCFkyohXYQGDTrDFRt92yXE7xHfQMB2U2yeRZ5Y1qo3oqC+NdAsr9axuEid3/m+fXAW
+         3BVEy3YoQhiAJCUpa+1DpLtLqINhPLQMU9Pug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=EQf+dWgsYoxxd2dvzOjUZKth6ahCt1jz8pAa/2/RQdU=;
-        b=sQ2hFhCiY5eDgqPk/1bHBQv7KWCQ5vzZh58YOdcVvqyo+6oWcWkcbPQaPEZLEozUFL
-         M8ib23pdpOUI6kWtbDTQxXYL8Zb1VaahPTlpdRVh9ofynPQPGQ9LAFMxNpJrbotagLux
-         ybRnhSKPEIRy0zm4mKg+FPwkYnuwXRHMYEXAC9Q4mPnlljDQaP+XVadGc/8zlrUbznuq
-         gvh5eGvT1okoK6DBzswo1V/VZzYYXFo2DsFSWYOiQODdWkNq+nPZ/VzRz06ip3qc5vGQ
-         ACNkp9bVOKedrSFg6mTJCdFtz3+qrlH+l1Si+qoXkGhGBj/03Z1MRVTA3EahC2svInOB
-         tNxw==
-X-Gm-Message-State: ACgBeo1Qk8U0OLzG4dGFMLDlWe9jXmdPlP94H9x7+b6AodfWKco9O2LE
-	kcGQQDacU06rWrGJr/yCshV7TwuiZj2gGozj
-X-Google-Smtp-Source: AA6agR75IR7fBJ3dz5RWMjZy29xVwF8CbzFWkNS31aGxYAZ2v9XdlP7Q1gzkk5uPjL593dqBTjp0mQ==
-X-Received: by 2002:a05:6402:2714:b0:43d:ca4f:d2a2 with SMTP id y20-20020a056402271400b0043dca4fd2a2mr11930705edd.185.1660507425298;
-        Sun, 14 Aug 2022 13:03:45 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c686000000b0043d34ab7ad6sm5305303edq.49.2022.08.14.13.03.44
+        bh=xfOGomlI+wNDkGCVf2j5gRZIqtfFV7kG9Gxf0h/VnxU=;
+        b=vr7EN0jl7ij6SiswUcMlzUnWDEEddyjUE2XAZO5MFy36eQh9JGjVsaTYeVXnc50ppC
+         dgXcvlp8V2/ywAMf5V9jwvYWjxbyDaITFAV5BNORDZ2+2283yDItJXrBpErWxVw/z3b4
+         47ASHno0YK+4a9vH257EtXmG165PAH+bll9JRo8YxNdD/Ok/uLRfvD86p9to2LismO25
+         krAYe/Ba3LwZMiUfBL3b/tyDGykyhVWYalywxdvd+SDm9wYMeuLLJ7wYt8xAlioDs/xF
+         Y2qd30evaUaYLqZiwnlORh2jadje3bE6TIiudfCyB0cggchE/dOZ3QzM3gXIKc+1H+9q
+         MdeA==
+X-Gm-Message-State: ACgBeo22Rrbip4kpUtG45DJwqLm7JhC4bjFDSPum7WhM14SUAgfl/iGr
+	R2MhJYSrYlk4TMfa//QbTJiAHJe4iwDBIEuO
+X-Google-Smtp-Source: AA6agR6egAuJM5T6WRcozreKrCJG7hX6HRHy3QoHdCjdppyAqX/gQiXGdoFR+NKsshDpc+lp/lKOgg==
+X-Received: by 2002:a50:ff13:0:b0:43e:76d3:63e1 with SMTP id a19-20020a50ff13000000b0043e76d363e1mr11576998edu.271.1660508986171;
+        Sun, 14 Aug 2022 13:29:46 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id f16-20020a50ee90000000b0043cf2e0ce1csm5325170edr.48.2022.08.14.13.29.45
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 13:03:44 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id b4so3844439wrn.4
-        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:03:44 -0700 (PDT)
-X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
- m15-20020a5d56cf000000b0021ece64afe7mr6817978wrw.281.1660507424308; Sun, 14
- Aug 2022 13:03:44 -0700 (PDT)
+        Sun, 14 Aug 2022 13:29:45 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so3050955wms.5
+        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:29:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
+ g16-20020a05600c4ed000b003a33ef3c8d1mr14508149wmq.154.1660508985000; Sun, 14
+ Aug 2022 13:29:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,12 +51,13 @@ References: <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
  <YvV2zfT0XbgwHGe/@ZenIV> <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
  <YvV86p5DjBLjjXHo@ZenIV> <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
  <CAHk-=wjLLw0xjL+TZs5DUGL8hOpmLMa4B92aDVFxw4HZthLraw@mail.gmail.com>
- <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com> <YvlILbn1ERLgZreh@ZenIV>
-In-Reply-To: <YvlILbn1ERLgZreh@ZenIV>
+ <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
+ <YvlILbn1ERLgZreh@ZenIV> <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 14 Aug 2022 13:03:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
-Message-ID: <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
+Date: Sun, 14 Aug 2022 13:29:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiVyGt0XCFom97ULZyG5Phf7+ifC03sW1i4HUz7xaazng@mail.gmail.com>
+Message-ID: <CAHk-=wiVyGt0XCFom97ULZyG5Phf7+ifC03sW1i4HUz7xaazng@mail.gmail.com>
 Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
 To: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
@@ -65,32 +66,34 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Aug 14, 2022 at 12:08 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Sun, Aug 14, 2022 at 1:03 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
+> Gcc does well regardless, and clang ends up really wanting to move so
+> much out of the dentry_cmp() loop that it runs out of registers and
+> always ends up doing a couple of spills.
 >
-> There's a cheap way to reduce the register pressure:
->                 seq = raw_seqcount_begin(&dentry->d_seq);
->                 if (dentry->d_parent != parent)
->                         continue;
->                 if (d_unhashed(dentry))
->                         continue;
->                 if (dentry->d_name.hash_len != hashlen)
->                         continue;
->                 if (dentry_cmp(dentry, str, hashlen_len(hashlen)) != 0)
->                         continue;
->                 *seqp = seq;
-> could move the last store to before dentry_cmp().
+> I think it reduced the spills by one, but not enough to generate the
+> nice non-frame code that gcc does.
 
-I actually tried that, it doesn't really end up helping.
+Note that that code was basically written to make gcc happy, so the
+fact that clang then does worse is not hugely surprising.
 
-Gcc does well regardless, and clang ends up really wanting to move so
-much out of the dentry_cmp() loop that it runs out of registers and
-always ends up doing a couple of spills.
+I dug into it some more, and it is really "load_unaligned_zeropad()"
+that makes clang really uncomfortable.
 
-I think it reduced the spills by one, but not enough to generate the
-nice non-frame code that gcc does.
+The problem ends up being that clang sees that it's inside that inner
+loop, and tries very hard to optimize the shift-and-mask that happens
+if the exception happens.
 
-It's a bit ugly, but the code probably performs quite well - the
-spills aren't in the inner loop.
+The fact that the exception *never* happens unless DEBUG_PAGEALLOC is
+enabled - and very very seldom even then - is not something we can
+really explain to clang.
+
+So it thinks that code is really hot in the inner loop, and does all
+kinds of silly things due to that.
+
+Gcc, in contrast, generates the obvious straightforward code, and
+that's what I wrote and optimized that code for.
 
              Linus
