@@ -1,44 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D657FD
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 12:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DBE0EDA
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660481519; x=1692017519;
+  t=1660482120; x=1692018120;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kFk1jUbR8Kh+cFUMjzYkduWCTXacUecoe/Y9VWupVTQ=;
-  b=F8csmVgQxifJBsAX65oN7ZTrmkRGa5bfg6S2F0/t9T3+Ud+tc0dyMWgD
-   yQnSRCgsBhaD2l6MLaRewQnlEHy23GdnalnalxLvAjVH2M8EQqUxHXQxX
-   sYvT+qat77D0v8JKLKsOQVQo4thb/9V1gBC8O5WKVc2+YfFaxUyT6xCXQ
-   fDjkjBeOVG8sfcMjtGWDGBD8bGJ/JEwg018f9Fkha/UAxBJPnmrcONeOF
-   d9m6i17eflpUzOZShCMZz7+40HSRpSPieegLlnBUTorjxmFZ8uTh/yUxM
-   kGWjid5h8IAij7MslZ1td9cW701coW61ml18VDw4upy4B1LE7PDFH4Ayw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355830350"
+  bh=JIQ1ZT9pOnDjlLygFn4YLE+Msxyu9MQbwhwxZukyOUg=;
+  b=N+2MP+M30BADWJ173oBN8T6SjHzywDyQPNYLzLbY2wGTu7jGt8ClhLcI
+   zpwXTsbSbFReQZmmtLqMOro+TdP75MrjsBN6XmPa01x3NfqYaLkmddwH3
+   iVacT7IfV1qc+r1WrKVEQ84wGXR0641Wv1b5Bj1Trgrcp027k89NlHx/Z
+   y2Ry1DhJ2UTCTxmXRWH8BUuV9/frX8/IKHOJt+BnfW796yGfIDGf9V3ug
+   cmTqsW/4QWyS9qYxUCDglZySwjgOInmFmsSENmU5ikpEfaxkiaWN7W8YD
+   Gu0CIak88+Z0OUg6ekb9B78efTjej/vpxeZTHaIVI/Xs6R1fCisKZP9OB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289392712"
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="355830350"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 05:51:59 -0700
+   d="scan'208";a="289392712"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 06:01:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="557006389"
+   d="scan'208";a="639375320"
 Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 05:51:57 -0700
+  by orsmga001.jf.intel.com with ESMTP; 14 Aug 2022 06:01:57 -0700
 Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oND5x-00005z-06;
-	Sun, 14 Aug 2022 12:51:57 +0000
-Date: Sun, 14 Aug 2022 20:51:14 +0800
+	id 1oNDFd-00006Y-0p;
+	Sun, 14 Aug 2022 13:01:57 +0000
+Date: Sun, 14 Aug 2022 21:01:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: Paul Cercueil <paul@crapouillou.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: [stable:linux-5.15.y 5373/9027] arch/x86/kvm/hyperv.c:2185:5:
- warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
-Message-ID: <202208142025.NHKErAjq-lkp@intel.com>
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: drivers/clk/loongson1/clk-loongson1b.c:40:13: warning: no previous
+ prototype for function 'ls1x_clk_init'
+Message-ID: <202208142045.g3U91bp3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,61 +47,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Vitaly,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
-commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/9027] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220814/202208142025.NHKErAjq-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   1 year, 11 months ago
+config: mips-randconfig-r023-20220731 (https://download.01.org/0day-ci/archive/20220814/202208142045.g3U91bp3-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/ drivers/clk/loongson1/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
-   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-       ^
+>> drivers/clk/loongson1/clk-loongson1b.c:40:13: warning: no previous prototype for function 'ls1x_clk_init' [-Wmissing-prototypes]
+   void __init ls1x_clk_init(void)
+               ^
+   drivers/clk/loongson1/clk-loongson1b.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init ls1x_clk_init(void)
+   ^
+   static 
    1 warning generated.
 
 
-vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+vim +/ls1x_clk_init +40 drivers/clk/loongson1/clk-loongson1b.c
 
-4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
-e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
-4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
-e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
-e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
-e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
-e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
-b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
-e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
-0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
-e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+3526f74fa925e4 drivers/clk/clk-ls1x.c Kelvin Cheung 2014-10-10  39  
+5175cb5894d606 drivers/clk/clk-ls1x.c Kelvin Cheung 2012-08-20 @40  void __init ls1x_clk_init(void)
 
-:::::: The code at line 2185 was first introduced by commit
-:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+:::::: The code at line 40 was first introduced by commit
+:::::: 5175cb5894d606f1756c07a685e6dcabd2d8745a clk: add Loongson1B clock support
 
-:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+:::::: TO: Kelvin Cheung <keguang.zhang@gmail.com>
+:::::: CC: Mike Turquette <mturquette@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
