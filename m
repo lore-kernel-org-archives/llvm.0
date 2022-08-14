@@ -1,228 +1,125 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0F2A4E
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 07:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660463485;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yC7GxGMOjBfTAsjYAicLd0lmEh/+pC87mB8qcXKA0kc=;
-	b=jA5Ofg9WI/3QM+mpaluS25nVQS9f9Bz+UWnUGBK3M9Le/JCSOmErCHEp1zQ5inUX7UlG07
-	v0rEGS10BHl6hghSXObfvILQXz+2xSJJstFCSqJF2vtiSqcTzylylRK/dN0RYol0+zsuXO
-	gtuwd97qyhJo8pOFPTaTyRNrkG6R8e4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-Um83DvFIPz2-y6CAMi0DJw-1; Sun, 14 Aug 2022 03:51:23 -0400
-X-MC-Unique: Um83DvFIPz2-y6CAMi0DJw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B037E85A581
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 07:51:23 +0000 (UTC)
-Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A3691C15BA8;
-	Sun, 14 Aug 2022 07:51:23 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (57/408 SKIPPED): Test report for 5.19.0
- (mainline.kernel.org-clang) [f6eb0fed]
-Date: Sun, 14 Aug 2022 07:51:23 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B92F7EE
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 09:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660468311; x=1692004311;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ceqCM9Qfl+nRYfHUft7vCq3f91tI3GJGF+Bio+Decpk=;
+  b=jZYExb6+NXtzFfYhg5K0er4yHJrrMemhlDMjL5TyxQ8GD3XoWSR6XioA
+   +x1T8pQ4ecoGCnMFuZwyu7RfLIgpPXcpcG2uVNfLqurNfMfIrWsfIyei/
+   Vm+jrDUKmCOVbUAVoJdm+ej2r2oeGylTBYGuszjpx2ZUK7fGpscVOAbLT
+   q+V62HT3Z+2RO1GMlywXUvk5ww/8ksb28IUC90ZqHtS0llMyYe4eWDgel
+   s94RapOYDzltn0fXy05ANSafbduaTPRvLUbXtxit4rKocGr42F/yUCitY
+   39Ue1uaQf7sAuwU+l0RRhau0k5sXv0y2NG4larcb5rtKHbcEZcqSeczYT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317788609"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="317788609"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 02:11:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="556972928"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 02:11:48 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oN9et-0002gn-1m;
+	Sun, 14 Aug 2022 09:11:47 +0000
+Date: Sun, 14 Aug 2022 17:10:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dao Lu <daolu@rivosinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand for
+ inline asm constraint 'i'
+Message-ID: <202208141746.ABdEd5xo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-Message-Id: <48625.122081403512400194@us-mta-580.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
+commit: 8eb060e10185cfc97ef0200d197ec246ba0f9f8c arch/riscv: add Zihintpause support
+date:   3 days ago
+config: riscv-randconfig-r005-20220814 (https://download.01.org/0day-ci/archive/20220814/202208141746.ABdEd5xo-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8eb060e10185cfc97ef0200d197ec246ba0f9f8c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8eb060e10185cfc97ef0200d197ec246ba0f9f8c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50744
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - Firmware test suite
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: SELinux prevents sendmail.service while running Memory funct=
-ion: kaslr
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1169
-            Affected tests:
-                  x86_64 - Memory function: kaslr
-                  x86_64 - Reboot test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-                  x86_64 (debug) - Memory function: kaslr
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+   In file included from <built-in>:4:
+   In file included from lib/vdso/gettimeofday.c:5:
+   In file included from include/vdso/datapage.h:17:
+   In file included from include/vdso/processor.h:10:
+   In file included from arch/riscv/include/asm/vdso/processor.h:7:
+   In file included from include/linux/jump_label.h:112:
+>> arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand for inline asm constraint 'i'
+                   "       .option push                            \n\t"
+                   ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+   make[2]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
+   make[1]: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/i +42 arch/riscv/include/asm/jump_label.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  37  
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  38  static __always_inline bool arch_static_branch_jump(struct static_key *key,
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  39  						    bool branch)
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  40  {
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  41  	asm_volatile_goto(
+ebc00dde8a975a Emil Renner Berthing 2020-07-14 @42  		"	.option push				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  43  		"	.option norelax				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  44  		"	.option norvc				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  45  		"1:	jal		zero, %l[label]		\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  46  		"	.option pop				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  47  		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  48  		"	.align		" RISCV_LGPTR "		\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  49  		"	.long		1b - ., %l[label] - .	\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  50  		"	" RISCV_PTR "	%0 - .			\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  51  		"	.popsection				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  52  		:  :  "i"(&((char *)key)[branch]) :  : label);
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  53  
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  54  	return false;
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  55  label:
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  56  	return true;
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  57  }
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  58  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: The code at line 42 was first introduced by commit
+:::::: ebc00dde8a975a543f5e1a7cdac93fef89fefe58 riscv: Add jump-label implementation
 
+:::::: TO: Emil Renner Berthing <kernel@esmil.dk>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
