@@ -1,99 +1,133 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FACC28F8
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 20:29:47 +0000 (UTC)
-Received: by mail-ed1-f45.google.com with SMTP id r4so7371674edi.8
-        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xfOGomlI+wNDkGCVf2j5gRZIqtfFV7kG9Gxf0h/VnxU=;
-        b=D1Y6bxPBDIzqq1QHg8NrNOVPs/qLN7TnjpcqjIhu/3KiooSJamYyL11iJeBHUGuw4Z
-         /zCFkyohXYQGDTrDFRt92yXE7xHfQMB2U2yeRZ5Y1qo3oqC+NdAsr9axuEid3/m+fXAW
-         3BVEy3YoQhiAJCUpa+1DpLtLqINhPLQMU9Pug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xfOGomlI+wNDkGCVf2j5gRZIqtfFV7kG9Gxf0h/VnxU=;
-        b=vr7EN0jl7ij6SiswUcMlzUnWDEEddyjUE2XAZO5MFy36eQh9JGjVsaTYeVXnc50ppC
-         dgXcvlp8V2/ywAMf5V9jwvYWjxbyDaITFAV5BNORDZ2+2283yDItJXrBpErWxVw/z3b4
-         47ASHno0YK+4a9vH257EtXmG165PAH+bll9JRo8YxNdD/Ok/uLRfvD86p9to2LismO25
-         krAYe/Ba3LwZMiUfBL3b/tyDGykyhVWYalywxdvd+SDm9wYMeuLLJ7wYt8xAlioDs/xF
-         Y2qd30evaUaYLqZiwnlORh2jadje3bE6TIiudfCyB0cggchE/dOZ3QzM3gXIKc+1H+9q
-         MdeA==
-X-Gm-Message-State: ACgBeo22Rrbip4kpUtG45DJwqLm7JhC4bjFDSPum7WhM14SUAgfl/iGr
-	R2MhJYSrYlk4TMfa//QbTJiAHJe4iwDBIEuO
-X-Google-Smtp-Source: AA6agR6egAuJM5T6WRcozreKrCJG7hX6HRHy3QoHdCjdppyAqX/gQiXGdoFR+NKsshDpc+lp/lKOgg==
-X-Received: by 2002:a50:ff13:0:b0:43e:76d3:63e1 with SMTP id a19-20020a50ff13000000b0043e76d363e1mr11576998edu.271.1660508986171;
-        Sun, 14 Aug 2022 13:29:46 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id f16-20020a50ee90000000b0043cf2e0ce1csm5325170edr.48.2022.08.14.13.29.45
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 13:29:45 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so3050955wms.5
-        for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 13:29:45 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
- g16-20020a05600c4ed000b003a33ef3c8d1mr14508149wmq.154.1660508985000; Sun, 14
- Aug 2022 13:29:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448F828E2
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 20:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660510096; x=1692046096;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WfzRpYDt3Xe8kcRJakKeO57VmiHMSmyYPO0Q4unxeYE=;
+  b=HhURFePN36uNOPky6KwrS0CVOdPfnyw1vu14/WF3GyyPzelAUQiXd3Qk
+   8WnJw6Xvnd/+Sd5N2ZYfDrPDPwJjQ5iLWMcUku0EEmBlRj8RS29xX0Hao
+   qvHVgbRXpnEib2BMWvh5HY1HNWBpnJeLY2BXUwjxStuU49CZ+KKWxI5Se
+   IvpZgrB22XsamK1NxrzhJ+8iQ32kVXC3s4rmpFpMI3Cjqb/hm9cy3A7OP
+   nayboVl53te7i3Kx2zPG8B5QLLdKf3qP0DU4Nff63n0dya3neiYWKTQci
+   zXBFudjAhuZfTLNPDJzAFQEiD+6eihYeaZSe+41F2Fux06qENdqJP7w84
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="278809422"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="278809422"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 13:48:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="934277480"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Aug 2022 13:48:14 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oNKWr-0000Wh-2Z;
+	Sun, 14 Aug 2022 20:48:13 +0000
+Date: Mon, 15 Aug 2022 04:47:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/media/dvb-frontends/nxt200x.c:1087:12: warning: stack frame
+ size (15160) exceeds limit (8192) in 'nxt200x_init'
+Message-ID: <202208150405.dJa74zEz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
- <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
- <YvVzHQ5DVaPAvw26@ZenIV> <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
- <YvV2zfT0XbgwHGe/@ZenIV> <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
- <YvV86p5DjBLjjXHo@ZenIV> <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
- <CAHk-=wjLLw0xjL+TZs5DUGL8hOpmLMa4B92aDVFxw4HZthLraw@mail.gmail.com>
- <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
- <YvlILbn1ERLgZreh@ZenIV> <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjvKtkqF9AXx8GoA80h_RNUV=Ld8qhi8ZEPmDXC0VUDUA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 14 Aug 2022 13:29:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiVyGt0XCFom97ULZyG5Phf7+ifC03sW1i4HUz7xaazng@mail.gmail.com>
-Message-ID: <CAHk-=wiVyGt0XCFom97ULZyG5Phf7+ifC03sW1i4HUz7xaazng@mail.gmail.com>
-Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Aug 14, 2022 at 1:03 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Gcc does well regardless, and clang ends up really wanting to move so
-> much out of the dentry_cmp() loop that it runs out of registers and
-> always ends up doing a couple of spills.
->
-> I think it reduced the spills by one, but not enough to generate the
-> nice non-frame code that gcc does.
+Hi Kees,
 
-Note that that code was basically written to make gcc happy, so the
-fact that clang then does worse is not hugely surprising.
+FYI, the error/warning still remains.
 
-I dug into it some more, and it is really "load_unaligned_zeropad()"
-that makes clang really uncomfortable.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5d6a0f4da9275f6c212de33777778673ba91241a
+commit: a52f8a59aef46b59753e583bf4b28fccb069ce64 fortify: Explicitly disable Clang support
+date:   11 months ago
+config: x86_64-randconfig-a013-20220815 (https://download.01.org/0day-ci/archive/20220815/202208150405.dJa74zEz-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a52f8a59aef46b59753e583bf4b28fccb069ce64
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a52f8a59aef46b59753e583bf4b28fccb069ce64
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/ drivers/media/dvb-frontends/ drivers/usb/host/
 
-The problem ends up being that clang sees that it's inside that inner
-loop, and tries very hard to optimize the shift-and-mask that happens
-if the exception happens.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The fact that the exception *never* happens unless DEBUG_PAGEALLOC is
-enabled - and very very seldom even then - is not something we can
-really explain to clang.
+All warnings (new ones prefixed by >>):
 
-So it thinks that code is really hot in the inner loop, and does all
-kinds of silly things due to that.
+>> drivers/media/dvb-frontends/nxt200x.c:1087:12: warning: stack frame size (15160) exceeds limit (8192) in 'nxt200x_init' [-Wframe-larger-than]
+   static int nxt200x_init(struct dvb_frontend* fe)
+              ^
+>> drivers/media/dvb-frontends/nxt200x.c:519:12: warning: stack frame size (9624) exceeds limit (8192) in 'nxt200x_setup_frontend_parameters' [-Wframe-larger-than]
+   static int nxt200x_setup_frontend_parameters(struct dvb_frontend *fe)
+              ^
+   2 warnings generated.
+--
+>> drivers/media/dvb-frontends/stv0367.c:995:12: warning: stack frame size (9464) exceeds limit (8192) in 'stv0367ter_algo' [-Wframe-larger-than]
+   static int stv0367ter_algo(struct dvb_frontend *fe)
+              ^
+>> drivers/media/dvb-frontends/stv0367.c:2540:12: warning: stack frame size (9368) exceeds limit (8192) in 'stv0367cab_set_frontend' [-Wframe-larger-than]
+   static int stv0367cab_set_frontend(struct dvb_frontend *fe)
+              ^
+   2 warnings generated.
+--
+   drivers/usb/host/max3421-hcd.c:1968:34: warning: unused variable 'max3421_of_match_table' [-Wunused-const-variable]
+   static const struct of_device_id max3421_of_match_table[] = {
+                                    ^
+>> drivers/usb/host/max3421-hcd.c:1378:1: warning: stack frame size (11288) exceeds limit (8192) in 'max3421_spi_thread' [-Wframe-larger-than]
+   max3421_spi_thread(void *dev_id)
+   ^
+   2 warnings generated.
 
-Gcc, in contrast, generates the obvious straightforward code, and
-that's what I wrote and optimized that code for.
 
-             Linus
+vim +/nxt200x_init +1087 drivers/media/dvb-frontends/nxt200x.c
+
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1086  
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08 @1087  static int nxt200x_init(struct dvb_frontend* fe)
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1088  {
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1089  	struct nxt200x_state* state = fe->demodulator_priv;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1090  	int ret = 0;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1091  
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1092  	if (!state->initialised) {
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1093  		switch (state->demod_chip) {
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1094  			case NXT2002:
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1095  				ret = nxt2002_init(fe);
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1096  				break;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1097  			case NXT2004:
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1098  				ret = nxt2004_init(fe);
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1099  				break;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1100  			default:
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1101  				return -EINVAL;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1102  		}
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1103  		state->initialised = 1;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1104  	}
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1105  	return ret;
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1106  }
+04a45929e7f00e drivers/media/dvb/frontends/nxt200x.c Kirk Lapray 2005-11-08  1107  
+
+:::::: The code at line 1087 was first introduced by commit
+:::::: 04a45929e7f00ed4fc7b1d375397f808c8a5d0eb [PATCH] dvb: add nxt200x frontend module
+
+:::::: TO: Kirk Lapray <kirk.lapray@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
