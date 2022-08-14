@@ -1,109 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F542EB8
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 16:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27383C433C1;
-	Sun, 14 Aug 2022 16:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660494680;
-	bh=WnMkrFmRqTr/C6KW7WcHvuKKxCCcy1TaXXmxhygiNlc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AafPMN7naZneKeqK1CAqc4CUJqDcngZ7R6+buGJ1ksHbW8ZHu7+KQCUtzIN3b0MEG
-	 qBkTPHpZ0fJ56NX5D/K2IkJI28NwUd8gf5WzydGgyvqnZMg031WqZvkI/Nvhdfvqdw
-	 Tir3N8fNwRS+hAyRAl8X9CknBSQuwkbTYUCGABkloihlu58mbecX2cTbcTEkhJn5+g
-	 ROirRPT+wuhP4jakKbczdoOKf28YfX77Z8Qf7iP5hVJNy8r55DQkXvpKzmN5gsrEi/
-	 7uYAnHEzMqhaJnv/W+dtTK7iu0blxxO2enFE08GSEdAJrUurUzt+AvOtK71IFFj3OQ
-	 TzbwKdaM7P+LQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E12F257C
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 19:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=t1+0X+jLswVdkejc/MI/VGIatK9gKFmi7huNqRXsrjY=; b=tQd3aws4JXT2vt4V6EBB0swGii
+	kftrvgEuYjuc7McqDq2EpBQ9vhnMdP4bWmTTuOqoazXfFtTEcpse1AlrxJK3JLOIBYAP3L9tMfwWK
+	Y8Xv/B7bdERm/CLPGkrIdOrZ0yS0NLY5qhg+uaD/s2ZopBcr+E3idQ50XHXJJEqzZ/hPd6ojrtkRm
+	a0diwNV8Ss1bqoHOyDZ7dpZcBkpd41AyNaKxnCbGnsmeLFf36bm8Tn8/AegjCw4mKKY28OB+yvMlC
+	HGBGjwlMM70OucyXM1E45uThnJ+fWsi90VcHt3bHUHrcqH14dWkR2lLwIhabOITKXSk+bUI5V4QcG
+	v0lUgltg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+	id 1oNIyL-004K3f-ET;
+	Sun, 14 Aug 2022 19:08:29 +0000
+Date: Sun, 14 Aug 2022 20:08:29 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Nathan Chancellor <nathan@kernel.org>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sasha Levin <sashal@kernel.org>,
-	ndesaulniers@google.com,
-	macro@orcam.me.uk,
-	linux-mips@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.9 8/8] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
-Date: Sun, 14 Aug 2022 12:30:41 -0400
-Message-Id: <20220814163041.2399552-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814163041.2399552-1-sashal@kernel.org>
-References: <20220814163041.2399552-1-sashal@kernel.org>
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
+	ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Matthew Wilcox <willy@infradead.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+Message-ID: <YvlILbn1ERLgZreh@ZenIV>
+References: <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+ <YvVzHQ5DVaPAvw26@ZenIV>
+ <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
+ <YvV2zfT0XbgwHGe/@ZenIV>
+ <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
+ <YvV86p5DjBLjjXHo@ZenIV>
+ <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
+ <CAHk-=wjLLw0xjL+TZs5DUGL8hOpmLMa4B92aDVFxw4HZthLraw@mail.gmail.com>
+ <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: Nathan Chancellor <nathan@kernel.org>
+On Thu, Aug 11, 2022 at 08:58:54PM -0700, Linus Torvalds wrote:
+> On Thu, Aug 11, 2022 at 3:43 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Oh, sadly, clang does much worse here.
+> >
+> > Gcc ends up being able to not have a stack frame at all for
+> > __d_lookup_rcu() once that DCACHE_OP_COMPARE case has been moved out.
+> > The gcc code really looks very nice.
+> >
+> > Clang, not so much, and it still has spills and reloads.
+> 
+> I ended up looking at the clang code generation more than I probably
+> should have, because I found it so odd.
+> 
+> Our code is literally written to not need that many values, and it
+> should be easy to keep everything in registers.
+> 
+> It turns out that clang is trying much too hard to be clever in
+> dentry_string_cmp(). The code is literally written so that we keep the
+> count of remaining characters in 'tcount', and then at the end we can
+> generate a 'mask' from that to ignore the parts of the pathname that
+> are beyond the size.
 
-[ Upstream commit 74de14fe05dd6b151d73cb0c73c8ec874cbdcde6 ]
+[snip]
 
-When CONFIG_XPA is enabled, Clang warns:
+There's a cheap way to reduce the register pressure:
+                seq = raw_seqcount_begin(&dentry->d_seq);
+		if (dentry->d_parent != parent)
+			continue;
+		if (d_unhashed(dentry))
+			continue;
+		if (dentry->d_name.hash_len != hashlen)
+			continue;
+		if (dentry_cmp(dentry, str, hashlen_len(hashlen)) != 0)
+			continue;  
+		*seqp = seq;
+could move the last store to before dentry_cmp().  Sure, we might get
+some extra stores out of that.  Into a hot cacheline, and if we really
+hit many of those extra stores, we already have a problem - a lot of
+collisions both in ->d_parent and ->d_name.hash_len.  If that happens,
+the cost of those extra stores is going to be trivial noise.
 
-  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
-          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
-                              ^
-  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
-  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
-                                     ^
-  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
-          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
-                                ^
-  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
-  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
-                                     ^
-  2 errors generated.
+From correctness POV that should be fine; callers of __d_lookup_rcu()
+getting NULL either entirely ignore *seqp (d_alloc_parallel()) or
+proceed to wipe it out (lookup_fast(), by calling try_to_unlazy()).
 
-_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
-build and runtime configuration, which is what the negation operators
-are trying to convey. To silence the warning, explicitly compare against
-0 so the result of the '<<' operator is not implicitly converted to a
-boolean.
-
-According to its documentation, GCC enables -Wint-in-bool-context with
--Wall but this warning is not visible when building the same
-configuration with GCC. It appears GCC only warns when compiling C++,
-not C, although the documentation makes no note of this:
-https://godbolt.org/z/x39q3brxf
-
-Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/mm/tlbex.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index f625fd20b21e..65fed205383e 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -637,7 +637,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
- 		return;
- 	}
- 
--	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
-+	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
- 		if (fill_includes_sw_bits) {
- 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
- 		} else {
-@@ -2518,7 +2518,7 @@ static void check_pabits(void)
- 	unsigned long entry;
- 	unsigned pabits, fillbits;
- 
--	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
-+	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
- 		/*
- 		 * We'll only be making use of the fact that we can rotate bits
- 		 * into the fill if the CPU supports RIXI, so don't bother
--- 
-2.35.1
-
+Comments?
