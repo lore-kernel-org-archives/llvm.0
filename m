@@ -1,49 +1,44 @@
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6009E7EE
-	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 01:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062697EE
+	for <llvm@lists.linux.dev>; Sun, 14 Aug 2022 02:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660439620; x=1691975620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dhKkSzBmVvUqQlk2H6PYP/DhZeE0cXbKpgag3Koj5YM=;
-  b=ZzH6zAUz/sPCPb8v+JlwTnr5KRsoNbVgKiJHEAAYsFG2htBKkojKUMIC
-   vKFkZDSvB65kNc/Mi+Rc2Iz52Q5bk1Ej9GONphObN6TVkGwG9eXns28xi
-   WJ2GMdL2JwtSsaMloZcQeFeCzu4e6EpvePksWMwlfkXKPsm6fswYdGXVh
-   2lrvmNBT7mR8lLeLRIsFKfAbmeYXEVGt3Aox4dCFXGdr8xFGYqd+ElK8f
-   Cmg7EbwnqCKRVvYPchIaLhmRwd5qHGyZItAlsMesQNoKalTZvpM8uN2lu
-   nhMGnAacpe+uQX2Vlc9IXA8+euiWGwlSzBEnTHfbx9bOHFkLSMV+iXQZi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="378078018"
+  t=1660443280; x=1691979280;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mL6DQCPNrGBktb6a8EQDWXZrefD9kYqagtdkBoIfQz0=;
+  b=VWxbFYpar9YVfC5i1lxbkxxZy1ZAxphueSmRMtgnrezzn7lCPMBmUofR
+   Cdw0swJciwa9/GiPIz59uvsmYWCaceB6sMCHK9sKreVASPYf++k7FFz9w
+   raY4buHNQMOFhLlC++b2mnOxOUmOHLbkX6arP3MdnuOhWwrQAtaCsw2iJ
+   UJHYRfi+EkNLlP0sK0+qR/VVmgYP43bkIVSI5MXOg11ycVJJa4+QQvdSa
+   J15iURxxZSsdKQu9LdqYwUzA7E0QWWiaaRfzDlHP5mpqssALYN+hev+zG
+   hJpAJIlG7WT9epxBZTkBSsXWe3J8uZCEjHdmuGExpgVrVa5Vw2LnaA9pA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="378080139"
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="378078018"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 18:13:39 -0700
+   d="scan'208";a="378080139"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 19:14:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="934109122"
+   d="scan'208";a="674473096"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Aug 2022 18:13:36 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 13 Aug 2022 19:14:38 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oN2C8-0002HT-0A;
-	Sun, 14 Aug 2022 01:13:36 +0000
-Date: Sun, 14 Aug 2022 09:13:00 +0800
+	id 1oN39B-0002Ln-2o;
+	Sun, 14 Aug 2022 02:14:37 +0000
+Date: Sun, 14 Aug 2022 10:14:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Olivier Masse <olivier.masse@nxp.com>, etienne.carriere@linaro.org,
-	jens.wiklander@linaro.org, sumit.garg@linaro.org,
-	sumit.semwal@linaro.org, christian.koenig@amd.com,
-	op-tee@lists.trustedfirmware.org, linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, clement.faure@nxp.com,
-	olivier.masse@nxp.com
-Subject: Re: [PATCH 1/1] tee: new ioctl to a register tee_shm from a dmabuf
- file descriptor
-Message-ID: <202208140900.TNSQFBzy-lkp@intel.com>
-References: <20220812143055.12938-2-olivier.masse@nxp.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-ntb@googlegroups.com, linux-kernel@vger.kernel.org,
+	Jon Mason <jdmason@kudzu.us>
+Subject: [jonmason-ntb:ntb-next-hacking 18/18]
+ drivers/pci/endpoint/functions/pci-epf-vntb.c:560:56: warning: variable
+ 'align' is uninitialized when used here
+Message-ID: <202208141017.cwJ0JXde-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,47 +47,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812143055.12938-2-olivier.masse@nxp.com>
 
-Hi Olivier,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Olivier-Masse/tee-Add-tee_shm_register_fd/20220812-223302
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: arm-randconfig-r026-20220814 (https://download.01.org/0day-ci/archive/20220814/202208140900.TNSQFBzy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+tree:   https://github.com/jonmason/ntb ntb-next-hacking
+head:   d90921d21692b59734d2452efea346217a526f44
+commit: d90921d21692b59734d2452efea346217a526f44 [18/18] pcie: endpoint: pci-epf-vntb: add endpoint msi support
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208141017.cwJ0JXde-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/994ce362c3244904f79f1e7d4cb436ea162421d1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Olivier-Masse/tee-Add-tee_shm_register_fd/20220812-223302
-        git checkout 994ce362c3244904f79f1e7d4cb436ea162421d1
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/jonmason/ntb/commit/d90921d21692b59734d2452efea346217a526f44
+        git remote add jonmason-ntb https://github.com/jonmason/ntb
+        git fetch --no-tags jonmason-ntb ntb-next-hacking
+        git checkout d90921d21692b59734d2452efea346217a526f44
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/endpoint/functions/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-ERROR: modpost: "__aeabi_uldivmod" [drivers/mtd/mtdswap.ko] undefined!
->> ERROR: modpost: module tee uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:541:33: warning: variable 'epc_features' set but not used [-Wunused-but-set-variable]
+           const struct pci_epc_features *epc_features;
+                                          ^
+>> drivers/pci/endpoint/functions/pci-epf-vntb.c:560:56: warning: variable 'align' is uninitialized when used here [-Wuninitialized]
+                   mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+                                                                        ^~~~~
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:542:11: note: initialize the variable 'align' to silence this warning
+           u32 align;
+                    ^
+                     = 0
+   2 warnings generated.
+
+
+vim +/align +560 drivers/pci/endpoint/functions/pci-epf-vntb.c
+
+d90921d21692b59 Frank Li 2022-07-07  534  
+53efbaa43643f36 Frank Li 2022-02-22  535  /**
+53efbaa43643f36 Frank Li 2022-02-22  536   * epf_ntb_db_bar_init() - Configure Doorbell window BARs
+53efbaa43643f36 Frank Li 2022-02-22  537   * @ntb: NTB device that facilitates communication between HOST and vHOST
+53efbaa43643f36 Frank Li 2022-02-22  538   */
+53efbaa43643f36 Frank Li 2022-02-22  539  static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
+53efbaa43643f36 Frank Li 2022-02-22  540  {
+53efbaa43643f36 Frank Li 2022-02-22  541  	const struct pci_epc_features *epc_features;
+53efbaa43643f36 Frank Li 2022-02-22  542  	u32 align;
+53efbaa43643f36 Frank Li 2022-02-22  543  	struct device *dev = &ntb->epf->dev;
+53efbaa43643f36 Frank Li 2022-02-22  544  	int ret;
+53efbaa43643f36 Frank Li 2022-02-22  545  	struct pci_epf_bar *epf_bar;
+d90921d21692b59 Frank Li 2022-07-07  546  	void __iomem *mw_addr = NULL;
+53efbaa43643f36 Frank Li 2022-02-22  547  	enum pci_barno barno;
+d90921d21692b59 Frank Li 2022-07-07  548  	size_t size;
+53efbaa43643f36 Frank Li 2022-02-22  549  
+53efbaa43643f36 Frank Li 2022-02-22  550  	epc_features = pci_epc_get_features(ntb->epf->epc,
+53efbaa43643f36 Frank Li 2022-02-22  551  					    ntb->epf->func_no,
+53efbaa43643f36 Frank Li 2022-02-22  552  					    ntb->epf->vfunc_no);
+53efbaa43643f36 Frank Li 2022-02-22  553  
+d90921d21692b59 Frank Li 2022-07-07  554  	size = epf_ntb_db_size(ntb);
+53efbaa43643f36 Frank Li 2022-02-22  555  
+53efbaa43643f36 Frank Li 2022-02-22  556  	barno = ntb->epf_ntb_bar[BAR_DB];
+d90921d21692b59 Frank Li 2022-07-07  557  	epf_bar = &ntb->epf->bar[barno];
+53efbaa43643f36 Frank Li 2022-02-22  558  
+d90921d21692b59 Frank Li 2022-07-07  559  	if (!ntb->epf_db_phy) {
+53efbaa43643f36 Frank Li 2022-02-22 @560  		mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+53efbaa43643f36 Frank Li 2022-02-22  561  		if (!mw_addr) {
+53efbaa43643f36 Frank Li 2022-02-22  562  			dev_err(dev, "Failed to allocate OB address\n");
+53efbaa43643f36 Frank Li 2022-02-22  563  			return -ENOMEM;
+53efbaa43643f36 Frank Li 2022-02-22  564  		}
+d90921d21692b59 Frank Li 2022-07-07  565  	} else {
+d90921d21692b59 Frank Li 2022-07-07  566  		epf_bar->phys_addr = ntb->epf_db_phy;
+d90921d21692b59 Frank Li 2022-07-07  567  		epf_bar->barno = barno;
+d90921d21692b59 Frank Li 2022-07-07  568  		epf_bar->size = size;
+d90921d21692b59 Frank Li 2022-07-07  569  	}
+53efbaa43643f36 Frank Li 2022-02-22  570  
+53efbaa43643f36 Frank Li 2022-02-22  571  	ntb->epf_db = mw_addr;
+53efbaa43643f36 Frank Li 2022-02-22  572  
+53efbaa43643f36 Frank Li 2022-02-22  573  	ret = pci_epc_set_bar(ntb->epf->epc, ntb->epf->func_no, ntb->epf->vfunc_no, epf_bar);
+53efbaa43643f36 Frank Li 2022-02-22  574  	if (ret) {
+53efbaa43643f36 Frank Li 2022-02-22  575  		dev_err(dev, "Doorbell BAR set failed\n");
+53efbaa43643f36 Frank Li 2022-02-22  576  			goto err_alloc_peer_mem;
+53efbaa43643f36 Frank Li 2022-02-22  577  	}
+53efbaa43643f36 Frank Li 2022-02-22  578  	return ret;
+53efbaa43643f36 Frank Li 2022-02-22  579  
+53efbaa43643f36 Frank Li 2022-02-22  580  err_alloc_peer_mem:
+53efbaa43643f36 Frank Li 2022-02-22  581  	pci_epc_mem_free_addr(ntb->epf->epc, epf_bar->phys_addr, mw_addr, epf_bar->size);
+53efbaa43643f36 Frank Li 2022-02-22  582  	return -1;
+53efbaa43643f36 Frank Li 2022-02-22  583  }
+53efbaa43643f36 Frank Li 2022-02-22  584  
+
+:::::: The code at line 560 was first introduced by commit
+:::::: 53efbaa43643f36d203700e7f436eaac11695274 PCI: endpoint: Support NTB transfer between RC and EP
+
+:::::: TO: Frank Li <Frank.Li@nxp.com>
+:::::: CC: Jon Mason <jdmason@kudzu.us>
 
 -- 
 0-DAY CI Kernel Test Service
