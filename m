@@ -1,85 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC11872
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396FFC433C1
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660568189;
-	bh=lvlMiVVah5yr20jbz3OzreKxmt2ds0C8MTIf3Hi13fU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MXacT48YCDUQkicSWhYVXZK42tG6S2xjTAPQxfiQ3lKe/JmVI1+i1OA+sEcFKp1U/
-	 trSWHpab/wzMizk2bKi6/f8TNbhKC3pE3a2hBtFuI2wEKXlgRrKZggHtnIIhAvVtGv
-	 ROuqF6zlf2uBPsdR/obGImgUKPiwkI1LVQdb+Q7ye5B/xxOGqaKDbPXoFcHQIvFjWk
-	 Sryef1GuZ/9gUKUANG+GgVnfeXBtzDL45lfghL4rBNJMNltjxxVQ6GrqVKy0uVyOQ7
-	 VyCpNbFXmVKMix8Jpg9qnksF3sjJgRXzY1mlcCoimfHgwnnywOB6hH/eogElg/A/Pc
-	 nmnI/ncFdy1Mg==
-Received: by mail-ej1-f53.google.com with SMTP id a7so13408919ejp.2
-        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 05:56:29 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3GW7fnN6vcZJN/OBExxwzWxIojQAgqsHA4QIW2c82bqWOCHwxA
-	8Hfmui0meyZRBqsgxNEYAKgoQdVwV55XiMDAwbA=
-X-Google-Smtp-Source: AA6agR79iSNr68RVWfkwvmQtkchdCVXRx6tdwlnUBYsBLMujOZY+I5O3UYZllXj4Q5MJmMiAUVtM7lE1fvhZ34atV0U=
-X-Received: by 2002:a17:906:9b08:b0:730:5d3c:4b1b with SMTP id
- eo8-20020a1709069b0800b007305d3c4b1bmr10215312ejc.606.1660568187406; Mon, 15
- Aug 2022 05:56:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3309C1872
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 13:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=0O1sf920eUihvgTY7T5XThUehKdDUHn2aHkaf8kBbAc=; b=U5+YgxZRQJLUsZVFGa8jpjISiZ
+	KXqYNcUc1MqF7NtePqt0KqehSGtnJdqqCaFozy4CIyCEG6PLW/qQes26YDnOMVQ7G9mxk7meBbkX+
+	Ad4seMTumPH4iTpcmCefpeyUQ+qVxQhzFYz/j/t9etjlPQjX5JQ03IYKDb2gYC5TPlN48pYtMGiAi
+	soblL2ptmaA4v/24nrXFZArqKunBh0PexOXZh4iM240WD+YmP+Ce97qrjFhtFx11cqXGzPFW2txRB
+	AS7yxj+/PzcEzLVuX8SetJ1HDhR6MhalKy1VrMxU6zfk33PbOSVI24Vt/vat1p2DbSX83vhstHv3Y
+	W6LzNG8Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oNZmT-005jhz-Cz; Mon, 15 Aug 2022 13:05:21 +0000
+Date: Mon, 15 Aug 2022 14:05:21 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+Message-ID: <YvpEkYMatTeNvNZa@casper.infradead.org>
+References: <202208140835.W6F1j6Da-lkp@intel.com>
+ <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+ <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202208140835.W6F1j6Da-lkp@intel.com> <Yvo8KUKJBlMtoNgI@casper.infradead.org>
-In-Reply-To: <Yvo8KUKJBlMtoNgI@casper.infradead.org>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 15 Aug 2022 14:56:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
-Message-ID: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
-Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
- limit (1024) in 'ntfs_read_folio'
-To: Matthew Wilcox <willy@infradead.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
 
-On Mon, Aug 15, 2022 at 2:29 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
-> > Hi Matthew,
+On Mon, Aug 15, 2022 at 02:56:11PM +0200, Arnd Bergmann wrote:
+> On Mon, Aug 15, 2022 at 2:29 PM Matthew Wilcox <willy@infradead.org> wrote:
 > >
-> > FYI, the error/warning still remains.
->
-> FYI, this is still not interesting.
-> This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
-> space is correspondingly larger.  The frame size warning should be
-> increased to allow for this.
->
-> > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+> > On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
+> > > Hi Matthew,
+> > >
+> > > FYI, the error/warning still remains.
+> >
+> > FYI, this is still not interesting.
+> > This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
+> > space is correspondingly larger.  The frame size warning should be
+> > increased to allow for this.
+> >
+> > > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+> 
+> I don't think we should change the frame size warning for this, there is not
+> generally any correlation between page size and stack usage, so that would
+> just hide bugs elsewhere.
 
-I don't think we should change the frame size warning for this, there is not
-generally any correlation between page size and stack usage, so that would
-just hide bugs elsewhere.
+In this specific case, there is.  It's a stack allocation of an array
+that depends on the number of 512-byte blocks per page.  With 4k pages,
+that's only 8.  With 256k pages, that's 512.  With an 8-byte pointer,
+that's a 4kB allocation, and even with a 4-byte pointer, that's a 2kB
+stack allocation, which is still going to blow the prescribed stack
+limit.
 
-NTFS has had problems with stack usage on 64K+ pages before, the last
-time we addressed this using 4eec7faf6775 ("fs: ntfs: Limit NTFS_RW to
-page sizes smaller than 64k"), but it looks like this time it affects both
-write and read support.
+This is not unique to NTFS!  An NTFS-specific "fix" is inappropriate.
+It's just that nobody's paying attention to the warnings coming from
+fs/buffer.c:
 
-I checked hexagon ntfs with 64KB pages, and that stays below the 1024 byte
-limit, so we could add another dependency
+include/linux/buffer_head.h:#define MAX_BUF_PER_PAGE (PAGE_SIZE / 512)
 
---- a/fs/ntfs/Kconfig
-+++ b/fs/ntfs/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config NTFS_FS
-        tristate "NTFS file system support"
-+      depends on PAGE_SIZE_LESS_THAN_256KB
-        select NLS
-        help
-          NTFS is the file system of Microsoft Windows NT, 2000, XP and 2003.
+int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+{
+...
+        struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
 
-to rule out the broken case but still allow powerpc64 and arm64 with
-64KB to use NTFS.
+I don't know why I'm not getting a nastygram about that one, but it's
+all bufferhead based filesystems.
 
-      Arnd
+> NTFS has had problems with stack usage on 64K+ pages before, the last
+> time we addressed this using 4eec7faf6775 ("fs: ntfs: Limit NTFS_RW to
+> page sizes smaller than 64k"), but it looks like this time it affects both
+> write and read support.
+
+The reasoning there is faulty.  If you have a 64k (or 256k) page size,
+your stack is correspondingly huge and can handle these kinds of
+allocations.
