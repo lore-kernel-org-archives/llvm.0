@@ -1,31 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941DC4C9D
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 19:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DA6C433B5;
-	Mon, 15 Aug 2022 19:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660593296;
-	bh=JjXv2VYkFvnQB0QxswcyR4e5GR1lOOgi20sTkwj01Pc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PyGBU3tFYPUXSJMh93qHz3c6aGJnaBF34wT5MoJZUZqjzHAHvr5ynEtIf18+qW6L5
-	 XqCKYTC7nLlBIOmHqTXSAg/77WYYz1KvP00PcTksp+o7XZq+UDvTdQ4nNSNyGfrY/x
-	 08zyjOwZxyvzRnH51ruNIDxalr0Wcx15f9JJyOtGoSpGbuP/qUBmULHRatO05lvhFm
-	 ntGa+x8EOvS4DEsNTz0A6eKqLhCR5mMTbTlArPbMaGAlX3Fe/CECuX29SAWleF/82p
-	 3yxuJjGjUUoc1WBwlNrvKYRkz6KUxu9ZBtfSxNQGer4ZFNjeRXYFjDPe0stzDlXJAS
-	 dydXU1BJBAdmQ==
-Date: Mon, 15 Aug 2022 12:54:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Dao Lu <daolu@rivosinc.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: Re: arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand
- for inline asm constraint 'i'
-Message-ID: <YvqkjlUZ9DA/kA4H@dev-arch.thelio-3990X>
-References: <202208141746.ABdEd5xo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAD24C9D
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 20:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=j2447HleS4DZ4bCY1Uc5ZeerWZpk2ShbXplreI9Wu+I=; b=XKwsXUL7HkZMtobsnhd4VwDrt7
+	18FvZmDomuG990H123wQK+O+zNBnYHwYW9vebxqpw/njGrNYO7Nqkjws21CoRMC8M2jTp62mdHNP8
+	YR9n6s/l6z7O8qGepB7Doc/pHeqtbSY2Zb/W7WeHB08KOlVgA+vit2hI4/V2MJwq6HOPsd0fYqsMV
+	wrACJfOaHUqer5Y85dSzOgNlPq8mBXQ+EMtbc2L3ipN+jWBwsdACtpfA2xdgG93zK94W3DtK3Nmsa
+	w+LBaSWt9AoBaM/20fg2AlqIFoyNw1TeQqdrw3DwxbbltF3/eQMS/eyHEYDGGwQUz/uMt6z6XmI03
+	qi2H6FFQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oNgOn-0063I6-TP; Mon, 15 Aug 2022 20:09:22 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 47A81980264; Mon, 15 Aug 2022 22:09:20 +0200 (CEST)
+Date: Mon, 15 Aug 2022 22:09:20 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
+	ceph-devel@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+ <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,69 +43,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208141746.ABdEd5xo-lkp@intel.com>
+In-Reply-To: <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
 
-On Sun, Aug 14, 2022 at 05:10:53PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
-> commit: 8eb060e10185cfc97ef0200d197ec246ba0f9f8c arch/riscv: add Zihintpause support
-> date:   3 days ago
-> config: riscv-randconfig-r005-20220814 (https://download.01.org/0day-ci/archive/20220814/202208141746.ABdEd5xo-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8eb060e10185cfc97ef0200d197ec246ba0f9f8c
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 8eb060e10185cfc97ef0200d197ec246ba0f9f8c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from <built-in>:4:
->    In file included from lib/vdso/gettimeofday.c:5:
->    In file included from include/vdso/datapage.h:17:
->    In file included from include/vdso/processor.h:10:
->    In file included from arch/riscv/include/asm/vdso/processor.h:7:
->    In file included from include/linux/jump_label.h:112:
-> >> arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand for inline asm constraint 'i'
->                    "       .option push                            \n\t"
->                    ^
->    1 error generated.
->    make[2]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
->    make[2]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
->    make[1]: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:219: __sub-make] Error 2
->    make: Target 'prepare' not remade because of errors.
+On Mon, Aug 15, 2022 at 08:58:21AM -0700, Linus Torvalds wrote:
+> And no, disassembling the instruction wouldn't kill us either (we know
+> it's a "mov" instruction, so it's just the modrm bytes), but again it
+> really didn't seem worth the pain. The generated code with the fixed
+> registers wasn't optimal, but it was close enough that it really
+> doesn't seem to matter.
 
-Just for the record, GCC 12.1.0 fails in the same way with the same
-configuration (I didn't look into the problem beyond that):
-
-  In file included from <command-line>:
-  In function 'arch_static_branch_jump',
-      inlined from 'cpu_relax' at arch/riscv/include/asm/vdso/processor.h:13:7:
-  include/linux/compiler_types.h:285:33: warning: 'asm' operand 0 probably does not match constraints
-    285 | #define asm_volatile_goto(x...) asm goto(x)
-        |                                 ^~~
-  arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
-     41 |         asm_volatile_goto(
-        |         ^~~~~~~~~~~~~~~~~
-  include/linux/compiler_types.h:285:33: error: impossible constraint in 'asm'
-    285 | #define asm_volatile_goto(x...) asm goto(x)
-        |                                 ^~~
-  arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
-     41 |         asm_volatile_goto(
-        |         ^~~~~~~~~~~~~~~~~
-  make[3]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-
-Cheers,
-Nathan
+I'm not at all suggesting we do this; but it might be
+insn_get_addr_ref() does what is needed.
