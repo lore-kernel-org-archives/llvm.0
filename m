@@ -1,150 +1,148 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF281102
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ggLuCCEIZCQBMm3JJ00RdHuIzYdliX5B+acRAFSYzU4=; b=i0DBUnLKNQHl45XvRIOcVVjinw
-	gJqenW+eJc2MYNljGVLcpE+MiyoDWd3apK4Ds1Opaf9Vc62oNXIwNHxkW+Oj5FCQHjFLZB1YcJClX
-	d6qB+nzOPjK02+rr2ELZTy+zgavn86kJxAEJTLFRi0lWYW2UvbueT9/Bloh6h7Mw17zd21IQZtmes
-	rs2I+nItWpttdhfGKRnkHvfdymCU32p1v6/SCT3eobzAHGx/duGoI/htUPDNa334H1kfSl9TJXtFh
-	Ds+gp10B9nG/di5b7g+9Cpyh9Hh2pp2qqmvM81YCe6/UNOnuV0IoD2VVMDJ3AGPPrP+lNhzfSOEpk
-	s+iS2R7g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oNULW-002bnN-GQ; Mon, 15 Aug 2022 07:17:10 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id CDAEB980264; Mon, 15 Aug 2022 09:17:08 +0200 (CEST)
-Date: Mon, 15 Aug 2022 09:17:08 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
-	ceph-devel@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-Message-ID: <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B12D1102
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 08:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660551012;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=27lKoSaVUdINu4HuH13l5vYL4jblUD5XULMIR7fcHFc=;
+	b=EwOrUAnwpqbcJq3OEHm4gle65hUcdJQyfcPOi2ucTHCOjjiU0Yesqm9ASRnlyw/XX8gqNK
+	IBZHW6t9l3lRkvbrvHSAB9fNnu00pbdELcdPP9ka4Nw/Rp1CRRprTDdTEE98d7Cug/XG3A
+	YKrVd+R4R76+C0Uz+XGzIUGG7+jzBRI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-599-dFcrD8T7Mtex1bjLvxsr_A-1; Mon, 15 Aug 2022 04:10:10 -0400
+X-MC-Unique: dFcrD8T7Mtex1bjLvxsr_A-1
+Received: by mail-ej1-f69.google.com with SMTP id sc31-20020a1709078a1f00b0073096c2b4e1so954628ejc.22
+        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 01:10:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=27lKoSaVUdINu4HuH13l5vYL4jblUD5XULMIR7fcHFc=;
+        b=ax4Iaf7TtnCeVpyW7iDxJsjHa4t8odAXuSDD2sUFgehZAmLoc3SWzvlSyejWipai98
+         KPGL0CSvI1lTcI01x3/jDQDuUowY4YU48Bt/msTdAzDCSGvyM7iivM4eZt1OkkkYsYAO
+         tafuEi59XUrVGLhefY9pPu0uzVL56F/ZIeA2K5+3zKSEV9twZ8XYZ1mPXIN1mqLa1pw0
+         w86dquN2sLXybJzAWVcT7Q80HA4dl55ebWIV9q73LR5RvoU80z6abRURbqVJo+J5slN9
+         s1IFqSvLOOmUDH1Ua3G0xBKxOYpHzhBt7xjMkf2kGld/efjV/1UmLTHBdpGPs0IF651e
+         dL7w==
+X-Gm-Message-State: ACgBeo1k2vsYi3ow2kpcONPt128Kb1LYg8BoCRQXvn1clONIZMixNkUP
+	qj6TyCduHrTQ+bXLiMAl3nbl/9aOW4SQ1xT0yyLjJ3YJ6Ejkq2HrptZdzOkSV9JoRQMWprLjRff
+	fgXAXqJYEsgWO6A==
+X-Received: by 2002:a05:6402:b88:b0:442:5d35:2133 with SMTP id cf8-20020a0564020b8800b004425d352133mr13569772edb.53.1660551009660;
+        Mon, 15 Aug 2022 01:10:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6hclU/vcxB2BCRDttM2wYHPyAa40y3hKKPm2d8l2u3HXLlrSsnS9PHPPW6R6uAupXIcyydIw==
+X-Received: by 2002:a05:6402:b88:b0:442:5d35:2133 with SMTP id cf8-20020a0564020b8800b004425d352133mr13569752edb.53.1660551009372;
+        Mon, 15 Aug 2022 01:10:09 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7cb95000000b0043cfc872e7dsm6164849edt.10.2022.08.15.01.10.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 01:10:08 -0700 (PDT)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: kernel test robot <lkp@intel.com>, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [stable:linux-5.15.y 5373/9027] arch/x86/kvm/hyperv.c:2185:5:
+ warning: stack frame size (1036) exceeds limit (1024) in
+ 'kvm_hv_hypercall'
+In-Reply-To: <202208142025.NHKErAjq-lkp@intel.com>
+References: <202208142025.NHKErAjq-lkp@intel.com>
+Date: Mon, 15 Aug 2022 10:10:07 +0200
+Message-ID: <87zgg6sza8.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-On Sun, Aug 14, 2022 at 02:14:08PM -0700, Linus Torvalds wrote:
+kernel test robot <lkp@intel.com> writes:
 
-> PeterZ - you've touched both the load_unaligned_zeropad() and the
-> exception code last, so let's run this past you, but this really does
-> seem to not only fix the code generation issue in fs/dcache.s, it just
-> looks simpler too. Comments?
+> Hi Vitaly,
+>
+> FYI, the error/warning still remains.
+>
 
-Ha, freshly back from vacation and I barely know what a computer is :-)
+Yes, this is expected as the patch which is supposed to 'fix' this is
+still pendind. The latest version is here:
 
->  arch/x86/include/asm/extable_fixup_types.h |  2 ++
->  arch/x86/include/asm/word-at-a-time.h      | 50 +++---------------------------
->  arch/x86/mm/extable.c                      | 30 ++++++++++++++++++
->  3 files changed, 37 insertions(+), 45 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
-> index 503622627400..b53f1919710b 100644
-> --- a/arch/x86/include/asm/extable_fixup_types.h
-> +++ b/arch/x86/include/asm/extable_fixup_types.h
-> @@ -64,4 +64,6 @@
->  #define	EX_TYPE_UCOPY_LEN4		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(4))
->  #define	EX_TYPE_UCOPY_LEN8		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(8))
+https://lore.kernel.org/kvm/20220803134540.399220-1-vkuznets@redhat.com/
 
-(weird tab stuff there, but that's for another day I suppose)
+...
 
-> +#define EX_TYPE_ZEROPAD			20 /* load ax from dx zero-padded */
-> +
->  #endif
-> diff --git a/arch/x86/include/asm/word-at-a-time.h b/arch/x86/include/asm/word-at-a-time.h
-> index 8338b0432b50..4893f1b30dd6 100644
-> --- a/arch/x86/include/asm/word-at-a-time.h
-> +++ b/arch/x86/include/asm/word-at-a-time.h
-> @@ -77,58 +77,18 @@ static inline unsigned long find_zero(unsigned long mask)
->   * and the next page not being mapped, take the exception and
->   * return zeroes in the non-existing part.
->   */
->  static inline unsigned long load_unaligned_zeropad(const void *addr)
->  {
->  	unsigned long ret;
->  
-> +	asm volatile(
-> +		"1:	mov (%[addr]), %[ret]\n"
->  		"2:\n"
-> +		_ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_ZEROPAD)
-> +		: [ret] "=a" (ret)
-> +		: [addr] "d" (addr));
->  
->  	return ret;
->  }
->  
->  #endif /* _ASM_WORD_AT_A_TIME_H */
-> diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-> index 331310c29349..58c79077a496 100644
-> --- a/arch/x86/mm/extable.c
-> +++ b/arch/x86/mm/extable.c
-> @@ -41,6 +41,34 @@ static bool ex_handler_default(const struct exception_table_entry *e,
->  	return true;
->  }
->  
-> +/*
-> + * This is the *very* rare case where we do a "load_unaligned_zeropad()"
-> + * and it's a page crosser into a non-existent page.
-> + *
-> + * This happens when we optimistically load a pathname a word-at-a-time
-> + * and the name is less than the full word and the  next page is not
-> + * mapped. Typically that only happens for CONFIG_DEBUG_PAGEALLOC.
-> + *
-> + * NOTE! The load is always of the form "mov (%edx),%eax" to make the
-> + * fixup simple.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+> head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
+> commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/9027] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+> config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220814/202208142025.NHKErAjq-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+>         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+>         git fetch --no-tags stable linux-5.15.y
+>         git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+>    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>        ^
+>    1 warning generated.
+>
+>
+> vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+>
+> 4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+> e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+> 4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
 
-So obviously we could use _ASM_EXTABLE_TYPE_REG together with something
-like: "mov (%[reg]), %[reg]" to not depend on these fixed registers, but
-yeah, that doesn't seem needed. Code-gen is fine as is.
+... but let me repeat myself: (see my previous reply here:
+https://lore.kernel.org/kvm/874jyw2v5n.fsf@redhat.com/)
+The source of the problem seems to be that Clang probably inlines
+kvm_hv_send_ipi() as on-stack variables in kvm_hv_hypercall() can not
+exceed 1024 bytes limit (struct kvm_hv_hcall is 144 bytes, the rest is
+negligible). The patch I mention above will likely fix the issue as it
+significantly reduces on-stack allocations in kvm_hv_send_ipi() but in
+this situation it shouldn't be inlined in the first place.
 
-> + */
-> +static bool ex_handler_zeropad(const struct exception_table_entry *e,
-> +			       struct pt_regs *regs,
-> +			       unsigned long fault_addr)
-> +{
-> +	const unsigned long mask = sizeof(long) - 1;
-> +	unsigned long offset, addr;
-> +
-> +	offset = regs->dx & mask;
-> +	addr = regs->dx & ~mask;
-> +	if (fault_addr != addr + sizeof(long))
-> +		return false;
-> +
-> +	regs->ax = *(unsigned long *)addr >> (offset * 8);
+(I still hope that I'm wrong finger pointing at the compiler here and
+someone smart will come to correct me :-)
 
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+> b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+> 0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+>
+> :::::: The code at line 2185 was first introduced by commit
+> :::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+>
+> :::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+> :::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-> +	regs->ip = ex_fixup_addr(e);
-> +	return true;
+-- 
+Vitaly
 
-I think the convention here is to do:
-
-	return ex_handler_default(e, regs);
-
-instead, that ensures there a bit of common post code.
-
-> +}
-> +
->  static bool ex_handler_fault(const struct exception_table_entry *fixup,
->  			     struct pt_regs *regs, int trapnr)
->  {
-
-But yeah, looks good to me.
