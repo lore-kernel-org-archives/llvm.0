@@ -1,116 +1,85 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B2FEBC
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660567297; x=1692103297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SplSxesvyZvRRgtnISH+hq5JWR2pxgb/KkEgyQmKz54=;
-  b=LZdqNIR3+eIvEJuArzgruz//mLc5uvGTjkvIwLyvxhHopyeeIJWTLL6v
-   KAW19GM9oRDkpiwGoU2Ga6ZbIiMDKoqQepa/aOwYgLd5yMk9AUYE93Lk3
-   1hyxVaNRV6dAimPgcQF7NW7ZUu/OixFKy3Nd3Okuyqfagj8Jc9rM50akq
-   fk2gZ+OX4xSrrGxfGEWcBmGCUp74ayykGQhR5WIgCTk/q89Ib3ELOJeWt
-   1nJR9VLQXuuA9UFYEAphV5IsSC9qEzOHSFG7lLbOxELRpnIURsXWiJAoB
-   22nZgSJILnA2J+r56u5wsrbtfQa5xwDsDozkOyRbgr9jSWalvaqCkcMvh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="272341554"
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="272341554"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 05:41:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="674820064"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Aug 2022 05:41:34 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNZPR-00010O-1F;
-	Mon, 15 Aug 2022 12:41:33 +0000
-Date: Mon, 15 Aug 2022 20:40:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
-	vbabka@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
-	vbabka@suse.cz, iamjoonsoo.kim@lge.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v7] mm/page_owner.c: add llseek for page_owner
-Message-ID: <202208152007.a6QeCOGK-lkp@intel.com>
-References: <20220815063010.22462-1-quic_yingangl@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC11872
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396FFC433C1
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660568189;
+	bh=lvlMiVVah5yr20jbz3OzreKxmt2ds0C8MTIf3Hi13fU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MXacT48YCDUQkicSWhYVXZK42tG6S2xjTAPQxfiQ3lKe/JmVI1+i1OA+sEcFKp1U/
+	 trSWHpab/wzMizk2bKi6/f8TNbhKC3pE3a2hBtFuI2wEKXlgRrKZggHtnIIhAvVtGv
+	 ROuqF6zlf2uBPsdR/obGImgUKPiwkI1LVQdb+Q7ye5B/xxOGqaKDbPXoFcHQIvFjWk
+	 Sryef1GuZ/9gUKUANG+GgVnfeXBtzDL45lfghL4rBNJMNltjxxVQ6GrqVKy0uVyOQ7
+	 VyCpNbFXmVKMix8Jpg9qnksF3sjJgRXzY1mlcCoimfHgwnnywOB6hH/eogElg/A/Pc
+	 nmnI/ncFdy1Mg==
+Received: by mail-ej1-f53.google.com with SMTP id a7so13408919ejp.2
+        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 05:56:29 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3GW7fnN6vcZJN/OBExxwzWxIojQAgqsHA4QIW2c82bqWOCHwxA
+	8Hfmui0meyZRBqsgxNEYAKgoQdVwV55XiMDAwbA=
+X-Google-Smtp-Source: AA6agR79iSNr68RVWfkwvmQtkchdCVXRx6tdwlnUBYsBLMujOZY+I5O3UYZllXj4Q5MJmMiAUVtM7lE1fvhZ34atV0U=
+X-Received: by 2002:a17:906:9b08:b0:730:5d3c:4b1b with SMTP id
+ eo8-20020a1709069b0800b007305d3c4b1bmr10215312ejc.606.1660568187406; Mon, 15
+ Aug 2022 05:56:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815063010.22462-1-quic_yingangl@quicinc.com>
+References: <202208140835.W6F1j6Da-lkp@intel.com> <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+In-Reply-To: <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 15 Aug 2022 14:56:11 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
+Message-ID: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+To: Matthew Wilcox <willy@infradead.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kassey,
+On Mon, Aug 15, 2022 at 2:29 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
+> > Hi Matthew,
+> >
+> > FYI, the error/warning still remains.
+>
+> FYI, this is still not interesting.
+> This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
+> space is correspondingly larger.  The frame size warning should be
+> increased to allow for this.
+>
+> > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
 
-Thank you for the patch! Perhaps something to improve:
+I don't think we should change the frame size warning for this, there is not
+generally any correlation between page size and stack usage, so that would
+just hide bugs elsewhere.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc1 next-20220815]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+NTFS has had problems with stack usage on 64K+ pages before, the last
+time we addressed this using 4eec7faf6775 ("fs: ntfs: Limit NTFS_RW to
+page sizes smaller than 64k"), but it looks like this time it affects both
+write and read support.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: hexagon-randconfig-r041-20220814 (https://download.01.org/0day-ci/archive/20220815/202208152007.a6QeCOGK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
-        git checkout f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+I checked hexagon ntfs with 64KB pages, and that stays below the 1024 byte
+limit, so we could add another dependency
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--- a/fs/ntfs/Kconfig
++++ b/fs/ntfs/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config NTFS_FS
+        tristate "NTFS file system support"
++      depends on PAGE_SIZE_LESS_THAN_256KB
+        select NLS
+        help
+          NTFS is the file system of Microsoft Windows NT, 2000, XP and 2003.
 
-All warnings (new ones prefixed by >>):
+to rule out the broken case but still allow powerpc64 and arm64 with
+64KB to use NTFS.
 
->> mm/page_owner.c:575:8: warning: no previous prototype for function 'lseek_page_owner' [-Wmissing-prototypes]
-   loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
-          ^
-   mm/page_owner.c:575:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/lseek_page_owner +575 mm/page_owner.c
-
-   574	
- > 575	loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
-   576	{
-   577		switch (orig) {
-   578		case SEEK_SET:
-   579			file->f_pos = offset;
-   580			break;
-   581		case SEEK_CUR:
-   582			file->f_pos += offset;
-   583			break;
-   584		default:
-   585			return -EINVAL;
-   586		}
-   587		return file->f_pos;
-   588	}
-   589	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+      Arnd
