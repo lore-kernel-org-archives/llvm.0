@@ -1,78 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541563238
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 16:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD978C433D7;
-	Mon, 15 Aug 2022 16:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B697E
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 17:05:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F1EC4314A;
+	Mon, 15 Aug 2022 17:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660580598;
-	bh=CQ8GnYQ4x+INFVVCSYPZ42+atVmQLvhXcUHF093NxoI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Db3WCW7QvkizfRr3+w9C7o7vjJbRK9vF+ZSd23yZLdTZ/10gf0s8Pje+E39i0XbOX
-	 lg9eCSB6p505XCQ9VjqmBVkzEGmAmN5X+qjPQkJDrDEPHf0x7I/I9LsnRbrmrQzNr0
-	 PBtbtLM8cJwZI1bRn46zJkj/6tyu/74vsI7w7f5xg3xUpQQ88bqEvTdRS1kZPx+bn7
-	 rEoQGxuMNnCpmjt9RmSmSZoMIUTh065hDwct9yo4qKx7MdQn4mr+D641a7sMk9lqnH
-	 V607nOms2sSxp1ScIuqInvySqb4j6Mprows1oj/pBKxdrzzN40RAeycR4g4S5C3nlE
-	 W5NhUgBLJtqFw==
-From: Mark Brown <broonie@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
- Liam Girdwood <lgirdwood@gmail.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>, alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>, llvm@lists.linux.dev,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>
-In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
-References: <20220810010809.2024482-1-nathan@kernel.org>
-Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
-Message-Id: <166058059542.769843.4941839393289864947.b4-ty@kernel.org>
-Date: Mon, 15 Aug 2022 17:23:15 +0100
+	s=k20201202; t=1660583152;
+	bh=fsvEKFbRbSDv04fTMLpl6zxZMxNaTblwWd8OSQ8qC6o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n2ca+2bE7miYdY9MQ/iS++z3jXsx6aNkFbyNbvxEzORjz8pdvApM5IJ2+GigFyA+n
+	 5dYRvy6CU9savsde+lTQSZ73SyjvX63CBWxTb/1x5fREwiQx2czuVDJdkf47kSPyn2
+	 JRSUuh2nbSgju64n5k8GDcnZMYCRqgn3AAbv5IMWgzL3rBrU/QeqRkR08b/De1SqyM
+	 Rn7hds6qQoSk4u7VV/OEJj2WTx6EVs4XTdCv/HOWAI/iiu6iXrwdkQq/5vCNUoQ06N
+	 n1uQ8Jz4In3HyNP9kG60RJMVM1GXWZtnin/aQeSxdeUNYVAcRX4w5YJcez23oznEoo
+	 4ZUYfUvKWL9nA==
+Date: Mon, 15 Aug 2022 10:05:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, kvm@vger.kernel.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [stable:linux-5.15.y 5373/9027] arch/x86/kvm/hyperv.c:2185:5:
+ warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
+Message-ID: <Yvp87jlVWg0e376v@dev-arch.thelio-3990X>
+References: <202208142025.NHKErAjq-lkp@intel.com>
+ <87zgg6sza8.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgg6sza8.fsf@redhat.com>
 
-On Tue, 9 Aug 2022 18:08:09 -0700, Nathan Chancellor wrote:
-> A recent change in clang strengthened its -Wbitfield-constant-conversion
-> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
-> only be 0 or -1, not 1:
+On Mon, Aug 15, 2022 at 10:10:07AM +0200, Vitaly Kuznetsov wrote:
+> kernel test robot <lkp@intel.com> writes:
 > 
->   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
->           dev->gclk_enabled = 1;
->                             ^ ~
->   1 error generated.
+> > Hi Vitaly,
+> >
+> > FYI, the error/warning still remains.
+> >
 > 
-> [...]
+> Yes, this is expected as the patch which is supposed to 'fix' this is
+> still pendind. The latest version is here:
+> 
+> https://lore.kernel.org/kvm/20220803134540.399220-1-vkuznets@redhat.com/
+> 
+> ...
+> 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+> > head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
+> > commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/9027] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+> > config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220814/202208142025.NHKErAjq-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+> >         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+> >         git fetch --no-tags stable linux-5.15.y
+> >         git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+> >    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+> >        ^
+> >    1 warning generated.
+> >
+> >
+> > vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+> >
+> > 4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+> > e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+> > e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+> > 4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> > bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+> > bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
+> 
+> ... but let me repeat myself: (see my previous reply here:
+> https://lore.kernel.org/kvm/874jyw2v5n.fsf@redhat.com/)
+> The source of the problem seems to be that Clang probably inlines
+> kvm_hv_send_ipi() as on-stack variables in kvm_hv_hypercall() can not
+> exceed 1024 bytes limit (struct kvm_hv_hcall is 144 bytes, the rest is
+> negligible). The patch I mention above will likely fix the issue as it
+> significantly reduces on-stack allocations in kvm_hv_send_ipi() but in
+> this situation it shouldn't be inlined in the first place.
 
-Applied to
+I seem to recall Nick mentioning at some point that LLVM gives a massive
+inlining discount to functions that are only called once so I guess that
+would explain why kvm_hv_send_ipi() gets inlined into
+kvm_hv_hypercall(). I think there are some inlining cost flags we could
+experiment with to see if we can avoid inlining functions with high
+stack usage into other functions. Additionally, the configurations that
+reported this warning are allmodconfig and allyesconfig, which enable
+KASAN, which is known to use more stack usage with clang:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+https://github.com/ClangBuiltLinux/linux/issues/39
 
-Thanks!
+I am hoping we'll get to addressing that during our meet up right before
+Plumbers but we'll see.
 
-[1/1] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
-      commit: eab9100d9898cbd37882b04415b12156f8942f18
+> (I still hope that I'm wrong finger pointing at the compiler here and
+> someone smart will come to correct me :-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Other folks more familiar with the LLVM side of things might correct me
+:)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Cheers,
+Nathan
