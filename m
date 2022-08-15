@@ -1,237 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7051102
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660546904;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YaseW025oDvpedOkrLHci69xu5aiek1CmWmhGCuRQ9c=;
-	b=X5iwAlMYILZdBQgX+xCplOiAAKtEBLo0f7mj/gNLtH4KLrY0JyizfDFhRRhNEHOIkrHSLC
-	oxR9RQk3WHEfemkjwR3p0WNB4RO5eY1/q2z/C04UmznSFNCd+sb8OwKqkacKKsm5gOPJFl
-	N0D4rqGGhUdMwwd5TrHWm+tDVg+QbOY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-7xLh4eWkMiiCpcBzIoEiBg-1; Mon, 15 Aug 2022 03:01:43 -0400
-X-MC-Unique: 7xLh4eWkMiiCpcBzIoEiBg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13C8D185A79C
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:01:43 +0000 (UTC)
-Received: from [172.64.0.112] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F1B881415128;
-	Mon, 15 Aug 2022 07:01:42 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [568035b0]
-Date: Mon, 15 Aug 2022 07:01:42 -0000
-CC: omosnace@redhat.com, mmalik@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF281102
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ggLuCCEIZCQBMm3JJ00RdHuIzYdliX5B+acRAFSYzU4=; b=i0DBUnLKNQHl45XvRIOcVVjinw
+	gJqenW+eJc2MYNljGVLcpE+MiyoDWd3apK4Ds1Opaf9Vc62oNXIwNHxkW+Oj5FCQHjFLZB1YcJClX
+	d6qB+nzOPjK02+rr2ELZTy+zgavn86kJxAEJTLFRi0lWYW2UvbueT9/Bloh6h7Mw17zd21IQZtmes
+	rs2I+nItWpttdhfGKRnkHvfdymCU32p1v6/SCT3eobzAHGx/duGoI/htUPDNa334H1kfSl9TJXtFh
+	Ds+gp10B9nG/di5b7g+9Cpyh9Hh2pp2qqmvM81YCe6/UNOnuV0IoD2VVMDJ3AGPPrP+lNhzfSOEpk
+	s+iS2R7g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oNULW-002bnN-GQ; Mon, 15 Aug 2022 07:17:10 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id CDAEB980264; Mon, 15 Aug 2022 09:17:08 +0200 (CEST)
+Date: Mon, 15 Aug 2022 09:17:08 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
+	ceph-devel@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <35769.122081503014300777@us-mta-595.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Sun, Aug 14, 2022 at 02:14:08PM -0700, Linus Torvalds wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> PeterZ - you've touched both the load_unaligned_zeropad() and the
+> exception code last, so let's run this past you, but this really does
+> seem to not only fix the code generation issue in fs/dcache.s, it just
+> looks simpler too. Comments?
 
+Ha, freshly back from vacation and I barely know what a computer is :-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/50773
+>  arch/x86/include/asm/extable_fixup_types.h |  2 ++
+>  arch/x86/include/asm/word-at-a-time.h      | 50 +++---------------------------
+>  arch/x86/mm/extable.c                      | 30 ++++++++++++++++++
+>  3 files changed, 37 insertions(+), 45 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
+> index 503622627400..b53f1919710b 100644
+> --- a/arch/x86/include/asm/extable_fixup_types.h
+> +++ b/arch/x86/include/asm/extable_fixup_types.h
+> @@ -64,4 +64,6 @@
+>  #define	EX_TYPE_UCOPY_LEN4		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(4))
+>  #define	EX_TYPE_UCOPY_LEN8		(EX_TYPE_UCOPY_LEN | EX_DATA_IMM(8))
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         aarch64 - Libkcapi AF_ALG test
-                   Issue: 90kernel-modules: install generic crypto modules =
-with hostonly unset #982
-                          https://github.com/dracutdevs/dracut/pull/982
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4810880
-           s390x - Libkcapi AF_ALG test
-                   Issue: 90kernel-modules: install generic crypto modules =
-with hostonly unset #982
-                          https://github.com/dracutdevs/dracut/pull/982
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4810964
-          x86_64 - Libkcapi AF_ALG test
-                   Issue: 90kernel-modules: install generic crypto modules =
-with hostonly unset #982
-                          https://github.com/dracutdevs/dracut/pull/982
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4811047
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Issue: 90kernel-modules: install generic crypto modules =
-with hostonly unset #982
-                          https://github.com/dracutdevs/dracut/pull/982
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4811193
+(weird tab stuff there, but that's for another day I suppose)
 
-    Unrecognized or new issues:
-           s390x - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4811012
+> +#define EX_TYPE_ZEROPAD			20 /* load ax from dx zero-padded */
+> +
+>  #endif
+> diff --git a/arch/x86/include/asm/word-at-a-time.h b/arch/x86/include/asm/word-at-a-time.h
+> index 8338b0432b50..4893f1b30dd6 100644
+> --- a/arch/x86/include/asm/word-at-a-time.h
+> +++ b/arch/x86/include/asm/word-at-a-time.h
+> @@ -77,58 +77,18 @@ static inline unsigned long find_zero(unsigned long mask)
+>   * and the next page not being mapped, take the exception and
+>   * return zeroes in the non-existing part.
+>   */
+>  static inline unsigned long load_unaligned_zeropad(const void *addr)
+>  {
+>  	unsigned long ret;
+>  
+> +	asm volatile(
+> +		"1:	mov (%[addr]), %[ret]\n"
+>  		"2:\n"
+> +		_ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_ZEROPAD)
+> +		: [ret] "=a" (ret)
+> +		: [addr] "d" (addr));
+>  
+>  	return ret;
+>  }
+>  
+>  #endif /* _ASM_WORD_AT_A_TIME_H */
+> diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+> index 331310c29349..58c79077a496 100644
+> --- a/arch/x86/mm/extable.c
+> +++ b/arch/x86/mm/extable.c
+> @@ -41,6 +41,34 @@ static bool ex_handler_default(const struct exception_table_entry *e,
+>  	return true;
+>  }
+>  
+> +/*
+> + * This is the *very* rare case where we do a "load_unaligned_zeropad()"
+> + * and it's a page crosser into a non-existent page.
+> + *
+> + * This happens when we optimistically load a pathname a word-at-a-time
+> + * and the name is less than the full word and the  next page is not
+> + * mapped. Typically that only happens for CONFIG_DEBUG_PAGEALLOC.
+> + *
+> + * NOTE! The load is always of the form "mov (%edx),%eax" to make the
+> + * fixup simple.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - Firmware test suite
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 - Firmware test suite
-                  x86_64 (debug) - Firmware test suite
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests: fail to build detached_mounts_propagation: error: =
-redeclaration of 'enum fsconfig_command'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1302
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
-laration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1303
-            Affected tests:
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
-edeclaration of enum fsconfig_command
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1300
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
+So obviously we could use _ASM_EXTABLE_TYPE_REG together with something
+like: "mov (%[reg]), %[reg]" to not depend on these fixed registers, but
+yeah, that doesn't seem needed. Code-gen is fine as is.
+
+> + */
+> +static bool ex_handler_zeropad(const struct exception_table_entry *e,
+> +			       struct pt_regs *regs,
+> +			       unsigned long fault_addr)
+> +{
+> +	const unsigned long mask = sizeof(long) - 1;
+> +	unsigned long offset, addr;
+> +
+> +	offset = regs->dx & mask;
+> +	addr = regs->dx & ~mask;
+> +	if (fault_addr != addr + sizeof(long))
+> +		return false;
+> +
+> +	regs->ax = *(unsigned long *)addr >> (offset * 8);
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+> +	regs->ip = ex_fixup_addr(e);
+> +	return true;
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+I think the convention here is to do:
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+	return ex_handler_default(e, regs);
 
+instead, that ensures there a bit of common post code.
+
+> +}
+> +
+>  static bool ex_handler_fault(const struct exception_table_entry *fixup,
+>  			     struct pt_regs *regs, int trapnr)
+>  {
+
+But yeah, looks good to me.
