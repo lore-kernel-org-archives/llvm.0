@@ -1,70 +1,47 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91447111F
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 10:37:46 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-122-Hgrs_dzPPQ2BICeey52XBw-1; Mon, 15 Aug 2022 11:37:43 +0100
-X-MC-Unique: Hgrs_dzPPQ2BICeey52XBw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Mon, 15 Aug 2022 11:37:42 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Mon, 15 Aug 2022 11:37:42 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Linus Torvalds' <torvalds@linux-foundation.org>, Nick Desaulniers
-	<ndesaulniers@google.com>
-CC: Joe Perches <joe@perches.com>, Nathan Chancellor <nathan@kernel.org>,
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, Masahiro Yamada
-	<masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>, Justin Stitt
-	<justinstitt@google.com>
-Subject: RE: mainline build failure for arm64 allmodconfig with clang
-Thread-Topic: mainline build failure for arm64 allmodconfig with clang
-Thread-Index: AQHYrbmR1EwWNARIT0SmjROGCil0pq2vyTZA
-Date: Mon, 15 Aug 2022 10:37:42 +0000
-Message-ID: <de9ccf7da0aa441b855fdfbd7761115a@AcuMS.aculab.com>
-References: <YvSxeDkmwxcJL+Z0@debian> <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
- <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
- <CAKwvOdnQjgtwqFXLv+QtWPfpHosM5fxE5oqbX0VUD53F8L6bRg@mail.gmail.com>
- <CAHk-=wgJA=e-CLcvU5LRKu0bMLeAewXtOM6as1hFVeQAVkMPbg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgJA=e-CLcvU5LRKu0bMLeAewXtOM6as1hFVeQAVkMPbg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C88184C
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gLBxowRDfXXdNnS2Uq+RFwPmidP3H5C4Kk5j9GJTZFs=; b=QQPtrhVPAdG95r+VIbHei8w2k6
+	4wv8m//LK8TSKKYblkP28KkhgaB8I92yaJhi3X0oW9pV1/6dK9b4iHx8T72x7NxLSkHkL9Lu+pGpL
+	i+BKx9xlXZxiT63eGBvhSzUSzWoZY4WFAPz4OOhI8RdxO1uwJNZ+HjU7LnnjtYc4MgNE3ctS97uBK
+	yUmOIWUpPQ/b8cOCyEFCJV3bytBb5xmlN07UDJHkReaMBeZ8Md/ENJ9VnogzV/PM+jwixAF04414w
+	DusD4Oiq5x1QLtUVkW7m9kGKFvbxkM57olpfMEk7u8mxqLMDhgvFscz0/22Z8e9w/KYKIFiea7oTX
+	RtWmyz4Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oNZDl-005how-D6; Mon, 15 Aug 2022 12:29:29 +0000
+Date: Mon, 15 Aug 2022 13:29:29 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+Message-ID: <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+References: <202208140835.W6F1j6Da-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208140835.W6F1j6Da-lkp@intel.com>
 
-Li4uDQo+IEFuZCBvZnRlbiB0aGF0IGNoYXIgaXNuJ3QgYWN0dWFsbHkgYSAnY2hhcicsIGl0IGlz
-IGFjdHVhbGx5IGFuICdpbnQnLA0KPiBlaXRoZXIgYmVjYXVzZSB5b3UgaGF2ZSBzaXR1YXRpb25z
-IGxpa2UgJ2dldGNoKCknLCBvciB5b3UgaGF2ZSBzaW1wbHkNCj4ganVzdCB0aGUgdXN1YWwgQyBl
-eHByZXNzaW9uIHJ1bGVzLCBpZSB5b3UgaGF2ZSBzb21ldGhpbmcgbGlrZQ0KPiANCj4gICAgICAg
-ICBpc3ByaW50KGMpID8gYyA6ICcuJw0KPiANCj4gd2hlcmUgZXZlbiBpZiAnYycgaXMgb2YgdHlw
-ZSAnY2hhcicsIHRoZSBlbmQgcmVzdWx0IGlzICdpbnQnLg0KDQpXaGljaCBpcywgb2YgY291cnNl
-LCBpbnZhbGlkIEMgOi0pDQpUaGUgZG9tYWluIG9mIHRoZSBpc3h4eHgoKSBmdW5jdGlvbnMgaXMg
-J3RoZSB2YWx1ZXMgb2YgY2hhcg0KY2FzdCB0byB1bnNpZ25lZCBpbnQnIGFuZCBFT0YuDQpTbyB0
-eXBpY2FsbHkgWy0xIC4uIDI1NV0uDQpQYXNzaW5nIGEgc2lnbmVkIGNoYXIgdmFyaWFibGUgdG8g
-aXNwcmludCgpIGlzIGxpa2VseSB0bw0KZ2VuZXJhdGUgdW5kZXNpcmVkIGJlaGF2aW91ciAobGlr
-ZSBhIGNvZGUgZHVtcCkuDQoNCkl0IGhhcyB0byBiZSBzYWlkIHRoYXQgSSBkaWQgYSBmdWxsIHRy
-YXdsIHRocm91Z2ggdGhlIE5ldEJTRA0KdXNlcnNwYWNlIGNvZGUgYmFzZSB0byBmaXggYWxsIHRo
-ZSBpc3h4eCgpIGNhbGxzIGFuZCBmYWlsZWQNCnRvIGZpbmQgYSBzaW5nbGUgb25lIHRoYXQgY291
-bGQgYWN0dWFsbHkgcGFzcyBFT0YuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
+> Hi Matthew,
+> 
+> FYI, the error/warning still remains.
 
+FYI, this is still not interesting.
+This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
+space is correspondingly larger.  The frame size warning should be
+increased to allow for this.
+
+> >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
