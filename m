@@ -1,157 +1,220 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684867E
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 02:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660530271; x=1692066271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=15akVnLmqGB2LRmtpYXPewEWH5UBdRqrgqSU2eW3ORg=;
-  b=ZAdHvO8P0sip8v3xCbtE6YwWMmTWchLfGA7aGuRB6wXRGb2QQGZRtXax
-   i2g/sO7AXlgU81kdsg8pFvkMutAb3HoLvg6XGcmgA7apY+FXWY3FBcel/
-   vrwLZqUT6BM68mcd377tTK2ZTObwE6fZdiLLlw1RGGGFUeNcAq/oYoUGX
-   YzUAbu71O8hihUUiz92mlTKYJ5sp/J4cnvyc4PTfrfl1cRv0IS2EmgxPG
-   lZDsY2dq5q34+iFnjXqkVvLTZgx/ErXPKPXPqMryefLntwZHy1GeNKpY4
-   2lwWPbJFgNYFDxAJjn57yDTq7zqp5g3M5GdytyXtd31bWwx7KwGN8LyNQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="290628373"
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="290628373"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 19:24:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="606507615"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Aug 2022 19:24:25 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNPmC-0000iM-1R;
-	Mon, 15 Aug 2022 02:24:24 +0000
-Date: Mon, 15 Aug 2022 10:23:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zach O'Keefe <zokeefe@google.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-api@vger.kernel.org,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	James Houghton <jthoughton@google.com>,
-	Hugh Dickins <hughd@google.com>, Yang Shi <shy828301@gmail.com>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	David Hildenbrand <david@redhat.com>,
-	David Rientjes <rientjes@google.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Peter Xu <peterx@redhat.com>,
-	Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-	SeongJae Park <sj@kernel.org>, Song Liu <songliubraving@fb.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Chris Kennelly <ckennelly@google.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Minchan Kim <minchan@kernel.org>, Patrick Xia <patrickx@google.com>,
-	Zach O'Keefe <zokeefe@google.com>
-Subject: Re: [PATCH mm-unstable 3/9] mm/madvise: add file and shmem support
- to MADV_COLLAPSE
-Message-ID: <202208151032.dIQzLJma-lkp@intel.com>
-References: <20220812012843.3948330-4-zokeefe@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EF4EA8
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 02:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660531306;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/J80gX3hQyvXp0Y1ODW7Ft9DBX5+4G4Qya/h6Zbphls=;
+	b=gewgQ8un5+pAb/CQhbYHTaD0TJUzyaBnSWc+x5wxiudubVOz9vetLrOGWIR4Rq6fQbLXu2
+	eiVKVDXoUexI+r0BDUMXcbxJYCZtF5+Q1OaGceP1EoU7UbTabssWRHZSxWI5qTpWIJxU21
+	gHxUZdPF4AY7TDBshdFBJbsbri+/quU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-aDi1tE0_NpKq-mYp4y_Zsg-1; Sun, 14 Aug 2022 22:41:45 -0400
+X-MC-Unique: aDi1tE0_NpKq-mYp4y_Zsg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2885B1C05AEF
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 02:41:45 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 966461415132;
+	Mon, 15 Aug 2022 02:41:44 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [5d6a0f4d]
+Date: Mon, 15 Aug 2022 02:41:43 -0000
+CC: omosnace@redhat.com, mmalik@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220812012843.3948330-4-zokeefe@google.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <03831.122081422414500377@us-mta-595.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Zach,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-add-file-shmem-support-to-MADV_COLLAPSE/20220812-093122
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r045-20220812 (https://download.01.org/0day-ci/archive/20220815/202208151032.dIQzLJma-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dff08746d6f7b9387b94360b66bd9db644542991
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zach-O-Keefe/mm-add-file-shmem-support-to-MADV_COLLAPSE/20220812-093122
-        git checkout dff08746d6f7b9387b94360b66bd9db644542991
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/fork.c:86:
->> include/linux/khugepaged.h:53:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/fork.c:163:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-               ^
-   kernel/fork.c:163:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-   ^
-   static 
-   kernel/fork.c:852:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:852:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
-   kernel/fork.c:947:12: warning: no previous prototype for function 'arch_dup_task_struct' [-Wmissing-prototypes]
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-              ^
-   kernel/fork.c:947:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-   ^
-   static 
-   3 warnings and 1 error generated.
---
-   In file included from mm/mmap.c:40:
->> include/linux/khugepaged.h:53:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +53 include/linux/khugepaged.h
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50762
 
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  33  
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  34  static inline void khugepaged_exit(struct mm_struct *mm)
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  35  {
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  36  	if (test_bit(MMF_VM_HUGEPAGE, &mm->flags))
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  37  		__khugepaged_exit(mm);
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  38  }
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  39  #else /* CONFIG_TRANSPARENT_HUGEPAGE */
-d2081b2bf8195b Yang Shi          2022-05-19  40  static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  41  {
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  42  }
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  43  static inline void khugepaged_exit(struct mm_struct *mm)
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  44  {
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  45  }
-c791576c60288c Yang Shi          2022-05-19  46  static inline void khugepaged_enter_vma(struct vm_area_struct *vma,
-6d50e60cd2edb5 David Rientjes    2014-10-29  47  					unsigned long vm_flags)
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  48  {
-ba76149f47d8c9 Andrea Arcangeli  2011-01-13  49  }
-dff08746d6f7b9 Zach O'Keefe      2022-08-11  50  static inline int collapse_pte_mapped_thp(struct mm_struct *mm,
-dff08746d6f7b9 Zach O'Keefe      2022-08-11  51  					  unsigned long addr, bool install_pmd)
-27e1f8273113ad Song Liu          2019-09-23  52  {
-27e1f8273113ad Song Liu          2019-09-23 @53  }
-4aab2be0983031 Vijay Balakrishna 2020-10-10  54  
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+         aarch64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4808926
+           s390x - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4808870
+          x86_64 - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4808688
+          x86_64 (debug) - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4808758
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
