@@ -1,33 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B697E
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 17:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F1EC4314A;
-	Mon, 15 Aug 2022 17:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E737E
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 17:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782C0C433D6;
+	Mon, 15 Aug 2022 17:11:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660583152;
-	bh=fsvEKFbRbSDv04fTMLpl6zxZMxNaTblwWd8OSQ8qC6o=;
+	s=k20201202; t=1660583484;
+	bh=bRUgZYlvzDD/pptSlNy1eAs06Vr+nJrjAzYkrLulvyM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n2ca+2bE7miYdY9MQ/iS++z3jXsx6aNkFbyNbvxEzORjz8pdvApM5IJ2+GigFyA+n
-	 5dYRvy6CU9savsde+lTQSZ73SyjvX63CBWxTb/1x5fREwiQx2czuVDJdkf47kSPyn2
-	 JRSUuh2nbSgju64n5k8GDcnZMYCRqgn3AAbv5IMWgzL3rBrU/QeqRkR08b/De1SqyM
-	 Rn7hds6qQoSk4u7VV/OEJj2WTx6EVs4XTdCv/HOWAI/iiu6iXrwdkQq/5vCNUoQ06N
-	 n1uQ8Jz4In3HyNP9kG60RJMVM1GXWZtnin/aQeSxdeUNYVAcRX4w5YJcez23oznEoo
-	 4ZUYfUvKWL9nA==
-Date: Mon, 15 Aug 2022 10:05:50 -0700
+	b=BAuaf25b2NdNXWi04fOoG9yv+2Kq5CV/qoRpBT49uScalWi+dIEbl6WXuReYzV9n3
+	 I2zuTIakQEwypk+02Z+9ewswCdIanzslKzS+RlTbE4thPI1pcdi/eJQt4g6xixQJSe
+	 NWuXxPju+/fXuqAw6Z51IPXM7Lu1+h+C5eDVmLb8uLzo+yFfy7jKdPr0UVKyQBvfl1
+	 VqAYrEh95SXG0ROs2UoysTGN2C5EyeK3x1PpIDMarFH0jhah4W4dNZkbUm6iy/spCN
+	 f8X/L2YRd8sv7W27x3jIlWChIcOKL3cfL7fTBNix9K561L8R4jG+CjuSvwqv0MTQ4/
+	 xfPvqWy1MCkYg==
+Date: Mon, 15 Aug 2022 10:11:22 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, kvm@vger.kernel.org,
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>, kernel test robot <lkp@intel.com>,
 	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [stable:linux-5.15.y 5373/9027] arch/x86/kvm/hyperv.c:2185:5:
- warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
-Message-ID: <Yvp87jlVWg0e376v@dev-arch.thelio-3990X>
-References: <202208142025.NHKErAjq-lkp@intel.com>
- <87zgg6sza8.fsf@redhat.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
+ limit (1024) in 'ntfs_read_folio'
+Message-ID: <Yvp+OnhAAQI5Zvj9@dev-arch.thelio-3990X>
+References: <202208140835.W6F1j6Da-lkp@intel.com>
+ <Yvo8KUKJBlMtoNgI@casper.infradead.org>
+ <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
+ <YvpEkYMatTeNvNZa@casper.infradead.org>
+ <CAK8P3a3=XC4ez-zeGptQb_9NtX5rVfr8Qq80eGaEckzUzjAxzg@mail.gmail.com>
+ <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,87 +38,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zgg6sza8.fsf@redhat.com>
+In-Reply-To: <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
 
-On Mon, Aug 15, 2022 at 10:10:07AM +0200, Vitaly Kuznetsov wrote:
-> kernel test robot <lkp@intel.com> writes:
+On Mon, Aug 15, 2022 at 04:37:09PM +0200, Arnd Bergmann wrote:
+> On Mon, Aug 15, 2022 at 3:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
 > 
-> > Hi Vitaly,
-> >
-> > FYI, the error/warning still remains.
-> >
-> 
-> Yes, this is expected as the patch which is supposed to 'fix' this is
-> still pendind. The latest version is here:
-> 
-> https://lore.kernel.org/kvm/20220803134540.399220-1-vkuznets@redhat.com/
-> 
-> ...
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-> > head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
-> > commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/9027] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-> > config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220814/202208142025.NHKErAjq-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
-> >         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-> >         git fetch --no-tags stable linux-5.15.y
-> >         git checkout cb188e07105f2216f5efbefac95df4b6ce266906
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
-> >    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-> >        ^
-> >    1 warning generated.
-> >
-> >
-> > vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
-> >
-> > 4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
-> > e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-> > e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
-> > 4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> > bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
-> > bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
-> 
-> ... but let me repeat myself: (see my previous reply here:
-> https://lore.kernel.org/kvm/874jyw2v5n.fsf@redhat.com/)
-> The source of the problem seems to be that Clang probably inlines
-> kvm_hv_send_ipi() as on-stack variables in kvm_hv_hypercall() can not
-> exceed 1024 bytes limit (struct kvm_hv_hcall is 144 bytes, the rest is
-> negligible). The patch I mention above will likely fix the issue as it
-> significantly reduces on-stack allocations in kvm_hv_send_ipi() but in
-> this situation it shouldn't be inlined in the first place.
+> > I have no problems with a patch removing support for 256KB pages if that
+> > helps, as Hexagon is the only architecture to support this and there are close
+> > to zero Linux users anway. This would leave only three warnings for 64KB
 
-I seem to recall Nick mentioning at some point that LLVM gives a massive
-inlining discount to functions that are only called once so I guess that
-would explain why kvm_hv_send_ipi() gets inlined into
-kvm_hv_hypercall(). I think there are some inlining cost flags we could
-experiment with to see if we can avoid inlining functions with high
-stack usage into other functions. Additionally, the configurations that
-reported this warning are allmodconfig and allyesconfig, which enable
-KASAN, which is known to use more stack usage with clang:
+Right, I had brought up at least adjusting the dependencies of 256KB
+pages so that it could not be selected with CONFIG_COMPILE_TEST to
+reduce the number of warnings that would appear in randconfigs.
 
-https://github.com/ClangBuiltLinux/linux/issues/39
+https://lore.kernel.org/YoAlvnyjEbYV4T1L@dev-arch.thelio-3990X/
 
-I am hoping we'll get to addressing that during our meet up right before
-Plumbers but we'll see.
+I suspect removing it outright would be fine too.
 
-> (I still hope that I'm wrong finger pointing at the compiler here and
-> someone smart will come to correct me :-)
+> > pages in allmodconfig:
+> >
+> > fs/mpage.c:131:20: error: stack frame size (1128) exceeds limit (1024)
+> > in 'do_mpage_readpage' [-Werror,-Wframe-larger-than]
+> > fs/mpage.c:447:12: error: stack frame size (1264) exceeds limit (1024)
+> > in '__mpage_writepage' [-Werror,-Wframe-larger-than]
+> > fs/ext4/readpage.c:223:5: error: stack frame size (1208) exceeds limit
+> > (1024) in 'ext4_mpage_readpages' [-Werror,-Wframe-larger-than]
+> 
+> I looked into these a bit more and found that these are arrays of sector_t,
+> which could be either 32-bit or 64-bit wide before 72deb455b5ec
+> ("block: remove CONFIG_LBDAF"), but is now always 64-bit, so having
+> an array of 128 of these (65536/512) adds a 1KB to the stack and will
+> cause a warning. It's only slightly over the limit, and there are very few
+> 32-bit systems that allow 64KB pages to trigger that warning.
+> 
+> I see now that ppc440 also supports 256KB pages and has the same
+> problem as hexagon, but also has been broken since the start of the
+> git history in this regard:
+> 
+> fs/mpage.c:638:1: error: the frame size of 4280 bytes is larger than
+> 2048 bytes [-Werror=frame-larger-than=]
+> 
+> I don't know if anyone strongly cares about 256KB pages on
+> ppc44x any more, but given this, I'm fairly sure that they are
+> not using block based file systems. So we could just make
+> CONFIG_BLOCK depend on PAGE_SIZE_LESS_THAN_256KB
+> globally instead of dropping 256KB pages everywhere.
 
-Other folks more familiar with the LLVM side of things might correct me
-:)
+That doesn't sound like an unreasonable solution.
 
 Cheers,
 Nathan
