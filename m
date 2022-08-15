@@ -1,82 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E661102
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 08:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A20C433C1;
-	Mon, 15 Aug 2022 08:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660552027;
-	bh=dBIx+PmLRGvc7cD7WDIJNr/ZMKAAJrp3rOtO9O0twBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fi6obagsa2VeTXjLLIkaCsW5yRfB0dHm61ajgGCipzZARpg3l90eaEMX0cGslJ79l
-	 mJMpU5uT84gMrJt+KuVbtv7eJIV3R5O6xflo/vqXPLfnsLyk6mj/GHZ3rqE1tooSvF
-	 S8DlsKeavkLpv+SOwn8GL6w//e+k89GWaFE2rqL9t2RxBjMlYC4DMBaCVpudjWeuHI
-	 OJPNnVlIgk/RxGSjBU3T6iYsPmcqSNepyJFM0qV/QS+K3D3fCwayRylLlNY4BPN78n
-	 je+A3yJepZ69Bua/u39oqFlNqnlX7MfJyDgyrUnPlswU7Fxp/30fpuOjU4niXEcQCe
-	 wCn0EpJooHG1g==
-Date: Mon, 15 Aug 2022 11:26:51 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
-	ceph-devel@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-Message-ID: <YvoDS+fHAe931JPi@kernel.org>
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
- <20220814225415.n546anzvud6sumux@box.shutemov.name>
- <CAHk-=wiOqbuzy7xzsLrN8LXKGGUUMH109wcKOXx_PV9PkHa=Zw@mail.gmail.com>
- <CAHk-=whSGBmH7zKvD-=qJLkWPSGZo1cM7GyLH=8cuide7+ri_Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FF07E
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 09:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660557047;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=voVt5vtSsg75qvN26In5h7yf2/MdzzrweOG7X0kBJDs=;
+	b=JEHM6SWYvzjs/53spwLHVnFzBRgR4uHzdpd1PB9kVg//uI1f94yGqOl69zme6xlrdF8B/9
+	7cGlGX+tnGtqFEKSMCJ8BXPQZ6BsZQebV9UnKNc5zfkYdS6+w2lC5JXg5VHJkIdnPEtGOM
+	qNEXQS0uqNDwroRJrGVJh9TXIaXzfHY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-K5wnQ38fNt2eai05nmFo_g-1; Mon, 15 Aug 2022 05:50:45 -0400
+X-MC-Unique: K5wnQ38fNt2eai05nmFo_g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71CD01C0515B
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 09:50:45 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5F3AB140EBE3;
+	Mon, 15 Aug 2022 09:50:45 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 5.19.0
+ (mainline.kernel.org-clang) [9f162193]
+Date: Mon, 15 Aug 2022 09:50:45 -0000
+CC: omosnace@redhat.com, mmalik@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whSGBmH7zKvD-=qJLkWPSGZo1cM7GyLH=8cuide7+ri_Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <63014.122081505504501315@us-mta-518.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 14, 2022 at 08:43:09PM -0700, Linus Torvalds wrote:
-> On Sun, Aug 14, 2022 at 3:59 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > If TDX has problems with it, then TDX needs to be fixed. And it's
-> > simple enough - just make sure you have a guard page between any
-> > kernel RAM mapping and whatever odd crazy page.
-> 
-> .. thinking about this more, I thought we had already done that in the
-> memory initialization code - ie make sure that we always leave a gap
-> between any page we mark and any IO memory after it.
-> 
-> But it's possible that I'm confused with the IO window allocation
-> code, which does the reverse (ie actively try to avoid starting
-> allocations close to the end-of-RAM because there is often
-> undocumented stolen memory there)
-> 
-> I'd much rather lose one page from the page allocator at the end of a
-> RAM region than lose the ability to do string word operations.
-> 
-> Of course, it's also entirely possible that even if my memory about us
-> already trying to do that is right (which it might not be), we might
-> also have lost that whole thing over time, since we've had a lot of
-> updates to the bootmem/memblock setup.
+Hi, we tested your kernel and here are the results:
 
-We don't create gaps in the memory initialization code, everything that's
-E820_TYPE_RAM goes in the end to the page allocator with exception of
-partial pages. And this didn't change in the last few years.
- 
->                Linus
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
--- 
-Sincerely yours,
-Mike.
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50769
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+           s390x - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4810060
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
