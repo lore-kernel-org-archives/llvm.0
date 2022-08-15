@@ -1,363 +1,239 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2815386
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 22:27:27 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso6670930wmc.0
-        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 15:27:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0873111E
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 22:50:04 +0000 (UTC)
+Received: by mail-ej1-f65.google.com with SMTP id tl27so15934591ejc.1
+        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 15:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc;
-        bh=Z6YKJuazvnayZjG05FAMXW0Sk5RBa6TVtBjvY8bmPNk=;
-        b=Mop8+KqUL/x90MZJCj9rWk5myRBz8DG7LQvwzDW4S/7G5T0ggjYAWmbKfzM5c9inoZ
-         PwJ4+WNppvw7QWj4O6H/TpD/sfRjxOvaJLcdFPS1HQA11YEsFrv/5B4za8mgh9vCGhsi
-         gM4/jQQFfFluCsAkAkeufm6jPT66G5QOduB2qsZTNSTa1gnevz2LTKGr2qe2AgtHsvT0
-         52iKXZtCbWyWDd4C86GDvdjjeic5MKVaOxwWrx0kDcy5AJrhKm5OKayWemnl1rpnWwqB
-         0rwDXmn12izrRYvIT6K7QMGNGqY422jMEtsT+0Ni4kiZAVswZOf+ptiha0wYKrIIuJI5
-         e5zg==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=I5jxQVs7W6/LmzImzxb0x52U4QygZ1NAuhue2UMu3tY=;
+        b=JFd0OtvLnfxGcRFVTNKpxHzu5uMl/QnIJc8Pym7w/M4kVpGynPr7Wk2rv4BN3QKZrL
+         xvxYbrWkaoQXYzKsZEVbfY/RHWtJwy63KQzIhtVJkZnDeW/NIRzzKr7onG4rJ7L08DLv
+         RtY3bFlGLHbG7PHAR77HZuh+uVH5IlN9qONPQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
-         :x-gm-message-state:from:to:cc;
-        bh=Z6YKJuazvnayZjG05FAMXW0Sk5RBa6TVtBjvY8bmPNk=;
-        b=1p54NP241g6HbkgI8VV2Z0K1xbas5JeeyFmFJpfj1vlYkekzZn6peDBDJkZileWsNI
-         71D+YhwZqU4kupdLqK2Cecmh2aAP2/nTD9/Zu9p7ThbZ4n3NL2RDOL6h1UDtp8wzvZWk
-         GP4Sntn7nzeIwuBCIWvLc6DDf2VaLfeBKPpps9xcxXhFm7/vQ52jrR/2qTfGQCEJftD8
-         5eE2E+us9WME6m4bbk8IGMHs3l023eWXiAXBRgLsHlXYkdWvOP7sbegEHvqzsp05luIR
-         /kSdjCs5aorsH+o4f/JqzHqUvHyw3NfK8mPHU9x/v5PXvVSv131VQCtX9bq4jnd+GyJh
-         BzXw==
-X-Gm-Message-State: ACgBeo3iOEqQCK6jQjO57pb1+kHV/50mRPnsGD0qy6R4mNId7Z9Bc1Ei
-	zwh6M14E8qRug0ONTJl2RQqOQkcMRdelSg==
-X-Google-Smtp-Source: AA6agR4GFJIag0hCzwhqXJlI+Jrp/pQWWFM9PlEuqsRuCIJKRqhHOEbT1MdObkl6qROPFuQ8LJZC+g==
-X-Received: by 2002:a05:600c:4fc4:b0:3a5:c9ed:ca2 with SMTP id o4-20020a05600c4fc400b003a5c9ed0ca2mr11045087wmq.73.1660602445948;
-        Mon, 15 Aug 2022 15:27:25 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05600c3b1800b003a4eea0aa48sm11534570wms.0.2022.08.15.15.27.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 15:27:25 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Mon, 15 Aug 2022 22:27:24 +0000 (UTC)
-To: Andre Vieira <andre.simoesdiasvieira@arm.com>
-Cc: llvm@lists.linux.dev
-Message-ID: <1465164958.6648.1660602445528@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by llvm: [TypePromotion] Search from
- ZExt + PHI
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=I5jxQVs7W6/LmzImzxb0x52U4QygZ1NAuhue2UMu3tY=;
+        b=ddu0+/0wAAn+bJKH9brArjak4+Ljf1AuaTIf0ZS3Z/7SsbZcfx4tu8G7wJNurXgjCU
+         uqKSzQSDW1xD8jfN7DdBu3BFcjibnjQ75tB0X/iGTyEpsc9oyDwXyLK5jypwua+l0N/D
+         1HQJtbjWmCadLhlMbDiz+RNESvD8rHZos1h+E2BHlS9IabR70yGmiUXiqfTKmTQTzc1F
+         z1idpEZ6bLDH9uz3qiiL1VoOPwN1arMJ1m7TspXKxwg1ZYrtqUFAg73+imO3npv8J7Jr
+         QYQrt2BC9ZPIRZQ+grxIzyEyNZ//tQdaFsEV+BiQ2zgE+x6SsWBiC7Zcbu23DpYJMEmQ
+         VgMw==
+X-Gm-Message-State: ACgBeo0ygcq2dQ/dZVSewesgkBpud3E0Rcvw1MsZ+BfTwXUco9mNrfVj
+	Dk5lj/jG68odh/jZb0LuFbsO6tbXP63yWKd+5Ek=
+X-Google-Smtp-Source: AA6agR7hb6Mh7GMn+oP4eY0oPMRKmnJ/uP0ImAuCuFdNm6XmSwpdNA4YjzKnSB8zUNLvjir3RmG5EA==
+X-Received: by 2002:a17:907:7292:b0:733:1965:3176 with SMTP id dt18-20020a170907729200b0073319653176mr11403387ejc.318.1660603802514;
+        Mon, 15 Aug 2022 15:50:02 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id n16-20020aa7d050000000b0043a87e6196esm7397747edo.6.2022.08.15.15.50.01
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 15:50:01 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso4564066wmb.2
+        for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 15:50:01 -0700 (PDT)
+X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
+ s25-20020a7bc399000000b003a5f3fb85e0mr4429844wmj.38.1660603801029; Mon, 15
+ Aug 2022 15:50:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_6647_1300915009.1660602444671"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-arm-lts-defconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net> <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
+ <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+In-Reply-To: <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 15 Aug 2022 15:49:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+Message-ID: <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Jeff Layton <jlayton@kernel.org>, 
+	Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: multipart/mixed; boundary="000000000000ac874805e64f7363"
 
-------=_Part_6647_1300915009.1660602444671
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+--000000000000ac874805e64f7363
+Content-Type: text/plain; charset="UTF-8"
 
-[TCWG CI] Regression caused by llvm: [TypePromotion] Search from ZExt + PHI:
-commit 164067918725d1ee8875e38213b6aee9be13383e
-Author: Andre Vieira <andre.simoesdiasvieira@arm.com>
+On Mon, Aug 15, 2022 at 1:09 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> I'm not at all suggesting we do this; but it might be
+> insn_get_addr_ref() does what is needed.
 
-    [TypePromotion] Search from ZExt + PHI
+.. you didn't suggest it at all, but I started doing it anyway.
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-6329
-# First few build errors in logs:
-# 00:12:33 ld.lld: error: undefined symbol: __aeabi_uldivmod
-# 00:12:33 make: *** [Makefile:1208: vmlinux] Error 1
+It's a bit more complicated, and the fixup certainly isn't that
+trivial thing any more, but you were right, it's not *that*
+complicated, and it does allow us to use arbitrary 'mov' instructions.
 
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-7082
-# linux build successful:
-all
-# linux boot successful:
-boot
+And while it now has more added lines than deletions, and the diffstat now says
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+ 3 files changed, 60 insertions(+), 43 deletions(-)
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-master-arm-lts-defconfig
+most of the added lines are still that block comment, and some *very*
+anal but trivial sanity checks of the instruction decode.
 
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/build-164067918725d1ee8875e38213b6aee9be13383e/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/build-05fc5037cd6c3aad7f2985deaf5a486775dafcec/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/
+So I could have made it smaller than it used to be by just not doing
+any of those verifications, and maybe I went a bit overboard, but I
+think this is such a rare case that it's better to be ridiculously
+careful than to try to minimize the number of lines.
 
-Reproduce builds:
-<cut>
-mkdir investigate-llvm-164067918725d1ee8875e38213b6aee9be13383e
-cd investigate-llvm-164067918725d1ee8875e38213b6aee9be13383e
+So it may be a few more lines, but I can argue that it is still at
+least conceptually simpler than the conditional asm goto with outputs
+code was.
 
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
+And yeah, it makes some of the code generation places marginally better.
 
-# Fetch manifests and test.sh script
-mkdir -p artifacts/build-baseline artifacts/build-parameters
-curl -o artifacts/build-baseline/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/build-baseline/manifest.sh --fail
-curl -o artifacts/build-parameters/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/build-parameters/manifest.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-lts-defconfig/7/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
+So since I was tricked into writing this patch, and it's even tested
+(the second attachment has a truly stupid patch with my test-case), I
+think it's worth doing.
 
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts/build-baseline
+Comments? I left your "Acked-by" from the previous version of this
+thing, so holler now if you think this got too ugly in the meantime..
 
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+               Linus
 
-cd llvm
+--000000000000ac874805e64f7363
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-x86-simplify-load_unaligned_zeropad-implementation.patch"
+Content-Disposition: attachment; 
+	filename="0001-x86-simplify-load_unaligned_zeropad-implementation.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l6vclm2r0>
+X-Attachment-Id: f_l6vclm2r0
 
-# Reproduce first_bad build
-git checkout --detach 164067918725d1ee8875e38213b6aee9be13383e
-../artifacts/test.sh
+RnJvbSAzMTBlZGZjN2I2YjBjOWE3OTIxZjExYzA1MTIzNGM3OTM4NTEzMGVkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
+dGlvbi5vcmc+CkRhdGU6IFN1biwgMTQgQXVnIDIwMjIgMTQ6MTY6MTMgLTA3MDAKU3ViamVjdDog
+W1BBVENIXSB4ODY6IHNpbXBsaWZ5IGxvYWRfdW5hbGlnbmVkX3plcm9wYWQoKSBpbXBsZW1lbnRh
+dGlvbgoKVGhlIGV4Y2VwdGlvbiBmb3IgdGhlICJ1bmFsaWduZWQgYWNjZXNzIGF0IHRoZSBlbmQg
+b2YgdGhlIHBhZ2UsIG5leHQKcGFnZSBub3QgbWFwcGVkIiBuZXZlciBoYXBwZW5zLCBidXQgdGhl
+IGZpeHVwIGNvZGUgZW5kcyB1cCBjYXVzaW5nCnRyb3VibGUgZm9yIGNvbXBpbGVycyB0byBvcHRp
+bWl6ZSB3ZWxsLgoKY2xhbmcgaW4gcGFydGljdWxhciBlbmRzIHVwIHNlZWluZyBpdCBiZWluZyBp
+biB0aGUgbWlkZGxlIG9mIGEgbG9vcCwgYW5kCnRyaWVzIGRlc3BlcmF0ZWx5IHRvIG9wdGltaXpl
+IHRoZSBleGNlcHRpb24gZml4dXAgY29kZSB0aGF0IGlzIG5ldmVyCnJlYWxseSByZWFjaGVkLgoK
+VGhlIHNpbXBsZSBzb2x1dGlvbiBpcyB0byBqdXN0IG1vdmUgYWxsIHRoZSBmaXh1cHMgaW50byB0
+aGUgZXhjZXB0aW9uCmhhbmRsZXIgaXRzZWxmLCB3aGljaCBtb3ZlcyBpdCBhbGwgb3V0IG9mIHRo
+ZSBob3QgY2FzZSBjb2RlLCBhbmQgbWVhbnMKdGhhdCB0aGUgY29tcGlsZXIgbmV2ZXIgc2VlcyBp
+dCBvciBuZWVkcyB0byB3b3JyeSBhYm91dCBpdC4KCkFja2VkLWJ5OiBQZXRlciBaaWpsc3RyYSA8
+cGV0ZXJ6QGluZnJhZGVhZC5vcmc+ClNpZ25lZC1vZmYtYnk6IExpbnVzIFRvcnZhbGRzIDx0b3J2
+YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz4KLS0tCiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9leHRh
+YmxlX2ZpeHVwX3R5cGVzLmggfCAgMiArCiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS93b3JkLWF0LWEt
+dGltZS5oICAgICAgfCA0NiArKy0tLS0tLS0tLS0tLS0tLS0KIGFyY2gveDg2L21tL2V4dGFibGUu
+YyAgICAgICAgICAgICAgICAgICAgICB8IDU1ICsrKysrKysrKysrKysrKysrKysrKysKIDMgZmls
+ZXMgY2hhbmdlZCwgNjAgaW5zZXJ0aW9ucygrKSwgNDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
+IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vZXh0YWJsZV9maXh1cF90eXBlcy5oIGIvYXJjaC94ODYv
+aW5jbHVkZS9hc20vZXh0YWJsZV9maXh1cF90eXBlcy5oCmluZGV4IDUwMzYyMjYyNzQwMC4uYjUz
+ZjE5MTk3MTBiIDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9leHRhYmxlX2ZpeHVw
+X3R5cGVzLmgKKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vZXh0YWJsZV9maXh1cF90eXBlcy5o
+CkBAIC02NCw0ICs2NCw2IEBACiAjZGVmaW5lCUVYX1RZUEVfVUNPUFlfTEVONAkJKEVYX1RZUEVf
+VUNPUFlfTEVOIHwgRVhfREFUQV9JTU0oNCkpCiAjZGVmaW5lCUVYX1RZUEVfVUNPUFlfTEVOOAkJ
+KEVYX1RZUEVfVUNPUFlfTEVOIHwgRVhfREFUQV9JTU0oOCkpCiAKKyNkZWZpbmUgRVhfVFlQRV9a
+RVJPUEFECQkJMjAgLyogbG9hZCBheCBmcm9tIGR4IHplcm8tcGFkZGVkICovCisKICNlbmRpZgpk
+aWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vd29yZC1hdC1hLXRpbWUuaCBiL2FyY2gv
+eDg2L2luY2x1ZGUvYXNtL3dvcmQtYXQtYS10aW1lLmgKaW5kZXggODMzOGIwNDMyYjUwLi40NmI0
+ZjFmN2YzNTQgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL3dvcmQtYXQtYS10aW1l
+LmgKKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vd29yZC1hdC1hLXRpbWUuaApAQCAtNzcsNTgg
+Kzc3LDE4IEBAIHN0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZyBmaW5kX3plcm8odW5zaWduZWQg
+bG9uZyBtYXNrKQogICogYW5kIHRoZSBuZXh0IHBhZ2Ugbm90IGJlaW5nIG1hcHBlZCwgdGFrZSB0
+aGUgZXhjZXB0aW9uIGFuZAogICogcmV0dXJuIHplcm9lcyBpbiB0aGUgbm9uLWV4aXN0aW5nIHBh
+cnQuCiAgKi8KLSNpZmRlZiBDT05GSUdfQ0NfSEFTX0FTTV9HT1RPX09VVFBVVAotCiBzdGF0aWMg
+aW5saW5lIHVuc2lnbmVkIGxvbmcgbG9hZF91bmFsaWduZWRfemVyb3BhZChjb25zdCB2b2lkICph
+ZGRyKQogewotCXVuc2lnbmVkIGxvbmcgb2Zmc2V0LCBkYXRhOwogCXVuc2lnbmVkIGxvbmcgcmV0
+OwogCi0JYXNtX3ZvbGF0aWxlX2dvdG8oCisJYXNtIHZvbGF0aWxlKAogCQkiMToJbW92ICVbbWVt
+XSwgJVtyZXRdXG4iCi0KLQkJX0FTTV9FWFRBQkxFKDFiLCAlbFtkb19leGNlcHRpb25dKQotCi0J
+CTogW3JldF0gIj1yIiAocmV0KQotCQk6IFttZW1dICJtIiAoKih1bnNpZ25lZCBsb25nICopYWRk
+cikKLQkJOiA6IGRvX2V4Y2VwdGlvbik7Ci0KLQlyZXR1cm4gcmV0OwotCi1kb19leGNlcHRpb246
+Ci0Jb2Zmc2V0ID0gKHVuc2lnbmVkIGxvbmcpYWRkciAmIChzaXplb2YobG9uZykgLSAxKTsKLQlh
+ZGRyID0gKHZvaWQgKikoKHVuc2lnbmVkIGxvbmcpYWRkciAmIH4oc2l6ZW9mKGxvbmcpIC0gMSkp
+OwotCWRhdGEgPSAqKHVuc2lnbmVkIGxvbmcgKilhZGRyOwotCXJldCA9IGRhdGEgPj4gb2Zmc2V0
+ICogODsKLQotCXJldHVybiByZXQ7Ci19Ci0KLSNlbHNlIC8qICFDT05GSUdfQ0NfSEFTX0FTTV9H
+T1RPX09VVFBVVCAqLwotCi1zdGF0aWMgaW5saW5lIHVuc2lnbmVkIGxvbmcgbG9hZF91bmFsaWdu
+ZWRfemVyb3BhZChjb25zdCB2b2lkICphZGRyKQotewotCXVuc2lnbmVkIGxvbmcgb2Zmc2V0LCBk
+YXRhOwotCXVuc2lnbmVkIGxvbmcgcmV0LCBlcnIgPSAwOwotCi0JYXNtKAkiMToJbW92ICVbbWVt
+XSwgJVtyZXRdXG4iCiAJCSIyOlxuIgotCi0JCV9BU01fRVhUQUJMRV9GQVVMVCgxYiwgMmIpCi0K
+LQkJOiBbcmV0XSAiPSZyIiAocmV0KSwgIithIiAoZXJyKQorCQlfQVNNX0VYVEFCTEVfVFlQRSgx
+YiwgMmIsIEVYX1RZUEVfWkVST1BBRCkKKwkJOiBbcmV0XSAiPXIiIChyZXQpCiAJCTogW21lbV0g
+Im0iICgqKHVuc2lnbmVkIGxvbmcgKilhZGRyKSk7CiAKLQlpZiAodW5saWtlbHkoZXJyKSkgewot
+CQlvZmZzZXQgPSAodW5zaWduZWQgbG9uZylhZGRyICYgKHNpemVvZihsb25nKSAtIDEpOwotCQlh
+ZGRyID0gKHZvaWQgKikoKHVuc2lnbmVkIGxvbmcpYWRkciAmIH4oc2l6ZW9mKGxvbmcpIC0gMSkp
+OwotCQlkYXRhID0gKih1bnNpZ25lZCBsb25nICopYWRkcjsKLQkJcmV0ID0gZGF0YSA+PiBvZmZz
+ZXQgKiA4OwotCX0KLQogCXJldHVybiByZXQ7CiB9CiAKLSNlbmRpZiAvKiBDT05GSUdfQ0NfSEFT
+X0FTTV9HT1RPX09VVFBVVCAqLwotCiAjZW5kaWYgLyogX0FTTV9XT1JEX0FUX0FfVElNRV9IICov
+CmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9tbS9leHRhYmxlLmMgYi9hcmNoL3g4Ni9tbS9leHRhYmxl
+LmMKaW5kZXggMzMxMzEwYzI5MzQ5Li42MDgxNGUxMTBhNTQgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2
+L21tL2V4dGFibGUuYworKysgYi9hcmNoL3g4Ni9tbS9leHRhYmxlLmMKQEAgLTQxLDYgKzQxLDU5
+IEBAIHN0YXRpYyBib29sIGV4X2hhbmRsZXJfZGVmYXVsdChjb25zdCBzdHJ1Y3QgZXhjZXB0aW9u
+X3RhYmxlX2VudHJ5ICplLAogCXJldHVybiB0cnVlOwogfQogCisvKgorICogVGhpcyBpcyB0aGUg
+KnZlcnkqIHJhcmUgY2FzZSB3aGVyZSB3ZSBkbyBhICJsb2FkX3VuYWxpZ25lZF96ZXJvcGFkKCki
+CisgKiBhbmQgaXQncyBhIHBhZ2UgY3Jvc3NlciBpbnRvIGEgbm9uLWV4aXN0ZW50IHBhZ2UuCisg
+KgorICogVGhpcyBoYXBwZW5zIHdoZW4gd2Ugb3B0aW1pc3RpY2FsbHkgbG9hZCBhIHBhdGhuYW1l
+IGEgd29yZC1hdC1hLXRpbWUKKyAqIGFuZCB0aGUgbmFtZSBpcyBsZXNzIHRoYW4gdGhlIGZ1bGwg
+d29yZCBhbmQgdGhlICBuZXh0IHBhZ2UgaXMgbm90CisgKiBtYXBwZWQuIFR5cGljYWxseSB0aGF0
+IG9ubHkgaGFwcGVucyBmb3IgQ09ORklHX0RFQlVHX1BBR0VBTExPQy4KKyAqCisgKiBOT1RFISBU
+aGUgZmF1bHRpbmcgYWRkcmVzcyBpcyBhbHdheXMgYSAnbW92IG1lbSxyZWcnIHR5cGUgaW5zdHJ1
+Y3Rpb24KKyAqIG9mIHNpemUgJ2xvbmcnLCBhbmQgdGhlIGV4Y2VwdGlvbiBmaXh1cCBtdXN0IGFs
+d2F5cyBwb2ludCB0byByaWdodAorICogYWZ0ZXIgdGhlIGluc3RydWN0aW9uLgorICovCitzdGF0
+aWMgYm9vbCBleF9oYW5kbGVyX3plcm9wYWQoY29uc3Qgc3RydWN0IGV4Y2VwdGlvbl90YWJsZV9l
+bnRyeSAqZSwKKwkJCSAgICAgICBzdHJ1Y3QgcHRfcmVncyAqcmVncywKKwkJCSAgICAgICB1bnNp
+Z25lZCBsb25nIGZhdWx0X2FkZHIpCit7CisJc3RydWN0IGluc24gaW5zbjsKKwljb25zdCB1bnNp
+Z25lZCBsb25nIG1hc2sgPSBzaXplb2YobG9uZykgLSAxOworCXVuc2lnbmVkIGxvbmcgb2Zmc2V0
+LCBhZGRyLCBuZXh0X2lwLCBsZW47CisJdW5zaWduZWQgbG9uZyAqcmVnOworCisJbmV4dF9pcCA9
+IGV4X2ZpeHVwX2FkZHIoZSk7CisJbGVuID0gbmV4dF9pcCAtIHJlZ3MtPmlwOworCWlmIChsZW4g
+PiBNQVhfSU5TTl9TSVpFKQorCQlyZXR1cm4gZmFsc2U7CisKKwlpZiAoaW5zbl9kZWNvZGUoJmlu
+c24sICh2b2lkICopIHJlZ3MtPmlwLCBsZW4sIElOU05fTU9ERV9LRVJOKSkKKwkJcmV0dXJuIGZh
+bHNlOworCWlmIChpbnNuLmxlbmd0aCAhPSBsZW4pCisJCXJldHVybiBmYWxzZTsKKworCWlmIChp
+bnNuLm9wY29kZS5ieXRlc1swXSAhPSAweDhiKQorCQlyZXR1cm4gZmFsc2U7CisJaWYgKGluc24u
+b3BuZF9ieXRlcyAhPSBzaXplb2YobG9uZykpCisJCXJldHVybiBmYWxzZTsKKworCWFkZHIgPSAo
+dW5zaWduZWQgbG9uZykgaW5zbl9nZXRfYWRkcl9yZWYoJmluc24sIHJlZ3MpOworCWlmIChhZGRy
+ID09IH4wdWwpCisJCXJldHVybiBmYWxzZTsKKworCW9mZnNldCA9IGFkZHIgJiBtYXNrOworCWFk
+ZHIgPSBhZGRyICYgfm1hc2s7CisJaWYgKGZhdWx0X2FkZHIgIT0gYWRkciArIHNpemVvZihsb25n
+KSkKKwkJcmV0dXJuIGZhbHNlOworCisJcmVnID0gaW5zbl9nZXRfbW9kcm1fcmVnX3B0cigmaW5z
+biwgcmVncyk7CisJaWYgKCFyZWcpCisJCXJldHVybiBmYWxzZTsKKworCSpyZWcgPSAqKHVuc2ln
+bmVkIGxvbmcgKilhZGRyID4+IChvZmZzZXQgKiA4KTsKKwlyZXR1cm4gZXhfaGFuZGxlcl9kZWZh
+dWx0KGUsIHJlZ3MpOworfQorCiBzdGF0aWMgYm9vbCBleF9oYW5kbGVyX2ZhdWx0KGNvbnN0IHN0
+cnVjdCBleGNlcHRpb25fdGFibGVfZW50cnkgKmZpeHVwLAogCQkJICAgICBzdHJ1Y3QgcHRfcmVn
+cyAqcmVncywgaW50IHRyYXBucikKIHsKQEAgLTIxNyw2ICsyNzAsOCBAQCBpbnQgZml4dXBfZXhj
+ZXB0aW9uKHN0cnVjdCBwdF9yZWdzICpyZWdzLCBpbnQgdHJhcG5yLCB1bnNpZ25lZCBsb25nIGVy
+cm9yX2NvZGUsCiAJCXJldHVybiBleF9oYW5kbGVyX3NneChlLCByZWdzLCB0cmFwbnIpOwogCWNh
+c2UgRVhfVFlQRV9VQ09QWV9MRU46CiAJCXJldHVybiBleF9oYW5kbGVyX3Vjb3B5X2xlbihlLCBy
+ZWdzLCB0cmFwbnIsIHJlZywgaW1tKTsKKwljYXNlIEVYX1RZUEVfWkVST1BBRDoKKwkJcmV0dXJu
+IGV4X2hhbmRsZXJfemVyb3BhZChlLCByZWdzLCBmYXVsdF9hZGRyKTsKIAl9CiAJQlVHKCk7CiB9
+Ci0tIAoyLjM3LjEuMjg5Lmc0NWFhMWU1YzcyLmRpcnR5Cgo=
+--000000000000ac874805e64f7363
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l6vclt1p1>
+X-Attachment-Id: f_l6vclt1p1
 
-# Reproduce last_good build
-git checkout --detach 05fc5037cd6c3aad7f2985deaf5a486775dafcec
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 164067918725d1ee8875e38213b6aee9be13383e
-Author: Andre Vieira <andre.simoesdiasvieira@arm.com>
-Date:   Thu Aug 11 09:47:53 2022 +0100
-
-    [TypePromotion] Search from ZExt + PHI
-    
-    Expand TypePromotion pass to try to promote PHI-nodes in loops that are the
-    operand of a ZExt, using the ZExt's result type to determine the Promote Width.
-    
-    Differential Revision: https://reviews.llvm.org/D111237
----
- llvm/lib/CodeGen/TypePromotion.cpp                 | 52 ++++++++++++++--------
- llvm/test/CodeGen/AArch64/O3-pipeline.ll           |  2 +-
- .../TypePromotion/AArch64/phi-zext-gep2.ll         | 44 ++++++++++++++++++
- llvm/test/Transforms/TypePromotion/ARM/casts.ll    | 14 +++---
- 4 files changed, 87 insertions(+), 25 deletions(-)
-
-diff --git a/llvm/lib/CodeGen/TypePromotion.cpp b/llvm/lib/CodeGen/TypePromotion.cpp
-index 2d7dd4605344..a9f20bdaf5bd 100644
---- a/llvm/lib/CodeGen/TypePromotion.cpp
-+++ b/llvm/lib/CodeGen/TypePromotion.cpp
-@@ -17,6 +17,7 @@
- 
- #include "llvm/ADT/SetVector.h"
- #include "llvm/ADT/StringRef.h"
-+#include "llvm/Analysis/LoopInfo.h"
- #include "llvm/Analysis/TargetTransformInfo.h"
- #include "llvm/CodeGen/Passes.h"
- #include "llvm/CodeGen/TargetLowering.h"
-@@ -175,9 +176,11 @@ public:
-   TypePromotion() : FunctionPass(ID) {}
- 
-   void getAnalysisUsage(AnalysisUsage &AU) const override {
-+    AU.addRequired<LoopInfoWrapperPass>();
-     AU.addRequired<TargetTransformInfoWrapperPass>();
-     AU.addRequired<TargetPassConfig>();
-     AU.setPreservesCFG();
-+    AU.addPreserved<LoopInfoWrapperPass>();
-   }
- 
-   StringRef getPassName() const override { return PASS_NAME; }
-@@ -872,7 +875,8 @@ bool TypePromotion::TryToPromote(Value *V, unsigned PromotedWidth) {
- 
-   // DAG optimizations should be able to handle these cases better, especially
-   // for function arguments.
--  if (ToPromote < 2 || (Blocks.size() == 1 && (NonFreeArgs > SafeWrap.size())))
-+  if (!isa<PHINode>(V) && (ToPromote < 2 || (Blocks.size() == 1 &&
-+                                             (NonFreeArgs > SafeWrap.size()))))
-     return false;
- 
-   IRPromoter Promoter(*Ctx, PromotedWidth, CurrentVisited, Sources, Sinks,
-@@ -901,6 +905,7 @@ bool TypePromotion::runOnFunction(Function &F) {
-   const TargetLowering *TLI = SubtargetInfo->getTargetLowering();
-   const TargetTransformInfo &TII =
-       getAnalysis<TargetTransformInfoWrapperPass>().getTTI(F);
-+  const LoopInfo &LI = getAnalysis<LoopInfoWrapperPass>().getLoopInfo();
-   RegisterBitWidth =
-       TII.getRegisterBitWidth(TargetTransformInfo::RGK_Scalar).getFixedSize();
-   Ctx = &F.getParent()->getContext();
-@@ -929,28 +934,39 @@ bool TypePromotion::runOnFunction(Function &F) {
-     return PromotedVT.getFixedSizeInBits();
-   };
- 
--  // Search up from icmps to try to promote their operands.
-+  auto BBIsInLoop = [&](BasicBlock *BB) -> bool {
-+    for (auto *L : LI)
-+      if (L->contains(BB))
-+        return true;
-+    return false;
-+  };
-+
-   for (BasicBlock &BB : F) {
-     for (Instruction &I : BB) {
-       if (AllVisited.count(&I))
-         continue;
- 
--      if (!isa<ICmpInst>(&I))
--        continue;
--
--      auto *ICmp = cast<ICmpInst>(&I);
--
--      // Skip signed
--      if (ICmp->isSigned())
--        continue;
--
--      LLVM_DEBUG(dbgs() << "IR Promotion: Searching from: " << *ICmp << "\n");
--
--      for (auto &Op : ICmp->operands()) {
--        if (auto *OpI = dyn_cast<Instruction>(Op)) {
--          if (auto PromotedWidth = GetPromoteWidth(OpI)) {
--            MadeChange |= TryToPromote(OpI, PromotedWidth);
--            break;
-+      if (isa<ZExtInst>(&I) && isa<PHINode>(I.getOperand(0)) &&
-+          BBIsInLoop(&BB)) {
-+        LLVM_DEBUG(dbgs() << "IR Promotion: Searching from: " << I.getOperand(0)
-+                          << "\n");
-+        EVT ZExtVT = TLI->getValueType(DL, I.getType());
-+        Instruction *Phi = static_cast<Instruction *>(I.getOperand(0));
-+        MadeChange |= TryToPromote(Phi, ZExtVT.getFixedSizeInBits());
-+      } else if (auto *ICmp = dyn_cast<ICmpInst>(&I)) {
-+        // Search up from icmps to try to promote their operands.
-+        // Skip signed or pointer compares
-+        if (ICmp->isSigned())
-+          continue;
-+
-+        LLVM_DEBUG(dbgs() << "IR Promotion: Searching from: " << *ICmp << "\n");
-+
-+        for (auto &Op : ICmp->operands()) {
-+          if (auto *OpI = dyn_cast<Instruction>(Op)) {
-+            if (auto PromotedWidth = GetPromoteWidth(OpI)) {
-+              MadeChange |= TryToPromote(OpI, PromotedWidth);
-+              break;
-+            }
-           }
-         }
-       }
-diff --git a/llvm/test/CodeGen/AArch64/O3-pipeline.ll b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-index 713c70fbf8bf..514627bbb320 100644
---- a/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-+++ b/llvm/test/CodeGen/AArch64/O3-pipeline.ll
-@@ -90,8 +90,8 @@
- ; CHECK-NEXT:       Interleaved Load Combine Pass
- ; CHECK-NEXT:       Dominator Tree Construction
- ; CHECK-NEXT:       Interleaved Access Pass
--; CHECK-NEXT:       Type Promotion
- ; CHECK-NEXT:       Natural Loop Information
-+; CHECK-NEXT:       Type Promotion
- ; CHECK-NEXT:       CodeGen Prepare
- ; CHECK-NEXT:       Dominator Tree Construction
- ; CHECK-NEXT:       Exception handling preparation
-diff --git a/llvm/test/Transforms/TypePromotion/AArch64/phi-zext-gep2.ll b/llvm/test/Transforms/TypePromotion/AArch64/phi-zext-gep2.ll
-new file mode 100644
-index 000000000000..4326580684ed
---- /dev/null
-+++ b/llvm/test/Transforms/TypePromotion/AArch64/phi-zext-gep2.ll
-@@ -0,0 +1,44 @@
-+; NOTE: Assertions have been autogenerated by utils/update_test_checks.py
-+; RUN: opt -mtriple=aarch64 -type-promotion -verify -S %s -o - | FileCheck %s
-+target datalayout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
-+
-+; Function Attrs: mustprogress nofree nosync nounwind uwtable
-+define dso_local void @foo(ptr noundef %ptr0, ptr nocapture noundef readonly %ptr1, ptr nocapture noundef %dest) local_unnamed_addr {
-+; CHECK-LABEL: @foo(
-+; CHECK-NEXT:  entry:
-+; CHECK-NEXT:    [[TMP0:%.*]] = load i8, ptr [[PTR0:%.*]], align 1
-+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[TMP0]] to i64
-+; CHECK-NEXT:    br label [[DO_BODY:%.*]]
-+; CHECK:       do.body:
-+; CHECK-NEXT:    [[TO_PROMOTE:%.*]] = phi i64 [ [[TMP1]], [[ENTRY:%.*]] ], [ [[TMP4:%.*]], [[DO_BODY]] ]
-+; CHECK-NEXT:    [[ARRAYIDX1:%.*]] = getelementptr inbounds i8, ptr [[PTR1:%.*]], i64 [[TO_PROMOTE]]
-+; CHECK-NEXT:    [[TMP2:%.*]] = load i8, ptr [[ARRAYIDX1]], align 2
-+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[TMP2]] to i64
-+; CHECK-NEXT:    [[COND_IN_I:%.*]] = getelementptr inbounds i8, ptr [[PTR1]], i64 [[TMP3]]
-+; CHECK-NEXT:    [[COND_I:%.*]] = load i8, ptr [[COND_IN_I]], align 1
-+; CHECK-NEXT:    [[TMP4]] = zext i8 [[COND_I]] to i64
-+; CHECK-NEXT:    store i8 [[TMP2]], ptr [[DEST:%.*]], align 1
-+; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i64 [[TMP4]], 0
-+; CHECK-NEXT:    br i1 [[CMP]], label [[DO_BODY]], label [[DO_END:%.*]]
-+; CHECK:       do.end:
-+; CHECK-NEXT:    ret void
-+;
-+entry:
-+  %0 = load i8, ptr %ptr0, align 1
-+  br label %do.body
-+
-+do.body:                                          ; preds = %do.body, %entry
-+  %to_promote = phi i8 [ %0, %entry ], [ %cond.i, %do.body ]
-+  %ext0 = zext i8 %to_promote to i64
-+  %arrayidx1 = getelementptr inbounds i8, ptr %ptr1, i64 %ext0
-+  %1 = load i8, ptr %arrayidx1, align 2
-+  %2 = zext i8 %1 to i64
-+  %cond.in.i = getelementptr inbounds i8, ptr %ptr1, i64 %2
-+  %cond.i = load i8, ptr %cond.in.i, align 1
-+  store i8 %1, ptr %dest, align 1
-+  %cmp = icmp ult i8 %cond.i, 0
-+  br i1 %cmp, label %do.body, label %do.end
-+
-+do.end:                                           ; preds = %do.body
-+  ret void
-+}
-diff --git a/llvm/test/Transforms/TypePromotion/ARM/casts.ll b/llvm/test/Transforms/TypePromotion/ARM/casts.ll
-index e7b340afd746..3e6159ef032e 100644
---- a/llvm/test/Transforms/TypePromotion/ARM/casts.ll
-+++ b/llvm/test/Transforms/TypePromotion/ARM/casts.ll
-@@ -57,24 +57,26 @@ define i8 @icmp_i32_zext(i8* %ptr) {
- ; CHECK-NEXT:  entry:
- ; CHECK-NEXT:    [[GEP:%.*]] = getelementptr inbounds i8, i8* [[PTR:%.*]], i32 0
- ; CHECK-NEXT:    [[TMP0:%.*]] = load i8, i8* [[GEP]], align 1
--; CHECK-NEXT:    [[TMP1:%.*]] = sub nuw nsw i8 [[TMP0]], 1
-+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[TMP0]] to i32
-+; CHECK-NEXT:    [[TMP2:%.*]] = sub nuw nsw i32 [[TMP1]], 1
- ; CHECK-NEXT:    [[CONV44:%.*]] = zext i8 [[TMP0]] to i32
- ; CHECK-NEXT:    br label [[PREHEADER:%.*]]
- ; CHECK:       preheader:
- ; CHECK-NEXT:    br label [[BODY:%.*]]
- ; CHECK:       body:
--; CHECK-NEXT:    [[TMP2:%.*]] = phi i8 [ [[TMP1]], [[PREHEADER]] ], [ [[TMP3:%.*]], [[IF_END:%.*]] ]
-+; CHECK-NEXT:    [[TMP3:%.*]] = phi i32 [ [[TMP2]], [[PREHEADER]] ], [ [[TMP5:%.*]], [[IF_END:%.*]] ]
- ; CHECK-NEXT:    [[SI_0274:%.*]] = phi i32 [ [[CONV44]], [[PREHEADER]] ], [ [[INC:%.*]], [[IF_END]] ]
--; CHECK-NEXT:    [[CONV51266:%.*]] = zext i8 [[TMP2]] to i32
--; CHECK-NEXT:    [[CMP52267:%.*]] = icmp eq i32 [[SI_0274]], [[CONV51266]]
-+; CHECK-NEXT:    [[CMP52267:%.*]] = icmp eq i32 [[SI_0274]], [[TMP3]]
- ; CHECK-NEXT:    br i1 [[CMP52267]], label [[IF_END]], label [[EXIT:%.*]]
- ; CHECK:       if.end:
- ; CHECK-NEXT:    [[INC]] = add i32 [[SI_0274]], 1
- ; CHECK-NEXT:    [[GEP1:%.*]] = getelementptr inbounds i8, i8* [[PTR]], i32 [[INC]]
--; CHECK-NEXT:    [[TMP3]] = load i8, i8* [[GEP1]], align 1
-+; CHECK-NEXT:    [[TMP4:%.*]] = load i8, i8* [[GEP1]], align 1
-+; CHECK-NEXT:    [[TMP5]] = zext i8 [[TMP4]] to i32
- ; CHECK-NEXT:    br label [[BODY]]
- ; CHECK:       exit:
--; CHECK-NEXT:    ret i8 [[TMP2]]
-+; CHECK-NEXT:    [[TMP6:%.*]] = trunc i32 [[TMP3]] to i8
-+; CHECK-NEXT:    ret i8 [[TMP6]]
- ;
- entry:
-   %gep = getelementptr inbounds i8, i8* %ptr, i32 0
-</cut>
-------=_Part_6647_1300915009.1660602444671--
+IGluaXQvbWFpbi5jIHwgMTMgKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDEzIGluc2Vy
+dGlvbnMoKykKCmRpZmYgLS1naXQgYS9pbml0L21haW4uYyBiL2luaXQvbWFpbi5jCmluZGV4IDkx
+NjQyYTRlNjliZS4uYzFlNjMyNTgyNDE5IDEwMDY0NAotLS0gYS9pbml0L21haW4uYworKysgYi9p
+bml0L21haW4uYwpAQCAtMTA4LDYgKzEwOCw4IEBACiAjaW5jbHVkZSA8YXNtL3NlY3Rpb25zLmg+
+CiAjaW5jbHVkZSA8YXNtL2NhY2hlZmx1c2guaD4KIAorI2luY2x1ZGUgPGFzbS93b3JkLWF0LWEt
+dGltZS5oPgorCiAjZGVmaW5lIENSRUFURV9UUkFDRV9QT0lOVFMKICNpbmNsdWRlIDx0cmFjZS9l
+dmVudHMvaW5pdGNhbGwuaD4KIApAQCAtMTQ4OCw2ICsxNDkwLDE1IEBAIHZvaWQgX193ZWFrIGZy
+ZWVfaW5pdG1lbSh2b2lkKQogCWZyZWVfaW5pdG1lbV9kZWZhdWx0KFBPSVNPTl9GUkVFX0lOSVRN
+RU0pOwogfQogCitzdGF0aWMgaW50IHRlc3RfdW5hbGlnbmVkKHZvaWQgKnVudXNlZCkKK3sKKwl2
+b2lkICpidWYgPSB2bWFsbG9jKFBBR0VfU0laRSk7CisJbWVtc2V0KGJ1ZiwgMHhmZSwgUEFHRV9T
+SVpFKTsKKwlwcmludGsoImxvYWRfdW5hbGlnbmVkX3plcm9wYWQgPSAlMDE2bHhcbiIsIGxvYWRf
+dW5hbGlnbmVkX3plcm9wYWQoYnVmICsgUEFHRV9TSVpFIC0gNSkpOworCWt0aHJlYWRfZXhpdCgw
+KTsKK30KKworCiBzdGF0aWMgaW50IF9fcmVmIGtlcm5lbF9pbml0KHZvaWQgKnVudXNlZCkKIHsK
+IAlpbnQgcmV0OwpAQCAtMTUxOCw2ICsxNTI5LDggQEAgc3RhdGljIGludCBfX3JlZiBrZXJuZWxf
+aW5pdCh2b2lkICp1bnVzZWQpCiAJc3lzdGVtX3N0YXRlID0gU1lTVEVNX1JVTk5JTkc7CiAJbnVt
+YV9kZWZhdWx0X3BvbGljeSgpOwogCitrZXJuZWxfdGhyZWFkKHRlc3RfdW5hbGlnbmVkLCBOVUxM
+LCBDTE9ORV9GUyB8IENMT05FX0ZJTEVTKTsKKwogCXJjdV9lbmRfaW5rZXJuZWxfYm9vdCgpOwog
+CiAJZG9fc3lzY3RsX2FyZ3MoKTsK
+--000000000000ac874805e64f7363--
