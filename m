@@ -1,29 +1,46 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C88184C
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gLBxowRDfXXdNnS2Uq+RFwPmidP3H5C4Kk5j9GJTZFs=; b=QQPtrhVPAdG95r+VIbHei8w2k6
-	4wv8m//LK8TSKKYblkP28KkhgaB8I92yaJhi3X0oW9pV1/6dK9b4iHx8T72x7NxLSkHkL9Lu+pGpL
-	i+BKx9xlXZxiT63eGBvhSzUSzWoZY4WFAPz4OOhI8RdxO1uwJNZ+HjU7LnnjtYc4MgNE3ctS97uBK
-	yUmOIWUpPQ/b8cOCyEFCJV3bytBb5xmlN07UDJHkReaMBeZ8Md/ENJ9VnogzV/PM+jwixAF04414w
-	DusD4Oiq5x1QLtUVkW7m9kGKFvbxkM57olpfMEk7u8mxqLMDhgvFscz0/22Z8e9w/KYKIFiea7oTX
-	RtWmyz4Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oNZDl-005how-D6; Mon, 15 Aug 2022 12:29:29 +0000
-Date: Mon, 15 Aug 2022 13:29:29 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B2FEBC
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 12:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660567297; x=1692103297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SplSxesvyZvRRgtnISH+hq5JWR2pxgb/KkEgyQmKz54=;
+  b=LZdqNIR3+eIvEJuArzgruz//mLc5uvGTjkvIwLyvxhHopyeeIJWTLL6v
+   KAW19GM9oRDkpiwGoU2Ga6ZbIiMDKoqQepa/aOwYgLd5yMk9AUYE93Lk3
+   1hyxVaNRV6dAimPgcQF7NW7ZUu/OixFKy3Nd3Okuyqfagj8Jc9rM50akq
+   fk2gZ+OX4xSrrGxfGEWcBmGCUp74ayykGQhR5WIgCTk/q89Ib3ELOJeWt
+   1nJR9VLQXuuA9UFYEAphV5IsSC9qEzOHSFG7lLbOxELRpnIURsXWiJAoB
+   22nZgSJILnA2J+r56u5wsrbtfQa5xwDsDozkOyRbgr9jSWalvaqCkcMvh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="272341554"
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="272341554"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 05:41:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="674820064"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Aug 2022 05:41:34 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oNZPR-00010O-1F;
+	Mon, 15 Aug 2022 12:41:33 +0000
+Date: Mon, 15 Aug 2022 20:40:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
+	vbabka@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
- limit (1024) in 'ntfs_read_folio'
-Message-ID: <Yvo8KUKJBlMtoNgI@casper.infradead.org>
-References: <202208140835.W6F1j6Da-lkp@intel.com>
+	Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+	vbabka@suse.cz, iamjoonsoo.kim@lge.com,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v7] mm/page_owner.c: add llseek for page_owner
+Message-ID: <202208152007.a6QeCOGK-lkp@intel.com>
+References: <20220815063010.22462-1-quic_yingangl@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,16 +49,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208140835.W6F1j6Da-lkp@intel.com>
+In-Reply-To: <20220815063010.22462-1-quic_yingangl@quicinc.com>
 
-On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
-> Hi Matthew,
-> 
-> FYI, the error/warning still remains.
+Hi Kassey,
 
-FYI, this is still not interesting.
-This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
-space is correspondingly larger.  The frame size warning should be
-increased to allow for this.
+Thank you for the patch! Perhaps something to improve:
 
-> >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc1 next-20220815]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: hexagon-randconfig-r041-20220814 (https://download.01.org/0day-ci/archive/20220815/202208152007.a6QeCOGK-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
+        git checkout f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/page_owner.c:575:8: warning: no previous prototype for function 'lseek_page_owner' [-Wmissing-prototypes]
+   loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
+          ^
+   mm/page_owner.c:575:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/lseek_page_owner +575 mm/page_owner.c
+
+   574	
+ > 575	loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
+   576	{
+   577		switch (orig) {
+   578		case SEEK_SET:
+   579			file->f_pos = offset;
+   580			break;
+   581		case SEEK_CUR:
+   582			file->f_pos += offset;
+   583			break;
+   584		default:
+   585			return -EINVAL;
+   586		}
+   587		return file->f_pos;
+   588	}
+   589	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
