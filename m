@@ -1,305 +1,237 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93ED51102
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 06:35:03 +0000 (UTC)
-X-UUID: 54195b813a394fdbb34eca0cdbf7a3ba-20220815
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=0oVsLLs6Bg4oTydvl/icM72CiYInRV1zOsDw1/gzWl8=;
-	b=b1TZF60fI73azApmuMiKOOHfNOLdUDNdOqpXBwGYvj8oSvonTK6SyWY9AUxU2vJCfv9PFqwfPkVI62AniEd9F/LWj2zwTVUhbbJH7sWtBjrQ8hzoDNfYUPAv1Il+CaSf+uPG5529F7yd+7Z1WWapFC9MpjzdonK8bLnlSKYCnfs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:cca631e0-34a3-48c0-9b07-5cd7d09c1d93,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
-	am,ACTION:release,TS:0
-X-CID-META: VersionHash:3d8acc9,CLOUDID:6e82ac9c-da39-4e3b-a854-56c7d2111b46,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-	,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 54195b813a394fdbb34eca0cdbf7a3ba-20220815
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-	(envelope-from <rex-bc.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 254329838; Mon, 15 Aug 2022 14:34:59 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 15 Aug 2022 14:34:57 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 15 Aug 2022 14:34:57 +0800
-Message-ID: <f5a27f00c89cadfb4fd2347f35a9504f964a4205.camel@mediatek.com>
-Subject: Re: [PATCH v25 0/7] Add MediaTek SoC DRM (vdosys1) support for
- mt8195
-From: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Mon, 15 Aug 2022 14:34:57 +0800
-In-Reply-To: <20220804072827.22383-1-nancy.lin@mediatek.com>
-References: <20220804072827.22383-1-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7051102
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660546904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YaseW025oDvpedOkrLHci69xu5aiek1CmWmhGCuRQ9c=;
+	b=X5iwAlMYILZdBQgX+xCplOiAAKtEBLo0f7mj/gNLtH4KLrY0JyizfDFhRRhNEHOIkrHSLC
+	oxR9RQk3WHEfemkjwR3p0WNB4RO5eY1/q2z/C04UmznSFNCd+sb8OwKqkacKKsm5gOPJFl
+	N0D4rqGGhUdMwwd5TrHWm+tDVg+QbOY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-7xLh4eWkMiiCpcBzIoEiBg-1; Mon, 15 Aug 2022 03:01:43 -0400
+X-MC-Unique: 7xLh4eWkMiiCpcBzIoEiBg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13C8D185A79C
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 07:01:43 +0000 (UTC)
+Received: from [172.64.0.112] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F1B881415128;
+	Mon, 15 Aug 2022 07:01:42 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 6.0.0-rc1
+ (mainline.kernel.org-clang) [568035b0]
+Date: Mon, 15 Aug 2022 07:01:42 -0000
+CC: omosnace@redhat.com, mmalik@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Message-Id: <35769.122081503014300777@us-mta-595.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2022-08-04 at 15:28 +0800, Nancy.Lin wrote:
-> The hardware path of vdosys1 with DPTx output need to go through by
-> several modules, such as, OVL_ADAPTOR and MERGE.
-> 
-> Add DRM and these modules support by the patches below:
-> 
-> Changes in v25:
-> - rebase to next-20220803
-> 
-> Changes in v24:
-> - fix ovl_adaptor binding issue (mtk_disp_ovl_adaptor.c)
->   - Since ovl_adaptor is an aggregated component, it should be
-> bounded after
->     all its child components are bounded.
-> - rebase to next-20220708
-> 
-> Changes in v23:
-> - separate[7] mmsys/mutex and drm patches into two series
-> 
-> Changes in v22:
-> - rebase to next-20220525
-> - rebase to vdosys0 series v22
-> - separate dts to a new patch
-> 
-> Changes in v21:
-> - fix reviewer comment
->   - fix rdma and ethdr binding doc and dts
-> 
-> Changes in v20:
-> - fix reviewer comment
->   - update mmsys update bit api name
->   - add mtk_mmsys_update_bits error message if lose gce property
->   - list all mt8195 vdosys1 reset bits
-> 
-> Changes in v19:
-> - fix reviewer comment
->   - separate mt8195 mmsys component to a new patch
->   - separate mt8195 vdo0 and vdo1 routing table
->   - separate mmsys_write_reg api to a new patch and simplify write
-> reg code
->   - separate mmsys 64 bit reset to a new patch
->   - separate mtk-mutex dp_intf1 component to a new patch
-> 
-> Changes in v18:
-> - fix reviewer comment
->   - fix rdma binding doc
->   - fix ethdr binding doc
->   - refine mmsys config cmdq support
->   - refine merge reset control flow, get reset control in probe
-> function
->   - add ethdr reset control error handling and remove dbg log
-> - rebase to vdosys0 series v20 (ref [5])
-> 
-> Changes in v17:
-> - fix reviewer comment in v16
->   - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
->   - separate mmsys config API
->   - move mdp_rdma binding yaml
-> - fix ovl adaptor pm runtime get sync timing issue
-> - rebase to vdosys0 series v19 (ref [5])
-> - rebase to [7] for modify vblank register change
-> 
-> Changes in v16:
-> - fix reviewer comment in v 15
->   - fix mtk_drm_ddp_comp.c alignment
->   - fix vdosys0 mmsys num before adding vdosys1 patch
-> 
-> Changes in v15:
-> - fix ethdr uppercase hex number in dts
-> 
-> Changes in v14:
-> - remove MTK_MMSYS 64 bit dependency
-> - add ethdr.yaml back and fix dt_schema check fail
-> 
-> Resend v13
-> - add related maintainer in maillist
-> 
-> Changes in v13:
-> - fix reviewer comment in v12
->   - fix rdma dt-binding format
->   - fix dts node naming
-> - fix 32 bit build error
->   - modify 64bit dependency for mtk-mmsys
-> - rebase to vdosys0 series v16. (ref [5])
-> 
-> Changes in v12:
-> - fix reviewer comment in v11
->   - modify mbox index
->   - refine dma dev for ovl_adaptor sub driver
-> 
-> Changes in v11:
-> - remove ethdr vblank spin lock
-> - refine ovl_adaptor print message
-> 
-> Changes in v10:
-> - refine ethdr reset control using
-> devm_reset_control_array_get_optional_exclusive
-> - fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
-> 
-> Changes in v9:
-> - rebase on kernel-5.16-rc1
-> - rebase on vdosys0 series v13. (ref [5])
-> - fix ovl_adaptor sub driver is brought up unintentionally
-> - fix clang build test fail- duplicate ethdr/mdp_rdma
-> init_module/cleanup_module symbol issue 
-> 
-> Changes in v8:
-> - separate merge async reset to new patch.
-> - separate drm ovl_adaptor sub driver to new patch.
-> - fix reviewer comment in v7.
-> 
-> Changes in v7:
-> - rebase on vdosys0 series v12 (ref[5])
-> - add dma description in ethdr binding document.
-> - refine vdosys1 bit definition of mmsys routing table.
-> - separate merge modification into 3 pathces.
-> - separate mutex modification into 2 patches.
-> - add plane color coding for mdp_rdma csc.
-> - move mdp_rdma pm control to ovl_adaptor.
-> - fix reviewer comment in v6.
-> 
-> Changes in v6:
-> - rebase on kernel-5.15-rc1.
-> - change mbox label to gce0 for dts node of vdosys1.
-> - modify mmsys reset num for mt8195.
-> - rebase on vdosys0 series v10. (ref [5])
-> - use drm to bring up ovl_adaptor driver.
-> - move drm iommu/mutex check from kms init to drm bind.
-> - modify rdma binding doc location.
-> (Documentation/devicetree/bindings/arm/)
-> - modify for reviewer's comment in v5.
-> 
-> Changes in v5:
-> - add mmsys reset controller reference.
-> 
-> Changes in v4:
-> - use merge common driver for merge1~4.
-> - refine ovl_adaptor rdma driver.
-> - use ovl_adaptor ddp_comp function instead of ethdr.
-> - modify for reviewer's comment in v3.
-> 
-> Changes in v3:
-> - modify for reviewer's comment in v2.
-> - add vdosys1 2 pixels align limit.
-> - add mixer odd offset support.
-> 
-> Changes in v2:
-> - Merge PSEUDO_OVL and ETHDR into one DRM component.
-> - Add mmsys config API for vdosys1 hardware setting.
-> - Add mmsys reset control using linux reset framework.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> 
-> This series are based on the following patch:
-> [1] arm64: dts: Add mediatek SoC mt8195 and evaluation board
->     20220112114724.1953-4-tinghan.shen@mediatek.com
-> [2] arm64: dts: mt8195: add IOMMU and smi nodes
->     20210615173233.26682-15-tinghan.shen@mediatek.com
-> [3] [v2] arm64: dts: mt8195: add display node for vdosys0
->     20220225021535.2655-1-jason-jh.lin@mediatek.com
-> [4] dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
->     20220407075726.17771-2-yong.wu@mediatek.com
-> [5] Add MediaTek SoC DRM (vdosys1) support for mt8195
->     20220526110233.20080-1-nancy.lin@mediatek.com
-> 
-> Nancy.Lin (7):
->   dt-bindings: mediatek: add ethdr definition for mt8195
->   drm/mediatek: add ETHDR support for MT8195
->   drm/mediatek: add ovl_adaptor support for MT8195
->   drm/mediatek: add dma dev get function
->   drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
->   drm/mediatek: add drm ovl_adaptor sub driver for MT8195
->   drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
-> 
->  .../display/mediatek/mediatek,ethdr.yaml      | 188 +++++++
->  drivers/gpu/drm/mediatek/Makefile             |   2 +
->  drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
->  .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 528
-> ++++++++++++++++++
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  96 ++--
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 129 +++--
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 359 ++++++++----
->  drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  24 +-
->  drivers/gpu/drm/mediatek/mtk_ethdr.c          | 370 ++++++++++++
->  drivers/gpu/drm/mediatek/mtk_ethdr.h          |  26 +
->  12 files changed, 1615 insertions(+), 197 deletions(-)
->  create mode 100644
-> Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yam
-> l
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
+Hi, we tested your kernel and here are the results:
 
-Hello all,
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Because Kernel 6.0-rc1 is released, I re-test this series.
-I use dp series [1] to test this mmsys series because this series is
-used to control external display.
 
-In my test, I can do modtest of these mode for DP and it passed.
-Whole series again for 6.0-rc1:
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/50773
 
-  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-flags: phsync, pvsync; type: preferred, driver
-  #1 1920x1080 59.94 1920 2008 2052 2200 1080 1084 1089 1125 148352
-flags: phsync, pvsync; type: driver
-  #2 1920x1080 50.00 1920 2448 2492 2640 1080 1084 1089 1125 148500
-flags: phsync, pvsync; type: driver
-  #3 1680x1050 59.95 1680 1784 1960 2240 1050 1053 1059 1089 146250
-flags: nhsync, pvsync; type: driver
-  #4 1600x900 60.00 1600 1624 1704 1800 900 901 904 1000 108000 flags:
-phsync, pvsync; type: driver
-  #5 1280x1024 60.02 1280 1328 1440 1688 1024 1025 1028 1066 108000
-flags: phsync, pvsync; type: driver
-  #6 1280x800 59.81 1280 1352 1480 1680 800 803 809 831 83500 flags:
-nhsync, pvsync; type: driver
-  #7 1280x720 60.00 1280 1390 1430 1650 720 725 730 750 74250 flags:
-phsync, pvsync; type: driver
-  #8 1280x720 59.94 1280 1390 1430 1650 720 725 730 750 74176 flags:
-phsync, pvsync; type: driver
-  #9 1280x720 50.00 1280 1720 1760 1980 720 725 730 750 74250 flags:
-phsync, pvsync; type: driver
-  #10 1024x768 60.00 1024 1048 1184 1344 768 771 777 806 65000 flags:
-nhsync, nvsync; type: driver
-  #11 800x600 60.32 800 840 968 1056 600 601 605 628 40000 flags:
-phsync, pvsync; type: driver
-  #12 720x576 50.00 720 732 796 864 576 581 586 625 27000 flags:
-nhsync, nvsync; type: driver
-  #13 720x480 60.00 720 736 798 858 480 489 495 525 27027 flags:
-nhsync, nvsync; type: driver
-  #14 720x480 59.94 720 736 798 858 480 489 495 525 27000 flags:
-nhsync, nvsync; type: driver
-  #15 640x480 60.00 640 656 752 800 480 490 492 525 25200 flags:
-nhsync, nvsync; type: driver
-  #16 640x480 59.94 640 656 752 800 480 490 492 525 25175 flags:
-nhsync, nvsync; type: driver
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+         aarch64 - Libkcapi AF_ALG test
+                   Issue: 90kernel-modules: install generic crypto modules =
+with hostonly unset #982
+                          https://github.com/dracutdevs/dracut/pull/982
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4810880
+           s390x - Libkcapi AF_ALG test
+                   Issue: 90kernel-modules: install generic crypto modules =
+with hostonly unset #982
+                          https://github.com/dracutdevs/dracut/pull/982
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4810964
+          x86_64 - Libkcapi AF_ALG test
+                   Issue: 90kernel-modules: install generic crypto modules =
+with hostonly unset #982
+                          https://github.com/dracutdevs/dracut/pull/982
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4811047
+          x86_64 (debug) - Libkcapi AF_ALG test
+                   Issue: 90kernel-modules: install generic crypto modules =
+with hostonly unset #982
+                          https://github.com/dracutdevs/dracut/pull/982
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4811193
 
-[1]:
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=665597
+    Unrecognized or new issues:
+           s390x - selinux-policy: serge-testsuite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4811012
 
-BRs,
-Bo-Chen
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - Firmware test suite
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 - Firmware test suite
+                  x86_64 (debug) - Firmware test suite
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests: fail to build detached_mounts_propagation: error: =
+redeclaration of 'enum fsconfig_command'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1302
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng: fail to build core-affinity: error: redec=
+laration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1303
+            Affected tests:
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - blktests: fail to build mount_clear_sock: error: r=
+edeclaration of enum fsconfig_command
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1300
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
