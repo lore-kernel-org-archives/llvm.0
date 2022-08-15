@@ -1,35 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E737E
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 17:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782C0C433D6;
-	Mon, 15 Aug 2022 17:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660583484;
-	bh=bRUgZYlvzDD/pptSlNy1eAs06Vr+nJrjAzYkrLulvyM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BAuaf25b2NdNXWi04fOoG9yv+2Kq5CV/qoRpBT49uScalWi+dIEbl6WXuReYzV9n3
-	 I2zuTIakQEwypk+02Z+9ewswCdIanzslKzS+RlTbE4thPI1pcdi/eJQt4g6xixQJSe
-	 NWuXxPju+/fXuqAw6Z51IPXM7Lu1+h+C5eDVmLb8uLzo+yFfy7jKdPr0UVKyQBvfl1
-	 VqAYrEh95SXG0ROs2UoysTGN2C5EyeK3x1PpIDMarFH0jhah4W4dNZkbUm6iy/spCN
-	 f8X/L2YRd8sv7W27x3jIlWChIcOKL3cfL7fTBNix9K561L8R4jG+CjuSvwqv0MTQ4/
-	 xfPvqWy1MCkYg==
-Date: Mon, 15 Aug 2022 10:11:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Matthew Wilcox <willy@infradead.org>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
- limit (1024) in 'ntfs_read_folio'
-Message-ID: <Yvp+OnhAAQI5Zvj9@dev-arch.thelio-3990X>
-References: <202208140835.W6F1j6Da-lkp@intel.com>
- <Yvo8KUKJBlMtoNgI@casper.infradead.org>
- <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
- <YvpEkYMatTeNvNZa@casper.infradead.org>
- <CAK8P3a3=XC4ez-zeGptQb_9NtX5rVfr8Qq80eGaEckzUzjAxzg@mail.gmail.com>
- <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE537E
+	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 17:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=MXNuYNMsVlTl4n7W8GHGr1bQEFwqfgp2A0ExRIF23qk=; b=qXeNvC+T5gA3BMHrvTz7QklUoi
+	zSJhfDsa/e/YFM28wZKpazCPqwXfUaLKWQmqKbkQ6uWUpHc2qXniG48txxPhRSLJg4OWt9sER60tV
+	YrBPEmy07SDMpzT2YbwPSY3tcG/1esOvN5peb//b/TwWDUx6nRU3n8//5T3zm6hsnVMs3ZFp6VN6b
+	Z6CoE4/2UE9Ehi8mz9zoq9uujaSDUSg0wmdapR/wgQmuzoVOcbgpJId3Z9B8OHpCMEKcnR3IHgQ07
+	WA5NdTHPxSFHgeXkh9AG0ojwCik46XFa74EJ3B0q/MkNRS0ceKf38TLFEiNGR6UDUGpw050FKsrpH
+	58N98aJg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oNeHm-002j9M-Mc; Mon, 15 Aug 2022 17:53:58 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7DDF0980264; Mon, 15 Aug 2022 19:53:55 +0200 (CEST)
+Date: Mon, 15 Aug 2022 19:53:55 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
+	ceph-devel@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <YvqIMyIDR334j3to@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+ <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,53 +43,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0TPYs2cbcx+0QGk=y8xjFrspdwnTHDxQCtsSwJmfvF6Q@mail.gmail.com>
+In-Reply-To: <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
 
-On Mon, Aug 15, 2022 at 04:37:09PM +0200, Arnd Bergmann wrote:
-> On Mon, Aug 15, 2022 at 3:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> 
-> > I have no problems with a patch removing support for 256KB pages if that
-> > helps, as Hexagon is the only architecture to support this and there are close
-> > to zero Linux users anway. This would leave only three warnings for 64KB
+On Mon, Aug 15, 2022 at 08:58:21AM -0700, Linus Torvalds wrote:
 
-Right, I had brought up at least adjusting the dependencies of 256KB
-pages so that it could not be selected with CONFIG_COMPILE_TEST to
-reduce the number of warnings that would appear in randconfigs.
+> The other question I had was actually the "return false" above - I
+> decided that if the address of the fault does *not* match the expected
+> "round %rdx up" address, we shouldn't do any fixup at all, and treat
+> it as a regular kernel oops - as if the exception table hadn't been
+> found at all.
 
-https://lore.kernel.org/YoAlvnyjEbYV4T1L@dev-arch.thelio-3990X/
-
-I suspect removing it outright would be fine too.
-
-> > pages in allmodconfig:
-> >
-> > fs/mpage.c:131:20: error: stack frame size (1128) exceeds limit (1024)
-> > in 'do_mpage_readpage' [-Werror,-Wframe-larger-than]
-> > fs/mpage.c:447:12: error: stack frame size (1264) exceeds limit (1024)
-> > in '__mpage_writepage' [-Werror,-Wframe-larger-than]
-> > fs/ext4/readpage.c:223:5: error: stack frame size (1208) exceeds limit
-> > (1024) in 'ext4_mpage_readpages' [-Werror,-Wframe-larger-than]
-> 
-> I looked into these a bit more and found that these are arrays of sector_t,
-> which could be either 32-bit or 64-bit wide before 72deb455b5ec
-> ("block: remove CONFIG_LBDAF"), but is now always 64-bit, so having
-> an array of 128 of these (65536/512) adds a 1KB to the stack and will
-> cause a warning. It's only slightly over the limit, and there are very few
-> 32-bit systems that allow 64KB pages to trigger that warning.
-> 
-> I see now that ppc440 also supports 256KB pages and has the same
-> problem as hexagon, but also has been broken since the start of the
-> git history in this regard:
-> 
-> fs/mpage.c:638:1: error: the frame size of 4280 bytes is larger than
-> 2048 bytes [-Werror=frame-larger-than=]
-> 
-> I don't know if anyone strongly cares about 256KB pages on
-> ppc44x any more, but given this, I'm fairly sure that they are
-> not using block based file systems. So we could just make
-> CONFIG_BLOCK depend on PAGE_SIZE_LESS_THAN_256KB
-> globally instead of dropping 256KB pages everywhere.
-
-That doesn't sound like an unreasonable solution.
-
-Cheers,
-Nathan
+Ah yes, I did see that and I agree, that seems like the right thing to do.
