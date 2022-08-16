@@ -1,150 +1,137 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A38253B8
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 17:39:57 +0000 (UTC)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GGiLUQ005227;
-	Tue, 16 Aug 2022 17:05:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=GjjxBkmOT7kfjjNUvdcUnZZdNAdgE5EWLferPMUXAnA=;
- b=YL3OJlfJ14C/KPkJRH8fKhPKtxIOlqOJCCgFbLlBfYmMkMVlPwl1iHQEcGvVjiGMJsXo
- yO9JGi5Mip9t30SQtzLm7bG2lseHrj967Kdgd5+z0DoVUkLuqBmERm+owzOgze1gPTci
- bUn1XWIJ9+3/wtPDjt2/OWXJvXD9bqeKpK6XqSYRKn9RYfPr+FHHd9GtLEj0/1pnHNdW
- ml8JmcSALUfRyXMglrSbQtCMj56n2OeR9UImqhMG3DmpdYe8g0/D75pGT7LWK1sOYczT
- pUwR1/hJD7YS1iTDHzA1y/2gDaQ+rWpgipepo4Qcf1UO35BDDeUoiK/tMe4XbTh9Bd7J Ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kd0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Aug 2022 17:05:41 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27GGjE2Q008425;
-	Tue, 16 Aug 2022 17:05:41 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kc1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Aug 2022 17:05:40 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GH5LZN002388;
-	Tue, 16 Aug 2022 17:05:38 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by ppma06ams.nl.ibm.com with ESMTP id 3hx37jbgk9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Aug 2022 17:05:38 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GH5a8b26608022
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Aug 2022 17:05:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5780611C04A;
-	Tue, 16 Aug 2022 17:05:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E38E011C04C;
-	Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
-Received: from localhost (unknown [9.43.58.12])
-	by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
-Date: Tue, 16 Aug 2022 22:35:34 +0530
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 0/2] ftrace/recordmcount: Handle object files without
- section symbols
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-	<20220816100423.5ee2e17c@gandalf.local.home>
-In-Reply-To: <20220816100423.5ee2e17c@gandalf.local.home>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1660668823.oegvwl2214.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OzR97rxPfkN_j2hNnQzGXDMJE-1aixqM
-X-Proofpoint-ORIG-GUID: PYoTJVUk2zunDwCz72cxwia_qgxH99mO
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CF353BE
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 17:58:05 +0000 (UTC)
+Received: by mail-ed1-f46.google.com with SMTP id a89so14479774edf.5
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 10:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VC/Trrv6J3X4sE7aLeQxuC2Jf1TU8h3dAVmLNNAb/Js=;
+        b=baokk5qq0rlLRQ0xpdsWAYJYwpImRq1O33VCZKgpyUfde7GmI0lSm3zXzVCV3lyMAD
+         4P11NRhDl0HTGv5KvbaqHyJVgYFEv7fzxNzP5DiTj8OajrzVTmGfJX4zttB+r6IjL4l1
+         BdgfkFgN4/Jrel046lgdpxCSDjFqu9TcUfZEg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VC/Trrv6J3X4sE7aLeQxuC2Jf1TU8h3dAVmLNNAb/Js=;
+        b=2XM3KYGKBFuwZAHL4xcGsV0yAKRkSu7jr0Fs/KcA6USUppHGyk9TRZFLZ+yl/rlYjh
+         5uvPJFbAN0uS55A08PwFpWBP/bvDwArMZ2JqXj4lD2MHHuAX7hhGeXzNvN9cc3jSOTm2
+         tngz09Phxv4V5yEKUi04ryECvRQBbTCBW1eKrCgWYF2NHmLZ107zKArzUX6I2OE3TYQX
+         yP+JLqv8He+u/7JspzRpNjV1TLtItpLzeCmLeJYzsdaN2KeF65k2kt+XJLTdDSFIF8Ss
+         Hs0N+HP7DUt8NM8FKTF9jmoNdlQyy/eHUTorevuHSVKpAZDTdO+vFJ6z0HppXqn+iiTL
+         dKYw==
+X-Gm-Message-State: ACgBeo1ujo5EQqNrkRc7vJTbKp7QZVY1j4zCiX6o118TmEC/eeCGy2FO
+	AScru86oihkUnNnDBFHQsyhYekmQyY780Se5CvY=
+X-Google-Smtp-Source: AA6agR56RR03GD80eNlL0Cr5LC4hzGodOkgSaP0sg5uqWxmvnPquMuNTu192KCWJJVPQ17G7EA38Vg==
+X-Received: by 2002:a05:6402:1e8d:b0:441:58db:b6a2 with SMTP id f13-20020a0564021e8d00b0044158dbb6a2mr19272000edf.277.1660672683695;
+        Tue, 16 Aug 2022 10:58:03 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id jx16-20020a170906ca5000b007305d408b3dsm5574702ejb.78.2022.08.16.10.58.02
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 10:58:02 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id n7so2324150wrv.4
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 10:58:02 -0700 (PDT)
+X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
+ d3-20020adfe843000000b00225221f0262mr272373wrn.193.1660672681718; Tue, 16 Aug
+ 2022 10:58:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0 impostorscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208160065
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net> <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
+ <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net> <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+ <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
+In-Reply-To: <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 16 Aug 2022 10:57:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
+Message-ID: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Jeff Layton <jlayton@kernel.org>, 
+	Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Steven,
+On Tue, Aug 16, 2022 at 1:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> > +#define EX_TYPE_ZEROPAD                      20 /* load ax from dx zero-padded */
+>
+> This comment is now woefully incorrect.
 
-Steven Rostedt wrote:
-> On Wed, 27 Apr 2022 15:01:20 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> This solves a build issue on powerpc with binutils v2.36 and newer [1].
->> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->> symbols") [2], binutils started dropping section symbols that it thought
->> were unused. Due to this, in certain scenarios, recordmcount is unable=20
->> to find a non-weak symbol to generate a relocation record against.
->>=20
->> Clang integrated assembler is also aggressive in dropping section=20
->> symbols [3].
->>=20
->> In the past, there have been various workarounds to address this. See=20
->> commits 55d5b7dd6451b5 ("initramfs: fix clang build failure") and=20
->> 6e7b64b9dd6d96 ("elfcore: fix building with clang") and a recent patch:
->> https://lore.kernel.org/linuxppc-dev/20220425174128.11455-1-naveen.n.rao=
-@linux.vnet.ibm.com/T/#u
->>=20
->> Fix this issue by using the weak symbol in the relocation record. This=20
->> can result in duplicate locations in the mcount table if those weak=20
->> functions are overridden, so have ftrace skip dupicate entries.
->>=20
->> Objtool already follows this approach, so patch 2 updates recordmcount=20
->> to do the same. Patch 1 updates ftrace to skip duplicate entries.
->>=20
->> - Naveen
->>=20
->>=20
->> [1] https://github.com/linuxppc/issues/issues/388
->> [2] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1bc=
-ae833b32f1
->> [3] https://github.com/ClangBuiltLinux/linux/issues/981
->>=20
->>
->=20
-> There's been work to handle weak functions, but I'm not sure that work
-> handled the issues here. Are these patches still needed, or was there
-> another workaround to handle the problems this addressed?
+Yes it is. Will fix.
 
-I'm afraid these patches are still needed to address issues in=20
-recordmcount.
+> > +     if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
+> > +             return false;
+>
+> We have insn_decode_kernel() for exactly this (very) common case.
 
-I submitted patches to remove use of weak functions in the kexec=20
-subsystem, but those have only enabled building ppc64le defconfig=20
-without errors:
-https://lore.kernel.org/all/20220519091237.676736-1-naveen.n.rao@linux.vnet=
-.ibm.com/
-https://lore.kernel.org/all/cover.1656659357.git.naveen.n.rao@linux.vnet.ib=
-m.com/
+I did that originally, and then I undid it in disgust, because that
+interface is too simple.
 
-The patch adding support for FTRACE_MCOUNT_MAX_OFFSET to powerpc only=20
-helps ignore weak functions during runtime:
-https://lore.kernel.org/all/20220809105425.424045-1-naveen.n.rao@linux.vnet=
-.ibm.com/
+In particular, it just uses MAX_INSN_SIZE blindly. Which I didn't want
+to do when I actually had the instruction size.
 
-We still see errors from recordmcount when trying to build certain=20
-powerpc configs.
+Yes, yes, I also check the decode size after-the-fact, but I didn't
+want the decoder to even look at the invalid bytes.
 
-We are pursuing support for objtool, which doesn't have the same issues:
-https://lore.kernel.org/all/20220808114908.240813-1-sv@linux.ibm.com/
+This exception case is about the data being at the end of the page, I
+wanted the fixup to be aware of code being at the end of a page too.
 
+(And yeah, I'm not convinced that the decoder is that careful, but at
+that point I feel it's a decoder issue, and not an issue with the code
+I write).
 
-- Naveen
+> > +     if (insn.length != len)
+> > +             return false;
+> > +
+> > +     if (insn.opcode.bytes[0] != 0x8b)
+> > +             return false;
+>
+> I was wondering if we want something like MOV_INSN_OPCODE for 0x8b to
+> enhance readability, otoh it's currently 0x8b all over the place, so
+> whatever. At some point you gotta have the insn tables with you anyway.
+
+Oh, I didn't even notice that we had another case of 0x8b checking.
+But yeah, the MMIO decoding wants to see what kind of access it is.
+
+But it wouldn't be MOV_INSN_OPCODE, it would have to be something like
+MOV_WORD_INSN_MODRM_REG_OPCODE, because that's what people are
+checking for - not just that it's a 'mov', but direction and size too.
+
+And then you'd have to also decide whether you describe those
+#define's using the Intel ordering or the one we actually use in our
+asm. So now the symbolic names are ambiguous anyway, in ways that the
+actual byte value isn't.
+
+So yeah, I suspect it ends up just being an issue of "you have to have
+the opcode tables in front of you anyway".
+
+Because you also need to check that that's the only encoding for "mov"
+(I checked, and yes, it is - there are other 'mov' encodings that move
+directly from memory into %rax, but those are using absolute addresses
+that don't make sense for a "this is an unaligned that might be a page
+crosser")
+
+Side note: now that I look at it, I note that the MMIO decoding
+doesn't handle the absolute address case. It's not really relevant for
+the kernel, but I could *imagine* that it is relevant in user mode,
+and the SEV case actually does have a "decode and emulate user mode
+instruction case".
+
+Not a big issue. If some crazy user even maps IO at a fixed address,
+and then uses a "mov %eax <-> moffset" instruction, the kernel
+emulation will print out an error and refuse to emulate it.
+
+                  Linus
