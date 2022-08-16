@@ -1,44 +1,51 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019036AA5
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 18:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BC16AAE;
+	Tue, 16 Aug 2022 19:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660673163; x=1692209163;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=49X/CqJK7o6r57TgsFbBXqQA3rnCet0L8eUbTEs6Z7U=;
-  b=UfEXrfNnRMuyE2o5BkPuguBrSQWu8wEabkOf3HWmejxZxUO8UBm78354
-   r4lzrzH9EkQbQfb9uA0cqP53WU/JlTXFv+16qUKB5OGIq4vMTkpWnm7rI
-   h7n+NtyoZtqUrBJzZXHOeaC/c7zwt1jD6d7dPyQVdNhyQv+pKmm1/+s5P
-   H+Sn1K/z2gcALtJPAQQsfKCe2cf5whB4c5KvM+nxto1n3vhQu+XjmeB1T
-   3kXKngGwLCYpk1NhQ2fNdKaGzfFEQlxjzMcyd4FzIzNbwvsBnq4VMU5K9
-   nxfK8BkGbTiYVfQFKv8FcOCio4XB/XXEqPS65xRnVlMJUcnDhchkT3BUs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292289616"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="292289616"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 11:06:00 -0700
+  t=1660676706; x=1692212706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fw20SIT8UosrRyl9DK6OBZL1qLEKx8DhIicuKy/Nujk=;
+  b=SnNSVFEk85LBDnsXbOkaF8x8PpODHWIDJy4HMvCyGD3KUQuW8ubWWXjA
+   LIntEJ5fTonYNRom/cc+Oft1hEiEhVRQF3VlGscnTYKJuai0JdC8/u5un
+   E/9BL6BsZyI+FVWgYxNBusc2ER2uL/32wqE4dN9NZ0B+p9k/FsRtAQEhf
+   Gd++bdbMCa6IUdXOJba3EQAHTqOqLhQqt0dU+tjhYnHpyrl6pYjOY8DxF
+   CYlZHPpJiImiQc4Sk9H0dfQzS8lS4U29MiMAWnEvcIBbG+efhhiyETcMB
+   l0Xms4HvceCog37hBLLvAFpkGPdwwJCH5q0KPjh9VvFMP+j7crfVPPhqQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="279267050"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="279267050"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:05:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="935019876"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="733409002"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 11:05:58 -0700
+  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 12:04:59 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oO0ww-00007Y-11;
-	Tue, 16 Aug 2022 18:05:58 +0000
-Date: Wed, 17 Aug 2022 02:05:21 +0800
+	id 1oO1s3-00009Y-0i;
+	Tue, 16 Aug 2022 19:04:59 +0000
+Date: Wed, 17 Aug 2022 03:04:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
+To: Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
+	bhelgaas@google.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/090-spi-hid 17/22]
- drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to
- undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202208170255.mWeqUzWX-lkp@intel.com>
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
+	lznuaa@gmail.com
+Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
+Message-ID: <202208170210.zGxvHnIZ-lkp@intel.com>
+References: <20220815213936.2380439-3-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,117 +54,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
-commit: 1d801ad9c4b08a5675701e82f600d9f462211a79 [17/22] hid: Add Apple DockChannel HID transport driver
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220817/202208170255.mWeqUzWX-lkp@intel.com/config)
+Hi Frank,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on jonmason-ntb/ntb-next]
+[also build test ERROR on robh/for-next linus/master v6.0-rc1 next-20220816]
+[cannot apply to tip/irq/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
+base:   https://github.com/jonmason/ntb ntb-next
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220817/202208170210.zGxvHnIZ-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/1d801ad9c4b08a5675701e82f600d9f462211a79
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 1d801ad9c4b08a5675701e82f600d9f462211a79
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
+        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hid/dockchannel-hid/ drivers/platform/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-                              ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:569:62: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                   dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-                                                                      ~~~     ^~~~~~
-                                                                      %zu
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
+>> drivers/irqchip/irq-imx-mu-msi.c:124:13: error: use of undeclared identifier 'irq_chip_ack_parent'
+           .irq_ack = irq_chip_ack_parent,
                       ^
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:830:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, work->hdr.length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:856:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                           shdr->length, hdr->length - sizeof(*shdr));
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:7: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
-           bool defer = false;
-                ^
-   4 warnings and 2 errors generated.
+   drivers/irqchip/irq-imx-mu-msi.c:127:30: error: variable has incomplete type 'struct msi_domain_ops'
+   static struct msi_domain_ops imx_mu_msi_irq_ops = {
+                                ^
+   drivers/irqchip/irq-imx-mu-msi.c:127:15: note: forward declaration of 'struct msi_domain_ops'
+   static struct msi_domain_ops imx_mu_msi_irq_ops = {
+                 ^
+   drivers/irqchip/irq-imx-mu-msi.c:131:12: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
+           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
+                      ^
+   drivers/irqchip/irq-imx-mu-msi.c:131:39: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
+           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
+                                                 ^
+   drivers/irqchip/irq-imx-mu-msi.c:130:31: error: variable has incomplete type 'struct msi_domain_info'
+   static struct msi_domain_info imx_mu_msi_domain_info = {
+                                 ^
+   drivers/irqchip/irq-imx-mu-msi.c:130:15: note: forward declaration of 'struct msi_domain_info'
+   static struct msi_domain_info imx_mu_msi_domain_info = {
+                 ^
+   drivers/irqchip/irq-imx-mu-msi.c:203:3: error: field designator 'alloc' does not refer to any field in type 'const struct irq_domain_ops'
+           .alloc  = imx_mu_msi_domain_irq_alloc,
+            ^
+   drivers/irqchip/irq-imx-mu-msi.c:204:3: error: field designator 'free' does not refer to any field in type 'const struct irq_domain_ops'
+           .free   = imx_mu_msi_domain_irq_free,
+            ^
+   drivers/irqchip/irq-imx-mu-msi.c:241:25: error: call to undeclared function 'platform_msi_create_irq_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           msi_data->msi_domain = platform_msi_create_irq_domain(
+                                  ^
+   drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
+           struct imx_mu_msi *msi_data, *priv;
+                                         ^
+   1 warning and 8 errors generated.
 
 
-vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
+vim +/irq_chip_ack_parent +124 drivers/irqchip/irq-imx-mu-msi.c
 
-   292	
-   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
-   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
-   295	{
-   296		int ret;
-   297		int report_id = *(u8*)data;
-   298	
-   299		mutex_lock(&iface->out_mutex);
-   300	
-   301		WARN_ON(iface->out_report != -1);
-   302		iface->out_report = report_id;
- > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-   304		iface->resp_buf = resp_buf;
-   305		iface->resp_size = resp_size;
-   306		reinit_completion(&iface->out_complete);
-   307	
-   308		ret = dchid_send(iface, iface->out_flags, data, size);
-   309		if (ret < 0)
-   310			goto done;
-   311	
-   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
-   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
-   314				report_id, iface->index, iface->name);
-   315			ret = -ETIMEDOUT;
-   316			goto done;
-   317		}
-   318	
-   319		ret = iface->resp_size;
-   320		if (iface->retcode) {
-   321			dev_err(iface->dchid->dev,
-   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
-   323				report_id, iface->index, iface->name, iface->retcode);
-   324			ret = -EIO;
-   325		}
-   326	
-   327	done:
-   328		iface->tx_seq++;
-   329		iface->out_report = -1;
-   330		iface->out_flags = 0;
-   331		iface->resp_buf = NULL;
-   332		iface->resp_size = 0;
-   333		mutex_unlock(&iface->out_mutex);
-   334		return ret;
-   335	}
-   336	
+   121	
+   122	static struct irq_chip imx_mu_msi_irq_chip = {
+   123		.name = "MU-MSI",
+ > 124		.irq_ack = irq_chip_ack_parent,
+   125	};
+   126	
 
 -- 
 0-DAY CI Kernel Test Service
