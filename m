@@ -1,58 +1,28 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073385396
-	for <llvm@lists.linux.dev>; Mon, 15 Aug 2022 23:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660605287; x=1692141287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gymUZdI4Zmk7S6OzFKoQtBE8+Fa1MVe79gGq0K3OHDA=;
-  b=UexT5kxawgdxLIEf7dOO+gsdPpN49Kqq+aSpCssKlGvXDUYQOB1MJGRj
-   tuku0qtpDiq25ezr7rzVrPPrLKZzntfb/koLdq7Fa6ZXwYdIaXQtEeniK
-   1mUUw7QojFSQENk50JnSmvyDfaUfZm4xfpjdJRw0bhdDMqMJCY2IUKVmA
-   cSD4IQHAdhUnG/lguA8HdDjJnOL3K2xrhrjCib0lTTHt6PHHP4OzENsrc
-   T54anNaOWTF8pI5V2+izvq9y6ALunYZ8Fx7npzNnBHuxXRZFNjTn19BJj
-   TaxG43HPGci9N3WENUAXOYM7SQbEXmajHtX80wBap0oam9HToPcuN38zb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356081468"
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="356081468"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 16:14:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="674992473"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Aug 2022 16:14:41 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNjI8-0001Gb-1I;
-	Mon, 15 Aug 2022 23:14:40 +0000
-Date: Tue, 16 Aug 2022 07:13:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Bobby Eshleman <bobbyeshleman@gmail.com>,
-	Cong Wang <cong.wang@bytedance.com>,
-	Jiang Wang <jiang.wang@bytedance.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 2/6] vsock: return errors other than -ENOMEM to socket
-Message-ID: <202208160737.gXXFmPbY-lkp@intel.com>
-References: <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2791B1111
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 00:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1B1C433D7;
+	Tue, 16 Aug 2022 00:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660610773;
+	bh=O9rR0Ifut42RrXnNAhJYb4d8tOd2e/S382QI1yeEM3w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B/76D5CUBfSHPjVl60IOEsKBW5wYg+UZ1o7bXDD/dF/HXLBcKE/TtCshHEagTGyu2
+	 s2zwZISd3swYQe10G/T2CGCPlp8zo5Q2ib25520AFotf7sMoMGngc4/fYkKtUODpX3
+	 RjU6NmIBqVS7gOvvUocE9u8PCicl3u9C4o+WLvvEE0ytL0WwqWX0GEEii2wv7XeZ4T
+	 TvG9T1o8wic4D5LUMF7FHxuludITm0VtnTaHZTZeYsjk1d3qqdPM0PIB7YXE7ncKCG
+	 uP987wku94+Oe0HHar6wZmpTTOzEY9vLGZZAoSnXnqbUdQ5wqFIgtArUOw7ON+2XOO
+	 OwR9vSvMxqS2g==
+Date: Mon, 15 Aug 2022 17:46:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: ci_notify@linaro.org
+Cc: Andre Vieira <andre.simoesdiasvieira@arm.com>, llvm@lists.linux.dev
+Subject: Re: [TCWG CI] Regression caused by llvm: [TypePromotion] Search from
+ ZExt + PHI
+Message-ID: <Yvro06Uid0t0Ou1M@dev-arch.thelio-3990X>
+References: <1465164958.6648.1660602445528@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,82 +31,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
+In-Reply-To: <1465164958.6648.1660602445528@jenkins.jenkins>
 
-Hi Bobby,
+On Mon, Aug 15, 2022 at 10:27:24PM +0000, ci_notify@linaro.org wrote:
+> [TCWG CI] Regression caused by llvm: [TypePromotion] Search from ZExt + PHI:
+> commit 164067918725d1ee8875e38213b6aee9be13383e
+> Author: Andre Vieira <andre.simoesdiasvieira@arm.com>
+> 
+>     [TypePromotion] Search from ZExt + PHI
+> 
+> Results regressed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 6329
+> # First few build errors in logs:
+> # 00:12:33 ld.lld: error: undefined symbol: __aeabi_uldivmod
+> # 00:12:33 make: *** [Makefile:1208: vmlinux] Error 1
 
-Thank you for the patch! Perhaps something to improve:
+I noticed this towards the end of last week too:
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linus/master v6.0-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://github.com/ClangBuiltLinux/linux/issues/1688
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-vsock-introduce-dgrams-sk_buff-and-qdisc/20220816-015812
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: i386-randconfig-a014-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160737.gXXFmPbY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/68c9c8216a573cdfe2170cad677854e2f4a34634
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bobby-Eshleman/virtio-vsock-introduce-dgrams-sk_buff-and-qdisc/20220816-015812
-        git checkout 68c9c8216a573cdfe2170cad677854e2f4a34634
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/vmw_vsock/
+I added some reduced reproducers to that thread. As I note in the
+original post of that issue, I am not sure if this error is a standalone
+problem or one that comes from another problem we are actively dealing
+with:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+https://github.com/ClangBuiltLinux/linux/issues/1666
+https://github.com/llvm/llvm-project/issues/56153
 
-All warnings (new ones prefixed by >>):
-
->> net/vmw_vsock/virtio_transport.c:178: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Merge the two most recent skbs together if possible.
-
-
-vim +178 net/vmw_vsock/virtio_transport.c
-
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  176  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  177  /**
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15 @178   * Merge the two most recent skbs together if possible.
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  179   *
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  180   * Caller must hold the queue lock.
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  181   */
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  182  static void
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  183  virtio_transport_add_to_queue(struct sk_buff_head *queue, struct sk_buff *new)
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  184  {
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  185  	struct sk_buff *old;
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  186  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  187  	spin_lock_bh(&queue->lock);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  188  	/* In order to reduce skb memory overhead, we merge new packets with
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  189  	 * older packets if they pass virtio_transport_skbs_can_merge().
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  190  	 */
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  191  	if (skb_queue_empty_lockless(queue)) {
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  192  		__skb_queue_tail(queue, new);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  193  		goto out;
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  194  	}
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  195  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  196  	old = skb_peek_tail(queue);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  197  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  198  	if (!virtio_transport_skbs_can_merge(old, new)) {
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  199  		__skb_queue_tail(queue, new);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  200  		goto out;
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  201  	}
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  202  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  203  	memcpy(skb_put(old, new->len), new->data, new->len);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  204  	vsock_hdr(old)->len = cpu_to_le32(old->len);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  205  	vsock_hdr(old)->buf_alloc = vsock_hdr(new)->buf_alloc;
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  206  	vsock_hdr(old)->fwd_cnt = vsock_hdr(new)->fwd_cnt;
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  207  	dev_kfree_skb_any(new);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  208  
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  209  out:
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  210  	spin_unlock_bh(&queue->lock);
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  211  }
-93afaf2cdefaa9 Bobby Eshleman 2022-08-15  212  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
