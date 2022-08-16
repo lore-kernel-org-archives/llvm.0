@@ -1,139 +1,376 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BC16AAE;
-	Tue, 16 Aug 2022 19:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660676706; x=1692212706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fw20SIT8UosrRyl9DK6OBZL1qLEKx8DhIicuKy/Nujk=;
-  b=SnNSVFEk85LBDnsXbOkaF8x8PpODHWIDJy4HMvCyGD3KUQuW8ubWWXjA
-   LIntEJ5fTonYNRom/cc+Oft1hEiEhVRQF3VlGscnTYKJuai0JdC8/u5un
-   E/9BL6BsZyI+FVWgYxNBusc2ER2uL/32wqE4dN9NZ0B+p9k/FsRtAQEhf
-   Gd++bdbMCa6IUdXOJba3EQAHTqOqLhQqt0dU+tjhYnHpyrl6pYjOY8DxF
-   CYlZHPpJiImiQc4Sk9H0dfQzS8lS4U29MiMAWnEvcIBbG+efhhiyETcMB
-   l0Xms4HvceCog37hBLLvAFpkGPdwwJCH5q0KPjh9VvFMP+j7crfVPPhqQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="279267050"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="279267050"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 12:05:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="733409002"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Aug 2022 12:04:59 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oO1s3-00009Y-0i;
-	Tue, 16 Aug 2022 19:04:59 +0000
-Date: Wed, 17 Aug 2022 03:04:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-	bhelgaas@google.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-	lznuaa@gmail.com
-Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
-Message-ID: <202208170210.zGxvHnIZ-lkp@intel.com>
-References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76FB6AAE
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 19:07:56 +0000 (UTC)
+Received: by mail-wm1-f42.google.com with SMTP id ay12so5685783wmb.1
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 12:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc;
+        bh=J75QslZdPFTaFlZ1NTOPDbRXSwySxcDSSEVqt++3Sno=;
+        b=bk5+ukW7ctXsr5c6nis1mKSElLqaJ3M2dkUinBK3hHCV2dtTLrWy4PXuIuCtK8Igm4
+         7RH7Xjim0d+7l5bUCUF/fYo//7wlxQ80qwERtoicqXDvzRBmXL0LPhEaT+ZckMq1U/iY
+         VI2cW/ew4f2XlMbQhik2giv24HeomSvAIqoHpKEuuPVMIIlddIUN9ppbd3SqNhRmrng1
+         CjaSwDCaSH4DFhTyG92KnpnRIb5krHt3k471/hup5rjXUToOgWWQDD6hQmENBt3RKJDW
+         lUg5Vu/iUAj1MQgtXHy+RqemdLXxIOo97vXHCwXIlazWABctWS3Hyn2IF7oxSdq8cPKB
+         PTug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=list-id:mime-version:subject:message-id:cc:to:date:from
+         :x-gm-message-state:from:to:cc;
+        bh=J75QslZdPFTaFlZ1NTOPDbRXSwySxcDSSEVqt++3Sno=;
+        b=fVDfbGfBUFXxniBE9fmqS97dasLUK6Qf5+bOJFfGPDHolTNLGQKKvTJw89NgczheVp
+         u8WhfHoetuQfHGBjo90pdeY8VqChtikAtYIfcESnzxQphB5G0zfIbyIx3sTd2/h3MCIz
+         mb+kJkXATjcUNnUnQKyhCDygxEkQXLgXIwHdWTZdelLpOErm9/p2AchUR5M4Js2z22/T
+         xJCDtd7Rp+IMI3BOxJ96eEFavJUs3iwxjeY+FDiNvKIratr0/jAqiwre7KuHtBEA6qEp
+         OUQpgWcIdqF6MzMjN7azOSLfXLbuXD8BNoH0eQjYJrNxxC7oIIT3dJ0dvBTt2oW9UwOJ
+         GnQA==
+X-Gm-Message-State: ACgBeo1ZRudBAdA3iG6iptSBXzFWPJ7s0zR+qAq7MheznI+4NwzEBA9M
+	LXUjSqRb3VdPh7Yg+MK6ZvQXYw==
+X-Google-Smtp-Source: AA6agR6Ssyji1Z4Wm4d9KansBtI/D4+4o/5XsdtjKNqf60OvIxtLblvcCkIMdiNAvlkJElMNsBMvEg==
+X-Received: by 2002:a1c:ed0e:0:b0:3a2:d7d0:c607 with SMTP id l14-20020a1ced0e000000b003a2d7d0c607mr19308851wmh.147.1660676875112;
+        Tue, 16 Aug 2022 12:07:55 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id by6-20020a056000098600b0021e571a99d5sm11145502wrb.17.2022.08.16.12.07.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 12:07:54 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Tue, 16 Aug 2022 19:07:54 +0000 (UTC)
+To: Shawn Zhong <github@shawnzhong.com>
+Cc: llvm@lists.linux.dev
+Message-ID: <587965879.6777.1660676874505@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by llvm: Fix
+ -Wbitfield-constant-conversion on 1-bit signed bitfield
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_6776_1825487553.1660676874159"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-Hi Frank,
+------=_Part_6776_1825487553.1660676874159
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I love your patch! Yet something to improve:
+[TCWG CI] Regression caused by llvm: Fix -Wbitfield-constant-conversion on 1-bit signed bitfield:
+commit 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+Author: Shawn Zhong <github@shawnzhong.com>
 
-[auto build test ERROR on jonmason-ntb/ntb-next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc1 next-20220816]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    Fix -Wbitfield-constant-conversion on 1-bit signed bitfield
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-base:   https://github.com/jonmason/ntb ntb-next
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220817/202208170210.zGxvHnIZ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+21250
+# First few build errors in logs:
+# 00:07:12 sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+# 00:07:12 make[3]: *** [scripts/Makefile.build:249: sound/soc/atmel/mchp-spdiftx.o] Error 1
+# 00:07:32 make[2]: *** [scripts/Makefile.build:465: sound/soc/atmel] Error 2
+# 00:12:27 make[1]: *** [scripts/Makefile.build:465: sound/soc] Error 2
+# 00:12:27 make: *** [Makefile:1855: sound] Error 2
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+from
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+21326
+# linux build successful:
+all
 
-All errors (new ones prefixed by >>):
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
->> drivers/irqchip/irq-imx-mu-msi.c:124:13: error: use of undeclared identifier 'irq_chip_ack_parent'
-           .irq_ack = irq_chip_ack_parent,
-                      ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:30: error: variable has incomplete type 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                                ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:15: note: forward declaration of 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:131:12: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                      ^
-   drivers/irqchip/irq-imx-mu-msi.c:131:39: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:31: error: variable has incomplete type 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:15: note: forward declaration of 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:203:3: error: field designator 'alloc' does not refer to any field in type 'const struct irq_domain_ops'
-           .alloc  = imx_mu_msi_domain_irq_alloc,
-            ^
-   drivers/irqchip/irq-imx-mu-msi.c:204:3: error: field designator 'free' does not refer to any field in type 'const struct irq_domain_ops'
-           .free   = imx_mu_msi_domain_irq_free,
-            ^
-   drivers/irqchip/irq-imx-mu-msi.c:241:25: error: call to undeclared function 'platform_msi_create_irq_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           msi_data->msi_domain = platform_msi_create_irq_domain(
-                                  ^
-   drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-           struct imx_mu_msi *msi_data, *priv;
-                                         ^
-   1 warning and 8 errors generated.
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
 
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-82afc9b169a67e8b8a1862fb9c41a2cd974d6691/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-e486e48c3d9e99e4c17d365bbc4b429c8e5b5999/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/
 
-vim +/irq_chip_ack_parent +124 drivers/irqchip/irq-imx-mu-msi.c
+Reproduce builds:
+<cut>
+mkdir investigate-llvm-82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+cd investigate-llvm-82afc9b169a67e8b8a1862fb9c41a2cd974d6691
 
-   121	
-   122	static struct irq_chip imx_mu_msi_irq_chip = {
-   123		.name = "MU-MSI",
- > 124		.irq_ack = irq_chip_ack_parent,
-   125	};
-   126	
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+# Fetch manifests and test.sh script
+mkdir -p artifacts/build-baseline artifacts/build-parameters
+curl -o artifacts/build-baseline/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-baseline/manifest.sh --fail
+curl -o artifacts/build-parameters/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-parameters/manifest.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts/build-baseline
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+
+cd llvm
+
+# Reproduce first_bad build
+git checkout --detach 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach e486e48c3d9e99e4c17d365bbc4b429c8e5b5999
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+Author: Shawn Zhong <github@shawnzhong.com>
+Date:   Tue Aug 9 11:42:39 2022 -0400
+
+    Fix -Wbitfield-constant-conversion on 1-bit signed bitfield
+    
+    A one-bit signed bit-field can only hold the values 0 and -1; this
+    corrects the diagnostic behavior accordingly.
+    
+    Fixes #53253
+    Differential Revision: https://reviews.llvm.org/D131255
+---
+ clang/docs/ReleaseNotes.rst                         |  3 +++
+ clang/lib/Sema/SemaChecking.cpp                     |  5 -----
+ clang/test/CXX/class/class.bit/p1.cpp               | 10 +++++-----
+ clang/test/CXX/drs/dr6xx.cpp                        |  6 +++---
+ clang/test/CodeGen/bitfield.c                       | 16 ++++++++++++++++
+ clang/test/CodeGenCXX/bitfield-layout.cpp           |  9 +++++++++
+ clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm |  2 +-
+ clang/test/Rewriter/rewrite-modern-struct-ivar.mm   |  4 ++--
+ clang/test/Sema/constant-conversion.c               | 12 ++++++++++--
+ clang/test/SemaCXX/constant-expression-cxx11.cpp    |  1 +
+ clang/test/SemaCXX/cxx1z-decomposition.cpp          |  2 +-
+ clang/test/SemaCXX/decomposition-blocks.cpp         |  2 +-
+ 12 files changed, 52 insertions(+), 20 deletions(-)
+
+diff --git a/clang/docs/ReleaseNotes.rst b/clang/docs/ReleaseNotes.rst
+index d830928a13d4..4b01f018005e 100644
+--- a/clang/docs/ReleaseNotes.rst
++++ b/clang/docs/ReleaseNotes.rst
+@@ -82,6 +82,9 @@ Improvements to Clang's diagnostics
+ - ``-Wformat`` now recognizes ``%b`` for the ``printf``/``scanf`` family of
+   functions and ``%B`` for the ``printf`` family of functions. Fixes
+   `Issue 56885: <https://github.com/llvm/llvm-project/issues/56885>`_.
++- ``-Wbitfield-constant-conversion`` now diagnoses implicit truncation when 1 is
++  assigned to a 1-bit signed integer bitfield. This fixes
++  `Issue 53253 <https://github.com/llvm/llvm-project/issues/53253>`_.
+ 
+ Non-comprehensive list of changes in this release
+ -------------------------------------------------
+diff --git a/clang/lib/Sema/SemaChecking.cpp b/clang/lib/Sema/SemaChecking.cpp
+index 5a1c21d3a367..a0ea35e1234f 100644
+--- a/clang/lib/Sema/SemaChecking.cpp
++++ b/clang/lib/Sema/SemaChecking.cpp
+@@ -13064,11 +13064,6 @@ static bool AnalyzeBitFieldAssignment(Sema &S, FieldDecl *Bitfield, Expr *Init,
+   if (llvm::APSInt::isSameValue(Value, TruncatedValue))
+     return false;
+ 
+-  // Special-case bitfields of width 1: booleans are naturally 0/1, and
+-  // therefore don't strictly fit into a signed bitfield of width 1.
+-  if (FieldWidth == 1 && Value == 1)
+-    return false;
+-
+   std::string PrettyValue = toString(Value, 10);
+   std::string PrettyTrunc = toString(TruncatedValue, 10);
+ 
+diff --git a/clang/test/CXX/class/class.bit/p1.cpp b/clang/test/CXX/class/class.bit/p1.cpp
+index ab15e3a356cf..5df1ab52cdd8 100644
+--- a/clang/test/CXX/class/class.bit/p1.cpp
++++ b/clang/test/CXX/class/class.bit/p1.cpp
+@@ -9,11 +9,11 @@ struct A {
+   int [[]] c : 1; // OK, attribute applies to the type.
+   int : 2 = 1; // expected-error {{anonymous bit-field cannot have a default member initializer}}
+   int : 0 { 1 }; // expected-error {{anonymous bit-field cannot have a default member initializer}}
+-  int : 0, d : 1 = 1;
++  unsigned int : 0, d : 1 = 1;
+   int : 1 = 12, e : 1; // expected-error {{anonymous bit-field cannot have a default member initializer}}
+-  int : 0, f : 1 = 1;
+-  int g [[]] : 1 = 1;
+-  int h [[]] : 1 {1};
+-  int i : foo() = foo();
++  unsigned int : 0, f : 1 = 1;
++  unsigned int g [[]] : 1 = 1;
++  unsigned int h [[]] : 1 {1};
++  unsigned int i : foo() = foo();
+   int j, [[]] k; // expected-error {{an attribute list cannot appear here}}
+ };
+diff --git a/clang/test/CXX/drs/dr6xx.cpp b/clang/test/CXX/drs/dr6xx.cpp
+index ad87c7295cfe..432fd6e6c5ef 100644
+--- a/clang/test/CXX/drs/dr6xx.cpp
++++ b/clang/test/CXX/drs/dr6xx.cpp
+@@ -911,9 +911,9 @@ namespace dr674 { // dr674: 8
+ namespace dr675 { // dr675: dup 739
+   template<typename T> struct A { T n : 1; };
+ #if __cplusplus >= 201103L
+-  static_assert(A<char>{1}.n < 0, "");
+-  static_assert(A<int>{1}.n < 0, "");
+-  static_assert(A<long long>{1}.n < 0, "");
++  static_assert(A<char>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
++  static_assert(A<int>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
++  static_assert(A<long long>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
+ #endif
+ }
+ 
+diff --git a/clang/test/CodeGen/bitfield.c b/clang/test/CodeGen/bitfield.c
+index c624d0045d33..4845d7c47842 100644
+--- a/clang/test/CodeGen/bitfield.c
++++ b/clang/test/CodeGen/bitfield.c
+@@ -87,3 +87,19 @@ int g3(void) {
+ // PATH: ret i32 1
+   return f3(20) + 130725747;
+ }
++
++static int f4(void) {
++  struct s5 {
++    int b:1;
++  } x;
++  x.b = 1;
++  return x.b;
++}
++
++int g4(void) {
++// CHECK-LABEL: @g4()
++// CHECK: ret i32 1
++// PATH-LABEL: @g4()
++// PATH: ret i32 1
++  return f4() + 2;
++}
+diff --git a/clang/test/CodeGenCXX/bitfield-layout.cpp b/clang/test/CodeGenCXX/bitfield-layout.cpp
+index d570b8f33e34..0e0d712fd8aa 100644
+--- a/clang/test/CodeGenCXX/bitfield-layout.cpp
++++ b/clang/test/CodeGenCXX/bitfield-layout.cpp
+@@ -105,6 +105,15 @@ int test_trunc_three_bits() {
+ // CHECK: define{{.*}} i32 @test_trunc_three_bits()
+ // CHECK: ret i32 -1
+ 
++int test_trunc_one_bit() {
++  union {
++    int i : 1; // truncated to 0b1 == -1
++  } const U = {1};  // 0b00000001
++  return U.i;
++}
++// CHECK: define{{.*}} i32 @test_trunc_one_bit()
++// CHECK: ret i32 -1
++
+ int test_trunc_1() {
+   union {
+     int i : 1; // truncated to 0b1 == -1
+diff --git a/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm b/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
+index a17fe3f85675..e54b1cdaab3a 100644
+--- a/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
++++ b/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
+@@ -34,7 +34,7 @@ typedef struct {
+ @implementation Foo
+ - (void)x:(Foo *)other {
+   bar.x = 0;
+-  bar.y = 1;
++  bar.y = -1;
+   self->_internal._singleRange._range = (( other ->bar.x) ? &( other ->_internal._singleRange._range) : ((NSRange *)(&(((_NSRangeInfo *)( other ->_internal._multipleRanges._data))->_ranges))))[0];
+ }
+ @end
+diff --git a/clang/test/Rewriter/rewrite-modern-struct-ivar.mm b/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
+index 9f56cd8b1b83..f98bdbc460d3 100644
+--- a/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
++++ b/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
+@@ -41,10 +41,10 @@ struct S {
+ @implementation Foo
+ - (void)x {
+   bar.x = 0;
+-  bar.y = 1;
++  bar.y = -1;
+ 
+   s.x = 0;
+-  s.y = 1;
++  s.y = -1;
+ }
+ @end
+ 
+diff --git a/clang/test/Sema/constant-conversion.c b/clang/test/Sema/constant-conversion.c
+index 025f4709a7d5..d386d21f24aa 100644
+--- a/clang/test/Sema/constant-conversion.c
++++ b/clang/test/Sema/constant-conversion.c
+@@ -15,8 +15,16 @@ void test_7809123(void) {
+ }
+ 
+ void test(void) {
+-  struct { int bit : 1; } a;
+-  a.bit = 1; // shouldn't warn
++  struct S {
++    int b : 1;  // The only valid values are 0 and -1.
++  } s;
++
++  s.b = -3; // expected-warning {{implicit truncation from 'int' to bit-field changes value from -3 to -1}}
++  s.b = -2; // expected-warning {{implicit truncation from 'int' to bit-field changes value from -2 to 0}}
++  s.b = -1; // no-warning
++  s.b = 0;  // no-warning
++  s.b = 1;  // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
++  s.b = 2;  // expected-warning {{implicit truncation from 'int' to bit-field changes value from 2 to 0}}
+ }
+ 
+ enum Test2 { K_zero, K_one };
+diff --git a/clang/test/SemaCXX/constant-expression-cxx11.cpp b/clang/test/SemaCXX/constant-expression-cxx11.cpp
+index e145ca982cdd..c5742ad8c2cb 100644
+--- a/clang/test/SemaCXX/constant-expression-cxx11.cpp
++++ b/clang/test/SemaCXX/constant-expression-cxx11.cpp
+@@ -2035,6 +2035,7 @@ namespace Bitfields {
+       }
+     };
+     static_assert(X::f(3) == -1, "3 should truncate to -1");
++    static_assert(X::f(1) == -1, "1 should truncate to -1");
+   }
+ 
+   struct HasUnnamedBitfield {
+diff --git a/clang/test/SemaCXX/cxx1z-decomposition.cpp b/clang/test/SemaCXX/cxx1z-decomposition.cpp
+index 13fe826759a3..305a9ac2ebc2 100644
+--- a/clang/test/SemaCXX/cxx1z-decomposition.cpp
++++ b/clang/test/SemaCXX/cxx1z-decomposition.cpp
+@@ -84,7 +84,7 @@ void enclosing() {
+ 
+   (void)[outerbit1]{}; // expected-error {{'outerbit1' cannot be captured because it does not have automatic storage duration}}
+ 
+-  auto [bit, var] = S2{1, 1}; // expected-note 2{{'bit' declared here}}
++  auto [bit, var] = S2{-1, 1}; // expected-note 2{{'bit' declared here}}
+ 
+   (void)[&bit] { // expected-error {{non-const reference cannot bind to bit-field 'a'}} \
+                     // expected-warning {{C++20}}
+diff --git a/clang/test/SemaCXX/decomposition-blocks.cpp b/clang/test/SemaCXX/decomposition-blocks.cpp
+index 21f66f8c7c1b..0676463d12c7 100644
+--- a/clang/test/SemaCXX/decomposition-blocks.cpp
++++ b/clang/test/SemaCXX/decomposition-blocks.cpp
+@@ -7,7 +7,7 @@ struct S {
+ 
+ void run(void (^)());
+ void test() {
+-  auto [i, j] = S{1, 42}; // expected-note {{'i' declared here}}
++  auto [i, j] = S{-1, 42}; // expected-note {{'i' declared here}}
+   run(^{
+     (void)i; // expected-error {{reference to local binding 'i' declared in enclosing function 'test'}}
+   });
+</cut>
+------=_Part_6776_1825487553.1660676874159--
