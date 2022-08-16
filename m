@@ -1,51 +1,45 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C073C00;
-	Tue, 16 Aug 2022 23:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68096D19
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 23:30:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660692009; x=1692228009;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aJeN90HVF/ei3jDxKECmS++0CA+/54+qZwuC6Tfbrcs=;
-  b=ZeJxfjPXQjRBWdU3iQtUFXfpHW5lU8FVxrlixf6GQ7D3zabQlwKChLZa
-   AOUz7+btav4jwCfAOh/PJweH459kk3Nuns8Ai5Z2bhaE9Th9ka+ekVV23
-   KJmSHzLzEgOy8muZyxzQSMdByxD14CPaZ/mXbp1K9sRhzJLOk8tmc16yx
-   2igZ0YhhopxfOpjJaXVuaLLr+GPeO5CXfjWTrsEiDzrjoYlwtAfcEoP1P
-   u1erECc2LSZheetfStMk3pQ/roO5U2X2VrWnfiDnqXdJNFSNL5IDeYm6o
-   cyVFBFa+KASLkQ8baACh5rpQ8p42i66qsZsDpNqNfbv4LsJaQ4Ff4im4d
+  t=1660692606; x=1692228606;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vz5xjTtCrN6+2TR5pSizt3o7/Rp/mlTV2P++6Fb6qPk=;
+  b=e0p/a1+IQ7ntnNst44tNKSPaOlOU1Abdonz4dcCjIXK/wB7Z6p8WvM45
+   evOnTHnWlCC24LU2fgm0DkZu1573FcNjPVw4cSpYsm+wv6hbdrXrfdRMc
+   CwqGyUbAYfERl9hRWgP/8fC4qtZii+9o1R46E9Aoof/9cElNuN/P6WMCh
+   4lENlD2jnc+LTCSQZqegPZ8m+6aLAJ0AWKqvjnWIfn6VJaFhihOg1+e2b
+   WPakmupjjsDHJ8bclxPIY1yGZcuTVnjTvm90ZkSxbI/gCVe1u0yKMsxN5
+   S5/ohoCkIMfBPjGNNyHaOGn82aU+26eUAlghQf/JFp+jYL5PdWBFTSpNn
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="354096876"
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="318355284"
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="354096876"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:20:09 -0700
+   d="scan'208";a="318355284"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 16:30:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="640224507"
+   d="scan'208";a="696559745"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Aug 2022 16:20:04 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Aug 2022 16:30:04 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oO5qt-0000KG-1Y;
-	Tue, 16 Aug 2022 23:20:03 +0000
-Date: Wed, 17 Aug 2022 07:19:06 +0800
+	id 1oO60Z-0000Ke-1u;
+	Tue, 16 Aug 2022 23:30:03 +0000
+Date: Wed, 17 Aug 2022 07:29:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-	bhelgaas@google.com
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-	lznuaa@gmail.com
-Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
-Message-ID: <202208170756.pO5LueSf-lkp@intel.com>
-References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: [ammarfaizi2-block:tglx/devel/depthtracking 58/59]
+ arch/x86/net/bpf_jit_comp.c:2103:40: error: use of undeclared identifier
+ '__fentry__'
+Message-ID: <202208170727.cRWzeoJx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,215 +48,301 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
 
-Hi Frank,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on jonmason-ntb/ntb-next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc1 next-20220816]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-base:   https://github.com/jonmason/ntb ntb-next
-config: arm-imx_v4_v5_defconfig (https://download.01.org/0day-ci/archive/20220817/202208170756.pO5LueSf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
+head:   9bbf33b92f4c755dd56f4d9bc1b40e94fdd1fff7
+commit: 5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a [58/59] x86/ftrace: Make it call depth tracking aware
+config: x86_64-randconfig-a013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170727.cRWzeoJx-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
+        # https://github.com/ammarfaizi2/linux-block/commit/5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
+        git checkout 5f5bcd6ccea80ee1fa71477dbf80d43d9cbbf30a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-imx-mu-msi.c:124:13: error: use of undeclared identifier 'irq_chip_ack_parent'
-           .irq_ack = irq_chip_ack_parent,
-                      ^
->> drivers/irqchip/irq-imx-mu-msi.c:127:30: error: variable has incomplete type 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                                ^
-   drivers/irqchip/irq-imx-mu-msi.c:127:15: note: forward declaration of 'struct msi_domain_ops'
-   static struct msi_domain_ops imx_mu_msi_irq_ops = {
-                 ^
->> drivers/irqchip/irq-imx-mu-msi.c:131:12: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_DOM_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-                      ^
->> drivers/irqchip/irq-imx-mu-msi.c:131:39: error: use of undeclared identifier 'MSI_FLAG_USE_DEF_CHIP_OPS'
-           .flags  = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
+>> arch/x86/net/bpf_jit_comp.c:2103:40: error: use of undeclared identifier '__fentry__'
+           x86_call_depth_emit_accounting(&prog, __fentry__);
                                                  ^
->> drivers/irqchip/irq-imx-mu-msi.c:130:31: error: variable has incomplete type 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                                 ^
-   drivers/irqchip/irq-imx-mu-msi.c:130:15: note: forward declaration of 'struct msi_domain_info'
-   static struct msi_domain_info imx_mu_msi_domain_info = {
-                 ^
->> drivers/irqchip/irq-imx-mu-msi.c:203:3: error: field designator 'alloc' does not refer to any field in type 'const struct irq_domain_ops'
-           .alloc  = imx_mu_msi_domain_irq_alloc,
-            ^
->> drivers/irqchip/irq-imx-mu-msi.c:204:3: error: field designator 'free' does not refer to any field in type 'const struct irq_domain_ops'
-           .free   = imx_mu_msi_domain_irq_free,
-            ^
->> drivers/irqchip/irq-imx-mu-msi.c:241:25: error: call to undeclared function 'platform_msi_create_irq_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           msi_data->msi_domain = platform_msi_create_irq_domain(
-                                  ^
-   drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-           struct imx_mu_msi *msi_data, *priv;
-                                         ^
-   1 warning and 8 errors generated.
+   1 error generated.
 
 
-vim +/irq_chip_ack_parent +124 drivers/irqchip/irq-imx-mu-msi.c
+vim +/__fentry__ +2103 arch/x86/net/bpf_jit_comp.c
 
-   121	
-   122	static struct irq_chip imx_mu_msi_irq_chip = {
-   123		.name = "MU-MSI",
- > 124		.irq_ack = irq_chip_ack_parent,
-   125	};
-   126	
- > 127	static struct msi_domain_ops imx_mu_msi_irq_ops = {
-   128	};
-   129	
- > 130	static struct msi_domain_info imx_mu_msi_domain_info = {
- > 131		.flags	= (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
-   132		.ops	= &imx_mu_msi_irq_ops,
-   133		.chip	= &imx_mu_msi_irq_chip,
-   134	};
-   135	
-   136	static void imx_mu_msi_parent_compose_msg(struct irq_data *data,
-   137						  struct msi_msg *msg)
-   138	{
-   139		struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
-   140		u64 addr = msi_data->msiir_addr + 4 * data->hwirq;
-   141	
-   142		msg->address_hi = upper_32_bits(addr);
-   143		msg->address_lo = lower_32_bits(addr);
-   144		msg->data = data->hwirq;
-   145	}
-   146	
-   147	static int imx_mu_msi_parent_set_affinity(struct irq_data *irq_data,
-   148					   const struct cpumask *mask, bool force)
-   149	{
-   150		return -EINVAL;
-   151	}
-   152	
-   153	static struct irq_chip imx_mu_msi_parent_chip = {
-   154		.name		= "MU",
-   155		.irq_mask	= imx_mu_msi_parent_mask_irq,
-   156		.irq_unmask	= imx_mu_msi_parent_unmask_irq,
-   157		.irq_ack	= imx_mu_msi_parent_ack_irq,
-   158		.irq_compose_msi_msg	= imx_mu_msi_parent_compose_msg,
-   159		.irq_set_affinity = imx_mu_msi_parent_set_affinity,
-   160	};
-   161	
-   162	static int imx_mu_msi_domain_irq_alloc(struct irq_domain *domain,
-   163						unsigned int virq,
-   164						unsigned int nr_irqs,
-   165						void *args)
-   166	{
-   167		struct imx_mu_msi *msi_data = domain->host_data;
-   168		unsigned long flags;
-   169		int pos, err = 0;
-   170	
-   171		WARN_ON(nr_irqs != 1);
-   172	
-   173		spin_lock_irqsave(&msi_data->lock, flags);
-   174		pos = find_first_zero_bit(&msi_data->used, IMX_MU_CHANS);
-   175		if (pos < IMX_MU_CHANS)
-   176			__set_bit(pos, &msi_data->used);
-   177		else
-   178			err = -ENOSPC;
-   179		spin_unlock_irqrestore(&msi_data->lock, flags);
-   180	
-   181		if (err)
-   182			return err;
-   183	
-   184		irq_domain_set_info(domain, virq, pos,
-   185				    &imx_mu_msi_parent_chip, msi_data,
-   186				    handle_edge_irq, NULL, NULL);
-   187		return 0;
-   188	}
-   189	
-   190	static void imx_mu_msi_domain_irq_free(struct irq_domain *domain,
-   191					       unsigned int virq, unsigned int nr_irqs)
-   192	{
-   193		struct irq_data *d = irq_domain_get_irq_data(domain, virq);
-   194		struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(d);
-   195		unsigned long flags;
-   196	
-   197		spin_lock_irqsave(&msi_data->lock, flags);
-   198		__clear_bit(d->hwirq, &msi_data->used);
-   199		spin_unlock_irqrestore(&msi_data->lock, flags);
-   200	}
-   201	
-   202	static const struct irq_domain_ops imx_mu_msi_domain_ops = {
- > 203		.alloc	= imx_mu_msi_domain_irq_alloc,
- > 204		.free	= imx_mu_msi_domain_irq_free,
-   205	};
-   206	
-   207	static void imx_mu_msi_irq_handler(struct irq_desc *desc)
-   208	{
-   209		struct imx_mu_msi *msi_data = irq_desc_get_handler_data(desc);
-   210		struct irq_chip *chip = irq_desc_get_chip(desc);
-   211		u32 status;
-   212		int i;
-   213	
-   214		status = imx_mu_read(msi_data, msi_data->cfg->xSR[IMX_MU_RSR]);
-   215	
-   216		chained_irq_enter(chip, desc);
-   217		for (i = 0; i < IMX_MU_CHANS; i++) {
-   218			if (status & IMX_MU_xSR_RFn(msi_data, i))
-   219				generic_handle_domain_irq(msi_data->msi_domain, i);
-   220		}
-   221		chained_irq_exit(chip, desc);
-   222	}
-   223	
-   224	static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct device *dev)
-   225	{
-   226		struct fwnode_handle *fwnodes = dev_fwnode(dev);
-   227		struct irq_domain *parent;
-   228	
-   229		/* Initialize MSI domain parent */
-   230		parent = irq_domain_create_linear(fwnodes,
-   231						    IMX_MU_CHANS,
-   232						    &imx_mu_msi_domain_ops,
-   233						    msi_data);
-   234		if (!parent) {
-   235			dev_err(dev, "failed to create IRQ domain\n");
-   236			return -ENOMEM;
-   237		}
-   238	
-   239		irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
-   240	
- > 241		msi_data->msi_domain = platform_msi_create_irq_domain(
-   242					fwnodes,
-   243					&imx_mu_msi_domain_info,
-   244					parent);
-   245	
-   246		if (!msi_data->msi_domain) {
-   247			dev_err(dev, "failed to create MSI domain\n");
-   248			irq_domain_remove(parent);
-   249			return -ENOMEM;
-   250		}
-   251	
-   252		irq_domain_set_pm_device(msi_data->msi_domain, dev);
-   253	
-   254		return 0;
-   255	}
-   256	
+  1970	
+  1971	/* Example:
+  1972	 * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
+  1973	 * its 'struct btf_func_model' will be nr_args=2
+  1974	 * The assembly code when eth_type_trans is executing after trampoline:
+  1975	 *
+  1976	 * push rbp
+  1977	 * mov rbp, rsp
+  1978	 * sub rsp, 16                     // space for skb and dev
+  1979	 * push rbx                        // temp regs to pass start time
+  1980	 * mov qword ptr [rbp - 16], rdi   // save skb pointer to stack
+  1981	 * mov qword ptr [rbp - 8], rsi    // save dev pointer to stack
+  1982	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
+  1983	 * mov rbx, rax                    // remember start time in bpf stats are enabled
+  1984	 * lea rdi, [rbp - 16]             // R1==ctx of bpf prog
+  1985	 * call addr_of_jited_FENTRY_prog
+  1986	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
+  1987	 * mov rsi, rbx                    // prog start time
+  1988	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
+  1989	 * mov rdi, qword ptr [rbp - 16]   // restore skb pointer from stack
+  1990	 * mov rsi, qword ptr [rbp - 8]    // restore dev pointer from stack
+  1991	 * pop rbx
+  1992	 * leave
+  1993	 * ret
+  1994	 *
+  1995	 * eth_type_trans has 5 byte nop at the beginning. These 5 bytes will be
+  1996	 * replaced with 'call generated_bpf_trampoline'. When it returns
+  1997	 * eth_type_trans will continue executing with original skb and dev pointers.
+  1998	 *
+  1999	 * The assembly code when eth_type_trans is called from trampoline:
+  2000	 *
+  2001	 * push rbp
+  2002	 * mov rbp, rsp
+  2003	 * sub rsp, 24                     // space for skb, dev, return value
+  2004	 * push rbx                        // temp regs to pass start time
+  2005	 * mov qword ptr [rbp - 24], rdi   // save skb pointer to stack
+  2006	 * mov qword ptr [rbp - 16], rsi   // save dev pointer to stack
+  2007	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
+  2008	 * mov rbx, rax                    // remember start time if bpf stats are enabled
+  2009	 * lea rdi, [rbp - 24]             // R1==ctx of bpf prog
+  2010	 * call addr_of_jited_FENTRY_prog  // bpf prog can access skb and dev
+  2011	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
+  2012	 * mov rsi, rbx                    // prog start time
+  2013	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
+  2014	 * mov rdi, qword ptr [rbp - 24]   // restore skb pointer from stack
+  2015	 * mov rsi, qword ptr [rbp - 16]   // restore dev pointer from stack
+  2016	 * call eth_type_trans+5           // execute body of eth_type_trans
+  2017	 * mov qword ptr [rbp - 8], rax    // save return value
+  2018	 * call __bpf_prog_enter           // rcu_read_lock and preempt_disable
+  2019	 * mov rbx, rax                    // remember start time in bpf stats are enabled
+  2020	 * lea rdi, [rbp - 24]             // R1==ctx of bpf prog
+  2021	 * call addr_of_jited_FEXIT_prog   // bpf prog can access skb, dev, return value
+  2022	 * movabsq rdi, 64bit_addr_of_struct_bpf_prog  // unused if bpf stats are off
+  2023	 * mov rsi, rbx                    // prog start time
+  2024	 * call __bpf_prog_exit            // rcu_read_unlock, preempt_enable and stats math
+  2025	 * mov rax, qword ptr [rbp - 8]    // restore eth_type_trans's return value
+  2026	 * pop rbx
+  2027	 * leave
+  2028	 * add rsp, 8                      // skip eth_type_trans's frame
+  2029	 * ret                             // return to its caller
+  2030	 */
+  2031	int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *image_end,
+  2032					const struct btf_func_model *m, u32 flags,
+  2033					struct bpf_tramp_links *tlinks,
+  2034					void *orig_call)
+  2035	{
+  2036		int ret, i, nr_args = m->nr_args;
+  2037		int regs_off, ip_off, args_off, stack_size = nr_args * 8, run_ctx_off;
+  2038		struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+  2039		struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+  2040		struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+  2041		u8 **branches = NULL;
+  2042		u8 *prog;
+  2043		bool save_ret;
+  2044	
+  2045		/* x86-64 supports up to 6 arguments. 7+ can be added in the future */
+  2046		if (nr_args > 6)
+  2047			return -ENOTSUPP;
+  2048	
+  2049		/* Generated trampoline stack layout:
+  2050		 *
+  2051		 * RBP + 8         [ return address  ]
+  2052		 * RBP + 0         [ RBP             ]
+  2053		 *
+  2054		 * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
+  2055		 *                                      BPF_TRAMP_F_RET_FENTRY_RET flags
+  2056		 *
+  2057		 *                 [ reg_argN        ]  always
+  2058		 *                 [ ...             ]
+  2059		 * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
+  2060		 *
+  2061		 * RBP - args_off  [ args count      ]  always
+  2062		 *
+  2063		 * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
+  2064		 *
+  2065		 * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
+  2066		 */
+  2067	
+  2068		/* room for return value of orig_call or fentry prog */
+  2069		save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
+  2070		if (save_ret)
+  2071			stack_size += 8;
+  2072	
+  2073		regs_off = stack_size;
+  2074	
+  2075		/* args count  */
+  2076		stack_size += 8;
+  2077		args_off = stack_size;
+  2078	
+  2079		if (flags & BPF_TRAMP_F_IP_ARG)
+  2080			stack_size += 8; /* room for IP address argument */
+  2081	
+  2082		ip_off = stack_size;
+  2083	
+  2084		stack_size += (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
+  2085		run_ctx_off = stack_size;
+  2086	
+  2087		if (flags & BPF_TRAMP_F_SKIP_FRAME) {
+  2088			/* skip patched call instruction and point orig_call to actual
+  2089			 * body of the kernel function.
+  2090			 */
+  2091			if (is_endbr(*(u32 *)orig_call))
+  2092				orig_call += ENDBR_INSN_SIZE;
+  2093			orig_call += X86_PATCH_SIZE;
+  2094		}
+  2095	
+  2096		prog = image;
+  2097	
+  2098		EMIT_ENDBR();
+  2099		/*
+  2100		 * This is the direct-call trampoline, as such it needs accounting
+  2101		 * for the __fentry__ call.
+  2102		 */
+> 2103		x86_call_depth_emit_accounting(&prog, __fentry__);
+  2104		EMIT1(0x55);		 /* push rbp */
+  2105		EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
+  2106		EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
+  2107		EMIT1(0x53);		 /* push rbx */
+  2108	
+  2109		/* Store number of arguments of the traced function:
+  2110		 *   mov rax, nr_args
+  2111		 *   mov QWORD PTR [rbp - args_off], rax
+  2112		 */
+  2113		emit_mov_imm64(&prog, BPF_REG_0, 0, (u32) nr_args);
+  2114		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -args_off);
+  2115	
+  2116		if (flags & BPF_TRAMP_F_IP_ARG) {
+  2117			/* Store IP address of the traced function:
+  2118			 * mov rax, QWORD PTR [rbp + 8]
+  2119			 * sub rax, X86_PATCH_SIZE
+  2120			 * mov QWORD PTR [rbp - ip_off], rax
+  2121			 */
+  2122			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
+  2123			EMIT4(0x48, 0x83, 0xe8, X86_PATCH_SIZE);
+  2124			emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -ip_off);
+  2125		}
+  2126	
+  2127		save_regs(m, &prog, nr_args, regs_off);
+  2128	
+  2129		if (flags & BPF_TRAMP_F_CALL_ORIG) {
+  2130			/* arg1: mov rdi, im */
+  2131			emit_mov_imm64(&prog, BPF_REG_1, (long) im >> 32, (u32) (long) im);
+  2132			if (emit_rsb_call(&prog, __bpf_tramp_enter, prog)) {
+  2133				ret = -EINVAL;
+  2134				goto cleanup;
+  2135			}
+  2136		}
+  2137	
+  2138		if (fentry->nr_links)
+  2139			if (invoke_bpf(m, &prog, fentry, regs_off, run_ctx_off,
+  2140				       flags & BPF_TRAMP_F_RET_FENTRY_RET))
+  2141				return -EINVAL;
+  2142	
+  2143		if (fmod_ret->nr_links) {
+  2144			branches = kcalloc(fmod_ret->nr_links, sizeof(u8 *),
+  2145					   GFP_KERNEL);
+  2146			if (!branches)
+  2147				return -ENOMEM;
+  2148	
+  2149			if (invoke_bpf_mod_ret(m, &prog, fmod_ret, regs_off,
+  2150					       run_ctx_off, branches)) {
+  2151				ret = -EINVAL;
+  2152				goto cleanup;
+  2153			}
+  2154		}
+  2155	
+  2156		if (flags & BPF_TRAMP_F_CALL_ORIG) {
+  2157			restore_regs(m, &prog, nr_args, regs_off);
+  2158	
+  2159			if (flags & BPF_TRAMP_F_ORIG_STACK) {
+  2160				emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
+  2161				EMIT2(0xff, 0xd0); /* call *rax */
+  2162			} else {
+  2163				/* call original function */
+  2164				if (emit_rsb_call(&prog, orig_call, prog)) {
+  2165					ret = -EINVAL;
+  2166					goto cleanup;
+  2167				}
+  2168			}
+  2169			/* remember return value in a stack for bpf prog to access */
+  2170			emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
+  2171			im->ip_after_call = prog;
+  2172			memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
+  2173			prog += X86_PATCH_SIZE;
+  2174		}
+  2175	
+  2176		if (fmod_ret->nr_links) {
+  2177			/* From Intel 64 and IA-32 Architectures Optimization
+  2178			 * Reference Manual, 3.4.1.4 Code Alignment, Assembly/Compiler
+  2179			 * Coding Rule 11: All branch targets should be 16-byte
+  2180			 * aligned.
+  2181			 */
+  2182			emit_align(&prog, 16);
+  2183			/* Update the branches saved in invoke_bpf_mod_ret with the
+  2184			 * aligned address of do_fexit.
+  2185			 */
+  2186			for (i = 0; i < fmod_ret->nr_links; i++)
+  2187				emit_cond_near_jump(&branches[i], prog, branches[i],
+  2188						    X86_JNE);
+  2189		}
+  2190	
+  2191		if (fexit->nr_links)
+  2192			if (invoke_bpf(m, &prog, fexit, regs_off, run_ctx_off, false)) {
+  2193				ret = -EINVAL;
+  2194				goto cleanup;
+  2195			}
+  2196	
+  2197		if (flags & BPF_TRAMP_F_RESTORE_REGS)
+  2198			restore_regs(m, &prog, nr_args, regs_off);
+  2199	
+  2200		/* This needs to be done regardless. If there were fmod_ret programs,
+  2201		 * the return value is only updated on the stack and still needs to be
+  2202		 * restored to R0.
+  2203		 */
+  2204		if (flags & BPF_TRAMP_F_CALL_ORIG) {
+  2205			im->ip_epilogue = prog;
+  2206			/* arg1: mov rdi, im */
+  2207			emit_mov_imm64(&prog, BPF_REG_1, (long) im >> 32, (u32) (long) im);
+  2208			if (emit_rsb_call(&prog, __bpf_tramp_exit, prog)) {
+  2209				ret = -EINVAL;
+  2210				goto cleanup;
+  2211			}
+  2212		}
+  2213		/* restore return value of orig_call or fentry prog back into RAX */
+  2214		if (save_ret)
+  2215			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
+  2216	
+  2217		EMIT1(0x5B); /* pop rbx */
+  2218		EMIT1(0xC9); /* leave */
+  2219		if (flags & BPF_TRAMP_F_SKIP_FRAME)
+  2220			/* skip our return address and return to parent */
+  2221			EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
+  2222		emit_return(&prog, prog);
+  2223		/* Make sure the trampoline generation logic doesn't overflow */
+  2224		if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
+  2225			ret = -EFAULT;
+  2226			goto cleanup;
+  2227		}
+  2228		ret = prog - (u8 *)image;
+  2229	
+  2230	cleanup:
+  2231		kfree(branches);
+  2232		return ret;
+  2233	}
+  2234	
 
 -- 
 0-DAY CI Kernel Test Service
