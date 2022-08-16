@@ -1,376 +1,348 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76FB6AAE
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 19:07:56 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id ay12so5685783wmb.1
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 12:07:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7B46AAE
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 19:24:20 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id bs25so13798544wrb.2
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 12:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc;
-        bh=J75QslZdPFTaFlZ1NTOPDbRXSwySxcDSSEVqt++3Sno=;
-        b=bk5+ukW7ctXsr5c6nis1mKSElLqaJ3M2dkUinBK3hHCV2dtTLrWy4PXuIuCtK8Igm4
-         7RH7Xjim0d+7l5bUCUF/fYo//7wlxQ80qwERtoicqXDvzRBmXL0LPhEaT+ZckMq1U/iY
-         VI2cW/ew4f2XlMbQhik2giv24HeomSvAIqoHpKEuuPVMIIlddIUN9ppbd3SqNhRmrng1
-         CjaSwDCaSH4DFhTyG92KnpnRIb5krHt3k471/hup5rjXUToOgWWQDD6hQmENBt3RKJDW
-         lUg5Vu/iUAj1MQgtXHy+RqemdLXxIOo97vXHCwXIlazWABctWS3Hyn2IF7oxSdq8cPKB
-         PTug==
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Sz8NNXwmI1EFfI2ysv73Yy1lOgv2a7RKnB5GY8gYwyA=;
+        b=v5Wq2TkCKJiji9wCUF2Og9fTe+WAKKIVnXpv6pmV69UDPXK/3jjiSwLZXS7rx/VfMV
+         HAlrWZpoEeUaShnaKamj3WVmo3UlZ8hZtIvOoXdAa5KPCkom8Z3cMFhFUkmBgW968cgS
+         aBkZtFa9Sc1dybQXYEg5/3Ba5sLZykMJon+ZwehL21O2uXYPv5CkhLb7OvEWDiKGdhmO
+         mYC/YwjhESSeNAV7myqJPTEk1atQ5BmqVktEgYBNPE3gh6IFFYYjupO9LHQ1SfJqD8Lf
+         fesOvFwb/2NnrwbKYPyk6cN+uadTvGGICYA9KKECIb+YoSTWR0TXCX88Alk1atyaKWce
+         urJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=J75QslZdPFTaFlZ1NTOPDbRXSwySxcDSSEVqt++3Sno=;
-        b=fVDfbGfBUFXxniBE9fmqS97dasLUK6Qf5+bOJFfGPDHolTNLGQKKvTJw89NgczheVp
-         u8WhfHoetuQfHGBjo90pdeY8VqChtikAtYIfcESnzxQphB5G0zfIbyIx3sTd2/h3MCIz
-         mb+kJkXATjcUNnUnQKyhCDygxEkQXLgXIwHdWTZdelLpOErm9/p2AchUR5M4Js2z22/T
-         xJCDtd7Rp+IMI3BOxJ96eEFavJUs3iwxjeY+FDiNvKIratr0/jAqiwre7KuHtBEA6qEp
-         OUQpgWcIdqF6MzMjN7azOSLfXLbuXD8BNoH0eQjYJrNxxC7oIIT3dJ0dvBTt2oW9UwOJ
-         GnQA==
-X-Gm-Message-State: ACgBeo1ZRudBAdA3iG6iptSBXzFWPJ7s0zR+qAq7MheznI+4NwzEBA9M
-	LXUjSqRb3VdPh7Yg+MK6ZvQXYw==
-X-Google-Smtp-Source: AA6agR6Ssyji1Z4Wm4d9KansBtI/D4+4o/5XsdtjKNqf60OvIxtLblvcCkIMdiNAvlkJElMNsBMvEg==
-X-Received: by 2002:a1c:ed0e:0:b0:3a2:d7d0:c607 with SMTP id l14-20020a1ced0e000000b003a2d7d0c607mr19308851wmh.147.1660676875112;
-        Tue, 16 Aug 2022 12:07:55 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id by6-20020a056000098600b0021e571a99d5sm11145502wrb.17.2022.08.16.12.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 12:07:54 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Tue, 16 Aug 2022 19:07:54 +0000 (UTC)
-To: Shawn Zhong <github@shawnzhong.com>
-Cc: llvm@lists.linux.dev
-Message-ID: <587965879.6777.1660676874505@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by llvm: Fix
- -Wbitfield-constant-conversion on 1-bit signed bitfield
+        bh=Sz8NNXwmI1EFfI2ysv73Yy1lOgv2a7RKnB5GY8gYwyA=;
+        b=2uNwpQL+aoDQ9KIQSGaQNnRjJphXcybDsufuiWYwMUa+1xjpYtGqpyeWc2woTtsjIn
+         n8ARnjyateD4gRkf/pjtTtKyZz9Qrfu3UKlE3B/m5BjwZ+tya9xv/MEPIczKRBZzGtL5
+         XZFFeFwC1IFyFy3fMYyLnB4cUaSgaikGRH1K6EQsxtqehJZ3HBsRWMX7IWI2jKUFEV+H
+         Wj0PjNBn3wi6h2dTmpli9WR7I/qdKKJRiRRAKLN0x2Mp0gj4gIy1UO/CW02QYqiW+s7m
+         PEOmO4WL0VZBM4pD+5inhoHyt89RQhnhMLg5EQMXD8jlnOTLmF/DTG3lULOuk9/84EA4
+         cUuQ==
+X-Gm-Message-State: ACgBeo2IVAjIfiodawN3aRK142NBimVpCsRxGsMd7RmyMbNJ9L073m44
+	TvC2xt6NulOB6S235jtCIZxa4w==
+X-Google-Smtp-Source: AA6agR4aEp+iW0YMEf5emiZyDEPlFnJbsXIRLMLmehN5Xx6i+1e+VtrBCslwlFSQBGiuC8RrtaKjkg==
+X-Received: by 2002:adf:fe44:0:b0:225:325:13f6 with SMTP id m4-20020adffe44000000b00225032513f6mr6744226wrs.234.1660677858735;
+        Tue, 16 Aug 2022 12:24:18 -0700 (PDT)
+Received: from [192.168.0.12] (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
+        by smtp.gmail.com with ESMTPSA id s3-20020a5d69c3000000b00225232154d7sm240559wrw.110.2022.08.16.12.24.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 12:24:18 -0700 (PDT)
+Message-ID: <0ee98af7-d6df-fb3d-b1f4-42d3482bc7a9@linaro.org>
+Date: Tue, 16 Aug 2022 20:24:16 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_6776_1825487553.1660676874159"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
-
-------=_Part_6776_1825487553.1660676874159
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 1/2] power: supply: add Qualcomm PMI8998 SMB2 Charger
+ driver
+Content-Language: en-US
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson
+ <bjorn.andersson@linaro.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ llvm@lists.linux.dev, phone-devel@vger.kernel.org
+References: <20220706194125.1861256-1-caleb.connolly@linaro.org>
+ <20220706194125.1861256-2-caleb.connolly@linaro.org>
+From: Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20220706194125.1861256-2-caleb.connolly@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-[TCWG CI] Regression caused by llvm: Fix -Wbitfield-constant-conversion on 1-bit signed bitfield:
-commit 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-Author: Shawn Zhong <github@shawnzhong.com>
 
-    Fix -Wbitfield-constant-conversion on 1-bit signed bitfield
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21250
-# First few build errors in logs:
-# 00:07:12 sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
-# 00:07:12 make[3]: *** [scripts/Makefile.build:249: sound/soc/atmel/mchp-spdiftx.o] Error 1
-# 00:07:32 make[2]: *** [scripts/Makefile.build:465: sound/soc/atmel] Error 2
-# 00:12:27 make[1]: *** [scripts/Makefile.build:465: sound/soc] Error 2
-# 00:12:27 make: *** [Makefile:1855: sound] Error 2
+On 06/07/2022 20:41, Caleb Connolly wrote:
+> Add a driver for the SMB2 charger block found in the Qualcomm PMI8998
+> and PM660.
 
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21326
-# linux build successful:
-all
+I noticed an issue in this revision which was the root-cause of the OnePlus 6 charging incredibly 
+slowly. Other SDM845 phones feature a secondary charger IC, usually the smb1135 (iirc) which was 
+able to work normally, hiding the issue, however the OnePlus 6 does not. See below.
+> 
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+> Changes since v1:
+>   * Renamed from qcom_smb2 to qcom_pmi8998_charger
+> ---
+>   drivers/power/supply/Kconfig                |    9 +
+>   drivers/power/supply/Makefile               |    1 +
+>   drivers/power/supply/qcom_pmi8998_charger.c | 1044 +++++++++++++++++++
+>   3 files changed, 1054 insertions(+)
+>   create mode 100644 drivers/power/supply/qcom_pmi8998_charger.c
+> 
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 7f02f36aea55..a39e3eda6dbd 100644
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+[snip]
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
+> +
+> +/* Init sequence derived from vendor downstream driver */
+> +static const struct smb2_register smb2_init_seq[] = {
+> +	{ .addr = AICL_RERUN_TIME_CFG, .mask = AICL_RERUN_TIME_MASK, .val = 0 },
+> +	/*
+> +	 * By default configure us as an upstream facing port
+> +	 * FIXME: for OTG we should set UFP_EN_CMD_BIT and DFP_EN_CMD_BIT both to 0
+> +	 */
+> +	{ .addr = TYPE_C_INTRPT_ENB_SOFTWARE_CTRL,
+> +	  .mask = TYPEC_POWER_ROLE_CMD_MASK | VCONN_EN_SRC_BIT |
+> +		  VCONN_EN_VALUE_BIT,
+> +	  .val = VCONN_EN_SRC_BIT | UFP_EN_CMD_BIT },
+> +	/*
+> +	 * disable Type-C factory mode and stay in Attached.SRC state when VCONN
+> +	 * over-current happens
+> +	 */
+> +	{ .addr = TYPE_C_CFG,
+> +	  .mask = FACTORY_MODE_DETECTION_EN_BIT | VCONN_OC_CFG_BIT,
+> +	  .val = 0 },
+> +	/* Configure VBUS for software control */
+> +	{ .addr = OTG_CFG, .mask = OTG_EN_SRC_CFG_BIT, .val = 0 },
+> +	{ .addr = FG_UPDATE_CFG_2_SEL,
+> +	  .mask = SOC_LT_CHG_RECHARGE_THRESH_SEL_BIT |
+> +		  VBT_LT_CHG_RECHARGE_THRESH_SEL_BIT,
+> +	  .val = VBT_LT_CHG_RECHARGE_THRESH_SEL_BIT },
+> +	/* Enable charging */
+> +	{ .addr = USBIN_OPTIONS_1_CFG, .mask = HVDCP_EN_BIT, .val = 0 },
+> +	{ .addr = CHARGING_ENABLE_CMD,
+> +	  .mask = CHARGING_ENABLE_CMD_BIT,
+> +	  .val = CHARGING_ENABLE_CMD_BIT },
+> +	/* Allow overriding the current limit */
+> +	// { .addr = USBIN_LOAD_CFG,
+> +	//   .mask = ICL_OVERRIDE_AFTER_APSD_BIT,
+> +	//   .val = ICL_OVERRIDE_AFTER_APSD_BIT },
+> +	{ .addr = CHGR_CFG2,
+> +	  .mask = CHG_EN_SRC_BIT | CHG_EN_POLARITY_BIT |
+> +		  PRETOFAST_TRANSITION_CFG_BIT | BAT_OV_ECC_BIT | I_TERM_BIT |
+> +		  AUTO_RECHG_BIT | EN_ANALOG_DROP_IN_VBATT_BIT |
+> +		  CHARGER_INHIBIT_BIT,
+> +	  .val = 0 },
+> +	/*
+> +	 * No clue what this does
+> +	 */
+> +	{ .addr = STAT_CFG,
+> +	  .mask = STAT_SW_OVERRIDE_CFG_BIT,
+> +	  .val = STAT_SW_OVERRIDE_CFG_BIT },
+> +	/*
+> +	 * Set the default SDP charger type to a 500ma USB 2.0 port
+> +	 */
+> +	{ .addr = USBIN_ICL_OPTIONS,
+> +	  .mask = USB51_MODE_BIT | USBIN_MODE_CHG_BIT,
+> +	  .val = USB51_MODE_BIT },
+> +	/*
+> +	 * Disable watchdog
+> +	 */
+> +	{ .addr = SNARL_BARK_BITE_WD_CFG, .mask = 0xff, .val = 0 },
+> +	{ .addr = WD_CFG,
+> +	  .mask = WATCHDOG_TRIGGER_AFP_EN_BIT | WDOG_TIMER_EN_ON_PLUGIN_BIT |
+> +		  BARK_WDOG_INT_EN_BIT,
+> +	  .val = 0 },
+> +	/* OnePlus init stuff from "op_set_collapse_fet" */
+> +	{ .addr = USBIN_5V_AICL_THRESHOLD_CFG,
+> +	  .mask = USBIN_5V_AICL_THRESHOLD_CFG_MASK,
+> +	  .val = 0x3 },
+> +	{ .addr = USBIN_CONT_AICL_THRESHOLD_CFG,
+> +	  .mask = USBIN_CONT_AICL_THRESHOLD_CFG_MASK,
+> +	  .val = 0x3 },
+> +	/* Yay undocumented register values! */
+> +	{ .addr = USBIN_LOAD_CFG, .mask = BIT(0) | BIT(1), .val = 0x3 },
+> +	/* Enable Automatic Input Current Limit, this will slowly ramp up the current
+> +	 * When connected to a wall charger, and automatically stop when it detects
+> +	 * the charger current limit (voltage drop?) or it reaches the programmed limit.
+> +	 */
+> +	{ .addr = USBIN_AICL_OPTIONS_CFG,
+> +	  .mask = USBIN_AICL_START_AT_MAX_BIT | USBIN_AICL_ADC_EN_BIT |
+> +		  USBIN_AICL_EN_BIT | SUSPEND_ON_COLLAPSE_USBIN_BIT |
+> +		  USBIN_HV_COLLAPSE_RESPONSE_BIT |
+> +		  USBIN_LV_COLLAPSE_RESPONSE_BIT,
+> +	  .val = USBIN_HV_COLLAPSE_RESPONSE_BIT |
+> +		 USBIN_LV_COLLAPSE_RESPONSE_BIT | USBIN_AICL_EN_BIT },
+> +	/*
+> +	 * Set pre charge current to default, the OnePlus 6 bootloader
+> +	 * sets this very conservatively.
+> +	 * NOTE: seems to be reset to zero again anyway after boot
+> +	 */
+> +	{ .addr = PRE_CHARGE_CURRENT_CFG,
+> +	  .mask = PRE_CHARGE_CURRENT_SETTING_MASK,
+> +	  .val = 500000 / 25000 },
+> +	/*
+> +	 * Set "fast charge current" to the default 2A, the OnePlus 6 also
+> +	 * sets this very conservatively.
+> +	 * NOTE: seems to be reset to zero again anyway after boot
+> +	 */
+> +	{ .addr = FAST_CHARGE_CURRENT_CFG,
+> +	  .mask = FAST_CHARGE_CURRENT_SETTING_MASK,
+> +	  .addr = 1950000 / 25000 },
 
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-82afc9b169a67e8b8a1862fb9c41a2cd974d6691/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-e486e48c3d9e99e4c17d365bbc4b429c8e5b5999/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/
+The .addr is set here twice, meaning the fast charge current register is not configured properly and 
+thus left at conservative bootloader values - or set to zero, I'm not sure how the compiler handles 
+this.
 
-Reproduce builds:
-<cut>
-mkdir investigate-llvm-82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-cd investigate-llvm-82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+Will be fixed in the next revision.
+> +};
+> +
+> +static int smb2_init_hw(struct smb2_chip *chip)
+> +{
+> +	int rc, i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(smb2_init_seq); i++) {
+> +		dev_dbg(chip->dev, "%d: Writing 0x%02x to 0x%02x\n", i,
+> +			smb2_init_seq[i].val, smb2_init_seq[i].addr);
+> +		rc = regmap_update_bits(chip->regmap,
+> +					chip->base + smb2_init_seq[i].addr,
+> +					smb2_init_seq[i].mask,
+> +					smb2_init_seq[i].val);
+> +		if (rc < 0)
+> +			return dev_err_probe(
+> +				chip->dev, rc,
+> +				"%s: Failed to write 0x%02x to 0x%02x\n",
+> +				__func__, smb2_init_seq[i].val,
+> +				smb2_init_seq[i].addr);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +struct smb2_irqs {
+> +	const char *name;
+> +	irqreturn_t (*handler)(int irq, void *data);
+> +};
+> +
+> +static const struct smb2_irqs irqs[] = {
+> +	{ .name = "bat-ov", .handler = smb2_handle_batt_overvoltage },
+> +	{ .name = "usb-plugin", .handler = smb2_handle_usb_plugin },
+> +	{ .name = "usbin-icl-change", .handler = smb2_handle_usb_icl_change },
+> +	{ .name = "wdog-bark", .handler = smb2_handle_wdog_bark },
+> +};
+> +
+> +static int smb2_probe(struct platform_device *pdev)
+> +{
+> +	struct power_supply_config supply_config = {};
+> +	struct smb2_chip *chip;
+> +	int rc, i, irq;
+> +
+> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
+> +		return -ENOMEM;
+> +
+> +	chip->dev = &pdev->dev;
+> +	chip->name = pdev->name;
+> +
+> +	chip->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!chip->regmap) {
+> +		return dev_err_probe(chip->dev, -ENODEV,
+> +				     "failed to locate the regmap\n");
+> +	}
+> +
+> +	rc = device_property_read_u32(chip->dev, "reg", &chip->base);
+> +	if (rc < 0) {
+> +		return dev_err_probe(chip->dev, rc,
+> +				     "Couldn't read base address\n");
+> +	}
+> +
+> +	chip->usb_in_v_chan = devm_iio_channel_get(chip->dev, "usbin_v");
+> +	if (IS_ERR(chip->usb_in_v_chan))
+> +		return dev_err_probe(
+> +			chip->dev, PTR_ERR(chip->usb_in_v_chan),
+> +			"Couldn't get usbin_v IIO channel from RRADC\n");
+> +
+> +	chip->usb_in_i_chan = devm_iio_channel_get(chip->dev, "usbin_i");
+> +	if (IS_ERR(chip->usb_in_i_chan)) {
+> +		return dev_err_probe(
+> +			chip->dev, PTR_ERR(chip->usb_in_i_chan),
+> +			"Couldn't get usbin_i IIO channel from RRADC\n");
+> +	}
+> +
+> +	rc = smb2_init_hw(chip);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	supply_config.drv_data = chip;
+> +	supply_config.of_node = pdev->dev.of_node;
+> +
+> +	chip->chg_psy = devm_power_supply_register(chip->dev, &smb2_psy_desc,
+> +						   &supply_config);
+> +	if (IS_ERR(chip->chg_psy))
+> +		return dev_err_probe(chip->dev, PTR_ERR(chip->chg_psy),
+> +				     "failed to register power supply\n");
+> +
+> +	rc = power_supply_get_battery_info(chip->chg_psy, &chip->batt_info);
+> +	if (rc)
+> +		return dev_err_probe(chip->dev, rc,
+> +				     "Failed to get battery info\n");
+> +
+> +	rc = devm_delayed_work_autocancel(chip->dev, &chip->status_change_work,
+> +					  smb2_status_change_work);
+> +	if (rc)
+> +		return dev_err_probe(
+> +			chip->dev, rc,
+> +			"Failed to initialise status change work\n");
+> +
+> +	rc = (chip->batt_info->voltage_max_design_uv - 3487500) / 7500 + 1;
+> +	rc = regmap_update_bits(chip->regmap, chip->base + FLOAT_VOLTAGE_CFG,
+> +				FLOAT_VOLTAGE_SETTING_MASK, rc);
+> +	if (rc < 0)
+> +		return dev_err_probe(chip->dev, rc, "Couldn't set vbat max\n");
+> +
+> +	for (i = 0; i < ARRAY_SIZE(irqs); i++) {
+> +		irq = of_irq_get_byname(pdev->dev.of_node, irqs[i].name);
+> +		if (irq < 0)
+> +			return dev_err_probe(chip->dev, irq,
+> +					     "Couldn't get irq %s byname\n",
+> +					     irqs[i].name);
+> +		rc = devm_request_threaded_irq(chip->dev, irq, NULL,
+> +					       irqs[i].handler, IRQF_ONESHOT,
+> +					       irqs[i].name, chip);
+> +		if (rc < 0)
+> +			return dev_err_probe(chip->dev, irq,
+> +					     "Couldn't request irq %s\n",
+> +					     irqs[i].name);
+> +	}
+> +
+> +	platform_set_drvdata(pdev, chip);
+> +
+> +	/* Initialise charger state */
+> +	schedule_delayed_work(&chip->status_change_work, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id smb2_match_id_table[] = {
+> +	{ .compatible = "qcom,pmi8998-charger" },
+> +	{ .compatible = "qcom,pm660-charger" },
+> +	{ /* sentinal */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, smb2_match_id_table);
+> +
+> +static struct platform_driver qcom_spmi_smb2 = {
+> +	.probe = smb2_probe,
+> +	.driver = {
+> +			.name = "qcom-pmi8998-charger",
+> +			.of_match_table = smb2_match_id_table,
+> +		},
+> +};
+> +
+> +module_platform_driver(qcom_spmi_smb2);
+> +
+> +MODULE_AUTHOR("Caleb Connolly <caleb.connolly@linaro.org>");
+> +MODULE_DESCRIPTION("Qualcomm SMB2 Charger Driver");
+> +MODULE_LICENSE("GPL");
 
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests and test.sh script
-mkdir -p artifacts/build-baseline artifacts/build-parameters
-curl -o artifacts/build-baseline/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-baseline/manifest.sh --fail
-curl -o artifacts/build-parameters/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/build-parameters/manifest.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-aarch64-mainline-allyesconfig/23/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
-
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts/build-baseline
-
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
-
-cd llvm
-
-# Reproduce first_bad build
-git checkout --detach 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-../artifacts/test.sh
-
-# Reproduce last_good build
-git checkout --detach e486e48c3d9e99e4c17d365bbc4b429c8e5b5999
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-Author: Shawn Zhong <github@shawnzhong.com>
-Date:   Tue Aug 9 11:42:39 2022 -0400
-
-    Fix -Wbitfield-constant-conversion on 1-bit signed bitfield
-    
-    A one-bit signed bit-field can only hold the values 0 and -1; this
-    corrects the diagnostic behavior accordingly.
-    
-    Fixes #53253
-    Differential Revision: https://reviews.llvm.org/D131255
----
- clang/docs/ReleaseNotes.rst                         |  3 +++
- clang/lib/Sema/SemaChecking.cpp                     |  5 -----
- clang/test/CXX/class/class.bit/p1.cpp               | 10 +++++-----
- clang/test/CXX/drs/dr6xx.cpp                        |  6 +++---
- clang/test/CodeGen/bitfield.c                       | 16 ++++++++++++++++
- clang/test/CodeGenCXX/bitfield-layout.cpp           |  9 +++++++++
- clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm |  2 +-
- clang/test/Rewriter/rewrite-modern-struct-ivar.mm   |  4 ++--
- clang/test/Sema/constant-conversion.c               | 12 ++++++++++--
- clang/test/SemaCXX/constant-expression-cxx11.cpp    |  1 +
- clang/test/SemaCXX/cxx1z-decomposition.cpp          |  2 +-
- clang/test/SemaCXX/decomposition-blocks.cpp         |  2 +-
- 12 files changed, 52 insertions(+), 20 deletions(-)
-
-diff --git a/clang/docs/ReleaseNotes.rst b/clang/docs/ReleaseNotes.rst
-index d830928a13d4..4b01f018005e 100644
---- a/clang/docs/ReleaseNotes.rst
-+++ b/clang/docs/ReleaseNotes.rst
-@@ -82,6 +82,9 @@ Improvements to Clang's diagnostics
- - ``-Wformat`` now recognizes ``%b`` for the ``printf``/``scanf`` family of
-   functions and ``%B`` for the ``printf`` family of functions. Fixes
-   `Issue 56885: <https://github.com/llvm/llvm-project/issues/56885>`_.
-+- ``-Wbitfield-constant-conversion`` now diagnoses implicit truncation when 1 is
-+  assigned to a 1-bit signed integer bitfield. This fixes
-+  `Issue 53253 <https://github.com/llvm/llvm-project/issues/53253>`_.
- 
- Non-comprehensive list of changes in this release
- -------------------------------------------------
-diff --git a/clang/lib/Sema/SemaChecking.cpp b/clang/lib/Sema/SemaChecking.cpp
-index 5a1c21d3a367..a0ea35e1234f 100644
---- a/clang/lib/Sema/SemaChecking.cpp
-+++ b/clang/lib/Sema/SemaChecking.cpp
-@@ -13064,11 +13064,6 @@ static bool AnalyzeBitFieldAssignment(Sema &S, FieldDecl *Bitfield, Expr *Init,
-   if (llvm::APSInt::isSameValue(Value, TruncatedValue))
-     return false;
- 
--  // Special-case bitfields of width 1: booleans are naturally 0/1, and
--  // therefore don't strictly fit into a signed bitfield of width 1.
--  if (FieldWidth == 1 && Value == 1)
--    return false;
--
-   std::string PrettyValue = toString(Value, 10);
-   std::string PrettyTrunc = toString(TruncatedValue, 10);
- 
-diff --git a/clang/test/CXX/class/class.bit/p1.cpp b/clang/test/CXX/class/class.bit/p1.cpp
-index ab15e3a356cf..5df1ab52cdd8 100644
---- a/clang/test/CXX/class/class.bit/p1.cpp
-+++ b/clang/test/CXX/class/class.bit/p1.cpp
-@@ -9,11 +9,11 @@ struct A {
-   int [[]] c : 1; // OK, attribute applies to the type.
-   int : 2 = 1; // expected-error {{anonymous bit-field cannot have a default member initializer}}
-   int : 0 { 1 }; // expected-error {{anonymous bit-field cannot have a default member initializer}}
--  int : 0, d : 1 = 1;
-+  unsigned int : 0, d : 1 = 1;
-   int : 1 = 12, e : 1; // expected-error {{anonymous bit-field cannot have a default member initializer}}
--  int : 0, f : 1 = 1;
--  int g [[]] : 1 = 1;
--  int h [[]] : 1 {1};
--  int i : foo() = foo();
-+  unsigned int : 0, f : 1 = 1;
-+  unsigned int g [[]] : 1 = 1;
-+  unsigned int h [[]] : 1 {1};
-+  unsigned int i : foo() = foo();
-   int j, [[]] k; // expected-error {{an attribute list cannot appear here}}
- };
-diff --git a/clang/test/CXX/drs/dr6xx.cpp b/clang/test/CXX/drs/dr6xx.cpp
-index ad87c7295cfe..432fd6e6c5ef 100644
---- a/clang/test/CXX/drs/dr6xx.cpp
-+++ b/clang/test/CXX/drs/dr6xx.cpp
-@@ -911,9 +911,9 @@ namespace dr674 { // dr674: 8
- namespace dr675 { // dr675: dup 739
-   template<typename T> struct A { T n : 1; };
- #if __cplusplus >= 201103L
--  static_assert(A<char>{1}.n < 0, "");
--  static_assert(A<int>{1}.n < 0, "");
--  static_assert(A<long long>{1}.n < 0, "");
-+  static_assert(A<char>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
-+  static_assert(A<int>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
-+  static_assert(A<long long>{1}.n < 0, ""); // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
- #endif
- }
- 
-diff --git a/clang/test/CodeGen/bitfield.c b/clang/test/CodeGen/bitfield.c
-index c624d0045d33..4845d7c47842 100644
---- a/clang/test/CodeGen/bitfield.c
-+++ b/clang/test/CodeGen/bitfield.c
-@@ -87,3 +87,19 @@ int g3(void) {
- // PATH: ret i32 1
-   return f3(20) + 130725747;
- }
-+
-+static int f4(void) {
-+  struct s5 {
-+    int b:1;
-+  } x;
-+  x.b = 1;
-+  return x.b;
-+}
-+
-+int g4(void) {
-+// CHECK-LABEL: @g4()
-+// CHECK: ret i32 1
-+// PATH-LABEL: @g4()
-+// PATH: ret i32 1
-+  return f4() + 2;
-+}
-diff --git a/clang/test/CodeGenCXX/bitfield-layout.cpp b/clang/test/CodeGenCXX/bitfield-layout.cpp
-index d570b8f33e34..0e0d712fd8aa 100644
---- a/clang/test/CodeGenCXX/bitfield-layout.cpp
-+++ b/clang/test/CodeGenCXX/bitfield-layout.cpp
-@@ -105,6 +105,15 @@ int test_trunc_three_bits() {
- // CHECK: define{{.*}} i32 @test_trunc_three_bits()
- // CHECK: ret i32 -1
- 
-+int test_trunc_one_bit() {
-+  union {
-+    int i : 1; // truncated to 0b1 == -1
-+  } const U = {1};  // 0b00000001
-+  return U.i;
-+}
-+// CHECK: define{{.*}} i32 @test_trunc_one_bit()
-+// CHECK: ret i32 -1
-+
- int test_trunc_1() {
-   union {
-     int i : 1; // truncated to 0b1 == -1
-diff --git a/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm b/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
-index a17fe3f85675..e54b1cdaab3a 100644
---- a/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
-+++ b/clang/test/Rewriter/rewrite-modern-struct-ivar-1.mm
-@@ -34,7 +34,7 @@ typedef struct {
- @implementation Foo
- - (void)x:(Foo *)other {
-   bar.x = 0;
--  bar.y = 1;
-+  bar.y = -1;
-   self->_internal._singleRange._range = (( other ->bar.x) ? &( other ->_internal._singleRange._range) : ((NSRange *)(&(((_NSRangeInfo *)( other ->_internal._multipleRanges._data))->_ranges))))[0];
- }
- @end
-diff --git a/clang/test/Rewriter/rewrite-modern-struct-ivar.mm b/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
-index 9f56cd8b1b83..f98bdbc460d3 100644
---- a/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
-+++ b/clang/test/Rewriter/rewrite-modern-struct-ivar.mm
-@@ -41,10 +41,10 @@ struct S {
- @implementation Foo
- - (void)x {
-   bar.x = 0;
--  bar.y = 1;
-+  bar.y = -1;
- 
-   s.x = 0;
--  s.y = 1;
-+  s.y = -1;
- }
- @end
- 
-diff --git a/clang/test/Sema/constant-conversion.c b/clang/test/Sema/constant-conversion.c
-index 025f4709a7d5..d386d21f24aa 100644
---- a/clang/test/Sema/constant-conversion.c
-+++ b/clang/test/Sema/constant-conversion.c
-@@ -15,8 +15,16 @@ void test_7809123(void) {
- }
- 
- void test(void) {
--  struct { int bit : 1; } a;
--  a.bit = 1; // shouldn't warn
-+  struct S {
-+    int b : 1;  // The only valid values are 0 and -1.
-+  } s;
-+
-+  s.b = -3; // expected-warning {{implicit truncation from 'int' to bit-field changes value from -3 to -1}}
-+  s.b = -2; // expected-warning {{implicit truncation from 'int' to bit-field changes value from -2 to 0}}
-+  s.b = -1; // no-warning
-+  s.b = 0;  // no-warning
-+  s.b = 1;  // expected-warning {{implicit truncation from 'int' to bit-field changes value from 1 to -1}}
-+  s.b = 2;  // expected-warning {{implicit truncation from 'int' to bit-field changes value from 2 to 0}}
- }
- 
- enum Test2 { K_zero, K_one };
-diff --git a/clang/test/SemaCXX/constant-expression-cxx11.cpp b/clang/test/SemaCXX/constant-expression-cxx11.cpp
-index e145ca982cdd..c5742ad8c2cb 100644
---- a/clang/test/SemaCXX/constant-expression-cxx11.cpp
-+++ b/clang/test/SemaCXX/constant-expression-cxx11.cpp
-@@ -2035,6 +2035,7 @@ namespace Bitfields {
-       }
-     };
-     static_assert(X::f(3) == -1, "3 should truncate to -1");
-+    static_assert(X::f(1) == -1, "1 should truncate to -1");
-   }
- 
-   struct HasUnnamedBitfield {
-diff --git a/clang/test/SemaCXX/cxx1z-decomposition.cpp b/clang/test/SemaCXX/cxx1z-decomposition.cpp
-index 13fe826759a3..305a9ac2ebc2 100644
---- a/clang/test/SemaCXX/cxx1z-decomposition.cpp
-+++ b/clang/test/SemaCXX/cxx1z-decomposition.cpp
-@@ -84,7 +84,7 @@ void enclosing() {
- 
-   (void)[outerbit1]{}; // expected-error {{'outerbit1' cannot be captured because it does not have automatic storage duration}}
- 
--  auto [bit, var] = S2{1, 1}; // expected-note 2{{'bit' declared here}}
-+  auto [bit, var] = S2{-1, 1}; // expected-note 2{{'bit' declared here}}
- 
-   (void)[&bit] { // expected-error {{non-const reference cannot bind to bit-field 'a'}} \
-                     // expected-warning {{C++20}}
-diff --git a/clang/test/SemaCXX/decomposition-blocks.cpp b/clang/test/SemaCXX/decomposition-blocks.cpp
-index 21f66f8c7c1b..0676463d12c7 100644
---- a/clang/test/SemaCXX/decomposition-blocks.cpp
-+++ b/clang/test/SemaCXX/decomposition-blocks.cpp
-@@ -7,7 +7,7 @@ struct S {
- 
- void run(void (^)());
- void test() {
--  auto [i, j] = S{1, 42}; // expected-note {{'i' declared here}}
-+  auto [i, j] = S{-1, 42}; // expected-note {{'i' declared here}}
-   run(^{
-     (void)i; // expected-error {{reference to local binding 'i' declared in enclosing function 'test'}}
-   });
-</cut>
-------=_Part_6776_1825487553.1660676874159--
+-- 
+Kind Regards,
+Caleb (they/he)
