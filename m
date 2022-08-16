@@ -1,88 +1,150 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AE453B0
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 17:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660670100; x=1692206100;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Bmp5mCt8wJOGpNRRf+Bk/y7OpqN82x/tmy7rrb/kv5E=;
-  b=QxC/gQQ6zOswGAy+LLIXBi+J5o7mjEB6ktPrCunnnQXRhWPKy8amDBSy
-   J2GnB1Nc18DiNgbfjoNBFHws0X1cyrHe/07V8gZnHPm5hly/2Vuc/P+wr
-   RiZ1hNpbsuqBk7lpRM9B+JHJQrokI1NwwaBdfeAivIYlCjOxEYjAEAvC9
-   PsAF5DZuGx1F5Np74USkJGCKR8kYlMDVsXpQzYF6PVEY+plx/NRkFq8dX
-   B9AURQB/ll6h60H+avvOur4hIXEYs00/pC3gg0O+xL4eY28E/+tl5qOUt
-   64JkcknbXfwU3vCYDAUa7ppwa6EIRiDtjQCQz5T8E885U9VdV6MopGQKu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292276706"
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="292276706"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 10:14:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
-   d="scan'208";a="635971895"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Aug 2022 10:14:58 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oO09Z-00006K-2T;
-	Tue, 16 Aug 2022 17:14:57 +0000
-Date: Wed, 17 Aug 2022 01:14:05 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:linux-5.18.y 2197/3591] vmlinux.o: warning:
- objtool: entry_SYSCALL_compat()+0x0: ANNOTATE_NOENDBR on ENDBR
-Message-ID: <202208170117.lGAJUk8f-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A38253B8
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 17:39:57 +0000 (UTC)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27GGiLUQ005227;
+	Tue, 16 Aug 2022 17:05:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=GjjxBkmOT7kfjjNUvdcUnZZdNAdgE5EWLferPMUXAnA=;
+ b=YL3OJlfJ14C/KPkJRH8fKhPKtxIOlqOJCCgFbLlBfYmMkMVlPwl1iHQEcGvVjiGMJsXo
+ yO9JGi5Mip9t30SQtzLm7bG2lseHrj967Kdgd5+z0DoVUkLuqBmERm+owzOgze1gPTci
+ bUn1XWIJ9+3/wtPDjt2/OWXJvXD9bqeKpK6XqSYRKn9RYfPr+FHHd9GtLEj0/1pnHNdW
+ ml8JmcSALUfRyXMglrSbQtCMj56n2OeR9UImqhMG3DmpdYe8g0/D75pGT7LWK1sOYczT
+ pUwR1/hJD7YS1iTDHzA1y/2gDaQ+rWpgipepo4Qcf1UO35BDDeUoiK/tMe4XbTh9Bd7J Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kd0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Aug 2022 17:05:41 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27GGjE2Q008425;
+	Tue, 16 Aug 2022 17:05:41 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j0f0y0kc1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Aug 2022 17:05:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+	by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27GH5LZN002388;
+	Tue, 16 Aug 2022 17:05:38 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+	by ppma06ams.nl.ibm.com with ESMTP id 3hx37jbgk9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Aug 2022 17:05:38 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27GH5a8b26608022
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Aug 2022 17:05:36 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5780611C04A;
+	Tue, 16 Aug 2022 17:05:36 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E38E011C04C;
+	Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
+Received: from localhost (unknown [9.43.58.12])
+	by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Tue, 16 Aug 2022 17:05:35 +0000 (GMT)
+Date: Tue, 16 Aug 2022 22:35:34 +0530
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH 0/2] ftrace/recordmcount: Handle object files without
+ section symbols
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+	<ndesaulniers@google.com>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<20220816100423.5ee2e17c@gandalf.local.home>
+In-Reply-To: <20220816100423.5ee2e17c@gandalf.local.home>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1660668823.oegvwl2214.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OzR97rxPfkN_j2hNnQzGXDMJE-1aixqM
+X-Proofpoint-ORIG-GUID: PYoTJVUk2zunDwCz72cxwia_qgxH99mO
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0 impostorscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160065
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Borislav Petkov <bp@suse.de>
-CC: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Hi Steven,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-head:   56bd9e4c28e9ed65e07e7148e65adfdf1f1c5524
-commit: 813423f90f0553c81c5fb4d531fc688a5d506b24 [2197/3591] x86/retbleed: Add fine grained Kconfig knobs
-config: x86_64-randconfig-a013-20220815 (https://download.01.org/0day-ci/archive/20220817/202208170117.lGAJUk8f-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=813423f90f0553c81c5fb4d531fc688a5d506b24
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.18.y
-        git checkout 813423f90f0553c81c5fb4d531fc688a5d506b24
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Steven Rostedt wrote:
+> On Wed, 27 Apr 2022 15:01:20 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> This solves a build issue on powerpc with binutils v2.36 and newer [1].
+>> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+>> symbols") [2], binutils started dropping section symbols that it thought
+>> were unused. Due to this, in certain scenarios, recordmcount is unable=20
+>> to find a non-weak symbol to generate a relocation record against.
+>>=20
+>> Clang integrated assembler is also aggressive in dropping section=20
+>> symbols [3].
+>>=20
+>> In the past, there have been various workarounds to address this. See=20
+>> commits 55d5b7dd6451b5 ("initramfs: fix clang build failure") and=20
+>> 6e7b64b9dd6d96 ("elfcore: fix building with clang") and a recent patch:
+>> https://lore.kernel.org/linuxppc-dev/20220425174128.11455-1-naveen.n.rao=
+@linux.vnet.ibm.com/T/#u
+>>=20
+>> Fix this issue by using the weak symbol in the relocation record. This=20
+>> can result in duplicate locations in the mcount table if those weak=20
+>> functions are overridden, so have ftrace skip dupicate entries.
+>>=20
+>> Objtool already follows this approach, so patch 2 updates recordmcount=20
+>> to do the same. Patch 1 updates ftrace to skip duplicate entries.
+>>=20
+>> - Naveen
+>>=20
+>>=20
+>> [1] https://github.com/linuxppc/issues/issues/388
+>> [2] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1bc=
+ae833b32f1
+>> [3] https://github.com/ClangBuiltLinux/linux/issues/981
+>>=20
+>>
+>=20
+> There's been work to handle weak functions, but I'm not sure that work
+> handled the issues here. Are these patches still needed, or was there
+> another workaround to handle the problems this addressed?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I'm afraid these patches are still needed to address issues in=20
+recordmcount.
 
-All warnings (new ones prefixed by >>):
+I submitted patches to remove use of weak functions in the kexec=20
+subsystem, but those have only enabled building ppc64le defconfig=20
+without errors:
+https://lore.kernel.org/all/20220519091237.676736-1-naveen.n.rao@linux.vnet=
+.ibm.com/
+https://lore.kernel.org/all/cover.1656659357.git.naveen.n.rao@linux.vnet.ib=
+m.com/
 
->> vmlinux.o: warning: objtool: entry_SYSCALL_compat()+0x0: ANNOTATE_NOENDBR on ENDBR
-   vmlinux.o: warning: objtool: ibt_selftest()+0xf: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ibt_selftest()+0x19: return with modified stack frame
+The patch adding support for FTRACE_MCOUNT_MAX_OFFSET to powerpc only=20
+helps ignore weak functions during runtime:
+https://lore.kernel.org/all/20220809105425.424045-1-naveen.n.rao@linux.vnet=
+.ibm.com/
+
+We still see errors from recordmcount when trying to build certain=20
+powerpc configs.
+
+We are pursuing support for objtool, which doesn't have the same issues:
+https://lore.kernel.org/all/20220808114908.240813-1-sv@linux.ibm.com/
 
 
-objdump-func vmlinux.o entry_SYSCALL_compat:
-0000 0000000000002580 <entry_SYSCALL_compat>:
-0000     2580:	f3 0f 1e fa          	endbr64
-0004     2584:	0f 01 f8             	swapgs
-0007     2587:	41 89 e0             	mov    %esp,%r8d
-000a     258a:	48 8b 24 25 00 00 00 00 	mov    0x0,%rsp	258e: R_X86_64_32S	cpu_current_top_of_stack
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+- Naveen
