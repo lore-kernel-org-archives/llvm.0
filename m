@@ -1,47 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DDC1867
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 02:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2585C1867
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 03:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660618126; x=1692154126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GIjwoEKzbUGoid2QJqu4OXAdDf1iMot8Evrfq8fVeZA=;
-  b=XzJ33B2KZbWj2XJcxSWE+8Pt1f9yHs0Mckh41bjb4Mn4fspE9/6ggns6
-   MroOe5djBK0+9gJbO1x7ujyG3y2Ah2QgCgd3/FoU/TfiT72l84iqawMDK
-   ELbgt8EM0sgKoNA9LshPqqe2F6vYX5D8VewAiVWwFTTS+ogrs3J0Zx3wS
-   xNgB+1sY+tM742pRW9bUXu4lFyyDkhbqUFLnGJsd8lTWTrAx6QgWkWQkR
-   sSEbp+JXLlQ3Mq5BJunZ3fW4Gasfx33SKllntQawv3dR/xQpa6/Eeh1u8
-   F9OJztQisy3ZvaIk30WZijhnUakWJ2i9ZgOXiWw4H9r1M7XAg1xgs5LsL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="272500493"
+  t=1660621787; x=1692157787;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KAiP5iJJgb/6Yq3FQ4Ggw1JqWJUBeDH9aBpsqpWyr3s=;
+  b=Qq8AIBmFPsXUqJLSXnWiOwgnCGGfW3NA7IFlZyqENzFZWqGF9mAu39aU
+   nx6rGSPrYyWuwqm4ZOcjl26fLKitN2V4u1drWd6XUFh05kyv8MFdzBmO6
+   kbI40+HTEL7MW0epAC5OLXzOe95DduOrbaebV0bEzYUKADrDq46Wibk0k
+   Lql4gmSAiDINFQK8MbCxAuEpk83N9M5kwnSXD8GL15YN6PXtRtOPGVMx4
+   jn/rPGuQx4PMBCqm46DIyL+cw+xBLmxoPBEBpPDn+3+JtHob5MluzSH+5
+   QsaPHZlZbsCUO/wEe/xAl0xPe+mPt2lrUNgJKE4EBaE7RKQwbHlmrdrhh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="356120434"
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="272500493"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 19:48:45 -0700
+   d="scan'208";a="356120434"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 20:49:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="934714033"
+   d="scan'208";a="583137550"
 Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2022 19:48:43 -0700
+  by orsmga006.jf.intel.com with ESMTP; 15 Aug 2022 20:49:45 -0700
 Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oNmdH-0001O1-0E;
-	Tue, 16 Aug 2022 02:48:43 +0000
-Date: Tue, 16 Aug 2022 10:47:51 +0800
+	id 1oNnaK-0001QS-1l;
+	Tue, 16 Aug 2022 03:49:44 +0000
+Date: Tue, 16 Aug 2022 11:49:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	linux-fsdevel@vger.kernel.org
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-btrfs@vger.kernel.org, linux-nilfs@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: [PATCH 5/7] nilfs2: Convert nilfs_find_uncommited_extent() to
- use filemap_get_folios_contig()
-Message-ID: <202208161010.5ZmABhnS-lkp@intel.com>
-References: <20220815185452.37447-6-vishal.moola@gmail.com>
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 9/16] sound/soc/apple/macaudio.c:627:15:
+ error: too many arguments to function call, expected 4, have 6
+Message-ID: <202208161128.ck05kP2v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,126 +45,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815185452.37447-6-vishal.moola@gmail.com>
 
-Hi "Vishal,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc1 next-20220815]
-[cannot apply to kdave/for-next konis-nilfs2/upstream]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/Convert-to-filemap_get_folios_contig/20220816-025830
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: s390-randconfig-r044-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161010.5ZmABhnS-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   54b20e361303307d4ed9f2903ad7b1f41caf8bea
+commit: ca97cfa4728cf208e9d53e17f5ff54cc08e804b3 [9/16] ASoC: apple: Add macaudio machine driver
+config: arm64-randconfig-r015-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161128.ck05kP2v-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ce1966344933bbe10010035cd25f23ec7dd76914
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vishal-Moola-Oracle/Convert-to-filemap_get_folios_contig/20220816-025830
-        git checkout ce1966344933bbe10010035cd25f23ec7dd76914
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/ca97cfa4728cf208e9d53e17f5ff54cc08e804b3
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout ca97cfa4728cf208e9d53e17f5ff54cc08e804b3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/apple/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/nilfs2/page.c:542:1: warning: unused label 'out' [-Wunused-label]
-   out:
-   ^~~~
-   1 warning generated.
+>> sound/soc/apple/macaudio.c:627:15: error: too many arguments to function call, expected 4, have 6
+                           &ma->jack, &ma->pin, 1);
+                                      ^~~~~~~~~~~
+   include/sound/soc-card.h:18:5: note: 'snd_soc_card_jack_new' declared here
+   int snd_soc_card_jack_new(struct snd_soc_card *card, const char *id, int type,
+       ^
+   1 error generated.
 
 
-vim +/out +542 fs/nilfs2/page.c
+vim +627 sound/soc/apple/macaudio.c
 
-622daaff0a8975 Ryusuke Konishi       2010-12-26  466  
-622daaff0a8975 Ryusuke Konishi       2010-12-26  467  /**
-622daaff0a8975 Ryusuke Konishi       2010-12-26  468   * nilfs_find_uncommitted_extent - find extent of uncommitted data
-622daaff0a8975 Ryusuke Konishi       2010-12-26  469   * @inode: inode
-622daaff0a8975 Ryusuke Konishi       2010-12-26  470   * @start_blk: start block offset (in)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  471   * @blkoff: start offset of the found extent (out)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  472   *
-622daaff0a8975 Ryusuke Konishi       2010-12-26  473   * This function searches an extent of buffers marked "delayed" which
-622daaff0a8975 Ryusuke Konishi       2010-12-26  474   * starts from a block offset equal to or larger than @start_blk.  If
-622daaff0a8975 Ryusuke Konishi       2010-12-26  475   * such an extent was found, this will store the start offset in
-622daaff0a8975 Ryusuke Konishi       2010-12-26  476   * @blkoff and return its length in blocks.  Otherwise, zero is
-622daaff0a8975 Ryusuke Konishi       2010-12-26  477   * returned.
-622daaff0a8975 Ryusuke Konishi       2010-12-26  478   */
-622daaff0a8975 Ryusuke Konishi       2010-12-26  479  unsigned long nilfs_find_uncommitted_extent(struct inode *inode,
-622daaff0a8975 Ryusuke Konishi       2010-12-26  480  					    sector_t start_blk,
-622daaff0a8975 Ryusuke Konishi       2010-12-26  481  					    sector_t *blkoff)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  482  {
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  483) 	unsigned int i, nr;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  484  	pgoff_t index;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  485  	unsigned int nblocks_in_page;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  486  	unsigned long length = 0;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  487  	sector_t b;
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  488) 	struct folio_batch fbatch;
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  489) 	struct folio *folio;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  490  
-622daaff0a8975 Ryusuke Konishi       2010-12-26  491  	if (inode->i_mapping->nrpages == 0)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  492  		return 0;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  493  
-09cbfeaf1a5a67 Kirill A. Shutemov    2016-04-01  494  	index = start_blk >> (PAGE_SHIFT - inode->i_blkbits);
-09cbfeaf1a5a67 Kirill A. Shutemov    2016-04-01  495  	nblocks_in_page = 1U << (PAGE_SHIFT - inode->i_blkbits);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  496  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  497) 	folio_batch_init(&fbatch);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  498  
-622daaff0a8975 Ryusuke Konishi       2010-12-26  499  repeat:
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  500) 	nr = filemap_get_folios_contig(inode->i_mapping, &index, ULONG_MAX,
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  501) 			&fbatch);
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  502) 	if (nr == 0)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  503  		return length;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  504  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  505) 	b = fbatch.folios[0]->index << (PAGE_SHIFT - inode->i_blkbits);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  506  	i = 0;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  507  	do {
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  508) 		folio = fbatch.folios[i];
-622daaff0a8975 Ryusuke Konishi       2010-12-26  509  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  510) 		folio_lock(folio);
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  511) 		if (folio_buffers(folio)) {
-622daaff0a8975 Ryusuke Konishi       2010-12-26  512  			struct buffer_head *bh, *head;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  513  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  514) 			bh = head = folio_buffers(folio);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  515  			do {
-622daaff0a8975 Ryusuke Konishi       2010-12-26  516  				if (b < start_blk)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  517  					continue;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  518  				if (buffer_delay(bh)) {
-622daaff0a8975 Ryusuke Konishi       2010-12-26  519  					if (length == 0)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  520  						*blkoff = b;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  521  					length++;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  522  				} else if (length > 0) {
-622daaff0a8975 Ryusuke Konishi       2010-12-26  523  					goto out_locked;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  524  				}
-622daaff0a8975 Ryusuke Konishi       2010-12-26  525  			} while (++b, bh = bh->b_this_page, bh != head);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  526  		} else {
-622daaff0a8975 Ryusuke Konishi       2010-12-26  527  			if (length > 0)
-622daaff0a8975 Ryusuke Konishi       2010-12-26  528  				goto out_locked;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  529  
-622daaff0a8975 Ryusuke Konishi       2010-12-26  530  			b += nblocks_in_page;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  531  		}
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  532) 		folio_unlock(folio);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  533  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  534) 	} while (++i < nr);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  535  
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  536) 	folio_batch_release(&fbatch);
-622daaff0a8975 Ryusuke Konishi       2010-12-26  537  	cond_resched();
-622daaff0a8975 Ryusuke Konishi       2010-12-26  538  	goto repeat;
-622daaff0a8975 Ryusuke Konishi       2010-12-26  539  
-622daaff0a8975 Ryusuke Konishi       2010-12-26  540  out_locked:
-ce1966344933bb Vishal Moola (Oracle  2022-08-15  541) 	folio_unlock(folio);
-622daaff0a8975 Ryusuke Konishi       2010-12-26 @542  out:
+   614	
+   615	static int macaudio_probe(struct snd_soc_card *card)
+   616	{
+   617		struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
+   618		int ret;
+   619	
+   620		ma->pin.pin = "Headphones";
+   621		ma->pin.mask = SND_JACK_HEADSET | SND_JACK_HEADPHONE;
+   622		ret = snd_soc_card_jack_new(card, ma->pin.pin,
+   623				SND_JACK_HEADSET |
+   624				SND_JACK_HEADPHONE |
+   625				SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+   626				SND_JACK_BTN_2 | SND_JACK_BTN_3,
+ > 627				&ma->jack, &ma->pin, 1);
+   628	
+   629		if (ret < 0) {
+   630			dev_err(card->dev, "jack creation failed: %d\n", ret);
+   631			return ret;
+   632		}
+   633	
+   634		snd_soc_jack_notifier_register(&ma->jack, &macaudio_jack_nb);
+   635	
+   636		return ret;
+   637	}
+   638	
 
 -- 
 0-DAY CI Kernel Test Service
