@@ -1,29 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6BB53BE
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 18:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FB3C433D6;
-	Tue, 16 Aug 2022 18:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660672812;
-	bh=EiqQzJcz9XK40Byh9bSZ1rCDF/xw20fVvoYBvRdfQHg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aGy+BQ/lhhKsxHfuY7cu1dNRRT0w91DSUyAIy1pfTZuWiBLq2IiUu5tUhdjrevsn8
-	 oXa/08fr4Bk7XuhSlGvkAAKWwFFLTdMPKOCpuY/br69ZL8+YOSqEqhhnR7LQkVu+Pv
-	 8M5/Rs/WbMEiug7/MDbymcSADJc0gmSQTmHb9bPCPGcWyLKo0O1+TdqbMZYAl3+zlp
-	 3seB0UqVy8U9jkMH+ws0q9RY9e0svfkBN8PqW7RQzmydPgJZgkfeTVsjaWwkZVCbbm
-	 yBWSeTry5SnImvGaO5Iaiql/3+AaOUg6nhiXpIEy1RMb1IeybhkNXMtu0n9ho71UOT
-	 xhsCBXPShVbeA==
-Date: Tue, 16 Aug 2022 11:00:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Matt Flax <flatmax@flatmax.com>
-Cc: kernel test robot <lkp@intel.com>, alsa-devel@alsa-project.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org
-Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
-Message-ID: <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
-References: <20220808214028.2502801-1-flatmax@flatmax.com>
- <202208090909.Pg0BZGie-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019036AA5
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 18:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660673163; x=1692209163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=49X/CqJK7o6r57TgsFbBXqQA3rnCet0L8eUbTEs6Z7U=;
+  b=UfEXrfNnRMuyE2o5BkPuguBrSQWu8wEabkOf3HWmejxZxUO8UBm78354
+   r4lzrzH9EkQbQfb9uA0cqP53WU/JlTXFv+16qUKB5OGIq4vMTkpWnm7rI
+   h7n+NtyoZtqUrBJzZXHOeaC/c7zwt1jD6d7dPyQVdNhyQv+pKmm1/+s5P
+   H+Sn1K/z2gcALtJPAQQsfKCe2cf5whB4c5KvM+nxto1n3vhQu+XjmeB1T
+   3kXKngGwLCYpk1NhQ2fNdKaGzfFEQlxjzMcyd4FzIzNbwvsBnq4VMU5K9
+   nxfK8BkGbTiYVfQFKv8FcOCio4XB/XXEqPS65xRnVlMJUcnDhchkT3BUs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="292289616"
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="292289616"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 11:06:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="935019876"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Aug 2022 11:05:58 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oO0ww-00007Y-11;
+	Tue, 16 Aug 2022 18:05:58 +0000
+Date: Wed, 17 Aug 2022 02:05:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/090-spi-hid 17/22]
+ drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to
+ undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202208170255.mWeqUzWX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,198 +47,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208090909.Pg0BZGie-lkp@intel.com>
 
-On Tue, Aug 09, 2022 at 09:49:38AM +0800, kernel test robot wrote:
-> Hi Matt,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on broonie-sound/for-next]
-> [also build test WARNING on tiwai-sound/for-next linus/master v5.19 next-20220808]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> config: hexagon-randconfig-r002-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090909.Pg0BZGie-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/7a9219a8431d7740c0958e53078820cbfef4f3f7
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
->         git checkout 7a9219a8431d7740c0958e53078820cbfef4f3f7
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
+commit: 1d801ad9c4b08a5675701e82f600d9f462211a79 [17/22] hid: Add Apple DockChannel HID transport driver
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220817/202208170255.mWeqUzWX-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/1d801ad9c4b08a5675701e82f600d9f462211a79
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 1d801ad9c4b08a5675701e82f600d9f462211a79
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/hid/dockchannel-hid/ drivers/platform/
 
-It doesn't look like these warnings were addressed before the change was
-applied to -next as commit 4e6bedd3c396 ("ASoC: codecs: add support for
-the TI SRC4392 codec"). I now see them in next-20220816.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:294:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
->                                                                            ^
->    sound/soc/codecs/src4xxx.c:221:20: note: initialize the variable 'd' to silence this warning
->            int val, pj, jd, d;
->                              ^
->                               = 0
-> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'jd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:289:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:221:17: note: initialize the variable 'jd' to silence this warning
->            int val, pj, jd, d;
->                           ^
->                            = 0
-> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'pj' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:284:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:221:13: note: initialize the variable 'pj' to silence this warning
->            int val, pj, jd, d;
->                       ^
->                        = 0
->    3 warnings generated.
-> --
-> >> sound/soc/codecs/src4xxx-i2c.c:35:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
->    static const struct of_device_id src4xxx_of_match[] = {
->                                     ^
->    1 warning generated.
-> 
-> 
-> vim +/d +277 sound/soc/codecs/src4xxx.c
-> 
->    213	
->    214	static int src4xxx_hw_params(struct snd_pcm_substream *substream,
->    215				struct snd_pcm_hw_params *params,
->    216				struct snd_soc_dai *dai)
->    217	{
->    218		struct snd_soc_component *component = dai->component;
->    219		struct src4xxx *src4xxx = snd_soc_component_get_drvdata(component);
->    220		unsigned int mclk_div;
->    221		int val, pj, jd, d;
->    222		int reg;
->    223		int ret;
->    224	
->    225		switch (dai->id) {
->    226		case SRC4XXX_PORTB:
->    227			reg = SRC4XXX_PORTB_CTL_06;
->    228			break;
->    229		default:
->    230			reg = SRC4XXX_PORTA_CTL_04;
->    231		}
->    232	
->    233		if (src4xxx->master[dai->id]) {
->    234			mclk_div = src4xxx->mclk_hz/params_rate(params);
->    235			if (src4xxx->mclk_hz != mclk_div*params_rate(params)) {
->    236				dev_err(component->dev,
->    237					"mclk %d / rate %d has a remainder.\n",
->    238					src4xxx->mclk_hz, params_rate(params));
->    239				return -EINVAL;
->    240			}
->    241	
->    242			val = ((int)mclk_div - 128) / 128;
->    243			if ((val < 0) | (val > 3)) {
->    244				dev_err(component->dev,
->    245					"div register setting %d is out of range\n",
->    246					val);
->    247				dev_err(component->dev,
->    248					"unsupported sample rate %d Hz for the master clock of %d Hz\n",
->    249					params_rate(params), src4xxx->mclk_hz);
->    250				return -EINVAL;
->    251			}
->    252	
->    253			/* set the TX DIV */
->    254			ret = regmap_update_bits(src4xxx->regmap,
->    255				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
->    256				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
->    257			if (ret) {
->    258				dev_err(component->dev,
->    259					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
->    260					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
->    261					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
->    262				return ret;
->    263			}
->    264	
->    265			/* set the PLL for the digital receiver */
->    266			switch (src4xxx->mclk_hz) {
->    267			case 24576000:
->    268				pj = 0x22;
->    269				jd = 0x00;
->    270				d = 0x00;
->    271				break;
->    272			case 22579200:
->    273				pj = 0x22;
->    274				jd = 0x1b;
->    275				d = 0xa3;
->    276				break;
->  > 277			default:
->    278				/* don't error out here,
->    279				 * other parts of the chip are still functional
->    280				 */
->    281				dev_info(component->dev,
->    282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+All error/warnings (new ones prefixed by >>):
 
-In the final commit, there is a 'break' here. Should it be a 'return 0'
-instead? Or should there be a different fix for these warnings?
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+                              ^
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:569:62: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                   dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
+                                                                      ~~~     ^~~~~~
+                                                                      %zu
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
+                      ^
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:830:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                           shdr->length, work->hdr.length - sizeof(*shdr));
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:856:18: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                           shdr->length, hdr->length - sizeof(*shdr));
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:7: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
+           bool defer = false;
+                ^
+   4 warnings and 2 errors generated.
 
->    283			}
->    284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->    285			if (ret < 0)
->    286				dev_err(component->dev,
->    287					"Failed to update PLL register 0x%x\n",
->    288					SRC4XXX_RCV_PLL_0F);
->  > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
->    290			if (ret < 0)
->    291				dev_err(component->dev,
->    292					"Failed to update PLL register 0x%x\n",
->    293					SRC4XXX_RCV_PLL_10);
->  > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
->    295			if (ret < 0)
->    296				dev_err(component->dev,
->    297					"Failed to update PLL register 0x%x\n",
->    298					SRC4XXX_RCV_PLL_11);
->    299	
->    300			ret = regmap_update_bits(src4xxx->regmap,
->    301				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
->    302				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
->    303			if (ret < 0) {
->    304				dev_err(component->dev,
->    305					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
->    306					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
->    307					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
->    308				return ret;
->    309			}
->    310	
->    311			return regmap_update_bits(src4xxx->regmap, reg,
->    312						SRC4XXX_MCLK_DIV_MASK, val);
->    313		} else
->    314			dev_info(dai->dev, "not setting up MCLK as not master\n");
->    315	
->    316		return 0;
->    317	};
->    318	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-> 
 
-Cheers,
-Nathan
+vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
+
+   292	
+   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
+   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
+   295	{
+   296		int ret;
+   297		int report_id = *(u8*)data;
+   298	
+   299		mutex_lock(&iface->out_mutex);
+   300	
+   301		WARN_ON(iface->out_report != -1);
+   302		iface->out_report = report_id;
+ > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+   304		iface->resp_buf = resp_buf;
+   305		iface->resp_size = resp_size;
+   306		reinit_completion(&iface->out_complete);
+   307	
+   308		ret = dchid_send(iface, iface->out_flags, data, size);
+   309		if (ret < 0)
+   310			goto done;
+   311	
+   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
+   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
+   314				report_id, iface->index, iface->name);
+   315			ret = -ETIMEDOUT;
+   316			goto done;
+   317		}
+   318	
+   319		ret = iface->resp_size;
+   320		if (iface->retcode) {
+   321			dev_err(iface->dchid->dev,
+   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
+   323				report_id, iface->index, iface->name, iface->retcode);
+   324			ret = -EIO;
+   325		}
+   326	
+   327	done:
+   328		iface->tx_seq++;
+   329		iface->out_report = -1;
+   330		iface->out_flags = 0;
+   331		iface->resp_buf = NULL;
+   332		iface->resp_size = 0;
+   333		mutex_unlock(&iface->out_mutex);
+   334		return ret;
+   335	}
+   336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
