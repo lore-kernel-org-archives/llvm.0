@@ -1,206 +1,131 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310812F26;
-	Tue, 16 Aug 2022 08:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660639198; x=1692175198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RSEQvzyLuQNM7I4Q/O8zTlnKSg2x78+IvGBFvjba1ps=;
-  b=nKCb98AGiWW42ZKDYnFkCLA/2gP4wyEraEHk5KaXljEeRhZc0bvHXttJ
-   BK//0HJ0ncBN8hU+rnlfI8eEuC7zlrf4TL6WxjMmnNlvJsC00/oGg96WH
-   7RYkMLvl1duUBDNZ/YKUx6j0cFOonsyGH8ydY5luirAfCtQleW3hiCKsB
-   0ukCw5yiirvdVQIoQEVnCh6AL5iL6zoy2PI7Ofc/Hp3d7/JWyr2QtIpha
-   OI387o3jH14ywXycPl3WbxS7wtnw1yumeGPNdSONfYWmbezTfOR2G+UuT
-   wX5DDFC5hYoRaNOtLJXkVjt7UlMHiGjJ/L1EFuJAbiyYvjqmMtxoBT8eV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="292160467"
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="292160467"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 01:39:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,240,1654585200"; 
-   d="scan'208";a="710058969"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Aug 2022 01:39:52 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oNs74-0001dx-2Y;
-	Tue, 16 Aug 2022 08:39:50 +0000
-Date: Tue, 16 Aug 2022 16:39:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-	bhelgaas@google.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
-	lznuaa@gmail.com
-Subject: Re: [PATCH v5 2/4] irqchip: Add IMX MU MSI controller driver
-Message-ID: <202208161638.7Rn1SHT2-lkp@intel.com>
-References: <20220815213936.2380439-3-Frank.Li@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0BD2F26
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 08:40:24 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id x7-20020a056e021ca700b002ded2e6331aso6749559ill.20
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 01:40:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Dwh0gS8jFs64hNlsf+lze9dSVRbAm8u7yK5LBD0pdLg=;
+        b=jYwvD2mWFEcWKSGLSRNxU5RFvkBI6+BM6Ri5IN150nCwDov9/D2y4bkoRh733eZrZZ
+         0RiQFgBIRs0mQFB7DJeLfpIQCNU2zodeXN1mln68MByKSwdKGURvhbFbNnbhf7kgVsTM
+         Wxp3kkIDReLMFCt5LYVIdiEkG2zTiIpoAy3dmmUczD7hmUXq8JpJYm0cshyl306z5hVn
+         PQt0rwr6s4baB1ZBvVJ1k9c6eTJkYsLj0hyUoXOf4St1xyxVe3JOsiSNrPXNWh7Npvqz
+         fahnMymtLNOmPqjG5CfKCht8GTsrOqEZ7efwBrklVZudWiZTICajs2f6IUjJoaW79mhD
+         bwPQ==
+X-Gm-Message-State: ACgBeo3I43n3hEga8slLxe2X5Z7a3+gAynpuCOTLfEuXfkwDRf3qiCTq
+	mvF35J6HDyRe7kVVItZGS9pP4zgGcxHSYL82qUvKVbLMIpzn
+X-Google-Smtp-Source: AA6agR5JuP2uqd8wNlSCkhc1kduZjGIqEpA1RqxELHnxLkd+IhD9MVUPeRbpXgTi1daetG2qSY6uOlsAAjkVx9Zb6Lkaj+8Y/c/v
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815213936.2380439-3-Frank.Li@nxp.com>
+X-Received: by 2002:a92:ca46:0:b0:2e5:d3dc:3d28 with SMTP id
+ q6-20020a92ca46000000b002e5d3dc3d28mr3090095ilo.238.1660639224209; Tue, 16
+ Aug 2022 01:40:24 -0700 (PDT)
+Date: Tue, 16 Aug 2022 01:40:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000f266f05e657b373@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in timerqueue_del
+From: syzbot <syzbot+621d4ae5dc548c7ac3f6@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Frank,
+Hello,
 
-I love your patch! Perhaps something to improve:
+syzbot found the following issue on:
 
-[auto build test WARNING on jonmason-ntb/ntb-next]
-[also build test WARNING on robh/for-next linus/master v6.0-rc1 next-20220816]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1249c047080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4757943c2b26daff
+dashboard link: https://syzkaller.appspot.com/bug?extid=621d4ae5dc548c7ac3f6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-base:   https://github.com/jonmason/ntb ntb-next
-config: arm64-randconfig-r025-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161638.7Rn1SHT2-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220816-131930
-        git checkout 71296e2ad757d90e870b2ab81f2b06b9c76e7c41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+621d4ae5dc548c7ac3f6@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+general protection fault, probably for non-canonical address 0xdffffdffe0000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: probably user-memory-access in range [0x00000fff00000000-0x00000fff00000007]
+CPU: 0 PID: 1108 Comm: kworker/u4:3 Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:timerqueue_del+0x26/0xf0 lib/timerqueue.c:55
+Code: 0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 49 89 f5 49 89 fe 48 bd 00 00 00 00 00 fc ff df e8 21 3a 20 fd 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 cb d8 73 fd 49 8b 5d 00 48 89 df
+RSP: 0000:ffffc90004ebfc30 EFLAGS: 00010006
 
-All warnings (new ones prefixed by >>):
+RAX: ffffffff846958af RBX: 00000fff00000000 RCX: ffff888020858000
+RDX: 0000000000000000 RSI: 00000fff00000000 RDI: ffff8880207744d8
+RBP: dffffc0000000000 R08: dffffc0000000000 R09: fffff520009d7f84
+R10: fffff520009d7f85 R11: 1ffff920009d7f84 R12: 000001ffe0000000
+R13: 00000fff00000000 R14: ffff8880207744d8 R15: ffff8880207744d8
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ cleanup_timerqueue kernel/time/posix-cpu-timers.c:519 [inline]
+ cleanup_timers kernel/time/posix-cpu-timers.c:534 [inline]
+ posix_cpu_timers_exit_group+0x7b/0x200 kernel/time/posix-cpu-timers.c:550
+ __exit_signal kernel/exit.c:109 [inline]
+ release_task+0x5b8/0x1890 kernel/exit.c:203
+ exit_notify kernel/exit.c:708 [inline]
+ do_exit+0x16ac/0x20a0 kernel/exit.c:815
+ call_usermodehelper_exec_async+0x3a1/0x3b0 kernel/umh.c:125
+ ret_from_fork+0x1f/0x30
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:timerqueue_del+0x26/0xf0 lib/timerqueue.c:55
+Code: 0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 49 89 f5 49 89 fe 48 bd 00 00 00 00 00 fc ff df e8 21 3a 20 fd 4d 89 ec 49 c1 ec 03 <41> 80 3c 2c 00 74 08 4c 89 ef e8 cb d8 73 fd 49 8b 5d 00 48 89 df
+RSP: 0000:ffffc90004ebfc30 EFLAGS: 00010006
 
->> drivers/irqchip/irq-imx-mu-msi.c:295:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-           struct imx_mu_msi *msi_data, *priv;
-                                         ^
-   1 warning generated.
+RAX: ffffffff846958af RBX: 00000fff00000000 RCX: ffff888020858000
+RDX: 0000000000000000 RSI: 00000fff00000000 RDI: ffff8880207744d8
+RBP: dffffc0000000000 R08: dffffc0000000000 R09: fffff520009d7f84
+R10: fffff520009d7f85 R11: 1ffff920009d7f84 R12: 000001ffe0000000
+R13: 00000fff00000000 R14: ffff8880207744d8 R15: ffff8880207744d8
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 1f 40 00          	nopl   0x0(%rax)
+   4:	55                   	push   %rbp
+   5:	41 57                	push   %r15
+   7:	41 56                	push   %r14
+   9:	41 55                	push   %r13
+   b:	41 54                	push   %r12
+   d:	53                   	push   %rbx
+   e:	49 89 f5             	mov    %rsi,%r13
+  11:	49 89 fe             	mov    %rdi,%r14
+  14:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
+  1b:	fc ff df
+  1e:	e8 21 3a 20 fd       	callq  0xfd203a44
+  23:	4d 89 ec             	mov    %r13,%r12
+  26:	49 c1 ec 03          	shr    $0x3,%r12
+* 2a:	41 80 3c 2c 00       	cmpb   $0x0,(%r12,%rbp,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	4c 89 ef             	mov    %r13,%rdi
+  34:	e8 cb d8 73 fd       	callq  0xfd73d904
+  39:	49 8b 5d 00          	mov    0x0(%r13),%rbx
+  3d:	48 89 df             	mov    %rbx,%rdi
 
 
-vim +/priv +295 drivers/irqchip/irq-imx-mu-msi.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   288	
-   289	static int __init imx_mu_of_init(struct device_node *dn,
-   290					 struct device_node *parent,
-   291					 const struct imx_mu_dcfg *cfg
-   292					)
-   293	{
-   294		struct platform_device *pdev = of_find_device_by_node(dn);
- > 295		struct imx_mu_msi *msi_data, *priv;
-   296		struct device_link *pd_link_a;
-   297		struct device_link *pd_link_b;
-   298		struct resource *res;
-   299		struct device *pd_a;
-   300		struct device *pd_b;
-   301		struct device *dev;
-   302		int ret;
-   303		int irq;
-   304	
-   305		if (!pdev)
-   306			return -ENODEV;
-   307	
-   308		dev = &pdev->dev;
-   309	
-   310		priv = msi_data = devm_kzalloc(&pdev->dev, sizeof(*msi_data), GFP_KERNEL);
-   311		if (!msi_data)
-   312			return -ENOMEM;
-   313	
-   314		msi_data->cfg = cfg;
-   315	
-   316		msi_data->regs = devm_platform_ioremap_resource_byname(pdev, "processor a-facing");
-   317		if (IS_ERR(msi_data->regs)) {
-   318			dev_err(&pdev->dev, "failed to initialize 'regs'\n");
-   319			return PTR_ERR(msi_data->regs);
-   320		}
-   321	
-   322		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "processor b-facing");
-   323		if (!res)
-   324			return -EIO;
-   325	
-   326		msi_data->msiir_addr = res->start + msi_data->cfg->xTR;
-   327	
-   328		irq = platform_get_irq(pdev, 0);
-   329		if (irq <= 0)
-   330			return -ENODEV;
-   331	
-   332		platform_set_drvdata(pdev, msi_data);
-   333	
-   334		msi_data->clk = devm_clk_get(dev, NULL);
-   335		if (IS_ERR(msi_data->clk)) {
-   336			if (PTR_ERR(msi_data->clk) != -ENOENT)
-   337				return PTR_ERR(msi_data->clk);
-   338	
-   339			msi_data->clk = NULL;
-   340		}
-   341	
-   342		pd_a = dev_pm_domain_attach_by_name(dev, "processor a-facing");
-   343		if (IS_ERR(pd_a))
-   344			return PTR_ERR(pd_a);
-   345	
-   346		pd_b = dev_pm_domain_attach_by_name(dev, "processor b-facing");
-   347		if (IS_ERR(pd_b))
-   348			return PTR_ERR(pd_b);
-   349	
-   350		pd_link_a = device_link_add(dev, pd_a,
-   351				DL_FLAG_STATELESS |
-   352				DL_FLAG_PM_RUNTIME |
-   353				DL_FLAG_RPM_ACTIVE);
-   354	
-   355		if (!pd_link_a) {
-   356			dev_err(dev, "Failed to add device_link to mu a.\n");
-   357			goto err_pd_a;
-   358		}
-   359	
-   360		pd_link_b = device_link_add(dev, pd_b,
-   361				DL_FLAG_STATELESS |
-   362				DL_FLAG_PM_RUNTIME |
-   363				DL_FLAG_RPM_ACTIVE);
-   364	
-   365	
-   366		if (!pd_link_b) {
-   367			dev_err(dev, "Failed to add device_link to mu a.\n");
-   368			goto err_pd_b;
-   369		}
-   370	
-   371		ret = imx_mu_msi_domains_init(msi_data, dev);
-   372		if (ret)
-   373			goto err_dm_init;
-   374	
-   375		irq_set_chained_handler_and_data(irq,
-   376						 imx_mu_msi_irq_handler,
-   377						 msi_data);
-   378	
-   379		pm_runtime_enable(dev);
-   380	
-   381		return 0;
-   382	
-   383	err_dm_init:
-   384		device_link_remove(dev,	pd_b);
-   385	err_pd_b:
-   386		device_link_remove(dev, pd_a);
-   387	err_pd_a:
-   388		return -EINVAL;
-   389	}
-   390	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
