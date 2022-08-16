@@ -1,182 +1,111 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81752F26
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 08:38:22 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id i3-20020a5d8403000000b0067bd73cc9eeso5540755ion.19
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 01:38:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231052F26
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 08:39:23 +0000 (UTC)
+Received: by mail-il1-f200.google.com with SMTP id j5-20020a056e02218500b002de1cf2347bso6576527ila.2
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 01:39:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=P+olfJtRQHOHGMMPDrWt6CvAtWdhD9URE1GY5oKp4Ns=;
-        b=SahspFvlwdmJpXwc4ItfQZg+nHwQmfgWrvoZJO9+ya0fSKaropVlFofuq/arO21gnb
-         Qq25Z4l2ZD2OeCaW8OGLhYPfQ0Gf5Ycs3krwtH/UN/Bmg5Ihss1nHayHXtUOmNa+784G
-         P+/Ve7NDiVrYkuOd3oIM5m0UU82+LexYhaR85ARM/ZwXCkCH+omob5z6R6KeRSjVYRxA
-         4Me6vqcdfREq0PreyD6EnMQf7A8mOsvPWoAtrNQH0I5QlVu/bjBW/4uFw++lyP2qyH6y
-         WESyaXdh3g0HlzT8tT2PQlI8l24pHA/w/rXPw/CiAB9iS98aSlV5MbmmqKzCrQtm70iW
-         u0Ew==
-X-Gm-Message-State: ACgBeo0vJfPpdpaAJfBF0L5Vcafki+5YZ2gKjOPDMNSvU/s20PdhwZTz
-	YRe+SP0qvonzFOpqF3gSjOpl+PlBq5tARtrUE8C09YOKE4ab
-X-Google-Smtp-Source: AA6agR5/sORJHrbE/EmX677b0DBh4Hd/rlfaMYN1cT0K8nlQFUG4r1zuphZGTgBiNrhuyOq5bCeQmYpkomwcJyAHNz518nGMQZsY
+        bh=LIRrM9Er52tS0cvVvdY5Sbdd6KgSVNZLH72A832Pq5s=;
+        b=jAH8jq0eAYH1zPSeRZbKfmCrADvlH50pOi58IQSLM18oZjzEjf2yH4KH1NJ+SIp3ry
+         jALcVD0uHrV1W/s5jP76Dyjb+Sgqc+nbNfRsFVM0KGfZA4TRZHUDyGjSwbXFrjWkm3T4
+         i3xBKx4cYhDqWiK3w1yWVOIIOJa8rbITP5kNqxy/Ms4sL45R+ItA5cAZ+esNZqPktCTA
+         k7JDhgqQHuynXKImlI2BIV9pUgmKVUCP3YeEzP1JRa1D0RySVVTjIBroocCBzLBcV7CT
+         UGP5Zd7Y8uze6aPmNucAyl/dYN+/mYdm4OOH/HxZfqHorBY2giDIZTb4QFxeZjeuPj6I
+         L/bg==
+X-Gm-Message-State: ACgBeo0K/spDe8jLvUK3PmfEbq772IESmlkroOuWG8ypQassqOlPRgn8
+	+xGq24xPuap+q+6UPpwoUR3gGAOv5c5r7ZaT1dVR4QjlNN55
+X-Google-Smtp-Source: AA6agR5shgoxwqRTco3PC25nkmTsDzI/3TYQ1SSIQwdJv+o5Pi+qaVILR1CWQMOqYebZ9T+1kkGpssIkklEp2o1Uoir5WMFP/4j+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:ad0d:0:b0:343:517b:eb41 with SMTP id
- s13-20020a02ad0d000000b00343517beb41mr8954373jan.152.1660639101857; Tue, 16
- Aug 2022 01:38:21 -0700 (PDT)
-Date: Tue, 16 Aug 2022 01:38:21 -0700
+X-Received: by 2002:a05:6638:14ca:b0:346:a62f:cc9f with SMTP id
+ l10-20020a05663814ca00b00346a62fcc9fmr1436694jak.163.1660639162312; Tue, 16
+ Aug 2022 01:39:22 -0700 (PDT)
+Date: Tue, 16 Aug 2022 01:39:22 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c434ae05e657ab87@google.com>
-Subject: [syzbot] upstream boot error: general protection fault in really_probe
-From: syzbot <syzbot+d964b0e6c56631bb9c3d@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000005eae9a05e657afc9@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in dup_fd
+From: syzbot <syzbot+0bd8bc660debfdbd190d@syzkaller.appspotmail.com>
+To: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    aea23e7c464b Merge tag 'pull-work.misc' of git://git.kerne..
+HEAD commit:    4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.ke..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13dc4b05080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f83c035536d7b2e3
-dashboard link: https://syzkaller.appspot.com/bug?extid=d964b0e6c56631bb9c3d
+console output: https://syzkaller.appspot.com/x/log.txt?x=169a15dd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4757943c2b26daff
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bd8bc660debfdbd190d
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d964b0e6c56631bb9c3d@syzkaller.appspotmail.com
+Reported-by: syzbot+0bd8bc660debfdbd190d@syzkaller.appspotmail.com
 
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-Console: switching to colour frame buffer device 128x48
-platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-usbcore: registered new interface driver udl
-brd: module loaded
-loop: module loaded
-zram: Added device: zram0
-null_blk: disk nullb0 created
-null_blk: module loaded
-Guest personality initialized and is inactive
-VMCI host device registered (name=vmci, major=10, minor=120)
-Initialized host personality
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-nfcsim 0.2 initialized
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-syzkaller-14276-gaea23e7c464b #0
+general protection fault, probably for non-canonical address 0xffff0000000001a0: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000000d00-0xfff8200000000d07]
+CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 5.19.0-syzkaller-14090-g4a9350597aff #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_unbound call_usermodehelper_exec_work
+
 RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x172/0x310 mm/slub.c:3282
-Code: 84 d9 00 00 00 48 83 78 10 00 0f 84 ce 00 00 00 49 8b 2e 40 f6 c5 0f 0f 85 9f 01 00 00 40 84 ff 0f 84 98 01 00 00 41 8b 46 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 4d 00 0f 94 c0 a8
-RSP: 0000:ffffc90000067918 EFLAGS: 00010202
-RAX: 0000000000000800 RBX: 0000000000000dc0 RCX: 0000000000000000
-RDX: 0000000000002ed0 RSI: 0000000000000dc0 RDI: ffff888012042101
-RBP: 000000000003d960 R08: dffffc0000000000 R09: fffffbfff1c4ade6
-R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: 0000000000000a20
-R13: ffff000000000000 R14: ffff888012042140 R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x12d/0x310 mm/slub.c:3268
+Code: 84 1c 01 00 00 48 83 78 10 00 0f 84 11 01 00 00 49 8b 3f 40 f6 c7 0f 0f 85 e3 01 00 00 45 84 c0 0f 84 dc 01 00 00 41 8b 47 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
+RSP: 0000:ffffc90000b775c8 EFLAGS: 00010202
+RAX: 00000000000001a0 RBX: 0000000000000cc0 RCX: 0000000000000000
+RDX: 0000000000000b51 RSI: 0000000000000cc0 RDI: 0000000000040a00
+RBP: ffffffff81f3d035 R08: dffffc0000000001 R09: fffffbfff1c4ad5e
+R10: fffffbfff1c4ad5e R11: 1ffffffff1c4ad5d R12: ffffc90000b77720
+R13: ffff000000000000 R14: ffffffff81f3d035 R15: ffff888140006640
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
+CR2: 0000000000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kobject_uevent_env+0x33a/0x8e0 lib/kobject_uevent.c:524
- really_probe+0x794/0x9f0 drivers/base/dd.c:657
- __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:748
- driver_probe_device+0x50/0x240 drivers/base/dd.c:778
- __driver_attach+0x35f/0x590 drivers/base/dd.c:1150
- bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
- bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
- driver_register+0x2e9/0x3e0 drivers/base/driver.c:240
- virtio_net_driver_init+0x8e/0xcb drivers/net/virtio_net.c:4108
- do_one_initcall+0xbd/0x2b0 init/main.c:1296
- do_initcall_level+0x168/0x218 init/main.c:1369
- do_initcalls+0x4b/0x8c init/main.c:1385
- kernel_init_freeable+0x43a/0x5c3 init/main.c:1611
- kernel_init+0x19/0x2b0 init/main.c:1500
+ dup_fd+0x75/0xb90 fs/file.c:324
+ copy_files+0xe6/0x200 kernel/fork.c:1623
+ copy_process+0x18b6/0x4010 kernel/fork.c:2244
+ kernel_clone+0x22f/0x7a0 kernel/fork.c:2673
+ user_mode_thread+0x12d/0x190 kernel/fork.c:2742
+ call_usermodehelper_exec_work+0x57/0x220 kernel/umh.c:174
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
  ret_from_fork+0x1f/0x30
  </TASK>
 Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x172/0x310 mm/slub.c:3282
-Code: 84 d9 00 00 00 48 83 78 10 00 0f 84 ce 00 00 00 49 8b 2e 40 f6 c5 0f 0f 85 9f 01 00 00 40 84 ff 0f 84 98 01 00 00 41 8b 46 28 <49> 8b 5c 05 00 48 8d 4a 08 4c 89 e8 65 48 0f c7 4d 00 0f 94 c0 a8
-RSP: 0000:ffffc90000067918 EFLAGS: 00010202
-RAX: 0000000000000800 RBX: 0000000000000dc0 RCX: 0000000000000000
-RDX: 0000000000002ed0 RSI: 0000000000000dc0 RDI: ffff888012042101
-RBP: 000000000003d960 R08: dffffc0000000000 R09: fffffbfff1c4ade6
-R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: 0000000000000a20
-R13: ffff000000000000 R14: ffff888012042140 R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	84 d9                	test   %bl,%cl
-   2:	00 00                	add    %al,(%rax)
-   4:	00 48 83             	add    %cl,-0x7d(%rax)
-   7:	78 10                	js     0x19
-   9:	00 0f                	add    %cl,(%rdi)
-   b:	84 ce                	test   %cl,%dh
-   d:	00 00                	add    %al,(%rax)
-   f:	00 49 8b             	add    %cl,-0x75(%rcx)
-  12:	2e 40 f6 c5 0f       	cs test $0xf,%bpl
-  17:	0f 85 9f 01 00 00    	jne    0x1bc
-  1d:	40 84 ff             	test   %dil,%dil
-  20:	0f 84 98 01 00 00    	je     0x1be
-  26:	41 8b 46 28          	mov    0x28(%r14),%eax
+   0:	84 1c 01             	test   %bl,(%rcx,%rax,1)
+   3:	00 00                	add    %al,(%rax)
+   5:	48 83 78 10 00       	cmpq   $0x0,0x10(%rax)
+   a:	0f 84 11 01 00 00    	je     0x121
+  10:	49 8b 3f             	mov    (%r15),%rdi
+  13:	40 f6 c7 0f          	test   $0xf,%dil
+  17:	0f 85 e3 01 00 00    	jne    0x200
+  1d:	45 84 c0             	test   %r8b,%r8b
+  20:	0f 84 dc 01 00 00    	je     0x202
+  26:	41 8b 47 28          	mov    0x28(%r15),%eax
 * 2a:	49 8b 5c 05 00       	mov    0x0(%r13,%rax,1),%rbx <-- trapping instruction
   2f:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
   33:	4c 89 e8             	mov    %r13,%rax
-  36:	65 48 0f c7 4d 00    	cmpxchg16b %gs:0x0(%rbp)
-  3c:	0f 94 c0             	sete   %al
-  3f:	a8                   	.byte 0xa8
+  36:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3b:	0f 94 c0             	sete   %al
+  3e:	a8 01                	test   $0x1,%al
 
 
 ---
