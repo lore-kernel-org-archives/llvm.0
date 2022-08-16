@@ -1,137 +1,229 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CF353BE
-	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 17:58:05 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id a89so14479774edf.5
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 10:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VC/Trrv6J3X4sE7aLeQxuC2Jf1TU8h3dAVmLNNAb/Js=;
-        b=baokk5qq0rlLRQ0xpdsWAYJYwpImRq1O33VCZKgpyUfde7GmI0lSm3zXzVCV3lyMAD
-         4P11NRhDl0HTGv5KvbaqHyJVgYFEv7fzxNzP5DiTj8OajrzVTmGfJX4zttB+r6IjL4l1
-         BdgfkFgN4/Jrel046lgdpxCSDjFqu9TcUfZEg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VC/Trrv6J3X4sE7aLeQxuC2Jf1TU8h3dAVmLNNAb/Js=;
-        b=2XM3KYGKBFuwZAHL4xcGsV0yAKRkSu7jr0Fs/KcA6USUppHGyk9TRZFLZ+yl/rlYjh
-         5uvPJFbAN0uS55A08PwFpWBP/bvDwArMZ2JqXj4lD2MHHuAX7hhGeXzNvN9cc3jSOTm2
-         tngz09Phxv4V5yEKUi04ryECvRQBbTCBW1eKrCgWYF2NHmLZ107zKArzUX6I2OE3TYQX
-         yP+JLqv8He+u/7JspzRpNjV1TLtItpLzeCmLeJYzsdaN2KeF65k2kt+XJLTdDSFIF8Ss
-         Hs0N+HP7DUt8NM8FKTF9jmoNdlQyy/eHUTorevuHSVKpAZDTdO+vFJ6z0HppXqn+iiTL
-         dKYw==
-X-Gm-Message-State: ACgBeo1ujo5EQqNrkRc7vJTbKp7QZVY1j4zCiX6o118TmEC/eeCGy2FO
-	AScru86oihkUnNnDBFHQsyhYekmQyY780Se5CvY=
-X-Google-Smtp-Source: AA6agR56RR03GD80eNlL0Cr5LC4hzGodOkgSaP0sg5uqWxmvnPquMuNTu192KCWJJVPQ17G7EA38Vg==
-X-Received: by 2002:a05:6402:1e8d:b0:441:58db:b6a2 with SMTP id f13-20020a0564021e8d00b0044158dbb6a2mr19272000edf.277.1660672683695;
-        Tue, 16 Aug 2022 10:58:03 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id jx16-20020a170906ca5000b007305d408b3dsm5574702ejb.78.2022.08.16.10.58.02
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 10:58:02 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id n7so2324150wrv.4
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 10:58:02 -0700 (PDT)
-X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
- d3-20020adfe843000000b00225221f0262mr272373wrn.193.1660672681718; Tue, 16 Aug
- 2022 10:58:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6BB53BE
+	for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 18:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FB3C433D6;
+	Tue, 16 Aug 2022 18:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660672812;
+	bh=EiqQzJcz9XK40Byh9bSZ1rCDF/xw20fVvoYBvRdfQHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aGy+BQ/lhhKsxHfuY7cu1dNRRT0w91DSUyAIy1pfTZuWiBLq2IiUu5tUhdjrevsn8
+	 oXa/08fr4Bk7XuhSlGvkAAKWwFFLTdMPKOCpuY/br69ZL8+YOSqEqhhnR7LQkVu+Pv
+	 8M5/Rs/WbMEiug7/MDbymcSADJc0gmSQTmHb9bPCPGcWyLKo0O1+TdqbMZYAl3+zlp
+	 3seB0UqVy8U9jkMH+ws0q9RY9e0svfkBN8PqW7RQzmydPgJZgkfeTVsjaWwkZVCbbm
+	 yBWSeTry5SnImvGaO5Iaiql/3+AaOUg6nhiXpIEy1RMb1IeybhkNXMtu0n9ho71UOT
+	 xhsCBXPShVbeA==
+Date: Tue, 16 Aug 2022 11:00:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Matt Flax <flatmax@flatmax.com>
+Cc: kernel test robot <lkp@intel.com>, alsa-devel@alsa-project.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Message-ID: <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
+ <202208090909.Pg0BZGie-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
- <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net> <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
- <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net> <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
- <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
-In-Reply-To: <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 16 Aug 2022 10:57:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
-Message-ID: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Jeff Layton <jlayton@kernel.org>, 
-	Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208090909.Pg0BZGie-lkp@intel.com>
 
-On Tue, Aug 16, 2022 at 1:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > +#define EX_TYPE_ZEROPAD                      20 /* load ax from dx zero-padded */
->
-> This comment is now woefully incorrect.
+On Tue, Aug 09, 2022 at 09:49:38AM +0800, kernel test robot wrote:
+> Hi Matt,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on broonie-sound/for-next]
+> [also build test WARNING on tiwai-sound/for-next linus/master v5.19 next-20220808]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> config: hexagon-randconfig-r002-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090909.Pg0BZGie-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/7a9219a8431d7740c0958e53078820cbfef4f3f7
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Matt-Flax/ASoC-codecs-add-uspport-for-the-TI-SRC4392-codec/20220809-054524
+>         git checkout 7a9219a8431d7740c0958e53078820cbfef4f3f7
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
 
-Yes it is. Will fix.
+It doesn't look like these warnings were addressed before the change was
+applied to -next as commit 4e6bedd3c396 ("ASoC: codecs: add support for
+the TI SRC4392 codec"). I now see them in next-20220816.
 
-> > +     if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
-> > +             return false;
->
-> We have insn_decode_kernel() for exactly this (very) common case.
+> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:294:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>                                                                            ^
+>    sound/soc/codecs/src4xxx.c:221:20: note: initialize the variable 'd' to silence this warning
+>            int val, pj, jd, d;
+>                              ^
+>                               = 0
+> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'jd' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:289:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+>                                                                            ^~
+>    sound/soc/codecs/src4xxx.c:221:17: note: initialize the variable 'jd' to silence this warning
+>            int val, pj, jd, d;
+>                           ^
+>                            = 0
+> >> sound/soc/codecs/src4xxx.c:277:3: warning: variable 'pj' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:284:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>                                                                            ^~
+>    sound/soc/codecs/src4xxx.c:221:13: note: initialize the variable 'pj' to silence this warning
+>            int val, pj, jd, d;
+>                       ^
+>                        = 0
+>    3 warnings generated.
+> --
+> >> sound/soc/codecs/src4xxx-i2c.c:35:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
+>    static const struct of_device_id src4xxx_of_match[] = {
+>                                     ^
+>    1 warning generated.
+> 
+> 
+> vim +/d +277 sound/soc/codecs/src4xxx.c
+> 
+>    213	
+>    214	static int src4xxx_hw_params(struct snd_pcm_substream *substream,
+>    215				struct snd_pcm_hw_params *params,
+>    216				struct snd_soc_dai *dai)
+>    217	{
+>    218		struct snd_soc_component *component = dai->component;
+>    219		struct src4xxx *src4xxx = snd_soc_component_get_drvdata(component);
+>    220		unsigned int mclk_div;
+>    221		int val, pj, jd, d;
+>    222		int reg;
+>    223		int ret;
+>    224	
+>    225		switch (dai->id) {
+>    226		case SRC4XXX_PORTB:
+>    227			reg = SRC4XXX_PORTB_CTL_06;
+>    228			break;
+>    229		default:
+>    230			reg = SRC4XXX_PORTA_CTL_04;
+>    231		}
+>    232	
+>    233		if (src4xxx->master[dai->id]) {
+>    234			mclk_div = src4xxx->mclk_hz/params_rate(params);
+>    235			if (src4xxx->mclk_hz != mclk_div*params_rate(params)) {
+>    236				dev_err(component->dev,
+>    237					"mclk %d / rate %d has a remainder.\n",
+>    238					src4xxx->mclk_hz, params_rate(params));
+>    239				return -EINVAL;
+>    240			}
+>    241	
+>    242			val = ((int)mclk_div - 128) / 128;
+>    243			if ((val < 0) | (val > 3)) {
+>    244				dev_err(component->dev,
+>    245					"div register setting %d is out of range\n",
+>    246					val);
+>    247				dev_err(component->dev,
+>    248					"unsupported sample rate %d Hz for the master clock of %d Hz\n",
+>    249					params_rate(params), src4xxx->mclk_hz);
+>    250				return -EINVAL;
+>    251			}
+>    252	
+>    253			/* set the TX DIV */
+>    254			ret = regmap_update_bits(src4xxx->regmap,
+>    255				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
+>    256				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+>    257			if (ret) {
+>    258				dev_err(component->dev,
+>    259					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
+>    260					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
+>    261					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+>    262				return ret;
+>    263			}
+>    264	
+>    265			/* set the PLL for the digital receiver */
+>    266			switch (src4xxx->mclk_hz) {
+>    267			case 24576000:
+>    268				pj = 0x22;
+>    269				jd = 0x00;
+>    270				d = 0x00;
+>    271				break;
+>    272			case 22579200:
+>    273				pj = 0x22;
+>    274				jd = 0x1b;
+>    275				d = 0xa3;
+>    276				break;
+>  > 277			default:
+>    278				/* don't error out here,
+>    279				 * other parts of the chip are still functional
+>    280				 */
+>    281				dev_info(component->dev,
+>    282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
 
-I did that originally, and then I undid it in disgust, because that
-interface is too simple.
+In the final commit, there is a 'break' here. Should it be a 'return 0'
+instead? Or should there be a different fix for these warnings?
 
-In particular, it just uses MAX_INSN_SIZE blindly. Which I didn't want
-to do when I actually had the instruction size.
+>    283			}
+>    284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>    285			if (ret < 0)
+>    286				dev_err(component->dev,
+>    287					"Failed to update PLL register 0x%x\n",
+>    288					SRC4XXX_RCV_PLL_0F);
+>  > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+>    290			if (ret < 0)
+>    291				dev_err(component->dev,
+>    292					"Failed to update PLL register 0x%x\n",
+>    293					SRC4XXX_RCV_PLL_10);
+>  > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>    295			if (ret < 0)
+>    296				dev_err(component->dev,
+>    297					"Failed to update PLL register 0x%x\n",
+>    298					SRC4XXX_RCV_PLL_11);
+>    299	
+>    300			ret = regmap_update_bits(src4xxx->regmap,
+>    301				SRC4XXX_TX_CTL_07, SRC4XXX_TX_MCLK_DIV_MASK,
+>    302				val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+>    303			if (ret < 0) {
+>    304				dev_err(component->dev,
+>    305					"Couldn't set the TX's div register to %d << %d = 0x%x\n",
+>    306					val, SRC4XXX_TX_MCLK_DIV_SHIFT,
+>    307					val<<SRC4XXX_TX_MCLK_DIV_SHIFT);
+>    308				return ret;
+>    309			}
+>    310	
+>    311			return regmap_update_bits(src4xxx->regmap, reg,
+>    312						SRC4XXX_MCLK_DIV_MASK, val);
+>    313		} else
+>    314			dev_info(dai->dev, "not setting up MCLK as not master\n");
+>    315	
+>    316		return 0;
+>    317	};
+>    318	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
 
-Yes, yes, I also check the decode size after-the-fact, but I didn't
-want the decoder to even look at the invalid bytes.
-
-This exception case is about the data being at the end of the page, I
-wanted the fixup to be aware of code being at the end of a page too.
-
-(And yeah, I'm not convinced that the decoder is that careful, but at
-that point I feel it's a decoder issue, and not an issue with the code
-I write).
-
-> > +     if (insn.length != len)
-> > +             return false;
-> > +
-> > +     if (insn.opcode.bytes[0] != 0x8b)
-> > +             return false;
->
-> I was wondering if we want something like MOV_INSN_OPCODE for 0x8b to
-> enhance readability, otoh it's currently 0x8b all over the place, so
-> whatever. At some point you gotta have the insn tables with you anyway.
-
-Oh, I didn't even notice that we had another case of 0x8b checking.
-But yeah, the MMIO decoding wants to see what kind of access it is.
-
-But it wouldn't be MOV_INSN_OPCODE, it would have to be something like
-MOV_WORD_INSN_MODRM_REG_OPCODE, because that's what people are
-checking for - not just that it's a 'mov', but direction and size too.
-
-And then you'd have to also decide whether you describe those
-#define's using the Intel ordering or the one we actually use in our
-asm. So now the symbolic names are ambiguous anyway, in ways that the
-actual byte value isn't.
-
-So yeah, I suspect it ends up just being an issue of "you have to have
-the opcode tables in front of you anyway".
-
-Because you also need to check that that's the only encoding for "mov"
-(I checked, and yes, it is - there are other 'mov' encodings that move
-directly from memory into %rax, but those are using absolute addresses
-that don't make sense for a "this is an unaligned that might be a page
-crosser")
-
-Side note: now that I look at it, I note that the MMIO decoding
-doesn't handle the absolute address case. It's not really relevant for
-the kernel, but I could *imagine* that it is relevant in user mode,
-and the SEV case actually does have a "decode and emulate user mode
-instruction case".
-
-Not a big issue. If some crazy user even maps IO at a fixed address,
-and then uses a "mov %eax <-> moffset" instruction, the kernel
-emulation will print out an error and refuse to emulate it.
-
-                  Linus
+Cheers,
+Nathan
