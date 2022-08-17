@@ -1,124 +1,102 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C752F2B
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660778863; x=1692314863;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bF8RhQapM9aMltjQD5Fv7KZEqa5L4QRLLLTgNQOxoOc=;
-  b=X/JRwJd6lcxODD/KJcLULFqpkTqt7mCIG0g4Rp1zEhwOvzAR3g82LC4m
-   hu/+Af8DX8D7bBLV06vvX9dFgXDLBrKeJsKepUhYV9Li9qGqh4n3A96j9
-   BP0s1z5PbJszKy2G6TmcwXNPeFUlriOJhKVtZNeVAYsAX8qb2FnZsIIB0
-   PlCl7xuNd5jTs2iW+H7lf62tZ+kw7kaDwj36iHgY8vRHJwZXhNeTuOdQB
-   THMrGtUGfRahLr1hRnoJJw0Fvg/ww/9oQr61XXayrlGHuaz6svIYt3ja+
-   WHHqUKD8KT36kKkChODvR7JHuk6C24twNWj0JVuTrObzyZQfs9dsFWjX5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378916499"
-X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="378916499"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 16:27:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="636575820"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2022 16:27:41 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oOSRo-0001TF-1g;
-	Wed, 17 Aug 2022 23:27:40 +0000
-Date: Thu, 18 Aug 2022 07:27:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Rapoport <rppt@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [rppt:crash-kernel/arm64-remap/v0.1 4/5] arch/arm64/mm/init.c:133:3:
- error: use of undeclared identifier 'crashkres_protection_possible'
-Message-ID: <202208180702.BgAbSr7d-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01077477
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:40:15 +0000 (UTC)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11be650aaccso61498fac.6
+        for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 16:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=daKNlzUlISpXfRKkkWFRtUiXLBWJavrHYfPtjh2uJpI=;
+        b=Iyf3cvO5rvbYqgr6PC43xyQOHandKHxgBfbSVZfHQBKStNgP7AeUDKY/AvYIjcwuil
+         gKDQAf8L1+FMfiFm2F0R/yvNGiqdvVeB4ZwTVZ6Xpil+4bKPW+IR4fPS6bmXUIrlQ61E
+         IGeqh/9AkEgJj6Dq6du9u8QTJ+bhiKPRbLZSrVQyF04WUTEU+6Joiv1/DbnGLh9SKhhL
+         Ift+3z2ymfxPk3OTDS3+kav9uoNPM0gwRn7U4HmCq0/v3ZPAgg6D7T61Ho84BuNHEjrp
+         ql5EZMemsXl7nWH//eVAkD2PnKz6jNfyWHtK5ycOvbg1N71VudGoGhk2kSSfiKdPpnxt
+         nKgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=daKNlzUlISpXfRKkkWFRtUiXLBWJavrHYfPtjh2uJpI=;
+        b=xgQgrTp0wMUB6/5BveHLKPXyGtEW5bSuJYb6ASRDc+DF0gncALeGlBCg0p3o0RS4Lt
+         YMivcMrn37VPEi8xTYcwB35d6Vq68pP0WZ54b5ZVxWCGsSlU7EYErRwcksgud5bntm/J
+         FSTqlVq703U3kuIhlCBAO5oytlT3feNBmu/XKTzjOc+Tgs9yp1modcTM80hnocB8A5hX
+         rd2tjq/RBFlzlVLEik9oel6ZAb2j4W6LMuqCf7wdhwrgnLAd7amh6ax/LmDGDj40Yj6D
+         r+fPFcHyonMjvA67Bb1tNQNXGCRX/OLiikE/7ZomVv/t+0bVgCLKomqqe+ZhBTxxLTdv
+         3igw==
+X-Gm-Message-State: ACgBeo16jeBH96KBwDt8czanvI0ieBygwsvitWtXsI3xxjrP06Wkjmj1
+	GehlBT5FfHUyLYHzzM9vSnLkoap5YaDBQp/HBWwF3g==
+X-Google-Smtp-Source: AA6agR7JztkGz0UiDLQonDNB7R4KJt4JkbhowjaMaCqhJe0/FNsjgPRFr1i6NaE3WNeRyGl0QT/y2yPeL2tieH7qkMQ=
+X-Received: by 2002:a05:6870:5b86:b0:11c:67ba:71dc with SMTP id
+ em6-20020a0568705b8600b0011c67ba71dcmr1969668oab.289.1660779614640; Wed, 17
+ Aug 2022 16:40:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <1659635174-2376-1-git-send-email-quic_gurus@quicinc.com>
+In-Reply-To: <1659635174-2376-1-git-send-email-quic_gurus@quicinc.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 17 Aug 2022 16:40:01 -0700
+Message-ID: <CAKwvOdnbMs-pLRfo4O-MHOF=9=kAvDuktkeeeX7bkmnLi8LWnw@mail.gmail.com>
+Subject: Re: [PATCH] scripts/clang-tools: Remove DeprecatedOrUnsafeBufferHandling
+ check
+To: Guru Das Srinagesh <quic_gurus@quicinc.com>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Elliot Berman <quic_eberman@quicinc.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git crash-kernel/arm64-remap/v0.1
-head:   083629d699170f5a86078d0a7afbe647c3a571cb
-commit: 3aaa4a222ab056611236c4c42499d24c8317bc96 [4/5] arm64/mm: remap crash kernel with base pages even if rodata_full disabled
-config: arm64-randconfig-r034-20220818 (https://download.01.org/0day-ci/archive/20220818/202208180702.BgAbSr7d-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=3aaa4a222ab056611236c4c42499d24c8317bc96
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt crash-kernel/arm64-remap/v0.1
-        git checkout 3aaa4a222ab056611236c4c42499d24c8317bc96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+On Thu, Aug 4, 2022 at 10:46 AM Guru Das Srinagesh
+<quic_gurus@quicinc.com> wrote:
+>
+> This `clang-analyzer` check flags the use of memset(), suggesting a more
+> secure version of the API, such as memset_s(), which does not exist in
+> the kernel:
+>
+>   warning: Call to function 'memset' is insecure as it does not provide
+>   security checks introduced in the C11 standard. Replace with analogous
+>   functions that support length arguments or provides boundary checks such
+>   as 'memset_s' in case of C11
+>   [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+>
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> ---
+>  scripts/clang-tools/run-clang-tools.py | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> index f754415a..1337ced 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -51,6 +51,7 @@ def run_analysis(entry):
+>          checks += "linuxkernel-*"
+>      else:
+>          checks += "clang-analyzer-*"
+> +        checks += ",-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the patch! I think it makes sense to add this.  I suspect
+the list of checks we might want to disable may grow. Maybe when it
+does, we could put these in an array and join them at the end.
 
-All errors (new ones prefixed by >>):
+Anyways, LGTM
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
->> arch/arm64/mm/init.c:133:3: error: use of undeclared identifier 'crashkres_protection_possible'
-                   crashkres_protection_possible = true;
-                   ^
-   arch/arm64/mm/init.c:151:2: error: use of undeclared identifier 'crashkres_protection_possible'
-           crashkres_protection_possible = true;
-           ^
-   2 errors generated.
+Masahiro, would you mind picking this up for us, please?
 
+>      p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
+>                         stdout=subprocess.PIPE,
+>                         stderr=subprocess.STDOUT,
+> --
+> 2.7.4
+>
 
-vim +/crashkres_protection_possible +133 arch/arm64/mm/init.c
-
-   119	
-   120	static unsigned long long __init
-   121	reserve_remap_crashkernel(unsigned long long crash_base,
-   122				  unsigned long long crash_size,
-   123				  unsigned long long crash_max)
-   124	{
-   125		unsigned long long size;
-   126	
-   127		/*
-   128		 * If linear map uses base pages or there is no ZONE_DMA/ZONE_DMA32
-   129		 * the crashk_res will be mapped with PTEs in mmu::map_mem()
-   130		 */
-   131		if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE) ||
-   132		    !have_zone_dma()) {
- > 133			crashkres_protection_possible = true;
-   134			return 0;
-   135		}
-   136	
-   137		if (crash_base)
-   138			return 0;
-   139	
-   140		size = ALIGN(crash_size, PUD_SIZE);
-   141	
-   142		crash_base = memblock_phys_alloc_range(size, PUD_SIZE, 0, crash_max);
-   143		if (!crash_base)
-   144			return 0;
-   145	
-   146		if (remap_crashkernel(crash_base, crash_size, size)) {
-   147			memblock_phys_free(crash_base, size);
-   148			return 0;
-   149		}
-   150	
-   151		crashkres_protection_possible = true;
-   152		memblock_phys_free(crash_base + crash_size, size - crash_size);
-   153	
-   154		return crash_base;
-   155	}
-   156	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
