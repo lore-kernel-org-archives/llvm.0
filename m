@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671F523D3
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 05:39:49 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33580e26058so1433147b3.4
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 22:39:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DE223D3
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 05:39:52 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3328a211611so87242117b3.5
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 22:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=iLN5+FLnhYIWqoDWLTWymRmT3HSuCKQDMghp6cr49+4=;
-        b=RmO9zVA/7Wz8b9GtpWsugHokUFgVDsG4vXhQNbDdnCDmm9BYfj+EyK6z57xrOuwSr5
-         xEHy7nRGZdtn7j0pVRnsb79os9hz8xZ8L3I3H/+5RGvGbmAaY1KTeppz5YckCGTdlKFi
-         WMmnxqPfR29q93koEqVqKV0oQyX6zZAGkY0X+m7nC1ZDpearMsBP/fqcS/s4uAbh7N4k
-         VL5kJWQpBFQf16lVQU3Hz3d7rLu9p44+5RFbWVEZKnl4dC6PjnAHJBEy0jRaUu8zH2r1
-         brJNcJN3Lg6IsHi6eP1cNqo9Kcsv7W71EYHmTabd6r3Bc8KeGw+RTkqsFBciOOgkRjzC
-         qIBw==
+        bh=qHxxMbzf5P1kENTIcu/skD1A7VW/ZSQMIDyzork9iPw=;
+        b=gqVyKJEKg7FHYfUlvFZRQ4gywaDxqgOla/wYNSrRrpQPIOeQgd8otSDUR81rYz06Pz
+         86FwoEQRXDngYehTse62DCp3ULAG3zl2VVSHPUTcSch9dCd1GVJmHLNIuS9Ice2KYHSE
+         /Ph6X2GyUQLtHLZp3hUMsFENjq6wAqo+qn5EpWgzZcCvi33yqo5FpUFubMhztDoufgY/
+         s/YaI0T2hL8w14sHHW7W+c6Mmk2yfQ/ibvJzRLrLjAkzecGwLWICJuoLQBTNOna3XZbI
+         VnFy770xGVxdjDk9dXHvkb/ZqSHfM1yhNZARL1EQll7tFtso8gJjlI04p5hAKF0gFFP7
+         BTDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=iLN5+FLnhYIWqoDWLTWymRmT3HSuCKQDMghp6cr49+4=;
-        b=AHhYdiuQs8HN8Ra32lvphhb1nt6cwpvF1npEdAEUcbP6Kpp1z8yIQQz62kKVeWmmnj
-         dkebBI8jZ77N8b9jWsh/1AXDeWS8mihVJ/IywQyHIqWEF/mmmja/HzoEUHWkpHZopdeH
-         yA4QuPC6XXcXkknbBqkwNTkX2ZuRN+dWn9TGsVgpuegyLoO4E7XVVWV/isw4qSHd48yE
-         4sK6awa6KjdHB/rKJ0nKpe3vi76maf9UcvUsl9vBJZCVBXWonrtF4vdYOSKANzEhrav/
-         xqnAcBxFsQfgnAkuVbUcO+j2oJJj6avjUzxNZk4rZby1S6YD8cp+xPfzLH+WLyBux9Sj
-         pkMg==
-X-Gm-Message-State: ACgBeo0LgVCExSC3Enw5VBOJRtAzT7xC01MaYy68jASpIlo5742RBgkH
-	Sa5idS0Rm0UdErptEoagqoZfoOTxA1Ri
-X-Google-Smtp-Source: AA6agR5Ztfm8DnME40MFJ+L3pOkrk/LLHs6fSAOR1/U1JeP8TP+phIUcP0v3cVdGvdWh8ubaYa9KQriPDx3N
+        bh=qHxxMbzf5P1kENTIcu/skD1A7VW/ZSQMIDyzork9iPw=;
+        b=aTTabKch/nEP7MbqsLsjE56lh9NcVP1gxpint8upGhUVXdZePgD36luC762Z/gVjvS
+         fcbwHBl4QbOFQFnwUn7u7x7M9YNaPMIHTP99vkNF8GR8wrS4bOMvfGSt4bOzTOKL1zW2
+         IW4jgietzeuNjqnfLwIHNSS0z4cqilq7uA2BKevDlUtgaTVBg7DTav3sxHFG3mAiXtyx
+         Eu5WutNWGad6aO9KiKME/e5OcBl0YZ7/3c9CleuRSsmsoEBbYRTux4U9Ew7dBCqOZjmc
+         aMlDbLfGZ4NUMuLH8bBv5mvxje0FmVtdUzuIjnf8WdD0BHPRL9RmJR9nLqUGq6enRBfv
+         A8xA==
+X-Gm-Message-State: ACgBeo0b575gp7KViEpGCJkdi20HeM5BarzbypJrHuwbSC1zC6/aR3ua
+	bhkDzawVJCGuiLD9nzjkoJ2gm6TucHFH
+X-Google-Smtp-Source: AA6agR6oqIM30UMn/90m2gApF2R7Le2AepInoK1oGfNY9eAWaYg7N++h7MaUpqoBJDhq2iKEZ3Oi69J7zqh3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3bec:858f:9a6d:63de])
- (user=irogers job=sendgmr) by 2002:a05:6902:920:b0:68f:a286:2a2b with SMTP id
- bu32-20020a056902092000b0068fa2862a2bmr3041696ybb.612.1660714788460; Tue, 16
- Aug 2022 22:39:48 -0700 (PDT)
-Date: Tue, 16 Aug 2022 22:39:29 -0700
+ (user=irogers job=sendgmr) by 2002:a25:ce92:0:b0:680:c480:4a8 with SMTP id
+ x140-20020a25ce92000000b00680c48004a8mr19112893ybe.299.1660714791094; Tue, 16
+ Aug 2022 22:39:51 -0700 (PDT)
+Date: Tue, 16 Aug 2022 22:39:30 -0700
 In-Reply-To: <20220817053930.769840-1-irogers@google.com>
-Message-Id: <20220817053930.769840-6-irogers@google.com>
+Message-Id: <20220817053930.769840-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220817053930.769840-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
+Subject: [PATCH v1 6/6] perf build: Enable -Wthread-safety with clang
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -76,84 +76,29 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add annotations to describe lock behavior. Add missing unlocks to
-perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
-analysis cannot follow pointers through local variables.
+If building with clang then enable -Wthread-safety warnings.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-sched.c | 8 ++++++++
- tools/perf/builtin-top.c   | 5 +++--
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ tools/perf/Makefile.config | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 0f52f73be896..a8a765ed28ce 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
- }
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 0661a1cf9855..0ef6f572485d 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
+ CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+ HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
  
- static void create_tasks(struct perf_sched *sched)
-+	EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-+	EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
- {
- 	struct task_desc *task;
- 	pthread_attr_t attr;
-@@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
- }
++# Enabled Wthread-safety analysis for clang builds.
++ifeq ($(CC_NO_CLANG), 0)
++  CFLAGS += -Wthread-safety
++endif
++
+ include $(srctree)/tools/scripts/Makefile.arch
  
- static void wait_for_tasks(struct perf_sched *sched)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
- {
- 	u64 cpu_usage_0, cpu_usage_1;
- 	struct task_desc *task;
-@@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
- }
- 
- static void run_one_test(struct perf_sched *sched)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
- {
- 	u64 T0, T1, delta, avg_delta, fluct;
- 
-@@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
- 	for (i = 0; i < sched->replay_repeat; i++)
- 		run_one_test(sched);
- 
-+	mutex_unlock(&sched->start_work_mutex);
-+	mutex_unlock(&sched->work_done_wait_mutex);
- 	return 0;
- }
- 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 3757292bfe86..e832f04e3076 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
- 					struct hist_entry *he,
- 					struct perf_sample *sample,
- 					struct evsel *evsel, u64 ip)
-+	EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
- {
- 	struct annotation *notes;
- 	struct symbol *sym = he->ms.sym;
-@@ -724,13 +725,13 @@ static void *display_thread(void *arg)
- static int hist_iter__top_callback(struct hist_entry_iter *iter,
- 				   struct addr_location *al, bool single,
- 				   void *arg)
-+	EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
- {
- 	struct perf_top *top = arg;
--	struct hist_entry *he = iter->he;
- 	struct evsel *evsel = iter->evsel;
- 
- 	if (perf_hpp_list.sym && single)
--		perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-+		perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
- 
- 	hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
- 		     !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
+ $(call detected_var,SRCARCH)
 -- 
 2.37.1.595.g718a3a8f04-goog
 
