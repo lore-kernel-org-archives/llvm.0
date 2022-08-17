@@ -1,91 +1,107 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DB82F2E
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 14:52:51 +0000 (UTC)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-04.nifty.com with ESMTP id 27HEjs3N008264
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:45:54 +0900
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 27HEjWLD026828
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:45:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 27HEjWLD026828
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1660747533;
-	bh=uSGHNJC19uOo+o4MTqX8ubojhADfhgOtyxA3oBtx0Vw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=zzx5VAh46M/Lr1np/fAfFPD43U0C9d5eXTm8lncAWE8P07ixx8EjPNTnhuJJo+cil
-	 Lxvm8EbZ3QMhrejTuQbTnBNa2keGhA/KfvBeRwp0RBsApOY5Z5tnakBpMS1UyS4s5X
-	 6pUAc1ry0VNea/1F72cAuKaTNYWNh5RjD1nPhTxHJ2+QLecEQMRe8yAGJxmgwYY81c
-	 mZ9HhU7XchekuVUmA/Eu7YsMGMceqG4BLPijWmQ1AanUoRkD3JBQUhor1D6SJ8Jixs
-	 9wT02sOzE50xfMSyjBvDfdahD29o+4TIPnU56reoZP1yfFonJV3R4LjdMGakzzKoN+
-	 jmYJ0j69bNu4w==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id h24so2405802wrb.8
-        for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 07:45:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3bwdD9WBJbTrFgLYH21Mtm616NVnohuaSP5NFSNzeL+XF/Ijmw
-	sYU0ebcM/xJ8zmvUU7j+PeR3An1aRm4SCa77hUs=
-X-Google-Smtp-Source: AA6agR4611rLwhvJge2V5I5V2koJiMq8syWgMNxEIKfxnkhKZB+GtpMB6g0Pr+VpUQyacDmgDOMa9Ca/O/RLwbZ9EbQ=
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr14909860wrv.97.1660747531856; Wed, 17
- Aug 2022 07:45:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58772F2E
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 15:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CACC433C1;
+	Wed, 17 Aug 2022 15:45:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660751153;
+	bh=prGIqLTjJea4Mm1/Op+Xn1poe2U0hwQIrV+hVaACtXs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NVm6zsWeYPt6buQTKUQM0HzWxyugtBwuEiwezWaOvx8/e6h13ThJfHVHCFRue+dtS
+	 cbFBlBtg8vuUA1LRaLrC96lnvCEdPMmpu62H9oAn7NfoV4V5ArDtLVXVzONGk6uOaI
+	 MZgzD2ovQMT4sEx3JS4ZCG9LGVddZHYKYlxs8h5kLs5fMK7c9y8Q5J6x3i9qwg6nU7
+	 WcsSiLwVcpnV/EH4U7GBv7U1E/rmN8clnzHgYrBIDVuNw1eEbopKWd7T03ALlyP3xI
+	 HTPuxc6CHbQd1PMNnlvMqi2RwcpB0Znbt4L5xTmqOMiw2BeuFWuPpYfDL/sjvTSP8X
+	 RjfhevUz6LFPw==
+Date: Wed, 17 Aug 2022 08:45:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Matt Flax <flatmax@flatmax.com>
+Cc: kernel test robot <lkp@intel.com>, alsa-devel@alsa-project.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Message-ID: <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
+ <202208090909.Pg0BZGie-lkp@intel.com>
+ <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+ <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220810230133.1895778-1-nathan@kernel.org>
-In-Reply-To: <20220810230133.1895778-1-nathan@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 17 Aug 2022 23:44:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
-Message-ID: <CAK7LNATMpk2F1n489mNAV7cxi8Z_E_hNjhyvX5QcUqQXUXf_4A@mail.gmail.com>
-Subject: Re: [PATCH] scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
 
-On Thu, Aug 11, 2022 at 8:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> There are no instances of this warning in the tree across several
-> difference architectures and configurations. This was added by
-> commit 26ea6bb1fef0 ("kbuild, LLVMLinux: Supress warnings unless W=1-3")
-> back in 2014, where it might have been necessary, but there are no
-> instances of it now so stop disabling it to increase warning coverage
-> for clang.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+On Wed, Aug 17, 2022 at 03:44:33PM +1000, Matt Flax wrote:
+> 
+> On 17/8/22 04:00, Nathan Chancellor wrote:
+> 
+> > >     265			/* set the PLL for the digital receiver */
+> > >     266			switch (src4xxx->mclk_hz) {
+> > >     267			case 24576000:
+> > >     268				pj = 0x22;
+> > >     269				jd = 0x00;
+> > >     270				d = 0x00;
+> > >     271				break;
+> > >     272			case 22579200:
+> > >     273				pj = 0x22;
+> > >     274				jd = 0x1b;
+> > >     275				d = 0xa3;
+> > >     276				break;
+> > >   > 277			default:
+> > >     278				/* don't error out here,
+> > >     279				 * other parts of the chip are still functional
+> > >     280				 */
+> > >     281				dev_info(component->dev,
+> > >     282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+> > In the final commit, there is a 'break' here. Should it be a 'return 0'
+> > instead? Or should there be a different fix for these warnings?
+> 
+> The data sheet for the src4392 doesn't list defaults for these registers
+> (loaded with pj, jd and d). The actual state of these registers is not known
+> until we load them with something, arbitrary or not.
+> 
+> 	{  SRC4XXX_RCV_PLL_0F,		0x00  },  /* not spec. in the datasheet */
+> 	{  SRC4XXX_RCV_PLL_10,		0xff  },  /* not spec. in the datasheet */
+> 	{  SRC4XXX_RCV_PLL_11,		0xff  },  /* not spec. in the datasheet */
+> 
+> The state of DIR PLL registers aren't important if the user doesn't specify
+> a known mclk frequency.  The implication is that the DIR will not function,
+> however that is already implied by the user lacking to specify a known mclk
+> frequency.
+> 
+> The other functions on the chip (port A/B I2S, SRC, DIT, etc) will behave as
+> per usual, only the DIR will be dysfunctional.
 
-Applied to linux-kbuild/fixes. Thanks.
+So I suppose there is little point to all of the calls to regmap_write()
+and regmap_update_bits() in the default case then, meaning a 'return 0'
+would be appropriate? Sorry, I am having a hard time parsing what should
+be done about the warnings, which are fatal for allmodconfig due to
+CONFIG_WERROR.
 
+Cheers,
+Nathan
 
-
->  scripts/Makefile.extrawarn | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 9bbaf7112a9b..69cec45c4e71 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -48,7 +48,6 @@ else
->  ifdef CONFIG_CC_IS_CLANG
->  KBUILD_CFLAGS += -Wno-initializer-overrides
->  KBUILD_CFLAGS += -Wno-sign-compare
-> -KBUILD_CFLAGS += -Wno-format-zero-length
->  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
->  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
->  KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
->
-> base-commit: aeb6e6ac18c73ec287b3b1e2c913520699358c13
-> --
-> 2.37.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+> > >     283			}
+> > >     284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+> > >     285			if (ret < 0)
+> > >     286				dev_err(component->dev,
+> > >     287					"Failed to update PLL register 0x%x\n",
+> > >     288					SRC4XXX_RCV_PLL_0F);
+> > >   > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+> > >     290			if (ret < 0)
+> > >     291				dev_err(component->dev,
+> > >     292					"Failed to update PLL register 0x%x\n",
+> > >     293					SRC4XXX_RCV_PLL_10);
+> > >   > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+> > >     295			if (ret < 0)
+> > >     296				dev_err(component->dev,
+> > >     297					"Failed to update PLL register 0x%x\n",
+> > >     298					SRC4XXX_RCV_PLL_11);
+> > Cheers,
+> > Nathan
