@@ -1,23 +1,23 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2078.outbound.protection.outlook.com [40.107.92.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8314420
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 16:07:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2657A53AC
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 16:07:40 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BKk5PqgjaJtVrZU6Eod/AgcharslUJZQdQH71mcTtRCPdx1ArMqRl49LPdSQdo5BI/E1lHV2VgFso7IlpUnuYU1LROqWRK2L1mqAi68DNTZYV9DvMCV/y3m7x2cFn4Dt5F//NzhAbu8/V3iUxJMmqhoN86lCstgpACO7UJ0cFX7i8YFyYvTG5lwgFa8bNuwuQ6euA/t1wsoQ9SSGJ9HW1f6WDHvcTxbvsnmeWpZcROClNUK8ROmGeKM042qI6u9mSTjKq7kyBS1j4aqwL0qE8Yl0fAuKwLDdv1TCYjnp4fVCsWKSr4WZeS77ofeA57SsmTYWei3WakHkrGPGH1mEOQ==
+ b=eK3Q7j0+GcvqNssBJSH04arsoawEZ7Bqz3oyBC9n2THY49tB340pqS8t8/BotIjle/F9+RzqFk5gQdEkV3mrdLY4+DJ7qui7MPbvSDybsMZwjXZbpvWEdYzJE7Dvqh9BttsKZLcohf/8X61M5cqimIYeJyHad7caXxAicvU2YzAl6Q+ax/alnp4ILonIkeQBWvt/e5BlXFC3QXqZhDu6YrbTRRKCo8o37PRL9HMJhKzoQZCwC7F9yNUOmeRxtSEsdlCmPFOGxB8GGcASaQcs6gZWgszTrfa82UpRZdZrTfRL4/tps9wb6BR5kVNaO2IrkV4fE7Eo3xE7/dLIkQsLoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=no2yqzYJXokMeG131Dho5VFjKDKTSyCHlp6AVKaxGdw=;
- b=mT1mgjqcjGqSOPFVLGd/f9VfuSIWDCGlekbQt0EcptpUYktG5DqXETZ8umsJwruntQXSP2yUjReGDq70je+CA4Sf8of4VNN3Cuez6a7ZMavrpBwqCemr9Qi/H2+kEZiQTExqao5gg2Hxm5+D+U7zccEBJS26ODXIxsGJ7k/1hZ5XTNTpmqtKYjobDIJAeVWHQnTYguhYZGtSu6O9WS/XYlWY1TaU2bnR4x+N8d+WmTyxRPYpGYGR65kz+blH/POjFG5eQCd7/yHuPfTTwiMOGvm+9wRWc38EuTFshToDHbSGSuoLtJW8KQDRqV4n1/L5whJYdvHZi494TiPT9LVsng==
+ bh=BCdpw68nbPkTpQ+ij/Mqjno48+8atd18Y3oCi5+pBHQ=;
+ b=PN5Iy66XOrREj4Vag8OUNBvxYchYsPPRJFKk2KA/na8s9xaS1Kf1F7g1MrzB2sRBk4j0zOJbbZ3swTxgq34XtApMNgIaWtiZibLCDNO00vc1jARgpDoY0Hs3xVmRN2FvX8HX2XgUeKs/wcBkrYQWbpH4cyR3USwXC5heq88CJ1NvyDfUPFMIb6zs3DM2Z3QHQUGcg4e1ox2PMAR+GKNu6wlf++LIpyNKMBIiFeI3XiICWTvA17ESXRJDne7B4rwQJu7/WhbbnIgwDuSrlx/ZDpJr1Us9FdrjGmn3AHkKCHVrYO1T0+noXfkPBkM4sdj27F3cW1HHYFnKIdfadoe0og==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=no2yqzYJXokMeG131Dho5VFjKDKTSyCHlp6AVKaxGdw=;
- b=hEi10DJVB7LWTJLe23JlJsplViM9GjKhbtcAxHbitEU2I+oH53Jq8o1ryrvLQWwUGl/kYdLGW4AkhCrRPx/QqVfM0a40L6CuZDA7//a6FNDZKDelJOOCJaIYT64PKM1p4VNWZ1lYSm6nfCkF6BwEcUfmmceF8qeI6Oj95pRGd1FR2LtBOAGtC7ndTGGlZ63pOiXQZtuK5deu5nYbLO8lae/0u7/QOnK2ep4l5RLeSvvDB7f+2h9DX+2kyQIwSp5cnhfd2xyNYkxzVl6L/PQSf8ksc49paT+kT1PM+RcmY9eJEA/yYyCXzo6u8pad8qJZKZPnWuVnQ1f6Tt4KJ40RSA==
+ bh=BCdpw68nbPkTpQ+ij/Mqjno48+8atd18Y3oCi5+pBHQ=;
+ b=l/blVsTwTJq5vPVoVa6Mv8N04RghCdS2Fl36kbdO4aNAcHAYRoLPh/htnzEUkMmVIi3nzzhfslelkYz2lkP80S0bgRAKzPY+vnaP8xv20vJNoreqAcCGsHkkpDaopeGWP/+hyLXaegn26l0YuM9T+eYKZfu2lnUFFj9bFDgmFFbiTiQNsZhD42jeXMYiq2WQ0KbXfkv1+Ah13mRGQK4Hdg+iDZgi82LzTtY8Kkk+BnDOumdERAOPlivwv+vjPVYGMqvkxYmFADI6qoahPTw3KnkWrVdVbkLRhO9LW/QvUBk7gqVWWR90ugHNrkviO0cvNpykbCyu1diLKtqnRbT8ww==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
@@ -37,15 +37,15 @@ To: Alex Williamson <alex.williamson@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH 2/8] vfio-pci: Break up vfio_pci_core_ioctl() into one function per ioctl
-Date: Wed, 17 Aug 2022 13:07:19 -0300
-Message-Id: <2-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+Subject: [PATCH 4/8] vfio-pci: Replace 'void __user *' with proper types in the ioctl functions
+Date: Wed, 17 Aug 2022 13:07:21 -0300
+Message-Id: <4-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
 In-Reply-To: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0052.namprd05.prod.outlook.com
- (2603:10b6:208:236::21) To MN2PR12MB4192.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR05CA0039.namprd05.prod.outlook.com
+ (2603:10b6:208:236::8) To MN2PR12MB4192.namprd12.prod.outlook.com
  (2603:10b6:208:1d5::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,271 +54,275 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca88584e-1621-4045-17fe-08da806a945a
+X-MS-Office365-Filtering-Correlation-Id: ac7cedd0-c7f8-487b-af8b-08da806a9476
 X-MS-TrafficTypeDiagnostic: CY4PR1201MB0216:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	77ihcviOVFzTAzHWiWctgGHxT7M8vtJdIddu+1cFiesSjFMFhlySI6L9xX7Tv1uEWunbMWo7J8jjEc330H8Y03p5hYi/t7x6v+CSdI32a84NWlhVP4OxhkRW1zzRhlWgU+xPfwqzz3exr3KAGiXpqY3MRsWfmOz6+79YGECG5hHx62UxMtdf+1KG4vC0pBlzmCjwrpoDLYTH8vnoiDU4iOSaATik8FKiBjinCi/nY80y7rnnmu3sxIrLjtgYv3LrL7q/1u2RR65Xyv0Hl40Is6af70Er0aR7fnGCz6D3T16KQOPid9S16ZSigtaBAad0+2v1CxxVjv+mQdMBT3r/igPzd7V2bmthgsdX+Xx1HuegOqj9ooGqtJqeXphhemDZvPqlwspUmIGD6WbauXSi/NHdyTkEtVN7kvk0qBOH0y471Kj/xf9QnuiBNyPaYYBsGhx/4W6DDzAX+MqLfORMCfITlck7W+HynGkGF1/3/w0nvMDCIogr9DSLIkpy/hS99B08T4qUfoSVOH24aRyF9aSMoOJit5qxKU+1tBGfSETaY0nmcaJ1ExYreij5KRSfxhMrJsEgafiwpBg+jLCRMHQoPZ84iGRO6RINAtBybNrQ8zelzdF015IzAbaRtZpBu3yJzY/LLgWGJ4wof/xrtmtc/DlsxCmCUShKmHmephBmIH6Xc95jwZ/bJOqF13qwWWTrJjTFYj9Vr/EpLscE4R1UWND06Dy+nWacrqYXBn5ci+u1t1mMCA8Py+mZSuyXyMvG02Ky32HJAF/hJQpSoundvMlciBOJs5tCy3QY840=
+	kZDylyOz24X5lZxhLwOYO04HhgUVFfNvgweEjlLrQ7GFtcSV1S8oubvmfhcrkrvYHk5K5AjFuT103bUGfpDGcqrXCoCfh4lhas2i+jUllF3wCXf3leWauXe5VA2sLiiX+bxjr1BNPcjKN60txvffMsenNVA+58CbRuriqMmOC0iCYBoDIbss44EFSDY/xfdcDx/s1gDa3rQ3GfKU7XTefTmHTiTic7N/lA//KFC2aJhV/7084igirHYieqIqsmwNZB6YuoEloU1abmFS2WKeRZtclG6GGLShzYtCYcOr79hVj22/x6vPZBkmuiJTuc+view9CaHj99r9SNrtf63FHbCLWv0TlLXGFh3ylEWOSj7lQamqX7adn0Lo0uRmkVeehAyBajvEjuaZg9rSCXdwbxOBoi7SHSdpDOgXzWB1aP4tS881JIFM+tEK/GFffnglZmtwDkHBLLfhw62ysMHSqXLtL63t6wflt0xrWS2YtTec7jU04Tv5WOl1JrB10APJQ+OBW94Dt1PvUlNdnH6xThlMnPlp8SCZpSaHwv+5YvU0l5KZsPQc86/5g5m7jyoJACC500/ibVb6JZF6s+Y8+oPa3Cuq2IfJBKSZstwyAH2gnsBAGZeSgCh6MM7U6MQgwLWZuHXUOVr5cQ5blV9UdjqeAfMi9iRGh24DEEQ0PKwhVQ7h3rodgVtDSXbD7MRfUt/KcjaUN03mD9Q/TqLoTjcg66lL0PZjA+QzAVDslOvPfQvCcwqfa2J2SgxN3Pzl1aVfBVmPso9XrEspmwm8/GoMSS3MDcvOgeWiQt5cWsc=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(41300700001)(6506007)(6666004)(6486002)(26005)(66476007)(2906002)(478600001)(8676002)(66556008)(110136005)(36756003)(86362001)(316002)(6512007)(38100700002)(186003)(5660300002)(2616005)(8936002)(66946007)(83380400001)(4216001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?uIAO2sADa7xENCLaDuUYaULlkrsvWiAWCI6WvhfgRBskcW8Fu8pbysVtMwvY?=
- =?us-ascii?Q?M83EAWY1B+Uo7L8Akx2NSdbcyYI+oiWU9qcURg2nLklm4l+O58YD7T0Rk2C/?=
- =?us-ascii?Q?MpLaTvqzovGlwNhRxHj4NG2zc2WKNQrts97RBGn+GgYzRCnEkbZ7NPmzERal?=
- =?us-ascii?Q?PiBYGBA1aH5ee2EmwpWGEq5o3g1rxGb2z4VFQXnpXOzlYL3e6i201O1CISGQ?=
- =?us-ascii?Q?FffX0VBqs1ULYEU//43mpLJMiMld19Em8IaF28/QQy+zGKiDtEb326fPRZ+q?=
- =?us-ascii?Q?hy8GgJBqe/MGwbC+V8WxiSRb8eAW2C4GoNe7MNFYlkjA9GkYSzXP4UPDvS5P?=
- =?us-ascii?Q?eBnuXoem+EmozjtkseD0PnlizvHx2MM9T357hAdMjFbQ6syRmfy74snBivVF?=
- =?us-ascii?Q?6tLQr6liTwkXzQ/dss7ZBV5YZ78exSxUp2pGVZYK/54O+zkn9DEyr5PAi9K6?=
- =?us-ascii?Q?jWe2QnzzyCP5TyVUaIMMGnmR86jcRrlHZRrwOIQUor0BziyLxHIQ+wQuRlgW?=
- =?us-ascii?Q?7u5kRmJYtjxCUrsFvsk4vIZvVnakOjI0V/VclPyHLx1bDrUMmajbFuCotnYg?=
- =?us-ascii?Q?jt1A/33v6G4P7NhgdVKuglfVm9DweKNc/6iEqkxfAsn2ZBhceHtGGphreuqz?=
- =?us-ascii?Q?gJnchnhRICv34NmmZDA/8AjjT/HiNCnlMx4Zevp7LrwJEmFKrf8813zl1Q1D?=
- =?us-ascii?Q?AHH/Fqr9vDWUdkGxzF9bDwsU+jO8ZFx7ZdN3T4fj42AiTpcPLf1uocm25xFt?=
- =?us-ascii?Q?xfAirYGt2LnAwaViVz+bSRJOfF4n/ukE3EmI15eCQqE1ReYw2N4TUIP0n/7q?=
- =?us-ascii?Q?1uF4W3BOVYt3/X1nlgbTOX+34WEIKt6dRF2gEFpcBLqEBVDm+e0TW92em9tD?=
- =?us-ascii?Q?cJezpuNcu07VGQKiCWeztY/Ghd7S059iw0woSaMhHy0xl0IMBSIqAIkfZi/i?=
- =?us-ascii?Q?oKWR/L8dc4ojApefxQHjFothLB8zwFm4uNqoh/eOVSDqBWN0D+SmPiYONj5B?=
- =?us-ascii?Q?gQYIVQr/QallhJxQg8a6bcC8Zt6+HL13a3Er6z97aelHAfqWm+82CHi/Tyy7?=
- =?us-ascii?Q?vl7+4QK32JiQDJd/+AFuE7HW3ZnuZHh42eXeb1qHXmCfWQbmoDKEzUdQ9VrZ?=
- =?us-ascii?Q?2b7ujs1LInaZXv8gAu9BxeJH12R11tk+G95sRzLl264ctrmOF2dZvR808OH2?=
- =?us-ascii?Q?ogd9LpYcO3EoAVq0YgkiuAPKNGBa4Y2egiNDIM0yFFK5PqA0UjN/XyMW7Szd?=
- =?us-ascii?Q?B2GBRlawjUDUjWo0w2K7DnDzp2c56u63NERf1HbCrKcI7yHF2U9v5aOIhFvI?=
- =?us-ascii?Q?DAuFb/8OxOTWGEkCyEcC2esC/2OBkMzwmwRqh2+DRubFVgOntSAonSRVbPgD?=
- =?us-ascii?Q?Xn38pjzwCfbTNXBxNFtPoCLxHn9e+cENPMHyVOuGlfqFJZlj67eJ2+mCaoQv?=
- =?us-ascii?Q?xk6V1PWWA8DoTAcR3+FxoLFn9QNVZNV5pV+9B6UmQsZqomRfmc/kgTXUM0go?=
- =?us-ascii?Q?LfC5uNeFVq4AHhVn1SXti2TrueI2eOi2APOrI7f9vKBeea3ldzc1rRuLGaSl?=
- =?us-ascii?Q?f4a9+Xs5SRLP33EZaPXPKT3lxrOorRkrI5BmPgc+?=
+	=?us-ascii?Q?cVVDvcQSuQLyoS5227ABIccYYoxaRmJrtbXCUdLUz2T0Hi9m+BaEYkrkFbMD?=
+ =?us-ascii?Q?Rvw5hEEKtp15a59nsiSa3+SaiO8SetdsYdjUpP1z7qM/H7RvfiDDYnhZhVZV?=
+ =?us-ascii?Q?RJlwYstNvlUG3THJResWLY94F+FPmGOBqVjWMjDtZv8fbJrHvMgjtreqfGgv?=
+ =?us-ascii?Q?+dWmgRPsybq1MFLSiJsdaktoEfmxpRhg07XXh0swmSa0H3dT2RL8EMsZXnia?=
+ =?us-ascii?Q?rKGLo79Plt2C4uN2lDYalu6jwXmzGiFX8VqO5AHTHY+Ts4EszF8LdxPbT5yz?=
+ =?us-ascii?Q?3Vb3Ir1yeyfVszMTqVTuCgPJa/ElUCb39RyCC5Yx9acG8FBSoEVCFLUtJd6q?=
+ =?us-ascii?Q?hsqHDMLAldN/GvxOlr1FCj6djKRU/SZQPLnLR5qGGYsUkkTIpweJ7vgJOj26?=
+ =?us-ascii?Q?WdWKP90mrmaHajxlXg/7ckzKtymjnPU0janE+Q9GxO16vcFfpCkHxrdC7VPh?=
+ =?us-ascii?Q?7EOvzB+0Kl3pj7YyPv+9Kzn/wd09eyvwjlRGrSKxVuj4ZSiqvVu13bkrqYNc?=
+ =?us-ascii?Q?56+pPrseMsL/UYvWa3Ag+RvREp5WZ0cMXZMNzYUljVIQkNzysWzDLHHqYtrN?=
+ =?us-ascii?Q?9shMJhqfsCRgZR2uufHFSlvJtW7gAws81JXbyu4wSoklQRTEvdI5jiyxWziv?=
+ =?us-ascii?Q?iI4RdJb0sY1UH4Gju42e4zyZCxlai0Z413BRLCEHLFqmqWi0szwK596shmBY?=
+ =?us-ascii?Q?MTfNrUM8iLDDu0KoNavzw195qlYdogLgEh1xoVh9WEjF+bKuI764KqwFWu8n?=
+ =?us-ascii?Q?4xK04zbApm3ZVj/fIRkPAytajGzySAIZsQzMYIBN+wLM1xsg4PGauLpo8bZ9?=
+ =?us-ascii?Q?7fc4vI+NFm4BvwVw8Zo01Cy2pLNoAWPZaBPlCrQH8+zjLQ9h9YBX6u9lc9C1?=
+ =?us-ascii?Q?45QlilAm+hFOAijrx4TaeaK38ntm4H9pjpOKilyWF2S4Y4vB8X4qYVUJ2SGO?=
+ =?us-ascii?Q?d0T+n6VpjoLQnnzSkYci/MPKXySwu37vh7AaH/4WLLsWXvoSCGAq5g4VEa6b?=
+ =?us-ascii?Q?uleRMMQWkEQCGXJaBB+1ycSqGyb0pMsq8b7wOcMi+LpLpup3/fZESgZDYdhd?=
+ =?us-ascii?Q?KDB5caulJ3ELZDyd7pyVV0cy64/AygZsv7yldfs9075TRvHOeqa18cQQRrf5?=
+ =?us-ascii?Q?Ne4D/QZ+k9Hl2uZw4JMFr3/OZ+t4YTzaR3M5y2+R6Ra6XfZlacV67TMKgyhW?=
+ =?us-ascii?Q?wqCa/yPc7JWgAFZ/xG+tXBPZrFWIWXiFBbeKV/dWaWKXLINvrGAjEQJ42k4p?=
+ =?us-ascii?Q?+vy6/Ms/tarkhDI8Ngg6pxlgS31i5KZzqjh7wT/hm+4BaotPOso4tqcKBGqp?=
+ =?us-ascii?Q?GhS3X3DSow5ssBL3PgdhpxXvC49NXBtVTBlaVh3CkZfdG0ODGJ9GVW9hNOQN?=
+ =?us-ascii?Q?YM8n8SZXwxCCHTCOovWFMrsSF4X5UjqRrE2CKhVN7PGmeGiGjrppBpV7JC7v?=
+ =?us-ascii?Q?ZIyebq83TKbQTmEocm42odqp5Qi81z9Hb7rbPZmWEseAfKXOhnCQzCKPfg+d?=
+ =?us-ascii?Q?3jOeJkl7eznxlkLioCuZwmBFR8hSM3AkqM7nlqYP+zW6IE0/QHk1EkyZUMjR?=
+ =?us-ascii?Q?Z8OcYmkJaC15FYH6GyDVZ0X+jrdSBKfPYhw06cXg?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca88584e-1621-4045-17fe-08da806a945a
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac7cedd0-c7f8-487b-af8b-08da806a9476
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 16:07:27.1260
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 16:07:27.3916
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dXKmXV79E+7Z+HsnTTkngzO0Ln8rbyGJ0fnrV7ksdEAS7dcuL4C91SH2jRqMZvk6
+X-MS-Exchange-CrossTenant-UserPrincipalName: BsghjnNWF5k+ANrB6k178CrB2r+YJhFCrGNw3/6XQ4y1TaWEMfmxYmmxVC4A3lC3
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0216
 
-500 lines is a bit long for a single function, move the bodies of each
-ioctl into separate functions and leave behind a switch statement to
-dispatch them. This patch just adds the function declarations and does not
-fix the indenting. The next patch will restore the indenting.
+This makes the code clearer and replaces a few places trying to access a
+flex array with an actual flex array.
 
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/vfio/pci/vfio_pci_core.c | 97 ++++++++++++++++++++++----------
- 1 file changed, 68 insertions(+), 29 deletions(-)
+ drivers/vfio/pci/vfio_pci_core.c | 58 +++++++++++++++-----------------
+ 1 file changed, 28 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 04180a0836cc90..6094f237552b35 100644
+index a0a855a52bbf1d..050b9d4b8c290c 100644
 --- a/drivers/vfio/pci/vfio_pci_core.c
 +++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -689,21 +689,15 @@ int vfio_pci_register_dev_region(struct vfio_pci_core_device *vdev,
- }
+@@ -690,7 +690,7 @@ int vfio_pci_register_dev_region(struct vfio_pci_core_device *vdev,
  EXPORT_SYMBOL_GPL(vfio_pci_register_dev_region);
  
--long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
--		unsigned long arg)
-+static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
-+				   void __user *arg)
+ static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
+-				   void __user *arg)
++				   struct vfio_device_info __user *arg)
  {
--	struct vfio_pci_core_device *vdev =
--		container_of(core_vdev, struct vfio_pci_core_device, vdev);
--	unsigned long minsz;
--
--	if (cmd == VFIO_DEVICE_GET_INFO) {
-+	unsigned long minsz = offsetofend(struct vfio_device_info, num_irqs);
- 		struct vfio_device_info info;
- 		struct vfio_info_cap caps = { .buf = NULL, .size = 0 };
- 		unsigned long capsz;
- 		int ret;
+ 	unsigned long minsz = offsetofend(struct vfio_device_info, num_irqs);
+ 	struct vfio_device_info info;
+@@ -701,7 +701,7 @@ static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
+ 	/* For backward compatibility, cannot require this */
+ 	capsz = offsetofend(struct vfio_iommu_type1_info, cap_offset);
  
--		minsz = offsetofend(struct vfio_device_info, num_irqs);
--
- 		/* For backward compatibility, cannot require this */
- 		capsz = offsetofend(struct vfio_iommu_type1_info, cap_offset);
+-	if (copy_from_user(&info, (void __user *)arg, minsz))
++	if (copy_from_user(&info, arg, minsz))
+ 		return -EFAULT;
  
-@@ -752,15 +746,17 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
+ 	if (info.argsz < minsz)
+@@ -733,22 +733,21 @@ static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
+ 			info.argsz = sizeof(info) + caps.size;
+ 		} else {
+ 			vfio_info_cap_shift(&caps, sizeof(info));
+-			if (copy_to_user((void __user *)arg + sizeof(info),
+-					 caps.buf, caps.size)) {
++			if (copy_to_user(arg + 1, caps.buf, caps.size)) {
+ 				kfree(caps.buf);
+ 				return -EFAULT;
+ 			}
+-			info.cap_offset = sizeof(info);
++			info.cap_offset = sizeof(*arg);
+ 		}
  
- 		return copy_to_user((void __user *)arg, &info, minsz) ?
- 			-EFAULT : 0;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_GET_REGION_INFO) {
-+static int vfio_pci_ioctl_get_region_info(struct vfio_pci_core_device *vdev,
-+					  void __user *arg)
-+{
-+	unsigned long minsz = offsetofend(struct vfio_region_info, offset);
- 		struct pci_dev *pdev = vdev->pdev;
- 		struct vfio_region_info info;
- 		struct vfio_info_cap caps = { .buf = NULL, .size = 0 };
- 		int i, ret;
- 
--		minsz = offsetofend(struct vfio_region_info, offset);
--
- 		if (copy_from_user(&info, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -897,12 +893,14 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 
- 		return copy_to_user((void __user *)arg, &info, minsz) ?
- 			-EFAULT : 0;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_GET_IRQ_INFO) {
-+static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
-+				       void __user *arg)
-+{
-+	unsigned long minsz = offsetofend(struct vfio_irq_info, count);
- 		struct vfio_irq_info info;
- 
--		minsz = offsetofend(struct vfio_irq_info, count);
--
- 		if (copy_from_user(&info, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -933,15 +931,17 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 
- 		return copy_to_user((void __user *)arg, &info, minsz) ?
- 			-EFAULT : 0;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_SET_IRQS) {
-+static int vfio_pci_ioctl_set_irqs(struct vfio_pci_core_device *vdev,
-+				   void __user *arg)
-+{
-+	unsigned long minsz = offsetofend(struct vfio_irq_set, count);
- 		struct vfio_irq_set hdr;
- 		u8 *data = NULL;
- 		int max, ret = 0;
- 		size_t data_size = 0;
- 
--		minsz = offsetofend(struct vfio_irq_set, count);
--
- 		if (copy_from_user(&hdr, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -968,8 +968,11 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 		kfree(data);
- 
- 		return ret;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_RESET) {
-+static int vfio_pci_ioctl_reset(struct vfio_pci_core_device *vdev,
-+				void __user *arg)
-+{
- 		int ret;
- 
- 		if (!vdev->reset_works)
-@@ -993,16 +996,20 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 		up_write(&vdev->memory_lock);
- 
- 		return ret;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_GET_PCI_HOT_RESET_INFO) {
-+static int
-+vfio_pci_ioctl_get_pci_hot_reset_info(struct vfio_pci_core_device *vdev,
-+				      void __user *arg)
-+{
-+	unsigned long minsz =
-+		offsetofend(struct vfio_pci_hot_reset_info, count);
- 		struct vfio_pci_hot_reset_info hdr;
- 		struct vfio_pci_fill_info fill = { 0 };
- 		struct vfio_pci_dependent_device *devices = NULL;
- 		bool slot = false;
- 		int ret = 0;
- 
--		minsz = offsetofend(struct vfio_pci_hot_reset_info, count);
--
- 		if (copy_from_user(&hdr, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -1066,8 +1073,12 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 
- 		kfree(devices);
- 		return ret;
-+}
- 
--	} else if (cmd == VFIO_DEVICE_PCI_HOT_RESET) {
-+static int vfio_pci_ioctl_pci_hot_reset(struct vfio_pci_core_device *vdev,
-+					void __user *arg)
-+{
-+	unsigned long minsz = offsetofend(struct vfio_pci_hot_reset, count);
- 		struct vfio_pci_hot_reset hdr;
- 		int32_t *group_fds;
- 		struct file **files;
-@@ -1075,8 +1086,6 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 		bool slot = false;
- 		int file_idx, count = 0, ret = 0;
- 
--		minsz = offsetofend(struct vfio_pci_hot_reset, count);
--
- 		if (copy_from_user(&hdr, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -1160,12 +1169,15 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 
- 		kfree(files);
- 		return ret;
--	} else if (cmd == VFIO_DEVICE_IOEVENTFD) {
-+}
-+
-+static int vfio_pci_ioctl_ioeventfd(struct vfio_pci_core_device *vdev,
-+				    void __user *arg)
-+{
-+	unsigned long minsz = offsetofend(struct vfio_device_ioeventfd, fd);
- 		struct vfio_device_ioeventfd ioeventfd;
- 		int count;
- 
--		minsz = offsetofend(struct vfio_device_ioeventfd, fd);
--
- 		if (copy_from_user(&ioeventfd, (void __user *)arg, minsz))
- 			return -EFAULT;
- 
-@@ -1182,8 +1194,35 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 
- 		return vfio_pci_ioeventfd(vdev, ioeventfd.offset,
- 					  ioeventfd.data, count, ioeventfd.fd);
-+}
-+
-+long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-+			 unsigned long arg)
-+{
-+	struct vfio_pci_core_device *vdev =
-+		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-+	void __user *uarg = (void __user *)arg;
-+
-+	switch (cmd) {
-+	case VFIO_DEVICE_GET_INFO:
-+		return vfio_pci_ioctl_get_info(vdev, uarg);
-+	case VFIO_DEVICE_GET_IRQ_INFO:
-+		return vfio_pci_ioctl_get_irq_info(vdev, uarg);
-+	case VFIO_DEVICE_GET_PCI_HOT_RESET_INFO:
-+		return vfio_pci_ioctl_get_pci_hot_reset_info(vdev, uarg);
-+	case VFIO_DEVICE_GET_REGION_INFO:
-+		return vfio_pci_ioctl_get_region_info(vdev, uarg);
-+	case VFIO_DEVICE_IOEVENTFD:
-+		return vfio_pci_ioctl_ioeventfd(vdev, uarg);
-+	case VFIO_DEVICE_PCI_HOT_RESET:
-+		return vfio_pci_ioctl_pci_hot_reset(vdev, uarg);
-+	case VFIO_DEVICE_RESET:
-+		return vfio_pci_ioctl_reset(vdev, uarg);
-+	case VFIO_DEVICE_SET_IRQS:
-+		return vfio_pci_ioctl_set_irqs(vdev, uarg);
-+	default:
-+		return -ENOTTY;
+ 		kfree(caps.buf);
  	}
--	return -ENOTTY;
+ 
+-	return copy_to_user((void __user *)arg, &info, minsz) ? -EFAULT : 0;
++	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
  }
+ 
+ static int vfio_pci_ioctl_get_region_info(struct vfio_pci_core_device *vdev,
+-					  void __user *arg)
++					  struct vfio_region_info __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_region_info, offset);
+ 	struct pci_dev *pdev = vdev->pdev;
+@@ -756,7 +755,7 @@ static int vfio_pci_ioctl_get_region_info(struct vfio_pci_core_device *vdev,
+ 	struct vfio_info_cap caps = { .buf = NULL, .size = 0 };
+ 	int i, ret;
+ 
+-	if (copy_from_user(&info, (void __user *)arg, minsz))
++	if (copy_from_user(&info, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	if (info.argsz < minsz)
+@@ -875,27 +874,26 @@ static int vfio_pci_ioctl_get_region_info(struct vfio_pci_core_device *vdev,
+ 			info.cap_offset = 0;
+ 		} else {
+ 			vfio_info_cap_shift(&caps, sizeof(info));
+-			if (copy_to_user((void __user *)arg + sizeof(info),
+-					 caps.buf, caps.size)) {
++			if (copy_to_user(arg + 1, caps.buf, caps.size)) {
+ 				kfree(caps.buf);
+ 				return -EFAULT;
+ 			}
+-			info.cap_offset = sizeof(info);
++			info.cap_offset = sizeof(*arg);
+ 		}
+ 
+ 		kfree(caps.buf);
+ 	}
+ 
+-	return copy_to_user((void __user *)arg, &info, minsz) ? -EFAULT : 0;
++	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
+ }
+ 
+ static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
+-				       void __user *arg)
++				       struct vfio_irq_info __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_irq_info, count);
+ 	struct vfio_irq_info info;
+ 
+-	if (copy_from_user(&info, (void __user *)arg, minsz))
++	if (copy_from_user(&info, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	if (info.argsz < minsz || info.index >= VFIO_PCI_NUM_IRQS)
+@@ -923,11 +921,11 @@ static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
+ 	else
+ 		info.flags |= VFIO_IRQ_INFO_NORESIZE;
+ 
+-	return copy_to_user((void __user *)arg, &info, minsz) ? -EFAULT : 0;
++	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
+ }
+ 
+ static int vfio_pci_ioctl_set_irqs(struct vfio_pci_core_device *vdev,
+-				   void __user *arg)
++				   struct vfio_irq_set __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_irq_set, count);
+ 	struct vfio_irq_set hdr;
+@@ -935,7 +933,7 @@ static int vfio_pci_ioctl_set_irqs(struct vfio_pci_core_device *vdev,
+ 	int max, ret = 0;
+ 	size_t data_size = 0;
+ 
+-	if (copy_from_user(&hdr, (void __user *)arg, minsz))
++	if (copy_from_user(&hdr, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	max = vfio_pci_get_irq_count(vdev, hdr.index);
+@@ -946,7 +944,7 @@ static int vfio_pci_ioctl_set_irqs(struct vfio_pci_core_device *vdev,
+ 		return ret;
+ 
+ 	if (data_size) {
+-		data = memdup_user((void __user *)(arg + minsz), data_size);
++		data = memdup_user(&arg->data, data_size);
+ 		if (IS_ERR(data))
+ 			return PTR_ERR(data);
+ 	}
+@@ -989,9 +987,9 @@ static int vfio_pci_ioctl_reset(struct vfio_pci_core_device *vdev,
+ 	return ret;
+ }
+ 
+-static int
+-vfio_pci_ioctl_get_pci_hot_reset_info(struct vfio_pci_core_device *vdev,
+-				      void __user *arg)
++static int vfio_pci_ioctl_get_pci_hot_reset_info(
++	struct vfio_pci_core_device *vdev,
++	struct vfio_pci_hot_reset_info __user *arg)
+ {
+ 	unsigned long minsz =
+ 		offsetofend(struct vfio_pci_hot_reset_info, count);
+@@ -1001,7 +999,7 @@ vfio_pci_ioctl_get_pci_hot_reset_info(struct vfio_pci_core_device *vdev,
+ 	bool slot = false;
+ 	int ret = 0;
+ 
+-	if (copy_from_user(&hdr, (void __user *)arg, minsz))
++	if (copy_from_user(&hdr, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	if (hdr.argsz < minsz)
+@@ -1051,11 +1049,11 @@ vfio_pci_ioctl_get_pci_hot_reset_info(struct vfio_pci_core_device *vdev,
+ 		hdr.count = fill.cur;
+ 
+ reset_info_exit:
+-	if (copy_to_user((void __user *)arg, &hdr, minsz))
++	if (copy_to_user(arg, &hdr, minsz))
+ 		ret = -EFAULT;
+ 
+ 	if (!ret) {
+-		if (copy_to_user((void __user *)(arg + minsz), devices,
++		if (copy_to_user(&arg->devices, devices,
+ 				 hdr.count * sizeof(*devices)))
+ 			ret = -EFAULT;
+ 	}
+@@ -1065,7 +1063,7 @@ vfio_pci_ioctl_get_pci_hot_reset_info(struct vfio_pci_core_device *vdev,
+ }
+ 
+ static int vfio_pci_ioctl_pci_hot_reset(struct vfio_pci_core_device *vdev,
+-					void __user *arg)
++					struct vfio_pci_hot_reset __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_pci_hot_reset, count);
+ 	struct vfio_pci_hot_reset hdr;
+@@ -1075,7 +1073,7 @@ static int vfio_pci_ioctl_pci_hot_reset(struct vfio_pci_core_device *vdev,
+ 	bool slot = false;
+ 	int file_idx, count = 0, ret = 0;
+ 
+-	if (copy_from_user(&hdr, (void __user *)arg, minsz))
++	if (copy_from_user(&hdr, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	if (hdr.argsz < minsz || hdr.flags)
+@@ -1109,7 +1107,7 @@ static int vfio_pci_ioctl_pci_hot_reset(struct vfio_pci_core_device *vdev,
+ 		return -ENOMEM;
+ 	}
+ 
+-	if (copy_from_user(group_fds, (void __user *)(arg + minsz),
++	if (copy_from_user(group_fds, arg->group_fds,
+ 			   hdr.count * sizeof(*group_fds))) {
+ 		kfree(group_fds);
+ 		kfree(files);
+@@ -1159,13 +1157,13 @@ static int vfio_pci_ioctl_pci_hot_reset(struct vfio_pci_core_device *vdev,
+ }
+ 
+ static int vfio_pci_ioctl_ioeventfd(struct vfio_pci_core_device *vdev,
+-				    void __user *arg)
++				    struct vfio_device_ioeventfd __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_device_ioeventfd, fd);
+ 	struct vfio_device_ioeventfd ioeventfd;
+ 	int count;
+ 
+-	if (copy_from_user(&ioeventfd, (void __user *)arg, minsz))
++	if (copy_from_user(&ioeventfd, arg, minsz))
+ 		return -EFAULT;
+ 
+ 	if (ioeventfd.argsz < minsz)
+@@ -1214,7 +1212,7 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
  EXPORT_SYMBOL_GPL(vfio_pci_core_ioctl);
  
+ static int vfio_pci_core_feature_token(struct vfio_device *device, u32 flags,
+-				       void __user *arg, size_t argsz)
++				       uuid_t __user *arg, size_t argsz)
+ {
+ 	struct vfio_pci_core_device *vdev =
+ 		container_of(device, struct vfio_pci_core_device, vdev);
 -- 
 2.37.2
 
