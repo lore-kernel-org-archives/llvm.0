@@ -1,45 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63617460
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 20:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652F07463
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 20:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660767877; x=1692303877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IIOssEjqoV4OTzY2YH29W6lbg95l6doUvPncIkn+X60=;
-  b=ime8ws5+moZwlEtYbyCZR2zFl5GwXMDKYZQb/9bwK0eshsv/HswIyMmt
-   K0v2lizQSSb76qVRSMAze0m/5i+OGm/7Mu1+GgAvsW/NCJ73qQFrdM1wv
-   ORADtK7ql85vDFJxTKPh7GcHqAivi6A00xsml92yBHcHyN/uXlLfGY1kQ
-   r07YwlKyuOOEoyPNSk8xn4K5QSs57kDFkytpZZ5rXevL4pmfviPgB0a6Y
-   LYLIj/n3oPTJ2R6ji08NH4iXxbcFwW3iPdNXd0fk5uf2pfp7rgEJlVNVd
-   HkrxI90C/bHHSiml8BH0BtYTwKkJ0Ow2eK+TAhl75ySKfxtvqTLPdfYGd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="272363826"
+  t=1660768476; x=1692304476;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+nf3P+bzUfdWxBjUlNyOkWW74Iv39NOlsik1vxmpSJU=;
+  b=k6mEFFtS4jAB+W+HVSgjLBe+ptVoxbStDnYg5I9t8a5LFwalY2UQSqAZ
+   TQZYsthOqrDDkpkNTZK+I2s4poun5NvOxQvlEEP88f9jL860N32LH3BrU
+   dw/kX7k70OIZ8qO2OZxx8uOZuzVZzr4ulGyRbE4Ur4jjlbsIIVRi4OR50
+   PaeqgFglOJ9+EGPRebMrNlyY/A+8hr+TH+FljpoEdoMaVkxkx+RBZpL25
+   vkc6ddyLyV4NefWTDLsEDS685CLFBLMDkeCPFWHToh/YpnlYMJNvQeoe1
+   Jqz5BSTDRzhBRpG80Ewu6cU8VlnlrKFnHGKu0bHRsVPoIf/RJZeptIbOo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293873868"
 X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="272363826"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 13:24:37 -0700
+   d="scan'208";a="293873868"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 13:34:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
-   d="scan'208";a="583913548"
+   d="scan'208";a="636525478"
 Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 13:24:34 -0700
+  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2022 13:34:34 -0700
 Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oOPab-0001JS-2L;
-	Wed, 17 Aug 2022 20:24:33 +0000
-Date: Thu, 18 Aug 2022 04:23:45 +0800
+	id 1oOPkI-0001Jm-09;
+	Wed, 17 Aug 2022 20:34:34 +0000
+Date: Thu, 18 Aug 2022 04:34:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mturquette@baylibre.com,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH] clk: Add Sunplus SP7021 clock driver
-Message-ID: <202208180400.EvwdX195-lkp@intel.com>
-References: <20220817070113.415971-1-qinjian@cqplus1.com>
+To: Jeff Layton <jlayton@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jlayton:iversion 1/7] samples/vfs/test-statx.c:111:24: warning:
+ more '%' conversions than data arguments
+Message-ID: <202208180458.7a2l8vcX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,167 +45,157 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817070113.415971-1-qinjian@cqplus1.com>
 
-Hi Qin,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on 568035b01cfb107af8d2e4bd2fb9aea22cf5b868]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/clk-Add-Sunplus-SP7021-clock-driver/20220817-151010
-base:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: arm-randconfig-r013-20220818 (https://download.01.org/0day-ci/archive/20220818/202208180400.EvwdX195-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git iversion
+head:   f4cbc6a71997effae6392d95c1a68884142d9d21
+commit: ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7 [1/7] vfs: report change attribute in statx for IS_I_VERSION inodes
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220818/202208180458.7a2l8vcX-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/5673230d6a56d6c37b8db18d202c0ef526f52b2e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qin-Jian/clk-Add-Sunplus-SP7021-clock-driver/20220817-151010
-        git checkout 5673230d6a56d6c37b8db18d202c0ef526f52b2e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton iversion
+        git checkout ab87f1864e9838a40a28f93e64b87a5ce9bfd3a7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/clk-sp7021.c:317:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:318:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:319:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:320:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:354:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:342:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:334:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:322:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>> samples/vfs/test-statx.c:111:24: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                   printf(" MountId: %llx"), stx->stx_mnt_id;
+                                     ~~~^
+>> samples/vfs/test-statx.c:111:34: warning: expression result unused [-Wunused-value]
+                   printf(" MountId: %llx"), stx->stx_mnt_id;
+                                             ~~~  ^~~~~~~~~~
+   2 warnings generated.
 
 
-vim +317 drivers/clk/clk-sp7021.c
+vim +111 samples/vfs/test-statx.c
 
-   310	
-   311	static int plltv_set_rate(struct sp_pll *clk)
-   312	{
-   313		unsigned long flags;
-   314		u32 r0, r1, r2;
-   315	
-   316		r0  = BIT(clk->bp_bit + 16);
- > 317		r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-   318		r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-   319		r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-   320		r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-   321	
-   322		r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-   323	
-   324		r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
-   325		r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
-   326	
-   327		spin_lock_irqsave(&clk->lock, flags);
-   328		writel(r0, clk->reg);
-   329		writel(r1, clk->reg + 4);
-   330		writel(r2, clk->reg + 8);
-   331		spin_unlock_irqrestore(&clk->lock, flags);
-   332	
-   333		return 0;
-   334	}
-   335	
+    76	
+    77	static void dump_statx(struct statx *stx)
+    78	{
+    79		char buffer[256], ft = '?';
+    80	
+    81		printf("results=%x\n", stx->stx_mask);
+    82	
+    83		printf(" ");
+    84		if (stx->stx_mask & STATX_SIZE)
+    85			printf(" Size: %-15llu", (unsigned long long)stx->stx_size);
+    86		if (stx->stx_mask & STATX_BLOCKS)
+    87			printf(" Blocks: %-10llu", (unsigned long long)stx->stx_blocks);
+    88		printf(" IO Block: %-6llu", (unsigned long long)stx->stx_blksize);
+    89		if (stx->stx_mask & STATX_TYPE) {
+    90			switch (stx->stx_mode & S_IFMT) {
+    91			case S_IFIFO:	printf("  FIFO\n");			ft = 'p'; break;
+    92			case S_IFCHR:	printf("  character special file\n");	ft = 'c'; break;
+    93			case S_IFDIR:	printf("  directory\n");		ft = 'd'; break;
+    94			case S_IFBLK:	printf("  block special file\n");	ft = 'b'; break;
+    95			case S_IFREG:	printf("  regular file\n");		ft = '-'; break;
+    96			case S_IFLNK:	printf("  symbolic link\n");		ft = 'l'; break;
+    97			case S_IFSOCK:	printf("  socket\n");			ft = 's'; break;
+    98			default:
+    99				printf(" unknown type (%o)\n", stx->stx_mode & S_IFMT);
+   100				break;
+   101			}
+   102		} else {
+   103			printf(" no type\n");
+   104		}
+   105	
+   106		sprintf(buffer, "%02x:%02x", stx->stx_dev_major, stx->stx_dev_minor);
+   107		printf("Device: %-15s", buffer);
+   108		if (stx->stx_mask & STATX_INO)
+   109			printf(" Inode: %-11llu", (unsigned long long) stx->stx_ino);
+   110		if (stx->stx_mask & STATX_MNT_ID)
+ > 111			printf(" MountId: %llx"), stx->stx_mnt_id;
+   112		if (stx->stx_mask & STATX_NLINK)
+   113			printf(" Links: %-5u", stx->stx_nlink);
+   114		if (stx->stx_mask & STATX_TYPE) {
+   115			switch (stx->stx_mode & S_IFMT) {
+   116			case S_IFBLK:
+   117			case S_IFCHR:
+   118				printf(" Device type: %u,%u",
+   119				       stx->stx_rdev_major, stx->stx_rdev_minor);
+   120				break;
+   121			}
+   122		}
+   123		printf("\n");
+   124	
+   125		if (stx->stx_mask & STATX_MODE)
+   126			printf("Access: (%04o/%c%c%c%c%c%c%c%c%c%c)  ",
+   127			       stx->stx_mode & 07777,
+   128			       ft,
+   129			       stx->stx_mode & S_IRUSR ? 'r' : '-',
+   130			       stx->stx_mode & S_IWUSR ? 'w' : '-',
+   131			       stx->stx_mode & S_IXUSR ? 'x' : '-',
+   132			       stx->stx_mode & S_IRGRP ? 'r' : '-',
+   133			       stx->stx_mode & S_IWGRP ? 'w' : '-',
+   134			       stx->stx_mode & S_IXGRP ? 'x' : '-',
+   135			       stx->stx_mode & S_IROTH ? 'r' : '-',
+   136			       stx->stx_mode & S_IWOTH ? 'w' : '-',
+   137			       stx->stx_mode & S_IXOTH ? 'x' : '-');
+   138		if (stx->stx_mask & STATX_UID)
+   139			printf("Uid: %5d   ", stx->stx_uid);
+   140		if (stx->stx_mask & STATX_GID)
+   141			printf("Gid: %5d\n", stx->stx_gid);
+   142	
+   143		if (stx->stx_mask & STATX_ATIME)
+   144			print_time("Access: ", &stx->stx_atime);
+   145		if (stx->stx_mask & STATX_MTIME)
+   146			print_time("Modify: ", &stx->stx_mtime);
+   147		if (stx->stx_mask & STATX_CTIME)
+   148			print_time("Change: ", &stx->stx_ctime);
+   149		if (stx->stx_mask & STATX_BTIME)
+   150			print_time("Birth: ", &stx->stx_btime);
+   151		if (stx->stx_mask & STATX_CHANGE_ATTR)
+   152			printf("Change Attr: 0x%llx\n", stx->stx_change_attr);
+   153	
+   154		if (stx->stx_attributes_mask) {
+   155			unsigned char bits, mbits;
+   156			int loop, byte;
+   157	
+   158			static char attr_representation[64 + 1] =
+   159				/* STATX_ATTR_ flags: */
+   160				"????????"	/* 63-56 */
+   161				"????????"	/* 55-48 */
+   162				"????????"	/* 47-40 */
+   163				"????????"	/* 39-32 */
+   164				"????????"	/* 31-24	0x00000000-ff000000 */
+   165				"????????"	/* 23-16	0x00000000-00ff0000 */
+   166				"???me???"	/* 15- 8	0x00000000-0000ff00 */
+   167				"?dai?c??"	/*  7- 0	0x00000000-000000ff */
+   168				;
+   169	
+   170			printf("Attributes: %016llx (",
+   171			       (unsigned long long)stx->stx_attributes);
+   172			for (byte = 64 - 8; byte >= 0; byte -= 8) {
+   173				bits = stx->stx_attributes >> byte;
+   174				mbits = stx->stx_attributes_mask >> byte;
+   175				for (loop = 7; loop >= 0; loop--) {
+   176					int bit = byte + loop;
+   177	
+   178					if (!(mbits & 0x80))
+   179						putchar('.');	/* Not supported */
+   180					else if (bits & 0x80)
+   181						putchar(attr_representation[63 - bit]);
+   182					else
+   183						putchar('-');	/* Not set */
+   184					bits <<= 1;
+   185					mbits <<= 1;
+   186				}
+   187				if (byte)
+   188					putchar(' ');
+   189			}
+   190			printf(")\n");
+   191		}
+   192	}
+   193	
 
 -- 
 0-DAY CI Kernel Test Service
