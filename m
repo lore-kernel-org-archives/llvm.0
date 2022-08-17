@@ -1,88 +1,126 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211EE1851
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 02:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660704611; x=1692240611;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=imY/mzr9ioQrXsr1sB25wvAl1kpV5ATxx69XCs57YUU=;
-  b=jE+8JFFFacAfX6YRqUQKlZFkoX2I5lAg+UusdGAYjrgsscr4AuI3xe58
-   H2WwGqHNKClF83jmbspu9pQ1dCSHQ7yCdBkS0oVfrY6lmRe2V6wkQBuF+
-   BQEGkC4BCDQQ6dwBRzavNOILvA0znCj/RsQnhdUpbgrUaasIQ8eVLVf1e
-   in57AV0uFXN59aFaRSOCYGzqdF+Nt8P7HuVk9pxgb7IgXlFw9X1yxKzd9
-   skGpEP+gGMmn2xxYMMG602b18lyZdQ7/vC4b/ygKDPbeBt4vYeIyJIRhk
-   udULx+SyPo5ZliTphNzV40A9VuvSzW9ss2LHms+xXaSghRUxBHh/hCw2v
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="378676616"
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="378676616"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 19:50:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="583574712"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Aug 2022 19:50:09 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oO98C-0000Uh-1C;
-	Wed, 17 Aug 2022 02:50:08 +0000
-Date: Wed, 17 Aug 2022 10:49:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>
-Subject: [intel-tdx:guest-filter 10/28] arch/x86/coco/core.c:35:23: error: a
- function declaration without a prototype is deprecated in all versions of C
-Message-ID: <202208171051.GtZFxUcq-lkp@intel.com>
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B65923A6
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 03:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=sLR7L
+	vrKYMgqFhsvENwXYBmFgc0bVIRbOis3wqnwhzw=; b=E9pFZYZXOu/FCV4FWOSRF
+	3M97U4cXU3qNTIFq5DwXnqTCyN7uhmnzUpIgx7KURZtXf6DIPH1YPyf+TXac6Iut
+	YbsQF6ZPwalkKkpTHdbtB8jTxnSz9FtB3vG6EexEN0zsCuyyOT2U1EqtkrADGV7u
+	RuxIfpSCtONZTsdUm+BSYU=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+	by smtp2 (Coremail) with SMTP id GtxpCgD3swajWfximOSZWA--.17366S2;
+	Wed, 17 Aug 2022 10:59:49 +0800 (CST)
+From: Jiangshan Yi <13667453960@163.com>
+To: tytso@mit.edu,
+	adilger.kernel@dilger.ca
+Cc: lczerner@redhat.com,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	linux-ext4@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH v4] fs/ext4: replace ternary operator with min()/max() and min_t()
+Date: Wed, 17 Aug 2022 10:59:28 +0800
+Message-Id: <20220817025928.612851-1-13667453960@163.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GtxpCgD3swajWfximOSZWA--.17366S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGFWxCw4UCw1rZw17CF17Jrb_yoW5Aw1UpF
+	n3CF18GFWru348uayIgr4UZw15W3WkG3y7XryY9r1UWFWqqFyxtrn8Kr1jvF1FgrWkZ34j
+	qFW0kr1UJwnIkrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jU_-PUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiyAVg+1p7HaIJdgAAs3
 
-tree:   https://github.com/intel/tdx.git guest-filter
-head:   c8ae661a124d107ccb71713b70010f1bf237b7a2
-commit: c664f263080aef1f09d2021e00428e648bc1c73f [10/28] x86/tdx: Add command line option to disable TDX guest filter support
-config: x86_64-randconfig-r012-20220815 (https://download.01.org/0day-ci/archive/20220817/202208171051.GtZFxUcq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/c664f263080aef1f09d2021e00428e648bc1c73f
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-filter
-        git checkout c664f263080aef1f09d2021e00428e648bc1c73f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-If you fix the issue, kindly add following tag where applicable
+Fix the following coccicheck warning:
+
+fs/ext4/inline.c:183: WARNING opportunity for min().
+fs/ext4/extents.c:2631: WARNING opportunity for max().
+fs/ext4/extents.c:2632: WARNING opportunity for min().
+fs/ext4/extents.c:5559: WARNING opportunity for max().
+fs/ext4/super.c:6908: WARNING opportunity for min().
+
+min()/max() and min_t() macro is defined in include/linux/minmax.h.
+It avoids multiple evaluations of the arguments when non-constant and
+performs strict type-checking.
+
 Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Lukas Czerner <lczerner@redhat.com>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+Reviewed-by: Lukas Czerner <lczerner@redhat.com>
+---
+ fs/ext4/extents.c | 8 +++-----
+ fs/ext4/inline.c  | 3 +--
+ fs/ext4/super.c   | 3 +--
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/coco/core.c:35:23: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   bool cc_filter_enabled()
-                         ^
-                          void
-   1 error generated.
-
-
-vim +35 arch/x86/coco/core.c
-
-    34	
-  > 35	bool cc_filter_enabled()
-    36	{
-    37		return cc_filter_status;
-    38	}
-    39	
-
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index c148bb97b527..37321aecd878 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -2628,9 +2628,8 @@ ext4_ext_rm_leaf(handle_t *handle, struct inode *inode,
+ 			  unwritten, ex_ee_len);
+ 		path[depth].p_ext = ex;
+ 
+-		a = ex_ee_block > start ? ex_ee_block : start;
+-		b = ex_ee_block+ex_ee_len - 1 < end ?
+-			ex_ee_block+ex_ee_len - 1 : end;
++		a = max(ex_ee_block, start);
++		b = min(ex_ee_block + ex_ee_len - 1, end);
+ 
+ 		ext_debug(inode, "  border %u:%u\n", a, b);
+ 
+@@ -5557,8 +5556,7 @@ static int ext4_insert_range(struct file *file, loff_t offset, loff_t len)
+ 	 * ee_start_lblk to shift extents
+ 	 */
+ 	ret = ext4_ext_shift_extents(inode, handle,
+-		ee_start_lblk > offset_lblk ? ee_start_lblk : offset_lblk,
+-		len_lblk, SHIFT_RIGHT);
++		max(ee_start_lblk, offset_lblk), len_lblk, SHIFT_RIGHT);
+ 
+ 	up_write(&EXT4_I(inode)->i_data_sem);
+ 	if (IS_SYNC(inode))
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index a4fbe825694b..2b42ececa46d 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -180,8 +180,7 @@ static int ext4_read_inline_data(struct inode *inode, void *buffer,
+ 
+ 	BUG_ON(len > EXT4_I(inode)->i_inline_size);
+ 
+-	cp_len = len < EXT4_MIN_INLINE_DATA_SIZE ?
+-			len : EXT4_MIN_INLINE_DATA_SIZE;
++	cp_len = min_t(unsigned int, len, EXT4_MIN_INLINE_DATA_SIZE);
+ 
+ 	raw_inode = ext4_raw_inode(iloc);
+ 	memcpy(buffer, (void *)(raw_inode->i_block), cp_len);
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 9a66abcca1a8..55649efc3eec 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6905,8 +6905,7 @@ static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
+ 		len = i_size-off;
+ 	toread = len;
+ 	while (toread > 0) {
+-		tocopy = sb->s_blocksize - offset < toread ?
+-				sb->s_blocksize - offset : toread;
++		tocopy = min_t(unsigned long, sb->s_blocksize - offset, toread);
+ 		bh = ext4_bread(NULL, inode, blk, 0);
+ 		if (IS_ERR(bh))
+ 			return PTR_ERR(bh);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+
