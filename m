@@ -1,123 +1,83 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A86823CB
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 05:44:38 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id u22so2851588plq.12
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 22:44:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3znbrSjjpvJwytUCGFSSBt6kROH+ezee+opuMaP8YXM=;
-        b=QM4/8vv4gJc7BKd4E0KpFd/jkT5JS5MDx2a73/YDZSzUwSXScNudb9Rs8q8wgeBuX1
-         zbj1k9PqFDHNSGvsrcpMu66A30mQTYKvVVfyPDpEerG/8/OcUppDwVsQv0NhLYEJjObM
-         7bb9JeZ52OFNxj+XCK6r9zVoLlrqmwmn41E3NPv1MAl8iNeNEsBxpFavaq19Qnmwech2
-         KGOgrAVlqKSVXAdRV+PZnXIjNelGcihZnl4Y0UUP5iXJX1gQApqmNkU6Pa0dG5G9XXKR
-         oEgWV52VWk1OaHITiJzVp5he3ICwDiofFbG/lf8cf5wTWLy4NCcbcb2SrZQ+P+k3i7MX
-         Q0gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3znbrSjjpvJwytUCGFSSBt6kROH+ezee+opuMaP8YXM=;
-        b=rYdrqaYuV7B5thS0cPreBcx4KhoyuXaNQjGxdWnW6L73x0e58QxKJhZcaUEu+/rBWf
-         Dmqjp3OLXm9BgerW0XOWaM0VwbuR6Y75iEbt+ppzfgrdnXw2C/9aUlSvgE1B9NEC27R8
-         /QIE1ka8vuCw6jBIcEdRiKig1xEUBeNw4FkXTEuIernBpovuEgE3lHHTMy/F2z+hYS74
-         RcSWXecoQ6HdYVTjxisBDZi875uo9R2Jw7waCw8h3WnsUOiIBNJm9dbJ6H+82EPzgn4O
-         YP3b4qp0EBJiOIKCg+EcNbJXcYe5S9hCJQfSiqyPIm9yldvJFM0G3NhzFLuZFLGxRWsU
-         vV2w==
-X-Gm-Message-State: ACgBeo0uSoyG5O7/kNGxAG57hymeCV+x1xkNqzCQEBGZbhOfd1uJGVgA
-	0vm7n3SEWBBb1IEyKIH48yF6ZMesb1aejxtf
-X-Google-Smtp-Source: AA6agR4bs1aL5MGE/NgKp+m43p6eTohs7NwK08JnwHC/Xg0owMyOXV/oKri9+jtYA8YBskgwxJPebg==
-X-Received: by 2002:a17:90b:4b0c:b0:1f4:ffac:699a with SMTP id lx12-20020a17090b4b0c00b001f4ffac699amr2091787pjb.145.1660715077630;
-        Tue, 16 Aug 2022 22:44:37 -0700 (PDT)
-Received: from ?IPV6:2406:3400:213:70c0:9df6:7e57:88ce:1bea? ([2406:3400:213:70c0:9df6:7e57:88ce:1bea])
-        by smtp.gmail.com with ESMTPSA id o21-20020aa79795000000b0052d8405bcd2sm9451333pfp.163.2022.08.16.22.44.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 22:44:37 -0700 (PDT)
-Message-ID: <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
-Date: Wed, 17 Aug 2022 15:44:33 +1000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA367C
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 07:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=45RsTvvQpAn/sSf9KQMAsIEwdB3TRL9b7yAQ8edqZtc=; b=rQtLOXCrBQhDRm/70fh1y3S2/5
+	Zvjv3iR9bXRxOX13MCcEc+zLzE1ul+eO189lBhcYzwcTX+W1j/mi2IgUa+iUyMVGaK8aYo36zJjSY
+	NkCmlQy650FpaTgpiFwTVE4INDiafqOmRl68kXZHmAHqlDDBq0ErZdxHYP6lyJAeElBUCv6Vt8FIY
+	bf/z+K5QWA5XTj32dh1I+lB8Kzy9/+y9UNrjbghtVzObo1Si4ugnWoJA85F98bM8STwICsN6Huv2z
+	pdHljpDabBsJ59lxHnBBhfJFWRny5gkRtg3Z4buBCxMiC6dFPr7tF7TLfLLlH38venKpOxQl61ZM/
+	T7NlV8ng==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oODkH-003CgF-VP; Wed, 17 Aug 2022 07:45:46 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4881A98007A; Wed, 17 Aug 2022 09:45:45 +0200 (CEST)
+Date: Wed, 17 Aug 2022 09:45:45 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
+	ceph-devel@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
+ updates for 5.20-rc1)
+Message-ID: <YvycqWVs5JbBR1D+@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
+ <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
+ <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
+ <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
+ <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
+ <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
+ <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
-Content-Language: en-AU
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, alsa-devel@alsa-project.org,
- llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org
-References: <20220808214028.2502801-1-flatmax@flatmax.com>
- <202208090909.Pg0BZGie-lkp@intel.com>
- <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
-From: Matt Flax <flatmax@flatmax.com>
-In-Reply-To: <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
 
+On Tue, Aug 16, 2022 at 10:57:45AM -0700, Linus Torvalds wrote:
 
-On 17/8/22 04:00, Nathan Chancellor wrote:
+> > > +     if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
+> > > +             return false;
+> >
+> > We have insn_decode_kernel() for exactly this (very) common case.
+> 
+> I did that originally, and then I undid it in disgust, because that
+> interface is too simple.
+> 
+> In particular, it just uses MAX_INSN_SIZE blindly. Which I didn't want
+> to do when I actually had the instruction size.
+> 
+> Yes, yes, I also check the decode size after-the-fact, but I didn't
+> want the decoder to even look at the invalid bytes.
+> 
+> This exception case is about the data being at the end of the page, I
+> wanted the fixup to be aware of code being at the end of a page too.
 
->>     265			/* set the PLL for the digital receiver */
->>     266			switch (src4xxx->mclk_hz) {
->>     267			case 24576000:
->>     268				pj = 0x22;
->>     269				jd = 0x00;
->>     270				d = 0x00;
->>     271				break;
->>     272			case 22579200:
->>     273				pj = 0x22;
->>     274				jd = 0x1b;
->>     275				d = 0xa3;
->>     276				break;
->>   > 277			default:
->>     278				/* don't error out here,
->>     279				 * other parts of the chip are still functional
->>     280				 */
->>     281				dev_info(component->dev,
->>     282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
-> In the final commit, there is a 'break' here. Should it be a 'return 0'
-> instead? Or should there be a different fix for these warnings?
+I don't want to argue this point too much; but I will anyway :-)
 
-The data sheet for the src4392 doesn't list defaults for these registers 
-(loaded with pj, jd and d). The actual state of these registers is not 
-known until we load them with something, arbitrary or not.
+IMO if the decoder ends up out of bounds its a decoder bug either way
+around. That is, we *know* there is a full instruction at the given IP
+because we got into this exception path.
 
-	{  SRC4XXX_RCV_PLL_0F,		0x00  },  /* not spec. in the datasheet */
-	{  SRC4XXX_RCV_PLL_10,		0xff  },  /* not spec. in the datasheet */
-	{  SRC4XXX_RCV_PLL_11,		0xff  },  /* not spec. in the datasheet */
+( it would be possible to add further constraints on trapnr )
 
-The state of DIR PLL registers aren't important if the user doesn't 
-specify a known mclk frequency.  The implication is that the DIR will 
-not function, however that is already implied by the user lacking to 
-specify a known mclk frequency.
+Irrespective of the length constraint given to the decoder, it should
+not decode/access things past this instruction (without being careful
+about it).
 
-The other functions on the chip (port A/B I2S, SRC, DIT, etc) will 
-behave as per usual, only the DIR will be dysfunctional.
-
-
->>     283			}
->>     284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->>     285			if (ret < 0)
->>     286				dev_err(component->dev,
->>     287					"Failed to update PLL register 0x%x\n",
->>     288					SRC4XXX_RCV_PLL_0F);
->>   > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
->>     290			if (ret < 0)
->>     291				dev_err(component->dev,
->>     292					"Failed to update PLL register 0x%x\n",
->>     293					SRC4XXX_RCV_PLL_10);
->>   > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
->>     295			if (ret < 0)
->>     296				dev_err(component->dev,
->>     297					"Failed to update PLL register 0x%x\n",
->>     298					SRC4XXX_RCV_PLL_11);
->>     
-> Cheers,
-> Nathan
+Anyway, I'm fine with the patch as you have it.
