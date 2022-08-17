@@ -1,111 +1,124 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F787463
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 22:08:16 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id i19so2394947lfr.10
-        for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 15:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MdXe9v7V/n49BLfPIm7mAPC3zaXea5taJTJFdb6i330=;
-        b=ad2R800fXpR9dwOXrfOT66zX7atkDbWCJuzExzeA9SOHu6hrhhW8FD8ZkdBXt3Kkvz
-         p5k4JJVQcAihCgjScizrSXVM3UdAV4Zh3VB8ZMz6m4XaheZD4gJUsX53gDk3DJh3phIv
-         Jh+RrCh9xONalatJVG1gRFh7dkx6m1j17YDDM4wqkLvpzWQyk9M1dQ89vS7yktQjlyrY
-         nSWyuVfMRdfAK0GBQKm0OiruU5DHNr7/F/jDfH9hXxUO1XQjUKfnoZCtLgIc6RPEobpj
-         rRMXGAl/y44i9E9X207ThzhY3fB/MJhKPsB6QDT9zugoQhc4vkvZf0dG80xd5hfJ+VrR
-         A5Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=MdXe9v7V/n49BLfPIm7mAPC3zaXea5taJTJFdb6i330=;
-        b=l/qso6WzpzlU4y7iOo36wpIa8HngAxw3cXAh9gCffwU3VyalgFR5yKG2bksdQDuANr
-         2etZmneKJV6a7YP+wFJXmoBalUZQe3zArF4DL9vB8VpZkP/97URw8SFHLmAPlDOz+UkK
-         GdzBkMJyD4b5oDqJg+fFM7c4sDI4Wv8LX0bOpbftp4ndR+rS0ahmi0OqYP/gtZiwVLVR
-         3wNzKInciWZGEMSroiXqpYnG2jI8u1GLju4MMFbVbneyPEXfo1tznE3AxnIWhfF2UNtP
-         xjBOqdShapvPRnHCyuDtbXvyTDvLI4vMvNJWx1lCUvcmWRV7Q88/spWqh0IHfd85f7yg
-         MoCA==
-X-Gm-Message-State: ACgBeo1DIWuqPSaw4NDXk8XY2vVRLmxUP/YuR/0xCUN/sX9z9kBHwbAN
-	jf0GdLcU8yXdA7xG5tnKesPUm9wj4l81oh28VUExBQ==
-X-Google-Smtp-Source: AA6agR6bbMV/+NnYEX/0CwW9iDlRuDXiyrW9k/uewNGpLosZ7a2gJKZGRauS38UPO+Ee/bRdMTB7b5oOC3RJt7neQAs=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr59229lfr.647.1660774094305; Wed, 17 Aug
- 2022 15:08:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C752F2B
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660778863; x=1692314863;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bF8RhQapM9aMltjQD5Fv7KZEqa5L4QRLLLTgNQOxoOc=;
+  b=X/JRwJd6lcxODD/KJcLULFqpkTqt7mCIG0g4Rp1zEhwOvzAR3g82LC4m
+   hu/+Af8DX8D7bBLV06vvX9dFgXDLBrKeJsKepUhYV9Li9qGqh4n3A96j9
+   BP0s1z5PbJszKy2G6TmcwXNPeFUlriOJhKVtZNeVAYsAX8qb2FnZsIIB0
+   PlCl7xuNd5jTs2iW+H7lf62tZ+kw7kaDwj36iHgY8vRHJwZXhNeTuOdQB
+   THMrGtUGfRahLr1hRnoJJw0Fvg/ww/9oQr61XXayrlGHuaz6svIYt3ja+
+   WHHqUKD8KT36kKkChODvR7JHuk6C24twNWj0JVuTrObzyZQfs9dsFWjX5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378916499"
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="378916499"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 16:27:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="636575820"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2022 16:27:41 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oOSRo-0001TF-1g;
+	Wed, 17 Aug 2022 23:27:40 +0000
+Date: Thu, 18 Aug 2022 07:27:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mike Rapoport <rppt@linux.ibm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [rppt:crash-kernel/arm64-remap/v0.1 4/5] arch/arm64/mm/init.c:133:3:
+ error: use of undeclared identifier 'crashkres_protection_possible'
+Message-ID: <202208180702.BgAbSr7d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220817185410.1174782-1-nathan@kernel.org>
-In-Reply-To: <20220817185410.1174782-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 17 Aug 2022 15:08:01 -0700
-Message-ID: <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-To: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 17, 2022 at 11:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> LLVM 16 will have support for this flag so move it out of the GCC-only
-> block to allow LLVM builds to take advantage of it.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-> Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git crash-kernel/arm64-remap/v0.1
+head:   083629d699170f5a86078d0a7afbe647c3a571cb
+commit: 3aaa4a222ab056611236c4c42499d24c8317bc96 [4/5] arm64/mm: remap crash kernel with base pages even if rodata_full disabled
+config: arm64-randconfig-r034-20220818 (https://download.01.org/0day-ci/archive/20220818/202208180702.BgAbSr7d-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=3aaa4a222ab056611236c4c42499d24c8317bc96
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt crash-kernel/arm64-remap/v0.1
+        git checkout 3aaa4a222ab056611236c4c42499d24c8317bc96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-Thanks for the patch, I also boot tested this (in virtual guests for
-both 64b and 32b).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+All errors (new ones prefixed by >>):
 
-Peter, is there anything else special about these prefixes needed to
-make use of them?
+>> arch/arm64/mm/init.c:133:3: error: use of undeclared identifier 'crashkres_protection_possible'
+                   crashkres_protection_possible = true;
+                   ^
+   arch/arm64/mm/init.c:151:2: error: use of undeclared identifier 'crashkres_protection_possible'
+           crashkres_protection_possible = true;
+           ^
+   2 errors generated.
 
-> ---
->
-> I was not sure if this information is relevant for the commit message
-> but I can boot without any issues on my test machines (two Intel and one
-> AMD).
->
->  arch/x86/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 7854685c5f25..987da87c7778 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -14,13 +14,13 @@ endif
->
->  ifdef CONFIG_CC_IS_GCC
->  RETPOLINE_CFLAGS       := $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
-> -RETPOLINE_CFLAGS       += $(call cc-option,-mindirect-branch-cs-prefix)
->  RETPOLINE_VDSO_CFLAGS  := $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
->  endif
->  ifdef CONFIG_CC_IS_CLANG
->  RETPOLINE_CFLAGS       := -mretpoline-external-thunk
->  RETPOLINE_VDSO_CFLAGS  := -mretpoline
->  endif
-> +RETPOLINE_CFLAGS       += $(call cc-option,-mindirect-branch-cs-prefix)
->
->  ifdef CONFIG_RETHUNK
->  RETHUNK_CFLAGS         := -mfunction-return=thunk-extern
->
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> --
-> 2.37.2
->
->
 
+vim +/crashkres_protection_possible +133 arch/arm64/mm/init.c
+
+   119	
+   120	static unsigned long long __init
+   121	reserve_remap_crashkernel(unsigned long long crash_base,
+   122				  unsigned long long crash_size,
+   123				  unsigned long long crash_max)
+   124	{
+   125		unsigned long long size;
+   126	
+   127		/*
+   128		 * If linear map uses base pages or there is no ZONE_DMA/ZONE_DMA32
+   129		 * the crashk_res will be mapped with PTEs in mmu::map_mem()
+   130		 */
+   131		if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE) ||
+   132		    !have_zone_dma()) {
+ > 133			crashkres_protection_possible = true;
+   134			return 0;
+   135		}
+   136	
+   137		if (crash_base)
+   138			return 0;
+   139	
+   140		size = ALIGN(crash_size, PUD_SIZE);
+   141	
+   142		crash_base = memblock_phys_alloc_range(size, PUD_SIZE, 0, crash_max);
+   143		if (!crash_base)
+   144			return 0;
+   145	
+   146		if (remap_crashkernel(crash_base, crash_size, size)) {
+   147			memblock_phys_free(crash_base, size);
+   148			return 0;
+   149		}
+   150	
+   151		crashkres_protection_possible = true;
+   152		memblock_phys_free(crash_base + crash_size, size - crash_size);
+   153	
+   154		return crash_base;
+   155	}
+   156	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
