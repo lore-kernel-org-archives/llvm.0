@@ -1,256 +1,848 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EE63D8B
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 12:17:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660738652; x=1692274652;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=rFtytMZmOqo7lJUeEmUHG859yWZ3pPUp+1x/qZ/nXjY=;
-  b=dA7q1YU8v8sJKhkxtPUCcvA/RblsxtWe2p8YeKu9qrwu5tz0QdQXCeXO
-   Zx39FS42SBBLVXmWW76Q80TvYPiobZrvOuSVZnoO2Y3FWi2nV/wr+rUGV
-   LC5jBUyCakLyyMmsHm/haShWFYdeo458hwFE/knYDMmgwschQ9IJziTiU
-   Vn6VwvjvKuuRuivsVzNXEp4AgBHWis0vDVfyPgVNx9WCd124NuWE0XiN0
-   t7IQfMIdBrHyevymGfr5CFeozyI8d+Rmh2z8R2G0SBtAHPAMq71/7CgKA
-   XT7FEdnilILa1moa8tM24dl3GTgNZZPpkqwZGH0QbYpnmEAPRs6RQuiFG
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="176747665"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Aug 2022 05:17:25 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 17 Aug 2022 05:17:25 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Wed, 17 Aug 2022 05:17:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ClB0p2ol28P2d7nMYL5OwB0JvsN7/0SrgUFcNzJqFsRa7hKY0kZ2T2uI/H2euoParwu6rzOf27IY4V5PLptVqmzsWJb8LgiaV+LYNY0P7b9hcOcIBz7TGRUG2N/nHeKb/M2Gtkmgox9qMteItINbunrhaaOjNbiYswEYlqyz9bB6WYYzt95bsbjI3V+aW/y2ILGPqE3uehjYpV4MI22qb/wUN//4zEaCv8oK33pzGMQAQe9jCqZOn4EDUDgONBZTPlwgqlH+6UkpL4FGvxnMNR2nDOZcQuNqhK5+5A2VPRrPdAh0hRHwLrWbqQlq0Gy80oodIcZwKVTaYgBbys8YTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rFtytMZmOqo7lJUeEmUHG859yWZ3pPUp+1x/qZ/nXjY=;
- b=g0esITalnVSy8K+J3Ea5ijiEVtlDcMxoMb3r4j3QsXkIp9wJF1FCuJccZ/96EeOhklz4uTsdbMV6bb847YfunadczzZGWOaZk694EowqEqs/n0Cq2AU08kERqjuRXRvU1oMpn2sDpSD5206l+mJ2WGqZR8hjI7wjh//+bUS9pGvZzJDKD2ECHV1e3QGRu8WZvIUOLKmO6iwrcSFLcqNL3XUWaViciGjp+h/hxse2i1AdU2U5mM9u4DfoaCOwXTupFgFeUPHAqTC8TwZ3R7bVU+e0mSIWbnzVMCXbM2bLq6rLAIb/hdAqP2kdqjcjKHxESdHiwf8AwNNmUvJr+AXiLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C41E187F
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 13:16:44 +0000 (UTC)
+Received: by mail-vs1-f52.google.com with SMTP id c3so13075192vsc.6
+        for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 06:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rFtytMZmOqo7lJUeEmUHG859yWZ3pPUp+1x/qZ/nXjY=;
- b=oguvjmSS+89862t45MorC8fhdWb4dm/x/lCAOy9f8ve9oYWoytW98FXNHf+aVuqaudQdgOJkMGI+YuJ0dyk9sjtOHti4CYiqcNNC4myUsa0ZmLkjrn3naxTc6Tf8+MpCVT3qnG+K0h/PhJric8xFbFh3/hXdzDCxAGTUJvkuZWM=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by DM5PR1101MB2267.namprd11.prod.outlook.com (2603:10b6:4:52::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 17 Aug
- 2022 12:17:11 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
- 12:17:11 +0000
-From: <Conor.Dooley@microchip.com>
-To: <nathan@kernel.org>
-CC: <ndesaulniers@google.com>, <llvm@lists.linux.dev>,
-	<mturquette@baylibre.com>, <sboyd@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <paul.walmsley@sifive.com>,
-	<aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <p.zabel@pengutronix.de>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<Daire.McNamara@microchip.com>, <palmer@dabbelt.com>
-Subject: Re: [PATCH v2 00/12] PolarFire SoC reset controller & clock cleanups
-Thread-Topic: [PATCH v2 00/12] PolarFire SoC reset controller & clock cleanups
-Thread-Index: AQHYj5/vIrxOVV1EL0SoHOsgiQHkyK2nacwAgAFM1ACAAAaZgIAAA0QAgAADOwCAASU6AIAEnVYAgATA8oA=
-Date: Wed, 17 Aug 2022 12:17:11 +0000
-Message-ID: <62bb08d7-0a14-13e4-5ca2-edb5ef3b9793@microchip.com>
-References: <20220704121558.2088698-1-conor.dooley@microchip.com>
- <bd14f1a2-750d-2511-df0a-85a9f5925f84@microchip.com>
- <YvP/bjh+wXihlrdG@dev-arch.thelio-3990X>
- <fc470bf4-33bb-d67b-3860-3ac775982f27@microchip.com>
- <YvQHtGObJwyBKGCQ@dev-arch.thelio-3990X>
- <3d2c56fa-8245-4992-2074-cd39677c2b3f@microchip.com>
- <d38d8b9c-45da-c464-264c-bebd084bdb17@microchip.com>
- <42354fef-8ca8-a81d-6af9-f250ecfd1924@microchip.com>
-In-Reply-To: <42354fef-8ca8-a81d-6af9-f250ecfd1924@microchip.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2151dde8-ebfb-4405-4d39-08da804a697c
-x-ms-traffictypediagnostic: DM5PR1101MB2267:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sCpBpW5rLdfN2nWtb2RxQ4lm09Nh+DY81TvugfWc08A/iqjDvaYNrFA0uM1dYhwmsKVP6E0zTtKZCBCgCNOa4pho7tBS2OUz4jW0YUinjkvTkMmifWTc/KEm1z7E/vbMqfeGMwWzX4Yujf29dXNlQFOQAQwuQghGAV6g2YB7bVcos/W8NnWrOJT93OCwmtyGA9ycY0LdY0+VT+WA31Qj4hF4m3vDspJFIipDwzexMvL3GBqJcUCMU7tW5RdjoLcN9LYZgMpTfICIFs4ze3WgOt9gpM/LUjpV94DDvw1hfBhkJENbr0Cr7lHl+CQ9LGPlW7sZflcyoCyYPVaaoDuE9vgWOtQE3Cp6HjcHOXA1HzCdc6jFutU4KNA6qT2eZ2bV5+Kz4iUCYZ60wV2mr2DRZHtPbV09ujTLVDzvmB0Hv+soCZOJkoD9BYysJ64jGP+/D5iuaSfED2zoG9tWnzx4X4uNg6XgJjclWEFEMNhazuR2hX36rerLDjLxkkLlFgUaClRBPhMar3Sl4/3j6VcFEtlD774Ovn7QdJjPshCAaNNLyRypTzchEx+iC1O4I3ookcsG+nDHLvdV912F/Uk0a5vsDPMXzVdRF0/87RAHbjsQcMFig7lu2bswge5BiM71ON62H+kStt61SEqj+xgpGGAniFozl3SGfbQ2gOPExwoWlEJjcp2SXLuEgxapun52r8EoARZ6hnuLbU+EffCZkB6y+D8G3vw180kI1BmGmn9FUAHiPk1Zi218dgg31v9xFMesxxnQrSx5+1AORApE/l1RSZPjKu7efvbm4rbuFGoAOf7aZd5/w2c3pY3MrRcvpYg8LePm50CxmYvFAd1Xi2aon3EQkA2r9r10XUchiv3o107DPIJ1K9HvqKhx2Uz+ABqcar2rPylxKnjLXNbAvxN4Z8Qps1Ce6HIbg6hJWrUlATCGjKCJPhQL0pOvwrzQ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(346002)(376002)(396003)(366004)(4326008)(54906003)(45080400002)(91956017)(83380400001)(122000001)(38070700005)(86362001)(8676002)(66946007)(6916009)(76116006)(66556008)(66476007)(66446008)(64756008)(31696002)(38100700002)(8936002)(316002)(5660300002)(2906002)(7416002)(186003)(2616005)(6506007)(71200400001)(6512007)(53546011)(26005)(41300700001)(966005)(478600001)(6486002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UU9Ddy9RdWVMZzNBY2VIbzlISUlCbmhXY1VvWlMxMElOS0pRRFhpUzN4NFhq?=
- =?utf-8?B?TXdQSEtvZktqQ2xRczJDeS9WUVZIZURocFNzOTdxUjJDQmZVb3JSNnJ3a2w4?=
- =?utf-8?B?NWFabzlSL0pLY2pHU3JOY2trQ2pISVk3VjRNdndnRVdJVlFvZGlQNU9RY0Zz?=
- =?utf-8?B?c210aktxdmVxdENkZGM2cHlXTUFkMlpIVVZVNllWNzJuUWlxSnBmVHEvMG5p?=
- =?utf-8?B?M1dWNk5yVCs1WWRob1RqRVcvYjhqeDA4Y0JZTi8rTDcyU010MDNFeGZacUo1?=
- =?utf-8?B?Szl2V0N1V3VsSWx4bEZvNjFIU3VQMm9zcStDZlVqdGtyQjY0MGZWVnQxU3dN?=
- =?utf-8?B?bUNsdis3N01vaU1MYllSN0FvdzNVR244L3pzZjlGODBqTDM5a0xrbUt5Z0xT?=
- =?utf-8?B?SHpjL1FCRENISnM1ZlBOL3BObnVYZXBOTHo2a1RIZUx5TmYzYTZMQit4M0NS?=
- =?utf-8?B?T0tZZzBzZ2M4MjNUVStDemkrZDg3Sk1Rek5pL0dJRjJUaXFDN0xvencwdWdF?=
- =?utf-8?B?SmhwZEF6SmoyOEl6c0J1Ly9hMW44cm0yUlRnckNHUXBpZTlFYlI5bkM5alg3?=
- =?utf-8?B?R0txVVlDNkFjeUV2NzU2ZG95TVhNaXo0UWtNN1JhNkxGbnp0VlVmdXd4SmR0?=
- =?utf-8?B?aVZpWUwvQlV6bjNhOWNhUWtzVTdHWXhSSFFKd0xKTlFzMEh6VHFFbUR6aHpG?=
- =?utf-8?B?UmNDYW9KTzdsK2FVNzNCQk5kWkpyYm1JakRnU3M5WWhRSlhOaklHNlhYb0Z2?=
- =?utf-8?B?N2hzYkN6VHY1TmFNRHhyQTN4eFNOSEF2bHA1blRZTHJ1WnRET29BY3BaRkNS?=
- =?utf-8?B?QWpjZjhmVElZMnd3NS9KQWFBTGowamcwMFV0RGZtc2UrZmt6UEZUUW4zS0Mz?=
- =?utf-8?B?M0xFNFQzT3pZT1BNd2tMTUlRTkoxOXh2ekJRVnBwb3Z3cmlGckxWYlE5Z3FG?=
- =?utf-8?B?aXR6ZVRhdzFzUGV3Z1FUOWJHNHFZcDM3N2V1Y1pDL3psUWpFZjg0clIrU0F6?=
- =?utf-8?B?aU0zbVJyRnFCSGpadTVyTlpVTEZnNDdQNWdMcmV6dEtnUWJleVVyMUVLZ1JF?=
- =?utf-8?B?Q2tNUUN5QUR3U29KTWxnTUZaL1F2TVhIMFBCZFlLMDJHS2tMYXFJVDg0dGdN?=
- =?utf-8?B?djlJZDF2Q1k3Z3VCNGxxbWRmYkJFWkpoeDRsSTEvaUUrYW5JKzViVFRWYlIz?=
- =?utf-8?B?NXM2OStBYmpEbEtEakJ6MUhhRnVmNi9KKzBXY05DVUJmQW1wa1MxZ1haVWtX?=
- =?utf-8?B?YnJXQVdJTFR5dlpoMEpaYlZMQ2ZQTDZlUFRNVEFXR1lUZit4MEYrcWd3Q1dt?=
- =?utf-8?B?WCs0R0VwUFQ2RXdsY3JwcFkzMWlERUZKMWFoSjdRbFovOEtNbDNQa3BOYUR2?=
- =?utf-8?B?QWZkdW5XbmNycVB4OXRQRHdOZGc4WGxXbldXVVlTaDRuV21MS3R4RXR3Nnkz?=
- =?utf-8?B?WjJVMHVNQXBWcVBTendpaSs5aWRMS3VNL2JteThkd3dEUWlMajE5RXF5aC95?=
- =?utf-8?B?SXMzWkZVTGtKbFA3MjEza0xuQTdFbVFJcEpHclQvSWVpZjdOZkcyRmdnTENG?=
- =?utf-8?B?Z1BOV3kvSmpuS3lhYUlOUEI4SHN4Y2JUWlFBZXMxY0txcGxFR3pZY0V4OCtH?=
- =?utf-8?B?a3FpUDlPMjFvajZOQlZST2pjUzkzN05TVGMxdmJveDRKRlBKZVR0RVdtbGhk?=
- =?utf-8?B?MFRwbUY1UERyeTlTQVRvQnp0d09Hck1SRzZpQWMyT0NHcmZZNWs4b2ZFdlR1?=
- =?utf-8?B?bGtDWGhnZVN2c1FidHpsa0RRVXFia1p5Sk9SdVp3VWlBNVp4V1FLNTRhRkVL?=
- =?utf-8?B?T2dGdWRzM2RuL0FtclpQUXdDTXJrdk1WWk1Ma21JaDBEMFRYb1I3SGlEbG5J?=
- =?utf-8?B?eXBhajdIWlB6N3hNa2dGVGdqakw1eVJpbFIwdFZuUUx2SVMxMFZmUVVtT2g3?=
- =?utf-8?B?cHh6RlAxdC9qemtLZWxtaEFad3NCTUU4YmViSGRZcmMvRHQrajNybU5PaTJL?=
- =?utf-8?B?a2N4VWQ2KytVUjE4UWc3TS80Z1VpYkF0MlZhbEg4Sll4QkdQSk5MMUN1OThR?=
- =?utf-8?B?eUZVVnBqWCtaLzBFZkFUS21BZkNwNThtc3ZLUEdkMVkzOVdlNVB5K3BndlBG?=
- =?utf-8?Q?N2fR8syjOl4yLm6aEXztQCnL8?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <17465025E1B51E4DA92E35B4C21E9DA9@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qNu7mlZc8sk80K5X2wSH2u/PhvlXl2bwjsN3IwYsPbk=;
+        b=jGW7lslTUZt9ripaCMmBqUdrQES81YxrgQDZ6/nXrefeyHYmbwBS5Z2ek+4hYxC8NP
+         D8Xw+Fq6So6C8oOgvqVoxzqS3f00TK+1lArcyC27s9rDZdFXnoBousL+vMHDCngMrkMq
+         e8/gYhiTLRFvd3BVCEzJPX6XyikyiO+LsLOjdviqqnaPwHTkLdh3MQfIkg/aNmLuW35s
+         M/z2E8seqOX6hCNvMEvdKwqg5UceZoSi9Nf1SFM8nJnGkAdNalzgm0ODnJXU3zaiX6lG
+         QS+N9tENFWSRcCy99UkpaHQqwjxAYQzwG/rfY1WqlsFX9hmGX4CN5nLy0oJjPrpDClfK
+         jaVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qNu7mlZc8sk80K5X2wSH2u/PhvlXl2bwjsN3IwYsPbk=;
+        b=iibnFuzpJiWczeAsrF+lbOLOyc1R6IXJbvW+jZxbYwtWwpk7MjQ9pjyJtHmhjHKEWF
+         qadLKR4/ExgK6hDhjvUnRkcIIbAophqpH0g7u/461XaC0Fn8FQlubHirJzIsSokUQ9hv
+         zYMNLwFYZ8BLqu932JwZ1kF6ZIDWRUVSoGJEqImIyoRKO7EdjdiQxgor7/uC65NQKHAY
+         q1jSJRS28QY+CMTh43XGfHa4KHBuKTpNOy0bbmvW+4dl6U8yf8610qcUbJaXS+ezC77d
+         0yxe4zfg/kQYn9SFjIDJB35Je1nBFTqkjhCwYNY329UteVOLjOo1IEmWYIw8ahZOBBSz
+         gZ5g==
+X-Gm-Message-State: ACgBeo2oSFKYKEkHlgWdkPdKUB/VbnzGf9Lyw5cvPn5TLCBQSVzdejRo
+	AAlx5Xv3bnabSc62RfluaGqYGHSG/CrvaTAXD92MTg==
+X-Google-Smtp-Source: AA6agR5XBkIWCMrjIv6nte0ceU+y9E75EVvFI836pt88NIVja3eZhdnIWMEreLkb9pyMgGsw6UEtuU5dq0gc3BVsS3E=
+X-Received: by 2002:a67:ca98:0:b0:386:2789:bf91 with SMTP id
+ a24-20020a67ca98000000b003862789bf91mr11016798vsl.46.1660742202803; Wed, 17
+ Aug 2022 06:16:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2151dde8-ebfb-4405-4d39-08da804a697c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2022 12:17:11.1723
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pjHUH/4a3dmbjJs9jTWwG0rIkuF7L6U2jWYLYz8PyuwXWpOV3V6V/nKwcHHaUO7Wj1pa+ZUyy90kRHFcbWDyRQFv8GBsMwBmCwbHkINs63s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2267
+References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-3-irogers@google.com>
+ <YvzW7FMpjg04bbQy@kernel.org>
+In-Reply-To: <YvzW7FMpjg04bbQy@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 17 Aug 2022 06:16:31 -0700
+Message-ID: <CAP-5=fW66XGfBAW7UCzYFG-5R1vF2DBPoxyg0h-qjErtuG9TcQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/6] perf mutex: Update use of pthread mutex/cond
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
+	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
+	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
+	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
+	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
+	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
+	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-T24gMTQvMDgvMjAyMiAxMjo0MSwgQ29ub3IuRG9vbGV5QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+
-Pg0KPj4gRG9lc24ndCByZWFsbHkgbWF0dGVyIHNpbmNlIHRoYXRzIGxvbmcgZW5vdWdoIHRvIGdl
-dCBwYXN0IHRoZSBzd2l0Y2gNCj4+IG91dCBvZiBlYXJseWNvbiB3aGljaCBpcyB3aGVyZSB0aGUg
-Y2xhbmcgYnVpbHQga2VybmVsIGRpZXMuDQoNCkkgaGFkIGZvcmdvdHRlbiBzb21ldGhpbmcgb2J2
-aW91czoga2VlcF9ib290Y29uLiBXaXRoIHRoYXQsIG9uIHRoZSBzYmkNCmNvbnNvbGUgSSBnZXQg
-YSBuaWNlOg0KDQpbICAgIDAuNTgxNzU0XSBVbmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBv
-aW50ZXIgZGVyZWZlcmVuY2UgYXQgdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAwYjENClsg
-ICAgMC41OTE1MjBdIE9vcHMgWyMxXQ0KWyAgICAwLjU5NDA0NV0gTW9kdWxlcyBsaW5rZWQgaW46
-DQpbICAgIDAuNTk3NDM1XSBDUFU6IDAgUElEOiAxIENvbW06IHN3YXBwZXIvMCBOb3QgdGFpbnRl
-ZCA2LjAuMC1yYzEtMDAwMTEtZzhlMTQ1OWNmNGVjYSAjMQ0KWyAgICAwLjYwNjE4OF0gSGFyZHdh
-cmUgbmFtZTogTWljcm9jaGlwIFBvbGFyRmlyZS1Tb0MgSWNpY2xlIEtpdCAoRFQpDQpbICAgIDAu
-NjEzMDEyXSBlcGMgOiBfX2Nsa19yZWdpc3RlcisweDRhNi8weDg1Yw0KWyAgICAwLjYxNzc1OV0g
-IHJhIDogX19jbGtfcmVnaXN0ZXIrMHg0OWUvMHg4NWMNClsgICAgMC42MjI0ODldIGVwYyA6IGZm
-ZmZmZmZmODAzZmFmN2MgcmEgOiBmZmZmZmZmZjgwM2ZhZjc0IHNwIDogZmZmZmZmYzgwNDAwYjcy
-MA0KWyAgICAwLjYzMDQ2Nl0gIGdwIDogZmZmZmZmZmY4MTBlOTNmOCB0cCA6IGZmZmZmZmU3N2Zl
-NjAwMDAgdDAgOiBmZmZmZmZlNzdmZmIzODAwDQpbICAgIDAuNjM4NDQzXSAgdDEgOiAwMDAwMDAw
-MDAwMDAwMDBhIHQyIDogZmZmZmZmZmZmZmZmZmZmZiBzMCA6IGZmZmZmZmM4MDQwMGI3YzANClsg
-ICAgMC42NDY0MjBdICBzMSA6IDAwMDAwMDAwMDAwMDAwMDEgYTAgOiAwMDAwMDAwMDAwMDAwMDAx
-IGExIDogMDAwMDAwMDAwMDAwMDAwMA0KWyAgICAwLjY1NDM5Nl0gIGEyIDogMDAwMDAwMDAwMDAw
-MDAwMSBhMyA6IDAwMDAwMDAwMDAwMDAwMDAgYTQgOiAwMDAwMDAwMDAwMDAwMDAwDQpbICAgIDAu
-NjYyMzczXSAgYTUgOiBmZmZmZmZmZjgwM2E1ODEwIGE2IDogMDAwMDAwMDIwMDAwMDAyMiBhNyA6
-IDAwMDAwMDAwMDAwMDAwMDYNClsgICAgMC42NzAzNTBdICBzMiA6IGZmZmZmZmZmODEwOTlkNDgg
-czMgOiBmZmZmZmZmZjgwZDZlMjhlIHM0IDogMDAwMDAwMDAwMDAwMDAyOA0KWyAgICAwLjY3ODMy
-N10gIHM1IDogZmZmZmZmZmY4MTBlZDNjOCBzNiA6IGZmZmZmZmZmODEwZWQzZDAgczcgOiBmZmZm
-ZmZlNzdmZmJjMTAwDQpbICAgIDAuNjg2MzA0XSAgczggOiBmZmZmZmZlNzdmZmIxNTQwIHM5IDog
-ZmZmZmZmZTc3ZmZiMTU0MCBzMTA6IDAwMDAwMDAwMDAwMDAwMDgNClsgICAgMC42OTQyODFdICBz
-MTE6IDAwMDAwMDAwMDAwMDAwMDAgdDMgOiAwMDAwMDAwMDAwMDAwMGM2IHQ0IDogMDAwMDAwMDAw
-MDAwMDAwNw0KWyAgICAwLjcwMjI1OF0gIHQ1IDogZmZmZmZmZmY4MTBjNzhjMCB0NiA6IGZmZmZm
-ZmU3N2ZmODhjZDANClsgICAgMC43MDgxMjVdIHN0YXR1czogMDAwMDAwMDIwMDAwMDEyMCBiYWRh
-ZGRyOiAwMDAwMDAwMDAwMDAwMGIxIGNhdXNlOiAwMDAwMDAwMDAwMDAwMDBkDQpbICAgIDAuNzE2
-ODY5XSBbPGZmZmZmZmZmODAzZmI4OTI+XSBkZXZtX2Nsa19od19yZWdpc3RlcisweDYyLzB4YWEN
-ClsgICAgMC43MjM0MjBdIFs8ZmZmZmZmZmY4MDQwMzQxMj5dIG1wZnNfY2xrX3Byb2JlKzB4MWUw
-LzB4MjQ0DQpbICAgIDAuNzI5NTkyXSBbPGZmZmZmZmZmODA0NTdkZWE+XSBwbGF0Zm9ybV9wcm9i
-ZSsweDgyLzB4YTYNClsgICAgMC43MzU1ODFdIFs8ZmZmZmZmZmY4MDQ1NTkzYz5dIGNhbGxfZHJp
-dmVyX3Byb2JlKzB4MjIvMHhhNA0KWyAgICAwLjc0MTg0OF0gWzxmZmZmZmZmZjgwNDU1N2RhPl0g
-cmVhbGx5X3Byb2JlKzB4MTNhLzB4MjdhDQpbICAgIDAuNzQ3ODE5XSBbPGZmZmZmZmZmODA0NTQ5
-Zjg+XSBfX2RyaXZlcl9wcm9iZV9kZXZpY2UrMHhjNC8weGVlDQpbICAgIDAuNzU0NDYwXSBbPGZm
-ZmZmZmZmODA0NTU0ZDA+XSBkcml2ZXJfcHJvYmVfZGV2aWNlKzB4M2MvMHgxOTYNClsgICAgMC43
-NjEwMTNdIFs8ZmZmZmZmZmY4MDQ1NTJjYz5dIF9fZGV2aWNlX2F0dGFjaF9kcml2ZXIrMHhhMi8w
-eDE4Yw0KWyAgICAwLjc2Nzg1M10gWzxmZmZmZmZmZjgwNDUyODRhPl0gYnVzX2Zvcl9lYWNoX2Ry
-disweDc2LzB4YmENClsgICAgMC43NzQwMTZdIFs8ZmZmZmZmZmY4MDQ1NDdjYT5dIF9fZGV2aWNl
-X2F0dGFjaCsweGEwLzB4MTVhDQpbICAgIDAuNzgwMTc5XSBbPGZmZmZmZmZmODA0NTQ4OTY+XSBk
-ZXZpY2VfaW5pdGlhbF9wcm9iZSsweDEyLzB4MWENClsgICAgMC43ODY3MzJdIFs8ZmZmZmZmZmY4
-MDQ1MjljNj5dIGJ1c19wcm9iZV9kZXZpY2UrMHgyZS8weDdjDQpbICAgIDAuNzkyODk1XSBbPGZm
-ZmZmZmZmODA0NGYyOTA+XSBkZXZpY2VfYWRkKzB4MjFhLzB4M2FhDQpbICAgIDAuNzk4NjkzXSBb
-PGZmZmZmZmZmODA1YzMyM2E+XSBvZl9kZXZpY2VfYWRkKzB4MjgvMHgzMg0KWyAgICAwLjgwNDU3
-OF0gWzxmZmZmZmZmZjgwNWMzYzU0Pl0gb2ZfcGxhdGZvcm1fZGV2aWNlX2NyZWF0ZV9wZGF0YSsw
-eDg4LzB4YjINClsgICAgMC44MTIxODFdIFs8ZmZmZmZmZmY4MDVjM2U3MD5dIG9mX3BsYXRmb3Jt
-X2J1c19jcmVhdGUrMHgxNGEvMHgxYTgNClsgICAgMC44MTkxMTddIFs8ZmZmZmZmZmY4MDVjM2Vh
-Nj5dIG9mX3BsYXRmb3JtX2J1c19jcmVhdGUrMHgxODAvMHgxYTgNClsgICAgMC44MjYwNTNdIFs8
-ZmZmZmZmZmY4MDVjM2YyYT5dIG9mX3BsYXRmb3JtX3BvcHVsYXRlKzB4NWMvMHg5Ng0KWyAgICAw
-LjgzMjYwNl0gWzxmZmZmZmZmZjgwODJiYmFhPl0gb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1bGF0
-ZV9pbml0KzB4YzIvMHhkNA0KWyAgICAwLjg0MDQwMF0gWzxmZmZmZmZmZjgwMDAyMGU4Pl0gZG9f
-b25lX2luaXRjYWxsKzB4YmMvMHgyMTYNClsgICAgMC44NDY1NjNdIFs8ZmZmZmZmZmY4MDgwMTI2
-Yz5dIGRvX2luaXRjYWxsX2xldmVsKzB4ODIvMHg5NA0KWyAgICAwLjg1MjgzMF0gWzxmZmZmZmZm
-ZjgwODAxMWFlPl0gZG9faW5pdGNhbGxzKzB4NWMvMHg5OA0KWyAgICAwLjg1ODYxMV0gWzxmZmZm
-ZmZmZjgwODAxMTRhPl0gZG9fYmFzaWNfc2V0dXArMHgyMC8weDI4DQpbICAgIDAuODY0NTgzXSBb
-PGZmZmZmZmZmODA4MDEwZTA+XSBrZXJuZWxfaW5pdF9mcmVlYWJsZSsweGJhLzB4MTA0DQpbICAg
-IDAuODcxMjIzXSBbPGZmZmZmZmZmODA3NDY4NTY+XSBrZXJuZWxfaW5pdCsweDIyLzB4MWJhDQpb
-ICAgIDAuODc3MDEzXSBbPGZmZmZmZmZmODAwMDM3MDA+XSByZXRfZnJvbV9leGNlcHRpb24rMHgw
-LzB4Yw0KWyAgICAwLjg4MzIxOF0gLS0tWyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBdLS0t
-DQoNCkF0IGxlYXN0IEkgaGFkIHNvbWV3aGVyZSB0byBzdGFydC4gU2luY2UgUUVNVSByZXByb3Ms
-IEkgY29udGludWVkIHRoZXJlIHdpdGg6DQoJJChRRU1VKS9xZW11LXN5c3RlbS1yaXNjdjY0IC1z
-IC1TIC1NIG1pY3JvY2hpcC1pY2ljbGUta2l0IFwNCgkJLW0gMkcgLXNtcCA1IFwNCgkJLWtlcm5l
-bCAkKHZtbGludXhfYmluKSBcDQoJCS1kdGIgJChkdGIpIFwNCgkJLWluaXRyZCAkKGluaXRyYW1m
-cykgXA0KCQktZGlzcGxheSBub25lIC1zZXJpYWwgbnVsbCBcDQoJCS1zZXJpYWwgc3RkaW8NCg0K
-RHVtcGluZyB0aGUgYmFja3RyYWNlIGF0IHRoZSBkZXZtX2Nsa19od19yZWdpc3RlcigpIGNhbGxz
-aXRlcyBzaG93cyB0aGF0DQppdCBwYXNzZXMgZm9yOg0KLSB0aGUgbWFpbiBwbGwgaW4gbXBmc19j
-bGtfcmVnaXN0ZXJfbXNzcGxscygpDQotIHRoZSAiY2ZnIiBjbG9ja3MgaW4gbXBmc19jbGtfcmVn
-aXN0ZXJfY2ZncygpDQotIHRoZSBmaXJzdCA0IHBlcmlwaCBjbG9ja3MuLi4NCg0KSXQgZmFpbHMg
-b24gImNsa19wZXJpcGhfdGltZXIiIC0gd2hpY2ggdXNlcyBhIGRpZmZlcmVudCBwYXJlbnQsIHRo
-YXQgaXQNCnRyaWVzIHRvIGZpbmQgdXNpbmcgdGhlIG1hY3JvOg0KI2RlZmluZSBQQVJFTlRfQ0xL
-KFBBUkVOVCkgKCZtcGZzX2NmZ19jbGtzW0NMS18jI1BBUkVOVF0uY2ZnLmh3KQ0KDQpJZiBwYXJl
-bnQgaXMgUlRDUkVGLCB0aGF0IGJlY29tZXM6ICZtcGZzX2NmZ19jbGtzWzMzXS5jZmcuaHcNCg0K
-QW5kIHllYWgsIHRoYXRzIHdlbGwgYmV5b25kIHRoZSBlbmQgb2YgdGhlIGFycmF5IQ0KDQpCb290
-aW5nIHdpdGggZ2NjLCBhbmQgbG9va2luZyBhdCB0aGUgY2xvY2sgc3VtbWFyeToNCiAgbXNzcmVm
-Y2xrICAgICAgICAgICAgICAgICAgICAgICAgICAgIDEgICAgICAgIDEgICAgICAgIDAgICAxMjUw
-MDAwMDAgICAgICAgICAgMCAgICAgMCAgNTAwMDAgICAgICAgICBZDQogICAgIGNsa19ydGNyZWYg
-ICAgICAgICAgICAgICAgICAgICAgICAwICAgICAgICAwICAgICAgICAwICAgICAxMDAwMDAwICAg
-ICAgICAgIDAgICAgIDAgIDUwMDAwICAgICAgICAgWQ0KICAgICAgICBjbGtfcGVyaXBoX3RpbWVy
-ICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgICAgMCAgICAgMTAwMDAwMCAgICAgICAgICAw
-ICAgICAwICA1MDAwMCAgICAgICAgIE4NCg0KVGhpcyBpcyByZXBvcnRlZCBjb3JyZWN0bHksIHNv
-IGhvdyB0aGlzIHdvcmtzIGZvciBlaXRoZXIgZ2NjIG9yIGNsYW5nIG5vdywgb3INCmdjYyB3aXRo
-IHRoZSBwYXRjaGVzIGFwcGxpZWQsIEkgYW0gbm90IHJlYWxseSB0b28gc3VyZS4uDQoNCk9uIHY2
-LjAtcmMxLCBnY2MgYW5kIGNsYW5nIHNob3c6DQogIG1zc3JlZmNsayAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAxICAgICAgICAxICAgICAgICAwICAgMTI1MDAwMDAwICAgICAgICAgIDAgICAg
-IDAgIDUwMDAwICAgICAgICAgWQ0KICAgICBjbGtfcnRjcmVmICAgICAgICAgICAgICAgICAgICAg
-ICAgMCAgICAgICAgMCAgICAgICAgMCAgICAgMTAwMDAwMCAgICAgICAgICAwICAgICAwICA1MDAw
-MCAgICAgICAgIFkNCg0KSSBndWVzcyB0aGlzIG1heSBmYWlsIGdyYWNlZnVsbHkgYXMgdGhlIHBv
-aW50ZXIgaXMgYWN0dWFsbHkgbnVsbCwgYnV0DQp0aGUgZXh0cmEgbGV2ZWwgb2YgaW5kaXJlY3Rp
-b24gYWRkZWQgYnkgbXkgcGF0Y2ggc3RhcnRlZCB0cmlwcGluZyB1cA0KdGhlIGVycm9yIGNoZWNr
-aW5nLiBJIG11c3QganVzdCBub3QgaGF2ZSBub3RpY2VkIGJlY2F1c2UgSSBhZGRlZCBSVENSRUYN
-CmluIGEgYml0IG9mIGEgaHVycnkgdHJ5aW5nIHRvIGZpeCBhIGJ1ZyBpbiB0aW1lIGZvciA1LjE4
-Og0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtY2xrLzk4NmM3M2RmLTk2MzQtZDE4Yi1l
-ZWQzLTM3NTg0ZmEyZWE4OUBjb25jaHVvZC5pZS8jdA0KDQpPYnZpb3VzbHkgSSd2ZSBnb3QgdG8g
-Zml4IHRoZSBidWcgaXRzZWxmIG5vdywgYnV0IG5vdyBJIGFtIGxlZnQgd29uZGVyaW5nDQphYm91
-dCBHQ0MncyBiZWhhdmlvdXIgcmF0aGVyIHRoYW4gY2xhbmcvbGx2bSdzIQ0KDQpUaGFua3MgTmF0
-aGFuIC0gaWYgZXZlbiBqdXN0IGZvciBiZWluZyBhIHJ1YmJlciBkdWNrIDopDQoNCkNvbm9yLg0K
-DQo+Pg0KPj4gRGlkbid0IGdldCBhIGNoYW5jZSB0byBsb29rIGF0IGRpc2Fzc2VtYmx5IGV0YyB0
-b2RheSwgYnV0IGFzIEkgc2FpZA0KPj4gbGFzdCBuaWdodCBpdCByZXByb2R1Y2VzIHdpdGggR05V
-IGJpbnV0aWxzLg0KPj4NCj4+IFRoYW5rcywNCj4+IENvbm9yLg0KPj4NCj4+IE9uIGFub3RoZXIg
-bm90ZSwgYnJvdWdodCB1cCBvdXIgUUVNVSBwb3J0J3Mgc3RhdGUgdG9kYXkgc28gZml4aW5nDQo+
-PiBpdCBpcyBub3cgb24gdGhlIGdvb2Qgb2xlLCBldmVyIGV4cGFuZGluZyB0b2RvIGxpc3QgOikN
-Cj4gDQoNCg==
+On Wed, Aug 17, 2022 at 4:54 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Aug 16, 2022 at 10:39:26PM -0700, Ian Rogers escreveu:
+> > From: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> >
+> > pthread_mutex_t and pthread_cond_t were replaced with the new wrapped
+> > struct/functions. To avoid default initialization values, use of
+> > PTHREAD_MUTEX_INITIALIZER was replaced with mutex_init/destroy. This
+> > wasn't done for dso__data_open_lock due to no clear early initialization
+> > code.
+> >
+> > Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> <SNIP>
+>
+> > index 90828ae03ef5..f3275be83a33 100644
+> > --- a/tools/perf/tests/openat-syscall-all-cpus.c
+> > +++ b/tools/perf/tests/openat-syscall-all-cpus.c
+> > @@ -2,7 +2,7 @@
+> >  #include <errno.h>
+> >  #include <inttypes.h>
+> >  /* For the CPU_* macros */
+> > -#include <pthread.h>
+> > +#include <sched.h>
+> >
+> >  #include <sys/types.h>
+> >  #include <sys/stat.h>
+> > diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
+> > index 6a001fcfed68..b386ade9ed06 100644
+> > --- a/tools/perf/tests/perf-record.c
+> > +++ b/tools/perf/tests/perf-record.c
+> > @@ -2,8 +2,6 @@
+> >  #include <errno.h>
+> >  #include <inttypes.h>
+> >  #include <linux/string.h>
+> > -/* For the CLR_() macros */
+> > -#include <pthread.h>
+>
+> why are removing these headers when the CLR_() macros are still in use
+> in this (and other) files?
+
+If a file isn't using any pthread_ functions:
+
+$ grep pthread tools/perf/tests/perf-record.c|wc -l
+0
+
+and only using mutex_ functions. I was trying to remove unnecessary
+header file #includes.
+
+The comment says the #include is necessary for CLR_ macros:
+
+$ grep CLR_ tools/perf/tests/perf-record.c|wc -l
+0
+
+There is a however a CPU_CLR macro used. CPU_CLR is defined in sched.h
+which is #included immediately below. In any case this is unlikely to
+break anything as there is always the transitive #include of
+<pthread.h> via "mutex.h".
+
+> These whould be best done in a separate patch with an explanation as to
+> why it is not needed, is it being obtained from some other header that
+> is more appropriate than pthread.h? etc.
+
+The old code used pthread_mutex_lock and so needs pthread.h, the new
+code uses mutex_lock and so doesn't.
+
+> In general we prefer more granular patches, so that we help in bisecting
+> problems, so please break this patch into multiple pieces, say one for
+> the 'perf bench' codebase, other for 'perf test', etc.
+
+Agreed. I was trying to maintain Pavithra's authorship where their
+change was monolithic. Here are the stats:
+
+$ git show 1694c66ea8d3720ec8a55ca3ac10ace61e319644|diffstat
+bench/epoll-ctl.c               |   33 ++++++++++++-------------
+bench/epoll-wait.c              |   33 ++++++++++++-------------
+bench/futex-hash.c              |   33 ++++++++++++-------------
+bench/futex-lock-pi.c           |   33 ++++++++++++-------------
+bench/futex-requeue.c           |   33 ++++++++++++-------------
+bench/futex-wake-parallel.c     |   33 ++++++++++++-------------
+bench/futex-wake.c              |   33 ++++++++++++-------------
+bench/numa.c                    |   93
++++++++++++++++++++++++++----------------------------------------------
+builtin-lock.c                  |    1
+builtin-record.c                |   13 ++++++---
+builtin-sched.c                 |   67
+++++++++++++++++++++++++---------------------------
+builtin-top.c                   |   40 +++++++++++++++---------------
+tests/mmap-basic.c              |    2 -
+tests/openat-syscall-all-cpus.c |    2 -
+tests/perf-record.c             |    2 -
+ui/browser.c                    |   20 +++++++--------
+ui/browsers/annotate.c          |   12 ++++-----
+ui/setup.c                      |    5 ++-
+ui/tui/helpline.c               |    5 +--
+ui/tui/progress.c               |    8 +++---
+ui/tui/setup.c                  |    8 +++---
+ui/tui/util.c                   |   18 ++++++-------
+ui/ui.h                         |    4 +--
+util/annotate.c                 |   13 ++++-----
+util/annotate.h                 |    4 +--
+util/bpf-event.h                |    1
+util/dso.c                      |   12 ++++-----
+util/dso.h                      |    4 +--
+util/hist.c                     |    6 ++--
+util/hist.h                     |    4 +--
+util/mmap.h                     |    1
+util/symbol.c                   |    4 +--
+util/top.h                      |    5 ++-
+ 33 files changed, 281 insertions(+), 304 deletions(-)
+
+Some locks like dso->lock are used in a lot of places so untangling
+this would be easiest as a rewrite. I was trying to avoid the rewrite
+to give Pavithra the author's tag.
+
+Thanks,
+Ian
+
+> - Arnaldo
+>
+> >
+> >  #include <sched.h>
+> >  #include <perf/mmap.h>
+> > diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+> > index fa5bd5c20e96..78fb01d6ad63 100644
+> > --- a/tools/perf/ui/browser.c
+> > +++ b/tools/perf/ui/browser.c
+> > @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+> >
+> >  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui_browser__show(struct ui_browser *browser, const char *title,
+> > @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >
+> >       browser->refresh_dimensions(browser);
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> >
+> >       browser->title = title;
+> > @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >       va_end(ap);
+> >       if (err > 0)
+> >               ui_helpline__push(browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return err ? 0 : -1;
+> >  }
+> >
+> >  void ui_browser__hide(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ui_helpline__pop();
+> >       zfree(&browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+> > @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+> >
+> >  int ui_browser__refresh(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__refresh(browser);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return 0;
+> >  }
+> > @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+> >       while (1) {
+> >               off_t offset;
+> >
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               err = __ui_browser__refresh(browser);
+> >               SLsmg_refresh();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >               if (err < 0)
+> >                       break;
+> >
+> > diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+> > index 44ba900828f6..9bc1076374ff 100644
+> > --- a/tools/perf/ui/browsers/annotate.c
+> > +++ b/tools/perf/ui/browsers/annotate.c
+> > @@ -8,11 +8,11 @@
+> >  #include "../../util/hist.h"
+> >  #include "../../util/sort.h"
+> >  #include "../../util/map.h"
+> > +#include "../../util/mutex.h"
+> >  #include "../../util/symbol.h"
+> >  #include "../../util/evsel.h"
+> >  #include "../../util/evlist.h"
+> >  #include <inttypes.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >  #include <linux/zalloc.h>
+> > @@ -319,7 +319,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
+> >
+> >       browser->entries = RB_ROOT;
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >
+> >       symbol__calc_percent(sym, evsel);
+> >
+> > @@ -348,7 +348,7 @@ static void annotate_browser__calc_percent(struct annotate_browser *browser,
+> >               }
+> >               disasm_rb_tree__insert(browser, &pos->al);
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >
+> >       browser->curr_hot = rb_last(&browser->entries);
+> >  }
+> > @@ -474,10 +474,10 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
+> >       }
+> >
+> >       notes = symbol__annotation(dl->ops.target.sym);
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >
+> >       if (!symbol__hists(dl->ops.target.sym, evsel->evlist->core.nr_entries)) {
+> > -             pthread_mutex_unlock(&notes->lock);
+> > +             mutex_unlock(&notes->lock);
+> >               ui__warning("Not enough memory for annotating '%s' symbol!\n",
+> >                           dl->ops.target.sym->name);
+> >               return true;
+> > @@ -486,7 +486,7 @@ static bool annotate_browser__callq(struct annotate_browser *browser,
+> >       target_ms.maps = ms->maps;
+> >       target_ms.map = ms->map;
+> >       target_ms.sym = dl->ops.target.sym;
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >       symbol__tui_annotate(&target_ms, evsel, hbt, browser->opts);
+> >       sym_title(ms->sym, ms->map, title, sizeof(title), browser->opts->percent_type);
+> >       ui_browser__show_title(&browser->b, title);
+> > diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+> > index 700335cde618..fd10dc6baf07 100644
+> > --- a/tools/perf/ui/setup.c
+> > +++ b/tools/perf/ui/setup.c
+> > @@ -1,5 +1,4 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> > -#include <pthread.h>
+> >  #include <dlfcn.h>
+> >  #include <unistd.h>
+> >
+> > @@ -8,7 +7,7 @@
+> >  #include "../util/hist.h"
+> >  #include "ui.h"
+> >
+> > -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+> > +struct mutex ui__lock;
+> >  void *perf_gtk_handle;
+> >  int use_browser = -1;
+> >
+> > @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+> >
+> >  void setup_browser(bool fallback_to_pager)
+> >  {
+> > +     mutex_init(&ui__lock, /*pshared=*/false);
+> >       if (use_browser < 2 && (!isatty(1) || dump_trace))
+> >               use_browser = 0;
+> >
+> > @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+> >       default:
+> >               break;
+> >       }
+> > +     mutex_destroy(&ui__lock);
+> >  }
+> > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+> > index 298d6af82fdd..db4952f5990b 100644
+> > --- a/tools/perf/ui/tui/helpline.c
+> > +++ b/tools/perf/ui/tui/helpline.c
+> > @@ -2,7 +2,6 @@
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >
+> > @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >       int ret;
+> >       static int backlog;
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ret = vscnprintf(ui_helpline__last_msg + backlog,
+> >                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
+> >       backlog += ret;
+> > @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >               SLsmg_refresh();
+> >               backlog = 0;
+> >       }
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return ret;
+> >  }
+> > diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+> > index 3d74af5a7ece..71b6c8d9474f 100644
+> > --- a/tools/perf/ui/tui/progress.c
+> > +++ b/tools/perf/ui/tui/progress.c
+> > @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       }
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+> > @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+> >       SLsmg_fill_region(y, 1, 1, bar, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void tui_progress__finish(void)
+> > @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+> >               return;
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static struct ui_progress_ops tui_progress__ops = {
+> > diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+> > index b1be59b4e2a4..a3b8c397c24d 100644
+> > --- a/tools/perf/ui/tui/setup.c
+> > +++ b/tools/perf/ui/tui/setup.c
+> > @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+> >  {
+> >       if (force || ui__need_resize) {
+> >               ui__need_resize = 0;
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               SLtt_get_screen_size();
+> >               SLsmg_reinit_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >  }
+> >
+> > @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+> >                                   "Press any key...", 0);
+> >
+> >       SLtt_set_cursor_visibility(1);
+> > -     if (!pthread_mutex_trylock(&ui__lock)) {
+> > +     if (mutex_trylock(&ui__lock)) {
+> >               SLsmg_refresh();
+> >               SLsmg_reset_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >       SLang_reset_tty();
+> >       perf_error__unregister(&perf_tui_eops);
+> > diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+> > index 0f562e2cb1e8..3c5174854ac8 100644
+> > --- a/tools/perf/ui/tui/util.c
+> > +++ b/tools/perf/ui/tui/util.c
+> > @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               t = sep + 1;
+> >       }
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >
+> >       max_len += 2;
+> >       nr_lines += 8;
+> > @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >       SLsmg_write_nstring((char *)exit_msg, max_len);
+> >       SLsmg_refresh();
+> >
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       x += 2;
+> >       len = 0;
+> >       key = ui__getch(delay_secs);
+> >       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >
+> >               if (key == K_BKSPC) {
+> >                       if (len == 0) {
+> > -                             pthread_mutex_unlock(&ui__lock);
+> > +                             mutex_unlock(&ui__lock);
+> >                               goto next_key;
+> >                       }
+> >                       SLsmg_gotorc(y, x + --len);
+> > @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               }
+> >               SLsmg_refresh();
+> >
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >
+> >               /* XXX more graceful overflow handling needed */
+> >               if (len == sizeof(buf) - 1) {
+> > @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+> >
+> >  void ui__info_window(const char *title, const char *text)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, NULL);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui__question_window(const char *title, const char *text,
+> >                       const char *exit_msg, int delay_secs)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, exit_msg);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return ui__getch(delay_secs);
+> >  }
+> >
+> > diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+> > index 9b6fdf06e1d2..99f8d2fe9bc5 100644
+> > --- a/tools/perf/ui/ui.h
+> > +++ b/tools/perf/ui/ui.h
+> > @@ -2,11 +2,11 @@
+> >  #ifndef _PERF_UI_H_
+> >  #define _PERF_UI_H_ 1
+> >
+> > -#include <pthread.h>
+> > +#include "../util/mutex.h"
+> >  #include <stdbool.h>
+> >  #include <linux/compiler.h>
+> >
+> > -extern pthread_mutex_t ui__lock;
+> > +extern struct mutex ui__lock;
+> >  extern void *perf_gtk_handle;
+> >
+> >  extern int use_browser;
+> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> > index 2c6a485c3de5..29d804d76145 100644
+> > --- a/tools/perf/util/annotate.c
+> > +++ b/tools/perf/util/annotate.c
+> > @@ -35,7 +35,6 @@
+> >  #include "arch/common.h"
+> >  #include "namespaces.h"
+> >  #include <regex.h>
+> > -#include <pthread.h>
+> >  #include <linux/bitops.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> > @@ -821,7 +820,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
+> >  {
+> >       struct annotation *notes = symbol__annotation(sym);
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >       if (notes->src != NULL) {
+> >               memset(notes->src->histograms, 0,
+> >                      notes->src->nr_histograms * notes->src->sizeof_sym_hist);
+> > @@ -829,7 +828,7 @@ void symbol__annotate_zero_histograms(struct symbol *sym)
+> >                       memset(notes->src->cycles_hist, 0,
+> >                               symbol__size(sym) * sizeof(struct cyc_hist));
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >  }
+> >
+> >  static int __symbol__account_cycles(struct cyc_hist *ch,
+> > @@ -1086,7 +1085,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
+> >       notes->hit_insn = 0;
+> >       notes->cover_insn = 0;
+> >
+> > -     pthread_mutex_lock(&notes->lock);
+> > +     mutex_lock(&notes->lock);
+> >       for (offset = size - 1; offset >= 0; --offset) {
+> >               struct cyc_hist *ch;
+> >
+> > @@ -1105,7 +1104,7 @@ void annotation__compute_ipc(struct annotation *notes, size_t size)
+> >                       notes->have_cycles = true;
+> >               }
+> >       }
+> > -     pthread_mutex_unlock(&notes->lock);
+> > +     mutex_unlock(&notes->lock);
+> >  }
+> >
+> >  int addr_map_symbol__inc_samples(struct addr_map_symbol *ams, struct perf_sample *sample,
+> > @@ -1258,13 +1257,13 @@ int disasm_line__scnprintf(struct disasm_line *dl, char *bf, size_t size, bool r
+> >
+> >  void annotation__init(struct annotation *notes)
+> >  {
+> > -     pthread_mutex_init(&notes->lock, NULL);
+> > +     mutex_init(&notes->lock, /*pshared=*/false);
+> >  }
+> >
+> >  void annotation__exit(struct annotation *notes)
+> >  {
+> >       annotated_source__delete(notes->src);
+> > -     pthread_mutex_destroy(&notes->lock);
+> > +     mutex_destroy(&notes->lock);
+> >  }
+> >
+> >  static void annotation_line__add(struct annotation_line *al, struct list_head *head)
+> > diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+> > index 986f2bbe4870..3cbd883e4d7a 100644
+> > --- a/tools/perf/util/annotate.h
+> > +++ b/tools/perf/util/annotate.h
+> > @@ -8,9 +8,9 @@
+> >  #include <linux/types.h>
+> >  #include <linux/list.h>
+> >  #include <linux/rbtree.h>
+> > -#include <pthread.h>
+> >  #include <asm/bug.h>
+> >  #include "symbol_conf.h"
+> > +#include "mutex.h"
+> >  #include "spark.h"
+> >
+> >  struct hist_browser_timer;
+> > @@ -273,7 +273,7 @@ struct annotated_source {
+> >  };
+> >
+> >  struct annotation {
+> > -     pthread_mutex_t         lock;
+> > +     struct mutex lock;
+> >       u64                     max_coverage;
+> >       u64                     start;
+> >       u64                     hit_cycles;
+> > diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
+> > index 144a8a24cc69..1bcbd4fb6c66 100644
+> > --- a/tools/perf/util/bpf-event.h
+> > +++ b/tools/perf/util/bpf-event.h
+> > @@ -4,7 +4,6 @@
+> >
+> >  #include <linux/compiler.h>
+> >  #include <linux/rbtree.h>
+> > -#include <pthread.h>
+> >  #include <api/fd/array.h>
+> >  #include <stdio.h>
+> >
+> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> > index 5ac13958d1bd..c7a5b42d1311 100644
+> > --- a/tools/perf/util/dso.c
+> > +++ b/tools/perf/util/dso.c
+> > @@ -795,7 +795,7 @@ dso_cache__free(struct dso *dso)
+> >       struct rb_root *root = &dso->data.cache;
+> >       struct rb_node *next = rb_first(root);
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (next) {
+> >               struct dso_cache *cache;
+> >
+> > @@ -804,7 +804,7 @@ dso_cache__free(struct dso *dso)
+> >               rb_erase(&cache->rb_node, root);
+> >               free(cache);
+> >       }
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >  }
+> >
+> >  static struct dso_cache *__dso_cache__find(struct dso *dso, u64 offset)
+> > @@ -841,7 +841,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >       struct dso_cache *cache;
+> >       u64 offset = new->offset;
+> >
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >       while (*p != NULL) {
+> >               u64 end;
+> >
+> > @@ -862,7 +862,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
+> >
+> >       cache = NULL;
+> >  out:
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       return cache;
+> >  }
+> >
+> > @@ -1297,7 +1297,7 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
+> >               dso->root = NULL;
+> >               INIT_LIST_HEAD(&dso->node);
+> >               INIT_LIST_HEAD(&dso->data.open_entry);
+> > -             pthread_mutex_init(&dso->lock, NULL);
+> > +             mutex_init(&dso->lock, /*pshared=*/false);
+> >               refcount_set(&dso->refcnt, 1);
+> >       }
+> >
+> > @@ -1336,7 +1336,7 @@ void dso__delete(struct dso *dso)
+> >       dso__free_a2l(dso);
+> >       zfree(&dso->symsrc_filename);
+> >       nsinfo__zput(dso->nsinfo);
+> > -     pthread_mutex_destroy(&dso->lock);
+> > +     mutex_destroy(&dso->lock);
+> >       free(dso);
+> >  }
+> >
+> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> > index 66981c7a9a18..58d94175e714 100644
+> > --- a/tools/perf/util/dso.h
+> > +++ b/tools/perf/util/dso.h
+> > @@ -2,7 +2,6 @@
+> >  #ifndef __PERF_DSO
+> >  #define __PERF_DSO
+> >
+> > -#include <pthread.h>
+> >  #include <linux/refcount.h>
+> >  #include <linux/types.h>
+> >  #include <linux/rbtree.h>
+> > @@ -11,6 +10,7 @@
+> >  #include <stdio.h>
+> >  #include <linux/bitops.h>
+> >  #include "build-id.h"
+> > +#include "mutex.h"
+> >
+> >  struct machine;
+> >  struct map;
+> > @@ -145,7 +145,7 @@ struct dso_cache {
+> >  struct auxtrace_cache;
+> >
+> >  struct dso {
+> > -     pthread_mutex_t  lock;
+> > +     struct mutex     lock;
+> >       struct list_head node;
+> >       struct rb_node   rb_node;       /* rbtree node sorted by long name */
+> >       struct rb_root   *root;         /* root of rbtree that rb_node is in */
+> > diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> > index 1c085ab56534..bfce88e5eb0d 100644
+> > --- a/tools/perf/util/hist.c
+> > +++ b/tools/perf/util/hist.c
+> > @@ -1622,13 +1622,13 @@ struct rb_root_cached *hists__get_rotate_entries_in(struct hists *hists)
+> >  {
+> >       struct rb_root_cached *root;
+> >
+> > -     pthread_mutex_lock(&hists->lock);
+> > +     mutex_lock(&hists->lock);
+> >
+> >       root = hists->entries_in;
+> >       if (++hists->entries_in > &hists->entries_in_array[1])
+> >               hists->entries_in = &hists->entries_in_array[0];
+> >
+> > -     pthread_mutex_unlock(&hists->lock);
+> > +     mutex_unlock(&hists->lock);
+> >
+> >       return root;
+> >  }
+> > @@ -2805,7 +2805,7 @@ int __hists__init(struct hists *hists, struct perf_hpp_list *hpp_list)
+> >       hists->entries_in = &hists->entries_in_array[0];
+> >       hists->entries_collapsed = RB_ROOT_CACHED;
+> >       hists->entries = RB_ROOT_CACHED;
+> > -     pthread_mutex_init(&hists->lock, NULL);
+> > +     mutex_init(&hists->lock, /*pshared=*/false);
+> >       hists->socket_filter = -1;
+> >       hists->hpp_list = hpp_list;
+> >       INIT_LIST_HEAD(&hists->hpp_formats);
+> > diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
+> > index 7ed4648d2fc2..508428b2c1b2 100644
+> > --- a/tools/perf/util/hist.h
+> > +++ b/tools/perf/util/hist.h
+> > @@ -4,10 +4,10 @@
+> >
+> >  #include <linux/rbtree.h>
+> >  #include <linux/types.h>
+> > -#include <pthread.h>
+> >  #include "evsel.h"
+> >  #include "color.h"
+> >  #include "events_stats.h"
+> > +#include "mutex.h"
+> >
+> >  struct hist_entry;
+> >  struct hist_entry_ops;
+> > @@ -98,7 +98,7 @@ struct hists {
+> >       const struct dso        *dso_filter;
+> >       const char              *uid_filter_str;
+> >       const char              *symbol_filter_str;
+> > -     pthread_mutex_t         lock;
+> > +     struct mutex            lock;
+> >       struct hists_stats      stats;
+> >       u64                     event_stream;
+> >       u16                     col_len[HISTC_NR_COLS];
+> > diff --git a/tools/perf/util/mmap.h b/tools/perf/util/mmap.h
+> > index cd8b0777473b..cd4ccec7f361 100644
+> > --- a/tools/perf/util/mmap.h
+> > +++ b/tools/perf/util/mmap.h
+> > @@ -9,7 +9,6 @@
+> >  #include <linux/bitops.h>
+> >  #include <perf/cpumap.h>
+> >  #include <stdbool.h>
+> > -#include <pthread.h> // for cpu_set_t
+> >  #ifdef HAVE_AIO_SUPPORT
+> >  #include <aio.h>
+> >  #endif
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index a4b22caa7c24..656d9b4dd456 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -1800,7 +1800,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >       }
+> >
+> >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >
+> >       /* check again under the dso->lock */
+> >       if (dso__loaded(dso)) {
+> > @@ -1964,7 +1964,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >               ret = 0;
+> >  out:
+> >       dso__set_loaded(dso);
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       nsinfo__mountns_exit(&nsc);
+> >
+> >       return ret;
+> > diff --git a/tools/perf/util/top.h b/tools/perf/util/top.h
+> > index 1c2c0a838430..a8b0d79bd96c 100644
+> > --- a/tools/perf/util/top.h
+> > +++ b/tools/perf/util/top.h
+> > @@ -5,6 +5,7 @@
+> >  #include "tool.h"
+> >  #include "evswitch.h"
+> >  #include "annotate.h"
+> > +#include "mutex.h"
+> >  #include "ordered-events.h"
+> >  #include "record.h"
+> >  #include <linux/types.h>
+> > @@ -53,8 +54,8 @@ struct perf_top {
+> >               struct ordered_events   *in;
+> >               struct ordered_events    data[2];
+> >               bool                     rotate;
+> > -             pthread_mutex_t          mutex;
+> > -             pthread_cond_t           cond;
+> > +             struct mutex mutex;
+> > +             struct cond cond;
+> >       } qe;
+> >  };
+> >
+> > --
+> > 2.37.1.595.g718a3a8f04-goog
+>
+> --
+>
+> - Arnaldo
