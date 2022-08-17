@@ -1,104 +1,123 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DE223D3
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 05:39:52 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3328a211611so87242117b3.5
-        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 22:39:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A86823CB
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 05:44:38 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id u22so2851588plq.12
+        for <llvm@lists.linux.dev>; Tue, 16 Aug 2022 22:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=qHxxMbzf5P1kENTIcu/skD1A7VW/ZSQMIDyzork9iPw=;
-        b=gqVyKJEKg7FHYfUlvFZRQ4gywaDxqgOla/wYNSrRrpQPIOeQgd8otSDUR81rYz06Pz
-         86FwoEQRXDngYehTse62DCp3ULAG3zl2VVSHPUTcSch9dCd1GVJmHLNIuS9Ice2KYHSE
-         /Ph6X2GyUQLtHLZp3hUMsFENjq6wAqo+qn5EpWgzZcCvi33yqo5FpUFubMhztDoufgY/
-         s/YaI0T2hL8w14sHHW7W+c6Mmk2yfQ/ibvJzRLrLjAkzecGwLWICJuoLQBTNOna3XZbI
-         VnFy770xGVxdjDk9dXHvkb/ZqSHfM1yhNZARL1EQll7tFtso8gJjlI04p5hAKF0gFFP7
-         BTDQ==
+        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=3znbrSjjpvJwytUCGFSSBt6kROH+ezee+opuMaP8YXM=;
+        b=QM4/8vv4gJc7BKd4E0KpFd/jkT5JS5MDx2a73/YDZSzUwSXScNudb9Rs8q8wgeBuX1
+         zbj1k9PqFDHNSGvsrcpMu66A30mQTYKvVVfyPDpEerG/8/OcUppDwVsQv0NhLYEJjObM
+         7bb9JeZ52OFNxj+XCK6r9zVoLlrqmwmn41E3NPv1MAl8iNeNEsBxpFavaq19Qnmwech2
+         KGOgrAVlqKSVXAdRV+PZnXIjNelGcihZnl4Y0UUP5iXJX1gQApqmNkU6Pa0dG5G9XXKR
+         oEgWV52VWk1OaHITiJzVp5he3ICwDiofFbG/lf8cf5wTWLy4NCcbcb2SrZQ+P+k3i7MX
+         Q0gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=qHxxMbzf5P1kENTIcu/skD1A7VW/ZSQMIDyzork9iPw=;
-        b=aTTabKch/nEP7MbqsLsjE56lh9NcVP1gxpint8upGhUVXdZePgD36luC762Z/gVjvS
-         fcbwHBl4QbOFQFnwUn7u7x7M9YNaPMIHTP99vkNF8GR8wrS4bOMvfGSt4bOzTOKL1zW2
-         IW4jgietzeuNjqnfLwIHNSS0z4cqilq7uA2BKevDlUtgaTVBg7DTav3sxHFG3mAiXtyx
-         Eu5WutNWGad6aO9KiKME/e5OcBl0YZ7/3c9CleuRSsmsoEBbYRTux4U9Ew7dBCqOZjmc
-         aMlDbLfGZ4NUMuLH8bBv5mvxje0FmVtdUzuIjnf8WdD0BHPRL9RmJR9nLqUGq6enRBfv
-         A8xA==
-X-Gm-Message-State: ACgBeo0b575gp7KViEpGCJkdi20HeM5BarzbypJrHuwbSC1zC6/aR3ua
-	bhkDzawVJCGuiLD9nzjkoJ2gm6TucHFH
-X-Google-Smtp-Source: AA6agR6oqIM30UMn/90m2gApF2R7Le2AepInoK1oGfNY9eAWaYg7N++h7MaUpqoBJDhq2iKEZ3Oi69J7zqh3
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3bec:858f:9a6d:63de])
- (user=irogers job=sendgmr) by 2002:a25:ce92:0:b0:680:c480:4a8 with SMTP id
- x140-20020a25ce92000000b00680c48004a8mr19112893ybe.299.1660714791094; Tue, 16
- Aug 2022 22:39:51 -0700 (PDT)
-Date: Tue, 16 Aug 2022 22:39:30 -0700
-In-Reply-To: <20220817053930.769840-1-irogers@google.com>
-Message-Id: <20220817053930.769840-7-irogers@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=3znbrSjjpvJwytUCGFSSBt6kROH+ezee+opuMaP8YXM=;
+        b=rYdrqaYuV7B5thS0cPreBcx4KhoyuXaNQjGxdWnW6L73x0e58QxKJhZcaUEu+/rBWf
+         Dmqjp3OLXm9BgerW0XOWaM0VwbuR6Y75iEbt+ppzfgrdnXw2C/9aUlSvgE1B9NEC27R8
+         /QIE1ka8vuCw6jBIcEdRiKig1xEUBeNw4FkXTEuIernBpovuEgE3lHHTMy/F2z+hYS74
+         RcSWXecoQ6HdYVTjxisBDZi875uo9R2Jw7waCw8h3WnsUOiIBNJm9dbJ6H+82EPzgn4O
+         YP3b4qp0EBJiOIKCg+EcNbJXcYe5S9hCJQfSiqyPIm9yldvJFM0G3NhzFLuZFLGxRWsU
+         vV2w==
+X-Gm-Message-State: ACgBeo0uSoyG5O7/kNGxAG57hymeCV+x1xkNqzCQEBGZbhOfd1uJGVgA
+	0vm7n3SEWBBb1IEyKIH48yF6ZMesb1aejxtf
+X-Google-Smtp-Source: AA6agR4bs1aL5MGE/NgKp+m43p6eTohs7NwK08JnwHC/Xg0owMyOXV/oKri9+jtYA8YBskgwxJPebg==
+X-Received: by 2002:a17:90b:4b0c:b0:1f4:ffac:699a with SMTP id lx12-20020a17090b4b0c00b001f4ffac699amr2091787pjb.145.1660715077630;
+        Tue, 16 Aug 2022 22:44:37 -0700 (PDT)
+Received: from ?IPV6:2406:3400:213:70c0:9df6:7e57:88ce:1bea? ([2406:3400:213:70c0:9df6:7e57:88ce:1bea])
+        by smtp.gmail.com with ESMTPSA id o21-20020aa79795000000b0052d8405bcd2sm9451333pfp.163.2022.08.16.22.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 22:44:37 -0700 (PDT)
+Message-ID: <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
+Date: Wed, 17 Aug 2022 15:44:33 +1000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220817053930.769840-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v1 6/6] perf build: Enable -Wthread-safety with clang
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
-	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
-	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
-	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
-	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
-	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
-	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Content-Language: en-AU
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, alsa-devel@alsa-project.org,
+ llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
+ <202208090909.Pg0BZGie-lkp@intel.com>
+ <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+From: Matt Flax <flatmax@flatmax.com>
+In-Reply-To: <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-If building with clang then enable -Wthread-safety warnings.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 5 +++++
- 1 file changed, 5 insertions(+)
+On 17/8/22 04:00, Nathan Chancellor wrote:
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 0661a1cf9855..0ef6f572485d 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
- CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
- HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
- 
-+# Enabled Wthread-safety analysis for clang builds.
-+ifeq ($(CC_NO_CLANG), 0)
-+  CFLAGS += -Wthread-safety
-+endif
-+
- include $(srctree)/tools/scripts/Makefile.arch
- 
- $(call detected_var,SRCARCH)
--- 
-2.37.1.595.g718a3a8f04-goog
+>>     265			/* set the PLL for the digital receiver */
+>>     266			switch (src4xxx->mclk_hz) {
+>>     267			case 24576000:
+>>     268				pj = 0x22;
+>>     269				jd = 0x00;
+>>     270				d = 0x00;
+>>     271				break;
+>>     272			case 22579200:
+>>     273				pj = 0x22;
+>>     274				jd = 0x1b;
+>>     275				d = 0xa3;
+>>     276				break;
+>>   > 277			default:
+>>     278				/* don't error out here,
+>>     279				 * other parts of the chip are still functional
+>>     280				 */
+>>     281				dev_info(component->dev,
+>>     282					"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+> In the final commit, there is a 'break' here. Should it be a 'return 0'
+> instead? Or should there be a different fix for these warnings?
 
+The data sheet for the src4392 doesn't list defaults for these registers 
+(loaded with pj, jd and d). The actual state of these registers is not 
+known until we load them with something, arbitrary or not.
+
+	{  SRC4XXX_RCV_PLL_0F,		0x00  },  /* not spec. in the datasheet */
+	{  SRC4XXX_RCV_PLL_10,		0xff  },  /* not spec. in the datasheet */
+	{  SRC4XXX_RCV_PLL_11,		0xff  },  /* not spec. in the datasheet */
+
+The state of DIR PLL registers aren't important if the user doesn't 
+specify a known mclk frequency.  The implication is that the DIR will 
+not function, however that is already implied by the user lacking to 
+specify a known mclk frequency.
+
+The other functions on the chip (port A/B I2S, SRC, DIT, etc) will 
+behave as per usual, only the DIR will be dysfunctional.
+
+
+>>     283			}
+>>     284			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>>     285			if (ret < 0)
+>>     286				dev_err(component->dev,
+>>     287					"Failed to update PLL register 0x%x\n",
+>>     288					SRC4XXX_RCV_PLL_0F);
+>>   > 289			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+>>     290			if (ret < 0)
+>>     291				dev_err(component->dev,
+>>     292					"Failed to update PLL register 0x%x\n",
+>>     293					SRC4XXX_RCV_PLL_10);
+>>   > 294			ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>>     295			if (ret < 0)
+>>     296				dev_err(component->dev,
+>>     297					"Failed to update PLL register 0x%x\n",
+>>     298					SRC4XXX_RCV_PLL_11);
+>>     
+> Cheers,
+> Nathan
