@@ -1,44 +1,42 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA367C
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 07:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=45RsTvvQpAn/sSf9KQMAsIEwdB3TRL9b7yAQ8edqZtc=; b=rQtLOXCrBQhDRm/70fh1y3S2/5
-	Zvjv3iR9bXRxOX13MCcEc+zLzE1ul+eO189lBhcYzwcTX+W1j/mi2IgUa+iUyMVGaK8aYo36zJjSY
-	NkCmlQy650FpaTgpiFwTVE4INDiafqOmRl68kXZHmAHqlDDBq0ErZdxHYP6lyJAeElBUCv6Vt8FIY
-	bf/z+K5QWA5XTj32dh1I+lB8Kzy9/+y9UNrjbghtVzObo1Si4ugnWoJA85F98bM8STwICsN6Huv2z
-	pdHljpDabBsJ59lxHnBBhfJFWRny5gkRtg3Z4buBCxMiC6dFPr7tF7TLfLLlH38venKpOxQl61ZM/
-	T7NlV8ng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oODkH-003CgF-VP; Wed, 17 Aug 2022 07:45:46 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4881A98007A; Wed, 17 Aug 2022 09:45:45 +0200 (CEST)
-Date: Wed, 17 Aug 2022 09:45:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
-	ceph-devel@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-Message-ID: <YvycqWVs5JbBR1D+@worktop.programming.kicks-ass.net>
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
- <Yvny9L3tw1EolqQ4@worktop.programming.kicks-ass.net>
- <CAHk-=whnEN3Apb5gRXSZK7BM+MOby9VCZe3sDcW34Zme_wk3uA@mail.gmail.com>
- <Yvqn8BqE7FdB6Ccd@worktop.programming.kicks-ass.net>
- <CAHk-=wj6QaNkoNPA0jrW8F_=RNNb1jCsFF2QngNEQb_C=wMDPQ@mail.gmail.com>
- <YvtPEA/9GV7GthZJ@worktop.programming.kicks-ass.net>
- <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6E47C
+	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 08:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660724061; x=1692260061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xA3pyXfIFhFP4Vu6qdyg1TVHtuRZcvgrznJgmVfN9v4=;
+  b=m7uvNsotMANWh2+Xv4iR0ibdZV1dJjdkCEwxkICIgEJRcoXodOp88onI
+   at9fcko+0y3PXLT+ONHQT2SxsJJTVIbkVNLMWDqNom/NSGGuezni1Pwmz
+   IhNe5thnltpFUXfsA/Qsu90OG57FHNX/YIC+rEHftJke535bJt1M/LkMS
+   aKL1O33sfWu82yvrcutDC5f6+xvFOjGGyXkusDde8/4tX+OEvGf25xScG
+   9Cnc7NVfgFmfYBvJyug0xtXP+tk1Z47eVzK0cTpcWr478CEJi+YZUKGCZ
+   8CNUbmnEWMc5OVRMPAnPY9i29ShEUaZLJXejN/lU+1hA6X3AankE1rsif
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="272202849"
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="272202849"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 01:14:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
+   d="scan'208";a="696689612"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Aug 2022 01:14:15 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oOEBq-0000j2-1E;
+	Wed, 17 Aug 2022 08:14:14 +0000
+Date: Wed, 17 Aug 2022 16:13:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-unaccepted-memory 11/14] ld.lld: error: undefined
+ symbol: arch_kexec_load
+Message-ID: <202208171435.ZwLactew-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,37 +45,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjZ0oC0__-kLX51jRwo4XgAQ9xJ=OeT5_=fiLxmDexFZw@mail.gmail.com>
 
-On Tue, Aug 16, 2022 at 10:57:45AM -0700, Linus Torvalds wrote:
+tree:   https://github.com/intel/tdx.git guest-unaccepted-memory
+head:   86fb61d5824802e1b7c4c8eb1b34029024f52ee6
+commit: 820c5c338451079677510d4183ba5d5dc314c030 [11/14] x86: Disable kexec if system has unaccepted memory
+config: x86_64-randconfig-a015-20220815 (https://download.01.org/0day-ci/archive/20220817/202208171435.ZwLactew-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/820c5c338451079677510d4183ba5d5dc314c030
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-unaccepted-memory
+        git checkout 820c5c338451079677510d4183ba5d5dc314c030
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> > > +     if (insn_decode(&insn, (void *) regs->ip, len, INSN_MODE_KERN))
-> > > +             return false;
-> >
-> > We have insn_decode_kernel() for exactly this (very) common case.
-> 
-> I did that originally, and then I undid it in disgust, because that
-> interface is too simple.
-> 
-> In particular, it just uses MAX_INSN_SIZE blindly. Which I didn't want
-> to do when I actually had the instruction size.
-> 
-> Yes, yes, I also check the decode size after-the-fact, but I didn't
-> want the decoder to even look at the invalid bytes.
-> 
-> This exception case is about the data being at the end of the page, I
-> wanted the fixup to be aware of code being at the end of a page too.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I don't want to argue this point too much; but I will anyway :-)
+All errors (new ones prefixed by >>):
 
-IMO if the decoder ends up out of bounds its a decoder bug either way
-around. That is, we *know* there is a full instruction at the given IP
-because we got into this exception path.
+>> ld.lld: error: undefined symbol: arch_kexec_load
+   >>> referenced by kexec.c:198 (kernel/kexec.c:198)
+   >>>               vmlinux.o:(__x64_sys_kexec_load)
+   >>> referenced by kexec_file.c:332 (kernel/kexec_file.c:332)
+   >>>               vmlinux.o:(__x64_sys_kexec_file_load)
 
-( it would be possible to add further constraints on trapnr )
-
-Irrespective of the length constraint given to the decoder, it should
-not decode/access things past this instruction (without being careful
-about it).
-
-Anyway, I'm fine with the patch as you have it.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
