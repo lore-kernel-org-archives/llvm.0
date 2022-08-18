@@ -1,37 +1,47 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F67823CD
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 08:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=0WDxrfmpMQZzXx9CVRCybqD/x6pT8kyfE3mZ4TXsYpg=; b=PzsrIjQqIrXWU/HCnE5RvcgMEv
-	jSDsHlj/qNilblrmnmM4l0NorDTJkm6ZUS649TPpvEHnsZIwJtQesH8n1PrFnJTvwIzBxmRcOmq7m
-	0WK0XyEBmp8dwK60Nj12OUsygPerCTOCKxhJYIFoPTAbUSSX3l06wXl3xRnJDXdd7sgYsBX0Nwm/y
-	F57w7Px3An5LW91jqSFpmUk6ns1z9JMX9En3WOC3SAzm7Y2qCjJ/gJR7qg6LYJ4JMqImqSFWEHitM
-	h9b6PxD95ZPr3rsFOpDEnR2I8StyQXpUhzf/a0edNT9e4QtKwcW8labUHDywKX9DykGXCD7l/Qkms
-	rNipSmbg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oOaSa-009Us4-AL; Thu, 18 Aug 2022 08:01:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 604BA9801D4; Thu, 18 Aug 2022 10:00:59 +0200 (CEST)
-Date: Thu, 18 Aug 2022 10:00:59 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-Message-ID: <Yv3xu7f3NDC1is6o@worktop.programming.kicks-ass.net>
-References: <20220817185410.1174782-1-nathan@kernel.org>
- <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
- <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8307C
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 08:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660812760; x=1692348760;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k8/zSAkp+cfoW3U6Qv53pN/pwfcCe/WePQzpTG+PzkE=;
+  b=E0btYCNpM/FWEFDf7sD9DwJQz9ZSR0nmYOPkzjy7X3dSc5Uue/FbDQqw
+   GyA0cI6S+fo1jYlK+nHn85s08u1Q8dPZ56DyZalJ/HAjJX96tPrlGOItB
+   w/F93njgoYUZxRmYOcZlkL0VddEFJABQVmGsMDAttwUKLk1ZC9DVZJaPW
+   PhmufQ9Ae46TueNFhyN7TCiKDnR3z0qVpJznR4WhgpI4z0QViW3MbxV8k
+   SW4Q4eHQ07+sZEuCyiXEykvfkfJrVcsQPo8+hH+vWFduRjtTMCTyD+/lw
+   dmmIbjBjDj1T6IUem3AVMBe5Yw1xWdNHnEn7YLQ3yK9NSS/eOgcP1UMgC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293982247"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="293982247"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:52:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="675985895"
+Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Aug 2022 01:52:38 -0700
+Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oObGX-0000Iv-1w;
+	Thu, 18 Aug 2022 08:52:37 +0000
+Date: Thu, 18 Aug 2022 16:51:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH v2 net 13/17] net: Fix data-races around
+ sysctl_fb_tunnels_only_for_init_net.
+Message-ID: <202208181615.Lu9xjiEv-lkp@intel.com>
+References: <20220818035227.81567-14-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,32 +50,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220818035227.81567-14-kuniyu@amazon.com>
 
-On Thu, Aug 18, 2022 at 09:45:39AM +0200, Peter Zijlstra wrote:
+Hi Kuniyuki,
 
-> The thing to do is boot with (warning, *very* verbose):
-> 
-> 	"spectre_v2=retpoline,lfence debug-alternative"
-> 
-> and observe that the retpoline sites all replace:
-> 
-> 	"cs call __x86_indirect_thunk_r11" (6 bytes)
-> 
-> with:
-> 
-> 	"lfence; jmp *%r11" (6 bytes)
+Thank you for the patch! Yet something to improve:
 
-		^^ call, ofc, unless the original was jmp then jmp...
+[auto build test ERROR on net/master]
 
-/me goes get more morning juice in an attempt to wake up.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git fc4aaf9fb3c99bcb326d52f9d320ed5680bd1cee
+config: riscv-randconfig-r032-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181615.Lu9xjiEv-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
+        git checkout 6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> 
-> 
-> This being clang, you'll ofcourse still have a few weird:
-> 
-> 	"Jcc.d32 __x86_indirect_thunk_r11"
-> 
-> sites that will not be able to be replaced, but there's nothing I can do
-> about that other than to continue to encourage y'all to stop emitting
-> them ;-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: sysctl_fb_tunnels_only_for_init_net
+   >>> referenced by ip_tunnel.c
+   >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
+   >>> referenced by ip_tunnel.c
+   >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
