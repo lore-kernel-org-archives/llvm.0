@@ -1,35 +1,49 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4BD23CD
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 07:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=B0FOqbOjjD5Eu6hMGkx4/QaR7cvvJoyR6LldMiptjZA=; b=lAbemeTjjG7Zib6AJtOPKEYNsf
-	uTj3+j1lm1WaMG3Dz2qNfFUxF5PX10h5Lg5dGz9GpMVCsuufeXp0I7106UGddGWKfz8PBbJJgvE7l
-	q5xNYe6NFBmq3KguAH5zB37sUHkQPSmI9pYeaGt6Qt6oIXV6T/Uyt6JB9GT1p/ulDRP8BVO2v74jM
-	KGbiQnvExQ1OmJIMLnFSfptlyTUDFhDgeFSgS/RSREY/8/rtTE+JhoMWtQO96aypVElR4K4/Bfld4
-	LTgVsjlSN5CktdTCY1U2f/cfMlsJZT3RClH7MXmcq0HCGV7YpCKJQ70mRd57Ob8c2lp9kLxp6xMQ0
-	3h0Lt9hA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oOaH2-009U3g-9s; Thu, 18 Aug 2022 07:49:04 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5DD9C980135; Thu, 18 Aug 2022 09:49:01 +0200 (CEST)
-Date: Thu, 18 Aug 2022 09:49:01 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-Message-ID: <Yv3u7XobZs/uPf6n@worktop.programming.kicks-ass.net>
-References: <20220817185410.1174782-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573ED23CD
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 07:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660809519; x=1692345519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZkYsJyWoE3iamxvXBLDRveMD2fLKX3azr/jNrlg8M1s=;
+  b=IGPiOJsFkQlAldDqmRyCjjOiMB9XB6OrwVDqCxOBVjes+kixoeXS9v2v
+   wji9mwfdZ0Fw5N9EFGaIw0aJ+o2VtWtBec0ijexVo0SKVyv9nsw9UptEt
+   A7Si7f1vekB9wDfQBT4HFXRTeybDbiaPOFIwd/Oi+BClBHFlr0itcXIU+
+   6cUQd/i3ucIsrdzq3HE7oRLjkTC0eLagk7PfIb5waPCrGU90N8jRsb/CS
+   Hwh2fBiZ3UGfhQivet5wmwfWwzY0W6gc4lgFZ/5kkiBTnQmNNa8BIBwnF
+   iWCvu2jDv+t+kYmshwnRATivjEY8URbstsBHkP79oDbl0+rpY6OymioMV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378987338"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="378987338"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 00:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="607735232"
+Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2022 00:58:35 -0700
+Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oOaQE-0000Dv-2p;
+	Thu, 18 Aug 2022 07:58:34 +0000
+Date: Thu, 18 Aug 2022 15:58:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: guoren@kernel.org, xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
+	heiko@sntech.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+	mick@ics.forth.gr, jszhang@kernel.org,
+	Guo Ren <guoren@linux.alibaba.com>,
+	AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
+ percpu crash_save_cpu
+Message-ID: <202208181520.fYQOePu6-lkp@intel.com>
+References: <20220816012701.561435-3-guoren@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,42 +52,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817185410.1174782-1-nathan@kernel.org>
+In-Reply-To: <20220816012701.561435-3-guoren@kernel.org>
 
-On Wed, Aug 17, 2022 at 11:54:11AM -0700, Nathan Chancellor wrote:
-> LLVM 16 will have support for this flag so move it out of the GCC-only
-> block to allow LLVM builds to take advantage of it.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-> Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi,
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+I love your patch! Yet something to improve:
 
-> ---
-> 
-> I was not sure if this information is relevant for the commit message
-> but I can boot without any issues on my test machines (two Intel and one
-> AMD).
-> 
->  arch/x86/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 7854685c5f25..987da87c7778 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -14,13 +14,13 @@ endif
->  
->  ifdef CONFIG_CC_IS_GCC
->  RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
-> -RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
->  RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
->  endif
->  ifdef CONFIG_CC_IS_CLANG
->  RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
->  RETPOLINE_VDSO_CFLAGS	:= -mretpoline
->  endif
-> +RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc1 next-20220818]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks for using the same option!
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: riscv-randconfig-r035-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181520.fYQOePu6-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+        git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/machine_kexec.c:217:7: error: call to undeclared function 'smp_crash_stop_failed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           WARN(smp_crash_stop_failed(),
+                ^
+   1 error generated.
+
+
+vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
+
+   193	
+   194	/*
+   195	 * machine_kexec - Jump to the loaded kimage
+   196	 *
+   197	 * This function is called by kernel_kexec which is called by the
+   198	 * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
+   199	 * or by crash_kernel which is called by the kernel's arch-specific
+   200	 * trap handler in case of a kernel panic. It's the final stage of
+   201	 * the kexec process where the pre-loaded kimage is ready to be
+   202	 * executed. We assume at this point that all other harts are
+   203	 * suspended and this hart will be the new boot hart.
+   204	 */
+   205	void __noreturn
+   206	machine_kexec(struct kimage *image)
+   207	{
+   208		struct kimage_arch *internal = &image->arch;
+   209		unsigned long jump_addr = (unsigned long) image->start;
+   210		unsigned long first_ind_entry = (unsigned long) &image->head;
+   211		unsigned long this_cpu_id = __smp_processor_id();
+   212		unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+   213		unsigned long fdt_addr = internal->fdt_addr;
+   214		void *control_code_buffer = page_address(image->control_code_page);
+   215		riscv_kexec_method kexec_method = NULL;
+   216	
+ > 217		WARN(smp_crash_stop_failed(),
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
