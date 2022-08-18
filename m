@@ -1,91 +1,65 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8307C
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 08:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660812760; x=1692348760;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k8/zSAkp+cfoW3U6Qv53pN/pwfcCe/WePQzpTG+PzkE=;
-  b=E0btYCNpM/FWEFDf7sD9DwJQz9ZSR0nmYOPkzjy7X3dSc5Uue/FbDQqw
-   GyA0cI6S+fo1jYlK+nHn85s08u1Q8dPZ56DyZalJ/HAjJX96tPrlGOItB
-   w/F93njgoYUZxRmYOcZlkL0VddEFJABQVmGsMDAttwUKLk1ZC9DVZJaPW
-   PhmufQ9Ae46TueNFhyN7TCiKDnR3z0qVpJznR4WhgpI4z0QViW3MbxV8k
-   SW4Q4eHQ07+sZEuCyiXEykvfkfJrVcsQPo8+hH+vWFduRjtTMCTyD+/lw
-   dmmIbjBjDj1T6IUem3AVMBe5Yw1xWdNHnEn7YLQ3yK9NSS/eOgcP1UMgC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293982247"
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="293982247"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:52:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="675985895"
-Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Aug 2022 01:52:38 -0700
-Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oObGX-0000Iv-1w;
-	Thu, 18 Aug 2022 08:52:37 +0000
-Date: Thu, 18 Aug 2022 16:51:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v2 net 13/17] net: Fix data-races around
- sysctl_fb_tunnels_only_for_init_net.
-Message-ID: <202208181615.Lu9xjiEv-lkp@intel.com>
-References: <20220818035227.81567-14-kuniyu@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE91C3C1D
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 11:17:46 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id w19so2613292ejc.7
+        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 04:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
+        b=YCwY2+ZOwZePVXHIed870W0AMBgz2YE11uL8soFdD2/JiKrKB7+vx5++xVceVEdfv4
+         f+3HWdO1z9ehFa6qO4t68/0/LzqpthaY/C6NCXUI1zp4UheqE64y4qTyK2KQzD2tnFiO
+         jIAkKAGKTeTAnV0OdfZwZoG5dGzccmnChgDjGByCmSXCxjOJFDalhFBdk4jGtDTd4TKT
+         VOiT1pJizr8p3mr9rGhr8Cc9eWbUZVB+oclTSvJGwHNQ+rXa16IgiG7190sjPR99Xski
+         vSwf/zjuFbcqVkEyDGyc7mHpL89dRdJkK4PhO4CY3g0nCTgARc+BXL5F18pAu+RVAyMu
+         1+RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
+        b=6HzVNovkC308rF/tFQhVUGHx77S+1Ik6nFp83FhJjc226mPRMSoVQFbXVHp8IF/Z/B
+         IqetvMxvVF027VYmPvI0WU9n3V3dIarMShl83I9TPTK2ZWTAjvT/RWiDZ1KnH7Z8sqku
+         UDVKoGSVxAbNLwOo0vEg78d2xtkilFnQCng3WCnx0X02r0N08wBrL/SaeLqCCwzkLMyA
+         yWOxw6x5Y9fgorDloUAqES8VubStSVZq95JSqx3FGbDwtNqcwim6kwwCcvJD3RbAJLE6
+         Fdz6q6wQw/TIhoT5KX7vnxow9CdmHuFba+lh88dFCWh12F0YzmcaFB7cpdgNStVAa/Ka
+         ZNDQ==
+X-Gm-Message-State: ACgBeo0Gj8DYawyLtOd2sDXQw+FnIspkY3iBAzSrk+FFVMnK/IjbdbMK
+	MLQOSST7xmelfIGokTkwtFu3Bisc11SVwx5Fh7fLBA==
+X-Google-Smtp-Source: AA6agR5b8bP+fivEf8sWhn4cjq7X6RpjZuI0sL1iRR2iThKSe11tnOp6MF2tDz+lsllpLbtZOzvSG3NbTnoaTALTQtY=
+X-Received: by 2002:a17:907:6d98:b0:731:2bb3:8e17 with SMTP id
+ sb24-20020a1709076d9800b007312bb38e17mr1597869ejc.203.1660821465138; Thu, 18
+ Aug 2022 04:17:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818035227.81567-14-kuniyu@amazon.com>
+References: <202208180333.1pfLpmaj-lkp@intel.com>
+In-Reply-To: <202208180333.1pfLpmaj-lkp@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 18 Aug 2022 13:17:34 +0200
+Message-ID: <CACRpkdYkRL0Yavgrg378Kte3mpeCTXoPu-Wnr0T7deNDyt2zoA@mail.gmail.com>
+Subject: Re: [broonie-regmap:for-next 4/4] include/asm-generic/io.h:187:18:
+ error: redefinition of 'readb'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kuniyuki,
+On Wed, Aug 17, 2022 at 9:53 PM kernel test robot <lkp@intel.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+>    In file included from arch/hexagon/include/asm/io.h:311:
+> >> include/asm-generic/io.h:187:18: error: redefinition of 'readb'
+>    static inline u8 readb(const volatile void __iomem *addr)
+>                     ^
 
-[auto build test ERROR on net/master]
+Aha. I'll hunt down a hexagon cross compiler and provide a fix on top
+of the regmap tree for-next.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git fc4aaf9fb3c99bcb326d52f9d320ed5680bd1cee
-config: riscv-randconfig-r032-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181615.Lu9xjiEv-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
-        git checkout 6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: sysctl_fb_tunnels_only_for_init_net
-   >>> referenced by ip_tunnel.c
-   >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
-   >>> referenced by ip_tunnel.c
-   >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij
