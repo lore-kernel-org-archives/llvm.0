@@ -1,78 +1,120 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AFC4A07
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 21:59:46 +0000 (UTC)
-Received: from notapiano (unknown [70.107.189.129])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 3F5776601B46;
-	Thu, 18 Aug 2022 22:59:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1660859984;
-	bh=Ywr+TRyo5kID6vdf/Ha5uTtV3PhPkoYBPghVaG7zL0A=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D87915A3
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 22:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C832C433D6;
+	Thu, 18 Aug 2022 22:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1660862876;
+	bh=4xLrzJT+0OJbxEwjAhIOtKSTYFq3Rbx2yNrXJxhtCNU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BacyDNYOHPFdC53DYZfM88pvN/PGaHbIqwvTh3QEO5GAUjuLicPbqx6QX0Ii6l85M
-	 4DpQHF36npu9SyYbqJ9t4c4WOE3nYiy0FEgmSQZ11QeADi/Eax46U9uloiuIs/oHxb
-	 ozgIlBMoHadbXBV3m5FhpMua6z+xlCT7il6RfqygnkNlkn8iG60Gx7X/kAT7JRhefF
-	 9v5bh8XuvBUbB8yuVGBrjpIYcN/TTPxEIERh7DsQpUL7aAzrkTJWsfs4dfbsc4p2Y7
-	 RZlsiPQesHSpcs7C5hlXboWxO13XUeYSncO6X/PCO7KkZjTUCS4IIxXERRehbBEKqo
-	 Hg9shXZpTpt7w==
-Date: Thu, 18 Aug 2022 17:59:38 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: "Nancy.Lin" <nancy.lin@mediatek.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, singo.chang@mediatek.com,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v25 00/10] Add MediaTek SoC(vdosys1) support for mt8195
-Message-ID: <20220818215938.w6sgdp5tpvf5eert@notapiano>
-References: <20220711075245.10492-1-nancy.lin@mediatek.com>
- <0afc69a72a4c55b17f8b626d43a08ad56ada64c5.camel@mediatek.com>
+	b=tLZBF8B4RXR3jLRTMZANn2UtYV4KuHUBGWQYPwcb5RfxSoMX1Rmiz0fCf4xb3sEbs
+	 oEqAKnim1WsmyiAXzys537CjY3cmODb8LuzWhnlEyKD6qybhhsHJzn/sArtTIKnIEH
+	 T68I7wz22AscY9Fbr7c5NHvI31nDjteDi6M+X7TEOQkP01nyCin9CEYxuT7T93EzWZ
+	 FRXbSLI070FcsKa+yyCTNspY+ZyOKY0l8LToMGDOdna8Xu4KjPH7v50Ewtl+AGsgO8
+	 o2bIGc4LDJ7G/jEvE9BKDU0YoQ7agQBBA1BEX+uZsuq3tNwAehwIWfkGbh3zeqNBt/
+	 +Wsn7Ufli9+Ig==
+Date: Thu, 18 Aug 2022 15:47:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Cc: hdegoede@redhat.com, markgross@kernel.org,
+	platform-driver-x86@vger.kernel.org, Patil.Reddy@amd.com,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 03/11] platform/x86/amd/pmf: Add support SPS PMF
+ feature
+Message-ID: <Yv7BmjjLtA3RaKju@thelio-3990X>
+References: <20220802151149.2123699-1-Shyam-sundar.S-k@amd.com>
+ <20220802151149.2123699-4-Shyam-sundar.S-k@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0afc69a72a4c55b17f8b626d43a08ad56ada64c5.camel@mediatek.com>
+In-Reply-To: <20220802151149.2123699-4-Shyam-sundar.S-k@amd.com>
 
-On Fri, Aug 05, 2022 at 06:04:08PM +0800, Nancy.Lin wrote:
-[..]
-> Hello Matthias,
+Hi Shyam,
+
+On Tue, Aug 02, 2022 at 08:41:41PM +0530, Shyam Sundar S K wrote:
+> SPS (a.k.a. Static Power Slider) gives a feel of Windows performance
+> power slider for the Linux users, where the user selects a certain
+> mode (like "balanced", "low-power" or "performance") and the thermals
+> associated with each selected mode gets applied from the silicon
+> side via the mailboxes defined through PMFW.
 > 
-> This series is about mmsys configuration of external display path.
+> PMF driver hooks to platform_profile by reading the PMF ACPI fn9 to
+> see if the support is being advertised by ACPI interface.
 > 
-> It is in version *25*, and it is reviewed by many reviewers, like CK
-> and Angelo.
-> The reset.h is also reviewed by Krzysztof.
+> If supported, the PMF driver reacts to platform_profile selection choices
+> made by the user and adjust the system thermal behavior.
 > 
-> This series is also well tested by Rex-BC and Angelo.
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 
-There is actually a silly but breaking bug in this version [1] affecting a lot
-of platforms, including mt8192.
+<snip>
 
-I'll provide a Tested-by tag for mt8192 in the next version, just in case. (If
-you can, please CC me, Nancy).
+> diff --git a/drivers/platform/x86/amd/pmf/sps.c b/drivers/platform/x86/amd/pmf/sps.c
+> new file mode 100644
+> index 000000000000..ef4df3fd774b
+> --- /dev/null
+> +++ b/drivers/platform/x86/amd/pmf/sps.c
 
-Thanks,
-Nícolas
+<snip>
 
-[1] https://lore.kernel.org/all/20220818214715.spbyic34szubx3gi@notapiano/
+> +u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
+> +{
+> +	u8 mode;
+> +
+> +	switch (pmf->current_profile) {
+> +	case PLATFORM_PROFILE_PERFORMANCE:
+> +		mode = POWER_MODE_PERFORMANCE;
+> +		break;
+> +	case PLATFORM_PROFILE_BALANCED:
+> +		mode = POWER_MODE_BALANCED_POWER;
+> +		break;
+> +	case PLATFORM_PROFILE_LOW_POWER:
+> +		mode = POWER_MODE_POWER_SAVER;
+> +		break;
+> +	default:
+> +		dev_err(pmf->dev, "Unknown Platform Profile.\n");
+> +		break;
+> +	}
+> +
+> +	return mode;
+> +}
+
+This patch is now in -next as commit 4c71ae414474
+("platform/x86/amd/pmf: Add support SPS PMF feature"), where it causes
+the following clang warning:
+
+  drivers/platform/x86/amd/pmf/sps.c:96:2: error: variable 'mode' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+          default:
+          ^~~~~~~
+  drivers/platform/x86/amd/pmf/sps.c:101:9: note: uninitialized use occurs here
+          return mode;
+                 ^~~~
+  drivers/platform/x86/amd/pmf/sps.c:84:9: note: initialize the variable 'mode' to silence this warning
+          u8 mode;
+                 ^
+                  = '\0'
+  1 error generated.
+
+As far as I can tell, the default case cannot actually happen due to the
+advertising of choices in amd_pmf_init_sps() and the check against those
+choices in platform_profile_store() but it would be good to avoid this
+warning, especially given that it is fatal with CONFIG_WERROR.
+
+I do not mind sending a patch for this but I am a little unclear what
+the best fix would be. Removing the default case would cause -Wswitch
+warnings because current_profile is an enum (plus it would make finding
+invalid profiles harder if there was ever a change in the core). Perhaps
+changing the return type to be an int, returning an error code in the
+default case, then updating the call sites to check for an error? I am
+open to other suggestions (or if you want to sent a fix yourself, just
+consider this a report).
+
+Cheers,
+Nathan
