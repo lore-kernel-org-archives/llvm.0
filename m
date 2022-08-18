@@ -1,26 +1,26 @@
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2962F22
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 20:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C97A4A07
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 21:47:24 +0000 (UTC)
 Received: from notapiano (unknown [70.107.189.129])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id DBE626601BF4;
-	Thu, 18 Aug 2022 21:42:34 +0100 (BST)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id D240C66019FB;
+	Thu, 18 Aug 2022 22:47:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1660855357;
-	bh=D7Xxxq2ivM89ftLoZFcKndJliveYXABeKvga5jeIPxo=;
+	s=mail; t=1660859242;
+	bh=4gpnxl75xpqaey0GgS05hQ2JXOenf1aNFuT3t037TNI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fn/n1YBEsHBcu+LaJsjFsogd/ABNi3DMfgFN131nKkah3nhbwwNPXWIJRNXQmPWQc
-	 QI7NxHqEz4NyyCwsmZT2QS2t/kPI6BsTyznD1SReSwnehkgg02CHT+Wk6YctN0D594
-	 iR68Wtm20Wb3TW4BA9pfXWr5V1rVGOfO6oSD+Y28nIHpdq0RBC81qRMksa/MA6mPcO
-	 SZfvev3HUHczAAVJH763JL7VNi5fZBrFhGR5e8VtkrSPp8cTjjWbCVKRjJ8KVcdfyw
-	 nrmVxwyWPErx1FknD8YmKHkJmnHtch7rQLY+olK/OhJMeoDtziOurhObeWJj9SB6mQ
-	 +xBtvs2WQe/zA==
-Date: Thu, 18 Aug 2022 16:42:31 -0400
+	b=EBmaQbanWlisUZo1v/tUYoK4/8bd1j2jFm+u8dfqyZyuoSE/phFCvdoPoFPZhKznK
+	 nPeMwAmGGLT5K17WA4PUxXe0K1C348e+lgDNFTWzgzFIM9aVaP9DzGGaWCova5fRSw
+	 p4DLeWH/351NFNk74MtG0Pp+P6P+JGvL4vePwP79wuPrh9+HdDpPPAJXlBnQHW3joR
+	 WfLEjwp6fINYl9EkAFnP+iMaFp318UG778MjeJ/iBvJr4xqscK80dGDR47Id72M6OF
+	 3nQzJxx9bIMXimOoL56w8Lt+vvTtpq8SvlxQRYDIKjC2dKF9bEHyy3ghx6TFTQ5gPO
+	 97/mIlif/FRJA==
+Date: Thu, 18 Aug 2022 17:47:15 -0400
 From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
 To: "Nancy.Lin" <nancy.lin@mediatek.com>
 Cc: Rob Herring <robh+dt@kernel.org>,
@@ -39,11 +39,11 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev, singo.chang@mediatek.com,
 	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v25 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Message-ID: <20220818204231.zvq6tipjyzen33oi@notapiano>
-References: <20220804072827.22383-1-nancy.lin@mediatek.com>
- <20220804072827.22383-2-nancy.lin@mediatek.com>
+Subject: Re: [PATCH v25 07/10] soc: mediatek: mmsys: add mmsys for support 64
+ reset bits
+Message-ID: <20220818214715.spbyic34szubx3gi@notapiano>
+References: <20220711075245.10492-1-nancy.lin@mediatek.com>
+ <20220711075245.10492-8-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,30 +53,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804072827.22383-2-nancy.lin@mediatek.com>
+In-Reply-To: <20220711075245.10492-8-nancy.lin@mediatek.com>
 
 Hi Nancy,
 
-On Thu, Aug 04, 2022 at 03:28:21PM +0800, Nancy.Lin wrote:
-> Add vdosys1 ETHDR definition.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno
->  <angelogioacchino.delregno@collabora.com>
+On Mon, Jul 11, 2022 at 03:52:42PM +0800, Nancy.Lin wrote:
+[..]
+>  static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
+>  	.clk_driver = "clk-mt2701-mm",
+>  	.routes = mmsys_default_routing_table,
+> @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
+>  	.routes = mmsys_default_routing_table,
+>  	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+>  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>  };
+>  
+>  static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
+> @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+>  	.routes = mmsys_mt8183_routing_table,
+>  	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+>  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>  };
+>  
+>  static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
+> @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
+>  	.routes = mmsys_mt8186_routing_table,
+>  	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+>  	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>  };
+[..]
+> @@ -351,18 +362,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	spin_lock_init(&mmsys->lock);
+> -
+> -	mmsys->rcdev.owner = THIS_MODULE;
+> -	mmsys->rcdev.nr_resets = 32;
 
-Some line-wrapping happened to your patch when sending, so it's corrupted and
-won't apply:
+The number of resets was previously always set to 32, and now you're instead
+setting it based on num_resets from each machine. The issue is, you're
+forgetting a bunch of them.
 
-	$ b4 am https://lore.kernel.org/all/20220804072827.22383-1-nancy.lin@mediatek.com/
-	$ git am ./v25_20220804_nancy_lin_add_mediatek_soc_drm_vdosys1_support_for_mt8195.mbx
-	Applying: dt-bindings: mediatek: add ethdr definition for mt8195
-	error: corrupt patch at line 228
-
-Fix whatever causes this in your setup and re-send. Tinghan also had this issue
-recently [1].
-
-[1] https://lore.kernel.org/all/96e66425-ff2a-4640-8b96-48fa39943bf9@linaro.org/
+mt8192 didn't get a num_reset, so this commit breaks the display on mt8192 based
+devices. But mt8192 isn't the only one, there are other platforms missing this
+property. Please set num_resets to 32 in every single one of them, otherwise
+there will be display regressions.
 
 Thanks,
 Nícolas
