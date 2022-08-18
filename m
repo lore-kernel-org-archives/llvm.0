@@ -1,112 +1,82 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378C37B
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 20:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660852932; x=1692388932;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hK4joLjW67roEfSg9L3o4RSW3LVg032fexmMiJB4qHE=;
-  b=QpIt3Q3Id1cZTSAA6y44m8rbr3wJwcTPpiAoz6vVfr37uXyg1UpJSfav
-   3Z39x6gMgPfW022CXZISOyl2oJLqrd+qQsfYgPUaVT+aI7ywpGYWBocOW
-   fe6+ZMcCh56K+VMyDBMl9j6T+EbQ6MUHD5lZLUoio5CSOCPcc3KvRyqRt
-   Wy7vCR3ZDLtOIGJ1WZ+W0P8LvpQ0SpTrb3He4TATEdDURd9/vAGuglUch
-   O23/FT4WfyDvQCKPiejHBZgRFtDySWLpz3kwO3T0+CuoIr8bROzmUJpy+
-   DRl/6LUm87LS/3xu1iR1DNsNyF0MXsl28dVzUcWTZiI+uyh0V91vHhwo5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="273250322"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="273250322"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 13:02:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="734179034"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2022 13:02:07 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oOliR-0000WH-01;
-	Thu, 18 Aug 2022 20:02:07 +0000
-Date: Fri, 19 Aug 2022 04:01:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-	netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
-Message-ID: <202208190318.HygywK17-lkp@intel.com>
-References: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2962F22
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 20:42:38 +0000 (UTC)
+Received: from notapiano (unknown [70.107.189.129])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id DBE626601BF4;
+	Thu, 18 Aug 2022 21:42:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1660855357;
+	bh=D7Xxxq2ivM89ftLoZFcKndJliveYXABeKvga5jeIPxo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Fn/n1YBEsHBcu+LaJsjFsogd/ABNi3DMfgFN131nKkah3nhbwwNPXWIJRNXQmPWQc
+	 QI7NxHqEz4NyyCwsmZT2QS2t/kPI6BsTyznD1SReSwnehkgg02CHT+Wk6YctN0D594
+	 iR68Wtm20Wb3TW4BA9pfXWr5V1rVGOfO6oSD+Y28nIHpdq0RBC81qRMksa/MA6mPcO
+	 SZfvev3HUHczAAVJH763JL7VNi5fZBrFhGR5e8VtkrSPp8cTjjWbCVKRjJ8KVcdfyw
+	 nrmVxwyWPErx1FknD8YmKHkJmnHtch7rQLY+olK/OhJMeoDtziOurhObeWJj9SB6mQ
+	 +xBtvs2WQe/zA==
+Date: Thu, 18 Aug 2022 16:42:31 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, singo.chang@mediatek.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v25 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
+Message-ID: <20220818204231.zvq6tipjyzen33oi@notapiano>
+References: <20220804072827.22383-1-nancy.lin@mediatek.com>
+ <20220804072827.22383-2-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804072827.22383-2-nancy.lin@mediatek.com>
 
-Hi Daniel,
+Hi Nancy,
 
-Thank you for the patch! Yet something to improve:
+On Thu, Aug 04, 2022 at 03:28:21PM +0800, Nancy.Lin wrote:
+> Add vdosys1 ETHDR definition.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno
+>  <angelogioacchino.delregno@collabora.com>
 
-[auto build test ERROR on bpf-next/master]
+Some line-wrapping happened to your patch when sending, so it's corrupted and
+won't apply:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220819/202208190318.HygywK17-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/c7b21d163eb9c61514dd86baf4281deb4d4387bb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
-        git checkout c7b21d163eb9c61514dd86baf4281deb4d4387bb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+	$ b4 am https://lore.kernel.org/all/20220804072827.22383-1-nancy.lin@mediatek.com/
+	$ git am ./v25_20220804_nancy_lin_add_mediatek_soc_drm_vdosys1_support_for_mt8195.mbx
+	Applying: dt-bindings: mediatek: add ethdr definition for mt8195
+	error: corrupt patch at line 228
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fix whatever causes this in your setup and re-send. Tinghan also had this issue
+recently [1].
 
-All errors (new ones prefixed by >>):
+[1] https://lore.kernel.org/all/96e66425-ff2a-4640-8b96-48fa39943bf9@linaro.org/
 
->> net/core/filter.c:8723:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-                          ^
-   net/core/filter.c:8797:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-                          ^
-   2 errors generated.
-
-
-vim +/btf_struct_access +8723 net/core/filter.c
-
-  8714	
-  8715	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
-  8716						const struct btf *btf,
-  8717						const struct btf_type *t, int off,
-  8718						int size, enum bpf_access_type atype,
-  8719						u32 *next_btf_id,
-  8720						enum bpf_type_flag *flag)
-  8721	{
-  8722		if (atype == BPF_READ)
-> 8723			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-  8724						 flag);
-  8725	
-  8726		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
-  8727						      next_btf_id, flag);
-  8728	}
-  8729	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Nícolas
