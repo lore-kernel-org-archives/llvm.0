@@ -1,65 +1,83 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE91C3C1D
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 11:17:46 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id w19so2613292ejc.7
-        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 04:17:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA9F3C35
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 11:40:08 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id k9so1448108wri.0
+        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 04:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
-        b=YCwY2+ZOwZePVXHIed870W0AMBgz2YE11uL8soFdD2/JiKrKB7+vx5++xVceVEdfv4
-         f+3HWdO1z9ehFa6qO4t68/0/LzqpthaY/C6NCXUI1zp4UheqE64y4qTyK2KQzD2tnFiO
-         jIAkKAGKTeTAnV0OdfZwZoG5dGzccmnChgDjGByCmSXCxjOJFDalhFBdk4jGtDTd4TKT
-         VOiT1pJizr8p3mr9rGhr8Cc9eWbUZVB+oclTSvJGwHNQ+rXa16IgiG7190sjPR99Xski
-         vSwf/zjuFbcqVkEyDGyc7mHpL89dRdJkK4PhO4CY3g0nCTgARc+BXL5F18pAu+RVAyMu
-         1+RQ==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=39duid3ev/LklZ+L3Q00JhOed86Qz5pMIsoTXShBt20=;
+        b=aYZUv7/DTyZT2pKIFoyT0w8jIQNcI+zpJ0aMVwE8I04L9AcMtzi9f+rT7QaNFYhmwA
+         qd4IDfpMSEeydsN8bgWSL801fnfmEHBYegk/xVQXL0n6W6GmX+0mW7/XmCfU+377t6mv
+         ylqKwyDxd5j7PU0bFcHN3RL2c5J8+j7JSxD6LjvJ7YwSHPQTAC6g4eYAHDbrrVPCddoL
+         wKBKnjSwRYX18YORcwkSWyTqYIjPvPnuE6g3DPKafms1p5PPqhmGVghU8pSl+8s8dKFe
+         bGfbMyY9uFJ0blWdX53SvtOYSfrNszaPyyHovYoJYMa+vXD6sdoT1pW/zU11Twx1R7cN
+         bm1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
-        b=6HzVNovkC308rF/tFQhVUGHx77S+1Ik6nFp83FhJjc226mPRMSoVQFbXVHp8IF/Z/B
-         IqetvMxvVF027VYmPvI0WU9n3V3dIarMShl83I9TPTK2ZWTAjvT/RWiDZ1KnH7Z8sqku
-         UDVKoGSVxAbNLwOo0vEg78d2xtkilFnQCng3WCnx0X02r0N08wBrL/SaeLqCCwzkLMyA
-         yWOxw6x5Y9fgorDloUAqES8VubStSVZq95JSqx3FGbDwtNqcwim6kwwCcvJD3RbAJLE6
-         Fdz6q6wQw/TIhoT5KX7vnxow9CdmHuFba+lh88dFCWh12F0YzmcaFB7cpdgNStVAa/Ka
-         ZNDQ==
-X-Gm-Message-State: ACgBeo0Gj8DYawyLtOd2sDXQw+FnIspkY3iBAzSrk+FFVMnK/IjbdbMK
-	MLQOSST7xmelfIGokTkwtFu3Bisc11SVwx5Fh7fLBA==
-X-Google-Smtp-Source: AA6agR5b8bP+fivEf8sWhn4cjq7X6RpjZuI0sL1iRR2iThKSe11tnOp6MF2tDz+lsllpLbtZOzvSG3NbTnoaTALTQtY=
-X-Received: by 2002:a17:907:6d98:b0:731:2bb3:8e17 with SMTP id
- sb24-20020a1709076d9800b007312bb38e17mr1597869ejc.203.1660821465138; Thu, 18
- Aug 2022 04:17:45 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=39duid3ev/LklZ+L3Q00JhOed86Qz5pMIsoTXShBt20=;
+        b=KSW99bJpxl42OCfeM2Lx9wgWuMN5+1xz68CnNpSZ+0trvllOOsJaiHoeWeqwpRnNe1
+         m/nKxVpjs8ehNBda8KNA+jZE+Tj2fNlL2L+6I2UCCIkxUqiGmaebzPHofRkiz2vFfpxH
+         P6Par9nHmZexmauM/Da4A4G3f7P5h/i0lTF0EbGa4sfGrAkwrepdnKoArTR7YmPQrMAT
+         0tAhCoF9Hs4yVtUrGQjy/F2r9VqLp+zNc8ChMt+0sP95vqkn56c20LNFhtyZ8TjxI8A1
+         oRAW4obw/O6B/hyplFYut3OeqEqD11S1VrNKYjWPUw0MZCC5zVhHMiOnnUM52MM4NF1w
+         fwDA==
+X-Gm-Message-State: ACgBeo2iuGOu1JY2wvYljRTBHecLIvW/Yq+TQvleiUOQWsRK7XI5Lv2g
+	S4oRGit++LYZwFzcVcKMCTY=
+X-Google-Smtp-Source: AA6agR5XGcrPcCTucmMNTTVJjePtpk2URT/+5LvA1qYXREbgCp1yEieKssKuUeSmXOyebR58PIKgyg==
+X-Received: by 2002:adf:fc08:0:b0:21e:d133:3500 with SMTP id i8-20020adffc08000000b0021ed1333500mr1487297wrr.353.1660822806671;
+        Thu, 18 Aug 2022 04:40:06 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id r5-20020a05600c35c500b003a5b6086381sm5337183wmq.48.2022.08.18.04.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 04:40:06 -0700 (PDT)
+Date: Thu, 18 Aug 2022 12:40:04 +0100
+From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To: Chih-Kang Chang <gary.chang@realtek.com>,
+	Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>
+Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: build failure of next-20220818 due to 341dd1f7de4c ("wifi: rtw88:
+ add the update channel flow to support setting by parameters")
+Message-ID: <Yv4lFKIoek8Fhv44@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202208180333.1pfLpmaj-lkp@intel.com>
-In-Reply-To: <202208180333.1pfLpmaj-lkp@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 18 Aug 2022 13:17:34 +0200
-Message-ID: <CACRpkdYkRL0Yavgrg378Kte3mpeCTXoPu-Wnr0T7deNDyt2zoA@mail.gmail.com>
-Subject: Re: [broonie-regmap:for-next 4/4] include/asm-generic/io.h:187:18:
- error: redefinition of 'readb'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 17, 2022 at 9:53 PM kernel test robot <lkp@intel.com> wrote:
+Hi All,
 
->    In file included from arch/hexagon/include/asm/io.h:311:
-> >> include/asm-generic/io.h:187:18: error: redefinition of 'readb'
->    static inline u8 readb(const volatile void __iomem *addr)
->                     ^
+Not sure if it has been reported, clang builds of arm64 allmodconfig have
+failed to build next-20220818 with the error:
 
-Aha. I'll hunt down a hexagon cross compiler and provide a fix on top
-of the regmap tree for-next.
+drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'primary_channel_idx' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+        default:
+        ^~~~~~~
+drivers/net/wireless/realtek/rtw88/main.c:754:39: note: uninitialized use occurs here
+        hal->current_primary_channel_index = primary_channel_idx;
+                                             ^~~~~~~~~~~~~~~~~~~
 
-Yours,
-Linus Walleij
+git bisect pointed to 341dd1f7de4c ("wifi: rtw88: add the update channel flow to support setting by parameters").
+And, reverting that commit has fixed the build failure.
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+--
+Regards
+Sudip
