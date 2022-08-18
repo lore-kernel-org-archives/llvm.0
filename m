@@ -1,53 +1,46 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C75346B2
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 19:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378C37B
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 20:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660851128; x=1692387128;
+  t=1660852932; x=1692388932;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=j5aa8Bz4WTZLjYv/eCo4jooseNT5Z+r4Y3IYqy1YzIw=;
-  b=cRi6oNh37bIKtP3fZauO/qFjQ9hz95ggb0D02PDZaDtLo4ti1w6BbTH/
-   7qK9WBdpAGAy3G6Fy62sb/5XbWLClZZAPdk49jT0n78ZmVUjUuXzZCo81
-   xMwEy2o4Y+dA6B1imFY767yy1+bg4mYWz+yv/mHasFpOPg8IaGoBll3it
-   Dzb5tBf+GzBrUo9LCTgkGnL43PIuuT1/cnt9hpIujcOt9f1+cmVTodQsJ
-   aDunEZ3ifepaLpLtI7dRv7FgESg5m464RJZH+WyAi8s22oZN1vJUMv8+Y
-   vOJLxN5n1uy9XYjsu+gr0L/5SQBoVhnYJHIlk4OWZJVZsWTfk0YXnILjg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="275899378"
+  bh=hK4joLjW67roEfSg9L3o4RSW3LVg032fexmMiJB4qHE=;
+  b=QpIt3Q3Id1cZTSAA6y44m8rbr3wJwcTPpiAoz6vVfr37uXyg1UpJSfav
+   3Z39x6gMgPfW022CXZISOyl2oJLqrd+qQsfYgPUaVT+aI7ywpGYWBocOW
+   fe6+ZMcCh56K+VMyDBMl9j6T+EbQ6MUHD5lZLUoio5CSOCPcc3KvRyqRt
+   Wy7vCR3ZDLtOIGJ1WZ+W0P8LvpQ0SpTrb3He4TATEdDURd9/vAGuglUch
+   O23/FT4WfyDvQCKPiejHBZgRFtDySWLpz3kwO3T0+CuoIr8bROzmUJpy+
+   DRl/6LUm87LS/3xu1iR1DNsNyF0MXsl28dVzUcWTZiI+uyh0V91vHhwo5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="273250322"
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="275899378"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:32:08 -0700
+   d="scan'208";a="273250322"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 13:02:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="783891296"
+   d="scan'208";a="734179034"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Aug 2022 12:32:04 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2022 13:02:07 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oOlFM-0000T9-0S;
-	Thu, 18 Aug 2022 19:32:04 +0000
-Date: Fri, 19 Aug 2022 03:31:03 +0800
+	id 1oOliR-0000WH-01;
+	Thu, 18 Aug 2022 20:02:07 +0000
+Date: Fri, 19 Aug 2022 04:01:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Anderson <sean.anderson@seco.com>, netdev@vger.kernel.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>
+To: Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Vladimir Oltean <olteanv@gmail.com>, linux-kernel@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alexandru Marginean <alexandru.marginean@nxp.com>,
-	Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [PATCH net-next v4 08/10] net: phylink: Adjust advertisement
- based on rate adaptation
-Message-ID: <202208190347.I3rrGqW3-lkp@intel.com>
-References: <20220818164616.2064242-9-sean.anderson@seco.com>
+	Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+	netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
+Message-ID: <202208190318.HygywK17-lkp@intel.com>
+References: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,186 +49,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818164616.2064242-9-sean.anderson@seco.com>
+In-Reply-To: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
 
-Hi Sean,
+Hi Daniel,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220819-005121
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e34cfee65ec891a319ce79797dda18083af33a76
-config: arm-randconfig-r026-20220818 (https://download.01.org/0day-ci/archive/20220819/202208190347.I3rrGqW3-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220819/202208190318.HygywK17-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/f4857d8d4f852b1cc3ae278785c209a7a0da0f67
+        # https://github.com/intel-lab-lkp/linux/commit/c7b21d163eb9c61514dd86baf4281deb4d4387bb
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220819-005121
-        git checkout f4857d8d4f852b1cc3ae278785c209a7a0da0f67
+        git fetch --no-tags linux-review Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
+        git checkout c7b21d163eb9c61514dd86baf4281deb4d4387bb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/phy/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/phy/phylink.c:543:7: error: call to undeclared function 'phylink_cap_from_speed_duplex'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                       phylink_cap_from_speed_duplex(max_speed, DUPLEX_FULL)) {
-                       ^
-   drivers/net/phy/phylink.c:559:7: error: call to undeclared function 'phylink_cap_from_speed_duplex'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                       phylink_cap_from_speed_duplex(max_speed, DUPLEX_HALF)) {
-                       ^
+>> net/core/filter.c:8723:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+                          ^
+   net/core/filter.c:8797:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+                          ^
    2 errors generated.
 
 
-vim +/phylink_cap_from_speed_duplex +543 drivers/net/phy/phylink.c
+vim +/btf_struct_access +8723 net/core/filter.c
 
-   431	
-   432	/**
-   433	 * phylink_get_capabilities() - get capabilities for a given MAC
-   434	 * @interface: phy interface mode defined by &typedef phy_interface_t
-   435	 * @mac_capabilities: bitmask of MAC capabilities
-   436	 * @rate_adaptation: type of rate adaptation being performed
-   437	 *
-   438	 * Get the MAC capabilities that are supported by the @interface mode and
-   439	 * @mac_capabilities.
-   440	 */
-   441	unsigned long phylink_get_capabilities(phy_interface_t interface,
-   442					       unsigned long mac_capabilities,
-   443					       int rate_adaptation)
-   444	{
-   445		int max_speed = phylink_interface_max_speed(interface);
-   446		unsigned long caps = MAC_SYM_PAUSE | MAC_ASYM_PAUSE;
-   447		unsigned long adapted_caps = 0;
-   448	
-   449		switch (interface) {
-   450		case PHY_INTERFACE_MODE_USXGMII:
-   451			caps |= MAC_10000FD | MAC_5000FD | MAC_2500FD;
-   452			fallthrough;
-   453	
-   454		case PHY_INTERFACE_MODE_RGMII_TXID:
-   455		case PHY_INTERFACE_MODE_RGMII_RXID:
-   456		case PHY_INTERFACE_MODE_RGMII_ID:
-   457		case PHY_INTERFACE_MODE_RGMII:
-   458		case PHY_INTERFACE_MODE_QSGMII:
-   459		case PHY_INTERFACE_MODE_SGMII:
-   460		case PHY_INTERFACE_MODE_GMII:
-   461			caps |= MAC_1000HD | MAC_1000FD;
-   462			fallthrough;
-   463	
-   464		case PHY_INTERFACE_MODE_REVRMII:
-   465		case PHY_INTERFACE_MODE_RMII:
-   466		case PHY_INTERFACE_MODE_SMII:
-   467		case PHY_INTERFACE_MODE_REVMII:
-   468		case PHY_INTERFACE_MODE_MII:
-   469			caps |= MAC_10HD | MAC_10FD;
-   470			fallthrough;
-   471	
-   472		case PHY_INTERFACE_MODE_100BASEX:
-   473			caps |= MAC_100HD | MAC_100FD;
-   474			break;
-   475	
-   476		case PHY_INTERFACE_MODE_TBI:
-   477		case PHY_INTERFACE_MODE_MOCA:
-   478		case PHY_INTERFACE_MODE_RTBI:
-   479		case PHY_INTERFACE_MODE_1000BASEX:
-   480			caps |= MAC_1000HD;
-   481			fallthrough;
-   482		case PHY_INTERFACE_MODE_1000BASEKX:
-   483		case PHY_INTERFACE_MODE_TRGMII:
-   484			caps |= MAC_1000FD;
-   485			break;
-   486	
-   487		case PHY_INTERFACE_MODE_2500BASEX:
-   488			caps |= MAC_2500FD;
-   489			break;
-   490	
-   491		case PHY_INTERFACE_MODE_5GBASER:
-   492			caps |= MAC_5000FD;
-   493			break;
-   494	
-   495		case PHY_INTERFACE_MODE_XGMII:
-   496		case PHY_INTERFACE_MODE_RXAUI:
-   497		case PHY_INTERFACE_MODE_XAUI:
-   498		case PHY_INTERFACE_MODE_10GBASER:
-   499		case PHY_INTERFACE_MODE_10GKR:
-   500			caps |= MAC_10000FD;
-   501			break;
-   502	
-   503		case PHY_INTERFACE_MODE_25GBASER:
-   504			caps |= MAC_25000FD;
-   505			break;
-   506	
-   507		case PHY_INTERFACE_MODE_XLGMII:
-   508			caps |= MAC_40000FD;
-   509			break;
-   510	
-   511		case PHY_INTERFACE_MODE_INTERNAL:
-   512			caps |= ~0;
-   513			break;
-   514	
-   515		case PHY_INTERFACE_MODE_NA:
-   516		case PHY_INTERFACE_MODE_MAX:
-   517			break;
-   518		}
-   519	
-   520		switch (rate_adaptation) {
-   521		case RATE_ADAPT_OPEN_LOOP:
-   522			/* TODO */
-   523			fallthrough;
-   524		case RATE_ADAPT_NONE:
-   525			adapted_caps = 0;
-   526			break;
-   527		case RATE_ADAPT_PAUSE: {
-   528			/* The MAC must support asymmetric pause towards the local
-   529			 * device for this. We could allow just symmetric pause, but
-   530			 * then we might have to renegotiate if the link partner
-   531			 * doesn't support pause. This is because there's no way to
-   532			 * accept pause frames without transmitting them if we only
-   533			 * support symmetric pause.
-   534			 */
-   535			if (!(mac_capabilities & MAC_SYM_PAUSE) ||
-   536			    !(mac_capabilities & MAC_ASYM_PAUSE))
-   537				break;
-   538	
-   539			/* We can't adapt if the MAC doesn't support the interface's
-   540			 * max speed at full duplex.
-   541			 */
-   542			if (mac_capabilities &
- > 543			    phylink_cap_from_speed_duplex(max_speed, DUPLEX_FULL)) {
-   544				/* Although a duplex-adapting phy might exist, we
-   545				 * conservatively remove these modes because the MAC
-   546				 * will not be aware of the half-duplex nature of the
-   547				 * link.
-   548				 */
-   549				adapted_caps = GENMASK(__fls(caps), __fls(MAC_10HD));
-   550				adapted_caps &= ~(MAC_1000HD | MAC_100HD | MAC_10HD);
-   551			}
-   552			break;
-   553		}
-   554		case RATE_ADAPT_CRS:
-   555			/* The MAC must support half duplex at the interface's max
-   556			 * speed.
-   557			 */
-   558			if (mac_capabilities &
-   559			    phylink_cap_from_speed_duplex(max_speed, DUPLEX_HALF)) {
-   560				adapted_caps = GENMASK(__fls(caps), __fls(MAC_10HD));
-   561				adapted_caps &= mac_capabilities;
-   562			}
-   563			break;
-   564		}
-   565	
-   566		return (caps & mac_capabilities) | adapted_caps;
-   567	}
-   568	EXPORT_SYMBOL_GPL(phylink_get_capabilities);
-   569	
+  8714	
+  8715	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
+  8716						const struct btf *btf,
+  8717						const struct btf_type *t, int off,
+  8718						int size, enum bpf_access_type atype,
+  8719						u32 *next_btf_id,
+  8720						enum bpf_type_flag *flag)
+  8721	{
+  8722		if (atype == BPF_READ)
+> 8723			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+  8724						 flag);
+  8725	
+  8726		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
+  8727						      next_btf_id, flag);
+  8728	}
+  8729	
 
 -- 
 0-DAY CI Kernel Test Service
