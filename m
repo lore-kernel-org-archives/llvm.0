@@ -1,201 +1,311 @@
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED224699
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 18:17:26 +0000 (UTC)
-Received: by mail-vs1-f42.google.com with SMTP id z185so2310471vsb.4
-        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 11:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rT2H7zlcI3RbMs94rTqf1TBmQjKXhRQAfwkbwmUxhx8=;
-        b=ZAe8Fo690UR35gXYrC8n1f6/45PnTs0JqPtd/wzOqd21vWG8HzQqnUef38dnjI+jIo
-         F/AF3v6Go4ZhQy72p3BLVZ9xq1OM/OjXCeqaFXW+JjQeDXrr0C+vAA2luAnzsiZ05IZG
-         uuofD+JCbEEFQvKGcSU6Zm59tINvNljz/buqfNO4Jvk8342/bQ3dFu7G9B+R8nT9Z6Ei
-         HlCJXTJC3OWgwntsTuf+AR1j0Wq2z+FZfgwCWnAWuXyZOvfKMx1jKHzomLG4L74Qd90Y
-         I2qZ1eQ9SPy8Hh+oiQmkmn1fZsEU7atoma6CQbCywU2aoxKcsVpKJ6AcQiRaWSAzI5VD
-         EvXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rT2H7zlcI3RbMs94rTqf1TBmQjKXhRQAfwkbwmUxhx8=;
-        b=fvCPNOR0zBDCwqehKfDDRjetgob0TfphJDWY+sjmIfR0ZuBbMiu+HAZJC2a3R4Nwho
-         bLjYYrh/RvErl6b8o26oTep9xFR1STDRQVCkXkQJVmwH02N/ECUyHJ6l66IMBKKsFHfR
-         Zt0FQ8RVRCcfvvMRjnrPxe8I5NcsvCxb2/XXBwyrpvdZBfiSQfuBCM83NnN1m8Fk1O6O
-         o8qeWFu3n5p+GsvwHpjSapCUz4aTu45U5EZBUWBtp+UYZ8qDZyNi0VcpCGt4+pSDdcdy
-         yKC8OuS0i+RLYiDhlNeLljqZTwIEww3ZVEcVDPprXNVjjDQtNWAWNs8+HBdhEuBgZH/F
-         weXw==
-X-Gm-Message-State: ACgBeo0fZRf+hxWFmXtbs1yVLLo1lLba6Of+vP7QNETkv4aDgOUwOsds
-	/KhFaLlUSSlAgzEpcveaMGMSDHY2OKLG+reQxCgSYQ==
-X-Google-Smtp-Source: AA6agR5+uj3uGbdRY155vc58puxQAjmKpFPCCn8f/lDMgE/7pqVk3fGVMYvkjQkSYIi/zK78CfDGYqSChiTxMLjRj1Q=
-X-Received: by 2002:a67:d105:0:b0:38d:c73d:fe21 with SMTP id
- u5-20020a67d105000000b0038dc73dfe21mr1675728vsi.36.1660846645628; Thu, 18 Aug
- 2022 11:17:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3E37B
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 19:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660851127; x=1692387127;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ek5IqYX+bKNFUtYq9X05isuDAUFHxFw32/iXVOIytRs=;
+  b=TyI92WokEXdjEhHJ5/E01Kga8lUF9zJAeHUhvdu6SYbcP5AVaVAfB/9i
+   rZqkc6Q5oYNB/8J5GC0yXAQxaN1LgFEIP3NMOOdRkOEWxBEN8FibwrMfC
+   M7wdIjXUrd6SqFE4mqz/cjI32bQpCwRSUKZ5AjXw672j652G6pr/Z53ZV
+   IvjBXXh0WNg7iaDPFMmfQRwotbtXKLASl0CbDwCrBCAICodL9DtenGGae
+   nJkHc1g1avxR9gSrb1dFABikpH8TaxAU6c2LC35u5NZeEeqh45whXaa7i
+   9ZH0+40qfla6vvr/pZF76WDBYwXvDR0032eiTdwnA6c0knLEeo8Kgz7nZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="354591030"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="354591030"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:32:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="558665972"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Aug 2022 12:32:04 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oOlFM-0000TB-0b;
+	Thu, 18 Aug 2022 19:32:04 +0000
+Date: Fri, 19 Aug 2022 03:31:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: net/ipv6/seg6_local.c:43:8: warning: Excessive padding in 'struct
+ seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields
+ order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider
+ reordering the fields or adding explicit p...
+Message-ID: <202208190350.HZ1vBJzy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-6-irogers@google.com>
- <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com>
-In-Reply-To: <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 18 Aug 2022 11:17:14 -0700
-Message-ID: <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
-	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
-	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
-	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
-	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
-	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
-	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-perf-users <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Aug 18, 2022 at 9:41 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Add annotations to describe lock behavior. Add missing unlocks to
-> > perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
-> > analysis cannot follow pointers through local variables.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-sched.c | 8 ++++++++
-> >  tools/perf/builtin-top.c   | 5 +++--
-> >  2 files changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> > index 0f52f73be896..a8a765ed28ce 100644
-> > --- a/tools/perf/builtin-sched.c
-> > +++ b/tools/perf/builtin-sched.c
-> > @@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
-> >  }
-> >
-> >  static void create_tasks(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> > +       EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> >  {
-> >         struct task_desc *task;
-> >         pthread_attr_t attr;
-> > @@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void wait_for_tasks(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >         u64 cpu_usage_0, cpu_usage_1;
-> >         struct task_desc *task;
-> > @@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void run_one_test(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >         u64 T0, T1, delta, avg_delta, fluct;
-> >
-> > @@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
-> >         for (i = 0; i < sched->replay_repeat; i++)
-> >                 run_one_test(sched);
-> >
-> > +       mutex_unlock(&sched->start_work_mutex);
-> > +       mutex_unlock(&sched->work_done_wait_mutex);
->
-> But this would wake up the replay tasks and let them burn cpus unnecessarily.
-> Maybe we can make them exit at the moment.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   573ae4f13f630d6660008f1974c0a8a29c30e18a
+commit: cfdf64a03406351a9d6c1fe568a141a9a85d4710 seg6: add callbacks for customizing the creation/destruction of a behavior
+date:   1 year, 8 months ago
+config: riscv-randconfig-c006-20220815 (https://download.01.org/0day-ci/archive/20220819/202208190350.HZ1vBJzy-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cfdf64a03406351a9d6c1fe568a141a9a85d4710
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout cfdf64a03406351a9d6c1fe568a141a9a85d4710
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
 
-I think I've stumbled on a can of worms. Why would you spin and not
-use a condition variable? Anyway, I can remove this by just saying
-this function leaves these locked.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >         return 0;
-> >  }
-> >
-> > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > index 3757292bfe86..e832f04e3076 100644
-> > --- a/tools/perf/builtin-top.c
-> > +++ b/tools/perf/builtin-top.c
-> > @@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
-> >                                         struct hist_entry *he,
-> >                                         struct perf_sample *sample,
-> >                                         struct evsel *evsel, u64 ip)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
-> >  {
-> >         struct annotation *notes;
-> >         struct symbol *sym = he->ms.sym;
-> > @@ -724,13 +725,13 @@ static void *display_thread(void *arg)
-> >  static int hist_iter__top_callback(struct hist_entry_iter *iter,
-> >                                    struct addr_location *al, bool single,
-> >                                    void *arg)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
-> >  {
-> >         struct perf_top *top = arg;
-> > -       struct hist_entry *he = iter->he;
-> >         struct evsel *evsel = iter->evsel;
-> >
-> >         if (perf_hpp_list.sym && single)
-> > -               perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-> > +               perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
-> >
-> >         hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
-> >                      !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
->
-> Looks like a separate change.
+clang-analyzer warnings: (new ones prefixed by >>)
+                       ^~~~~
+   drivers/memstick/core/ms_block.c:1762:2: note: Taking false branch
+           dbg("Parallel mode supported: %d", !!(msb->caps & MEMSTICK_CAP_PAR4));
+           ^
+   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
+   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
+                                           ^
+   drivers/memstick/core/ms_block.h:279:3: note: expanded from macro '__dbg'
+                   if (debug >= level) \
+                   ^
+   drivers/memstick/core/ms_block.c:1762:2: note: Loop condition is false.  Exiting loop
+           dbg("Parallel mode supported: %d", !!(msb->caps & MEMSTICK_CAP_PAR4));
+           ^
+   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
+   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
+                                           ^
+   drivers/memstick/core/ms_block.h:278:2: note: expanded from macro '__dbg'
+           do { \
+           ^
+   drivers/memstick/core/ms_block.c:1763:2: note: 'debug' is < 1
+           dbg("Read only: %d", msb->read_only);
+           ^
+   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
+   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.h:279:7: note: expanded from macro '__dbg'
+                   if (debug >= level) \
+                       ^~~~~
+   drivers/memstick/core/ms_block.c:1763:2: note: Taking false branch
+           dbg("Read only: %d", msb->read_only);
+           ^
+   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
+   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
+                                           ^
+   drivers/memstick/core/ms_block.h:279:3: note: expanded from macro '__dbg'
+                   if (debug >= level) \
+                   ^
+   drivers/memstick/core/ms_block.c:1763:2: note: Loop condition is false.  Exiting loop
+           dbg("Read only: %d", msb->read_only);
+           ^
+   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
+   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
+                                           ^
+   drivers/memstick/core/ms_block.h:278:2: note: expanded from macro '__dbg'
+           do { \
+           ^
+   drivers/memstick/core/ms_block.c:1772:6: note: 'error' is 0
+           if (error)
+               ^~~~~
+   drivers/memstick/core/ms_block.c:1772:2: note: Taking false branch
+           if (error)
+           ^
+   drivers/memstick/core/ms_block.c:1775:10: note: Calling 'msb_ftl_initialize'
+           error = msb_ftl_initialize(msb);
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1332:6: note: Assuming field 'ftl_initialized' is false
+           if (msb->ftl_initialized)
+               ^~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1332:2: note: Taking false branch
+           if (msb->ftl_initialized)
+           ^
+   drivers/memstick/core/ms_block.c:1344:6: note: Assuming field 'used_blocks_bitmap' is null
+           if (!msb->used_blocks_bitmap || !msb->lba_to_pba_table ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1344:31: note: Left side of '||' is true
+           if (!msb->used_blocks_bitmap || !msb->lba_to_pba_table ||
+                                        ^
+   drivers/memstick/core/ms_block.c:1347:3: note: Memory is released
+                   kfree(msb->lba_to_pba_table);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1775:10: note: Returning; memory was released
+           error = msb_ftl_initialize(msb);
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1776:6: note: 'error' is -12
+           if (error)
+               ^~~~~
+   drivers/memstick/core/ms_block.c:1776:2: note: Taking true branch
+           if (error)
+           ^
+   drivers/memstick/core/ms_block.c:2180:7: note: Returning; memory was released
+           rc = msb_init_card(card);
+                ^~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:2181:6: note: 'rc' is -12
+           if (rc)
+               ^~
+   drivers/memstick/core/ms_block.c:2181:2: note: Taking true branch
+           if (rc)
+           ^
+   drivers/memstick/core/ms_block.c:2182:3: note: Control jumps to line 2192
+                   goto out_free;
+                   ^
+   drivers/memstick/core/ms_block.c:2193:2: note: Calling 'msb_data_clear'
+           msb_data_clear(msb);
+           ^~~~~~~~~~~~~~~~~~~
+   drivers/memstick/core/ms_block.c:1957:2: note: Attempt to free released memory
+           kfree(msb->lba_to_pba_table);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 8 warnings (8 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> net/ipv6/seg6_local.c:43:8: warning: Excessive padding in 'struct seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct seg6_action_desc {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   net/ipv6/seg6_local.c:43:8: note: Excessive padding in 'struct seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider reordering the fields or adding explicit padding members
+   struct seg6_action_desc {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (16 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   19 warnings generated.
+   net/ipv6/ip6_vti.c:194:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
+           strcpy(t->parms.name, dev->name);
+           ^~~~~~
+   net/ipv6/ip6_vti.c:194:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
+           strcpy(t->parms.name, dev->name);
+           ^~~~~~
+   net/ipv6/ip6_vti.c:849:4: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+                           err = vti6_update(t, &p1, false);
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ipv6/ip6_vti.c:849:4: note: Value stored to 'err' is never read
+                           err = vti6_update(t, &p1, false);
+                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ipv6/ip6_vti.c:1166:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
+           strcpy(t->parms.name, ip6n->fb_tnl_dev->name);
+           ^~~~~~
+   net/ipv6/ip6_vti.c:1166:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
+           strcpy(t->parms.name, ip6n->fb_tnl_dev->name);
+           ^~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   net/atm/common.c:238:2: warning: Assigned value is garbage or undefined [clang-analyzer-core.uninitialized.Assign]
+           skb_queue_walk_safe(&queue, skb, tmp) {
+           ^
+   include/linux/skbuff.h:3459:33: note: expanded from macro 'skb_queue_walk_safe'
+                   for (skb = (queue)->next, tmp = skb->next;                      \
+                                                 ^ ~~~~~~~~~
+   net/atm/common.c:231:2: note: Calling '__skb_queue_head_init'
+           __skb_queue_head_init(&queue);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/atm/common.c:231:2: note: Returning from '__skb_queue_head_init'
+           __skb_queue_head_init(&queue);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/atm/common.c:234:2: note: Loop condition is false.  Exiting loop
+           spin_lock_irqsave(&rq->lock, flags);
+           ^
+   include/linux/spinlock.h:384:2: note: expanded from macro 'spin_lock_irqsave'
+           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+           ^
+   include/linux/spinlock.h:250:2: note: expanded from macro 'raw_spin_lock_irqsave'
+           do {                                            \
+           ^
+   net/atm/common.c:234:2: note: Loop condition is false.  Exiting loop
+           spin_lock_irqsave(&rq->lock, flags);
+           ^
+   include/linux/spinlock.h:382:43: note: expanded from macro 'spin_lock_irqsave'
+   #define spin_lock_irqsave(lock, flags)                          \
+                                                                   ^
+   net/atm/common.c:235:2: note: Calling 'skb_queue_splice_init'
+           skb_queue_splice_init(rq, &queue);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/skbuff.h:1957:6: note: Assuming the condition is false
+           if (!skb_queue_empty(list)) {
+               ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/skbuff.h:1957:2: note: Taking false branch
+           if (!skb_queue_empty(list)) {
+           ^
+   net/atm/common.c:235:2: note: Returning from 'skb_queue_splice_init'
+           skb_queue_splice_init(rq, &queue);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/atm/common.c:238:2: note: Assigned value is garbage or undefined
+           skb_queue_walk_safe(&queue, skb, tmp) {
+           ^
+   include/linux/skbuff.h:3459:33: note: expanded from macro 'skb_queue_walk_safe'
+                   for (skb = (queue)->next, tmp = skb->next;                      \
 
-This is subtle and relates to how the thread safety pass in clang is
-implemented. I'll waffle but the TL;DR is that without this change we
-can't enable Wthread-safety so I'd say it is part of the same change.
-The waffley bit:
+vim +43 net/ipv6/seg6_local.c
 
-Thread safety checking puts the annotation on to the variable and not
-the type. We know that:
-const char *x = "hi";
-char *y = x;
-will give a compile time error on the assignment to y as const-ness
-was lost. With the thread safety checks you could have:
-char *x PT_GUARDED_BY(lock) = ...;
-char *y = x;
-And if you used x without holding "lock" you'd get an error but you
-wouldn't get the same error from y, even though behind the scenes it
-is the same memory. It is the same case here, on entry we know that
-"iter->he->hists->lock" is held but the assignment to "he" means clang
-doesn't know that "he->hists->lock" is held. This then fails the check
-on perf_top__record_precise_ip that the lock be held as we pass "he"
-rather than "iter->he".
+cfdf64a03406351 Andrea Mayer 2020-12-02  42  
+d1df6fd8a1d22d3 David Lebrun 2017-08-05 @43  struct seg6_action_desc {
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  44  	int action;
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  45  	unsigned long attrs;
+0a3021f1d4e553d Andrea Mayer 2020-12-02  46  
+0a3021f1d4e553d Andrea Mayer 2020-12-02  47  	/* The optattrs field is used for specifying all the optional
+0a3021f1d4e553d Andrea Mayer 2020-12-02  48  	 * attributes supported by a specific behavior.
+0a3021f1d4e553d Andrea Mayer 2020-12-02  49  	 * It means that if one of these attributes is not provided in the
+0a3021f1d4e553d Andrea Mayer 2020-12-02  50  	 * netlink message during the behavior creation, no errors will be
+0a3021f1d4e553d Andrea Mayer 2020-12-02  51  	 * returned to the userspace.
+0a3021f1d4e553d Andrea Mayer 2020-12-02  52  	 *
+0a3021f1d4e553d Andrea Mayer 2020-12-02  53  	 * Each attribute can be only of two types (mutually exclusive):
+0a3021f1d4e553d Andrea Mayer 2020-12-02  54  	 * 1) required or 2) optional.
+0a3021f1d4e553d Andrea Mayer 2020-12-02  55  	 * Every user MUST obey to this rule! If you set an attribute as
+0a3021f1d4e553d Andrea Mayer 2020-12-02  56  	 * required the same attribute CANNOT be set as optional and vice
+0a3021f1d4e553d Andrea Mayer 2020-12-02  57  	 * versa.
+0a3021f1d4e553d Andrea Mayer 2020-12-02  58  	 */
+0a3021f1d4e553d Andrea Mayer 2020-12-02  59  	unsigned long optattrs;
+0a3021f1d4e553d Andrea Mayer 2020-12-02  60  
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  61  	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  62  	int static_headroom;
+cfdf64a03406351 Andrea Mayer 2020-12-02  63  
+cfdf64a03406351 Andrea Mayer 2020-12-02  64  	struct seg6_local_lwtunnel_ops slwt_ops;
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  65  };
+d1df6fd8a1d22d3 David Lebrun 2017-08-05  66  
 
-Thanks,
-Ian
+:::::: The code at line 43 was first introduced by commit
+:::::: d1df6fd8a1d22d37cffa0075ab8ad423ce656777 ipv6: sr: define core operations for seg6local lightweight tunnel
 
-> Thanks,
-> Namhyung
->
->
-> > --
-> > 2.37.1.595.g718a3a8f04-goog
-> >
+:::::: TO: David Lebrun <david.lebrun@uclouvain.be>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
