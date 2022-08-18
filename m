@@ -1,49 +1,37 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573ED23CD
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 07:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660809519; x=1692345519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZkYsJyWoE3iamxvXBLDRveMD2fLKX3azr/jNrlg8M1s=;
-  b=IGPiOJsFkQlAldDqmRyCjjOiMB9XB6OrwVDqCxOBVjes+kixoeXS9v2v
-   wji9mwfdZ0Fw5N9EFGaIw0aJ+o2VtWtBec0ijexVo0SKVyv9nsw9UptEt
-   A7Si7f1vekB9wDfQBT4HFXRTeybDbiaPOFIwd/Oi+BClBHFlr0itcXIU+
-   6cUQd/i3ucIsrdzq3HE7oRLjkTC0eLagk7PfIb5waPCrGU90N8jRsb/CS
-   Hwh2fBiZ3UGfhQivet5wmwfWwzY0W6gc4lgFZ/5kkiBTnQmNNa8BIBwnF
-   iWCvu2jDv+t+kYmshwnRATivjEY8URbstsBHkP79oDbl0+rpY6OymioMV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="378987338"
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="378987338"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 00:58:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="607735232"
-Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2022 00:58:35 -0700
-Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oOaQE-0000Dv-2p;
-	Thu, 18 Aug 2022 07:58:34 +0000
-Date: Thu, 18 Aug 2022 15:58:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: guoren@kernel.org, xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
-	heiko@sntech.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, liaochang1@huawei.com,
-	mick@ics.forth.gr, jszhang@kernel.org,
-	Guo Ren <guoren@linux.alibaba.com>,
-	AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
- percpu crash_save_cpu
-Message-ID: <202208181520.fYQOePu6-lkp@intel.com>
-References: <20220816012701.561435-3-guoren@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F67823CD
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 08:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=0WDxrfmpMQZzXx9CVRCybqD/x6pT8kyfE3mZ4TXsYpg=; b=PzsrIjQqIrXWU/HCnE5RvcgMEv
+	jSDsHlj/qNilblrmnmM4l0NorDTJkm6ZUS649TPpvEHnsZIwJtQesH8n1PrFnJTvwIzBxmRcOmq7m
+	0WK0XyEBmp8dwK60Nj12OUsygPerCTOCKxhJYIFoPTAbUSSX3l06wXl3xRnJDXdd7sgYsBX0Nwm/y
+	F57w7Px3An5LW91jqSFpmUk6ns1z9JMX9En3WOC3SAzm7Y2qCjJ/gJR7qg6LYJ4JMqImqSFWEHitM
+	h9b6PxD95ZPr3rsFOpDEnR2I8StyQXpUhzf/a0edNT9e4QtKwcW8labUHDywKX9DykGXCD7l/Qkms
+	rNipSmbg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oOaSa-009Us4-AL; Thu, 18 Aug 2022 08:01:00 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 604BA9801D4; Thu, 18 Aug 2022 10:00:59 +0200 (CEST)
+Date: Thu, 18 Aug 2022 10:00:59 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
+ GCC-only block
+Message-ID: <Yv3xu7f3NDC1is6o@worktop.programming.kicks-ass.net>
+References: <20220817185410.1174782-1-nathan@kernel.org>
+ <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
+ <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,74 +40,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816012701.561435-3-guoren@kernel.org>
+In-Reply-To: <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
 
-Hi,
+On Thu, Aug 18, 2022 at 09:45:39AM +0200, Peter Zijlstra wrote:
 
-I love your patch! Yet something to improve:
+> The thing to do is boot with (warning, *very* verbose):
+> 
+> 	"spectre_v2=retpoline,lfence debug-alternative"
+> 
+> and observe that the retpoline sites all replace:
+> 
+> 	"cs call __x86_indirect_thunk_r11" (6 bytes)
+> 
+> with:
+> 
+> 	"lfence; jmp *%r11" (6 bytes)
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc1 next-20220818]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+		^^ call, ofc, unless the original was jmp then jmp...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: riscv-randconfig-r035-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181520.fYQOePu6-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
-        git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+/me goes get more morning juice in an attempt to wake up.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/riscv/kernel/machine_kexec.c:217:7: error: call to undeclared function 'smp_crash_stop_failed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           WARN(smp_crash_stop_failed(),
-                ^
-   1 error generated.
-
-
-vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
-
-   193	
-   194	/*
-   195	 * machine_kexec - Jump to the loaded kimage
-   196	 *
-   197	 * This function is called by kernel_kexec which is called by the
-   198	 * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
-   199	 * or by crash_kernel which is called by the kernel's arch-specific
-   200	 * trap handler in case of a kernel panic. It's the final stage of
-   201	 * the kexec process where the pre-loaded kimage is ready to be
-   202	 * executed. We assume at this point that all other harts are
-   203	 * suspended and this hart will be the new boot hart.
-   204	 */
-   205	void __noreturn
-   206	machine_kexec(struct kimage *image)
-   207	{
-   208		struct kimage_arch *internal = &image->arch;
-   209		unsigned long jump_addr = (unsigned long) image->start;
-   210		unsigned long first_ind_entry = (unsigned long) &image->head;
-   211		unsigned long this_cpu_id = __smp_processor_id();
-   212		unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
-   213		unsigned long fdt_addr = internal->fdt_addr;
-   214		void *control_code_buffer = page_address(image->control_code_page);
-   215		riscv_kexec_method kexec_method = NULL;
-   216	
- > 217		WARN(smp_crash_stop_failed(),
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> 
+> This being clang, you'll ofcourse still have a few weird:
+> 
+> 	"Jcc.d32 __x86_indirect_thunk_r11"
+> 
+> sites that will not be able to be replaced, but there's nothing I can do
+> about that other than to continue to encourage y'all to stop emitting
+> them ;-)
