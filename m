@@ -1,171 +1,159 @@
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D672F3D
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 16:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660840895; x=1692376895;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A62wNNnyRHyyzxZ6tSE+cebI/CQZDEfNq/drzCzLzj8=;
-  b=DP0FQuPyPAcl0JLeuSlxpZh+heIXLMXTcp1fDdgmOmwxpQ83bFAV9YMu
-   iFJ8Ov7EsFjWRHot5dKpY+VB742wZLw4+p7LXjGkprittLwW4F3oM6FzC
-   TWbeIxY+IaD+BhbMPCfS3P3IBa90GNgBiSoKWlkogNU81ruomPCTUdkaL
-   0=;
-X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
-   d="scan'208";a="219007245"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 16:41:16 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-	by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id 9F1FF44E57;
-	Thu, 18 Aug 2022 16:41:14 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 18 Aug 2022 16:41:14 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.158) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 18 Aug 2022 16:41:11 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <nathan@kernel.org>
-CC: <davem@davemloft.net>, <edumazet@google.com>, <kbuild-all@lists.01.org>,
-	<kuba@kernel.org>, <kuniyu@amazon.com>, <lkp@intel.com>,
-	<llvm@lists.linux.dev>, <netdev@vger.kernel.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH v2 net 13/17] net: Fix data-races around sysctl_fb_tunnels_only_for_init_net.
-Date: Thu, 18 Aug 2022 09:41:04 -0700
-Message-ID: <20220818164104.33802-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <Yv5nd3cVX2ZKysC/@dev-arch.thelio-3990X>
-References: <Yv5nd3cVX2ZKysC/@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6685443F
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 16:41:56 +0000 (UTC)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so2397593fac.7
+        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 09:41:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=TxrZFV8dUb259eoEHCfR6GzbKO/Pq7sBw8UepmiQD0I=;
+        b=OnTabSMbcxLNGmyVtNgGPMiW4rnbbdYmE7ovF44ov+KvV64rX8vVHSmeKDr6yva93K
+         hDTSkjvgcTX2HbaK8Z0CoQXx1NC7bkT/4H27c27s1TiyKuOkRJbLGpxIaPtLvKZ1fAvD
+         pJSUTP0xViicJ5RTVmUcArbvst3wRPDT0wQGrtwoxPwj3PIWVG0bVbMdC95mPqwEjCqq
+         3kPTAqHKFNFUHMJ0Ln2ce1M4/SPjNiEU11oTJlr0vzlQfS38rfjMin681//bglXHtHFr
+         ct4etExM3SWNK49X8QTxsGGCfJVXc3HXkjAHQSQvdsAHrEhtKpCTactIvNudLSyzpRPT
+         kRYA==
+X-Gm-Message-State: ACgBeo2obsEBie5tFRpZgy9fUqhMxjFJFLFYZmWZRN/zVWvhzedfg7Z7
+	Tnvx17Kr6l0nxUiqAnugug9FbuKKeE/Y15C1p7k=
+X-Google-Smtp-Source: AA6agR4toXcD4OdN15w3bGskhC2TqAiqVZ0qIKUDZWBfePKQ0n7SI0sdS+hjXr8PL6yzZUuFV7WnaLb9+j9k3OtvJgA=
+X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
+ em4-20020a0568705b8400b0010cd1fa2f52mr1855071oab.92.1660840915842; Thu, 18
+ Aug 2022 09:41:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.158]
-X-ClientProxiedBy: EX13D45UWA001.ant.amazon.com (10.43.160.91) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-Precedence: Bulk
+References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-6-irogers@google.com>
+In-Reply-To: <20220817053930.769840-6-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Thu, 18 Aug 2022 09:41:44 -0700
+Message-ID: <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com>
+Subject: Re: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
+	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
+	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
+	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
+	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
+	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
+	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Thu, 18 Aug 2022 09:23:19 -0700
-> On Thu, Aug 18, 2022 at 08:01:54AM -0700, Kuniyuki Iwashima wrote:
-> > From:   kernel test robot <lkp@intel.com>
-> > Date:   Thu, 18 Aug 2022 16:51:37 +0800
-> > > Hi Kuniyuki,
-> > > 
-> > > Thank you for the patch! Yet something to improve:
-> > > 
-> > > [auto build test ERROR on net/master]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git fc4aaf9fb3c99bcb326d52f9d320ed5680bd1cee
-> > > config: riscv-randconfig-r032-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181615.Lu9xjiEv-lkp@intel.com/config)
-> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install riscv cross compiling tool for clang build
-> > >         # apt-get install binutils-riscv64-linux-gnu
-> > >         # https://github.com/intel-lab-lkp/linux/commit/6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
-> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > >         git fetch --no-tags linux-review Kuniyuki-Iwashima/net-sysctl-Fix-data-races-around-net-core-XXX/20220818-115941
-> > >         git checkout 6bc3dfb3dc4862f4e00ba93c45cd5c0251b85d5b
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> ld.lld: error: undefined symbol: sysctl_fb_tunnels_only_for_init_net
-> > >    >>> referenced by ip_tunnel.c
-> > >    >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
-> > >    >>> referenced by ip_tunnel.c
-> > >    >>>               ipv4/ip_tunnel.o:(ip_tunnel_init_net) in archive net/built-in.a
-> > 
-> > Hmm... I tested allmodconfig with x86_64 but it seems not enough...
-> > 
-> > I don't think just using READ_ONCE() causes regression.
-> > Is this really regression or always-broken stuff in some arch,
-> > or ... clang 16?
-> > 
-> > Anyway, I'll take a look.
-> 
-> You'll see the same error with the same configuration and GCC:
-> 
-> riscv64-linux-gnu-ld: net/ipv4/ip_tunnel.o: in function `.L536':
-> ip_tunnel.c:(.text+0x1d4a): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> riscv64-linux-gnu-ld: ip_tunnel.c:(.text+0x1d4e): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> 
-> $ scripts/config --file build/riscv/.config -s SYSCTL
-> undef
-> 
-> Prior to your change, the '!IS_ENABLED(CONFIG_SYSCTL)' would cause
-> net_has_fallback_tunnels() to unconditionally 'return 1' in the
-> CONFIG_SYSCTL=n case,
+On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Add annotations to describe lock behavior. Add missing unlocks to
+> perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
+> analysis cannot follow pointers through local variables.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-sched.c | 8 ++++++++
+>  tools/perf/builtin-top.c   | 5 +++--
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index 0f52f73be896..a8a765ed28ce 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
+>  }
+>
+>  static void create_tasks(struct perf_sched *sched)
+> +       EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+> +       EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+>  {
+>         struct task_desc *task;
+>         pthread_attr_t attr;
+> @@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
+>  }
+>
+>  static void wait_for_tasks(struct perf_sched *sched)
+> +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>  {
+>         u64 cpu_usage_0, cpu_usage_1;
+>         struct task_desc *task;
+> @@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+>  }
+>
+>  static void run_one_test(struct perf_sched *sched)
+> +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>  {
+>         u64 T0, T1, delta, avg_delta, fluct;
+>
+> @@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
+>         for (i = 0; i < sched->replay_repeat; i++)
+>                 run_one_test(sched);
+>
+> +       mutex_unlock(&sched->start_work_mutex);
+> +       mutex_unlock(&sched->work_done_wait_mutex);
 
-Yes, you are right.
-I've just noticed it and this fixed the error.
-Also, I did the same mistake in the 14th patch...
-Thank you, Nathan!
-
----8<---
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 2563d30736e9..78dd63a5c7c8 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -640,9 +640,14 @@ extern int sysctl_devconf_inherit_init_net;
-  */
- static inline bool net_has_fallback_tunnels(const struct net *net)
- {
--	return !IS_ENABLED(CONFIG_SYSCTL) ||
--	       !sysctl_fb_tunnels_only_for_init_net ||
--	       (net == &init_net && sysctl_fb_tunnels_only_for_init_net == 1);
-+#if IS_ENABLED(CONFIG_SYSCTL)
-+	int fb_tunnels_only_for_init_net = READ_ONCE(sysctl_fb_tunnels_only_for_init_net);
-+
-+	return !fb_tunnels_only_for_init_net ||
-+		(net_eq(net, &init_net) && fb_tunnels_only_for_init_net == 1);
-+#else
-+	return true;
-+#endif
- }
- 
- static inline int netdev_queue_numa_node_read(const struct netdev_queue *q)
----8<---
+But this would wake up the replay tasks and let them burn cpus unnecessarily.
+Maybe we can make them exit at the moment.
 
 
-> meaning 'fb_tunnels_only_for_init_net' was never
-> emitted in the final assembly so the linker would not complain about it
-> never being defined (the kernel relies on this trick a lot, which is why
-> you cannot build the kernel with -O0).
-> 
-> After your change, sysctl_fb_tunnels_only_for_init_net is
-> unconditionally used but it is only defined in sysctl_net_core.c, which
-> is only built when CONFIG_SYSCTL=y, hence the link error.
-> 
-> I suspect hoisting '!IS_ENABLED(CONFIG_SYSCTL)' out of the return into
-> its own conditional would fix the error:
-> 
->   static inline bool net_has_fallback_tunnels(const struct net *net)
->   {
->       int fb_tunnels_only_for_init_net;
-> 
->       if (!IS_ENABLED(CONFIG_SYSCTL))
->           return true;
-> 
->       fb_tunnels_only_for_init_net = READ_ONCE(sysctl_fb_tunnels_only_for_init_net);
-> 
->       return !fb_tunnels_only_for_init_net ||
->              (net == &init_net && fb_tunnels_only_for_init_net == 1)
->   }
-> 
-> Cheers,
-> Nathan
+>         return 0;
+>  }
+>
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index 3757292bfe86..e832f04e3076 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
+>                                         struct hist_entry *he,
+>                                         struct perf_sample *sample,
+>                                         struct evsel *evsel, u64 ip)
+> +       EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
+>  {
+>         struct annotation *notes;
+>         struct symbol *sym = he->ms.sym;
+> @@ -724,13 +725,13 @@ static void *display_thread(void *arg)
+>  static int hist_iter__top_callback(struct hist_entry_iter *iter,
+>                                    struct addr_location *al, bool single,
+>                                    void *arg)
+> +       EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
+>  {
+>         struct perf_top *top = arg;
+> -       struct hist_entry *he = iter->he;
+>         struct evsel *evsel = iter->evsel;
+>
+>         if (perf_hpp_list.sym && single)
+> -               perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
+> +               perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
+>
+>         hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
+>                      !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
+
+Looks like a separate change.
+
+Thanks,
+Namhyung
+
+
+> --
+> 2.37.1.595.g718a3a8f04-goog
+>
