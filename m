@@ -1,102 +1,217 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01077477
-	for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 23:40:15 +0000 (UTC)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11be650aaccso61498fac.6
-        for <llvm@lists.linux.dev>; Wed, 17 Aug 2022 16:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=daKNlzUlISpXfRKkkWFRtUiXLBWJavrHYfPtjh2uJpI=;
-        b=Iyf3cvO5rvbYqgr6PC43xyQOHandKHxgBfbSVZfHQBKStNgP7AeUDKY/AvYIjcwuil
-         gKDQAf8L1+FMfiFm2F0R/yvNGiqdvVeB4ZwTVZ6Xpil+4bKPW+IR4fPS6bmXUIrlQ61E
-         IGeqh/9AkEgJj6Dq6du9u8QTJ+bhiKPRbLZSrVQyF04WUTEU+6Joiv1/DbnGLh9SKhhL
-         Ift+3z2ymfxPk3OTDS3+kav9uoNPM0gwRn7U4HmCq0/v3ZPAgg6D7T61Ho84BuNHEjrp
-         ql5EZMemsXl7nWH//eVAkD2PnKz6jNfyWHtK5ycOvbg1N71VudGoGhk2kSSfiKdPpnxt
-         nKgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=daKNlzUlISpXfRKkkWFRtUiXLBWJavrHYfPtjh2uJpI=;
-        b=xgQgrTp0wMUB6/5BveHLKPXyGtEW5bSuJYb6ASRDc+DF0gncALeGlBCg0p3o0RS4Lt
-         YMivcMrn37VPEi8xTYcwB35d6Vq68pP0WZ54b5ZVxWCGsSlU7EYErRwcksgud5bntm/J
-         FSTqlVq703U3kuIhlCBAO5oytlT3feNBmu/XKTzjOc+Tgs9yp1modcTM80hnocB8A5hX
-         rd2tjq/RBFlzlVLEik9oel6ZAb2j4W6LMuqCf7wdhwrgnLAd7amh6ax/LmDGDj40Yj6D
-         r+fPFcHyonMjvA67Bb1tNQNXGCRX/OLiikE/7ZomVv/t+0bVgCLKomqqe+ZhBTxxLTdv
-         3igw==
-X-Gm-Message-State: ACgBeo16jeBH96KBwDt8czanvI0ieBygwsvitWtXsI3xxjrP06Wkjmj1
-	GehlBT5FfHUyLYHzzM9vSnLkoap5YaDBQp/HBWwF3g==
-X-Google-Smtp-Source: AA6agR7JztkGz0UiDLQonDNB7R4KJt4JkbhowjaMaCqhJe0/FNsjgPRFr1i6NaE3WNeRyGl0QT/y2yPeL2tieH7qkMQ=
-X-Received: by 2002:a05:6870:5b86:b0:11c:67ba:71dc with SMTP id
- em6-20020a0568705b8600b0011c67ba71dcmr1969668oab.289.1660779614640; Wed, 17
- Aug 2022 16:40:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE30315AE
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 00:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1660782701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=203DRcvyaTDoYNfX/I15M5iWAx5TYwoX0dHBVCoZZ0Y=;
+	b=ilHi9Ju/eWwmX5k4/hT1Pwec6L568OuzV2G2SsCkPlSU+taW9GRHFRDB8ZMlYw4combVXT
+	dn74QfTWw77ueGvTmIbqjT3JMcNc/gVWHgMtxuCkvXPqkCmwhtcJqnkVcdD5b0vTRgapUy
+	kPG/VcmEy9gRfuMkDCFw0K8DF3V5b8g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-TJL-37LuMQexs3VhjSEHpg-1; Wed, 17 Aug 2022 20:31:40 -0400
+X-MC-Unique: TJL-37LuMQexs3VhjSEHpg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B0658032FB
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 00:31:40 +0000 (UTC)
+Received: from [172.64.10.10] (unknown [10.30.33.221])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id EF051492C3B;
+	Thu, 18 Aug 2022 00:31:39 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 6.0.0-rc1
+ (mainline.kernel.org-clang) [274a2eeb]
+Date: Thu, 18 Aug 2022 00:31:38 -0000
+CC: xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1659635174-2376-1-git-send-email-quic_gurus@quicinc.com>
-In-Reply-To: <1659635174-2376-1-git-send-email-quic_gurus@quicinc.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 17 Aug 2022 16:40:01 -0700
-Message-ID: <CAKwvOdnbMs-pLRfo4O-MHOF=9=kAvDuktkeeeX7bkmnLi8LWnw@mail.gmail.com>
-Subject: Re: [PATCH] scripts/clang-tools: Remove DeprecatedOrUnsafeBufferHandling
- check
-To: Guru Das Srinagesh <quic_gurus@quicinc.com>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Elliot Berman <quic_eberman@quicinc.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Message-Id: <70516.122081720314000536@us-mta-596.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 4, 2022 at 10:46 AM Guru Das Srinagesh
-<quic_gurus@quicinc.com> wrote:
->
-> This `clang-analyzer` check flags the use of memset(), suggesting a more
-> secure version of the API, such as memset_s(), which does not exist in
-> the kernel:
->
->   warning: Call to function 'memset' is insecure as it does not provide
->   security checks introduced in the C11 standard. Replace with analogous
->   functions that support length arguments or provides boundary checks such
->   as 'memset_s' in case of C11
->   [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
->
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> ---
->  scripts/clang-tools/run-clang-tools.py | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-> index f754415a..1337ced 100755
-> --- a/scripts/clang-tools/run-clang-tools.py
-> +++ b/scripts/clang-tools/run-clang-tools.py
-> @@ -51,6 +51,7 @@ def run_analysis(entry):
->          checks += "linuxkernel-*"
->      else:
->          checks += "clang-analyzer-*"
-> +        checks += ",-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
+Hi, we tested your kernel and here are the results:
 
-Thanks for the patch! I think it makes sense to add this.  I suspect
-the list of checks we might want to disable may grow. Maybe when it
-does, we could put these in an array and join them at the end.
-
-Anyways, LGTM
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Masahiro, would you mind picking this up for us, please?
-
->      p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
->                         stdout=subprocess.PIPE,
->                         stderr=subprocess.STDOUT,
-> --
-> 2.7.4
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
--- 
-Thanks,
-~Nick Desaulniers
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51018
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4843196
+          x86_64 - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4843393
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
+            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
+NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
+bsystem for controller nvme0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1274
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
+ed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1354
+            Affected tests:
+                 aarch64 - Libkcapi AF_ALG test
+                   s390x - Libkcapi AF_ALG test
+                  x86_64 - Libkcapi AF_ALG test
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                  x86_64 - kdump - sysrq-c
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
+tablished after max reconnecting reached
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
+            Affected tests:
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
+gument
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1352
+            Affected tests:
+                   s390x - selinux-policy: serge-testsuite
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Storage - software RAID testing
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
