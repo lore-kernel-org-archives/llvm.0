@@ -1,110 +1,127 @@
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50F534405
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 13:00:48 +0000 (UTC)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27ICwCR51029865, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27ICwCR51029865
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-	Thu, 18 Aug 2022 20:58:12 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 18 Aug 2022 20:58:25 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 18 Aug 2022 20:58:24 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
- RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
- 15.01.2375.007; Thu, 18 Aug 2022 20:58:24 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: "arnd@kernel.org" <arnd@kernel.org>,
-        "sudipm.mukherjee@gmail.com"
-	<sudipm.mukherjee@gmail.com>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-next@vger.kernel.org"
-	<linux-next@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "tony0620emma@gmail.com"
-	<tony0620emma@gmail.com>,
-        "linux-wireless@vger.kernel.org"
-	<linux-wireless@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com"
-	<edumazet@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Gary Chang <gary.chang@realtek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>
-Subject: Re: build failure of next-20220818 due to 341dd1f7de4c ("wifi: rtw88: add the update channel flow to support setting by parameters")
-Thread-Topic: build failure of next-20220818 due to 341dd1f7de4c ("wifi:
- rtw88: add the update channel flow to support setting by parameters")
-Thread-Index: AQHYsvdH+VODKjoKikSt5m62qYeAPq20BvSAgAARZQA=
-Date: Thu, 18 Aug 2022 12:58:24 +0000
-Message-ID: <d707e413e8dc3a615b64ca2e8941072f41143184.camel@realtek.com>
-References: <Yv4lFKIoek8Fhv44@debian>
-	 <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
-In-Reply-To: <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.85.133]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzgvMTgg5LiK5Y2IIDExOjAzOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <59B3755ACDCB28419BB1E779583124BD@realtek.com>
-Content-Transfer-Encoding: base64
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D53440F
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 13:17:53 +0000 (UTC)
+Received: by mail-wm1-f47.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso914874wmb.2
+        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 06:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0hMBZdmypFeE7nn9xpMgEu0GnAmxZ1jeqSSwSJUPNNw=;
+        b=rx/8KX1mx8pJRM89xEGW6NK8OKmkJd2/woep5gOqGBrN/7wCef8CijbpKqeuvkrDYH
+         w5swqrKMHXoMv7i14LzcSTZJ2MLuu9/I14kjsrvs9GjUEUeA0/P08z4yLkPgOJ9VDGtN
+         pt64OkRaZh8MkRfyO0I5R2Mta5tE2GNS2hZvV22yguSN3xkZjzQb1xusC3wVGapEw+x3
+         ffCmamFDmN3upQjRi3SO99qIXUUa3sJ4fcBhAeQOZwShAscwfy+2fMOCGt5l1tQqaFta
+         nzS1rjpyYyFrOG86aRO6hxDT7mQblkdXd14wXqSKrochgVcu1kGs5Vseao4cayI9iuEQ
+         esMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0hMBZdmypFeE7nn9xpMgEu0GnAmxZ1jeqSSwSJUPNNw=;
+        b=2Qu4ClMQGLIn0MeTOKRH/4I0LDkh7vqs2ZCKIEPyWELzy+6esRcUDWAE2R2CDlyUP6
+         8sBiPsIQPUcuZkboGBsYgWQEtA1VwYJ4md1j6fUVjQoRcAZU0X2s29XR/WFDxjPjU9Kq
+         hfXW2yJk0M9VD98uJNbyybghYCfcLyAD6ipjgEbjGFvo+6uv7KF4PX/t3B0A+s4022FB
+         2bTzInn+lJmw3btZY/SkuaY9Pk3oF/zgvql2OXoXEJYCKJGPCkYEd2WxKvZMpwAWV30V
+         GlRuKQ3FtTHMO/ikkYGegSGpMF8Mg+pIdu7dUU9KDGmdaICPA4/abyMnUmUoS3ksgK5g
+         HNNg==
+X-Gm-Message-State: ACgBeo28AVZlxsNAWdba6D40JiP8qEafDkE7XXAsOkBW7333UBF/BEcx
+	TnC0r3SAWU9oK108FDstLySDjQnCu4sTf72Oaag/BA==
+X-Google-Smtp-Source: AA6agR4P2W83lFoyy+21Wbj3xoywCVddVDI5GzAZccFnalAxynNAHBGH73Kr8DU9jGhKcsmqEpavY1+anpVqWP3s4UA=
+X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id
+ u8-20020a05600c19c800b003a5ec6a8d16mr5021369wmq.182.1660828670994; Thu, 18
+ Aug 2022 06:17:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-7-irogers@google.com>
+ <CAM9d7cgd-KsqJNxh_MbX9h4tr8rOtAqKe-t7Qfck0m9pTxWK7w@mail.gmail.com>
+In-Reply-To: <CAM9d7cgd-KsqJNxh_MbX9h4tr8rOtAqKe-t7Qfck0m9pTxWK7w@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 18 Aug 2022 06:17:38 -0700
+Message-ID: <CAP-5=fVVV8UPppzet7jwvrf9ig8RpWE1x4mxAJBAnuqbdSbP-Q@mail.gmail.com>
+Subject: Re: [PATCH v1 6/6] perf build: Enable -Wthread-safety with clang
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
+	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
+	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
+	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
+	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
+	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
+	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-T24gVGh1LCAyMDIyLTA4LTE4IGF0IDEzOjU2ICswMjAwLCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0K
-PiBPbiBUaHUsIEF1ZyAxOCwgMjAyMiBhdCAxOjQwIFBNIFN1ZGlwIE11a2hlcmplZSAoQ29kZXRo
-aW5rKQ0KPiA8c3VkaXBtLm11a2hlcmplZUBnbWFpbC5jb20+IHdyb3RlOg0KPiA+IEhpIEFsbCwN
-Cj4gPiANCj4gPiBOb3Qgc3VyZSBpZiBpdCBoYXMgYmVlbiByZXBvcnRlZCwgY2xhbmcgYnVpbGRz
-IG9mIGFybTY0IGFsbG1vZGNvbmZpZyBoYXZlDQo+ID4gZmFpbGVkIHRvIGJ1aWxkIG5leHQtMjAy
-MjA4MTggd2l0aCB0aGUgZXJyb3I6DQo+ID4gDQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVh
-bHRlay9ydHc4OC9tYWluLmM6NzMxOjI6IGVycm9yOiB2YXJpYWJsZSAncHJpbWFyeV9jaGFubmVs
-X2lkeCcgaXMgdXNlZA0KPiA+IHVuaW5pdGlhbGl6ZWQgd2hlbmV2ZXIgc3dpdGNoIGRlZmF1bHQg
-aXMgdGFrZW4gWy1XZXJyb3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gPiAgICAgICAg
-IGRlZmF1bHQ6DQo+ID4gICAgICAgICBefn5+fn5+DQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-cmVhbHRlay9ydHc4OC9tYWluLmM6NzU0OjM5OiBub3RlOiB1bmluaXRpYWxpemVkIHVzZSBvY2N1
-cnMgaGVyZQ0KPiA+ICAgICAgICAgaGFsLT5jdXJyZW50X3ByaW1hcnlfY2hhbm5lbF9pbmRleCA9
-IHByaW1hcnlfY2hhbm5lbF9pZHg7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fg0KPiA+IA0KPiA+IGdpdCBiaXNlY3Qg
-cG9pbnRlZCB0byAzNDFkZDFmN2RlNGMgKCJ3aWZpOiBydHc4ODogYWRkIHRoZSB1cGRhdGUgY2hh
-bm5lbCBmbG93IHRvIHN1cHBvcnQgc2V0dGluZw0KPiA+IGJ5IHBhcmFtZXRlcnMiKS4NCj4gPiBB
-bmQsIHJldmVydGluZyB0aGF0IGNvbW1pdCBoYXMgZml4ZWQgdGhlIGJ1aWxkIGZhaWx1cmUuDQo+
-ID4gDQo+ID4gSSB3aWxsIGJlIGhhcHB5IHRvIHRlc3QgYW55IHBhdGNoIG9yIHByb3ZpZGUgYW55
-IGV4dHJhIGxvZyBpZiBuZWVkZWQuDQo+IA0KPiBIaSBTdWRlZXAsDQo+IA0KPiBpbiBteSBleHBl
-cmllbmNlLCB5b3UgZ2V0IHRoZSBiZXN0IHJlc3VsdHMgYnkgcG9zdGluZyBhIHBhdGNoIGluc3Rl
-YWQNCj4gb2YgYSBidWcgcmVwb3J0DQo+IHdoZW4geW91IHNwb3QgYSBuZXcgd2FybmluZy4gSWYg
-eW91IGFyZSB1bnN1cmUgaXQncyB0aGUgcmlnaHQgZml4LA0KPiBqdXN0IHN0YXRlIHRoYXQNCj4g
-aW4gdGhlIGRlc2NyaXB0aW9uLiBUaGUgbWFpbnRhaW5lcnMgd2lsbCB0aGVuIGVpdGhlciBiZSBh
-YmxlIHRvIGp1c3QNCj4gcGljayBpdCB1cCBpZg0KPiBpdCBsb29rcyBjb3JyZWN0LCBvciBiZSBt
-b3RpdmF0ZWQgdG8gZG8gYSBiZXR0ZXIgcGF0Y2ggaWYgdGhleSBkb24ndA0KPiBsaWtlIGl0LiA7
-LSkNCj4gDQo+IEluIHRoaXMgY2FzZSwgSSB0aGluayB0aGUgYmVzdCBmaXggd291bGQgYmUgdG8g
-bWVyZ2VkIHRoZSAnZGVmYXVsdCcNCj4gd2l0aCB0aGUgJ2Nhc2UNCj4gUlRXX0NIQU5ORUxfV0lE
-VEhfMjAnIGluIHRoZSBzd2l0Y2ggc3RhdGVtZW50LCBhbmQgdXNlDQo+IFJUV19TQ19ET05UX0NB
-UkUuIE9mIGNvdXJzZSwgSSBoYXZlIG5vIGlkZWEgaWYgdGhhdCBpcyB0aGUgcmlnaHQgZml4LA0K
-PiBidXQgaXQgd291bGQgbWFrZSBzZW5zZS4NCj4gDQo+IEp1c3QgdHJ5IHRvIGF2b2lkIGFkZGlu
-ZyBpbml0aWFsaXphdGlvbnMgdG8gdGhlIHZhcmlhYmxlIGRlY2xhcmF0aW9uLCBhcyB0aGF0DQo+
-IHdvdWxkIHByZXZlbnQgdGhlIGNvbXBpbGVyIGZyb20gd2FybmluZyBpZiB0aGVyZSBpcyBhIG5l
-dyB1bmluaXRpYWxpemVkIHVzZS4NCj4gDQoNCkkgaGF2ZSBzZW50IGEgcGF0Y2ggdG8gZml4IHRo
-aXM6IA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2lyZWxlc3MvMjAyMjA4MTUwNjIw
-MDQuMjI5MjAtMS1wa3NoaWhAcmVhbHRlay5jb20vVC8jdQ0KDQpQaW5nLUtlDQoNCg0K
+On Wed, Aug 17, 2022, 11:11 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Ian,
+>
+> On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > If building with clang then enable -Wthread-safety warnings.
+>
+> Do you know the minimal supported version for the option?
+> I'm not sure we have a check for that kind of thing.
+
+
+It has been supported for a long time, close to 10 years. Looking
+around it looks like clang 3.5 had the support. For context, BPF was
+supported after clang 3.7. Given this long support, and we don't
+version check for BPF, I think it is okay to assume the flag is
+supported.
+
+Thanks,
+Ian
+
+>
+> Thanks,
+> Namhyung
+>
+>
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/Makefile.config | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index 0661a1cf9855..0ef6f572485d 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
+> >  CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+> >  HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+> >
+> > +# Enabled Wthread-safety analysis for clang builds.
+> > +ifeq ($(CC_NO_CLANG), 0)
+> > +  CFLAGS += -Wthread-safety
+> > +endif
+> > +
+> >  include $(srctree)/tools/scripts/Makefile.arch
+> >
+> >  $(call detected_var,SRCARCH)
+> > --
+> > 2.37.1.595.g718a3a8f04-goog
+> >
