@@ -1,191 +1,110 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996FF28F0
-	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 12:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660826448; x=1692362448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HyfQ3MAnDLuX/yCV8HS/ul1zmMufIrdLei+p/wgYtG8=;
-  b=gvqvzSjvipIHA6yJLDETMcXPzktmw2dStgTjzmgdBJRkSuN5XsJ7Rvt/
-   IWHjHSL2gKbt9+JjRAU6jL0S55iHoehi/MuOyUhfU/2jqeptSZCJTvQjV
-   H++OAaIJ0nI35q3K+Rl6soW8Yr9ZcaAkZG33MJZ1hqHpXxuuzyH+rzbel
-   BIi+B2ndE8KJpdwSzo93ZR36G+AegoBC94gZhO6/iEElg9zzxhlmI0thG
-   uF7fE4GMvB8yAtwTHuHxWFKCgoI1p/nlJF0hccGI+10x6CNjQWgIBFsVU
-   0BWmzUx/4L47ut9LZknm9bF64bgotDh+uWn6MRIFmjY/zHOP+e6fm6MQu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293537451"
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="293537451"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 05:40:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="935795830"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Aug 2022 05:40:46 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oOepK-00001z-0y;
-	Thu, 18 Aug 2022 12:40:46 +0000
-Date: Thu, 18 Aug 2022 20:40:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mattias Forsblad <mattias.forsblad@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC net-next PATCH 2/3] mv88e6xxx: Implement remote management
- support (RMU)
-Message-ID: <202208182008.s00O6DMN-lkp@intel.com>
-References: <20220818102924.287719-3-mattias.forsblad@gmail.com>
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50F534405
+	for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 13:00:48 +0000 (UTC)
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27ICwCR51029865, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27ICwCR51029865
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+	Thu, 18 Aug 2022 20:58:12 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 18 Aug 2022 20:58:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 18 Aug 2022 20:58:24 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
+ RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
+ 15.01.2375.007; Thu, 18 Aug 2022 20:58:24 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: "arnd@kernel.org" <arnd@kernel.org>,
+        "sudipm.mukherjee@gmail.com"
+	<sudipm.mukherjee@gmail.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-next@vger.kernel.org"
+	<linux-next@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "tony0620emma@gmail.com"
+	<tony0620emma@gmail.com>,
+        "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com"
+	<edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Gary Chang <gary.chang@realtek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>
+Subject: Re: build failure of next-20220818 due to 341dd1f7de4c ("wifi: rtw88: add the update channel flow to support setting by parameters")
+Thread-Topic: build failure of next-20220818 due to 341dd1f7de4c ("wifi:
+ rtw88: add the update channel flow to support setting by parameters")
+Thread-Index: AQHYsvdH+VODKjoKikSt5m62qYeAPq20BvSAgAARZQA=
+Date: Thu, 18 Aug 2022 12:58:24 +0000
+Message-ID: <d707e413e8dc3a615b64ca2e8941072f41143184.camel@realtek.com>
+References: <Yv4lFKIoek8Fhv44@debian>
+	 <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
+In-Reply-To: <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [125.224.85.133]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzgvMTgg5LiK5Y2IIDExOjAzOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <59B3755ACDCB28419BB1E779583124BD@realtek.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818102924.287719-3-mattias.forsblad@gmail.com>
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hi Mattias,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mattias-Forsblad/net-dsa-mv88e6xxx-Add-RMU-support/20220818-183122
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git e34cfee65ec891a319ce79797dda18083af33a76
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220818/202208182008.s00O6DMN-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8543f260de6b37602bb98a7c6646b97e2b94fba6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mattias-Forsblad/net-dsa-mv88e6xxx-Add-RMU-support/20220818-183122
-        git checkout 8543f260de6b37602bb98a7c6646b97e2b94fba6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/mv88e6xxx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/dsa/mv88e6xxx/rmu.c:147:21: warning: variable 'master' set but not used [-Wunused-but-set-variable]
-           struct net_device *master;
-                              ^
->> drivers/net/dsa/mv88e6xxx/rmu.c:211:5: warning: no previous prototype for function 'mv88e6xxx_rmu_stats_get' [-Wmissing-prototypes]
-   int mv88e6xxx_rmu_stats_get(struct mv88e6xxx_chip *chip, int port, uint64_t *data)
-       ^
-   drivers/net/dsa/mv88e6xxx/rmu.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mv88e6xxx_rmu_stats_get(struct mv88e6xxx_chip *chip, int port, uint64_t *data)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/mv88e6xxx_rmu_stats_get +211 drivers/net/dsa/mv88e6xxx/rmu.c
-
-   142	
-   143	static int mv88e6xxx_rmu_send_wait(struct mv88e6xxx_chip *chip, int port,
-   144					   int request, const char *msg, int len)
-   145	{
-   146		const struct dsa_port *dp;
- > 147		struct net_device *master;
-   148		int ret = 0;
-   149	
-   150		dp = dsa_to_port(chip->ds, port);
-   151		if (!dp)
-   152			return 0;
-   153	
-   154		master = dp->master;
-   155	
-   156		mutex_lock(&chip->rmu.mutex);
-   157	
-   158		chip->rmu.request_cmd = request;
-   159	
-   160		ret = mv88e6xxx_rmu_tx(chip, port, msg, len);
-   161		if (ret == -ENODEV) {
-   162			/* Device not ready yet? Try again later */
-   163			ret = 0;
-   164			goto out;
-   165		}
-   166	
-   167		if (ret) {
-   168			dev_err(chip->dev, "RMU: error transmitting request (%d)", ret);
-   169			goto out;
-   170		}
-   171	
-   172		ret = wait_for_completion_timeout(&chip->rmu.completion,
-   173						  msecs_to_jiffies(MV88E6XXX_WAIT_POLL_TIME_MS));
-   174		if (ret == 0) {
-   175			dev_err(chip->dev,
-   176				"RMU: timeout waiting for request %d (%d) on dev:port %d:%d\n",
-   177				request, ret, chip->ds->index, port);
-   178			ret = -ETIMEDOUT;
-   179		}
-   180	
-   181	out:
-   182		mutex_unlock(&chip->rmu.mutex);
-   183	
-   184		return ret > 0 ? 0 : ret;
-   185	}
-   186	
-   187	static int mv88e6xxx_rmu_get_id(struct mv88e6xxx_chip *chip, int port)
-   188	{
-   189		const u8 get_id[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-   190		int ret = -1;
-   191	
-   192		if (chip->rmu.got_id)
-   193			return 0;
-   194	
-   195		chip->rmu.netdev = dev_get_by_name(&init_net, "chan0");
-   196		if (!chip->rmu.netdev) {
-   197			dev_err(chip->dev, "RMU: unable to get interface");
-   198			return -ENODEV;
-   199		}
-   200	
-   201		ret = mv88e6xxx_rmu_send_wait(chip, port, RMU_REQ_GET_ID, get_id, 8);
-   202		if (ret) {
-   203			dev_err(chip->dev, "RMU: error for command GET_ID %d index %d\n", ret,
-   204				chip->ds->index);
-   205			return ret;
-   206		}
-   207	
-   208		return 0;
-   209	}
-   210	
- > 211	int mv88e6xxx_rmu_stats_get(struct mv88e6xxx_chip *chip, int port, uint64_t *data)
-   212	{
-   213		u8 dump_mib[8] = { 0x00, 0x01, 0x00, 0x00, 0x10, 0x20, 0x00, 0x00 };
-   214		int ret;
-   215	
-   216		if (!chip)
-   217			return 0;
-   218	
-   219		ret = mv88e6xxx_rmu_get_id(chip, port);
-   220		if (ret)
-   221			return ret;
-   222	
-   223		/* Send a GET_MIB command */
-   224		dump_mib[7] = port;
-   225		ret = mv88e6xxx_rmu_send_wait(chip, port, RMU_REQ_DUMP_MIB, dump_mib, 8);
-   226		if (ret) {
-   227			dev_err(chip->dev, "RMU: error for command DUMP_MIB %d dev %d:%d\n", ret,
-   228				chip->ds->index, port);
-   229			return ret;
-   230		}
-   231	
-   232		/* Update MIB for port */
-   233		if (chip->info->ops->stats_get_stats)
-   234			return chip->info->ops->stats_get_stats(chip, port, data);
-   235	
-   236		return 0;
-   237	}
-   238	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+T24gVGh1LCAyMDIyLTA4LTE4IGF0IDEzOjU2ICswMjAwLCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0K
+PiBPbiBUaHUsIEF1ZyAxOCwgMjAyMiBhdCAxOjQwIFBNIFN1ZGlwIE11a2hlcmplZSAoQ29kZXRo
+aW5rKQ0KPiA8c3VkaXBtLm11a2hlcmplZUBnbWFpbC5jb20+IHdyb3RlOg0KPiA+IEhpIEFsbCwN
+Cj4gPiANCj4gPiBOb3Qgc3VyZSBpZiBpdCBoYXMgYmVlbiByZXBvcnRlZCwgY2xhbmcgYnVpbGRz
+IG9mIGFybTY0IGFsbG1vZGNvbmZpZyBoYXZlDQo+ID4gZmFpbGVkIHRvIGJ1aWxkIG5leHQtMjAy
+MjA4MTggd2l0aCB0aGUgZXJyb3I6DQo+ID4gDQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVh
+bHRlay9ydHc4OC9tYWluLmM6NzMxOjI6IGVycm9yOiB2YXJpYWJsZSAncHJpbWFyeV9jaGFubmVs
+X2lkeCcgaXMgdXNlZA0KPiA+IHVuaW5pdGlhbGl6ZWQgd2hlbmV2ZXIgc3dpdGNoIGRlZmF1bHQg
+aXMgdGFrZW4gWy1XZXJyb3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gPiAgICAgICAg
+IGRlZmF1bHQ6DQo+ID4gICAgICAgICBefn5+fn5+DQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydHc4OC9tYWluLmM6NzU0OjM5OiBub3RlOiB1bmluaXRpYWxpemVkIHVzZSBvY2N1
+cnMgaGVyZQ0KPiA+ICAgICAgICAgaGFsLT5jdXJyZW50X3ByaW1hcnlfY2hhbm5lbF9pbmRleCA9
+IHByaW1hcnlfY2hhbm5lbF9pZHg7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fg0KPiA+IA0KPiA+IGdpdCBiaXNlY3Qg
+cG9pbnRlZCB0byAzNDFkZDFmN2RlNGMgKCJ3aWZpOiBydHc4ODogYWRkIHRoZSB1cGRhdGUgY2hh
+bm5lbCBmbG93IHRvIHN1cHBvcnQgc2V0dGluZw0KPiA+IGJ5IHBhcmFtZXRlcnMiKS4NCj4gPiBB
+bmQsIHJldmVydGluZyB0aGF0IGNvbW1pdCBoYXMgZml4ZWQgdGhlIGJ1aWxkIGZhaWx1cmUuDQo+
+ID4gDQo+ID4gSSB3aWxsIGJlIGhhcHB5IHRvIHRlc3QgYW55IHBhdGNoIG9yIHByb3ZpZGUgYW55
+IGV4dHJhIGxvZyBpZiBuZWVkZWQuDQo+IA0KPiBIaSBTdWRlZXAsDQo+IA0KPiBpbiBteSBleHBl
+cmllbmNlLCB5b3UgZ2V0IHRoZSBiZXN0IHJlc3VsdHMgYnkgcG9zdGluZyBhIHBhdGNoIGluc3Rl
+YWQNCj4gb2YgYSBidWcgcmVwb3J0DQo+IHdoZW4geW91IHNwb3QgYSBuZXcgd2FybmluZy4gSWYg
+eW91IGFyZSB1bnN1cmUgaXQncyB0aGUgcmlnaHQgZml4LA0KPiBqdXN0IHN0YXRlIHRoYXQNCj4g
+aW4gdGhlIGRlc2NyaXB0aW9uLiBUaGUgbWFpbnRhaW5lcnMgd2lsbCB0aGVuIGVpdGhlciBiZSBh
+YmxlIHRvIGp1c3QNCj4gcGljayBpdCB1cCBpZg0KPiBpdCBsb29rcyBjb3JyZWN0LCBvciBiZSBt
+b3RpdmF0ZWQgdG8gZG8gYSBiZXR0ZXIgcGF0Y2ggaWYgdGhleSBkb24ndA0KPiBsaWtlIGl0LiA7
+LSkNCj4gDQo+IEluIHRoaXMgY2FzZSwgSSB0aGluayB0aGUgYmVzdCBmaXggd291bGQgYmUgdG8g
+bWVyZ2VkIHRoZSAnZGVmYXVsdCcNCj4gd2l0aCB0aGUgJ2Nhc2UNCj4gUlRXX0NIQU5ORUxfV0lE
+VEhfMjAnIGluIHRoZSBzd2l0Y2ggc3RhdGVtZW50LCBhbmQgdXNlDQo+IFJUV19TQ19ET05UX0NB
+UkUuIE9mIGNvdXJzZSwgSSBoYXZlIG5vIGlkZWEgaWYgdGhhdCBpcyB0aGUgcmlnaHQgZml4LA0K
+PiBidXQgaXQgd291bGQgbWFrZSBzZW5zZS4NCj4gDQo+IEp1c3QgdHJ5IHRvIGF2b2lkIGFkZGlu
+ZyBpbml0aWFsaXphdGlvbnMgdG8gdGhlIHZhcmlhYmxlIGRlY2xhcmF0aW9uLCBhcyB0aGF0DQo+
+IHdvdWxkIHByZXZlbnQgdGhlIGNvbXBpbGVyIGZyb20gd2FybmluZyBpZiB0aGVyZSBpcyBhIG5l
+dyB1bmluaXRpYWxpemVkIHVzZS4NCj4gDQoNCkkgaGF2ZSBzZW50IGEgcGF0Y2ggdG8gZml4IHRo
+aXM6IA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2lyZWxlc3MvMjAyMjA4MTUwNjIw
+MDQuMjI5MjAtMS1wa3NoaWhAcmVhbHRlay5jb20vVC8jdQ0KDQpQaW5nLUtlDQoNCg0K
