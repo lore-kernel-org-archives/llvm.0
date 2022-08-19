@@ -1,161 +1,155 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0D37B
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 02:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660877254; x=1692413254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jcKwrTNRwZ50GiiU+OeWOwCLdIPtugAJms3wzDX5Rd0=;
-  b=CUvMjR6rsjfbcgC6p+Rl/NgNTi/Y05DwJ3EWoM71rJkiRKv4GiLppb5z
-   a5tk5mia1DkIClamjDIDDvsULIjy3yOwIeSRyoKSZlR6GGPqV84TqUfqh
-   XgxJI5Ayo3mmu/UwTSUX62mi60Uce2kHpaVJrl5HucKuD7SR3V1SDkM9w
-   xE0hQWInkRbBs4VFyEX5X64WKwliinbHmdAgLvXxWhPbdLDjO/JLgJjpb
-   Zq/5fFZqgaRMOkPrbFElKvtXCWB5jpvVVCr/LvWaPhqLPfPoOJ5vBRxkD
-   nUaVGcgJ+lvmWB/XeSocjDxssHjhWyvYdiLPH9E6vG3tzHuup+UsQQTBO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="290485904"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="290485904"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 19:47:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="604464991"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Aug 2022 19:47:26 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oOs2f-0000yY-2h;
-	Fri, 19 Aug 2022 02:47:25 +0000
-Date: Fri, 19 Aug 2022 10:47:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jacob Keller <jacob.e.keller@intel.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Siva Reddy Kallam <siva.kallam@broadcom.com>,
-	Prashant Sreedharan <prashant@broadcom.com>,
-	Michael Chan <mchan@broadcom.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Bryan Whitehead <bryan.whitehead@microchip.com>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Vivek Thampi <vithampi@vmware.com>
-Subject: Re: [net-next 10/14] ptp: lan743x: convert to .adjfine and
- diff_by_scaled_ppm
-Message-ID: <202208191003.18DiEs1l-lkp@intel.com>
-References: <20220818222742.1070935-11-jacob.e.keller@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F9E7B
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 04:13:30 +0000 (UTC)
+X-UUID: a63f09ca2c9f4537b6f578f8eb0f0bb8-20220819
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=oi64ZAN56SKAouCD2c1g9twrjMLE3pr2hOeKSFbJBlc=;
+	b=kLqGjSNz8+1XbllMVOPZaqWOF46ITVExEFcvFk97u5dfpFRFZx+vvpwvBsy/woIzSjfSNqW1OwNA6ua5MTVfF15tr2X+7vri2Ybs2VR0Srvr3RkE091dPV7oAQJsr4qCIEyrbRntJrSe9SKSCPzkqvbbE289PujB7VTS4DwCJSg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:698863a8-5ed3-4c7c-bcde-43584b7eef79,OB:0,L
+	OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Releas
+	e_Ham,ACTION:release,TS:73
+X-CID-INFO: VERSION:1.1.10,REQID:698863a8-5ed3-4c7c-bcde-43584b7eef79,OB:0,LOB
+	:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Spam_GS9
+	81B3D,ACTION:quarantine,TS:73
+X-CID-META: VersionHash:84eae18,CLOUDID:ee6942af-9535-44a6-aa9b-7f62b79b6ff6,C
+	OID:d6bf27258396,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL:0
+X-UUID: a63f09ca2c9f4537b6f578f8eb0f0bb8-20220819
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 240840742; Fri, 19 Aug 2022 12:13:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 19 Aug 2022 12:13:24 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 19 Aug 2022 12:13:24 +0800
+Message-ID: <12062a2e2957113d40b4bf3c1c62d18418b51a12.camel@mediatek.com>
+Subject: Re: [PATCH v25 07/10] soc: mediatek: mmsys: add mmsys for support
+ 64 reset bits
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Fri, 19 Aug 2022 12:13:23 +0800
+In-Reply-To: <d7ccb3fb2630c1c0b6dda2990cff72169e5e5d0b.camel@mediatek.com>
+References: <20220711075245.10492-1-nancy.lin@mediatek.com>
+	 <20220711075245.10492-8-nancy.lin@mediatek.com>
+	 <20220818214715.spbyic34szubx3gi@notapiano>
+	 <d7ccb3fb2630c1c0b6dda2990cff72169e5e5d0b.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818222742.1070935-11-jacob.e.keller@intel.com>
+Content-Transfer-Encoding: 8bit
+X-MTK: N
 
-Hi Jacob,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on 9017462f006c4b686cb1e1e1a3a52ea8363076e6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
-base:   9017462f006c4b686cb1e1e1a3a52ea8363076e6
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220819/202208191003.18DiEs1l-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d3c6eac5778f2ce74e7d6d7be90a60f616551718
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
-        git checkout d3c6eac5778f2ce74e7d6d7be90a60f616551718
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/ethernet/microchip/lan743x_ptp.c:368:12: error: redefinition of 'lan743x_ptpci_adjfine'
-   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
-              ^
-   drivers/net/ethernet/microchip/lan743x_ptp.c:335:12: note: previous definition is here
-   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long scaled_ppm)
-              ^
->> drivers/net/ethernet/microchip/lan743x_ptp.c:386:3: error: use of undeclared identifier 'lan743_rate_adj'; did you mean 'lan743x_rate_adj'?
-                   lan743_rate_adj = (u32)diff;
-                   ^~~~~~~~~~~~~~~
-                   lan743x_rate_adj
-   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
-           u64 lan743x_rate_adj;
-               ^
->> drivers/net/ethernet/microchip/lan743x_ptp.c:388:3: error: use of undeclared identifier 'lan74e_rage_adj'; did you mean 'lan743x_rate_adj'?
-                   lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
-                   ^~~~~~~~~~~~~~~
-                   lan743x_rate_adj
-   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
-           u64 lan743x_rate_adj;
-               ^
-   3 errors generated.
+Hi Nicolas,
 
 
-vim +386 drivers/net/ethernet/microchip/lan743x_ptp.c
+On Fri, 2022-08-19 at 10:09 +0800, Nancy.Lin wrote:
+> Hi Nicolas,
+> 
+> Thanks for the review.
+> 
+> On Thu, 2022-08-18 at 17:47 -0400, Nícolas F. R. A. Prado wrote:
+> > Hi Nancy,
+> > 
+> > On Mon, Jul 11, 2022 at 03:52:42PM +0800, Nancy.Lin wrote:
+> > [..]
+> > >  static const struct mtk_mmsys_driver_data
+> > > mt2701_mmsys_driver_data
+> > > = {
+> > >  	.clk_driver = "clk-mt2701-mm",
+> > >  	.routes = mmsys_default_routing_table,
+> > > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
+> > > mt8173_mmsys_driver_data = {
+> > >  	.routes = mmsys_default_routing_table,
+> > >  	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> > >  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > > +	.num_resets = 32,
+> > >  };
+> > >  
+> > >  static const struct mtk_mmsys_match_data mt8173_mmsys_match_data
+> > > =
+> > > {
+> > > @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data
+> > > mt8183_mmsys_driver_data = {
+> > >  	.routes = mmsys_mt8183_routing_table,
+> > >  	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+> > >  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > > +	.num_resets = 32,
+> > >  };
+> > >  
+> > >  static const struct mtk_mmsys_match_data mt8183_mmsys_match_data
+> > > =
+> > > {
+> > > @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data
+> > > mt8186_mmsys_driver_data = {
+> > >  	.routes = mmsys_mt8186_routing_table,
+> > >  	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+> > >  	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> > > +	.num_resets = 32,
+> > >  };
+> > 
+> > [..]
+> > > @@ -351,18 +362,6 @@ static int mtk_mmsys_probe(struct
+> > > platform_device *pdev)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	spin_lock_init(&mmsys->lock);
+> > > -
+> > > -	mmsys->rcdev.owner = THIS_MODULE;
+> > > -	mmsys->rcdev.nr_resets = 32;
+> > 
+> > The number of resets was previously always set to 32, and now
+> > you're
+> > instead
+> > setting it based on num_resets from each machine. The issue is,
+> > you're
+> > forgetting a bunch of them.
+> > 
+> > mt8192 didn't get a num_reset, so this commit breaks the display on
+> > mt8192 based
+> > devices. But mt8192 isn't the only one, there are other platforms
+> > missing this
+> > property. Please set num_resets to 32 in every single one of them,
+> > otherwise
+> > there will be display regressions.
+> > 
+> > Thanks,
+> > Nícolas
+> 
+> It's my mistake. I will set num_resets to 32 for every mmsys driver.
+> 
+> Thanks,
+> Nancy
 
-   367	
-   368	static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
-   369	{
-   370		struct lan743x_ptp *ptp =
-   371			container_of(ptpci, struct lan743x_ptp, ptp_clock_info);
-   372		struct lan743x_adapter *adapter =
-   373			container_of(ptp, struct lan743x_adapter, ptp);
-   374		u64 lan743x_rate_adj;
-   375		s32 delta_ppb;
-   376		u64 diff;
-   377	
-   378		delta_ppb = scaled_ppm_to_ppb(delta);
-   379		if ((delta_ppb < (-LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB)) ||
-   380		    delta_ppb > LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB) {
-   381			return -EINVAL;
-   382		}
-   383	
-   384		/* diff_by_scaled_ppm returns true if the difference is negative */
-   385		if (diff_by_scaled_ppm(1ULL << 35, delta, &diff))
- > 386			lan743_rate_adj = (u32)diff;
-   387		else
- > 388			lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
-   389	
-   390		lan743x_csr_write(adapter, PTP_CLOCK_RATE_ADJ,
-   391				  lan743x_rate_adj);
-   392	
-   393		return 0;
-   394	}
-   395	
+After review the code, I think only the mmsys driver with the
+sw0_rst_offset setting should set num_resets to 32, otherwise it would
+set wrong addr in the mtk_mmsys_reset_update() function. Those mmsys
+without sw0_rst_offset set should not set num_resets to 32.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Nancy
+
