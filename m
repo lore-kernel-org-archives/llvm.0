@@ -1,240 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9719E29A0
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 15:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660921300;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=C23tTnhGGbQiH9VYZcAgqqmbYR4WQNgCSKeL+ZI/IHU=;
-	b=DaT2Wlk+E+hdKPj5z2n6CXtK/F4xQnuKrW2bakX56KEodxj+u1saMEjPDymwnDwVNsMX3P
-	/Oq37I3UDiG6LIK6OZk6+CxIGZzKB0s9rkzMjXpW10gNZZui0yhUTiSb98NpsKS2Inh5Hj
-	0ti1n3NtwU4Zysx1+M70C0lbV1x3A1Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-VtBZ2AybMS6z0Ykz9In3QQ-1; Fri, 19 Aug 2022 11:01:39 -0400
-X-MC-Unique: VtBZ2AybMS6z0Ykz9In3QQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A338B85A584
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 15:01:38 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 94AE9403344;
-	Fri, 19 Aug 2022 15:01:38 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [4c2d0b03]
-Date: Fri, 19 Aug 2022 15:01:38 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C783C13
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 15:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B50C433D6;
+	Fri, 19 Aug 2022 15:32:07 +0000 (UTC)
+Message-ID: <427a05ef-44c0-0044-6ea4-e110afcb75b2@xs4all.nl>
+Date: Fri, 19 Aug 2022 17:32:05 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <11187.122081911013901871@us-mta-584.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [hverkuil-media-tree:for-v6.1c 3/3]
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:905:10: warning: cast to
+ smaller integer type 'enum mdp_comp_type' from 'const void *'
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Moudy Ho <moudy.ho@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+ daoyuan huang <daoyuan.huang@mediatek.com>
+References: <202208190957.uDT8XE6b-lkp@intel.com>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <202208190957.uDT8XE6b-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+Hi Moudy,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: OK
+On 19/08/2022 04:05, kernel test robot wrote:
+> tree:   git://linuxtv.org/hverkuil/media_tree.git for-v6.1c
+> head:   b2273b84e1291c52279edf13b08744833c1faaab
+> commit: b2273b84e1291c52279edf13b08744833c1faaab [3/3] media: platform: mtk-mdp3: add MediaTek MDP3 driver
+> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220819/202208190957.uDT8XE6b-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+>         git fetch --no-tags hverkuil-media-tree for-v6.1c
+>         git checkout b2273b84e1291c52279edf13b08744833c1faaab
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/mediatek/mdp3/ drivers/vfio/pci/hisilicon/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:905:10: warning: cast to smaller integer type 'enum mdp_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+>                    type = (enum mdp_comp_type)of_id->data;
+>                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:964:10: warning: cast to smaller integer type 'enum mdp_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+>                    type = (enum mdp_comp_type)of_id->data;
+>                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Can you fix this? I believe you need to do this to fix this:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51145
+(enum mdp_comp_type)(uintptr_t)of_id->data
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-          x86_64 - Storage - blktests - blk
-                   Issue: Storage blktests: loop/003 - +Test took 1 seconds
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/657
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4862360
+Regards,
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - Storage - software RAID testing
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
-ed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1354
-            Affected tests:
-                 aarch64 - Libkcapi AF_ALG test
-                   s390x - Libkcapi AF_ALG test
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests - xfs: generic/511: mount: /mnt/xfstests/mnt2: wron=
-g fs type, bad option, bad superblock on /dev/vda4
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1362
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-                  x86_64 (debug) - xfstests - xfs
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
-bsystem for controller nvme0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1274
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+	Hans
 
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>    2 warnings generated.
+> 
+> 
+> vim +905 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+> 
+>    883	
+>    884	static int mdp_comp_sub_create(struct mdp_dev *mdp)
+>    885	{
+>    886		struct device *dev = &mdp->pdev->dev;
+>    887		struct device_node *node, *parent;
+>    888	
+>    889		parent = dev->of_node->parent;
+>    890	
+>    891		for_each_child_of_node(parent, node) {
+>    892			const struct of_device_id *of_id;
+>    893			enum mdp_comp_type type;
+>    894			int id, alias_id;
+>    895			struct mdp_comp *comp;
+>    896	
+>    897			of_id = of_match_node(mdp_sub_comp_dt_ids, node);
+>    898			if (!of_id)
+>    899				continue;
+>    900			if (!of_device_is_available(node)) {
+>    901				dev_dbg(dev, "Skipping disabled sub comp. %pOF\n", node);
+>    902				continue;
+>    903			}
+>    904	
+>  > 905			type = (enum mdp_comp_type)of_id->data;
+>    906			alias_id = mdp_comp_alias_id[type];
+>    907			id = mdp_comp_get_id(type, alias_id);
+>    908			if (id < 0) {
+>    909				dev_err(dev,
+>    910					"Fail to get sub comp. id: type %d alias %d\n",
+>    911					type, alias_id);
+>    912				return -EINVAL;
+>    913			}
+>    914			mdp_comp_alias_id[type]++;
+>    915	
+>    916			comp = mdp_comp_create(mdp, node, id);
+>    917			if (IS_ERR(comp))
+>    918				return PTR_ERR(comp);
+>    919		}
+>    920	
+>    921		return 0;
+>    922	}
+>    923	
+> 
