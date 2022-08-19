@@ -1,341 +1,146 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6B4A14
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 20:04:59 +0000 (UTC)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 767A020002;
-	Fri, 19 Aug 2022 20:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1660939491;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mJeLjPpv9375aOPerzCLWUf/BEwwoWvVvVy4aMJ+n9U=;
-	b=XJl+pCRTBIcHaEMZ07ygpNbBK4lMwhLqXkN3dPnUQg3Oiu71nU65/nN9IsWLFS3IXcQvGq
-	76Jv0rBNJ1QgY4a+5l+gXGvemOTrDSZ77HFayr5R/Zo0Szxbzo8OcPcA6EmBGxKq8Inxrv
-	8U5iPZqLovAkWIKXgKoxRrJ3OrzUANh0L/VDdeRQVIQdeH64uJFxrPaUC2sKATvOAiNNZ2
-	Ow36qYyWfwP13t1YgewVQvJC3FpqQM5ykzpXt6luLhWEoFHoILBeEUpzwdVVdcgowxggrg
-	i1WgTI8MA+cKx/Kza0OjJXzmZHw6UILJjbonadGznuILW+bDJKVx+lHmnZ2HiQ==
-Date: Fri, 19 Aug 2022 22:04:50 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	kvm@vger.kernel.org, llvm@lists.linux.dev,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Borislav Petkov <bp@suse.de>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-Message-ID: <Yv/s4i9qU0baSD4A@mail.local>
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
- <20220819190640.2763586-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528D7748C
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 21:24:05 +0000 (UTC)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-324ec5a9e97so153802307b3.7
+        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 14:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=Y6QwoVZVicOlVCtE7c/suMyZbLEm/X8sYTuoOY17aP8=;
+        b=Pg6j74ClZ4u3ciAjGeVATapbOuX7TryyaYQhY/ONqHud/ndF5+OBkmoao+GTRgjkEN
+         w4Bn+WmZekdAloy2kiGt7POrpDThYcNFxXHRPi9aQotlEIMazh8t0NSHOtgEkDo2TZcY
+         sgMUGgY6TjgcgUeiMPC8iQh/owopnqH4V3LbleKUCf72AInbFB8lb0T2bLHhHbKyF5fh
+         nR5lBEx1pEiFQ9UNjzvD8pyAfbqp0HLnrBTnwNIYIYyHtEAQk5p+GZzXvlHYNqb9cAuV
+         r8JCEUj5coumykLCFHVQrevpEdZjlkenLd4I8CkTghl46gbE9a0NfkZbB6r7JP0A1Ft/
+         n79w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=Y6QwoVZVicOlVCtE7c/suMyZbLEm/X8sYTuoOY17aP8=;
+        b=n/Up8pJzuPNawOjcRJFyecIslgf48U4UgdmhmJ2aPYI6z2uX1BpWz39ZC7XEpiCo8l
+         XiyrWoBtZcfOEjLwzHpCHcv4RjBGYGTx/izCUlvFuXsFGkcge/lzAA67w/IfKkg+dnay
+         EqHuocoMJTymJryE1wsITfYu1HKWZU7j/soKXWHaArBbo6h0OvEUHbLdDxfwLf4UlgbK
+         xdlT6/PQUG8R0WXirxDLQdDnq5AOrDWpBY5mPpKirIB2O7vmbWJ2EvsXy/nGkL1WDDgk
+         S11+Ih34OykspxtiSoPg3t6cQIVWfGZC1lMHGNk9FqPiqjuNWkRg5rPihwJGjX2YvVKk
+         rMzA==
+X-Gm-Message-State: ACgBeo3U11dal/8ZnmwZI+jhJZA4mM84xsqMFrzqIft+X1t98RHtQc75
+	M9ghEdGSiP5ndA38bMaDxSEJPx+Mjy+Sz4B2iTwDTw==
+X-Google-Smtp-Source: AA6agR5I8T82dnw4LDMcR1q4iQM0q8naijH15mGEpwPD55IdJJk39uM9aPMuAoD3pMU6shQEiCHYzyqOflBTs2s7gvk=
+X-Received: by 2002:a0d:fd06:0:b0:324:e4fe:9e6c with SMTP id
+ n6-20020a0dfd06000000b00324e4fe9e6cmr9286130ywf.332.1660944244044; Fri, 19
+ Aug 2022 14:24:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
+References: <CAEHB24_nMMdHw1tQ0Jb0rhOLXgi6X=_Ou6r8BcbV3r-6HeueEA@mail.gmail.com>
+In-Reply-To: <CAEHB24_nMMdHw1tQ0Jb0rhOLXgi6X=_Ou6r8BcbV3r-6HeueEA@mail.gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 19 Aug 2022 14:23:53 -0700
+Message-ID: <CANn89iK2O_-m3KUooE8TUOupYZwXAjfrV64bhS0UAn8hFZVdgw@mail.gmail.com>
+Subject: Re: data-race in __tcp_alloc_md5sig_pool / tcp_alloc_md5sig_pool
+To: abhishek.shah@columbia.edu
+Cc: David Miller <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Song Liu <songliubraving@fb.com>, trix@redhat.com, Yonghong Song <yhs@fb.com>, 
+	Gabriel Ryan <gabe@cs.columbia.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/08/2022 12:06:40-0700, Nick Desaulniers wrote:
-> GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
-> The minimum supported versions of these tools for the build according to
-> Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
-> 
-> Remove the feature detection script, Kconfig option, and clean up some
-> fallback code that is no longer supported.
-> 
-> The removed script was also testing for a GCC specific bug that was
-> fixed in the 4.7 release.
-> 
-> Also remove workarounds for bpftrace using clang older than 9.0.0, since
-> other BPF backend fixes are required at this point.
-> 
-> Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
-> Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
-> Acked-by: Borislav Petkov <bp@suse.de>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Fri, Aug 19, 2022 at 8:40 AM Abhishek Shah
+<abhishek.shah@columbia.edu> wrote:
+>
+> Hi all,
+>
 
-> ---
-> 
-> Changes v1 -> v2:
-> https://lore.kernel.org/linux-kbuild/20220819170053.2686006-1-ndesaulniers@google.com/
-> * Pick up Boris' ack.
-> * Drop line about Dash compat as per Alexandre.
-> * Drop Alexandre's reported by as per Masahiro.
-> * s/Kbuild/asm goto/ in oneline as per Masahiro.
-> * Remove entirety of bpftrace workarounds as per Alexei.
-> * Fix mistake in arch/x86/include/asm/rmwcc.h in v1 where I removed too
->   much; we still need guards for __GCC_ASM_FLAG_OUTPUTS__.
-> 
->  Documentation/kbuild/kconfig-language.rst |  4 ++--
->  arch/Kconfig                              |  3 +--
->  arch/um/include/asm/cpufeature.h          | 15 ---------------
->  arch/x86/Makefile                         |  4 ----
->  arch/x86/include/asm/cpufeature.h         | 15 ---------------
->  arch/x86/include/asm/rmwcc.h              |  6 +++---
->  arch/x86/kvm/emulate.c                    |  2 +-
->  init/Kconfig                              |  4 ----
->  scripts/gcc-goto.sh                       | 22 ----------------------
->  tools/arch/x86/include/asm/rmwcc.h        | 21 ---------------------
->  10 files changed, 7 insertions(+), 89 deletions(-)
->  delete mode 100755 scripts/gcc-goto.sh
-> 
-> diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
-> index 7fb398649f51..858ed5d80def 100644
-> --- a/Documentation/kbuild/kconfig-language.rst
-> +++ b/Documentation/kbuild/kconfig-language.rst
-> @@ -525,8 +525,8 @@ followed by a test macro::
->  If you need to expose a compiler capability to makefiles and/or C source files,
->  `CC_HAS_` is the recommended prefix for the config option::
->  
-> -  config CC_HAS_ASM_GOTO
-> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> +  config CC_HAS_FOO
-> +	def_bool $(success,$(srctree)/scripts/cc-check-foo.sh $(CC))
->  
->  Build as module only
->  ~~~~~~~~~~~~~~~~~~~~
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index f330410da63a..5dbf11a5ba4e 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -53,7 +53,6 @@ config KPROBES
->  config JUMP_LABEL
->  	bool "Optimize very unlikely/likely branches"
->  	depends on HAVE_ARCH_JUMP_LABEL
-> -	depends on CC_HAS_ASM_GOTO
->  	select OBJTOOL if HAVE_JUMP_LABEL_HACK
->  	help
->  	 This option enables a transparent branch optimization that
-> @@ -1361,7 +1360,7 @@ config HAVE_PREEMPT_DYNAMIC_CALL
->  
->  config HAVE_PREEMPT_DYNAMIC_KEY
->  	bool
-> -	depends on HAVE_ARCH_JUMP_LABEL && CC_HAS_ASM_GOTO
-> +	depends on HAVE_ARCH_JUMP_LABEL
->  	select HAVE_PREEMPT_DYNAMIC
->  	help
->  	   An architecture should select this if it can handle the preemption
-> diff --git a/arch/um/include/asm/cpufeature.h b/arch/um/include/asm/cpufeature.h
-> index 19cd7ed6ec3c..4b6d1b526bc1 100644
-> --- a/arch/um/include/asm/cpufeature.h
-> +++ b/arch/um/include/asm/cpufeature.h
-> @@ -65,20 +65,6 @@ extern void setup_clear_cpu_cap(unsigned int bit);
->  
->  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
->  
-> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
-> -
-> -/*
-> - * Workaround for the sake of BPF compilation which utilizes kernel
-> - * headers, but clang does not support ASM GOTO and fails the build.
-> - */
-> -#ifndef __BPF_TRACING__
-> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
-> -#endif
-> -
-> -#define static_cpu_has(bit)            boot_cpu_has(bit)
-> -
-> -#else
-> -
->  /*
->   * Static testing of CPU features. Used the same as boot_cpu_has(). It
->   * statically patches the target code for additional performance. Use
-> @@ -137,7 +123,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
->  		boot_cpu_has(bit) :				\
->  		_static_cpu_has(bit)				\
->  )
-> -#endif
->  
->  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
->  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 7854685c5f25..bafbd905e6e7 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -286,10 +286,6 @@ vdso_install:
->  
->  archprepare: checkbin
->  checkbin:
-> -ifndef CONFIG_CC_HAS_ASM_GOTO
-> -	@echo Compiler lacks asm-goto support.
-> -	@exit 1
-> -endif
->  ifdef CONFIG_RETPOLINE
->  ifeq ($(RETPOLINE_CFLAGS),)
->  	@echo "You are building kernel with non-retpoline compiler." >&2
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index ea34cc31b047..1a85e1fb0922 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -155,20 +155,6 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
->  
->  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
->  
-> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
-> -
-> -/*
-> - * Workaround for the sake of BPF compilation which utilizes kernel
-> - * headers, but clang does not support ASM GOTO and fails the build.
-> - */
-> -#ifndef __BPF_TRACING__
-> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
-> -#endif
-> -
-> -#define static_cpu_has(bit)            boot_cpu_has(bit)
-> -
-> -#else
-> -
->  /*
->   * Static testing of CPU features. Used the same as boot_cpu_has(). It
->   * statically patches the target code for additional performance. Use
-> @@ -208,7 +194,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
->  		boot_cpu_has(bit) :				\
->  		_static_cpu_has(bit)				\
->  )
-> -#endif
->  
->  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
->  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-> diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
-> index 8a9eba191516..7fa611216417 100644
-> --- a/arch/x86/include/asm/rmwcc.h
-> +++ b/arch/x86/include/asm/rmwcc.h
-> @@ -11,7 +11,7 @@
->  
->  #define __CLOBBERS_MEM(clb...)	"memory", ## clb
->  
-> -#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
-> +#ifndef __GCC_ASM_FLAG_OUTPUTS__
->  
->  /* Use asm goto */
->  
-> @@ -27,7 +27,7 @@ cc_label:	c = true;						\
->  	c;								\
->  })
->  
-> -#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-> +#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
->  
->  /* Use flags output or a set instruction */
->  
-> @@ -40,7 +40,7 @@ cc_label:	c = true;						\
->  	c;								\
->  })
->  
-> -#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-> +#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
->  
->  #define GEN_UNARY_RMWcc_4(op, var, cc, arg0)				\
->  	__GEN_RMWcc(op " " arg0, var, cc, __CLOBBERS_MEM())
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index b4eeb7c75dfa..08613c65138d 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -493,7 +493,7 @@ FOP_END;
->  
->  /*
->   * XXX: inoutclob user must know where the argument is being expanded.
-> - *      Relying on CONFIG_CC_HAS_ASM_GOTO would allow us to remove _fault.
-> + *      Using asm goto would allow us to remove _fault.
->   */
->  #define asm_safe(insn, inoutclob...) \
->  ({ \
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 80fe60fa77fb..532362fcfe31 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -70,11 +70,7 @@ config CC_CAN_LINK_STATIC
->  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
->  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->  
-> -config CC_HAS_ASM_GOTO
-> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> -
->  config CC_HAS_ASM_GOTO_OUTPUT
-> -	depends on CC_HAS_ASM_GOTO
->  	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
->  
->  config CC_HAS_ASM_GOTO_TIED_OUTPUT
-> diff --git a/scripts/gcc-goto.sh b/scripts/gcc-goto.sh
-> deleted file mode 100755
-> index 8b980fb2270a..000000000000
-> --- a/scripts/gcc-goto.sh
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -# Test for gcc 'asm goto' support
-> -# Copyright (C) 2010, Jason Baron <jbaron@redhat.com>
-> -
-> -cat << "END" | $@ -x c - -fno-PIE -c -o /dev/null
-> -int main(void)
-> -{
-> -#if defined(__arm__) || defined(__aarch64__)
-> -	/*
-> -	 * Not related to asm goto, but used by jump label
-> -	 * and broken on some ARM GCC versions (see GCC Bug 48637).
-> -	 */
-> -	static struct { int dummy; int state; } tp;
-> -	asm (".long %c0" :: "i" (&tp.state));
-> -#endif
-> -
-> -entry:
-> -	asm goto ("" :::: entry);
-> -	return 0;
-> -}
-> -END
-> diff --git a/tools/arch/x86/include/asm/rmwcc.h b/tools/arch/x86/include/asm/rmwcc.h
-> index fee7983a90b4..11ff975242ca 100644
-> --- a/tools/arch/x86/include/asm/rmwcc.h
-> +++ b/tools/arch/x86/include/asm/rmwcc.h
-> @@ -2,8 +2,6 @@
->  #ifndef _TOOLS_LINUX_ASM_X86_RMWcc
->  #define _TOOLS_LINUX_ASM_X86_RMWcc
->  
-> -#ifdef CONFIG_CC_HAS_ASM_GOTO
-> -
->  #define __GEN_RMWcc(fullop, var, cc, ...)				\
->  do {									\
->  	asm_volatile_goto (fullop "; j" cc " %l[cc_label]"		\
-> @@ -20,23 +18,4 @@ cc_label:								\
->  #define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
->  	__GEN_RMWcc(op " %1, " arg0, var, cc, vcon (val))
->  
-> -#else /* !CONFIG_CC_HAS_ASM_GOTO */
-> -
-> -#define __GEN_RMWcc(fullop, var, cc, ...)				\
-> -do {									\
-> -	char c;								\
-> -	asm volatile (fullop "; set" cc " %1"				\
-> -			: "+m" (var), "=qm" (c)				\
-> -			: __VA_ARGS__ : "memory");			\
-> -	return c != 0;							\
-> -} while (0)
-> -
-> -#define GEN_UNARY_RMWcc(op, var, arg0, cc)				\
-> -	__GEN_RMWcc(op " " arg0, var, cc)
-> -
-> -#define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
-> -	__GEN_RMWcc(op " %2, " arg0, var, cc, vcon (val))
-> -
-> -#endif /* CONFIG_CC_HAS_ASM_GOTO */
-> -
->  #endif /* _TOOLS_LINUX_ASM_X86_RMWcc */
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
-> 
+Not sure why you included so many people in this report ?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You have not exactly said what could be the issue (other than the raw
+kcsan report)
+
+> We found a race involving the tcp_md5sig_pool_populated variable. Upon fu=
+rther investigation, we think that __tcp_alloc_md5sig_pool can be run multi=
+ple times before tcp_md5sig_pool_populated is set to true here. However, we=
+ are not sure. Please let us know what you think.
+
+I think this is a false positive, because the data race is properly handled
+with the help of tcp_md5sig_mutex.
+
+We might silence it, of course, like many other existing data races.
+
+
+
+>
+> Thanks!
+>
+>
+> --------------------Report--------------
+>
+> write to 0xffffffff883a2438 of 1 bytes by task 6542 on cpu 0:
+>  __tcp_alloc_md5sig_pool+0x239/0x260 net/ipv4/tcp.c:4343
+>  tcp_alloc_md5sig_pool+0x58/0xb0 net/ipv4/tcp.c:4352
+>  tcp_md5_do_add+0x2c4/0x470 net/ipv4/tcp_ipv4.c:1199
+>  tcp_v6_parse_md5_keys+0x473/0x490
+>  do_tcp_setsockopt net/ipv4/tcp.c:3614 [inline]
+>  tcp_setsockopt+0xda6/0x1be0 net/ipv4/tcp.c:3698
+>  sock_common_setsockopt+0x62/0x80 net/core/sock.c:3505
+>  __sys_setsockopt+0x2d1/0x450 net/socket.c:2180
+>  __do_sys_setsockopt net/socket.c:2191 [inline]
+>  __se_sys_setsockopt net/socket.c:2188 [inline]
+>  __x64_sys_setsockopt+0x67/0x80 net/socket.c:2188
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> read to 0xffffffff883a2438 of 1 bytes by task 6541 on cpu 1:
+>  tcp_alloc_md5sig_pool+0x15/0xb0 net/ipv4/tcp.c:4348
+>  tcp_md5_do_add+0x2c4/0x470 net/ipv4/tcp_ipv4.c:1199
+>  tcp_v4_parse_md5_keys+0x42f/0x500 net/ipv4/tcp_ipv4.c:1303
+>  do_tcp_setsockopt net/ipv4/tcp.c:3614 [inline]
+>  tcp_setsockopt+0xda6/0x1be0 net/ipv4/tcp.c:3698
+>  sock_common_setsockopt+0x62/0x80 net/core/sock.c:3505
+>  __sys_setsockopt+0x2d1/0x450 net/socket.c:2180
+>  __do_sys_setsockopt net/socket.c:2191 [inline]
+>  __se_sys_setsockopt net/socket.c:2188 [inline]
+>  __x64_sys_setsockopt+0x67/0x80 net/socket.c:2188
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 6541 Comm: syz-executor2-n Not tainted 5.18.0-rc5+ #107
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/0=
+1/2014
+>
+>
+> Reproducing Inputs
+>
+> Input CPU 0:
+> r0 =3D socket(0xa, 0x1, 0x0)
+> setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000000)=3D{@in6=3D=
+{{0xa, 0x0, 0x0, @private0}}, 0x0, 0x0, 0x10, 0x0, "a04979dcb0f6e3666c36f59=
+053376c1d2e245fbad5b4749a8c55dda1bd819ec87afb7f5ac2483f179675d3c23fdba661af=
+cca7cca5661a7b52ac11cc8085800c2c0d8e7de309eb57b89292880a563154"}, 0xd8)
+> setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000100)=3D{@in6=3D=
+{{0xa, 0x0, 0x0, @loopback}}, 0x0, 0x0, 0x28, 0x0, "f386ea32b026420a2c65ea3=
+75667090000000000000000a300001e81f9c22181fe9cef51a4070736c7a33d08c1dd5c35eb=
+9b0e6c6aa490d4f1b18f7b09103bf18619b49a9ce10f4bd98e0b00"}, 0xd8)
+>
+> Input CPU 1:
+> r0 =3D socket$inet_tcp(0x2, 0x1, 0x0)
+> setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000080)=3D{@in=3D{=
+{0x2, 0x0, @remote}}, 0x0, 0x0, 0x47, 0x0, "2a34e559cc66f8b453edeb61450c389=
+9cc1d1304f0e5f1758293ddd3597b84447d3056ed871ae397b0fd27a54e4ff8ba83f0cf3e5f=
+323acb74f974c0b87333e0570e9019d8fdcf0bc1044a5e96d68296"}, 0xd8)
