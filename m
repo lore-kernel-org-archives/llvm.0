@@ -1,43 +1,45 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFCA6105
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 22:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8480F6118
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 23:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660947075; x=1692483075;
+  t=1660950144; x=1692486144;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wkSL4YcRImAsSr0vR7QMBeygezS34rFVcTAH931PSlI=;
-  b=cmqtIKfbmciiCeTMwI+5QgC4M7eSzMObHlQBcYaUgqE/2Rm+EKABmNR6
-   5hAineaaG235orBC2D8Csmbs9pOQBWrHeE5pErQAZdE3+ybXb9NgGGFJN
-   WJy9Rniep571fuY5EZOTqtaqpBdwe0AjXe3miPvnXXdCNz0U52Mf3O7gR
-   bQQ7IwRP28xaiMa57MiEwNI/EbVqKxwpiqPq37m0SgHn0geljs2M1V0IL
-   C7sHY2j6omdGSvNo0C7yPEJZLvXKFXQt4k58aMpu8gEroAyQ504sLipIG
-   h+o4ZD9GyuF5kjZQUTYmxNRLPm3Wgsv8o3SnuabQhpes2Q01imiyosnAm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="354843943"
+  bh=r7qay1+dP6VVlT5JhKkRy2Ccw8Xyj0gBU/jadv5XVwQ=;
+  b=MiVwO3DY2XhezkDCzoQ56P9MfJMFvnfbEvTzfu4BcVRyyOR22JCusZh8
+   Ji5t37uQcV76urn1JzZxGZ9yiVQdQreW4i0nzthxU11Hx8+QeRCW9Zptc
+   N4jDdehC7r9KCSR67+i9MHJrBlCWeR7DhkvlW/VD5xqfcC9Z/HPFtW585
+   +83k0DT3f/G+FL5GHC2thC0M3993PPMi0m/0GqBtvj1ka6jqhrCKaTG1k
+   zdMd/sxqcnQu53LF6/ybTgDsecbmZAXic5fVvIGtlLf0Ww0DOizo7sEAn
+   OCQyekHBufasGaAZo3ko1xd/9LabJvPP6gW1nx3uz5LiGFr5dDnwlboG5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="276153256"
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="354843943"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 15:11:14 -0700
+   d="scan'208";a="276153256"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 16:02:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="641402174"
+   d="scan'208";a="853911497"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Aug 2022 15:11:13 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 19 Aug 2022 16:02:14 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPACu-0001rJ-2g;
-	Fri, 19 Aug 2022 22:11:12 +0000
-Date: Sat, 20 Aug 2022 06:10:37 +0800
+	id 1oPB0I-0001tM-1J;
+	Fri, 19 Aug 2022 23:02:14 +0000
+Date: Sat, 20 Aug 2022 07:01:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To: Andi Kleen <ak@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest-hardening-rebased 35/36]
- drivers/virtio/virtio_mmio.c:611:6: error: implicit declaration of function
+	linux-kernel@vger.kernel.org,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 24/36]
+ drivers/pci/probe.c:2451:7: error: implicit declaration of function
  'cc_platform_has' is invalid in C99
-Message-ID: <202208200658.d5mG6HxB-lkp@intel.com>
+Message-ID: <202208200603.DlhLITXV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,131 +49,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-drivers/virtio/virtio_mmio.c
+drivers/pci/pci.c
+drivers/pci/probe.c
 tree:   https://github.com/intel/tdx.git guest-hardening-rebased
 head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
-commit: 8aee8422c3b96f5d4dde1f31f8a96409a3e55c48 [35/36] virtio-mmio: Disable in TDX guest
-config: hexagon-buildonly-randconfig-r005-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200658.d5mG6HxB-lkp@intel.com/config)
+commit: 9fc8d23dbf6bd3cdb60761d86121008b2335cd74 [24/36] x86/tdx: Disable enhanced PCI parsing for TDX
+config: riscv-randconfig-r036-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200603.DlhLITXV-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/8aee8422c3b96f5d4dde1f31f8a96409a3e55c48
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel/tdx/commit/9fc8d23dbf6bd3cdb60761d86121008b2335cd74
         git remote add intel-tdx https://github.com/intel/tdx.git
         git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 8aee8422c3b96f5d4dde1f31f8a96409a3e55c48
+        git checkout 9fc8d23dbf6bd3cdb60761d86121008b2335cd74
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/virtio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/virtio/virtio_mmio.c:611:6: error: implicit declaration of function 'cc_platform_has' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-               ^
->> drivers/virtio/virtio_mmio.c:611:22: error: use of undeclared identifier 'CC_ATTR_GUEST_HARDENED'
+>> drivers/pci/probe.c:2451:7: error: implicit declaration of function 'cc_platform_has' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!cc_platform_has(CC_ATTR_GUEST_HARDENED))
+                ^
+>> drivers/pci/probe.c:2451:23: error: use of undeclared identifier 'CC_ATTR_GUEST_HARDENED'
+           if (!cc_platform_has(CC_ATTR_GUEST_HARDENED))
+                                ^
+   drivers/pci/probe.c:2457:22: error: use of undeclared identifier 'CC_ATTR_GUEST_HARDENED'
            if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
                                ^
->> drivers/virtio/virtio_mmio.c:611:22: error: use of undeclared identifier 'CC_ATTR_GUEST_HARDENED'
->> drivers/virtio/virtio_mmio.c:611:22: error: use of undeclared identifier 'CC_ATTR_GUEST_HARDENED'
-   drivers/virtio/virtio_mmio.c:657:33: warning: shift count >= width of type [-Wshift-count-overflow]
-                   rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-                                                 ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/virtio/virtio_mmio.c:666:46: warning: shift count >= width of type [-Wshift-count-overflow]
-                   rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                              ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 4 errors generated.
+   3 errors generated.
 
 
-vim +/cc_platform_has +611 drivers/virtio/virtio_mmio.c
+vim +/cc_platform_has +2451 drivers/pci/probe.c
 
-   604	
-   605	static int virtio_mmio_probe(struct platform_device *pdev)
-   606	{
-   607		struct virtio_mmio_device *vm_dev;
-   608		unsigned long magic;
-   609		int rc;
-   610	
- > 611		if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-   612			return -ENODEV;
-   613	
-   614		vm_dev = devm_kzalloc(&pdev->dev, sizeof(*vm_dev), GFP_KERNEL);
-   615		if (!vm_dev)
-   616			return -ENOMEM;
-   617	
-   618		vm_dev->vdev.dev.parent = &pdev->dev;
-   619		vm_dev->vdev.dev.release = virtio_mmio_release_dev;
-   620		vm_dev->vdev.config = &virtio_mmio_config_ops;
-   621		vm_dev->pdev = pdev;
-   622		INIT_LIST_HEAD(&vm_dev->virtqueues);
-   623		spin_lock_init(&vm_dev->lock);
-   624	
-   625		vm_dev->base = devm_platform_ioremap_resource(pdev, 0);
-   626		if (IS_ERR(vm_dev->base))
-   627			return PTR_ERR(vm_dev->base);
-   628	
-   629		/* Check magic value */
-   630		magic = readl(vm_dev->base + VIRTIO_MMIO_MAGIC_VALUE);
-   631		if (magic != ('v' | 'i' << 8 | 'r' << 16 | 't' << 24)) {
-   632			dev_warn(&pdev->dev, "Wrong magic value 0x%08lx!\n", magic);
-   633			return -ENODEV;
-   634		}
-   635	
-   636		/* Check device version */
-   637		vm_dev->version = readl(vm_dev->base + VIRTIO_MMIO_VERSION);
-   638		if (vm_dev->version < 1 || vm_dev->version > 2) {
-   639			dev_err(&pdev->dev, "Version %ld not supported!\n",
-   640					vm_dev->version);
-   641			return -ENXIO;
-   642		}
-   643	
-   644		vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
-   645		if (vm_dev->vdev.id.device == 0) {
-   646			/*
-   647			 * virtio-mmio device with an ID 0 is a (dummy) placeholder
-   648			 * with no function. End probing now with no error reported.
-   649			 */
-   650			return -ENODEV;
-   651		}
-   652		vm_dev->vdev.id.vendor = readl(vm_dev->base + VIRTIO_MMIO_VENDOR_ID);
-   653	
-   654		if (vm_dev->version == 1) {
-   655			writel(PAGE_SIZE, vm_dev->base + VIRTIO_MMIO_GUEST_PAGE_SIZE);
-   656	
-   657			rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-   658			/*
-   659			 * In the legacy case, ensure our coherently-allocated virtio
-   660			 * ring will be at an address expressable as a 32-bit PFN.
-   661			 */
-   662			if (!rc)
-   663				dma_set_coherent_mask(&pdev->dev,
-   664						      DMA_BIT_MASK(32 + PAGE_SHIFT));
-   665		} else {
-   666			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-   667		}
-   668		if (rc)
-   669			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-   670		if (rc)
-   671			dev_warn(&pdev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
-   672	
-   673		platform_set_drvdata(pdev, vm_dev);
-   674	
-   675		rc = register_virtio_device(&vm_dev->vdev);
-   676		if (rc)
-   677			put_device(&vm_dev->vdev.dev);
-   678	
-   679		return rc;
-   680	}
-   681	
+  2448	
+  2449	static void pci_init_capabilities(struct pci_dev *dev)
+  2450	{
+> 2451		if (!cc_platform_has(CC_ATTR_GUEST_HARDENED))
+  2452			pci_ea_init(dev);	/* Enhanced Allocation */
+  2453	
+  2454		pci_msi_init(dev);		/* Disable MSI */
+  2455		pci_msix_init(dev);		/* Disable MSI-X */
+  2456	
+  2457		if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
+  2458			return;
+  2459	
+  2460		/* Buffers for saving PCIe and PCI-X capabilities */
+  2461		pci_allocate_cap_save_buffers(dev);
+  2462	
+  2463		pci_pm_init(dev);		/* Power Management */
+  2464		pci_vpd_init(dev);		/* Vital Product Data */
+  2465		pci_configure_ari(dev);		/* Alternative Routing-ID Forwarding */
+  2466		pci_iov_init(dev);		/* Single Root I/O Virtualization */
+  2467		pci_ats_init(dev);		/* Address Translation Services */
+  2468		pci_pri_init(dev);		/* Page Request Interface */
+  2469		pci_pasid_init(dev);		/* Process Address Space ID */
+  2470		pci_acs_init(dev);		/* Access Control Services */
+  2471		pci_ptm_init(dev);		/* Precision Time Measurement */
+  2472		pci_aer_init(dev);		/* Advanced Error Reporting */
+  2473		pci_dpc_init(dev);		/* Downstream Port Containment */
+  2474		pci_rcec_init(dev);		/* Root Complex Event Collector */
+  2475	
+  2476		pcie_report_downtraining(dev);
+  2477		pci_init_reset_methods(dev);
+  2478	}
+  2479	
 
 -- 
 0-DAY CI Kernel Test Service
