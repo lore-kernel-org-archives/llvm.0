@@ -1,233 +1,206 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468625CAD
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 09:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1660900904;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5XREqs/CQYO9/O0xQOzgORnj6T08jpmx6DVBNj85Imk=;
-	b=W07dBPTeP+FTVZC+04xBgeJKrbiCnXCsXpGarqiPzOjsYKCHM+PqG4MDZ8VdeVn1GDaTCI
-	lrYsaGS6Y8wq/lxsjDbLx4Ss/fUs6KeP3SQhLDsSSxqCnAypNLi8O1BMbn99QrvTN01iYf
-	htF0OzaQcxjXIJouNqgB+9wiWIGaHBA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-ElWb560mMfeqkMI6R6H2ZQ-1; Fri, 19 Aug 2022 05:21:43 -0400
-X-MC-Unique: ElWb560mMfeqkMI6R6H2ZQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC55B101A586
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 09:21:42 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CEC7540D282E;
-	Fri, 19 Aug 2022 09:21:42 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [573ae4f1]
-Date: Fri, 19 Aug 2022 09:21:42 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2AE17FC
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 10:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660904095; x=1692440095;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JamywlG2KZ6pHXhHN2aKg0RetQH+YJ6MdCpIgtBFBvc=;
+  b=I7+PQBDPttWgRqcB3+82rsJ6CyuVemJ0xwrkJjUyQ4gK9z2swRgiIB2q
+   LJSFMHWQy1WT0hIosLs1uBQ0pX6dReHsbnG4VS8ufUDiaILZ1CTvsW8yJ
+   cJp8GNE5jxG+oHG/TG0yzRqGmjZ3ookEErQ3t/z2RWB86JxjewXsC9yc6
+   sCXd3X4KUQRGfC17mRlwSoCl3Po/4qC+Q1lJJMwA90ySQR10m0KdKgA2W
+   cUnYAzsnU7cNM3Cga8CeC3m4SyBb4tP7nCPjuz2KyMZCyiliq4iJAj1vT
+   z9hIlWGRyEVAYCsWBzQyjk1yf3iHnBBlCnYz75neulhchxwAsNsvv2+c3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="294259110"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="294259110"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 03:14:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="697518686"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Aug 2022 03:14:49 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oOz1d-0001Kn-0l;
+	Fri, 19 Aug 2022 10:14:49 +0000
+Date: Fri, 19 Aug 2022 18:14:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux@roeck-us.net, nfraprado@collabora.com
+Cc: kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	David Airlie <airlied@linux.ie>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	singo.chang@mediatek.com, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v26 2/7] drm/mediatek: add ETHDR support for MT8195
+Message-ID: <202208191837.iIwHfovs-lkp@intel.com>
+References: <20220819061456.8042-3-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <83941.122081905214300139@us-mta-176.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819061456.8042-3-nancy.lin@mediatek.com>
 
-Hi, we tested your kernel and here are the results:
+Hi "Nancy.Lin",
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on drm-misc/drm-misc-next]
+[cannot apply to robh/for-next mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51108
+url:    https://github.com/intel-lab-lkp/linux/commits/Nancy-Lin/Add-MediaTek-SoC-DRM-vdosys1-support-for-mt8195/20220819-142314
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220819/202208191837.iIwHfovs-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ec3724f819412feab6e61118e61e574a86aa4dc0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nancy-Lin/Add-MediaTek-SoC-DRM-vdosys1-support-for-mt8195/20220819-142314
+        git checkout ec3724f819412feab6e61118e61e574a86aa4dc0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-          x86_64 (debug) - Storage - lvm thinp stqe test
-                   Issue: pvremove takes long time
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/734
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4856934
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Storage - software RAID testing
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - Storage - software RAID testing
-                  x86_64 (debug) - Networking cki netfilter test
-        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
-ed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1354
-            Affected tests:
-                 aarch64 - Libkcapi AF_ALG test
-                   s390x - Libkcapi AF_ALG test
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests - xfs: generic/511: mount: /mnt/xfstests/mnt2: wron=
-g fs type, bad option, bad superblock on /dev/vda4
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1362
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-                  x86_64 (debug) - xfstests - xfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvme-tcp: nvme/030: failed to lookup su=
-bsystem for controller nvme0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1274
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-        Issue: Storage - blktests - nvme-tcp: nvme/030: Failed to open ctrl=
- nvme1, errno 11
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1275
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/mediatek/mtk_ethdr.c: In function 'mtk_ethdr_layer_config':
+>> drivers/gpu/drm/mediatek/mtk_ethdr.c:171:9: error: implicit declaration of function 'mtk_mmsys_mixer_in_config' [-Werror=implicit-function-declaration]
+     171 |         mtk_mmsys_mixer_in_config(priv->mmsys_dev, idx + 1, alpha_con ? false : true,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/mediatek/mtk_ethdr.c: In function 'mtk_ethdr_config':
+>> drivers/gpu/drm/mediatek/mtk_ethdr.c:232:9: error: implicit declaration of function 'mtk_mmsys_hdr_confing'; did you mean 'mtk_mmsys_ddp_connect'? [-Werror=implicit-function-declaration]
+     232 |         mtk_mmsys_hdr_confing(priv->mmsys_dev, w / 2, h, cmdq_pkt);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         mtk_mmsys_ddp_connect
+>> drivers/gpu/drm/mediatek/mtk_ethdr.c:233:9: error: implicit declaration of function 'mtk_mmsys_mixer_in_channel_swap' [-Werror=implicit-function-declaration]
+     233 |         mtk_mmsys_mixer_in_channel_swap(priv->mmsys_dev, 4, 0, cmdq_pkt);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/mtk_mmsys_mixer_in_config +171 drivers/gpu/drm/mediatek/mtk_ethdr.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   146	
+   147	void mtk_ethdr_layer_config(struct device *dev, unsigned int idx,
+   148				    struct mtk_plane_state *state,
+   149				    struct cmdq_pkt *cmdq_pkt)
+   150	{
+   151		struct mtk_ethdr *priv = dev_get_drvdata(dev);
+   152		struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
+   153		struct mtk_plane_pending_state *pending = &state->pending;
+   154		unsigned int offset = (pending->x & 1) << 31 | pending->y << 16 | pending->x;
+   155		unsigned int align_width = ALIGN_DOWN(pending->width, 2);
+   156		unsigned int alpha_con = 0;
+   157	
+   158		dev_dbg(dev, "%s+ idx:%d", __func__, idx);
+   159	
+   160		if (idx >= 4)
+   161			return;
+   162	
+   163		if (!pending->enable) {
+   164			mtk_ddp_write(cmdq_pkt, 0, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_SIZE(idx));
+   165			return;
+   166		}
+   167	
+   168		if (state->base.fb && state->base.fb->format->has_alpha)
+   169			alpha_con = MIXER_ALPHA_AEN | MIXER_ALPHA;
+   170	
+ > 171		mtk_mmsys_mixer_in_config(priv->mmsys_dev, idx + 1, alpha_con ? false : true,
+   172					  DEFAULT_9BIT_ALPHA,
+   173					  pending->x & 1 ? MIXER_INX_MODE_EVEN_EXTEND :
+   174					  MIXER_INX_MODE_BYPASS, align_width / 2 - 1, cmdq_pkt);
+   175	
+   176		mtk_ddp_write(cmdq_pkt, pending->height << 16 | align_width, &mixer->cmdq_base,
+   177			      mixer->regs, MIX_L_SRC_SIZE(idx));
+   178		mtk_ddp_write(cmdq_pkt, offset, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_OFFSET(idx));
+   179		mtk_ddp_write_mask(cmdq_pkt, alpha_con, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_CON(idx),
+   180				   0x1ff);
+   181		mtk_ddp_write_mask(cmdq_pkt, BIT(idx), &mixer->cmdq_base, mixer->regs, MIX_SRC_CON,
+   182				   BIT(idx));
+   183	}
+   184	
+   185	void mtk_ethdr_config(struct device *dev, unsigned int w,
+   186			      unsigned int h, unsigned int vrefresh,
+   187			      unsigned int bpc, struct cmdq_pkt *cmdq_pkt)
+   188	{
+   189		struct mtk_ethdr *priv = dev_get_drvdata(dev);
+   190		struct mtk_ethdr_comp *vdo_fe0 = &priv->ethdr_comp[ETHDR_VDO_FE0];
+   191		struct mtk_ethdr_comp *vdo_fe1 = &priv->ethdr_comp[ETHDR_VDO_FE1];
+   192		struct mtk_ethdr_comp *gfx_fe0 = &priv->ethdr_comp[ETHDR_GFX_FE0];
+   193		struct mtk_ethdr_comp *gfx_fe1 = &priv->ethdr_comp[ETHDR_GFX_FE1];
+   194		struct mtk_ethdr_comp *vdo_be = &priv->ethdr_comp[ETHDR_VDO_BE];
+   195		struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
+   196	
+   197		dev_dbg(dev, "%s-w:%d, h:%d\n", __func__, w, h);
+   198	
+   199		mtk_ddp_write(cmdq_pkt, HDR_VDO_FE_0804_BYPASS_ALL, &vdo_fe0->cmdq_base,
+   200			      vdo_fe0->regs, HDR_VDO_FE_0804_HDR_DM_FE);
+   201	
+   202		mtk_ddp_write(cmdq_pkt, HDR_VDO_FE_0804_BYPASS_ALL, &vdo_fe1->cmdq_base,
+   203			      vdo_fe1->regs, HDR_VDO_FE_0804_HDR_DM_FE);
+   204	
+   205		mtk_ddp_write(cmdq_pkt, HDR_GFX_FE_0204_BYPASS_ALL, &gfx_fe0->cmdq_base,
+   206			      gfx_fe0->regs, HDR_GFX_FE_0204_GFX_HDR_FE);
+   207	
+   208		mtk_ddp_write(cmdq_pkt, HDR_GFX_FE_0204_BYPASS_ALL, &gfx_fe1->cmdq_base,
+   209			      gfx_fe1->regs, HDR_GFX_FE_0204_GFX_HDR_FE);
+   210	
+   211		mtk_ddp_write(cmdq_pkt, HDR_VDO_BE_0204_BYPASS_ALL, &vdo_be->cmdq_base,
+   212			      vdo_be->regs, HDR_VDO_BE_0204_VDO_DM_BE);
+   213	
+   214		mtk_ddp_write(cmdq_pkt, MIX_FUNC_DCM_ENABLE, &mixer->cmdq_base, mixer->regs, MIX_FUNC_DCM0);
+   215		mtk_ddp_write(cmdq_pkt, MIX_FUNC_DCM_ENABLE, &mixer->cmdq_base, mixer->regs, MIX_FUNC_DCM1);
+   216		mtk_ddp_write(cmdq_pkt, h << 16 | w, &mixer->cmdq_base, mixer->regs, MIX_ROI_SIZE);
+   217		mtk_ddp_write(cmdq_pkt, BGCLR_BLACK, &mixer->cmdq_base, mixer->regs, MIX_ROI_BGCLR);
+   218		mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
+   219			      MIX_L_SRC_CON(0));
+   220		mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
+   221			      MIX_L_SRC_CON(1));
+   222		mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
+   223			      MIX_L_SRC_CON(2));
+   224		mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
+   225			      MIX_L_SRC_CON(3));
+   226		mtk_ddp_write(cmdq_pkt, 0x0, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_SIZE(0));
+   227		mtk_ddp_write(cmdq_pkt, OUTPUT_NO_RND | SOURCE_RGB_SEL | BACKGROUND_RELAY,
+   228			      &mixer->cmdq_base, mixer->regs, MIX_DATAPATH_CON);
+   229		mtk_ddp_write_mask(cmdq_pkt, MIX_SRC_L0_EN, &mixer->cmdq_base, mixer->regs,
+   230				   MIX_SRC_CON, MIX_SRC_L0_EN);
+   231	
+ > 232		mtk_mmsys_hdr_confing(priv->mmsys_dev, w / 2, h, cmdq_pkt);
+ > 233		mtk_mmsys_mixer_in_channel_swap(priv->mmsys_dev, 4, 0, cmdq_pkt);
+   234	}
+   235	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
