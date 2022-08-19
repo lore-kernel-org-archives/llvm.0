@@ -1,191 +1,271 @@
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91460160
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 06:42:14 +0000 (UTC)
-Received: by mail-oi1-f170.google.com with SMTP id m6so3880316oib.4
-        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 23:42:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xT/8EmOLWgGpotOZrjKtP5nnobd3VpZhpZsW/obGVUc=;
-        b=FVnrxU/nhTOeal+lVBE1xWeXHchPG95WhjNJXj6jpAPmDdnDz21hA1bFtDsnwPIwei
-         fJKBm7Q83tBDHxvCEODcpxy+C2sh/6/ts011PKPWXQ66tv9d2iD704oN5/Mg3J311MBh
-         BAm3ZMF0m/qPb751iBHE2eqQMELEzHoTFLPYEDt7I6tB7BNoJMoyNTQNhCp7tlzrRZ7Y
-         dj4HCh21gRYTgrUk39zJ2FeGUP8+5pnuOJSqDGCJ/8POlRbG1WUS0gXpfCDtcqAazFRE
-         YVepWspt3CYJvccCxaTwsueB1Y7BEq+/jRgG3fqTt6YmIdHHQ0z03+Afgq+ZFUioelVU
-         1rTw==
-X-Gm-Message-State: ACgBeo0QW++d9rgRFGVGlErHezgY9L8fXeed4S7Mc6SlJoNhGX5ZLApb
-	VfHBzDNBccDHFjmlHKq7iomep17pYUHGqzOciOY=
-X-Google-Smtp-Source: AA6agR7+ZYQsBIT+yyrvDvPpd1PiAtyHAPRxJdIOVAmAMD+SBoYMPAYQ0vMAQEbHZAie9v3BtB0Wl75yTPJfbYAyRIs=
-X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
- k128-20020acaba86000000b0033ac6f73001mr5184885oif.5.1660891333580; Thu, 18
- Aug 2022 23:42:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C0617EE
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 08:58:12 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZLMiQdISi+Oapn5wxG+9aP6X9Qu469feYwJGfZ1U9yeg1XyDGG7ZJyx2g23A0mTRW3MI+FtaErxT9XdcoIkx5qirpfE5WFUYyeZJZbXm1dwKh3oOHPbDymAtAsPwqrFPPlBDacHtIC8PD48xx2aeZVzxavFyS73GyV3QRIEUh01rvo5AZjn+FK+gAWe3TduUq2dv5dWsrVlHkmITtnSKVAB2wi0B+8IwowBV0gxAcf/JH6AFJgOjZPIilhkb7QIan7tcHqruAH8YBH7/C+EtbJwiCZjwBBCfrSfOUxQkH9dSIBHRf1KeCrwG3lue+Ug80yc/2yEYV97qAJIgO3zOcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BOMeJ6fzbkJymwNoJw7XCb8Zr9dmHtL4p7hKjWXSsz4=;
+ b=J2UlBg6V6RUHHdJpN/knJUjkjmV6SH6b9G6Pl+LVbFY3WwvLrDoS36yDBgIkEPuilh+Bsv1XhZv3iEDCItgjPoTFmeox93o5R3O0e2ZUsGUYVxfFGmQxSQAXTfnA6Q4kJ/8E7uW5zYsMzbhFsenOhojruL0tCaEBYpUtPWAJ18HamUQGSCWcihW7ZfXtDEITlomDuCI0yALvFKWPOtf+TMVnQikWD15yztxT0Nbx8K4KafWMsfiKUcwY/YDzLB6dEEOqBBaz0hon4rhhaapC/TDxqvUYbOQlQShKixtIWX+/mpJb/Usf2OXg1/v0mvaLCK4bc8IVUMVmcjK1/HqZuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BOMeJ6fzbkJymwNoJw7XCb8Zr9dmHtL4p7hKjWXSsz4=;
+ b=xjznH1VoGFqtCrUepm6WtRv/N0liFibuF8xXi79DhB+ezFPGjl8oXKfH4fLc8evJBl9P3bQ8prZZ3+mqWyjZeC3M15004dR5V1OtArcLJJP3/6+W3aRgWzLjX4QzFZtQgNpZTYMlWGnAmuj2R4mxIrkGMn6kmIelj73V1roXh9I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
+ by SN7PR12MB7021.namprd12.prod.outlook.com (2603:10b6:806:262::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Fri, 19 Aug
+ 2022 08:58:10 +0000
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::6947:34fa:6a20:3e20]) by BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::6947:34fa:6a20:3e20%9]) with mapi id 15.20.5504.028; Fri, 19 Aug 2022
+ 08:58:10 +0000
+Message-ID: <c515c207-5497-67ba-c0f4-c4d5ae46f755@amd.com>
+Date: Fri, 19 Aug 2022 14:28:00 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v4 03/11] platform/x86/amd/pmf: Add support SPS PMF
+ feature
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: hdegoede@redhat.com, markgross@kernel.org,
+ platform-driver-x86@vger.kernel.org, Patil.Reddy@amd.com,
+ llvm@lists.linux.dev
+References: <20220802151149.2123699-1-Shyam-sundar.S-k@amd.com>
+ <20220802151149.2123699-4-Shyam-sundar.S-k@amd.com>
+ <Yv7BmjjLtA3RaKju@thelio-3990X>
+From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+In-Reply-To: <Yv7BmjjLtA3RaKju@thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0047.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::18) To BL1PR12MB5176.namprd12.prod.outlook.com
+ (2603:10b6:208:311::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-6-irogers@google.com>
- <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com> <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
-In-Reply-To: <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Thu, 18 Aug 2022 23:42:02 -0700
-Message-ID: <CAM9d7cgRDgHtAJd9814tbV41yY8Leypzv8Ay=kQgswjNYWj0RA@mail.gmail.com>
-Subject: Re: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
-	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
-	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
-	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
-	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
-	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
-	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-perf-users <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 23646a5c-b2eb-4d79-0f90-08da81c0f0d5
+X-MS-TrafficTypeDiagnostic: SN7PR12MB7021:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MOBrhBh5CZyEnwXyakFE53lFiYxCahTn3OWfUhPO67pan1zkDWx+TKC+PzeDeAYyApDG53L7NIEYMOre//NJZM1P0QweDz/RXRjKDeIhY7yN2/vJkaHNY0ylgdRWOGSFj4OF49wwvRwFIFJmoASoVQLBX5GbRpdeLhIX1L2PdKSYt+C9SneAtSkTSDIRroftINOQnhcE3rdOE+z5fOZ3ON0xh4SMPjXq0Ml+TdI0zn3memoiTRSb36O/HRXz/AJaAyN6j8Jwzeph9Ij4wNfMAzw+2+xClhiC9Lw8hES94Gf4uWAimDbEkeA972qfvQ76/Wx1pdUm6GD7YqBqrbolC2UT7owu7R/jhkyY6+cJwE8EgzOjkKY8rvUnOvG32L9ZYb5y+eY06NKVpkq85ndfcNAcyyJv8rguZE6Si+WzmLufjyj4WGB5dU5w852UVT2mMBq/7NVLrWAQDiYNlYSjC3CJnZhyodzXQXMVGb3tbcWpH7KEEAkf/bLQqa5fcFRYVw9SgU3fC27g1mIfoK2cytsxQhZXNbEjxUaM51tBN0Sugx7YYxpGfdWn4VFpdXshGru7Ur2YouCHL919zBTJKJ+gd+A5wlcVwiB3fc9s92r5pu1tYQmL/qrUOlF/eduW71ZGc3Bis1B2WteMtklr+2fR43to1Tg08wFvuN5rmyoPBk6jd9hTLqHulqndMqpIa/XcEIUL/WGK7+dUQRKycwLE6cj/fN09vpk25gR90h96huGWagl69K09a6BUvIsuB2dR6cNRjfWJ0fMSWjMl033ODlJx2jw+XTMQ7QXm2W8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(2906002)(2616005)(31686004)(6916009)(186003)(36756003)(316002)(83380400001)(38100700002)(53546011)(4326008)(66946007)(66556008)(66476007)(8676002)(31696002)(6486002)(6512007)(26005)(41300700001)(86362001)(478600001)(8936002)(6666004)(6506007)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WUJrcUZ0UUN1SW9tYmYvNnhoK05WeVJBcWdhbm52YzRqOTB2cC9pK0xaVUZ3?=
+ =?utf-8?B?dy82dzZWYlowQzh5eHY2K1c0VDVWU3RqTDhSc2R1cnZuVW1IV1RjaVd1ekMz?=
+ =?utf-8?B?WkZPUjRzdU9wWVJlcnpoV1d1UXpRRVN4UGN0eFB4bExDQytwcjlvYlorNFBx?=
+ =?utf-8?B?MXJRSlBJckdpaU9FQTRsMUFQUTNkSG5QenBhdDlZakdZR2xsbTVQRzF6aVBl?=
+ =?utf-8?B?VUYxSnVZTm5VUkVaZkJKTmlTemxHeHlJdm1FZmYyMHFHdDN3MnFWMklDSktq?=
+ =?utf-8?B?VmxBNjhjZlliZG4xZTFTWXR6VmpMY0tKN283b0MwY0JlSi9OQ3NucVRkMHBu?=
+ =?utf-8?B?ZnprdTlsWGF6S1FKcmxsZytuTVQ2dU1ZRTF4VUxja0ZRbUptVXlyVVJqbWp2?=
+ =?utf-8?B?dEJhUDN1RmRaU0lGRTR1NGpMTVM4dkxZdGlWbWpYdWdNcTBJRCtJdTcwZ0E3?=
+ =?utf-8?B?cE5LQ0pQNGNpajJVc2RWN3JCNXdVUU9DTmFSanhnZDhlVzZrdzR3Z29nM0cz?=
+ =?utf-8?B?MWp3Y0Erc0FjSmVtajV1R2VtaW5CYWhGS1kzV3MyUEZ5a0gydmdvWG5hNWJz?=
+ =?utf-8?B?R2p5SzZ0SllidEtPMFJlaXVDVFZrN2lLa2dSMzViNWhUOXhzWm5EbGxyVGt4?=
+ =?utf-8?B?RkZTK1RBMGRlTHhMSFNaazR5QUVCR0NjenJBcnd5Y2JMM2VXYnhEOGhVb28r?=
+ =?utf-8?B?enpQSTVZSi9YTmU1aVJPRG5yRmpSTUNYck4zQ1UzKzlTbUl6NUVkQ3p4LzVU?=
+ =?utf-8?B?b3d1bUE2cU9xSVV6UkhXWURqZk1wQkpYVGRncCsxdWZHQ1pHZlh5c2xnN2wy?=
+ =?utf-8?B?eEFkYU9yMUkwUVRoeStDYmw0RjdSSm05emJVN21aS3JhblhWV2lKd2RUdmcr?=
+ =?utf-8?B?TUhZQjdTOWs4Wjh1bmY4aVIrMVRxVFh1VEY3eXZMSXpjZFltalRJL1VscVlY?=
+ =?utf-8?B?TlRzNDcyeDFVKzBqc25TTjNDWHhUTTJuSTB5SGZDdVpZdU15aE9NUU9VOWpl?=
+ =?utf-8?B?MTlPVllnM21HWko3cjZIUVRuYnVJVU9GRGxxdEFMSlZJUm1EUU1KRG1KRHJM?=
+ =?utf-8?B?NDh5V1NSOE1Mc1d3ZytmNFl6djhNOWZoRld1eWZBTHd1YmNlK1UybTJMM3RJ?=
+ =?utf-8?B?bjNMRE1RSWcvSmlMNGZkN0ZjTzJyYXZ4NVlFM05KVER4Z3lyYkJQZWdHZlNS?=
+ =?utf-8?B?Qk9kZUtqMS9vTmxkMjQ2QkRNL2lTYWI2WU1MV0VsWFVHcVdhZjNNSmNRTzR1?=
+ =?utf-8?B?aWhsc04rVGYxWUFzbkhaM0ZRRWlBMUEwK2RwZmJjYlpDQ1BvbG8yNXB5OEVl?=
+ =?utf-8?B?S1IzTElsTW1lazlaVzNkZCtIL0hTK3psSUJCdFZxRnkyM2U2ZHBBcEpnQk1o?=
+ =?utf-8?B?cWlDVzNlUmJ2RWh6a3IvWUZ5Wldxemxpd2thTWZqSllOYWlqQ1VtdUdmVzdS?=
+ =?utf-8?B?L0VEUnN0Ly8zbWZralVNMHFYeldkRlNoY3g5THdBVHNGNWVQVVJnK1NhNmJ3?=
+ =?utf-8?B?UjFxZk9Yd1VIbDlYTzZ0WERZWi9HSm5NbDZVVlRBd3dtaVpKdjNSc0xQVFI1?=
+ =?utf-8?B?clkydVlYSmZqKy9vbW1DMHV6MHNpMGJtN2NoR3V3L3RPdFkvQUl2YUhLK29R?=
+ =?utf-8?B?VE9BdVhOajBGenV2RkM4eGhWcXVFazhQNEtQOHhMKzJEYzNnTW4yNzBKaHB6?=
+ =?utf-8?B?dlQrRTRUYTRhVTRIa2h2NnRGdkNUdHlOanB2YSt2V3ROOGxWcTUrSjlpckFH?=
+ =?utf-8?B?TjMwU2VjR2trdWFsWmFUUzJHTHVKWElHU1RiRWMwVERVWWw5QWtEN1F0aHBD?=
+ =?utf-8?B?c21HMFFGZkNZY0YzYitxT2ZFT2paNGNxei9XNEwrd3dLcm5WaU5MbU00VDFt?=
+ =?utf-8?B?Z3kzWWdFbFpzbHFFcFlRbUI3alI2K29EVmFwZ05yNWk2RmRyYlV6RVlXU1lF?=
+ =?utf-8?B?SUhzdEJJSjNpNDF3bU9Ub1R6K2Y1T1dwZFlqTGJPWmJ5OUdNeXlWV0ZCUGlV?=
+ =?utf-8?B?R2VzbkpkejVxSjZ6WHZ5VW1INFRQYXppZmUvT21vcUIxeHRRLzdFQndLWEU4?=
+ =?utf-8?B?a0M2NHVwYmNRNGpRSjd4dnJidGh5clFGSWhZK3pycGk2RzhqN2gvdU4zR3ht?=
+ =?utf-8?Q?5ISJLDO8+HM9AmkEE9jRmrauG?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23646a5c-b2eb-4d79-0f90-08da81c0f0d5
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 08:58:10.3526
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 301HEXzrQGsQUq4CSKqXD8WBqdedtVHCBZK/zkSyWikLweNX902oW/IrkGmLMq781Mx79Fh8ry+pnX4KfhGjVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7021
 
-On Thu, Aug 18, 2022 at 11:17 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Thu, Aug 18, 2022 at 9:41 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > Add annotations to describe lock behavior. Add missing unlocks to
-> > > perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
-> > > analysis cannot follow pointers through local variables.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/builtin-sched.c | 8 ++++++++
-> > >  tools/perf/builtin-top.c   | 5 +++--
-> > >  2 files changed, 11 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> > > index 0f52f73be896..a8a765ed28ce 100644
-> > > --- a/tools/perf/builtin-sched.c
-> > > +++ b/tools/perf/builtin-sched.c
-> > > @@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
-> > >  }
-> > >
-> > >  static void create_tasks(struct perf_sched *sched)
-> > > +       EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> > > +       EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> > >  {
-> > >         struct task_desc *task;
-> > >         pthread_attr_t attr;
-> > > @@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
-> > >  }
-> > >
-> > >  static void wait_for_tasks(struct perf_sched *sched)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> > >  {
-> > >         u64 cpu_usage_0, cpu_usage_1;
-> > >         struct task_desc *task;
-> > > @@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> > >  }
-> > >
-> > >  static void run_one_test(struct perf_sched *sched)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> > >  {
-> > >         u64 T0, T1, delta, avg_delta, fluct;
-> > >
-> > > @@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
-> > >         for (i = 0; i < sched->replay_repeat; i++)
-> > >                 run_one_test(sched);
-> > >
-> > > +       mutex_unlock(&sched->start_work_mutex);
-> > > +       mutex_unlock(&sched->work_done_wait_mutex);
-> >
-> > But this would wake up the replay tasks and let them burn cpus unnecessarily.
-> > Maybe we can make them exit at the moment.
->
-> I think I've stumbled on a can of worms. Why would you spin and not
-> use a condition variable? Anyway, I can remove this by just saying
-> this function leaves these locked.
+Hi Nathan,
 
-I think you can add a boolean variable and set it before unlocking the
-mutexes.  In the thread body, it can check the variable and exit.
+Thanks for bringing this up.
 
+On 8/19/2022 4:17 AM, Nathan Chancellor wrote:
+> Hi Shyam,
+> 
+> On Tue, Aug 02, 2022 at 08:41:41PM +0530, Shyam Sundar S K wrote:
+>> SPS (a.k.a. Static Power Slider) gives a feel of Windows performance
+>> power slider for the Linux users, where the user selects a certain
+>> mode (like "balanced", "low-power" or "performance") and the thermals
+>> associated with each selected mode gets applied from the silicon
+>> side via the mailboxes defined through PMFW.
+>>
+>> PMF driver hooks to platform_profile by reading the PMF ACPI fn9 to
+>> see if the support is being advertised by ACPI interface.
+>>
+>> If supported, the PMF driver reacts to platform_profile selection choices
+>> made by the user and adjust the system thermal behavior.
+>>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>> Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+> 
+> <snip>
+> 
+>> diff --git a/drivers/platform/x86/amd/pmf/sps.c b/drivers/platform/x86/amd/pmf/sps.c
+>> new file mode 100644
+>> index 000000000000..ef4df3fd774b
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/amd/pmf/sps.c
+> 
+> <snip>
+> 
+>> +u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
+>> +{
+>> +	u8 mode;
+>> +
+>> +	switch (pmf->current_profile) {
+>> +	case PLATFORM_PROFILE_PERFORMANCE:
+>> +		mode = POWER_MODE_PERFORMANCE;
+>> +		break;
+>> +	case PLATFORM_PROFILE_BALANCED:
+>> +		mode = POWER_MODE_BALANCED_POWER;
+>> +		break;
+>> +	case PLATFORM_PROFILE_LOW_POWER:
+>> +		mode = POWER_MODE_POWER_SAVER;
+>> +		break;
+>> +	default:
+>> +		dev_err(pmf->dev, "Unknown Platform Profile.\n");
+>> +		break;
+>> +	}
+>> +
+>> +	return mode;
+>> +}
+> 
+> This patch is now in -next as commit 4c71ae414474
+> ("platform/x86/amd/pmf: Add support SPS PMF feature"), where it causes
+> the following clang warning:
+> 
+>   drivers/platform/x86/amd/pmf/sps.c:96:2: error: variable 'mode' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>           default:
+>           ^~~~~~~
+>   drivers/platform/x86/amd/pmf/sps.c:101:9: note: uninitialized use occurs here
+>           return mode;
+>                  ^~~~
+>   drivers/platform/x86/amd/pmf/sps.c:84:9: note: initialize the variable 'mode' to silence this warning
+>           u8 mode;
+>                  ^
+>                   = '\0'
+>   1 error generated.
+> 
+> As far as I can tell, the default case cannot actually happen due to the
+> advertising of choices in amd_pmf_init_sps() and the check against those
+> choices in platform_profile_store() but it would be good to avoid this
+> warning, especially given that it is fatal with CONFIG_WERROR.
+> 
+> I do not mind sending a patch for this but I am a little unclear what
+> the best fix would be. Removing the default case would cause -Wswitch
+> warnings because current_profile is an enum (plus it would make finding
+> invalid profiles harder if there was ever a change in the core). Perhaps
+> changing the return type to be an int, returning an error code in the
+> default case, then updating the call sites to check for an error? I am
+> open to other suggestions (or if you want to sent a fix yourself, just
+> consider this a report).
 
->
-> >
-> > >         return 0;
-> > >  }
-> > >
-> > > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > > index 3757292bfe86..e832f04e3076 100644
-> > > --- a/tools/perf/builtin-top.c
-> > > +++ b/tools/perf/builtin-top.c
-> > > @@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
-> > >                                         struct hist_entry *he,
-> > >                                         struct perf_sample *sample,
-> > >                                         struct evsel *evsel, u64 ip)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
-> > >  {
-> > >         struct annotation *notes;
-> > >         struct symbol *sym = he->ms.sym;
-> > > @@ -724,13 +725,13 @@ static void *display_thread(void *arg)
-> > >  static int hist_iter__top_callback(struct hist_entry_iter *iter,
-> > >                                    struct addr_location *al, bool single,
-> > >                                    void *arg)
-> > > +       EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
-> > >  {
-> > >         struct perf_top *top = arg;
-> > > -       struct hist_entry *he = iter->he;
-> > >         struct evsel *evsel = iter->evsel;
-> > >
-> > >         if (perf_hpp_list.sym && single)
-> > > -               perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-> > > +               perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
-> > >
-> > >         hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
-> > >                      !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
-> >
-> > Looks like a separate change.
->
-> This is subtle and relates to how the thread safety pass in clang is
-> implemented. I'll waffle but the TL;DR is that without this change we
-> can't enable Wthread-safety so I'd say it is part of the same change.
-> The waffley bit:
->
-> Thread safety checking puts the annotation on to the variable and not
-> the type. We know that:
-> const char *x = "hi";
-> char *y = x;
-> will give a compile time error on the assignment to y as const-ness
-> was lost. With the thread safety checks you could have:
-> char *x PT_GUARDED_BY(lock) = ...;
-> char *y = x;
-> And if you used x without holding "lock" you'd get an error but you
-> wouldn't get the same error from y, even though behind the scenes it
-> is the same memory. It is the same case here, on entry we know that
-> "iter->he->hists->lock" is held but the assignment to "he" means clang
-> doesn't know that "he->hists->lock" is held. This then fails the check
-> on perf_top__record_precise_ip that the lock be held as we pass "he"
-> rather than "iter->he".
+yes, you are right. We can just change the return an error code like the
+other driver implementing the platform_profile. Like below.
 
-Oh, I mean this perf top change can be separated from perf sched.
+diff --git a/drivers/platform/x86/amd/pmf/pmf.h
+b/drivers/platform/x86/amd/pmf/pmf.h
+index 7613ed2ef6e3..172610f93bd1 100644
+--- a/drivers/platform/x86/amd/pmf/pmf.h
++++ b/drivers/platform/x86/amd/pmf/pmf.h
+@@ -303,7 +303,7 @@ int amd_pmf_init_metrics_table(struct amd_pmf_dev *dev);
+ int amd_pmf_get_power_source(void);
+
+ /* SPS Layer */
+-u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf);
++int amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf);
+ void amd_pmf_update_slider(struct amd_pmf_dev *dev, bool op, int idx,
+                           struct amd_pmf_static_slider_granular *table);
+ int amd_pmf_init_sps(struct amd_pmf_dev *dev);
+diff --git a/drivers/platform/x86/amd/pmf/sps.c
+b/drivers/platform/x86/amd/pmf/sps.c
+index 8923e29cc6ca..dba7e36962dc 100644
+--- a/drivers/platform/x86/amd/pmf/sps.c
++++ b/drivers/platform/x86/amd/pmf/sps.c
+@@ -79,9 +79,9 @@ static int amd_pmf_profile_get(struct
+platform_profile_handler *pprof,
+        return 0;
+ }
+
+-u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
++int amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
+ {
+-       u8 mode;
++       int mode;
+
+        switch (pmf->current_profile) {
+        case PLATFORM_PROFILE_PERFORMANCE:
+@@ -95,7 +95,7 @@ u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
+                break;
+        default:
+                dev_err(pmf->dev, "Unknown Platform Profile.\n");
+-               break;
++               return -EOPNOTSUPP;
+        }
+
+        return mode;
+@@ -105,10 +105,13 @@ static int amd_pmf_profile_set(struct
+platform_profile_handler *pprof,
+                               enum platform_profile_option profile)
+ {
+        struct amd_pmf_dev *pmf = container_of(pprof, struct
+amd_pmf_dev, pprof);
+-       u8 mode;
++       int mode;
+
+        pmf->current_profile = profile;
+        mode = amd_pmf_get_pprof_modes(pmf);
++       if (mode < 0)
++               return mode;
++
+        amd_pmf_update_slider(pmf, SLIDER_OP_SET, mode, NULL);
+        return 0;
+ }
+
 
 Thanks,
-Namhyung
+Shyam
+
+> 
+> Cheers,
+> Nathan
+> 
