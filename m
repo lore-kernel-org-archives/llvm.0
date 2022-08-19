@@ -1,43 +1,70 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502E07B
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 02:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0D37B
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 02:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660877249; x=1692413249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GMrRWCmHtP+K1cz9ix34DjSAFqwxGQRvSySKIEhTu/A=;
-  b=dMypE9C4Pyt4a8VFTKF0sdCnzJD6ydtTWRpUnqWtz8hZPTKKFhzYJ4S7
-   SXg+5CVzzufGpDHHjvlY43EzG1n9XxfQYj91xmRdRxTW4hDfr/bYRcZcR
-   qwHyG9gstKsBAtKl1hCx3FKYOM5zkbsWZMzAULfzIbj8Qa1EhGLvebeIo
-   bYW5ejubROLRSRbZGcBfnL86yZqu4+Te25pphiA/xjK8hBYZKHK6hUoLO
-   SBoKegRmJ7fcz2hP+1YkGlsHxdAXzoja54s/vYEVO/1RV8AeTNNuoTeBs
-   VbVKqC/L6Si/Z45SV4QOPelZovkNYPZMd8TKhWshGNda70KJ8OVB6o1LG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="291675561"
+  t=1660877254; x=1692413254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jcKwrTNRwZ50GiiU+OeWOwCLdIPtugAJms3wzDX5Rd0=;
+  b=CUvMjR6rsjfbcgC6p+Rl/NgNTi/Y05DwJ3EWoM71rJkiRKv4GiLppb5z
+   a5tk5mia1DkIClamjDIDDvsULIjy3yOwIeSRyoKSZlR6GGPqV84TqUfqh
+   XgxJI5Ayo3mmu/UwTSUX62mi60Uce2kHpaVJrl5HucKuD7SR3V1SDkM9w
+   xE0hQWInkRbBs4VFyEX5X64WKwliinbHmdAgLvXxWhPbdLDjO/JLgJjpb
+   Zq/5fFZqgaRMOkPrbFElKvtXCWB5jpvVVCr/LvWaPhqLPfPoOJ5vBRxkD
+   nUaVGcgJ+lvmWB/XeSocjDxssHjhWyvYdiLPH9E6vG3tzHuup+UsQQTBO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="290485904"
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="291675561"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 19:47:28 -0700
+   d="scan'208";a="290485904"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 19:47:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="697412033"
+   d="scan'208";a="604464991"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Aug 2022 19:47:26 -0700
+  by orsmga007.jf.intel.com with ESMTP; 18 Aug 2022 19:47:26 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oOs2f-0000ya-2l;
+	id 1oOs2f-0000yY-2h;
 	Fri, 19 Aug 2022 02:47:25 +0000
-Date: Fri, 19 Aug 2022 10:47:18 +0800
+Date: Fri, 19 Aug 2022 10:47:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matt Flax <flatmax@flatmax.com>
+To: Jacob Keller <jacob.e.keller@intel.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 958/2065] sound/soc/codecs/src4xxx-i2c.c:28:34:
- warning: unused variable 'src4xxx_of_match'
-Message-ID: <202208191049.E2V7QwLA-lkp@intel.com>
+	Jacob Keller <jacob.e.keller@intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Siva Reddy Kallam <siva.kallam@broadcom.com>,
+	Prashant Sreedharan <prashant@broadcom.com>,
+	Michael Chan <mchan@broadcom.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Bryan Whitehead <bryan.whitehead@microchip.com>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Vivek Thampi <vithampi@vmware.com>
+Subject: Re: [net-next 10/14] ptp: lan743x: convert to .adjfine and
+ diff_by_scaled_ppm
+Message-ID: <202208191003.18DiEs1l-lkp@intel.com>
+References: <20220818222742.1070935-11-jacob.e.keller@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,109 +73,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220818222742.1070935-11-jacob.e.keller@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   5b6a4bf680d61b1dd26629840f848d0df8983c62
-commit: 4e6bedd3c396014ba70de2b4c9995c8e024e82b3 [958/2065] ASoC: codecs: add support for the TI SRC4392 codec
-config: s390-buildonly-randconfig-r003-20220819 (https://download.01.org/0day-ci/archive/20220819/202208191049.E2V7QwLA-lkp@intel.com/config)
+Hi Jacob,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 9017462f006c4b686cb1e1e1a3a52ea8363076e6]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
+base:   9017462f006c4b686cb1e1e1a3a52ea8363076e6
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220819/202208191003.18DiEs1l-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4e6bedd3c396014ba70de2b4c9995c8e024e82b3
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 4e6bedd3c396014ba70de2b4c9995c8e024e82b3
+        # https://github.com/intel-lab-lkp/linux/commit/d3c6eac5778f2ce74e7d6d7be90a60f616551718
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
+        git checkout d3c6eac5778f2ce74e7d6d7be90a60f616551718
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from sound/soc/codecs/src4xxx-i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from sound/soc/codecs/src4xxx-i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from sound/soc/codecs/src4xxx-i2c.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
-   static const struct of_device_id src4xxx_of_match[] = {
-                                    ^
-   13 warnings generated.
+   drivers/net/ethernet/microchip/lan743x_ptp.c:368:12: error: redefinition of 'lan743x_ptpci_adjfine'
+   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
+              ^
+   drivers/net/ethernet/microchip/lan743x_ptp.c:335:12: note: previous definition is here
+   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long scaled_ppm)
+              ^
+>> drivers/net/ethernet/microchip/lan743x_ptp.c:386:3: error: use of undeclared identifier 'lan743_rate_adj'; did you mean 'lan743x_rate_adj'?
+                   lan743_rate_adj = (u32)diff;
+                   ^~~~~~~~~~~~~~~
+                   lan743x_rate_adj
+   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
+           u64 lan743x_rate_adj;
+               ^
+>> drivers/net/ethernet/microchip/lan743x_ptp.c:388:3: error: use of undeclared identifier 'lan74e_rage_adj'; did you mean 'lan743x_rate_adj'?
+                   lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
+                   ^~~~~~~~~~~~~~~
+                   lan743x_rate_adj
+   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
+           u64 lan743x_rate_adj;
+               ^
+   3 errors generated.
 
 
-vim +/src4xxx_of_match +28 sound/soc/codecs/src4xxx-i2c.c
+vim +386 drivers/net/ethernet/microchip/lan743x_ptp.c
 
-    27	
-  > 28	static const struct of_device_id src4xxx_of_match[] = {
-    29		{ .compatible = "ti,src4392", },
-    30		{ }
-    31	};
-    32	MODULE_DEVICE_TABLE(of, src4xxx_of_match);
-    33	
-    34	
+   367	
+   368	static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
+   369	{
+   370		struct lan743x_ptp *ptp =
+   371			container_of(ptpci, struct lan743x_ptp, ptp_clock_info);
+   372		struct lan743x_adapter *adapter =
+   373			container_of(ptp, struct lan743x_adapter, ptp);
+   374		u64 lan743x_rate_adj;
+   375		s32 delta_ppb;
+   376		u64 diff;
+   377	
+   378		delta_ppb = scaled_ppm_to_ppb(delta);
+   379		if ((delta_ppb < (-LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB)) ||
+   380		    delta_ppb > LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB) {
+   381			return -EINVAL;
+   382		}
+   383	
+   384		/* diff_by_scaled_ppm returns true if the difference is negative */
+   385		if (diff_by_scaled_ppm(1ULL << 35, delta, &diff))
+ > 386			lan743_rate_adj = (u32)diff;
+   387		else
+ > 388			lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
+   389	
+   390		lan743x_csr_write(adapter, PTP_CLOCK_RATE_ADJ,
+   391				  lan743x_rate_adj);
+   392	
+   393		return 0;
+   394	}
+   395	
 
 -- 
 0-DAY CI Kernel Test Service
