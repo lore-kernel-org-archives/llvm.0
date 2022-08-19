@@ -1,46 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36B84697
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 17:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD20B4A05
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 18:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660931228; x=1692467228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FOynmcElN88ZHiDBBPM4LouI5ZrjwbxW2G62gb61PWQ=;
-  b=ASQpoXFcNDreqcDf1F3qZ6rsPXUYxeladTM04ziV+sxcgIku7DjYQr8e
-   gDATPLpRW+lR317tTAmgxLcNwVQn+neonB5Cy9Dtxdw36L/bzTNrY9E83
-   olw82ScN+Zj/2eU4J85VV9SgfmP4uRf7r5DcmDElIBT8EwcwZdoH+jcCC
-   KW5GwhkYcLeX55x+iRDdJRz7+RHoKqVw5p6BZ21MG0BAF6snNOLXR9mNK
-   CqdysmgumhhIJLaXkizri43+FvWOnMkw3lfu6RGJ/cy1NDol0aMqslEp3
-   ht59FrGw8sVhmYN5aOAk0nI9Ve5RSe1Sd9t9yPv/xn0YawAuhkFtCZTAr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293064894"
+  t=1660933097; x=1692469097;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JQAOPktEPRsnqLPYYBE3d+Ey4OcbjKfZooDFCCpPMXM=;
+  b=BBJ7U2QzC5KitdtBf7UmCgbvNgQUAILxNWtph+4pycWGS+sWfVeEezdf
+   l5F7xOH4Qy/YF5dBLGVnPR4s7Gvwcmkjri+Mhohccpu2aWRpNmNdhqIit
+   0OU3znsN5Chl2wEKha8UliwfwTl6CY5OMoDL2p6351rAHVOqGMLqZs0DN
+   +Ml1CG5Glq1wvRXGK1Mi3i7mv+hrVW32gUiq5Sz7olyDF+zL78JSD814R
+   spzSJEmybLRZQnG2EScoRZWG+xrO/jrNNQzpaFnHiF5+LxzKfLhtvoC7c
+   ZfalJfNkn3UsCdSbF/YjECk3L7vlmDfLc1wP/s60rbdkFU9eDk3heFG6E
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="379364220"
 X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="293064894"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 10:47:08 -0700
+   d="scan'208";a="379364220"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:18:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="936300666"
+   d="scan'208";a="584747126"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Aug 2022 10:47:06 -0700
+  by orsmga006.jf.intel.com with ESMTP; 19 Aug 2022 11:18:06 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oP65J-0001gL-2b;
-	Fri, 19 Aug 2022 17:47:05 +0000
-Date: Sat, 20 Aug 2022 01:46:46 +0800
+	id 1oP6ZK-0001hT-0n;
+	Fri, 19 Aug 2022 18:18:06 +0000
+Date: Sat, 20 Aug 2022 02:17:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>, akpm@linux-foundation.org,
-	songmuchun@bytedance.com, mike.kravetz@oracle.com
+To: Jiri Pirko <jiri@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm/gup: fix races when looking up a CONT-PTE size
- hugetlb page
-Message-ID: <202208200109.XEXN0wPy-lkp@intel.com>
-References: <0f3df6604059011bf78a286c2cf5da5c4b41ccb1.1660902741.git.baolin.wang@linux.alibaba.com>
+Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 5/42]
+ drivers/net/wwan/t7xx/t7xx_port_devlink.c:465:35: error: use of undeclared
+ identifier 'DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT'; did you mean
+ 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT'?
+Message-ID: <202208200242.iM0kVtBs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,197 +47,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0f3df6604059011bf78a286c2cf5da5c4b41ccb1.1660902741.git.baolin.wang@linux.alibaba.com>
 
-Hi Baolin,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-some-issues-when-looking-up-hugetlb-page/20220819-182017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: riscv-randconfig-r042-20220819 (https://download.01.org/0day-ci/archive/20220820/202208200109.XEXN0wPy-lkp@intel.com/config)
+drivers/net/netdevsim/dev.c
+include/net/devlink.h
+net/core/devlink.c
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
+head:   e7096f2b22b32bd60568d91d12b562b3314bc8cc
+commit: d8cf683bc939bf07c19efa964a98f10829e30df4 [5/42] net: devlink: extend info_get() version put to indicate a flash component
+config: s390-randconfig-r044-20220819 (https://download.01.org/0day-ci/archive/20220820/202208200242.iM0kVtBs-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c0add09e9de4b39c58633c89ea25ba10ed12d134
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baolin-Wang/Fix-some-issues-when-looking-up-hugetlb-page/20220819-182017
-        git checkout c0add09e9de4b39c58633c89ea25ba10ed12d134
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/jpirko/linux_mlxsw/commit/d8cf683bc939bf07c19efa964a98f10829e30df4
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
+        git checkout d8cf683bc939bf07c19efa964a98f10829e30df4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/ drivers/net/wwan/t7xx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/gup.c:551:9: error: implicit declaration of function 'huge_ptep_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   pte = huge_ptep_get(ptep);
-                         ^
->> mm/gup.c:551:7: error: assigning to 'pte_t' from incompatible type 'int'
-                   pte = huge_ptep_get(ptep);
-                       ^ ~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
+   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
+   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
+   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/wwan/t7xx/t7xx_port_devlink.c:465:35: error: use of undeclared identifier 'DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT'; did you mean 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT'?
+           .supported_flash_update_params = DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT,
+                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                            DEVLINK_ATTR_FLASH_UPDATE_COMPONENT
+   include/uapi/linux/devlink.h:532:2: note: 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT' declared here
+           DEVLINK_ATTR_FLASH_UPDATE_COMPONENT,    /* string */
+           ^
+   13 errors generated.
 
 
-vim +/huge_ptep_get +551 mm/gup.c
+vim +465 drivers/net/wwan/t7xx/t7xx_port_devlink.c
 
-   518	
-   519	static struct page *follow_page_pte(struct vm_area_struct *vma,
-   520			unsigned long address, pmd_t *pmd, unsigned int flags,
-   521			struct dev_pagemap **pgmap)
-   522	{
-   523		struct mm_struct *mm = vma->vm_mm;
-   524		struct page *page;
-   525		spinlock_t *ptl;
-   526		pte_t *ptep, pte;
-   527		int ret;
-   528	
-   529		/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-   530		if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
-   531				 (FOLL_PIN | FOLL_GET)))
-   532			return ERR_PTR(-EINVAL);
-   533	retry:
-   534		if (unlikely(pmd_bad(*pmd)))
-   535			return no_page_table(vma, flags);
-   536	
-   537		/*
-   538		 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
-   539		 * ARM64 architecture.
-   540		 */
-   541		if (is_vm_hugetlb_page(vma)) {
-   542			struct hstate *hstate = hstate_vma(vma);
-   543			unsigned long size = huge_page_size(hstate);
-   544	
-   545			ptep = huge_pte_offset(mm, address, size);
-   546			if (!ptep)
-   547				return no_page_table(vma, flags);
-   548	
-   549			ptl = huge_pte_lockptr(hstate, mm, ptep);
-   550			spin_lock(ptl);
- > 551			pte = huge_ptep_get(ptep);
-   552		} else {
-   553			ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
-   554			pte = *ptep;
-   555		}
-   556	
-   557		if (!pte_present(pte)) {
-   558			swp_entry_t entry;
-   559			/*
-   560			 * KSM's break_ksm() relies upon recognizing a ksm page
-   561			 * even while it is being migrated, so for that case we
-   562			 * need migration_entry_wait().
-   563			 */
-   564			if (likely(!(flags & FOLL_MIGRATION)))
-   565				goto no_page;
-   566			if (pte_none(pte))
-   567				goto no_page;
-   568			entry = pte_to_swp_entry(pte);
-   569			if (!is_migration_entry(entry))
-   570				goto no_page;
-   571			pte_unmap_unlock(ptep, ptl);
-   572			migration_entry_wait(mm, pmd, address);
-   573			goto retry;
-   574		}
-   575		if ((flags & FOLL_NUMA) && pte_protnone(pte))
-   576			goto no_page;
-   577	
-   578		page = vm_normal_page(vma, address, pte);
-   579	
-   580		/*
-   581		 * We only care about anon pages in can_follow_write_pte() and don't
-   582		 * have to worry about pte_devmap() because they are never anon.
-   583		 */
-   584		if ((flags & FOLL_WRITE) &&
-   585		    !can_follow_write_pte(pte, page, vma, flags)) {
-   586			page = NULL;
-   587			goto out;
-   588		}
-   589	
-   590		if (!page && pte_devmap(pte) && (flags & (FOLL_GET | FOLL_PIN))) {
-   591			/*
-   592			 * Only return device mapping pages in the FOLL_GET or FOLL_PIN
-   593			 * case since they are only valid while holding the pgmap
-   594			 * reference.
-   595			 */
-   596			*pgmap = get_dev_pagemap(pte_pfn(pte), *pgmap);
-   597			if (*pgmap)
-   598				page = pte_page(pte);
-   599			else
-   600				goto no_page;
-   601		} else if (unlikely(!page)) {
-   602			if (flags & FOLL_DUMP) {
-   603				/* Avoid special (like zero) pages in core dumps */
-   604				page = ERR_PTR(-EFAULT);
-   605				goto out;
-   606			}
-   607	
-   608			if (is_zero_pfn(pte_pfn(pte))) {
-   609				page = pte_page(pte);
-   610			} else {
-   611				ret = follow_pfn_pte(vma, address, ptep, flags);
-   612				page = ERR_PTR(ret);
-   613				goto out;
-   614			}
-   615		}
-   616	
-   617		if (!pte_write(pte) && gup_must_unshare(flags, page)) {
-   618			page = ERR_PTR(-EMLINK);
-   619			goto out;
-   620		}
-   621	
-   622		VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
-   623			       !PageAnonExclusive(page), page);
-   624	
-   625		/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
-   626		if (unlikely(!try_grab_page(page, flags))) {
-   627			page = ERR_PTR(-ENOMEM);
-   628			goto out;
-   629		}
-   630		/*
-   631		 * We need to make the page accessible if and only if we are going
-   632		 * to access its content (the FOLL_PIN case).  Please see
-   633		 * Documentation/core-api/pin_user_pages.rst for details.
-   634		 */
-   635		if (flags & FOLL_PIN) {
-   636			ret = arch_make_page_accessible(page);
-   637			if (ret) {
-   638				unpin_user_page(page);
-   639				page = ERR_PTR(ret);
-   640				goto out;
-   641			}
-   642		}
-   643		if (flags & FOLL_TOUCH) {
-   644			if ((flags & FOLL_WRITE) &&
-   645			    !pte_dirty(pte) && !PageDirty(page))
-   646				set_page_dirty(page);
-   647			/*
-   648			 * pte_mkyoung() would be more correct here, but atomic care
-   649			 * is needed to avoid losing the dirty bit: it is easier to use
-   650			 * mark_page_accessed().
-   651			 */
-   652			mark_page_accessed(page);
-   653		}
-   654	out:
-   655		pte_unmap_unlock(ptep, ptl);
-   656		return page;
-   657	no_page:
-   658		pte_unmap_unlock(ptep, ptl);
-   659		if (!pte_none(pte))
-   660			return NULL;
-   661		return no_page_table(vma, flags);
-   662	}
-   663	
+87dae9e70bf7be M Chetan Kumar 2022-08-16  462  
+87dae9e70bf7be M Chetan Kumar 2022-08-16  463  /* Call back function for devlink ops */
+87dae9e70bf7be M Chetan Kumar 2022-08-16  464  static const struct devlink_ops devlink_flash_ops = {
+87dae9e70bf7be M Chetan Kumar 2022-08-16 @465  	.supported_flash_update_params = DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT,
+87dae9e70bf7be M Chetan Kumar 2022-08-16  466  	.flash_update = t7xx_devlink_flash_update,
+87dae9e70bf7be M Chetan Kumar 2022-08-16  467  	.reload_actions = BIT(DEVLINK_RELOAD_ACTION_DRIVER_REINIT) |
+87dae9e70bf7be M Chetan Kumar 2022-08-16  468  			  BIT(DEVLINK_RELOAD_ACTION_FW_ACTIVATE),
+87dae9e70bf7be M Chetan Kumar 2022-08-16  469  	.reload_down = t7xx_devlink_reload_down,
+87dae9e70bf7be M Chetan Kumar 2022-08-16  470  	.reload_up = t7xx_devlink_reload_up,
+87dae9e70bf7be M Chetan Kumar 2022-08-16  471  };
+87dae9e70bf7be M Chetan Kumar 2022-08-16  472  
+
+:::::: The code at line 465 was first introduced by commit
+:::::: 87dae9e70bf7be2bd8a3c561fe3ddf666eb8a7a4 net: wwan: t7xx: Enable devlink based fw flashing and coredump collection
+
+:::::: TO: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
