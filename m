@@ -1,271 +1,790 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C0617EE
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 08:58:12 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZLMiQdISi+Oapn5wxG+9aP6X9Qu469feYwJGfZ1U9yeg1XyDGG7ZJyx2g23A0mTRW3MI+FtaErxT9XdcoIkx5qirpfE5WFUYyeZJZbXm1dwKh3oOHPbDymAtAsPwqrFPPlBDacHtIC8PD48xx2aeZVzxavFyS73GyV3QRIEUh01rvo5AZjn+FK+gAWe3TduUq2dv5dWsrVlHkmITtnSKVAB2wi0B+8IwowBV0gxAcf/JH6AFJgOjZPIilhkb7QIan7tcHqruAH8YBH7/C+EtbJwiCZjwBBCfrSfOUxQkH9dSIBHRf1KeCrwG3lue+Ug80yc/2yEYV97qAJIgO3zOcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BOMeJ6fzbkJymwNoJw7XCb8Zr9dmHtL4p7hKjWXSsz4=;
- b=J2UlBg6V6RUHHdJpN/knJUjkjmV6SH6b9G6Pl+LVbFY3WwvLrDoS36yDBgIkEPuilh+Bsv1XhZv3iEDCItgjPoTFmeox93o5R3O0e2ZUsGUYVxfFGmQxSQAXTfnA6Q4kJ/8E7uW5zYsMzbhFsenOhojruL0tCaEBYpUtPWAJ18HamUQGSCWcihW7ZfXtDEITlomDuCI0yALvFKWPOtf+TMVnQikWD15yztxT0Nbx8K4KafWMsfiKUcwY/YDzLB6dEEOqBBaz0hon4rhhaapC/TDxqvUYbOQlQShKixtIWX+/mpJb/Usf2OXg1/v0mvaLCK4bc8IVUMVmcjK1/HqZuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BOMeJ6fzbkJymwNoJw7XCb8Zr9dmHtL4p7hKjWXSsz4=;
- b=xjznH1VoGFqtCrUepm6WtRv/N0liFibuF8xXi79DhB+ezFPGjl8oXKfH4fLc8evJBl9P3bQ8prZZ3+mqWyjZeC3M15004dR5V1OtArcLJJP3/6+W3aRgWzLjX4QzFZtQgNpZTYMlWGnAmuj2R4mxIrkGMn6kmIelj73V1roXh9I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
- by SN7PR12MB7021.namprd12.prod.outlook.com (2603:10b6:806:262::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Fri, 19 Aug
- 2022 08:58:10 +0000
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::6947:34fa:6a20:3e20]) by BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::6947:34fa:6a20:3e20%9]) with mapi id 15.20.5504.028; Fri, 19 Aug 2022
- 08:58:10 +0000
-Message-ID: <c515c207-5497-67ba-c0f4-c4d5ae46f755@amd.com>
-Date: Fri, 19 Aug 2022 14:28:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v4 03/11] platform/x86/amd/pmf: Add support SPS PMF
- feature
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: hdegoede@redhat.com, markgross@kernel.org,
- platform-driver-x86@vger.kernel.org, Patil.Reddy@amd.com,
- llvm@lists.linux.dev
-References: <20220802151149.2123699-1-Shyam-sundar.S-k@amd.com>
- <20220802151149.2123699-4-Shyam-sundar.S-k@amd.com>
- <Yv7BmjjLtA3RaKju@thelio-3990X>
-From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-In-Reply-To: <Yv7BmjjLtA3RaKju@thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0047.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::18) To BL1PR12MB5176.namprd12.prod.outlook.com
- (2603:10b6:208:311::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CA917EE
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 09:10:40 +0000 (UTC)
+Received: by mail-vs1-f54.google.com with SMTP id v128so3865416vsb.10
+        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 02:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc;
+        bh=gceGtQR7pN3tA4bpWaHztM36gTRwfMzq7TB6lAHZIbQ=;
+        b=20LlkRUxOk9OSH2HUC00A7QOCVb9KORNdxXgJTkWZV/5CNUaKawvkid+0Yse0VsmB2
+         uIiwP8HMKOJM2hCStx202z9w6bd+wzQgyPXuU8zF2H1m/ZIrchynwPoTc2LeNii/yEFQ
+         wJlfQFfZncx3R3yyisLQfKBMKpoYnNijCnWepon+Z2HggYd3hbiXyMlsDP+a/1uEnC1/
+         A2AMlS412rxDkv7eRNdCo8G5T5ysJf81+Tm2ilueNWbW4/i0vnxMXKt9xwQkkdAAH1Cj
+         eL2/Yyi8ryHn/SK4KfTcx3Hq2VnxkVRHYIpzr/RduWoL3mS5c6co6JCYJOgI0qRwOKWf
+         +jCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc;
+        bh=gceGtQR7pN3tA4bpWaHztM36gTRwfMzq7TB6lAHZIbQ=;
+        b=0kDMutPZTGeMFhGrGcyVGWpcGJbIhHDMBZNhJsltXR5I3U2GjxybKt50gzBDdWQk8z
+         Y2DRxw7SezkHwjba5MLZOwYBjFwU5cQh9BFwYOv25M+QpF8FNsCVJnIWx1cAbNzOEb3u
+         lyc+aaHoMw5rWj0lalY/xqcye4B1Xa9hu1D2ANccneJFqLhLBU9BIZLgEsdNZMBRpEfY
+         XHfhLDk8X4VY9mWz3t4uY+Icdm7gG/RfqiE85wMduA3VX6BhIv6QDheSrFoKwGjtV58z
+         EcGZQrEbMO6+ryO/HSbEsFXCVqrAitX8KFFFUIEE/YER4EqtRKyNpQK317rDZ+rgbVAH
+         l1FA==
+X-Gm-Message-State: ACgBeo1aInB+zg0X7Kg8QT0cAtPc5X+LX6N57YccbPY04XUPqu9TApET
+	zSD4rO9gwdWRvAbKRlkEJvySMmzeL7CcWr0VoXQcEw==
+X-Google-Smtp-Source: AA6agR4VAifHFjtsXQEFSk53I+n4y/AbPeFwJdnNCRlp/l0XqClZjxeGHeOIPCXyTqEcYIizMqwbKSHFal8gxvlzvx4=
+X-Received: by 2002:a67:b303:0:b0:38a:b12f:cbc4 with SMTP id
+ a3-20020a67b303000000b0038ab12fcbc4mr2500381vsm.46.1660900239786; Fri, 19 Aug
+ 2022 02:10:39 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 19 Aug 2022 02:10:39 -0700
+From: Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220819061456.8042-1-nancy.lin@mediatek.com> <20220819061456.8042-4-nancy.lin@mediatek.com>
+In-Reply-To: <20220819061456.8042-4-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 23646a5c-b2eb-4d79-0f90-08da81c0f0d5
-X-MS-TrafficTypeDiagnostic: SN7PR12MB7021:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	MOBrhBh5CZyEnwXyakFE53lFiYxCahTn3OWfUhPO67pan1zkDWx+TKC+PzeDeAYyApDG53L7NIEYMOre//NJZM1P0QweDz/RXRjKDeIhY7yN2/vJkaHNY0ylgdRWOGSFj4OF49wwvRwFIFJmoASoVQLBX5GbRpdeLhIX1L2PdKSYt+C9SneAtSkTSDIRroftINOQnhcE3rdOE+z5fOZ3ON0xh4SMPjXq0Ml+TdI0zn3memoiTRSb36O/HRXz/AJaAyN6j8Jwzeph9Ij4wNfMAzw+2+xClhiC9Lw8hES94Gf4uWAimDbEkeA972qfvQ76/Wx1pdUm6GD7YqBqrbolC2UT7owu7R/jhkyY6+cJwE8EgzOjkKY8rvUnOvG32L9ZYb5y+eY06NKVpkq85ndfcNAcyyJv8rguZE6Si+WzmLufjyj4WGB5dU5w852UVT2mMBq/7NVLrWAQDiYNlYSjC3CJnZhyodzXQXMVGb3tbcWpH7KEEAkf/bLQqa5fcFRYVw9SgU3fC27g1mIfoK2cytsxQhZXNbEjxUaM51tBN0Sugx7YYxpGfdWn4VFpdXshGru7Ur2YouCHL919zBTJKJ+gd+A5wlcVwiB3fc9s92r5pu1tYQmL/qrUOlF/eduW71ZGc3Bis1B2WteMtklr+2fR43to1Tg08wFvuN5rmyoPBk6jd9hTLqHulqndMqpIa/XcEIUL/WGK7+dUQRKycwLE6cj/fN09vpk25gR90h96huGWagl69K09a6BUvIsuB2dR6cNRjfWJ0fMSWjMl033ODlJx2jw+XTMQ7QXm2W8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(2906002)(2616005)(31686004)(6916009)(186003)(36756003)(316002)(83380400001)(38100700002)(53546011)(4326008)(66946007)(66556008)(66476007)(8676002)(31696002)(6486002)(6512007)(26005)(41300700001)(86362001)(478600001)(8936002)(6666004)(6506007)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WUJrcUZ0UUN1SW9tYmYvNnhoK05WeVJBcWdhbm52YzRqOTB2cC9pK0xaVUZ3?=
- =?utf-8?B?dy82dzZWYlowQzh5eHY2K1c0VDVWU3RqTDhSc2R1cnZuVW1IV1RjaVd1ekMz?=
- =?utf-8?B?WkZPUjRzdU9wWVJlcnpoV1d1UXpRRVN4UGN0eFB4bExDQytwcjlvYlorNFBx?=
- =?utf-8?B?MXJRSlBJckdpaU9FQTRsMUFQUTNkSG5QenBhdDlZakdZR2xsbTVQRzF6aVBl?=
- =?utf-8?B?VUYxSnVZTm5VUkVaZkJKTmlTemxHeHlJdm1FZmYyMHFHdDN3MnFWMklDSktq?=
- =?utf-8?B?VmxBNjhjZlliZG4xZTFTWXR6VmpMY0tKN283b0MwY0JlSi9OQ3NucVRkMHBu?=
- =?utf-8?B?ZnprdTlsWGF6S1FKcmxsZytuTVQ2dU1ZRTF4VUxja0ZRbUptVXlyVVJqbWp2?=
- =?utf-8?B?dEJhUDN1RmRaU0lGRTR1NGpMTVM4dkxZdGlWbWpYdWdNcTBJRCtJdTcwZ0E3?=
- =?utf-8?B?cE5LQ0pQNGNpajJVc2RWN3JCNXdVUU9DTmFSanhnZDhlVzZrdzR3Z29nM0cz?=
- =?utf-8?B?MWp3Y0Erc0FjSmVtajV1R2VtaW5CYWhGS1kzV3MyUEZ5a0gydmdvWG5hNWJz?=
- =?utf-8?B?R2p5SzZ0SllidEtPMFJlaXVDVFZrN2lLa2dSMzViNWhUOXhzWm5EbGxyVGt4?=
- =?utf-8?B?RkZTK1RBMGRlTHhMSFNaazR5QUVCR0NjenJBcnd5Y2JMM2VXYnhEOGhVb28r?=
- =?utf-8?B?enpQSTVZSi9YTmU1aVJPRG5yRmpSTUNYck4zQ1UzKzlTbUl6NUVkQ3p4LzVU?=
- =?utf-8?B?b3d1bUE2cU9xSVV6UkhXWURqZk1wQkpYVGRncCsxdWZHQ1pHZlh5c2xnN2wy?=
- =?utf-8?B?eEFkYU9yMUkwUVRoeStDYmw0RjdSSm05emJVN21aS3JhblhWV2lKd2RUdmcr?=
- =?utf-8?B?TUhZQjdTOWs4Wjh1bmY4aVIrMVRxVFh1VEY3eXZMSXpjZFltalRJL1VscVlY?=
- =?utf-8?B?TlRzNDcyeDFVKzBqc25TTjNDWHhUTTJuSTB5SGZDdVpZdU15aE9NUU9VOWpl?=
- =?utf-8?B?MTlPVllnM21HWko3cjZIUVRuYnVJVU9GRGxxdEFMSlZJUm1EUU1KRG1KRHJM?=
- =?utf-8?B?NDh5V1NSOE1Mc1d3ZytmNFl6djhNOWZoRld1eWZBTHd1YmNlK1UybTJMM3RJ?=
- =?utf-8?B?bjNMRE1RSWcvSmlMNGZkN0ZjTzJyYXZ4NVlFM05KVER4Z3lyYkJQZWdHZlNS?=
- =?utf-8?B?Qk9kZUtqMS9vTmxkMjQ2QkRNL2lTYWI2WU1MV0VsWFVHcVdhZjNNSmNRTzR1?=
- =?utf-8?B?aWhsc04rVGYxWUFzbkhaM0ZRRWlBMUEwK2RwZmJjYlpDQ1BvbG8yNXB5OEVl?=
- =?utf-8?B?S1IzTElsTW1lazlaVzNkZCtIL0hTK3psSUJCdFZxRnkyM2U2ZHBBcEpnQk1o?=
- =?utf-8?B?cWlDVzNlUmJ2RWh6a3IvWUZ5Wldxemxpd2thTWZqSllOYWlqQ1VtdUdmVzdS?=
- =?utf-8?B?L0VEUnN0Ly8zbWZralVNMHFYeldkRlNoY3g5THdBVHNGNWVQVVJnK1NhNmJ3?=
- =?utf-8?B?UjFxZk9Yd1VIbDlYTzZ0WERZWi9HSm5NbDZVVlRBd3dtaVpKdjNSc0xQVFI1?=
- =?utf-8?B?clkydVlYSmZqKy9vbW1DMHV6MHNpMGJtN2NoR3V3L3RPdFkvQUl2YUhLK29R?=
- =?utf-8?B?VE9BdVhOajBGenV2RkM4eGhWcXVFazhQNEtQOHhMKzJEYzNnTW4yNzBKaHB6?=
- =?utf-8?B?dlQrRTRUYTRhVTRIa2h2NnRGdkNUdHlOanB2YSt2V3ROOGxWcTUrSjlpckFH?=
- =?utf-8?B?TjMwU2VjR2trdWFsWmFUUzJHTHVKWElHU1RiRWMwVERVWWw5QWtEN1F0aHBD?=
- =?utf-8?B?c21HMFFGZkNZY0YzYitxT2ZFT2paNGNxei9XNEwrd3dLcm5WaU5MbU00VDFt?=
- =?utf-8?B?Z3kzWWdFbFpzbHFFcFlRbUI3alI2K29EVmFwZ05yNWk2RmRyYlV6RVlXU1lF?=
- =?utf-8?B?SUhzdEJJSjNpNDF3bU9Ub1R6K2Y1T1dwZFlqTGJPWmJ5OUdNeXlWV0ZCUGlV?=
- =?utf-8?B?R2VzbkpkejVxSjZ6WHZ5VW1INFRQYXppZmUvT21vcUIxeHRRLzdFQndLWEU4?=
- =?utf-8?B?a0M2NHVwYmNRNGpRSjd4dnJidGh5clFGSWhZK3pycGk2RzhqN2gvdU4zR3ht?=
- =?utf-8?Q?5ISJLDO8+HM9AmkEE9jRmrauG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23646a5c-b2eb-4d79-0f90-08da81c0f0d5
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 08:58:10.3526
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 301HEXzrQGsQUq4CSKqXD8WBqdedtVHCBZK/zkSyWikLweNX902oW/IrkGmLMq781Mx79Fh8ry+pnX4KfhGjVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7021
+Date: Fri, 19 Aug 2022 02:10:39 -0700
+Message-ID: <CABnWg9u994yOTFkWWK4kpNEZ5g1hjWmeBhOJBh52H6c8pXAUNw@mail.gmail.com>
+Subject: Re: [PATCH v26 3/7] drm/mediatek: add ovl_adaptor support for MT8195
+To: linux-mediatek@lists.infradead.org, Rob Herring <robh+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net, 
+	nfraprado@collabora.com
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"ancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin" <jason-jh.lin@mediatek.com>, 
+	Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+	singo.chang@mediatek.com, Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nathan,
+On Fri, 19 Aug 2022 08:14, "" wrote:
+>Add ovl_adaptor driver for MT8195.
+>Ovl_adaptor is an encapsulated module and designed for simplified
+>DRM control flow. This module is composed of 8 RDMAs, 4 MERGEs and
+>an ETHDR. Two RDMAs merge into one layer, so this module support 4
+>layers.
+>
+Hi Nancy, sorry I'm late in the review process, but I just applied
+your series and I stumbled upon a panic.
+(see details inline)
 
-Thanks for bringing this up.
+This is due to the fact that my dts is missing the required ovl
+components, though, I think the driver
+shouldn't cause a panic whenever the dts is not complete.
 
-On 8/19/2022 4:17 AM, Nathan Chancellor wrote:
-> Hi Shyam,
-> 
-> On Tue, Aug 02, 2022 at 08:41:41PM +0530, Shyam Sundar S K wrote:
->> SPS (a.k.a. Static Power Slider) gives a feel of Windows performance
->> power slider for the Linux users, where the user selects a certain
->> mode (like "balanced", "low-power" or "performance") and the thermals
->> associated with each selected mode gets applied from the silicon
->> side via the mailboxes defined through PMFW.
->>
->> PMF driver hooks to platform_profile by reading the PMF ACPI fn9 to
->> see if the support is being advertised by ACPI interface.
->>
->> If supported, the PMF driver reacts to platform_profile selection choices
->> made by the user and adjust the system thermal behavior.
->>
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->> Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-> 
-> <snip>
-> 
->> diff --git a/drivers/platform/x86/amd/pmf/sps.c b/drivers/platform/x86/amd/pmf/sps.c
->> new file mode 100644
->> index 000000000000..ef4df3fd774b
->> --- /dev/null
->> +++ b/drivers/platform/x86/amd/pmf/sps.c
-> 
-> <snip>
-> 
->> +u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
->> +{
->> +	u8 mode;
->> +
->> +	switch (pmf->current_profile) {
->> +	case PLATFORM_PROFILE_PERFORMANCE:
->> +		mode = POWER_MODE_PERFORMANCE;
->> +		break;
->> +	case PLATFORM_PROFILE_BALANCED:
->> +		mode = POWER_MODE_BALANCED_POWER;
->> +		break;
->> +	case PLATFORM_PROFILE_LOW_POWER:
->> +		mode = POWER_MODE_POWER_SAVER;
->> +		break;
->> +	default:
->> +		dev_err(pmf->dev, "Unknown Platform Profile.\n");
->> +		break;
->> +	}
->> +
->> +	return mode;
->> +}
-> 
-> This patch is now in -next as commit 4c71ae414474
-> ("platform/x86/amd/pmf: Add support SPS PMF feature"), where it causes
-> the following clang warning:
-> 
->   drivers/platform/x86/amd/pmf/sps.c:96:2: error: variable 'mode' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->           default:
->           ^~~~~~~
->   drivers/platform/x86/amd/pmf/sps.c:101:9: note: uninitialized use occurs here
->           return mode;
->                  ^~~~
->   drivers/platform/x86/amd/pmf/sps.c:84:9: note: initialize the variable 'mode' to silence this warning
->           u8 mode;
->                  ^
->                   = '\0'
->   1 error generated.
-> 
-> As far as I can tell, the default case cannot actually happen due to the
-> advertising of choices in amd_pmf_init_sps() and the check against those
-> choices in platform_profile_store() but it would be good to avoid this
-> warning, especially given that it is fatal with CONFIG_WERROR.
-> 
-> I do not mind sending a patch for this but I am a little unclear what
-> the best fix would be. Removing the default case would cause -Wswitch
-> warnings because current_profile is an enum (plus it would make finding
-> invalid profiles harder if there was ever a change in the core). Perhaps
-> changing the return type to be an int, returning an error code in the
-> default case, then updating the call sites to check for an error? I am
-> open to other suggestions (or if you want to sent a fix yourself, just
-> consider this a report).
+I'm testing this out with an mt8195-demo board.
 
-yes, you are right. We can just change the return an error code like the
-other driver implementing the platform_profile. Like below.
+>Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+>Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+>Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+>---
+> drivers/gpu/drm/mediatek/Makefile             |   1 +
+> drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
+> .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 528 ++++++++++++++++++
+> drivers/gpu/drm/mediatek/mtk_drm_drv.h        |   1 +
+> 4 files changed, 556 insertions(+)
+> create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+>
+>diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
+>index fb158a1e7f06..3abd27d7c91d 100644
+>--- a/drivers/gpu/drm/mediatek/Makefile
+>+++ b/drivers/gpu/drm/mediatek/Makefile
+>@@ -6,6 +6,7 @@ mediatek-drm-y := mtk_disp_aal.o \
+> 		  mtk_disp_gamma.o \
+> 		  mtk_disp_merge.o \
+> 		  mtk_disp_ovl.o \
+>+		  mtk_disp_ovl_adaptor.o \
+> 		  mtk_disp_rdma.o \
+> 		  mtk_drm_crtc.o \
+> 		  mtk_drm_ddp_comp.o \
+>diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>index 33e61a136bbc..654f8e257984 100644
+>--- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>+++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>@@ -7,6 +7,8 @@
+> #define _MTK_DISP_DRV_H_
+>
+> #include <linux/soc/mediatek/mtk-cmdq.h>
+>+#include <linux/soc/mediatek/mtk-mmsys.h>
+>+#include <linux/soc/mediatek/mtk-mutex.h>
+> #include "mtk_drm_plane.h"
+> #include "mtk_mdp_rdma.h"
+>
+>@@ -116,6 +118,30 @@ void mtk_rdma_unregister_vblank_cb(struct device *dev);
+> void mtk_rdma_enable_vblank(struct device *dev);
+> void mtk_rdma_disable_vblank(struct device *dev);
+>
+>+void mtk_ovl_adaptor_add_comp(struct device *dev, struct mtk_mutex *mutex);
+>+void mtk_ovl_adaptor_remove_comp(struct device *dev, struct mtk_mutex *mutex);
+>+void mtk_ovl_adaptor_connect(struct device *dev, struct device *mmsys_dev,
+>+			     unsigned int next);
+>+void mtk_ovl_adaptor_disconnect(struct device *dev, struct device *mmsys_dev,
+>+				unsigned int next);
+>+int mtk_ovl_adaptor_clk_enable(struct device *dev);
+>+void mtk_ovl_adaptor_clk_disable(struct device *dev);
+>+void mtk_ovl_adaptor_config(struct device *dev, unsigned int w,
+>+			    unsigned int h, unsigned int vrefresh,
+>+			    unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+>+void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
+>+				  struct mtk_plane_state *state,
+>+				  struct cmdq_pkt *cmdq_pkt);
+>+void mtk_ovl_adaptor_register_vblank_cb(struct device *dev, void (*vblank_cb)(void *),
+>+					void *vblank_cb_data);
+>+void mtk_ovl_adaptor_unregister_vblank_cb(struct device *dev);
+>+void mtk_ovl_adaptor_enable_vblank(struct device *dev);
+>+void mtk_ovl_adaptor_disable_vblank(struct device *dev);
+>+void mtk_ovl_adaptor_start(struct device *dev);
+>+void mtk_ovl_adaptor_stop(struct device *dev);
+>+unsigned int mtk_ovl_adaptor_layer_nr(struct device *dev);
+>+struct device *mtk_ovl_adaptor_dma_dev_get(struct device *dev);
+>+
+> int mtk_mdp_rdma_clk_enable(struct device *dev);
+> void mtk_mdp_rdma_clk_disable(struct device *dev);
+> void mtk_mdp_rdma_start(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+>diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+>new file mode 100644
+>index 000000000000..267ee0a1b8fa
+>--- /dev/null
+>+++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+>@@ -0,0 +1,528 @@
+>+// SPDX-License-Identifier: GPL-2.0-only
+>+/*
+>+ * Copyright (c) 2021 MediaTek Inc.
+>+ */
+>+
+>+#include <drm/drm_fourcc.h>
+>+#include <drm/drm_of.h>
+>+#include <linux/clk.h>
+>+#include <linux/component.h>
+>+#include <linux/of_device.h>
+>+#include <linux/of_address.h>
+>+#include <linux/platform_device.h>
+>+#include <linux/pm_runtime.h>
+>+#include <linux/reset.h>
+>+#include <linux/soc/mediatek/mtk-cmdq.h>
+>+#include <linux/soc/mediatek/mtk-mmsys.h>
+>+#include <linux/soc/mediatek/mtk-mutex.h>
+>+
+>+#include "mtk_disp_drv.h"
+>+#include "mtk_drm_crtc.h"
+>+#include "mtk_drm_ddp_comp.h"
+>+#include "mtk_drm_drv.h"
+>+#include "mtk_ethdr.h"
+>+
+>+#define MTK_OVL_ADAPTOR_RDMA_MAX_WIDTH 1920
+>+#define MTK_OVL_ADAPTOR_LAYER_NUM 4
+>+
+>+enum mtk_ovl_adaptor_comp_type {
+>+	OVL_ADAPTOR_TYPE_RDMA = 0,
+>+	OVL_ADAPTOR_TYPE_MERGE,
+>+	OVL_ADAPTOR_TYPE_ETHDR,
+>+	OVL_ADAPTOR_TYPE_NUM,
+>+};
+>+
+>+enum mtk_ovl_adaptor_comp_id {
+>+	OVL_ADAPTOR_MDP_RDMA0,
+>+	OVL_ADAPTOR_MDP_RDMA1,
+>+	OVL_ADAPTOR_MDP_RDMA2,
+>+	OVL_ADAPTOR_MDP_RDMA3,
+>+	OVL_ADAPTOR_MDP_RDMA4,
+>+	OVL_ADAPTOR_MDP_RDMA5,
+>+	OVL_ADAPTOR_MDP_RDMA6,
+>+	OVL_ADAPTOR_MDP_RDMA7,
+>+	OVL_ADAPTOR_MERGE0,
+>+	OVL_ADAPTOR_MERGE1,
+>+	OVL_ADAPTOR_MERGE2,
+>+	OVL_ADAPTOR_MERGE3,
+>+	OVL_ADAPTOR_ETHDR0,
+>+	OVL_ADAPTOR_ID_MAX
+>+};
+>+
+>+struct ovl_adaptor_comp_match {
+>+	enum mtk_ovl_adaptor_comp_type type;
+>+	int alias_id;
+>+};
+>+
+>+struct mtk_disp_ovl_adaptor {
+>+	struct device *ovl_adaptor_comp[OVL_ADAPTOR_ID_MAX];
+>+	struct device *mmsys_dev;
+>+	bool children_bound;
+>+};
+>+
+>+static const char * const private_comp_stem[OVL_ADAPTOR_TYPE_NUM] = {
+>+	[OVL_ADAPTOR_TYPE_RDMA]		= "vdo1-rdma",
+>+	[OVL_ADAPTOR_TYPE_MERGE]	= "merge",
+>+	[OVL_ADAPTOR_TYPE_ETHDR]	= "ethdr",
+>+};
+>+
+>+static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_MAX] = {
+>+	[OVL_ADAPTOR_MDP_RDMA0]	= { OVL_ADAPTOR_TYPE_RDMA, 0 },
+>+	[OVL_ADAPTOR_MDP_RDMA1]	= { OVL_ADAPTOR_TYPE_RDMA, 1 },
+>+	[OVL_ADAPTOR_MDP_RDMA2]	= { OVL_ADAPTOR_TYPE_RDMA, 2 },
+>+	[OVL_ADAPTOR_MDP_RDMA3]	= { OVL_ADAPTOR_TYPE_RDMA, 3 },
+>+	[OVL_ADAPTOR_MDP_RDMA4]	= { OVL_ADAPTOR_TYPE_RDMA, 4 },
+>+	[OVL_ADAPTOR_MDP_RDMA5]	= { OVL_ADAPTOR_TYPE_RDMA, 5 },
+>+	[OVL_ADAPTOR_MDP_RDMA6]	= { OVL_ADAPTOR_TYPE_RDMA, 6 },
+>+	[OVL_ADAPTOR_MDP_RDMA7]	= { OVL_ADAPTOR_TYPE_RDMA, 7 },
+>+	[OVL_ADAPTOR_MERGE0]	= { OVL_ADAPTOR_TYPE_MERGE, 1 },
+>+	[OVL_ADAPTOR_MERGE1]	= { OVL_ADAPTOR_TYPE_MERGE, 2 },
+>+	[OVL_ADAPTOR_MERGE2]	= { OVL_ADAPTOR_TYPE_MERGE, 3 },
+>+	[OVL_ADAPTOR_MERGE3]	= { OVL_ADAPTOR_TYPE_MERGE, 4 },
+>+	[OVL_ADAPTOR_ETHDR0]	= { OVL_ADAPTOR_TYPE_ETHDR, 0 },
+>+};
+>+
+>+void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
+>+				  struct mtk_plane_state *state,
+>+				  struct cmdq_pkt *cmdq_pkt)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+	struct mtk_plane_pending_state *pending = &state->pending;
+>+	struct mtk_mdp_rdma_cfg rdma_config = {0};
+>+	struct device *rdma_l;
+>+	struct device *rdma_r;
+>+	struct device *merge;
+>+	struct device *ethdr;
+>+	const struct drm_format_info *fmt_info = drm_format_info(pending->format);
+>+	bool use_dual_pipe = false;
+>+	unsigned int align_width;
+>+	unsigned int l_w = 0;
+>+	unsigned int r_w = 0;
+>+
+>+	dev_dbg(dev, "%s+ idx:%d, enable:%d, fmt:0x%x\n", __func__, idx,
+>+		pending->enable, pending->format);
+>+	dev_dbg(dev, "addr 0x%pad, fb w:%d, {%d,%d,%d,%d}\n",
+>+		&pending->addr, (pending->pitch / fmt_info->cpp[0]),
+>+		pending->x, pending->y, pending->width, pending->height);
+>+
+>+	rdma_l = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0 + 2 * idx];
+>+	rdma_r = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0 + 2 * idx + 1];
+>+	merge = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MERGE0 + idx];
+>+	ethdr = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0];
+>+
+>+	if (!pending->enable) {
+>+		mtk_merge_stop_cmdq(merge, cmdq_pkt);
+>+		mtk_mdp_rdma_stop(rdma_l, cmdq_pkt);
+>+		mtk_mdp_rdma_stop(rdma_r, cmdq_pkt);
+>+		mtk_ethdr_layer_config(ethdr, idx, state, cmdq_pkt);
+>+		return;
+>+	}
+>+
+>+	/* ETHDR is in 1T2P domain, width needs to be 2 pixels align */
+>+	align_width = ALIGN_DOWN(pending->width, 2);
+>+
+>+	if (align_width > MTK_OVL_ADAPTOR_RDMA_MAX_WIDTH)
+>+		use_dual_pipe = true;
+>+
+>+	if (use_dual_pipe) {
+>+		l_w = (align_width / 2) + ((pending->width / 2) % 2);
+>+		r_w = align_width - l_w;
+>+	} else {
+>+		l_w = align_width;
+>+	}
+>+	mtk_merge_advance_config(merge, l_w, r_w, pending->height, 0, 0, cmdq_pkt);
+>+	mtk_mmsys_merge_async_config(ovl_adaptor->mmsys_dev, idx, align_width / 2,
+>+				     pending->height, cmdq_pkt);
+>+
+>+	rdma_config.width = l_w;
+>+	rdma_config.height = pending->height;
+>+	rdma_config.addr0 = pending->addr;
+>+	rdma_config.pitch = pending->pitch;
+>+	rdma_config.fmt = pending->format;
+>+	rdma_config.color_encoding = pending->color_encoding;
+>+	mtk_mdp_rdma_config(rdma_l, &rdma_config, cmdq_pkt);
+>+
+>+	if (use_dual_pipe) {
+>+		rdma_config.x_left = l_w;
+>+		rdma_config.width = r_w;
+>+		mtk_mdp_rdma_config(rdma_r, &rdma_config, cmdq_pkt);
+>+	}
+>+
+>+	mtk_merge_start_cmdq(merge, cmdq_pkt);
+>+
+>+	mtk_mdp_rdma_start(rdma_l, cmdq_pkt);
+>+	if (use_dual_pipe)
+>+		mtk_mdp_rdma_start(rdma_r, cmdq_pkt);
+>+	else
+>+		mtk_mdp_rdma_stop(rdma_r, cmdq_pkt);
+>+
+>+	mtk_ethdr_layer_config(ethdr, idx, state, cmdq_pkt);
+>+}
+>+
+>+void mtk_ovl_adaptor_config(struct device *dev, unsigned int w,
+>+			    unsigned int h, unsigned int vrefresh,
+>+			    unsigned int bpc, struct cmdq_pkt *cmdq_pkt)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_config(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0], w, h,
+>+			 vrefresh, bpc, cmdq_pkt);
+>+}
+>+
+>+void mtk_ovl_adaptor_start(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_start(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0]);
+>+}
+>+
+>+void mtk_ovl_adaptor_stop(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_stop(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0]);
+>+}
+>+
+>+int mtk_ovl_adaptor_clk_enable(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+	struct device *comp;
+>+	int ret;
+>+	int i;
+>+
+>+	for (i = 0; i < OVL_ADAPTOR_MERGE0; i++) {
+>+		comp = ovl_adaptor->ovl_adaptor_comp[i];
+>+		ret = pm_runtime_get_sync(comp);
+>+		if (ret < 0) {
+>+			dev_err(dev, "Failed to enable power domain %d, err %d\n", i, ret);
+>+			goto pwr_err;
+>+		}
+>+	}
+>+
+>+	for (i = 0; i < OVL_ADAPTOR_ID_MAX; i++) {
+>+		comp = ovl_adaptor->ovl_adaptor_comp[i];
+>+
+>+		if (i < OVL_ADAPTOR_MERGE0)
+>+			ret = mtk_mdp_rdma_clk_enable(comp);
+>+		else if (i < OVL_ADAPTOR_ETHDR0)
+>+			ret = mtk_merge_clk_enable(comp);
+>+		else
+>+			ret = mtk_ethdr_clk_enable(comp);
+>+		if (ret) {
+>+			dev_err(dev, "Failed to enable clock %d, err %d\n", i, ret);
+>+			goto clk_err;
+>+		}
+>+	}
+>+
+>+	return ret;
+>+
+>+clk_err:
+>+	while (--i >= 0) {
+>+		comp = ovl_adaptor->ovl_adaptor_comp[i];
+>+		if (i < OVL_ADAPTOR_MERGE0)
+>+			mtk_mdp_rdma_clk_disable(comp);
+>+		else if (i < OVL_ADAPTOR_ETHDR0)
+>+			mtk_merge_clk_disable(comp);
+>+		else
+>+			mtk_ethdr_clk_disable(comp);
+>+	}
+>+	i = OVL_ADAPTOR_MERGE0;
+>+
+>+pwr_err:
+>+	while (--i >= 0)
+>+		pm_runtime_put(ovl_adaptor->ovl_adaptor_comp[i]);
+>+
+>+	return ret;
+>+}
+>+
+>+void mtk_ovl_adaptor_clk_disable(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+	struct device *comp;
+>+	int i;
+>+
+>+	for (i = 0; i < OVL_ADAPTOR_ID_MAX; i++) {
+>+		comp = ovl_adaptor->ovl_adaptor_comp[i];
+>+
+>+		if (i < OVL_ADAPTOR_MERGE0) {
+>+			mtk_mdp_rdma_clk_disable(comp);
+>+			pm_runtime_put(comp);
+>+		} else if (i < OVL_ADAPTOR_ETHDR0) {
+>+			mtk_merge_clk_disable(comp);
+>+		} else {
+>+			mtk_ethdr_clk_disable(comp);
+>+		}
+>+	}
+>+}
+>+
+>+unsigned int mtk_ovl_adaptor_layer_nr(struct device *dev)
+>+{
+>+	return MTK_OVL_ADAPTOR_LAYER_NUM;
+>+}
+>+
+>+struct device *mtk_ovl_adaptor_dma_dev_get(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	return ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0];
+>+}
+>+
+>+void mtk_ovl_adaptor_register_vblank_cb(struct device *dev, void (*vblank_cb)(void *),
+>+					void *vblank_cb_data)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_register_vblank_cb(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0],
+>+				     vblank_cb, vblank_cb_data);
+>+}
+>+
+>+void mtk_ovl_adaptor_unregister_vblank_cb(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_unregister_vblank_cb(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0]);
+>+}
+>+
+>+void mtk_ovl_adaptor_enable_vblank(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_enable_vblank(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0]);
+>+}
+>+
+>+void mtk_ovl_adaptor_disable_vblank(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+>+
+>+	mtk_ethdr_disable_vblank(ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0]);
+>+}
+>+
+>+void mtk_ovl_adaptor_add_comp(struct device *dev, struct mtk_mutex *mutex)
+>+{
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA0);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA1);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA2);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA3);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA4);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA5);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA6);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA7);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE1);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE2);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE3);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE4);
+>+	mtk_mutex_add_comp(mutex, DDP_COMPONENT_ETHDR_MIXER);
+>+}
+>+
+>+void mtk_ovl_adaptor_remove_comp(struct device *dev, struct mtk_mutex *mutex)
+>+{
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA0);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA1);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA2);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA3);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA4);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA5);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA6);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA7);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE1);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE2);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE3);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE4);
+>+	mtk_mutex_remove_comp(mutex, DDP_COMPONENT_ETHDR_MIXER);
+>+}
+>+
+>+void mtk_ovl_adaptor_connect(struct device *dev, struct device *mmsys_dev, unsigned int next)
+>+{
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MDP_RDMA0, DDP_COMPONENT_MERGE1);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MDP_RDMA1, DDP_COMPONENT_MERGE1);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MDP_RDMA2, DDP_COMPONENT_MERGE2);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MERGE1, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MERGE2, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MERGE3, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_MERGE4, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_connect(mmsys_dev, DDP_COMPONENT_ETHDR_MIXER, next);
+>+}
+>+
+>+void mtk_ovl_adaptor_disconnect(struct device *dev, struct device *mmsys_dev, unsigned int next)
+>+{
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MDP_RDMA0, DDP_COMPONENT_MERGE1);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MDP_RDMA1, DDP_COMPONENT_MERGE1);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MDP_RDMA2, DDP_COMPONENT_MERGE2);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MERGE1, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MERGE2, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MERGE3, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_MERGE4, DDP_COMPONENT_ETHDR_MIXER);
+>+	mtk_mmsys_ddp_disconnect(mmsys_dev, DDP_COMPONENT_ETHDR_MIXER, next);
+>+}
+>+
+>+static int ovl_adaptor_comp_get_id(struct device *dev, struct device_node *node,
+>+				   enum mtk_ovl_adaptor_comp_type type)
+>+{
+>+	int alias_id = of_alias_get_id(node, private_comp_stem[type]);
+>+	int i;
+>+
+>+	for (i = 0; i < ARRAY_SIZE(comp_matches); i++)
+>+		if (comp_matches[i].type == type &&
+>+		    comp_matches[i].alias_id == alias_id)
+>+			return i;
+>+
+>+	dev_warn(dev, "Failed to get id. type: %d, alias: %d\n", type, alias_id);
+>+	return -EINVAL;
+>+}
+>+
+>+static const struct of_device_id mtk_ovl_adaptor_comp_dt_ids[] = {
+>+	{
+>+		.compatible = "mediatek,mt8195-vdo1-rdma",
+>+		.data = (void *)OVL_ADAPTOR_TYPE_RDMA,
+>+	}, {
+>+		.compatible = "mediatek,mt8195-disp-merge",
+>+		.data = (void *)OVL_ADAPTOR_TYPE_MERGE,
+>+	}, {
+>+		.compatible = "mediatek,mt8195-disp-ethdr",
+>+		.data = (void *)OVL_ADAPTOR_TYPE_ETHDR,
+>+	},
+>+	{},
+>+};
+>+
+>+static int compare_of(struct device *dev, void *data)
+>+{
+>+	return dev->of_node == data;
+>+}
+>+
+>+static int ovl_adaptor_comp_init(struct device *dev, struct component_match **match)
+>+{
+>+	struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+>+	struct device_node *node, *parent;
+>+	struct platform_device *comp_pdev;
+>+
+>+	parent = dev->parent->parent->of_node->parent;
+>+
+>+	for_each_child_of_node(parent, node) {
+>+		const struct of_device_id *of_id;
+>+		enum mtk_ovl_adaptor_comp_type type;
+>+		int id;
+>+
+>+		of_id = of_match_node(mtk_ovl_adaptor_comp_dt_ids, node);
+>+		if (!of_id)
+>+			continue;
+>+
+>+		if (!of_device_is_available(node)) {
+>+			dev_dbg(dev, "Skipping disabled component %pOF\n",
+>+				node);
+>+			continue;
+>+		}
+>+
+>+		type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
+>+		id = ovl_adaptor_comp_get_id(dev, node, type);
+>+		if (id < 0) {
+>+			dev_warn(dev, "Skipping unknown component %pOF\n",
+>+				 node);
+>+			continue;
+>+		}
+>+
+>+		comp_pdev = of_find_device_by_node(node);
+>+		if (!comp_pdev)
+>+			return -EPROBE_DEFER;
+>+
+>+		priv->ovl_adaptor_comp[id] = &comp_pdev->dev;
+>+
+>+		drm_of_component_match_add(dev, match, compare_of, node);
+>+		dev_dbg(dev, "Adding component match for %pOF\n", node);
+>+	}
+>+
+>+	return 0;
+>+}
+>+
+>+static int mtk_disp_ovl_adaptor_comp_bind(struct device *dev, struct device *master,
+>+					  void *data)
+>+{
+>+	struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+>+
+>+	if (!priv->children_bound)
+>+		return -EPROBE_DEFER;
+>+
+>+	return 0;
+>+}
+>+
+>+static void mtk_disp_ovl_adaptor_comp_unbind(struct device *dev, struct device *master,
+>+					     void *data)
+>+{
+>+}
+>+
+>+static const struct component_ops mtk_disp_ovl_adaptor_comp_ops = {
+>+	.bind	= mtk_disp_ovl_adaptor_comp_bind,
+>+	.unbind = mtk_disp_ovl_adaptor_comp_unbind,
+>+};
+>+
+>+static int mtk_disp_ovl_adaptor_master_bind(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+>+	int ret;
+>+
+>+	ret = component_bind_all(dev, priv->mmsys_dev);
+>+	if (ret)
+>+		return dev_err_probe(dev, ret, "component_bind_all failed!\n");
+>+
+>+	priv->children_bound = true;
+>+	return 0;
+>+}
+>+
+>+static void mtk_disp_ovl_adaptor_master_unbind(struct device *dev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+>+
+>+	priv->children_bound = false;
+>+}
+>+
+>+static const struct component_master_ops mtk_disp_ovl_adaptor_master_ops = {
+>+	.bind		= mtk_disp_ovl_adaptor_master_bind,
+>+	.unbind		= mtk_disp_ovl_adaptor_master_unbind,
+>+};
+>+
+>+static int mtk_disp_ovl_adaptor_probe(struct platform_device *pdev)
+>+{
+>+	struct mtk_disp_ovl_adaptor *priv;
+>+	struct device *dev = &pdev->dev;
+>+	struct component_match *match = NULL;
+>+	int ret;
+>+
+>+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>+	if (!priv)
+>+		return -ENOMEM;
+>+
+>+	platform_set_drvdata(pdev, priv);
+>+
+>+	ret = ovl_adaptor_comp_init(dev, &match);
+>+	if (ret < 0)
+>+		return ret;
+>+
+>+	priv->mmsys_dev = pdev->dev.platform_data;
+>+
+>+	component_master_add_with_match(dev, &mtk_disp_ovl_adaptor_master_ops, match);
 
-diff --git a/drivers/platform/x86/amd/pmf/pmf.h
-b/drivers/platform/x86/amd/pmf/pmf.h
-index 7613ed2ef6e3..172610f93bd1 100644
---- a/drivers/platform/x86/amd/pmf/pmf.h
-+++ b/drivers/platform/x86/amd/pmf/pmf.h
-@@ -303,7 +303,7 @@ int amd_pmf_init_metrics_table(struct amd_pmf_dev *dev);
- int amd_pmf_get_power_source(void);
+Here the code assumes match is not NULL and that
+ovl_adaptor_comp_init() allocated it
+with a call to drm_of_component_match_add() which never happens in
+case of a buggy dts.
+IMHO, ovl_adaptor_comp_init() should return an error in case no
+components have been found.
 
- /* SPS Layer */
--u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf);
-+int amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf);
- void amd_pmf_update_slider(struct amd_pmf_dev *dev, bool op, int idx,
-                           struct amd_pmf_static_slider_granular *table);
- int amd_pmf_init_sps(struct amd_pmf_dev *dev);
-diff --git a/drivers/platform/x86/amd/pmf/sps.c
-b/drivers/platform/x86/amd/pmf/sps.c
-index 8923e29cc6ca..dba7e36962dc 100644
---- a/drivers/platform/x86/amd/pmf/sps.c
-+++ b/drivers/platform/x86/amd/pmf/sps.c
-@@ -79,9 +79,9 @@ static int amd_pmf_profile_get(struct
-platform_profile_handler *pprof,
-        return 0;
- }
+[    0.936986] mediatek-disp-ovl-adaptor
+mediatek-disp-ovl-adaptor.2.auto: Failed to get id. type: 1, alias:
+-19
+[    0.938238] mediatek-disp-ovl-adaptor
+mediatek-disp-ovl-adaptor.2.auto: Skipping unknown component
+/soc/merge@1c014000
+[    0.939596] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+[    0.940701] Mem abort info:
+[    0.941064]   ESR = 0x0000000096000004
+[    0.941538]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.942208]   SET = 0, FnV = 0
+[    0.942595]   EA = 0, S1PTW = 0
+[    0.942993]   FSC = 0x04: level 0 translation fault
+[    0.943607] Data abort info:
+[    0.943972]   ISV = 0, ISS = 0x00000004
+[    0.944455]   CM = 0, WnR = 0
+[    0.944835] [0000000000000000] user address but active_mm is swapper
+[    0.945636] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    0.946340] CPU: 6 PID: 1 Comm: swapper/0 Not tainted
+6.0.0-rc1-next-20220818-mtk #17
+[    0.947327] swapper/0[1] cmdline: b
+[    0.947327]
+[    0.947976] Hardware name: MediaTek MT8195 demo board (DT)
+[    0.948666] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.949545] pc : component_master_add_with_match+0x24/0x100
+[    0.950257] lr : mtk_disp_ovl_adaptor_probe+0x1d0/0x280
+[    0.950925] sp : ffff80000a62b720
+[    0.951344] x29: ffff80000a62b720 x28: 0000000000000000 x27: ffff0000048dac10
+[    0.952248] x26: ffff00007fbbdda0 x25: 0000000000000001 x24: 0000000000000000
+[    0.953149] x23: ffff0000048dac00 x22: ffff8000097e29d0 x21: ffff0000048dac10
+[    0.954050] x20: 0000000000000000 x19: 0000000000000000 x18: ffffffffffffffff
+[    0.954951] x17: 70696b53203a6f74 x16: 75612e322e726f74 x15: 0720072007200720
+[    0.955852] x14: 0720072007200720 x13: ffff80000a3787e0 x12: 00000000000002af
+[    0.956752] x11: 00000000000000e5 x10: ffff84000bfe5dc8 x9 : 0000000000000002
+[    0.957653] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : 01fefefefefefeff
+[    0.958553] x5 : 0000000000000014 x4 : 0000000000000000 x3 : ffff0000048db000
+[    0.959453] x2 : 0000000000000000 x1 : ffff8000097e29d0 x0 : ffff0000048dac10
+[    0.960354] Call trace:
+[    0.960664]  component_master_add_with_match+0x24/0x100
+[    0.961326]  mtk_disp_ovl_adaptor_probe+0x1d0/0x280
+[    0.961945]  platform_probe+0x6c/0xe0
+[    0.962411]  really_probe+0xbc/0x2d4
+[    0.962864]  __driver_probe_device+0x78/0xe0
+[    0.963404]  driver_probe_device+0x40/0x12c
+[    0.963933]  __device_attach_driver+0xec/0x154
+[    0.964496]  bus_for_each_drv+0x78/0xd0
+[    0.964982]  __device_attach+0xa8/0x1c0
+[    0.965467]  device_initial_probe+0x18/0x2c
+[    0.965997]  bus_probe_device+0x9c/0xa4
+[    0.966482]  device_add+0x384/0x870
+[    0.966927]  platform_device_add+0x118/0x23c
+[    0.967470]  platform_device_register_full+0x104/0x18c
+[    0.968120]  mtk_drm_probe+0x31c/0x440
+[    0.968596]  platform_probe+0x6c/0xe0
+[    0.969061]  really_probe+0xbc/0x2d4
+[    0.969515]  __driver_probe_device+0x78/0xe0
+[    0.970055]  driver_probe_device+0x40/0x12c
+[    0.970584]  __driver_attach+0x120/0x1d0
+[    0.971080]  bus_for_each_dev+0x70/0xcc
+[    0.971569]  driver_attach+0x28/0x34
+[    0.972022]  bus_add_driver+0x148/0x200
+[    0.972507]  driver_register+0x7c/0x13c
+[    0.972993]  __platform_register_drivers+0x54/0xdc
+[    0.973600]  mtk_drm_init+0x24/0x30
+[    0.974044]  do_one_initcall+0x6c/0x148
+[    0.974530]  kernel_init_freeable+0x208/0x288
+[    0.975080]  kernel_init+0x28/0x130
+[    0.975526]  ret_from_fork+0x10/0x20
+[    0.975984] Code: aa0203f4 a9025bf5 aa0003f5 aa0103f6 (a9400440)
+[    0.976753] ---[ end trace 0000000000000000 ]---
+[    0.977347] Kernel panic - not syncing: Attempted to kill init!
+exitcode=0x0000000b
+[    0.978311] SMP: stopping secondary CPUs
+[    0.978811] Kernel Offset: disabled
+[    0.979252] CPU features: 0x2000,0001c029,19801c82
+[    0.979856] Memory Limit: none
+[    0.980243] ---[ end Kernel panic - not syncing: Attempted to kill
+init! exitcode=0x0000000b ]---
 
--u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
-+int amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
- {
--       u8 mode;
-+       int mode;
 
-        switch (pmf->current_profile) {
-        case PLATFORM_PROFILE_PERFORMANCE:
-@@ -95,7 +95,7 @@ u8 amd_pmf_get_pprof_modes(struct amd_pmf_dev *pmf)
-                break;
-        default:
-                dev_err(pmf->dev, "Unknown Platform Profile.\n");
--               break;
-+               return -EOPNOTSUPP;
-        }
-
-        return mode;
-@@ -105,10 +105,13 @@ static int amd_pmf_profile_set(struct
-platform_profile_handler *pprof,
-                               enum platform_profile_option profile)
- {
-        struct amd_pmf_dev *pmf = container_of(pprof, struct
-amd_pmf_dev, pprof);
--       u8 mode;
-+       int mode;
-
-        pmf->current_profile = profile;
-        mode = amd_pmf_get_pprof_modes(pmf);
-+       if (mode < 0)
-+               return mode;
-+
-        amd_pmf_update_slider(pmf, SLIDER_OP_SET, mode, NULL);
-        return 0;
- }
-
-
-Thanks,
-Shyam
-
-> 
-> Cheers,
-> Nathan
-> 
+Thx,
+Guillaume.
+>+	pm_runtime_enable(dev);
+>+
+>+	ret = component_add(dev, &mtk_disp_ovl_adaptor_comp_ops);
+>+	if (ret != 0) {
+>+		pm_runtime_disable(dev);
+>+		dev_err(dev, "Failed to add component: %d\n", ret);
+>+	}
+>+
+>+	return ret;
+>+}
+>+
+>+static int mtk_disp_ovl_adaptor_remove(struct platform_device *pdev)
+>+{
+>+	component_master_del(&pdev->dev, &mtk_disp_ovl_adaptor_master_ops);
+>+	pm_runtime_disable(&pdev->dev);
+>+	return 0;
+>+}
+>+
+>+struct platform_driver mtk_disp_ovl_adaptor_driver = {
+>+	.probe		= mtk_disp_ovl_adaptor_probe,
+>+	.remove		= mtk_disp_ovl_adaptor_remove,
+>+	.driver		= {
+>+		.name	= "mediatek-disp-ovl-adaptor",
+>+		.owner	= THIS_MODULE,
+>+	},
+>+};
+>diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.h b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+>index 3b393e4b364a..51bee36579ef 100644
+>--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+>+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+>@@ -57,6 +57,7 @@ extern struct platform_driver mtk_disp_ccorr_driver;
+> extern struct platform_driver mtk_disp_color_driver;
+> extern struct platform_driver mtk_disp_gamma_driver;
+> extern struct platform_driver mtk_disp_merge_driver;
+>+extern struct platform_driver mtk_disp_ovl_adaptor_driver;
+> extern struct platform_driver mtk_disp_ovl_driver;
+> extern struct platform_driver mtk_disp_rdma_driver;
+> extern struct platform_driver mtk_dpi_driver;
+>--
+>2.18.0
+>
+>
