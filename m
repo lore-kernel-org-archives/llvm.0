@@ -1,172 +1,142 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD20B4A05
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 18:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660933097; x=1692469097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JQAOPktEPRsnqLPYYBE3d+Ey4OcbjKfZooDFCCpPMXM=;
-  b=BBJ7U2QzC5KitdtBf7UmCgbvNgQUAILxNWtph+4pycWGS+sWfVeEezdf
-   l5F7xOH4Qy/YF5dBLGVnPR4s7Gvwcmkjri+Mhohccpu2aWRpNmNdhqIit
-   0OU3znsN5Chl2wEKha8UliwfwTl6CY5OMoDL2p6351rAHVOqGMLqZs0DN
-   +Ml1CG5Glq1wvRXGK1Mi3i7mv+hrVW32gUiq5Sz7olyDF+zL78JSD814R
-   spzSJEmybLRZQnG2EScoRZWG+xrO/jrNNQzpaFnHiF5+LxzKfLhtvoC7c
-   ZfalJfNkn3UsCdSbF/YjECk3L7vlmDfLc1wP/s60rbdkFU9eDk3heFG6E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="379364220"
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="379364220"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:18:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="584747126"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Aug 2022 11:18:06 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oP6ZK-0001hT-0n;
-	Fri, 19 Aug 2022 18:18:06 +0000
-Date: Sat, 20 Aug 2022 02:17:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Pirko <jiri@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 5/42]
- drivers/net/wwan/t7xx/t7xx_port_devlink.c:465:35: error: use of undeclared
- identifier 'DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT'; did you mean
- 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT'?
-Message-ID: <202208200242.iM0kVtBs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B1F2F27
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 18:32:06 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id gk3so10312280ejb.8
+        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 11:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8M7zvEV1EjOinuu0/2qV6kFVAXmq1t0nJAMuoRVdbdE=;
+        b=OjzbobpnwezG9oOO0D3mqTlOH2RNSu4r0nogaaHp3yLiFaL9iSFcc9jKxJNdaliY4r
+         +sof2HsYV4LldXKlP1L4mxNTFPUILVVxajwccNizy2oTfFmv4MOqO1x4a719N9KyGRSq
+         VwfZUsvOp9U63E4LDrpMmo8FCJfCk6flcOpKx1Ku8woZC0gZgrPeuW9hKrEVjWbNp6n+
+         G/wix3nes/dB53tfVEBUYNXnLhvROq4quXRoHI6ycRqGeodV/63Ry3KYaQ0u70nBNqTf
+         ChpZDn6psIVDIAcGzWcrkr8v9sADjc7OGL7PKtwwljfXGdtRD5NK+FS9+BhGHa6atrxM
+         Q0Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8M7zvEV1EjOinuu0/2qV6kFVAXmq1t0nJAMuoRVdbdE=;
+        b=cn/2RPZwe+MRSWvAqG2qBdLy6w6YN5Xw33zDxwGkUcsDxb7y+MFTXu099T/jFwuFyD
+         2Wg2BT/ghU7CCXQdwiUc48Xkl+OrrWG3WpTkHC+Lqrg77qgOzVgq+Hk74nOlHT3rbh5Y
+         YO1zBnL/rlO6U65Gv75w0gXpzRV4XyoS5WQUr7b4hD0LMS2MTh6jz/ltPYtctwhYFyjs
+         hXg70Co53FgE/tuzSF8hVlMkv68EWWo4suSKLukn28jstuOYew7x2GHUBFyMODPHPSAk
+         2EUYTOi+KaDpsOVImsJKLbmNsfYLJB6BKIWgYnd13ONohbu8oCyN0G1XPdbydXUaBCvQ
+         1Tkw==
+X-Gm-Message-State: ACgBeo1hMDyPnVWgGoHVxnQLXCWP16iXfN3uJMJZtQYruBA+gMyzd7A1
+	ZZ30ZYN8GrK5j9XtkvHxNQsFpWqZSg3FQDk1Lgo=
+X-Google-Smtp-Source: AA6agR4aYE+hGNo+6qjl3AaYARmI4Kr6rF+W8Kgen2c+mElNtZtQUvjOd81QElgSQbjXmnAkEFxFPh1O3+Q1febkRLE=
+X-Received: by 2002:a17:907:e8d:b0:730:a4e8:27ed with SMTP id
+ ho13-20020a1709070e8d00b00730a4e827edmr5455063ejc.58.1660933925080; Fri, 19
+ Aug 2022 11:32:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220819170053.2686006-1-ndesaulniers@google.com>
+ <Yv/Ff3mAfyCeWtmo@mail.local> <CAKwvOdnCGywz02Mf220njrS16fm4vTnFRFKALtJCqMbQY8Xz_w@mail.gmail.com>
+ <CAK7LNAQy66UAWy+tyLYpzf51brdwVESAK8igcHud=4=-v5QxmQ@mail.gmail.com>
+In-Reply-To: <CAK7LNAQy66UAWy+tyLYpzf51brdwVESAK8igcHud=4=-v5QxmQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 19 Aug 2022 11:31:53 -0700
+Message-ID: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
+Subject: Re: [PATCH] Kconfig: eradicate CC_HAS_ASM_GOTO
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Peter Zijlstra <peterz@infradead.org>, 
+	X86 ML <x86@kernel.org>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-um@lists.infradead.org, 
+	kvm@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-drivers/net/netdevsim/dev.c
-include/net/devlink.h
-net/core/devlink.c
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
-head:   e7096f2b22b32bd60568d91d12b562b3314bc8cc
-commit: d8cf683bc939bf07c19efa964a98f10829e30df4 [5/42] net: devlink: extend info_get() version put to indicate a flash component
-config: s390-randconfig-r044-20220819 (https://download.01.org/0day-ci/archive/20220820/202208200242.iM0kVtBs-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/jpirko/linux_mlxsw/commit/d8cf683bc939bf07c19efa964a98f10829e30df4
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
-        git checkout d8cf683bc939bf07c19efa964a98f10829e30df4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/ drivers/net/wwan/t7xx/
+On Fri, Aug 19, 2022 at 10:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Sat, Aug 20, 2022 at 2:28 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Fri, Aug 19, 2022 at 10:16 AM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> > >
+> > > On 19/08/2022 10:00:53-0700, Nick Desaulniers wrote:
+> > > > GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
+> > > > The minimum supported versions of these tools for the build according to
+> > > > Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
+> > > >
+> > > > Remove the feature detection script, Kconfig option, and clean up some
+> > > > fallback code that is no longer supported.
+> > > >
+> > > > The removed script was also testing for a GCC specific bug that was
+> > > > fixed in the 4.7 release.
+> > > >
+> > > > The script was also not portable; users of Dash shell reported errors
+> > > > when it was invoked.
+> > > >
+> > >
+> > > To be clear, the script was portable, what is not working with dash is
+> > > the current detection of CC_HAS_ASM_GOTO_TIED_OUTPUT. I'll try the other
+> > > suggestion from Masahiro.
+> >
+> > Ah, that was his point about echo; that makes more sense.
+> >
+> > Unless a v2 is required, perhaps Masahiro would be kind enough to drop
+> > this sentence from the commit message when applying?
+>
+> I can if there is nothing else to fix.
+>
+>
+> And, Alexandre's Reported-by is irrelevant.
+>
+> As for the subject prefix "Kconfig:",
+> I prefer something else, for example,
+> "asm goto:" or "jump label:".
+>
+> I want to reserve "Kconfig:" for changes in scripts/kconfig/.
+>
+>
+> >
+> > >
+> > > > --- a/arch/x86/include/asm/cpufeature.h
+> > > > +++ b/arch/x86/include/asm/cpufeature.h
+> > > > @@ -155,11 +155,11 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
+> > > >
+> > > >  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
+> > > >
+> > > > -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
+> > > > +#if defined(__clang__) && __clang_major__ < 9
+> > >
+> > > Shouldn't we simply mandates clang >= 9 and drop the whole section? This
+> > > is what you do later on.
+> >
+> > I considered it, but I don't think it would be safe to do so in this
+> > header.  If you look at the comment block below it, it mentions that
+> > these kernel headers are being sucked into UAPI headers that are used
+> > outside of the kernel builds, such as when building eBPF programs.  So
+> > we don't know what userspace tools might be consuming these headers.
+> > The original intent of the guard was to not break eBPF compilation
+> > with older clang releases, so I've retained. that functionality.
+> >
+> > + Alexei to review
+> > (author of
+> > commit b1ae32dbab50 ("x86/cpufeature: Guard asm_volatile_goto usage
+> > for BPF compilation")
+>
+>
+> I am not sure at this point.
+> Wait for the input from Alexei.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
-   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
-   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_port_devlink.c:10:
-   In file included from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:23:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/wwan/t7xx/t7xx_port_devlink.c:465:35: error: use of undeclared identifier 'DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT'; did you mean 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT'?
-           .supported_flash_update_params = DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT,
-                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            DEVLINK_ATTR_FLASH_UPDATE_COMPONENT
-   include/uapi/linux/devlink.h:532:2: note: 'DEVLINK_ATTR_FLASH_UPDATE_COMPONENT' declared here
-           DEVLINK_ATTR_FLASH_UPDATE_COMPONENT,    /* string */
-           ^
-   13 errors generated.
-
-
-vim +465 drivers/net/wwan/t7xx/t7xx_port_devlink.c
-
-87dae9e70bf7be M Chetan Kumar 2022-08-16  462  
-87dae9e70bf7be M Chetan Kumar 2022-08-16  463  /* Call back function for devlink ops */
-87dae9e70bf7be M Chetan Kumar 2022-08-16  464  static const struct devlink_ops devlink_flash_ops = {
-87dae9e70bf7be M Chetan Kumar 2022-08-16 @465  	.supported_flash_update_params = DEVLINK_SUPPORT_FLASH_UPDATE_COMPONENT,
-87dae9e70bf7be M Chetan Kumar 2022-08-16  466  	.flash_update = t7xx_devlink_flash_update,
-87dae9e70bf7be M Chetan Kumar 2022-08-16  467  	.reload_actions = BIT(DEVLINK_RELOAD_ACTION_DRIVER_REINIT) |
-87dae9e70bf7be M Chetan Kumar 2022-08-16  468  			  BIT(DEVLINK_RELOAD_ACTION_FW_ACTIVATE),
-87dae9e70bf7be M Chetan Kumar 2022-08-16  469  	.reload_down = t7xx_devlink_reload_down,
-87dae9e70bf7be M Chetan Kumar 2022-08-16  470  	.reload_up = t7xx_devlink_reload_up,
-87dae9e70bf7be M Chetan Kumar 2022-08-16  471  };
-87dae9e70bf7be M Chetan Kumar 2022-08-16  472  
-
-:::::: The code at line 465 was first introduced by commit
-:::::: 87dae9e70bf7be2bd8a3c561fe3ddf666eb8a7a4 net: wwan: t7xx: Enable devlink based fw flashing and coredump collection
-
-:::::: TO: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+It's probably best to remove this old workaround.
+bpftrace still has code that does:
+  cflags.push_back("-D__BPF_TRACING__");
+and bpftrace sort-of works with llvm 6+,
+but they need to move to a newer clang for tons of other reasons
+including lots of fixes in the clang bpf backend that were
+added over the years.
+So just nuke this old hack.
