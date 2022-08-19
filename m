@@ -1,352 +1,77 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EE146BC
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 19:06:55 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-336c3b72da5so86847997b3.6
-        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 12:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=Scxx2WxT5O+vs9/nBnpMEI6Jj8+LnDx00EwfheEhbiA=;
-        b=D5PuOvajf3fP4Ji6yQy1evwGrkBulRcdtR37aDxGD0sb1cNhJwiGXKiBPx/qnweE6G
-         0YpzGGR/FdE9QvZ3zTkZ5NTBMBr++DErASp82jaKnYuti0AAGikQU3TZQB/9UJ9iTBsW
-         gQyFmOTIybhOSE82kZrWf1ttkXHekLJX0uaD9mQfrDgjvM25bS96Dhyiq1jem88qRgzu
-         A/vx5N6VqqpSsDFRtSuSnATNg5A4LnW+exwimnCxcEJfN7gTtMrhq5B1sAmCP7pNqXuV
-         +KGI1ZwTCQSkcWS3yx5mv5HPvbbbEGM3ipDxakrKxb7UIPVgW9Ta7AaWtclRwdfLPEBk
-         ftAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=Scxx2WxT5O+vs9/nBnpMEI6Jj8+LnDx00EwfheEhbiA=;
-        b=ksI0swRWiKX262smYp3BeUkfaljQ8fRvd5vOLZPrfAoJA/QnFyMqQxYQWErs/Rpjeg
-         GC4AlA17qb9P4p6JUMaUQh/b0Vtr5GDrhXMViR1jX5d1Ykh/g34qLhsIeuFio28rDm8z
-         S7WhyRfx0/L61N1QKlDxQA/JG+76UO+heArA0+yYXR+NXavISudNvne76AR53A4H5LjF
-         DO2y7mcRhVjoSNC/0xNdnvk24dUHWzNwdA1h1eyEqX+v4pfBeD8g/Q7zs4GVg4zzXj99
-         NgnWaWawJwWoXE5eXgkwpo1PPSkVmaIdAusNrnUvyea87ZRWF/xELLmJ5EP+pAx7iEBy
-         Vmag==
-X-Gm-Message-State: ACgBeo0GbSHfJvF6fJSrDOfF+hmJu+LgZV2ZlLvi2l0M1MmZO/J23Kt3
-	G1ebnTqEt27smKeHFFQu0P5vAV84gM5xAZdD6wY=
-X-Google-Smtp-Source: AA6agR5RqgJAoSg5QPgdQ/Z86BYE5Wpe9Lm5jPFGnEvkXlx218Q7krGpFTG2nbVigRefPFr9DXek6FuQIPMnFJmeG30=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:4752:6cab:cd5c:55be])
- (user=ndesaulniers job=sendgmr) by 2002:a5b:9c4:0:b0:691:7745:afb5 with SMTP
- id y4-20020a5b09c4000000b006917745afb5mr8762907ybq.57.1660936014766; Fri, 19
- Aug 2022 12:06:54 -0700 (PDT)
-Date: Fri, 19 Aug 2022 12:06:40 -0700
-In-Reply-To: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
-Message-Id: <20220819190640.2763586-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2D44A14
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 19:46:54 +0000 (UTC)
+Received: from notapiano (unknown [70.107.189.129])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id B725C6601DC4;
+	Fri, 19 Aug 2022 20:46:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1660938406;
+	bh=sRXwaDjYZwFvMt0JXRUXrrOwoE4Qoa92zFqWgUdECMY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dAIUksXIZu2+Lr+PB/54wM3eHvY6NsWHwHAc3TqizdU7gNTDTyx/70X0fuOcjNaVl
+	 rjHb9iJX4BjZAP3sYxSS7exR+W5sSqLlTP2jSOeCzzyJmw62Yeb0ZYNvB5t1Cx6Nsh
+	 ZhuQXMmyCGiOwxjvwvVjNO3hK2Lg1+h4KoRphJqgPCb/vQqXWra5pyMvLOpl4bXfp1
+	 bz5iEOWesxg7+rARRLDfFBWibj6+P29aEEsh+pDdRHlPT5ZF8ZqBg3ImdioGa6d+9m
+	 BRITgtCIdF650K4uecRC48QaLCJZDQkQyLZBqS3dII96+s/wAJ3oX3SVhueDE31OIm
+	 a2PLtdJoaSIRg==
+Date: Fri, 19 Aug 2022 15:46:39 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, singo.chang@mediatek.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v26 5/7] drm/mediatek: modify mediatek-drm for mt8195
+ multi mmsys support
+Message-ID: <20220819194639.tiyiiucgdknmjiew@notapiano>
+References: <20220819061456.8042-1-nancy.lin@mediatek.com>
+ <20220819061456.8042-6-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660936000; l=10408;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=o5jtF0qgjBAwzK8hj72cqFfTQZrRKJnCZmTAHywxjks=;
- b=yCfT5EfvYho4viB2fnHbpoJCl9sDkYwrxmJgkRt2Ft3CC+gArTmwlhkq0zP3pLGVR+AMz5f88NSh
- NCZyS5vNAaADorgpPkfQrOvx1OaHgMw1UuCcCWS1XHMMO6NndUTF
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Borislav Petkov <bp@suse.de>, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220819061456.8042-6-nancy.lin@mediatek.com>
 
-GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
-The minimum supported versions of these tools for the build according to
-Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
+On Fri, Aug 19, 2022 at 02:14:54PM +0800, Nancy.Lin wrote:
+> MT8195 have two mmsys. Modify drm for MT8195 multi-mmsys support.
+> The two mmsys (vdosys0 and vdosys1) will bring up two drm drivers,
+> only one drm driver register as the drm device.
+> Each drm driver binds its own component. The last bind drm driver
+> allocates and registers the drm device to drm core.
+> Each crtc path is created with the corresponding drm driver data.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-Remove the feature detection script, Kconfig option, and clean up some
-fallback code that is no longer supported.
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-The removed script was also testing for a GCC specific bug that was
-fixed in the 4.7 release.
+Display and external display still work on mt8192 as it should.
 
-Also remove workarounds for bpftrace using clang older than 9.0.0, since
-other BPF backend fixes are required at this point.
-
-Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
-Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
-Acked-by: Borislav Petkov <bp@suse.de>
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-
-Changes v1 -> v2:
-https://lore.kernel.org/linux-kbuild/20220819170053.2686006-1-ndesaulniers@google.com/
-* Pick up Boris' ack.
-* Drop line about Dash compat as per Alexandre.
-* Drop Alexandre's reported by as per Masahiro.
-* s/Kbuild/asm goto/ in oneline as per Masahiro.
-* Remove entirety of bpftrace workarounds as per Alexei.
-* Fix mistake in arch/x86/include/asm/rmwcc.h in v1 where I removed too
-  much; we still need guards for __GCC_ASM_FLAG_OUTPUTS__.
-
- Documentation/kbuild/kconfig-language.rst |  4 ++--
- arch/Kconfig                              |  3 +--
- arch/um/include/asm/cpufeature.h          | 15 ---------------
- arch/x86/Makefile                         |  4 ----
- arch/x86/include/asm/cpufeature.h         | 15 ---------------
- arch/x86/include/asm/rmwcc.h              |  6 +++---
- arch/x86/kvm/emulate.c                    |  2 +-
- init/Kconfig                              |  4 ----
- scripts/gcc-goto.sh                       | 22 ----------------------
- tools/arch/x86/include/asm/rmwcc.h        | 21 ---------------------
- 10 files changed, 7 insertions(+), 89 deletions(-)
- delete mode 100755 scripts/gcc-goto.sh
-
-diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
-index 7fb398649f51..858ed5d80def 100644
---- a/Documentation/kbuild/kconfig-language.rst
-+++ b/Documentation/kbuild/kconfig-language.rst
-@@ -525,8 +525,8 @@ followed by a test macro::
- If you need to expose a compiler capability to makefiles and/or C source files,
- `CC_HAS_` is the recommended prefix for the config option::
- 
--  config CC_HAS_ASM_GOTO
--	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-+  config CC_HAS_FOO
-+	def_bool $(success,$(srctree)/scripts/cc-check-foo.sh $(CC))
- 
- Build as module only
- ~~~~~~~~~~~~~~~~~~~~
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a..5dbf11a5ba4e 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -53,7 +53,6 @@ config KPROBES
- config JUMP_LABEL
- 	bool "Optimize very unlikely/likely branches"
- 	depends on HAVE_ARCH_JUMP_LABEL
--	depends on CC_HAS_ASM_GOTO
- 	select OBJTOOL if HAVE_JUMP_LABEL_HACK
- 	help
- 	 This option enables a transparent branch optimization that
-@@ -1361,7 +1360,7 @@ config HAVE_PREEMPT_DYNAMIC_CALL
- 
- config HAVE_PREEMPT_DYNAMIC_KEY
- 	bool
--	depends on HAVE_ARCH_JUMP_LABEL && CC_HAS_ASM_GOTO
-+	depends on HAVE_ARCH_JUMP_LABEL
- 	select HAVE_PREEMPT_DYNAMIC
- 	help
- 	   An architecture should select this if it can handle the preemption
-diff --git a/arch/um/include/asm/cpufeature.h b/arch/um/include/asm/cpufeature.h
-index 19cd7ed6ec3c..4b6d1b526bc1 100644
---- a/arch/um/include/asm/cpufeature.h
-+++ b/arch/um/include/asm/cpufeature.h
-@@ -65,20 +65,6 @@ extern void setup_clear_cpu_cap(unsigned int bit);
- 
- #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
- 
--#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
--
--/*
-- * Workaround for the sake of BPF compilation which utilizes kernel
-- * headers, but clang does not support ASM GOTO and fails the build.
-- */
--#ifndef __BPF_TRACING__
--#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
--#endif
--
--#define static_cpu_has(bit)            boot_cpu_has(bit)
--
--#else
--
- /*
-  * Static testing of CPU features. Used the same as boot_cpu_has(). It
-  * statically patches the target code for additional performance. Use
-@@ -137,7 +123,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
- 		boot_cpu_has(bit) :				\
- 		_static_cpu_has(bit)				\
- )
--#endif
- 
- #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
- #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 7854685c5f25..bafbd905e6e7 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -286,10 +286,6 @@ vdso_install:
- 
- archprepare: checkbin
- checkbin:
--ifndef CONFIG_CC_HAS_ASM_GOTO
--	@echo Compiler lacks asm-goto support.
--	@exit 1
--endif
- ifdef CONFIG_RETPOLINE
- ifeq ($(RETPOLINE_CFLAGS),)
- 	@echo "You are building kernel with non-retpoline compiler." >&2
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index ea34cc31b047..1a85e1fb0922 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -155,20 +155,6 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
- 
- #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
- 
--#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
--
--/*
-- * Workaround for the sake of BPF compilation which utilizes kernel
-- * headers, but clang does not support ASM GOTO and fails the build.
-- */
--#ifndef __BPF_TRACING__
--#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
--#endif
--
--#define static_cpu_has(bit)            boot_cpu_has(bit)
--
--#else
--
- /*
-  * Static testing of CPU features. Used the same as boot_cpu_has(). It
-  * statically patches the target code for additional performance. Use
-@@ -208,7 +194,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
- 		boot_cpu_has(bit) :				\
- 		_static_cpu_has(bit)				\
- )
--#endif
- 
- #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
- #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
-index 8a9eba191516..7fa611216417 100644
---- a/arch/x86/include/asm/rmwcc.h
-+++ b/arch/x86/include/asm/rmwcc.h
-@@ -11,7 +11,7 @@
- 
- #define __CLOBBERS_MEM(clb...)	"memory", ## clb
- 
--#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
-+#ifndef __GCC_ASM_FLAG_OUTPUTS__
- 
- /* Use asm goto */
- 
-@@ -27,7 +27,7 @@ cc_label:	c = true;						\
- 	c;								\
- })
- 
--#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-+#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
- 
- /* Use flags output or a set instruction */
- 
-@@ -40,7 +40,7 @@ cc_label:	c = true;						\
- 	c;								\
- })
- 
--#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-+#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
- 
- #define GEN_UNARY_RMWcc_4(op, var, cc, arg0)				\
- 	__GEN_RMWcc(op " " arg0, var, cc, __CLOBBERS_MEM())
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index b4eeb7c75dfa..08613c65138d 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -493,7 +493,7 @@ FOP_END;
- 
- /*
-  * XXX: inoutclob user must know where the argument is being expanded.
-- *      Relying on CONFIG_CC_HAS_ASM_GOTO would allow us to remove _fault.
-+ *      Using asm goto would allow us to remove _fault.
-  */
- #define asm_safe(insn, inoutclob...) \
- ({ \
-diff --git a/init/Kconfig b/init/Kconfig
-index 80fe60fa77fb..532362fcfe31 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -70,11 +70,7 @@ config CC_CAN_LINK_STATIC
- 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
- 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
- 
--config CC_HAS_ASM_GOTO
--	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
--
- config CC_HAS_ASM_GOTO_OUTPUT
--	depends on CC_HAS_ASM_GOTO
- 	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
- 
- config CC_HAS_ASM_GOTO_TIED_OUTPUT
-diff --git a/scripts/gcc-goto.sh b/scripts/gcc-goto.sh
-deleted file mode 100755
-index 8b980fb2270a..000000000000
---- a/scripts/gcc-goto.sh
-+++ /dev/null
-@@ -1,22 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Test for gcc 'asm goto' support
--# Copyright (C) 2010, Jason Baron <jbaron@redhat.com>
--
--cat << "END" | $@ -x c - -fno-PIE -c -o /dev/null
--int main(void)
--{
--#if defined(__arm__) || defined(__aarch64__)
--	/*
--	 * Not related to asm goto, but used by jump label
--	 * and broken on some ARM GCC versions (see GCC Bug 48637).
--	 */
--	static struct { int dummy; int state; } tp;
--	asm (".long %c0" :: "i" (&tp.state));
--#endif
--
--entry:
--	asm goto ("" :::: entry);
--	return 0;
--}
--END
-diff --git a/tools/arch/x86/include/asm/rmwcc.h b/tools/arch/x86/include/asm/rmwcc.h
-index fee7983a90b4..11ff975242ca 100644
---- a/tools/arch/x86/include/asm/rmwcc.h
-+++ b/tools/arch/x86/include/asm/rmwcc.h
-@@ -2,8 +2,6 @@
- #ifndef _TOOLS_LINUX_ASM_X86_RMWcc
- #define _TOOLS_LINUX_ASM_X86_RMWcc
- 
--#ifdef CONFIG_CC_HAS_ASM_GOTO
--
- #define __GEN_RMWcc(fullop, var, cc, ...)				\
- do {									\
- 	asm_volatile_goto (fullop "; j" cc " %l[cc_label]"		\
-@@ -20,23 +18,4 @@ cc_label:								\
- #define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
- 	__GEN_RMWcc(op " %1, " arg0, var, cc, vcon (val))
- 
--#else /* !CONFIG_CC_HAS_ASM_GOTO */
--
--#define __GEN_RMWcc(fullop, var, cc, ...)				\
--do {									\
--	char c;								\
--	asm volatile (fullop "; set" cc " %1"				\
--			: "+m" (var), "=qm" (c)				\
--			: __VA_ARGS__ : "memory");			\
--	return c != 0;							\
--} while (0)
--
--#define GEN_UNARY_RMWcc(op, var, arg0, cc)				\
--	__GEN_RMWcc(op " " arg0, var, cc)
--
--#define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
--	__GEN_RMWcc(op " %2, " arg0, var, cc, vcon (val))
--
--#endif /* CONFIG_CC_HAS_ASM_GOTO */
--
- #endif /* _TOOLS_LINUX_ASM_X86_RMWcc */
--- 
-2.37.1.595.g718a3a8f04-goog
-
+Thanks,
+Nícolas
