@@ -1,153 +1,191 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D29E17D8
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 06:15:11 +0000 (UTC)
-X-UUID: 516ef06100fc4d89b98a1a61fa407d16-20220819
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rDOgK5Ukj6Kqp6guWqZHpoQ9zAqLE+sUML9b37sssLU=;
-	b=iI21Ia7Qdx7oKP2mZqb0iQ0SaRpr3Z2rN6t8SXbtgG89pzCZCGMfUkklE5hPMjHR7KqJ3BRZTVKYdSOh4txj+qqFiCrSUzsZdG+N9zurIKknRr0t5vPt+iaDhSF1HwFw7RI+utQMZmlxaJuaQUMJel3mKFbPUm3mod/NFDhMYOk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:82cdea6b-fa5f-48eb-99c4-47e7020b75f1,OB:0,L
-	OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-	Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:27f71e9d-da39-4e3b-a854-56c7d2111b46,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
-	nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 516ef06100fc4d89b98a1a61fa407d16-20220819
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 87562457; Fri, 19 Aug 2022 14:15:03 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 19 Aug 2022 14:14:58 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 19 Aug 2022 14:14:58 +0800
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
- Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
- Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
-	<nfraprado@collabora.com>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
-	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
-	<singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v26 4/7] drm/mediatek: add dma dev get function
-Date: Fri, 19 Aug 2022 14:14:53 +0800
-Message-ID: <20220819061456.8042-5-nancy.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220819061456.8042-1-nancy.lin@mediatek.com>
-References: <20220819061456.8042-1-nancy.lin@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91460160
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 06:42:14 +0000 (UTC)
+Received: by mail-oi1-f170.google.com with SMTP id m6so3880316oib.4
+        for <llvm@lists.linux.dev>; Thu, 18 Aug 2022 23:42:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xT/8EmOLWgGpotOZrjKtP5nnobd3VpZhpZsW/obGVUc=;
+        b=FVnrxU/nhTOeal+lVBE1xWeXHchPG95WhjNJXj6jpAPmDdnDz21hA1bFtDsnwPIwei
+         fJKBm7Q83tBDHxvCEODcpxy+C2sh/6/ts011PKPWXQ66tv9d2iD704oN5/Mg3J311MBh
+         BAm3ZMF0m/qPb751iBHE2eqQMELEzHoTFLPYEDt7I6tB7BNoJMoyNTQNhCp7tlzrRZ7Y
+         dj4HCh21gRYTgrUk39zJ2FeGUP8+5pnuOJSqDGCJ/8POlRbG1WUS0gXpfCDtcqAazFRE
+         YVepWspt3CYJvccCxaTwsueB1Y7BEq+/jRgG3fqTt6YmIdHHQ0z03+Afgq+ZFUioelVU
+         1rTw==
+X-Gm-Message-State: ACgBeo0QW++d9rgRFGVGlErHezgY9L8fXeed4S7Mc6SlJoNhGX5ZLApb
+	VfHBzDNBccDHFjmlHKq7iomep17pYUHGqzOciOY=
+X-Google-Smtp-Source: AA6agR7+ZYQsBIT+yyrvDvPpd1PiAtyHAPRxJdIOVAmAMD+SBoYMPAYQ0vMAQEbHZAie9v3BtB0Wl75yTPJfbYAyRIs=
+X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
+ k128-20020acaba86000000b0033ac6f73001mr5184885oif.5.1660891333580; Thu, 18
+ Aug 2022 23:42:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-6-irogers@google.com>
+ <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com> <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
+In-Reply-To: <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Thu, 18 Aug 2022 23:42:02 -0700
+Message-ID: <CAM9d7cgRDgHtAJd9814tbV41yY8Leypzv8Ay=kQgswjNYWj0RA@mail.gmail.com>
+Subject: Re: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Weiguo Li <liwg06@foxmail.com>, 
+	Pavithra Gurushankar <gpavithrasha@gmail.com>, Thomas Richter <tmricht@linux.ibm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>, 
+	Wenyu Liu <liuwenyu7@huawei.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Dave Marchevsky <davemarchevsky@fb.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexandre Truong <alexandre.truong@arm.com>, 
+	Kim Phillips <kim.phillips@amd.com>, Leo Yan <leo.yan@linaro.org>, 
+	Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>, 
+	Andres Freund <andres@anarazel.de>, Song Liu <songliubraving@fb.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, Riccardo Mancini <rickyman7@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>, 
+	Lexi Shao <shaolexi@huawei.com>, Remi Bernon <rbernon@codeweavers.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-This is a preparation for adding support for the ovl_adaptor sub driver
-Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
-dma_dev_get function for getting representative dma dev in ovl_adaptor.
+On Thu, Aug 18, 2022 at 11:17 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Thu, Aug 18, 2022 at 9:41 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > Add annotations to describe lock behavior. Add missing unlocks to
+> > > perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
+> > > analysis cannot follow pointers through local variables.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/builtin-sched.c | 8 ++++++++
+> > >  tools/perf/builtin-top.c   | 5 +++--
+> > >  2 files changed, 11 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> > > index 0f52f73be896..a8a765ed28ce 100644
+> > > --- a/tools/perf/builtin-sched.c
+> > > +++ b/tools/perf/builtin-sched.c
+> > > @@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
+> > >  }
+> > >
+> > >  static void create_tasks(struct perf_sched *sched)
+> > > +       EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+> > > +       EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+> > >  {
+> > >         struct task_desc *task;
+> > >         pthread_attr_t attr;
+> > > @@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
+> > >  }
+> > >
+> > >  static void wait_for_tasks(struct perf_sched *sched)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> > >  {
+> > >         u64 cpu_usage_0, cpu_usage_1;
+> > >         struct task_desc *task;
+> > > @@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+> > >  }
+> > >
+> > >  static void run_one_test(struct perf_sched *sched)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> > >  {
+> > >         u64 T0, T1, delta, avg_delta, fluct;
+> > >
+> > > @@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
+> > >         for (i = 0; i < sched->replay_repeat; i++)
+> > >                 run_one_test(sched);
+> > >
+> > > +       mutex_unlock(&sched->start_work_mutex);
+> > > +       mutex_unlock(&sched->work_done_wait_mutex);
+> >
+> > But this would wake up the replay tasks and let them burn cpus unnecessarily.
+> > Maybe we can make them exit at the moment.
+>
+> I think I've stumbled on a can of worms. Why would you spin and not
+> use a condition variable? Anyway, I can remove this by just saying
+> this function leaves these locked.
 
-Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
- 3 files changed, 24 insertions(+)
+I think you can add a boolean variable and set it before unlocking the
+mutexes.  In the thread body, it can check the variable and exit.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 112615817dcb..78e20f604158 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -58,6 +58,7 @@ struct mtk_drm_crtc {
- #endif
- 
- 	struct device			*mmsys_dev;
-+	struct device			*dma_dev;
- 	struct mtk_mutex		*mutex;
- 	unsigned int			ddp_comp_nr;
- 	struct mtk_ddp_comp		**ddp_comp;
-@@ -865,6 +866,13 @@ static int mtk_drm_crtc_init_comp_planes(struct drm_device *drm_dev,
- 	return 0;
- }
- 
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
-+{
-+	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
-+
-+	return mtk_crtc->dma_dev;
-+}
-+
- int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
- {
-@@ -953,6 +961,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			return ret;
- 	}
- 
-+	/*
-+	 * Default to use the first component as the dma dev.
-+	 * In the case of ovl_adaptor sub driver, it needs to use the
-+	 * dma_dev_get function to get representative dma dev.
-+	 */
-+	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
-+
- 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-index cb9a36c48d4f..f5a6e80c5265 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
- 			     struct mtk_plane_state *state);
- void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
- 			       struct drm_atomic_state *plane_state);
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
- 
- #endif /* MTK_DRM_CRTC_H */
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-index 2d0052c23dcb..364f3f7f59fa 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-@@ -71,6 +71,7 @@ struct mtk_ddp_comp_funcs {
- 	void (*bgclr_in_off)(struct device *dev);
- 	void (*ctm_set)(struct device *dev,
- 			struct drm_crtc_state *state);
-+	struct device * (*dma_dev_get)(struct device *dev);
- };
- 
- struct mtk_ddp_comp {
-@@ -203,6 +204,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp *comp,
- 		comp->funcs->ctm_set(comp->dev, state);
- }
- 
-+static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp *comp)
-+{
-+	if (comp->funcs && comp->funcs->dma_dev_get)
-+		return comp->funcs->dma_dev_get(comp->dev);
-+	return comp->dev;
-+}
-+
- int mtk_ddp_comp_get_id(struct device_node *node,
- 			enum mtk_ddp_comp_type comp_type);
- unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
--- 
-2.18.0
 
+>
+> >
+> > >         return 0;
+> > >  }
+> > >
+> > > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> > > index 3757292bfe86..e832f04e3076 100644
+> > > --- a/tools/perf/builtin-top.c
+> > > +++ b/tools/perf/builtin-top.c
+> > > @@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
+> > >                                         struct hist_entry *he,
+> > >                                         struct perf_sample *sample,
+> > >                                         struct evsel *evsel, u64 ip)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
+> > >  {
+> > >         struct annotation *notes;
+> > >         struct symbol *sym = he->ms.sym;
+> > > @@ -724,13 +725,13 @@ static void *display_thread(void *arg)
+> > >  static int hist_iter__top_callback(struct hist_entry_iter *iter,
+> > >                                    struct addr_location *al, bool single,
+> > >                                    void *arg)
+> > > +       EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
+> > >  {
+> > >         struct perf_top *top = arg;
+> > > -       struct hist_entry *he = iter->he;
+> > >         struct evsel *evsel = iter->evsel;
+> > >
+> > >         if (perf_hpp_list.sym && single)
+> > > -               perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
+> > > +               perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
+> > >
+> > >         hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
+> > >                      !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
+> >
+> > Looks like a separate change.
+>
+> This is subtle and relates to how the thread safety pass in clang is
+> implemented. I'll waffle but the TL;DR is that without this change we
+> can't enable Wthread-safety so I'd say it is part of the same change.
+> The waffley bit:
+>
+> Thread safety checking puts the annotation on to the variable and not
+> the type. We know that:
+> const char *x = "hi";
+> char *y = x;
+> will give a compile time error on the assignment to y as const-ness
+> was lost. With the thread safety checks you could have:
+> char *x PT_GUARDED_BY(lock) = ...;
+> char *y = x;
+> And if you used x without holding "lock" you'd get an error but you
+> wouldn't get the same error from y, even though behind the scenes it
+> is the same memory. It is the same case here, on entry we know that
+> "iter->he->hists->lock" is held but the assignment to "he" means clang
+> doesn't know that "he->hists->lock" is held. This then fails the check
+> on perf_top__record_precise_ip that the lock be held as we pass "he"
+> rather than "iter->he".
+
+Oh, I mean this perf top change can be separated from perf sched.
+
+Thanks,
+Namhyung
