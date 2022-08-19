@@ -1,93 +1,100 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91504A05
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 18:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660934292; x=1692470292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iNZ8OTgrcP4HEsJvk4GqUiryuR+PawK94q78dSQ8mT8=;
-  b=SvNDKSNwjm5nCz2W+JGW2DAwvnNV2ZYI52/hYWz57Dae6//UVdgSBqt9
-   lMn2Nd8EwhGIE/vTBDe3M2OtGbnqDWsk+gCQJA/RLrHOnal0Ioc/eAP3h
-   MiJx1V9otCeRh3+1gMIcc2kw0W4cBbigxR7jrLtCZHrG+AD+MYzXcbuP8
-   YPUA9P4d3NQjlBM1BSWlMt/zRI21zwsAzgbtvSJMByJSllR/q+Ds9rRgx
-   PQFj4Sdx0Y+arwiOeBTFiiBB16ALOKX/yZBpo3F2XVUBXbzUYjYm8AVrC
-   6Prt79hMaqOs29P1vPSRNuG6raQ3gq3qTg7n9kWB0vwcsz9v7jiDcuaOa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="290643541"
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="290643541"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:38:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="697645941"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Aug 2022 11:38:07 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oP6sg-0001ht-1W;
-	Fri, 19 Aug 2022 18:38:06 +0000
-Date: Sat, 20 Aug 2022 02:37:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <202208200202.pmwCMvZd-lkp@intel.com>
-References: <20220819120109.3857571-8-o.rempel@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AF446BC
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 18:46:08 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id q7so3519249lfu.5
+        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 11:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jK40RXGDRPOTytfHjHl5rauDT3xxxYnRso/4al/XGPU=;
+        b=T9DCS3cTH/nuB+1YeHhuvdjoHJ20yGJASVAmlYK1a2NT+2JtnuVb5zZd8NB6JQyOIB
+         pviTc4Am0++P1lWZBkAqxmj32emKAVZa5V5ET50kE/fgsLMgTKxbQwnHrQjX6neu7A3S
+         GgkAejd5H5Bp2cRPRJ/hsgo5yAXTjuXTyzTT6kSbcs5IWeOQzBtpGIfjxWgoDy8+7hMN
+         RbSZ4yUVPvHm5yMosjsHxmQH39BVMSY/fAptFkb4WnwIkHGdXX9NcMXd1nfRKMnvB/RL
+         9Nyd1UdEYFexM4rTVDXmKiJdAn7QfRjyb9xJ+wQFcPRl0AQtsiwZPS8zN299tdnf+e80
+         czgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jK40RXGDRPOTytfHjHl5rauDT3xxxYnRso/4al/XGPU=;
+        b=MPxSxk+HI64JXPH22i32WFG1eJ6ePmAe0uwQKrft9xyKpVNJDqjuxtW6eMTDBa4oJp
+         IVaOrwlXrY3Cq+fjfrnGLecD+A/L4tKkgkjrKmE9bt9S0qZIQ711HI4nfeB3WCzY3IDT
+         pkEWGmIm2xV7C18WFmsnhe34ZibSTdgBDqOCYxdCZoQ5p7/gOVQt8MJEKrhymvrMFCgf
+         zxD+VKqY2oYhsf5CDFkunpEfi2DTBTqsa0iftzln9di72VbmPwsa6aJBdQLbSE0afKc+
+         TpeoAc7XFGbcDKza8JcV6v1/V5ieqw5gG4e8+BO9k7KAYCq9UTiVYd5KxEH9ssWdZUtg
+         yieg==
+X-Gm-Message-State: ACgBeo0Up5N7jshJ8V2F5VKIhWof8/9QTjyUtAN4LWnd+1jdRLYnwUmi
+	4PhTlZJDzA8kOtIrsOTODOiGIsNGMid2MmSqSusWBQ==
+X-Google-Smtp-Source: AA6agR4KumF285qiswcOzjSXUb8EYq6mkaWU+FOOy10Y2YwtDP8AXxfnFuUHUpAcljWMs+qp107a7uNYbeeSFqPzU7o=
+X-Received: by 2002:a05:6512:b01:b0:48b:a065:2a8b with SMTP id
+ w1-20020a0565120b0100b0048ba0652a8bmr2719340lfu.401.1660934766166; Fri, 19
+ Aug 2022 11:46:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819120109.3857571-8-o.rempel@pengutronix.de>
+References: <20220819170053.2686006-1-ndesaulniers@google.com>
+In-Reply-To: <20220819170053.2686006-1-ndesaulniers@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 19 Aug 2022 11:45:54 -0700
+Message-ID: <CAKwvOd=sDbV-aKvroQTdOvW6C32TW20fr4xT0S4-E=fKeS=aWg@mail.gmail.com>
+Subject: Re: [PATCH] Kconfig: eradicate CC_HAS_ASM_GOTO
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, kvm@vger.kernel.org, llvm@lists.linux.dev, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Oleksij,
+On Fri, Aug 19, 2022 at 10:01 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
+> index 8a9eba191516..c82f1b334207 100644
+> --- a/arch/x86/include/asm/rmwcc.h
+> +++ b/arch/x86/include/asm/rmwcc.h
+> @@ -11,9 +11,7 @@
+>
+>  #define __CLOBBERS_MEM(clb...) "memory", ## clb
+>
+> -#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
+> -
+> -/* Use asm goto */
+> +#ifndef __GCC_ASM_FLAG_OUTPUTS__
+>
+>  #define __GEN_RMWcc(fullop, _var, cc, clobbers, ...)                   \
+>  ({                                                                     \
+> @@ -27,21 +25,6 @@ cc_label:    c = true;                                               \
+>         c;                                                              \
+>  })
+>
+> -#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
+> -
+> -/* Use flags output or a set instruction */
+> -
+> -#define __GEN_RMWcc(fullop, _var, cc, clobbers, ...)                   \
+> -({                                                                     \
+> -       bool c;                                                         \
+> -       asm volatile (fullop CC_SET(cc)                                 \
+> -                       : [var] "+m" (_var), CC_OUT(cc) (c)             \
+> -                       : __VA_ARGS__ : clobbers);                      \
+> -       c;                                                              \
+> -})
+> -
+> -#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
+> -
 
-I love your patch! Yet something to improve:
+^ probably don't want to remove the terminal endif. Will respin based
+on feedback from Masahiro + Alexei.
 
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-generic-PSE-support/20220819-200408
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 268603d79cc48dba671e9caf108fab32315b86a2
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200202.pmwCMvZd-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ac5a14669dbe6cac4972ff01ea6291d12152e78f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Oleksij-Rempel/add-generic-PSE-support/20220819-200408
-        git checkout ac5a14669dbe6cac4972ff01ea6291d12152e78f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> make[3]: *** No rule to make target 'net/ethtool/pse.o', needed by 'net/ethtool/built-in.a'.
-   make[3]: Target '__build' not remade because of errors.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
