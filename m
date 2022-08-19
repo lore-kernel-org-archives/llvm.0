@@ -1,261 +1,319 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1DA4697
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 17:17:45 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id l1so6407867lfk.8
-        for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 10:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=jF3p7eucLj35Tf/dx8yU7+OQzgohLYj/T6WQnEPpcq8=;
-        b=oV8cmQ/AYe6fKs6g5xkmrGZTX3b66teSY2TQYduxFdvsAaMZZ7TmFJDbslZdso2dR/
-         a6Z2zrTLsGVnEqLcIKBdLlq40S/0WLtd1cp2TWyUUekD8VOJ32hrY1AMqIuqDpqwqWF5
-         pWpQWWdZvqs6R1A8FtAyzMNyg7pj0bRp10NTmZ1Jgbf5ifavFlxpr5PSIy8oPavvGxoA
-         dAbDhysYbOQYplefwU7Riqe4Q82hWQ0TwSoZtHQUWJotljEC9OzenqirtaXbNe3ZmKYe
-         7NzbrITsERQNqZ3IgUaIJSdZ7kG6fjp7vJepFYBPQNMIV75uL0LzKsXiWFco/6FJGEYx
-         cKmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=jF3p7eucLj35Tf/dx8yU7+OQzgohLYj/T6WQnEPpcq8=;
-        b=XtHhD0ZiyTQZnZRGP4Kdpd+LpiyFJFJtW1t3fT5cBbsqk/2leKKmQk22Yjt36ndiFl
-         fxJB7Z3+M9XlmNAoCsC9lUavjplN/Vc1Lb6SENIY4oZo76xU1X/IxvCpXzPLmpaxZTgb
-         I5Kz+OSWECCgv4pHXgokuP59CzAN7HpUoMAKlfG1Q1r7sEUEaJ/YnJrucT/fmecTjItx
-         wDZq2mtios6U7H2IgJlD5GasHd1JGyQhQWruvXQvIPcMVD5ehSHXldyWVEI8dizbkfiz
-         9eG7SE38X+uMJ4UMi8pdkipnVbceDoVLo5gtTln7v/HHbt/isKAyazuC3ocZIxup6mt+
-         xwvQ==
-X-Gm-Message-State: ACgBeo32xDuv848qP0BLgezfC7/Kh9MVZVdARNqo49rUN6oGcoENETuO
-	K2/ufdxjyyF5IRV+Ru5O7T6uAPJnPnevpC+56bRTpg==
-X-Google-Smtp-Source: AA6agR6eA764nLrYZaBVmT71AjszmnBSG/gKjjWIEFAe6ZKPz7BslEWua4WPvIWFK2LgV0AxO0GBjQpn9WvoyasQuh0=
-X-Received: by 2002:a05:6512:1317:b0:48c:ed42:5cf4 with SMTP id
- x23-20020a056512131700b0048ced425cf4mr2547681lfu.103.1660929462999; Fri, 19
- Aug 2022 10:17:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C12E4697
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 17:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660929968; x=1692465968;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1XnqIFNf0XejaRves2bY6Pd9CIDYLky/1ju1aow/fIc=;
+  b=fY8bCg6VPVSsl4cebtOItfWT7zTj3WIgVf7JiWCInGrPEvYtgULHgVpj
+   LvIm82TntZXXl/CqC19/rb1sfve6KKdYwfuUKg9V091ubl4aSK94B1LDj
+   2QaNom5NRm2Ha2y3X3fekL7IY171EnCGPzw3kZ0DNAabr7RdeaXC54OSH
+   ZZVwixcJS24OdnGb1palCTQK8+WTVmGHmiWX85ZWFEnw6G/ewwYR5kP26
+   YjOgu138/xFYBxyEVEv+NSjNgobja2gboGKOExDV22H6AMxlAFMj+/ePU
+   vRssyLUcUTMUT14l9Us124H8P0VI434WCNoUPeLpc6JnUAp0MIqXAx/DM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="290630399"
+X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
+   d="scan'208";a="290630399"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 10:26:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
+   d="scan'208";a="676525066"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2022 10:26:05 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oP5kz-0001fP-0o;
+	Fri, 19 Aug 2022 17:26:05 +0000
+Date: Sat, 20 Aug 2022 01:25:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Peng <chao.p.peng@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 142/308]
+ arch/x86/kvm/../../../virt/kvm/kvm_main.c:4969:1: error: unused label
+ 'arch_vm_ioctl'
+Message-ID: <202208200119.bJFiHQWt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
- <202208102231.qSUdYAdb-lkp@intel.com> <Yv+5ZkFxhR+JK/Rj@madcap2.tricolour.ca>
-In-Reply-To: <Yv+5ZkFxhR+JK/Rj@madcap2.tricolour.ca>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 19 Aug 2022 10:17:31 -0700
-Message-ID: <CAKwvOdnQiC++rhVCFToE6t-ZO_VgkhtbH0gy=dEg662EfWucBg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
- decision context
-To: Richard Guy Briggs <rgb@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, Linux-Audit Mailing List <linux-audit@redhat.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>, 
-	Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Aug 19, 2022 at 9:25 AM Richard Guy Briggs <rgb@redhat.com> wrote:
->
-> On 2022-08-10 22:28, kernel test robot wrote:
-> > Hi Richard,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on jack-fs/fsnotify]
-> > [also build test WARNING on pcmoore-audit/next linus/master v5.19 next-=
-20220810]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Brig=
-gs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-01=
-2825
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.g=
-it fsnotify
-> > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/2=
-0220810/202208102231.qSUdYAdb-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f=
-1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/a943676abc023c0=
-94f05b45f4d61936c567507a2
-> >         git remote add linux-review https://github.com/intel-lab-lkp/li=
-nux
-> >         git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Al=
-low-user-space-to-pass-back-additional-audit-info/20220810-012825
-> >         git checkout a943676abc023c094f05b45f4d61936c567507a2
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash fs/notify/fanotify/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> fs/notify/fanotify/fanotify_user.c:325:35: warning: format specifies=
- type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int=
-') [-Wformat]
->
-> Interesting.  When I "fix" it, my compiler complains:
->
->         fs/notify/fanotify/fanotify_user.c:324:11: warning: format =E2=80=
-=98%u=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, but=
- argument 8 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98long unsigned i=
-nt=E2=80=99} [-Wformat=3D]
+Documentation/virt/kvm/api.rst
+arch/x86/include/asm/kvm_host.h
+arch/x86/kvm/mmu.h
+include/linux/kvm_host.h
+virt/kvm/kvm_main.c
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   85c097fdd1667a842a9e75d8f658fc16bd72981a
+commit: 28993d4dc822c5ef68219ec9dfb233a4f988a416 [142/308] KVM: Register/unregister the guest private memory regions
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220820/202208200119.bJFiHQWt-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/28993d4dc822c5ef68219ec9dfb233a4f988a416
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 28993d4dc822c5ef68219ec9dfb233a4f988a416
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-The correct format specifier for size_t is %zu.  This avoids issues
-between ILP32 vs LP64 targets.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >                     group, fd, response, info_buf, count);
-> >                                                    ^~~~~
-> >    include/linux/printk.h:594:38: note: expanded from macro 'pr_debug'
-> >            no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> >                                        ~~~     ^~~~~~~~~~~
-> >    include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-> >                    printk(fmt, ##__VA_ARGS__);             \
-> >                           ~~~    ^~~~~~~~~~~
-> >    include/linux/printk.h:464:60: note: expanded from macro 'printk'
-> >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS=
-__)
-> >                                                        ~~~    ^~~~~~~~~=
-~~
-> >    include/linux/printk.h:436:19: note: expanded from macro 'printk_ind=
-ex_wrap'
-> >                    _p_func(_fmt, ##__VA_ARGS__);                       =
-    \
-> >                            ~~~~    ^~~~~~~~~~~
-> >    1 warning generated.
-> >
-> >
-> > vim +325 fs/notify/fanotify/fanotify_user.c
-> >
-> >    312
-> >    313        static int process_access_response(struct fsnotify_group =
-*group,
-> >    314                                           struct fanotify_respon=
-se *response_struct,
-> >    315                                           const char __user *buf=
-,
-> >    316                                           size_t count)
-> >    317        {
-> >    318                struct fanotify_perm_event *event;
-> >    319                int fd =3D response_struct->fd;
-> >    320                u32 response =3D response_struct->response;
-> >    321                struct fanotify_response_info_header info_hdr;
-> >    322                char *info_buf =3D NULL;
-> >    323
-> >    324                pr_debug("%s: group=3D%p fd=3D%d response=3D%u bu=
-f=3D%p size=3D%lu\n", __func__,
-> >  > 325                         group, fd, response, info_buf, count);
-> >    326                /*
-> >    327                 * make sure the response is valid, if invalid we=
- do nothing and either
-> >    328                 * userspace can send a valid response or we will=
- clean it up after the
-> >    329                 * timeout
-> >    330                 */
-> >    331                if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
-> >    332                        return -EINVAL;
-> >    333                switch (response & FANOTIFY_RESPONSE_ACCESS) {
-> >    334                case FAN_ALLOW:
-> >    335                case FAN_DENY:
-> >    336                        break;
-> >    337                default:
-> >    338                        return -EINVAL;
-> >    339                }
-> >    340                if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(gro=
-up, FAN_ENABLE_AUDIT))
-> >    341                        return -EINVAL;
-> >    342                if (fd < 0)
-> >    343                        return -EINVAL;
-> >    344                if (response & FAN_INFO) {
-> >    345                        size_t c =3D count;
-> >    346                        const char __user *ib =3D buf;
-> >    347
-> >    348                        if (c <=3D 0)
-> >    349                                return -EINVAL;
-> >    350                        while (c >=3D sizeof(info_hdr)) {
-> >    351                                if (copy_from_user(&info_hdr, ib,=
- sizeof(info_hdr)))
-> >    352                                        return -EFAULT;
-> >    353                                if (info_hdr.pad !=3D 0)
-> >    354                                        return -EINVAL;
-> >    355                                if (c < info_hdr.len)
-> >    356                                        return -EINVAL;
-> >    357                                switch (info_hdr.type) {
-> >    358                                case FAN_RESPONSE_INFO_AUDIT_RULE=
-:
-> >    359                                        break;
-> >    360                                case FAN_RESPONSE_INFO_NONE:
-> >    361                                default:
-> >    362                                        return -EINVAL;
-> >    363                                }
-> >    364                                c -=3D info_hdr.len;
-> >    365                                ib +=3D info_hdr.len;
-> >    366                        }
-> >    367                        if (c !=3D 0)
-> >    368                                return -EINVAL;
-> >    369                        /* Simplistic check for now */
-> >    370                        if (count !=3D sizeof(struct fanotify_res=
-ponse_info_audit_rule))
-> >    371                                return -EINVAL;
-> >    372                        info_buf =3D kmalloc(sizeof(struct fanoti=
-fy_response_info_audit_rule),
-> >    373                                           GFP_KERNEL);
-> >    374                        if (!info_buf)
-> >    375                                return -ENOMEM;
-> >    376                        if (copy_from_user(info_buf, buf, count))
-> >    377                                return -EFAULT;
-> >    378                }
-> >    379                spin_lock(&group->notification_lock);
-> >    380                list_for_each_entry(event, &group->fanotify_data.=
-access_list,
-> >    381                                    fae.fse.list) {
-> >    382                        if (event->fd !=3D fd)
-> >    383                                continue;
-> >    384
-> >    385                        list_del_init(&event->fae.fse.list);
-> >    386                        /* finish_permission_event() eats info_bu=
-f */
-> >    387                        finish_permission_event(group, event, res=
-ponse_struct,
-> >    388                                                count, info_buf);
-> >    389                        wake_up(&group->fanotify_data.access_wait=
-q);
-> >    390                        return 0;
-> >    391                }
-> >    392                spin_unlock(&group->notification_lock);
-> >    393
-> >    394                return -ENOENT;
-> >    395        }
-> >    396
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> >
->
-> - RGB
->
-> --
-> Richard Guy Briggs <rgb@redhat.com>
-> Sr. S/W Engineer, Kernel Security, Base Operating Systems
-> Remote, Ottawa, Red Hat Canada
-> IRC: rgb, SunRaycer
-> Voice: +1.647.777.2635, Internal: (81) 32635
->
->
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/../../../virt/kvm/kvm_main.c:4969:1: error: unused label 'arch_vm_ioctl' [-Werror,-Wunused-label]
+   arch_vm_ioctl:
+   ^~~~~~~~~~~~~~
+   1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/arch_vm_ioctl +4969 arch/x86/kvm/../../../virt/kvm/kvm_main.c
+
+  4745	
+  4746	static long kvm_vm_ioctl(struct file *filp,
+  4747				   unsigned int ioctl, unsigned long arg)
+  4748	{
+  4749		struct kvm *kvm = filp->private_data;
+  4750		void __user *argp = (void __user *)arg;
+  4751		int r;
+  4752	
+  4753		if (kvm->mm != current->mm || kvm->vm_dead)
+  4754			return -EIO;
+  4755		switch (ioctl) {
+  4756		case KVM_CREATE_VCPU:
+  4757			r = kvm_vm_ioctl_create_vcpu(kvm, arg);
+  4758			break;
+  4759		case KVM_ENABLE_CAP: {
+  4760			struct kvm_enable_cap cap;
+  4761	
+  4762			r = -EFAULT;
+  4763			if (copy_from_user(&cap, argp, sizeof(cap)))
+  4764				goto out;
+  4765			r = kvm_vm_ioctl_enable_cap_generic(kvm, &cap);
+  4766			break;
+  4767		}
+  4768		case KVM_SET_USER_MEMORY_REGION: {
+  4769			struct kvm_user_mem_region mem;
+  4770			unsigned long size;
+  4771			u32 flags;
+  4772	
+  4773			kvm_sanity_check_user_mem_region_alias();
+  4774	
+  4775			memset(&mem, 0, sizeof(mem));
+  4776	
+  4777			r = -EFAULT;
+  4778	
+  4779			if (get_user(flags,
+  4780				(u32 __user *)(argp + offsetof(typeof(mem), flags))))
+  4781				goto out;
+  4782	
+  4783			if (flags & KVM_MEM_PRIVATE) {
+  4784				r = -EINVAL;
+  4785				goto out;
+  4786			}
+  4787	
+  4788			size = sizeof(struct kvm_userspace_memory_region);
+  4789	
+  4790			if (copy_from_user(&mem, argp, size))
+  4791				goto out;
+  4792	
+  4793			r = -EINVAL;
+  4794			if ((flags ^ mem.flags) & KVM_MEM_PRIVATE)
+  4795				goto out;
+  4796	
+  4797			r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+  4798			break;
+  4799		}
+  4800	#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+  4801		case KVM_MEMORY_ENCRYPT_REG_REGION:
+  4802		case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+  4803			struct kvm_enc_region region;
+  4804	
+  4805			if (!kvm_arch_private_mem_supported(kvm))
+  4806				goto arch_vm_ioctl;
+  4807	
+  4808			r = -EFAULT;
+  4809			if (copy_from_user(&region, argp, sizeof(region)))
+  4810				goto out;
+  4811	
+  4812			r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+  4813			break;
+  4814		}
+  4815	#endif
+  4816		case KVM_GET_DIRTY_LOG: {
+  4817			struct kvm_dirty_log log;
+  4818	
+  4819			r = -EFAULT;
+  4820			if (copy_from_user(&log, argp, sizeof(log)))
+  4821				goto out;
+  4822			r = kvm_vm_ioctl_get_dirty_log(kvm, &log);
+  4823			break;
+  4824		}
+  4825	#ifdef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
+  4826		case KVM_CLEAR_DIRTY_LOG: {
+  4827			struct kvm_clear_dirty_log log;
+  4828	
+  4829			r = -EFAULT;
+  4830			if (copy_from_user(&log, argp, sizeof(log)))
+  4831				goto out;
+  4832			r = kvm_vm_ioctl_clear_dirty_log(kvm, &log);
+  4833			break;
+  4834		}
+  4835	#endif
+  4836	#ifdef CONFIG_KVM_MMIO
+  4837		case KVM_REGISTER_COALESCED_MMIO: {
+  4838			struct kvm_coalesced_mmio_zone zone;
+  4839	
+  4840			r = -EFAULT;
+  4841			if (copy_from_user(&zone, argp, sizeof(zone)))
+  4842				goto out;
+  4843			r = kvm_vm_ioctl_register_coalesced_mmio(kvm, &zone);
+  4844			break;
+  4845		}
+  4846		case KVM_UNREGISTER_COALESCED_MMIO: {
+  4847			struct kvm_coalesced_mmio_zone zone;
+  4848	
+  4849			r = -EFAULT;
+  4850			if (copy_from_user(&zone, argp, sizeof(zone)))
+  4851				goto out;
+  4852			r = kvm_vm_ioctl_unregister_coalesced_mmio(kvm, &zone);
+  4853			break;
+  4854		}
+  4855	#endif
+  4856		case KVM_IRQFD: {
+  4857			struct kvm_irqfd data;
+  4858	
+  4859			r = -EFAULT;
+  4860			if (copy_from_user(&data, argp, sizeof(data)))
+  4861				goto out;
+  4862			r = kvm_irqfd(kvm, &data);
+  4863			break;
+  4864		}
+  4865		case KVM_IOEVENTFD: {
+  4866			struct kvm_ioeventfd data;
+  4867	
+  4868			r = -EFAULT;
+  4869			if (copy_from_user(&data, argp, sizeof(data)))
+  4870				goto out;
+  4871			r = kvm_ioeventfd(kvm, &data);
+  4872			break;
+  4873		}
+  4874	#ifdef CONFIG_HAVE_KVM_MSI
+  4875		case KVM_SIGNAL_MSI: {
+  4876			struct kvm_msi msi;
+  4877	
+  4878			r = -EFAULT;
+  4879			if (copy_from_user(&msi, argp, sizeof(msi)))
+  4880				goto out;
+  4881			r = kvm_send_userspace_msi(kvm, &msi);
+  4882			break;
+  4883		}
+  4884	#endif
+  4885	#ifdef __KVM_HAVE_IRQ_LINE
+  4886		case KVM_IRQ_LINE_STATUS:
+  4887		case KVM_IRQ_LINE: {
+  4888			struct kvm_irq_level irq_event;
+  4889	
+  4890			r = -EFAULT;
+  4891			if (copy_from_user(&irq_event, argp, sizeof(irq_event)))
+  4892				goto out;
+  4893	
+  4894			r = kvm_vm_ioctl_irq_line(kvm, &irq_event,
+  4895						ioctl == KVM_IRQ_LINE_STATUS);
+  4896			if (r)
+  4897				goto out;
+  4898	
+  4899			r = -EFAULT;
+  4900			if (ioctl == KVM_IRQ_LINE_STATUS) {
+  4901				if (copy_to_user(argp, &irq_event, sizeof(irq_event)))
+  4902					goto out;
+  4903			}
+  4904	
+  4905			r = 0;
+  4906			break;
+  4907		}
+  4908	#endif
+  4909	#ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
+  4910		case KVM_SET_GSI_ROUTING: {
+  4911			struct kvm_irq_routing routing;
+  4912			struct kvm_irq_routing __user *urouting;
+  4913			struct kvm_irq_routing_entry *entries = NULL;
+  4914	
+  4915			r = -EFAULT;
+  4916			if (copy_from_user(&routing, argp, sizeof(routing)))
+  4917				goto out;
+  4918			r = -EINVAL;
+  4919			if (!kvm_arch_can_set_irq_routing(kvm))
+  4920				goto out;
+  4921			if (routing.nr > KVM_MAX_IRQ_ROUTES)
+  4922				goto out;
+  4923			if (routing.flags)
+  4924				goto out;
+  4925			if (routing.nr) {
+  4926				urouting = argp;
+  4927				entries = vmemdup_user(urouting->entries,
+  4928						       array_size(sizeof(*entries),
+  4929								  routing.nr));
+  4930				if (IS_ERR(entries)) {
+  4931					r = PTR_ERR(entries);
+  4932					goto out;
+  4933				}
+  4934			}
+  4935			r = kvm_set_irq_routing(kvm, entries, routing.nr,
+  4936						routing.flags);
+  4937			kvfree(entries);
+  4938			break;
+  4939		}
+  4940	#endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
+  4941		case KVM_CREATE_DEVICE: {
+  4942			struct kvm_create_device cd;
+  4943	
+  4944			r = -EFAULT;
+  4945			if (copy_from_user(&cd, argp, sizeof(cd)))
+  4946				goto out;
+  4947	
+  4948			r = kvm_ioctl_create_device(kvm, &cd);
+  4949			if (r)
+  4950				goto out;
+  4951	
+  4952			r = -EFAULT;
+  4953			if (copy_to_user(argp, &cd, sizeof(cd)))
+  4954				goto out;
+  4955	
+  4956			r = 0;
+  4957			break;
+  4958		}
+  4959		case KVM_CHECK_EXTENSION:
+  4960			r = kvm_vm_ioctl_check_extension_generic(kvm, arg);
+  4961			break;
+  4962		case KVM_RESET_DIRTY_RINGS:
+  4963			r = kvm_vm_ioctl_reset_dirty_pages(kvm);
+  4964			break;
+  4965		case KVM_GET_STATS_FD:
+  4966			r = kvm_vm_ioctl_get_stats_fd(kvm);
+  4967			break;
+  4968		default:
+> 4969	arch_vm_ioctl:
+  4970			r = kvm_arch_vm_ioctl(filp, ioctl, arg);
+  4971		}
+  4972	out:
+  4973		return r;
+  4974	}
+  4975	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
