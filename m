@@ -1,299 +1,164 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FD85CBE
-	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 11:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660909620; x=1692445620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4sxJIM+BHWY9O0qQyEAm4kfuYvS3K5+yYTeL3uKnO6Q=;
-  b=CO5WD3RNleh6opDFgxXnczSwviN6ORGWeaF+FwYYCM0JaQ9txr1CKnBd
-   C9Y2MgoKk0Dat7YYVNj8NxRYULMLf7QVGPmeDLkFPMP/YBVnVmrm1UH9w
-   xe4cgtPltHnUO8H+ws3NghD5TtUZGM/Qrn4VhnkAj4jEwWpDGMM6JfYJJ
-   KeSq8VPHKljkQMQXfEyn5qqkg4pmJJxI2wSpIvPo6FSr3GPTgzYy2gSgg
-   hVd+HyLluHJab4v9ts6Dz4nfHZGUC1m9o6bLYXESX6FDmqWeF26alxxqS
-   nlPyrdBuGZA0Wgk1C6/J9wMr3YHp3aepqye9lrLWKi8/RZAP5e5cnT5Xb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="279958778"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="279958778"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 04:46:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="750501984"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Aug 2022 04:46:54 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oP0Sj-0001PS-1n;
-	Fri, 19 Aug 2022 11:46:53 +0000
-Date: Fri, 19 Aug 2022 19:45:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gireesh.Hiremath@in.bosch.com, linux-omap@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721FE2F52
+	for <llvm@lists.linux.dev>; Fri, 19 Aug 2022 14:25:30 +0000 (UTC)
+Received: from notapiano (unknown [70.107.189.129])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 64F796601DC3;
+	Fri, 19 Aug 2022 15:25:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1660919128;
+	bh=LVvo/H0yD5IHtK3BCe8kCRuEpXJ/0WbPUX2JGtIkvgQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BRORHC1ycbpuGPFg/CMbY1HXG9CbZw4mD7QI+HegRtsRqLIKpA/blhXZFcCxxTwSe
+	 CFPxPAyaltAW76paK8ntAjomzoOPjkNOtVVBeAi2QyofZ2hjkE0B6ZFtIoL8KXYC5H
+	 9Uwy6/Vbl5vdJpybntjkT4r/XtG+b10BHFnRmqYHar17voYPOQO+atkovGyYsHZTCQ
+	 I/mrcDhrSCILIKryUZfcVvlp/9NgDGzRHqEtcXYzq9B1XoGhk/ugm6JiJ6a7L5fGo9
+	 oLDayXKm/kpvfkJ10EN22YLo7a7r7rVTCnpSVRxwt+qj1PZ26gwehcF1fc0feVsogX
+	 x24TsgoxwUDQw==
+Date: Fri, 19 Aug 2022 10:25:22 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, bcousson@baylibre.com,
-	tony@atomide.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-	mkorpershoek@baylibre.com, davidgow@google.com,
-	m.felsch@pengutronix.de, swboyd@chromium.org,
-	fengping.yu@mediatek.com, y.oudjana@protonmail.com,
-	rdunlap@infradead.org, colin.king@intel.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	sjoerd.simons@collabora.co.uk, VinayKumar.Shettar@in.bosch.com,
-	Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 2/3] driver: input: matric-keypad: add reduced matrix
- support
-Message-ID: <202208191937.Y6z0Gjrt-lkp@intel.com>
-References: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, singo.chang@mediatek.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v25 07/10] soc: mediatek: mmsys: add mmsys for support 64
+ reset bits
+Message-ID: <20220819142522.c4o3nrkxfj2r3zd7@notapiano>
+References: <20220711075245.10492-1-nancy.lin@mediatek.com>
+ <20220711075245.10492-8-nancy.lin@mediatek.com>
+ <20220818214715.spbyic34szubx3gi@notapiano>
+ <d7ccb3fb2630c1c0b6dda2990cff72169e5e5d0b.camel@mediatek.com>
+ <12062a2e2957113d40b4bf3c1c62d18418b51a12.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <12062a2e2957113d40b4bf3c1c62d18418b51a12.camel@mediatek.com>
 
-Hi,
+On Fri, Aug 19, 2022 at 12:13:23PM +0800, Nancy.Lin wrote:
+> Hi Nicolas,
+> 
+> 
+> On Fri, 2022-08-19 at 10:09 +0800, Nancy.Lin wrote:
+> > Hi Nicolas,
+> > 
+> > Thanks for the review.
+> > 
+> > On Thu, 2022-08-18 at 17:47 -0400, Nícolas F. R. A. Prado wrote:
+> > > Hi Nancy,
+> > > 
+> > > On Mon, Jul 11, 2022 at 03:52:42PM +0800, Nancy.Lin wrote:
+> > > [..]
+> > > >  static const struct mtk_mmsys_driver_data
+> > > > mt2701_mmsys_driver_data
+> > > > = {
+> > > >  	.clk_driver = "clk-mt2701-mm",
+> > > >  	.routes = mmsys_default_routing_table,
+> > > > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
+> > > > mt8173_mmsys_driver_data = {
+> > > >  	.routes = mmsys_default_routing_table,
+> > > >  	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> > > >  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > > > +	.num_resets = 32,
+> > > >  };
+> > > >  
+> > > >  static const struct mtk_mmsys_match_data mt8173_mmsys_match_data
+> > > > =
+> > > > {
+> > > > @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data
+> > > > mt8183_mmsys_driver_data = {
+> > > >  	.routes = mmsys_mt8183_routing_table,
+> > > >  	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+> > > >  	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > > > +	.num_resets = 32,
+> > > >  };
+> > > >  
+> > > >  static const struct mtk_mmsys_match_data mt8183_mmsys_match_data
+> > > > =
+> > > > {
+> > > > @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data
+> > > > mt8186_mmsys_driver_data = {
+> > > >  	.routes = mmsys_mt8186_routing_table,
+> > > >  	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+> > > >  	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> > > > +	.num_resets = 32,
+> > > >  };
+> > > 
+> > > [..]
+> > > > @@ -351,18 +362,6 @@ static int mtk_mmsys_probe(struct
+> > > > platform_device *pdev)
+> > > >  		return ret;
+> > > >  	}
+> > > >  
+> > > > -	spin_lock_init(&mmsys->lock);
+> > > > -
+> > > > -	mmsys->rcdev.owner = THIS_MODULE;
+> > > > -	mmsys->rcdev.nr_resets = 32;
+> > > 
+> > > The number of resets was previously always set to 32, and now
+> > > you're
+> > > instead
+> > > setting it based on num_resets from each machine. The issue is,
+> > > you're
+> > > forgetting a bunch of them.
+> > > 
+> > > mt8192 didn't get a num_reset, so this commit breaks the display on
+> > > mt8192 based
+> > > devices. But mt8192 isn't the only one, there are other platforms
+> > > missing this
+> > > property. Please set num_resets to 32 in every single one of them,
+> > > otherwise
+> > > there will be display regressions.
+> > > 
+> > > Thanks,
+> > > Nícolas
+> > 
+> > It's my mistake. I will set num_resets to 32 for every mmsys driver.
+> > 
+> > Thanks,
+> > Nancy
+> 
+> After review the code, I think only the mmsys driver with the
+> sw0_rst_offset setting should set num_resets to 32, otherwise it would
+> set wrong addr in the mtk_mmsys_reset_update() function. Those mmsys
+> without sw0_rst_offset set should not set num_resets to 32.
 
-Thank you for the patch! Perhaps something to improve:
+I don't think that's the case. num_resets and sw0_rst_offset are completely
+unrelated in the code. sw0_rst_offset just gives the offset from the base
+mmsys memory to the register that manages resets; it can be 0 in which case the
+reset register would be right at the start of the mmsys iospace.
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+nr_resets, which is set by num_resets, on the other hand, seems to be used in a
+single place: of_reset_simple_xlate() in drivers/reset/core.c. And the logic
+there is really simple: if you pass a reset id greater than nr_resets, you will
+get an error. So when you leave num_resets unset (0) for any of the platforms,
+you're making all reset registrations in the DT fail.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: s390-randconfig-r044-20220819 (https://download.01.org/0day-ci/archive/20220819/202208191937.Y6z0Gjrt-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-        git checkout a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/input/keyboard/
+So I'm really confident that we need num_resets = 32 on *all* platforms (except
+the ones that have 64 of course, we just can't leave them empty).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/input/keyboard/matrix_keypad.c:857:3: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!keypad->button_array) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/keyboard/matrix_keypad.c:932:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   drivers/input/keyboard/matrix_keypad.c:857:3: note: remove the 'if' if its condition is always false
-                   if (!keypad->button_array) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/input/keyboard/matrix_keypad.c:828:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
->> drivers/input/keyboard/matrix_keypad.c:65:33: warning: unused variable 'keypad_infos' [-Wunused-const-variable]
-   static const struct keypad_info keypad_infos[] = {
-                                   ^
-   14 warnings generated.
-
-
-vim +857 drivers/input/keyboard/matrix_keypad.c
-
-   822	
-   823	static int matrix_keypad_probe(struct platform_device *pdev)
-   824	{
-   825		const struct matrix_keypad_platform_data *pdata;
-   826		struct matrix_keypad *keypad;
-   827		struct input_dev *input_dev;
- > 828		int err;
-   829	
-   830		pdata = dev_get_platdata(&pdev->dev);
-   831		if (!pdata) {
-   832			pdata = matrix_keypad_parse_dt(&pdev->dev);
-   833			if (IS_ERR(pdata))
-   834				return PTR_ERR(pdata);
-   835		} else if (!pdata->keymap_data) {
-   836			dev_err(&pdev->dev, "no keymap data defined\n");
-   837			return -EINVAL;
-   838		}
-   839	
-   840		keypad = kzalloc(sizeof(struct matrix_keypad), GFP_KERNEL);
-   841		input_dev = input_allocate_device();
-   842		if (!keypad || !input_dev) {
-   843			err = -ENOMEM;
-   844			goto err_free_mem;
-   845		}
-   846	
-   847		keypad->input_dev = input_dev;
-   848		keypad->pdata = pdata;
-   849		keypad->row_shift = get_count_order(pdata->num_col_gpios);
-   850		keypad->stopped = true;
-   851	
-   852		if (pdata->mode == REDUCED) {
-   853			keypad->button_array = devm_kzalloc(
-   854				&pdev->dev,
-   855				sizeof(struct button) * (pdata->num_of_buttons),
-   856				GFP_KERNEL);
- > 857			if (!keypad->button_array) {
-   858				dev_err(&pdev->dev,
-   859					"could not allocate memory for button array\n");
-   860				goto err_free_mem;
-   861				;
-   862			}
-   863	
-   864			poll_prepare(keypad);
-   865	
-   866			err = input_setup_polling(input_dev, matrix_keypad_poll);
-   867			if (err) {
-   868				dev_err(&pdev->dev,
-   869					"unable to set up polling, err=%d\n", err);
-   870				return err;
-   871			}
-   872	
-   873			input_set_poll_interval(input_dev, pdata->poll_interval_ms);
-   874		} else {
-   875			INIT_DELAYED_WORK(&keypad->work, matrix_keypad_scan);
-   876		}
-   877		spin_lock_init(&keypad->lock);
-   878	
-   879		input_dev->name = pdev->name;
-   880		input_dev->id.bustype = BUS_HOST;
-   881		input_dev->dev.parent = &pdev->dev;
-   882		input_dev->open = matrix_keypad_start;
-   883		input_dev->close = matrix_keypad_stop;
-   884	
-   885		if (pdata->mode == REDUCED) {
-   886			err = matrix_keypad_build_keymap(pdata->keymap_data, NULL,
-   887							 pdata->num_line_gpios,
-   888							 pdata->num_line_gpios, NULL,
-   889							 input_dev);
-   890			if (err) {
-   891				dev_err(&pdev->dev, "failed to build keymap for reduced mode\n");
-   892				goto err_free_mem;
-   893			}
-   894		} else {
-   895			err = matrix_keypad_build_keymap(pdata->keymap_data, NULL,
-   896							 pdata->num_row_gpios,
-   897							 pdata->num_col_gpios, NULL,
-   898							 input_dev);
-   899			if (err) {
-   900				dev_err(&pdev->dev, "failed to build keymap for generic mode\n");
-   901				goto err_free_mem;
-   902			}
-   903		}
-   904	
-   905		if (!pdata->no_autorepeat)
-   906			__set_bit(EV_REP, input_dev->evbit);
-   907		input_set_capability(input_dev, EV_MSC, MSC_SCAN);
-   908		input_set_drvdata(input_dev, keypad);
-   909	
-   910		if (pdata->mode == REDUCED) {
-   911			button_hdl_init(keypad);
-   912		} else {
-   913			err = matrix_keypad_init_gpio(pdev, keypad);
-   914			if (err)
-   915				goto err_free_mem;
-   916		}
-   917	
-   918		err = input_register_device(keypad->input_dev);
-   919		if (err)
-   920			goto err_free_gpio;
-   921	
-   922		device_init_wakeup(&pdev->dev, pdata->wakeup);
-   923		platform_set_drvdata(pdev, keypad);
-   924	
-   925		return 0;
-   926	
-   927	err_free_gpio:
-   928		matrix_keypad_free_gpio(keypad);
-   929	err_free_mem:
-   930		input_free_device(input_dev);
-   931		kfree(keypad);
-   932		return err;
-   933	}
-   934	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Nícolas
