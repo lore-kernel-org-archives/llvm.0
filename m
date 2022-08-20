@@ -1,39 +1,33 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C92C210D
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 12:06:20 +0000 (UTC)
-Received: by mail-oi1-f180.google.com with SMTP id u9so7400864oiv.12
-        for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 05:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc;
-        bh=mf+BGQNsYSJCzj9Yop/1xy8Ja+yt+HEFVNOqFU3s8gU=;
-        b=Fc4EDdryo+o0cR1BeQStJozKBQW0cXZFzwVuqhNlJYmPKLCZLgDisnyqEolLlHKNli
-         Fhv32Hu7yJ1dmgY1tQ/GdABO3amcpBJONu62Uloo6dE/viLLufmpp9/NMHIXMcUnAWHe
-         /K3Hz4BshhbgPj8zyQdbcMlTBDYtXRfjR4SHifJ4gLld83wGhbDjn+1P1E3/8m3i1Ou6
-         eYNPxkAYb30gK6REN/i2sK7MRDvNjAN6IcKWAN1ef6OkPH7kp0Ilpmq4J4AoJC2ZQ/q/
-         VJ/Kl0V3DSiAxkwpBzRFVwsnyS7ucXH9i2rNP2Bu+8zD7WQjH4e7GREVMTvYksGWN5+g
-         aBLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=mf+BGQNsYSJCzj9Yop/1xy8Ja+yt+HEFVNOqFU3s8gU=;
-        b=ySh0Xm7WJ/JjzIemFDyKBap525gE95ZH6ontymQuKMvU/kSIU4AV4pzX3iSACODrNl
-         yGseBSAcoJ6g11XMi8Ti4QdKK5cgndrbL1gXJgY3HhSGzXcCjNYWC43iI7QsVEe+v1qu
-         VDPgp6ORed5EVNJEpKoyQ1J3TGEnF1mC150qIjDkvwT3T1WTrt3n/Ii4pY+KfogK8hIV
-         frV2ppMy4RiLg9eGF6lHx7M+BW+Q98RkFDNh5FUz9z6lrkOqiLy9LyD7jcmEHca3AOoZ
-         Jr2FuEmSsbmd3vaJaRRQbH+PJmLZuWVKEGZv7Gcf+IbtDCCnloFctg1FrwDml3dt+mpp
-         julw==
-X-Gm-Message-State: ACgBeo3p+SGxMu27MwIcA5JFxFfUl8XbCfuCbUv4B66/7lRbZEEuE4uQ
-	3utkHjmTlmZyAT84rZAKrWl9cRFMhRMCnafcaSM=
-X-Google-Smtp-Source: AA6agR4ICOE2LfN4NlOKxCVBEOSWiAdjwW3NLUyzRQQVu8BSlwK3wMMkJ2R7r8I2EvUUPL0aCCbzwBn0W30Y3jQluK8=
-X-Received: by 2002:aca:aac2:0:b0:343:3435:a270 with SMTP id
- t185-20020acaaac2000000b003433435a270mr5314540oie.252.1660997179188; Sat, 20
- Aug 2022 05:06:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574C6360
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 12:54:59 +0000 (UTC)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-10.nifty.com with ESMTP id 27KCqXuf028646
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 21:52:33 +0900
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 27KCqOlP024100
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 21:52:24 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 27KCqOlP024100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1660999945;
+	bh=GHahFXt4ioyW5MZu1ElfcdTptt6dVXg5M3W1/jxlxvE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SOesfCmNwq9P6oJZf3lNhUjXIgx9FzAK8yaiBK0/AuOAOHropLavhP/npi3fmUgFG
+	 FtvzPHZbdziK8ivUwLzPht7zOHnDYB/y+4IJGkEn387CyXIlF9OFOfBqTMuM9k9+Ei
+	 W65+DMXjjrCTfT+RadTcHSe+2u6dLTQMmclaU0vRy6/CVmAN5VcXpErqtyjB/keNp4
+	 l3Vy2zixqzWmdSJnuIDNMiXYRU/UV7UwNLxAhImo+rjvncmABiwx7QEwT/RVrLVNjn
+	 6wY2nDoDKHzIMRl8XLm2AvB3ME9qoZ3Lj1SSaEwvopzULul6TzcihDob/NgdhK6CsJ
+	 ceSmTFl/Gi1sA==
+X-Nifty-SrcIP: [209.85.221.43]
+Received: by mail-wr1-f43.google.com with SMTP id u14so7998181wrq.9
+        for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 05:52:24 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2Bqb3nLiXLN/fowZeD7TvidA5i73a+dz8KmmFN8FJg6Tnpi2j5
+	fLAdliJBGNxOacRoQoKdSC7FE+GChSIklQDMxnk=
+X-Google-Smtp-Source: AA6agR4wWnuB9XGAuI1WKA/jjk/uFVdV/ka150NMuJlMrDN+HuAKVcpPpy2YXZSHi6SBo5A1JSymTbR7DaCJ22EUSkQ=
+X-Received: by 2002:a05:6000:1acb:b0:223:5de3:f8bf with SMTP id
+ i11-20020a0560001acb00b002235de3f8bfmr6438282wry.691.1660999943314; Sat, 20
+ Aug 2022 05:52:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,27 +37,29 @@ MIME-Version: 1.0
 References: <20220513113930.10488-1-masahiroy@kernel.org> <20220513113930.10488-3-masahiroy@kernel.org>
  <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
 In-Reply-To: <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sat, 20 Aug 2022 14:05:43 +0200
-Message-ID: <CA+icZUU1R6vmmKussGBXGBzR8We2b5mAnfWT5BCcfvYY3vk+Zw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 20 Aug 2022 21:51:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATKh4DrgSeN+E1r7xmh1YL6mwWL_g2zL-rz=NYuzXT1bA@mail.gmail.com>
+Message-ID: <CAK7LNATKh4DrgSeN+E1r7xmh1YL6mwWL_g2zL-rz=NYuzXT1bA@mail.gmail.com>
 Subject: Re: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10]
  kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
 To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, 
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 20, 2022 at 12:04 PM Christophe Leroy
+On Sat, Aug 20, 2022 at 7:02 PM Christophe Leroy
 <christophe.leroy@csgroup.eu> wrote:
 >
 > Hi,
@@ -109,108 +105,17 @@ On Sat, Aug 20, 2022 at 12:04 PM Christophe Leroy
 > Bisected to 7b4537199a4a ("kbuild: link symbol CRCs at final link,
 > removing CONFIG_MODULE_REL_CRCS")
 >
-
-What you are looking for is...
-
-commit 7d13fd96df875a9d786ee6dcc8fec460d35d4b12
-("modpost: fix module versioning when a symbol lacks valid CRC")
-
-It's pending in kbuild.git#fixes.
-
--Sedat-
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/commit/?h=3Dfixes&id=3D7d13fd96df875a9d786ee6dcc8fec460d35d4b12
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/log/?h=3Dfixes
-
 > The above patch leads to the following problem building
 > mpc85xx_defconfig + CONFIG_RELOCATABLE
->
->    LD      vmlinux
->    SYSMAP  System.map
->    SORTTAB vmlinux
->    CHKREL  vmlinux
-> WARNING: 451 bad relocations
-> c0b0f26d R_PPC_UADDR32     .head.text-0x3ff9f2bc
-> c0b0f271 R_PPC_UADDR32     .head.text-0x3ffac300
-> c0b0f275 R_PPC_UADDR32     .head.text-0x3ffb0bdc
-> c0b0f279 R_PPC_UADDR32     .head.text-0x3fe1e080
-> c0b0f27d R_PPC_UADDR32     .head.text-0x3fe1df4c
-> c0b0f281 R_PPC_UADDR32     .head.text-0x3fe21514
-> c0b0f285 R_PPC_UADDR32     .head.text-0x3fe211c0
-> c0b0f289 R_PPC_UADDR32     .head.text-0x3ffabda0
-> c0b0f28d R_PPC_UADDR32     .head.text-0x3fe21258
-> c0b0f291 R_PPC_UADDR32     .head.text-0x3fe074d0
-> c0b0f295 R_PPC_UADDR32     .head.text-0x3fe07ad4
-> c0b0f299 R_PPC_UADDR32     .head.text-0x3fe13470
-> c0b0f29d R_PPC_UADDR32     .head.text-0x3fe22700
-> c0b0f2a1 R_PPC_UADDR32     .head.text-0x3ff4b8e0
-> c0b0f2a5 R_PPC_UADDR32     .head.text-0x3fe08320
-> c0b0f2a9 R_PPC_UADDR32     .head.text-0x3fe220dc
-> c0b0f2ad R_PPC_UADDR32     .head.text-0x3fe21da0
-> c0b0f2b1 R_PPC_UADDR32     .head.text-0x3ff89dc0
-> c0b0f2b5 R_PPC_UADDR32     .head.text-0x3fe16524
-> c0b0f2b9 R_PPC_UADDR32     .head.text-0x3fe1ef74
-> c0b0f2bd R_PPC_UADDR32     .head.text-0x3ff98b84
-> c0b0f2c1 R_PPC_UADDR32     .head.text-0x3fdef9a0
-> c0b0f2c5 R_PPC_UADDR32     .head.text-0x3fdf21ac
-> c0b0f2c9 R_PPC_UADDR32     .head.text-0x3ff993c4
-> ...
-> c0b0f969 R_PPC_UADDR32     .head.text-0x3ff89dc0
-> c0b0f96d R_PPC_UADDR32     .head.text-0x3fe9ad40
-> c0b0f971 R_PPC_UADDR32     .head.text-0x3ff2eb00
-> c0b0f975 R_PPC_UADDR32     .head.text-0x3ff89dc0
->
-> And boot fails:
->
-> Run /init as init process
-> kernel tried to execute user page (0) - exploit attempt? (uid: 0)
-> BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-> Faulting instruction address: 0x00000000
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> BE PAGE_SIZE=3D4K MPC8544 DS
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc1-00054-g7b4537199a4a #1523
-> NIP:  00000000 LR: c00150e4 CTR: 00000000
-> REGS: c3091e10 TRAP: 0400   Not tainted  (5.18.0-rc1-00054-g7b4537199a4a)
-> MSR:  00009000 <EE,ME>  CR: 88000422  XER: 20000000
->
-> GPR00: 00004000 c3091f00 c30c8000 00000000 00000013 b7bb9f4c b7bd8f60
-> bfee6650
-> GPR08: 00000054 00000000 c0b0f26d 00000000 c13b0000 00000000 bfee6668
-> 00000000
-> GPR16: 84e08000 00000000 08000000 00000064 00000000 00102000 00000001
-> 00000001
-> GPR24: 00000001 00000001 b7b9c7d0 10000034 00000009 b7bd8f38 b7bd9854
-> b7bd8688
-> NIP [00000000] 0x0
-> LR [c00150e4] ret_from_syscall+0x0/0x28
-> Call Trace:
-> [c3091f00] [c0000af0] InstructionStorage+0x150/0x160 (unreliable)
-> --- interrupt: c00 at 0xb7bb28e8
-> NIP:  b7bb28e8 LR: b7bb1384 CTR: b7bb1218
-> REGS: c3091f10 TRAP: 0c00   Not tainted  (5.18.0-rc1-00054-g7b4537199a4a)
-> MSR:  0002d000 <CE,EE,PR,ME>  CR: 28000422  XER: 20000000
->
-> GPR00: 0000002d bfee61f0 00000000 00000000 00000013 b7bb9f4c b7bd8f60
-> bfee6650
-> GPR08: 00000054 00000020 bfee6648 00000000 00000001 00000000 bfee6668
-> 00000000
-> GPR16: 84e08000 00000000 08000000 00000064 00000000 00102000 00000001
-> 00000001
-> GPR24: 00000001 00000001 b7b9c7d0 10000034 00000009 b7bd8f38 b7bd9854
-> b7bd8688
-> NIP [b7bb28e8] 0xb7bb28e8
-> LR [b7bb1384] 0xb7bb1384
-> --- interrupt: c00
-> Instruction dump:
-> XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-> XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-> ---[ end trace 0000000000000000 ]---
->
-> Kernel panic - not syncing: Attempted to kill init! exitcode=3D0x0000000b
->
->
->
-> Christophe
+
+
+
+Is this because the relocation implementation on ppc is incomplete?
+(and is it the reason why relock_check.sh exists?)
+
+arch/powerpc/kernel/reloc_32.S does not support R_PPC_UADDR32
+
+
+--=20
+Best Regards
+Masahiro Yamada
