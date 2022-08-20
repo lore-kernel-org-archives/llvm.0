@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AFC6138
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 07:21:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C436B613F
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 08:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660980093; x=1692516093;
+  t=1660982647; x=1692518647;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mT2OnrZKI+5b1XrN4GgaNeXcyUNY+BY7YaSiluFAXnk=;
-  b=i5k52+pAozE+WF5BZ6bwpjPgkJnkd09AyYVMdStRuHgGRSjG19haScEE
-   rLiFokO0tGz/702aE1a8/1utflsX97pnfxi2pec7G6ICCvdIOA0R19onN
-   SCh3nqK/tz4WMvqY0nSoBoIJeWKCXIb+hr7QWEuOnQN6hibcy7zxIZ1Lw
-   NbSfy46qxZjEHTyxx7zTbV2jY4bQA3Ejy2ksXjNz1UTci2GHL5vozI2Ji
-   Cv8XFxC0S8uxC2/oxAmmz6IblUDRkGMozf5iP6/cNMpAxapxcpEtQqfAE
-   3dM8q8GacQq/YQ5CdLwJn9OWJLnVwDPlzkcv0i4SU+oiGiz6qR/UpZD4y
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="291902831"
+  bh=6JUrxYCKKv9Corxi85IfluTexRfbKr9u7r3UhCXYa8Q=;
+  b=j5rCs8GQPXr0344aGx2zdXXUC4PMqu6TU+eyX4UQ0TvC2jWcXDN30w7X
+   TZBowtWqiw86DMwV41GMhiTOEbI74sr7rLpWtkXdft/qfeTPSRce2XhCr
+   iBsHJ3XyjEZnLN7+Cwv04ldZ8OWy2GnL3uuVWJKthZrGZenpf3NC8EzkI
+   hZv/O73ldrYaX4sgCm7qXpi6W5J06e7nnfHP3CTL4gy2PYpt2pwxE1fAK
+   FZn8eYdLnXwlKV7gSmPanSDt9Dr1i74KxhKBiChkfwflC6/3C1IYh45Iy
+   22agtalzSlqZOwknWKSN7M2VOeuetAWAWXeUGBQaKmsQyiFxG93Y18E83
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293159900"
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="291902831"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 00:21:32 -0700
+   d="scan'208";a="293159900"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 01:03:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="676680674"
+   d="scan'208";a="936468917"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Aug 2022 00:21:31 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 20 Aug 2022 01:03:57 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPInS-0002JP-1X;
-	Sat, 20 Aug 2022 07:21:30 +0000
-Date: Sat, 20 Aug 2022 15:21:14 +0800
+	id 1oPJSX-0002Ln-0C;
+	Sat, 20 Aug 2022 08:03:57 +0000
+Date: Sat, 20 Aug 2022 16:02:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: [jgunthorpe:iommufd 3/14] drivers/iommu/iommufd/main.c:277: warning:
- expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get()
- instead
-Message-ID: <202208201532.7dK1NH9N-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for function '__ashldi3'
+Message-ID: <202208201544.3bfagcR3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,49 +47,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   6624f48e554fe6a880b261074a1c9580dc9b5384
-commit: a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7 [3/14] iommufd: File descriptor, context, kconfig and makefiles
-config: s390-randconfig-r035-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201532.7dK1NH9N-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
+Hi Masahiro,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   50cd95ac46548429e5bba7ca75cc97d11a697947
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   9 months ago
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20220820/202208201544.3bfagcR3-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
 All warnings (new ones prefixed by >>):
 
-   drivers/iommu/iommufd/main.c:277: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_get'
->> drivers/iommu/iommufd/main.c:277: warning: expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get() instead
-   drivers/iommu/iommufd/main.c:307: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_put'
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for function '__ashldi3' [-Wmissing-prototypes]
+   long long notrace __ashldi3(long long u, word_type b)
+                     ^
+   arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long long notrace __ashldi3(long long u, word_type b)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +277 drivers/iommu/iommufd/main.c
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
 
-   269	
-   270	/**
-   271	 * iommufd_ctxet - Get a context reference
-   272	 * @ictx - Context to get
-   273	 *
-   274	 * The caller must already hold a valid reference to ictx.
-   275	 */
-   276	void iommufd_ctx_get(struct iommufd_ctx *ictx)
- > 277	{
-   278		get_file(ictx->file);
-   279	}
-   280	EXPORT_SYMBOL_GPL(iommufd_ctx_get);
-   281	
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
 
 -- 
 0-DAY CI Kernel Test Service
