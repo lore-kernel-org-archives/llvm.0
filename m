@@ -1,45 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB35617E
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 00:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926E415A2
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 00:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660954459; x=1692490459;
+  t=1660956920; x=1692492920;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0pkWwH2wSD9gvsHrarqZvzQyvP8hrcdUrMl7gKVgE7U=;
-  b=IH73VpdGKa0jwsjfS3U9VjnG3RGtM2xU2piCi1qc4+Pa2K9JXYUFAY2u
-   4oGIh2KaBBAf5G1KKIZ/5u5ATWtmvvKPxVMERFHF9Ft1j3pCQbwXrgs99
-   PWvqZR/cvnFpaQ3gnQGUyWSz7xqzrJMGYy9PE07kDTjCEVvO+iUvsbWIy
-   hc2MW87p3ZBriv8xdxtRx+PJGr4jSPsxXXitBLpSjfSJ1/HCVUAFA/g4v
-   MOLBrFkuvyUDtJXvrSx2HEeR7cCbuTggr3wY5ZBxzSHlZoho7cj1MBrCy
-   01+ARcWu8UejAbLl4yJIbP3GA5M0vUmDxELDLgGS9yd0NarWPom95nP9w
+  bh=jQCFueG72K1/IsvlQP1m+Io0jjK+0RV4Mz5A/fOkDSw=;
+  b=UhEdAl9s5JlqPmqrhIq9lIHYycxtC0pzMJ/10MTPXt5lPksnxWO3zqtU
+   rdWgbAyV4KzrViZ/6d0pMuAL9hj0nSzda1dNO1ZiONHWz4+f0X9nyt7it
+   Gr+GfbvCLLnr2B3DpZqxgtg1waBXVwNpiLi4TbyByvY01bi2OpGrK6i80
+   8URXSfURRy9DwXUyqUxTgjt5UmFXcZQSn1PMv0LzxrmYGFiob+1DvhtYM
+   qA1/xH5Zl3Bo97LwqrT/dumwTy0NwtE8JfyVwgeFg9GA5DQJjsF5H7KSW
+   GhfVQ69x9U8cMJVMVpap1eQJq295yPReI3ecEh392DXPPzvdECAmHszKI
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="280093172"
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293920873"
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="280093172"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 17:14:18 -0700
+   d="scan'208";a="293920873"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 17:55:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="559119530"
+   d="scan'208";a="676626196"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Aug 2022 17:14:16 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2022 17:55:18 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPC80-0001wb-0z;
-	Sat, 20 Aug 2022 00:14:16 +0000
-Date: Sat, 20 Aug 2022 08:13:49 +0800
+	id 1oPCli-0001yD-0U;
+	Sat, 20 Aug 2022 00:55:18 +0000
+Date: Sat, 20 Aug 2022 08:54:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andi Kleen <ak@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 11/36]
- arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function
- 'tdx_write_msr'
-Message-ID: <202208200851.ZfmiszQz-lkp@intel.com>
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 13/36]
+ arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function
+ 'tdx_mmio_readq'
+Message-ID: <202208200846.ns0LqPhB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,16 +51,16 @@ Content-Disposition: inline
 arch/x86/coco/tdx/tdx.c
 tree:   https://github.com/intel/tdx.git guest-hardening-rebased
 head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
-commit: a9189da9f0413f85d9072894ccb973cf785d2c0d [11/36] x86/tdx: Use direct paravirt call for wrmsrl
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200851.ZfmiszQz-lkp@intel.com/config)
+commit: 0cf382195475412201e134e2925bb276445a8460 [13/36] x86/tdx: Enable direct iomap MMIO optimizations
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200846.ns0LqPhB-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/a9189da9f0413f85d9072894ccb973cf785d2c0d
+        # https://github.com/intel/tdx/commit/0cf382195475412201e134e2925bb276445a8460
         git remote add intel-tdx https://github.com/intel/tdx.git
         git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout a9189da9f0413f85d9072894ccb973cf785d2c0d
+        git checkout 0cf382195475412201e134e2925bb276445a8460
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
@@ -71,34 +70,35 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function 'tdx_write_msr' [-Wmissing-prototypes]
+   arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function 'tdx_write_msr' [-Wmissing-prototypes]
    void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
                 ^
    arch/x86/coco/tdx/tdx.c:298:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
    ^
    static 
-   1 warning generated.
+>> arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function 'tdx_mmio_readq' [-Wmissing-prototypes]
+   unsigned long tdx_mmio_readq(void __iomem* addr)
+                 ^
+   arch/x86/coco/tdx/tdx.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long tdx_mmio_readq(void __iomem* addr)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/tdx_write_msr +298 arch/x86/coco/tdx/tdx.c
+vim +/tdx_mmio_readq +531 arch/x86/coco/tdx/tdx.c
 
-   297	
- > 298	void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-   299	{
-   300		struct tdx_hypercall_args args = {
-   301			.r10 = TDX_HYPERCALL_STANDARD,
-   302			.r11 = hcall_func(EXIT_REASON_MSR_WRITE),
-   303			.r12 = msr,
-   304			.r13 = (u64)high << 32 | low,
-   305		};
-   306	
-   307		if (tdx_fast_tdcall_path_msr(msr))
-   308			__tdx_hypercall(&args, 0);
-   309		else
-   310			native_write_msr(msr, low, high);
-   311	}
-   312	
+   530	
+ > 531	unsigned long tdx_mmio_readq(void __iomem* addr)
+   532	{
+   533		unsigned long val;
+   534	
+   535		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
+   536			return 0xffffffffffffffff;
+   537		return val;
+   538	}
+   539	
 
 -- 
 0-DAY CI Kernel Test Service
