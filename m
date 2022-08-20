@@ -1,47 +1,51 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5550C33EB
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 21:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD7633EB
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 21:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661030366; x=1692566366;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=62dQ8Ri0QVmRFB/Q0m7xeUmyi0fTIhGNs287/kq6pN8=;
-  b=gFpFuCF6E1Ip7UkAB6WDD4cJ6ojD+qBmbvb4mRtz9vTUmYHB+Q93Wh7J
-   scwTROrqAc7UHBPMYrnoiRzZM77t22wD0gZDbNBcvGJUxp9hS22H8T1PH
-   8fJvNDsNFlaWGNQSOerYML0T6K+d36goGSlK6FOvYsfMA4m4h2Pjq5qqC
-   FT5XIP5nQzAmL7oTkRvqwJ0YcRK2E2r073+USwUqllFKGG69NxJo/SPUI
-   YChhmQZ/ln9GpMAli6vQ1YJKLMqaaLL4idcUCONgHgFN7Fuzbp/88u48s
-   H3Mk6CtXC9MeBFHN+/xTGGmTWvDQBTLpM3DqnnGeBRINlr309CtAGSazt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="273592903"
+  t=1661031632; x=1692567632;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LOzvEj7iLKGD5rk7k/t82D26qr+7N1ucQ2gJOw8QkWw=;
+  b=cycL16YByT8wng2aDHRFYS1Fd5bvoR7P5nhgvXnQhIOpejZ4Afw5Dyhu
+   QfW9m/paGVWpDpeVDux2k2bEI29Hlld1kkNIgfBIzNwCBXPcmMT1Vehzf
+   idRFoU9snZtqI3G1gS7dABxf2zP/eOf2W+Eqvt6UX+JggdojytDP8BFq2
+   5WBy9wStajOCkB4Ee47tEitcNDT/0p7enKxILoV4dxODSib69KLKIW8OY
+   ran6eN/koBV2SQb7Qz/slk1T3G26s/RfeHxMUI/lrtGSG6T8A9IDpX0zg
+   H7drhhJv5aONTEn9dGaL8mq6NDqTBOndUogMqUmulsNnsSlRDFLbiNaDn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="291947877"
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="273592903"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 14:19:17 -0700
+   d="scan'208";a="291947877"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 14:40:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="676788742"
+   d="scan'208";a="641601976"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Aug 2022 14:19:15 -0700
+  by orsmga001.jf.intel.com with ESMTP; 20 Aug 2022 14:40:16 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPVsA-0003Dr-2T;
-	Sat, 20 Aug 2022 21:19:14 +0000
-Date: Sun, 21 Aug 2022 05:18:59 +0800
+	id 1oPWCV-0003Ex-1O;
+	Sat, 20 Aug 2022 21:40:15 +0000
+Date: Sun, 21 Aug 2022 05:39:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Arminder Singh <arminders208@outlook.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
- undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202208210527.NcaIKIN8-lkp@intel.com>
+	Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Hector Martin <marcan@marcan.st>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-i2c@vger.kernel.org,
+	Arminder Singh <arminders208@outlook.com>
+Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
+Message-ID: <202208210548.MCoIwyQl-lkp@intel.com>
+References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,120 +54,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
 
-Hi Arnd,
+Hi Arminder,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cc1807b9158a909ffe829a5e222be756c57c9a90
-commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-date:   5 months ago
-config: mips-buildonly-randconfig-r006-20220821 (https://download.01.org/0day-ci/archive/20220821/202208210527.NcaIKIN8-lkp@intel.com/config)
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220821/202208210548.MCoIwyQl-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/98584b2b51d808ab582798c7a50511e8c1889ced
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
+        git checkout 98584b2b51d808ab582798c7a50511e8c1889ced
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/cirrus/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/busses/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
->> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^
-   <scratch space>:14:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:14:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:25:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   5 errors generated.
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/i2c/busses/i2c-pasemi-core.c:86:6: warning: variable 'status' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (smbus->use_irq) {
+               ^~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:92:12: note: uninitialized use occurs here
+                   while (!(status & SMSTA_XEN) && timeout--) {
+                            ^~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:86:2: note: remove the 'if' if its condition is always true
+           if (smbus->use_irq) {
+           ^~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:83:21: note: initialize the variable 'status' to silence this warning
+           unsigned int status;
+                              ^
+                               = 0
+   8 warnings generated.
 
 
-vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
+vim +86 drivers/i2c/busses/i2c-pasemi-core.c
 
-0548448b719ac7 Charles Keepax 2019-03-19  199  
-0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
-0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
-0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
-0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
-0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
-0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
-0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
-0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
-0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
-0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
-0548448b719ac7 Charles Keepax 2019-03-19  220  
-
-:::::: The code at line 200 was first introduced by commit
-:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
-
-:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+    79	
+    80	static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
+    81	{
+    82		int timeout = 10;
+    83		unsigned int status;
+    84		unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
+    85	
+  > 86		if (smbus->use_irq) {
+    87			reinit_completion(&smbus->irq_completion);
+    88			reg_write(smbus, REG_IMASK, bitmask);
+    89			wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
+    90			status = reg_read(smbus, REG_SMSTA);
+    91		} else {
+    92			while (!(status & SMSTA_XEN) && timeout--) {
+    93				msleep(1);
+    94				status = reg_read(smbus, REG_SMSTA);
+    95			}
+    96		}
+    97	
+    98	
+    99		/* Got NACK? */
+   100		if (status & SMSTA_MTN)
+   101			return -ENXIO;
+   102	
+   103		if (timeout < 0) {
+   104			dev_warn(smbus->dev, "Timeout, status 0x%08x\n", status);
+   105			reg_write(smbus, REG_SMSTA, status);
+   106			return -ETIME;
+   107		}
+   108	
+   109		/* Clear XEN */
+   110		reg_write(smbus, REG_SMSTA, SMSTA_XEN);
+   111	
+   112		return 0;
+   113	}
+   114	
 
 -- 
 0-DAY CI Kernel Test Service
