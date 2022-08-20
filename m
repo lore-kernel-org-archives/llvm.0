@@ -1,43 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41BB612B
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 05:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AFC6138
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 07:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660973369; x=1692509369;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3pEqGV7nuvJGz18VKeEMzfVgqfYyDF9Irr7mbSpFFlY=;
-  b=fVZu6eh5CHiwhy8Jh5Hm8NtsgRtEg9kg53v2HHsuc7tZgMMYLLJFdVPJ
-   yPgHrdKA1KVYRn+t+cnQjyfVyRg2yty0B1szuSDYqO+TAtdPkxA3dDk8H
-   zouQrJtYd5osI8mvxLTW9WpI0Y9cedC1Zhe0UmXRe6Ve1OektBcM6ypoz
-   0ENATz4DI8ZPXWUgJEdnGO+v3t5w0703EWDHGytxHDnkcsotZ7a14Ne7c
-   t70Vc2bPbZG3HoB2pKyQs9Of3e33eLk5hYytiNMjDlVXVCi0/AUAk2hrP
-   ColShdLq6q6qiqoZunGGhO4PRoc/JcC0hFU8fDvv+dRZkLQld2oMrZz9G
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="294428963"
+  t=1660980093; x=1692516093;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mT2OnrZKI+5b1XrN4GgaNeXcyUNY+BY7YaSiluFAXnk=;
+  b=i5k52+pAozE+WF5BZ6bwpjPgkJnkd09AyYVMdStRuHgGRSjG19haScEE
+   rLiFokO0tGz/702aE1a8/1utflsX97pnfxi2pec7G6ICCvdIOA0R19onN
+   SCh3nqK/tz4WMvqY0nSoBoIJeWKCXIb+hr7QWEuOnQN6hibcy7zxIZ1Lw
+   NbSfy46qxZjEHTyxx7zTbV2jY4bQA3Ejy2ksXjNz1UTci2GHL5vozI2Ji
+   Cv8XFxC0S8uxC2/oxAmmz6IblUDRkGMozf5iP6/cNMpAxapxcpEtQqfAE
+   3dM8q8GacQq/YQ5CdLwJn9OWJLnVwDPlzkcv0i4SU+oiGiz6qR/UpZD4y
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="291902831"
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="294428963"
+   d="scan'208";a="291902831"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 22:29:28 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 00:21:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="676665839"
+   d="scan'208";a="676680674"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2022 22:29:27 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 20 Aug 2022 00:21:31 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPH30-0002Cf-2U;
-	Sat, 20 Aug 2022 05:29:26 +0000
-Date: Sat, 20 Aug 2022 13:29:14 +0800
+	id 1oPInS-0002JP-1X;
+	Sat, 20 Aug 2022 07:21:30 +0000
+Date: Sat, 20 Aug 2022 15:21:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v3 bpf-next 01/15] bpf: Introduce any context BPF
- specific memory allocator.
-Message-ID: <202208201311.vnNw5eHw-lkp@intel.com>
-References: <20220819214232.18784-2-alexei.starovoitov@gmail.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
+Subject: [jgunthorpe:iommufd 3/14] drivers/iommu/iommufd/main.c:277: warning:
+ expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get()
+ instead
+Message-ID: <202208201532.7dK1NH9N-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,104 +46,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819214232.18784-2-alexei.starovoitov@gmail.com>
 
-Hi Alexei,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/bpf-BPF-specific-memory-allocator/20220820-054421
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220820/202208201311.vnNw5eHw-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   6624f48e554fe6a880b261074a1c9580dc9b5384
+commit: a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7 [3/14] iommufd: File descriptor, context, kconfig and makefiles
+config: s390-randconfig-r035-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201532.7dK1NH9N-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/430052d4904f4c7e48cd90f0d4efeb45f73ea69e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexei-Starovoitov/bpf-BPF-specific-memory-allocator/20220820-054421
-        git checkout 430052d4904f4c7e48cd90f0d4efeb45f73ea69e
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/jgunthorpe/linux/commit/a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   kernel/bpf/memalloc.c:84:2: error: unknown type name 'local_t'
-           local_t active;
-           ^
->> kernel/bpf/memalloc.c:178:7: error: call to undeclared function 'local_inc_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   if (local_inc_return(&c->active) == 1) {
-                       ^
-   kernel/bpf/memalloc.c:178:7: note: did you mean 'atomic_inc_return'?
-   include/linux/atomic/atomic-instrumented.h:195:1: note: 'atomic_inc_return' declared here
-   atomic_inc_return(atomic_t *v)
-   ^
->> kernel/bpf/memalloc.c:182:3: error: call to undeclared function 'local_dec'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   local_dec(&c->active);
-                   ^
-   kernel/bpf/memalloc.c:207:7: error: call to undeclared function 'local_inc_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   if (local_inc_return(&c->active) == 1) {
-                       ^
-   kernel/bpf/memalloc.c:214:3: error: call to undeclared function 'local_dec'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   local_dec(&c->active);
-                   ^
-   kernel/bpf/memalloc.c:380:6: error: call to undeclared function 'local_inc_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (local_inc_return(&c->active) == 1) {
-               ^
-   kernel/bpf/memalloc.c:385:2: error: call to undeclared function 'local_dec'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           local_dec(&c->active);
-           ^
-   kernel/bpf/memalloc.c:408:6: error: call to undeclared function 'local_inc_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (local_inc_return(&c->active) == 1) {
-               ^
-   kernel/bpf/memalloc.c:420:2: error: call to undeclared function 'local_dec'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           local_dec(&c->active);
-           ^
-   9 errors generated.
+   drivers/iommu/iommufd/main.c:277: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_get'
+>> drivers/iommu/iommufd/main.c:277: warning: expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get() instead
+   drivers/iommu/iommufd/main.c:307: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_put'
 
 
-vim +/local_inc_return +178 kernel/bpf/memalloc.c
+vim +277 drivers/iommu/iommufd/main.c
 
-   156	
-   157	/* Mostly runs from irq_work except __init phase. */
-   158	static void alloc_bulk(struct bpf_mem_cache *c, int cnt, int node)
-   159	{
-   160		struct mem_cgroup *memcg = NULL, *old_memcg;
-   161		unsigned long flags;
-   162		void *obj;
-   163		int i;
-   164	
-   165		memcg = get_memcg(c);
-   166		old_memcg = set_active_memcg(memcg);
-   167		for (i = 0; i < cnt; i++) {
-   168			obj = __alloc(c, node);
-   169			if (!obj)
-   170				break;
-   171			if (IS_ENABLED(CONFIG_PREEMPT_RT))
-   172				/* In RT irq_work runs in per-cpu kthread, so disable
-   173				 * interrupts to avoid preemption and interrupts and
-   174				 * reduce the chance of bpf prog executing on this cpu
-   175				 * when active counter is busy.
-   176				 */
-   177				local_irq_save(flags);
- > 178			if (local_inc_return(&c->active) == 1) {
-   179				__llist_add(obj, &c->free_llist);
-   180				c->free_cnt++;
-   181			}
- > 182			local_dec(&c->active);
-   183			if (IS_ENABLED(CONFIG_PREEMPT_RT))
-   184				local_irq_restore(flags);
-   185		}
-   186		set_active_memcg(old_memcg);
-   187		mem_cgroup_put(memcg);
-   188	}
-   189	
+   269	
+   270	/**
+   271	 * iommufd_ctxet - Get a context reference
+   272	 * @ictx - Context to get
+   273	 *
+   274	 * The caller must already hold a valid reference to ictx.
+   275	 */
+   276	void iommufd_ctx_get(struct iommufd_ctx *ictx)
+ > 277	{
+   278		get_file(ictx->file);
+   279	}
+   280	EXPORT_SYMBOL_GPL(iommufd_ctx_get);
+   281	
 
 -- 
 0-DAY CI Kernel Test Service
