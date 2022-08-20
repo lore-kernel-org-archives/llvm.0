@@ -1,44 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926E415A2
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 00:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0B917C2
+	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 01:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660956920; x=1692492920;
+  t=1660958961; x=1692494961;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jQCFueG72K1/IsvlQP1m+Io0jjK+0RV4Mz5A/fOkDSw=;
-  b=UhEdAl9s5JlqPmqrhIq9lIHYycxtC0pzMJ/10MTPXt5lPksnxWO3zqtU
-   rdWgbAyV4KzrViZ/6d0pMuAL9hj0nSzda1dNO1ZiONHWz4+f0X9nyt7it
-   Gr+GfbvCLLnr2B3DpZqxgtg1waBXVwNpiLi4TbyByvY01bi2OpGrK6i80
-   8URXSfURRy9DwXUyqUxTgjt5UmFXcZQSn1PMv0LzxrmYGFiob+1DvhtYM
-   qA1/xH5Zl3Bo97LwqrT/dumwTy0NwtE8JfyVwgeFg9GA5DQJjsF5H7KSW
-   GhfVQ69x9U8cMJVMVpap1eQJq295yPReI3ecEh392DXPPzvdECAmHszKI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293920873"
+  bh=0gkzhiPe5L2aHqJ85RWOeog/KMgcsPto4GRDCWAFbrE=;
+  b=kFHf5NJoPbF/+GOmQc7//t1yZbFsmFzSqZVGkko0xMgmDvNPHWy5qN2A
+   LXEGVZ/epNl8vC8amFtGi4YXFdPrH7z4hPNEAAYh5/QzELZUyCUh6GXSD
+   HbXy8nweUvfuV7oij6rbbBLbI7INyCBfUiYb+68HZsrOoR8urCbrOFusb
+   BfhOAgTSpU47/HZ7wvA15VBVuQuGRfoc14/+fQQPrv0JP9qRHZTO0shvA
+   inp0YZBu5RxU9MriBuyQKaySVk5YP47azTq3C5WfFMZL6d1FvE40KxCEL
+   SvKtIWwGpvUqG3S0fetI+laoUPTeUppqWyk6DCch8bDYZnmuDDDWTWJNE
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="354866101"
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="293920873"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 17:55:20 -0700
+   d="scan'208";a="354866101"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 18:29:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="676626196"
+   d="scan'208";a="559136928"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2022 17:55:18 -0700
+  by orsmga003.jf.intel.com with ESMTP; 19 Aug 2022 18:29:19 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPCli-0001yD-0U;
-	Sat, 20 Aug 2022 00:55:18 +0000
-Date: Sat, 20 Aug 2022 08:54:55 +0800
+	id 1oPDId-0001zz-0K;
+	Sat, 20 Aug 2022 01:29:19 +0000
+Date: Sat, 20 Aug 2022 09:29:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andi Kleen <ak@linux.intel.com>
+To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 13/36]
- arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function
- 'tdx_mmio_readq'
-Message-ID: <202208200846.ns0LqPhB-lkp@intel.com>
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 16/36]
+ arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for
+ function 'kvm_unit_test_debug_init'
+Message-ID: <202208200918.YVqTQZEH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,19 +48,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-arch/x86/coco/tdx/tdx.c
+arch/x86/coco/tdx/Makefile
+arch/x86/coco/tdx/tdx-tests.c
 tree:   https://github.com/intel/tdx.git guest-hardening-rebased
 head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
-commit: 0cf382195475412201e134e2925bb276445a8460 [13/36] x86/tdx: Enable direct iomap MMIO optimizations
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200846.ns0LqPhB-lkp@intel.com/config)
+commit: 5091d7c6068bf030df54dc48b303a1d25a7ef0a0 [16/36] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200918.YVqTQZEH-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/0cf382195475412201e134e2925bb276445a8460
+        # https://github.com/intel/tdx/commit/5091d7c6068bf030df54dc48b303a1d25a7ef0a0
         git remote add intel-tdx https://github.com/intel/tdx.git
         git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 0cf382195475412201e134e2925bb276445a8460
+        git checkout 5091d7c6068bf030df54dc48b303a1d25a7ef0a0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
@@ -70,35 +71,20 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for function 'tdx_write_msr' [-Wmissing-prototypes]
-   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-                ^
-   arch/x86/coco/tdx/tdx.c:298:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+>> arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for function 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
+   int __init kvm_unit_test_debug_init(void)
+              ^
+   arch/x86/coco/tdx/tdx-tests.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init kvm_unit_test_debug_init(void)
    ^
    static 
->> arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for function 'tdx_mmio_readq' [-Wmissing-prototypes]
-   unsigned long tdx_mmio_readq(void __iomem* addr)
-                 ^
-   arch/x86/coco/tdx/tdx.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long tdx_mmio_readq(void __iomem* addr)
-   ^
-   static 
-   2 warnings generated.
+   1 warning generated.
 
 
-vim +/tdx_mmio_readq +531 arch/x86/coco/tdx/tdx.c
+vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
 
-   530	
- > 531	unsigned long tdx_mmio_readq(void __iomem* addr)
-   532	{
-   533		unsigned long val;
-   534	
-   535		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
-   536			return 0xffffffffffffffff;
-   537		return val;
-   538	}
-   539	
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
 
 -- 
 0-DAY CI Kernel Test Service
