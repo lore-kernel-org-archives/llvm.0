@@ -1,215 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B02371
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 06:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661064645;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OoZhA4GBGPch1N3iOepMdKu9dzOKB8wa24aDNcq9ikg=;
-	b=JUxNiZyrXXqG2/DdUaNbMwrIj2vQuxpJvgAk7cZpthJ62U2BIFRj5tiToytiVBiYXXZjSc
-	FtRz2BlFTtVFkyKAQM969mm4YtJp6KU95T+B22toP3RQ5Lv21j9QYGEZlaPj/1PSM/CTAc
-	klqlxHwXVjNRI6fiN3L6VYfrdf+Hyrk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-36-W8RQZ_7yNSCfoEAD59JpZA-1; Sun, 21 Aug 2022 02:50:43 -0400
-X-MC-Unique: W8RQZ_7yNSCfoEAD59JpZA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A629F811E76
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 06:50:43 +0000 (UTC)
-Received: from [172.64.4.35] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 971361410DD7;
-	Sun, 21 Aug 2022 06:50:43 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (56/381 SKIPPED): Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [f31c32ef]
-Date: Sun, 21 Aug 2022 06:50:41 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AA4371
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 06:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661064775; x=1692600775;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b67IsNnJhJZXwjsvQnCc2klpUpKpU5ujWx41lFQeQT0=;
+  b=hT3yE4P3HcZ+fBwCEAY1ICCnYIlC9wqHDMYSI2Ia+6xYmLGxp1CsfwPM
+   wXZJELgOrA+/Vl189Eo3qxsCLe68gMZ03/FneqYJIc59YHvkA8rje7dM5
+   W0NfGqFeDoMtTuhAsscA/4yQ9Uq1sbIHLthiYw/OCOMxgNKS1f9FmLnD3
+   G1CjTT8iAcgKAjq6RI4PK/zyvnILbwKYE/anxoSlxjwwrPo2b5HYFf5J9
+   RRfJwZERv909rRNa9Fpb7nN1cQ05HJZB0B9TQ5kod8SQlp4Hq4cZS1Mte
+   UxGR+SgGzowDOvr/8F7Kc0B7WFMMpDolYzBbTYIYo9fW7LFNVLqTr/KFM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="379523381"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="379523381"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 23:52:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="697948166"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Aug 2022 23:52:37 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oPep2-0003mP-2d;
+	Sun, 21 Aug 2022 06:52:36 +0000
+Date: Sun, 21 Aug 2022 14:52:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:extron 94/94]
+ arch/x86/include/asm/thread_info.h:175:13: error: calling
+ '__builtin_frame_address' with a nonzero argument is unsafe
+Message-ID: <202208211427.2SoCEKiR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <83173.122082102504300183@us-mta-36.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://linuxtv.org/hverkuil/media_tree.git extron
+head:   1540c2ffcd7f0fb1320c24f214d02a5c08f9fb2c
+commit: 1540c2ffcd7f0fb1320c24f214d02a5c08f9fb2c [94/94] cec/extron-da-hd-4k-plus: add the Extron DA HD 4K Plus CEC driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220821/202208211427.2SoCEKiR-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree extron
+        git checkout 1540c2ffcd7f0fb1320c24f214d02a5c08f9fb2c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51254
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
-ed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1354
-            Affected tests:
-                 aarch64 - Libkcapi AF_ALG test
-                   s390x - Libkcapi AF_ALG test
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
-tablished after max reconnecting reached
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:31:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+>> arch/x86/include/asm/thread_info.h:175:13: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+           oldframe = __builtin_frame_address(1);
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/thread_info.h:177:11: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+                   frame = __builtin_frame_address(2);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/__builtin_frame_address +175 arch/x86/include/asm/thread_info.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+2052e8d40ad58b include/asm-x86/thread_info.h      Christoph Lameter 2008-05-12  157  
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  158  /*
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  159   * Walks up the stack frames to make sure that the specified object is
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  160   * entirely contained by a single stack frame.
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  161   *
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  162   * Returns:
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  163   *	GOOD_FRAME	if within a frame
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  164   *	BAD_STACK	if placed across a frame boundary (or outside stack)
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  165   *	NOT_STACK	unable to determine (no frame pointers, etc)
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  166   */
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  167  static inline int arch_within_stack_frames(const void * const stack,
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  168  					   const void * const stackend,
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  169  					   const void *obj, unsigned long len)
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  170  {
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  171  #if defined(CONFIG_FRAME_POINTER)
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  172  	const void *frame = NULL;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  173  	const void *oldframe;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  174  
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12 @175  	oldframe = __builtin_frame_address(1);
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  176  	if (oldframe)
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  177  		frame = __builtin_frame_address(2);
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  178  	/*
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  179  	 * low ----------------------------------------------> high
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  180  	 * [saved bp][saved ip][args][local vars][saved bp][saved ip]
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  181  	 *                     ^----------------^
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  182  	 *               allow copies only within here
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  183  	 */
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  184  	while (stack <= frame && frame < stackend) {
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  185  		/*
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  186  		 * If obj + len extends past the last frame, this
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  187  		 * check won't pass and the next frame will be 0,
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  188  		 * causing us to bail out and correctly report
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  189  		 * the copy as invalid.
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  190  		 */
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  191  		if (obj + len <= frame)
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  192  			return obj >= oldframe + 2 * sizeof(void *) ?
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  193  				GOOD_FRAME : BAD_STACK;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  194  		oldframe = frame;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  195  		frame = *(const void * const *)frame;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  196  	}
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  197  	return BAD_STACK;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  198  #else
+96dc4f9fb64690 arch/x86/include/asm/thread_info.h Sahara            2017-02-16  199  	return NOT_STACK;
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  200  #endif
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  201  }
+0f60a8efe4005a arch/x86/include/asm/thread_info.h Kees Cook         2016-07-12  202  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: The code at line 175 was first introduced by commit
+:::::: 0f60a8efe4005ab5e65ce000724b04d4ca04a199 mm: Implement stack frame object validation
 
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
