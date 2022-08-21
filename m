@@ -1,217 +1,187 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5102E33EB
-	for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 22:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661032820; x=1692568820;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LrQv1+3SWqwZjWIzFDtVhreFFkYePFkar04j1huQ8nI=;
-  b=WYws68EeCxkFdAJgQ39HKioPMG2a7msZkAbf+kC71LX39s6cyCjtFRSP
-   lzogtITBz7FaBgCRg1zx4mZ30H61ZvHpD6OMJ6/S4jzd/XNyy337F2Hu+
-   xEineXnafwlW3Mdf1PVl+tZlFmN/EGiw1ARF+WBHLvlvjRt+GxOefjCQ+
-   Dj7qNV/MXi+sev/8GtsfINaCxF4g2X+nEOpu0Ju32AljZL07hKeXUlfEK
-   7y2T2nLiPRe47szrE7CZJHbT8PYymhmjpWs7G5vD6yodnoQW1jzp60K86
-   CPOiZTvGmyEPvhii8lXCFA10szv1B7QyYrdnedzS1Z36nd5ZVQbW509PZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="280169625"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="280169625"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 15:00:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="676793924"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Aug 2022 15:00:17 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oPWVs-0003GF-0G;
-	Sat, 20 Aug 2022 22:00:16 +0000
-Date: Sun, 21 Aug 2022 05:59:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [lunn:v6.0-rc1-net-next-c45-v2 22/43]
- drivers/net/phy/mdio_bus.c:710:11: warning: variable 'i' is uninitialized
- when used here
-Message-ID: <202208210507.G2Dl9qfs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125D536A
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 02:04:25 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id c7-20020a056e020bc700b002e59be6ce85so5836378ilu.12
+        for <llvm@lists.linux.dev>; Sat, 20 Aug 2022 19:04:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=A/zzpYW1tI4lloz1zH6jwjZDuRD2LG4tBGIDFKtm7Fk=;
+        b=lDtiNF6xbQylnhul5ypOvV3bDzfoC5WtBgJZLGWuIZYK73iBNMLhA465WhWJHsQtmF
+         ZQZJZ0xbpRVSb1Kt39mZBxBbcbD2Cc7880eIL94Uhll1mJCwZAatKs8s4+MGz3/w4Wn7
+         VvRYbxF0jGloCDW9ZXhj88RnJtGWJ1Ob//pYPd348Tpo9tcHtuj5MV5usXCMgSUIz9x2
+         xmq0PYqSJ8767qU/kqhapRUWtn9RT4LSpmF4jWo6AQ/jZqcT/IqhWPwqF6+m06mbdNx/
+         BkZ4QmL3d5aUmbWItkQQCIY+7VWomO2fUD4hpRBpWiQW0C/oBDuU/5tdXJby5Ep21pn5
+         C2qA==
+X-Gm-Message-State: ACgBeo3IED4lZGmeNpn4kCgJo/nFe9C2kX5tSnVoxWw3k50gQmwVyr2Z
+	EJYt2vIXwA4MsBjL7pBA/ZYrG4o2wXB/is6NzYaXLQG/JCcr
+X-Google-Smtp-Source: AA6agR6GMU82BcVllkaESQsbE+fuErrxfN16OoFxjAi4lzVf2Mr1+qFfdbf2ZIzLsUN2FG/7tHBRHPqAsht+EW+jOZ2curz4lwVJ
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6602:1482:b0:688:d06b:223e with SMTP id
+ a2-20020a056602148200b00688d06b223emr6125885iow.3.1661047465195; Sat, 20 Aug
+ 2022 19:04:25 -0700 (PDT)
+Date: Sat, 20 Aug 2022 19:04:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001e3e0305e6b6c076@google.com>
+Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in kernfs_new_node
+From: syzbot <syzbot+e80c44ef751cb1889491@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/lunn/linux.git v6.0-rc1-net-next-c45-v2
-head:   d9f40d85a4b36657563e89a7732cef0b066360c5
-commit: 722913b6079821483263edb374052075e4d31c0b [22/43] net: mdiobus: Rework scanning of bus ready for quirks
-config: hexagon-randconfig-r041-20220821 (https://download.01.org/0day-ci/archive/20220821/202208210507.G2Dl9qfs-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/722913b6079821483263edb374052075e4d31c0b
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v6.0-rc1-net-next-c45-v2
-        git checkout 722913b6079821483263edb374052075e4d31c0b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/phy/
+Hello,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1053627b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+dashboard link: https://syzkaller.appspot.com/bug?extid=e80c44ef751cb1889491
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
->> drivers/net/phy/mdio_bus.c:710:11: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-           while (--i >= 0) {
-                    ^
-   drivers/net/phy/mdio_bus.c:621:7: note: initialize the variable 'i' to silence this warning
-           int i, err;
-                ^
-                 = 0
-   1 warning generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e80c44ef751cb1889491@syzkaller.appspotmail.com
+
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=120)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+vcan: Virtual CAN interface driver
+vxcan: Virtual CAN Tunnel driver
+slcan: serial line CAN interface driver
+CAN device driver interface
+usbcore: registered new interface driver usb_8dev
+usbcore: registered new interface driver ems_usb
+usbcore: registered new interface driver gs_usb
+usbcore: registered new interface driver kvaser_usb
+usbcore: registered new interface driver mcba_usb
+usbcore: registered new interface driver peak_usb
+e100: Intel(R) PRO/100 Network Driver
+e100: Copyright(c) 1999-2006 Intel Corporation
+e1000: Intel(R) PRO/1000 Network Driver
+e1000: Copyright (c) 1999-2006 Intel Corporation.
+e1000e: Intel(R) PRO/1000 Network Driver
+e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+mkiss: AX.25 Multikiss, Hans Albas PE1AYX
+AX.25: 6pack driver, Revision: 0.3.0
+AX.25: bpqether driver version 004
+PPP generic driver version 2.4.2
+BUG: unable to handle page fault for address: ffffdc0000000006
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 12026067 P4D 12026067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
+RIP: 0010:kernfs_new_node+0x3e/0x160 fs/kernfs/dir.c:655
+Code: 89 44 24 04 41 89 cc 41 89 d7 49 89 f5 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 1d 26 75 ff 48 8d 7b 30 48 89 f8 48 c1 e8 03 <80> 3c 28 00 74 05 e8 c7 c4 c8 ff 4c 8b 73 30 4d 85 f6 4c 0f 44 f3
+RSP: 0000:ffffc90000067a48 EFLAGS: 00010a06
+RAX: 1fffe00000000006 RBX: ffff000000000000 RCX: ffff888012228000
+RDX: 0000000000000000 RSI: ffffffff8b23d2c0 RDI: ffff000000000030
+RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000004
+R10: fffffbfff19cdabd R11: 1ffffffff19cdabc R12: 0000000000000000
+R13: ffffffff8b23d2c0 R14: ffff888147423e80 R15: 000000000000a1ff
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000006 CR3: 000000000ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kernfs_create_link+0x9f/0x1f0 fs/kernfs/symlink.c:39
+ sysfs_do_create_link_sd+0x85/0x100 fs/sysfs/symlink.c:44
+ device_add_class_symlinks drivers/base/core.c:3239 [inline]
+ device_add+0x642/0xf90 drivers/base/core.c:3465
+ device_create_groups_vargs drivers/base/core.c:4194 [inline]
+ device_create+0x252/0x2e0 drivers/base/core.c:4236
+ ppp_init+0xfb/0x157 drivers/net/ppp/ppp_generic.c:1410
+ do_one_initcall+0xbd/0x2b0 init/main.c:1296
+ do_initcall_level+0x168/0x218 init/main.c:1369
+ do_initcalls+0x4b/0x8c init/main.c:1385
+ kernel_init_freeable+0x43a/0x5c3 init/main.c:1611
+ kernel_init+0x19/0x2b0 init/main.c:1500
+ ret_from_fork+0x1f/0x30
+ </TASK>
+Modules linked in:
+CR2: ffffdc0000000006
+---[ end trace 0000000000000000 ]---
+RIP: 0010:kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
+RIP: 0010:kernfs_new_node+0x3e/0x160 fs/kernfs/dir.c:655
+Code: 89 44 24 04 41 89 cc 41 89 d7 49 89 f5 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 1d 26 75 ff 48 8d 7b 30 48 89 f8 48 c1 e8 03 <80> 3c 28 00 74 05 e8 c7 c4 c8 ff 4c 8b 73 30 4d 85 f6 4c 0f 44 f3
+RSP: 0000:ffffc90000067a48 EFLAGS: 00010a06
+RAX: 1fffe00000000006 RBX: ffff000000000000 RCX: ffff888012228000
+RDX: 0000000000000000 RSI: ffffffff8b23d2c0 RDI: ffff000000000030
+RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000004
+R10: fffffbfff19cdabd R11: 1ffffffff19cdabc R12: 0000000000000000
+R13: ffffffff8b23d2c0 R14: ffff888147423e80 R15: 000000000000a1ff
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000006 CR3: 000000000ca8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	89 44 24 04          	mov    %eax,0x4(%rsp)
+   4:	41 89 cc             	mov    %ecx,%r12d
+   7:	41 89 d7             	mov    %edx,%r15d
+   a:	49 89 f5             	mov    %rsi,%r13
+   d:	48 89 fb             	mov    %rdi,%rbx
+  10:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
+  17:	fc ff df
+  1a:	e8 1d 26 75 ff       	callq  0xff75263c
+  1f:	48 8d 7b 30          	lea    0x30(%rbx),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1) <-- trapping instruction
+  2e:	74 05                	je     0x35
+  30:	e8 c7 c4 c8 ff       	callq  0xffc8c4fc
+  35:	4c 8b 73 30          	mov    0x30(%rbx),%r14
+  39:	4d 85 f6             	test   %r14,%r14
+  3c:	4c 0f 44 f3          	cmove  %rbx,%r14
 
 
-vim +/i +710 drivers/net/phy/mdio_bus.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-d3ab5f14887577 Andrew Lunn            2022-04-20  603  
-b3df0da886ffdb Randy Dunlap           2007-03-06  604  /**
-59f069789c9867 Russell King           2015-09-25  605   * __mdiobus_register - bring up all the PHYs on a given bus and attach them to bus
-b3df0da886ffdb Randy Dunlap           2007-03-06  606   * @bus: target mii_bus
-59f069789c9867 Russell King           2015-09-25  607   * @owner: module containing bus accessor functions
-e13934563db047 Andy Fleming           2005-08-24  608   *
-b3df0da886ffdb Randy Dunlap           2007-03-06  609   * Description: Called by a bus driver to bring up all the PHYs
-59f069789c9867 Russell King           2015-09-25  610   *   on a given bus, and attach them to the bus. Drivers should use
-59f069789c9867 Russell King           2015-09-25  611   *   mdiobus_register() rather than __mdiobus_register() unless they
-f89df3f381f1e1 Andrew Lunn            2016-01-06  612   *   need to pass a specific owner module. MDIO devices which are not
-fec76125baf739 Peng Li                2021-03-30  613   *   PHYs will not be brought up by this function. They are expected
-f89df3f381f1e1 Andrew Lunn            2016-01-06  614   *   to be explicitly listed in DT and instantiated by of_mdiobus_register().
-b3df0da886ffdb Randy Dunlap           2007-03-06  615   *
-b3df0da886ffdb Randy Dunlap           2007-03-06  616   * Returns 0 on success or < 0 on error.
-e13934563db047 Andy Fleming           2005-08-24  617   */
-3e3aaf64941698 Russell King           2015-09-24  618  int __mdiobus_register(struct mii_bus *bus, struct module *owner)
-e13934563db047 Andy Fleming           2005-08-24  619  {
-711fdba37a3dd7 Andrew Lunn            2016-01-06  620  	struct mdio_device *mdiodev;
-161c8d2f50109b Krzysztof Halasa       2008-12-25  621  	int i, err;
-69226896ad636b Roger Quadros          2017-04-21  622  	struct gpio_desc *gpiod;
-e13934563db047 Andy Fleming           2005-08-24  623  
-ff6e03d991ba1b Andrew Lunn            2022-04-02  624  	if (!bus || !bus->name)
-ff6e03d991ba1b Andrew Lunn            2022-04-02  625  		return -EINVAL;
-ff6e03d991ba1b Andrew Lunn            2022-04-02  626  
-ff6e03d991ba1b Andrew Lunn            2022-04-02  627  	if (!bus->read != !bus->write)
-ff6e03d991ba1b Andrew Lunn            2022-04-02  628  		return -EINVAL;
-ff6e03d991ba1b Andrew Lunn            2022-04-02  629  
-ff6e03d991ba1b Andrew Lunn            2022-04-02  630  	if (!bus->read_c45 != !bus->write_c45)
-ff6e03d991ba1b Andrew Lunn            2022-04-02  631  		return -EINVAL;
-ff6e03d991ba1b Andrew Lunn            2022-04-02  632  
-ff6e03d991ba1b Andrew Lunn            2022-04-02  633  	if (!bus->read && !bus->read_c45)
-e13934563db047 Andy Fleming           2005-08-24  634  		return -EINVAL;
-e13934563db047 Andy Fleming           2005-08-24  635  
-04f41c68f18886 Saravana Kannan        2021-09-15  636  	if (bus->parent && bus->parent->of_node)
-04f41c68f18886 Saravana Kannan        2021-09-15  637  		bus->parent->of_node->fwnode.flags |=
-04f41c68f18886 Saravana Kannan        2021-09-15  638  					FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD;
-04f41c68f18886 Saravana Kannan        2021-09-15  639  
-867ae8a7993b26 Florian Fainelli       2021-11-17  640  	WARN(bus->state != MDIOBUS_ALLOCATED &&
-867ae8a7993b26 Florian Fainelli       2021-11-17  641  	     bus->state != MDIOBUS_UNREGISTERED,
-867ae8a7993b26 Florian Fainelli       2021-11-17  642  	     "%s: not in ALLOCATED or UNREGISTERED state\n", bus->id);
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  643  
-3e3aaf64941698 Russell King           2015-09-24  644  	bus->owner = owner;
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  645  	bus->dev.parent = bus->parent;
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  646  	bus->dev.class = &mdio_bus_class;
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  647  	bus->dev.groups = NULL;
-036b66879addb2 Stephen Hemminger      2009-02-26  648  	dev_set_name(&bus->dev, "%s", bus->id);
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  649  
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  650  	/* We need to set state to MDIOBUS_UNREGISTERED to correctly release
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  651  	 * the device in mdiobus_free()
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  652  	 *
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  653  	 * State will be updated later in this function in case of success
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  654  	 */
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  655  	bus->state = MDIOBUS_UNREGISTERED;
-ca6e11c337daf7 Pavel Skripkin         2021-09-30  656  
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  657  	err = device_register(&bus->dev);
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  658  	if (err) {
-8d242488ce4627 Joe Perches            2012-06-09  659  		pr_err("mii_bus %s failed to register\n", bus->id);
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  660  		return -EINVAL;
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  661  	}
-46abc02175b3c2 Lennert Buytenhek      2008-10-08  662  
-d1e7fe4d92742d Adrian Bunk            2008-02-20  663  	mutex_init(&bus->mdio_lock);
-6349084746ff4f Michael Walle          2020-05-06  664  	mutex_init(&bus->shared_lock);
-d1e7fe4d92742d Adrian Bunk            2008-02-20  665  
-e0183b974d3008 Mike Looijmans         2021-02-02  666  	/* assert bus level PHY GPIO reset */
-e0183b974d3008 Mike Looijmans         2021-02-02  667  	gpiod = devm_gpiod_get_optional(&bus->dev, "reset", GPIOD_OUT_HIGH);
-69226896ad636b Roger Quadros          2017-04-21  668  	if (IS_ERR(gpiod)) {
-0a12ad59295561 Grygorii Strashko      2020-11-19  669  		err = dev_err_probe(&bus->dev, PTR_ERR(gpiod),
-0a12ad59295561 Grygorii Strashko      2020-11-19  670  				    "mii_bus %s couldn't get reset GPIO\n",
-69226896ad636b Roger Quadros          2017-04-21  671  				    bus->id);
-e40e2a2e78664f Thomas Petazzoni       2019-01-16  672  		device_del(&bus->dev);
-0a12ad59295561 Grygorii Strashko      2020-11-19  673  		return err;
-fe0e4052fb11d5 Sergei Shtylyov        2017-06-12  674  	} else	if (gpiod) {
-d396e84c56047b Sergei Shtylyov        2017-06-12  675  		bus->reset_gpiod = gpiod;
-6259e0f5478d7a Bruno Thomsen          2020-07-30  676  		fsleep(bus->reset_delay_us);
-69226896ad636b Roger Quadros          2017-04-21  677  		gpiod_set_value_cansleep(gpiod, 0);
-bb3831294cd507 Bruno Thomsen          2020-07-30  678  		if (bus->reset_post_delay_us > 0)
-bb3831294cd507 Bruno Thomsen          2020-07-30  679  			fsleep(bus->reset_post_delay_us);
-69226896ad636b Roger Quadros          2017-04-21  680  	}
-69226896ad636b Roger Quadros          2017-04-21  681  
-c290d1ab12d338 Florian Fainelli       2020-04-18  682  	if (bus->reset) {
-c290d1ab12d338 Florian Fainelli       2020-04-18  683  		err = bus->reset(bus);
-c290d1ab12d338 Florian Fainelli       2020-04-18  684  		if (err)
-c290d1ab12d338 Florian Fainelli       2020-04-18  685  			goto error_reset_gpiod;
-c290d1ab12d338 Florian Fainelli       2020-04-18  686  	}
-df0c8d911abf6b Florian Fainelli       2017-05-11  687  
-722913b6079821 Andrew Lunn            2022-04-20  688  	if (bus->probe_capabilities == MDIOBUS_NO_CAP ||
-722913b6079821 Andrew Lunn            2022-04-20  689  	    bus->probe_capabilities == MDIOBUS_C22 ||
-722913b6079821 Andrew Lunn            2022-04-20  690  	    bus->probe_capabilities == MDIOBUS_C22_C45) {
-722913b6079821 Andrew Lunn            2022-04-20  691  		err = mdiobus_scan_bus_c22(bus);
-722913b6079821 Andrew Lunn            2022-04-20  692  		if (err)
-161c8d2f50109b Krzysztof Halasa       2008-12-25  693  			goto error;
-161c8d2f50109b Krzysztof Halasa       2008-12-25  694  	}
-722913b6079821 Andrew Lunn            2022-04-20  695  
-722913b6079821 Andrew Lunn            2022-04-20  696  	if (bus->probe_capabilities == MDIOBUS_C45 ||
-722913b6079821 Andrew Lunn            2022-04-20  697  	    bus->probe_capabilities == MDIOBUS_C22_C45) {
-722913b6079821 Andrew Lunn            2022-04-20  698  		err = mdiobus_scan_bus_c45(bus);
-722913b6079821 Andrew Lunn            2022-04-20  699  		if (err)
-722913b6079821 Andrew Lunn            2022-04-20  700  			goto error;
-64b1c2b42b555e Herbert Valerio Riedel 2006-05-10  701  	}
-f896424cbc6122 Matt Porter            2005-11-02  702  
-d0281a56b00c63 Florian Fainelli       2017-03-28  703  	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
-648ea0134069cd Florian Fainelli       2017-02-04  704  
-e8e5752dc0a56a Krzysztof Halasa       2008-12-17  705  	bus->state = MDIOBUS_REGISTERED;
-7590fc6f80ac2c Florian Fainelli       2022-01-03  706  	dev_dbg(&bus->dev, "probed\n");
-161c8d2f50109b Krzysztof Halasa       2008-12-25  707  	return 0;
-e13934563db047 Andy Fleming           2005-08-24  708  
-161c8d2f50109b Krzysztof Halasa       2008-12-25  709  error:
-161c8d2f50109b Krzysztof Halasa       2008-12-25 @710  	while (--i >= 0) {
-711fdba37a3dd7 Andrew Lunn            2016-01-06  711  		mdiodev = bus->mdio_map[i];
-711fdba37a3dd7 Andrew Lunn            2016-01-06  712  		if (!mdiodev)
-711fdba37a3dd7 Andrew Lunn            2016-01-06  713  			continue;
-711fdba37a3dd7 Andrew Lunn            2016-01-06  714  
-711fdba37a3dd7 Andrew Lunn            2016-01-06  715  		mdiodev->device_remove(mdiodev);
-711fdba37a3dd7 Andrew Lunn            2016-01-06  716  		mdiodev->device_free(mdiodev);
-161c8d2f50109b Krzysztof Halasa       2008-12-25  717  	}
-c290d1ab12d338 Florian Fainelli       2020-04-18  718  error_reset_gpiod:
-69226896ad636b Roger Quadros          2017-04-21  719  	/* Put PHYs in RESET to save power */
-a010a2f6540ecc Florian Fainelli       2017-09-08  720  	if (bus->reset_gpiod)
-d396e84c56047b Sergei Shtylyov        2017-06-12  721  		gpiod_set_value_cansleep(bus->reset_gpiod, 1);
-69226896ad636b Roger Quadros          2017-04-21  722  
-161c8d2f50109b Krzysztof Halasa       2008-12-25  723  	device_del(&bus->dev);
-4fd5f812c23c7d Lennert Buytenhek      2008-08-26  724  	return err;
-4fd5f812c23c7d Lennert Buytenhek      2008-08-26  725  }
-3e3aaf64941698 Russell King           2015-09-24  726  EXPORT_SYMBOL(__mdiobus_register);
-4fd5f812c23c7d Lennert Buytenhek      2008-08-26  727  
-
-:::::: The code at line 710 was first introduced by commit
-:::::: 161c8d2f50109b44b664eaf23831ea1587979a61 net: PHYLIB mdio fixes #2
-
-:::::: TO: Krzysztof Halasa <khc@pm.waw.pl>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
