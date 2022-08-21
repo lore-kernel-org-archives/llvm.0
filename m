@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B25370
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 09:31:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0A6640
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 10:01:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661074305;
+	s=mimecast20190719; t=1661076103;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=6fj0LOrx1NHK8eTlYJOWAx5stfouzIFhbcGxBDxzrkQ=;
-	b=dVttzw4EWd2fPUyvWDbV26/crWEBF7j1aG8uUtDwO8ax9dL/ttA/75kPd5c4kBHZzU5WCl
-	Gj3s6r2DX3L0ShnnauhgAt6ivOOK0M5kGoIXP5G/z/J8oQHxwVCMO00KrgtuGnRyt0PpzC
-	+rPVsMFcilYHvDYt30NayNBeAjp453I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=vYfZxOK6HpHit4cplG4jdUdVIfrrsq7dTGCefdEpkCc=;
+	b=S7BudhgCmQ9rXDG6uMHk0Fl+Rcp2hLaqIH8s0aMlDioqtXXE5uS17KC7Lkrrbn8DSnVPrq
+	uOm+Q4zvIlzDhBE7B4kgMmenLCzBiqqo42GM1xvBMnFvzYH3flJAHEnrHmqqEwTuL7/Aub
+	66gmZ4nPhueOnLAyZyRGuQoGwsdNgiw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-Y3vKL8zwPhq_RLnmn20nRA-1; Sun, 21 Aug 2022 05:31:44 -0400
-X-MC-Unique: Y3vKL8zwPhq_RLnmn20nRA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-434-xg8-jddjOYm7GVTSyTwl3g-1; Sun, 21 Aug 2022 06:01:42 -0400
+X-MC-Unique: xg8-jddjOYm7GVTSyTwl3g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5CA1185A7A4
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 09:31:43 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 055D71C06901
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 10:01:42 +0000 (UTC)
 Received: from [172.64.4.35] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C4F8B945D0;
-	Sun, 21 Aug 2022 09:31:43 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E789C2166B26;
+	Sun, 21 Aug 2022 10:01:41 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (56/381 SKIPPED): Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [15b3f48a]
-Date: Sun, 21 Aug 2022 09:31:41 -0000
+Subject: =?utf-8?b?4pyF?= PASS (55/381 SKIPPED): Test report for 6.0.0-rc1
+ (mainline.kernel.org-clang) [cc1807b9]
+Date: Sun, 21 Aug 2022 10:01:41 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <45916.122082105314400296@us-mta-668.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+Message-Id: <78148.122082106014200245@us-mta-434.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51259
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51257
 
 One or more kernel tests failed:
 
@@ -66,12 +66,6 @@ l-tests/-/issues/513
             Affected tests:
                  aarch64 - Firmware test suite
                   x86_64 (debug) - kselftest build - bpf
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
         Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
 to resize filesystem
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -92,6 +86,12 @@ l-tests/-/issues/1349
                    s390x - Storage - lvm thinp stqe test
                   x86_64 - Storage - lvm thinp stqe test
                   x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
         Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
 d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
 tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
@@ -101,12 +101,12 @@ apability permissive=3D0
                  aarch64 - Networking cki netfilter test
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
                   x86_64 - Networking cki netfilter test
                   x86_64 - ALSA PCM loopback test
                   x86_64 - Storage - SCSI VPD
                   x86_64 (debug) - Networking cki netfilter test
                   x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
         Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
 ed
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -159,17 +159,22 @@ l-tests/-/issues/1368
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
         Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
 gument
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -182,23 +187,12 @@ l-tests/-/issues/1352
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
         Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
 found
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1235
             Affected tests:
                  aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
 
 
 If you find a failure unrelated to your changes, please tag it at https://d=
