@@ -1,58 +1,70 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D581963B
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 10:11:49 +0000 (UTC)
-Received: by mail-ej1-f49.google.com with SMTP id gb36so16170519ejc.10
-        for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 03:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=8ith3DKWqelfwAhl4fXB2Zj3+XrRanGIkq2gbaZNWZg=;
-        b=BVQpXwpBZgmCcpri72t9UYGSUWNIWbGX+mvKI914QY8tRVzJe+eeIW6Qh/v466eoXH
-         fqtZ9qkt9kzrgFQw4vvsffJYWvxDWABGWdj72gGBl+UQVV0nFx/FqLnPInnnqSkwvZiz
-         QAx3e/fFprENPZEkS4XD1h1f1dkIll6fgX8OBhc6HyYzEUEfBsScjnLGiqwELqIQJfdE
-         CXpkfkItL/NTWXet387ZBCBynIWBmmn5KciXvLRb/KXwolyGql54ceQ8n2zKycvV0r3S
-         RNr8UB6ykcmIvdBDzec7uUOA0eGooPOq6M9o5dvWGS520weyqQRDNqRik0CYBOTV/P1m
-         j0ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=8ith3DKWqelfwAhl4fXB2Zj3+XrRanGIkq2gbaZNWZg=;
-        b=LdzGnV0cesDteGacvVAr98X109KafzgFRdqbTZRhmiqDvq27SeyuyXkzl7rPRxFR8X
-         GzwuxG1YBKS69+Cln7OGjNQ9VILjI/nQ9r9LoiBt4jPSi6JGJ5Wz0rELbeb6oIHCndFQ
-         o2+GVn2yLkG+BIwrJRryMFWB/FoNsgqj54XEZU3DEkavlT2gDsdkzgH7BLpfeiI+uXLs
-         OEjU54loG8ViTsIfOu1ZdaALXiPMVOT1Yb2yHyFDDNLa8/NV7AhgN2o6F4u6k7oiIYt9
-         mg2DHh7VcYKc55Ziu80RoBe3xzU/6pK030iPLd3XloRjnTO3NDG089wCvWdw5FwIjHG0
-         5hkw==
-X-Gm-Message-State: ACgBeo3QZv8rRJLQwUhH5l9lPM2VuM+JrMMpei1Zlg0fVhYxOrv/W3N3
-	M+v5zk1W+gq2axVrv8nCcd8=
-X-Google-Smtp-Source: AA6agR4kTu9YlV5YYbUUlwVhkyNFi6XbWVbAuGGc7J+qELenLCeL3rXs3jHQa/zJy5NHEabc6B1vAQ==
-X-Received: by 2002:a17:907:288a:b0:730:7f77:9550 with SMTP id em10-20020a170907288a00b007307f779550mr9534282ejc.216.1661076708009;
-        Sun, 21 Aug 2022 03:11:48 -0700 (PDT)
-Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
-        by smtp.gmail.com with ESMTPSA id j15-20020aa7c0cf000000b0043bbc9503ddsm6251027edp.76.2022.08.21.03.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 03:11:47 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Sun, 21 Aug 2022 12:11:45 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	kvm@vger.kernel.org, llvm@lists.linux.dev,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Borislav Petkov <bp@suse.de>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-Message-ID: <YwIE4WDJXWK/LOR6@gmail.com>
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
- <20220819190640.2763586-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BD61873
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 15:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661095402; x=1692631402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8/iNi7dL+X0JQfBLWYDScHJZL12LFVVUc4/cZIXyHxU=;
+  b=RkUIK7TIlHcNvgd29hQq3c5HsSi36Wkbi8RsgOuAJ1EjyoRbYQouq9uT
+   /uyLME5i+JmqooKJO/aiBay2Id7LIf51sVx4QEDaHbbkYRz54BC5no9yS
+   3uRDCq5eXHntJkebEgvy9JQAdtep/eg2CkUEFh96srPfK8ccc26GAXopv
+   pRXAhZrxx7aswtAFitkYTULTd4spKQ6W8s4c4814nRuom+Gq7TpiIAasZ
+   iU5sRR34XH8pz+gH0DLBilZLTxofWw1udAs8+Hlz98tk4iwYcqURuyDhA
+   8nVhbKPwAMjnMQsYrg4sEs4HK7/9HlTapo0whW/QatZ/X79rUG43b+77R
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="354990885"
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="354990885"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 08:22:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,252,1654585200"; 
+   d="scan'208";a="698022770"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Aug 2022 08:22:53 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oPmmq-0004EZ-1s;
+	Sun, 21 Aug 2022 15:22:52 +0000
+Date: Sun, 21 Aug 2022 23:22:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacob Keller <jacob.e.keller@intel.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Siva Reddy Kallam <siva.kallam@broadcom.com>,
+	Prashant Sreedharan <prashant@broadcom.com>,
+	Michael Chan <mchan@broadcom.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Bryan Whitehead <bryan.whitehead@microchip.com>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Vivek Thampi <vithampi@vmware.com>
+Subject: Re: [net-next 10/14] ptp: lan743x: convert to .adjfine and
+ diff_by_scaled_ppm
+Message-ID: <202208212326.87xlsbQB-lkp@intel.com>
+References: <20220818222742.1070935-11-jacob.e.keller@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,35 +73,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
+In-Reply-To: <20220818222742.1070935-11-jacob.e.keller@intel.com>
+
+Hi Jacob,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 9017462f006c4b686cb1e1e1a3a52ea8363076e6]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
+base:   9017462f006c4b686cb1e1e1a3a52ea8363076e6
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220821/202208212326.87xlsbQB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 01ffe31cbb54bfd8e38e71b3cf804a1d67ebf9c1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d3c6eac5778f2ce74e7d6d7be90a60f616551718
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacob-Keller/ptp-convert-drivers-to-adjfine/20220819-063154
+        git checkout d3c6eac5778f2ce74e7d6d7be90a60f616551718
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/microchip/lan743x_ptp.c:368:12: error: redefinition of 'lan743x_ptpci_adjfine'
+   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
+              ^
+   drivers/net/ethernet/microchip/lan743x_ptp.c:335:12: note: previous definition is here
+   static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long scaled_ppm)
+              ^
+>> drivers/net/ethernet/microchip/lan743x_ptp.c:386:3: error: use of undeclared identifier 'lan743_rate_adj'; did you mean 'lan743x_rate_adj'?
+                   lan743_rate_adj = (u32)diff;
+                   ^~~~~~~~~~~~~~~
+                   lan743x_rate_adj
+   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
+           u64 lan743x_rate_adj;
+               ^
+>> drivers/net/ethernet/microchip/lan743x_ptp.c:388:3: error: use of undeclared identifier 'lan74e_rage_adj'; did you mean 'lan743x_rate_adj'?
+                   lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
+                   ^~~~~~~~~~~~~~~
+                   lan743x_rate_adj
+   drivers/net/ethernet/microchip/lan743x_ptp.c:374:6: note: 'lan743x_rate_adj' declared here
+           u64 lan743x_rate_adj;
+               ^
+   3 errors generated.
 
 
-* Nick Desaulniers <ndesaulniers@google.com> wrote:
+vim +/lan743x_ptpci_adjfine +368 drivers/net/ethernet/microchip/lan743x_ptp.c
 
-> GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
-> The minimum supported versions of these tools for the build according to
-> Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
-> 
-> Remove the feature detection script, Kconfig option, and clean up some
-> fallback code that is no longer supported.
-> 
-> The removed script was also testing for a GCC specific bug that was
-> fixed in the 4.7 release.
-> 
-> Also remove workarounds for bpftrace using clang older than 9.0.0, since
-> other BPF backend fixes are required at this point.
-> 
-> Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
-> Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
-> Acked-by: Borislav Petkov <bp@suse.de>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+   367	
+ > 368	static int lan743x_ptpci_adjfine(struct ptp_clock_info *ptpci, long delta)
+   369	{
+   370		struct lan743x_ptp *ptp =
+   371			container_of(ptpci, struct lan743x_ptp, ptp_clock_info);
+   372		struct lan743x_adapter *adapter =
+   373			container_of(ptp, struct lan743x_adapter, ptp);
+   374		u64 lan743x_rate_adj;
+   375		s32 delta_ppb;
+   376		u64 diff;
+   377	
+   378		delta_ppb = scaled_ppm_to_ppb(delta);
+   379		if ((delta_ppb < (-LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB)) ||
+   380		    delta_ppb > LAN743X_PTP_MAX_FREQ_ADJ_IN_PPB) {
+   381			return -EINVAL;
+   382		}
+   383	
+   384		/* diff_by_scaled_ppm returns true if the difference is negative */
+   385		if (diff_by_scaled_ppm(1ULL << 35, delta, &diff))
+ > 386			lan743_rate_adj = (u32)diff;
+   387		else
+ > 388			lan74e_rage_adj = (u32)diff | PTP_CLOCK_RATE_ADJ_DIR_;
+   389	
+   390		lan743x_csr_write(adapter, PTP_CLOCK_RATE_ADJ,
+   391				  lan743x_rate_adj);
+   392	
+   393		return 0;
+   394	}
+   395	
 
-Reviewed-by: Ingo Molnar <mingo@kernel.org>
-
-Good riddance.
-
-Thanks,
-
-	Ingo
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
