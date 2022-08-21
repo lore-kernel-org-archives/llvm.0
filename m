@@ -1,67 +1,161 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7683E2F5B
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 17:12:06 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id e21so6340380edc.7
-        for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 10:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=2IG7yxCXKhrrmlYS5yO7XY8+9kSj2TtQKMSIeXBcBeM=;
-        b=KzixGCuDnswaMadZqR4ynhhwNXnoXEVyUxEjeuDGHd5tL+ljlGzsi+LE8LF7F5lwRn
-         v9mjz4V1ufMkIAeKimYo9EAgIy0HyOy9AOd/PAq3eqylpiDSkisiUMxEQp1Y8V7AtTGo
-         NbrWgFjyqJ/5NmxocTy3bgtBX7ufagCwkWDhA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=2IG7yxCXKhrrmlYS5yO7XY8+9kSj2TtQKMSIeXBcBeM=;
-        b=MChl054pDSIW32si2RtUB2kzXQKoSI84Aa+fKHE1mKvDKgcemiZMm9Vhq4H4gOTcNS
-         eSaF50sJE+HP70jIkGwPm5riGB2sscIGXbV5BBx95Cf3Wnqqfwn0Ig7FBZJDhNiWJ9kK
-         7YsjjG5x6+LZFZYTa31ID2Ejw1akO4tw3CsMODwAQUNL50HSpxU9hUaL7w2e26SZ6RWL
-         X5KerIJBAjI8zdsO0cEdqdQ04aleAu687sf6r0n/Sr9inEuLhJqsCRjdPT9Ymr+G2eD2
-         DAFSrc8fjZordYNp/5KIKlk9LeAuaiunrwoFy76VZoqYxC2t36LI2XEgPw9hM3sQvw+3
-         SB9Q==
-X-Gm-Message-State: ACgBeo05XzOt3uZWieb+Za9HTfMK2xRx6ThejY8Zj9omDSeFdzHmj6qH
-	AYHwYt/82NQypBHR7k/Yqh/UO6UZ4XJb78Q7
-X-Google-Smtp-Source: AA6agR5HKZkJfW9Q8FIMFCNrciF57eO016LC4iDpkGfSyvYSFc+Vt3fTMZHZr1ULeUnHvMWBxB23xQ==
-X-Received: by 2002:a05:6402:328c:b0:446:bcc8:bf49 with SMTP id f12-20020a056402328c00b00446bcc8bf49mr1583871eda.309.1661101924358;
-        Sun, 21 Aug 2022 10:12:04 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906218900b0072af92fa086sm5111292eju.32.2022.08.21.10.12.03
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Aug 2022 10:12:03 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso6580751wma.2
-        for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 10:12:03 -0700 (PDT)
-X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
- s25-20020a7bc399000000b003a5f3fb85e0mr10127541wmj.38.1661101922857; Sun, 21
- Aug 2022 10:12:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F6E7B
+	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 19:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661111225; x=1692647225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xgq5pV8NmzafHjaVV82jPIGbVdCuhC2gTgsrPRjWnRk=;
+  b=e6XN0fWyNtJrl5l1AHDb0YHgxbRrGnauiom5N+9TD31ud/Sz3SV0SOI5
+   riKXNoa86qc6io27J3tdUI8fo/pSfgJAcynKgs6n74BlpL7Cj3aDyC0z5
+   ZaqyFxNwI94K8uqLVgO44l9mguZBWizFA8ubjGEt2crJJAeHXfvKkQFBd
+   wCulTZ4YCPoYVlYUnb/uuJ4muwmKPtObKjrDr9tQwSqLO0XFAOzSpDlR5
+   xRrKFMuYMgWwaPYd3eSdGwGmgeMV/xGJEFEIfAJ5W97T835mk1OFYy+5Z
+   h7S7DoA1dypJDCScRTONTPxHO3QeGwY3ota76DG8EQvmjG+GpY/5xFMjC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="294556490"
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="294556490"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 12:47:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="559496311"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2022 12:47:01 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oPquS-0004QP-2M;
+	Sun, 21 Aug 2022 19:47:00 +0000
+Date: Mon, 22 Aug 2022 03:46:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Igor Kononenko <i.kononenko@yadro.com>, Corey Minyard <minyard@acm.org>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
+	Igor Kononenko <i.kononenko@yadro.com>,
+	openipmi-developer@lists.sourceforge.net,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ipmi:kcs_bmc: Add cleanup regmap(interrupt-regs) on
+ a shutdown.
+Message-ID: <202208220317.cROZCTcB-lkp@intel.com>
+References: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
- <20220819190640.2763586-1-ndesaulniers@google.com>
-In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 21 Aug 2022 10:11:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whLcuvDDS3rZfEgDrwbdJrTx8HCRNiZ5cDc80-_gzHCxw@mail.gmail.com>
-Message-ID: <CAHk-=whLcuvDDS3rZfEgDrwbdJrTx8HCRNiZ5cDc80-_gzHCxw@mail.gmail.com>
-Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
-	kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Borislav Petkov <bp@suse.de>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
 
-Applied directly, just because I love seeing old nasty stuff like this go away.
+Hi Igor,
 
-             Linus
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on cminyard-ipmi/for-next]
+[also build test ERROR on soc/for-next linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
+base:   https://github.com/cminyard/linux-ipmi for-next
+config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220822/202208220317.cROZCTcB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 01ffe31cbb54bfd8e38e71b3cf804a1d67ebf9c1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
+        git checkout 9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/char/ipmi/kcs_bmc_aspeed.c:643:29: error: incompatible pointer types passing 'struct kcs_bmc *' to parameter of type 'struct kcs_bmc_device *' [-Werror,-Wincompatible-pointer-types]
+           aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
+                                      ^~~~~~~
+   drivers/char/ipmi/kcs_bmc_aspeed.c:399:63: note: passing argument to parameter 'kcs_bmc' here
+   static void aspeed_kcs_irq_mask_update(struct kcs_bmc_device *kcs_bmc, u8 mask, u8 state)
+                                                                 ^
+   7 warnings and 1 error generated.
+
+
+vim +643 drivers/char/ipmi/kcs_bmc_aspeed.c
+
+   638	
+   639	static void aspeed_kcs_shutdown(struct platform_device *pdev)
+   640	{
+   641		struct kcs_bmc *kcs_bmc = dev_get_drvdata(&pdev->dev);
+   642	
+ > 643		aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
+   644	}
+   645	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
