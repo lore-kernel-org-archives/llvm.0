@@ -1,122 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED117EC
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D73C433C1;
-	Mon, 22 Aug 2022 09:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1661159806;
-	bh=bzquj3qt1EtQk+OChulRIFKTfQUr9RSZAGXRtx/8tCI=;
-	h=Subject:To:Cc:From:Date:From;
-	b=BIgGa/hyKWniZwYLx4Bfylc8piDZyxltOo9vQOG+ETPHZ1JTyXII5S+J2u36oFVco
-	 t10Qttj5iDdQKeUCKb3IsWC8vFLI0X5EPmBSmdXA9RombBTtzo1D5qjLNjiA6ZOA0s
-	 NT/uB81O0gBCYf5+uLOkPXjzEgJLl3NQd+vzLNvU=
-Subject: Patch "tools build: Switch to new openssl API for test-libcrypto" has been added to the 5.19-stable tree
-To: acme@redhat.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,gregkh@linuxfoundation.org,john.fastabend@gmail.com,kpsingh@kernel.org,llvm@lists.linux.dev,martin.lau@linux.dev,mingo@redhat.com,nathan@kernel.org,ndesaulniers@google.com,peterz@infradead.org,quentin@isovalent.com,roberto.sassu@huawei.com,sdf@google.com,song@kernel.org,terrelln@fb.com
-Cc: <stable-commits@vger.kernel.org>
-From: <gregkh@linuxfoundation.org>
-Date: Mon, 22 Aug 2022 11:16:05 +0200
-Message-ID: <16611597657271@kroah.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728407EC
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:28:54 +0000 (UTC)
+Received: by mail-wr1-f41.google.com with SMTP id n7so12417451wrv.4
+        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 02:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=LZiPZabk8uBgJRKOzhDJ2uC93G1aMkxBm+1//LLMvqw=;
+        b=PpCeVcqMgILqQyzKcfm/hYQMiH5rJcmQtUa6hRVk7gORFWsMAM2eLp32v6iNcRPARn
+         fsAkKZTs/7l5zKLu7ltMs1T/BZ5ZGFymB0XPU4Q+y0zBKGi1q/LoFDldlYrZL354K48/
+         dTTuZPFwEoyiKuzStbwLcyQNTCvZUnIqnURkyotQO+xz5KeNVbRlCh9y0xRh6hqHpjyB
+         R7VIFpAB70knHoCKjMHifSF9vovtTz7LBvXMpB4Djr0JBm98LGaAKUowFbNo7hMrzkWd
+         l/bu3mEzm8qZoFWvCwQNw+SLYbKSyK0IyaIvnVsq0KYqo9jPcubYL8FXUg8GJieNuJvm
+         NzWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=LZiPZabk8uBgJRKOzhDJ2uC93G1aMkxBm+1//LLMvqw=;
+        b=Cv1yTkzKEb6NlzkDj12+rBf60l/hzMOJtI3jOd53F3y4zhYa3YaHRsiDMoZvQL8mib
+         FA5gDL7N7XeNbdAtQ6npL4dQjqZCdrPnoGnPZJThQmh00ResKgC12aSqMWHMB8zaWd5Y
+         3n3Q5IvbbJMbOnIDVSGLmL9J8hXnPQh/MR/z7ae6ZerweMNngwTNfzV/iaWfSJJiyXXA
+         ehvfiWa0RZX0kzwTuGzJ0N70DeJIbiqUxnlF/oTOEYXFxXO2f8WaEEMun6kII5+kQQ/j
+         Q5UZauMdaVHU4rUZPlkLVsYmM9jsTa2knlzLhIh0Dt6uPsNudx8mvTIz+mgIUWh++YuL
+         jmrQ==
+X-Gm-Message-State: ACgBeo33NJMFO+Y4v1kZ8SO5R3ZeEim+uFjMmLP7AMzh9AJUnZvVj2LQ
+	VYQ0uID6PnI3MU8OLdg23PQ=
+X-Google-Smtp-Source: AA6agR5TCN6tBlMC5N0TVpsdW5/8135kWB6j/OBUdEV/Us8d0j9b322vyx644RgsF8mNnzeqLXBAVA==
+X-Received: by 2002:a05:6000:1acf:b0:222:cff7:3b6c with SMTP id i15-20020a0560001acf00b00222cff73b6cmr10285263wry.191.1661160532519;
+        Mon, 22 Aug 2022 02:28:52 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05600c355500b003a5ee64cc98sm19491518wmq.33.2022.08.22.02.28.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 02:28:51 -0700 (PDT)
+Date: Mon, 22 Aug 2022 10:28:50 +0100
+From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To: Matt Flax <flatmax@flatmax.com>, Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: build failure of next-20220822 due to 4e6bedd3c396 ("ASoC: codecs:
+ add support for the TI SRC4392 codec")
+Message-ID: <YwNMUlAmu/qCjuva@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
-X-stable: commit
-X-Patchwork-Hint: ignore 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi All,
+
+Not sure if it has been reported, builds of arm64 with clang failed to
+build next-20220822 with the error:
+
+sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                default:
+                ^~~~~~~
+sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
+                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+                                                                        ^
+sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
+        int val, pj, jd, d;
+                          ^
+                           = 0
+sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                default:
+                ^~~~~~~
+sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
+                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+                                                                        ^~
+sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
+        int val, pj, jd, d;
+                       ^
+                        = 0
+sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                default:
+                ^~~~~~~
+sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
+                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+                                                                        ^~
+sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
+        int val, pj, jd, d;
+                   ^
+                    = 0
+3 errors generated.
+
+git bisect pointed to 4e6bedd3c396 ("ASoC: codecs: add support for the TI SRC4392 codec").
+
+I will be happy to test any patch or provide any extra log if needed.
 
 
-This is a note to let you know that I've just added the patch titled
-
-    tools build: Switch to new openssl API for test-libcrypto
-
-to the 5.19-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-
-The filename of the patch is:
-     tools-build-switch-to-new-openssl-api-for-test-libcrypto.patch
-and it can be found in the queue-5.19 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
-
-
-From 5b245985a6de5ac18b5088c37068816d413fb8ed Mon Sep 17 00:00:00 2001
-From: Roberto Sassu <roberto.sassu@huawei.com>
-Date: Tue, 19 Jul 2022 19:05:55 +0200
-Subject: tools build: Switch to new openssl API for test-libcrypto
-
-From: Roberto Sassu <roberto.sassu@huawei.com>
-
-commit 5b245985a6de5ac18b5088c37068816d413fb8ed upstream.
-
-Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
-error when it encounters the deprecated function MD5_Init() and the others.
-
-The error would be interpreted as missing libcrypto, while in reality it is
-not.
-
-Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: llvm@lists.linux.dev
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nick Terrell <terrelln@fb.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/r/20220719170555.2576993-4-roberto.sassu@huawei.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/build/feature/test-libcrypto.c |   15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
---- a/tools/build/feature/test-libcrypto.c
-+++ b/tools/build/feature/test-libcrypto.c
-@@ -1,16 +1,23 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <openssl/evp.h>
- #include <openssl/sha.h>
- #include <openssl/md5.h>
- 
- int main(void)
- {
--	MD5_CTX context;
-+	EVP_MD_CTX *mdctx;
- 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
- 	unsigned char dat[] = "12345";
-+	unsigned int digest_len;
- 
--	MD5_Init(&context);
--	MD5_Update(&context, &dat[0], sizeof(dat));
--	MD5_Final(&md[0], &context);
-+	mdctx = EVP_MD_CTX_new();
-+	if (!mdctx)
-+		return 0;
-+
-+	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
-+	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
-+	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
-+	EVP_MD_CTX_free(mdctx);
- 
- 	SHA1(&dat[0], sizeof(dat), &md[0]);
- 
-
-
-Patches currently in stable-queue which might be from roberto.sassu@huawei.com are
-
-queue-5.19/tools-build-switch-to-new-openssl-api-for-test-libcrypto.patch
+--
+Regards
+Sudip
