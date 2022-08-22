@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C237EC
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:15:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9FFC433C1;
-	Mon, 22 Aug 2022 09:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623707EC
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33DEC433D6;
+	Mon, 22 Aug 2022 09:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1661159707;
-	bh=0x3LcKSCcbNtDMccD8XrTGlLueh8OtIdO0/UnBbXbq8=;
+	s=korg; t=1661159750;
+	bh=mmrLwKYUBSYLM/1k32NsMsPTqOM8KHh2Dy3z0lJl/do=;
 	h=Subject:To:Cc:From:Date:From;
-	b=iASuuqqtyiWbVVeT08Iw/iSYqsDt0peGkppAjpt1abQV2bXcJlLWEiQUrlPyk0npP
-	 PcM/d5uAcZcv0haQDd4kpVGPIScgnjbN42Oc2HU8RpA7ifxTlj7PY3Bunt4Blej+48
-	 dmsXI1/9IW/muC7vTCMccz8M4tgI+O3gAloUx2GM=
-Subject: Patch "tools build: Switch to new openssl API for test-libcrypto" has been added to the 5.10-stable tree
+	b=OECf6wXG267w+FJDlOJp0arW5it/ptCAD48HI5irdxdnT5DqPyc2+VQWwhjfX22cR
+	 gQs3k9w7HZe0pLFMf/OAZhqUHk3U8oVCFMJmifYO8SFWxfLroD8NS7bjrf1TnDS7H7
+	 XhVuuzbeIwGQmDjRMx2lXQmnznhWudvrTSyMglJI=
+Subject: Patch "tools build: Switch to new openssl API for test-libcrypto" has been added to the 5.15-stable tree
 To: acme@redhat.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,gregkh@linuxfoundation.org,john.fastabend@gmail.com,kpsingh@kernel.org,llvm@lists.linux.dev,martin.lau@linux.dev,mingo@redhat.com,nathan@kernel.org,ndesaulniers@google.com,peterz@infradead.org,quentin@isovalent.com,roberto.sassu@huawei.com,sdf@google.com,song@kernel.org,terrelln@fb.com
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Mon, 22 Aug 2022 11:14:48 +0200
-Message-ID: <1661159688199201@kroah.com>
+Date: Mon, 22 Aug 2022 11:14:57 +0200
+Message-ID: <166115969716578@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,12 +34,12 @@ This is a note to let you know that I've just added the patch titled
 
     tools build: Switch to new openssl API for test-libcrypto
 
-to the 5.10-stable tree which can be found at:
+to the 5.15-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      tools-build-switch-to-new-openssl-api-for-test-libcrypto.patch
-and it can be found in the queue-5.10 subdirectory.
+and it can be found in the queue-5.15 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -119,4 +119,4 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Patches currently in stable-queue which might be from roberto.sassu@huawei.com are
 
-queue-5.10/tools-build-switch-to-new-openssl-api-for-test-libcrypto.patch
+queue-5.15/tools-build-switch-to-new-openssl-api-for-test-libcrypto.patch
