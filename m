@@ -1,136 +1,86 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7032C256C
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 14:45:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661179547; x=1692715547;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SoEASToC8Lg7LTAIRzKTjzRxmyACvRFQA1v66YGhhoQ=;
-  b=C0qktZQldaHxhlWoEtzuImNvoZh4jFUoomhYIR1IAdbZNl/S7klYKgbm
-   yBIaXjA3lBZTPgpHH+bQP41zxD3tQK+JdUECHF5IOftsF5zgAZd6WG/vS
-   AOJDq56Pwf2Kl23HdEGvh8tFx7yaqG099rLO2tgpKJZwK5JzSQ8ZRkzkE
-   dEw+EdyT8rslPWL15kAduhhSvndO4JDTBAM3TKZu8nJSF9kqymnYJsxCX
-   E/xPLidoyLBH+n4Km86a8NDAacnrrGGnNqO/7yi5H+eEV8D1wGTOczAj+
-   e0KIW1RXZl5kZS3L6Ypn3UApWXP2vfI9qwmU+Z/oUqTK+nIOtSRnoSxqP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273184422"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="273184422"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:45:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="677235022"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Aug 2022 07:45:44 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQ8gS-0000K0-0s;
-	Mon, 22 Aug 2022 14:45:44 +0000
-Date: Mon, 22 Aug 2022 22:45:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jeff Johnson <quic_jjohnson@quicinc.com>
-Subject: Re: [PATCH] soc: qcom: qmi: use const for struct qmi_elem_info
-Message-ID: <202208222238.2bPtxE6h-lkp@intel.com>
-References: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303D32580
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 16:34:24 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id be9so8107398lfb.12
+        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2vQSeG17lzwccuXXheDklfdz+rvEzFZchuxcxOfWA70=;
+        b=QS+1k7+PE+rePGoe9S3/Sv5bzXx+MhKRdXlXZFyr/Fbt5c6Cz9Zaanza+Ak1wKazBk
+         m/rIfz7sa8ff2z4xpc0om5KqeFWYh/69V8JYMeB2GHSkRL7O9KD8hncg+smlKcyWWVPT
+         MqFz/Ce4uMUr1qiCsX2rfd2wEeDM899inOCWguVFSAHBHudGjIfswLuaL70NbPhh6wak
+         eStexTI6QP7EpgiA3CHeM8D1rfdZiMDqMUNmbiNeMo+s5hO0ktzSywOJxF751Wa/eKMR
+         do7TXBX3bO0L16iRgPQ1jbgVrKwlcLIreT0U2UkFsZhZ5rRebQfMNqFHxKluHLm67odY
+         uBSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2vQSeG17lzwccuXXheDklfdz+rvEzFZchuxcxOfWA70=;
+        b=Q3ZC9tdLRkJTHENIIMuyYA5vonndRBvoKXxaCsAzGGHBGPTJtG+UUqa7vRivqdg4VZ
+         OdsqZIFOVIdX9+L98JCovUJLGSIzB5PIk7Th/lNkwME4+Qs5myWu+m8HpZHyyYjc0Igr
+         8BVkQuPq2RGlq1tb0iMXB2qLQmqVP94AlBa542QZfYr88GQnoQA19vEy4sf1xA/M6igy
+         WHyP6twxkmfHMMg72v0it7o36OMcYKurQyFXLDM58Bw5RTGO5O90lvWqMQQzM1slTUVx
+         oSLCw1ZQfZp6EH+NxQQh3cF9xNM8fBMY8PYt6kgD7kZoKGB0El0+pcKkqdMRTHkkzkMq
+         bGQg==
+X-Gm-Message-State: ACgBeo3+1ex9aUkuMV3sICTVDjAjrCnD8241pk4CrfGMpMHynX7s72+4
+	wA+//yKsrcvOUbtTPMLvy07FwMkTIkPFLGzWEWJZgg==
+X-Google-Smtp-Source: AA6agR5wdEQEK+Retm/u5BnbwMryz3pxZ3P0il+KFDxb5lpW/sWxxXD0EVQECkE4rzxIJGgJ1jK/jYaZzrJSAyb58/M=
+X-Received: by 2002:a05:6512:2356:b0:492:e06d:7530 with SMTP id
+ p22-20020a056512235600b00492e06d7530mr2582685lfu.103.1661186062033; Mon, 22
+ Aug 2022 09:34:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
+References: <YwNMUlAmu/qCjuva@debian>
+In-Reply-To: <YwNMUlAmu/qCjuva@debian>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 22 Aug 2022 09:34:09 -0700
+Message-ID: <CAKwvOd=9ozTdeYDWzY0i-hrD4Vew5qPAcamx6wo_Y7PA+nCYBA@mail.gmail.com>
+Subject: Re: build failure of next-20220822 due to 4e6bedd3c396 ("ASoC:
+ codecs: add support for the TI SRC4392 codec")
+To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc: Matt Flax <flatmax@flatmax.com>, Mark Brown <broonie@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org, 
+	linux-next@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jeff,
+On Mon, Aug 22, 2022 at 2:28 AM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> Not sure if it has been reported,
 
-Thank you for the patch! Yet something to improve:
+Hi Sudip,
+Thanks for the report.  Two ways you can check if it's already been reported:
+1. Check our issue tracker
+(https://github.com/ClangBuiltLinux/linux/issues), you'll see that it
+has been (https://github.com/ClangBuiltLinux/linux/issues/1691 ->
+https://lore.kernel.org/all/YvvbKry5FVFbNdcI@dev-arch.thelio-3990X/)
+2. Search for the warning message on lore.
+(https://lore.kernel.org/all/ -> search for
+"sound/soc/codecs/src4xxx.c Wsometimes" ->
+https://lore.kernel.org/all/?q=sound%2Fsoc%2Fcodecs%2Fsrc4xxx.c+Wsometimes
+and you'll see two reports from bots and two from humans).
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc2 next-20220822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> builds of arm64 with clang failed to
+> build next-20220822 with the error:
+>
+> sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                 default:
+>                 ^~~~~~~
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1c23f9e627a7b412978b4e852793c5e3c3efc555
-config: mips-buildonly-randconfig-r002-20220821 (https://download.01.org/0day-ci/archive/20220822/202208222238.2bPtxE6h-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project abce7acebd4c06c977bc4bd79170697f1122bc5e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/84f0de3071b40fad5e5a48ad27b16ce28f9210fb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
-        git checkout 84f0de3071b40fad5e5a48ad27b16ce28f9210fb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/qcom/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/soc/qcom/qmi_encdec.c:94:9: error: returning 'const struct qmi_elem_info *' from a function with result type 'struct qmi_elem_info *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           return temp_ei;
-                  ^~~~~~~
-   1 error generated.
-
-
-vim +94 drivers/soc/qcom/qmi_encdec.c
-
-9b8a11e82615274 Bjorn Andersson 2017-12-05  59  
-84f0de3071b40fa Jeff Johnson    2022-08-21  60  static int qmi_encode(const struct qmi_elem_info *ei_array, void *out_buf,
-9b8a11e82615274 Bjorn Andersson 2017-12-05  61  		      const void *in_c_struct, u32 out_buf_len,
-9b8a11e82615274 Bjorn Andersson 2017-12-05  62  		      int enc_level);
-9b8a11e82615274 Bjorn Andersson 2017-12-05  63  
-84f0de3071b40fa Jeff Johnson    2022-08-21  64  static int qmi_decode(const struct qmi_elem_info *ei_array, void *out_c_struct,
-9b8a11e82615274 Bjorn Andersson 2017-12-05  65  		      const void *in_buf, u32 in_buf_len, int dec_level);
-9b8a11e82615274 Bjorn Andersson 2017-12-05  66  
-9b8a11e82615274 Bjorn Andersson 2017-12-05  67  /**
-9b8a11e82615274 Bjorn Andersson 2017-12-05  68   * skip_to_next_elem() - Skip to next element in the structure to be encoded
-9b8a11e82615274 Bjorn Andersson 2017-12-05  69   * @ei_array: Struct info describing the element to be skipped.
-9b8a11e82615274 Bjorn Andersson 2017-12-05  70   * @level: Depth level of encoding/decoding to identify nested structures.
-9b8a11e82615274 Bjorn Andersson 2017-12-05  71   *
-9b8a11e82615274 Bjorn Andersson 2017-12-05  72   * This function is used while encoding optional elements. If the flag
-9b8a11e82615274 Bjorn Andersson 2017-12-05  73   * corresponding to an optional element is not set, then encoding the
-9b8a11e82615274 Bjorn Andersson 2017-12-05  74   * optional element can be skipped. This function can be used to perform
-9b8a11e82615274 Bjorn Andersson 2017-12-05  75   * that operation.
-9b8a11e82615274 Bjorn Andersson 2017-12-05  76   *
-9b8a11e82615274 Bjorn Andersson 2017-12-05  77   * Return: struct info of the next element that can be encoded.
-9b8a11e82615274 Bjorn Andersson 2017-12-05  78   */
-84f0de3071b40fa Jeff Johnson    2022-08-21  79  static struct qmi_elem_info *skip_to_next_elem(const struct qmi_elem_info *ei_array,
-9b8a11e82615274 Bjorn Andersson 2017-12-05  80  					       int level)
-9b8a11e82615274 Bjorn Andersson 2017-12-05  81  {
-84f0de3071b40fa Jeff Johnson    2022-08-21  82  	const struct qmi_elem_info *temp_ei = ei_array;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  83  	u8 tlv_type;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  84  
-9b8a11e82615274 Bjorn Andersson 2017-12-05  85  	if (level > 1) {
-9b8a11e82615274 Bjorn Andersson 2017-12-05  86  		temp_ei = temp_ei + 1;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  87  	} else {
-9b8a11e82615274 Bjorn Andersson 2017-12-05  88  		do {
-9b8a11e82615274 Bjorn Andersson 2017-12-05  89  			tlv_type = temp_ei->tlv_type;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  90  			temp_ei = temp_ei + 1;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  91  		} while (tlv_type == temp_ei->tlv_type);
-9b8a11e82615274 Bjorn Andersson 2017-12-05  92  	}
-9b8a11e82615274 Bjorn Andersson 2017-12-05  93  
-9b8a11e82615274 Bjorn Andersson 2017-12-05 @94  	return temp_ei;
-9b8a11e82615274 Bjorn Andersson 2017-12-05  95  }
-9b8a11e82615274 Bjorn Andersson 2017-12-05  96  
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
