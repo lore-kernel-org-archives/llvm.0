@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B31164D
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 06:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3F47F
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 07:11:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661149303;
+	s=mimecast20190719; t=1661152305;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=X6y757R2UB9xJAhr3LoRbkiVd9MtR71SpCiPcJcvS2w=;
-	b=gAgaD7TLe9+OsRofKpQRRbIkukL+Hm/ffBXiAcDgbuezh2C/mlqYH6Qj/C8+LcObuvctdN
-	XGyjYPQ8U2pTFAO5mH3RMa8bAwBibMct6pUSxcEs0xhy9Tm7GhUZqy1HST/GiC8sGjpUQC
-	+Dm2nSbISBlYktJNLdP57m2tclewM4k=
+	bh=eZweAJyhhZT+p8B/1eDn71rHcXqWRlkCPIWI+rOLjl4=;
+	b=F+xrgt4icam7NbuIsWrDFKutqPZwxiGrGpQFXQWzkMKl2vCJL2bz2I5vZfJrT7QTru3Qh7
+	9SrSnI9GttjSQbhTV3EQwmZrxwdq7W2LQDlgoS0Fh+rQ5cqsY1iw1XkTPPF1x/4o468bxS
+	8ZgJgj+NahZbSLFBivRxO3vPyd2JEyU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-MqoHc_MIOLWpugBGvIlpAA-1; Mon, 22 Aug 2022 02:21:41 -0400
-X-MC-Unique: MqoHc_MIOLWpugBGvIlpAA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-92-T6nw42JHPHOwKrPbFRu8Ew-1; Mon, 22 Aug 2022 03:11:43 -0400
+X-MC-Unique: T6nw42JHPHOwKrPbFRu8Ew-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86EB6804184
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 06:21:41 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ADB085A585
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 07:11:43 +0000 (UTC)
 Received: from [172.64.4.35] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 760DF1121315;
-	Mon, 22 Aug 2022 06:21:41 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8B2172166B26;
+	Mon, 22 Aug 2022 07:11:43 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (16/381 SKIPPED): Test report for 6.0.0-rc1
- (mainline.kernel.org-clang) [e3f259d3]
-Date: Mon, 22 Aug 2022 06:21:39 -0000
+Subject: =?utf-8?b?4pyF?= PASS (25/381 SKIPPED): Test report for 6.0.0-rc1
+ (mainline.kernel.org-clang) [15b3f48a]
+Date: Mon, 22 Aug 2022 07:11:42 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <23313.122082202214100444@us-mta-541.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+Message-Id: <93406.122082203114300417@us-mta-92.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,7 +53,7 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51282
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51281
 
 One or more kernel tests failed:
 
@@ -72,7 +72,6 @@ to resize filesystem
 l-tests/-/issues/1325
             Affected tests:
                  aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
                    s390x - Storage - lvm thinp stqe test
                   x86_64 - Storage - lvm thinp stqe test
                   x86_64 (debug) - Storage - lvm thinp stqe test
@@ -82,7 +81,6 @@ vg/snap1
 l-tests/-/issues/1349
             Affected tests:
                  aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
                    s390x - Storage - lvm thinp stqe test
                   x86_64 - Storage - lvm thinp stqe test
                   x86_64 (debug) - Storage - lvm thinp stqe test
@@ -103,7 +101,6 @@ apability permissive=3D0
                   x86_64 - Storage - SCSI VPD
                   x86_64 (debug) - Networking cki netfilter test
                   x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
         Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
 ed
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -120,22 +117,6 @@ le
 l-tests/-/issues/914
             Affected tests:
                   x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
         Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1345
@@ -162,29 +143,46 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
+                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
         Issue: Storage block - storage fio numa: Performance comparison: mi=
 n:40535 * 1.15 < max:81259
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
             Affected tests:
                   x86_64 - Storage - block - storage fio numa
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
         Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
 gument
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1352
             Affected tests:
                    s390x - selinux-policy: serge-testsuite
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
         Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
 .c:5407 __alloc_pages+0x1a0/0x290
             URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
@@ -197,6 +195,11 @@ found
 l-tests/-/issues/1235
             Affected tests:
                  aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
 
 If you find a failure unrelated to your changes, please tag it at https://d=
