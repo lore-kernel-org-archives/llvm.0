@@ -1,92 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA24A02
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 18:09:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3BEC433D7;
-	Mon, 22 Aug 2022 18:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3051F64D;
+	Mon, 22 Aug 2022 18:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378F9C433D6;
+	Mon, 22 Aug 2022 18:31:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661191751;
-	bh=9uFjr12ZJn72bY423Jrkibrsve+4lfScTWjUh9RqsRI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e0Bt+a2uu1M8rVndbEeewsHyZWzL5KYHdHqi8MfclDkvtyfyASHoUNJwZdEoohdI5
-	 Sd5gJdHnoSXBCEOeXbrmxtY6oq2syrjf3WwAYfNtkNKV/CYVXIJjDgbTf9eq/Y/rY0
-	 vIYQKx38AhJBm6yd1Php5fcdUHwqnPB+D7WQnxyGsqeqaQzEc1S4aAvv/wu4G1/pRz
-	 c1gN5Y63VU+zlFjvkxD6xJUh+/Y8F8PKjYbZBxoT/AjCJbTvhfaetP6rLCoOX8UVG8
-	 8bdtY+C/VAlGqcUKyHl+UQ3SXcRpeKicdX9YHU9bky4xoUut+u6YSKBaxNAQm0nRix
-	 OJ53yJHtLY63A==
-Date: Mon, 22 Aug 2022 19:09:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Matt Flax <flatmax@flatmax.com>, kernel test robot <lkp@intel.com>,
-	alsa-devel@alsa-project.org, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org
-Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
-Message-ID: <YwPGQZHs1o0jsv2m@sirena.org.uk>
-References: <20220808214028.2502801-1-flatmax@flatmax.com>
- <202208090909.Pg0BZGie-lkp@intel.com>
- <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
- <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
- <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
+	s=k20201202; t=1661193068;
+	bh=xXLp8vcpSHFXcg8Thw4aqS7oAXd1A4ff7T8kKAEapI8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BJqqyAHDoivLbBiMTx6xaDsVTE0XnbDmqovaLOU1mOvJ22j85rhVQgGVWxN7+bozo
+	 b9izsqjngBTe+tmQYon6HJMNUsEOZDAbKq9HdQuJrcyJM9XjFKFwEMHnx4ftqrT9fn
+	 hnTp7UCjOyu68bd1yjnrXAab0XBDOjohSaGNC9N0DbXP5wue/CK21Bw/hu/Eww5neC
+	 scniUIrRbM6wIdtvmTHIDNApbUBu1lMxpFYKzGOi+CseTrV46rjCcbrxsP49tG7mpm
+	 wUBm/GCHACYjoerh1kXVKVtv0pkmmWe2kWp9O/Zwipx4PdM404UcGvH27nhci/CCBz
+	 YJKw1xxP7Nd4Q==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Matt Flax <flatmax@flatmax.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Subject: [PATCH] ASoC: codes: src4xxx: Avoid clang -Wsometimes-uninitialized in src4xxx_hw_params()
+Date: Mon, 22 Aug 2022 11:31:01 -0700
+Message-Id: <20220822183101.1115095-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6vU7YlowxUaBWkHl"
-Content-Disposition: inline
-In-Reply-To: <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
-X-Cookie: Do not write in this space.
+Content-Transfer-Encoding: 8bit
 
+Clang warns:
 
---6vU7YlowxUaBWkHl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                  default:
+                  ^~~~~~~
+  sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
+                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+                                                                          ^
+  sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
+          int val, pj, jd, d;
+                            ^
+                            = 0
+  sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                  default:
+                  ^~~~~~~
+  sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
+                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+                                                                          ^~
+  sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
+          int val, pj, jd, d;
+                        ^
+                          = 0
+  sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+                  default:
+                  ^~~~~~~
+  sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
+                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+                                                                          ^~
+  sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
+          int val, pj, jd, d;
+                    ^
+                      = 0
+  3 errors generated.
 
-On Wed, Aug 17, 2022 at 08:45:51AM -0700, Nathan Chancellor wrote:
-> On Wed, Aug 17, 2022 at 03:44:33PM +1000, Matt Flax wrote:
-> > On 17/8/22 04:00, Nathan Chancellor wrote:
+According to the comment in the default case, other parts of the chip
+are still functional without these values so just return 0 in the
+default case to avoid using these variables uninitialized.
 
-> > > In the final commit, there is a 'break' here. Should it be a 'return =
-0'
-> > > instead? Or should there be a different fix for these warnings?
+Link: https://github.com/ClangBuiltLinux/linux/issues/1691
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/codecs/src4xxx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > The state of DIR PLL registers aren't important if the user doesn't spe=
-cify
-> > a known mclk frequency.=A0 The implication is that the DIR will not fun=
-ction,
-> > however that is already implied by the user lacking to specify a known =
-mclk
-> > frequency.
+diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
+index a8f143057b41..cf45caa4bf7f 100644
+--- a/sound/soc/codecs/src4xxx.c
++++ b/sound/soc/codecs/src4xxx.c
+@@ -283,7 +283,7 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
+ 			 */
+ 			dev_info(component->dev,
+ 				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+-			break;
++			return 0;
+ 		}
+ 		ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+ 		if (ret < 0)
 
-> > The other functions on the chip (port A/B I2S, SRC, DIT, etc) will beha=
-ve as
-> > per usual, only the DIR will be dysfunctional.
+base-commit: 94f072748337424c9cf92cd018532a34db3a5516
+-- 
+2.37.2
 
-> So I suppose there is little point to all of the calls to regmap_write()
-> and regmap_update_bits() in the default case then, meaning a 'return 0'
-> would be appropriate? Sorry, I am having a hard time parsing what should
-> be done about the warnings, which are fatal for allmodconfig due to
-> CONFIG_WERROR.
-
-Are either of you still looking at fixing this?
-
---6vU7YlowxUaBWkHl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDxkAACgkQJNaLcl1U
-h9C73wf/RgzOmsSZTp0Dl2xyhY28TyLQJ3Prc306CZBASMpf/slGe7F+A6tTJU1N
-lFmnFIRhJYOS3NwqDrOZhJrB10MondVH4DKMjjmjZRlcPZPUo/nIU3EFQqYYm1R/
-VtXqOnXEgjbke8d8YI4En+2RoX0WerlLXnANA8YsRpDCCDt2fj/tCKoZeWVx7UsE
-65mnCelZqCDszFoUZJUor7BO8uzJPlxFSqnl8rT+iqYBfpwa9CmExw5CwmYTPuUu
-Gqx7nJdlkaHKgc/XXPPiyNO/79vQYgAWhpxXg3vHkmv6KDOBEbe5VSXXujAyHvn9
-VQryX9/4cKi+z/EzMSZW0oiUew0hdg==
-=enod
------END PGP SIGNATURE-----
-
---6vU7YlowxUaBWkHl--
