@@ -1,52 +1,43 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728407EC
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 09:28:54 +0000 (UTC)
-Received: by mail-wr1-f41.google.com with SMTP id n7so12417451wrv.4
-        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 02:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=LZiPZabk8uBgJRKOzhDJ2uC93G1aMkxBm+1//LLMvqw=;
-        b=PpCeVcqMgILqQyzKcfm/hYQMiH5rJcmQtUa6hRVk7gORFWsMAM2eLp32v6iNcRPARn
-         fsAkKZTs/7l5zKLu7ltMs1T/BZ5ZGFymB0XPU4Q+y0zBKGi1q/LoFDldlYrZL354K48/
-         dTTuZPFwEoyiKuzStbwLcyQNTCvZUnIqnURkyotQO+xz5KeNVbRlCh9y0xRh6hqHpjyB
-         R7VIFpAB70knHoCKjMHifSF9vovtTz7LBvXMpB4Djr0JBm98LGaAKUowFbNo7hMrzkWd
-         l/bu3mEzm8qZoFWvCwQNw+SLYbKSyK0IyaIvnVsq0KYqo9jPcubYL8FXUg8GJieNuJvm
-         NzWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=LZiPZabk8uBgJRKOzhDJ2uC93G1aMkxBm+1//LLMvqw=;
-        b=Cv1yTkzKEb6NlzkDj12+rBf60l/hzMOJtI3jOd53F3y4zhYa3YaHRsiDMoZvQL8mib
-         FA5gDL7N7XeNbdAtQ6npL4dQjqZCdrPnoGnPZJThQmh00ResKgC12aSqMWHMB8zaWd5Y
-         3n3Q5IvbbJMbOnIDVSGLmL9J8hXnPQh/MR/z7ae6ZerweMNngwTNfzV/iaWfSJJiyXXA
-         ehvfiWa0RZX0kzwTuGzJ0N70DeJIbiqUxnlF/oTOEYXFxXO2f8WaEEMun6kII5+kQQ/j
-         Q5UZauMdaVHU4rUZPlkLVsYmM9jsTa2knlzLhIh0Dt6uPsNudx8mvTIz+mgIUWh++YuL
-         jmrQ==
-X-Gm-Message-State: ACgBeo33NJMFO+Y4v1kZ8SO5R3ZeEim+uFjMmLP7AMzh9AJUnZvVj2LQ
-	VYQ0uID6PnI3MU8OLdg23PQ=
-X-Google-Smtp-Source: AA6agR5TCN6tBlMC5N0TVpsdW5/8135kWB6j/OBUdEV/Us8d0j9b322vyx644RgsF8mNnzeqLXBAVA==
-X-Received: by 2002:a05:6000:1acf:b0:222:cff7:3b6c with SMTP id i15-20020a0560001acf00b00222cff73b6cmr10285263wry.191.1661160532519;
-        Mon, 22 Aug 2022 02:28:52 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05600c355500b003a5ee64cc98sm19491518wmq.33.2022.08.22.02.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 02:28:51 -0700 (PDT)
-Date: Mon, 22 Aug 2022 10:28:50 +0100
-From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To: Matt Flax <flatmax@flatmax.com>, Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: build failure of next-20220822 due to 4e6bedd3c396 ("ASoC: codecs:
- add support for the TI SRC4392 codec")
-Message-ID: <YwNMUlAmu/qCjuva@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BEA362
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 10:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661164307; x=1692700307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9ex5t4ytfumm6Wsq9uJG78mnESKnj7rd8OGsNfvqKSQ=;
+  b=DYx5yFP4f5S1+Y00BzxZChqdelMwz1dQ8TeerKxOQCuGVqiyKHCqfzbt
+   tuke0N/JJPe5+c8uApvrVItNR8DAs/yrMY6znbmuHQZe1g7+B4y4F6cm7
+   XM0mkidAotXJAwCINl4WjgDdXYi9M+DmnuX/+DBp9x+MG6F/WH1B5yPXE
+   2+tWJ20BfgvlLnXxfd7bBW7/vqYSeyAqSUBu+MDAYhOORBEw2yeQ0cWH3
+   besSmxW0alL53ld3ouBpdXY+Z1V0EtgcwDo9hkyhq8U3FZ0j69A69F1KW
+   MTq1fx2hn0i4+hM2E0wVrIgcDlVOxc/MX0qV+VWm9U0HbKaCW11vRuv4m
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="273133310"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="273133310"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:31:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="698240197"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 03:31:45 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQ4ie-0005DE-2C;
+	Mon, 22 Aug 2022 10:31:44 +0000
+Date: Mon, 22 Aug 2022 18:31:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/base/power/domain.c:2894:34: warning: unused variable
+ 'idle_state_match'
+Message-ID: <202208221825.M4zoR8e6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,48 +47,59 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi All,
+Hi Konrad,
 
-Not sure if it has been reported, builds of arm64 with clang failed to
-build next-20220822 with the error:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                default:
-                ^~~~~~~
-sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
-                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
-                                                                        ^
-sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
-        int val, pj, jd, d;
-                          ^
-                           = 0
-sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                default:
-                ^~~~~~~
-sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
-                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
-                                                                        ^~
-sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
-        int val, pj, jd, d;
-                       ^
-                        = 0
-sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                default:
-                ^~~~~~~
-sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
-                ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
-                                                                        ^~
-sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
-        int val, pj, jd, d;
-                   ^
-                    = 0
-3 errors generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
+commit: 7d0221fb59125181a31ef3a561306c70fb238bc7 soc/qcom: Make QCOM_RPMPD select PM_GENERIC_DOMAINS/_OF
+date:   7 weeks ago
+config: x86_64-buildonly-randconfig-r004-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221825.M4zoR8e6-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d0221fb59125181a31ef3a561306c70fb238bc7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7d0221fb59125181a31ef3a561306c70fb238bc7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/base/power/
 
-git bisect pointed to 4e6bedd3c396 ("ASoC: codecs: add support for the TI SRC4392 codec").
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I will be happy to test any patch or provide any extra log if needed.
+All warnings (new ones prefixed by >>):
+
+>> drivers/base/power/domain.c:2894:34: warning: unused variable 'idle_state_match' [-Wunused-const-variable]
+   static const struct of_device_id idle_state_match[] = {
+                                    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
+   Selected by [m]:
+   - QCOM_RPMPD [=m] && QCOM_SMD_RPM [=y]
 
 
---
-Regards
-Sudip
+vim +/idle_state_match +2894 drivers/base/power/domain.c
+
+5d6be70add65e3 Ulf Hansson 2018-06-29  2893  
+30f604283e05d3 Lina Iyer   2016-10-14 @2894  static const struct of_device_id idle_state_match[] = {
+598da548ef7892 Lina Iyer   2016-11-03  2895  	{ .compatible = "domain-idle-state", },
+30f604283e05d3 Lina Iyer   2016-10-14  2896  	{ }
+30f604283e05d3 Lina Iyer   2016-10-14  2897  };
+30f604283e05d3 Lina Iyer   2016-10-14  2898  
+
+:::::: The code at line 2894 was first introduced by commit
+:::::: 30f604283e05d34cb10108c7ba017e5f4fc9d62c PM / Domains: Allow domain power states to be read from DT
+
+:::::: TO: Lina Iyer <lina.iyer@linaro.org>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
