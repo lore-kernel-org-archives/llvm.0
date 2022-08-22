@@ -1,186 +1,168 @@
-Received: from mx0a-00364e01.pphosted.com (mx0a-00364e01.pphosted.com [148.163.135.74])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E87E4A3B
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 20:54:13 +0000 (UTC)
-Received: from pps.filterd (m0167070.ppops.net [127.0.0.1])
-	by mx0a-00364e01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MKocHd027335
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 16:54:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type : content-transfer-encoding; s=pps01;
- bh=Mo8sb9Iedj8/VdO/SEttnMUVmZS2+A3c4OZ9QqF18mQ=;
- b=IYB2OReoAW8/QxkoYNcm2sBfZON8LQtMvSnyjaN4/yPMGrn+zMfvh54bYxD5ed7VMpi+
- fGCoEXFC3+UCdD2sPLPsZO2UFEaNkww1vVe9AvocjYXoJEgutP5LI7OojGOwqD52LV66
- 8PJ71+TTg9u4hh1CZQdC7EJfULiGsMOpIQWrIkZWDwdFJXYH9TzpyCe9TsP4U6TpOBma
- BEOvUJQIAFcU60q5UXGF2M+3b98X2iOK++RRH+LP20+o5/5vqbkby2jnsFM2G61bONiV
- ud7wTWNhRy74fdQdKSnMnBTz6qPBLaegJ3LtowCa/C/vTPt3Z0noa0azYlabhJO6M2rO Sg== 
-Received: from sendprdmail21.cc.columbia.edu (sendprdmail21.cc.columbia.edu [128.59.72.23])
-	by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 3j4fqcrnja-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 16:54:07 -0400
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
-	by sendprdmail21.cc.columbia.edu (8.14.7/8.14.4) with ESMTP id 27MKs6J5013083
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 16:54:06 -0400
-Received: by mail-ua1-f69.google.com with SMTP id 95-20020a9f23e8000000b0038caa7cd5c1so2485475uao.8
-        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 13:54:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Mo8sb9Iedj8/VdO/SEttnMUVmZS2+A3c4OZ9QqF18mQ=;
-        b=qtJopEuPWIzz8hpeIYKDodbLsiTGNeaURBtFTltd2CsdrPWC41/IjGHg8P8MoC7eCT
-         BsNZNQ9ikFzRhSXqBAdUdOZk+97xVtTWn7DsNIXpHm8C8uOay+nlxZY6utoo6gUVhsRo
-         DYeE82mZJs46ZjMwISF8lxQc/PzVKwZuYNvVf6y7pIoB+gJAKTb6zR+6kSJsJ3365vAX
-         nWxGEOrYMwntx2tenE6BmHZOk1yxhkBLvv4yT2jAKOFKt6It9sLizFIH1OqzO06yOE7q
-         YTM8XgbJuiMaUrgDHp869h8rQ8/zXnJoL3jMEZvxexhh9IlhcLhFAEL62Sjyv8V9HU3n
-         +3YQ==
-X-Gm-Message-State: ACgBeo0EVwdJgv5UAi9qNzIL6K3bUpLn6/a1j+q6JWz9Os3hqEPdI6q9
-	7+M7AZsK+CL4INwtpHOhi5DJOZuYJgtQxF+ghuZR2MWwVrE46PzaMel1IH3iXnMkgcRhLaWOVlD
-	5YOfP6mDJ+X/UNAnhJ96k0TP2FQODo6PuD4U1Mw==
-X-Received: by 2002:a67:d284:0:b0:390:3f27:a274 with SMTP id z4-20020a67d284000000b003903f27a274mr4415261vsi.12.1661201645100;
-        Mon, 22 Aug 2022 13:54:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6NjecVC7q0XYguex/4+KoZJIW4YqcaBN4i5IohL13E0ok2VmGJpinv8mEj+Weg1cPvOmVpHEoakTrqhLkfAcI=
-X-Received: by 2002:a67:d284:0:b0:390:3f27:a274 with SMTP id
- z4-20020a67d284000000b003903f27a274mr4415241vsi.12.1661201644854; Mon, 22 Aug
- 2022 13:54:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDE34A3B
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 21:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661203990; x=1692739990;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=J+nlTsy447ezTHFkY+OKdtjPYFWf9E9HvchcpQLOnWc=;
+  b=V9AXWQP8+eYBJpPez7U3gXOb/Img8Xu1+X+4gPjSPKW7z38QIVZOI/UK
+   22L8nhXDvTDo+tjctPWGEfrlhSb748Vi7wMEalTnpiJjNwTPLx1nKtGaq
+   FEXlMoIsNm4QrOhICzXTzeQ/TkR89Upm7KVdtOtbWgDhgSJtnwvmltp5K
+   hi2EbLW576jBNb7MEcVdaARrYAKoVK/dqooIAwI3rS3n1bGNEe+FeQNbn
+   TqRZi2Wvba4F/iw1sp4Ki8yeM44vf4XY/d////0hE9+1+ByvxTHTFxDUp
+   6vq2CgSH5BI+FnRtlp5KRgOLWHel7gR65r+4RFMJgdH1ILLh9zHtQKjrU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="355254834"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="355254834"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 14:33:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="559905242"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Aug 2022 14:33:09 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQF2i-0000jx-2N;
+	Mon, 22 Aug 2022 21:33:08 +0000
+Date: Tue, 23 Aug 2022 05:32:56 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: __ct_user_exit+0x61: call to
+ __kcsan_check_access() leaves .noinstr.text section
+Message-ID: <202208230527.XSWmHSN3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAEHB24_nMMdHw1tQ0Jb0rhOLXgi6X=_Ou6r8BcbV3r-6HeueEA@mail.gmail.com>
- <CANn89iK2O_-m3KUooE8TUOupYZwXAjfrV64bhS0UAn8hFZVdgw@mail.gmail.com>
-In-Reply-To: <CANn89iK2O_-m3KUooE8TUOupYZwXAjfrV64bhS0UAn8hFZVdgw@mail.gmail.com>
-From: Gabriel Ryan <gabe@cs.columbia.edu>
-Date: Mon, 22 Aug 2022 16:53:58 -0400
-Message-ID: <CALbthtc5ptO8VySp+TGqQU8SCU1AXQooOD+LqSUQi8-NbJLFdA@mail.gmail.com>
-Subject: Re: data-race in __tcp_alloc_md5sig_pool / tcp_alloc_md5sig_pool
-To: Eric Dumazet <edumazet@google.com>
-Cc: abhishek.shah@columbia.edu, David Miller <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <songliubraving@fb.com>,
-        trix@redhat.com, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-ORIG-GUID: NWBMd4HBoBDXVt-48Xyz0MeTOR4jusJf
-X-Proofpoint-GUID: NWBMd4HBoBDXVt-48Xyz0MeTOR4jusJf
-X-CU-OB: Yes
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_12,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=10 phishscore=0 mlxlogscore=732 priorityscore=1501
- bulkscore=10 clxscore=1011 mlxscore=0 lowpriorityscore=10 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220083
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Eric,
+CC: linux-kernel@vger.kernel.org
+TO: Frederic Weisbecker <frederic@kernel.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
+CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-Makes sense, thanks for taking the time to look at our report.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   072e51356cd5a4a1c12c1020bc054c99b98333df
+commit: 171476775d32a40bfebf83250136c19b2e842672 context_tracking: Convert state to atomic_t
+date:   7 weeks ago
+config: x86_64-buildonly-randconfig-r004-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230527.XSWmHSN3-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 171476775d32a40bfebf83250136c19b2e842672
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Best,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Gabe
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x26: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x47: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x31: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x63: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x58: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x61: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x58: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x58: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x63: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_kernel_exit_state+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_nmi_enter+0x58: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_kernel_enter_state+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_kernel_exit+0x62: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_idle_exit+0x4b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_kernel_enter+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_enter+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __ct_user_exit+0x61: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: check_preemption_disabled+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fault_in_readable+0x19c: call to __tsan_volatile_write1() with UACCESS enabled
 
 
+objdump-func vmlinux.o __ct_user_exit:
+0000 0000000000005310 <__ct_user_exit>:
+0000     5310:	55                   	push   %rbp
+0001     5311:	48 89 e5             	mov    %rsp,%rbp
+0004     5314:	41 57                	push   %r15
+0006     5316:	41 56                	push   %r14
+0008     5318:	53                   	push   %rbx
+0009     5319:	41 89 fe             	mov    %edi,%r14d
+000c     531c:	e8 00 00 00 00       	call   5321 <__ct_user_exit+0x11>	531d: R_X86_64_PLT32	debug_smp_processor_id-0x4
+0011     5321:	89 c3                	mov    %eax,%ebx
+0013     5323:	83 f8 40             	cmp    $0x40,%eax
+0016     5326:	0f 83 b9 00 00 00    	jae    53e5 <__ct_user_exit+0xd5>
+001c     532c:	49 c7 c7 00 00 00 00 	mov    $0x0,%r15	532f: R_X86_64_32S	context_tracking
+0023     5333:	4c 03 3c dd 00 00 00 00 	add    0x0(,%rbx,8),%r15	5337: R_X86_64_32S	__per_cpu_offset
+002b     533b:	e8 e0 fe ff ff       	call   5220 <context_tracking_recursion_enter>
+0030     5340:	84 c0                	test   %al,%al
+0032     5342:	0f 84 96 00 00 00    	je     53de <__ct_user_exit+0xce>
+0038     5348:	e8 00 00 00 00       	call   534d <__ct_user_exit+0x3d>	5349: R_X86_64_PLT32	debug_smp_processor_id-0x4
+003d     534d:	89 c3                	mov    %eax,%ebx
+003f     534f:	83 f8 40             	cmp    $0x40,%eax
+0042     5352:	0f 83 a1 00 00 00    	jae    53f9 <__ct_user_exit+0xe9>
+0048     5358:	48 8b 1c dd 00 00 00 00 	mov    0x0(,%rbx,8),%rbx	535c: R_X86_64_32S	__per_cpu_offset
+0050     5360:	48 8d bb 00 00 00 00 	lea    0x0(%rbx),%rdi	5363: R_X86_64_32S	context_tracking+0x8
+0057     5367:	be 04 00 00 00       	mov    $0x4,%esi
+005c     536c:	ba 04 00 00 00       	mov    $0x4,%edx
+0061     5371:	e8 00 00 00 00       	call   5376 <__ct_user_exit+0x66>	5372: R_X86_64_PLT32	__kcsan_check_access-0x4
+0066     5376:	8b 83 00 00 00 00    	mov    0x0(%rbx),%eax	5378: R_X86_64_32S	context_tracking+0x8
+006c     537c:	83 e0 03             	and    $0x3,%eax
+006f     537f:	44 39 f0             	cmp    %r14d,%eax
+0072     5382:	75 47                	jne    53cb <__ct_user_exit+0xbb>
+0074     5384:	41 80 3f 00          	cmpb   $0x0,(%r15)
+0078     5388:	74 29                	je     53b3 <__ct_user_exit+0xa3>
+007a     538a:	bf 04 00 00 00       	mov    $0x4,%edi
+007f     538f:	44 29 f7             	sub    %r14d,%edi
+0082     5392:	e8 19 fb ff ff       	call   4eb0 <ct_kernel_enter>
+0087     5397:	41 83 fe 02          	cmp    $0x2,%r14d
+008b     539b:	75 2e                	jne    53cb <__ct_user_exit+0xbb>
+008d     539d:	90                   	nop
+008e     539e:	65 48 8b 3d 00 00 00 00 	mov    %gs:0x0(%rip),%rdi        # 53a6 <__ct_user_exit+0x96>	53a2: R_X86_64_PC32	current_task-0x4
+0096     53a6:	e8 00 00 00 00       	call   53ab <__ct_user_exit+0x9b>	53a7: R_X86_64_PLT32	vtime_user_exit-0x4
+009b     53ab:	e8 00 00 00 00       	call   53b0 <__ct_user_exit+0xa0>	53ac: R_X86_64_PLT32	.text.trace_user_exit-0x4
+00a0     53b0:	90                   	nop
+00a1     53b1:	eb 18                	jmp    53cb <__ct_user_exit+0xbb>
+00a3     53b3:	49 8d 7f 08          	lea    0x8(%r15),%rdi
+00a7     53b7:	be 04 00 00 00       	mov    $0x4,%esi
+00ac     53bc:	ba 07 00 00 00       	mov    $0x7,%edx
+00b1     53c1:	e8 00 00 00 00       	call   53c6 <__ct_user_exit+0xb6>	53c2: R_X86_64_PLT32	__kcsan_check_access-0x4
+00b6     53c6:	f0 45 29 77 08       	lock sub %r14d,0x8(%r15)
+00bb     53cb:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	53ce: R_X86_64_32S	.rodata.str1.1+0x17d60
+00c2     53d2:	e8 00 00 00 00       	call   53d7 <__ct_user_exit+0xc7>	53d3: R_X86_64_PLT32	__this_cpu_preempt_check-0x4
+00c7     53d7:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 53de <__ct_user_exit+0xce>	53da: R_X86_64_PC32	context_tracking
+00ce     53de:	5b                   	pop    %rbx
+00cf     53df:	41 5e                	pop    %r14
+00d1     53e1:	41 5f                	pop    %r15
+00d3     53e3:	5d                   	pop    %rbp
+00d4     53e4:	c3                   	ret
+00d5     53e5:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	53e8: R_X86_64_32S	.data..Lanon.43b63b4377371cb5bc9e39ed22bbae3e.6
+00dc     53ec:	48 89 de             	mov    %rbx,%rsi
+00df     53ef:	e8 00 00 00 00       	call   53f4 <__ct_user_exit+0xe4>	53f0: R_X86_64_PLT32	__ubsan_handle_out_of_bounds-0x4
+00e4     53f4:	e9 33 ff ff ff       	jmp    532c <__ct_user_exit+0x1c>
+00e9     53f9:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	53fc: R_X86_64_32S	.data..Lanon.43b63b4377371cb5bc9e39ed22bbae3e.15
+00f0     5400:	48 89 de             	mov    %rbx,%rsi
+00f3     5403:	e8 00 00 00 00       	call   5408 <__ct_user_exit+0xf8>	5404: R_X86_64_PLT32	__ubsan_handle_out_of_bounds-0x4
+00f8     5408:	e9 4b ff ff ff       	jmp    5358 <__ct_user_exit+0x48>
+00fd     540d:	cc                   	int3
+00fe     540e:	cc                   	int3
+00ff     540f:	cc                   	int3
 
-On Fri, Aug 19, 2022 at 5:24 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Fri, Aug 19, 2022 at 8:40 AM Abhishek Shah
-> <abhishek.shah@columbia.edu> wrote:
-> >
-> > Hi all,
-> >
->
-> Not sure why you included so many people in this report ?
->
-> You have not exactly said what could be the issue (other than the raw
-> kcsan report)
->
-> > We found a race involving the tcp_md5sig_pool_populated variable. Upon =
-further investigation, we think that __tcp_alloc_md5sig_pool can be run mul=
-tiple times before tcp_md5sig_pool_populated is set to true here. However, =
-we are not sure. Please let us know what you think.
->
-> I think this is a false positive, because the data race is properly handl=
-ed
-> with the help of tcp_md5sig_mutex.
->
-> We might silence it, of course, like many other existing data races.
->
->
->
-> >
-> > Thanks!
-> >
-> >
-> > --------------------Report--------------
-> >
-> > write to 0xffffffff883a2438 of 1 bytes by task 6542 on cpu 0:
-> >  __tcp_alloc_md5sig_pool+0x239/0x260 net/ipv4/tcp.c:4343
-> >  tcp_alloc_md5sig_pool+0x58/0xb0 net/ipv4/tcp.c:4352
-> >  tcp_md5_do_add+0x2c4/0x470 net/ipv4/tcp_ipv4.c:1199
-> >  tcp_v6_parse_md5_keys+0x473/0x490
-> >  do_tcp_setsockopt net/ipv4/tcp.c:3614 [inline]
-> >  tcp_setsockopt+0xda6/0x1be0 net/ipv4/tcp.c:3698
-> >  sock_common_setsockopt+0x62/0x80 net/core/sock.c:3505
-> >  __sys_setsockopt+0x2d1/0x450 net/socket.c:2180
-> >  __do_sys_setsockopt net/socket.c:2191 [inline]
-> >  __se_sys_setsockopt net/socket.c:2188 [inline]
-> >  __x64_sys_setsockopt+0x67/0x80 net/socket.c:2188
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > read to 0xffffffff883a2438 of 1 bytes by task 6541 on cpu 1:
-> >  tcp_alloc_md5sig_pool+0x15/0xb0 net/ipv4/tcp.c:4348
-> >  tcp_md5_do_add+0x2c4/0x470 net/ipv4/tcp_ipv4.c:1199
-> >  tcp_v4_parse_md5_keys+0x42f/0x500 net/ipv4/tcp_ipv4.c:1303
-> >  do_tcp_setsockopt net/ipv4/tcp.c:3614 [inline]
-> >  tcp_setsockopt+0xda6/0x1be0 net/ipv4/tcp.c:3698
-> >  sock_common_setsockopt+0x62/0x80 net/core/sock.c:3505
-> >  __sys_setsockopt+0x2d1/0x450 net/socket.c:2180
-> >  __do_sys_setsockopt net/socket.c:2191 [inline]
-> >  __se_sys_setsockopt net/socket.c:2188 [inline]
-> >  __x64_sys_setsockopt+0x67/0x80 net/socket.c:2188
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > Reported by Kernel Concurrency Sanitizer on:
-> > CPU: 1 PID: 6541 Comm: syz-executor2-n Not tainted 5.18.0-rc5+ #107
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04=
-/01/2014
-> >
-> >
-> > Reproducing Inputs
-> >
-> > Input CPU 0:
-> > r0 =3D socket(0xa, 0x1, 0x0)
-> > setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000000)=3D{@in6=
-=3D{{0xa, 0x0, 0x0, @private0}}, 0x0, 0x0, 0x10, 0x0, "a04979dcb0f6e3666c36=
-f59053376c1d2e245fbad5b4749a8c55dda1bd819ec87afb7f5ac2483f179675d3c23fdba66=
-1afcca7cca5661a7b52ac11cc8085800c2c0d8e7de309eb57b89292880a563154"}, 0xd8)
-> > setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000100)=3D{@in6=
-=3D{{0xa, 0x0, 0x0, @loopback}}, 0x0, 0x0, 0x28, 0x0, "f386ea32b026420a2c65=
-ea375667090000000000000000a300001e81f9c22181fe9cef51a4070736c7a33d08c1dd5c3=
-5eb9b0e6c6aa490d4f1b18f7b09103bf18619b49a9ce10f4bd98e0b00"}, 0xd8)
-> >
-> > Input CPU 1:
-> > r0 =3D socket$inet_tcp(0x2, 0x1, 0x0)
-> > setsockopt$inet_tcp_TCP_MD5SIG(r0, 0x6, 0xe, &(0x7f0000000080)=3D{@in=
-=3D{{0x2, 0x0, @remote}}, 0x0, 0x0, 0x47, 0x0, "2a34e559cc66f8b453edeb61450=
-c3899cc1d1304f0e5f1758293ddd3597b84447d3056ed871ae397b0fd27a54e4ff8ba83f0cf=
-3e5f323acb74f974c0b87333e0570e9019d8fdcf0bc1044a5e96d68296"}, 0xd8)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
