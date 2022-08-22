@@ -1,138 +1,145 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D664A32
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 20:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661198528; x=1692734528;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0HPJzTZJCyzz51oJb40DfeTcEqv2C1B8j5nBtpWnNS8=;
-  b=XvvAcjj2TIoyqbazZfVRbaXZuexSwFbzQO3JtpULs1C/gN3grmvtooIe
-   HbLEtDSF5x/1qDmD75VFFJSQUondc418h1JSJqAHH3K+C68Maa4ADZJKc
-   9E7e9WEdkYc7P7BFJ1FgG1JOBAeCEmuZDaW1OMXCiywaatmbyDsKpTp23
-   MRkGTn1865B5fqFVvn3RB1Q9EJBXZEjX8sNu1S95ABktuxqjp7VCUrydz
-   vm0sxbD12utwwXG6LvcYaw90mc/seL5euvvnVTgv+cM0N4UXhibqbU8eE
-   KufXvGm0KunwoTDmXv7UoQtpryaX3QUJOzesWt7WntSZ5Aa7Um+VvTygO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="292252185"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="292252185"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:02:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="698412564"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 13:02:06 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQDcb-0000gC-38;
-	Mon, 22 Aug 2022 20:02:05 +0000
-Date: Tue, 23 Aug 2022 04:01:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.rewrite 5/5] kernel/events/core.c:846:3:
- error: 'continue' statement not in loop statement
-Message-ID: <202208230329.okV9Yjck-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4625F621
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 20:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BE5C433D6;
+	Mon, 22 Aug 2022 20:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661200397;
+	bh=L7tlcpkYgc/ur8opmsWlrpLVUOyqqprbLLElkrBYdpQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AnaIdOt77v6p9ZU3L/kcb4eyLiENDAhWGaPOtT9OonZwHrsWpPmeSxh4WQbRliWWT
+	 DLzgW0fKawo74lqnQDnRLvBzCAc5oECD9ADjJD9+be6XShynIzlZIWbqSoBy9gJUwr
+	 AIFRAdWrNlj1fqPQBx7IKQ4HoPGm86XtN2klx+a5lyI28yz1KEPQRkx1kDRePune22
+	 Zq3yG7JVL3USr+YZtr15yOdSVxSr3UPUW2XgRdcYI22BeCzcz56ZgaI+5emG+AhmGz
+	 ok6h87AZxwr1mmRhfUuXvcCC7nMXsaZ5MTI+5KYaCxsHvsqFuUv2Bzh451TcmjfVhS
+	 Wm8xzr09Hi1aA==
+Date: Mon, 22 Aug 2022 13:33:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Lukasz Bartosik <lb@semihalf.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
+	llvm@lists.linux.dev
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+Message-ID: <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.rewrite
-head:   596b8cc92a97fa8defbff896dc9baedef441b983
-commit: 596b8cc92a97fa8defbff896dc9baedef441b983 [5/5] Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-config: x86_64-randconfig-a004-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230329.okV9Yjck-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=596b8cc92a97fa8defbff896dc9baedef441b983
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.rewrite
-        git checkout 596b8cc92a97fa8defbff896dc9baedef441b983
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi all,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Apologies in advance if you see this twice. I did not see the original
+make it to either lore.kernel.org or the freedesktop.org archives so I
+figured it might have been sent into the void.
 
-All errors (new ones prefixed by >>):
+On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+> From: Łukasz Bartosik <lb@semihalf.com>
+> 
+> Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+> The root cause is null pointer defeference of bi_next
+> in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+> 
+> BUG: kernel NULL pointer dereference, address: 000000000000002e
+> PGD 0 P4D 0
+> Oops: 0002 [#1] PREEMPT SMP NOPTI
+> CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+> Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/14/2021
+> RIP: 0010:tgl_get_bw_info+0x2de/0x510
+> ...
+> [    2.554467] Call Trace:
+> [    2.554467]  <TASK>
+> [    2.554467]  intel_bw_init_hw+0x14a/0x434
+> [    2.554467]  ? _printk+0x59/0x73
+> [    2.554467]  ? _dev_err+0x77/0x91
+> [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+> [    2.554467]  i915_driver_probe+0x4c8/0x638
+> [    2.554467]  i915_pci_probe+0xf8/0x14e
+> [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+> [    2.554467]  pci_device_probe+0xaa/0x142
+> [    2.554467]  really_probe+0x13f/0x2f4
+> [    2.554467]  __driver_probe_device+0x9e/0xd3
+> [    2.554467]  driver_probe_device+0x24/0x7c
+> [    2.554467]  __driver_attach+0xba/0xcf
+> [    2.554467]  ? driver_attach+0x1f/0x1f
+> [    2.554467]  bus_for_each_dev+0x8c/0xc0
+> [    2.554467]  bus_add_driver+0x11b/0x1f7
+> [    2.554467]  driver_register+0x60/0xea
+> [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> [    2.554467]  i915_init+0x2c/0xb9
+> [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> [    2.554467]  do_one_initcall+0x12e/0x2b3
+> [    2.554467]  do_initcall_level+0xd6/0xf3
+> [    2.554467]  do_initcalls+0x4e/0x79
+> [    2.554467]  kernel_init_freeable+0xed/0x14d
+> [    2.554467]  ? rest_init+0xc1/0xc1
+> [    2.554467]  kernel_init+0x1a/0x120
+> [    2.554467]  ret_from_fork+0x1f/0x30
+> [    2.554467]  </TASK>
+> ...
+> Kernel panic - not syncing: Fatal exception
+> 
+> Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+> Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+> ---
+>  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/i915/display/intel_bw.c
+> index 2da4aacc956b..bd0ed68b7faa 100644
+> --- a/drivers/gpu/drm/i915/display/intel_bw.c
+> +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+> @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_private *dev_priv, const struct intel
+>  		int clpchgroup;
+>  		int j;
+>  
+> -		if (i < num_groups - 1)
+> -			bi_next = &dev_priv->max_bw[i + 1];
+> -
+>  		clpchgroup = (sa->deburst * qi.deinterleave / num_channels) << i;
+>  
+> -		if (i < num_groups - 1 && clpchgroup < clperchgroup)
+> -			bi_next->num_planes = (ipqdepth - clpchgroup) / clpchgroup + 1;
+> -		else
+> -			bi_next->num_planes = 0;
+> +		if (i < num_groups - 1) {
+> +			bi_next = &dev_priv->max_bw[i + 1];
+> +
+> +			if (clpchgroup < clperchgroup)
+> +				bi_next->num_planes = (ipqdepth - clpchgroup) /
+> +						       clpchgroup + 1;
+> +			else
+> +				bi_next->num_planes = 0;
+> +		}
+>  
+>  		bi->num_qgv_points = qi.num_points;
+>  		bi->num_psf_gv_points = qi.num_psf_points;
+> -- 
+> 2.35.0.rc2.247.g8bbb082509-goog
+> 
+> 
 
->> kernel/events/core.c:846:3: error: 'continue' statement not in loop statement
-                   continue;
-                   ^
-   kernel/events/core.c:4220:29: warning: variable 'task_ctx' set but not used [-Wunused-but-set-variable]
-           struct perf_event_context *task_ctx = NULL;
-                                      ^
-   kernel/events/core.c:4790:1: warning: no previous prototype for function 'find_get_pmu_context' [-Wmissing-prototypes]
-   find_get_pmu_context(struct pmu *pmu, struct perf_event_context *ctx,
-   ^
-   kernel/events/core.c:4789:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct perf_event_pmu_context *
-   ^
-   static 
-   kernel/events/core.c:12029:2: error: call to undeclared function 'mutex_lock_double'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
-           ^
-   2 warnings and 2 errors generated.
+Was this patch ever applied or was the issue fixed in a different way?
+If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+compiler supports it), bi_next will be deterministically initialized to
+NULL, which means 'bi_next->num_planes = 0' will crash when the first if
+statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+us at [1] so it impacts real users (and I have been applying this change
+locally for six months). I see some discussion in this thread, was it
+ever resolved?
 
+[1]: https://github.com/ClangBuiltLinux/linux/issues/1626
 
-vim +/continue +846 kernel/events/core.c
-
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  831  
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  832  /*
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  833   * reschedule events based on the cgroup constraint of task.
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  834   */
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  835  static void perf_cgroup_switch(struct task_struct *task)
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  836  {
-596b8cc92a97fa kernel/events/core.c Peter Zijlstra          2022-06-15  837  	struct perf_cpu_context *cpuctx = this_cpu_ptr(&cpu_context);
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  838  	struct perf_cgroup *cgrp;
-058fe1c0440e68 kernel/events/core.c David Carrillo-Cisneros 2017-01-18  839  	struct list_head *list;
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  840  	unsigned long flags;
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  841  
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  842  	cgrp = perf_cgroup_from_task(task, NULL);
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  843  
-058fe1c0440e68 kernel/events/core.c David Carrillo-Cisneros 2017-01-18  844  	WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  845  	if (READ_ONCE(cpuctx->cgrp) == cgrp)
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29 @846  		continue;
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  847  
-facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  848  	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  849  	perf_ctx_disable(&cpuctx->ctx);
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  850  
-6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  851  	ctx_sched_out(&cpuctx->ctx, EVENT_ALL);
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  852  	/*
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  853  	 * must not be done before ctxswout due
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  854  	 * to update_cgrp_time_from_cpuctx() in
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  855  	 * ctx_sched_out()
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  856  	 */
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  857  	cpuctx->cgrp = cgrp;
-95cf59ea72331d kernel/events/core.c Peter Zijlstra          2012-10-02  858  	/*
-95cf59ea72331d kernel/events/core.c Peter Zijlstra          2012-10-02  859  	 * set cgrp before ctxsw in to allow
-a0827713e298d0 kernel/events/core.c Chengming Zhou          2022-03-29  860  	 * perf_cgroup_set_timestamp() in ctx_sched_in()
-a0827713e298d0 kernel/events/core.c Chengming Zhou          2022-03-29  861  	 * to not have to pass task around
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  862  	 */
-6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  863  	ctx_sched_in(&cpuctx->ctx, EVENT_ALL);
-96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  864  
-6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  865  	perf_ctx_enable(&cpuctx->ctx);
-facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  866  	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
-facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  867  }
-e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  868  
-
-:::::: The code at line 846 was first introduced by commit
-:::::: 96492a6c558acb56124844d1409d9ef8624a0322 perf/core: Fix perf_cgroup_switch()
-
-:::::: TO: Chengming Zhou <zhouchengming@bytedance.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
