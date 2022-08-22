@@ -1,236 +1,186 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155627FA
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 11:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661167302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Qiy7/F0Z54v1OH7QpR+OERnIBquYPOwRkF+LwT3mSPo=;
-	b=bxKvbI7GIIpqrEqfAWe5+uoQKnTWIYpyaj4tRN8uJ7NrcAdvBSc/q7pTca70f5QS7FsAxt
-	u67NWef4pfbnV7pYc9HecOQMMlbuixHFlShlRFEhO4M53rZdvpo96K71c76oshOzyEyUjJ
-	jVNBQ1VVe75sg5Ytj2Gw301KfMmW+a4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-403-dGY1N99EN82fzOEhf1sQKQ-1; Mon, 22 Aug 2022 07:21:41 -0400
-X-MC-Unique: dGY1N99EN82fzOEhf1sQKQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A0BD80A0B9
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 11:21:40 +0000 (UTC)
-Received: from [172.64.9.49] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C753492C3B;
-	Mon, 22 Aug 2022 11:21:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (53/381 SKIPPED): Test report for 6.0.0-rc2
- (mainline.kernel.org-clang) [1c23f9e6]
-Date: Mon, 22 Aug 2022 11:21:39 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88907FA
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 11:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661168630; x=1692704630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tt7xYuyVZ5OryjdpetomIsUm0dcKP7f20CLjm3NMmWs=;
+  b=UiRmM0DtSeCSZSXaCqOfpJwh1iCFB54A12tbjTdy1tBEnf5OX02QFoIS
+   aSaR6CsIBTyUeE8fsRAl7GagfQdxRxNjdtcBXwCSTFV/FSWEMONre1JXz
+   JvjFt1auwdMWfLXzdDz+7bMsw8sUEbhYRg/0IL7v2LzuZBPIkRW2xWWTB
+   DHd0UrpuTyEZ2/dS5Gl99/b6v+NOdlqzPoQSQLtSi4KkF9eDW5MQCMNZn
+   QFbJ9m35Ps0MlUaLeiiRLyHGF/+viimVCXpcNIfEcAM0dVOUMdA60jwV4
+   Kr+LoguXC7rqIqCgnhQT8AXkCTI7uZomPyIowJ3QpspNfp2YzCgQghShC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="276421273"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="276421273"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 04:43:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="937007235"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 04:43:48 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQ5qO-0005IV-0C;
+	Mon, 22 Aug 2022 11:43:48 +0000
+Date: Mon, 22 Aug 2022 19:42:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yue Hu <zbestahu@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 2/2] erofs: add on-disk compressed fragments support
+Message-ID: <202208221956.uRQu5Di8-lkp@intel.com>
+References: <b087322de2adfd8ce39a5d380191562b0b0e0086.1661146058.git.huyue2@coolpad.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Message-Id: <27151.122082207214100103@us-mta-403.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b087322de2adfd8ce39a5d380191562b0b0e0086.1661146058.git.huyue2@coolpad.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yue,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on xiang-erofs/dev-test]
+[also build test ERROR on linus/master v6.0-rc2 next-20220822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Tested-by: CKI Project <cki-project@redhat.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Yue-Hu/erofs-support-compressed-fragments-data/20220822-135454
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
+config: i386-randconfig-a003-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221956.uRQu5Di8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fcee3af7935e7bb4544090297b4260c00fe2f9c8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yue-Hu/erofs-support-compressed-fragments-data/20220822-135454
+        git checkout fcee3af7935e7bb4544090297b4260c00fe2f9c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51285
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
-ed
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1354
-            Affected tests:
-                 aarch64 - Libkcapi AF_ALG test
-                   s390x - Libkcapi AF_ALG test
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+>> fs/erofs/super.c:384:7: error: no member named 'packed_inode' in 'struct erofs_sb_info'
+           sbi->packed_inode = erofs_sb_has_fragments(sbi) ?
+           ~~~  ^
+   1 error generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +384 fs/erofs/super.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   327	
+   328	static int erofs_read_superblock(struct super_block *sb)
+   329	{
+   330		struct erofs_sb_info *sbi;
+   331		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+   332		struct erofs_super_block *dsb;
+   333		unsigned int blkszbits;
+   334		void *data;
+   335		int ret;
+   336	
+   337		data = erofs_read_metabuf(&buf, sb, 0, EROFS_KMAP);
+   338		if (IS_ERR(data)) {
+   339			erofs_err(sb, "cannot read erofs superblock");
+   340			return PTR_ERR(data);
+   341		}
+   342	
+   343		sbi = EROFS_SB(sb);
+   344		dsb = (struct erofs_super_block *)(data + EROFS_SUPER_OFFSET);
+   345	
+   346		ret = -EINVAL;
+   347		if (le32_to_cpu(dsb->magic) != EROFS_SUPER_MAGIC_V1) {
+   348			erofs_err(sb, "cannot find valid erofs superblock");
+   349			goto out;
+   350		}
+   351	
+   352		sbi->feature_compat = le32_to_cpu(dsb->feature_compat);
+   353		if (erofs_sb_has_sb_chksum(sbi)) {
+   354			ret = erofs_superblock_csum_verify(sb, data);
+   355			if (ret)
+   356				goto out;
+   357		}
+   358	
+   359		ret = -EINVAL;
+   360		blkszbits = dsb->blkszbits;
+   361		/* 9(512 bytes) + LOG_SECTORS_PER_BLOCK == LOG_BLOCK_SIZE */
+   362		if (blkszbits != LOG_BLOCK_SIZE) {
+   363			erofs_err(sb, "blkszbits %u isn't supported on this platform",
+   364				  blkszbits);
+   365			goto out;
+   366		}
+   367	
+   368		if (!check_layout_compatibility(sb, dsb))
+   369			goto out;
+   370	
+   371		sbi->sb_size = 128 + dsb->sb_extslots * EROFS_SB_EXTSLOT_SIZE;
+   372		if (sbi->sb_size > EROFS_BLKSIZ) {
+   373			erofs_err(sb, "invalid sb_extslots %u (more than a fs block)",
+   374				  sbi->sb_size);
+   375			goto out;
+   376		}
+   377		sbi->primarydevice_blocks = le32_to_cpu(dsb->blocks);
+   378		sbi->meta_blkaddr = le32_to_cpu(dsb->meta_blkaddr);
+   379	#ifdef CONFIG_EROFS_FS_XATTR
+   380		sbi->xattr_blkaddr = le32_to_cpu(dsb->xattr_blkaddr);
+   381	#endif
+   382		sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+   383		sbi->root_nid = le16_to_cpu(dsb->root_nid);
+ > 384		sbi->packed_inode = erofs_sb_has_fragments(sbi) ?
+   385			erofs_iget(sb, le64_to_cpu(dsb->packed_nid), false) : NULL;
+   386		sbi->inos = le64_to_cpu(dsb->inos);
+   387	
+   388		sbi->build_time = le64_to_cpu(dsb->build_time);
+   389		sbi->build_time_nsec = le32_to_cpu(dsb->build_time_nsec);
+   390	
+   391		memcpy(&sb->s_uuid, dsb->uuid, sizeof(dsb->uuid));
+   392	
+   393		ret = strscpy(sbi->volume_name, dsb->volume_name,
+   394			      sizeof(dsb->volume_name));
+   395		if (ret < 0) {	/* -E2BIG */
+   396			erofs_err(sb, "bad volume name without NIL terminator");
+   397			ret = -EFSCORRUPTED;
+   398			goto out;
+   399		}
+   400	
+   401		/* parse on-disk compression configurations */
+   402		if (erofs_sb_has_compr_cfgs(sbi))
+   403			ret = erofs_load_compr_cfgs(sb, dsb);
+   404		else
+   405			ret = z_erofs_load_lz4_config(sb, dsb, NULL, 0);
+   406		if (ret < 0)
+   407			goto out;
+   408	
+   409		/* handle multiple devices */
+   410		ret = erofs_scan_devices(sb, dsb);
+   411	
+   412		if (erofs_sb_has_ztailpacking(sbi))
+   413			erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+   414		if (erofs_is_fscache_mode(sb))
+   415			erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+   416		if (erofs_sb_has_fragments(sbi))
+   417			erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
+   418	out:
+   419		erofs_put_metabuf(&buf);
+   420		return ret;
+   421	}
+   422	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
