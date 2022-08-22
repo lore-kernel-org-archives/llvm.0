@@ -1,48 +1,40 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F6E7B
-	for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 19:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7844369
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 02:52:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661111225; x=1692647225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xgq5pV8NmzafHjaVV82jPIGbVdCuhC2gTgsrPRjWnRk=;
-  b=e6XN0fWyNtJrl5l1AHDb0YHgxbRrGnauiom5N+9TD31ud/Sz3SV0SOI5
-   riKXNoa86qc6io27J3tdUI8fo/pSfgJAcynKgs6n74BlpL7Cj3aDyC0z5
-   ZaqyFxNwI94K8uqLVgO44l9mguZBWizFA8ubjGEt2crJJAeHXfvKkQFBd
-   wCulTZ4YCPoYVlYUnb/uuJ4muwmKPtObKjrDr9tQwSqLO0XFAOzSpDlR5
-   xRrKFMuYMgWwaPYd3eSdGwGmgeMV/xGJEFEIfAJ5W97T835mk1OFYy+5Z
-   h7S7DoA1dypJDCScRTONTPxHO3QeGwY3ota76DG8EQvmjG+GpY/5xFMjC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="294556490"
-X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
-   d="scan'208";a="294556490"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 12:47:04 -0700
+  t=1661136747; x=1692672747;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=g5hWdDXmFVcBVhegmZvPEjPUy61T+K+FJ0evseqn6sE=;
+  b=PvifStTIJSvlub25k0rN0KIbK/AsQnjvu9QJO0tSG9Au9ddxI8LY/Gvq
+   novEvGopY9fPtR9RN82vv4NlaIl6FFXiaO+POFBu5Uha0To9LSVBJWvdr
+   S5LX3WLh4CMzhC12tQ/fchSH5ATxOC/H7mMMsBLjjxdS5+7d2AY8DJe4a
+   tcKTKoGk4UMCzaS6IMd+E415HmtHF9sE3SZRLs+/zzABH9Ga6B0VSeguS
+   TxgDZNx4bzdIHnaYJJTOBXLokYFgKZW4i0lZO5jbAcAgBQk0LmLhS0OTh
+   FKtyFvGrl3TnnN/7UkaLHnnWZV2wFubt5UrDbVQv6qMt/9F/W4E3kklHp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="379600109"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="379600109"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 19:52:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
-   d="scan'208";a="559496311"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="677051488"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2022 12:47:01 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2022 19:52:26 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPquS-0004QP-2M;
-	Sun, 21 Aug 2022 19:47:00 +0000
-Date: Mon, 22 Aug 2022 03:46:33 +0800
+	id 1oPxY9-0004qN-1t;
+	Mon, 22 Aug 2022 02:52:25 +0000
+Date: Mon, 22 Aug 2022 10:51:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Igor Kononenko <i.kononenko@yadro.com>, Corey Minyard <minyard@acm.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-	Igor Kononenko <i.kononenko@yadro.com>,
-	openipmi-developer@lists.sourceforge.net,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] ipmi:kcs_bmc: Add cleanup regmap(interrupt-regs) on
- a shutdown.
-Message-ID: <202208220317.cROZCTcB-lkp@intel.com>
-References: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: enter_from_user_mode+0x11b: call to
+ __SCT__preempt_schedule() leaves .noinstr.text section
+Message-ID: <202208221035.JagzmyMU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,110 +43,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
 
-Hi Igor,
+CC: linux-kernel@vger.kernel.org
+TO: Frederic Weisbecker <frederic@kernel.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
+CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on cminyard-ipmi/for-next]
-[also build test ERROR on soc/for-next linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
-base:   https://github.com/cminyard/linux-ipmi for-next
-config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220822/202208220317.cROZCTcB-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 01ffe31cbb54bfd8e38e71b3cf804a1d67ebf9c1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4daa6a81c07c54f989e70d682fa0bff568c14df0
+commit: 171476775d32a40bfebf83250136c19b2e842672 context_tracking: Convert state to atomic_t
+date:   7 weeks ago
+config: x86_64-buildonly-randconfig-r001-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221035.JagzmyMU-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
-        git checkout 9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 171476775d32a40bfebf83250136c19b2e842672
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/char/ipmi/kcs_bmc_aspeed.c:643:29: error: incompatible pointer types passing 'struct kcs_bmc *' to parameter of type 'struct kcs_bmc_device *' [-Werror,-Wincompatible-pointer-types]
-           aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
-                                      ^~~~~~~
-   drivers/char/ipmi/kcs_bmc_aspeed.c:399:63: note: passing argument to parameter 'kcs_bmc' here
-   static void aspeed_kcs_irq_mask_update(struct kcs_bmc_device *kcs_bmc, u8 mask, u8 state)
-                                                                 ^
-   7 warnings and 1 error generated.
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: enter_from_user_mode+0x11b: call to __SCT__preempt_schedule() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x1e2: call to __SCT__preempt_schedule() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x11e: call to __SCT__preempt_schedule() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x11b: call to __SCT__preempt_schedule() leaves .noinstr.text section
 
 
-vim +643 drivers/char/ipmi/kcs_bmc_aspeed.c
-
-   638	
-   639	static void aspeed_kcs_shutdown(struct platform_device *pdev)
-   640	{
-   641		struct kcs_bmc *kcs_bmc = dev_get_drvdata(&pdev->dev);
-   642	
- > 643		aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
-   644	}
-   645	
+objdump-func vmlinux.o enter_from_user_mode:
+0000 0000000000003580 <enter_from_user_mode>:
+0000     3580:	50                   	push   %rax
+0001     3581:	48 c7 04 24 00 00 00 00 	movq   $0x0,(%rsp)
+0009     3589:	9c                   	pushf
+000a     358a:	8f 04 24             	pop    (%rsp)
+000d     358d:	48 8b 04 24          	mov    (%rsp),%rax
+0011     3591:	48 0f ba 25 00 00 00 00 34 	btq    $0x34,0x0(%rip)        # 359a <enter_from_user_mode+0x1a>	3595: R_X86_64_PC32	boot_cpu_data+0x33
+001a     359a:	0f 82 b8 00 00 00    	jb     3658 <enter_from_user_mode+0xd8>
+0020     35a0:	b9 00 44 00 00       	mov    $0x4400,%ecx
+0025     35a5:	48 f7 05 00 00 00 00 00 00 01 00 	testq  $0x10000,0x0(%rip)        # 35b0 <enter_from_user_mode+0x30>	35a8: R_X86_64_PC32	boot_cpu_data+0x30
+0030     35b0:	0f 85 a2 00 00 00    	jne    3658 <enter_from_user_mode+0xd8>
+0036     35b6:	85 c1                	test   %eax,%ecx
+0038     35b8:	0f 85 a7 00 00 00    	jne    3665 <enter_from_user_mode+0xe5>
+003e     35be:	f6 87 88 00 00 00 03 	testb  $0x3,0x88(%rdi)
+0045     35c5:	0f 84 ab 00 00 00    	je     3676 <enter_from_user_mode+0xf6>
+004b     35cb:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 35d3 <enter_from_user_mode+0x53>	35cf: R_X86_64_PC32	cpu_current_top_of_stack-0x4
+0053     35d3:	48 29 e0             	sub    %rsp,%rax
+0056     35d6:	48 3d 00 40 00 00    	cmp    $0x4000,%rax
+005c     35dc:	0f 83 9d 00 00 00    	jae    367f <enter_from_user_mode+0xff>
+0062     35e2:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 35ea <enter_from_user_mode+0x6a>	35e6: R_X86_64_PC32	current_task-0x4
+006a     35ea:	b9 58 3f 00 00       	mov    $0x3f58,%ecx
+006f     35ef:	48 03 48 20          	add    0x20(%rax),%rcx
+0073     35f3:	48 39 f9             	cmp    %rdi,%rcx
+0076     35f6:	0f 85 8c 00 00 00    	jne    3688 <enter_from_user_mode+0x108>
+007c     35fc:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3603 <enter_from_user_mode+0x83>	35fe: R_X86_64_PC32	context_tracking_key-0x5
+0083     3603:	7e 36                	jle    363b <enter_from_user_mode+0xbb>
+0085     3605:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 360c <enter_from_user_mode+0x8c>	3607: R_X86_64_PC32	context_tracking_key-0x5
+008c     360c:	7e 29                	jle    3637 <enter_from_user_mode+0xb7>
+008e     360e:	65 ff 05 00 00 00 00 	incl   %gs:0x0(%rip)        # 3615 <enter_from_user_mode+0x95>	3611: R_X86_64_PC32	__preempt_count-0x4
+0095     3615:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	3618: R_X86_64_32S	context_tracking+0x8
+009c     361c:	65 48 03 05 00 00 00 00 	add    %gs:0x0(%rip),%rax        # 3624 <enter_from_user_mode+0xa4>	3620: R_X86_64_PC32	this_cpu_off-0x4
+00a4     3624:	8b 00                	mov    (%rax),%eax
+00a6     3626:	83 e0 03             	and    $0x3,%eax
+00a9     3629:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 3630 <enter_from_user_mode+0xb0>	362c: R_X86_64_PC32	__preempt_count-0x4
+00b0     3630:	74 69                	je     369b <enter_from_user_mode+0x11b>
+00b2     3632:	83 f8 02             	cmp    $0x2,%eax
+00b5     3635:	74 04                	je     363b <enter_from_user_mode+0xbb>
+00b7     3637:	90                   	nop
+00b8     3638:	0f 0b                	ud2
+00ba     363a:	90                   	nop
+00bb     363b:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3642 <enter_from_user_mode+0xc2>	363d: R_X86_64_PC32	context_tracking_key-0x5
+00c2     3642:	7e 0a                	jle    364e <enter_from_user_mode+0xce>
+00c4     3644:	bf 02 00 00 00       	mov    $0x2,%edi
+00c9     3649:	e8 00 00 00 00       	call   364e <enter_from_user_mode+0xce>	364a: R_X86_64_PLT32	__ct_user_exit-0x4
+00ce     364e:	90                   	nop
+00cf     364f:	90                   	nop
+00d0     3650:	58                   	pop    %rax
+00d1     3651:	31 c0                	xor    %eax,%eax
+00d3     3653:	31 c9                	xor    %ecx,%ecx
+00d5     3655:	31 ff                	xor    %edi,%edi
+00d7     3657:	c3                   	ret
+00d8     3658:	b9 00 44 04 00       	mov    $0x44400,%ecx
+00dd     365d:	85 c1                	test   %eax,%ecx
+00df     365f:	0f 84 59 ff ff ff    	je     35be <enter_from_user_mode+0x3e>
+00e5     3665:	90                   	nop
+00e6     3666:	0f 0b                	ud2
+00e8     3668:	90                   	nop
+00e9     3669:	f6 87 88 00 00 00 03 	testb  $0x3,0x88(%rdi)
+00f0     3670:	0f 85 55 ff ff ff    	jne    35cb <enter_from_user_mode+0x4b>
+00f6     3676:	90                   	nop
+00f7     3677:	0f 0b                	ud2
+00f9     3679:	90                   	nop
+00fa     367a:	e9 4c ff ff ff       	jmp    35cb <enter_from_user_mode+0x4b>
+00ff     367f:	90                   	nop
+0100     3680:	0f 0b                	ud2
+0102     3682:	90                   	nop
+0103     3683:	e9 5a ff ff ff       	jmp    35e2 <enter_from_user_mode+0x62>
+0108     3688:	90                   	nop
+0109     3689:	0f 0b                	ud2
+010b     368b:	90                   	nop
+010c     368c:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3693 <enter_from_user_mode+0x113>	368e: R_X86_64_PC32	context_tracking_key-0x5
+0113     3693:	0f 8f 6c ff ff ff    	jg     3605 <enter_from_user_mode+0x85>
+0119     3699:	eb a0                	jmp    363b <enter_from_user_mode+0xbb>
+011b     369b:	e8 00 00 00 00       	call   36a0 <enter_from_user_mode+0x120>	369c: R_X86_64_PLT32	__SCT__preempt_schedule-0x4
+0120     36a0:	83 f8 02             	cmp    $0x2,%eax
+0123     36a3:	74 96                	je     363b <enter_from_user_mode+0xbb>
+0125     36a5:	eb 90                	jmp    3637 <enter_from_user_mode+0xb7>
+0127     36a7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
 
 -- 
 0-DAY CI Kernel Test Service
