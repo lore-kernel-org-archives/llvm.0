@@ -1,91 +1,222 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3A864D
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 06:12:21 +0000 (UTC)
-Received: by mail-ot1-f44.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso7070304otv.1
-        for <llvm@lists.linux.dev>; Sun, 21 Aug 2022 23:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xRBPID2afPJAp96OqaGvBdjqx78UAxNzgaJTyGjabr8=;
-        b=fAsoPJBfZm1Q3Pe+7+Kgk49YdcBBzb5wbtHRNl3NBQ8lbJi6wNFGOyGP+hoP0LKlyB
-         VYzze1ue1TiTDDgBtSEp6kziMzbSiH5Fii+zpt7cBoV90iAQvRLmQHESUpqo3Y2Wp0tT
-         txhLSz77VhTqtxhPw3vHrTEWUE1Rg3dXr9mmw80FeRscTk39kroT1YD6ySvLqCPXYB/M
-         jKGtS5Jkl9M0Xr8BvbyheUI4MSQ3LYilhkgfoy9UPRCTcOE8FZLGdRPd5ma1WAVAWUHJ
-         rX8xGUAGM5/iqMLz3tWKZo8+A29cJCX4/zNpzemWmun70fPvCnhrk/oSR+OdcQSW3niU
-         7edw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xRBPID2afPJAp96OqaGvBdjqx78UAxNzgaJTyGjabr8=;
-        b=1L2byRdqjXhMy7SDCh6v4F/XikEDkz644aNKakfQX4OvpdCDL1DXmhwKyWQ0ojna06
-         LpTE8DUg/n/vQaSjEyvFOfKAYHtVmMCHyjz7OGg3j0mnC9TzQ2tMo7U1Ym0yguqPrxGS
-         31gw8zU6FiYDDrfF+XDZrviR7pGe+BcMchSrHUBC+KmT0axLcFYEh8x1MPXgkSCgtFIO
-         UMausQYGFK6mjxs3s+buc+RjCyWB9VVN97Y6CqIaCzkK4ghmidlAC2XooMOv4St+/COP
-         chfxARmUQzkDopUSualLgYxR7rqQouQPcvHApeqdMeMiDInPLhaTMGh+PNNRDYrZnn7l
-         hkIg==
-X-Gm-Message-State: ACgBeo3VhonNFPkVoBY+FXG5VnDar9hM+OzptOvQV1NyfM2bgq5K8b4C
-	7SfvmI4JdmrVyZYT+Trbmq04eOD1WNCXj5Qqvgc=
-X-Google-Smtp-Source: AA6agR5/3lpDfPcI8hjqmqqJiTVbPVyi0UuVROvgrbHtJM/EtFwkEW7IgrfmM3wwNBrbhTG/o1jOsrLr57VaSHZoKMc=
-X-Received: by 2002:a05:6830:2a8e:b0:638:c41c:d5a1 with SMTP id
- s14-20020a0568302a8e00b00638c41cd5a1mr7455068otu.367.1661148740694; Sun, 21
- Aug 2022 23:12:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B31164D
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 06:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661149303;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=X6y757R2UB9xJAhr3LoRbkiVd9MtR71SpCiPcJcvS2w=;
+	b=gAgaD7TLe9+OsRofKpQRRbIkukL+Hm/ffBXiAcDgbuezh2C/mlqYH6Qj/C8+LcObuvctdN
+	XGyjYPQ8U2pTFAO5mH3RMa8bAwBibMct6pUSxcEs0xhy9Tm7GhUZqy1HST/GiC8sGjpUQC
+	+Dm2nSbISBlYktJNLdP57m2tclewM4k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-MqoHc_MIOLWpugBGvIlpAA-1; Mon, 22 Aug 2022 02:21:41 -0400
+X-MC-Unique: MqoHc_MIOLWpugBGvIlpAA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86EB6804184
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 06:21:41 +0000 (UTC)
+Received: from [172.64.4.35] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 760DF1121315;
+	Mon, 22 Aug 2022 06:21:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (16/381 SKIPPED): Test report for 6.0.0-rc1
+ (mainline.kernel.org-clang) [e3f259d3]
+Date: Mon, 22 Aug 2022 06:21:39 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
- <20220819190640.2763586-1-ndesaulniers@google.com> <CAHk-=whLcuvDDS3rZfEgDrwbdJrTx8HCRNiZ5cDc80-_gzHCxw@mail.gmail.com>
-In-Reply-To: <CAHk-=whLcuvDDS3rZfEgDrwbdJrTx8HCRNiZ5cDc80-_gzHCxw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Mon, 22 Aug 2022 08:11:44 +0200
-Message-ID: <CA+icZUUX1gPvnExa=zyVqB8xYOTai+nfHp6E7+qRE2mXXa2M=A@mail.gmail.com>
-Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Borislav Petkov <bp@suse.de>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Message-Id: <23313.122082202214100444@us-mta-541.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 21, 2022 at 7:13 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Applied directly, just because I love seeing old nasty stuff like this go away.
->
->              Linus
+Hi, we tested your kernel and here are the results:
 
-Hi,
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Small nitpick:
+Tested-by: CKI Project <cki-project@redhat.com>
 
---- a/arch/x86/include/asm/rmwcc.h
-+++ b/arch/x86/include/asm/rmwcc.h
-...
--#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
-+#ifndef __GCC_ASM_FLAG_OUTPUTS__
-...
--#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) ||
-!defined(CONFIG_CC_HAS_ASM_GOTO) */
-+#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
-...
--#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) ||
-!defined(CONFIG_CC_HAS_ASM_GOTO) */
-+#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51282
 
-Shouldn't that be...
+One or more kernel tests failed:
 
-#if !defined(__GCC_ASM_FLAG_OUTPUTS__)
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: Libkcapi AF_ALG test: Got Allocation of cbc(aes) cipher fail=
+ed
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1354
+            Affected tests:
+                 aarch64 - Libkcapi AF_ALG test
+                 ppc64le - Libkcapi AF_ALG test
+                   s390x - Libkcapi AF_ALG test
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
+gument
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1352
+            Affected tests:
+                   s390x - selinux-policy: serge-testsuite
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-...to fit the 2 comments?
 
-Best regards,
--Sedat-
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
