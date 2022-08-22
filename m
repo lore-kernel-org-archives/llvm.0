@@ -1,40 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7844369
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 02:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B622361
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 04:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661136747; x=1692672747;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=g5hWdDXmFVcBVhegmZvPEjPUy61T+K+FJ0evseqn6sE=;
-  b=PvifStTIJSvlub25k0rN0KIbK/AsQnjvu9QJO0tSG9Au9ddxI8LY/Gvq
-   novEvGopY9fPtR9RN82vv4NlaIl6FFXiaO+POFBu5Uha0To9LSVBJWvdr
-   S5LX3WLh4CMzhC12tQ/fchSH5ATxOC/H7mMMsBLjjxdS5+7d2AY8DJe4a
-   tcKTKoGk4UMCzaS6IMd+E415HmtHF9sE3SZRLs+/zzABH9Ga6B0VSeguS
-   TxgDZNx4bzdIHnaYJJTOBXLokYFgKZW4i0lZO5jbAcAgBQk0LmLhS0OTh
-   FKtyFvGrl3TnnN/7UkaLHnnWZV2wFubt5UrDbVQv6qMt/9F/W4E3kklHp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="379600109"
+  t=1661144072; x=1692680072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fCz5QbltH6KtfNc+34Ba0Esmq+hpNHQ6ULWrYhcnmPA=;
+  b=ClMxzapBZBKGKX72YDrwe1LY1AhqArWg1bsjjXwLXZ2Ow3IpdHtIlYIf
+   9V6hZ+SlJ6aUx7pjLkLEPcS4D/UaC3cnGeuYn/g5PDqbzjpTLOmalaM83
+   qdg0yRAQocSnd0hg+caSAmg64vWpNjPJgONh7ZkC0wMxGLttajJ+5fjx2
+   3kdsFgTY9VU+kEruLgA0Yae1OB4uYkBXOiJRJb05u9Ff/7xDrvtKgS2Mm
+   Ng4dIvlKtf8h6wTNLgQN9UHEgOuIAKEfDfSOqafw+F6h2DewGInzVkm0U
+   SvN3u4ex70EO+Yu59dpjPMtK/Nhe8T+kKzKQ6lPn3+GE+5YzBHVVCT7hC
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="273075602"
 X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="379600109"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 19:52:27 -0700
+   d="scan'208";a="273075602"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 21:54:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="677051488"
+   d="scan'208";a="559595426"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2022 19:52:26 -0700
+  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2022 21:54:30 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oPxY9-0004qN-1t;
-	Mon, 22 Aug 2022 02:52:25 +0000
-Date: Mon, 22 Aug 2022 10:51:51 +0800
+	id 1oPzSH-0004wN-2m;
+	Mon, 22 Aug 2022 04:54:29 +0000
+Date: Mon, 22 Aug 2022 12:54:25 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: enter_from_user_mode+0x11b: call to
- __SCT__preempt_schedule() leaves .noinstr.text section
-Message-ID: <202208221035.JagzmyMU-lkp@intel.com>
+To: Pingfan Liu <kernelfans@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
+Message-ID: <202208221246.L4LUk5u8-lkp@intel.com>
+References: <20220822021520.6996-7-kernelfans@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,120 +45,210 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220822021520.6996-7-kernelfans@gmail.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Hi Pingfan,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4daa6a81c07c54f989e70d682fa0bff568c14df0
-commit: 171476775d32a40bfebf83250136c19b2e842672 context_tracking: Convert state to atomic_t
-date:   7 weeks ago
-config: x86_64-buildonly-randconfig-r001-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221035.JagzmyMU-lkp@intel.com/config)
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc2 next-20220819]
+[cannot apply to arm64/for-next/core soc/for-next arm/for-next kvmarm/next xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/arm64-riscv-Introduce-fast-kexec-reboot/20220822-101854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: i386-randconfig-a001-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221246.L4LUk5u8-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 171476775d32a40bfebf83250136c19b2e842672
+        # https://github.com/intel-lab-lkp/linux/commit/28c1ad168af1fe0412af126f49213f44664175ed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pingfan-Liu/arm64-riscv-Introduce-fast-kexec-reboot/20220822-101854
+        git checkout 28c1ad168af1fe0412af126f49213f44664175ed
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: enter_from_user_mode+0x11b: call to __SCT__preempt_schedule() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x1e2: call to __SCT__preempt_schedule() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x11e: call to __SCT__preempt_schedule() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x11b: call to __SCT__preempt_schedule() leaves .noinstr.text section
+>> kernel/cpu.c:1875:4: error: field designator 'support_kexec_parallel' does not refer to any field in type 'struct cpuhp_step'
+                   .support_kexec_parallel = true,
+                    ^
+   1 error generated.
 
 
-objdump-func vmlinux.o enter_from_user_mode:
-0000 0000000000003580 <enter_from_user_mode>:
-0000     3580:	50                   	push   %rax
-0001     3581:	48 c7 04 24 00 00 00 00 	movq   $0x0,(%rsp)
-0009     3589:	9c                   	pushf
-000a     358a:	8f 04 24             	pop    (%rsp)
-000d     358d:	48 8b 04 24          	mov    (%rsp),%rax
-0011     3591:	48 0f ba 25 00 00 00 00 34 	btq    $0x34,0x0(%rip)        # 359a <enter_from_user_mode+0x1a>	3595: R_X86_64_PC32	boot_cpu_data+0x33
-001a     359a:	0f 82 b8 00 00 00    	jb     3658 <enter_from_user_mode+0xd8>
-0020     35a0:	b9 00 44 00 00       	mov    $0x4400,%ecx
-0025     35a5:	48 f7 05 00 00 00 00 00 00 01 00 	testq  $0x10000,0x0(%rip)        # 35b0 <enter_from_user_mode+0x30>	35a8: R_X86_64_PC32	boot_cpu_data+0x30
-0030     35b0:	0f 85 a2 00 00 00    	jne    3658 <enter_from_user_mode+0xd8>
-0036     35b6:	85 c1                	test   %eax,%ecx
-0038     35b8:	0f 85 a7 00 00 00    	jne    3665 <enter_from_user_mode+0xe5>
-003e     35be:	f6 87 88 00 00 00 03 	testb  $0x3,0x88(%rdi)
-0045     35c5:	0f 84 ab 00 00 00    	je     3676 <enter_from_user_mode+0xf6>
-004b     35cb:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 35d3 <enter_from_user_mode+0x53>	35cf: R_X86_64_PC32	cpu_current_top_of_stack-0x4
-0053     35d3:	48 29 e0             	sub    %rsp,%rax
-0056     35d6:	48 3d 00 40 00 00    	cmp    $0x4000,%rax
-005c     35dc:	0f 83 9d 00 00 00    	jae    367f <enter_from_user_mode+0xff>
-0062     35e2:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 35ea <enter_from_user_mode+0x6a>	35e6: R_X86_64_PC32	current_task-0x4
-006a     35ea:	b9 58 3f 00 00       	mov    $0x3f58,%ecx
-006f     35ef:	48 03 48 20          	add    0x20(%rax),%rcx
-0073     35f3:	48 39 f9             	cmp    %rdi,%rcx
-0076     35f6:	0f 85 8c 00 00 00    	jne    3688 <enter_from_user_mode+0x108>
-007c     35fc:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3603 <enter_from_user_mode+0x83>	35fe: R_X86_64_PC32	context_tracking_key-0x5
-0083     3603:	7e 36                	jle    363b <enter_from_user_mode+0xbb>
-0085     3605:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 360c <enter_from_user_mode+0x8c>	3607: R_X86_64_PC32	context_tracking_key-0x5
-008c     360c:	7e 29                	jle    3637 <enter_from_user_mode+0xb7>
-008e     360e:	65 ff 05 00 00 00 00 	incl   %gs:0x0(%rip)        # 3615 <enter_from_user_mode+0x95>	3611: R_X86_64_PC32	__preempt_count-0x4
-0095     3615:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	3618: R_X86_64_32S	context_tracking+0x8
-009c     361c:	65 48 03 05 00 00 00 00 	add    %gs:0x0(%rip),%rax        # 3624 <enter_from_user_mode+0xa4>	3620: R_X86_64_PC32	this_cpu_off-0x4
-00a4     3624:	8b 00                	mov    (%rax),%eax
-00a6     3626:	83 e0 03             	and    $0x3,%eax
-00a9     3629:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 3630 <enter_from_user_mode+0xb0>	362c: R_X86_64_PC32	__preempt_count-0x4
-00b0     3630:	74 69                	je     369b <enter_from_user_mode+0x11b>
-00b2     3632:	83 f8 02             	cmp    $0x2,%eax
-00b5     3635:	74 04                	je     363b <enter_from_user_mode+0xbb>
-00b7     3637:	90                   	nop
-00b8     3638:	0f 0b                	ud2
-00ba     363a:	90                   	nop
-00bb     363b:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3642 <enter_from_user_mode+0xc2>	363d: R_X86_64_PC32	context_tracking_key-0x5
-00c2     3642:	7e 0a                	jle    364e <enter_from_user_mode+0xce>
-00c4     3644:	bf 02 00 00 00       	mov    $0x2,%edi
-00c9     3649:	e8 00 00 00 00       	call   364e <enter_from_user_mode+0xce>	364a: R_X86_64_PLT32	__ct_user_exit-0x4
-00ce     364e:	90                   	nop
-00cf     364f:	90                   	nop
-00d0     3650:	58                   	pop    %rax
-00d1     3651:	31 c0                	xor    %eax,%eax
-00d3     3653:	31 c9                	xor    %ecx,%ecx
-00d5     3655:	31 ff                	xor    %edi,%edi
-00d7     3657:	c3                   	ret
-00d8     3658:	b9 00 44 04 00       	mov    $0x44400,%ecx
-00dd     365d:	85 c1                	test   %eax,%ecx
-00df     365f:	0f 84 59 ff ff ff    	je     35be <enter_from_user_mode+0x3e>
-00e5     3665:	90                   	nop
-00e6     3666:	0f 0b                	ud2
-00e8     3668:	90                   	nop
-00e9     3669:	f6 87 88 00 00 00 03 	testb  $0x3,0x88(%rdi)
-00f0     3670:	0f 85 55 ff ff ff    	jne    35cb <enter_from_user_mode+0x4b>
-00f6     3676:	90                   	nop
-00f7     3677:	0f 0b                	ud2
-00f9     3679:	90                   	nop
-00fa     367a:	e9 4c ff ff ff       	jmp    35cb <enter_from_user_mode+0x4b>
-00ff     367f:	90                   	nop
-0100     3680:	0f 0b                	ud2
-0102     3682:	90                   	nop
-0103     3683:	e9 5a ff ff ff       	jmp    35e2 <enter_from_user_mode+0x62>
-0108     3688:	90                   	nop
-0109     3689:	0f 0b                	ud2
-010b     368b:	90                   	nop
-010c     368c:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 3693 <enter_from_user_mode+0x113>	368e: R_X86_64_PC32	context_tracking_key-0x5
-0113     3693:	0f 8f 6c ff ff ff    	jg     3605 <enter_from_user_mode+0x85>
-0119     3699:	eb a0                	jmp    363b <enter_from_user_mode+0xbb>
-011b     369b:	e8 00 00 00 00       	call   36a0 <enter_from_user_mode+0x120>	369c: R_X86_64_PLT32	__SCT__preempt_schedule-0x4
-0120     36a0:	83 f8 02             	cmp    $0x2,%eax
-0123     36a3:	74 96                	je     363b <enter_from_user_mode+0xbb>
-0125     36a5:	eb 90                	jmp    3637 <enter_from_user_mode+0xb7>
-0127     36a7:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
+vim +1875 kernel/cpu.c
+
+  1821	
+  1822	/* Boot processor state steps */
+  1823	static struct cpuhp_step cpuhp_hp_states[] = {
+  1824		[CPUHP_OFFLINE] = {
+  1825			.name			= "offline",
+  1826			.startup.single		= NULL,
+  1827			.teardown.single	= NULL,
+  1828		},
+  1829	#ifdef CONFIG_SMP
+  1830		[CPUHP_CREATE_THREADS]= {
+  1831			.name			= "threads:prepare",
+  1832			.startup.single		= smpboot_create_threads,
+  1833			.teardown.single	= NULL,
+  1834			.cant_stop		= true,
+  1835		},
+  1836		[CPUHP_PERF_PREPARE] = {
+  1837			.name			= "perf:prepare",
+  1838			.startup.single		= perf_event_init_cpu,
+  1839			.teardown.single	= perf_event_exit_cpu,
+  1840		},
+  1841		[CPUHP_RANDOM_PREPARE] = {
+  1842			.name			= "random:prepare",
+  1843			.startup.single		= random_prepare_cpu,
+  1844			.teardown.single	= NULL,
+  1845		},
+  1846		[CPUHP_WORKQUEUE_PREP] = {
+  1847			.name			= "workqueue:prepare",
+  1848			.startup.single		= workqueue_prepare_cpu,
+  1849			.teardown.single	= NULL,
+  1850		},
+  1851		[CPUHP_HRTIMERS_PREPARE] = {
+  1852			.name			= "hrtimers:prepare",
+  1853			.startup.single		= hrtimers_prepare_cpu,
+  1854			.teardown.single	= hrtimers_dead_cpu,
+  1855		},
+  1856		[CPUHP_SMPCFD_PREPARE] = {
+  1857			.name			= "smpcfd:prepare",
+  1858			.startup.single		= smpcfd_prepare_cpu,
+  1859			.teardown.single	= smpcfd_dead_cpu,
+  1860		},
+  1861		[CPUHP_RELAY_PREPARE] = {
+  1862			.name			= "relay:prepare",
+  1863			.startup.single		= relay_prepare_cpu,
+  1864			.teardown.single	= NULL,
+  1865		},
+  1866		[CPUHP_SLAB_PREPARE] = {
+  1867			.name			= "slab:prepare",
+  1868			.startup.single		= slab_prepare_cpu,
+  1869			.teardown.single	= slab_dead_cpu,
+  1870		},
+  1871		[CPUHP_RCUTREE_PREP] = {
+  1872			.name			= "RCU/tree:prepare",
+  1873			.startup.single		= rcutree_prepare_cpu,
+  1874			.teardown.single	= rcutree_dead_cpu,
+> 1875			.support_kexec_parallel	= true,
+  1876		},
+  1877		/*
+  1878		 * On the tear-down path, timers_dead_cpu() must be invoked
+  1879		 * before blk_mq_queue_reinit_notify() from notify_dead(),
+  1880		 * otherwise a RCU stall occurs.
+  1881		 */
+  1882		[CPUHP_TIMERS_PREPARE] = {
+  1883			.name			= "timers:prepare",
+  1884			.startup.single		= timers_prepare_cpu,
+  1885			.teardown.single	= timers_dead_cpu,
+  1886		},
+  1887		/* Kicks the plugged cpu into life */
+  1888		[CPUHP_BRINGUP_CPU] = {
+  1889			.name			= "cpu:bringup",
+  1890			.startup.single		= bringup_cpu,
+  1891			.teardown.single	= finish_cpu,
+  1892			.cant_stop		= true,
+  1893		},
+  1894		/* Final state before CPU kills itself */
+  1895		[CPUHP_AP_IDLE_DEAD] = {
+  1896			.name			= "idle:dead",
+  1897		},
+  1898		/*
+  1899		 * Last state before CPU enters the idle loop to die. Transient state
+  1900		 * for synchronization.
+  1901		 */
+  1902		[CPUHP_AP_OFFLINE] = {
+  1903			.name			= "ap:offline",
+  1904			.cant_stop		= true,
+  1905		},
+  1906		/* First state is scheduler control. Interrupts are disabled */
+  1907		[CPUHP_AP_SCHED_STARTING] = {
+  1908			.name			= "sched:starting",
+  1909			.startup.single		= sched_cpu_starting,
+  1910			.teardown.single	= sched_cpu_dying,
+  1911		},
+  1912		[CPUHP_AP_RCUTREE_DYING] = {
+  1913			.name			= "RCU/tree:dying",
+  1914			.startup.single		= NULL,
+  1915			.teardown.single	= rcutree_dying_cpu,
+  1916		},
+  1917		[CPUHP_AP_SMPCFD_DYING] = {
+  1918			.name			= "smpcfd:dying",
+  1919			.startup.single		= NULL,
+  1920			.teardown.single	= smpcfd_dying_cpu,
+  1921		},
+  1922		/* Entry state on starting. Interrupts enabled from here on. Transient
+  1923		 * state for synchronsization */
+  1924		[CPUHP_AP_ONLINE] = {
+  1925			.name			= "ap:online",
+  1926		},
+  1927		/*
+  1928		 * Handled on control processor until the plugged processor manages
+  1929		 * this itself.
+  1930		 */
+  1931		[CPUHP_TEARDOWN_CPU] = {
+  1932			.name			= "cpu:teardown",
+  1933			.startup.single		= NULL,
+  1934			.teardown.single	= takedown_cpu,
+  1935			.cant_stop		= true,
+  1936		},
+  1937	
+  1938		[CPUHP_AP_SCHED_WAIT_EMPTY] = {
+  1939			.name			= "sched:waitempty",
+  1940			.startup.single		= NULL,
+  1941			.teardown.single	= sched_cpu_wait_empty,
+  1942		},
+  1943	
+  1944		/* Handle smpboot threads park/unpark */
+  1945		[CPUHP_AP_SMPBOOT_THREADS] = {
+  1946			.name			= "smpboot/threads:online",
+  1947			.startup.single		= smpboot_unpark_threads,
+  1948			.teardown.single	= smpboot_park_threads,
+  1949		},
+  1950		[CPUHP_AP_IRQ_AFFINITY_ONLINE] = {
+  1951			.name			= "irq/affinity:online",
+  1952			.startup.single		= irq_affinity_online_cpu,
+  1953			.teardown.single	= NULL,
+  1954		},
+  1955		[CPUHP_AP_PERF_ONLINE] = {
+  1956			.name			= "perf:online",
+  1957			.startup.single		= perf_event_init_cpu,
+  1958			.teardown.single	= perf_event_exit_cpu,
+  1959		},
+  1960		[CPUHP_AP_WATCHDOG_ONLINE] = {
+  1961			.name			= "lockup_detector:online",
+  1962			.startup.single		= lockup_detector_online_cpu,
+  1963			.teardown.single	= lockup_detector_offline_cpu,
+  1964		},
+  1965		[CPUHP_AP_WORKQUEUE_ONLINE] = {
+  1966			.name			= "workqueue:online",
+  1967			.startup.single		= workqueue_online_cpu,
+  1968			.teardown.single	= workqueue_offline_cpu,
+  1969		},
+  1970		[CPUHP_AP_RANDOM_ONLINE] = {
+  1971			.name			= "random:online",
+  1972			.startup.single		= random_online_cpu,
+  1973			.teardown.single	= NULL,
+  1974		},
+  1975		[CPUHP_AP_RCUTREE_ONLINE] = {
+  1976			.name			= "RCU/tree:online",
+  1977			.startup.single		= rcutree_online_cpu,
+  1978			.teardown.single	= rcutree_offline_cpu,
+  1979		},
+  1980	#endif
+  1981		/*
+  1982		 * The dynamically registered state space is here
+  1983		 */
+  1984	
 
 -- 
 0-DAY CI Kernel Test Service
