@@ -1,106 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3051F64D;
-	Mon, 22 Aug 2022 18:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378F9C433D6;
-	Mon, 22 Aug 2022 18:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E73E320F
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 18:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EBE0C433C1;
+	Mon, 22 Aug 2022 18:32:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661193068;
-	bh=xXLp8vcpSHFXcg8Thw4aqS7oAXd1A4ff7T8kKAEapI8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BJqqyAHDoivLbBiMTx6xaDsVTE0XnbDmqovaLOU1mOvJ22j85rhVQgGVWxN7+bozo
-	 b9izsqjngBTe+tmQYon6HJMNUsEOZDAbKq9HdQuJrcyJM9XjFKFwEMHnx4ftqrT9fn
-	 hnTp7UCjOyu68bd1yjnrXAab0XBDOjohSaGNC9N0DbXP5wue/CK21Bw/hu/Eww5neC
-	 scniUIrRbM6wIdtvmTHIDNApbUBu1lMxpFYKzGOi+CseTrV46rjCcbrxsP49tG7mpm
-	 wUBm/GCHACYjoerh1kXVKVtv0pkmmWe2kWp9O/Zwipx4PdM404UcGvH27nhci/CCBz
-	 YJKw1xxP7Nd4Q==
+	s=k20201202; t=1661193123;
+	bh=gfZjPJT5G7lpjIu/0Jy28SoaFgeZIqpxf0POXqDEnMQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V7UOEFled3s96Est+17agM3GtQ6UvjepLkC8J4vcoBFlVFLEU/vF1CCXXIJTxb2aa
+	 s5ZiGbhY9yzE6XqyuTX8vZbpd0+xE1hubC7trUqz5Dz6UbCGzw6wFWn4k6xAXH6sQ9
+	 hFRgwGjcJ+gCg28wDCKYyDt5Qz2RX35oFlOYNjeRRG/I+ilCSEVqYMFHVzl6O0U81E
+	 YBGu9yeH+3wRhgj6ALfl0NkAOy6lPF+w71RbBBe91doRY+BTi8ZNl1Nz1Ac4YKJF2i
+	 x6nFfnPmb8QfrgcLvoUFOrW4VUv5c3vRjfwCRGhOzVdgjFucHliXFhap+VcfAYgs72
+	 Vi5NKaGikPFbg==
+Date: Mon, 22 Aug 2022 11:32:01 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matt Flax <flatmax@flatmax.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Subject: [PATCH] ASoC: codes: src4xxx: Avoid clang -Wsometimes-uninitialized in src4xxx_hw_params()
-Date: Mon, 22 Aug 2022 11:31:01 -0700
-Message-Id: <20220822183101.1115095-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.2
+To: Mark Brown <broonie@kernel.org>
+Cc: Matt Flax <flatmax@flatmax.com>, kernel test robot <lkp@intel.com>,
+	alsa-devel@alsa-project.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Message-ID: <YwPLoSWuYzsJ6Bhp@dev-arch.thelio-3990X>
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
+ <202208090909.Pg0BZGie-lkp@intel.com>
+ <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+ <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
+ <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
+ <YwPGQZHs1o0jsv2m@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YwPGQZHs1o0jsv2m@sirena.org.uk>
 
-Clang warns:
+On Mon, Aug 22, 2022 at 07:09:05PM +0100, Mark Brown wrote:
+> On Wed, Aug 17, 2022 at 08:45:51AM -0700, Nathan Chancellor wrote:
+> > On Wed, Aug 17, 2022 at 03:44:33PM +1000, Matt Flax wrote:
+> > > On 17/8/22 04:00, Nathan Chancellor wrote:
+> 
+> > > > In the final commit, there is a 'break' here. Should it be a 'return 0'
+> > > > instead? Or should there be a different fix for these warnings?
+> 
+> > > The state of DIR PLL registers aren't important if the user doesn't specify
+> > > a known mclk frequency.  The implication is that the DIR will not function,
+> > > however that is already implied by the user lacking to specify a known mclk
+> > > frequency.
+> 
+> > > The other functions on the chip (port A/B I2S, SRC, DIT, etc) will behave as
+> > > per usual, only the DIR will be dysfunctional.
+> 
+> > So I suppose there is little point to all of the calls to regmap_write()
+> > and regmap_update_bits() in the default case then, meaning a 'return 0'
+> > would be appropriate? Sorry, I am having a hard time parsing what should
+> > be done about the warnings, which are fatal for allmodconfig due to
+> > CONFIG_WERROR.
+> 
+> Are either of you still looking at fixing this?
 
-  sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                  default:
-                  ^~~~~~~
-  sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
-                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
-                                                                          ^
-  sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
-          int val, pj, jd, d;
-                            ^
-                            = 0
-  sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                  default:
-                  ^~~~~~~
-  sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
-                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
-                                                                          ^~
-  sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
-          int val, pj, jd, d;
-                        ^
-                          = 0
-  sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-                  default:
-                  ^~~~~~~
-  sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
-                  ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
-                                                                          ^~
-  sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
-          int val, pj, jd, d;
-                    ^
-                      = 0
-  3 errors generated.
+I sent https://lore.kernel.org/20220822183101.1115095-1-nathan@kernel.org/.
 
-According to the comment in the default case, other parts of the chip
-are still functional without these values so just return 0 in the
-default case to avoid using these variables uninitialized.
+If that is not the right fix, I need some guidance on what it should be.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1691
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- sound/soc/codecs/src4xxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
-index a8f143057b41..cf45caa4bf7f 100644
---- a/sound/soc/codecs/src4xxx.c
-+++ b/sound/soc/codecs/src4xxx.c
-@@ -283,7 +283,7 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
- 			 */
- 			dev_info(component->dev,
- 				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
--			break;
-+			return 0;
- 		}
- 		ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
- 		if (ret < 0)
-
-base-commit: 94f072748337424c9cf92cd018532a34db3a5516
--- 
-2.37.2
-
+Cheers,
+Nathan
