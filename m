@@ -1,81 +1,92 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07534A02
-	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 18:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661191200; x=1692727200;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CPFy24F8sy/omsQamBjsDDWtFQi9GRtcPb64gkgr7Dg=;
-  b=cbpuAb7Qm3OnwiAQOphl89cgetqscSAdEKL7IYiVPIsplwwnhhNwiXyg
-   wTX9MLx2MM3RdEkotza89qxgdC+sH26gnanFxrJgNOrYoXMkBZLZpSPL1
-   VOE4PXBeraXDOmkVY0NkfQhv8KIijBPm4kn6J97XH9ha3iylts35J9JFU
-   +KOQU0XSUMnVb5abDLobOzLbGu/QKroCfYCfWp5443JANl6uYQA3MnQWI
-   fekpjSrGucxJnccre7pQ284uJ/utNePL1FpMZuaSScRRoH2/UgRApW+me
-   /k7FaDkcMsH45afFSXsYanJ0PD2fvz8vhOtRGr91RrAyIz4IuZPgygCVy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="280455557"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="280455557"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 11:00:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="751379047"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Aug 2022 10:59:58 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQBiQ-0000Y5-12;
-	Mon, 22 Aug 2022 17:59:58 +0000
-Date: Tue, 23 Aug 2022 01:59:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Subject: ld.lld: error: undefined symbol: drm_gem_fb_begin_cpu_access
-Message-ID: <202208230156.Vo2ozAm4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA24A02
+	for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 18:09:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3BEC433D7;
+	Mon, 22 Aug 2022 18:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661191751;
+	bh=9uFjr12ZJn72bY423Jrkibrsve+4lfScTWjUh9RqsRI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e0Bt+a2uu1M8rVndbEeewsHyZWzL5KYHdHqi8MfclDkvtyfyASHoUNJwZdEoohdI5
+	 Sd5gJdHnoSXBCEOeXbrmxtY6oq2syrjf3WwAYfNtkNKV/CYVXIJjDgbTf9eq/Y/rY0
+	 vIYQKx38AhJBm6yd1Php5fcdUHwqnPB+D7WQnxyGsqeqaQzEc1S4aAvv/wu4G1/pRz
+	 c1gN5Y63VU+zlFjvkxD6xJUh+/Y8F8PKjYbZBxoT/AjCJbTvhfaetP6rLCoOX8UVG8
+	 8bdtY+C/VAlGqcUKyHl+UQ3SXcRpeKicdX9YHU9bky4xoUut+u6YSKBaxNAQm0nRix
+	 OJ53yJHtLY63A==
+Date: Mon, 22 Aug 2022 19:09:05 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Matt Flax <flatmax@flatmax.com>, kernel test robot <lkp@intel.com>,
+	alsa-devel@alsa-project.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org
+Subject: Re: [PATCH v2] ASoC: codecs: add uspport for the TI SRC4392 codec
+Message-ID: <YwPGQZHs1o0jsv2m@sirena.org.uk>
+References: <20220808214028.2502801-1-flatmax@flatmax.com>
+ <202208090909.Pg0BZGie-lkp@intel.com>
+ <YvvbKry5FVFbNdcI@dev-arch.thelio-3990X>
+ <f8439531-897a-c25a-688b-be01290b006d@flatmax.com>
+ <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6vU7YlowxUaBWkHl"
 Content-Disposition: inline
+In-Reply-To: <Yv0NLxzwqdBaZ3Jf@dev-arch.thelio-3990X>
+X-Cookie: Do not write in this space.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-commit: 08971eea06db3377ea1f9ff4f95a5df5f6c9aeb7 drm/mipi-dbi: Use framebuffer dma-buf helpers
-date:   1 year, 1 month ago
-config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230156.Vo2ozAm4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08971eea06db3377ea1f9ff4f95a5df5f6c9aeb7
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 08971eea06db3377ea1f9ff4f95a5df5f6c9aeb7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--6vU7YlowxUaBWkHl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+On Wed, Aug 17, 2022 at 08:45:51AM -0700, Nathan Chancellor wrote:
+> On Wed, Aug 17, 2022 at 03:44:33PM +1000, Matt Flax wrote:
+> > On 17/8/22 04:00, Nathan Chancellor wrote:
 
->> ld.lld: error: undefined symbol: drm_gem_fb_begin_cpu_access
-   >>> referenced by drm_mipi_dbi.c:207 (drivers/gpu/drm/drm_mipi_dbi.c:207)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_gem_fb_end_cpu_access
-   >>> referenced by drm_mipi_dbi.c:227 (drivers/gpu/drm/drm_mipi_dbi.c:227)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> > > In the final commit, there is a 'break' here. Should it be a 'return =
+0'
+> > > instead? Or should there be a different fix for these warnings?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > The state of DIR PLL registers aren't important if the user doesn't spe=
+cify
+> > a known mclk frequency.=A0 The implication is that the DIR will not fun=
+ction,
+> > however that is already implied by the user lacking to specify a known =
+mclk
+> > frequency.
+
+> > The other functions on the chip (port A/B I2S, SRC, DIT, etc) will beha=
+ve as
+> > per usual, only the DIR will be dysfunctional.
+
+> So I suppose there is little point to all of the calls to regmap_write()
+> and regmap_update_bits() in the default case then, meaning a 'return 0'
+> would be appropriate? Sorry, I am having a hard time parsing what should
+> be done about the warnings, which are fatal for allmodconfig due to
+> CONFIG_WERROR.
+
+Are either of you still looking at fixing this?
+
+--6vU7YlowxUaBWkHl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDxkAACgkQJNaLcl1U
+h9C73wf/RgzOmsSZTp0Dl2xyhY28TyLQJ3Prc306CZBASMpf/slGe7F+A6tTJU1N
+lFmnFIRhJYOS3NwqDrOZhJrB10MondVH4DKMjjmjZRlcPZPUo/nIU3EFQqYYm1R/
+VtXqOnXEgjbke8d8YI4En+2RoX0WerlLXnANA8YsRpDCCDt2fj/tCKoZeWVx7UsE
+65mnCelZqCDszFoUZJUor7BO8uzJPlxFSqnl8rT+iqYBfpwa9CmExw5CwmYTPuUu
+Gqx7nJdlkaHKgc/XXPPiyNO/79vQYgAWhpxXg3vHkmv6KDOBEbe5VSXXujAyHvn9
+VQryX9/4cKi+z/EzMSZW0oiUew0hdg==
+=enod
+-----END PGP SIGNATURE-----
+
+--6vU7YlowxUaBWkHl--
