@@ -1,109 +1,219 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F257B
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 10:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661249215; x=1692785215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=40xYcxGbAaCY2yU3+PNRKX05WeMt3NF3HpgfT7YSQ8g=;
-  b=D9kgBLiPmt4LuWpHF+z1K/d3tWUHHPifX7VLWJdh5jb4YLaddWGpRkVU
-   ttYdxwz3iS4Q3SRgLq4aHl55qLQWs31Oh1zl2LzmDVCxhSfhKNXL8JR3E
-   bBdBXMvjktiBsmHqanAWyOZlDfayRcp8J15ckoJNHlaC1CldY0bm+5j9w
-   z/ormFlEZr3/Un235wdI0pHFYONbzA76P0ccqy6+ihWRhCvEwR6H/+p/C
-   Uam1OMafzXTXbjt6H7YjU5UqqAaJzhIK0sKfllKwSfr22rsr8pcCyNocf
-   J01q0xor05ad6CBocLlX9lJxBBdOgYVVR1uC59H2fVCosG9fwKm1JRxj+
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294929284"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="294929284"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 03:06:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="560103695"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 03:06:53 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQQo3-00008B-1G;
-	Tue, 23 Aug 2022 10:06:47 +0000
-Date: Tue, 23 Aug 2022 18:06:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christian Brauner <brauner@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, linux-kernel@vger.kernel.org,
-	syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com,
-	Ayushman Dutta <ayudutta@amazon.com>
-Subject: Re: [PATCH v2] seccomp: Move copy_seccomp() to no failure path.
-Message-ID: <202208231731.jLa4KypR-lkp@intel.com>
-References: <20220823004806.38681-1-kuniyu@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769357B
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 10:20:53 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so7475706wms.0
+        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 03:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=6B2aaE05A19n1QO6TV80aKcnYR+rV1SXKdzbvIzbg4g=;
+        b=bLwUshR/KjjpH4/M3KjtV2uBz2zBwVDBfJbT8OMDXEi28JH9ev8nDErPAUzw6MCuKQ
+         8XCdE5RF//bResXNcpor8urzvQAewr8Qw4yE8f3lOiw3j0qGlJ2RWiuICSGvzYQ2sqPq
+         Pp+X7m7OTnsindTQcXlzP/kZ2sePM7umzfpwB3uWscvCz6sY0CkL67Hkd8Fe0AkjqUwC
+         ueFa6YLybLL7F+tHigREto25Nlx8GPI73fGaF8znQ+OHSm4DquSpo4qzMxhJMaeQCSxT
+         9DO/e7GFNuqG7XZKPPmxsiS/kMzTYJij6f3P3eh17kK6XtKLaAyHXSBXfw9yTdp+hfKB
+         cBPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=6B2aaE05A19n1QO6TV80aKcnYR+rV1SXKdzbvIzbg4g=;
+        b=gBaWqYTJea4Oe9OJSOS9rdZB5RG9K5JcguatHwMBRgjseWGkuxvS8TjGBaK2DIYZ3S
+         abmksaIyWEJ8Wa0DVLyfuWFDLyxrWwnkbH/qZZgLez9SngCzFw8yFaB1m5UDB5zpQnQJ
+         AKZPR6xzdc5/GXtXGdx4oXSxLOn/0sh2dyBN5vgpTvRNi+SNljstu8oyImO05OUr4pYh
+         3hkpeyJwXaHdWMugmCdAEjFJigCIPExGFhWwsDMCEgIdBLr+aKKc8kR0KgLkT8gQPVe7
+         2ecnfOAG5qTwbTXR4Ou0p/0WvdOKDlkH5IyVboghoOk5lL7bxNXukwYkd+1hRGKnC0Pw
+         VbLg==
+X-Gm-Message-State: ACgBeo2AYf0JGgqaYFVGMn4ttyX2aS0aPf7+HBn2EfxsDR2cBTRWBelG
+	9w+1kT4m/80hAGsqTPhp1x0=
+X-Google-Smtp-Source: AA6agR5QGCmY2+lpv3pmfgjOGB+SAsuaFxjHbidzi3vOftokbwnF4eT1UErnSpCGR87umteRm5QVRQ==
+X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id i4-20020a1c3b04000000b003a5487c6240mr1715787wma.152.1661250051576;
+        Tue, 23 Aug 2022 03:20:51 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1cf406000000b003a2f2bb72d5sm24302590wma.45.2022.08.23.03.20.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 03:20:50 -0700 (PDT)
+Message-ID: <44c86ad9-8158-0a8a-ce31-a995c8d10e0b@gmail.com>
+Date: Tue, 23 Aug 2022 12:20:48 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823004806.38681-1-kuniyu@amazon.com>
-
-Hi Kuniyuki,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc2 next-20220823]
-[cannot apply to kees/for-next/pstore]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/seccomp-Move-copy_seccomp-to-no-failure-path/20220823-085102
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 072e51356cd5a4a1c12c1020bc054c99b98333df
-config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220823/202208231731.jLa4KypR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f5034318d40caefe1d5445e4ae3db7b632010bb8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuniyuki-Iwashima/seccomp-Move-copy_seccomp-to-no-failure-path/20220823-085102
-        git checkout f5034318d40caefe1d5445e4ae3db7b632010bb8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/fork.c:540:28: error: no member named 'filter' in 'struct seccomp'
-           WARN_ON_ONCE(tsk->seccomp.filter);
-                        ~~~~~~~~~~~~ ^
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON_ONCE'
-           int __ret_warn_on = !!(condition);                      \
-                                  ^~~~~~~~~
-   1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v26 07/10] soc: mediatek: mmsys: add mmsys for support 64
+ reset bits
+Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux@roeck-us.net, nfraprado@collabora.com
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220819061011.7672-1-nancy.lin@mediatek.com>
+ <20220819061011.7672-8-nancy.lin@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220819061011.7672-8-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +540 kernel/fork.c
 
-   537	
-   538	void free_task(struct task_struct *tsk)
-   539	{
- > 540		WARN_ON_ONCE(tsk->seccomp.filter);
-   541		release_user_cpus_ptr(tsk);
-   542		scs_release(tsk);
-   543	
+On 19/08/2022 08:10, Nancy.Lin wrote:
+> Add mmsys for support 64 reset bits. It is a preparation for MT8195
+> vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset bits.
+> 
+> 1. Add the number of reset bits in mmsys private data
+> 2. move the whole "reset register code section" behind the
+> "get mmsys->data" code section for getting the num_resets in mmsys->data.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mtk-mmsys.c | 40 +++++++++++++++++++++-----------
+>   drivers/soc/mediatek/mtk-mmsys.h |  1 +
+>   2 files changed, 27 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index 999be064103b..20ae751ad8a7 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -20,6 +20,8 @@
+>   #include "mt8195-mmsys.h"
+>   #include "mt8365-mmsys.h"
+>   
+> +#define MMSYS_SW_RESET_PER_REG 32
+> +
+>   static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
+>   	.clk_driver = "clk-mt2701-mm",
+>   	.routes = mmsys_default_routing_table,
+> @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
+>   	.routes = mmsys_default_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+>   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
+> @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+>   	.routes = mmsys_mt8183_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+>   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
+> @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
+>   	.routes = mmsys_mt8186_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+>   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data = {
+> @@ -128,6 +133,7 @@ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
+>   	.routes = mmsys_mt8192_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
+>   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+You didn't reply to Nicolas regarding the reset numbers. I actually agree with 
+him that we will need the num_resets declared for all devices. Why do you think 
+this is not the case?
+
+Regards,
+Matthias
+
+
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8192_mmsys_match_data = {
+> @@ -288,13 +294,19 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
+>   {
+>   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
+>   	unsigned long flags;
+> +	u32 offset;
+> +	u32 reg;
+> +
+> +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
+> +	id = id % MMSYS_SW_RESET_PER_REG;
+> +	reg = mmsys->data->sw0_rst_offset + offset;
+>   
+>   	spin_lock_irqsave(&mmsys->lock, flags);
+>   
+>   	if (assert)
+> -		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0, NULL);
+> +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), 0, NULL);
+>   	else
+> -		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id), NULL);
+> +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), BIT(id), NULL);
+>   
+>   	spin_unlock_irqrestore(&mmsys->lock, flags);
+>   
+> @@ -351,18 +363,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> -	spin_lock_init(&mmsys->lock);
+> -
+> -	mmsys->rcdev.owner = THIS_MODULE;
+> -	mmsys->rcdev.nr_resets = 32;
+> -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> -	mmsys->rcdev.of_node = pdev->dev.of_node;
+> -	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
+> -		return ret;
+> -	}
+> -
+>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>   	if (!res) {
+>   		dev_err(dev, "Couldn't get mmsys resource\n");
+> @@ -384,6 +384,18 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+>   		mmsys->data = match_data->drv_data[0];
+>   	}
+>   
+> +	spin_lock_init(&mmsys->lock);
+> +
+> +	mmsys->rcdev.owner = THIS_MODULE;
+> +	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
+> +	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> +	mmsys->rcdev.of_node = pdev->dev.of_node;
+> +	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+>   	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
+>   	if (ret)
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
+> index f01ba206481d..20a271b80b3b 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.h
+> +++ b/drivers/soc/mediatek/mtk-mmsys.h
+> @@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
+>   	const struct mtk_mmsys_routes *routes;
+>   	const unsigned int num_routes;
+>   	const u16 sw0_rst_offset;
+> +	const u32 num_resets;
+>   };
+>   
+>   struct mtk_mmsys_match_data {
