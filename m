@@ -1,176 +1,88 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA873A3B
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 06:59:28 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id e84-20020a6bb557000000b00689b576890aso3369839iof.14
-        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 23:59:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=29V1kxVUW3EwQRaqzTQ6JyEXfaDjKQkAV8eYjg4pbH0=;
-        b=XzY1YxnnDeTAN1sxyvBtbL5wPQRGwbu+rMSmDegYntu/HOkmKdpRbJ5QQV/WB8uTil
-         Kk4Xfw37rFY9ujDRf6U9GKy+RH96lSa1afW98zI+N5puA8HaelLZQwXiszLhiMvEbOsF
-         mSkqeBTP7W99GOT33nXG1DdHuaWygMdk4EsWEMpE3rDSTG/iP0o7u9MYJCMbYd/zHb3d
-         d8xvakAI4Gdw+/C5JIFhNfv8gFKOQASnSI3QnuyW2grODApjuzouXz6a3QopJSzmz4Up
-         GmMWuTYk+2UFCUaYh+7M+IbDoHvQJu8K8p+U5gqwptxoLvCOLU+/2j/xCFVKfSN6BZFj
-         HRbQ==
-X-Gm-Message-State: ACgBeo1Yoe8MQAKfELzZWzl922uhFtPoB+brMCCT+RGNCV2Ied7WNTns
-	0uqiwon1AvZR2h2f1miF+EBpiePnmJJNda+QcZwi6l7jdnYr
-X-Google-Smtp-Source: AA6agR6SSfDZQSDLeDvPmJDFgTvyl5pTtyWjSq9EkDJMEiQjLoF1JUUQ7BRr0sEjXBEZnsBE+e3LHxxY9lSBYaVLmvsD10vvIdsF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA2BA3B
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 07:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661238089; x=1692774089;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aZypyCjFzyTXB8yyU6iCIEXYn2kcxBHcOlnvkN2wxx4=;
+  b=eSc3+ILwgq4DOioKBuTN2CtEf7+/HtHvn77kZymFm2DAqfYsAVfmnKOD
+   HN6loQgUeBHAr6I0iGH54YCkvmRz7i9cTspSh3DsfN8UXVRN61XRI6mwH
+   sUpNFQJG00cVYX1jPp0WsPSyxwMbACK26/V8IFj9AOhPUNm+i7+g0heFk
+   G5zL0M9UQ0hsByzNhpL4bAwP5bnwmripKZbwc/ykDTh863P1A9xA7u+/6
+   bkN1iV0U50QfICtkc5pQ36h0q/147h4r2CLubL9s3WTPQImVHZvPaO/rF
+   y6j+xSthSSBX6mizAODi+q5BPWad4TzSJP8Z9yn7XV7DkpdD/uphTElws
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="319650028"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="319650028"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:01:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="735383095"
+Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Aug 2022 00:01:17 -0700
+Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQNuW-00009t-2k;
+	Tue, 23 Aug 2022 07:01:16 +0000
+Date: Tue, 23 Aug 2022 15:00:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 49/314]
+ usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized
+ type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU
+ extension
+Message-ID: <202208231439.fY8AdaYo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:1d09:0:b0:33b:a8cc:17d3 with SMTP id
- 9-20020a021d09000000b0033ba8cc17d3mr10741726jaj.25.1661237967928; Mon, 22 Aug
- 2022 23:59:27 -0700 (PDT)
-Date: Mon, 22 Aug 2022 23:59:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f745de05e6e31a3f@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in __access_remote_vm
-From: syzbot <syzbot+35b87c668935bb55e666@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, 
-	clang-built-linux@googlegroups.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   552dd80c48f67ca01bcdd10667e0c11efd375177
+commit: 1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673 [49/314] KVM: TDX: initialize VM with TDX specific parameters
+config: i386-randconfig-r031-20220822 (https://download.01.org/0day-ci/archive/20220823/202208231439.fY8AdaYo-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=144f3023080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=35b87c668935bb55e666
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a5c1f3080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e9ce85080000
+All warnings (new ones prefixed by >>):
 
-The issue was bisected to:
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/kvm.h:15:
+>> usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
 
-commit 6e5be40d32fb1907285277c02e74493ed43d77fe
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Fri Aug 13 14:21:30 2021 +0000
-
-    fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=112f1867080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=132f1867080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=152f1867080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+35b87c668935bb55e666@syzkaller.appspotmail.com
-Fixes: 6e5be40d32fb ("fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile")
-
-loop0: detected capacity change from 0 to 64
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:675:13
-shift exponent -247 is negative
-CPU: 0 PID: 3617 Comm: syz-executor807 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1521
-in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 3617, name: syz-executor807
-preempt_count: 0, expected: 0
-RCU nest depth: 0, expected: 0
-1 lock held by syz-executor807/3617:
- #0: ffff888022d380e0 (&type->s_umount_key#41/1){+.+.}-{3:3}, at: alloc_super+0x22e/0xb60 fs/super.c:228
-irq event stamp: 4810
-hardirqs last  enabled at (4809): [<ffffffff816199ce>] __up_console_sem+0xae/0xc0 kernel/printk/printk.c:264
-hardirqs last disabled at (4810): [<ffffffff894c1738>] dump_stack_lvl+0x2e/0x134 lib/dump_stack.c:139
-softirqs last  enabled at (4804): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last  enabled at (4804): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-softirqs last disabled at (4789): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (4789): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-CPU: 0 PID: 3617 Comm: syz-executor807 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-syz-executor807[3617] cmdline: ./syz-executor807082514
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
- down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
- mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
- __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
- get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
- get_mm_cmdline fs/proc/base.c:367 [inline]
- get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
- dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
- dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
- dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
- __dump_stack lib/dump_stack.c:121 [inline]
- dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- parse_ntfs_boot_sector fs/ntfs/super.c:915 [inline]
- ntfs_fill_super.cold+0x147/0x56c fs/ntfs/super.c:2792
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcec358610a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5a5afbf8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd5a5afc50 RCX: 00007fcec358610a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd5a5afc10
-RBP: 00007ffd5a5afc10 R08: 00007ffd5a5afc50 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000230
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000002
- </TASK>
-syz-executor807[3617] cmdline: ./syz-executor807082514
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- parse_ntfs_boot_sector fs/ntfs/super.c:915 [inline]
- ntfs_fill_super.cold+0x147/0x56c fs/ntfs/super.c:2792
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcec358610a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5a5afbf8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd5a5afc50 RCX: 00007fcec358610a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd5a5afc10
-RBP: 00007ffd5a5afc10 R08: 00007ffd5a5afc50 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000230
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000002
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
