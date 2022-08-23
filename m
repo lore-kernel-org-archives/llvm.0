@@ -1,95 +1,93 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9A15CA0
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 19:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661281750; x=1692817750;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=/d8mJECyJUV7osUGtRSzQ8fOp0Bw7oe/6CK+8x1En1E=;
-  b=jci9xP85+ysVTn8062IPU8MxsIG1bmIOLokWtf3RKDqJo6xfW7LZ8k+0
-   Z2xXiCdOtKNOMtAuzymbF9z+ICQgzrsP+JUkeivV+LRSpNXnPilXV2PSJ
-   9iVacmyJytMze0zN68sKuI7eYC0e13vMO1zmXU8Dk1p2hi3R1JWSnTP+C
-   Hb/wgK2GyY04LFc+2GrQgzx6baNbqsA47Ht8/9O3yusN5LY+2N6AyiVLL
-   TUukvaHpnyI8Aq6YhYc3N1Qtg6NWRyu+a7WDJHvR+sSwEfzlgL4i/xdu/
-   qZ+qW/nqugA0P/9Sk2q3vZxsoiAHqOjeYT/MtLa8rrs5nYvDPutVSt58l
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="294562671"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="294562671"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 12:09:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="677741092"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2022 12:09:00 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQZGm-0000Rr-0I;
-	Tue, 23 Aug 2022 19:09:00 +0000
-Date: Wed, 24 Aug 2022 03:08:23 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: error: unknown target CPU 'loongson2e'
-Message-ID: <202208240250.I5yHeMRQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99307A3D
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 20:31:32 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3375488624aso380598957b3.3
+        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 13:31:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=FvOQiT0TsbXNUArqe4thB3SqDZo6X/Lj2phpd0Hb6sc=;
+        b=AjKVd9ZLRU3+b86AZi7MZO3al75Dwc9CyGq2grlrbKT9OnQm9Zszg2i/8QKidFrf1d
+         QnOwGGs5UISGtQQna2EgZv8iKDDNnaavqXAjZpj1bEQ/JWZnRsDHyrgGWi2LrycgMUVv
+         DXEkidWer0OahGqDVXgqq3MZOavkRXAxDw4D4ff79a+fFGz5i7W1Gy9cepHa72fxLhFM
+         7rFnYphn1EZLS3zD9v0CjYexc/vo7Y83EfXr9LmFPGq+sRm0vy37E3cGpxKHCRMlGLNs
+         PEGB8VtodIAjDiSIYZVWW6lj5bZeXppnw2k1L+zbX8dyK7sC9WW4HR1werSeT5ZP4g2r
+         9jXg==
+X-Gm-Message-State: ACgBeo1v8FhfSjH5fP4NovkaC+aFYByU3AqIbYzUWCCOlo4w0EZwDxjy
+	mlbPFaaYD86EmHYvD6oIPrS8PcJzSsbtPGw0itM=
+X-Google-Smtp-Source: AA6agR6q56i0cQRjgvbMl29HdVBJzNz3wM0i/Vh6AJG7KbArhisaujcGwstd41SPk7iZmpWjD50jFAxmXzZlQ2jes1o=
+X-Received: by 2002:a25:7455:0:b0:68e:e73f:5fd5 with SMTP id
+ p82-20020a257455000000b0068ee73f5fd5mr24329275ybc.20.1661286691491; Tue, 23
+ Aug 2022 13:31:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
+ <YwT+5GGCOKoTjfQZ@zn.tnic> <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
+ <YwUR35I7+5JbLvMM@zn.tnic>
+In-Reply-To: <YwUR35I7+5JbLvMM@zn.tnic>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Wed, 24 Aug 2022 05:31:20 +0900
+Message-ID: <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-CC: linux-kernel@vger.kernel.org
-TO: Nathan Chancellor <nathan@kernel.org>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Wed. 24 Aug. 2022 at 02:43, Borislav Petkov <bp@alien8.de> wrote:
+> On Tue, Aug 23, 2022 at 10:12:17AM -0700, Nick Desaulniers wrote:
+> > Callers of these need to guard against zero input, as the pre-existing
+> > comment notes:
+> >
+> > >> Undefined if no bit exists, so code should check against 0 first.
 
-Hi Nathan,
+If the fact that __ffs(0) is undefined is a concern, I can add a safety net:
 
-FYI, the error/warning still remains.
+  #define __ffs(word) \
+          (__builtin_constant_p(word) ? \
+                  (unsigned long)__builtin_ctzl(word) +
+BUILD_BUG_ON_ZERO(word): \
+                  variable___ffs(word))
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   072e51356cd5a4a1c12c1020bc054c99b98333df
-commit: 13ceb48bc19c563e05f407e663aaa4105fdfd408 MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
-date:   9 months ago
-config: mips-buildonly-randconfig-r006-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240250.I5yHeMRQ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13ceb48bc19c563e05f407e663aaa4105fdfd408
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13ceb48bc19c563e05f407e663aaa4105fdfd408
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+It will only catch the constant expression but still better than
+nothing (this comment also applies to the other functions undefined
+when the argument is zero).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Also, if this aspect was unclear, I can add a comment in the commit
+log to explain.
 
-All errors (new ones prefixed by >>):
+> This is just silly.
+>
+> And then there's
+>
+>  * ffs(value) returns 0 if value is 0 or the position of the first
+>  * set bit if value is nonzero. The first (least significant) bit
+>  * is at position 1.
+>  */
+> static __always_inline int ffs(int x)
+>
+> Can we unify the two and move the guard against 0 inside the function
+> or, like ffs() does, have it return 0 if value is 0?
 
-   clang-16: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
->> error: unknown target CPU 'loongson2e'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> error: unknown target CPU 'loongson2e'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target 'missing-syscalls' not remade because of errors.
-   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+There is an index issue. __ffs() starts at 0 but ffs() starts at one.
+i.e.: __ffs(0x01) is 0 but ffs(0x01) is 1.
+Aside from the zero edge case, ffs(x) equals __ffs(x) + 1. This
+explains why __fss(0) is undefined.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+Yours sincerely,
+Vincent Mailhol
