@@ -1,119 +1,91 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DB9A3D
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 06:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661235014; x=1692771014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NoZ36EAx5ccntdaDWrxrTT7Iigt1WKbWdoZsQR0GDG8=;
-  b=Ciz+dbk4ZXGySffWzqtxKbpi1HfMD6iGlFc+0hF0Nn7DaITgkMnVfVA9
-   IAJgjbNV0r5qXJR8RCuYrVQHQh3aO/gZqmEe48PWC+gTX+afIxtGfOgLo
-   lBJdMhtlqmKo3PUVaAERZBoaF6koCf9/5rDXRJN3DYtFGvDbppi8QyW11
-   3FvpLLBew/rkcLgWr1wtMljuMDbxEY5SIU5f4UYm4BLLlMxS8WKfMKZNj
-   aaJ7U4uRuairGGSBwuZaFTkiEup4xMsX0eW6dmyvawvlbRApPVOrBlmCI
-   6Mj1OTpGsNAMbb9Lq+4V9MWNJpJtZH3ndH50bAGM8qAnShZZ9BbJUOk6t
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273354436"
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="273354436"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 23:10:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="560037010"
-Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Aug 2022 23:10:12 -0700
-Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQN75-00005P-2n;
-	Tue, 23 Aug 2022 06:10:11 +0000
-Date: Tue, 23 Aug 2022 14:09:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:arm64/alternatives/rework 8/12]
- arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared
- function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202208231413.qMjHMepE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799E2A48
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 06:18:36 +0000 (UTC)
+Received: by mail-io1-f71.google.com with SMTP id v14-20020a6b5b0e000000b0067bc967a6c0so6816909ioh.5
+        for <llvm@lists.linux.dev>; Mon, 22 Aug 2022 23:18:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=w7IBh16YCOLSqhh2JLVcXFQTO2VKalGU5Te6z3qBSMc=;
+        b=xid+U+An4ziSb7lwr+6YcMn15TG2PMQzRMejSJDnjP5rNCphneImGkgLz1ergnudJ6
+         uucFuRCHMS2DrxOEKYRKMG751TZhuCnTCWANPsXForyrEsgZ71/OtgPdWCv2DaK1EMbY
+         DbMS9dITmS8DnZ5pvynubBh7wA3f5PPvEJDEFLPIfXuoNt4Pd5Ay53azeD0xobABQpVG
+         1RdMN5ZcQGrzGux9lD0sYqb1wARZ6JrYsLnjGHkaDRJmKu2GU0k0ZQ3V37rqlRor9/e0
+         YZdqEDT8KfEg3H+Qq0JLxk6abNa2IY1w4rUkPOd30BpGmDTLjbeFkRmxA4rbfSluyZfV
+         ABVg==
+X-Gm-Message-State: ACgBeo0L+VK/gXjaEEhD9qC5j42Nq7dKWZWfubdi9dFkhTrkhowIVT5n
+	UvXJwo9jTVfW2STt1rbIUcbUWSjvsSkFOq0m7t99WImKqZ7s
+X-Google-Smtp-Source: AA6agR6ZjVfPnVgmZjl23yXcHlr22t2DH/cVcuWLiCkH385YErK52BwMvN4Ge2U5Gj99sViQbuYqE2WhAZKQzNWxEXweKfeCQkaE
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6e02:f04:b0:2e9:be2a:5fac with SMTP id
+ x4-20020a056e020f0400b002e9be2a5facmr4268302ilj.70.1661235515559; Mon, 22 Aug
+ 2022 23:18:35 -0700 (PDT)
+Date: Mon, 22 Aug 2022 23:18:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb172905e6e28808@google.com>
+Subject: [syzbot] memory leak in ntfs_init_fs_context
+From: syzbot <syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
-head:   c6f1e900bb0e1c5932f9995feaf4acb70cf6f62e
-commit: 1696b807a602e836898825b7fff3691438b90f39 [8/12] arm64: alternative: add alternative_has_feature_*()
-config: arm64-randconfig-r026-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231413.qMjHMepE-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=1696b807a602e836898825b7fff3691438b90f39
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/alternatives/rework
-        git checkout 1696b807a602e836898825b7fff3691438b90f39
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+Hello,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    1c23f9e627a7 Linux 6.0-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16caa92d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b1831d905b683446
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d67170b20e8f94351c8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161472f3080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145f3e2d080000
 
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm64/include/asm/bug.h:26:
-   In file included from include/asm-generic/bug.h:5:
-   In file included from include/linux/compiler.h:248:
-   In file included from arch/arm64/include/asm/rwonce.h:11:
->> arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           BUILD_BUG_ON(feature >= ARM64_NCAPS);
-           ^
-   arch/arm64/include/asm/alternative-macros.h:241:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           BUILD_BUG_ON(feature >= ARM64_NCAPS);
-           ^
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:117: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1205: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
+
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff8881100918a0 (size 32):
+  comm "syz-executor151", pid 3611, jiffies 4294944949 (age 8.110s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 c0 ff c0 ff 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81b23cb2>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff81b23cb2>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff81b23cb2>] ntfs_init_fs_context+0x22/0x1e0 fs/ntfs3/super.c:1397
+    [<ffffffff81650025>] alloc_fs_context+0x225/0x3b0 fs/fs_context.c:290
+    [<ffffffff8162beb3>] do_new_mount fs/namespace.c:3025 [inline]
+    [<ffffffff8162beb3>] path_mount+0x6f3/0x10d0 fs/namespace.c:3370
+    [<ffffffff8162cfde>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8162cfde>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8162cfde>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8162cfde>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845e4855>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845e4855>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 
-vim +/BUILD_BUG_ON +224 arch/arm64/include/asm/alternative-macros.h
 
-   220	
-   221	static __always_inline bool
-   222	alternative_has_feature_likely(unsigned long feature)
-   223	{
- > 224		BUILD_BUG_ON(feature >= ARM64_NCAPS);
-   225	
-   226		asm_volatile_goto(
-   227		ALTERNATIVE("b	%l[l_no]", "nop", %[feature])
-   228		:
-   229		: [feature] "i" (feature)
-   230		:
-   231		: l_no);
-   232	
-   233		return true;
-   234	l_no:
-   235		return false;
-   236	}
-   237	
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
