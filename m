@@ -1,42 +1,37 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7905F2913
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 15:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661268855; x=1692804855;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9DNFjEnxAu6pVEZx2wee1snRS/Abn90NS3/AqHO5CN4=;
-  b=OHWuDQmmjGS80OWt+EP/viBCViLTEnPSH6fb3iiaSRXqDrMtVHSltEy1
-   Ud6U1dTkjhz09JX6vWdj5DVt0RaH4POssZEfbVUaFXf51FQjQo5lO4aNe
-   7bF0y0E1kCKvSIh0DzTG+U93kHKJRbD6QVQDQn4Cngjkpm6iFn6mFH4Vq
-   e8YfkzdpE8D1lLO6qxZWCQYgJZe35zbJ/VpAgsVDMGcFLPX8SRQaMH/y7
-   z+nvNu8slW3IBG+7bIZPAF2psHecSfjOzCTyLh+9SikpN2fL6Ye84B/EZ
-   RwbG5Idqfu8ATlZlf8LfIOMSHCCXkYdWUlLGy9Sekmi4gicCnnAAlD4c9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="295003182"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="295003182"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 08:34:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="937514517"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Aug 2022 08:33:55 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQVud-0000LH-0s;
-	Tue, 23 Aug 2022 15:33:55 +0000
-Date: Tue, 23 Aug 2022 23:33:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
- warning: unused variable 'samsung_jpeg_match'
-Message-ID: <202208232313.mMyA7Adu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4113D2913
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 15:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C33C433B5;
+	Tue, 23 Aug 2022 15:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661269157;
+	bh=EY7ffbopHvWsKpBVtYBIrPDSyaNtMo8vstLMv2RbPi8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q4cLF4ai88z/mqbFHfObkZHkx3eEi9LrgQNCu7fhOmP7r/F+1Nbz9zwGAI7WQkkJm
+	 M7mrxmZk6dSxVjdCXZCxnh3upzNpqzq8AMMlB+iXd/8UcwIYN2YyK9E2U6yKEVT70E
+	 KXaE7WVPdZKyOWP1DSMbaZxspsvmlQ0zGizbNpNDwyZ1Rd7xVxlpoIwLzfEkYi9sCQ
+	 vAmSz40YIMt3v6Z8gC1A5CyZfqg4yUWTja65AZMkdCvEJJwVsbS2sy6T1Qari0jJow
+	 TUI0EuTu5TiWchDhjT3A7bKme6PtqyolERQg1j5heVQ0PXDqZnzK7dJTo8dahQKadt
+	 Xo+9oKO4geaFQ==
+Date: Tue, 23 Aug 2022 08:39:13 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Nicolas Ferre <nicolas.ferre@microchip.com>, llvm@lists.linux.dev,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang
+ -Wbitfield-constant-conversion
+Message-ID: <YwT0oUjo/lzBDRdH@dev-arch.thelio-3990X>
+References: <20220810010809.2024482-1-nathan@kernel.org>
+ <166058059542.769843.4941839393289864947.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,72 +40,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <166058059542.769843.4941839393289864947.b4-ty@kernel.org>
 
-Hi Mauro,
+Hi Mark,
 
-First bad commit (maybe != root cause):
+On Mon, Aug 15, 2022 at 05:23:15PM +0100, Mark Brown wrote:
+> On Tue, 9 Aug 2022 18:08:09 -0700, Nathan Chancellor wrote:
+> > A recent change in clang strengthened its -Wbitfield-constant-conversion
+> > to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
+> > only be 0 or -1, not 1:
+> > 
+> >   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+> >           dev->gclk_enabled = 1;
+> >                             ^ ~
+> >   1 error generated.
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> Thanks!
+> 
+> [1/1] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+>       commit: eab9100d9898cbd37882b04415b12156f8942f18
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   072e51356cd5a4a1c12c1020bc054c99b98333df
-commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-date:   5 months ago
-config: hexagon-buildonly-randconfig-r005-20220823 (https://download.01.org/0day-ci/archive/20220823/202208232313.mMyA7Adu-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/
+I noticed that this was applied to for-6.1. I know you do not rebase or
+change your trees so this request might be rejected based on that alone
+but would it be possible to cherry-pick this to for-6.0 so that it can
+be applied to Linus's tree quicker? We have had to apply this change to
+our CI to keep our builds green in mainline, -tip, and 5.19/5.15 stable
+with clang-16 due to -Werror. If not, no worries, I should have made it
+clearer that is what I was looking for with the subject prefix.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_jpeg_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
-
-:::::: The code at line 3126 was first introduced by commit
-:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
-
-:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
