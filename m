@@ -1,376 +1,175 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AAFA3B
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 07:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661240482; x=1692776482;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eBUDp/rDp/TuKW82oc+oRAUoN3+jwli0qyESIDxf7Ps=;
-  b=L0n9EmWFOIHItFAts2KpOu5VqPfnzvbh52wcovdMfbgzDyXGe+cVsFC2
-   4Wz/XM6xbFEysNOzMrCUePrFqfUStG/KEX3NbmvoLT7DvBtEbwGJAa7rs
-   3MXE0hnsh0y3LrLhJSJ33N+w4De9AdUCz9CUHz66a4ASZuXMj7ko1icCr
-   Qyy1Nz4nvjPjYdIfHF2NryXJrGmkYqdxuxk1gMvnUbDUt1DcY3F15cmcY
-   awaR/VgaYrlZJGlH6yykcN5Ef+Ihet0Vx51ULbVxST2gqI6pAcvp4SIlZ
-   8ltO4uwIeY7n8josL/d92e7Z27fd/rjiwjrsivTDfUZLVMUNnBJrIX1eF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="280590091"
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="280590091"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:41:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="669909829"
-Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Aug 2022 00:41:19 -0700
-Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQOXG-0000Bu-2m;
-	Tue, 23 Aug 2022 07:41:18 +0000
-Date: Tue, 23 Aug 2022 15:41:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Chunming Zhou <david1.zhou@amd.com>,
-	Guenter Roeck <groeck@chromium.org>,
-	Sean Paul <seanpaul@chromium.org>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	=?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 7536/9999]
- drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int'
- but the argument has type 'u64' (aka 'unsigned long long')
-Message-ID: <202208231552.C5IkgSE2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D553CEBD
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 07:47:46 +0000 (UTC)
+Received: by mail-ed1-f45.google.com with SMTP id b16so16943429edd.4
+        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 00:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
+        b=r/ygoMH4PmOcKkRHWKGLm4IJsjvq7jQQvgR8f0yM8XfPlucwO7274qaI+UOtzXCcgi
+         +Rn5qDcqdr53GXGjAwkE1WU0NGsaCc4fIe23izlDzWN/gJib6IHg5uP+Wgzu2uz4F8zM
+         Qa+1JOclWTMrk6wFRCar84pDpAnUeCeBUHnnLzNkjm8kpBjpnUOu3r3jSrvpyUHlSWcH
+         QdPTuvHjK7KkQd4nILuQ5mupXY4PR5hz/Lq9xe7WPwqqmpUGTbBX5Qo6Fe16FpsXUW/T
+         AmH7Dv+xDbm8lPhe/wqpvTQbTflDAd9ceUHVm6HvNys/WAPxxIrseYdTTSuNUuseZvMn
+         Y7pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
+        b=hh1+1nFe11yquKf5bI892t/1yF0iN1KliELmrSOL2WGluZSGu+Z3hy9rb+hTIgVw+K
+         lhtoAoO53kiBgqAFX+1ie/+ZcmYWK1NoZI1PXb+x2uuoygcE57sqYDWsDLZ0rLfMRmJ8
+         DQctF64oyNU6O6E/+kjwbcTfros+O9jWMtPEwNOnxZOUjytDjR77hNc+OLQ871bI/IRx
+         DU/7HbAloZ+v283A6NZWVyFIgFuVsUlLJfvxuIhjgTOhtLWz/gLo0BIV1eVZqtsvdOc9
+         +IJTzyOg7qG3I95NE3+3/BQjXF7qerHBI/ZVw+KUQNlABxKHFRehSxVZfSzL3pzInVAZ
+         YPyg==
+X-Gm-Message-State: ACgBeo0P4k7KRbozWxCEOIKtYA9GWPq8DxTuTD9X9vZ6wN+IO93WGMR/
+	caCTwzPi9upgSGQ2LOCCsfWfu5SuXPrxWHqVHhBF
+X-Google-Smtp-Source: AA6agR5rF1UelnTaKi7EozwOAA/BkqIZaLPDGwyCS+1GcJkzZ/CKZXyYqgNOUU9xEwZ/jVzg1riK+C3nxR3AskhtSUI=
+X-Received: by 2002:a05:6402:40cb:b0:446:fd02:f03b with SMTP id
+ z11-20020a05640240cb00b00446fd02f03bmr2470245edb.405.1661240865088; Tue, 23
+ Aug 2022 00:47:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com> <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+In-Reply-To: <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
+Date: Tue, 23 Aug 2022 09:47:33 +0200
+Message-ID: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+To: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	Nathan Chancellor <nathan@kernel.org>, keescook@chromium.org
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, intel-gfx@lists.freedesktop.org, 
+	upstream@semihalf.com, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+>
+> Hi all,
+>
+> Apologies in advance if you see this twice. I did not see the original
+> make it to either lore.kernel.org or the freedesktop.org archives so I
+> figured it might have been sent into the void.
+>
+> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
+> >
+> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+> > The root cause is null pointer defeference of bi_next
+> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+> >
+> > BUG: kernel NULL pointer dereference, address: 000000000000002e
+> > PGD 0 P4D 0
+> > Oops: 0002 [#1] PREEMPT SMP NOPTI
+> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/=
+14/2021
+> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
+> > ...
+> > [    2.554467] Call Trace:
+> > [    2.554467]  <TASK>
+> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
+> > [    2.554467]  ? _printk+0x59/0x73
+> > [    2.554467]  ? _dev_err+0x77/0x91
+> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+> > [    2.554467]  i915_driver_probe+0x4c8/0x638
+> > [    2.554467]  i915_pci_probe+0xf8/0x14e
+> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+> > [    2.554467]  pci_device_probe+0xaa/0x142
+> > [    2.554467]  really_probe+0x13f/0x2f4
+> > [    2.554467]  __driver_probe_device+0x9e/0xd3
+> > [    2.554467]  driver_probe_device+0x24/0x7c
+> > [    2.554467]  __driver_attach+0xba/0xcf
+> > [    2.554467]  ? driver_attach+0x1f/0x1f
+> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
+> > [    2.554467]  bus_add_driver+0x11b/0x1f7
+> > [    2.554467]  driver_register+0x60/0xea
+> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> > [    2.554467]  i915_init+0x2c/0xb9
+> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> > [    2.554467]  do_one_initcall+0x12e/0x2b3
+> > [    2.554467]  do_initcall_level+0xd6/0xf3
+> > [    2.554467]  do_initcalls+0x4e/0x79
+> > [    2.554467]  kernel_init_freeable+0xed/0x14d
+> > [    2.554467]  ? rest_init+0xc1/0xc1
+> > [    2.554467]  kernel_init+0x1a/0x120
+> > [    2.554467]  ret_from_fork+0x1f/0x30
+> > [    2.554467]  </TASK>
+> > ...
+> > Kernel panic - not syncing: Fatal exception
+> >
+> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+> >  1 file changed, 9 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/=
+i915/display/intel_bw.c
+> > index 2da4aacc956b..bd0ed68b7faa 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_privat=
+e *dev_priv, const struct intel
+> >               int clpchgroup;
+> >               int j;
+> >
+> > -             if (i < num_groups - 1)
+> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
+> > -
+> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chann=
+els) << i;
+> >
+> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
+> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) /=
+ clpchgroup + 1;
+> > -             else
+> > -                     bi_next->num_planes =3D 0;
+> > +             if (i < num_groups - 1) {
+> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
+> > +
+> > +                     if (clpchgroup < clperchgroup)
+> > +                             bi_next->num_planes =3D (ipqdepth - clpch=
+group) /
+> > +                                                    clpchgroup + 1;
+> > +                     else
+> > +                             bi_next->num_planes =3D 0;
+> > +             }
+> >
+> >               bi->num_qgv_points =3D qi.num_points;
+> >               bi->num_psf_gv_points =3D qi.num_psf_points;
+> > --
+> > 2.35.0.rc2.247.g8bbb082509-goog
+> >
+> >
+>
+> Was this patch ever applied or was the issue fixed in a different way?
+> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+> compiler supports it), bi_next will be deterministically initialized to
+> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first i=
+f
+> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+> us at [1] so it impacts real users (and I have been applying this change
+> locally for six months). I see some discussion in this thread, was it
+> ever resolved?
+>
+> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
+>
+> Cheers,
+> Nathan
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 88445be194e93603d722c82108ed8c47c3f60e65 [7536/9999] UPSTREAM: dma-buf: make fence sequence numbers 64 bit v2
-config: x86_64-randconfig-a005-20220822 (https://download.01.org/0day-ci/archive/20220823/202208231552.C5IkgSE2-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/88445be194e93603d722c82108ed8c47c3f60e65
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout 88445be194e93603d722c82108ed8c47c3f60e65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/ drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/thread_info.h:38:
-   arch/x86/include/asm/thread_info.h:229:13: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
-           oldframe = __builtin_frame_address(1);
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/thread_info.h:231:11: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
-                   frame = __builtin_frame_address(2);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/i915/i915_gem.c:31:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:44:
-   In file included from include/linux/perf_event.h:48:
-   include/linux/ftrace.h:706:9: error: calling '__builtin_return_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
-           addr = CALLER_ADDR1;
-                  ^~~~~~~~~~~~
-   include/linux/ftrace.h:693:38: note: expanded from macro 'CALLER_ADDR1'
-   #define CALLER_ADDR1 ((unsigned long)ftrace_return_address(1))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/ftrace.h:686:36: note: expanded from macro 'ftrace_return_address'
-   #  define ftrace_return_address(n) __builtin_return_address(n)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/ftrace.h:709:9: error: calling '__builtin_return_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
-           return CALLER_ADDR2;
-                  ^~~~~~~~~~~~
-   include/linux/ftrace.h:694:38: note: expanded from macro 'CALLER_ADDR2'
-   #define CALLER_ADDR2 ((unsigned long)ftrace_return_address(2))
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/ftrace.h:686:36: note: expanded from macro 'ftrace_return_address'
-   #  define ftrace_return_address(n) __builtin_return_address(n)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/i915/i915_gem.c:31:
-   drivers/gpu/drm/i915/i915_drv.h:3199:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-           return i915_reset_backoff(error) | i915_terminally_wedged(error);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            ||
-   drivers/gpu/drm/i915/i915_drv.h:3199:9: note: cast one or both operands to int to silence this warning
-   drivers/gpu/drm/i915/i915_gem.c:142:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.c:142:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   drivers/gpu/drm/i915/i915_gem.c:186:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.c:186:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   drivers/gpu/drm/i915/i915_gem.c:200:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.c:200:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
->> drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                             request->fence.context, request->fence.seqno,
-                                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
-           __trace_printk_check_format(fmt, ##args);                       \
-                                       ~~~    ^~~~
-   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
-                   ____trace_printk_check_format(fmt, ##args);             \
-                                                 ~~~    ^~~~
->> drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                             request->fence.context, request->fence.seqno,
-                                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
-                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
-                                             ~~~    ^~~~
-   drivers/gpu/drm/i915/i915_gem.c:3324:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                     request->fence.context, request->fence.seqno);
-                                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
-           __trace_printk_check_format(fmt, ##args);                       \
-                                       ~~~    ^~~~
-   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
-                   ____trace_printk_check_format(fmt, ##args);             \
-                                                 ~~~    ^~~~
-   drivers/gpu/drm/i915/i915_gem.c:3324:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                     request->fence.context, request->fence.seqno);
-                                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
-                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
-                                             ~~~    ^~~~
-   drivers/gpu/drm/i915/i915_gem.c:3336:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                     request->fence.context, request->fence.seqno);
-                                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
-           __trace_printk_check_format(fmt, ##args);                       \
-                                       ~~~    ^~~~
-   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
-                   ____trace_printk_check_format(fmt, ##args);             \
-                                                 ~~~    ^~~~
-   drivers/gpu/drm/i915/i915_gem.c:3336:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
-                     request->fence.context, request->fence.seqno);
-                                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                                   ~~~    ^~~~~~~~~~~
-   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
-                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
-                                             ~~~    ^~~~
-   drivers/gpu/drm/i915/i915_gem.c:3350:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("start\n");
-           ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.c:3350:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   drivers/gpu/drm/i915/i915_gem.c:3421:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("end\n");
-           ^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.c:3421:2: note: treat the string as an argument to avoid this
-
-
-vim +3202 drivers/gpu/drm/i915/i915_gem.c
-
-36193acd54bdf1 Mika Kuoppala 2017-01-17  3171  
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3172  /* Returns the request if it was guilty of the hang */
-e61e0f51ba7974 Chris Wilson  2018-02-21  3173  static struct i915_request *
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3174  i915_gem_reset_request(struct intel_engine_cs *engine,
-bba0869b18e44f Chris Wilson  2018-04-06  3175  		       struct i915_request *request,
-bba0869b18e44f Chris Wilson  2018-04-06  3176  		       bool stalled)
-61da536204ca0d Mika Kuoppala 2017-01-17  3177  {
-71895a085879d7 Mika Kuoppala 2017-01-17  3178  	/* The guilty request will get skipped on a hung engine.
-71895a085879d7 Mika Kuoppala 2017-01-17  3179  	 *
-71895a085879d7 Mika Kuoppala 2017-01-17  3180  	 * Users of client default contexts do not rely on logical
-71895a085879d7 Mika Kuoppala 2017-01-17  3181  	 * state preserved between batches so it is safe to execute
-71895a085879d7 Mika Kuoppala 2017-01-17  3182  	 * queued requests following the hang. Non default contexts
-71895a085879d7 Mika Kuoppala 2017-01-17  3183  	 * rely on preserved state, so skipping a batch loses the
-71895a085879d7 Mika Kuoppala 2017-01-17  3184  	 * evolution of the state and it needs to be considered corrupted.
-71895a085879d7 Mika Kuoppala 2017-01-17  3185  	 * Executing more queued batches on top of corrupted state is
-71895a085879d7 Mika Kuoppala 2017-01-17  3186  	 * risky. But we take the risk by trying to advance through
-71895a085879d7 Mika Kuoppala 2017-01-17  3187  	 * the queued requests in order to make the client behaviour
-71895a085879d7 Mika Kuoppala 2017-01-17  3188  	 * more predictable around resets, by not throwing away random
-71895a085879d7 Mika Kuoppala 2017-01-17  3189  	 * amount of batches it has prepared for execution. Sophisticated
-71895a085879d7 Mika Kuoppala 2017-01-17  3190  	 * clients can use gem_reset_stats_ioctl and dma fence status
-71895a085879d7 Mika Kuoppala 2017-01-17  3191  	 * (exported via sync_file info ioctl on explicit fences) to observe
-71895a085879d7 Mika Kuoppala 2017-01-17  3192  	 * when it loses the context state and should rebuild accordingly.
-71895a085879d7 Mika Kuoppala 2017-01-17  3193  	 *
-71895a085879d7 Mika Kuoppala 2017-01-17  3194  	 * The context ban, and ultimately the client ban, mechanism are safety
-71895a085879d7 Mika Kuoppala 2017-01-17  3195  	 * valves if client submission ends up resulting in nothing more than
-71895a085879d7 Mika Kuoppala 2017-01-17  3196  	 * subsequent hangs.
-71895a085879d7 Mika Kuoppala 2017-01-17  3197  	 */
-71895a085879d7 Mika Kuoppala 2017-01-17  3198  
-bba0869b18e44f Chris Wilson  2018-04-06  3199  	if (i915_request_completed(request)) {
-bba0869b18e44f Chris Wilson  2018-04-06  3200  		GEM_TRACE("%s pardoned global=%d (fence %llx:%d), current %d\n",
-bba0869b18e44f Chris Wilson  2018-04-06  3201  			  engine->name, request->global_seqno,
-bba0869b18e44f Chris Wilson  2018-04-06 @3202  			  request->fence.context, request->fence.seqno,
-bba0869b18e44f Chris Wilson  2018-04-06  3203  			  intel_engine_get_seqno(engine));
-bba0869b18e44f Chris Wilson  2018-04-06  3204  		stalled = false;
-bba0869b18e44f Chris Wilson  2018-04-06  3205  	}
-bba0869b18e44f Chris Wilson  2018-04-06  3206  
-bba0869b18e44f Chris Wilson  2018-04-06  3207  	if (stalled) {
-4e0d64dba816ad Chris Wilson  2018-05-17  3208  		i915_gem_context_mark_guilty(request->gem_context);
-6dd7526f6f6c73 Chris Wilson  2018-07-06  3209  		i915_request_skip(request, -EIO);
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3210  
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3211  		/* If this context is now banned, skip all pending requests. */
-4e0d64dba816ad Chris Wilson  2018-05-17  3212  		if (i915_gem_context_is_banned(request->gem_context))
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3213  			engine_skip_context(request);
-61da536204ca0d Mika Kuoppala 2017-01-17  3214  	} else {
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3215  		/*
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3216  		 * Since this is not the hung engine, it may have advanced
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3217  		 * since the hang declaration. Double check by refinding
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3218  		 * the active request at the time of the reset.
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3219  		 */
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3220  		request = i915_gem_find_active_request(engine);
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3221  		if (request) {
-042ed2dbe5b294 Chris Wilson  2018-06-15  3222  			unsigned long flags;
-042ed2dbe5b294 Chris Wilson  2018-06-15  3223  
-4e0d64dba816ad Chris Wilson  2018-05-17  3224  			i915_gem_context_mark_innocent(request->gem_context);
-61da536204ca0d Mika Kuoppala 2017-01-17  3225  			dma_fence_set_error(&request->fence, -EAGAIN);
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3226  
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3227  			/* Rewind the engine to replay the incomplete rq */
-042ed2dbe5b294 Chris Wilson  2018-06-15  3228  			spin_lock_irqsave(&engine->timeline.lock, flags);
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3229  			request = list_prev_entry(request, link);
-a89d1f921c1593 Chris Wilson  2018-05-02  3230  			if (&request->link == &engine->timeline.requests)
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3231  				request = NULL;
-042ed2dbe5b294 Chris Wilson  2018-06-15  3232  			spin_unlock_irqrestore(&engine->timeline.lock, flags);
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3233  		}
-61da536204ca0d Mika Kuoppala 2017-01-17  3234  	}
-61da536204ca0d Mika Kuoppala 2017-01-17  3235  
-d1d1ebf4120db0 Chris Wilson  2017-07-21  3236  	return request;
-61da536204ca0d Mika Kuoppala 2017-01-17  3237  }
-61da536204ca0d Mika Kuoppala 2017-01-17  3238  
-
-:::::: The code at line 3202 was first introduced by commit
-:::::: bba0869b18e44ff2f713c98575ddad8c7c5e9b10 drm/i915: Treat i915_reset_engine() as guilty until proven innocent
-
-:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
-:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The patch was not accepted by upstream. I gave up after sending two reminde=
+rs
+that the issue is still present which resulted in no upstream reaction.
+I have been also applying that patch locally for a few months.
+Thanks for bringing it up to upstream attention again.
