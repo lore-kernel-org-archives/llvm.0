@@ -1,44 +1,46 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32707EE
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 02:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89281A20
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 03:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661222933; x=1692758933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N21eChXaMfHiY1BuhjyFGPuUQ6VOm77fOOL7wdNZewo=;
-  b=ZKtG+9FPnnk61EJzua+rw79PbIvL/EZGP1OeMn78IqdE7HC8IXwmIaQA
-   rXhiTVumgkjL9xVkuJjiMPNYsGBTXFgEwtQG8C6uCCPKRwKKtx61zZHzb
-   B1RnukPVL3M/fTrJofKLJYesLxKyuvEnd+xEsGdLhlc0dR2erf1Nkooc0
-   gFR9OX5VIq4WcPMRxD8KsD6uUKzcZa9toS17VbXMDsqj/yA1VN2vhm3/g
-   vIOIOR1Mr6qDi8FZj7AlgRnPRVUBPGlycOatUgb7ehUEk8zXxpq7vA1G6
-   EfTzA7X8QpwWef8FLBoFxZPE8Y4RK07QAOwV04Rc5GAcTHWUvvQbiJ+Yt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294857913"
+  t=1661224168; x=1692760168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tHINCusW1xr9wyTEQFYHoBqNpNqS3pZAVUeIOoov8K0=;
+  b=JdBQTYlhKMCADCuLEuwMWoTkY5vqne9CnUQP4jagckZ/R9Fy3zvsbxqB
+   M+pCElvDKfBt+3dKkQbMW2jhs15cYHpuygJ4Kz58tvULO1qPZjQ2H2sA+
+   FVqKibliI1fSjoSb79McrEM48jZbeDBEUQykpazIQwGnV2Oknh8wz+exM
+   wrmFVESw2cAogIgMJDzGp0KELyp3yn6mzqOGJZ/fyOJFvmeAFKRdKZBrj
+   kZgtgKYFXKI4LU0b6uCUopZjcuBGWPU8sG4tW2wXM0jxXj/Nvc/WsFHW5
+   eSVB3J0maN/2zE/UTGNwahtjgT9b+DeS4228IFiO4hYzRsmW2IKHhsWDe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="292318916"
 X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="294857913"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 19:48:37 -0700
+   d="scan'208";a="292318916"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 20:09:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="585786893"
+   d="scan'208";a="937290718"
 Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Aug 2022 19:48:26 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 20:09:25 -0700
 Received: from kbuild by dd9b29378baa with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oQJxo-00014S-0j;
-	Tue, 23 Aug 2022 02:48:24 +0000
-Date: Tue, 23 Aug 2022 10:48:13 +0800
+	id 1oQKI8-00015h-30;
+	Tue, 23 Aug 2022 03:09:24 +0000
+Date: Tue, 23 Aug 2022 11:08:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ardb:for-kernelci 7/7]
- drivers/firmware/efi/libstub/arm64-stub.c:178:25: error: incompatible
- pointer to integer conversion passing 'void *' to parameter of type
- 'unsigned long'
-Message-ID: <202208231055.QZtD1nxQ-lkp@intel.com>
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH v2 3/4] drm: rcar-du: fix DSI enable & disable sequence
+Message-ID: <202208231031.hFwNDAuL-lkp@intel.com>
+References: <20220822130513.119029-4-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,150 +49,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220822130513.119029-4-tomi.valkeinen@ideasonboard.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   6aca304c2ee44597ad1f6989d4905ed9f52ad16b
-commit: 6aca304c2ee44597ad1f6989d4905ed9f52ad16b [7/7] arm64: efi/libstub: enter with the MMU on
-config: arm64-randconfig-r025-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231055.QZtD1nxQ-lkp@intel.com/config)
+Hi Tomi,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pinchartl-media/drm/du/next]
+[also build test WARNING on linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomi-Valkeinen/drm-rcar-du-DSI-fixes/20220822-210756
+base:   git://linuxtv.org/pinchartl/media.git drm/du/next
+config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231031.hFwNDAuL-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project abce7acebd4c06c977bc4bd79170697f1122bc5e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=6aca304c2ee44597ad1f6989d4905ed9f52ad16b
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 6aca304c2ee44597ad1f6989d4905ed9f52ad16b
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d037472981c443d699c022aa91c5335f686d82ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tomi-Valkeinen/drm-rcar-du-DSI-fixes/20220822-210756
+        git checkout d037472981c443d699c022aa91c5335f686d82ad
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/firmware/efi/libstub/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/rcar-du/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/arm64-stub.c:178:25: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
-           caches_clean_inval_pou((void *)*image_addr,
-                                  ^~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/cacheflush.h:72:50: note: passing argument to parameter 'start' here
-   extern void caches_clean_inval_pou(unsigned long start, unsigned long end);
-                                                    ^
-   drivers/firmware/efi/libstub/arm64-stub.c:179:11: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
-                                  (void *)*image_addr + kernel_codesize);
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/cacheflush.h:72:71: note: passing argument to parameter 'end' here
-   extern void caches_clean_inval_pou(unsigned long start, unsigned long end);
-                                                                         ^
-   2 errors generated.
+   In file included from drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:36:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:615:6: warning: no previous prototype for function 'rcar_mipi_dsi_pclk_enable' [-Wmissing-prototypes]
+   void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
+        ^
+   drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:615:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
+   ^
+   static 
+>> drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:654:6: warning: no previous prototype for function 'rcar_mipi_dsi_pclk_disable' [-Wmissing-prototypes]
+   void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
+        ^
+   drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:654:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
+   ^
+   static 
+   9 warnings generated.
 
 
-vim +178 drivers/firmware/efi/libstub/arm64-stub.c
+vim +/rcar_mipi_dsi_pclk_enable +615 drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
 
-    81	
-    82	efi_status_t handle_kernel_image(unsigned long *image_addr,
-    83					 unsigned long *image_size,
-    84					 unsigned long *reserve_addr,
-    85					 unsigned long *reserve_size,
-    86					 efi_loaded_image_t *image,
-    87					 efi_handle_t image_handle)
-    88	{
-    89		efi_status_t status;
-    90		unsigned long kernel_size, kernel_codesize, kernel_memsize = 0;
-    91		u32 phys_seed = 0;
-    92	
-    93		/*
-    94		 * Although relocatable kernels can fix up the misalignment with
-    95		 * respect to MIN_KIMG_ALIGN, the resulting virtual text addresses are
-    96		 * subtly out of sync with those recorded in the vmlinux when kaslr is
-    97		 * disabled but the image required relocation anyway. Therefore retain
-    98		 * 2M alignment if KASLR was explicitly disabled, even if it was not
-    99		 * going to be activated to begin with.
-   100		 */
-   101		u64 min_kimg_align = efi_nokaslr ? MIN_KIMG_ALIGN : SEGMENT_ALIGN;
-   102	
-   103		if (IS_ENABLED(CONFIG_RANDOMIZE_BASE)) {
-   104			efi_guid_t li_fixed_proto = LINUX_EFI_LOADED_IMAGE_FIXED_GUID;
-   105			void *p;
-   106	
-   107			if (efi_nokaslr) {
-   108				efi_info("KASLR disabled on kernel command line\n");
-   109			} else if (efi_bs_call(handle_protocol, image_handle,
-   110					       &li_fixed_proto, &p) == EFI_SUCCESS) {
-   111				efi_info("Image placement fixed by loader\n");
-   112			} else {
-   113				status = efi_get_random_bytes(sizeof(phys_seed),
-   114							      (u8 *)&phys_seed);
-   115				if (status == EFI_NOT_FOUND) {
-   116					efi_info("EFI_RNG_PROTOCOL unavailable\n");
-   117					efi_nokaslr = true;
-   118				} else if (status != EFI_SUCCESS) {
-   119					efi_err("efi_get_random_bytes() failed (0x%lx)\n",
-   120						status);
-   121					efi_nokaslr = true;
-   122				}
-   123			}
-   124		}
-   125	
-   126		if (image->image_base != _text)
-   127			efi_err("FIRMWARE BUG: efi_loaded_image_t::image_base has bogus value\n");
-   128	
-   129		if (!IS_ALIGNED((u64)_text, SEGMENT_ALIGN))
-   130			efi_err("FIRMWARE BUG: kernel image not aligned on %dk boundary\n",
-   131				SEGMENT_ALIGN >> 10);
-   132	
-   133		kernel_size = _edata - _text;
-   134		kernel_codesize = __inittext_end - _text;
-   135		kernel_memsize = kernel_size + (_end - _edata);
-   136		*reserve_size = kernel_memsize;
-   137	
-   138		if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && phys_seed != 0) {
-   139			/*
-   140			 * If KASLR is enabled, and we have some randomness available,
-   141			 * locate the kernel at a randomized offset in physical memory.
-   142			 */
-   143			status = efi_random_alloc(*reserve_size, min_kimg_align,
-   144						  reserve_addr, phys_seed,
-   145						  EFI_LOADER_CODE);
-   146			if (status != EFI_SUCCESS)
-   147				efi_warn("efi_random_alloc() failed: 0x%lx\n", status);
-   148		} else {
-   149			status = EFI_OUT_OF_RESOURCES;
-   150		}
-   151	
-   152		if (status != EFI_SUCCESS) {
-   153			if (!check_image_region((u64)_text, kernel_memsize)) {
-   154				efi_err("FIRMWARE BUG: Image BSS overlaps adjacent EFI memory region\n");
-   155			} else if (IS_ALIGNED((u64)_text, min_kimg_align)) {
-   156				/*
-   157				 * Just execute from wherever we were loaded by the
-   158				 * UEFI PE/COFF loader if the alignment is suitable.
-   159				 */
-   160				*image_addr = (u64)_text;
-   161				*reserve_size = 0;
-   162				return EFI_SUCCESS;
-   163			}
-   164	
-   165			status = efi_allocate_pages_aligned(*reserve_size, reserve_addr,
-   166							    ULONG_MAX, min_kimg_align,
-   167							    EFI_LOADER_CODE);
-   168	
-   169			if (status != EFI_SUCCESS) {
-   170				efi_err("Failed to relocate kernel\n");
-   171				*reserve_size = 0;
-   172				return status;
-   173			}
-   174		}
-   175	
-   176		*image_addr = *reserve_addr;
-   177		memcpy((void *)*image_addr, _text, kernel_size);
- > 178		caches_clean_inval_pou((void *)*image_addr,
-   179				       (void *)*image_addr + kernel_codesize);
-   180	
-   181		return EFI_SUCCESS;
-   182	}
-   183	
+   614	
+ > 615	void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
+   616				       struct drm_atomic_state *state)
+   617	{
+   618		struct rcar_mipi_dsi *dsi = bridge_to_rcar_mipi_dsi(bridge);
+   619		const struct drm_display_mode *mode;
+   620		struct drm_connector *connector;
+   621		struct drm_crtc *crtc;
+   622		int ret;
+   623	
+   624		connector = drm_atomic_get_new_connector_for_encoder(state,
+   625								     bridge->encoder);
+   626		crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
+   627		mode = &drm_atomic_get_new_crtc_state(state, crtc)->adjusted_mode;
+   628	
+   629		ret = rcar_mipi_dsi_clk_enable(dsi);
+   630		if (ret < 0) {
+   631			dev_err(dsi->dev, "failed to enable DSI clocks\n");
+   632			return;
+   633		}
+   634	
+   635		ret = rcar_mipi_dsi_startup(dsi, mode);
+   636		if (ret < 0)
+   637			goto err_dsi_startup;
+   638	
+   639		rcar_mipi_dsi_set_display_timing(dsi, mode);
+   640	
+   641		ret = rcar_mipi_dsi_start_hs_clock(dsi);
+   642		if (ret < 0)
+   643			goto err_dsi_start_hs;
+   644	
+   645		return;
+   646	
+   647	err_dsi_start_hs:
+   648		rcar_mipi_dsi_shutdown(dsi);
+   649	err_dsi_startup:
+   650		rcar_mipi_dsi_clk_disable(dsi);
+   651	}
+   652	EXPORT_SYMBOL_GPL(rcar_mipi_dsi_pclk_enable);
+   653	
+ > 654	void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
+   655	{
+   656		struct rcar_mipi_dsi *dsi = bridge_to_rcar_mipi_dsi(bridge);
+   657	
+   658		rcar_mipi_dsi_shutdown(dsi);
+   659		rcar_mipi_dsi_clk_disable(dsi);
+   660	}
+   661	EXPORT_SYMBOL_GPL(rcar_mipi_dsi_pclk_disable);
+   662	
 
 -- 
 0-DAY CI Kernel Test Service
