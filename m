@@ -1,219 +1,270 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769357B
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 10:20:53 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so7475706wms.0
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 03:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=6B2aaE05A19n1QO6TV80aKcnYR+rV1SXKdzbvIzbg4g=;
-        b=bLwUshR/KjjpH4/M3KjtV2uBz2zBwVDBfJbT8OMDXEi28JH9ev8nDErPAUzw6MCuKQ
-         8XCdE5RF//bResXNcpor8urzvQAewr8Qw4yE8f3lOiw3j0qGlJ2RWiuICSGvzYQ2sqPq
-         Pp+X7m7OTnsindTQcXlzP/kZ2sePM7umzfpwB3uWscvCz6sY0CkL67Hkd8Fe0AkjqUwC
-         ueFa6YLybLL7F+tHigREto25Nlx8GPI73fGaF8znQ+OHSm4DquSpo4qzMxhJMaeQCSxT
-         9DO/e7GFNuqG7XZKPPmxsiS/kMzTYJij6f3P3eh17kK6XtKLaAyHXSBXfw9yTdp+hfKB
-         cBPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6B2aaE05A19n1QO6TV80aKcnYR+rV1SXKdzbvIzbg4g=;
-        b=gBaWqYTJea4Oe9OJSOS9rdZB5RG9K5JcguatHwMBRgjseWGkuxvS8TjGBaK2DIYZ3S
-         abmksaIyWEJ8Wa0DVLyfuWFDLyxrWwnkbH/qZZgLez9SngCzFw8yFaB1m5UDB5zpQnQJ
-         AKZPR6xzdc5/GXtXGdx4oXSxLOn/0sh2dyBN5vgpTvRNi+SNljstu8oyImO05OUr4pYh
-         3hkpeyJwXaHdWMugmCdAEjFJigCIPExGFhWwsDMCEgIdBLr+aKKc8kR0KgLkT8gQPVe7
-         2ecnfOAG5qTwbTXR4Ou0p/0WvdOKDlkH5IyVboghoOk5lL7bxNXukwYkd+1hRGKnC0Pw
-         VbLg==
-X-Gm-Message-State: ACgBeo2AYf0JGgqaYFVGMn4ttyX2aS0aPf7+HBn2EfxsDR2cBTRWBelG
-	9w+1kT4m/80hAGsqTPhp1x0=
-X-Google-Smtp-Source: AA6agR5QGCmY2+lpv3pmfgjOGB+SAsuaFxjHbidzi3vOftokbwnF4eT1UErnSpCGR87umteRm5QVRQ==
-X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id i4-20020a1c3b04000000b003a5487c6240mr1715787wma.152.1661250051576;
-        Tue, 23 Aug 2022 03:20:51 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z6-20020a1cf406000000b003a2f2bb72d5sm24302590wma.45.2022.08.23.03.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 03:20:50 -0700 (PDT)
-Message-ID: <44c86ad9-8158-0a8a-ce31-a995c8d10e0b@gmail.com>
-Date: Tue, 23 Aug 2022 12:20:48 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD12EED4
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 11:30:24 +0000 (UTC)
+X-UUID: 4193c841d59540278728a9813f1d2810-20220823
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=5IUdramIkid/u6ApEZFUzQPcYeOozNSiBDrLooC1sGY=;
+	b=PTFVP4/Ha4uQLBY6CHAVX2QizqkUtt8+uLDTHmbUerHbcpRwD+6julRF+yzOcp/BTnb50Ce/5mCME44kVbgbiDC+VHP8m5J24a4cbQpDzb3NauTpQn0+rkaEjqceUEaycFNqaA9BYSfCs1hw69df/U4JqG7HZRiETeFeBC9SaRU=;
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:43a9cc4d-f10f-4c86-87ec-1a1039576b5f,OB:0,L
+	OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release
+	_Ham,ACTION:release,TS:54
+X-CID-INFO: VERSION:1.1.10,REQID:43a9cc4d-f10f-4c86-87ec-1a1039576b5f,OB:0,LOB
+	:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_H
+	amU,ACTION:release,TS:54
+X-CID-META: VersionHash:84eae18,CLOUDID:02c58ac9-6b09-4f60-bf82-12f039f5d530,C
+	OID:9e9149611341,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 4193c841d59540278728a9813f1d2810-20220823
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 363795232; Tue, 23 Aug 2022 19:30:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 23 Aug 2022 19:30:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 23 Aug 2022 19:30:01 +0800
+Message-ID: <140b3cd10317a5db781df180ce4efb697cdd641b.camel@mediatek.com>
+Subject: Re: [PATCH v26 07/10] soc: mediatek: mmsys: add mmsys for support
+ 64 reset bits
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring
+	<robh+dt@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	<nfraprado@collabora.com>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Tue, 23 Aug 2022 19:30:01 +0800
+In-Reply-To: <44c86ad9-8158-0a8a-ce31-a995c8d10e0b@gmail.com>
+References: <20220819061011.7672-1-nancy.lin@mediatek.com>
+	 <20220819061011.7672-8-nancy.lin@mediatek.com>
+	 <44c86ad9-8158-0a8a-ce31-a995c8d10e0b@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v26 07/10] soc: mediatek: mmsys: add mmsys for support 64
- reset bits
-Content-Language: en-US
-To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux@roeck-us.net, nfraprado@collabora.com
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "jason-jh . lin" <jason-jh.lin@mediatek.com>,
- Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev, singo.chang@mediatek.com,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220819061011.7672-1-nancy.lin@mediatek.com>
- <20220819061011.7672-8-nancy.lin@mediatek.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220819061011.7672-8-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-MTK: N
 
+Hi Matthias,
 
+Thanks for the review.
 
-On 19/08/2022 08:10, Nancy.Lin wrote:
-> Add mmsys for support 64 reset bits. It is a preparation for MT8195
-> vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset bits.
+On Tue, 2022-08-23 at 12:20 +0200, Matthias Brugger wrote:
 > 
-> 1. Add the number of reset bits in mmsys private data
-> 2. move the whole "reset register code section" behind the
-> "get mmsys->data" code section for getting the num_resets in mmsys->data.
+> On 19/08/2022 08:10, Nancy.Lin wrote:
+> > Add mmsys for support 64 reset bits. It is a preparation for MT8195
+> > vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset bits.
+> > 
+> > 1. Add the number of reset bits in mmsys private data
+> > 2. move the whole "reset register code section" behind the
+> > "get mmsys->data" code section for getting the num_resets in mmsys-
+> > >data.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> > Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-mmsys.c | 40 +++++++++++++++++++++----
+> > -------
+> >   drivers/soc/mediatek/mtk-mmsys.h |  1 +
+> >   2 files changed, 27 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> > b/drivers/soc/mediatek/mtk-mmsys.c
+> > index 999be064103b..20ae751ad8a7 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -20,6 +20,8 @@
+> >   #include "mt8195-mmsys.h"
+> >   #include "mt8365-mmsys.h"
+> >   
+> > +#define MMSYS_SW_RESET_PER_REG 32
+> > +
+> >   static const struct mtk_mmsys_driver_data
+> > mt2701_mmsys_driver_data = {
+> >   	.clk_driver = "clk-mt2701-mm",
+> >   	.routes = mmsys_default_routing_table,
+> > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8173_mmsys_driver_data = {
+> >   	.routes = mmsys_default_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data
+> > = {
+> > @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8183_mmsys_driver_data = {
+> >   	.routes = mmsys_mt8183_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data
+> > = {
+> > @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8186_mmsys_driver_data = {
+> >   	.routes = mmsys_mt8186_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+> >   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data
+> > = {
+> > @@ -128,6 +133,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8192_mmsys_driver_data = {
+> >   	.routes = mmsys_mt8192_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
+> >   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
 > 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-mmsys.c | 40 +++++++++++++++++++++-----------
->   drivers/soc/mediatek/mtk-mmsys.h |  1 +
->   2 files changed, 27 insertions(+), 14 deletions(-)
+> You didn't reply to Nicolas regarding the reset numbers. I actually
+> agree with 
+> him that we will need the num_resets declared for all devices. Why do
+> you think 
+> this is not the case?
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 999be064103b..20ae751ad8a7 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -20,6 +20,8 @@
->   #include "mt8195-mmsys.h"
->   #include "mt8365-mmsys.h"
->   
-> +#define MMSYS_SW_RESET_PER_REG 32
-> +
->   static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
->   	.clk_driver = "clk-mt2701-mm",
->   	.routes = mmsys_default_routing_table,
-> @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
->   	.routes = mmsys_default_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
->   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
-> @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
->   	.routes = mmsys_mt8183_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
->   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
-> @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
->   	.routes = mmsys_mt8186_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
->   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
->   };
->   
->   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data = {
-> @@ -128,6 +133,7 @@ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
->   	.routes = mmsys_mt8192_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
->   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> +	.num_resets = 32,
+> Regards,
+> Matthias
+> 
 
-You didn't reply to Nicolas regarding the reset numbers. I actually agree with 
-him that we will need the num_resets declared for all devices. Why do you think 
-this is not the case?
+Sorry, I lost Nicolas's email. 
+
+I checked with the mmsys git log with reset controller function.
+
+1. Enric add mmsys reset controller function in [1]/[2].
+   => in mtk_mmsys_reset_update(), all mmsys reset offset is
+MMSYS_SW0_RST_B (0x140). 
+
+2. After Enric's patch, Rex add sw0_rst_offset in mmsys driver data in
+[3].
+
+So, I think sw0_rst_offset is not zero. Instead of only add num_resets
+but also need to add sw0_rst_offset for all mmsys. What do you think ?
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/soc/mediatek/mtk-mmsys.c?id=f27ef2856343e2ddc392975d7b15120442e4d7b7
+[2]
+
+https://patchwork.kernel.org/project/linux-mediatek/cover/20210825102632.601614-1-enric.balletbo@collabora.com/
+[3]
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/soc/mediatek/mtk-mmsys.c?id=62dc30150c06774a8122c52aedd0eddaceaf5940
 
 Regards,
-Matthias
+Nancy
+> 
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8192_mmsys_match_data
+> > = {
+> > @@ -288,13 +294,19 @@ static int mtk_mmsys_reset_update(struct
+> > reset_controller_dev *rcdev, unsigned l
+> >   {
+> >   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys,
+> > rcdev);
+> >   	unsigned long flags;
+> > +	u32 offset;
+> > +	u32 reg;
+> > +
+> > +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
+> > +	id = id % MMSYS_SW_RESET_PER_REG;
+> > +	reg = mmsys->data->sw0_rst_offset + offset;
+> >   
+> >   	spin_lock_irqsave(&mmsys->lock, flags);
+> >   
+> >   	if (assert)
+> > -		mtk_mmsys_update_bits(mmsys, mmsys->data-
+> > >sw0_rst_offset, BIT(id), 0, NULL);
+> > +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), 0, NULL);
+> >   	else
+> > -		mtk_mmsys_update_bits(mmsys, mmsys->data-
+> > >sw0_rst_offset, BIT(id), BIT(id), NULL);
+> > +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), BIT(id),
+> > NULL);
+> >   
+> >   	spin_unlock_irqrestore(&mmsys->lock, flags);
+> >   
+> > @@ -351,18 +363,6 @@ static int mtk_mmsys_probe(struct
+> > platform_device *pdev)
+> >   		return ret;
+> >   	}
+> >   
+> > -	spin_lock_init(&mmsys->lock);
+> > -
+> > -	mmsys->rcdev.owner = THIS_MODULE;
+> > -	mmsys->rcdev.nr_resets = 32;
+> > -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> > -	mmsys->rcdev.of_node = pdev->dev.of_node;
+> > -	ret = devm_reset_controller_register(&pdev->dev, &mmsys-
+> > >rcdev);
+> > -	if (ret) {
+> > -		dev_err(&pdev->dev, "Couldn't register mmsys reset
+> > controller: %d\n", ret);
+> > -		return ret;
+> > -	}
+> > -
+> >   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> >   	if (!res) {
+> >   		dev_err(dev, "Couldn't get mmsys resource\n");
+> > @@ -384,6 +384,18 @@ static int mtk_mmsys_probe(struct
+> > platform_device *pdev)
+> >   		mmsys->data = match_data->drv_data[0];
+> >   	}
+> >   
+> > +	spin_lock_init(&mmsys->lock);
+> > +
+> > +	mmsys->rcdev.owner = THIS_MODULE;
+> > +	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
+> > +	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> > +	mmsys->rcdev.of_node = pdev->dev.of_node;
+> > +	ret = devm_reset_controller_register(&pdev->dev, &mmsys-
+> > >rcdev);
+> > +	if (ret) {
+> > +		dev_err(&pdev->dev, "Couldn't register mmsys reset
+> > controller: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> >   #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+> >   	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
+> >   	if (ret)
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.h
+> > b/drivers/soc/mediatek/mtk-mmsys.h
+> > index f01ba206481d..20a271b80b3b 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.h
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.h
+> > @@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
+> >   	const struct mtk_mmsys_routes *routes;
+> >   	const unsigned int num_routes;
+> >   	const u16 sw0_rst_offset;
+> > +	const u32 num_resets;
+> >   };
+> >   
+> >   struct mtk_mmsys_match_data {
+> 
+> 
 
-
->   };
->   
->   static const struct mtk_mmsys_match_data mt8192_mmsys_match_data = {
-> @@ -288,13 +294,19 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
->   {
->   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
->   	unsigned long flags;
-> +	u32 offset;
-> +	u32 reg;
-> +
-> +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
-> +	id = id % MMSYS_SW_RESET_PER_REG;
-> +	reg = mmsys->data->sw0_rst_offset + offset;
->   
->   	spin_lock_irqsave(&mmsys->lock, flags);
->   
->   	if (assert)
-> -		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0, NULL);
-> +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), 0, NULL);
->   	else
-> -		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id), NULL);
-> +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), BIT(id), NULL);
->   
->   	spin_unlock_irqrestore(&mmsys->lock, flags);
->   
-> @@ -351,18 +363,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> -	spin_lock_init(&mmsys->lock);
-> -
-> -	mmsys->rcdev.owner = THIS_MODULE;
-> -	mmsys->rcdev.nr_resets = 32;
-> -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> -	mmsys->rcdev.of_node = pdev->dev.of_node;
-> -	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
-> -		return ret;
-> -	}
-> -
->   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->   	if (!res) {
->   		dev_err(dev, "Couldn't get mmsys resource\n");
-> @@ -384,6 +384,18 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
->   		mmsys->data = match_data->drv_data[0];
->   	}
->   
-> +	spin_lock_init(&mmsys->lock);
-> +
-> +	mmsys->rcdev.owner = THIS_MODULE;
-> +	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
-> +	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> +	mmsys->rcdev.of_node = pdev->dev.of_node;
-> +	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->   #if IS_REACHABLE(CONFIG_MTK_CMDQ)
->   	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
->   	if (ret)
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-> index f01ba206481d..20a271b80b3b 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.h
-> +++ b/drivers/soc/mediatek/mtk-mmsys.h
-> @@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
->   	const struct mtk_mmsys_routes *routes;
->   	const unsigned int num_routes;
->   	const u16 sw0_rst_offset;
-> +	const u32 num_resets;
->   };
->   
->   struct mtk_mmsys_match_data {
