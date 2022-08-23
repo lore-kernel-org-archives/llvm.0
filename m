@@ -1,149 +1,112 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9527866F0
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 21:53:19 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id r22so13392815pgm.5
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 14:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=FnXtIAn0IyAxdQUTX7XZR7kL9caPa6K/jTtIbR9ZQeI=;
-        b=obG8zpTD+VGj/DhquSB91/B1nOh31Mf4zX+mS3y0p5WZzXTnSJmE6BQmTBA4htk1bt
-         XRB+svL4DsVm3OkT5aF7hEmIk/4ALS2HX0O2/ztMnxBw49FnjkWu9FdCfnqi7jQqRU+d
-         93bGDbVwtR9FlSajQpZw/u8rSYDVTNqP80KtM3yeeIfToDmxuUv9olyyqcQDpDJeWSGi
-         Se31wC8WzlmZeIawaNAM86zcgRAoNetc+63r/+hXDvOEqTgzpIkonR8X/m6Zh4Os6+eX
-         wJIR+cK/L+K6oi+d5tFd8eKuKOA39x2u5gtPHF2/ignKoLU990mH7UniqFXIep+6DPUG
-         I9fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FnXtIAn0IyAxdQUTX7XZR7kL9caPa6K/jTtIbR9ZQeI=;
-        b=IJiGQEO4eWcX6IiZnqtmtpqbZlapqNqKWDJFogrr90q6P82Qv0E/aD40U0M/Yw6Kh+
-         bup4ff3FOhgFSQe2/XLgNcF17de7rvBw3Y8sOk0OIa+hgrexzaQwx/vZhuQ1tEP74Soh
-         QslG1TLbaf1qXB0Fz/jGoUHklChUR9xSk3SCAey3QRStDMfUZKtbotfCr7AhUbaT4agS
-         QKMyD7a2y9D6TkxnrQV++Sbp+CurwvUG4CNx2byJFCkriUv92ipLss114GI3QyOjb/vm
-         /NzOskpCjhZs/Cl639Yz3k/JTYPbavKTDlDD0csWnNvUXaERZRoQLvftDr30kM3kMae1
-         8jAQ==
-X-Gm-Message-State: ACgBeo3O+kFoLfdqarTIEmmiso0NKa3FYGCkRlL3aHd55x9QXFfib3B3
-	3+Gur6kLelgmJMHKF3+4hVFuJQ==
-X-Google-Smtp-Source: AA6agR5ZlhUCW0kK8H4ShGD2wDJdvUWRcHbYtHdfzqHhFuCrXOYakw0jq4ZSaTBUiLOaY8O66jszSA==
-X-Received: by 2002:aa7:9e4b:0:b0:536:68f0:dc93 with SMTP id z11-20020aa79e4b000000b0053668f0dc93mr15058614pfq.8.1661291599070;
-        Tue, 23 Aug 2022 14:53:19 -0700 (PDT)
-Received: from ?IPV6:2406:3400:213:70c0:5c76:4280:5b6b:9ce0? ([2406:3400:213:70c0:5c76:4280:5b6b:9ce0])
-        by smtp.gmail.com with ESMTPSA id f76-20020a62384f000000b0052f20d70845sm11232126pfa.150.2022.08.23.14.53.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 14:53:18 -0700 (PDT)
-Message-ID: <95641765-17a4-79aa-1ce3-9cd760ed41f4@flatmax.com>
-Date: Wed, 24 Aug 2022 07:53:13 +1000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CE566F1
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 22:01:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661292068; x=1692828068;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+KpCMWzGfyKPK9D4bSvPtB37EM6LUxlpcX427rSatZY=;
+  b=SU76PFgPbOXIDyMDqcFWVcQQMmzNbMUisTJJrmDHpXM1mq1o5996aBja
+   /OobjDKLAcLw8MjGyQuJz5SHNzrQT7PqwlE7NRF70D8fPSZfQTvGYNE2l
+   ClVS1+R2b/WnWwfJtc7Kv6Xkb0GIGfkxZJ494TpcwlMIcDG5RqIy/EZbN
+   Uj3jdcc/bKLhX6hA/MfuVR4ITTpbIaGFWxC6PF6pztSo6otbpZcLf1gT6
+   4cxEYx2Ik8Up+xwEaoOYi/2FL4jVoLI7bTBYOnOFBWZYD4rD87nuxBmsk
+   3zCuk1PvCFlAv1qwfC1bH1eh60WcUrnwGLtfmZDlU0fnQENtkLVme0XVv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293804066"
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="293804066"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 15:01:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="751835195"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Aug 2022 15:01:06 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQbxJ-0000bX-1Q;
+	Tue, 23 Aug 2022 22:01:05 +0000
+Date: Wed, 24 Aug 2022 06:00:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202208240558.1wT7kygx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] ASoC: codes: src4xxx: Avoid clang
- -Wsometimes-uninitialized in src4xxx_hw_params()
-Content-Language: en-AU
-To: Nathan Chancellor <nathan@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- kernel test robot <lkp@intel.com>,
- "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-References: <20220823151939.2493697-1-nathan@kernel.org>
-From: Matt Flax <flatmax@flatmax.com>
-In-Reply-To: <20220823151939.2493697-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-This looks good.
+Hi Mauro,
 
-Reviewed-by: Matt Flax <flatmax@flatmax.com>
+First bad commit (maybe != root cause):
 
-On 24/8/22 01:19, Nathan Chancellor wrote:
-> Clang warns:
->
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
->                                                                            ^
->    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
->            int val, pj, jd, d;
->                              ^
->                              = 0
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
->            int val, pj, jd, d;
->                          ^
->                            = 0
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
->            int val, pj, jd, d;
->                      ^
->                        = 0
->    3 errors generated.
->
-> The datasheet does not have any default values for these regmap values
-> so pick some arbitrary values and print to the user that this is the
-> case to silence the warnings.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1691
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-> Suggested-by: Matt Flax <flatmax@flatmax.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->
-> v1 -> v2: https://lore.kernel.org/20220822183101.1115095-1-nathan@kernel.org/
->
-> * Don't return early, just initialize the values to some arbitrary
->    numbers and try to hobble along, as other parts of the chip may be
->    functional.
->
-> * Add message and comment to describe this situation.
->
->   sound/soc/codecs/src4xxx.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
-> index a8f143057b41..db4e280dd055 100644
-> --- a/sound/soc/codecs/src4xxx.c
-> +++ b/sound/soc/codecs/src4xxx.c
-> @@ -280,9 +280,14 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
->   		default:
->   			/* don't error out here,
->   			 * other parts of the chip are still functional
-> +			 * Dummy initialize variables to avoid
-> +			 * -Wsometimes-uninitialized from clang.
->   			 */
->   			dev_info(component->dev,
-> -				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
-> +				"Couldn't set the RCV PLL as this master clock rate is unknown. Chosen regmap values may not match real world values.\n");
-> +			pj = 0x0;
-> +			jd = 0xff;
-> +			d = 0xff;
->   			break;
->   		}
->   		ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->
-> base-commit: 94f072748337424c9cf92cd018532a34db3a5516
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   df0219d11b6f04251d38e345db4f9780cb32e2e2
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   5 months ago
+config: hexagon-buildonly-randconfig-r005-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240558.1wT7kygx-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3a drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3a drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
