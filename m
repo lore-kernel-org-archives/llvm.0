@@ -1,91 +1,77 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347B74C63
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 18:09:44 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id u6so14002235eda.12
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 11:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=z1E8GnokuPUf7Vf8jyRFI0tVUIIyZ4+J29LO62NqtGs=;
-        b=f7YWVinSY8ScIRzGU6IKFd1NVHvyN+OHFUCMQySl/7XI8jTIEO/r5Oc2amLrrPyIkb
-         Yq9Lodmd2qHYkOGWQqVBFQjnzkuEXv8IPwvbOGA62FnA7BVt9ACIGyIOBNMA6u9tDI+A
-         VgeBPNnVKcOJxRAdEckzFxiEJNdYLTy0qPiT4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=z1E8GnokuPUf7Vf8jyRFI0tVUIIyZ4+J29LO62NqtGs=;
-        b=KxIpKZcu6r+zun4dcC7vUSF02sswgyXh/D9Q7kUw01Lx2L5BICL6tSY16HVnVgjaJY
-         uQnIkt3XNiCQ4Tnm10ExJa57L1TEvYEL5jCuoUX13U4G4Mn2M5k+R0ETgWoEkdPoGMPR
-         blQJxlpPLapV9B6UizEbOw6TzQmfxnbO4Pb5sipI2jSw1ld4feGZq8RDvYTl2tGXCh0Y
-         7Als2K0vNVQs/d1W/z4qjaBEboPBPTo1uKt3pKu1MIS3CTEP5dWmBE0ZJDgpwyk6ykXC
-         ftvXaS8H8n78EhoHa1rAqqgtv2iWdKuaedl2bqGz87R6B5H/gjRvOXgq8Q7WdeTVvrPL
-         RTuw==
-X-Gm-Message-State: ACgBeo0tKLxOjgRlUO4Y+WvWGrEEavX7Zd4Z49J3kLt7Vjisez3hrc9S
-	sZ6ibFNctQLzVQH5w4kkxFTvzDz+5ZSp90Tv
-X-Google-Smtp-Source: AA6agR7fLWkGco4no2104vInudrdqUjKYcIdkXH0k/4OXwYOaBUeC3O9PA6KWkpe7MLiJ69e4i5HOg==
-X-Received: by 2002:aa7:ccd5:0:b0:445:cede:7936 with SMTP id y21-20020aa7ccd5000000b00445cede7936mr4625159edt.223.1661278182154;
-        Tue, 23 Aug 2022 11:09:42 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0072ffbbc3341sm128184ejc.204.2022.08.23.11.09.38
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 11:09:39 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id h24so17949457wrb.8
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 11:09:38 -0700 (PDT)
-X-Received: by 2002:adf:b343:0:b0:225:1a75:2a9a with SMTP id
- k3-20020adfb343000000b002251a752a9amr13812698wrd.281.1661278178479; Tue, 23
- Aug 2022 11:09:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CDE7E0
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 18:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E6CC433D6;
+	Tue, 23 Aug 2022 18:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661279839;
+	bh=6b52WSZ0j72XRJq6uFTsXCAQc695XrtImOHOm6npeI0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=fCGqvlzlZe5Fih2wiCo9XuQ6bZuWQpS4Fkb5U9T0AaZAfFtnkTftjnL8OvWZ29Asp
+	 WRTPf0O0fPAGBPJx6q1Lv0Z3hmboFJvyaFxbs5z0MTX/b7o74pGWz5HeJxdiwfy9n6
+	 ZkXthBYrOmT36MUgDa8PmrF/903ZpdwLG2J8uQPi89h7asbfIvWVJ9ryQAlVk0mQOa
+	 c+otNUMpaonl6T8AeR9I1YBiYmlcds+u4+kAwMC6BEo5L4/EGngyhSpy/Y/7kHtljd
+	 YM4G4eG7gDn1nVmor3ffibw/eIgQJdh2yKIOlnhYLF89o8KCBTHv+jgxZlM2IIKrhQ
+	 WZM6LZLiIS6Nw==
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, alsa-devel@alsa-project.org, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, linux-kernel@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea@microchip.com>, Tom Rix <trix@redhat.com>, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
+References: <20220810010809.2024482-1-nathan@kernel.org>
+Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+Message-Id: <166127983640.711152.15279532246364775048.b4-ty@kernel.org>
+Date: Tue, 23 Aug 2022 19:37:16 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YwSRFzQQKAXP2ncp@debian>
-In-Reply-To: <YwSRFzQQKAXP2ncp@debian>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 23 Aug 2022 11:09:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjn1=Gyi3Jxw4V0A=fXpOu5e1StPoyu52A6DHmbT+auzA@mail.gmail.com>
-Message-ID: <CAHk-=wjn1=Gyi3Jxw4V0A=fXpOu5e1StPoyu52A6DHmbT+auzA@mail.gmail.com>
-Subject: Re: mainline build failure for loongarch allmodconfig with gcc-12
-To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
 
-On Tue, Aug 23, 2022 at 1:34 AM Sudip Mukherjee (Codethink)
-<sudipm.mukherjee@gmail.com> wrote:
->
-> I have been trying to build loongarch as part of my nightly builds, and
-> I can build loongson3_defconfig without any error. But allmodconfig fails
-> with the error:
->
-> In function '__cmpxchg',
->     inlined from 'ssh_seq_next' at drivers/platform/surface/aggregator/controller.c:61:9,
+On Tue, 9 Aug 2022 18:08:09 -0700, Nathan Chancellor wrote:
+> A recent change in clang strengthened its -Wbitfield-constant-conversion
+> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
+> only be 0 or -1, not 1:
+> 
+>   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+>           dev->gclk_enabled = 1;
+>                             ^ ~
+>   1 error generated.
+> 
+> [...]
 
-Looks like ssh_seq_next() wants to do an atomic cmpxchg() on a single
-byte value, and the Loongarch implementation only does 4- and 8-byte
-versions.
+Applied to
 
-It looks like loongarch - from its MIPS heritage - inherited the "we
-can't do atomics on byte variables", so that it needs the same strange
-"do bytes as word accesses with mask-and-shifts".
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-For MIPS, the code is in __xchg_small() in arch/mips/kernel/cmpxchg.c.
+Thanks!
 
-Alpha has something similar, except it's all done in inline asm in
-arch/alpha/include/asm/xchg.h (look for "____cmpxchg(_u8," in there.
+[1/1] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+      commit: 5c5c2baad2b55cc0a4b190266889959642298f79
 
-Of course, we could just add a Kconfig variable like
-"ARCH_LACKS_BYTE_ATOMICS" and make that driver depend on it not being
-true, and just have Loongarch set it.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-But I think loongarch should just implement the byte masking stuff.
-Particularly since I suspect it can just copy the MIPS code as-is.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-                  Linus
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
