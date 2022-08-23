@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65507B
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 08:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D365AC433D7;
-	Tue, 23 Aug 2022 08:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63537B
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 08:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C022BC433C1;
+	Tue, 23 Aug 2022 08:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1661244433;
+	s=korg; t=1661244803;
 	bh=69ovCRcumfGslh/oGLivZ4DIr8oJgQGwFuXGEqHGW5k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pQxgqL2KgWzCKRnMVfjab2ZAUFyYUEVWVEF26pCj6zZFczFmfdAyGQICYPGWLXxga
-	 L4KaxEwVWPXbt7ITdk7ettvTS3XdJJvEfiuY1ff1cgbqD3dCnZ7U6GW0hAHl4rK5Z4
-	 PXF5Tu9DJ3V3jZsUxlWmtf8K4wAEwkIhbUhU01cQ=
+	b=BFGcUPhy3FdlJSs4xPaJ6Isyeg9C7IGbrGfh01GoRRPeTMr2xXjgGHHYvg2ih2GyQ
+	 jlBFXGAln7J1kUeFcuOc/a91Uqn+LtrSqUBOGyk1o017DjQ3O6Vr7D4nNBldzZEIPi
+	 7f6I4SVPUjKg4eT0rCUGVeXftPNCTixV0LlMi/mI=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Song Liu <song@kernel.org>,
 	Stanislav Fomichev <sdf@google.com>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.15 093/244] tools build: Switch to new openssl API for test-libcrypto
-Date: Tue, 23 Aug 2022 10:24:12 +0200
-Message-Id: <20220823080102.118945451@linuxfoundation.org>
+Subject: [PATCH 4.14 194/229] tools build: Switch to new openssl API for test-libcrypto
+Date: Tue, 23 Aug 2022 10:25:55 +0200
+Message-Id: <20220823080100.563952280@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
