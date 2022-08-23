@@ -1,216 +1,417 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A600256E
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 13:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661260184;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bOtpHFE2ejB69jhjZcLwAbMf0aXTvO+KkahRxdPBV0Q=;
-	b=YNg03q7AY0Xw0NJt/An4q48yekQayZdrmD3vl2Xrbhz2Ax4rkveCLyqEXAEbBVUcxWbqMF
-	uM/T8M2zgz//HvlrBnYKy6Z/6YnT8JMfoeMMIycuwBChHjoMnk7Bfobx4kxG4teHzFbSpQ
-	JZfMazd6B/3MnO2RMFWKZilvxj+qyAY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-bpvth83hOMmHJ82y5xT7uA-1; Tue, 23 Aug 2022 09:09:43 -0400
-X-MC-Unique: bpvth83hOMmHJ82y5xT7uA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 194408037AF
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 13:09:43 +0000 (UTC)
-Received: from [172.64.9.49] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0947418EA8;
-	Tue, 23 Aug 2022 13:09:43 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (55/381 SKIPPED): Test report for 6.0.0-rc2
- (mainline.kernel.org-clang) [072e5135]
-Date: Tue, 23 Aug 2022 13:09:42 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F15256E
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 13:47:31 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id o9-20020a056e0214c900b002dc29c288bfso10472796ilk.3
+        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 06:47:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=yuI0gBoDdaG1ukpIkwbYoyRmusXsLyM9T6V2Av2ljrw=;
+        b=0/5fPBjstN2Xk63tiefCkOUloXZDngN4vPg4x/aSa84npmAlD7xdNIC5DMwu91dA9n
+         MJlJjZ7Xr0INvwEpc+23na2YQM1y3oefqUgnbAtR5teXjOD/eh9Yt9Qs1WyRV+4Eoptg
+         my00Z/qcbi82WabkZJztjZd07FfcRFp6mUZFuJnwumZcDQrn3NWiBy53KZY7N/VqlRPd
+         6e4j11OV2gdnaK/pPGE4TzlgG3XiiCwLC3N9J0byXo4OyHHFeN9bK0xdMdloVnYSGgij
+         uhyMCa1o8fXcQFigZPpsTJQYiPoLjO0xlZOlLASgGd95s44WavFbzfrHimX/VR0u5P47
+         v7GA==
+X-Gm-Message-State: ACgBeo2peGLkKxh2vC9DI0uFhD7b7mveq7W69lnpGK/jvPVBKF+OTjHn
+	PIltl7tdymLwXVKEt4F5kcWyJBmWw+CEZ5sR84PUoi9gFvoi
+X-Google-Smtp-Source: AA6agR4ZHFxxt6GyWBMRbWHfprqC2ix/u+r4pl2sB4gpYjjaZ+jRzaJvsXMmQExDLyyUfzGgTdlNUkKwHpoFhVWu64PLUcEbAoF9
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <18294.122082309094300794@us-mta-466.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6638:2504:b0:343:38c9:eb27 with SMTP id
+ v4-20020a056638250400b0034338c9eb27mr12178230jat.92.1661262451186; Tue, 23
+ Aug 2022 06:47:31 -0700 (PDT)
+Date: Tue, 23 Aug 2022 06:47:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000048207505e6e8ced7@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in check_noncircular
+From: syzbot <syzbot+d709b1e8ea3167a1f513@syzkaller.appspotmail.com>
+To: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+syzbot found the following issue on:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16960ab5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+dashboard link: https://syzkaller.appspot.com/bug?extid=d709b1e8ea3167a1f513
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51368
+Unfortunately, I don't have any reproducer for this issue yet.
 
-One or more kernel tests failed:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d709b1e8ea3167a1f513@syzkaller.appspotmail.com
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 (debug) - Networking cki netfilter test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+CPU: 1 PID: 5779 Comm: syz-executor.5 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1521
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 5779, name: syz-executor.5
+preempt_count: 0, expected: 0
+RCU nest depth: 0, expected: 0
+5 locks held by syz-executor.5/5779:
+ #0: ffff8880173565e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe3/0x100 fs/file.c:1036
+ #1: ffff888021202460 (sb_writers#10){.+.+}-{0:0}, at: ksys_write+0x127/0x250 fs/read_write.c:631
+ #2: ffff8880245aec88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x28c/0x610 fs/kernfs/file.c:345
+ #3: ffff88807d20a748 (kn->active#223){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b0/0x610 fs/kernfs/file.c:346
+ #4: ffffffff8c0780a8 (oom_lock){+.+.}-{3:3}, at: mem_cgroup_out_of_memory+0x8d/0x270 mm/memcontrol.c:1642
+irq event stamp: 4106
+hardirqs last  enabled at (4105): [<ffffffff816756cd>] call_rcu+0x2dd/0x790 kernel/rcu/tree.c:2828
+hardirqs last disabled at (4106): [<ffffffff894c1738>] dump_stack_lvl+0x2e/0x134 lib/dump_stack.c:139
+softirqs last  enabled at (4084): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
+softirqs last  enabled at (4084): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+softirqs last disabled at (4063): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
+softirqs last disabled at (4063): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+CPU: 1 PID: 5779 Comm: syz-executor.5 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-rc1-next-20220819-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.5/5779 is trying to acquire lock:
+ffff88807b920828 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+ffff88807b920828 (&mm->mmap_lock#2){++++}-{3:3}, at: __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+
+but task is already holding lock:
+ffffffff8c0780a8 (oom_lock){+.+.}-{3:3}, at: mem_cgroup_out_of_memory+0x8d/0x270 mm/memcontrol.c:1642
+
+which lock already depends on the new lock.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+the existing dependency chain (in reverse order) is:
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+-> #1 (oom_lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       mem_cgroup_out_of_memory+0x8d/0x270 mm/memcontrol.c:1642
+       mem_cgroup_oom mm/memcontrol.c:1882 [inline]
+       try_charge_memcg+0xf13/0x1300 mm/memcontrol.c:2675
+       try_charge mm/memcontrol.c:2769 [inline]
+       charge_memcg+0x31/0x320 mm/memcontrol.c:6816
+       __mem_cgroup_charge+0x27/0x90 mm/memcontrol.c:6837
+       mem_cgroup_charge include/linux/memcontrol.h:696 [inline]
+       wp_page_copy+0x27c/0x1b60 mm/memory.c:3122
+       do_wp_page+0x1d1/0x1910 mm/memory.c:3393
+       handle_pte_fault mm/memory.c:4926 [inline]
+       __handle_mm_fault+0x184b/0x3a90 mm/memory.c:5050
+       handle_mm_fault+0x1c8/0x780 mm/memory.c:5171
+       do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1399
+       handle_page_fault arch/x86/mm/fault.c:1490 [inline]
+       exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1546
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-> #0 (&mm->mmap_lock#2){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       down_read_killable+0x9b/0x490 kernel/locking/rwsem.c:1522
+       mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+       __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+       get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+       get_mm_cmdline fs/proc/base.c:367 [inline]
+       get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+       dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+       dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+       dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+       __dump_stack lib/dump_stack.c:121 [inline]
+       dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+       __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+       down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
+       mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+       __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+       get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+       get_mm_cmdline fs/proc/base.c:367 [inline]
+       get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+       dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+       dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+       dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+       __dump_stack lib/dump_stack.c:121 [inline]
+       dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+       dump_header+0x10b/0x7f9 mm/oom_kill.c:460
+       oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1036
+       out_of_memory+0x358/0x14a0 mm/oom_kill.c:1174
+       mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1652
+       memory_max_write+0x2f5/0x3c0 mm/memcontrol.c:6392
+       cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3930
+       kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+       call_write_iter include/linux/fs.h:2188 [inline]
+       new_sync_write fs/read_write.c:491 [inline]
+       vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+       ksys_write+0x127/0x250 fs/read_write.c:631
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(oom_lock);
+                               lock(&mm->mmap_lock#2);
+                               lock(oom_lock);
+  lock(&mm->mmap_lock#2);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor.5/5779:
+ #0: ffff8880173565e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe3/0x100 fs/file.c:1036
+ #1: ffff888021202460 (sb_writers#10){.+.+}-{0:0}, at: ksys_write+0x127/0x250 fs/read_write.c:631
+ #2: ffff8880245aec88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x28c/0x610 fs/kernfs/file.c:345
+ #3: ffff88807d20a748 (kn->active#223){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b0/0x610 fs/kernfs/file.c:346
+ #4: ffffffff8c0780a8 (oom_lock){+.+.}-{3:3}, at: mem_cgroup_out_of_memory+0x8d/0x270 mm/memcontrol.c:1642
+
+stack backtrace:
+CPU: 1 PID: 5779 Comm: syz-executor.5 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+syz-executor.5[5779] cmdline: /root/syz-executor.5 exec
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ down_read_killable+0x9b/0x490 kernel/locking/rwsem.c:1522
+ mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+ __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+ get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+ get_mm_cmdline fs/proc/base.c:367 [inline]
+ get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+ dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+ dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+ dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+ __dump_stack lib/dump_stack.c:121 [inline]
+ dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+ down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
+ mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+ __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+ get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+ get_mm_cmdline fs/proc/base.c:367 [inline]
+ get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+ dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+ dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+ dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+ __dump_stack lib/dump_stack.c:121 [inline]
+ dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+ dump_header+0x10b/0x7f9 mm/oom_kill.c:460
+ oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1036
+ out_of_memory+0x358/0x14a0 mm/oom_kill.c:1174
+ mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1652
+ memory_max_write+0x2f5/0x3c0 mm/memcontrol.c:6392
+ cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3930
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+ call_write_iter include/linux/fs.h:2188 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f47db689279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f47dc719168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f47db79bf80 RCX: 00007f47db689279
+RDX: 0000000000000012 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007f47db6e3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffce4a733f R14: 00007f47dc719300 R15: 0000000000022000
+ </TASK>
+BUG: sleeping function called from invalid context at mm/gup.c:1215
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 5779, name: syz-executor.5
+preempt_count: 0, expected: 0
+RCU nest depth: 0, expected: 0
+INFO: lockdep is turned off.
+irq event stamp: 4106
+hardirqs last  enabled at (4105): [<ffffffff816756cd>] call_rcu+0x2dd/0x790 kernel/rcu/tree.c:2828
+hardirqs last disabled at (4106): [<ffffffff894c1738>] dump_stack_lvl+0x2e/0x134 lib/dump_stack.c:139
+softirqs last  enabled at (4084): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
+softirqs last  enabled at (4084): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+softirqs last disabled at (4063): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
+softirqs last disabled at (4063): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+CPU: 1 PID: 5779 Comm: syz-executor.5 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+syz-executor.5[5779] cmdline: /root/syz-executor.5 exec
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+ __get_user_pages+0x451/0xfd0 mm/gup.c:1215
+ __get_user_pages_locked mm/gup.c:1423 [inline]
+ __get_user_pages_remote+0x18f/0x830 mm/gup.c:2133
+ get_user_pages_remote+0x84/0xc0 mm/gup.c:2206
+ __access_remote_vm+0x275/0x6f0 mm/memory.c:5470
+ get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+ get_mm_cmdline fs/proc/base.c:367 [inline]
+ get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+ dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+ dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+ dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+ __dump_stack lib/dump_stack.c:121 [inline]
+ dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+ down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
+ mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+ __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+ get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+ get_mm_cmdline fs/proc/base.c:367 [inline]
+ get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+ dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+ dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+ dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+ __dump_stack lib/dump_stack.c:121 [inline]
+ dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+ dump_header+0x10b/0x7f9 mm/oom_kill.c:460
+ oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1036
+ out_of_memory+0x358/0x14a0 mm/oom_kill.c:1174
+ mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1652
+ memory_max_write+0x2f5/0x3c0 mm/memcontrol.c:6392
+ cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3930
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+ call_write_iter include/linux/fs.h:2188 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f47db689279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f47dc719168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f47db79bf80 RCX: 00007f47db689279
+RDX: 0000000000000012 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007f47db6e3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffce4a733f R14: 00007f47dc719300 R15: 0000000000022000
+ </TASK>
+syz-executor.5[5779] cmdline: /root/syz-executor.5 exec
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+ down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
+ mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
+ __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
+ get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
+ get_mm_cmdline fs/proc/base.c:367 [inline]
+ get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
+ dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
+ dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
+ dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
+ __dump_stack lib/dump_stack.c:121 [inline]
+ dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
+ dump_header+0x10b/0x7f9 mm/oom_kill.c:460
+ oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1036
+ out_of_memory+0x358/0x14a0 mm/oom_kill.c:1174
+ mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1652
+ memory_max_write+0x2f5/0x3c0 mm/memcontrol.c:6392
+ cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3930
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+ call_write_iter include/linux/fs.h:2188 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f47db689279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f47dc719168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f47db79bf80 RCX: 00007f47db689279
+RDX: 0000000000000012 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007f47db6e3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffce4a733f R14: 00007f47dc719300 R15: 0000000000022000
+ </TASK>
+syz-executor.5[5779] cmdline: /root/syz-executor.5 exec
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ dump_header+0x10b/0x7f9 mm/oom_kill.c:460
+ oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1036
+ out_of_memory+0x358/0x14a0 mm/oom_kill.c:1174
+ mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1652
+ memory_max_write+0x2f5/0x3c0 mm/memcontrol.c:6392
+ cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3930
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:354
+ call_write_iter include/linux/fs.h:2188 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f47db689279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f47dc719168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f47db79bf80 RCX: 00007f47db689279
+RDX: 0000000000000012 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007f47db6e3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffce4a733f R14: 00007f47dc719300 R15: 0000000000022000
+ </TASK>
+memory: usage 432kB, limit 0kB, failcnt 27
+swap: usage 0kB, limit 9007199254740988kB, failcnt 0
+Memory cgroup stats for /syz1:
+anon 122880
+file 57344
+kernel 262144
+kernel_stack 65536
+pagetables 81920
+percpu 0
+sock 0
+vmalloc 0
+shmem 36864
+zswap 0
+zswapped 0
+file_mapped 36864
+file_dirty 4096
+file_writeback 0
+swapcached 0
+anon_thp 0
+file_thp 0
+shmem_thp 0
+inactive_anon 139264
+active_anon 20480
+inactive_file 12288
+active_file 8192
+unevictable 0
+slab_reclaimable 12008
+slab_unreclaimable 76488
+slab 88496
+oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=syz5,mems_allowed=0-1,oom_memcg=/syz1,task_memcg=/syz1,task=syz-executor.1,pid=3746,uid=0
+Memory cgroup out of memory: Killed process 3746 (syz-executor.1) total-vm:50536kB, anon-rss:392kB, file-rss:9072kB, shmem-rss:4kB, UID:0 pgtables:72kB oom_score_adj:0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
