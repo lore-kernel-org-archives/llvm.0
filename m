@@ -1,42 +1,42 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7758E3207
-	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 22:11:11 +0000 (UTC)
-Received: by mail-pg1-f201.google.com with SMTP id m22-20020a6562d6000000b0042a7471b984so3908015pgv.4
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 15:11:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256255C91
+	for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 22:11:18 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-334ab1f0247so259194687b3.7
+        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 15:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=XPuMrEmpVaX0CO7dyFJBelQFPDb3Vcz70HxeyCf+Aoo=;
-        b=SJ+8921Gu9b3/VmEZj1EADQgc2FMFPsv+iqRwwG5/DLfP5x1WL5CBnZHQEUET2dwDf
-         XCIywGXcF2XdS/+7+k9pj4eDl7frNGPb65KPPdKE101o4g6KTeZpDK6CGNKG00b0ITNl
-         zyDdmGb4gNTgLzAqH4Tjy2oJzOgCcHLXJBlNtbKjB6XEVu49IDYwo+amTX33qly9RRwv
-         rwDvxWdmjvQRM8UsDDWP5uyogTrGHTO2VgNeNSTn06gT7UylBKz+LA4jtwbG1NOPNYJo
-         dzhQ6/kVIZUwVds8WBpBKWKtDjgoVl+bezYgHud5Lxcb045ct0ESDcPS4o48YA9GuyiX
-         cz8A==
+        bh=K4oRiNn+G2rdtJsE6L2b3oylFpgb/KpBFNxvRzPUh68=;
+        b=mPAPh3cEvyWdIZIF7pmnVaWOxwkdb/agfVPZLOISUSLKAOcBm6GD0GO984MB0BbI3h
+         nLeod1OUEJerQDtGS66iqteAj4Zm/QF4FHJoo6k5jCF7oa7npVly5Z+afdgkK7DojHeE
+         K8XhJDLxpv6UuKYEhvh3OXaCnHSBd81MS4q6MwEPHtSUGiZMhjf9hc0OnS34FCadQuwz
+         1SoHhjdmqixqY3VKmSmcDFXYPCR4Nxk+7nq3/U2G43pCTfjljlWU06JiNxt6XIhCpDPk
+         pZzBl3Mm1ZUgjxzQpUOIwQluQR+T8AvcaJs7Oz2ymxKbM2XVkwRHeMA2lI1ymtHkqfVg
+         Lvog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=XPuMrEmpVaX0CO7dyFJBelQFPDb3Vcz70HxeyCf+Aoo=;
-        b=Hkr1BztOjsb2TIP2TSTIJoUDIFxLBqjUNU7PtAhxPCyTBRnqXfGYhK14NTBRbmn675
-         xI6SKej2vm9USeox+djqtRQJrFFx/3drgGGS/SbY15HQ2iS/vX+N8A+gDKXU0HtDO4dA
-         vrs9gyGaY7YCuEhiq5Wds3Anssq5FHwpos8C661pIRN9CiGmC3WsP4U/BN0J3g07Y6vn
-         8aWbilZxi0X+m0yCOxszgWs+9+dQO8zBRAUPSARjevim8vFpgnQ05BH1kuE5xN6D5LMZ
-         zrXwjptaKFfKaduWn/AmIOAJ7PhbRYrz7mto8i8jJGKYHgVIlbnLJo4ZZde3JM7PluhI
-         zSrQ==
-X-Gm-Message-State: ACgBeo2TffH+065Y50qZz8Cf4MbypZpzV+AEVyaHg5li8ls8Txqj8n54
-	kwoiqF9DvwgDU5Ckoo57I+wKiRDZ3Ar8
-X-Google-Smtp-Source: AA6agR6/lrrbVHDvzAtqYEgzKbOP+OGUUywQemY8hrKQaj9m/YTAfzeBeCgzyMm2qKvm/cIwWjLpEYwnDh/O
+        bh=K4oRiNn+G2rdtJsE6L2b3oylFpgb/KpBFNxvRzPUh68=;
+        b=GVEr1g2U+CKiolHdTKNlkN/HfIJdOfpaO2yFWRSZ/WlMULWzy1PgEkGd1kNFxYz2uh
+         VLWsEkZ0Oxfe2LB2KozphDiBgPZmkeXC59I+10lPixxpvIP71mbL6BvsN970NQIAZ1JV
+         u9Od0I0Hequ7rOA7z0hRnmv5MvLczeDeqcmLa4WTQ0Hq78ZVIfXA/oImucLnXM6QyHku
+         SK6ttFOCgmiJAuvYsvSZlS3wmLI4FPpx/TLQXHv+aIPn68Cv2Y7Y6Igg5oXcx1h/f/OF
+         eOJ4+W6PlmdVcy57gHwEG35YFHfVrMHE3/btzT4sTBnWm5ov/O1lrOzNeqAhN7CjyUMt
+         JqGA==
+X-Gm-Message-State: ACgBeo29lxcmQ0hAvbNMSBuGA3o5uFZvrE2YNv446BpJtE1eY9eENHLf
+	DplCQ8JTZh35mfnE6DJdy66dnWa+FnP8
+X-Google-Smtp-Source: AA6agR7GhAN18bhNP7OEUGzMVoWqbLNjvwo0Kz5W4Z6P+DPRLh4sVcdbaQ0WjCi4/p46vI8Uk3tw7Xot0K2W
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7dbd:c08f:de81:c2a3])
- (user=irogers job=sendgmr) by 2002:a17:902:d505:b0:173:111a:3023 with SMTP id
- b5-20020a170902d50500b00173111a3023mr1535558plg.32.1661292670931; Tue, 23 Aug
- 2022 15:11:10 -0700 (PDT)
-Date: Tue, 23 Aug 2022 15:09:20 -0700
+ (user=irogers job=sendgmr) by 2002:a81:124c:0:b0:334:d633:f3c9 with SMTP id
+ 73-20020a81124c000000b00334d633f3c9mr28335053yws.437.1661292677181; Tue, 23
+ Aug 2022 15:11:17 -0700 (PDT)
+Date: Tue, 23 Aug 2022 15:09:21 -0700
 In-Reply-To: <20220823220922.256001-1-irogers@google.com>
-Message-Id: <20220823220922.256001-17-irogers@google.com>
+Message-Id: <20220823220922.256001-18-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220823220922.256001-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v2 16/18] perf sched: Fixes for thread safety analysis
+Subject: [PATCH v2 17/18] perf top: Fixes for thread safety analysis
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -75,114 +75,41 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add annotations to describe lock behavior. Add unlocks so that mutexes
-aren't conditionally held on exit from perf_sched__replay. Add an exit
-variable so that thread_func can terminate, rather than leaving the
-threads blocked on mutexes.
+Add annotations to describe lock behavior.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 17 deletions(-)
+ tools/perf/builtin-top.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 0f52f73be896..ce8497d39f9c 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -246,6 +246,7 @@ struct perf_sched {
- 	const char	*time_str;
- 	struct perf_time_interval ptime;
- 	struct perf_time_interval hist_time;
-+	volatile bool   thread_funcs_exit;
- };
- 
- /* per thread run time data */
-@@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
- 	prctl(PR_SET_NAME, comm2);
- 	if (fd < 0)
- 		return NULL;
--again:
--	ret = sem_post(&this_task->ready_for_work);
--	BUG_ON(ret);
--	mutex_lock(&sched->start_work_mutex);
--	mutex_unlock(&sched->start_work_mutex);
- 
--	cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-+	while (!sched->thread_funcs_exit) {
-+		ret = sem_post(&this_task->ready_for_work);
-+		BUG_ON(ret);
-+		mutex_lock(&sched->start_work_mutex);
-+		mutex_unlock(&sched->start_work_mutex);
- 
--	for (i = 0; i < this_task->nr_events; i++) {
--		this_task->curr_event = i;
--		perf_sched__process_event(sched, this_task->atoms[i]);
--	}
-+		cpu_usage_0 = get_cpu_usage_nsec_self(fd);
- 
--	cpu_usage_1 = get_cpu_usage_nsec_self(fd);
--	this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
--	ret = sem_post(&this_task->work_done_sem);
--	BUG_ON(ret);
-+		for (i = 0; i < this_task->nr_events; i++) {
-+			this_task->curr_event = i;
-+			perf_sched__process_event(sched, this_task->atoms[i]);
-+		}
- 
--	mutex_lock(&sched->work_done_wait_mutex);
--	mutex_unlock(&sched->work_done_wait_mutex);
-+		cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-+		this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-+		ret = sem_post(&this_task->work_done_sem);
-+		BUG_ON(ret);
- 
--	goto again;
-+		mutex_lock(&sched->work_done_wait_mutex);
-+		mutex_unlock(&sched->work_done_wait_mutex);
-+	}
-+	return NULL;
- }
- 
- static void create_tasks(struct perf_sched *sched)
-+	EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-+	EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index 3757292bfe86..e832f04e3076 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
+ 					struct hist_entry *he,
+ 					struct perf_sample *sample,
+ 					struct evsel *evsel, u64 ip)
++	EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
  {
- 	struct task_desc *task;
- 	pthread_attr_t attr;
-@@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
- }
- 
- static void wait_for_tasks(struct perf_sched *sched)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+ 	struct annotation *notes;
+ 	struct symbol *sym = he->ms.sym;
+@@ -724,13 +725,13 @@ static void *display_thread(void *arg)
+ static int hist_iter__top_callback(struct hist_entry_iter *iter,
+ 				   struct addr_location *al, bool single,
+ 				   void *arg)
++	EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
  {
- 	u64 cpu_usage_0, cpu_usage_1;
- 	struct task_desc *task;
-@@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
- }
+ 	struct perf_top *top = arg;
+-	struct hist_entry *he = iter->he;
+ 	struct evsel *evsel = iter->evsel;
  
- static void run_one_test(struct perf_sched *sched)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-+	EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
- {
- 	u64 T0, T1, delta, avg_delta, fluct;
+ 	if (perf_hpp_list.sym && single)
+-		perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
++		perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
  
-@@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
- 	print_task_traces(sched);
- 	add_cross_task_wakeups(sched);
- 
-+	sched->thread_funcs_exit = false;
- 	create_tasks(sched);
- 	printf("------------------------------------------------------------\n");
- 	for (i = 0; i < sched->replay_repeat; i++)
- 		run_one_test(sched);
- 
-+	sched->thread_funcs_exit = true;
-+	mutex_unlock(&sched->start_work_mutex);
-+	mutex_unlock(&sched->work_done_wait_mutex);
- 	return 0;
- }
- 
+ 	hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
+ 		     !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
 -- 
 2.37.2.609.g9ff673ca1a-goog
 
