@@ -1,103 +1,185 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA68D7E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:41:22 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3360c0f0583so296674577b3.2
-        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=GrPou0VZKgNlblC435aJ0/uQRkx4htFwsCEj3e4SObU=;
-        b=N1o6OUXGC/iH2ijb+lNFnDPHgqw3EE+YVt/w/YNG5LZUfFDtYUy7DPSHSoCRfmQwJS
-         GEW628oNDtiSEG+TR9DYt4rWnaj3cDMsOXnilUJ370jMbMm2KfNgR9m9Ztnive72kTrg
-         OaXWIVL0131N9ESH7zWki2HFxKiH1rI35QiprRkAJ13BoDEnL+LlSMy/HEWT438XtiMf
-         WGYAyjrFhnpcRX1qI2eaj3Tz+LyLgSHEugk/D/oOKrB0J9WujNMqEsCeVjZOH7UIoT9C
-         YQYpw/2SUA7LK6rmLDDGa50cJB04mKuYyUDqd0YphGCt9YPiv0IJMleBR3DizoZje5+w
-         Sv/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=GrPou0VZKgNlblC435aJ0/uQRkx4htFwsCEj3e4SObU=;
-        b=MYzUd8Lwgkz/xTQwkbek/nOwsouJH4D7cpUcwgZA+vLQVFFlYy/oMe2pr8ChKaPJsc
-         ObgQSdG69vEOAop2hVUTdpZTXAY39BBf91c0zv13cqNCUhthxExp9rNmHF7s6FF2KcrW
-         JJt2oaAjrrH4zUusZ3dQF0aTTMcDBoTwmMLBjokHd06JL3W7SywMVLb7MGfzUCUhhjSy
-         K4Dv09BUh0W6FbKs3CdScHVupA1VgyNiz9sjfCKlAmMvP9YJ3ENmFMq5DOcC0+jZz+kV
-         +ywUekvFAWnVuLOMWHQpFgcVxcoslg6SPZrt7Bq9v2TAkloZ5hMY+E0zFE0Y+ez4MsUw
-         k7Zg==
-X-Gm-Message-State: ACgBeo3+NG8yY/OVNYbOJiKy0NyYqJI7x7OiP5pYJLnGK0OkGcW2PLl7
-	ktsgP9Lty9kBhRbJbggBIArz4iYyLbkj
-X-Google-Smtp-Source: AA6agR50UpqAJXTKM7Aszo8uGw/kXlrIkRrRMT0M2mPuVHtgbj+KdyX05ZLo/uA1kRbmgsROvLG/mEAHf0b2
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ab82:a348:500d:1fc4])
- (user=irogers job=sendgmr) by 2002:a25:b3c4:0:b0:68d:d900:837e with SMTP id
- x4-20020a25b3c4000000b0068dd900837emr28057015ybf.501.1661355681725; Wed, 24
- Aug 2022 08:41:21 -0700 (PDT)
-Date: Wed, 24 Aug 2022 08:39:01 -0700
-In-Reply-To: <20220824153901.488576-1-irogers@google.com>
-Message-Id: <20220824153901.488576-19-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50997E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 16:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661357061; x=1692893061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9PmxGyD0G85YGbxs5z9xOLXNd7VzvtqENVunATfS8Nk=;
+  b=EQe5GwmNYINpEAf0uLfRIRM1vzHtGfCO3blXDweL1B4+Yk1FLxOmj/Ec
+   VtNWpt8CS2emjvcMq1wLZWGVJGdwwNQ+uIvDVTMRUTk78ed/WeS5FtRKP
+   re83i/aXl8utZO+f78EGOtx2DcHV+BcFKXJoNk+SOdMciKe2TnSCH45zI
+   Muh+HievNyHlg6jWwdG6hNk3wFG4JDIdPnmygzb9i9s0QprwQpVviCo6n
+   y/ooJ2+CE2iqQOowWzvOvTt2yOoS4jXxkepFSmsbjgldl/uxMLrOUNSBH
+   HCeuH5xwUUtjTnkce6loHSy/5AMjX3D5vRrh68sOeC08ZgRlKYK7CnHDv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="380298391"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="380298391"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:04:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="586489777"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 09:04:19 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQsra-0000j7-1u;
+	Wed, 24 Aug 2022 16:04:18 +0000
+Date: Thu, 25 Aug 2022 00:03:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 132/1117]
+ drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of
+ function 'FIELD_PREP'
+Message-ID: <202208242304.NpNCW92o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v3 18/18] perf build: Enable -Wthread-safety with clang
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
-	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
-	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
-	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, 
-	Adrian Hunter <adrian.hunter@intel.com>, "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
-	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
-	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Cc: Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If building with clang then enable -Wthread-safety warnings.
+Hi Shubhrajyoti,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 5 +++++
- 1 file changed, 5 insertions(+)
+FYI, the error/warning still remains.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index c41a090c0652..72dadafdbad9 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
- CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
- HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
- 
-+# Enabled Wthread-safety analysis for clang builds.
-+ifeq ($(CC_NO_CLANG), 0)
-+  CFLAGS += -Wthread-safety
-+endif
-+
- include $(srctree)/tools/scripts/Makefile.arch
- 
- $(call detected_var,SRCARCH)
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+head:   789b01147d793e5a6d1c794dd0a5879ccd61bd1d
+commit: e7cc160039f02d71ef5a3b16038d325ad76ab59e [132/1117] clocking-wizard: Support higher frequency accuracy
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220824/202208242304.NpNCW92o-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/e7cc160039f02d71ef5a3b16038d325ad76ab59e
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+        git checkout e7cc160039f02d71ef5a3b16038d325ad76ab59e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+                 ^
+>> drivers/clk/clk-xlnx-clock-wizard.c:369:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+               ^
+   2 errors generated.
+
+
+vim +/FIELD_PREP +309 drivers/clk/clk-xlnx-clock-wizard.c
+
+   286	
+   287	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
+   288					       unsigned long parent_rate)
+   289	{
+   290		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   291		u32 reg, pre;
+   292		u32 value;
+   293		int err;
+   294		u64 vco_freq, rate_div, f, clockout0_div;
+   295	
+   296		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
+   297		if (err)
+   298			pr_err("failed to get divisors\n");
+   299	
+   300		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
+   301		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   302	
+   303		clockout0_div = rate_div / WZRD_FRAC_POINTS;
+   304	
+   305		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
+   306		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
+   307		f = f & WZRD_CLKOUT_FRAC_MASK;
+   308	
+ > 309		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
+   310		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
+   311	
+   312		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
+   313		/* Set divisor and clear phase offset */
+   314		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
+   315		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
+   316		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
+   317		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
+   318		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
+   319		/* Check status register */
+   320		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
+   321					 value & WZRD_DR_LOCK_BIT_MASK,
+   322					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
+   323		if (err)
+   324			return -ETIMEDOUT;
+   325	
+   326		/* Initiate reconfiguration */
+   327		writel(WZRD_DR_BEGIN_DYNA_RECONF,
+   328		       divider->base + WZRD_DR_INIT_REG_OFFSET);
+   329	
+   330		/* Check status register */
+   331		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
+   332					 value & WZRD_DR_LOCK_BIT_MASK,
+   333					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
+   334		if (err)
+   335			return -ETIMEDOUT;
+   336	
+   337		return 0;
+   338	}
+   339	
+   340	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
+   341					unsigned long parent_rate)
+   342	{
+   343		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   344		unsigned long flags = 0;
+   345		int ret;
+   346	
+   347		if (divider->lock)
+   348			spin_lock_irqsave(divider->lock, flags);
+   349		else
+   350			__acquire(divider->lock);
+   351	
+   352		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
+   353	
+   354		if (divider->lock)
+   355			spin_unlock_irqrestore(divider->lock, flags);
+   356		else
+   357			__release(divider->lock);
+   358	
+   359		return ret;
+   360	}
+   361	
+   362	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
+   363						      unsigned long parent_rate)
+   364	{
+   365		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   366		u32 m, d, o, div, reg, f;
+   367	
+   368		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
+ > 369		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   370		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
+   371		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
+   372		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
+   373		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
+   374	
+   375		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
+   376		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
+   377				divider->flags, divider->width);
+   378	}
+   379	
+
 -- 
-2.37.2.609.g9ff673ca1a-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
