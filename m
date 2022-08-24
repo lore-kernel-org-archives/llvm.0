@@ -1,194 +1,169 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649F97E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661328241; x=1692864241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iqSZQ3NiVJWhpIJm/QA3YsSHn2PhwlnuDTmZ/d+c01o=;
-  b=l3UN08KHWqO9Yc7aZ8bhI89C5MtSsy48RQurGfGXClSSta9DGTYbSbM9
-   Yi6pnQHFeiEUR7d0V7PaMQeHXfZYRy1S3Hp6xNCKhg6DOWvgUHjSN6Ow9
-   2/nrOKMl5XjkNStkuNkdGDIFh+hYbabJmHgPfzvpk459EvitYGCAqJK6h
-   3O75rEbWCudVU4Aru9ZXv+g7xKeqCNbV7EO15Oa9tXNp1LHxu1YbJA3IW
-   Xq47iuXNcK3u50TVhxYlg1v6F/P2gt4w8K4fPM2Qoh+/M3MR9qnHFFonZ
-   k9XmFrYhNYNHcFYeqY0Yf6dKdtsvbtAAG7T9Zwk0992yQeBlfqM+RM+fJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="274286197"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="274286197"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:04:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="612713965"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Aug 2022 01:03:57 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQlMi-00005L-1U;
-	Wed, 24 Aug 2022 08:03:56 +0000
-Date: Wed, 24 Aug 2022 16:03:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Stultz <jstultz@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC][PATCH v2 1/2] sched: Avoid placing RT threads on cores
- handling long softirqs
-Message-ID: <202208241540.4avi4iGS-lkp@intel.com>
-References: <20220822190501.2171100-2-jstultz@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9691A7E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:10:24 +0000 (UTC)
+Received: by mail-pl1-f179.google.com with SMTP id p18so15007563plr.8
+        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 01:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
+        b=cPxFHkHRNoi1QBAXIZO2yurpDn3w+3l34l7pBPurq8rCROhaUjmamifjcijzDGua/m
+         YRIcg6wAzqTPTsp320ufVQc0Kb8NnQtL8yx25moUm5SswdFzVU9kYjWoc5jiCIF3uM2r
+         3DyVOi1J8LAaxEvuVcahNa7DE7YdictCKevdI2TcRCvNDOUrIbX47U+KCKlVtPTWh9X6
+         F6N3hXERQBk9dAvoiTRiFLR02mSYLOKIvrv9rnQst77WFHPvwKGYFm7utnSPnackgNwb
+         LmYnZiPxuBIGZVPiSGBTcZINkXsugVVl2OktUjldWgZtHgmsxdOzfAyVEOkEYQRcr6GR
+         ZcqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
+        b=skSfqx4k/k5pyi5tFTCcKcUGA6pFjzKgggdAYE9Z/UtWIldLsQNFpBK+1pyzwE/byS
+         E55b/8lpU59mLDnB1gtpctH2bd6oXh2YkleaRkcFl4ll15SjjTElsCXIurhvCsn5OoBS
+         VqJC0dHXtxp0ogK2a8k0ZSAFRH1JsyyJWMasMLHF5csE2pjZaaCdHDhjeaLDrcU0T4yW
+         byKNzIkH6EaHx5lw8Hh8vPDNW7aERFT7A1xpGvLA/lMm6hSpTAx0CTc56Zzoe3JD2GQs
+         N3F/avnj1Cohy36Has+w8vK5vw6WjcG/znueWiHT8DLdQBzI50kkojTtEYb/GxwXBAvt
+         pvcQ==
+X-Gm-Message-State: ACgBeo0rBlhjFciDdUAPax5QmjsymViSGpPONjie91yZpe3rp8xNV99m
+	H0Sy9vZ2Yqi2dObi7puKO0pGJUvSgP+72m0KfpY=
+X-Google-Smtp-Source: AA6agR7mOlL6iWB+csFRao6aJppvPwxrM+PSC03oib3/MwvPJvTec2P0Wk4/CsnZda2KXSiwddkoqNaUXpxd2g1w8jk=
+X-Received: by 2002:a17:90b:4a05:b0:1f5:62d5:4155 with SMTP id
+ kk5-20020a17090b4a0500b001f562d54155mr7417749pjb.6.1661328623952; Wed, 24 Aug
+ 2022 01:10:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822190501.2171100-2-jstultz@google.com>
+References: <20220824055637.10676-1-zhouzhouyi@gmail.com> <8d8bfc81-b584-20f4-65ae-d626f019cdf4@csgroup.eu>
+ <CAABZP2w7jw4OHXPDANNabaD1L1BbUG8ymu9zLGEt5xA8YgZ3ow@mail.gmail.com> <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
+In-Reply-To: <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date: Wed, 24 Aug 2022 16:10:12 +0800
+Message-ID: <CAABZP2ybddBG1KVTemcg4PvHsObVfP7Z+UMUkMCpZSBjBwFKbg@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mm: fix used but uninitialized variable
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "akpm@linux-foundation.org" <akpm@linux-foundation.org>, "nathan@kernel.org" <nathan@kernel.org>, 
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, "trix@redhat.com" <trix@redhat.com>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi John,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc2 next-20220824]
-[cannot apply to tip/sched/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/Softirq-rt-Optimizations/20220823-030642
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 072e51356cd5a4a1c12c1020bc054c99b98333df
-config: s390-randconfig-r003-20220824 (https://download.01.org/0day-ci/archive/20220824/202208241540.4avi4iGS-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/1d1c0ba7867315d6327259cbf7a561248330038b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Stultz/Softirq-rt-Optimizations/20220823-030642
-        git checkout 1d1c0ba7867315d6327259cbf7a561248330038b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from kernel/sched/build_policy.c:45:
->> kernel/sched/rt.c:1612:33: error: no member named '__softirq_pending' in 'struct irq_stat'
-                          per_cpu(irq_stat, cpu).__softirq_pending;
-                          ~~~~~~~~~~~~~~~~~~~~~~ ^
-   12 warnings and 1 error generated.
-
-
-vim +1612 kernel/sched/rt.c
-
-  1601	
-  1602	#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
-  1603	/*
-  1604	 * Return whether the task on the given cpu is currently non-preemptible
-  1605	 * while handling a potentially long softirq, or if the task is likely
-  1606	 * to block preemptions soon because it is a ksoftirq thread that is
-  1607	 * handling slow softirq.
-  1608	 */
-  1609	static bool task_may_preempt(struct task_struct *task, int cpu)
-  1610	{
-  1611		u32 softirqs = per_cpu(active_softirqs, cpu) |
-> 1612			       per_cpu(irq_stat, cpu).__softirq_pending;
-  1613	
-  1614		struct task_struct *cpu_ksoftirqd = per_cpu(ksoftirqd, cpu);
-  1615		struct task_struct *curr;
-  1616		struct rq *rq = cpu_rq(cpu);
-  1617		int ret;
-  1618	
-  1619		rcu_read_lock();
-  1620		curr = READ_ONCE(rq->curr); /* unlocked access */
-  1621		ret = !((softirqs & LONG_SOFTIRQ_MASK) &&
-  1622			 (curr == cpu_ksoftirqd ||
-  1623			  preempt_count() & SOFTIRQ_MASK));
-  1624		rcu_read_unlock();
-  1625		return ret;
-  1626	}
-  1627	#else
-  1628	static bool task_may_preempt(struct task_struct *task, int cpu)
-  1629	{
-  1630		return true;
-  1631	}
-  1632	#endif /* CONFIG_RT_SOFTIRQ_OPTIMIZATION */
-  1633	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Wed, Aug 24, 2022 at 2:49 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 24/08/2022 =C3=A0 08:41, Zhouyi Zhou a =C3=A9crit :
+> > Thank Christophe for reviewing my patch
+> >
+> > On Wed, Aug 24, 2022 at 2:10 PM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
+> >>
+> >>
+> >>
+> >> Le 24/08/2022 =C3=A0 07:56, Zhouyi Zhou a =C3=A9crit :
+> >>> In function walk_hugetlb_range, the local variable err may
+> >>> be used uninitialzed when:
+> >>> ops->pte_hole in side of "else if (ops->pte_hole)" is false.
+> >>>
+> >>> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >>> ---
+> >>> Dear mm Developers:
+> >>>
+> >>> When I build kernel using "make CC=3Dclang-14"
+> >>> the compiler complains following:
+> >>>
+> >>> CC      mm/pagewalk.o
+> >>> mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> >>>                   else if (ops->pte_hole)
+> >>>                            ^~~~~~~~~~~~~
+> >>> mm/pagewalk.c:321:7: note: uninitialized use occurs here
+> >>>                   if (err)
+> >>>                       ^~~
+> >>> mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always=
+ true
+> >>>                   else if (ops->pte_hole)
+> >>>                        ^~~~~~~~~~~~~~~~~~
+> >>> mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence =
+this warning
+> >>>                   int err;
+> >>>                          ^
+> >>>                           =3D 0
+> >>> 1 error generated.
+> >>> make[1]: *** [scripts/Makefile.build:250: mm/pagewalk.o] Error 1
+> >>> make: *** [Makefile:2006: mm] Error 2
+> >>>
+> >>> I initialize that variable outside of the for loop because we can ass=
+ign 0 to err
+> >>> only once in this function.
+> >>>
+> >>> After my fix, I can compile the kernel.
+> >>>
+> >>> Many Thanks
+> >>> Zhouyi
+> >>> --
+> >>>    mm/pagewalk.c | 2 +-
+> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+> >>> index 54b2a1beeeb3..b6eb330e8ecd 100644
+> >>> --- a/mm/pagewalk.c
+> >>> +++ b/mm/pagewalk.c
+> >>> @@ -306,9 +306,9 @@ static int walk_hugetlb_range(unsigned long addr,=
+ unsigned long end,
+> >>>        unsigned long hmask =3D huge_page_mask(h);
+> >>>        unsigned long sz =3D huge_page_size(h);
+> >>>        const struct mm_walk_ops *ops =3D walk->ops;
+> >>> +     int err =3D 0;
+> >>
+> >> Why do you move it back outside of the for loop allthough it is
+> >> exclusively used inside the loop ?
+> > I move it outside of the for loop for performance consideration. Becaus=
+e
+> > if we initialize err inside, there will be an assignment statement
+> > every iteration.
+>
+> I think GCC is smart enough to do the assignment only when necessary,
+> maybe have a look at the generated assembly in order to confirm.
+Thank Christophe for your guidance, I disassembled the GCC generated
+code, it optimized away int err =3D 0 on both X86 and PowerPC platforms.
+The disassembled instructions are quite long, so I prefer not to paste
+in my email unless someone asks me to do so ;-)
+>
+> >>
+> >>>
+> >>>        for (; addr < end; addr =3D next) {
+> >>> -             int err;
+> >>
+> >> Another solution would be to add an explicit else, setting err =3D 0 i=
+n
+> >> the if/else if sequence.
+> > Thank Christophe for your valuable advice, I am going to prepare a 2nd =
+version
+>
+Thank Christophe for your reminder, I only subscribed to the RCU
+mailing list currently, so I submitted duplicated work.  I should be
+more devoted to the Linux community. I am sorry.
+> Don't spend too much time on that, there are already other people
+> looking at it, see
+> https://lore.kernel.org/linux-mm/20220823153055.2517764-1-nathan@kernel.o=
+rg/T/
+>
+> >
+> > Thanks
+> > Zhouyi
+Many thanks
+Zhouyi
+> >>
+> >>>                pte_t *pte =3D huge_pte_offset(walk->mm, addr & hmask,=
+ sz);
+> >>>
+> >>>                next =3D hugetlb_entry_end(h, addr, end);
