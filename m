@@ -1,42 +1,42 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A067E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:39:42 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-335cf0fd1a4so297231137b3.11
-        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:39:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54A27E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:39:49 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-32a115757b6so299911387b3.13
+        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=kkLvqnwJBxJuW02GoX/GzvRRDzNYFeMugLbS0btBnq0=;
-        b=B9NeSXVK1Z/YGVgg5ME8fCdkrk5kmvUFhcIxIa4KEn4ng69OxUi6ns3GRw8VCQQdGS
-         Sgop1OYDLylw9yEDt9gKa2KU7BZAE9ViKooESlAKp3p0rGDU3DJgmiWqrILuQKJ3WY5a
-         4+gPt0J/WPg4GCpozetMbDp472EIJmJgcsV1MKbfquS+lBN8fMGaNRYt8ZQtdnyjmoNO
-         A58LFdbBvNmcuxeUEmJKfonYQVOpvUAd9+cwguheIuZvWBio/YHsQNiHnEGCF6DNbwA3
-         2JW1U3A9sx++6GtBkSAmQEuW3vge/TKg9cIgZNlZ7k86+Tlw5P7HwWWjD+EmeLyWv4HK
-         OLdQ==
+        bh=pZo3ybA6ZsEryuXOn4d62Wz0dp/bgVjWOiLvTRxWsEY=;
+        b=p4FyE0yxqJ0gcs0rMvffg6i8ThfPwPcAljBGiNianeiQxxwR+phlIvdN5J9vNVpW9g
+         bd/jJ0UJhsTdeRuorHlWZSrwSTj9O6lWcGxzDYf6mzx7TK12x2uarwy3PGX7492fp9h+
+         T4wDQmswJnu0QgrIO6/vMkoZqNdpF6T9OW1bfyTi6zeEe7SdXKiB5g0rxnr13iWlpjx5
+         BOqHGJ3OO5PUprSAACnApPH4B5sQGfs4LYqziheWbgiYL/S775FuPKuYXKC/khyqZJku
+         VySmlvYULOQGHxpsZthpWOB95hTku6eotWHWkO5psZLhXsxLLr2VsRYCrXD6Pl7T5hQI
+         4kOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=kkLvqnwJBxJuW02GoX/GzvRRDzNYFeMugLbS0btBnq0=;
-        b=sKuGaq0SAj9CrJACDEsuIqoimt8E8QAytXkglNyXazTaUYBAdPeOSmUcT15k5OprBO
-         DNnl2B2KEPCuxzR+ljSp8JEIuCzGDUiFlmGOEtmHg6PGZ5/5xBNNNeB32itnx2iFVPFu
-         7N7DEyDIo4VbrRzNnYt8ivHd3pnJWr0vDDzCGh5lFQlrVqIx90YP+Bf06U0CF2462Otk
-         /HwFPgeM6RpKKVXd5oMP3kGEn8/y0IR7OPvMEsSq1tRv+Ti12bq9wbsKpbRe85pkpJrm
-         KrrEyFefUuWBSL+xgmZdEWstEy9kWke/HrCouN9USDnOr3ZaJk0kfYOAu5Fy0Wv9ZpPU
-         X4vg==
-X-Gm-Message-State: ACgBeo1h2g1QIezPZeRRNAEDumJpHfbPTnemcJK1BCYZFMYbx2+P3e6q
-	H1apcfp7zxksTg8j3kls2mrE78GKW/os
-X-Google-Smtp-Source: AA6agR7x43hwf+QCzO2HL5X3zNDuQ479UfzmfZoh2CI7pJJ/ZpFXBAkUnKPG0dh4+XTcWw+Y2OnQtjQCfq20
+        bh=pZo3ybA6ZsEryuXOn4d62Wz0dp/bgVjWOiLvTRxWsEY=;
+        b=RG6iH90MWaYdOJPTQ8KnwpskxwjxH8ga1oCNpL4pG6lWREEIViAcBJk3PNwBYfNEib
+         fu2XC9QUZnsh8+VaMeDDawbVBIXC3le+k9Mhr8NKJT9Tf3IO42qPabzMu6KI7kGX1G6O
+         IPgQzQdgNe//HxuHObzUPocDwUOA1BZws/s0+xgmw+YOQB7UECLfm3Y5vvCMzAA+//9A
+         gkvYC32c8Hyome88oNGR5BfTHLA5SBxM4r48dcWM9tZr9p7lE3YXF92qWkyCyi2d+13U
+         FLWro3fQYPC9t9Cd+yYNj5WfCGrGfgnVBpmpZrb/2xj0XnRAphBpWZXoEFWghBzJXv+e
+         2SLQ==
+X-Gm-Message-State: ACgBeo3o5q36HqYOEvTc8pnzq+DdSYVmH5FMDy2DOKAQtOfwVPXVavtB
+	qjfh1/S1wH5/AVukyy+5IEkrfPNA0CEV
+X-Google-Smtp-Source: AA6agR40np2NY72RorRpZui2xolMtuxfyOBxXmnrj5Igq5OSJ3AcUvBjDxBw5ZshLxvh8kIyReO56ljdDcJr
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ab82:a348:500d:1fc4])
- (user=irogers job=sendgmr) by 2002:a25:3ca:0:b0:696:3653:d1b with SMTP id
- 193-20020a2503ca000000b0069636530d1bmr967511ybd.175.1661355581832; Wed, 24
- Aug 2022 08:39:41 -0700 (PDT)
-Date: Wed, 24 Aug 2022 08:38:46 -0700
+ (user=irogers job=sendgmr) by 2002:a25:becd:0:b0:690:a05c:8103 with SMTP id
+ k13-20020a25becd000000b00690a05c8103mr28098386ybm.381.1661355588791; Wed, 24
+ Aug 2022 08:39:48 -0700 (PDT)
+Date: Wed, 24 Aug 2022 08:38:47 -0700
 In-Reply-To: <20220824153901.488576-1-irogers@google.com>
-Message-Id: <20220824153901.488576-4-irogers@google.com>
+Message-Id: <20220824153901.488576-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220824153901.488576-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v3 03/18] perf tests: Avoid pthread.h inclusion
+Subject: [PATCH v3 04/18] perf hist: Update use of pthread mutex
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -75,56 +75,106 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-pthread.h is being included for the side-effect of getting sched.h and
-macros like CPU_CLR. Switch to directly using sched.h, or if that is
-already present, just remove the pthread.h inclusion entirely.
+Switch to the use of mutex wrappers that provide better error checking.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/mmap-basic.c              | 2 --
- tools/perf/tests/openat-syscall-all-cpus.c | 2 +-
- tools/perf/tests/perf-record.c             | 2 --
- 3 files changed, 1 insertion(+), 5 deletions(-)
+ tools/perf/builtin-top.c | 8 ++++----
+ tools/perf/util/hist.c   | 6 +++---
+ tools/perf/util/hist.h   | 4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
-index dfb6173b2a82..21b5e68179d7 100644
---- a/tools/perf/tests/mmap-basic.c
-+++ b/tools/perf/tests/mmap-basic.c
-@@ -1,8 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <errno.h>
- #include <inttypes.h>
--/* For the CLR_() macros */
--#include <pthread.h>
- #include <stdlib.h>
- #include <perf/cpumap.h>
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index fd8fd913c533..14e60f6f219c 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -220,7 +220,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
+ 		 * This function is now called with he->hists->lock held.
+ 		 * Release it before going to sleep.
+ 		 */
+-		pthread_mutex_unlock(&he->hists->lock);
++		mutex_unlock(&he->hists->lock);
  
-diff --git a/tools/perf/tests/openat-syscall-all-cpus.c b/tools/perf/tests/openat-syscall-all-cpus.c
-index 90828ae03ef5..f3275be83a33 100644
---- a/tools/perf/tests/openat-syscall-all-cpus.c
-+++ b/tools/perf/tests/openat-syscall-all-cpus.c
-@@ -2,7 +2,7 @@
- #include <errno.h>
- #include <inttypes.h>
- /* For the CPU_* macros */
--#include <pthread.h>
-+#include <sched.h>
+ 		if (err == -ERANGE && !he->ms.map->erange_warned)
+ 			ui__warn_map_erange(he->ms.map, sym, ip);
+@@ -230,7 +230,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
+ 			sleep(1);
+ 		}
  
- #include <sys/types.h>
- #include <sys/stat.h>
-diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
-index 6a001fcfed68..b386ade9ed06 100644
---- a/tools/perf/tests/perf-record.c
-+++ b/tools/perf/tests/perf-record.c
-@@ -2,8 +2,6 @@
- #include <errno.h>
- #include <inttypes.h>
- #include <linux/string.h>
--/* For the CLR_() macros */
--#include <pthread.h>
+-		pthread_mutex_lock(&he->hists->lock);
++		mutex_lock(&he->hists->lock);
+ 	}
+ }
  
- #include <sched.h>
- #include <perf/mmap.h>
+@@ -836,12 +836,12 @@ static void perf_event__process_sample(struct perf_tool *tool,
+ 		else
+ 			iter.ops = &hist_iter_normal;
+ 
+-		pthread_mutex_lock(&hists->lock);
++		mutex_lock(&hists->lock);
+ 
+ 		if (hist_entry_iter__add(&iter, &al, top->max_stack, top) < 0)
+ 			pr_err("Problem incrementing symbol period, skipping event\n");
+ 
+-		pthread_mutex_unlock(&hists->lock);
++		mutex_unlock(&hists->lock);
+ 	}
+ 
+ 	addr_location__put(&al);
+diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+index 1c085ab56534..698add038cec 100644
+--- a/tools/perf/util/hist.c
++++ b/tools/perf/util/hist.c
+@@ -1622,13 +1622,13 @@ struct rb_root_cached *hists__get_rotate_entries_in(struct hists *hists)
+ {
+ 	struct rb_root_cached *root;
+ 
+-	pthread_mutex_lock(&hists->lock);
++	mutex_lock(&hists->lock);
+ 
+ 	root = hists->entries_in;
+ 	if (++hists->entries_in > &hists->entries_in_array[1])
+ 		hists->entries_in = &hists->entries_in_array[0];
+ 
+-	pthread_mutex_unlock(&hists->lock);
++	mutex_unlock(&hists->lock);
+ 
+ 	return root;
+ }
+@@ -2805,7 +2805,7 @@ int __hists__init(struct hists *hists, struct perf_hpp_list *hpp_list)
+ 	hists->entries_in = &hists->entries_in_array[0];
+ 	hists->entries_collapsed = RB_ROOT_CACHED;
+ 	hists->entries = RB_ROOT_CACHED;
+-	pthread_mutex_init(&hists->lock, NULL);
++	mutex_init(&hists->lock);
+ 	hists->socket_filter = -1;
+ 	hists->hpp_list = hpp_list;
+ 	INIT_LIST_HEAD(&hists->hpp_formats);
+diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
+index 7ed4648d2fc2..508428b2c1b2 100644
+--- a/tools/perf/util/hist.h
++++ b/tools/perf/util/hist.h
+@@ -4,10 +4,10 @@
+ 
+ #include <linux/rbtree.h>
+ #include <linux/types.h>
+-#include <pthread.h>
+ #include "evsel.h"
+ #include "color.h"
+ #include "events_stats.h"
++#include "mutex.h"
+ 
+ struct hist_entry;
+ struct hist_entry_ops;
+@@ -98,7 +98,7 @@ struct hists {
+ 	const struct dso	*dso_filter;
+ 	const char		*uid_filter_str;
+ 	const char		*symbol_filter_str;
+-	pthread_mutex_t		lock;
++	struct mutex		lock;
+ 	struct hists_stats	stats;
+ 	u64			event_stream;
+ 	u16			col_len[HISTC_NR_COLS];
 -- 
 2.37.2.609.g9ff673ca1a-goog
 
