@@ -1,119 +1,279 @@
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3CE7E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:00:36 +0000 (UTC)
-Date: Wed, 24 Aug 2022 10:00:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1661353229;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wpdpInv50s3/tIr2zAWlDOu11BVdoLVMcL8Ge4aE150=;
-	b=vCNG6VW0yVkpK30QQEGBHc0IONpr09WwKoJRzM318XHzyPpdYjdo72Wro1vDzdAr0MYNLs
-	EYH9TmimgWflNvzHC80WrzVMIezIPbQfNXq8NkEMiF6hjZuJQrG4iKwHF5FaWtL6Sovhst
-	w05T8HvT2UqbKDR9ZLtxGz/iI8pVsbI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	James Morse <james.morse@arm.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Atish Patra <atishp@atishpatra.org>,
-	David Hildenbrand <david@redhat.com>, Tom Rix <trix@redhat.com>,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.cs.columbia.edu, kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>,
-	Peter Gonda <pgonda@google.com>,
-	Andrew Jones <andrew.jones@linux.dev>
-Subject: Re: [PATCH v4 5/6] KVM: selftests: Make arm64's MMIO ucall multi-VM
- friendly
-Message-ID: <YwY9BYDUeiT87/Vs@google.com>
-References: <20220824032115.3563686-1-seanjc@google.com>
- <20220824032115.3563686-6-seanjc@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226D17E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:01:35 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id n7so21114409wrv.4
+        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9MwRKo7p5mGuEOorxe18ICwvOojGU+Msts5Hm6mDUmM=;
+        b=DHIFxLxTXAgmKsbJjZGy1lXpuYDVR2jq+dJVAIM0rh6V3yuD8QQfAom1LDARfKzsl+
+         XPbDIDgDCWkUDgXOm8bmsdVC+BN4+x5CxVuRd51g0EdKzB0v31sXINtSdNwYi2Z/KAFT
+         x+X+cL5bKKpYSzXOkRt2+VEdw3+GdCgMU4FZvP7lg4la1rFMzIknWizCD1JjLUV2QUqX
+         VYMOQdMSGlq7WsX2UyUSEXw4kyK0nIjqFdBzsV7uYhBJ5w/XDJhqZPgnIyAlP/IOup9q
+         w8k3tPvZ2X1ztqdWGHG3EaguNJG7GSJ/0W4ssLRBEzzcFjuVbROv7zXYwfDmkxT+3ZNk
+         lotQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9MwRKo7p5mGuEOorxe18ICwvOojGU+Msts5Hm6mDUmM=;
+        b=EDgyj2Y5+4vFytcXoJPF97V6TCP4fLgIWY/bvp56LoOStUCw+NIJE9BY2uXP1RF6d3
+         ZwEXLsWyQhmaDoVuPzdfhHKmTvD6oH/tD66djmyZ55ZHA5sPPSs1wxFXN847sg0pUHqS
+         9iWEA7RuodzB7vzyvcoNmCnAO+MHaMcUOLfryou5lIh2hRsAiX3kyygPOq4TMh8Kcafb
+         eNhjCJv7aMt8JnCDDgYu1el7yvqXiwXB6B9H4wMFKRJcAQ+fgQsLFZr5/vGQvSao0chC
+         OYayhwa9lHWo3ODsjTSBAsn+UJ5ixAeVVxYl4+SoSI+O7S3ld/ztrkeI8MAKu+Em43Uy
+         90EQ==
+X-Gm-Message-State: ACgBeo2vY0k3kkBG+Sib9KTQ0GMsSyz2DxqDf9DckgS0XutCANxwzRwP
+	sqhd+/kzgTPw5aryveRxZtbo7Zsf21lNdl1YLapwzw==
+X-Google-Smtp-Source: AA6agR7HpNIT/fnUb42DSSIVVlV1mMl/8w4k0TKNasA3YcVRAe/dW1zFnuIFWQttSxtmk0z2PuivVtxuyY0WXQe9Dw0=
+X-Received: by 2002:a05:6000:1008:b0:225:58e0:223f with SMTP id
+ a8-20020a056000100800b0022558e0223fmr8713911wrx.375.1661353293134; Wed, 24
+ Aug 2022 08:01:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824032115.3563686-6-seanjc@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+References: <20220823220922.256001-1-irogers@google.com> <20220823220922.256001-2-irogers@google.com>
+ <4e68941f-1370-0c23-6f42-44f3e19e65f7@intel.com>
+In-Reply-To: <4e68941f-1370-0c23-6f42-44f3e19e65f7@intel.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 24 Aug 2022 08:01:21 -0700
+Message-ID: <CAP-5=fVLiY2J2P8p9GY=sn-kxHYp8iVdmpRcgTkLi9YJCT5QHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/18] perf mutex: Wrapped usage of mutex and cond
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
+	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
+	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
+	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
+	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
+	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
+	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sean,
+On Wed, Aug 24, 2022 at 2:45 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 24/08/22 01:09, Ian Rogers wrote:
+> > From: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> >
+> > Added a new header file mutex.h that wraps the usage of
+> > pthread_mutex_t and pthread_cond_t. By abstracting these it is
+> > possible to introduce error checking.
+> >
+> > Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/Build   |  1 +
+> >  tools/perf/util/mutex.c | 97 +++++++++++++++++++++++++++++++++++++++++
+> >  tools/perf/util/mutex.h | 43 ++++++++++++++++++
+> >  3 files changed, 141 insertions(+)
+> >  create mode 100644 tools/perf/util/mutex.c
+> >  create mode 100644 tools/perf/util/mutex.h
+> >
+> > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> > index 9dfae1bda9cc..8fd6dc8de521 100644
+> > --- a/tools/perf/util/Build
+> > +++ b/tools/perf/util/Build
+> > @@ -143,6 +143,7 @@ perf-y += branch.o
+> >  perf-y += mem2node.o
+> >  perf-y += clockid.o
+> >  perf-y += list_sort.o
+> > +perf-y += mutex.o
+> >
+> >  perf-$(CONFIG_LIBBPF) += bpf-loader.o
+> >  perf-$(CONFIG_LIBBPF) += bpf_map.o
+> > diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
+> > new file mode 100644
+> > index 000000000000..d12cf0714268
+> > --- /dev/null
+> > +++ b/tools/perf/util/mutex.c
+> > @@ -0,0 +1,97 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include "mutex.h"
+> > +
+> > +#include "debug.h"
+> > +#include <linux/string.h>
+> > +#include <errno.h>
+> > +
+> > +static void check_err(const char *fn, int err)
+> > +{
+> > +     char sbuf[STRERR_BUFSIZE];
+> > +
+> > +     if (err == 0)
+> > +             return;
+> > +
+> > +     pr_err("%s error: '%s'", fn, str_error_r(err, sbuf, sizeof(sbuf)));
+>
+> pr_err() does not add '\n' so it needs to be in the format string.
 
-On Wed, Aug 24, 2022 at 03:21:14AM +0000, Sean Christopherson wrote:
-> Fix a mostly-theoretical bug where ARM's ucall MMIO setup could result in
-> different VMs stomping on each other by cloberring the global pointer.
-> 
-> Fix the most obvious issue by saving the MMIO gpa into the VM.
-> 
-> A more subtle bug is that creating VMs in parallel (on multiple tasks)
-> could result in a VM using the wrong address.  Synchronizing a global to
-> a guest effectively snapshots the value on a per-VM basis, i.e. the
-> "global" is already prepped to work with multiple VMs, but setting the
-> global in the host and copying it to the guest needs to happen atomically.
-> To fix that bug, add atomic_sync_global_pointer_to_guest() to sync
-> "global" pointers that hold per-VM values, i.e. technically need to be
-> handled in a thread-safe manner.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     | 16 +++++++++++++++
->  .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++++++++++++-----
->  2 files changed, 31 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 24fde97f6121..9ec7fbe941aa 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -16,6 +16,7 @@
->  #include <linux/kvm.h>
->  #include "linux/rbtree.h"
->  
-> +#include <asm/atomic.h>
->  
->  #include <sys/ioctl.h>
->  
-> @@ -81,6 +82,7 @@ struct kvm_vm {
->  	struct sparsebit *vpages_mapped;
->  	bool has_irqchip;
->  	bool pgd_created;
-> +	vm_paddr_t ucall_mmio_addr;
->  	vm_paddr_t pgd;
->  	vm_vaddr_t gdt;
->  	vm_vaddr_t tss;
-> @@ -714,6 +716,20 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
->  	memcpy(&(g), _p, sizeof(g));				\
->  })
->  
-> +/*
-> + * Sync a global pointer to the guest that has a per-VM value, in which case
-> + * writes to the host copy of the "global" must be serialized (in case a test
-> + * is being truly crazy and spawning multiple VMs concurrently).
-> + */
+Thanks, will add in v3.
 
-Do we even care about writes to the host's copy of the global pointer?
-I don't see how the host pointer is used beyond serializing writes into
-a guest.
+> > +}
+> > +
+> > +#define CHECK_ERR(err) check_err(__func__, err)
+> > +
+> > +void mutex_init(struct mutex *mtx, bool pshared)
+> > +{
+> > +     pthread_mutexattr_t attr;
+> > +
+> > +     CHECK_ERR(pthread_mutexattr_init(&attr));
+> > +
+> > +#ifndef NDEBUG
+> > +     /* In normal builds enable error checking, such as recursive usage. */
+> > +     CHECK_ERR(pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK));
+> > +#endif
+> > +     if (pshared)
+> > +             pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
+> > +
+> > +     CHECK_ERR(pthread_mutex_init(&mtx->lock, &attr));
+> > +     CHECK_ERR(pthread_mutexattr_destroy(&attr));
+> > +}
+> > +
+> > +void mutex_destroy(struct mutex *mtx)
+> > +{
+> > +     CHECK_ERR(pthread_mutex_destroy(&mtx->lock));
+> > +}
+> > +
+> > +void mutex_lock(struct mutex *mtx)
+> > +{
+> > +     CHECK_ERR(pthread_mutex_lock(&mtx->lock));
+> > +}
+> > +
+> > +void mutex_unlock(struct mutex *mtx)
+> > +{
+> > +     CHECK_ERR(pthread_mutex_unlock(&mtx->lock));
+> > +}
+> > +
+> > +bool mutex_trylock(struct mutex *mtx)
+> > +{
+> > +     int ret = pthread_mutex_trylock(&mtx->lock);
+> > +
+> > +     if (ret == 0)
+> > +             return true; /* Lock acquired. */
+> > +
+> > +     if (ret == EBUSY)
+> > +             return false; /* Lock busy. */
+> > +
+> > +     /* Print error. */
+> > +     CHECK_ERR(ret);
+> > +     return false;
+> > +}
+> > +
+> > +void cond_init(struct cond *cnd, bool pshared)
+> > +{
+> > +     pthread_condattr_t attr;
+> > +
+> > +     CHECK_ERR(pthread_condattr_init(&attr));
+> > +     if (pshared)
+> > +             CHECK_ERR(pthread_condattr_setpshared(&attr, PTHREAD_PROCESS_SHARED));
+> > +
+> > +     CHECK_ERR(pthread_cond_init(&cnd->cond, &attr));
+> > +     CHECK_ERR(pthread_condattr_destroy(&attr));
+> > +}
+> > +
+> > +void cond_destroy(struct cond *cnd)
+> > +{
+> > +     CHECK_ERR(pthread_cond_destroy(&cnd->cond));
+> > +}
+> > +
+> > +void cond_wait(struct cond *cnd, struct mutex *mtx)
+> > +{
+> > +     CHECK_ERR(pthread_cond_wait(&cnd->cond, &mtx->lock));
+> > +}
+> > +
+> > +void cond_signal(struct cond *cnd)
+> > +{
+> > +     CHECK_ERR(pthread_cond_signal(&cnd->cond));
+> > +}
+> > +
+> > +void cond_broadcast(struct cond *cnd)
+> > +{
+> > +     CHECK_ERR(pthread_cond_broadcast(&cnd->cond));
+> > +}
+> > diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
+> > new file mode 100644
+> > index 000000000000..952276ad83bd
+> > --- /dev/null
+> > +++ b/tools/perf/util/mutex.h
+> > @@ -0,0 +1,43 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __PERF_MUTEX_H
+> > +#define __PERF_MUTEX_H
+> > +
+> > +#include <pthread.h>
+> > +#include <stdbool.h>
+> > +
+> > +/*
+> > + * A wrapper around the mutex implementation that allows perf to error check
+> > + * usage, etc.
+> > + */
+> > +struct mutex {
+> > +     pthread_mutex_t lock;
+> > +};
+> > +
+> > +/* A wrapper around the condition variable implementation. */
+> > +struct cond {
+> > +     pthread_cond_t cond;
+> > +};
+>
+> Do these definitions need to be in the header?
+> What about just:
+>
+> struct mutex;
+> struct cond;
+>
+> and put the defintions in mutex.c.
 
-IOW, it looks as though we could skip the whole global illusion
-altogether and write straight into guest memory.
+Agreed, unfortunately struct mutex is a variable in a bunch of structs
+and without the definition in the header file the size is missing.
 
---
 Thanks,
-Oliver
+Ian
+
+> > +
+> > +/*
+> > + * Initialize the mtx struct, if pshared is set then specify the process-shared
+> > + * rather than default process-private attribute.
+> > + */
+> > +void mutex_init(struct mutex *mtx, bool pshared);
+> > +void mutex_destroy(struct mutex *mtx);
+> > +
+> > +void mutex_lock(struct mutex *mtx);
+> > +void mutex_unlock(struct mutex *mtx);
+> > +bool mutex_trylock(struct mutex *mtx);
+> > +
+> > +/*
+> > + * Initialize the cond struct, if pshared is set then specify the process-shared
+> > + * rather than default process-private attribute.
+> > + */
+> > +void cond_init(struct cond *cnd, bool pshared);
+> > +void cond_destroy(struct cond *cnd);
+> > +
+> > +void cond_wait(struct cond *cnd, struct mutex *mtx);
+> > +void cond_signal(struct cond *cnd);
+> > +void cond_broadcast(struct cond *cnd);
+> > +
+> > +#endif /* __PERF_MUTEX_H */
+>
