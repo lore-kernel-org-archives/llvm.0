@@ -1,164 +1,117 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC7B66E4
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 12:11:11 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3378303138bso414457697b3.9
-        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 05:11:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=vssqVG+YXSj6gRHoUIAB1p3FH/P288mmnDBJ3dNJIZ0=;
-        b=GbD+Ts4mzCxQMYTZYuF52Hqxg+HJZW6EsOK/8GFqPtVFfx25ckhfHgnuy5R/6KdFhs
-         elzB222srphxIos2WEtkrKR1C/M2anp32y3dbBlyEhUGN++i4Z5sinFuc/x5czdNkBaL
-         TmbsS2RO7JHWVbaWBuK/34mNJTtLv1mGC7GCsT8+RMt3Qho+35tEGrEM5mVuOa01LbNT
-         eR073/nTxN0yFnKb2zPrKebrmOwsd1Z3oOHXAnXvh7c+VX4mdJGat/FlCiY8bSc3EaHW
-         0+VInRxLR79UcovRrk7y1IJGChcMsyQ15peEhCiCl+O9wMASIfn1D5l+/83fEfEnHMgS
-         RJeg==
-X-Gm-Message-State: ACgBeo2P/hA/q2smIE5O0I7uwKDD0wpJUo3dvJwAxYAqLpAWQMYK+pGz
-	uPKW9hnVIVvO19xaFjCgaNHKRP6GiccISgdiYS8=
-X-Google-Smtp-Source: AA6agR5kmKkOGbn2J8y1sxBjTA119Piw2hUCIQEiQwTZC9CaH7kY8xIkNNeIvXFpm30T/Ek1vZc/VUCo71ffO7etAy0=
-X-Received: by 2002:a81:6f43:0:b0:335:9e7e:ad25 with SMTP id
- k64-20020a816f43000000b003359e7ead25mr30442176ywc.518.1661343070674; Wed, 24
- Aug 2022 05:11:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815AE7B
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 13:25:08 +0000 (UTC)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DB421EC056A;
+	Wed, 24 Aug 2022 15:24:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1661347496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hvtVxhWrztDsZXHALGXRisb9QLUwGNxxI+ykol7ovVo=;
+	b=Igt6T7VsheNVHQUMoO69O/uFLPp7VAdAhsrFKKwTrxalqZq+17xhfRkrVg23xurex9KpDu
+	/MThpzGjF+UqrqaAsUToD9N6w3NsaVraXMOWKHY6egMnU98E7XsjxlbK2E9vcG1kZumei0
+	wsg5NuIgX4mHx+ipvBNi9wX/4rN9DQ8=
+Date: Wed, 24 Aug 2022 15:24:52 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+Message-ID: <YwYmpK40ju5WUlVZ@zn.tnic>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
+ <YwT+5GGCOKoTjfQZ@zn.tnic>
+ <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
+ <YwUR35I7+5JbLvMM@zn.tnic>
+ <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
+ <YwXkuW3rSYY7ZJT+@zn.tnic>
+ <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
- <YwT+5GGCOKoTjfQZ@zn.tnic> <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic> <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
- <YwXkuW3rSYY7ZJT+@zn.tnic>
-In-Reply-To: <YwXkuW3rSYY7ZJT+@zn.tnic>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Wed, 24 Aug 2022 21:10:59 +0900
-Message-ID: <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-To: Borislav Petkov <bp@alien8.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
 
-On Wed. 24 Aug 2022 at 17:43, Borislav Petkov <bp@alien8.de> wrote:
-> On Wed, Aug 24, 2022 at 05:31:20AM +0900, Vincent MAILHOL wrote:
-> > If the fact that __ffs(0) is undefined is a concern,
->
-> So what is of concern is I'm looking at those *ffs things and they look
-> like a real mess:
+On Wed, Aug 24, 2022 at 09:10:59PM +0900, Vincent MAILHOL wrote:
+> Not exactly, this is TZCNT for x86_64 but for x86, it will be BSF…
 
-I agree that the thing is a mess. Especially the naming: adding
-underscores when the behaviour is different is misleading. I think
-that ctzl() would have been a better name than __ffs().
+Not x86 - some old models which do not understand TZCNT, I'm being told.
+And I'm being also told, "Intel and AMD disagree on what BSF does when
+passed 0". So this is more mess.
 
->  * Undefined if no bit exists, so code should check against 0 first.
->  */
-> static __always_inline unsigned long __ffs(unsigned long word)
-> {
->         asm("rep; bsf %1,%0"
->
-> and that's TZCNT.
+> It means that __ffs() is not a x86_64 specific function. Each
 
-Not exactly, this is TZCNT for x86_64 but for x86, it will be BSF=E2=80=A6
+No, not that. The comment "Undefined if no bit exists".
 
-> And nowhere in TZCNT's description does it talk about undefined behavior
-> - it is all defined.
->
-> So I have no clue what that comment is supposed to mean?
+On my machine, __ffs(0) - the way it is implemented:
 
-It means that __ffs() is not a x86_64 specific function. Each
-architecture is free to provide an optimized implementation and are
-free to ignore __ffs(0) because this is undefined.
-For ffs(0) to be defined, every architecture would have to produce the
-same result, and this is not the case.
+	rep; bsf %1,%0
 
-> Then:
->
->  * ffs - find first set bit in word
->  * @x: the word to search
->  *
->  * This is defined the same way as the libc and compiler builtin ffs
->  * routines, therefore differs in spirit from the other bitops.
->  *
->  * ffs(value) returns 0 if value is 0 or the position of the first
->  * set bit if value is nonzero. The first (least significant) bit
->  * is at position 1.
->
-> while
->
-> "Built-in Function: int __builtin_ctz (unsigned int x)
->
->     Returns the number of trailing 0-bits in x, starting at the least sig=
-nificant bit position. If x is 0, the result is undefined."
->
-> as previously pasted.
->
-> So ffs() doesn't have undefined behavior either.
->
-> I guess it wants to say, it is undefined in the *respective* libc or
-> compiler helper implementation. And that should be explained.
->
-> > I can add a safety net:
->
-> Nah, no need. It seems this "behavior" has been the case a long time so
-> callers should know better (or have burned themselves properly :)).
->
-> > There is an index issue. __ffs() starts at 0 but ffs() starts at one.
-> > i.e.: __ffs(0x01) is 0 but ffs(0x01) is 1.
-> > Aside from the zero edge case, ffs(x) equals __ffs(x) + 1. This
-> > explains why __fss(0) is undefined.
->
-> I'd love to drop the undefined thing and start counting at 1 while
-> keeping the 0 case the special one.
->
-> But that ship has sailed a long time ago - look at all the __ffs() and
-> ffs() callers.
+is well-defined:
 
-ACK. I do not believe that this is something which can be changed now.
-At least, I=E2=80=AFam not willing to start such a crusade.
+"If the input operand is zero, CF is set to 1 and the size (in bits) of
+the input operand is written to the destination register. Otherwise, CF
+is cleared."
 
-> Back to your patch: I think the text should be fixed to say that both
-> ffs() and __ffs()'s kernel implementation doesn't have undefined results
+Leading to
 
-NACK. __ffs(0) is an undefined behaviour (c.f. TZCNT instruction for
-x86_64 and BSF instruction for x86). Even if x86_64 and x86 had the
-same behaviour that would still not be OK as it may fool developers
-into believing that __ffs(0) is defined kernel wide and would result
-in non portable code.
+__ffs(0): 0x40
 
-> but since it needs to adhere to the libc variants' API, it treats 0
-> differently. They surely can handle 0 as input.
->
-> I.e., I'd like to see a comment there explaining the whole difference
-> between ffs() and __ffs() so that people are aware.
+i.e., input operand of 64 bits.
 
-This would be helpful but the priority would then be to modify asm-generic:
-https://elixir.bootlin.com/linux/latest/source/include/asm-generic/bitops/_=
-_ffs.h#L11
+So on this particular x86 implementation, TZCNT(0) is well defined.
 
-Regardless, I do not think that the comment of __ffs() and ffs() is
-related to this patch series.
+So I'd like for that "undefined" thing to be expanded upon and
+explained. Something along the lines of "the libc/compiler primitives'
+*ffs(0) is undefined. Our inline asm helpers adhere to that behavior
+even if the result they return for input operand of 0 is very well
+defined."
 
-> Btw, pls do
->
-> s/variable___ffs/variable__ffs/g
->
-> Two underscores are just fine.
+Now, if there are some machines which do not adhere to the current hw
+behavior, then they should be ALTERNATIVEd.
 
-OK for me. The rationale was to name it variable_<function_name>()
-thus the three underscores. But I will also be happy with two
-underscores.
+Better?
 
+> > Back to your patch: I think the text should be fixed to say that both
+> > ffs() and __ffs()'s kernel implementation doesn't have undefined results
+> 
+> NACK. __ffs(0) is an undefined behaviour (c.f. TZCNT instruction for
 
-Yours sincerely,
-Vincent Mailhol
+NACK, SCHMACK. Read my mail again: "I think the text should be fixed".
+The *text* - not __ffs(0) itself. The *text* should be fixed to explain
+what undefined means. See above too.
+
+IOW, to start explaining this humongous mess I've scratched the surface
+of.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
