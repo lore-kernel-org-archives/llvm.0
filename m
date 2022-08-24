@@ -1,78 +1,187 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8E9671F
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 19:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731227B
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 21:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661367745; x=1692903745;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bYVre1YznOFajN/3s4M8VKRS5YVUUpw3RPbdi4Ytvg4=;
-  b=MACkC2nIHXkk7WBfj0dsDDrG1t/ElExDxqBva1oTiHrTibLTRmckTeD/
-   vWAp6nPM+InJYEqIY4hFAUcm0h2D8NAfRwHPCZrRlOnhqMx7C1AzMvz39
-   2R8p4mmNENjXRK40kNJBR22aZNgnZfuOTe7Efs2SDrUNHEdwN5XP1HuYu
-   yKOJ91Fu1Bzed/RsahYipM3H0DNlO+RP3nxAKUU2Vy0c2t30+ZeNinmjC
-   VJTOG8pSXgdLqdyUW5+Cqq71r1VS/qpKZck5vX2BOkUQO5xEdaXC4fLpk
-   YhiMrGU8BfvrA9m+f/awXdDHgFFugf8Lf7ZVADSzui2yimlzTMOTkBl2A
+  t=1661377309; x=1692913309;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u55x3BMC6IdX0hvusvjBKoB9KItycF/ELPuKXOiG878=;
+  b=H8cVDzw+mf+L8xJEd+plczF4RKNGxHTsETgYMTapRY+WTaUrWOSttPBs
+   pWHiX9TRyX7S2/macNRjrkIWKrvR9L5R7wIcOJ9dRHMg4C65TRmw7WCSz
+   OaBnYhTRE2E51SR61OtppxwvJvQdCZGPFvJ+H7l7KaVW9CmY6T4QZoNFY
+   PhcmT6Lpsuox/O4hAz7RsJvF2XmK+vw0m5YY5Z5dlxmcscVwgNm930zZM
+   BICOltNFWA2uBFx7UO72ZqgJJKsiyLvFViQZrH8P5G1KYoNRfrZe/WW0a
+   7XSBKVNVRrT8cCwymlYmKbx8rP/DVYxfVmgVwqQNi60zxY1m4Yu9AvPfg
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="274441399"
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="294863324"
 X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="274441399"
+   d="scan'208";a="294863324"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 12:02:11 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 14:41:48 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="938027073"
-Received: from skeshri-mobl.ger.corp.intel.com (HELO [10.212.154.182]) ([10.212.154.182])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 12:02:10 -0700
-Message-ID: <08cda8cc-1a0f-9577-0e2d-ed6ccd10c174@intel.com>
-Date: Wed, 24 Aug 2022 12:02:10 -0700
+   d="scan'208";a="938069235"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2022 14:41:47 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oQy8A-0001FH-2D;
+	Wed, 24 Aug 2022 21:41:46 +0000
+Date: Thu, 25 Aug 2022 05:41:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [axboe-block:io_uring-6.0 14/14] io_uring/net.c:1053:36: warning:
+ variable 'addr' is uninitialized when used here
+Message-ID: <202208250535.oP4RWEEL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-Content-Language: en-US
-To: "Kirill A. Shutemov" <kirill@shutemov.name>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
- Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>,
- ceph-devel@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Matthew Wilcox <willy@infradead.org>,
- clang-built-linux <llvm@lists.linux.dev>,
- Dave Hansen <dave.hansen@linux.intel.com>
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
- <20220814225415.n546anzvud6sumux@box.shutemov.name>
- <CAHk-=wiOqbuzy7xzsLrN8LXKGGUUMH109wcKOXx_PV9PkHa=Zw@mail.gmail.com>
- <CAHk-=whSGBmH7zKvD-=qJLkWPSGZo1cM7GyLH=8cuide7+ri_Q@mail.gmail.com>
- <20220815041232.kypaxhhnvobgb35t@box.shutemov.name>
-From: Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220815041232.kypaxhhnvobgb35t@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 8/14/22 21:12, Kirill A. Shutemov wrote:
-> But if somebody would try to be clever -- allocate memory and vmap() as
-> shared (with proper VMM notification), but leave direct mapping intact --
-> we have a problem. load_unaligned_zeropad() can step onto private mapping
-> of the shared memory in direct mapping and crash whole TD guest.
-> 
-> The worst part is that for somebody who is not aware about
-> load_unaligned_zeropad(), the vmap() trick is totally reasonable approach:
-> it helps to avoid direct mapping fragmentation. We considered the trick
-> for one of TDX-specific drivers.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.0
+head:   0596fa5ef9aff29219021fa6f0117b604ff83d09
+commit: 0596fa5ef9aff29219021fa6f0117b604ff83d09 [14/14] io_uring/net: save address for sendzc async execution
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220825/202208250535.oP4RWEEL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=0596fa5ef9aff29219021fa6f0117b604ff83d09
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block io_uring-6.0
+        git checkout 0596fa5ef9aff29219021fa6f0117b604ff83d09
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-This can also be fixed with guard pages.  It means allocating a
-physically contiguous page to precede each one you want to vmap(), but
-that's not the end of the world.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-We're going to have to be *VERY* careful with any private->shared
-conversion code.
+All warnings (new ones prefixed by >>):
+
+>> io_uring/net.c:1053:36: warning: variable 'addr' is uninitialized when used here [-Wuninitialized]
+                           return io_setup_async_addr(req, addr, issue_flags);
+                                                           ^~~~
+   io_uring/net.c:978:42: note: initialize the variable 'addr' to silence this warning
+           struct sockaddr_storage __address, *addr;
+                                                   ^
+                                                    = NULL
+   1 warning generated.
+
+
+vim +/addr +1053 io_uring/net.c
+
+   975	
+   976	int io_sendzc(struct io_kiocb *req, unsigned int issue_flags)
+   977	{
+   978		struct sockaddr_storage __address, *addr;
+   979		struct io_ring_ctx *ctx = req->ctx;
+   980		struct io_sendzc *zc = io_kiocb_to_cmd(req, struct io_sendzc);
+   981		struct io_notif_slot *notif_slot;
+   982		struct io_kiocb *notif;
+   983		struct msghdr msg;
+   984		struct iovec iov;
+   985		struct socket *sock;
+   986		unsigned msg_flags;
+   987		int ret, min_ret = 0;
+   988	
+   989		if (!(req->flags & REQ_F_POLLED) &&
+   990		    (zc->flags & IORING_RECVSEND_POLL_FIRST))
+   991			return -EAGAIN;
+   992	
+   993		if (issue_flags & IO_URING_F_UNLOCKED)
+   994			return -EAGAIN;
+   995		sock = sock_from_file(req->file);
+   996		if (unlikely(!sock))
+   997			return -ENOTSOCK;
+   998	
+   999		notif_slot = io_get_notif_slot(ctx, zc->slot_idx);
+  1000		if (!notif_slot)
+  1001			return -EINVAL;
+  1002		notif = io_get_notif(ctx, notif_slot);
+  1003		if (!notif)
+  1004			return -ENOMEM;
+  1005	
+  1006		msg.msg_name = NULL;
+  1007		msg.msg_control = NULL;
+  1008		msg.msg_controllen = 0;
+  1009		msg.msg_namelen = 0;
+  1010	
+  1011		if (zc->addr) {
+  1012			if (req_has_async_data(req)) {
+  1013				struct io_async_msghdr *io = req->async_data;
+  1014	
+  1015				msg.msg_name = &io->addr;
+  1016			} else {
+  1017				ret = move_addr_to_kernel(zc->addr, zc->addr_len, &__address);
+  1018				if (unlikely(ret < 0))
+  1019					return ret;
+  1020				msg.msg_name = (struct sockaddr *)&__address;
+  1021			}
+  1022			msg.msg_namelen = zc->addr_len;
+  1023		}
+  1024	
+  1025		if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
+  1026			ret = io_import_fixed(WRITE, &msg.msg_iter, req->imu,
+  1027						(u64)(uintptr_t)zc->buf, zc->len);
+  1028			if (unlikely(ret))
+  1029				return ret;
+  1030		} else {
+  1031			ret = import_single_range(WRITE, zc->buf, zc->len, &iov,
+  1032						  &msg.msg_iter);
+  1033			if (unlikely(ret))
+  1034				return ret;
+  1035			ret = io_notif_account_mem(notif, zc->len);
+  1036			if (unlikely(ret))
+  1037				return ret;
+  1038		}
+  1039	
+  1040		msg_flags = zc->msg_flags | MSG_ZEROCOPY;
+  1041		if (issue_flags & IO_URING_F_NONBLOCK)
+  1042			msg_flags |= MSG_DONTWAIT;
+  1043		if (msg_flags & MSG_WAITALL)
+  1044			min_ret = iov_iter_count(&msg.msg_iter);
+  1045	
+  1046		msg.msg_flags = msg_flags;
+  1047		msg.msg_ubuf = &io_notif_to_data(notif)->uarg;
+  1048		msg.sg_from_iter = io_sg_from_iter;
+  1049		ret = sock_sendmsg(sock, &msg);
+  1050	
+  1051		if (unlikely(ret < min_ret)) {
+  1052			if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
+> 1053				return io_setup_async_addr(req, addr, issue_flags);
+  1054	
+  1055			if (ret > 0 && io_net_retry(sock, msg.msg_flags)) {
+  1056				zc->len -= ret;
+  1057				zc->buf += ret;
+  1058				zc->done_io += ret;
+  1059				req->flags |= REQ_F_PARTIAL_IO;
+  1060				return io_setup_async_addr(req, addr, issue_flags);
+  1061			}
+  1062			if (ret == -ERESTARTSYS)
+  1063				ret = -EINTR;
+  1064			req_set_fail(req);
+  1065		} else if (zc->flags & IORING_RECVSEND_NOTIF_FLUSH) {
+  1066			io_notif_slot_flush_submit(notif_slot, 0);
+  1067		}
+  1068	
+  1069		if (ret >= 0)
+  1070			ret += zc->done_io;
+  1071		else if (zc->done_io)
+  1072			ret = zc->done_io;
+  1073		io_req_set_res(req, ret, 0);
+  1074		return IOU_OK;
+  1075	}
+  1076	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
