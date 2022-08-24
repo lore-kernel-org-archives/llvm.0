@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8FB7E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:39:56 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33352499223so296650817b3.8
-        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:39:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7867E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:40:02 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3363b1dffa0so298909397b3.23
+        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 08:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=gT8uGhkPz2QVnzj86f2E281NRyIthHuKkag96DoN/yw=;
-        b=U+0X/kZRQHBs+6EtDK9G1mX43K8ZAL3xn0/TBI+PnH4qGB93szqa60OnaP41kr8dzw
-         9QxineCg1olwLiYSqDFtsZ/DL3qt5W6eR5TCTrDzlgG3t20vGrl7TtoTaTPJqh4ejp+V
-         fOBK2QoavsAeGxc7ZOPJaBPfbn80gRsXO59+l5v0lcwdEKd7o+h2LPa4qhnAKzksgMVp
-         ALL9gtkdn2WUP3jETGiY5QAO1PyxVdYdDQa49bK9WeoWn4gACgU7UhjQ1Dlnp3z9npl2
-         34gO4ZNZnH69GdlCJG3fu7eOy9UXPpE5LPOovQZYlMf6sex3WDh4WqxhHDj1zxBHDbcA
-         ANMg==
+        bh=TZmRLUQ2d7TXmU69l5rNy1CTfW+D1QluUT9t1SCPaRQ=;
+        b=kFt2a2Yy49Okrz/AcL9NH0j2SCcVEr5HYilUar2f5s4z+KrAYcuPMJoWRKa/Ojk36T
+         lB5tOBCLgSmTIjGoOfko2hIAK72mAG/d/XUQ8trQS/ZWIB6jy+tUTZ2tW7JByu6gVYiG
+         vNMAF6YcK/jQBjarFtGteespzwsMUho7CExNdhqE0dyfv/EDaHpnfkl3GVQojcAA4DfM
+         K72V6rhIwSigCRpIR/FsB6JJTjad1SMHnU8dArYTdMvDff9QXAqtgMawgLXU1+w2sXil
+         dUkRiqLK61LuM6M9TRY117nOmUvxd6/sP709qAeQXzl7oPwLK/dCCpVYYh7KI3Od3spX
+         Kmqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=gT8uGhkPz2QVnzj86f2E281NRyIthHuKkag96DoN/yw=;
-        b=WkwNgSp81xK8nurlBpcaDijIK+UDVb4IByPPC7a3xmmW13u6VKDaXaONiSw2gZtHKh
-         egdNG2v1wQqw2IxiWqVChskyoBO1jU+iVCn/tGtdJFAu3bkRmFnYMg8rc+5E0sAXBcM1
-         yBTu1V5S7aP4T8WqWf7UpoQ/wvi21/Q3FDcferBiRD2zrRC9mdBHbwPQ9u/VRFDfjiGz
-         X5fH6FKft3JcpDW92Xoj2j8rBIffBE+CqXu+Nan3wxINulU6aLU9wdDfDVzr4/2eXw6p
-         tVPM8v8+cZD48FjHKwPqpuWVYSwoHd7z+dvcHaSgup64SIYd8XT79piTnw3byHrIiO2n
-         bbKQ==
-X-Gm-Message-State: ACgBeo3QVXoEKk+xMBODqnaqljWWMp5b1Zw3BBx6Wdh0YZjujJkkhSab
-	UdF0nECFJxPanvzsqRkccQEdtsVyio2z
-X-Google-Smtp-Source: AA6agR5ogga8EEBaYLPmvldmteYhwwTHUME0yqOv74tlcAU5d3CrXbpxfPBzolFdoMRAia3otbb1SmJYRf3r
+        bh=TZmRLUQ2d7TXmU69l5rNy1CTfW+D1QluUT9t1SCPaRQ=;
+        b=vITSO16ehlWJi12oSv7Dp8cJB6D2FRwRypErU084dlX6ht0NBiDVv1zcIaSrv2Ouse
+         D8fPDDd0F11ejCgGLZALhkdZub7LSt5nKjWlmzRcBc09FtAAIqLYbtVii5Ua05rrKOcl
+         iG8wTmuScHjBxs2zP9/CkDNkkFEBJapsc83k8/1uZk4gdaU9Ke7s6FYMxtDpn0hMcfuq
+         /WQ7UWm4vCJ5ja6viGnQXO+0Wg51g6KQsHfwWhRTCg0J+4plW4k43wZPKjWT9LyVZMDg
+         wcrvu/DrhlRLvFJm8aJOKnGiKcVb9JOmEqvW+uBWEyz1Jt22F+RAarbQzuMLu4/IwyVJ
+         GiCA==
+X-Gm-Message-State: ACgBeo2t+feJeZejtU5k0LNrOXJ1u31NztTNsjm+ERIU19uLaDe4ZD44
+	G5XLIsLH7NhWGaThsT505R6UxCWjDMdy
+X-Google-Smtp-Source: AA6agR7s5Q11LLmEK7bhw9Jv7H9t6qvpGnpsnE2nnoN8CK/3a9IyLjfDH+89vD4ezWXEjVj5AiIRBQMtdryR
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ab82:a348:500d:1fc4])
- (user=irogers job=sendgmr) by 2002:a25:84cd:0:b0:67a:699e:4e84 with SMTP id
- x13-20020a2584cd000000b0067a699e4e84mr27914790ybm.407.1661355595376; Wed, 24
- Aug 2022 08:39:55 -0700 (PDT)
-Date: Wed, 24 Aug 2022 08:38:48 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d4cb:0:b0:68f:6452:57ee with SMTP id
+ m194-20020a25d4cb000000b0068f645257eemr26553234ybf.609.1661355602414; Wed, 24
+ Aug 2022 08:40:02 -0700 (PDT)
+Date: Wed, 24 Aug 2022 08:38:49 -0700
 In-Reply-To: <20220824153901.488576-1-irogers@google.com>
-Message-Id: <20220824153901.488576-6-irogers@google.com>
+Message-Id: <20220824153901.488576-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220824153901.488576-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v3 05/18] perf bpf: Remove unused pthread.h include
+Subject: [PATCH v3 06/18] perf lock: Remove unused pthread.h include
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -75,24 +75,24 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-No pthread usage in bpf-event.h.
+No pthread usage in builtin-lock.c.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/bpf-event.h | 1 -
+ tools/perf/builtin-lock.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-index 144a8a24cc69..1bcbd4fb6c66 100644
---- a/tools/perf/util/bpf-event.h
-+++ b/tools/perf/util/bpf-event.h
-@@ -4,7 +4,6 @@
- 
- #include <linux/compiler.h>
- #include <linux/rbtree.h>
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index dd11d3471baf..70197c0593b1 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -28,7 +28,6 @@
+ #include <sys/types.h>
+ #include <sys/prctl.h>
+ #include <semaphore.h>
 -#include <pthread.h>
- #include <api/fd/array.h>
- #include <stdio.h>
+ #include <math.h>
+ #include <limits.h>
  
 -- 
 2.37.2.609.g9ff673ca1a-goog
