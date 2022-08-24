@@ -1,274 +1,204 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C311110
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 09:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661334328; x=1692870328;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=r14CxE1SBaJlMjpDav35DU25bLbY0RYb1m2G+BUYXHA=;
-  b=nGR2XXq68XY/DBj2kbj1y92Q3WQru7fuNLLTUA8b7gM+jEAeShe0WJEy
-   ufR940GkdgYf20ZZpCUH9G18kCG33iHFK0+3oUBfZVy91DADlBIQKbOdV
-   OMAs2S7wWsg4NFRUhRUJYYQDcqkVWDklyVUgjLbH+7YKFN2z/SsPSrZgQ
-   CMS0BxHtKsOrNqpvRYZ2sU7BF3Q2Jc3kd/6uzWJR6p/f0je1b3vgnTNvq
-   ahtdE/AAOAny2T+itF4qj41bvhS8yWNpG9Qps+htW2Eaq7dj4cMGIjjhj
-   RD42fprniSoYe9v0pRuJtikAC72XQfmOfzyU7TnQTBf2vZbl4VgprKyQN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292667005"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="292667005"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 02:45:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="586365611"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.108])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 02:45:15 -0700
-Message-ID: <4e68941f-1370-0c23-6f42-44f3e19e65f7@intel.com>
-Date: Wed, 24 Aug 2022 12:45:10 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBDB1110
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 09:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661334645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=l0oHmXCAM0S70z7wGc5V1GjXlYiaNEOF63i5kwt7YCE=;
+	b=C9K2VaR4bV5Nrg/GYTbiSvgRDUzb2kLmptrbhAAndJHhsaNL5Lv7eJ9L1HSWSj6fvY8ByR
+	pCrGuttCT2LM8LTaLEw1zwqAZ82dvnQsPJzBHt8gLC9MQVz/5y75CW80rNfxjGxHI1N8La
+	q2t6HuHO7Hu9FDUR0yxKMWTNEAlXFWY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-365-UpbUJctbOYSSSeMrcaNbNw-1; Wed, 24 Aug 2022 05:50:44 -0400
+X-MC-Unique: UpbUJctbOYSSSeMrcaNbNw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1104B3C10142
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 09:50:44 +0000 (UTC)
+Received: from [172.64.12.16] (unknown [10.30.32.158])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 03D4A400E726;
+	Wed, 24 Aug 2022 09:50:44 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (55/381 SKIPPED): Test report for 6.0.0-rc2
+ (mainline.kernel.org-clang) [df0219d1]
+Date: Wed, 24 Aug 2022 09:50:42 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 01/18] perf mutex: Wrapped usage of mutex and cond
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
- <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
- Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
- Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
- <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
- Kim Phillips <kim.phillips@amd.com>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Alexandre Truong <alexandre.truong@arm.com>,
- Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
- Andres Freund <andres@anarazel.de>, Adrian Hunter <adrian.hunter@intel.com>,
- =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
- Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>,
- Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>,
- Kajol Jain <kjain@linux.ibm.com>,
- Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
- Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220823220922.256001-1-irogers@google.com>
- <20220823220922.256001-2-irogers@google.com>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220823220922.256001-2-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Message-Id: <61922.122082405504400241@us-mta-365.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24/08/22 01:09, Ian Rogers wrote:
-> From: Pavithra Gurushankar <gpavithrasha@gmail.com>
-> 
-> Added a new header file mutex.h that wraps the usage of
-> pthread_mutex_t and pthread_cond_t. By abstracting these it is
-> possible to introduce error checking.
-> 
-> Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/Build   |  1 +
->  tools/perf/util/mutex.c | 97 +++++++++++++++++++++++++++++++++++++++++
->  tools/perf/util/mutex.h | 43 ++++++++++++++++++
->  3 files changed, 141 insertions(+)
->  create mode 100644 tools/perf/util/mutex.c
->  create mode 100644 tools/perf/util/mutex.h
-> 
-> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> index 9dfae1bda9cc..8fd6dc8de521 100644
-> --- a/tools/perf/util/Build
-> +++ b/tools/perf/util/Build
-> @@ -143,6 +143,7 @@ perf-y += branch.o
->  perf-y += mem2node.o
->  perf-y += clockid.o
->  perf-y += list_sort.o
-> +perf-y += mutex.o
->  
->  perf-$(CONFIG_LIBBPF) += bpf-loader.o
->  perf-$(CONFIG_LIBBPF) += bpf_map.o
-> diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
-> new file mode 100644
-> index 000000000000..d12cf0714268
-> --- /dev/null
-> +++ b/tools/perf/util/mutex.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "mutex.h"
-> +
-> +#include "debug.h"
-> +#include <linux/string.h>
-> +#include <errno.h>
-> +
-> +static void check_err(const char *fn, int err)
-> +{
-> +	char sbuf[STRERR_BUFSIZE];
-> +
-> +	if (err == 0)
-> +		return;
-> +
-> +	pr_err("%s error: '%s'", fn, str_error_r(err, sbuf, sizeof(sbuf)));
+Hi, we tested your kernel and here are the results:
 
-pr_err() does not add '\n' so it needs to be in the format string.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> +}
-> +
-> +#define CHECK_ERR(err) check_err(__func__, err)
-> +
-> +void mutex_init(struct mutex *mtx, bool pshared)
-> +{
-> +	pthread_mutexattr_t attr;
-> +
-> +	CHECK_ERR(pthread_mutexattr_init(&attr));
-> +
-> +#ifndef NDEBUG
-> +	/* In normal builds enable error checking, such as recursive usage. */
-> +	CHECK_ERR(pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK));
-> +#endif
-> +	if (pshared)
-> +		pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
-> +
-> +	CHECK_ERR(pthread_mutex_init(&mtx->lock, &attr));
-> +	CHECK_ERR(pthread_mutexattr_destroy(&attr));
-> +}
-> +
-> +void mutex_destroy(struct mutex *mtx)
-> +{
-> +	CHECK_ERR(pthread_mutex_destroy(&mtx->lock));
-> +}
-> +
-> +void mutex_lock(struct mutex *mtx)
-> +{
-> +	CHECK_ERR(pthread_mutex_lock(&mtx->lock));
-> +}
-> +
-> +void mutex_unlock(struct mutex *mtx)
-> +{
-> +	CHECK_ERR(pthread_mutex_unlock(&mtx->lock));
-> +}
-> +
-> +bool mutex_trylock(struct mutex *mtx)
-> +{
-> +	int ret = pthread_mutex_trylock(&mtx->lock);
-> +
-> +	if (ret == 0)
-> +		return true; /* Lock acquired. */
-> +
-> +	if (ret == EBUSY)
-> +		return false; /* Lock busy. */
-> +
-> +	/* Print error. */
-> +	CHECK_ERR(ret);
-> +	return false;
-> +}
-> +
-> +void cond_init(struct cond *cnd, bool pshared)
-> +{
-> +	pthread_condattr_t attr;
-> +
-> +	CHECK_ERR(pthread_condattr_init(&attr));
-> +	if (pshared)
-> +		CHECK_ERR(pthread_condattr_setpshared(&attr, PTHREAD_PROCESS_SHARED));
-> +
-> +	CHECK_ERR(pthread_cond_init(&cnd->cond, &attr));
-> +	CHECK_ERR(pthread_condattr_destroy(&attr));
-> +}
-> +
-> +void cond_destroy(struct cond *cnd)
-> +{
-> +	CHECK_ERR(pthread_cond_destroy(&cnd->cond));
-> +}
-> +
-> +void cond_wait(struct cond *cnd, struct mutex *mtx)
-> +{
-> +	CHECK_ERR(pthread_cond_wait(&cnd->cond, &mtx->lock));
-> +}
-> +
-> +void cond_signal(struct cond *cnd)
-> +{
-> +	CHECK_ERR(pthread_cond_signal(&cnd->cond));
-> +}
-> +
-> +void cond_broadcast(struct cond *cnd)
-> +{
-> +	CHECK_ERR(pthread_cond_broadcast(&cnd->cond));
-> +}
-> diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
-> new file mode 100644
-> index 000000000000..952276ad83bd
-> --- /dev/null
-> +++ b/tools/perf/util/mutex.h
-> @@ -0,0 +1,43 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __PERF_MUTEX_H
-> +#define __PERF_MUTEX_H
-> +
-> +#include <pthread.h>
-> +#include <stdbool.h>
-> +
-> +/*
-> + * A wrapper around the mutex implementation that allows perf to error check
-> + * usage, etc.
-> + */
-> +struct mutex {
-> +	pthread_mutex_t lock;
-> +};
-> +
-> +/* A wrapper around the condition variable implementation. */
-> +struct cond {
-> +	pthread_cond_t cond;
-> +};
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Do these definitions need to be in the header?
-What about just:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51504
 
-struct mutex;
-struct cond;
+One or more kernel tests failed:
 
-and put the defintions in mutex.c.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
+gument
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1352
+            Affected tests:
+                   s390x - selinux-policy: serge-testsuite
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-> +
-> +/*
-> + * Initialize the mtx struct, if pshared is set then specify the process-shared
-> + * rather than default process-private attribute.
-> + */
-> +void mutex_init(struct mutex *mtx, bool pshared);
-> +void mutex_destroy(struct mutex *mtx);
-> +
-> +void mutex_lock(struct mutex *mtx);
-> +void mutex_unlock(struct mutex *mtx);
-> +bool mutex_trylock(struct mutex *mtx);
-> +
-> +/*
-> + * Initialize the cond struct, if pshared is set then specify the process-shared
-> + * rather than default process-private attribute.
-> + */
-> +void cond_init(struct cond *cnd, bool pshared);
-> +void cond_destroy(struct cond *cnd);
-> +
-> +void cond_wait(struct cond *cnd, struct mutex *mtx);
-> +void cond_signal(struct cond *cnd);
-> +void cond_broadcast(struct cond *cnd);
-> +
-> +#endif /* __PERF_MUTEX_H */
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
