@@ -1,117 +1,119 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815AE7B
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 13:25:08 +0000 (UTC)
-Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DB421EC056A;
-	Wed, 24 Aug 2022 15:24:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1661347496;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3CE7E
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 15:00:36 +0000 (UTC)
+Date: Wed, 24 Aug 2022 10:00:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1661353229;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hvtVxhWrztDsZXHALGXRisb9QLUwGNxxI+ykol7ovVo=;
-	b=Igt6T7VsheNVHQUMoO69O/uFLPp7VAdAhsrFKKwTrxalqZq+17xhfRkrVg23xurex9KpDu
-	/MThpzGjF+UqrqaAsUToD9N6w3NsaVraXMOWKHY6egMnU98E7XsjxlbK2E9vcG1kZumei0
-	wsg5NuIgX4mHx+ipvBNi9wX/4rN9DQ8=
-Date: Wed, 24 Aug 2022 15:24:52 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-Message-ID: <YwYmpK40ju5WUlVZ@zn.tnic>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
- <YwT+5GGCOKoTjfQZ@zn.tnic>
- <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic>
- <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
- <YwXkuW3rSYY7ZJT+@zn.tnic>
- <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
+	bh=wpdpInv50s3/tIr2zAWlDOu11BVdoLVMcL8Ge4aE150=;
+	b=vCNG6VW0yVkpK30QQEGBHc0IONpr09WwKoJRzM318XHzyPpdYjdo72Wro1vDzdAr0MYNLs
+	EYH9TmimgWflNvzHC80WrzVMIezIPbQfNXq8NkEMiF6hjZuJQrG4iKwHF5FaWtL6Sovhst
+	w05T8HvT2UqbKDR9ZLtxGz/iI8pVsbI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Atish Patra <atishp@atishpatra.org>,
+	David Hildenbrand <david@redhat.com>, Tom Rix <trix@redhat.com>,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.cs.columbia.edu, kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>,
+	Peter Gonda <pgonda@google.com>,
+	Andrew Jones <andrew.jones@linux.dev>
+Subject: Re: [PATCH v4 5/6] KVM: selftests: Make arm64's MMIO ucall multi-VM
+ friendly
+Message-ID: <YwY9BYDUeiT87/Vs@google.com>
+References: <20220824032115.3563686-1-seanjc@google.com>
+ <20220824032115.3563686-6-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
+In-Reply-To: <20220824032115.3563686-6-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 
-On Wed, Aug 24, 2022 at 09:10:59PM +0900, Vincent MAILHOL wrote:
-> Not exactly, this is TZCNT for x86_64 but for x86, it will be BSF…
+Hi Sean,
 
-Not x86 - some old models which do not understand TZCNT, I'm being told.
-And I'm being also told, "Intel and AMD disagree on what BSF does when
-passed 0". So this is more mess.
-
-> It means that __ffs() is not a x86_64 specific function. Each
-
-No, not that. The comment "Undefined if no bit exists".
-
-On my machine, __ffs(0) - the way it is implemented:
-
-	rep; bsf %1,%0
-
-is well-defined:
-
-"If the input operand is zero, CF is set to 1 and the size (in bits) of
-the input operand is written to the destination register. Otherwise, CF
-is cleared."
-
-Leading to
-
-__ffs(0): 0x40
-
-i.e., input operand of 64 bits.
-
-So on this particular x86 implementation, TZCNT(0) is well defined.
-
-So I'd like for that "undefined" thing to be expanded upon and
-explained. Something along the lines of "the libc/compiler primitives'
-*ffs(0) is undefined. Our inline asm helpers adhere to that behavior
-even if the result they return for input operand of 0 is very well
-defined."
-
-Now, if there are some machines which do not adhere to the current hw
-behavior, then they should be ALTERNATIVEd.
-
-Better?
-
-> > Back to your patch: I think the text should be fixed to say that both
-> > ffs() and __ffs()'s kernel implementation doesn't have undefined results
+On Wed, Aug 24, 2022 at 03:21:14AM +0000, Sean Christopherson wrote:
+> Fix a mostly-theoretical bug where ARM's ucall MMIO setup could result in
+> different VMs stomping on each other by cloberring the global pointer.
 > 
-> NACK. __ffs(0) is an undefined behaviour (c.f. TZCNT instruction for
+> Fix the most obvious issue by saving the MMIO gpa into the VM.
+> 
+> A more subtle bug is that creating VMs in parallel (on multiple tasks)
+> could result in a VM using the wrong address.  Synchronizing a global to
+> a guest effectively snapshots the value on a per-VM basis, i.e. the
+> "global" is already prepped to work with multiple VMs, but setting the
+> global in the host and copying it to the guest needs to happen atomically.
+> To fix that bug, add atomic_sync_global_pointer_to_guest() to sync
+> "global" pointers that hold per-VM values, i.e. technically need to be
+> handled in a thread-safe manner.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     | 16 +++++++++++++++
+>  .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++++++++++++-----
+>  2 files changed, 31 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 24fde97f6121..9ec7fbe941aa 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -16,6 +16,7 @@
+>  #include <linux/kvm.h>
+>  #include "linux/rbtree.h"
+>  
+> +#include <asm/atomic.h>
+>  
+>  #include <sys/ioctl.h>
+>  
+> @@ -81,6 +82,7 @@ struct kvm_vm {
+>  	struct sparsebit *vpages_mapped;
+>  	bool has_irqchip;
+>  	bool pgd_created;
+> +	vm_paddr_t ucall_mmio_addr;
+>  	vm_paddr_t pgd;
+>  	vm_vaddr_t gdt;
+>  	vm_vaddr_t tss;
+> @@ -714,6 +716,20 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
+>  	memcpy(&(g), _p, sizeof(g));				\
+>  })
+>  
+> +/*
+> + * Sync a global pointer to the guest that has a per-VM value, in which case
+> + * writes to the host copy of the "global" must be serialized (in case a test
+> + * is being truly crazy and spawning multiple VMs concurrently).
+> + */
 
-NACK, SCHMACK. Read my mail again: "I think the text should be fixed".
-The *text* - not __ffs(0) itself. The *text* should be fixed to explain
-what undefined means. See above too.
+Do we even care about writes to the host's copy of the global pointer?
+I don't see how the host pointer is used beyond serializing writes into
+a guest.
 
-IOW, to start explaining this humongous mess I've scratched the surface
-of.
+IOW, it looks as though we could skip the whole global illusion
+altogether and write straight into guest memory.
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--
+Thanks,
+Oliver
