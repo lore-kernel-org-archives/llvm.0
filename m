@@ -1,185 +1,202 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50997E
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 16:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661357061; x=1692893061;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9PmxGyD0G85YGbxs5z9xOLXNd7VzvtqENVunATfS8Nk=;
-  b=EQe5GwmNYINpEAf0uLfRIRM1vzHtGfCO3blXDweL1B4+Yk1FLxOmj/Ec
-   VtNWpt8CS2emjvcMq1wLZWGVJGdwwNQ+uIvDVTMRUTk78ed/WeS5FtRKP
-   re83i/aXl8utZO+f78EGOtx2DcHV+BcFKXJoNk+SOdMciKe2TnSCH45zI
-   Muh+HievNyHlg6jWwdG6hNk3wFG4JDIdPnmygzb9i9s0QprwQpVviCo6n
-   y/ooJ2+CE2iqQOowWzvOvTt2yOoS4jXxkepFSmsbjgldl/uxMLrOUNSBH
-   HCeuH5xwUUtjTnkce6loHSy/5AMjX3D5vRrh68sOeC08ZgRlKYK7CnHDv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="380298391"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="380298391"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:04:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="586489777"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 09:04:19 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oQsra-0000j7-1u;
-	Wed, 24 Aug 2022 16:04:18 +0000
-Date: Thu, 25 Aug 2022 00:03:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 132/1117]
- drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of
- function 'FIELD_PREP'
-Message-ID: <202208242304.NpNCW92o-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811036713
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 17:02:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661360524;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZoJpPWIJJRg/heHaIpULWO2IFayk++pKTnj3mwjcc/8=;
+	b=UTlV9MPl53zeIW/jQiMoaw/VSrTD5c2iT6WIdpZzJgbe09D3WgkNjdtxJkCUCtmzvhjaM9
+	saZr10Agpke2qPykauyHL6YFsTgHKgUNaPTVc4Q8e8zgzFVRAd/ml7nKcYWYq0SMtkOzJA
+	53ZYUSH4cJf2qZ0SpYR91WBJk2YmwbM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-410-o8XyinSvNw6JhaMtyI4M9A-1; Wed, 24 Aug 2022 13:02:03 -0400
+X-MC-Unique: o8XyinSvNw6JhaMtyI4M9A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3454E8032F1
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 17:02:03 +0000 (UTC)
+Received: from [172.64.3.119] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2618AC15BB3;
+	Wed, 24 Aug 2022 17:02:03 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (72/381 SKIPPED): Test report for master
+ (6.0.0-rc2, mainline.kernel.org-clang, c40e8341)
+Date: Wed, 24 Aug 2022 17:02:03 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <98594.122082413020301204@us-mta-410.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shubhrajyoti,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-head:   789b01147d793e5a6d1c794dd0a5879ccd61bd1d
-commit: e7cc160039f02d71ef5a3b16038d325ad76ab59e [132/1117] clocking-wizard: Support higher frequency accuracy
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220824/202208242304.NpNCW92o-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/e7cc160039f02d71ef5a3b16038d325ad76ab59e
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-        git checkout e7cc160039f02d71ef5a3b16038d325ad76ab59e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.0-rc2-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tj/cgroup
 
-All errors (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51536
 
->> drivers/clk/clk-xlnx-clock-wizard.c:309:8: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
-           reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-                 ^
->> drivers/clk/clk-xlnx-clock-wizard.c:369:6: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
-           d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-               ^
-   2 errors generated.
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
+gument
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1352
+            Affected tests:
+                   s390x - selinux-policy: serge-testsuite
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
+.c:5407 __alloc_pages+0x1a0/0x290
+            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
+FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +/FIELD_PREP +309 drivers/clk/clk-xlnx-clock-wizard.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-   286	
-   287	static int clk_wzrd_dynamic_all_nolock(struct clk_hw *hw, unsigned long rate,
-   288					       unsigned long parent_rate)
-   289	{
-   290		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   291		u32 reg, pre;
-   292		u32 value;
-   293		int err;
-   294		u64 vco_freq, rate_div, f, clockout0_div;
-   295	
-   296		err = clk_wzrd_get_divisors(hw, rate, parent_rate);
-   297		if (err)
-   298			pr_err("failed to get divisors\n");
-   299	
-   300		vco_freq = DIV_ROUND_CLOSEST((parent_rate * divider->valuem), divider->valued);
-   301		rate_div = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   302	
-   303		clockout0_div = rate_div / WZRD_FRAC_POINTS;
-   304	
-   305		pre = DIV_ROUND_CLOSEST((vco_freq * WZRD_FRAC_POINTS), rate);
-   306		f = (u32)(pre - (clockout0_div * WZRD_FRAC_POINTS));
-   307		f = f & WZRD_CLKOUT_FRAC_MASK;
-   308	
- > 309		reg = FIELD_PREP(WZRD_CLKOUT_DIVIDE_MASK, clockout0_div) |
-   310		      FIELD_PREP(WZRD_CLKOUT0_FRAC_MASK, f);
-   311	
-   312		writel(reg, divider->base + WZRD_CLK_CFG_REG(2));
-   313		/* Set divisor and clear phase offset */
-   314		reg = FIELD_PREP(WZRD_CLKFBOUT_MULT_MASK, divider->valuem) |
-   315		      FIELD_PREP(WZRD_DIVCLK_DIVIDE_MASK, divider->valued);
-   316		writel(reg, divider->base + WZRD_CLK_CFG_REG(0));
-   317		writel(divider->valueo, divider->base + WZRD_CLK_CFG_REG(2));
-   318		writel(0, divider->base + WZRD_CLK_CFG_REG(3));
-   319		/* Check status register */
-   320		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
-   321					 value & WZRD_DR_LOCK_BIT_MASK,
-   322					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
-   323		if (err)
-   324			return -ETIMEDOUT;
-   325	
-   326		/* Initiate reconfiguration */
-   327		writel(WZRD_DR_BEGIN_DYNA_RECONF,
-   328		       divider->base + WZRD_DR_INIT_REG_OFFSET);
-   329	
-   330		/* Check status register */
-   331		err = readl_poll_timeout(divider->base + WZRD_DR_STATUS_REG_OFFSET, value,
-   332					 value & WZRD_DR_LOCK_BIT_MASK,
-   333					 WZRD_USEC_POLL, WZRD_TIMEOUT_POLL);
-   334		if (err)
-   335			return -ETIMEDOUT;
-   336	
-   337		return 0;
-   338	}
-   339	
-   340	static int clk_wzrd_dynamic_all(struct clk_hw *hw, unsigned long rate,
-   341					unsigned long parent_rate)
-   342	{
-   343		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   344		unsigned long flags = 0;
-   345		int ret;
-   346	
-   347		if (divider->lock)
-   348			spin_lock_irqsave(divider->lock, flags);
-   349		else
-   350			__acquire(divider->lock);
-   351	
-   352		ret = clk_wzrd_dynamic_all_nolock(hw, rate, parent_rate);
-   353	
-   354		if (divider->lock)
-   355			spin_unlock_irqrestore(divider->lock, flags);
-   356		else
-   357			__release(divider->lock);
-   358	
-   359		return ret;
-   360	}
-   361	
-   362	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
-   363						      unsigned long parent_rate)
-   364	{
-   365		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
-   366		u32 m, d, o, div, reg, f;
-   367	
-   368		reg = readl(divider->base + WZRD_CLK_CFG_REG(0));
- > 369		d = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   370		m = FIELD_GET(WZRD_CLKFBOUT_MULT_MASK, reg);
-   371		reg = readl(divider->base + WZRD_CLK_CFG_REG(2));
-   372		o = FIELD_GET(WZRD_DIVCLK_DIVIDE_MASK, reg);
-   373		f = FIELD_GET(WZRD_CLKOUT0_FRAC_MASK, reg);
-   374	
-   375		div = DIV_ROUND_CLOSEST(d * (WZRD_FRAC_POINTS * o + f), WZRD_FRAC_POINTS);
-   376		return divider_recalc_rate(hw, parent_rate * m, div, divider->table,
-   377				divider->flags, divider->width);
-   378	}
-   379	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
