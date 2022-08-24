@@ -1,45 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35ECA52
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 00:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDADEA8
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 01:36:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661300053; x=1692836053;
+  t=1661304975; x=1692840975;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q5+fJkkrhpEKqDfwbpQXxS4H0y9eE92M/bKUxlyZw9A=;
-  b=JaZvuzevIMR2frlx0ybnwtOkmtWIyhFAN4/xhcggrFSjWXuVwx1kjj3T
-   NzL1pdXh33gYXzWjQk0wjPL7dV6xhmkXO8Z79HoltYNaFFiWC97tvvbjj
-   qqVGDfCAEBoBHNfnmKMQISsKjaaW9WYO6Czi6zC5cJCHIABgZ/mWG9guc
-   6+3T18QpnI/6PyXQGqYVM+WsVJMWXsPfWSuW+khS5WgXROUxzV6edOnNI
-   ANedEMl+Ukmgmn2kxwbd5TC9w72OF3K4ynuaj2PdD3g0+Hc3VrSzeDeMO
-   ek4aIREbM9A3gFB1aan8Slqxdi2SXYRlgU6gHmuL2W1kVSg/JBJGh4PIZ
+  bh=ZSQdgFUsPfJRnOYbqUKECCoXJ23M8lFz2oYprolTziI=;
+  b=oKOx5NQM9UKkoWp6mlkYWhrqAcLwGRX3qCHBx3ofZV2Ef53bzhdQLKNK
+   ptRC6C91St3WfDH/Y03UqNG9CEH27vh/eUgwWzgfs4Ke5JnWD2fUouxzC
+   /BV7et/UpjPFnjFKN1xnEvKgG+Oapm9hRJKX1er6z3YCdnVBe/vQv88Xi
+   zSbQDkJOuawJYeX87wkzElhHxP8eAWjdwbMCMiwAW/Jy7ABAOq6zE1Yfo
+   bpbR5xUwT00dJAb3/NhmENq0yvDvOCkx1fvLLpqVhlrzAX7bqktD4qBAK
+   d8d9z0mDLoAcVzched8UTxx+i1zs4T8iAwDzW4DxjQqbFdINgkPMPhQLD
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="280801782"
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293839045"
 X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="280801782"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 17:14:13 -0700
+   d="scan'208";a="293839045"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 18:36:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="735676840"
+   d="scan'208";a="560398672"
 Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 23 Aug 2022 17:14:11 -0700
+  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 18:36:13 -0700
 Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oQe27-0000kM-0j;
-	Wed, 24 Aug 2022 00:14:11 +0000
-Date: Wed, 24 Aug 2022 08:13:42 +0800
+	id 1oQfJV-0000oh-0A;
+	Wed, 24 Aug 2022 01:36:13 +0000
+Date: Wed, 24 Aug 2022 09:35:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Mark Rutland <mark.rutland@arm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-lib 7/22]
- fs/netfs/misc.c:22:46: warning: format specifies type 'unsigned long' but
- the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202208240851.chpv1GAP-lkp@intel.com>
+Subject: [mark:arm64/alternatives/rework 15/18]
+ arch/arm64/kernel/alternative.c:269:14: warning: no previous prototype for
+ function 'alt_cb_patch_nops'
+Message-ID: <202208240946.qpIze2KD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,82 +47,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-lib
-head:   14725009c14bfa32267af313901825cea6f069a6
-commit: a5251be6cee44d7d393c0784487530e6dae512bb [7/22] netfs: Provide invalidatepage and releasepage calls
-config: hexagon-buildonly-randconfig-r004-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240851.chpv1GAP-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
+head:   fad62c713602c963008575fd972d316569a32d12
+commit: e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823 [15/18] arm64: alternatives: add shared NOP callback
+config: arm64-randconfig-r022-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240946.qpIze2KD-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/a5251be6cee44d7d393c0784487530e6dae512bb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-lib
-        git checkout a5251be6cee44d7d393c0784487530e6dae512bb
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/alternatives/rework
+        git checkout e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/mm/ kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/misc.c:22:46: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                         ~~~                           ^~~~~~
-                         %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/misc.c:22:54: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                             ~~~                               ^~~~~~
-                             %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+>> arch/arm64/kernel/alternative.c:269:14: warning: no previous prototype for function 'alt_cb_patch_nops' [-Wmissing-prototypes]
+   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
+                ^
+   arch/arm64/kernel/alternative.c:269:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
+           ^
+           static 
+   1 warning generated.
 
 
-vim +22 fs/netfs/misc.c
+vim +/alt_cb_patch_nops +269 arch/arm64/kernel/alternative.c
 
-    10	
-    11	/**
-    12	 * netfs_invalidate_folio - Invalidate or partially invalidate a folio
-    13	 * @folio: Folio proposed for release
-    14	 * @offset: Offset of the invalidated region
-    15	 * @length: Length of the invalidated region
-    16	 *
-    17	 * Invalidate part or all of a folio for a network filesystem.  The folio will
-    18	 * be removed afterwards if the invalidated region covers the entire folio.
-    19	 */
-    20	void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
-    21	{
-  > 22		_enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-    23	
-    24		folio_wait_fscache(folio);
-    25	}
-    26	EXPORT_SYMBOL(netfs_invalidate_folio);
-    27	
+   268	
+ > 269	noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
 
 -- 
 0-DAY CI Kernel Test Service
