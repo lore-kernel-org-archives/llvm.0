@@ -1,117 +1,162 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120084.outbound.protection.outlook.com [40.107.12.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127DB7B
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 05:57:00 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id y141so15518549pfb.7
-        for <llvm@lists.linux.dev>; Tue, 23 Aug 2022 22:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=YSPT0Qki7Ju6xZPR8zVKpd/3Y86SHIvAxlRRGYCf6+4=;
-        b=cJxCFckjGJmmRH3AxuVSwOTHmKPDvNUdHzsphspcL7MitfDj8cpemzRzFld9ka1JzG
-         WnlEJmWoRnoQ0gxoov7Yt2rf6aTE+TfXoQJvWIXYocISArwgddH0SidAHEq6rI3BEAyN
-         lTCzC7TZlFS/gWBvSe7q4HjuJZm2PmzxhmH39KjiNT25T3wxl6rd+nx3TTAEHqkRjefB
-         GdI9uw+uu7SgshMtpf8Q4Pap89vTe6dJteYBtDjWBy3J1GMWr5EsxKSpmmXX0h4FUQtj
-         GhPxiJ6N14F3KQEG3Fsuq79NI0Rt8cZtb/ZaylWiz9B1X/yS1OJIoDWBzLdxviW9YVnq
-         xjlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=YSPT0Qki7Ju6xZPR8zVKpd/3Y86SHIvAxlRRGYCf6+4=;
-        b=fX1umsuORfwnXvNz3TCwqHnpw39jv6x5NbMIijjrUzSp3UKuKdWRHI31Zihcre1wte
-         UtrgPx+S5Ku++KuzeOSdjtDsR2dw7UbF39c0lJ+vNAfU2tWe60CfrokedUjbVZc3gXA5
-         rBt/heGBoKsUNZ3HS7xNnr+sugyXIFYiMZTJFGnHMfN4s3/Voq/eYl0HUlEORORQME6u
-         L7VJabgSkTZvDRYqeuyzPB2PeI32iJIMaLGq1eHHUVAegzSyDumulqxdyJsj833K/GXR
-         HXHEBY17MhmHEgaypXgqiOVn2s2jQr4Dzwr+kUZzgWKkAAFpqzjMir3URQ+hsxSOEBfc
-         SumA==
-X-Gm-Message-State: ACgBeo0I8Jp+CAK3/hUrbGI0y4eGhaXP593veJlcEhiPc/RzphTadxd9
-	4YUyu6bfwcFTdN8NsOH2Lf8=
-X-Google-Smtp-Source: AA6agR6SU5V/MTOUdkMzfuBJ885alWNFmMOeIBJqlCJlfH7pKsFBZWwp8COvHDCLw/dA8nRjvHlUeA==
-X-Received: by 2002:a63:de02:0:b0:428:9e02:5f3e with SMTP id f2-20020a63de02000000b004289e025f3emr23286847pgg.592.1661320620513;
-        Tue, 23 Aug 2022 22:57:00 -0700 (PDT)
-Received: from localhost.localdomain ([64.64.123.33])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902eb8400b0016c9e5f291bsm11423473plg.111.2022.08.23.22.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 22:56:59 -0700 (PDT)
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-To: akpm@linux-foundation.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH linux-next] mm: fix used but uninitialized variable
-Date: Wed, 24 Aug 2022 13:56:37 +0800
-Message-Id: <20220824055637.10676-1-zhouzhouyi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06DA7B
+	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 06:10:33 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kBHKZboTgkktK3ACBQpWjQ/wxTDLX0HAWx5cwmgcjK0b/LYQO/GB6hNEwaKKSXzL596EVgceL4DOFJ0nJSf29lrZWPS756A1zmeoa/JOJ/HQQhfy185n8+9Z7OXEPBny2P5fL/j6Mzg7+iUXc8SfE/MHNh4prjGpSLTw29RSXFwP6MYkQfJtgzOHoEQlXYsjhjIB1GJd1L0GcQIr0+AP2Ea1og4Te01QJFVKTxzqa5OpwuVMPdlZL2W2fAj6+yHAhi2GxPHBTw3WomL5bpmauNAGQwrnntzETog5jkc4P7bc2gr0ewq5t11RNNnogTXD3g88EGpNQ6efjcxxsS1hSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y0vIpnmx+1WLS5KiI0N5hhneCRQGVWDFqIL+/649D0o=;
+ b=UZVEv74LvK/SWIdCCjyqsMUSKrtZvvB8+Q8QE16nNdbi9u3suDLqjS9XDf0XKINBP9OZkYiNhiOevHHCOvD08DpnbULaDO1bRJe4u6k3JMWPdMJiiO9OCKjw2J2RihL0xJIDnrqfEKvHaqQLPW5JZ6wCCvFXB9IfbhX0JoYjsCTihy+a7hPpyAaaws2qFsx2PsU9GXCjIMxiYMwkgd2DGwlQWPhKA5qgHNHub7y9TQMbKGBYy6Os+AcSUHNLwNjEe7OhNgv+R9mR6VwgNDZmay6DGEw3cB2xU05h0XsyD2eSdRP3cODp60+xOBL/qBUpMNdtmLxkGGmBjCxpdrcQKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y0vIpnmx+1WLS5KiI0N5hhneCRQGVWDFqIL+/649D0o=;
+ b=jdZglbBpoTh2a1btIMBnBup6F3HpJ575jgGaIHdJw4NUQHrFylNFS6Jpddvo7v8wPmghKpE28Bmkr0h87cseydb9d8fFcmRhkNL8Y1vDUYkiGYmNvWxpl0eBdqgm9i3XUstbKVY61nywUJW+bo8IrGmiZp2KqwHc14yogx4B6VeyTC+yFNTxHD7+U/C4StALGgGr17FwEZ5CVPYBFnxncOrs/PajXEI1wekh8ETKcjVvMtQp+/W4qUQj0V2z7QPLblFu2pjkM3VuJu/eXNvBgVUhJ9X7sdaqYkYNZxB2Lp6u2VrWCC0Ncu7Rw/sY7hkXiJWBWZ5pupqeypQB+4FMeg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2387.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:34::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 06:10:31 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
+ 06:10:31 +0000
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Zhouyi Zhou <zhouzhouyi@gmail.com>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, "trix@redhat.com"
+	<trix@redhat.com>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH linux-next] mm: fix used but uninitialized variable
+Thread-Topic: [PATCH linux-next] mm: fix used but uninitialized variable
+Thread-Index: AQHYt35XzsFKpFb3eUu3rI9AKkOHmq29kW8A
+Date: Wed, 24 Aug 2022 06:10:30 +0000
+Message-ID: <8d8bfc81-b584-20f4-65ae-d626f019cdf4@csgroup.eu>
+References: <20220824055637.10676-1-zhouzhouyi@gmail.com>
+In-Reply-To: <20220824055637.10676-1-zhouzhouyi@gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 82c63b1c-d0f8-4926-9af9-08da85975941
+x-ms-traffictypediagnostic: MR1P264MB2387:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 2MIjk1UHH0roTIXDpPR5je7V1nXKkkqwcQ4/h/+k2l6Obme5KqgjuXVsaaPqdwCEVgPPbx8viDb1W1xcxrYejh5/qWyKhmq+/kNRcQFaDPr1gJrHcG0NQC4G1wXbCI/AuFTpOfmZCw2y1DBhp197T+zZdNozt37u1LwuWQjIwwy3WMNOY9YN+coW7SpKu8io3URsSZt6FkHNejckgs13Iz5+sYYTpPnbd3jbfCci3+mOcicpcArZpDjH5xZ9MC+/XJjuTKjm3WwWY/lBBKjM9yDzXXsBRHlVM7FCIxs87IsfVEBy2+AiHDVKGnBtIdx4XdyW7TFUImmn2O8IPSaa17cCFr/+M55bPaEL5I+xOk89T9wEPaPhd1hkKsqLxlDGbrMkmJrGT45FX/SGfpckE6RI+nJTiUYZVEzeGSKg09XOJ5Fw35JsaEsr5vqoTDfQbgrjOuEVqATx0TZhDRc8240DJ2NmrZVLnf7Ts2KAkorXJzlZsUJbiSfMzEmdEQlC7QJzqSCnbStbsNRhWiemvzmOPy8tLXUkGGNZBRmsnkBhvsS/gkI5KzbHT8M/qWSBAl/rlWMLEc1hPIVHEMrDMvVaQojUql1WJiWjMIdyh43GzvZnngDdVzUw5w8CpcIorrJrBbeVMt6211IyVeWs54pgxSn/W2kA6UldaNvh8i7s+mwAsinF69Vz8py93zB82Fd1Red3Q3biJs+kcM8+5rAyw3haNJvoOPJjVGsG4OHZ+z0U6pLf1r8bPze8xOmW0sxxb8o5yrE8Vbegs4gqPxo62aGDY5E6I9fFaykZCML+seMt1cvDIK5VP82WKO7WBeQ4yJCQQmwN3ZBj0g8g5Q==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(346002)(376002)(136003)(366004)(396003)(38070700005)(122000001)(6506007)(83380400001)(2906002)(31686004)(38100700002)(36756003)(110136005)(316002)(71200400001)(8676002)(44832011)(5660300002)(41300700001)(8936002)(26005)(66574015)(2616005)(186003)(31696002)(66946007)(6486002)(66476007)(64756008)(66556008)(478600001)(76116006)(86362001)(66446008)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?SjdpS0lwNUpDVGdYT01WQkxUOFEybWRmOCtvVU5TdVpJb0RGdVRDUUZWeDRv?=
+ =?utf-8?B?V2cwTUVUU3ExY2FEM1g2K3IrY0dxMXF6Z3FCaVpJa1FiTG1mOG5yRUY5TTUz?=
+ =?utf-8?B?L2tnNEpGQ1V1NG4yNjc1R1NldnRtell0RlRsNWJzMU5odXZFMDZaNG5NMFBI?=
+ =?utf-8?B?K0VOWnZWdHpybGFUcUNWYW5QU0VTY0pxa1puczhsK2ZKRTRTd3g3RkN0NFlC?=
+ =?utf-8?B?eFBhMTdyQWhBTHJMV1FURG8rNHdic0JObERTZDBXZXdSRGhmTDhodEhoUWY0?=
+ =?utf-8?B?dmlFUGFSVlBIQzdoNGpzLzNneUlGN25qS0NmRVZaRlB6d2VWSk8vL3VQY00y?=
+ =?utf-8?B?dFp4MHNlRDBHcjY3bGJPaHRxaW5wQmE1Zmo1czlKVW5KTFVmWTRxMVJ3R0Nh?=
+ =?utf-8?B?TXZOUkg2cmh2YlZUeTFTNGJXaUs2OGJ4RE40Q0oyWEV2NXUzK1QrMGt1cFFv?=
+ =?utf-8?B?b2xwZ2owMVFuOFVic1VVQjJ2OEozaHpkN1JhVERHWGt2S3IwMFpPbit5UVhV?=
+ =?utf-8?B?OUozcm0rQXlBNUZmcDVuaWVCWGJEaktkdlQvUTdadjkwUG5Fd1czL1QwdjR5?=
+ =?utf-8?B?dXpsMi9ZUEkwN0RXL09JR0dUc3dVUE5mYWZuZEhBN0dLdzZRbE0zbFlVNkhR?=
+ =?utf-8?B?anhxbTQ0MGh0WUNEQmVYU3ZXdHgwdEdja1FWc2p5MEhBZXRmWWlNQ2xWeTYr?=
+ =?utf-8?B?VXdDR01xUnVwM2tKNEhWL3BCMHV2T0JaOTA5MzU0STBNQUo2MjVYSU9WQkVl?=
+ =?utf-8?B?RExsTDYrRHREdHV0czZSNFB5WW1WalNackk0VlFuTFFpRm8rdWcvM2hnVDZ5?=
+ =?utf-8?B?NlpjdjIyRVVNU2N0TmdnQ1cwSDJUbUg0WHZCZkpqbU9VZ2taVVBtbzZxS0pr?=
+ =?utf-8?B?L0dqMmI0blhhcmVGTUlGdlpoZkdxYWRGWkJ4NDlqd01mQVE4YjBmZEZob1F5?=
+ =?utf-8?B?SWlkSEc3MzdsdTY5Z1AzcDNmL2RnVVg2Qk5YYUg4S1RoVmxSek1ubk5wam13?=
+ =?utf-8?B?QjQ1MzBjSVdpbHVRZDlRQ0Z3TlVRa2cxVnV1K2Y2cld3dW9lNUdmeTlHclJH?=
+ =?utf-8?B?RnN6ajRzOFRGTWtJdHRnRmJiSHhKYnp0SFROT0R2dFQvUi9vUjJwZFpieGhT?=
+ =?utf-8?B?aXl2YXdkcTZkaGpiM2VTMCtRN3pZZE1IL1JFL2kyNDVUSDV4dGxPTytZV0Zj?=
+ =?utf-8?B?MkpOS3pCU0hLaVJ6SzhhUlRDaHplLzdmRE1BeXllRHFMRzh4L0pubGZTUUNr?=
+ =?utf-8?B?K3c0b1plclAvMkc4bDdFK21xVld4RUtmYXhId3VMNkpNbTNZMysvZ3kwR0sz?=
+ =?utf-8?B?VDVDeE5lNENFZFpGcU5vYXRVQXlXSlZXSDVKbkFaSHhDNFIrU1Voc2Z3UHRQ?=
+ =?utf-8?B?bDlZcTNkU3hYM0FVZzdldkpqMk9QVytEUDdUOHR1Tlp5THVKRUthQW5qTGhP?=
+ =?utf-8?B?cHFubzN2YUt3YTlYTGJseVQ1SFRNVVhqTzJBR3R4L3lUdnk4dUFqSlBQR3NE?=
+ =?utf-8?B?emM0M05vSjRFSFhwQncrTm5XKzREZm14b3RiZ2VsOW1HMWtjSlUyQ0RjQXZ3?=
+ =?utf-8?B?WGI5Nmc1V2NqUEFDUGRia0Y5ZU9wVWhnOEFMUlVWQkcvRGRGaXdMTXc5QitW?=
+ =?utf-8?B?Zis3cS9jelJRL3pnRW1vaU16dy9oZDBRbEMybWpkTFBNMkN3WjAxcVpZdkxs?=
+ =?utf-8?B?VVNoYTljSC9UdjlvVUJheEhHRDQzaTB6b2ppWURQRFJJQ3ZHMHVDSm9tS3pz?=
+ =?utf-8?B?amQ5NDJzbGNzVEVaL1ZOWFFrOWJOSnRCaGRseUNZV3duVnpKSmxwMGZDUkRK?=
+ =?utf-8?B?d2w3d1grV0YxM1pMSEFCMThDSGZoK0k5TnFhQkVHL1BDU0NaL1NqNm1tVEpn?=
+ =?utf-8?B?U3pXWHNpSWFYZDduL0E5MVg1UXlMYW9yUjhTOWd6QVhnZ2Y2a1Nwa3ZnellU?=
+ =?utf-8?B?c2tzRWl4Vkl5TjZqNnJrYWJtem01TWNTM3FXMDNHTmUyakw4YVNuUjVBT3p5?=
+ =?utf-8?B?OXRmQi9KZWtiS1o3QW82T1FiVnhOeWltcWtzTXl1WTZpcFVrRlR5YjROYldI?=
+ =?utf-8?B?TENyVXB3SEs1aGp6OFQyOHgxSURiUW1SSEVubmF6OENpUmpkRlh5amRVMnRr?=
+ =?utf-8?B?M2g5RVdHQUxkYWxIc0JvZ3g0c1hqbFpCN3FEOWo5dnc3djBLUktFZzVpNE43?=
+ =?utf-8?B?Ymc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C25B062C5678D143BF7BE5EBA1DC874E@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c63b1c-d0f8-4926-9af9-08da85975941
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 06:10:31.0218
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g0APK/p6Bgj3OaBiMdz4U+w8Gjbuj9jTeTRNmCsxgyVSrXogJneJVj2JfY0MjXxMopHwBzFkFlJScuKW53nh8DPugJbO3IVIwnxe6It2U+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2387
 
-In function walk_hugetlb_range, the local variable err may
-be used uninitialzed when:
-ops->pte_hole in side of "else if (ops->pte_hole)" is false.
-
-Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
----
-Dear mm Developers:
-
-When I build kernel using "make CC=clang-14"
-the compiler complains following:
-
-CC      mm/pagewalk.o
-mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                else if (ops->pte_hole)
-                         ^~~~~~~~~~~~~
-mm/pagewalk.c:321:7: note: uninitialized use occurs here
-                if (err)
-                    ^~~
-mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always true
-                else if (ops->pte_hole)
-                     ^~~~~~~~~~~~~~~~~~
-mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence this warning
-                int err;
-                       ^
-                        = 0
-1 error generated.
-make[1]: *** [scripts/Makefile.build:250: mm/pagewalk.o] Error 1
-make: *** [Makefile:2006: mm] Error 2
-
-I initialize that variable outside of the for loop because we can assign 0 to err
-only once in this function.
-
-After my fix, I can compile the kernel. 
-
-Many Thanks
-Zhouyi
---
- mm/pagewalk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 54b2a1beeeb3..b6eb330e8ecd 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -306,9 +306,9 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 	unsigned long hmask = huge_page_mask(h);
- 	unsigned long sz = huge_page_size(h);
- 	const struct mm_walk_ops *ops = walk->ops;
-+	int err = 0;
- 
- 	for (; addr < end; addr = next) {
--		int err;
- 		pte_t *pte = huge_pte_offset(walk->mm, addr & hmask, sz);
- 
- 		next = hugetlb_entry_end(h, addr, end);
--- 
-2.34.1
-
+DQoNCkxlIDI0LzA4LzIwMjIgw6AgMDc6NTYsIFpob3V5aSBaaG91IGEgw6ljcml0wqA6DQo+IElu
+IGZ1bmN0aW9uIHdhbGtfaHVnZXRsYl9yYW5nZSwgdGhlIGxvY2FsIHZhcmlhYmxlIGVyciBtYXkN
+Cj4gYmUgdXNlZCB1bmluaXRpYWx6ZWQgd2hlbjoNCj4gb3BzLT5wdGVfaG9sZSBpbiBzaWRlIG9m
+ICJlbHNlIGlmIChvcHMtPnB0ZV9ob2xlKSIgaXMgZmFsc2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
+OiBaaG91eWkgWmhvdSA8emhvdXpob3V5aUBnbWFpbC5jb20+DQo+IC0tLQ0KPiBEZWFyIG1tIERl
+dmVsb3BlcnM6DQo+IA0KPiBXaGVuIEkgYnVpbGQga2VybmVsIHVzaW5nICJtYWtlIENDPWNsYW5n
+LTE0Ig0KPiB0aGUgY29tcGlsZXIgY29tcGxhaW5zIGZvbGxvd2luZzoNCj4gDQo+IENDICAgICAg
+bW0vcGFnZXdhbGsubw0KPiBtbS9wYWdld2Fsay5jOjMxODoxMjogZXJyb3I6IHZhcmlhYmxlICdl
+cnInIGlzIHVzZWQgdW5pbml0aWFsaXplZCB3aGVuZXZlciAnaWYnIGNvbmRpdGlvbiBpcyBmYWxz
+ZSBbLVdlcnJvciwtV3NvbWV0aW1lcy11bmluaXRpYWxpemVkXQ0KPiAgICAgICAgICAgICAgICAg
+IGVsc2UgaWYgKG9wcy0+cHRlX2hvbGUpDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+
+fn5+fn5+fn5+fg0KPiBtbS9wYWdld2Fsay5jOjMyMTo3OiBub3RlOiB1bmluaXRpYWxpemVkIHVz
+ZSBvY2N1cnMgaGVyZQ0KPiAgICAgICAgICAgICAgICAgIGlmIChlcnIpDQo+ICAgICAgICAgICAg
+ICAgICAgICAgIF5+fg0KPiBtbS9wYWdld2Fsay5jOjMxODo4OiBub3RlOiByZW1vdmUgdGhlICdp
+ZicgaWYgaXRzIGNvbmRpdGlvbiBpcyBhbHdheXMgdHJ1ZQ0KPiAgICAgICAgICAgICAgICAgIGVs
+c2UgaWYgKG9wcy0+cHRlX2hvbGUpDQo+ICAgICAgICAgICAgICAgICAgICAgICBefn5+fn5+fn5+
+fn5+fn5+fn4NCj4gbW0vcGFnZXdhbGsuYzozMTE6MTA6IG5vdGU6IGluaXRpYWxpemUgdGhlIHZh
+cmlhYmxlICdlcnInIHRvIHNpbGVuY2UgdGhpcyB3YXJuaW5nDQo+ICAgICAgICAgICAgICAgICAg
+aW50IGVycjsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgXg0KPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgPSAwDQo+IDEgZXJyb3IgZ2VuZXJhdGVkLg0KPiBtYWtlWzFdOiAqKiogW3Njcmlw
+dHMvTWFrZWZpbGUuYnVpbGQ6MjUwOiBtbS9wYWdld2Fsay5vXSBFcnJvciAxDQo+IG1ha2U6ICoq
+KiBbTWFrZWZpbGU6MjAwNjogbW1dIEVycm9yIDINCj4gDQo+IEkgaW5pdGlhbGl6ZSB0aGF0IHZh
+cmlhYmxlIG91dHNpZGUgb2YgdGhlIGZvciBsb29wIGJlY2F1c2Ugd2UgY2FuIGFzc2lnbiAwIHRv
+IGVycg0KPiBvbmx5IG9uY2UgaW4gdGhpcyBmdW5jdGlvbi4NCj4gDQo+IEFmdGVyIG15IGZpeCwg
+SSBjYW4gY29tcGlsZSB0aGUga2VybmVsLg0KPiANCj4gTWFueSBUaGFua3MNCj4gWmhvdXlpDQo+
+IC0tDQo+ICAgbW0vcGFnZXdhbGsuYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
+cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9tbS9wYWdld2Fsay5j
+IGIvbW0vcGFnZXdhbGsuYw0KPiBpbmRleCA1NGIyYTFiZWVlYjMuLmI2ZWIzMzBlOGVjZCAxMDA2
+NDQNCj4gLS0tIGEvbW0vcGFnZXdhbGsuYw0KPiArKysgYi9tbS9wYWdld2Fsay5jDQo+IEBAIC0z
+MDYsOSArMzA2LDkgQEAgc3RhdGljIGludCB3YWxrX2h1Z2V0bGJfcmFuZ2UodW5zaWduZWQgbG9u
+ZyBhZGRyLCB1bnNpZ25lZCBsb25nIGVuZCwNCj4gICAJdW5zaWduZWQgbG9uZyBobWFzayA9IGh1
+Z2VfcGFnZV9tYXNrKGgpOw0KPiAgIAl1bnNpZ25lZCBsb25nIHN6ID0gaHVnZV9wYWdlX3NpemUo
+aCk7DQo+ICAgCWNvbnN0IHN0cnVjdCBtbV93YWxrX29wcyAqb3BzID0gd2Fsay0+b3BzOw0KPiAr
+CWludCBlcnIgPSAwOw0KDQpXaHkgZG8geW91IG1vdmUgaXQgYmFjayBvdXRzaWRlIG9mIHRoZSBm
+b3IgbG9vcCBhbGx0aG91Z2ggaXQgaXMgDQpleGNsdXNpdmVseSB1c2VkIGluc2lkZSB0aGUgbG9v
+cCA/DQoNCj4gICANCj4gICAJZm9yICg7IGFkZHIgPCBlbmQ7IGFkZHIgPSBuZXh0KSB7DQo+IC0J
+CWludCBlcnI7DQoNCkFub3RoZXIgc29sdXRpb24gd291bGQgYmUgdG8gYWRkIGFuIGV4cGxpY2l0
+IGVsc2UsIHNldHRpbmcgZXJyID0gMCBpbiANCnRoZSBpZi9lbHNlIGlmIHNlcXVlbmNlLg0KDQo+
+ICAgCQlwdGVfdCAqcHRlID0gaHVnZV9wdGVfb2Zmc2V0KHdhbGstPm1tLCBhZGRyICYgaG1hc2ss
+IHN6KTsNCj4gICANCj4gICAJCW5leHQgPSBodWdldGxiX2VudHJ5X2VuZChoLCBhZGRyLCBlbmQp
+Ow==
