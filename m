@@ -1,152 +1,101 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37F61110
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 10:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661336135; x=1692872135;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=F3hdBdWFw9/N+cVdceQJWxxc8Y/utx6ligUGZLp/CII=;
-  b=BwDOQmNyMBr8JteUnhqcAW/gU4CemsRHPpAUdlAaEEpAIGjZkwt4sNHJ
-   RWJtSNdDtj5ukef3q5bl+jLZmeqUD2A469NFdXydW4DMOE0D3QKIhK8LC
-   NR1reHlPlEnHzxF98Bj89IYeS6iqkQDa6enEKn77sC+FiMQjELrkyraRL
-   IaQA6cARgOG8fX9COeBE9zSGrSV079/e+QqdrVP+L5QY5CFq1UE3ZntOf
-   RaKlLSv+gtvMJb/nNrO+WPtSMozTpjhanKKMTszWsVQ3fK4PB9cm0t54u
-   Ddw5np5ionPsn0rdbqlVYJfzaUmC0GAYvZUPtf0oTQzlorvdsbuj72YD9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293927583"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="293927583"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:15:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="586375894"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.108])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:15:00 -0700
-Message-ID: <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
-Date: Wed, 24 Aug 2022 13:14:55 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712BA111F;
+	Wed, 24 Aug 2022 11:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FDCC433D7;
+	Wed, 24 Aug 2022 11:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661339551;
+	bh=0jQSAV+e3DFpfOT8Uw+ldmXyihIQw4KJzWHoCN/nq/I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=HemH+J2+CHNXyNDfyzK+72NI/FKUv8yMkZzWvDC9kgRfsQu9d/8Kuuuiq/cH/hHkw
+	 3G5oaRIGJZ+iO6BYj8tyHXzMmuJF2OuzZHLcrHmJ4yJW5iQIYpXdpkncT4pijcfKDJ
+	 wF60ZLLUCWVUAhp0zqjlr4fVW7Bh3gN0ZtJZIMQO+CumUt69dQpEoLf79JKq2lWWYO
+	 +vIhABC9ACC9FaPvV2wf/QWdLAd78w16aDQgSipv+/n7Fg7P1yr5B97CE6/VG+6a/W
+	 LtEEAfzpYy+hBY6OkBcCr+Ncfe2gqEkyIHAagiwwwvu8H6t6R34NlHTMm9t+j7Tz61
+	 u5LUb3K63sRSQ==
+From: Mark Brown <broonie@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Matt Flax <flatmax@flatmax.com>
+Cc: patches@lists.linux.dev, alsa-devel@alsa-project.org, Nick Desaulniers <ndesaulniers@google.com>,
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+ linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+In-Reply-To: <20220823151939.2493697-1-nathan@kernel.org>
+References: <20220823151939.2493697-1-nathan@kernel.org>
+Subject: Re: [PATCH v2] ASoC: codes: src4xxx: Avoid clang -Wsometimes-uninitialized in src4xxx_hw_params()
+Message-Id: <166133954873.17904.8458082648861330231.b4-ty@kernel.org>
+Date: Wed, 24 Aug 2022 12:12:28 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 07/18] perf record: Update use of pthread mutex
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
- <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
- Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
- Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
- <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
- Kim Phillips <kim.phillips@amd.com>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Alexandre Truong <alexandre.truong@arm.com>,
- Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
- Andres Freund <andres@anarazel.de>, Adrian Hunter <adrian.hunter@intel.com>,
- =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
- Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>,
- Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>,
- Kajol Jain <kjain@linux.ibm.com>,
- Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
- Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220823220922.256001-1-irogers@google.com>
- <20220823220922.256001-8-irogers@google.com>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220823220922.256001-8-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
 
-On 24/08/22 01:09, Ian Rogers wrote:
-> Switch to the use of mutex wrappers that provide better error checking
-> for synth_lock.
-
-It would be better to distinguish patches that make drop-in
-replacements from patches like this that change logic.
-
+On Tue, 23 Aug 2022 08:19:40 -0700, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-record.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+>   sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                   default:
+>                   ^~~~~~~
+>   sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
+>                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>                                                                           ^
+>   sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
+>           int val, pj, jd, d;
+>                             ^
+>                             = 0
+>   sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                   default:
+>                   ^~~~~~~
+>   sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
+>                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+>                                                                           ^~
+>   sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
+>           int val, pj, jd, d;
+>                         ^
+>                           = 0
+>   sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                   default:
+>                   ^~~~~~~
+>   sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
+>                   ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>                                                                           ^~
+>   sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
+>           int val, pj, jd, d;
+>                     ^
+>                       = 0
+>   3 errors generated.
 > 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 4713f0f3a6cf..02eb85677e99 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -21,6 +21,7 @@
->  #include "util/evsel.h"
->  #include "util/debug.h"
->  #include "util/mmap.h"
-> +#include "util/mutex.h"
->  #include "util/target.h"
->  #include "util/session.h"
->  #include "util/tool.h"
-> @@ -608,17 +609,18 @@ static int process_synthesized_event(struct perf_tool *tool,
->  	return record__write(rec, NULL, event, event->header.size);
->  }
->  
-> +static struct mutex synth_lock;
-> +
->  static int process_locked_synthesized_event(struct perf_tool *tool,
->  				     union perf_event *event,
->  				     struct perf_sample *sample __maybe_unused,
->  				     struct machine *machine __maybe_unused)
->  {
-> -	static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
->  	int ret;
->  
-> -	pthread_mutex_lock(&synth_lock);
-> +	mutex_lock(&synth_lock);
->  	ret = process_synthesized_event(tool, event, sample, machine);
-> -	pthread_mutex_unlock(&synth_lock);
-> +	mutex_unlock(&synth_lock);
->  	return ret;
->  }
->  
-> @@ -1917,6 +1919,7 @@ static int record__synthesize(struct record *rec, bool tail)
->  	}
->  
->  	if (rec->opts.nr_threads_synthesize > 1) {
-> +		mutex_init(&synth_lock, /*pshared=*/false);
+> [...]
 
-It would be better to have mutex_init() and mutex_init_shared()
-since /*pshared=*/true is rarely used.
+Applied to
 
->  		perf_set_multithreaded();
->  		f = process_locked_synthesized_event;
->  	}
-> @@ -1930,8 +1933,10 @@ static int record__synthesize(struct record *rec, bool tail)
->  						    rec->opts.nr_threads_synthesize);
->  	}
->  
-> -	if (rec->opts.nr_threads_synthesize > 1)
-> +	if (rec->opts.nr_threads_synthesize > 1) {
->  		perf_set_singlethreaded();
-> +		mutex_destroy(&synth_lock);
-> +	}
->  
->  out:
->  	return err;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/1] ASoC: codes: src4xxx: Avoid clang -Wsometimes-uninitialized in src4xxx_hw_params()
+      commit: 7d3ac70d82080f7a934402d66c5238e1d99be412
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
