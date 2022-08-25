@@ -1,42 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731227B
-	for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 21:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CAC10F5
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 00:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661377309; x=1692913309;
+  t=1661387099; x=1692923099;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u55x3BMC6IdX0hvusvjBKoB9KItycF/ELPuKXOiG878=;
-  b=H8cVDzw+mf+L8xJEd+plczF4RKNGxHTsETgYMTapRY+WTaUrWOSttPBs
-   pWHiX9TRyX7S2/macNRjrkIWKrvR9L5R7wIcOJ9dRHMg4C65TRmw7WCSz
-   OaBnYhTRE2E51SR61OtppxwvJvQdCZGPFvJ+H7l7KaVW9CmY6T4QZoNFY
-   PhcmT6Lpsuox/O4hAz7RsJvF2XmK+vw0m5YY5Z5dlxmcscVwgNm930zZM
-   BICOltNFWA2uBFx7UO72ZqgJJKsiyLvFViQZrH8P5G1KYoNRfrZe/WW0a
-   7XSBKVNVRrT8cCwymlYmKbx8rP/DVYxfVmgVwqQNi60zxY1m4Yu9AvPfg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="294863324"
+  bh=lTR8Aua53Hrg1CIsD9Rc3773VnkmtC85xsQjT06tgf4=;
+  b=nYuxJk8p6IV8Omq7YTWe2WbvjFd6iqLdd264t6YtJE3btSUrGXmVgJDX
+   vfBtRTltQqtguEnsR8wLYUDl/vrzKVLJkYLWHDk4rKrYUniJEOYWbwEzU
+   paZysUrUGBlziRtRJiOGjfwTDfsU0i9FJYXAFXkymYDK5NJIgMPzfKozz
+   qtKzAbkg5pnAkfiIgW9maziQu30Lmt/E01LiSLBb3uXATyYB08mQJMmFK
+   evFOjPwShtsrGs0mg+bjbUNkCKrN76/VSuf2Is7I444lwANsIxKReSbXP
+   U3ioV+5T2vYw7HvPKcwmil4WoDnIGR4MX5dw8vUO1SLgD0/Ckg1u4OK91
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="380398624"
 X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="294863324"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 14:41:48 -0700
+   d="scan'208";a="380398624"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 17:24:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="938069235"
+   d="scan'208";a="586643669"
 Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2022 14:41:47 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 17:24:56 -0700
 Received: from kbuild by 34e741d32628 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oQy8A-0001FH-2D;
-	Wed, 24 Aug 2022 21:41:46 +0000
-Date: Thu, 25 Aug 2022 05:41:05 +0800
+	id 1oR0g3-0001RD-37;
+	Thu, 25 Aug 2022 00:24:55 +0000
+Date: Thu, 25 Aug 2022 08:24:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [axboe-block:io_uring-6.0 14/14] io_uring/net.c:1053:36: warning:
- variable 'addr' is uninitialized when used here
-Message-ID: <202208250535.oP4RWEEL-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared
+ identifier 'GPIOD_OUT_LOW'
+Message-ID: <202208250802.7310sfQR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,141 +46,142 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.0
-head:   0596fa5ef9aff29219021fa6f0117b604ff83d09
-commit: 0596fa5ef9aff29219021fa6f0117b604ff83d09 [14/14] io_uring/net: save address for sendzc async execution
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220825/202208250535.oP4RWEEL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Mark,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c40e8341e3b3bb27e3a65b06b5b454626234c4f0
+commit: 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f ASoC: simple-amplifier: Remove spurious gpiolib select
+date:   7 months ago
+config: hexagon-randconfig-r045-20220825 (https://download.01.org/0day-ci/archive/20220825/202208250802.7310sfQR-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=0596fa5ef9aff29219021fa6f0117b604ff83d09
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block io_uring-6.0
-        git checkout 0596fa5ef9aff29219021fa6f0117b604ff83d09
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> io_uring/net.c:1053:36: warning: variable 'addr' is uninitialized when used here [-Wuninitialized]
-                           return io_setup_async_addr(req, addr, issue_flags);
-                                                           ^~~~
-   io_uring/net.c:978:42: note: initialize the variable 'addr' to silence this warning
-           struct sockaddr_storage __address, *addr;
-                                                   ^
-                                                    = NULL
-   1 warning generated.
+   sound/soc/codecs/tlv320adc3xxx.c:1209:21: error: implicit declaration of function 'devm_gpiod_get' [-Werror,-Wimplicit-function-declaration]
+           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+                              ^
+   sound/soc/codecs/tlv320adc3xxx.c:1209:21: note: did you mean 'devm_gpio_free'?
+   include/linux/gpio.h:243:20: note: 'devm_gpio_free' declared here
+   static inline void devm_gpio_free(struct device *dev, unsigned int gpio)
+                      ^
+>> sound/soc/codecs/tlv320adc3xxx.c:1209:50: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+           adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+                                                           ^
+   sound/soc/codecs/tlv320adc3xxx.c:1257:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
+           gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
+           ^
+   sound/soc/codecs/tlv320adc3xxx.c:1257:2: note: did you mean 'gpio_set_value_cansleep'?
+   include/linux/gpio.h:188:20: note: 'gpio_set_value_cansleep' declared here
+   static inline void gpio_set_value_cansleep(unsigned gpio, int value)
+                      ^
+   3 errors generated.
 
 
-vim +/addr +1053 io_uring/net.c
+vim +/GPIOD_OUT_LOW +1209 sound/soc/codecs/tlv320adc3xxx.c
 
-   975	
-   976	int io_sendzc(struct io_kiocb *req, unsigned int issue_flags)
-   977	{
-   978		struct sockaddr_storage __address, *addr;
-   979		struct io_ring_ctx *ctx = req->ctx;
-   980		struct io_sendzc *zc = io_kiocb_to_cmd(req, struct io_sendzc);
-   981		struct io_notif_slot *notif_slot;
-   982		struct io_kiocb *notif;
-   983		struct msghdr msg;
-   984		struct iovec iov;
-   985		struct socket *sock;
-   986		unsigned msg_flags;
-   987		int ret, min_ret = 0;
-   988	
-   989		if (!(req->flags & REQ_F_POLLED) &&
-   990		    (zc->flags & IORING_RECVSEND_POLL_FIRST))
-   991			return -EAGAIN;
-   992	
-   993		if (issue_flags & IO_URING_F_UNLOCKED)
-   994			return -EAGAIN;
-   995		sock = sock_from_file(req->file);
-   996		if (unlikely(!sock))
-   997			return -ENOTSOCK;
-   998	
-   999		notif_slot = io_get_notif_slot(ctx, zc->slot_idx);
-  1000		if (!notif_slot)
-  1001			return -EINVAL;
-  1002		notif = io_get_notif(ctx, notif_slot);
-  1003		if (!notif)
-  1004			return -ENOMEM;
-  1005	
-  1006		msg.msg_name = NULL;
-  1007		msg.msg_control = NULL;
-  1008		msg.msg_controllen = 0;
-  1009		msg.msg_namelen = 0;
-  1010	
-  1011		if (zc->addr) {
-  1012			if (req_has_async_data(req)) {
-  1013				struct io_async_msghdr *io = req->async_data;
-  1014	
-  1015				msg.msg_name = &io->addr;
-  1016			} else {
-  1017				ret = move_addr_to_kernel(zc->addr, zc->addr_len, &__address);
-  1018				if (unlikely(ret < 0))
-  1019					return ret;
-  1020				msg.msg_name = (struct sockaddr *)&__address;
-  1021			}
-  1022			msg.msg_namelen = zc->addr_len;
-  1023		}
-  1024	
-  1025		if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
-  1026			ret = io_import_fixed(WRITE, &msg.msg_iter, req->imu,
-  1027						(u64)(uintptr_t)zc->buf, zc->len);
-  1028			if (unlikely(ret))
-  1029				return ret;
-  1030		} else {
-  1031			ret = import_single_range(WRITE, zc->buf, zc->len, &iov,
-  1032						  &msg.msg_iter);
-  1033			if (unlikely(ret))
-  1034				return ret;
-  1035			ret = io_notif_account_mem(notif, zc->len);
-  1036			if (unlikely(ret))
-  1037				return ret;
-  1038		}
-  1039	
-  1040		msg_flags = zc->msg_flags | MSG_ZEROCOPY;
-  1041		if (issue_flags & IO_URING_F_NONBLOCK)
-  1042			msg_flags |= MSG_DONTWAIT;
-  1043		if (msg_flags & MSG_WAITALL)
-  1044			min_ret = iov_iter_count(&msg.msg_iter);
-  1045	
-  1046		msg.msg_flags = msg_flags;
-  1047		msg.msg_ubuf = &io_notif_to_data(notif)->uarg;
-  1048		msg.sg_from_iter = io_sg_from_iter;
-  1049		ret = sock_sendmsg(sock, &msg);
-  1050	
-  1051		if (unlikely(ret < min_ret)) {
-  1052			if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
-> 1053				return io_setup_async_addr(req, addr, issue_flags);
-  1054	
-  1055			if (ret > 0 && io_net_retry(sock, msg.msg_flags)) {
-  1056				zc->len -= ret;
-  1057				zc->buf += ret;
-  1058				zc->done_io += ret;
-  1059				req->flags |= REQ_F_PARTIAL_IO;
-  1060				return io_setup_async_addr(req, addr, issue_flags);
-  1061			}
-  1062			if (ret == -ERESTARTSYS)
-  1063				ret = -EINTR;
-  1064			req_set_fail(req);
-  1065		} else if (zc->flags & IORING_RECVSEND_NOTIF_FLUSH) {
-  1066			io_notif_slot_flush_submit(notif_slot, 0);
-  1067		}
-  1068	
-  1069		if (ret >= 0)
-  1070			ret += zc->done_io;
-  1071		else if (zc->done_io)
-  1072			ret = zc->done_io;
-  1073		io_req_set_res(req, ret, 0);
-  1074		return IOU_OK;
-  1075	}
-  1076	
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1196  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1197  static int adc3xxx_i2c_probe(struct i2c_client *i2c,
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1198  			     const struct i2c_device_id *id)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1199  {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1200  	struct device *dev = &i2c->dev;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1201  	struct adc3xxx *adc3xxx = NULL;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1202  	int ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1203  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1204  	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1205  	if (!adc3xxx)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1206  		return -ENOMEM;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1207  	adc3xxx->dev = dev;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1208  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15 @1209  	adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1210  	if (IS_ERR(adc3xxx->rst_pin)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1211  		return dev_err_probe(dev, PTR_ERR(adc3xxx->rst_pin),
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1212  				     "Failed to request rst_pin\n");
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1213  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1214  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1215  	adc3xxx->mclk = devm_clk_get(dev, NULL);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1216  	if (IS_ERR(adc3xxx->mclk)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1217  		/*
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1218  		 * The chip itself supports running off the BCLK either
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1219  		 * directly or via the PLL, but the driver does not (yet), so
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1220  		 * having a specified mclk is required. Otherwise, we could
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1221  		 * use the lack of a clocks property to indicate when BCLK is
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1222  		 * intended as the clock source.
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1223  		 */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1224  		return dev_err_probe(dev, PTR_ERR(adc3xxx->mclk),
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1225  				     "Failed to acquire MCLK\n");
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1226  	} else if (adc3xxx->mclk) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1227  		ret = clk_prepare_enable(adc3xxx->mclk);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1228  		if (ret < 0)
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1229  			return ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1230  		dev_dbg(dev, "Enabled MCLK, freq %lu Hz\n", clk_get_rate(adc3xxx->mclk));
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1231  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1232  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1233  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmdin-gpio1", &adc3xxx->gpio_cfg[0]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1234  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1235  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1236  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmclk-gpio2", &adc3xxx->gpio_cfg[1]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1237  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1238  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1239  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias1-vg", &adc3xxx->micbias_vg[0]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1240  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1241  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1242  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias2-vg", &adc3xxx->micbias_vg[1]);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1243  	if (ret < 0)
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1244  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1245  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1246  	adc3xxx->regmap = devm_regmap_init_i2c(i2c, &adc3xxx_regmap);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1247  	if (IS_ERR(adc3xxx->regmap)) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1248  		ret = PTR_ERR(adc3xxx->regmap);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1249  		goto err_unprepare_mclk;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1250  	}
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1251  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1252  	i2c_set_clientdata(i2c, adc3xxx);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1253  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1254  	adc3xxx->type = id->driver_data;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1255  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1256  	/* Reset codec chip */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1257  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1258  	usleep_range(2000, 100000); /* Requirement: > 10 ns (datasheet p13) */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1259  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 0);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1260  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1261  	/* Potentially set up pins used as GPIOs */
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1262  	adc3xxx_init_gpio(adc3xxx);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1263  
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1264  	ret = snd_soc_register_component(dev,
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1265  			&soc_component_dev_adc3xxx, &adc3xxx_dai, 1);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1266  	if (ret < 0) {
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1267  		dev_err(dev, "Failed to register codec: %d\n", ret);
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1268  		goto err_unprepare_mclk;
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1269  	}
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1270  
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1271  	return 0;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1272  
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1273  err_unprepare_mclk:
+8a2d8e4fed6d58 Yang Yingliang   2021-12-23  1274  	clk_disable_unprepare(adc3xxx->mclk);
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1275  	return ret;
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1276  }
+e9a3b57efd28fe Ricard Wanderlof 2021-12-15  1277  
+
+:::::: The code at line 1209 was first introduced by commit
+:::::: e9a3b57efd28fe889a98171bdc1e9e0dd7eb9a50 ASoC: codec: tlv320adc3xxx: New codec driver
+
+:::::: TO: Ricard Wanderlof <ricardw@axis.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
