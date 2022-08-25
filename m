@@ -1,84 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B1C33F7;
-	Thu, 25 Aug 2022 16:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC67DC433C1;
-	Thu, 25 Aug 2022 16:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661443809;
-	bh=YeZpqXiWIj2UfGQAr0U2HYO2aQK9k8WY7/sp89p4GTs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aaMwx8JKmkkb6t5r8pvyF2YpWKpX4SjF9KqZKXHKxAL2bkLj59sosnMbT7KLDUXeC
-	 MuZWH6jEnAENICgMXZmj9CyIeWZ+czj2hzTq+ho/6licNb3A79kj1ztNs829U+02RU
-	 8EP7yZJje2Ytht8AmmDi0pymRSWyH8oBa0sKGWHEODAaouA1/NuEvpUbZL2Lqg0iDx
-	 cgW2AjPInr+1TzJpqxo+ByAWUS0UB7hrTOBH8Eyt3bTQib9A/pAbTq+UycoR7NWyIR
-	 FD4f9HKnND++p5ItBYfnfD+z28AEdJcFaONZgYX4lKwG+PkJgLKel3wDhWV0ERgRBK
-	 DfrtefSXYKcuQ==
-Date: Thu, 25 Aug 2022 09:10:07 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>, linux-mm <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	regressions@lists.linux.dev,
-	clang-built-linux <clang-built-linux@googlegroups.com>,
-	Muchun Song <songmuchun@bytedance.com>,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	David Hildenbrand <david@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	James Houghton <jthoughton@google.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Miaohe Lin <linmiaohe@huawei.com>, Michal Hocko <mhocko@suse.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Peter Xu <peterx@redhat.com>,
-	Prakash Sangappa <prakash.sangappa@oracle.com>,
-	llvm@lists.linux.dev
-Subject: Re: [next] x86: fs/hugetlbfs/inode.c:673:16: error: variable
- 'm_index' is uninitialized when used here [-Werror,-Wuninitialized]
-Message-ID: <Ywee393cssPJ07Gr@dev-arch.thelio-3990X>
-References: <CA+G9fYsHVdu0toduQqk6vsR8Z8mOVzZ9-_p3O5fjQ5mOpSxsDA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC36F3C00
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 16:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661444175; x=1692980175;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dexjnAFY5uhDar1V0uA27KUIA1B5OYcNy4yxSywmqjs=;
+  b=H2C1Mbk84UNsChjVfATv/HT0b9PT7VWz99iqRCbTMJPsOLlxMTIa2P9v
+   l3HMSdHkGiM6WN4bdFcBgeHYFtQIpD0RuDwDqqZ+auDUWXgDGc+KmkdCh
+   +jPji4MkTMNWquly2JqMh41PhbCCKY0NCCIR0mdXUtM7CP/WLt9hK90Rv
+   mWz19gj17fzY04nRAkfB9lIJg2t/VkYku1wLZmCc9n+bJAD7hNfXREkI5
+   1ahu3nNZddOpeLSKn4vxueqG16hHLuCae1MJWnIGF5umOrd36Utn/SYZ0
+   FSr2iFLeg89zqisofiKgOom6Zr7166gJiROHq1haT6aWxUi3qEnADOIrB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320366711"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="320366711"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:15:04 -0700
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="671059006"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.129])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:14:52 -0700
+Message-ID: <c422c9b3-d6e2-e1d5-5273-6a720fdde6c4@intel.com>
+Date: Thu, 25 Aug 2022 19:14:47 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsHVdu0toduQqk6vsR8Z8mOVzZ9-_p3O5fjQ5mOpSxsDA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 00/18] Mutex wrapper, locking and memory leak fixes
+Content-Language: en-US
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
+ <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-perf-users <linux-perf-users@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Naresh,
-
-On Thu, Aug 25, 2022 at 04:13:30PM +0530, Naresh Kamboju wrote:
-> The x86_64 and i386 clang builds failed due to these warnings / errors
-> on Linux next-20220825.
+On 25/08/22 15:30, Arnaldo Carvalho de Melo wrote:
+> On Wed, Aug 24, 2022, 12:39 PM Ian Rogers <irogers@google.com <mailto:irogers@google.com>> wrote:
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>     When fixing a locking race and memory leak in:
+>     https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/ <https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/>
 > 
-> fs/hugetlbfs/inode.c:673:16: error: variable 'm_index' is
-> uninitialized when used here [-Werror,-Wuninitialized]
->                                                 m_start, m_index, truncate_op);
->                                                          ^~~~~~~
-> fs/hugetlbfs/inode.c:651:26: note: initialize the variable 'm_index'
-> to silence this warning
->         pgoff_t m_start, m_index;
->                                 ^
->                                  = 0
-> 1 error generated.
+>     It was requested that debug mutex code be separated out into its own
+>     files. This was, in part, done by Pavithra Gurushankar in:
+>     https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/ <https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/>
+> 
+>     These patches fix issues with the previous patches, add in the
+>     original dso->nsinfo fix and then build on our mutex wrapper with
+>     clang's -Wthread-safety analysis. The analysis found missing unlocks
+>     in builtin-sched.c which are fixed and -Wthread-safety is enabled by
+>     default when building with clang.
+> 
+>     v3. Adds a missing new line to the error messages and removes the
+>         pshared argument to mutex_init by having two functions, mutex_init
+>         and mutex_init_pshared. These changes were suggested by Adrian Hunter.
+> 
+> 
+> Adrian, can I have your Acked-by or, better, Reviewed-by?
 
-Thank you for the report! Commit fcc0d3d00d74 ("hugetlb: handle truncate
-racing with page faults") introduced this warning; the Intel folks
-caught this as well:
+Sure, just let me have another look.  Should get to it
+tomorrow.
 
-https://lore.kernel.org/202208251012.g1mOhhxy-lkp@intel.com/
+> 
+> Thanks, 
+> 
+> -  Arnaldo 
+> 
+>     v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
+>         annotations as requested by Arnaldo and Namhyung. A boolean is
+>         added to builtin-sched.c to terminate thread funcs rather than
+>         leaving them blocked on delted mutexes.
+> 
+>     Ian Rogers (17):
+>       perf bench: Update use of pthread mutex/cond
+>       perf tests: Avoid pthread.h inclusion
+>       perf hist: Update use of pthread mutex
+>       perf bpf: Remove unused pthread.h include
+>       perf lock: Remove unused pthread.h include
+>       perf record: Update use of pthread mutex
+>       perf sched: Update use of pthread mutex
+>       perf ui: Update use of pthread mutex
+>       perf mmap: Remove unnecessary pthread.h include
+>       perf dso: Update use of pthread mutex
+>       perf annotate: Update use of pthread mutex
+>       perf top: Update use of pthread mutex
+>       perf dso: Hold lock when accessing nsinfo
+>       perf mutex: Add thread safety annotations
+>       perf sched: Fixes for thread safety analysis
+>       perf top: Fixes for thread safety analysis
+>       perf build: Enable -Wthread-safety with clang
+> 
+>     Pavithra Gurushankar (1):
+>       perf mutex: Wrapped usage of mutex and cond
+> 
+>      tools/perf/Makefile.config                 |   5 +
+>      tools/perf/bench/epoll-ctl.c               |  33 +++---
+>      tools/perf/bench/epoll-wait.c              |  33 +++---
+>      tools/perf/bench/futex-hash.c              |  33 +++---
+>      tools/perf/bench/futex-lock-pi.c           |  33 +++---
+>      tools/perf/bench/futex-requeue.c           |  33 +++---
+>      tools/perf/bench/futex-wake-parallel.c     |  33 +++---
+>      tools/perf/bench/futex-wake.c              |  33 +++---
+>      tools/perf/bench/numa.c                    |  93 ++++++----------
+>      tools/perf/builtin-inject.c                |   4 +
+>      tools/perf/builtin-lock.c                  |   1 -
+>      tools/perf/builtin-record.c                |  13 ++-
+>      tools/perf/builtin-sched.c                 | 105 +++++++++---------
+>      tools/perf/builtin-top.c                   |  45 ++++----
+>      tools/perf/tests/mmap-basic.c              |   2 -
+>      tools/perf/tests/openat-syscall-all-cpus.c |   2 +-
+>      tools/perf/tests/perf-record.c             |   2 -
+>      tools/perf/ui/browser.c                    |  20 ++--
+>      tools/perf/ui/browsers/annotate.c          |  12 +--
+>      tools/perf/ui/setup.c                      |   5 +-
+>      tools/perf/ui/tui/helpline.c               |   5 +-
+>      tools/perf/ui/tui/progress.c               |   8 +-
+>      tools/perf/ui/tui/setup.c                  |   8 +-
+>      tools/perf/ui/tui/util.c                   |  18 ++--
+>      tools/perf/ui/ui.h                         |   4 +-
+>      tools/perf/util/Build                      |   1 +
+>      tools/perf/util/annotate.c                 |  15 +--
+>      tools/perf/util/annotate.h                 |   4 +-
+>      tools/perf/util/bpf-event.h                |   1 -
+>      tools/perf/util/build-id.c                 |  12 ++-
+>      tools/perf/util/dso.c                      |  19 ++--
+>      tools/perf/util/dso.h                      |   4 +-
+>      tools/perf/util/hist.c                     |   6 +-
+>      tools/perf/util/hist.h                     |   4 +-
+>      tools/perf/util/map.c                      |   3 +
+>      tools/perf/util/mmap.h                     |   1 -
+>      tools/perf/util/mutex.c                    | 119 +++++++++++++++++++++
+>      tools/perf/util/mutex.h                    | 109 +++++++++++++++++++
+>      tools/perf/util/probe-event.c              |   3 +
+>      tools/perf/util/symbol.c                   |   4 +-
+>      tools/perf/util/top.h                      |   5 +-
+>      41 files changed, 570 insertions(+), 323 deletions(-)
+>      create mode 100644 tools/perf/util/mutex.c
+>      create mode 100644 tools/perf/util/mutex.h
+> 
+>     -- 
+>     2.37.2.609.g9ff673ca1a-goog
+> 
 
-As an aside, can you please update your contact for our mailing list to
-llvm@lists.linux.dev? We do not use the Google Groups list anymore.
-
-Cheers,
-Nathan
