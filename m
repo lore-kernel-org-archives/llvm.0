@@ -1,195 +1,127 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E634C87
-	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 23:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661469177; x=1693005177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1Qw9UAVBMXeB5Chv+0jjCLOuH0afuUp8MQfTHbW+8ew=;
-  b=PwJLncMsiEraOA5dOXrs7vFK6/UGIH8KjLNJcBMS1UFthCQ4XuBtohnf
-   VAEzHORfnwvemoC6rgJ8scOG0R/ur2DTjvQgA7gGAIOdmS/bgJNfG8vrR
-   CrUXGCXwFFJAGVSJy4YFtx9UvyvwXJ12iORKXSy0x8KOouOupdNjMY6BY
-   iAKIiT/cy9uN8sRAHuGiA1luxyhqwE7nUrhPDci2uLUz/JCvNyfe0wyIB
-   uX3dv/U+5BhmU0dkI51JBW10ZmLEVG5UaZXtOkNTmCubUapPmNITiX46F
-   Vl7yDdARn2I82m1Ez6gE2T8UIyuBFGtbxeANrgHLEzH+AVOP98cJOgnzJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295651111"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="295651111"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 16:12:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="561223635"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 25 Aug 2022 16:12:55 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oRM1u-000323-2p;
-	Thu, 25 Aug 2022 23:12:54 +0000
-Date: Fri, 26 Aug 2022 07:12:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [arm-integrator:realview 1/1]
- arch/arm/boot/dts/arm-realview-pba8.dts:48:36: warning: '/*' within block
- comment
-Message-ID: <202208260759.RwmEK9fd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43E24C87
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 23:25:25 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-3345ad926f2so366490757b3.12
+        for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 16:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc;
+        bh=y2TyZVHOzKZlb9wECS9yMCNcXCNpwqCPWpTxl29+IMY=;
+        b=dkM+A09pjx32V3tjxCAZAaj4iTr2QWwZFTx14MwcUXXnZscAY3fsOcj6h5WXQXxdoD
+         pE2ASAcwod4FD0N0sCT4FjUT0tg9Opertqs8xb3KgjTkUGEmN0krLyCYuuqUGRjMcltU
+         i55uCtWc8Su1TGA6H/a9JTuhvCJcNgBM50Y1A4ihMCdqTUfplBKQUaiEUX2n1Vh4N710
+         3yOt5OJYxOGq7VwXawE8F72ZOkRT8JCFAjGnVJAcUhtb87iwBUwK1cOzoECBWrP6U0Ke
+         ZtEkGqxLhvl3GVE9ZNy1Tt1CBoQxoOnHS9H5jY9/byfHRVWvrd+Zhz17D7ZlFyP3ffIM
+         c1wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=y2TyZVHOzKZlb9wECS9yMCNcXCNpwqCPWpTxl29+IMY=;
+        b=tFFj0K3iBu6CJfxMl3zibPwimQJOBCaOweCjeqGCyXnE5jH1aPHOjPnchrqGQHqdf9
+         37gR1T1mdTXmfBR25ZrM2qtG+Xch1YVwIQmfujm2lJaTZswC4QODEX2jOFZ4eprxMRqp
+         D7Mgq5PGpJzh6lSjCiiSyxEnnBz47yLIFP08xEZoA6arW4gCu4SR6p9uXxJWhyL6IClM
+         Mhr6wL6Ib84yeAHQ9SgXNFkLk6TKjLbqUBbPnrvkzbe9J/1JdTu9LM0fUsXjYkYQTWpp
+         yWfGCaFUFL3d6ErC9StZKGu1KBYExCujBe/lJBAtlgqkKkUVO+eCzCG93Uw+b7WVhTL+
+         fonA==
+X-Gm-Message-State: ACgBeo2box996O7pOlGzCvtmPLnQcwMoE+fIyoe4CXX71J1Y9/0i0L3e
+	/s/Zs9+C8DTtzBQIkRchzujlPa0phSA=
+X-Google-Smtp-Source: AA6agR4iAX55dcIo3IUqvlfKkqmyFpPiECgmLWRpTah2t3s+pqlFTA2hJbEvjHCDMn3ntt/fdb4I5rKg3Mw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:6143:0:b0:335:3076:168e with SMTP id
+ v64-20020a816143000000b003353076168emr5851445ywb.460.1661469924695; Thu, 25
+ Aug 2022 16:25:24 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Thu, 25 Aug 2022 23:25:15 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220825232522.3997340-1-seanjc@google.com>
+Subject: [PATCH v5 0/7] KVM: selftests: Implement ucall "pool" (for SEV)
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: James Morse <james.morse@arm.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Oliver Upton <oliver.upton@linux.dev>, 
+	Atish Patra <atishp@atishpatra.org>, David Hildenbrand <david@redhat.com>, Tom Rix <trix@redhat.com>, 
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.cs.columbia.edu, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>, 
+	Peter Gonda <pgonda@google.com>, Andrew Jones <andrew.jones@linux.dev>, 
+	Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git realview
-head:   2438557220f5d282cc55b136a287fe5ae98dc7a9
-commit: 2438557220f5d282cc55b136a287fe5ae98dc7a9 [1/1] ARM: dts: realview: Extend PBX family memory description
-config: arm-randconfig-r032-20220823 (https://download.01.org/0day-ci/archive/20220826/202208260759.RwmEK9fd-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5653884e34e05ee7aad099cc7f729688d92a002f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=2438557220f5d282cc55b136a287fe5ae98dc7a9
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator realview
-        git checkout 2438557220f5d282cc55b136a287fe5ae98dc7a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Non-KVM folks, y'all got pulled in because of the atomic_test_and_set_bit()
+patch.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Rework the ucall infrastructure to use a pool of ucall structs to pass
+memory instead of using the guest's stack.  For confidential VMs with
+encrypted memory, e.g. SEV, the guest's stack "needs" to be private memory
+and so can't be used to communicate with the host.
 
-All warnings (new ones prefixed by >>):
+Convert all implementations to the pool as all of the complexity is hidden
+in common code, and supporting multiple interfaces adds its own kind of
+complexity. 
 
->> arch/arm/boot/dts/arm-realview-pba8.dts:48:36: warning: '/*' within block comment [-Wcomment]
-                   /*reg = <0x70000000 0x20000000>; /* 512 MiB baseboard DDR */
-                                                    ^
-   1 warning generated.
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:42.9-45.4: Warning (unit_address_vs_reg): /memory: node has a reg or ranges property, but no unit name
-     also defined at arch/arm/boot/dts/arm-realview-pba8.dts:47.9-49.4
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unit_address_vs_reg): /xtal24mhz@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:76.20-82.4: Warning (unit_address_vs_reg): /timclk@1M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unit_address_vs_reg): /mclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unit_address_vs_reg): /kmiclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unit_address_vs_reg): /sspclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:108.23-114.4: Warning (unit_address_vs_reg): /uartclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:116.23-122.4: Warning (unit_address_vs_reg): /wdogclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:125.15-129.4: Warning (unit_address_vs_reg): /pclk@0: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pba8.dts:51.13-56.4: Warning (unit_address_vs_reg): /pmu@0: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:169.9-194.4: Warning (avoid_unnecessary_addr_size): /bridge: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /mclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /kmiclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /kmiclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unique_unit_address): /sspclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unique_unit_address): /sspclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:108.23-114.4: Warning (unique_unit_address): /uartclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:125.15-129.4: Warning (unique_unit_address): /pclk@0: duplicate unit-address (also used in node /pmu@0)
---
->> arch/arm/boot/dts/arm-realview-pbx-a9.dts:68:36: warning: '/*' within block comment [-Wcomment]
-                   /*reg = <0x20000000 0x20000000>, /* 512 MiB daughterboard DDR2 */
-                                                    ^
-   arch/arm/boot/dts/arm-realview-pbx-a9.dts:69:36: warning: '/*' within block comment [-Wcomment]
-                   /*      <0x70000000 0x20000000>; /* 512 MiB baseboard DDR */
-                                                    ^
-   2 warnings generated.
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:42.9-45.4: Warning (unit_address_vs_reg): /memory: node has a reg or ranges property, but no unit name
-     also defined at arch/arm/boot/dts/arm-realview-pbx-a9.dts:67.9-70.4
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unit_address_vs_reg): /xtal24mhz@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:76.20-82.4: Warning (unit_address_vs_reg): /timclk@1M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unit_address_vs_reg): /mclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unit_address_vs_reg): /kmiclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unit_address_vs_reg): /sspclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:108.23-114.4: Warning (unit_address_vs_reg): /uartclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:116.23-122.4: Warning (unit_address_vs_reg): /wdogclk@24M: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:125.15-129.4: Warning (unit_address_vs_reg): /pclk@0: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx-a9.dts:72.23-88.4: Warning (unit_address_vs_reg): /cache-controller: node has a reg or ranges property, but no unit name
-   arch/arm/boot/dts/arm-realview-pbx-a9.dts:109.13-115.4: Warning (unit_address_vs_reg): /pmu@0: node has a unit name, but no reg or ranges property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:169.9-194.4: Warning (avoid_unnecessary_addr_size): /bridge: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /mclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /kmiclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /kmiclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /sspclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unique_unit_address): /sspclk@24M: duplicate unit-address (also used in node /uartclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:64.27-68.4: Warning (unique_unit_address): /xtal24mhz@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:84.17-90.4: Warning (unique_unit_address): /mclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:92.21-98.4: Warning (unique_unit_address): /kmiclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:100.21-106.4: Warning (unique_unit_address): /sspclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:108.23-114.4: Warning (unique_unit_address): /uartclk@24M: duplicate unit-address (also used in node /wdogclk@24M)
-   arch/arm/boot/dts/arm-realview-pbx.dtsi:125.15-129.4: Warning (unique_unit_address): /pclk@0: duplicate unit-address (also used in node /pmu@0)
-   arch/arm/boot/dts/arm-realview-pbx-a9.dts:90.20-93.4: Warning (unique_unit_address): /scu@1f000000: duplicate unit-address (also used in node /interrupt-controller@1f000000)
+Tested on x86 and ARM, compile tested on s390 and RISC-V.
+
+v5:
+ - Use less convoluted method of writing per-VM "globals". [Oliver]
+ - Add patch to drop ucall_uninit().
+
+v4: https://lore.kernel.org/all/20220824032115.3563686-1-seanjc@google.com
+
+Peter Gonda (2):
+  tools: Add atomic_test_and_set_bit()
+  KVM: selftests: Add ucall pool based implementation
+
+Sean Christopherson (5):
+  KVM: selftests: Consolidate common code for populating ucall struct
+  KVM: selftests: Consolidate boilerplate code in get_ucall()
+  KVM: selftests: Automatically do init_ucall() for non-barebones VMs
+  KVM: selftests: Make arm64's MMIO ucall multi-VM friendly
+  KVM: selftest: Drop now-unnecessary ucall_uninit()
+
+ tools/arch/x86/include/asm/atomic.h           |   7 ++
+ tools/include/asm-generic/atomic-gcc.h        |  12 +++
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/aarch64/arch_timer.c        |   1 -
+ .../selftests/kvm/aarch64/debug-exceptions.c  |   1 -
+ .../selftests/kvm/aarch64/hypercalls.c        |   1 -
+ .../testing/selftests/kvm/aarch64/psci_test.c |   1 -
+ .../testing/selftests/kvm/aarch64/vgic_init.c |   2 -
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |   1 -
+ tools/testing/selftests/kvm/dirty_log_test.c  |   3 -
+ .../selftests/kvm/include/kvm_util_base.h     |  15 +++
+ .../selftests/kvm/include/ucall_common.h      |  10 +-
+ .../selftests/kvm/kvm_page_table_test.c       |   2 -
+ .../testing/selftests/kvm/lib/aarch64/ucall.c | 102 +++---------------
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  11 ++
+ .../selftests/kvm/lib/perf_test_util.c        |   3 -
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  42 ++------
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |  39 ++-----
+ .../testing/selftests/kvm/lib/ucall_common.c  | 102 ++++++++++++++++++
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  39 ++-----
+ .../testing/selftests/kvm/memslot_perf_test.c |   1 -
+ tools/testing/selftests/kvm/rseq_test.c       |   1 -
+ tools/testing/selftests/kvm/steal_time.c      |   1 -
+ .../kvm/system_counter_offset_test.c          |   1 -
+ 24 files changed, 189 insertions(+), 210 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
 
 
-vim +48 arch/arm/boot/dts/arm-realview-pba8.dts
-
-    25	
-    26	/ {
-    27		model = "ARM RealView Platform Baseboard for Cortex-A8";
-    28		compatible = "arm,realview-pba8";
-    29		arm,hbi = <0x178>;
-    30	
-    31		cpus {
-    32			#address-cells = <1>;
-    33			#size-cells = <0>;
-    34			enable-method = "arm,realview-smp";
-    35	
-    36			cpu0: cpu@0 {
-    37				device_type = "cpu";
-    38				compatible = "arm,cortex-a8";
-    39				reg = <0>;
-    40			};
-    41		};
-    42	
-    43		/*
-    44		 * Using the full 512MB of RAM will require bootloader
-    45		 * changes to not load the kernel to the alias at 0x0.
-    46		 */
-    47		memory {
-  > 48			/*reg = <0x70000000 0x20000000>; /* 512 MiB baseboard DDR */
-    49		};
-    50	
-    51		pmu: pmu@0 {
-    52			compatible = "arm,cortex-a8-pmu";
-    53			interrupt-parent = <&intc>;
-    54			interrupts = <0 47 IRQ_TYPE_LEVEL_HIGH>;
-    55			interrupt-affinity = <&cpu0>;
-    56		};
-    57	
-    58		/* Primary GIC PL390 interrupt controller in the test chip */
-    59		intc: interrupt-controller@1e000000 {
-    60			compatible = "arm,pl390";
-    61			#interrupt-cells = <3>;
-    62			#address-cells = <1>;
-    63			interrupt-controller;
-    64			reg = <0x1e001000 0x1000>,
-    65			      <0x1e000000 0x100>;
-    66		};
-    67	};
-    68	
-
+base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2.672.g94769d06f0-goog
+
