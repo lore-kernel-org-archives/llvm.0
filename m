@@ -1,32 +1,33 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC36F3C00
-	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 16:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661444175; x=1692980175;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dexjnAFY5uhDar1V0uA27KUIA1B5OYcNy4yxSywmqjs=;
-  b=H2C1Mbk84UNsChjVfATv/HT0b9PT7VWz99iqRCbTMJPsOLlxMTIa2P9v
-   l3HMSdHkGiM6WN4bdFcBgeHYFtQIpD0RuDwDqqZ+auDUWXgDGc+KmkdCh
-   +jPji4MkTMNWquly2JqMh41PhbCCKY0NCCIR0mdXUtM7CP/WLt9hK90Rv
-   mWz19gj17fzY04nRAkfB9lIJg2t/VkYku1wLZmCc9n+bJAD7hNfXREkI5
-   1ahu3nNZddOpeLSKn4vxueqG16hHLuCae1MJWnIGF5umOrd36Utn/SYZ0
-   FSr2iFLeg89zqisofiKgOom6Zr7166gJiROHq1haT6aWxUi3qEnADOIrB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="320366711"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="320366711"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:15:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="671059006"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.129])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 09:14:52 -0700
-Message-ID: <c422c9b3-d6e2-e1d5-5273-6a720fdde6c4@intel.com>
-Date: Thu, 25 Aug 2022 19:14:47 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927A03C14
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 17:48:22 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id f21so21035079pjt.2
+        for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 10:48:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qBvhEEGuLxX+PJv+tbfEQq/bCO94kZfgiA0ElB3g654=;
+        b=nCQ6orPxZXRruHsc/CsZ74MbcFTlWnuxsCmA9DZAB+tEa/cnET+vLEWOCmSx0rZ9hy
+         ZywXWt+LmP/hCYALw/O/nV+lTnJvszrrdVzsmkYoTTVRLOCAw3VCaBooAysYOyOrZ7O/
+         jp2x2u+aLOsiUj+Q/53AoRd688dOdjcCwOPelUHUc12sJFnn0pOfxaKrilhVwy8BT0Je
+         mzO48FhLmMpxnHczxQzULBniuohTjWDEeQ5XURCQj60nMiYYctPPZNwdktZSK89GqhE+
+         jANzzMRGRkfOSABktkWksj2WAosgk/8DrbW+w9HdUDDMIhiWYN89iNQHGhrOI+pcauRW
+         ohow==
+X-Gm-Message-State: ACgBeo15GIwD6aNhWsFAq+DTwSZeilmLHhNHv+slGQPnP4HuYyWOKFFP
+	6kpF7HR0bDoFxZV8t4a/Q3I=
+X-Google-Smtp-Source: AA6agR5cGI2rlUxjZutlHyCVw4YwR2efDBuTB1Rgl/S09JMuKrd2JkNWWXHv0YFZNevkCJqE/aaSRQ==
+X-Received: by 2002:a17:90b:4ad2:b0:1fa:f9d3:df64 with SMTP id mh18-20020a17090b4ad200b001faf9d3df64mr238704pjb.19.1661449701882;
+        Thu, 25 Aug 2022 10:48:21 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:349c:3078:d005:5a7e? ([2620:15c:211:201:349c:3078:d005:5a7e])
+        by smtp.gmail.com with ESMTPSA id i14-20020a17090a2a0e00b001f3e643ebbfsm15247pjd.0.2022.08.25.10.48.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 10:48:21 -0700 (PDT)
+Message-ID: <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
+Date: Thu, 25 Aug 2022 10:48:19 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,157 +35,117 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/18] Mutex wrapper, locking and memory leak fixes
+ Thunderbird/91.11.0
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in blk_mq_map_swqueue
 Content-Language: en-US
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
- Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
- <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
- Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
- Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
- <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
- Kim Phillips <kim.phillips@amd.com>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Alexandre Truong <alexandre.truong@arm.com>,
- Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
- Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
- <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
- James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
- Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
- Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
- Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-perf-users <linux-perf-users@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CA+JHD906M0truH7wPNZ=eJwdCA=qLhYDonUx_ZQBwJYpiX1hNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: Dmitry Vyukov <dvyukov@google.com>
+References: <0000000000004c3b1405e6b7de26@google.com>
+Cc: syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>,
+ axboe@kernel.dk, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, syzkaller-bugs@googlegroups.com
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <0000000000004c3b1405e6b7de26@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 25/08/22 15:30, Arnaldo Carvalho de Melo wrote:
-> On Wed, Aug 24, 2022, 12:39 PM Ian Rogers <irogers@google.com <mailto:irogers@google.com>> wrote:
+On 8/20/22 20:24, syzbot wrote:
+> Hello,
 > 
->     When fixing a locking race and memory leak in:
->     https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/ <https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/>
+> syzbot found the following issue on:
 > 
->     It was requested that debug mutex code be separated out into its own
->     files. This was, in part, done by Pavithra Gurushankar in:
->     https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/ <https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/>
+> HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13cf3c7b080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ea55456e1ff28ef7f9ff
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
->     These patches fix issues with the previous patches, add in the
->     original dso->nsinfo fix and then build on our mutex wrapper with
->     clang's -Wthread-safety analysis. The analysis found missing unlocks
->     in builtin-sched.c which are fixed and -Wthread-safety is enabled by
->     default when building with clang.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com
 > 
->     v3. Adds a missing new line to the error messages and removes the
->         pshared argument to mutex_init by having two functions, mutex_init
->         and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> 
-> 
-> Adrian, can I have your Acked-by or, better, Reviewed-by?
+> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+> BUG: unable to handle page fault for address: ffffdc0000000000
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 12026067
+> P4D 12026067 PUD 0
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> Workqueue: events_unbound async_run_entry_fn
+> RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
+> Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
+> RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
+> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+> RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
+> R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
+> R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
+> FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   <TASK>
+>   blk_mq_init_allocated_queue+0x1a31/0x1c20 block/blk-mq.c:4119
+>   blk_mq_init_queue_data block/blk-mq.c:3908 [inline]
+>   blk_mq_init_queue+0x9f/0x120 block/blk-mq.c:3918
+>   scsi_alloc_sdev+0x697/0x9d0 drivers/scsi/scsi_scan.c:335
+>   scsi_probe_and_add_lun+0x1d1/0x4ab0 drivers/scsi/scsi_scan.c:1191
+>   __scsi_scan_target+0x1fb/0x10e0 drivers/scsi/scsi_scan.c:1673
+>   scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
+>   scsi_scan_host_selected+0x394/0x6c0 drivers/scsi/scsi_scan.c:1790
+>   do_scsi_scan_host drivers/scsi/scsi_scan.c:1929 [inline]
+>   do_scan_async+0x12e/0x7b0 drivers/scsi/scsi_scan.c:1939
+>   async_run_entry_fn+0xa6/0x400 kernel/async.c:127
+>   process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+>   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>   kthread+0x266/0x300 kernel/kthread.c:376
+>   ret_from_fork+0x1f/0x30
+>   </TASK>
+> Modules linked in:
+> CR2: ffffdc0000000000
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
+> Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
+> RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
+> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+> RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
+> R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
+> R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
+> FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess), 5 bytes skipped:
+>     0:	43 0f b6 04 37       	movzbl (%r15,%r14,1),%eax
+>     5:	84 c0                	test   %al,%al
+>     7:	0f 85 49 02 00 00    	jne    0x256
+>     d:	41 0f b7 45 00       	movzwl 0x0(%r13),%eax
+>    12:	8d 48 01             	lea    0x1(%rax),%ecx
+>    15:	66 41 89 4d 00       	mov    %cx,0x0(%r13)
+>    1a:	48 8d 1c c3          	lea    (%rbx,%rax,8),%rbx
+>    1e:	48 89 d8             	mov    %rbx,%rax
+>    21:	48 c1 e8 03          	shr    $0x3,%rax
+> * 25:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+>    2a:	4c 8b 7c 24 68       	mov    0x68(%rsp),%r15
+>    2f:	74 08                	je     0x39
+>    31:	48 89 df             	mov    %rbx,%rdi
+>    34:	e8 36 7b c1 fd       	callq  0xfdc17b6f
+>    39:	48                   	rex.W
+>    3a:	8b                   	.byte 0x8b
 
-Sure, just let me have another look.  Should get to it
-tomorrow.
+Hi Dmitry,
 
-> 
-> Thanks, 
-> 
-> -  Arnaldo 
-> 
->     v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
->         annotations as requested by Arnaldo and Namhyung. A boolean is
->         added to builtin-sched.c to terminate thread funcs rather than
->         leaving them blocked on delted mutexes.
-> 
->     Ian Rogers (17):
->       perf bench: Update use of pthread mutex/cond
->       perf tests: Avoid pthread.h inclusion
->       perf hist: Update use of pthread mutex
->       perf bpf: Remove unused pthread.h include
->       perf lock: Remove unused pthread.h include
->       perf record: Update use of pthread mutex
->       perf sched: Update use of pthread mutex
->       perf ui: Update use of pthread mutex
->       perf mmap: Remove unnecessary pthread.h include
->       perf dso: Update use of pthread mutex
->       perf annotate: Update use of pthread mutex
->       perf top: Update use of pthread mutex
->       perf dso: Hold lock when accessing nsinfo
->       perf mutex: Add thread safety annotations
->       perf sched: Fixes for thread safety analysis
->       perf top: Fixes for thread safety analysis
->       perf build: Enable -Wthread-safety with clang
-> 
->     Pavithra Gurushankar (1):
->       perf mutex: Wrapped usage of mutex and cond
-> 
->      tools/perf/Makefile.config                 |   5 +
->      tools/perf/bench/epoll-ctl.c               |  33 +++---
->      tools/perf/bench/epoll-wait.c              |  33 +++---
->      tools/perf/bench/futex-hash.c              |  33 +++---
->      tools/perf/bench/futex-lock-pi.c           |  33 +++---
->      tools/perf/bench/futex-requeue.c           |  33 +++---
->      tools/perf/bench/futex-wake-parallel.c     |  33 +++---
->      tools/perf/bench/futex-wake.c              |  33 +++---
->      tools/perf/bench/numa.c                    |  93 ++++++----------
->      tools/perf/builtin-inject.c                |   4 +
->      tools/perf/builtin-lock.c                  |   1 -
->      tools/perf/builtin-record.c                |  13 ++-
->      tools/perf/builtin-sched.c                 | 105 +++++++++---------
->      tools/perf/builtin-top.c                   |  45 ++++----
->      tools/perf/tests/mmap-basic.c              |   2 -
->      tools/perf/tests/openat-syscall-all-cpus.c |   2 +-
->      tools/perf/tests/perf-record.c             |   2 -
->      tools/perf/ui/browser.c                    |  20 ++--
->      tools/perf/ui/browsers/annotate.c          |  12 +--
->      tools/perf/ui/setup.c                      |   5 +-
->      tools/perf/ui/tui/helpline.c               |   5 +-
->      tools/perf/ui/tui/progress.c               |   8 +-
->      tools/perf/ui/tui/setup.c                  |   8 +-
->      tools/perf/ui/tui/util.c                   |  18 ++--
->      tools/perf/ui/ui.h                         |   4 +-
->      tools/perf/util/Build                      |   1 +
->      tools/perf/util/annotate.c                 |  15 +--
->      tools/perf/util/annotate.h                 |   4 +-
->      tools/perf/util/bpf-event.h                |   1 -
->      tools/perf/util/build-id.c                 |  12 ++-
->      tools/perf/util/dso.c                      |  19 ++--
->      tools/perf/util/dso.h                      |   4 +-
->      tools/perf/util/hist.c                     |   6 +-
->      tools/perf/util/hist.h                     |   4 +-
->      tools/perf/util/map.c                      |   3 +
->      tools/perf/util/mmap.h                     |   1 -
->      tools/perf/util/mutex.c                    | 119 +++++++++++++++++++++
->      tools/perf/util/mutex.h                    | 109 +++++++++++++++++++
->      tools/perf/util/probe-event.c              |   3 +
->      tools/perf/util/symbol.c                   |   4 +-
->      tools/perf/util/top.h                      |   5 +-
->      41 files changed, 570 insertions(+), 323 deletions(-)
->      create mode 100644 tools/perf/util/mutex.c
->      create mode 100644 tools/perf/util/mutex.h
-> 
->     -- 
->     2.37.2.609.g9ff673ca1a-goog
-> 
+This issue and also another report that has been shared recently on the
+linux-scsi mailing list look like USB issues to me. Who is the right person
+to make sure that the USB mailing list is included for USB related issues?
 
+Thanks,
+
+Bart.
