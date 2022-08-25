@@ -1,129 +1,202 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088453C14
-	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 18:20:00 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id d23so24966581lfl.13
-        for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 11:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LzcSMU79flsCFGsYwPA8jm006j9ntJHVrXRums+x4hg=;
-        b=SYv3Q3AaGa03fEqdwIrUan3UK8SVmw9Z+8W0B7f1Bj2B8+vTNPtKhvy5T89n7XvozG
-         NDgrl5LlirpCD9r3IS2kZBXYAE8dV6QP7j2D5koQYtr3nUg9jAbPihRKFqrhn5RwEcp7
-         BZd5umqi6jfrO6Cx8Bgf7w4lG0lyQa4YV0Q/DkOpfm5hmLCPyrSHeF6USOHTKnb82axs
-         UbqNS0wIZUyhVt9oIeAumA1MQ798CrLeXJrUDk7NUqGzWAQI6IfNL7t9zG0bFBciPxy1
-         +Yq1LnHzDtJzsiTKE4JhDpzYlvm+dVVQN2UNFpkKFOEdD6wZ+Y0MP9sxzTcXJXAlNHDb
-         gwcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LzcSMU79flsCFGsYwPA8jm006j9ntJHVrXRums+x4hg=;
-        b=ofpZUZ4RGiLrtc1p+j0XtFn/pGjJAbmzxEtLV+cp7RCXZ1ffh4hX+kBU0s4no4FIi3
-         sUyoxSVi7zVPQ6RxGYVPbyy/zawXG/U8hfmJX0rdj17ZAUN94I7DTTFtOJlW+rrYhRz/
-         aNz4xPfDmaY0CTcx5kP33P4DopdI7ZAqvoosWvtQ3EV2LaRcgmk9++KDtZFVuefva68O
-         pPz39zY1gLehkRSVNSI2sYL5wr0S0+nOmigDUHW3MvT5Jo/wegzSCNt3ljU2lIN+txq9
-         poY2Q8QCjePxhYlI129HL8cUTo4NTCrxahQA5CUE0PdIQijcaviQedEMQX2NF9VTIPJ9
-         0HYw==
-X-Gm-Message-State: ACgBeo1HYCx44KHDBdpdmupr1W8n1a2e28DFadif4LKPJVFUkiug5MF6
-	RGZQSt2ECmE9DDF9BSFcAO+gFMcWAkOQYhVor1Zszg==
-X-Google-Smtp-Source: AA6agR4DcOai/4bkoqgXsxN2AlpaLedM35dK8SSB6wQ+78buD9y4OrDy89oUbjQQpHxrnsnUIN+AQrnsjuDafmd1nR8=
-X-Received: by 2002:a05:6512:158b:b0:48b:38:cff8 with SMTP id
- bp11-20020a056512158b00b0048b0038cff8mr1399470lfb.100.1661451598905; Thu, 25
- Aug 2022 11:19:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A892F2D
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 22:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E303DC433C1;
+	Thu, 25 Aug 2022 22:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661466883;
+	bh=9MvW1+ds+HiEDTMo8oSecKFR7fbv9XBzO14GO+DL/w0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L+3k+Rr+gqFEuwpCpD5J9g7cWojXI6SNtH3GE0/cjZr93xjYYs4xoEsCjTr8tcwuI
+	 YJcg7gwIfkVmPglt+LB5IOSJN0dHDgH3eWRKAEzueq3nPYdJFEc4Ig+ru9UgEJDjFB
+	 n2DuNgIFAf7+KKwNLMOwtRklRBm6CQUaNdCNyr+koLZdv3FGNYbGn5aQD6BT6RzHho
+	 rSSh4k+TEgSoLKwTrVfKUu/iVU82FVM5loh/uRYFDM237M0jBCodHYrF9W2JcCHDhV
+	 au8CSYCJZZFwBP7W66PvRw1xb2RzcVzoz9rsEHf8eKsA4UK35zqqX5Gr/gBddngSPj
+	 ONgzRBCIya6Lg==
+Date: Thu, 25 Aug 2022 15:34:41 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Harry Wentland <harry.wentland@amd.com>,
+	"Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	David Airlie <airlied@linux.ie>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	amd-gfx list <amd-gfx@lists.freedesktop.org>,
+	dri-devel <dri-devel@lists.freedesktop.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+Message-ID: <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
+References: <YuwRyQYPCb1FD+mr@debian>
+ <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+ <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
+ <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+ <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+ <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
+ <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
+ <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220825180607.2707947-1-nathan@kernel.org>
-In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 25 Aug 2022 11:19:47 -0700
-Message-ID: <CAKwvOdmNCT+USwe5Lui27Oa1jfNyy3NwP3jW=Q7JJi1R5ibRnw@mail.gmail.com>
-Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in mlx5e_rep_add_meta_tunnel_rule()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tom Rix <trix@redhat.com>, 
-	netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X>
 
-On Thu, Aug 25, 2022 at 11:06 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang warns:
->
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (IS_ERR(flow_rule)) {
->               ^~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
->           return err;
->                 ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
->           if (IS_ERR(flow_rule)) {
->           ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
->           int err;
->                 ^
->                   = 0
->   1 error generated.
->
-> There is little reason to have the 'goto + error variable' construct in
-> this function. Get rid of it and just return the PTR_ERR value in the if
-> statement and 0 at the end.
->
-> Fixes: 430e2d5e2a98 ("net/mlx5: E-Switch, Move send to vport meta rule creation")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1695
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi AMD folks,
 
-Thanks for the fix!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Top posting because it might not have been obvious but I was looking for
+your feedback on this message (which can be viewed on lore.kernel.org if
+you do not have the original [1]) so that we can try to get this fixed
+in some way for 6.0/6.1. If my approach is not welcome, please consider
+suggesting another one or looking to see if this is something you all
+could look into.
 
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> index c8617a62e542..a977804137a8 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> @@ -471,22 +471,18 @@ mlx5e_rep_add_meta_tunnel_rule(struct mlx5e_priv *priv)
->         struct mlx5_eswitch_rep *rep = rpriv->rep;
->         struct mlx5_flow_handle *flow_rule;
->         struct mlx5_flow_group *g;
-> -       int err;
->
->         g = esw->fdb_table.offloads.send_to_vport_meta_grp;
->         if (!g)
->                 return 0;
->
->         flow_rule = mlx5_eswitch_add_send_to_vport_meta_rule(esw, rep->vport);
-> -       if (IS_ERR(flow_rule)) {
-> -               err = PTR_ERR(flow_rule);
-> -               goto out;
-> -       }
-> +       if (IS_ERR(flow_rule))
-> +               return PTR_ERR(flow_rule);
->
->         rpriv->send_to_vport_meta_rule = flow_rule;
->
-> -out:
-> -       return err;
-> +       return 0;
->  }
->
->  static void
->
-> base-commit: c19d893fbf3f2f8fa864ae39652c7fee939edde2
-> --
-> 2.37.2
->
+[1]: https://lore.kernel.org/Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X/
 
+Cheers,
+Nathan
 
--- 
-Thanks,
-~Nick Desaulniers
+On Thu, Aug 18, 2022 at 08:59:14AM -0700, Nathan Chancellor wrote:
+> Hi Arnd,
+> 
+> Doubling back around to this now since I think this is the only thing
+> breaking x86_64 allmodconfig with clang 11 through 15.
+> 
+> On Fri, Aug 05, 2022 at 09:32:13PM +0200, Arnd Bergmann wrote:
+> > On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
+> > > > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
+> > > > While splitting out sub-functions can help reduce the maximum stack
+> > > > usage, it seems that in this case it makes the actual problem worse:
+> > > > I see 2168 bytes for the combined
+> > > > dml32_ModeSupportAndSystemConfigurationFull(), but marking
+> > > > mode_support_configuration() as noinline gives me 1992 bytes
+> > > > for the outer function plus 384 bytes for the inner one. So it does
+> > > > avoid the warning (barely), but not the problem that the warning tries
+> > > > to point out.
+> > >
+> > > I haven't had a chance to take a look at splitting things up yet, would
+> > > you recommend a different approach?
+> > 
+> > Splitting up large functions can help when you have large local variables
+> > that are used in different parts of the function, and the split gets the
+> > compiler to reuse stack locations.
+> > 
+> > I think in this particular function, the problem isn't actually local variables
+> > but either pushing variables on the stack for argument passing,
+> > or something that causes the compiler to run out of registers so it
+> > has to spill registers to the stack.
+> > 
+> > In either case, one has to actually look at the generated output
+> > and then try to rearrange the codes so this does not happen.
+> > 
+> > One thing to try would be to condense a function call like
+> > 
+> >                 dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
+> > 
+> > &v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
+> >                         mode_lib->vba.USRRetrainingRequiredFinal,
+> >                         mode_lib->vba.UsesMALLForPStateChange,
+> > 
+> > mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
+> >                         mode_lib->vba.NumberOfActiveSurfaces,
+> >                         mode_lib->vba.MaxLineBufferLines,
+> >                         mode_lib->vba.LineBufferSizeFinal,
+> >                         mode_lib->vba.WritebackInterfaceBufferSize,
+> >                         mode_lib->vba.DCFCLK,
+> >                         mode_lib->vba.ReturnBW,
+> >                         mode_lib->vba.SynchronizeTimingsFinal,
+> > 
+> > mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+> >                         mode_lib->vba.DRRDisplay,
+> >                         v->dpte_group_bytes,
+> >                         v->meta_row_height,
+> >                         v->meta_row_height_chroma,
+> > 
+> > v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
+> >                         mode_lib->vba.WritebackChunkSize,
+> >                         mode_lib->vba.SOCCLK,
+> >                         v->DCFCLKDeepSleep,
+> >                         mode_lib->vba.DETBufferSizeY,
+> >                         mode_lib->vba.DETBufferSizeC,
+> >                         mode_lib->vba.SwathHeightY,
+> >                         mode_lib->vba.SwathHeightC,
+> >                         mode_lib->vba.LBBitPerPixel,
+> >                         v->SwathWidthY,
+> >                         v->SwathWidthC,
+> >                         mode_lib->vba.HRatio,
+> >                         mode_lib->vba.HRatioChroma,
+> >                         mode_lib->vba.vtaps,
+> >                         mode_lib->vba.VTAPsChroma,
+> >                         mode_lib->vba.VRatio,
+> >                         mode_lib->vba.VRatioChroma,
+> >                         mode_lib->vba.HTotal,
+> >                         mode_lib->vba.VTotal,
+> >                         mode_lib->vba.VActive,
+> >                         mode_lib->vba.PixelClock,
+> >                         mode_lib->vba.BlendingAndTiming,
+> >                         .... /* more arguments */);
+> > 
+> > into calling conventions that take a pointer to 'mode_lib->vba' and another
+> > one to 'v', so these are no longer passed on the stack individually.
+> 
+> So I took a whack at reducing this function's number of parameters and
+> ended up with the attached patch. I basically just removed any
+> parameters that were identical between the two call sites and access them
+> through the vba pointer, as you suggested.
+> 
+> AMD folks, is this an acceptable approach? It didn't take a trivial
+> amount of time so I want to make sure this is okay before I do it to
+> more functions/files.
+> 
+> Due to the potential size of these changes, I am a little weary of them
+> going into 6.0; even though they should be a simple search and replace
+> for the most part, it might be nice for them to have some decent soak
+> time in -next. One solution would be to raise the warning limit for
+> these files on 6.0 so that allmodconfig does not ship broken then reduce
+> the limit for 6.1 once these patches have been applied.
+> 
+> Additionally, I took a look at the stack usage across all compilers that
+> the kernel supports and I thought it was kind of interesting that the
+> usage really jumps from GCC 7 to 8, which I am guessing is a result of
+> commit e8a170ff9a35 ("drm/amdgpu: enable -msse2 for GCC 7.1+ users").
+> GCC 8 allmodconfig actually errors now too:
+> 
+> https://lore.kernel.org/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
+> 
+>           |-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+>           | dml30_ModeSupportAndSystemConfigurationFull() | dml31_ModeSupportAndSystemConfigurationFull() | dml32_ModeSupportAndSystemConfigurationFull() |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> | GCC 5   |                  1056 bytes                   |                   656 bytes                   |                  1040 bytes                   |
+> | GCC 6   |                  1024 bytes                   |                   672 bytes                   |                  1056 bytes                   |
+> | GCC 7   |                  1040 bytes                   |                   664 bytes                   |                  1056 bytes                   |
+> | GCC 8   |                  1760 bytes                   |                  1608 bytes                   |                  2144 bytes                   |
+> | GCC 9   |                  1664 bytes                   |                  1392 bytes                   |                  1960 bytes                   |
+> | GCC 10  |                  1648 bytes                   |                  1368 bytes                   |                  1952 bytes                   |
+> | GCC 11  |                  1680 bytes                   |                  1400 bytes                   |                  1952 bytes                   |
+> | GCC 12  |                  1680 bytes                   |                  1400 bytes                   |                  1984 bytes                   |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> | LLVM 11 |                  2104 bytes                   |                  2056 bytes                   |                  2120 bytes                   |
+> | LLVM 12 |                  2152 bytes                   |                  2200 bytes                   |                  2152 bytes                   |
+> | LLVM 13 |                  2216 bytes                   |                  2248 bytes                   |                  2168 bytes                   |
+> | LLVM 14 |                  2168 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> | LLVM 15 |                  2216 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> | LLVM 16 |                  2232 bytes                   |                  2216 bytes                   |                  2176 bytes                   |
+> |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> 
+> With the patch I have attached,
+> dml32_ModeSupportAndSystemConfigurationFull() drops from 2176 to 1944
+> for LLVM 16, which is obviously still not great but it at least avoids
+> the warning.
+> 
+> Cheers,
+> Nathan
