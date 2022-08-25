@@ -1,418 +1,179 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28A11841
-	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 02:20:05 +0000 (UTC)
-X-UUID: 05e989caa154479bad7150acdbe8b1ad-20220825
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fMaxPbtRsPB7u5/xEhCvW3M/iJpDMnXyBFXjy70UF8Q=;
-	b=IhzdWue/0SaNx/dDDyF05TtNQ8j4ueePxvnpqkCUjTGT6TJwtLuQ2UJdD6onRiG63wI07U63znB9eLpvd0U1YvKcZfq9lmOzF1pMOyVy+xE7Pg1fvt4gstjQcBLlKPwSBY3UZlCyBeum0X+xNCLBSEztN2gacPcOMEX6xXwLpiw=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:f025415c-b21c-432f-8277-849aa005dffe,OB:0,L
-	OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Releas
-	e_Ham,ACTION:release,TS:82
-X-CID-INFO: VERSION:1.1.10,REQID:f025415c-b21c-432f-8277-849aa005dffe,OB:0,LOB
-	:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Spam_GS9
-	81B3D,ACTION:quarantine,TS:82
-X-CID-META: VersionHash:84eae18,CLOUDID:f39a7d55-e800-47dc-8adf-0c936acf4f1b,C
-	OID:a3e852526483,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL:0
-X-UUID: 05e989caa154479bad7150acdbe8b1ad-20220825
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 10391960; Thu, 25 Aug 2022 10:20:00 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 25 Aug 2022 10:19:58 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 25 Aug 2022 10:19:58 +0800
-Message-ID: <b1563f1079efeb2f7983b9a1b973f85ac663c5ed.camel@mediatek.com>
-Subject: Re: [PATCH v26 07/10] soc: mediatek: mmsys: add mmsys for support
- 64 reset bits
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring
-	<robh+dt@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
-	<nfraprado@collabora.com>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Thu, 25 Aug 2022 10:19:58 +0800
-In-Reply-To: <db271721-163f-e5ec-25d8-e90357104b6c@gmail.com>
-References: <20220819061011.7672-1-nancy.lin@mediatek.com>
-	 <20220819061011.7672-8-nancy.lin@mediatek.com>
-	 <44c86ad9-8158-0a8a-ce31-a995c8d10e0b@gmail.com>
-	 <140b3cd10317a5db781df180ce4efb697cdd641b.camel@mediatek.com>
-	 <c7c4e73f-dd03-4c88-f434-2aa3bd681e39@gmail.com>
-	 <7c59d86501c39fa6e0e182f4a537de814320426e.camel@mediatek.com>
-	 <db271721-163f-e5ec-25d8-e90357104b6c@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E60671A
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 02:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661394431; x=1692930431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m2NShgQpSZYJtyh/PISIzWJuAQu2oaO8T2wMyOtGoI8=;
+  b=XKfcm+lrOHHDmM58GrVFhZFBXxAbTyaw/ptGEpYqc2P63Q7SQDQ8je57
+   u8nxj8C5mUdRMFKuOxMmv7Sw/FJrkkmA1HqYrx2/JD69U4fr9oIAsPou4
+   nnNJLu8BVHFYqZevV2bsT53ET4eqGZpNyzxq3kEBo8SChfcDi55L5lXYH
+   2JXxVMlLamqlrRBBbRNKB514Fqkf/vK+WQ/0CVF7xiToM7bxYMMqKFaBk
+   9hZNEfzvbUEYWzRu4RR/So/FoIJyTyesUfPrGLWJ7Z53xDWo3mulV1I4T
+   vBe0/ZBmK+0MLEKe3b9ldN9dsv198eVt/AxAHmD7kbyJiTgWvmZtfzHkq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="281097865"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="281097865"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 19:27:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="639389118"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 24 Aug 2022 19:27:08 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oR2aJ-0001df-1d;
+	Thu, 25 Aug 2022 02:27:07 +0000
+Date: Thu, 25 Aug 2022 10:26:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 272/276]
+ fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized
+ when used here
+Message-ID: <202208251012.g1mOhhxy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Matthias,
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   73129b786c0eca5be67491a5e893e13b75133a62
+commit: fcc0d3d00d74b012c36d52128687ab9d197d3f0d [272/276] hugetlb: handle truncate racing with page faults
+config: arm64-randconfig-r014-20220823 (https://download.01.org/0day-ci/archive/20220825/202208251012.g1mOhhxy-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/fcc0d3d00d74b012c36d52128687ab9d197d3f0d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout fcc0d3d00d74b012c36d52128687ab9d197d3f0d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/hugetlbfs/
 
-Thanks for your comment.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, 2022-08-24 at 13:41 +0200, Matthias Brugger wrote:
-> 
-> On 24/08/2022 04:44, Nancy.Lin wrote:
-> > Hi Matthias,
-> > 
-> > Thanks for your comment.
-> > 
-> > On Tue, 2022-08-23 at 14:08 +0200, Matthias Brugger wrote:
-> > > 
-> > > On 23/08/2022 13:30, Nancy.Lin wrote:
-> > > > Hi Matthias,
-> > > > 
-> > > > Thanks for the review.
-> > > > 
-> > > > On Tue, 2022-08-23 at 12:20 +0200, Matthias Brugger wrote:
-> > > > > 
-> > > > > On 19/08/2022 08:10, Nancy.Lin wrote:
-> > > > > > Add mmsys for support 64 reset bits. It is a preparation
-> > > > > > for
-> > > > > > MT8195
-> > > > > > vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset
-> > > > > > bits.
-> > > > > > 
-> > > > > > 1. Add the number of reset bits in mmsys private data
-> > > > > > 2. move the whole "reset register code section" behind the
-> > > > > > "get mmsys->data" code section for getting the num_resets
-> > > > > > in
-> > > > > > mmsys-
-> > > > > > > data.
-> > > > > > 
-> > > > > > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > > > > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > > > > angelogioacchino.delregno@collabora.com>
-> > > > > > Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> > > > > > Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > > > ---
-> > > > > >     drivers/soc/mediatek/mtk-mmsys.c | 40
-> > > > > > +++++++++++++++++++++-
-> > > > > > ---
-> > > > > > -------
-> > > > > >     drivers/soc/mediatek/mtk-mmsys.h |  1 +
-> > > > > >     2 files changed, 27 insertions(+), 14 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> > > > > > b/drivers/soc/mediatek/mtk-mmsys.c
-> > > > > > index 999be064103b..20ae751ad8a7 100644
-> > > > > > --- a/drivers/soc/mediatek/mtk-mmsys.c
-> > > > > > +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> > > > > > @@ -20,6 +20,8 @@
-> > > > > >     #include "mt8195-mmsys.h"
-> > > > > >     #include "mt8365-mmsys.h"
-> > > > > >     
-> > > > > > +#define MMSYS_SW_RESET_PER_REG 32
-> > > > > > +
-> > > > > >     static const struct mtk_mmsys_driver_data
-> > > > > > mt2701_mmsys_driver_data = {
-> > > > > >     	.clk_driver = "clk-mt2701-mm",
-> > > > > >     	.routes = mmsys_default_routing_table,
-> > > > > > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
-> > > > > > mt8173_mmsys_driver_data = {
-> > > > > >     	.routes = mmsys_default_routing_table,
-> > > > > >     	.num_routes =
-> > > > > > ARRAY_SIZE(mmsys_default_routing_table),
-> > > > > >     	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> > > > > > +	.num_resets = 32,
-> > > > > >     };
-> > > > > >     
-> > > > > >     static const struct mtk_mmsys_match_data
-> > > > > > mt8173_mmsys_match_data
-> > > > > > = {
-> > > > > > @@ -100,6 +103,7 @@ static const struct
-> > > > > > mtk_mmsys_driver_data
-> > > > > > mt8183_mmsys_driver_data = {
-> > > > > >     	.routes = mmsys_mt8183_routing_table,
-> > > > > >     	.num_routes =
-> > > > > > ARRAY_SIZE(mmsys_mt8183_routing_table),
-> > > > > >     	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> > > > > > +	.num_resets = 32,
-> > > > > >     };
-> > > > > >     
-> > > > > >     static const struct mtk_mmsys_match_data
-> > > > > > mt8183_mmsys_match_data
-> > > > > > = {
-> > > > > > @@ -114,6 +118,7 @@ static const struct
-> > > > > > mtk_mmsys_driver_data
-> > > > > > mt8186_mmsys_driver_data = {
-> > > > > >     	.routes = mmsys_mt8186_routing_table,
-> > > > > >     	.num_routes =
-> > > > > > ARRAY_SIZE(mmsys_mt8186_routing_table),
-> > > > > >     	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> > > > > > +	.num_resets = 32,
-> > > > > >     };
-> > > > > >     
-> > > > > >     static const struct mtk_mmsys_match_data
-> > > > > > mt8186_mmsys_match_data
-> > > > > > = {
-> > > > > > @@ -128,6 +133,7 @@ static const struct
-> > > > > > mtk_mmsys_driver_data
-> > > > > > mt8192_mmsys_driver_data = {
-> > > > > >     	.routes = mmsys_mt8192_routing_table,
-> > > > > >     	.num_routes =
-> > > > > > ARRAY_SIZE(mmsys_mt8192_routing_table),
-> > > > > >     	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> > > > > > +	.num_resets = 32,
-> > > > > 
-> > > > > You didn't reply to Nicolas regarding the reset numbers. I
-> > > > > actually
-> > > > > agree with
-> > > > > him that we will need the num_resets declared for all
-> > > > > devices.
-> > > > > Why do
-> > > > > you think
-> > > > > this is not the case?
-> > > > > 
-> > > > > Regards,
-> > > > > Matthias
-> > > > > 
-> > > > 
-> > > > Sorry, I lost Nicolas's email.
-> > > > 
-> > > > I checked with the mmsys git log with reset controller
-> > > > function.
-> > > > 
-> > > > 1. Enric add mmsys reset controller function in [1]/[2].
-> > > >      => in mtk_mmsys_reset_update(), all mmsys reset offset is
-> > > > MMSYS_SW0_RST_B (0x140).
-> > > > 
-> > > > 2. After Enric's patch, Rex add sw0_rst_offset in mmsys driver
-> > > > data
-> > > > in
-> > > > [3].
-> > > > 
-> > > > So, I think sw0_rst_offset is not zero. Instead of only add
-> > > > num_resets
-> > > > but also need to add sw0_rst_offset for all mmsys. What do you
-> > > > think ?
-> > > > 
-> > > 
-> > > Good point. It seems we have a bug in the driver. Either all SoCs
-> > > have the
-> > > reset, but it's broken since
-> > > 62dc30150c06 ("soc: mediatek: mmsys: add sw0_rst_offset in mmsys
-> > > driver data")
-> > > or we are adding a reset controller independently if the silicon
-> > > has
-> > > one, which
-> > > would be an error in:
-> > > f27ef2856343 ("soc: mediatek: mmsys: Add reset controller
-> > > support")
-> > > 
-> > > We have to find that out.
-> > > 
-> > > Regards,
-> > > Matthias
-> > 
-> > 
-> > In [2], I think the first revision of Enric's reset controller is
-> > added
-> > for 8173 and 8183, not for all mmsys device.
-> >      =>[v3,4/7] arm64: dts: mt8173: Add the mmsys reset bit to
-> > reset the
-> > dsi0
-> >      =>[v3,5/7] arm64: dts: mt8183: Add the mmsys reset bit to
-> > reset the
-> > dsi0
-> > 
-> > In [3], Rex only add sw0_rst_offset in 8173 and 8183 mmsys driver
-> > data.
-> > > 
-> > 
-> > For other SoCs, like mt2701,mt2712..., these SoCs even don't define
-> > mmsys hw reset bit[4]. So I think only set the num_resets to 32 or
-> > 64
-> > to those mmsys devices who really need the reset control, others
-> > set to
-> > 0(same as my v26 patch).
-> > 
-> 
-> Thanks for looking into this, please see my comment further below.
-> 
-> 
-> > 
-> > [4]mt2701-resets.h
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/reset/mt2701-resets.h?id=62dc30150c06774a8122c52aedd0eddaceaf5940__;!!CTRNKA9wMg0ARbw!3j1YotescyEb7vq_dITIlc-FdtaFSslPkcn3B-Sw95Zf613Z-TPG4FK0BdCyW0Fb$
-> >  
-> > 
-> > Regards,
-> > Nancy
-> > 
-> > 
-> > > > [1]
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/soc/mediatek/mtk-mmsys.c?id=f27ef2856343e2ddc392975d7b15120442e4d7b7__;!!CTRNKA9wMg0ARbw!3cWAYlD1mrWRmNZy0zoJs8MNiD3s7K9PteJI9cGEvu_qp3VShfqxsBTb_fKynszs$
-> > > >   
-> > > > [2]
-> > > > 
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/cover/20210825102632.601614-1-enric.balletbo@collabora.com/__;!!CTRNKA9wMg0ARbw!3cWAYlD1mrWRmNZy0zoJs8MNiD3s7K9PteJI9cGEvu_qp3VShfqxsBTb_cH-3nM8$
-> > > >   
-> > > > [3]
-> > > > 
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/soc/mediatek/mtk-mmsys.c?id=62dc30150c06774a8122c52aedd0eddaceaf5940__;!!CTRNKA9wMg0ARbw!3cWAYlD1mrWRmNZy0zoJs8MNiD3s7K9PteJI9cGEvu_qp3VShfqxsBTb_VXEsbNa$
-> > > >   
-> > > > 
-> > > > Regards,
-> > > > Nancy
-> > > > > 
-> > > > > >     };
-> > > > > >     
-> > > > > >     static const struct mtk_mmsys_match_data
-> > > > > > mt8192_mmsys_match_data
-> > > > > > = {
-> > > > > > @@ -288,13 +294,19 @@ static int
-> > > > > > mtk_mmsys_reset_update(struct
-> > > > > > reset_controller_dev *rcdev, unsigned l
-> > > > > >     {
-> > > > > >     	struct mtk_mmsys *mmsys = container_of(rcdev,
-> > > > > > struct
-> > > > > > mtk_mmsys,
-> > > > > > rcdev);
-> > > > > >     	unsigned long flags;
-> > > > > > +	u32 offset;
-> > > > > > +	u32 reg;
-> > > > > > +
-> > > > > > +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
-> > > > > > +	id = id % MMSYS_SW_RESET_PER_REG;
-> > > > > > +	reg = mmsys->data->sw0_rst_offset + offset;
-> > > > > >     
-> > > > > >     	spin_lock_irqsave(&mmsys->lock, flags);
-> > > > > >     
-> > > > > >     	if (assert)
-> > > > > > -		mtk_mmsys_update_bits(mmsys, mmsys->data-
-> > > > > > > sw0_rst_offset, BIT(id), 0, NULL);
-> > > > > > 
-> > > > > > +		mtk_mmsys_update_bits(mmsys, reg, BIT(id), 0,
-> > > > > > NULL);
-> > > > > >     	else
-> > > > > > -		mtk_mmsys_update_bits(mmsys, mmsys->data-
-> > > > > > > sw0_rst_offset, BIT(id), BIT(id), NULL);
-> > > > > > 
-> > > > > > +		mtk_mmsys_update_bits(mmsys, reg, BIT(id),
-> > > > > > BIT(id),
-> > > > > > NULL);
-> > > > > >     
-> > > > > >     	spin_unlock_irqrestore(&mmsys->lock, flags);
-> > > > > >     
-> > > > > > @@ -351,18 +363,6 @@ static int mtk_mmsys_probe(struct
-> > > > > > platform_device *pdev)
-> > > > > >     		return ret;
-> > > > > >     	}
-> > > > > >     
-> > > > > > -	spin_lock_init(&mmsys->lock);
-> > > > > > -
-> > > > > > -	mmsys->rcdev.owner = THIS_MODULE;
-> > > > > > -	mmsys->rcdev.nr_resets = 32;
-> > > > > > -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> > > > > > -	mmsys->rcdev.of_node = pdev->dev.of_node;
-> > > > > > -	ret = devm_reset_controller_register(&pdev->dev,
-> > > > > > &mmsys-
-> > > > > > > rcdev);
-> > > > > > 
-> > > > > > -	if (ret) {
-> > > > > > -		dev_err(&pdev->dev, "Couldn't register mmsys
-> > > > > > reset
-> > > > > > controller: %d\n", ret);
-> > > > > > -		return ret;
-> > > > > > -	}
-> > > > > > -
-> > > > > >     	res = platform_get_resource(pdev,
-> > > > > > IORESOURCE_MEM, 0);
-> > > > > >     	if (!res) {
-> > > > > >     		dev_err(dev, "Couldn't get mmsys
-> > > > > > resource\n");
-> > > > > > @@ -384,6 +384,18 @@ static int mtk_mmsys_probe(struct
-> > > > > > platform_device *pdev)
-> > > > > >     		mmsys->data = match_data->drv_data[0];
-> > > > > >     	}
-> > > > > >     
-> > > > > > +	spin_lock_init(&mmsys->lock);
-> > > > > > +
-> > > > > > +	mmsys->rcdev.owner = THIS_MODULE;
-> > > > > > +	mmsys->rcdev.nr_resets = mmsys->data->num_resets;
-> > > > > > +	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> > > > > > +	mmsys->rcdev.of_node = pdev->dev.of_node;
-> > > > > > +	ret = devm_reset_controller_register(&pdev->dev,
-> > > > > > &mmsys-
-> > > > > > > rcdev);
-> > > > > > 
-> > > > > > +	if (ret) {
-> > > > > > +		dev_err(&pdev->dev, "Couldn't register mmsys
-> > > > > > reset
-> > > > > > controller: %d\n", ret);
-> > > > > > +		return ret;
-> > > > > > +	}
-> > > > > > +
-> 
-> 
-> This code is only relevant if mmsys->data->num_resets > 0. Let's
-> check for that 
-> before setting up and registering an interrupt controller. What do
-> you think?
-> 
-> Regards,
-> Matthias
-> 
-There is no doubt that we need to check num_resets > 0 before
-registering reset controller.
+All warnings (new ones prefixed by >>):
 
-I will add it in the next revision.
-
-Regards,
-Nancy
+>> fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized when used here [-Wuninitialized]
+                                                   m_start, m_index, truncate_op);
+                                                            ^~~~~~~
+   fs/hugetlbfs/inode.c:540:26: note: initialize the variable 'm_index' to silence this warning
+           pgoff_t m_start, m_index;
+                                   ^
+                                    = 0
+   1 warning generated.
 
 
-> > > > > >     #if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> > > > > >     	ret = cmdq_dev_get_client_reg(dev, &mmsys-
-> > > > > > >cmdq_base,
-> > > > > > 0);
-> > > > > >     	if (ret)
-> > > > > > diff --git a/drivers/soc/mediatek/mtk-mmsys.h
-> > > > > > b/drivers/soc/mediatek/mtk-mmsys.h
-> > > > > > index f01ba206481d..20a271b80b3b 100644
-> > > > > > --- a/drivers/soc/mediatek/mtk-mmsys.h
-> > > > > > +++ b/drivers/soc/mediatek/mtk-mmsys.h
-> > > > > > @@ -92,6 +92,7 @@ struct mtk_mmsys_driver_data {
-> > > > > >     	const struct mtk_mmsys_routes *routes;
-> > > > > >     	const unsigned int num_routes;
-> > > > > >     	const u16 sw0_rst_offset;
-> > > > > > +	const u32 num_resets;
-> > > > > >     };
-> > > > > >     
-> > > > > >     struct mtk_mmsys_match_data {
-> > > > > 
-> > > > > 
-> 
-> 
+vim +/m_index +562 fs/hugetlbfs/inode.c
 
+   502	
+   503	/*
+   504	 * remove_inode_hugepages handles two distinct cases: truncation and hole
+   505	 * punch.  There are subtle differences in operation for each case.
+   506	 *
+   507	 * truncation is indicated by end of range being LLONG_MAX
+   508	 *	In this case, we first scan the range and release found pages.
+   509	 *	After releasing pages, hugetlb_unreserve_pages cleans up region/reserve
+   510	 *	maps and global counts.  Page faults can race with truncation.
+   511	 *	During faults, hugetlb_no_page() checks i_size before page allocation,
+   512	 *	and again after	obtaining page table lock.  It will 'back out'
+   513	 *	allocations in the truncated range.
+   514	 * hole punch is indicated if end is not LLONG_MAX
+   515	 *	In the hole punch case we scan the range and release found pages.
+   516	 *	Only when releasing a page is the associated region/reserve map
+   517	 *	deleted.  The region/reserve map for ranges without associated
+   518	 *	pages are not modified.  Page faults can race with hole punch.
+   519	 *	This is indicated if we find a mapped page.
+   520	 * Note: If the passed end of range value is beyond the end of file, but
+   521	 * not LLONG_MAX this routine still performs a hole punch operation.
+   522	 *
+   523	 * Since page faults can race with this routine, care must be taken as both
+   524	 * modify huge page reservation data.  To somewhat synchronize these operations
+   525	 * the hugetlb fault mutex is taken for EVERY index in the range to be hole
+   526	 * punched or truncated.  In this way, we KNOW either:
+   527	 * - fault code has added a page beyond i_size, and we will remove here
+   528	 * - fault code will see updated i_size and not add a page beyond
+   529	 * The parameter 'lm__end' indicates the offset of the end of hole or file
+   530	 * before truncation.  For hole punch lm_end == lend.
+   531	 */
+   532	static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
+   533					   loff_t lend, loff_t lm_end)
+   534	{
+   535		struct hstate *h = hstate_inode(inode);
+   536		struct address_space *mapping = &inode->i_data;
+   537		const pgoff_t start = lstart >> huge_page_shift(h);
+   538		const pgoff_t end = lend >> huge_page_shift(h);
+   539		pgoff_t m_end = lm_end >> huge_page_shift(h);
+   540		pgoff_t m_start, m_index;
+   541		struct folio_batch fbatch;
+   542		struct folio *folio;
+   543		pgoff_t next, index;
+   544		unsigned int i;
+   545		long freed = 0;
+   546		u32 hash;
+   547		bool truncate_op = (lend == LLONG_MAX);
+   548	
+   549		folio_batch_init(&fbatch);
+   550		next = m_start = start;
+   551		while (filemap_get_folios(mapping, &next, end - 1, &fbatch)) {
+   552			for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+   553				folio = fbatch.folios[i];
+   554	
+   555				index = folio->index;
+   556				/*
+   557				 * Take fault mutex for missing folios before index,
+   558				 * while checking folios that might have been added
+   559				 * due to a race with fault code.
+   560				 */
+   561				freed += fault_lock_inode_indicies(h, inode, mapping,
+ > 562							m_start, m_index, truncate_op);
+   563	
+   564				/*
+   565				 * Remove folio that was part of folio_batch.
+   566				 */
+   567				hash = hugetlb_fault_mutex_hash(mapping, index);
+   568				mutex_lock(&hugetlb_fault_mutex_table[hash]);
+   569				if (remove_inode_single_folio(h, inode, mapping, folio,
+   570								index, truncate_op))
+   571					freed++;
+   572				mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+   573			}
+   574			folio_batch_release(&fbatch);
+   575			cond_resched();
+   576		}
+   577	
+   578		/*
+   579		 * Take fault mutex for missing folios at end of range while checking
+   580		 * for folios that might have been added due to a race with fault code.
+   581		 */
+   582		freed += fault_lock_inode_indicies(h, inode, mapping, m_start, m_end,
+   583							truncate_op);
+   584	
+   585		if (truncate_op)
+   586			(void)hugetlb_unreserve_pages(inode, start, LONG_MAX, freed);
+   587	}
+   588	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
