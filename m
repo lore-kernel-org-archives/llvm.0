@@ -1,200 +1,198 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F597B
-	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 06:20:41 +0000 (UTC)
-Received: by mail-qk1-f169.google.com with SMTP id c9so13295099qkk.6
-        for <llvm@lists.linux.dev>; Wed, 24 Aug 2022 23:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VX4Y4+Won0KX8jGaPLr5VW15tCXibPzu3K+PtpUFtUI=;
-        b=Y8hRK+2zVt+ZCuO+xvmsgGKy+xZJrwhsvClzDv/VrY9y6ls8wwTZ0LoyO+BVXu0DsI
-         PZJOB1E1xIOfVk2FCw6Eb9gt+w8b6/y+TueGi761vbmNUk3UrLqtqrJzwSTVmdhncM3S
-         ItWWxsTfkPiD5XUQOVMFVUSY6K7bYxi8SxVJLGUpXGQZ82tP4+tvD16QUpjd+IPsXyB8
-         5fAzlxPG4YWY6+t5jH02AB1m2Uxf99gtnyNXNRUA1r89Iv+M9/n+7mD3Cya0DiQ2QXmZ
-         2kbcic9pmK+iEQIkIPQo+t7ST2jl4dAUd6XrN6zs3H7iylJ89ZWEoHKGHLOzwknq7QuO
-         c90w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VX4Y4+Won0KX8jGaPLr5VW15tCXibPzu3K+PtpUFtUI=;
-        b=fR/GzZsuIHSu2V7wgWPTLCDzE/JypQb6T01aZx1lgvzMxVw0GdS7qtvbar8WWEMRe3
-         IarnImlt5l7Bl9c86tYwprxathBzsaOIjuBdFifW82889O8uoTBzDhgf/k+JvkRJ973L
-         /rcj103j8rQots+qynqyVyfBnL0UKnsS/zvl1komBw8h51QPCuk+87KpJaXCSG7QbPZp
-         l1HUrDlA92Sv+UkiwxnokXwogQyREL0klODqz9SNBWxIghR4cPKXYCxGDDtGgseHIDq+
-         yT3CcIeDr+UPZLpKFJvDKTlL1KgT/XFOhhkPSUz5O6xUiil/qybyWymctYzxiCyEiHWj
-         V7hQ==
-X-Gm-Message-State: ACgBeo1urxgk7aos9QSsMU/QgbMthPTJsvN3JSJL5J5kHO/0osuSPuvo
-	nJQV9HvYVtS4ws4CY0tbvGIN89o7pOahslsLTktWRNTyQOU=
-X-Google-Smtp-Source: AA6agR7v2o1hAF09FAz3I4m2/9OS9jsniuPwNwIHZwZWDUxur32zYrrIsRsrSTEVX+Y23y7BaVsKG7o7datXiT32ZSU=
-X-Received: by 2002:a05:620a:2587:b0:6a7:ee6f:bf2a with SMTP id
- x7-20020a05620a258700b006a7ee6fbf2amr2003059qko.542.1661408440061; Wed, 24
- Aug 2022 23:20:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC5B1FA7
+	for <llvm@lists.linux.dev>; Thu, 25 Aug 2022 07:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661413042; x=1692949042;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=t/rbNCnmLJMpaKwBLSJzt4+Hn6aArCb+aEEP0znZZAk=;
+  b=ckLx1g4J6DQMN2HV2KCZUcG80WQPqfqlxX9ZpnIC8BA7AXaiP0V5S+qD
+   OzEHzPQnLFvPEA5SZey565pjRzODbwfQ0zrmJdVyF4ly2oJAaih31/kca
+   wMIFiqY7GxiabuTUouFQ0+gfMY1LQ+AgTCIVpfnZokxDDzLBcfq1mnBmR
+   us0vpkQkVfJ82/ia78WZKchD5oz38FyW47uc4Zqql6x5r8sAqDETc6k0j
+   Ak9mcOyuoGQVQf973DaQpKQVP93TYj61+lJojBVbrhuDIM5jsOlrLRase
+   4XAJUI52zJoqOjk9US+ZdJNxro4FthYmMZ76Exafl7kFOv9N1wFVaMdOI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="294173319"
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="294173319"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
+   d="scan'208";a="639478341"
+Received: from pranavir-mobl.gar.corp.intel.com (HELO localhost) ([10.252.50.196])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 00:37:17 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>,
+ linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Nathan Chancellor <nathan@kernel.org>,
+ keescook@chromium.org
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
+ llvm@lists.linux.dev, "Sripada, Radhakrishna"
+ <radhakrishna.sripada@intel.com>, Ville =?utf-8?B?U3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Matt Roper <matthew.d.roper@intel.com>,
+ Anusha Srivatsa <anusha.srivatsa@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+In-Reply-To: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com>
+ <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+ <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Date: Thu, 25 Aug 2022 10:37:14 +0300
+Message-ID: <875yigixjp.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202208251224.teVMa7Yy-lkp@intel.com>
-In-Reply-To: <202208251224.teVMa7Yy-lkp@intel.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Thu, 25 Aug 2022 08:20:28 +0200
-Message-ID: <CAFULd4bgdGosQ3byMW9S+ov0uDO9iK3jCmZ-fkZQbCGOpfUvXQ@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:akpm/mm/mm-nonmm-unstable 50/50]
- kernel/smpboot.c:435:6: warning: variable 'oldstate' is used uninitialized
- whenever 'if' condition is true
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>, "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, 
-	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: multipart/mixed; boundary="000000000000e5cf9305e70acba7"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
---000000000000e5cf9305e70acba7
-Content-Type: text/plain; charset="UTF-8"
+On Tue, 23 Aug 2022, =C5=81ukasz Bartosik <lb@semihalf.com> wrote:
+>>
+>> Hi all,
+>>
+>> Apologies in advance if you see this twice. I did not see the original
+>> make it to either lore.kernel.org or the freedesktop.org archives so I
+>> figured it might have been sent into the void.
+>>
+>> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+>> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
+>> >
+>> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+>> > The root cause is null pointer defeference of bi_next
+>> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+>> >
+>> > BUG: kernel NULL pointer dereference, address: 000000000000002e
+>> > PGD 0 P4D 0
+>> > Oops: 0002 [#1] PREEMPT SMP NOPTI
+>> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+>> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05=
+/14/2021
+>> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
+>> > ...
+>> > [    2.554467] Call Trace:
+>> > [    2.554467]  <TASK>
+>> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
+>> > [    2.554467]  ? _printk+0x59/0x73
+>> > [    2.554467]  ? _dev_err+0x77/0x91
+>> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+>> > [    2.554467]  i915_driver_probe+0x4c8/0x638
+>> > [    2.554467]  i915_pci_probe+0xf8/0x14e
+>> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+>> > [    2.554467]  pci_device_probe+0xaa/0x142
+>> > [    2.554467]  really_probe+0x13f/0x2f4
+>> > [    2.554467]  __driver_probe_device+0x9e/0xd3
+>> > [    2.554467]  driver_probe_device+0x24/0x7c
+>> > [    2.554467]  __driver_attach+0xba/0xcf
+>> > [    2.554467]  ? driver_attach+0x1f/0x1f
+>> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
+>> > [    2.554467]  bus_add_driver+0x11b/0x1f7
+>> > [    2.554467]  driver_register+0x60/0xea
+>> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+>> > [    2.554467]  i915_init+0x2c/0xb9
+>> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+>> > [    2.554467]  do_one_initcall+0x12e/0x2b3
+>> > [    2.554467]  do_initcall_level+0xd6/0xf3
+>> > [    2.554467]  do_initcalls+0x4e/0x79
+>> > [    2.554467]  kernel_init_freeable+0xed/0x14d
+>> > [    2.554467]  ? rest_init+0xc1/0xc1
+>> > [    2.554467]  kernel_init+0x1a/0x120
+>> > [    2.554467]  ret_from_fork+0x1f/0x30
+>> > [    2.554467]  </TASK>
+>> > ...
+>> > Kernel panic - not syncing: Fatal exception
+>> >
+>> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+>> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
+>> > ---
+>> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+>> >  1 file changed, 9 insertions(+), 7 deletions(-)
+>> >
+>> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm=
+/i915/display/intel_bw.c
+>> > index 2da4aacc956b..bd0ed68b7faa 100644
+>> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
+>> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+>> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_priva=
+te *dev_priv, const struct intel
+>> >               int clpchgroup;
+>> >               int j;
+>> >
+>> > -             if (i < num_groups - 1)
+>> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
+>> > -
+>> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chan=
+nels) << i;
+>> >
+>> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
+>> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) =
+/ clpchgroup + 1;
+>> > -             else
+>> > -                     bi_next->num_planes =3D 0;
+>> > +             if (i < num_groups - 1) {
+>> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
+>> > +
+>> > +                     if (clpchgroup < clperchgroup)
+>> > +                             bi_next->num_planes =3D (ipqdepth - clpc=
+hgroup) /
+>> > +                                                    clpchgroup + 1;
+>> > +                     else
+>> > +                             bi_next->num_planes =3D 0;
+>> > +             }
+>> >
+>> >               bi->num_qgv_points =3D qi.num_points;
+>> >               bi->num_psf_gv_points =3D qi.num_psf_points;
+>> > --
+>> > 2.35.0.rc2.247.g8bbb082509-goog
+>> >
+>> >
+>>
+>> Was this patch ever applied or was the issue fixed in a different way?
+>> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+>> compiler supports it), bi_next will be deterministically initialized to
+>> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first =
+if
+>> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+>> us at [1] so it impacts real users (and I have been applying this change
+>> locally for six months). I see some discussion in this thread, was it
+>> ever resolved?
+>>
+>> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
+>>
+>> Cheers,
+>> Nathan
+>
+> The patch was not accepted by upstream. I gave up after sending two remin=
+ders
+> that the issue is still present which resulted in no upstream reaction.
+> I have been also applying that patch locally for a few months.
+> Thanks for bringing it up to upstream attention again.
 
-On Thu, Aug 25, 2022 at 6:30 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Uros,
->
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Apologies for us dropping the ball here. There were objections to the
+code from Ville [1] but nobody stepped up to clean it up. I think this
+was really more about the commit being fixed c64a9a7c05be ("drm/i915:
+Update memory bandwidth formulae") than about the patch at hand.
 
-No, the warning is correct, and although my compiler didn't emit the
-warning, the variable is indeed uninitialized.
+In any case, I've gone ahead and pushed this patch to drm-intel-next
+now. With the Fixes tag it should eventually find its way to stable
+v5.17+. Thank you for the patch, review - and nagging. ;)
 
-The patched kernel worked for me and I was not careful enough to find
-all incoming edges to the label.
+What still remains is cleaning up the code. But that should never have
+stalled the fix for months. Sorry again.
 
-Attached is an incremental patch I am testing, will send it later
-today as a proper patch.
 
-Uros.
+BR,
+Jani.
 
-> tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-nonmm-unstable
-> head:   2d1e07c7534c14e56ac3818fa24e7c1643a9b1dc
-> commit: 2d1e07c7534c14e56ac3818fa24e7c1643a9b1dc [50/50] smpboot: use atomic_try_cmpxchg in cpu_wait_death and cpu_report_death
-> config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220825/202208251224.teVMa7Yy-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/2d1e07c7534c14e56ac3818fa24e7c1643a9b1dc
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block akpm/mm/mm-nonmm-unstable
->         git checkout 2d1e07c7534c14e56ac3818fa24e7c1643a9b1dc
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/smpboot.c:435:6: warning: variable 'oldstate' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/smpboot.c:449:6: note: uninitialized use occurs here
->            if (oldstate == CPU_DEAD) {
->                ^~~~~~~~
->    kernel/smpboot.c:435:2: note: remove the 'if' if its condition is always false
->            if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/smpboot.c:428:14: note: initialize the variable 'oldstate' to silence this warning
->            int oldstate;
->                        ^
->                         = 0
->    1 warning generated.
->
->
-> vim +435 kernel/smpboot.c
->
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  421
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  422  /*
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  423   * Wait for the specified CPU to exit the idle loop and die.
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  424   */
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  425  bool cpu_wait_death(unsigned int cpu, int seconds)
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  426  {
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  427         int jf_left = seconds * HZ;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  428         int oldstate;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  429         bool ret = true;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  430         int sleep_jf = 1;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  431
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  432         might_sleep();
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  433
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  434         /* The outgoing CPU will normally get done quite quickly. */
-> 8038dad7e88858 Paul E. McKenney 2015-02-25 @435         if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  436                 goto update_state;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  437         udelay(5);
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  438
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  439         /* But if the outgoing CPU dawdles, wait increasingly long times. */
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  440         while (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) != CPU_DEAD) {
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  441                 schedule_timeout_uninterruptible(sleep_jf);
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  442                 jf_left -= sleep_jf;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  443                 if (jf_left <= 0)
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  444                         break;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  445                 sleep_jf = DIV_ROUND_UP(sleep_jf * 11, 10);
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  446         }
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  447         oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
-> 2d1e07c7534c14 Uros Bizjak      2022-08-23  448  update_state:
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  449         if (oldstate == CPU_DEAD) {
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  450                 /* Outgoing CPU died normally, update state. */
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  451                 smp_mb(); /* atomic_read() before update. */
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  452                 atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_POST_DEAD);
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  453         } else {
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  454                 /* Outgoing CPU still hasn't died, set state accordingly. */
-> 2d1e07c7534c14 Uros Bizjak      2022-08-23  455                 if (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
-> 2d1e07c7534c14 Uros Bizjak      2022-08-23  456                                         &oldstate, CPU_BROKEN))
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  457                         goto update_state;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  458                 ret = false;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  459         }
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  460         return ret;
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  461  }
-> 8038dad7e88858 Paul E. McKenney 2015-02-25  462
->
-> :::::: The code at line 435 was first introduced by commit
-> :::::: 8038dad7e888581266c76df15d70ca457a3c5910 smpboot: Add common code for notification from dying CPU
->
-> :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
 
---000000000000e5cf9305e70acba7
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-smpboot-Fix-cpu_wait_death-for-early-cpu-death.patch"
-Content-Disposition: attachment; 
-	filename="0001-smpboot-Fix-cpu_wait_death-for-early-cpu-death.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l78nod9y0>
-X-Attachment-Id: f_l78nod9y0
+[1] https://lore.kernel.org/r/YgOYBfQJF7hIzEPE@intel.com
 
-RnJvbSAyOWM0MTlmOWMyNzY3N2E0ODQyZmUyYWVmMzZkY2Y0NGI0MzIxZGZlIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBVcm9zIEJpemphayA8dWJpempha0BnbWFpbC5jb20+CkRhdGU6
-IFRodSwgMjUgQXVnIDIwMjIgMDg6MDk6NDQgKzAyMDAKU3ViamVjdDogW1BBVENIXSBzbXBib290
-OiBGaXggY3B1X3dhaXRfZGVhdGggZm9yIGVhcmx5IGNwdSBkZWF0aAoKRml4IHVuaW5pdGlhbGl6
-ZWQgdmFyaWFibGUgaW4gY2FzZSBjcHUgZGllcyBlYXJseS4KClJlcG9ydGVkLWJ5OiBrZXJuZWwg
-dGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4KQ2M6IEFuZHJldyBNb3J0b24gPGFrcG1AbGludXgt
-Zm91bmRhdGlvbi5vcmc+ClNpZ25lZC1vZmYtYnk6IFVyb3MgQml6amFrIDx1Yml6amFrQGdtYWls
-LmNvbT4KLS0tCiBrZXJuZWwvc21wYm9vdC5jIHwgMyArKy0KIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
-c2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvc21wYm9vdC5j
-IGIva2VybmVsL3NtcGJvb3QuYwppbmRleCBmM2NmMWE5YThiNDQuLjJjNzM5NmRhNDcwYyAxMDA2
-NDQKLS0tIGEva2VybmVsL3NtcGJvb3QuYworKysgYi9rZXJuZWwvc21wYm9vdC5jCkBAIC00MzMs
-NyArNDMzLDcgQEAgYm9vbCBjcHVfd2FpdF9kZWF0aCh1bnNpZ25lZCBpbnQgY3B1LCBpbnQgc2Vj
-b25kcykKIAogCS8qIFRoZSBvdXRnb2luZyBDUFUgd2lsbCBub3JtYWxseSBnZXQgZG9uZSBxdWl0
-ZSBxdWlja2x5LiAqLwogCWlmIChhdG9taWNfcmVhZCgmcGVyX2NwdShjcHVfaG90cGx1Z19zdGF0
-ZSwgY3B1KSkgPT0gQ1BVX0RFQUQpCi0JCWdvdG8gdXBkYXRlX3N0YXRlOworCQlnb3RvIHVwZGF0
-ZV9zdGF0ZV9lYXJseTsKIAl1ZGVsYXkoNSk7CiAKIAkvKiBCdXQgaWYgdGhlIG91dGdvaW5nIENQ
-VSBkYXdkbGVzLCB3YWl0IGluY3JlYXNpbmdseSBsb25nIHRpbWVzLiAqLwpAQCAtNDQ0LDYgKzQ0
-NCw3IEBAIGJvb2wgY3B1X3dhaXRfZGVhdGgodW5zaWduZWQgaW50IGNwdSwgaW50IHNlY29uZHMp
-CiAJCQlicmVhazsKIAkJc2xlZXBfamYgPSBESVZfUk9VTkRfVVAoc2xlZXBfamYgKiAxMSwgMTAp
-OwogCX0KK3VwZGF0ZV9zdGF0ZV9lYXJseToKIAlvbGRzdGF0ZSA9IGF0b21pY19yZWFkKCZwZXJf
-Y3B1KGNwdV9ob3RwbHVnX3N0YXRlLCBjcHUpKTsKIHVwZGF0ZV9zdGF0ZToKIAlpZiAob2xkc3Rh
-dGUgPT0gQ1BVX0RFQUQpIHsKLS0gCjIuMzEuMQoK
---000000000000e5cf9305e70acba7--
+--=20
+Jani Nikula, Intel Open Source Graphics Center
