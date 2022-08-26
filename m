@@ -1,158 +1,128 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2060.outbound.protection.outlook.com [40.107.243.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A9E5384
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 23:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661556345; x=1693092345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ybnVqotmHYbskoWeW7Vf5ai0y0aLeXGFeQIl1fl+BJw=;
-  b=c/FhBrxJvLPfSbroX6A1EugNij10ZjRLQc1DLIdBDit2nnWZOEkMQSXn
-   kcd3RANsCWoWavmjaJgQoyBR8hBUwBwePZI/iGuBkqS6jbt7sI9iAw2s7
-   zIkoTQQYP/QIpmyMLRe19Zi2dyJ+amMEq1l1Oy6tAtnpelJeyDGgkWOrF
-   ap94W1yQcdYdpznkil/G+zFD6S6F/oKjGZfy3TdUBtfV9Tg2bH6BAhZCK
-   CC2Tx9D+wuPgQIE/FQP5pc77mv9GwLwcUY9LUHQZ8WSSHQliCl8u892Gm
-   p+Dic7YMW4HmkUxib3Mnr/pMIKofrHijGmi6gkDWMK0YVY3F7Xy07Z4PF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="356328758"
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="356328758"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 16:25:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="679027402"
-Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Aug 2022 16:25:23 -0700
-Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oRihX-0000ds-07;
-	Fri, 26 Aug 2022 23:25:23 +0000
-Date: Sat, 27 Aug 2022 07:25:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [PATCH] wifi: use struct_group to copy addresses
-Message-ID: <202208270709.yaMdVwqX-lkp@intel.com>
-References: <20220826222007.7acf78f1ecee.I7c75a7d3599f120c720a5d6ec170fd90ec0dfd51@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F5C5384
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 23:43:10 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HnCUs3KSqkNLOiODRe1LmmoOJCJIz4nvJyZrmxV6XEgmxrIr//43QJit321Bt8w6Yakx7MvjypbKUOswZbfEfZYiZ0v3vIri8J2g0BjFPVdMpOfSzASKGaR/sB73k86nFv4gy+HKgzdFVc/CSyAmIyOSwxfJBKpVXfQMAb40YZBbm6Njd4x5e6D94befq/hlEkKInRN9WZFHQmywMX5dGYEGNuZ+r5dq4yHRWwT7KX5T0fj6y+r+H8mXw+LDAz5tf+YUqAB4LtP+eyeoa3YTzT1udS6n0ve2PKenn9w9P3irO4OStemvVdto9JTYqWLuO3WXRaVWx/05GzeLWTKDwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4J4rgFVgYPXhvd1svB9QAv3MshPPopg88cPMi+zgQ2Y=;
+ b=coZz2KaBJAB0M2vwUFDqxvRXwvCe5neaozNwSKyPArDaxtW66M7j7Whr2AsiewgsVe7L/LWBEmzX60PzLFFSTBwXp82CjX+J6pwl7/iSqTlRTtqzsn/L/PtF9zcmMr+r713ZmtX74sNeMxW4ulNeO8H7ifbDXjRk3I22OjR0PGnAGxN+qY8ZuLUb3AiVSJY10hCXsnfEI70M2W7FeoAT6fGfQYCEuM/7I7hzzXR3ZeW4a2qIrTZgTjV8voRBzVH/YMU3ievrb4BVdYtVlk7Y4V0cDKuiWRYaxd5NzU2Lwyjdc72utgA4UeCAZ9CuuWqB8ISTH6QJuDqUyJ3mU/dVfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4J4rgFVgYPXhvd1svB9QAv3MshPPopg88cPMi+zgQ2Y=;
+ b=Dym44zrwRmQi6PkW4jUGAI6grVDuhloNoHCB+UKHvFDcsWBF/r3bC1gHf3YhhrMIxVL68/PNSbtfOqeazEIuo5cCYOHuVaiDejNu38MbnkJrCL3laM/D79TheaPyuyDIJLBE95UO5QwOAZ4tDNKW6DcKQKG+7+S/3LZLGKEnhPIg3X2oX75Wmgkd4nc65iefssETGs19GmSBwM1qMlyIYezntL7K8qVY+y8EK9ZWyoF6jo52RkX6S/qc766hIbLBcv7KCr7z+rLthgT6ZGjZSc78ZKJO2/8ZEt+4NhYq2cmCrIfq5reWW04psn8xco/x4SN/bS/n+IJR4SQ9CHR17w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MN2PR12MB3935.namprd12.prod.outlook.com (2603:10b6:208:168::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Fri, 26 Aug
+ 2022 23:43:09 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.016; Fri, 26 Aug 2022
+ 23:43:08 +0000
+Date: Fri, 26 Aug 2022 20:43:07 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex.williamson@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH 8/8] vfio: Split VFIO_GROUP_GET_STATUS into a function
+Message-ID: <Ywlai0AR7RuF9FlI@nvidia.com>
+References: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+ <8-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+X-ClientProxiedBy: BL0PR0102CA0071.prod.exchangelabs.com
+ (2603:10b6:208:25::48) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826222007.7acf78f1ecee.I7c75a7d3599f120c720a5d6ec170fd90ec0dfd51@changeid>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9deb7293-34e6-48cd-63f9-08da87bcbafd
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3935:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	c4QYmksalwBVMggP4aZrL5UQcXn8WqZ8tob3Gy9i+DeoksCT+Rg2+RyJefWjpZLWJt/ouHxPtQ0TzosEqxQEpQMl6etfjCYd4Dr7xELqrg9cEhmbQDY3KrPnsDsdsWJZX1mCxYMSV0/etzvUwqqj2tF3zr9EsSHT9e4SXRaZZP5YxgnjV7xQFCS98yXidG4EQLoMkQIOOHT3vn7dfmU7TQhSVNGKOQlrAdjJtp5KIKHLOQwJylOdDQ9n5V/LLQQdNZ6iH6n9ZV5EVaEKaN8EbPDs11g6gLfAiK0tQZlpMX2Ell8Lym91u7jE8KSgQLcvDVR4QaT9v1ldzuQ//tNXTQ8cpXYuMZUpbS9ncyTv3O54S+SDPCM2JA1ZEoRag1bF3K6uKjjhl9YnZHD2QRfUCHRSGJ6wWrHvxvjXF6kMXKlB1JxJVr1S29EHRKSaK/r59y5xf6NOb+0RHiR2v7rAWJHzMM/qQyhCl6W7rTKCVXujEVlAx+2OpDncAnVCW1XMZSRVFcAInf7T7KBxFGdZf3mm1ilQDne21Y1DooIoARF3RD1FphFrUYVpF32464GpxZdYiiaiRNZAxsvHuT7mJQjikS9cS5d3t3uxdrPb/QujG0rkxzfRr1ZjTGj3zED+yrkrAKJGfKrDxDRrtcvH237fsdsnq6zHe5yJvTc2kATMxDp2/+VoSfRrylUyBhJcmBgPnS5DNiT2U3A2syLMfw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(38100700002)(66946007)(8936002)(186003)(66476007)(66556008)(5660300002)(8676002)(83380400001)(2906002)(316002)(26005)(36756003)(6506007)(41300700001)(6486002)(110136005)(86362001)(478600001)(4744005)(2616005)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?P+24RmNqTOl/btoQuXEXo9Yg1pXdjJZ/y8lcfAaOLkOJB2SkdOEVwvJ7PnVR?=
+ =?us-ascii?Q?mR3u2gcbUGeqE/CO9U82213MXz4TQvEjbh1mXX38qPaIOsFfMRJIapruSHDY?=
+ =?us-ascii?Q?09M0Bus/FMgCagPZzFce3J4rKSfxpxVumbdfXtapcKerQIN95k74hz/GDUlN?=
+ =?us-ascii?Q?/3AI2EvRaGR1fTM6aX6KQwsLC1wgHtM+0XnIcTfmDXkCVp5YtuuhkE6ryKgu?=
+ =?us-ascii?Q?nCewU22iXoQKys274pcUSs9Q6fqLweanV7dYtijBs/L3DhOe2+z0cYklSN2S?=
+ =?us-ascii?Q?2g4S++NflZydfzdC1GeBSlYguLomCKYWgAqo3NE7zzqjnWF9emnAmjkNmQst?=
+ =?us-ascii?Q?aKVOObFB++QiHbwoxe8xNaSELsUCG5xBUnDqVgYTS2lbxZi9cqSDbmLIGmw0?=
+ =?us-ascii?Q?Kd/XmofVPf8xL3AmetZxL6tDV8CG5hU3WpvL2HFmzUgnl6duvSFsM0Qb0Rj1?=
+ =?us-ascii?Q?E9EXM/hiAC3ver96MVDs1f1GjmVhSs7oVpC5NLofSBM0gmBd+jRI6fbA04J6?=
+ =?us-ascii?Q?r81GVg/40KzUkUyDiFlVPQZz+skIuXeLTalNi+FlQoGQ9pF3TYBzaYppqYgM?=
+ =?us-ascii?Q?iPefpi/1nXl4F5xGh2kUrdc9+Np86pzMtqpKjNGzi0kdF1PpfV9mexIU+NpM?=
+ =?us-ascii?Q?SRqOMcQYMooJSsGHJdM6wiwpy3YHeNzMAakBRTb8xJKIcnVog9X5P+GkNNOV?=
+ =?us-ascii?Q?Chf0MfB+PSpaJN46eecjJTV7FzfoiLNJYi9AMd7IPrVAL0XdY3C/5HqFsPJd?=
+ =?us-ascii?Q?D68CmoK8VQp415W+Jn0bvDpfDj8P/W9PgqrUCMDdcT5+/BymBya8v/guLVV2?=
+ =?us-ascii?Q?tPl+YgU75RB+yBWhAO2c6q9Bgk7cBjIbagobojP3MJbri3Fy/Nx+bEzp1jY7?=
+ =?us-ascii?Q?yrYZVFBDqIbdTApczm2EMT8RjU3E7YTV9xv3zF3v/pRd2aBksz47C/OzkytU?=
+ =?us-ascii?Q?wDQYFgG3noJp/RBzJvnEEkKKiDXkdTXXcaH4LVJOxfZWvIroplUYV5nn6tZP?=
+ =?us-ascii?Q?HtNNOQyJuMmqS3GtQiuEztVycpuY+qgFDYidikyI4IMvh1WDzI65v/QLxxs2?=
+ =?us-ascii?Q?/IR2Tv/79rzmg2y1sgPCME6BOMv6cSMzMl+T0Bv00AxZ4NCiCQ3EKpZVOCVp?=
+ =?us-ascii?Q?82t97Hat3urgRWFsCTQo34CvwYNPyBv3nb3Buuc9rZBWTeO38SYZLzjISK8Q?=
+ =?us-ascii?Q?Q21NhgYh+Avx5GYV8RZWup7/jJanA7cMx3EsgQw1EFE4TMKsOJsTRqHsOwGM?=
+ =?us-ascii?Q?00GsiPn3cLKOkHYMeLjhMq2OwVjggWpje4AVhcdtna3phVqgCzZa5/c0Wc/l?=
+ =?us-ascii?Q?sHN0alTfm6RHAJz5jPAEKIsgiqMIKDiuZ1You06tODWyN2Uwff5mb21CEmku?=
+ =?us-ascii?Q?bEc5TkckhRdBhqOiM/AVJS7bjizBEZfzej9ju3mN2K98gUlNQbYA3rSTf4zX?=
+ =?us-ascii?Q?ysIZ6r0RmwidYovbd7heHETeKudqbOOBNkpJOxgpUvCU4pbgj2anFkV090dd?=
+ =?us-ascii?Q?bI3hg9BilqgSatqh6tH3X8TfCISUuOJrzR0edvWNeDr4oXE/z//WUxUwhp5V?=
+ =?us-ascii?Q?TCORpZ/LnaIUYvN9PXOVOCWlk4YuoMWLqkwt0XOf?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9deb7293-34e6-48cd-63f9-08da87bcbafd
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2022 23:43:08.8678
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FKvdJnTa+jR8BpOoMc6jH5CM5va4hj29AwVNKRY7/aXQp6ZKilhvuFeEBbKp3THW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3935
 
-Hi Johannes,
+On Wed, Aug 17, 2022 at 01:07:25PM -0300, Jason Gunthorpe wrote:
+> This is the last sizable implementation in vfio_group_fops_unl_ioctl(),
+> move it to a function so vfio_group_fops_unl_ioctl() is emptied out.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/vfio/vfio_main.c | 55 ++++++++++++++++++++--------------------
+>  1 file changed, 27 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 78957f45c37a34..6f96e6d07a5e98 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -1227,6 +1227,32 @@ static int vfio_group_ioctl_get_device_fd(struct vfio_group *group,
+>  	vfio_device_put(device);
+>  	return ret;
+>  }
+> +static int vfio_group_ioctl_get_status(struct vfio_group *group,
+> +				       struct vfio_group_status __user *arg)
 
-I love your patch! Yet something to improve:
+There is a missing blank line after the } here
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.0-rc2 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-use-struct_group-to-copy-addresses/20220827-042146
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: riscv-randconfig-r042-20220827 (https://download.01.org/0day-ci/archive/20220827/202208270709.yaMdVwqX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b170af98c24ca49976213745cd2ded205febf09d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Johannes-Berg/wifi-use-struct_group-to-copy-addresses/20220827-042146
-        git checkout b170af98c24ca49976213745cd2ded205febf09d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/wireless/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/wireless/lib80211_crypt_ccmp.c:139:18: error: passing 'const struct (unnamed struct at include/linux/ieee80211.h:313:2)' to parameter of incompatible type 'const void *'
-           memcpy(aad + 2, hdr->addrs, 3 * ETH_ALEN);
-                           ^~~~~~~~~~
-   arch/riscv/include/asm/string.h:16:52: note: passing argument to parameter here
-   extern asmlinkage void *memcpy(void *, const void *, size_t);
-                                                      ^
-   1 error generated.
-
-
-vim +139 net/wireless/lib80211_crypt_ccmp.c
-
-    93	
-    94	static int ccmp_init_iv_and_aad(const struct ieee80211_hdr *hdr,
-    95					const u8 *pn, u8 *iv, u8 *aad)
-    96	{
-    97		u8 *pos, qc = 0;
-    98		size_t aad_len;
-    99		int a4_included, qc_included;
-   100	
-   101		a4_included = ieee80211_has_a4(hdr->frame_control);
-   102		qc_included = ieee80211_is_data_qos(hdr->frame_control);
-   103	
-   104		aad_len = 22;
-   105		if (a4_included)
-   106			aad_len += 6;
-   107		if (qc_included) {
-   108			pos = (u8 *) & hdr->addr4;
-   109			if (a4_included)
-   110				pos += 6;
-   111			qc = *pos & 0x0f;
-   112			aad_len += 2;
-   113		}
-   114	
-   115		/* In CCM, the initial vectors (IV) used for CTR mode encryption and CBC
-   116		 * mode authentication are not allowed to collide, yet both are derived
-   117		 * from the same vector. We only set L := 1 here to indicate that the
-   118		 * data size can be represented in (L+1) bytes. The CCM layer will take
-   119		 * care of storing the data length in the top (L+1) bytes and setting
-   120		 * and clearing the other bits as is required to derive the two IVs.
-   121		 */
-   122		iv[0] = 0x1;
-   123	
-   124		/* Nonce: QC | A2 | PN */
-   125		iv[1] = qc;
-   126		memcpy(iv + 2, hdr->addr2, ETH_ALEN);
-   127		memcpy(iv + 8, pn, CCMP_PN_LEN);
-   128	
-   129		/* AAD:
-   130		 * FC with bits 4..6 and 11..13 masked to zero; 14 is always one
-   131		 * A1 | A2 | A3
-   132		 * SC with bits 4..15 (seq#) masked to zero
-   133		 * A4 (if present)
-   134		 * QC (if present)
-   135		 */
-   136		pos = (u8 *) hdr;
-   137		aad[0] = pos[0] & 0x8f;
-   138		aad[1] = pos[1] & 0xc7;
- > 139		memcpy(aad + 2, hdr->addrs, 3 * ETH_ALEN);
-   140		pos = (u8 *) & hdr->seq_ctrl;
-   141		aad[20] = pos[0] & 0x0f;
-   142		aad[21] = 0;		/* all bits masked */
-   143		memset(aad + 22, 0, 8);
-   144		if (a4_included)
-   145			memcpy(aad + 22, hdr->addr4, ETH_ALEN);
-   146		if (qc_included) {
-   147			aad[a4_included ? 28 : 22] = qc;
-   148			/* rest of QC masked */
-   149		}
-   150		return aad_len;
-   151	}
-   152	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jason
