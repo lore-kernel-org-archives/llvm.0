@@ -1,264 +1,425 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605784401
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 17:00:58 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id n17so2504104wrm.4
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 10:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JEhNvpfoNzfDeGW74u3xSSl/MYDbd+EVlekxBTwg3NA=;
-        b=oU00OE4iuFOFTtHrjYbOvALjBpqdpR10gma/0zQjg3/wyIzXAIm5MsztyND0vu+BOj
-         Ps66PxrryfQFWqmvBt87O/ObT403dz5UaUDjrVvtwGVtF9EdYXR8gX8LINqs99/4y7wN
-         A2FnseH1cfFdB8nnaYjBBBsKtwmIhc0vK2/1yY+sndAtB7YlNe0aCOUFBw8YfNqiNhKJ
-         +eeBQwrXAzvDn0ykbNRjeokUDeW1WJgjC3ZRDZk4ctiyUEYH72LNPB7Nr2QS5swcEBaG
-         EBvUn8yJH60WIYLMjU1Rc4fpwwLsE3jDbwIiOHtYpZPtBI//j0O6mMb8effGhTM1uKbY
-         UHPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JEhNvpfoNzfDeGW74u3xSSl/MYDbd+EVlekxBTwg3NA=;
-        b=tusS4b7suRb1jZwNiIBk79szCyUgxTveIXP5XshSMvASBJfjAizdsu0dPCCDlhzBjV
-         yVHdhQd8BqgONKsDgMpD86sZjlHCSOA/NFLDVgl2Jvmdny9/VAmy7CdkVcLKxm/jxxi2
-         b5LsJfyWxxwl3q65CV8UxEjZCbzs3dmwv3KlSuTVo/SLATsYWB92iXWQ2SJLYL3BDymP
-         Py4E2J71YM8rKtQ43cBOdf35B/zlgaXZZ8QdQiChdLWOiZNqF7YaQB+2DiszQPbwrPi8
-         9B42se9cN453zlktpnD7uAmomLgoWJ+ps0GZPDGJp33R7TzsLTvMf7ELi/Z+ZVfT4lEc
-         vGBg==
-X-Gm-Message-State: ACgBeo2wqNh8dcZYyywkWPMbdEn3mdsdJ3oSpswCnh/Jd8lz7bxLlHSO
-	+nvyQKMd7E1K6ltb1CLPXcA1w/0njOLKZNmv4jt+kQ==
-X-Google-Smtp-Source: AA6agR5LU69lHRvtd54QfGEgYgVcAUVwOrGekk0JU/wP7Dkli07WC8aI6P7tk1Hn5wItAZKvTpstpMMcfheK//oiLhc=
-X-Received: by 2002:a05:6000:1008:b0:225:58e0:223f with SMTP id
- a8-20020a056000100800b0022558e0223fmr315173wrx.375.1661533256385; Fri, 26 Aug
- 2022 10:00:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05A54401
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 17:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661534574; x=1693070574;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9cy24XYcLvU6w1XlSrvVD0EpP1CFPGhWLRfNWWyPsA0=;
+  b=M1oAD96dGgT6bVVk1Lc7kqWIIFW3ZWaGoK4DVLOFgZ3/eBYDDtoM8ZL5
+   Jvojf2yt2usKSk46MVcQpVg6iLk8TvlF+c+TaZ0nFrdaOKEaLDqeWObha
+   w2T3hzI4TWBr2OiZTO4HRP4bQgfs4MTiQoBIs5E9sQ6ENNuUXGeqpIf/M
+   tQ5XfNwui38MH2aMbZ3BL39Fc1YZpPGCI2mB/biftnOnliJblr9ou2/YC
+   y77/vx14YFLnBNZQ/2ZhRLFqFVW3Hg/rE5igqbO8w+bCl11xjuckTUjgO
+   afI7ZwwhkPgoeli94riaj0zkhlPACsUKQEiuagJTG6F2IY2LU9Yq7xslF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="292135924"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="292135924"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:22:42 -0700
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="640136395"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 10:22:30 -0700
+Message-ID: <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com>
+Date: Fri, 26 Aug 2022 20:22:24 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-16-irogers@google.com>
- <Ywj4vnYp6KGrrwl+@kernel.org>
-In-Reply-To: <Ywj4vnYp6KGrrwl+@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 26 Aug 2022 10:00:43 -0700
-Message-ID: <CAP-5=fU0Kc+ZhVBXWz1zup1wFGUf8EOyaRREmfXDfD+hGGoL6w@mail.gmail.com>
-Subject: Re: [PATCH v3 15/18] perf mutex: Add thread safety annotations
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
-	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
-	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
-	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, 
-	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
-	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
-	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
+ <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+ <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 26, 2022 at 9:45 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Aug 24, 2022 at 08:38:58AM -0700, Ian Rogers escreveu:
-> > Add thread safety annotations to struct mutex so that when compiled with
-> > clang's -Wthread-safety warnings are generated for erroneous lock
-> > patterns. NO_THREAD_SAFETY_ANALYSIS is needed for
-> > mutex_lock/mutex_unlock as the analysis doesn't under pthread calls.
->
-> So even having the guards checking if the attribute is available it
-> seems at least clang 11.0 is needed, as the "lockable" arg was
-> introduced there:
->
->   37    42.61 fedora:32                     : FAIL clang version 10.0.1 (Fedora 10.0.1-3.fc32)
->     In file included from /git/perf-6.0.0-rc2/tools/perf/util/../ui/ui.h:5:
->     /git/perf-6.0.0-rc2/tools/perf/util/../ui/../util/mutex.h:74:8: error: invalid capability name 'lockable'; capability name must be 'mutex' or 'role' [-Werror,-Wthread-safety-attributes]
->     struct LOCKABLE mutex {
->            ^
->     /git/perf-6.0.0-rc2/tools/perf/util/../ui/../util/mutex.h:35:44: note: expanded from macro 'LOCKABLE'
->     #define LOCKABLE __attribute__((capability("lockable")))
+On 26/08/22 19:02, Ian Rogers wrote:
+> On Fri, Aug 26, 2022 at 3:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 24/08/22 18:38, Ian Rogers wrote:
+>>> Switch to the use of mutex wrappers that provide better error checking.
+>>>
+>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>> ---
+>>>  tools/perf/ui/browser.c           | 20 ++++++++++----------
+>>>  tools/perf/ui/browsers/annotate.c |  2 +-
+>>>  tools/perf/ui/setup.c             |  5 +++--
+>>>  tools/perf/ui/tui/helpline.c      |  5 ++---
+>>>  tools/perf/ui/tui/progress.c      |  8 ++++----
+>>>  tools/perf/ui/tui/setup.c         |  8 ++++----
+>>>  tools/perf/ui/tui/util.c          | 18 +++++++++---------
+>>>  tools/perf/ui/ui.h                |  4 ++--
+>>>  8 files changed, 35 insertions(+), 35 deletions(-)
+>>>
+>>> diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+>>> index fa5bd5c20e96..78fb01d6ad63 100644
+>>> --- a/tools/perf/ui/browser.c
+>>> +++ b/tools/perf/ui/browser.c
+>>> @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+>>>
+>>>  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+>>>  {
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       __ui_browser__show_title(browser, title);
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>  }
+>>>
+>>>  int ui_browser__show(struct ui_browser *browser, const char *title,
+>>> @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>>>
+>>>       browser->refresh_dimensions(browser);
+>>>
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       __ui_browser__show_title(browser, title);
+>>>
+>>>       browser->title = title;
+>>> @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>>>       va_end(ap);
+>>>       if (err > 0)
+>>>               ui_helpline__push(browser->helpline);
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>       return err ? 0 : -1;
+>>>  }
+>>>
+>>>  void ui_browser__hide(struct ui_browser *browser)
+>>>  {
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       ui_helpline__pop();
+>>>       zfree(&browser->helpline);
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>  }
+>>>
+>>>  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+>>> @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+>>>
+>>>  int ui_browser__refresh(struct ui_browser *browser)
+>>>  {
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       __ui_browser__refresh(browser);
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>
+>>>       return 0;
+>>>  }
+>>> @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+>>>       while (1) {
+>>>               off_t offset;
+>>>
+>>> -             pthread_mutex_lock(&ui__lock);
+>>> +             mutex_lock(&ui__lock);
+>>>               err = __ui_browser__refresh(browser);
+>>>               SLsmg_refresh();
+>>> -             pthread_mutex_unlock(&ui__lock);
+>>> +             mutex_unlock(&ui__lock);
+>>>               if (err < 0)
+>>>                       break;
+>>>
+>>> diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+>>> index 44ba900828f6..b8747e8dd9ea 100644
+>>> --- a/tools/perf/ui/browsers/annotate.c
+>>> +++ b/tools/perf/ui/browsers/annotate.c
+>>> @@ -8,11 +8,11 @@
+>>>  #include "../../util/hist.h"
+>>>  #include "../../util/sort.h"
+>>>  #include "../../util/map.h"
+>>> +#include "../../util/mutex.h"
+>>>  #include "../../util/symbol.h"
+>>>  #include "../../util/evsel.h"
+>>>  #include "../../util/evlist.h"
+>>>  #include <inttypes.h>
+>>> -#include <pthread.h>
+>>>  #include <linux/kernel.h>
+>>>  #include <linux/string.h>
+>>>  #include <linux/zalloc.h>
+>>> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+>>> index 700335cde618..25ded88801a3 100644
+>>> --- a/tools/perf/ui/setup.c
+>>> +++ b/tools/perf/ui/setup.c
+>>> @@ -1,5 +1,4 @@
+>>>  // SPDX-License-Identifier: GPL-2.0
+>>> -#include <pthread.h>
+>>>  #include <dlfcn.h>
+>>>  #include <unistd.h>
+>>>
+>>> @@ -8,7 +7,7 @@
+>>>  #include "../util/hist.h"
+>>>  #include "ui.h"
+>>>
+>>> -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+>>> +struct mutex ui__lock;
+>>>  void *perf_gtk_handle;
+>>>  int use_browser = -1;
+>>>
+>>> @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+>>>
+>>>  void setup_browser(bool fallback_to_pager)
+>>>  {
+>>> +     mutex_init(&ui__lock);
+>>>       if (use_browser < 2 && (!isatty(1) || dump_trace))
+>>>               use_browser = 0;
+>>>
+>>> @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+>>>       default:
+>>>               break;
+>>>       }
+>>> +     mutex_destroy(&ui__lock);
+>>
+>> Looks like exit_browser() can be called even when setup_browser()
+>> was never called.
+>>
+>> Note, it also looks like PTHREAD_MUTEX_INITIALIZER is all zeros so
+>> pthread won't notice.
+> 
+> Memory sanitizer will notice some cases of this and so I didn't want
+> to code defensively around exit being called ahead of setup.
 
+I am not sure you understood.
 
-capability("lockable") can just be lockable, the capability
-generalization came in a later clang release.
+As I wrote, exit_browser() can be called even when setup_browser()
+was never called, so it is not defensive programming, it is necessary
+programming that you only get away without doing because
+PTHREAD_MUTEX_INITIALIZER is all zeros.
 
-That is change:
-#define LOCKABLE __attribute__((capability("lockable")))
-to:
-#define LOCKABLE __attribute__((lockable))
+> 
+> Thanks,
+> Ian
+> 
+>>>  }
+>>> diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+>>> index 298d6af82fdd..db4952f5990b 100644
+>>> --- a/tools/perf/ui/tui/helpline.c
+>>> +++ b/tools/perf/ui/tui/helpline.c
+>>> @@ -2,7 +2,6 @@
+>>>  #include <stdio.h>
+>>>  #include <stdlib.h>
+>>>  #include <string.h>
+>>> -#include <pthread.h>
+>>>  #include <linux/kernel.h>
+>>>  #include <linux/string.h>
+>>>
+>>> @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+>>>       int ret;
+>>>       static int backlog;
+>>>
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       ret = vscnprintf(ui_helpline__last_msg + backlog,
+>>>                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
+>>>       backlog += ret;
+>>> @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+>>>               SLsmg_refresh();
+>>>               backlog = 0;
+>>>       }
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>
+>>>       return ret;
+>>>  }
+>>> diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+>>> index 3d74af5a7ece..71b6c8d9474f 100644
+>>> --- a/tools/perf/ui/tui/progress.c
+>>> +++ b/tools/perf/ui/tui/progress.c
+>>> @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+>>>       }
+>>>
+>>>       ui__refresh_dimensions(false);
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       y = SLtt_Screen_Rows / 2 - 2;
+>>>       SLsmg_set_color(0);
+>>>       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+>>> @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+>>>       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+>>>       SLsmg_fill_region(y, 1, 1, bar, ' ');
+>>>       SLsmg_refresh();
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>  }
+>>>
+>>>  static void tui_progress__finish(void)
+>>> @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+>>>               return;
+>>>
+>>>       ui__refresh_dimensions(false);
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       y = SLtt_Screen_Rows / 2 - 2;
+>>>       SLsmg_set_color(0);
+>>>       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+>>>       SLsmg_refresh();
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>  }
+>>>
+>>>  static struct ui_progress_ops tui_progress__ops = {
+>>> diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+>>> index b1be59b4e2a4..a3b8c397c24d 100644
+>>> --- a/tools/perf/ui/tui/setup.c
+>>> +++ b/tools/perf/ui/tui/setup.c
+>>> @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+>>>  {
+>>>       if (force || ui__need_resize) {
+>>>               ui__need_resize = 0;
+>>> -             pthread_mutex_lock(&ui__lock);
+>>> +             mutex_lock(&ui__lock);
+>>>               SLtt_get_screen_size();
+>>>               SLsmg_reinit_smg();
+>>> -             pthread_mutex_unlock(&ui__lock);
+>>> +             mutex_unlock(&ui__lock);
+>>>       }
+>>>  }
+>>>
+>>> @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+>>>                                   "Press any key...", 0);
+>>>
+>>>       SLtt_set_cursor_visibility(1);
+>>> -     if (!pthread_mutex_trylock(&ui__lock)) {
+>>> +     if (mutex_trylock(&ui__lock)) {
+>>>               SLsmg_refresh();
+>>>               SLsmg_reset_smg();
+>>> -             pthread_mutex_unlock(&ui__lock);
+>>> +             mutex_unlock(&ui__lock);
+>>>       }
+>>>       SLang_reset_tty();
+>>>       perf_error__unregister(&perf_tui_eops);
+>>> diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+>>> index 0f562e2cb1e8..3c5174854ac8 100644
+>>> --- a/tools/perf/ui/tui/util.c
+>>> +++ b/tools/perf/ui/tui/util.c
+>>> @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>>>               t = sep + 1;
+>>>       }
+>>>
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>
+>>>       max_len += 2;
+>>>       nr_lines += 8;
+>>> @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>>>       SLsmg_write_nstring((char *)exit_msg, max_len);
+>>>       SLsmg_refresh();
+>>>
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>
+>>>       x += 2;
+>>>       len = 0;
+>>>       key = ui__getch(delay_secs);
+>>>       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+>>> -             pthread_mutex_lock(&ui__lock);
+>>> +             mutex_lock(&ui__lock);
+>>>
+>>>               if (key == K_BKSPC) {
+>>>                       if (len == 0) {
+>>> -                             pthread_mutex_unlock(&ui__lock);
+>>> +                             mutex_unlock(&ui__lock);
+>>>                               goto next_key;
+>>>                       }
+>>>                       SLsmg_gotorc(y, x + --len);
+>>> @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>>>               }
+>>>               SLsmg_refresh();
+>>>
+>>> -             pthread_mutex_unlock(&ui__lock);
+>>> +             mutex_unlock(&ui__lock);
+>>>
+>>>               /* XXX more graceful overflow handling needed */
+>>>               if (len == sizeof(buf) - 1) {
+>>> @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+>>>
+>>>  void ui__info_window(const char *title, const char *text)
+>>>  {
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       __ui__info_window(title, text, NULL);
+>>>       SLsmg_refresh();
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>  }
+>>>
+>>>  int ui__question_window(const char *title, const char *text,
+>>>                       const char *exit_msg, int delay_secs)
+>>>  {
+>>> -     pthread_mutex_lock(&ui__lock);
+>>> +     mutex_lock(&ui__lock);
+>>>       __ui__info_window(title, text, exit_msg);
+>>>       SLsmg_refresh();
+>>> -     pthread_mutex_unlock(&ui__lock);
+>>> +     mutex_unlock(&ui__lock);
+>>>       return ui__getch(delay_secs);
+>>>  }
+>>>
+>>> diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+>>> index 9b6fdf06e1d2..99f8d2fe9bc5 100644
+>>> --- a/tools/perf/ui/ui.h
+>>> +++ b/tools/perf/ui/ui.h
+>>> @@ -2,11 +2,11 @@
+>>>  #ifndef _PERF_UI_H_
+>>>  #define _PERF_UI_H_ 1
+>>>
+>>> -#include <pthread.h>
+>>> +#include "../util/mutex.h"
+>>>  #include <stdbool.h>
+>>>  #include <linux/compiler.h>
+>>>
+>>> -extern pthread_mutex_t ui__lock;
+>>> +extern struct mutex ui__lock;
+>>>  extern void *perf_gtk_handle;
+>>>
+>>>  extern int use_browser;
+>>
 
-and later clangs take the earlier name. Do you want a v5 for this 1 liner?
-
-Thanks,
-Ian
-
-> The next fedora releases are ok with it:
->
->   38   124.89 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
->   39   132.20 fedora:34                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
->   40    21.44 fedora:34-x-ARC-glibc         : Ok   arc-linux-gcc (ARC HS GNU/Linux glibc toolchain 2019.03-rc1) 8.3.1 20190225
->   41    19.43 fedora:34-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1) 8.3.1 20190225
->   42   136.33 fedora:35                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
->   43   137.73 fedora:36                     : Ok   gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1) , clang version 14.0.0 (Fedora 14.0.0-1.fc36)
->   44   140.45 fedora:37                     : Ok   gcc (GCC) 12.1.1 20220628 (Red Hat 12.1.1-3) , clang version 14.0.5 (Fedora 14.0.5-6.fc37)
->   45   126.80 fedora:38                     : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
->   46   127.00 fedora:rawhide                : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
->
-> Is there a way to check if a "capability" is available for the
-> attribute? Otherwise we can additionally check the clang version?
->
-> For my tests I'll make clang 11.0 to be the oldest supported compiler
-> (i.e. just disable building with older versions), but wanted to let you
-> know since you try to check if the attribute is available and fallback
-> to doing nothing in that case.
->
-> - Arnaldo
->
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/mutex.c |  2 ++
-> >  tools/perf/util/mutex.h | 72 ++++++++++++++++++++++++++++++++++++++---
-> >  2 files changed, 69 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
-> > index 892294ac1769..ec813093276d 100644
-> > --- a/tools/perf/util/mutex.c
-> > +++ b/tools/perf/util/mutex.c
-> > @@ -50,11 +50,13 @@ void mutex_destroy(struct mutex *mtx)
-> >  }
-> >
-> >  void mutex_lock(struct mutex *mtx)
-> > +     NO_THREAD_SAFETY_ANALYSIS
-> >  {
-> >       CHECK_ERR(pthread_mutex_lock(&mtx->lock));
-> >  }
-> >
-> >  void mutex_unlock(struct mutex *mtx)
-> > +     NO_THREAD_SAFETY_ANALYSIS
-> >  {
-> >       CHECK_ERR(pthread_mutex_unlock(&mtx->lock));
-> >  }
-> > diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
-> > index c9e110a2b55e..48a2d87598f0 100644
-> > --- a/tools/perf/util/mutex.h
-> > +++ b/tools/perf/util/mutex.h
-> > @@ -5,11 +5,73 @@
-> >  #include <pthread.h>
-> >  #include <stdbool.h>
-> >
-> > +/*
-> > + * A function-like feature checking macro that is a wrapper around
-> > + * `__has_attribute`, which is defined by GCC 5+ and Clang and evaluates to a
-> > + * nonzero constant integer if the attribute is supported or 0 if not.
-> > + */
-> > +#ifdef __has_attribute
-> > +#define HAVE_ATTRIBUTE(x) __has_attribute(x)
-> > +#else
-> > +#define HAVE_ATTRIBUTE(x) 0
-> > +#endif
-> > +
-> > +
-> > +#if HAVE_ATTRIBUTE(guarded_by) && HAVE_ATTRIBUTE(pt_guarded_by) && \
-> > +     HAVE_ATTRIBUTE(lockable) && HAVE_ATTRIBUTE(exclusive_lock_function) && \
-> > +     HAVE_ATTRIBUTE(exclusive_trylock_function) && HAVE_ATTRIBUTE(exclusive_locks_required) && \
-> > +     HAVE_ATTRIBUTE(no_thread_safety_analysis)
-> > +
-> > +/* Documents if a shared field or global variable needs to be protected by a mutex. */
-> > +#define GUARDED_BY(x) __attribute__((guarded_by(x)))
-> > +
-> > +/*
-> > + * Documents if the memory location pointed to by a pointer should be guarded by
-> > + * a mutex when dereferencing the pointer.
-> > + */
-> > +#define PT_GUARDED_BY(x) __attribute__((pt_guarded_by(x)))
-> > +
-> > +/* Documents if a type is a lockable type. */
-> > +#define LOCKABLE __attribute__((capability("lockable")))
-> > +
-> > +/* Documents functions that acquire a lock in the body of a function, and do not release it. */
-> > +#define EXCLUSIVE_LOCK_FUNCTION(...)  __attribute__((exclusive_lock_function(__VA_ARGS__)))
-> > +
-> > +/*
-> > + * Documents functions that expect a lock to be held on entry to the function,
-> > + * and release it in the body of the function.
-> > + */
-> > +#define UNLOCK_FUNCTION(...) __attribute__((unlock_function(__VA_ARGS__)))
-> > +
-> > +/* Documents functions that try to acquire a lock, and return success or failure. */
-> > +#define EXCLUSIVE_TRYLOCK_FUNCTION(...) \
-> > +     __attribute__((exclusive_trylock_function(__VA_ARGS__)))
-> > +
-> > +
-> > +/* Documents a function that expects a mutex to be held prior to entry. */
-> > +#define EXCLUSIVE_LOCKS_REQUIRED(...) __attribute__((exclusive_locks_required(__VA_ARGS__)))
-> > +
-> > +/* Turns off thread safety checking within the body of a particular function. */
-> > +#define NO_THREAD_SAFETY_ANALYSIS __attribute__((no_thread_safety_analysis))
-> > +
-> > +#else
-> > +
-> > +#define GUARDED_BY(x)
-> > +#define PT_GUARDED_BY(x)
-> > +#define LOCKABLE
-> > +#define EXCLUSIVE_LOCK_FUNCTION(...)
-> > +#define UNLOCK_FUNCTION(...)
-> > +#define EXCLUSIVE_TRYLOCK_FUNCTION(...)
-> > +#define EXCLUSIVE_LOCKS_REQUIRED(...)
-> > +#define NO_THREAD_SAFETY_ANALYSIS
-> > +
-> > +#endif
-> > +
-> >  /*
-> >   * A wrapper around the mutex implementation that allows perf to error check
-> >   * usage, etc.
-> >   */
-> > -struct mutex {
-> > +struct LOCKABLE mutex {
-> >       pthread_mutex_t lock;
-> >  };
-> >
-> > @@ -27,9 +89,9 @@ void mutex_init(struct mutex *mtx);
-> >  void mutex_init_pshared(struct mutex *mtx);
-> >  void mutex_destroy(struct mutex *mtx);
-> >
-> > -void mutex_lock(struct mutex *mtx);
-> > -void mutex_unlock(struct mutex *mtx);
-> > -bool mutex_trylock(struct mutex *mtx);
-> > +void mutex_lock(struct mutex *mtx) EXCLUSIVE_LOCK_FUNCTION(*mtx);
-> > +void mutex_unlock(struct mutex *mtx) UNLOCK_FUNCTION(*mtx);
-> > +bool mutex_trylock(struct mutex *mtx) EXCLUSIVE_TRYLOCK_FUNCTION(true, *mtx);
-> >
-> >  /* Default initialize the cond struct. */
-> >  void cond_init(struct cond *cnd);
-> > @@ -40,7 +102,7 @@ void cond_init(struct cond *cnd);
-> >  void cond_init_pshared(struct cond *cnd);
-> >  void cond_destroy(struct cond *cnd);
-> >
-> > -void cond_wait(struct cond *cnd, struct mutex *mtx);
-> > +void cond_wait(struct cond *cnd, struct mutex *mtx) EXCLUSIVE_LOCKS_REQUIRED(mtx);
-> >  void cond_signal(struct cond *cnd);
-> >  void cond_broadcast(struct cond *cnd);
-> >
-> > --
-> > 2.37.2.609.g9ff673ca1a-goog
->
-> --
->
-> - Arnaldo
