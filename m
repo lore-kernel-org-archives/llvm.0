@@ -1,296 +1,105 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF4A4C94
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:41:34 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-33dc31f25f9so64302217b3.11
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=P9zRTXvNypp3XLQggkQTXRwQu3WlNLsiD9EHNuXARTg=;
-        b=La0x9SjqRvdzB4vrHoyKFtUVY2OoiypUYeaR78qLZ1vc0Nwu/4BSAIHNm5vqUngnKI
-         4BZMs1MLaYX3We+ieWOWrIPjLiUTUM7q+lNsmXJtQ66T5JJFlSHM15jB1LAJf2FROLjB
-         /ZFOXLO8zJT7cLYDpJkeiAEVbeqi5uinaep2zlxBJ5IaQxw2JDoOt0on08QyfNVdljdH
-         pVERyUPLTkGofJNvPCIG2JNKsIX8UkDN7akdKRFln29ViEQtCyxqyLHZ9URilv8T+YV/
-         llMYnpXHX9q4GlGyyGq+DPmoXdzD7rHkb8LhmMaFp2w5R5qc0OB5efh/jl0E9HCwXBkT
-         1GHg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F1F4C94
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:48:21 +0000 (UTC)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11cb3c811d9so3563725fac.1
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:48:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=P9zRTXvNypp3XLQggkQTXRwQu3WlNLsiD9EHNuXARTg=;
-        b=qv+y/cs93an8FHhHccTaAW4SEyl9hgtbPe1QwsBH8VccTTPaN/q3ZcLDLc0pzA3vNP
-         TK7CZvWQpyR7X817OV23ZjDc5A50TNxGOJLktFJDkjvEVuqnEb1gslnGmMLIPKDkbtr6
-         unHFNH6V1uhA6O3gIdB6h3AOI2b8rgc49E4A1rK5Vt2yRPn8N17GemVjm+1BirXMlxmY
-         fwqIiXCtY0XAq+M2WOxogOO6zCtdjsCBC/YF0vxP94SQ1YTGWYsC2yAW1ghMZlx9ZN1+
-         oXFwhTFIOqRipXCbMbJvxlgWFmb0h8xozLNIuCYQxp12SzUOqb4Qd8h8p2Mmo7cVgKRc
-         GKlA==
-X-Gm-Message-State: ACgBeo0RxoBOUw/X6XKx92mjwJRRJpbDrvArRJDJbe69q6+tj1/Jugf8
-	FuVA+totBoDusPHm5PMMHso9XI7owMj2kb8UL5Iy
-X-Google-Smtp-Source: AA6agR4jYfv9Yfoj0O4lJ0QBOu5d/jHbq8WNg7m0HneGti9DqY9LkjBidt7XdZadNcfNiO3Yi2mpaNU4n3ilTzo2We0=
-X-Received: by 2002:a25:8550:0:b0:691:11f9:41dd with SMTP id
- f16-20020a258550000000b0069111f941ddmr1315287ybn.600.1661546493585; Fri, 26
- Aug 2022 13:41:33 -0700 (PDT)
+        bh=+sFY7D0l2mnCR+yBDf+opIgpmAA2WEbHZKwcSvQkuz0=;
+        b=0nCuo7qPL/8Sz3uoG565gwZU69wHi3V4navaQ8+PdDX2Oahq+dS2QFVQtt7S0rv6IF
+         FlXV9Es1tnITisubzoOyTDrtl4ejZ4Mrg20r0GWgFX7HhzdQBib1QyjhRhT85LQOvglO
+         x+GoAdVlBy6VN6V0IOdoG5fE0+gIzvqY/M0pL0etuw3G1Ia88RPBzBvKWMYGCjg86tYV
+         acdd8s1XPwz955+g/4rAN3ZRn+AWDgF2h2Jf/RFRv+hx9Ny1gCrXiDHu/cjljHFgyJXJ
+         9Qr0yjnq1DHaVEy5e4ptSgm6y7QhFCczuZOKjhy6IaitIe0mH93bI3qdvSxTlqvJuL/Y
+         FtXw==
+X-Gm-Message-State: ACgBeo32d36VzIBPVibqmpK8kspz/rP7dagMTQej9PJuWd+I/I8kLv/E
+	qaec2L6qAeRmGBc3vRzz8g6jC8AgiTcd6CAg+D0=
+X-Google-Smtp-Source: AA6agR5zjotJNa9cZNMRCVklNAcj4vN3wXvrE7llGej28AXg2L/RwCW7jMpT+qihLPXgoIk9036xBPWFpfl3w2jC2PQ=
+X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
+ em4-20020a0568705b8400b0010cd1fa2f52mr2736185oab.92.1661546900488; Fri, 26
+ Aug 2022 13:48:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-3-ndesaulniers@google.com> <CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com>
- <CAKwvOdnPjYNFy3r01TBohrZbRGFafGuWaPa8u6b2JdgH=0tKKg@mail.gmail.com> <CAKwvOd=4VgsEjL6hYMTH2ufCZjDTiJWv_u48VY4YPGYXW3MR=A@mail.gmail.com>
-In-Reply-To: <CAKwvOd=4VgsEjL6hYMTH2ufCZjDTiJWv_u48VY4YPGYXW3MR=A@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 26 Aug 2022 13:41:22 -0700
-Message-ID: <CAGG=3QUStBe5QKa66vza_nmrs1J=0SjJPdqHQWVoNvHMWe7KSg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Makefile.debug: re-enable debug info for .S files
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, 
-	Fangrui Song <maskray@google.com>, Alexey Alexandrov <aalexand@google.com>, 
-	Greg Thelen <gthelen@google.com>
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
+ <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
+ <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com> <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+ <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com> <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
+In-Reply-To: <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Fri, 26 Aug 2022 13:48:09 -0700
+Message-ID: <CAM9d7chNUhmULYUfkEuBC3LcD08y7hLGmFn0qeX83KqoPksvCQ@mail.gmail.com>
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
+	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
+	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
+	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
+	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
+	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
+	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Remi Bernon <rbernon@codeweavers.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 1:16 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, Aug 26, 2022 at 12:36 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> On Fri, Aug 26, 2022 at 12:52 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+> On 26/08/22 21:26, Namhyung Kim wrote:
+> > On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
+
+> >> In the previous code the threads were blocked on mutexes that were
+> >> stack allocated and the stack memory went away. You are correct to say
+> >> that to those locks I added an init and destroy call. The lifetime of
+> >> the mutex was wrong previously and remains wrong in this change.
 > >
-> > On Fri, Aug 26, 2022 at 11:41 AM Bill Wendling <morbo@google.com> wrote:
-> > >
-> > > On Fri, Aug 26, 2022 at 11:10 AM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > Alexey reported that the fraction of unknown filename instances in
-> > > > kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-> > > > to assembler defined symbols, which regressed as a result of:
-> > > >
-> > > > commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-> > > >
-> > > > In that commit, I allude to restoring debug info for assembler defined
-> > > > symbols in a follow up patch, but it seems I forgot to do so in
-> > > >
-> > > > commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
-> > > >
-> > > > This patch does a few things:
-> > > > 1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
-> > > >    the assembler to emit debug info. But this can cause an issue for
-> > > >    folks using a newer compiler but older assembler, because the
-> > > >    implicit default DWARF version changed from v4 to v5 in gcc-11 and
-> > > >    clang-14.
-> > > > 2. If the user is using CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, use a
-> > > >    version check to explicitly set -Wa,-gdwarf-<version> for the
-> > > >    assembler. There's another problem with this; GAS only gained support
-> > > >    for explicit DWARF versions 3-5 in the 2.36 GNU binutils release.
-> > > > 3. Wrap -Wa,-gdwarf-<version> in as-option call to test whether the
-> > > >    assembler supports that explicit DWARF version.
-> > > >
-> > > > Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> > > > Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-> > > > Reported-by: Alexey Alexandrov <aalexand@google.com>
-> > > > Reported-by: Bill Wendling <morbo@google.com>
-> > > > Reported-by: Greg Thelen <gthelen@google.com>
-> > > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > > ---
-> > > >  scripts/Makefile.debug | 22 ++++++++++++++++++----
-> > > >  1 file changed, 18 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> > > > index 9f39b0130551..a7a6da7f6e7d 100644
-> > > > --- a/scripts/Makefile.debug
-> > > > +++ b/scripts/Makefile.debug
-> > > > @@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
-> > > >  DEBUG_CFLAGS   += -gsplit-dwarf
-> > > >  else
-> > > >  DEBUG_CFLAGS   += -g
-> > > > +KBUILD_AFLAGS  += -g
-> > > >  endif
-> > > >
-> > > > -ifndef CONFIG_AS_IS_LLVM
-> > > > -KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> > > > +ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > > +# gcc-11+, clang-14+
-> > > > +ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o $(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
-> > >
-> > > Do you think this would be better as a macro? Maybe something like:
-> > >
-> > > if $(call cc-min-version,110000,140000)
-> > >
-> > > where the first argument is GCC's min version and second Clang's min
-> > > version. It would be more readable and reusable.
-> >
-> > Yeah!
-> >
-> > I was looking at cc-ifversion, which has a bug in that it specifically
-> > uses CONFIG_GCC_VERSION.  I think I sent a series maybe a year or two
-> > ago trying to remove all users of that macro; I think most landed but
-> > not all and I never pursued it to completion.  Also, I think there's
-> > one user remaining in the AMDGPU drivers; looks like they're been
-> > reducing their dependency on that SIMD hack I wrote for them years ago
-> > after propagating it to parts of their tree, but one user remains.
-> > Perhaps I can just open code it there, or replace it with something
-> > new like you suggest.
-> >
-> > Such a macro would need to consider whether CC_IS_GCC vs CC_IS_CLANG;
-> > I could imagine we might need a version check for both, or just one of
-> > the two compilers.
-> >
-> > Ugh, logical OR in GNU make is supported by use of the filter macro...yuck.
-> >
-> > ifneq ($(filter y, $(call gcc-min-version, 110000), $(call
-> > clang-min-version, 140000),)
-> > # add gcc-11+, clang-14+ flag
-> > endif
-> >
-> > or maybe as you suggest:
-> >
-> > ifneq ($(call cc-min-version,110000,140000),)
-> > # add gcc-11+, clang-14+ flag
-> > endif
-> >
-> > where the newly minted cc-min-version is implemented in terms of the
-> > newly minted gcc-min-version and clang-min-version.  Then I can use
-> > cc-min-version in this series, and replace cc-ifversion in AMDGPU with
-> > gcc-min-version.  That way, we create composable wrappers that are
-> > readable and reusable.
+> > I think you fixed the lifetime issue with sched->thread_funcs_exit here.
+> > All you need to do is calling pthread_join() after the mutex_unlock, no?
 >
-> RFC:
-> ```
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index d1739f0d3ce3..4809a4c9e5f2 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -65,6 +65,19 @@ cc-disable-warning = $(call try-run,\
->  # Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
->  cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] &&
-> echo $(3) || echo $(4))
+> Like this maybe:
+
+Yeah, but at this point we might want to factor it out as a function like
+destroy_tasks().
+
+Thanks,
+Namhyung
+
 >
-> +# gcc-min-version
-> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
-> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index b483ff0d432e..8090c1218855 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -3326,6 +3326,13 @@ static int perf_sched__replay(struct perf_sched *sched)
+>         sched->thread_funcs_exit = true;
+>         mutex_unlock(&sched->start_work_mutex);
+>         mutex_unlock(&sched->work_done_wait_mutex);
+> +       /* Get rid of threads so they won't be upset by mutex destruction */
+> +       for (i = 0; i < sched->nr_tasks; i++) {
+> +               int err = pthread_join(sched->tasks[i]->thread, NULL);
 > +
-> +# clang-min-version
-> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
-> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-> +
-> +# cc-min-version
-> +# Usage: cflags-$(call cc-min-version, 701000, 110000)
-> +#                                      ^ GCC   ^ Clang
-> +cc-min-version = $(filter y, $(call gcc-min-version, $(1)), $(call
-> clang-min-version, $(2)))
-> +
->  # ld-option
->  # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
->  ld-option = $(call try-run, $(LD) $(KBUILD_LDFLAGS) $(1) -v,$(1),$(2),$(3))
-> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> index 0f9912f7bd4c..80c84f746219 100644
-> --- a/scripts/Makefile.debug
-> +++ b/scripts/Makefile.debug
-> @@ -7,7 +7,7 @@ endif
->
->  ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  # gcc-11+, clang-14+
-> -ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o
-> $(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
-> +ifeq ($(call cc-min-version, 110000, 140000), y)
->  dwarf-version-y := 5
->  else
->  dwarf-version-y := 4
->
-> ```
->
-> I'd keep the replacement of cc-ifversion with gcc-min-version as a
-> distinct child patch, since I don't care about backports for that (and
-> there's probably more cc-ifversion users the further back you go) but
-> I think we might want cc-min-version in stable.
->
-> Technically, the above should also update
-> Documentation/kbuild/makefiles.rst; but I'm just testing this works;
-> it seems to.
->
-> Oh, it looks like cc-ifversion both permits checking max-version and
-> min version. But we can implement -ge and -lt with just one or the
-> other:
->
-> ```
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> index 86a3b5bfd699..17e8fd42d0a5 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
->  endif
->
->  ifdef CONFIG_CC_IS_GCC
-> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
-> +ifeq ($(call gcc-min-version, 70100),)
-
-I think for this you want "gcc-max-version".
-
->  IS_OLD_GCC = 1
->  endif
->  endif
-> ```
->
-> Thoughts?
->
-
-I like this idea. Modifying "cc-ifversion" would be great, but you'd
-have to somehow specify the checking versions for both gcc and clang
-in the macro, and that's messy given the number of arguments that
-already exist. It might be possible instead to implement
-"cc-ifversion" in terms of the "*-{max,min}-version" macros.
-
--bw
-
-> >
-> > >
-> > > -bw
-> > >
-> > > > +dwarf-version-y := 5
-> > > > +else
-> > > > +dwarf-version-y := 4
-> > > >  endif
-> > > > -
-> > > > -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > > +else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> > > >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
-> > > >  DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
-> > > >  endif
-> > > >
-> > > > +# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
-> > > > +# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> > > > +ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
-> > > > +KBUILD_AFLAGS  += -Wa,-gdwarf-$(dwarf-version-y)
-> > > > +else
-> > > > +ifndef CONFIG_AS_IS_LLVM
-> > > > +KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> > > > +endif
-> > > > +endif
-> > > > +
-> > > >  ifdef CONFIG_DEBUG_INFO_REDUCED
-> > > >  DEBUG_CFLAGS   += -fno-var-tracking
-> > > >  ifdef CONFIG_CC_IS_GCC
-> > > > --
-> > > > 2.37.2.672.g94769d06f0-goog
-> > > >
-> >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+> +               if (err)
+> +                       pr_err("pthread_join() failed for task nr %lu, error %d\n", i, err);
+> +       }
+>         return 0;
+>  }
