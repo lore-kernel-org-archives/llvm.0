@@ -1,153 +1,128 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE023A5
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 05:39:04 +0000 (UTC)
-X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cxEgDl4+jLLmXItOb4ZpoNKLX8XnInSqhwiq/zHFf9U=;
-	b=rJqhTTcyzFTXdy5oL9LA683w4UluYE0//uU0PLz5aZqU6qhAgkswC6jut9ilTE50jh4Mnql+JApSyt2UZBAtOoAH1YLiJ1MpU5yo0LegVNludEZkz3EefCQkW699WUR46b/tntxPdut/qHTPf+5qHrOPXT1hs05VfNayEdts11I=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,L
-	OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Releas
-	e_Ham,ACTION:release,TS:49
-X-CID-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,LOB
-	:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_
-	HamU,ACTION:release,TS:49
-X-CID-META: VersionHash:84eae18,CLOUDID:0a5e2c20-1c20-48a5-82a0-25f9c331906d,C
-	OID:58d5f93ec29e,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
-	(envelope-from <roger.lu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1514045262; Fri, 26 Aug 2022 13:38:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 26 Aug 2022 13:38:50 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 26 Aug 2022 13:38:50 +0800
-Message-ID: <57b31acfc4f5bcff3c73c35bc30805b84af3bfbd.camel@mediatek.com>
-Subject: Re: drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused
- variable 'svs_of_match'
-From: Roger Lu <roger.lu@mediatek.com>
-To: kernel test robot <lkp@intel.com>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-	<linux-kernel@vger.kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Kevin
- Hilman <khilman@baylibre.com>
-Date: Fri, 26 Aug 2022 13:38:50 +0800
-In-Reply-To: <202208210442.ZL8oxHze-lkp@intel.com>
-References: <202208210442.ZL8oxHze-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B3A2560
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 08:26:56 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id m1so1203706edb.7
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 01:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=L6RGdjoY+6gxGbx3graJqJb0iU8CPB5cb7afxoCsDDs=;
+        b=ui/bq2ILEPwGljYaS7Kr5e+dU9U0iVAxN/aVvUgtji596YvxIINn34e1rmYsIVnvn7
+         NizHaaxO/gZC3c8NzL3YbDCrnd5hMEkmkt0nXsXQjB4ibrWcM1GcfszMOH99UcBqM+27
+         38y2aECTDEOB+Vd9iLKEgbISObjsFQ9Ce0ZfNrZMuaAyTFw7JAeDLGiCWyws1LJgD4sC
+         eJEG1PiTCd87HpqinX7JmuLG4UBPuQcYfIVxFbMU7hbj292b9HCt2w0tnK6IropkevB/
+         h3TXGIEsyf2OOUcy1bVyrEFdQYXq4x6T/SuAE0WWrHvm/IKdisBle+QxzrV/Gq6aQ4zV
+         i5zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=L6RGdjoY+6gxGbx3graJqJb0iU8CPB5cb7afxoCsDDs=;
+        b=e+xrbv0cK0SCg0mFwxMacYxsifHzUguOlL6sQUVNEE8R/n9swqFpuamDM16HUM5igI
+         ZSu7ouQOQp5X/mJq8ylL/oE3eMnjW0W7gnTCMLBlf81oNa2yecURWst6LXoregEfdrWi
+         FOoa/rcazmSQCt856kIX4XYj8NHMBNGKo7YjfA6e6EKWMXYJZpmr5w0Tuc7XiNnT3+MV
+         wmxPcHL6K5Pc+9hr2/4zkD9JHRtE1CTY9YxPkmKfMCnAnwcCqrc4ujxUvmA7TjwSMUcq
+         iASYjflFf135LaB0pey1vqY3RZEU5sr0EmqnHp2ZCeYBEDG2BdnDmnIqJYj/ZjSZV4Wr
+         RumA==
+X-Gm-Message-State: ACgBeo1O1YqAAnJmZrnjaDXDtBiabHZdWRuJnEM2Ta6omx9wYWWtCdPT
+	tego/GOUJ7P0zZBZjc8BIkGGJtruAi7DMj6W8o+tKQ==
+X-Google-Smtp-Source: AA6agR4ZAQqzLF7gYyN6tLirIFssq2R5dp+X3fc7UvkTKXdWF6D+cNxFsdE8uCN+giaNWTqZ0qY7KX7Vl24nYsKr83M=
+X-Received: by 2002:a05:6402:50d4:b0:447:85f:52d5 with SMTP id
+ h20-20020a05640250d400b00447085f52d5mr5972359edb.205.1661502414690; Fri, 26
+ Aug 2022 01:26:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+References: <202208221506.0Lo051G4-lkp@intel.com>
+In-Reply-To: <202208221506.0Lo051G4-lkp@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 26 Aug 2022 10:26:43 +0200
+Message-ID: <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+Subject: Re: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>, 
+	Douglas Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Dear all,
+On Mon, Aug 22, 2022 at 9:27 AM kernel test robot <lkp@intel.com> wrote:
 
-Sorry for late reply. These issues are fixed by below patches. Thanks for the
-heads-up.
-
-  drivers/soc/mediatek/mtk-svs.c:1481:12: error: unused function 'svs_suspend'
-[-Werror,-Wunused-function]
-  static int svs_suspend(struct device *dev)
-             ^
-  drivers/soc/mediatek/mtk-svs.c:1515:12: error: unused function 'svs_resume' [-
-Werror,-Wunused-function]
-  static int svs_resume(struct device *dev)
-
-=> fixed by 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220622175649.1856337-1-nathan@kernel.org/
-
->> drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
-'svs_of_match' [-Wunused-const-variable]
-   static const struct of_device_id svs_of_match[] = {
-
-=> fixed by 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220726141653.177948-5-angelogioacchino.delregno@collabora.com/
-
-Sincerely,
-Roger Lu.
-
-On Sun, 2022-08-21 at 04:38 +0800, kernel test robot wrote:
-> Hi Roger,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
->   master
-> head:   cc1807b9158a909ffe829a5e222be756c57c9a90
-> commit: 681a02e9500073cd8b9c25a04f06166254b5a879 soc: mediatek: SVS: introduce
-> MTK SVS engine
-> date:   9 weeks ago
-> config: hexagon-randconfig-r022-20220821 (
-> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220821/202208210442.ZL8oxHze-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRKmS3VSy$
->  )
-> compiler: clang version 16.0.0 (
-> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIUR1DJG$
-> $  c9a41fe60ab62f7a40049c100adcc8087a47669b)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
+> commit: 57f6190a60ecc19f1ddddac0d7ea6524229271a9 drm/panel: ws2401: Add driver for WideChips WS2401
+> date:   1 year, 1 month ago
+> config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221506.0Lo051G4-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 > reproduce (this is a W=1 build):
->         wget 
-> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRF4kJosK$
->   -O ~/bin/make.cross
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # 
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=681a02e9500073cd8b9c25a04f06166254b5a879__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRNjbQMgG$
->  
->         git remote add linus 
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
->  
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f6190a60ecc19f1ddddac0d7ea6524229271a9
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 >         git fetch --no-tags linus master
->         git checkout 681a02e9500073cd8b9c25a04f06166254b5a879
+>         git checkout 57f6190a60ecc19f1ddddac0d7ea6524229271a9
 >         # save the config file
 >         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
-> O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
-> 
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+>
 > If you fix the issue, kindly add following tag where applicable
 > Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/soc/mediatek/mtk-svs.c:853:12: warning: unused function
-> 'svs_suspend' [-Wunused-function]
->    static int svs_suspend(struct device *dev)
->               ^
->    drivers/soc/mediatek/mtk-svs.c:880:12: warning: unused function
-> 'svs_resume' [-Wunused-function]
->    static int svs_resume(struct device *dev)
->               ^
-> > > drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
-> > > 'svs_of_match' [-Wunused-const-variable]
-> 
->    static const struct of_device_id svs_of_match[] = {
->                                     ^
->    3 warnings generated.
-> 
-> 
-> vim +/svs_of_match +1287 drivers/soc/mediatek/mtk-svs.c
-> 
->   1286	
-> > 1287	static const struct of_device_id svs_of_match[] = {
-> 
->   1288		{
->   1289			.compatible = "mediatek,mt8183-svs",
->   1290			.data = &svs_mt8183_platform_data,
->   1291		}, {
->   1292			/* Sentinel */
->   1293		},
->   1294	};
->   1295	
-> 
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+>    >>> referenced by drm_mipi_dbi.c:203 (drivers/gpu/drm/drm_mipi_dbi.c:203)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+>    >>> referenced by drm_mipi_dbi.c:258 (drivers/gpu/drm/drm_mipi_dbi.c:258)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_fb_swab
+>    >>> referenced by drm_mipi_dbi.c:219 (drivers/gpu/drm/drm_mipi_dbi.c:219)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_destroy_state
+>    >>> referenced by drm_mipi_dbi.c
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_gem_fb_create_with_dirty
+>    >>> referenced by drm_mipi_dbi.c
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_check
+>    >>> referenced by drm_mipi_dbi.c
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_commit
+>    >>> referenced by drm_mipi_dbi.c
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
+>    >>> referenced by drm_mipi_dbi.c:224 (drivers/gpu/drm/drm_mipi_dbi.c:224)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_fb_memcpy
+>    >>> referenced by drm_mipi_dbi.c:221 (drivers/gpu/drm/drm_mipi_dbi.c:221)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_damage_merged
+>    >>> referenced by drm_mipi_dbi.c:318 (drivers/gpu/drm/drm_mipi_dbi.c:318)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_pipe_update) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_simple_display_pipe_init
+>    >>> referenced by drm_mipi_dbi.c:529 (drivers/gpu/drm/drm_mipi_dbi.c:529)
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_dev_init_with_formats) in archive drivers/built-in.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_reset
+>    >>> referenced by drm_mipi_dbi.c
+>    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
 
+I don't understand this error report, please robot, analyze further and come
+back with details on what needs to be fixed.
+
+Yours,
+Linus Walleij
