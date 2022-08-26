@@ -1,213 +1,404 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBDE29AC
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 10:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661509306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jnopTG83AwqkZlLGojau3Yx6mIqD3OQY553M+euRNho=;
-	b=CE1HNFpbEw6xTgAcszQ6BT/w9w6lRXMw2BYE+vM9IdRmBGTe5xSr7DNeMzzIzzJLzCsHHh
-	sU7i0AhNeZha77TaH+u3zHwilGDGSHeCrcXFbvDR7ljC7+zgGJ3+3uHFD3F/Pk3aP0bPVy
-	kHiKTbAIJryQMHMNRFlSIlGnFP3j9wM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-0EYkb8s7Nw6MUaXzMT1OFg-1; Fri, 26 Aug 2022 06:21:45 -0400
-X-MC-Unique: 0EYkb8s7Nw6MUaXzMT1OFg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53F69811E76
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 10:21:45 +0000 (UTC)
-Received: from [172.64.3.119] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4231B2026D4C;
-	Fri, 26 Aug 2022 10:21:45 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
- mainline.kernel.org-clang, 3f5c2005)
-Date: Fri, 26 Aug 2022 10:21:43 -0000
-CC: jbastian@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DE029AC
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 10:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661509493; x=1693045493;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=gzG5jvF8AiDzT3HIfyzKFCafcG5IQ+Wuj7+aBQMAuWk=;
+  b=e2Z3kZYQOFvHFXugtZKmX2QPKEb9Mow9ycg4g3RDQILvHUcOQVnSgBnN
+   d60J+ZnBl7tLKQSSr9sP6yIkY7me8pQN05jPVVhA6HqqRVfZx6OYy3oTU
+   rOsbTx2MyQ9GVdPh9jhtuBzLHANo7lUvKcWMk6Anbmrm3s17Ima/czJ9Y
+   MViGyP5iz0PhdvZAR47CACOgtLPpgNemZxbJdwaIhSfiIhEh6W++NXLsR
+   GnWhJ8KyNitABVrfV6pqVhlESV1VI31SFeHe0zdwTMfip0UN1N3ygxYLe
+   f0opGCZngjYn6sOyPxGVkBfbopXRzzpe97OyyG/2IV5EdxnLYZ1nQ/Mpr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="274871656"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="274871656"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:24:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="606723974"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 03:24:31 -0700
+Message-ID: <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+Date: Fri, 26 Aug 2022 13:24:26 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <84874.122082606214500261@us-mta-251.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
+ <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-10-irogers@google.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220824153901.488576-10-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 24/08/22 18:38, Ian Rogers wrote:
+> Switch to the use of mutex wrappers that provide better error checking.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/ui/browser.c           | 20 ++++++++++----------
+>  tools/perf/ui/browsers/annotate.c |  2 +-
+>  tools/perf/ui/setup.c             |  5 +++--
+>  tools/perf/ui/tui/helpline.c      |  5 ++---
+>  tools/perf/ui/tui/progress.c      |  8 ++++----
+>  tools/perf/ui/tui/setup.c         |  8 ++++----
+>  tools/perf/ui/tui/util.c          | 18 +++++++++---------
+>  tools/perf/ui/ui.h                |  4 ++--
+>  8 files changed, 35 insertions(+), 35 deletions(-)
+> 
+> diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+> index fa5bd5c20e96..78fb01d6ad63 100644
+> --- a/tools/perf/ui/browser.c
+> +++ b/tools/perf/ui/browser.c
+> @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+>  
+>  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+>  {
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	__ui_browser__show_title(browser, title);
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  }
+>  
+>  int ui_browser__show(struct ui_browser *browser, const char *title,
+> @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>  
+>  	browser->refresh_dimensions(browser);
+>  
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	__ui_browser__show_title(browser, title);
+>  
+>  	browser->title = title;
+> @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+>  	va_end(ap);
+>  	if (err > 0)
+>  		ui_helpline__push(browser->helpline);
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  	return err ? 0 : -1;
+>  }
+>  
+>  void ui_browser__hide(struct ui_browser *browser)
+>  {
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	ui_helpline__pop();
+>  	zfree(&browser->helpline);
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  }
+>  
+>  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+> @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+>  
+>  int ui_browser__refresh(struct ui_browser *browser)
+>  {
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	__ui_browser__refresh(browser);
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  
+>  	return 0;
+>  }
+> @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+>  	while (1) {
+>  		off_t offset;
+>  
+> -		pthread_mutex_lock(&ui__lock);
+> +		mutex_lock(&ui__lock);
+>  		err = __ui_browser__refresh(browser);
+>  		SLsmg_refresh();
+> -		pthread_mutex_unlock(&ui__lock);
+> +		mutex_unlock(&ui__lock);
+>  		if (err < 0)
+>  			break;
+>  
+> diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+> index 44ba900828f6..b8747e8dd9ea 100644
+> --- a/tools/perf/ui/browsers/annotate.c
+> +++ b/tools/perf/ui/browsers/annotate.c
+> @@ -8,11 +8,11 @@
+>  #include "../../util/hist.h"
+>  #include "../../util/sort.h"
+>  #include "../../util/map.h"
+> +#include "../../util/mutex.h"
+>  #include "../../util/symbol.h"
+>  #include "../../util/evsel.h"
+>  #include "../../util/evlist.h"
+>  #include <inttypes.h>
+> -#include <pthread.h>
+>  #include <linux/kernel.h>
+>  #include <linux/string.h>
+>  #include <linux/zalloc.h>
+> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+> index 700335cde618..25ded88801a3 100644
+> --- a/tools/perf/ui/setup.c
+> +++ b/tools/perf/ui/setup.c
+> @@ -1,5 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <pthread.h>
+>  #include <dlfcn.h>
+>  #include <unistd.h>
+>  
+> @@ -8,7 +7,7 @@
+>  #include "../util/hist.h"
+>  #include "ui.h"
+>  
+> -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+> +struct mutex ui__lock;
+>  void *perf_gtk_handle;
+>  int use_browser = -1;
+>  
+> @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+>  
+>  void setup_browser(bool fallback_to_pager)
+>  {
+> +	mutex_init(&ui__lock);
+>  	if (use_browser < 2 && (!isatty(1) || dump_trace))
+>  		use_browser = 0;
+>  
+> @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+>  	default:
+>  		break;
+>  	}
+> +	mutex_destroy(&ui__lock);
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Looks like exit_browser() can be called even when setup_browser()
+was never called.
 
+Note, it also looks like PTHREAD_MUTEX_INITIALIZER is all zeros so
+pthread won't notice.
 
-Kernel information:
-    Commit message: Merge tag 'cgroup-for-6.0-rc2-fixes-2' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/tj/cgroup
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51723
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - ACPI enabled test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4940829
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4940702
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc=
-.c:5407 __alloc_pages+0x1a0/0x290
-            URL: https://lore.kernel.org/all/CA+QYu4rPbfH-4wNR06Vn=3D31RCGK=
-FFEB-KRskn52Jtig_UugYzg@mail.gmail.com
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+>  }
+> diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+> index 298d6af82fdd..db4952f5990b 100644
+> --- a/tools/perf/ui/tui/helpline.c
+> +++ b/tools/perf/ui/tui/helpline.c
+> @@ -2,7 +2,6 @@
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> -#include <pthread.h>
+>  #include <linux/kernel.h>
+>  #include <linux/string.h>
+>  
+> @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+>  	int ret;
+>  	static int backlog;
+>  
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	ret = vscnprintf(ui_helpline__last_msg + backlog,
+>  			sizeof(ui_helpline__last_msg) - backlog, format, ap);
+>  	backlog += ret;
+> @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+>  		SLsmg_refresh();
+>  		backlog = 0;
+>  	}
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  
+>  	return ret;
+>  }
+> diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+> index 3d74af5a7ece..71b6c8d9474f 100644
+> --- a/tools/perf/ui/tui/progress.c
+> +++ b/tools/perf/ui/tui/progress.c
+> @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+>  	}
+>  
+>  	ui__refresh_dimensions(false);
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	y = SLtt_Screen_Rows / 2 - 2;
+>  	SLsmg_set_color(0);
+>  	SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+> @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+>  	bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+>  	SLsmg_fill_region(y, 1, 1, bar, ' ');
+>  	SLsmg_refresh();
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  }
+>  
+>  static void tui_progress__finish(void)
+> @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+>  		return;
+>  
+>  	ui__refresh_dimensions(false);
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	y = SLtt_Screen_Rows / 2 - 2;
+>  	SLsmg_set_color(0);
+>  	SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+>  	SLsmg_refresh();
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  }
+>  
+>  static struct ui_progress_ops tui_progress__ops = {
+> diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+> index b1be59b4e2a4..a3b8c397c24d 100644
+> --- a/tools/perf/ui/tui/setup.c
+> +++ b/tools/perf/ui/tui/setup.c
+> @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+>  {
+>  	if (force || ui__need_resize) {
+>  		ui__need_resize = 0;
+> -		pthread_mutex_lock(&ui__lock);
+> +		mutex_lock(&ui__lock);
+>  		SLtt_get_screen_size();
+>  		SLsmg_reinit_smg();
+> -		pthread_mutex_unlock(&ui__lock);
+> +		mutex_unlock(&ui__lock);
+>  	}
+>  }
+>  
+> @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+>  				    "Press any key...", 0);
+>  
+>  	SLtt_set_cursor_visibility(1);
+> -	if (!pthread_mutex_trylock(&ui__lock)) {
+> +	if (mutex_trylock(&ui__lock)) {
+>  		SLsmg_refresh();
+>  		SLsmg_reset_smg();
+> -		pthread_mutex_unlock(&ui__lock);
+> +		mutex_unlock(&ui__lock);
+>  	}
+>  	SLang_reset_tty();
+>  	perf_error__unregister(&perf_tui_eops);
+> diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+> index 0f562e2cb1e8..3c5174854ac8 100644
+> --- a/tools/perf/ui/tui/util.c
+> +++ b/tools/perf/ui/tui/util.c
+> @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>  		t = sep + 1;
+>  	}
+>  
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  
+>  	max_len += 2;
+>  	nr_lines += 8;
+> @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>  	SLsmg_write_nstring((char *)exit_msg, max_len);
+>  	SLsmg_refresh();
+>  
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  
+>  	x += 2;
+>  	len = 0;
+>  	key = ui__getch(delay_secs);
+>  	while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+> -		pthread_mutex_lock(&ui__lock);
+> +		mutex_lock(&ui__lock);
+>  
+>  		if (key == K_BKSPC) {
+>  			if (len == 0) {
+> -				pthread_mutex_unlock(&ui__lock);
+> +				mutex_unlock(&ui__lock);
+>  				goto next_key;
+>  			}
+>  			SLsmg_gotorc(y, x + --len);
+> @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+>  		}
+>  		SLsmg_refresh();
+>  
+> -		pthread_mutex_unlock(&ui__lock);
+> +		mutex_unlock(&ui__lock);
+>  
+>  		/* XXX more graceful overflow handling needed */
+>  		if (len == sizeof(buf) - 1) {
+> @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+>  
+>  void ui__info_window(const char *title, const char *text)
+>  {
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	__ui__info_window(title, text, NULL);
+>  	SLsmg_refresh();
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  }
+>  
+>  int ui__question_window(const char *title, const char *text,
+>  			const char *exit_msg, int delay_secs)
+>  {
+> -	pthread_mutex_lock(&ui__lock);
+> +	mutex_lock(&ui__lock);
+>  	__ui__info_window(title, text, exit_msg);
+>  	SLsmg_refresh();
+> -	pthread_mutex_unlock(&ui__lock);
+> +	mutex_unlock(&ui__lock);
+>  	return ui__getch(delay_secs);
+>  }
+>  
+> diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+> index 9b6fdf06e1d2..99f8d2fe9bc5 100644
+> --- a/tools/perf/ui/ui.h
+> +++ b/tools/perf/ui/ui.h
+> @@ -2,11 +2,11 @@
+>  #ifndef _PERF_UI_H_
+>  #define _PERF_UI_H_ 1
+>  
+> -#include <pthread.h>
+> +#include "../util/mutex.h"
+>  #include <stdbool.h>
+>  #include <linux/compiler.h>
+>  
+> -extern pthread_mutex_t ui__lock;
+> +extern struct mutex ui__lock;
+>  extern void *perf_gtk_handle;
+>  
+>  extern int use_browser;
 
