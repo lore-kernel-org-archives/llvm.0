@@ -1,95 +1,240 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074104C74
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661542208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QSBTgAkm0SaYb8DW7gR+dgkZTqYU/q+rNDOIFkFmPGA=;
-	b=BabThPrSb7hjBI12z0g8J5tAqihniInCwSDwkooiZTaNKH88wPII/0x6iFWzNlVGEEiOji
-	JoeAz5nRNXN44FXlApGERt3NBPdrkWzYWYrHwIrKI0Z4h3kYSb19hE55Y4Mo8savYcgqxF
-	mlmy1kceoER2Rwu5zMjS5q16ssuYAYc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-grgQo5AWP5qmPYzhMZ1kSg-1; Fri, 26 Aug 2022 15:30:07 -0400
-X-MC-Unique: grgQo5AWP5qmPYzhMZ1kSg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71BC2101A56D
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:30:07 +0000 (UTC)
-Received: from [172.64.3.119] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 63C5E40C141D;
-	Fri, 26 Aug 2022 19:30:07 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
- mainline.kernel.org-clang, 3e5c673f)
-Date: Fri, 26 Aug 2022 19:30:05 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536E94C74
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661542588; x=1693078588;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iSj/SuZhPON+rDmdOdwBzP5dOtaScuuVxlTIXwYMKPE=;
+  b=a4fgU3AJzmxacOFpONCJRGB38EsaGTWhMvZVcs5lgDgT4soEL/PEa2iC
+   my35ED6n42gUwaRLp2jf11/EDr9MSnojvVNXNFT6OrQPXygbwTaHnk60Q
+   YXCBax7v2T5MD98oV1RqkvQ8aqRuyhnpmh40CB3rmCN52taaKhkJCk7QO
+   zcg8LKJZpBu+0l33ltaJot4zUh6+csUwJYSnUHaO0Zoj5LN3s2ZsywT52
+   bZdK9kA9QmbaArv4Z036FOYABTB2G35O2uhfpoLYxNZm/b88kQSedSeLI
+   WJj/UT4bsjLQWngCpECrutdUnVA8AgQ54YL2BHOFI8P2cnFzFpHxisySo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294586222"
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="294586222"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
+   d="scan'208";a="671592528"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:00 -0700
+Message-ID: <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
+Date: Fri, 26 Aug 2022 22:35:53 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <68745.122082615300701817@us-mta-616.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
+Content-Language: en-US
+To: Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
+ =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-perf-users <linux-perf-users@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-17-irogers@google.com>
+ <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
+ <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
+ <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
+ <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+ <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 26/08/22 21:26, Namhyung Kim wrote:
+> On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
+>>
+>> On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 26/08/22 19:06, Ian Rogers wrote:
+>>>> On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>
+>>>>> On 24/08/22 18:38, Ian Rogers wrote:
+>>>>>> Add annotations to describe lock behavior. Add unlocks so that mutexes
+>>>>>> aren't conditionally held on exit from perf_sched__replay. Add an exit
+>>>>>> variable so that thread_func can terminate, rather than leaving the
+>>>>>> threads blocked on mutexes.
+>>>>>>
+>>>>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>>>>> ---
+>>>>>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
+>>>>>>  1 file changed, 29 insertions(+), 17 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+>>>>>> index 7e4006d6b8bc..b483ff0d432e 100644
+>>>>>> --- a/tools/perf/builtin-sched.c
+>>>>>> +++ b/tools/perf/builtin-sched.c
+>>>>>> @@ -246,6 +246,7 @@ struct perf_sched {
+>>>>>>       const char      *time_str;
+>>>>>>       struct perf_time_interval ptime;
+>>>>>>       struct perf_time_interval hist_time;
+>>>>>> +     volatile bool   thread_funcs_exit;
+>>>>>>  };
+>>>>>>
+>>>>>>  /* per thread run time data */
+>>>>>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
+>>>>>>       prctl(PR_SET_NAME, comm2);
+>>>>>>       if (fd < 0)
+>>>>>>               return NULL;
+>>>>>> -again:
+>>>>>> -     ret = sem_post(&this_task->ready_for_work);
+>>>>>> -     BUG_ON(ret);
+>>>>>> -     mutex_lock(&sched->start_work_mutex);
+>>>>>> -     mutex_unlock(&sched->start_work_mutex);
+>>>>>>
+>>>>>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+>>>>>> +     while (!sched->thread_funcs_exit) {
+>>>>>> +             ret = sem_post(&this_task->ready_for_work);
+>>>>>> +             BUG_ON(ret);
+>>>>>> +             mutex_lock(&sched->start_work_mutex);
+>>>>>> +             mutex_unlock(&sched->start_work_mutex);
+>>>>>>
+>>>>>> -     for (i = 0; i < this_task->nr_events; i++) {
+>>>>>> -             this_task->curr_event = i;
+>>>>>> -             perf_sched__process_event(sched, this_task->atoms[i]);
+>>>>>> -     }
+>>>>>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+>>>>>>
+>>>>>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+>>>>>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+>>>>>> -     ret = sem_post(&this_task->work_done_sem);
+>>>>>> -     BUG_ON(ret);
+>>>>>> +             for (i = 0; i < this_task->nr_events; i++) {
+>>>>>> +                     this_task->curr_event = i;
+>>>>>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
+>>>>>> +             }
+>>>>>>
+>>>>>> -     mutex_lock(&sched->work_done_wait_mutex);
+>>>>>> -     mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+>>>>>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+>>>>>> +             ret = sem_post(&this_task->work_done_sem);
+>>>>>> +             BUG_ON(ret);
+>>>>>>
+>>>>>> -     goto again;
+>>>>>> +             mutex_lock(&sched->work_done_wait_mutex);
+>>>>>> +             mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>> +     }
+>>>>>> +     return NULL;
+>>>>>>  }
+>>>>>>
+>>>>>>  static void create_tasks(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+>>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+>>>>>>  {
+>>>>>>       struct task_desc *task;
+>>>>>>       pthread_attr_t attr;
+>>>>>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
+>>>>>>  }
+>>>>>>
+>>>>>>  static void wait_for_tasks(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>>>>>>  {
+>>>>>>       u64 cpu_usage_0, cpu_usage_1;
+>>>>>>       struct task_desc *task;
+>>>>>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+>>>>>>  }
+>>>>>>
+>>>>>>  static void run_one_test(struct perf_sched *sched)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+>>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+>>>>>>  {
+>>>>>>       u64 T0, T1, delta, avg_delta, fluct;
+>>>>>>
+>>>>>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
+>>>>>>       print_task_traces(sched);
+>>>>>>       add_cross_task_wakeups(sched);
+>>>>>>
+>>>>>> +     sched->thread_funcs_exit = false;
+>>>>>>       create_tasks(sched);
+>>>>>>       printf("------------------------------------------------------------\n");
+>>>>>>       for (i = 0; i < sched->replay_repeat; i++)
+>>>>>>               run_one_test(sched);
+>>>>>>
+>>>>>> +     sched->thread_funcs_exit = true;
+>>>>>> +     mutex_unlock(&sched->start_work_mutex);
+>>>>>> +     mutex_unlock(&sched->work_done_wait_mutex);
+>>>>>
+>>>>> I think you still need to wait for the threads to exit before
+>>>>> destroying the mutexes.
+>>>>
+>>>> This is a pre-existing issue and beyond the scope of this patch set.
+>>>
+>>> You added the mutex_destroy functions in patch 8, so it is still
+>>> fallout from that.
+>>
+>> In the previous code the threads were blocked on mutexes that were
+>> stack allocated and the stack memory went away. You are correct to say
+>> that to those locks I added an init and destroy call. The lifetime of
+>> the mutex was wrong previously and remains wrong in this change.
+> 
+> I think you fixed the lifetime issue with sched->thread_funcs_exit here.
+> All you need to do is calling pthread_join() after the mutex_unlock, no?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: FAILED
+Like this maybe:
 
+diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+index b483ff0d432e..8090c1218855 100644
+--- a/tools/perf/builtin-sched.c
++++ b/tools/perf/builtin-sched.c
+@@ -3326,6 +3326,13 @@ static int perf_sched__replay(struct perf_sched *sched)
+ 	sched->thread_funcs_exit = true;
+ 	mutex_unlock(&sched->start_work_mutex);
+ 	mutex_unlock(&sched->work_done_wait_mutex);
++	/* Get rid of threads so they won't be upset by mutex destruction */
++	for (i = 0; i < sched->nr_tasks; i++) {
++		int err = pthread_join(sched->tasks[i]->thread, NULL);
++
++		if (err)
++			pr_err("pthread_join() failed for task nr %lu, error %d\n", i, err);
++	}
+ 	return 0;
+ }
+ 
 
-Kernel information:
-    Commit message: Merge tag 'block-6.0-2022-08-26' of git://git.kernel.dk=
-/linux-block
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51844
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/25453=
-2
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4961666
-
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
