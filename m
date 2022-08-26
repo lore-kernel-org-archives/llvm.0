@@ -1,222 +1,198 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E66F187F
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 14:31:46 +0000 (UTC)
-Received: by mail-oo1-f51.google.com with SMTP id u5-20020a4a5705000000b0044b34c2c89cso303147ooa.9
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 07:31:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C222F2E
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 15:48:58 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id 10so1479949iou.2
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 08:48:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=ozDTceTfUzqIFpyT0YcSUK9TplSXxX9G3oavml2m3j4=;
-        b=MlmxpO+iBvw0GkojD3IajC7FwAea3Z4+dChqSX7MMC1gPHSTDD3uDn2GDhz4XmISOK
-         3z0cXkAX0N93LG91xvrnQMJAug891CRdWbwFEeQi/1R3fBtAMfbd5GH05QdURjj9ZGrH
-         K3QivdQF9NBwEwus7jQmYS2KUjl97h6BJfQ9U8GCydz5QD1LQC+l6tAtc24HB0QK9bq6
-         1XkDfj81aa80ybSjCdaajXwr6gPgNpEwCGy81wJg8FiBkQq5PO6KhjFGEvHZmFQpeTvI
-         M71BdGp0dqtziYGJVlzEwDYQR30M61M598G6QhX4GwYhYsSQbxsHbOv8cuy0S/lk+Yqq
-         Farg==
+        bh=CfKWDPh7X1VuNag5D5B/vS+f3kUXwEbxZn8+4bgPB10=;
+        b=ONIm9zdhImgqNvaUQZfwo8g5tSkpqQg0QkxDSb0QT+jV+CntszKp8hwzZYkJdui/k8
+         /4oMsDkQiywyrCmaesV9+zR91N8l1I2CdzE2R5ZSNLNKcLaAlLdM5bYBnfkTBhT/kmuc
+         6355G09l6pl7Rj+jg/+rnHad2AcOe9VIeZvIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=ozDTceTfUzqIFpyT0YcSUK9TplSXxX9G3oavml2m3j4=;
-        b=5/PhBks5I81hLmP5Wxt9g78ODeXVIeifMju/FapVAQB+4+dRTct3w5egcBsQrmEs0x
-         aAz4yvUcj+vR0XAb6CpmfTHQJJ/L8HZ7EsOZY9d6CdWQQAzQMgtqIgQQtJlS+zgKWOTZ
-         NDhr1LDuxs/4lYsve/r53a2sjaZy9plAZRxEVOtQQtUyccedIJ+bbwnFyXZzRApzgHkN
-         faOqOjFdgeTcySe2lQW2xSRp5lQ4VgtLTr+y97GhFGHvM8IThvIYPwwkQE2PK5Ut18j5
-         DQ6cmg/NZK1Bv+VdQLaA6+Cnwd6Onm20VfHaiIJmYVBDQrasmRa2b98jcKSLubctswC4
-         6O5w==
-X-Gm-Message-State: ACgBeo1pM/grCeSmxDcl7tehM76hXD0vGLVyfgZFoG4WYMO+yeFL0M7Z
-	jTOsc+kiwX9sSlV2q8hkgoHCv/GxjoqHsp+5xME=
-X-Google-Smtp-Source: AA6agR6OTc8Q6hLSMcU85KNwKBqdNmESy8A+oSktMGR+afdi+apNZb18+AtL2ToJQ6vJJnhB63SgwQBw3XBFL3bEgNE=
-X-Received: by 2002:a4a:aa81:0:b0:44a:da30:274e with SMTP id
- d1-20020a4aaa81000000b0044ada30274emr1330760oon.97.1661524305634; Fri, 26 Aug
- 2022 07:31:45 -0700 (PDT)
+        bh=CfKWDPh7X1VuNag5D5B/vS+f3kUXwEbxZn8+4bgPB10=;
+        b=StoUFukBu2aIxljfIyCzO8YdNpP1972Pxh+Ti/PUMEgzXqRAsUxakJF8jnA5GYNb7F
+         Lylzq/ReWzP5ixNEXcMEeRhol6nbOlR1b5wO6kD5kaTBMO75OokTWTOdC5shudbcth8M
+         i5xnRlAGlX1VRigFDaJdZ20LPjnD3+KMhCRw0bXBrO0o3x2g6b0zO8nSeBUj1eutSkOU
+         4+1FDEkCmE6+P3W81xoa9H8Z43AMqvbcHS6LA1D4lLi6EGvnYjJT3li3s2wOLIo/R/CF
+         hmFJqEcc63XS6VwwB84W2eZv6mj8xxeC47tdjYXeM3toQjxmn2SmTLXA6F5aZ7xsm2Hr
+         AQIg==
+X-Gm-Message-State: ACgBeo3KYbhWrmroxHGqa4ruWbZqQOBRumkmeR7IHpszcBjL7ZDIuas4
+	j665K8RM6De/fbdLi9gooX1EuTJiooupMhFC
+X-Google-Smtp-Source: AA6agR4iOGcBitVp0ByTfbAliYheAfze3WF74wocxF5ogBtuyaGrj+ncN9QZ3vJtBSkRAG5FOnoRJg==
+X-Received: by 2002:a6b:c343:0:b0:68a:b1d0:3ddf with SMTP id t64-20020a6bc343000000b0068ab1d03ddfmr3810938iof.0.1661528937316;
+        Fri, 26 Aug 2022 08:48:57 -0700 (PDT)
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com. [209.85.166.44])
+        by smtp.gmail.com with ESMTPSA id z2-20020a02cea2000000b003476640caf8sm1033625jaq.173.2022.08.26.08.48.56
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 08:48:56 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id z72so1457806iof.12
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 08:48:56 -0700 (PDT)
+X-Received: by 2002:a02:c772:0:b0:349:e359:a0c1 with SMTP id
+ k18-20020a02c772000000b00349e359a0c1mr4210651jao.246.1661528935826; Fri, 26
+ Aug 2022 08:48:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
- <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
- <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
- <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X> <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
- <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X> <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
-In-Reply-To: <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Fri, 26 Aug 2022 10:31:34 -0400
-Message-ID: <CADnq5_NmsnsoJqB8HZ-JQ9B4B+5ZBQ0hM+T-NDSu8xyp5tUVcw@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>, "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, Arnd Bergmann <arnd@kernel.org>, 
-	David Airlie <airlied@linux.ie>, clang-built-linux <llvm@lists.linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
-	amd-gfx list <amd-gfx@lists.freedesktop.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+References: <202208221506.0Lo051G4-lkp@intel.com> <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+In-Reply-To: <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 26 Aug 2022 08:48:42 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vxdoo21OQJ-Ad57-gFVcJ7biQipoJqDE2bSpLC2NxrhQ@mail.gmail.com>
+Message-ID: <CAD=FV=Vxdoo21OQJ-Ad57-gFVcJ7biQipoJqDE2bSpLC2NxrhQ@mail.gmail.com>
+Subject: Re: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	LKML <linux-kernel@vger.kernel.org>, =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Aug 25, 2022 at 6:34 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi AMD folks,
->
-> Top posting because it might not have been obvious but I was looking for
-> your feedback on this message (which can be viewed on lore.kernel.org if
-> you do not have the original [1]) so that we can try to get this fixed
-> in some way for 6.0/6.1. If my approach is not welcome, please consider
-> suggesting another one or looking to see if this is something you all
-> could look into.
+Hi,
 
-The patch looks good to me.  I was hoping Harry or Rodrigo could
-comment more since they are more familiar with this code and trying to
-keep it in sync with what we get from the hardware teams.
-
-Alex
-
-
+On Fri, Aug 26, 2022 at 1:26 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> [1]: https://lore.kernel.org/Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X/
+> On Mon, Aug 22, 2022 at 9:27 AM kernel test robot <lkp@intel.com> wrote:
 >
-> Cheers,
-> Nathan
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
+> > commit: 57f6190a60ecc19f1ddddac0d7ea6524229271a9 drm/panel: ws2401: Add driver for WideChips WS2401
+> > date:   1 year, 1 month ago
+> > config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221506.0Lo051G4-lkp@intel.com/config)
+> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f6190a60ecc19f1ddddac0d7ea6524229271a9
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 57f6190a60ecc19f1ddddac0d7ea6524229271a9
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+> >    >>> referenced by drm_mipi_dbi.c:203 (drivers/gpu/drm/drm_mipi_dbi.c:203)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> >    >>> referenced by drm_mipi_dbi.c:258 (drivers/gpu/drm/drm_mipi_dbi.c:258)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_fb_swab
+> >    >>> referenced by drm_mipi_dbi.c:219 (drivers/gpu/drm/drm_mipi_dbi.c:219)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_destroy_state
+> >    >>> referenced by drm_mipi_dbi.c
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_gem_fb_create_with_dirty
+> >    >>> referenced by drm_mipi_dbi.c
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_atomic_helper_check
+> >    >>> referenced by drm_mipi_dbi.c
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_atomic_helper_commit
+> >    >>> referenced by drm_mipi_dbi.c
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
+> >    >>> referenced by drm_mipi_dbi.c:224 (drivers/gpu/drm/drm_mipi_dbi.c:224)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_fb_memcpy
+> >    >>> referenced by drm_mipi_dbi.c:221 (drivers/gpu/drm/drm_mipi_dbi.c:221)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_atomic_helper_damage_merged
+> >    >>> referenced by drm_mipi_dbi.c:318 (drivers/gpu/drm/drm_mipi_dbi.c:318)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_pipe_update) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_simple_display_pipe_init
+> >    >>> referenced by drm_mipi_dbi.c:529 (drivers/gpu/drm/drm_mipi_dbi.c:529)
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_dev_init_with_formats) in archive drivers/built-in.a
+> > --
+> > >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_reset
+> >    >>> referenced by drm_mipi_dbi.c
+> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
 >
-> On Thu, Aug 18, 2022 at 08:59:14AM -0700, Nathan Chancellor wrote:
-> > Hi Arnd,
-> >
-> > Doubling back around to this now since I think this is the only thing
-> > breaking x86_64 allmodconfig with clang 11 through 15.
-> >
-> > On Fri, Aug 05, 2022 at 09:32:13PM +0200, Arnd Bergmann wrote:
-> > > On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
-> > > > > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
-> > > > > While splitting out sub-functions can help reduce the maximum stack
-> > > > > usage, it seems that in this case it makes the actual problem worse:
-> > > > > I see 2168 bytes for the combined
-> > > > > dml32_ModeSupportAndSystemConfigurationFull(), but marking
-> > > > > mode_support_configuration() as noinline gives me 1992 bytes
-> > > > > for the outer function plus 384 bytes for the inner one. So it does
-> > > > > avoid the warning (barely), but not the problem that the warning tries
-> > > > > to point out.
-> > > >
-> > > > I haven't had a chance to take a look at splitting things up yet, would
-> > > > you recommend a different approach?
-> > >
-> > > Splitting up large functions can help when you have large local variables
-> > > that are used in different parts of the function, and the split gets the
-> > > compiler to reuse stack locations.
-> > >
-> > > I think in this particular function, the problem isn't actually local variables
-> > > but either pushing variables on the stack for argument passing,
-> > > or something that causes the compiler to run out of registers so it
-> > > has to spill registers to the stack.
-> > >
-> > > In either case, one has to actually look at the generated output
-> > > and then try to rearrange the codes so this does not happen.
-> > >
-> > > One thing to try would be to condense a function call like
-> > >
-> > >                 dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
-> > >
-> > > &v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
-> > >                         mode_lib->vba.USRRetrainingRequiredFinal,
-> > >                         mode_lib->vba.UsesMALLForPStateChange,
-> > >
-> > > mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
-> > >                         mode_lib->vba.NumberOfActiveSurfaces,
-> > >                         mode_lib->vba.MaxLineBufferLines,
-> > >                         mode_lib->vba.LineBufferSizeFinal,
-> > >                         mode_lib->vba.WritebackInterfaceBufferSize,
-> > >                         mode_lib->vba.DCFCLK,
-> > >                         mode_lib->vba.ReturnBW,
-> > >                         mode_lib->vba.SynchronizeTimingsFinal,
-> > >
-> > > mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
-> > >                         mode_lib->vba.DRRDisplay,
-> > >                         v->dpte_group_bytes,
-> > >                         v->meta_row_height,
-> > >                         v->meta_row_height_chroma,
-> > >
-> > > v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
-> > >                         mode_lib->vba.WritebackChunkSize,
-> > >                         mode_lib->vba.SOCCLK,
-> > >                         v->DCFCLKDeepSleep,
-> > >                         mode_lib->vba.DETBufferSizeY,
-> > >                         mode_lib->vba.DETBufferSizeC,
-> > >                         mode_lib->vba.SwathHeightY,
-> > >                         mode_lib->vba.SwathHeightC,
-> > >                         mode_lib->vba.LBBitPerPixel,
-> > >                         v->SwathWidthY,
-> > >                         v->SwathWidthC,
-> > >                         mode_lib->vba.HRatio,
-> > >                         mode_lib->vba.HRatioChroma,
-> > >                         mode_lib->vba.vtaps,
-> > >                         mode_lib->vba.VTAPsChroma,
-> > >                         mode_lib->vba.VRatio,
-> > >                         mode_lib->vba.VRatioChroma,
-> > >                         mode_lib->vba.HTotal,
-> > >                         mode_lib->vba.VTotal,
-> > >                         mode_lib->vba.VActive,
-> > >                         mode_lib->vba.PixelClock,
-> > >                         mode_lib->vba.BlendingAndTiming,
-> > >                         .... /* more arguments */);
-> > >
-> > > into calling conventions that take a pointer to 'mode_lib->vba' and another
-> > > one to 'v', so these are no longer passed on the stack individually.
-> >
-> > So I took a whack at reducing this function's number of parameters and
-> > ended up with the attached patch. I basically just removed any
-> > parameters that were identical between the two call sites and access them
-> > through the vba pointer, as you suggested.
-> >
-> > AMD folks, is this an acceptable approach? It didn't take a trivial
-> > amount of time so I want to make sure this is okay before I do it to
-> > more functions/files.
-> >
-> > Due to the potential size of these changes, I am a little weary of them
-> > going into 6.0; even though they should be a simple search and replace
-> > for the most part, it might be nice for them to have some decent soak
-> > time in -next. One solution would be to raise the warning limit for
-> > these files on 6.0 so that allmodconfig does not ship broken then reduce
-> > the limit for 6.1 once these patches have been applied.
-> >
-> > Additionally, I took a look at the stack usage across all compilers that
-> > the kernel supports and I thought it was kind of interesting that the
-> > usage really jumps from GCC 7 to 8, which I am guessing is a result of
-> > commit e8a170ff9a35 ("drm/amdgpu: enable -msse2 for GCC 7.1+ users").
-> > GCC 8 allmodconfig actually errors now too:
-> >
-> > https://lore.kernel.org/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
-> >
-> >           |-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
-> >           | dml30_ModeSupportAndSystemConfigurationFull() | dml31_ModeSupportAndSystemConfigurationFull() | dml32_ModeSupportAndSystemConfigurationFull() |
-> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
-> > | GCC 5   |                  1056 bytes                   |                   656 bytes                   |                  1040 bytes                   |
-> > | GCC 6   |                  1024 bytes                   |                   672 bytes                   |                  1056 bytes                   |
-> > | GCC 7   |                  1040 bytes                   |                   664 bytes                   |                  1056 bytes                   |
-> > | GCC 8   |                  1760 bytes                   |                  1608 bytes                   |                  2144 bytes                   |
-> > | GCC 9   |                  1664 bytes                   |                  1392 bytes                   |                  1960 bytes                   |
-> > | GCC 10  |                  1648 bytes                   |                  1368 bytes                   |                  1952 bytes                   |
-> > | GCC 11  |                  1680 bytes                   |                  1400 bytes                   |                  1952 bytes                   |
-> > | GCC 12  |                  1680 bytes                   |                  1400 bytes                   |                  1984 bytes                   |
-> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
-> > | LLVM 11 |                  2104 bytes                   |                  2056 bytes                   |                  2120 bytes                   |
-> > | LLVM 12 |                  2152 bytes                   |                  2200 bytes                   |                  2152 bytes                   |
-> > | LLVM 13 |                  2216 bytes                   |                  2248 bytes                   |                  2168 bytes                   |
-> > | LLVM 14 |                  2168 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
-> > | LLVM 15 |                  2216 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
-> > | LLVM 16 |                  2232 bytes                   |                  2216 bytes                   |                  2176 bytes                   |
-> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
-> >
-> > With the patch I have attached,
-> > dml32_ModeSupportAndSystemConfigurationFull() drops from 2176 to 1944
-> > for LLVM 16, which is obviously still not great but it at least avoids
-> > the warning.
-> >
-> > Cheers,
-> > Nathan
+> I don't understand this error report, please robot, analyze further and come
+> back with details on what needs to be fixed.
+
+I've never been accused of being a robot (OK, well, there was that one
+time...), but I can probably still help a little...
+
+I followed the "steps to reproduce" from the report and got the
+failure. Basically the problem is this:
+
+$ grep DRM_MIPI_DBI build_dir/.config
+CONFIG_DRM_MIPI_DBI=y
+
+$ grep DRM_KMS_HELPER build_dir/.config
+CONFIG_DRM_KMS_HELPER=m
+
+...so you're the MIPI DBI code is builtin and calling into the KMS
+helper which is a module. That's does not compute. <ERR>. <ERR>.
+<SHUTTING DOWN>.
+
+Unfortunately, fixing the error isn't the most trivial thing in the
+world. If you just do this:
+
+ config DRM_MIPI_DBI
+        tristate
++       select DRM_KMS_HELPER
+        depends on DRM
+
+...then you get a circular dependency:
+
+drivers/gpu/drm/Kconfig:76:error: recursive dependency detected!
+drivers/gpu/drm/Kconfig:76:     symbol DRM_KMS_HELPER is selected by
+DRM_MIPI_DBI
+drivers/gpu/drm/Kconfig:31:     symbol DRM_MIPI_DBI is selected by
+DRM_PANEL_ILITEK_ILI9341
+drivers/gpu/drm/panel/Kconfig:165:      symbol
+DRM_PANEL_ILITEK_ILI9341 depends on DRM_KMS_HELPER
+For a resolution refer to Documentation/kbuild/kconfig-language.rst
+subsection "Kconfig recursive dependency limitations"
+
+...and if you do this:
+
+ config DRM_MIPI_DBI
+        tristate
+        depends on DRM
++       depends on DRM_KMS_HELPER
+
+...then you get errors like this:
+
+WARNING: unmet direct dependencies detected for DRM_MIPI_DBI
+  Depends on [m]: HAS_IOMEM [=y] && DRM [=y] && DRM_KMS_HELPER [=m]
+  Selected by [y]:
+  - DRM_PANEL_WIDECHIPS_WS2401 [=y] && HAS_IOMEM [=y] && DRM [=y] &&
+DRM_PANEL [=y] && SPI [=y] && GPIOLIB [=y] && BACKLIGHT_CLASS_DEVICE
+[=y]
+  Selected by [m]:
+  - TINYDRM_ILI9225 [=m] && HAS_IOMEM [=y] && DRM [=y] && SPI [=y]
+  - TINYDRM_ILI9486 [=m] && HAS_IOMEM [=y] && DRM [=y] && SPI [=y]
+  - TINYDRM_ST7586 [=m] && HAS_IOMEM [=y] && DRM [=y] && SPI [=y]
+  - TINYDRM_ST7735R [=m] && HAS_IOMEM [=y] && DRM [=y] && SPI [=y]
+
+
+Hopefully that at least explains the problem even if it doesn't
+magically give a solution. ;-)
+
+-Doug
