@@ -1,112 +1,136 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700E84C94
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:52:22 +0000 (UTC)
-Received: by mail-wr1-f52.google.com with SMTP id bq11so3088280wrb.12
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=/FKV8NfeABOB5rtbgWYmbTPwp8Mt3Wy5s1mzFHehzCI=;
-        b=iGdU9mei9DSZLuS7uHMIilQd2lkoyJdSwxMI0mReZhtN5gkUjZ/wrXKT6lcyVWfI9/
-         tSFEDjKo7eNzCSM30CeVaMzrZNaxDUnrPRphbe/K9PkwnBBazL4zX7PI3/+oGgwh5Q7L
-         3AKr1t8J/rXzDnfuOfT7+4CTJJ1LAPtw04XEl6tR5l3+D4KBpg52ot7ATUaTg8NZUb3k
-         or4JQYq+nMk1Gs+Q2/BmuTpabwasj/n4rO+JuYwI5336KrkHtYygVkgHP5DTbK8WQ4/N
-         d1tPQHY3ycYE50AtVpwKar6L2Df6EgDYGz2wDtXA7euueSCPx5CC1D0PpALlrwPPqOhh
-         ysmg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766A54C94
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 21:32:17 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-32a09b909f6so68053747b3.0
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 14:32:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/FKV8NfeABOB5rtbgWYmbTPwp8Mt3Wy5s1mzFHehzCI=;
-        b=OsJUyoKL0+LX47KqOfPZ4OxBakpnCd00HKgAjoE+Wr3wFxhK1KT8jKtbeArjiqfyKj
-         lYXSy9XyTu6m59+13TBDz/jIvACUO0FNCsJoA+wfbevRCf8Q3JHBI93wlGROa0KBen9K
-         3rJky5jSG8+whfZut6fFHkkULIjzXTYdDKi92SsC/QDDtWs7YmZenT09l+PIdcgCTbOA
-         qSVBOjwb8KNTfaCInLelJs5nxVN6AKd9Al4+KbvBw9nNVcv4bnUPyZ15zcXLFStlQr7X
-         jVn4WY1qAu1YteDEjcbHuYdlIDSEWgtBDqi0aLk1ihwOaELWCeZNsSMKC4ADasQMR5lP
-         TKsw==
-X-Gm-Message-State: ACgBeo3rtCayNKrzbRRIHF59WFp02QNyk85lm0TVrKAZ0+BRPUeMpGyr
-	+/6gj+TyoR4NUF2Ne9Gza2cFpNq6znFZvkYt6C0vdw==
-X-Google-Smtp-Source: AA6agR6ZX12RvsXCpQ9Cff+4vP0t6K9e1t4KciZ/ugNMY7xpQnsmru7piccWOa5mOvIGJPe4W+8t0gQU5sT8viOyTYU=
-X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
- i9-20020a0560001ac900b002207f4049e3mr738777wry.40.1661547139826; Fri, 26 Aug
- 2022 13:52:19 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=i0/vsp+gUvOYuI/yixtkpRQ65mmMRu/3we2IfkmdpkY=;
+        b=EtjtNKf6QM2y1/VV7k3OdJaHuqHnqiieZbnlVotBdPlcsEduLgbzqaEOnLnjXOMsAn
+         TOEKZyLpcMTQwuIZBODfvPTzQY21FuT0YhHjjzX3fIue/RJPsc1q16nBdyxLisXtqfzv
+         b53BxG+AsJNTXKNaJBJckew80+0RkttkD4wPThHAgzUsknsbjkE88y74HiI6+4aGiilF
+         M2X5/e4nmjg71lZfEB4Nzr5v5tLsYJcuZdmUzev4eTFhFx8O4gzb6YoICBqzRU53uz9E
+         Yt7Rg6Pe0MIKQh+CUZ6HSPTnW040NmCj5HDaChQ8mMYzljfmoSqs09yOGYqd0Wm+3PlX
+         XyIA==
+X-Gm-Message-State: ACgBeo3FU7bKRC+Oxe78z/iHrlczwkFeGvGT6Ypo1wus/rMQ7NMrDlr0
+	u0k5xRBsxbh8mmuDBu0hhWqjmEES4M0H6RE5dy0=
+X-Google-Smtp-Source: AA6agR7z2ZI0yKXDqlXkzQUMM3F1fkkF+7niigHfsen99l3nmmzXb9zSmu1ko+Iq+1f7BGMHCGhE2RqaigRfBhn3R/k=
+X-Received: by 2002:a25:becd:0:b0:690:a05c:8103 with SMTP id
+ k13-20020a25becd000000b00690a05c8103mr1471661ybm.381.1661549536354; Fri, 26
+ Aug 2022 14:32:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
- <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
- <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
- <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com> <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
- <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com> <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
-In-Reply-To: <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 26 Aug 2022 13:52:07 -0700
-Message-ID: <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
-	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
-	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
-	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
-	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
-	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-perf-users <linux-perf-users@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	llvm@lists.linux.dev
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
+ <YwT+5GGCOKoTjfQZ@zn.tnic> <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
+ <YwUR35I7+5JbLvMM@zn.tnic> <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
+ <YwXkuW3rSYY7ZJT+@zn.tnic> <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
+ <YwYmpK40ju5WUlVZ@zn.tnic>
+In-Reply-To: <YwYmpK40ju5WUlVZ@zn.tnic>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Sat, 27 Aug 2022 06:32:05 +0900
+Message-ID: <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 26, 2022 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Wed. 24 Aug. 2022 at 22:24, Borislav Petkov <bp@alien8.de> wrote:
+> On Wed, Aug 24, 2022 at 09:10:59PM +0900, Vincent MAILHOL wrote:
+> > Not exactly, this is TZCNT for x86_64 but for x86, it will be BSF=E2=80=
+=A6
 >
-> On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > On 26/08/22 22:00, Namhyung Kim wrote:
-> > > On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > >> Below seems adequate for now, at least logically, but maybe it
-> > >> would confuse clang thread-safety analysis?
-> > >
-> > > I think it's not just about locks, the exit_browser should bail out early
-> > > if the setup code was not called.
-> >
-> > In those cases, use_browser is 0 or -1 unless someone has inserted
-> > an invalid perf config like "tui.script=on" or "gtk.script=on".
-> > So currently, in cases where exit_browser() is called without
-> > setup_browser(), it does nothing.  Which means it is only the
-> > unconditional mutex_destroy() that needs to be conditional.
+> Not x86 - some old models which do not understand TZCNT, I'm being told.
+
+ACK.
+
+> And I'm being also told, "Intel and AMD disagree on what BSF does when
+> passed 0". So this is more mess.
+
+ACK.
+
+> > It means that __ffs() is not a x86_64 specific function. Each
 >
-> Yeah there's a possibility that it can be called with > 0 use_browser
-> on some broken config or something.  So I think it's safer and better
-> for future changes.
+> No, not that. The comment "Undefined if no bit exists".
+>
+> On my machine, __ffs(0) - the way it is implemented:
+>
+>         rep; bsf %1,%0
+>
+> is well-defined:
+>
+> "If the input operand is zero, CF is set to 1 and the size (in bits) of
+> the input operand is written to the destination register. Otherwise, CF
+> is cleared."
 
-I'd thought about a:
-static bool ui__lock_initialized;
-but the issue is shouldn't it be atomic? Maybe we should guard it with
-a lock? Then we are back where we started. Having a clean init/exit
-invariant would be best but such a change has the potential to be
-large and out of scope here.
+It is well defined on *your* machine.
 
-Thanks,
-Ian
+On some other machines, it might be undefined:
+"If the content of the source operand is 0, the content of the
+destination operand is undefined."
+https://www.felixcloutier.com/x86/bsf
 
-> Thanks,
-> Namhyung
+> Leading to
+>
+> __ffs(0): 0x40
+>
+> i.e., input operand of 64 bits.
+>
+> So on this particular x86 implementation, TZCNT(0) is well defined.
+
+It is here where I do not follow you. OK that on most of the recent
+machines, the compiler will emit a TZCNT and that this instruction is
+well defined for zero. But on some older machines, it will emit BSF,
+and on a subset of those machines, BSF(0) might be undefined.
+
+> So I'd like for that "undefined" thing to be expanded upon and
+> explained. Something along the lines of "the libc/compiler primitives'
+> *ffs(0) is undefined. Our inline asm helpers adhere to that behavior
+> even if the result they return for input operand of 0 is very well
+> defined."
+>
+> Now, if there are some machines which do not adhere to the current hw
+> behavior, then they should be ALTERNATIVEd.
+>
+> Better?
+>
+> > > Back to your patch: I think the text should be fixed to say that both
+> > > ffs() and __ffs()'s kernel implementation doesn't have undefined resu=
+lts
+> >
+> > NACK. __ffs(0) is an undefined behaviour (c.f. TZCNT instruction for
+>
+> NACK, SCHMACK. Read my mail again: "I think the text should be fixed".
+> The *text* - not __ffs(0) itself. The *text* should be fixed to explain
+> what undefined means. See above too.
+>
+> IOW, to start explaining this humongous mess I've scratched the surface
+> of.
+
+Agree that this is only the surface. But, my patch series is about
+constant folding, not about the text of *ffs(). Here, I just *move*
+the existing text, I did not modify anything.
+Can we agree that this is a separate topic? I do not think I am the
+good person to fix that mess (and in all honesty, I am not a domain
+expert in this domain and I am afraid I would just make you lose your
+time if I had to work on this).
+
+
+Yours sincerely,
+Vincent Mailhol
