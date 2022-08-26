@@ -1,128 +1,293 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B3A2560
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 08:26:56 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id m1so1203706edb.7
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 01:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=L6RGdjoY+6gxGbx3graJqJb0iU8CPB5cb7afxoCsDDs=;
-        b=ui/bq2ILEPwGljYaS7Kr5e+dU9U0iVAxN/aVvUgtji596YvxIINn34e1rmYsIVnvn7
-         NizHaaxO/gZC3c8NzL3YbDCrnd5hMEkmkt0nXsXQjB4ibrWcM1GcfszMOH99UcBqM+27
-         38y2aECTDEOB+Vd9iLKEgbISObjsFQ9Ce0ZfNrZMuaAyTFw7JAeDLGiCWyws1LJgD4sC
-         eJEG1PiTCd87HpqinX7JmuLG4UBPuQcYfIVxFbMU7hbj292b9HCt2w0tnK6IropkevB/
-         h3TXGIEsyf2OOUcy1bVyrEFdQYXq4x6T/SuAE0WWrHvm/IKdisBle+QxzrV/Gq6aQ4zV
-         i5zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=L6RGdjoY+6gxGbx3graJqJb0iU8CPB5cb7afxoCsDDs=;
-        b=e+xrbv0cK0SCg0mFwxMacYxsifHzUguOlL6sQUVNEE8R/n9swqFpuamDM16HUM5igI
-         ZSu7ouQOQp5X/mJq8ylL/oE3eMnjW0W7gnTCMLBlf81oNa2yecURWst6LXoregEfdrWi
-         FOoa/rcazmSQCt856kIX4XYj8NHMBNGKo7YjfA6e6EKWMXYJZpmr5w0Tuc7XiNnT3+MV
-         wmxPcHL6K5Pc+9hr2/4zkD9JHRtE1CTY9YxPkmKfMCnAnwcCqrc4ujxUvmA7TjwSMUcq
-         iASYjflFf135LaB0pey1vqY3RZEU5sr0EmqnHp2ZCeYBEDG2BdnDmnIqJYj/ZjSZV4Wr
-         RumA==
-X-Gm-Message-State: ACgBeo1O1YqAAnJmZrnjaDXDtBiabHZdWRuJnEM2Ta6omx9wYWWtCdPT
-	tego/GOUJ7P0zZBZjc8BIkGGJtruAi7DMj6W8o+tKQ==
-X-Google-Smtp-Source: AA6agR4ZAQqzLF7gYyN6tLirIFssq2R5dp+X3fc7UvkTKXdWF6D+cNxFsdE8uCN+giaNWTqZ0qY7KX7Vl24nYsKr83M=
-X-Received: by 2002:a05:6402:50d4:b0:447:85f:52d5 with SMTP id
- h20-20020a05640250d400b00447085f52d5mr5972359edb.205.1661502414690; Fri, 26
- Aug 2022 01:26:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2CE258F
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 08:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661503813; x=1693039813;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=QBRLETGvncTRL0lzh7ch6U3+EDLdG+HLMX8Hw3Ab734=;
+  b=cACv2NMBtJV2TbrW7XF2ruuVoF5d7wyLXIcl5/pyW7wTguzhR/OU5aQN
+   kVbqa7MBNJ/effga/EdaSdgWNWexvV5KGmFpzVNi3MNbIsHNjAxQX9GRo
+   es5negXoYUaKAbz16LhtqYIFSU3lLxz6rpEai0eL3ieaoQkklJWjro6A9
+   kquibGvhnNLgTGuC7bCPq+LPuXASbAQaGV/EEkb6KhcTt6musb8XmAw0R
+   BuLzfzCvWmFQrrA5w1Q8bhBHggE48GEKc9b8sutoegI2U3XltIQrtt5Kn
+   lfaWibMIV7p0N3oJRgJ/Cud25k01S4FvRYBh+KI0h9rHuI3VGWHCJfIbP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="295239859"
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="295239859"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 01:50:13 -0700
+X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
+   d="scan'208";a="671381337"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 01:50:01 -0700
+Message-ID: <40f723d1-a030-983b-93b3-63791321ae4c@intel.com>
+Date: Fri, 26 Aug 2022 11:49:56 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202208221506.0Lo051G4-lkp@intel.com>
-In-Reply-To: <202208221506.0Lo051G4-lkp@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 26 Aug 2022 10:26:43 +0200
-Message-ID: <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>, 
-	Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 01/18] perf mutex: Wrapped usage of mutex and cond
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
+ <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-2-irogers@google.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220824153901.488576-2-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 22, 2022 at 9:27 AM kernel test robot <lkp@intel.com> wrote:
+On 24/08/22 18:38, Ian Rogers wrote:
+> From: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> 
+> Added a new header file mutex.h that wraps the usage of
+> pthread_mutex_t and pthread_cond_t. By abstracting these it is
+> possible to introduce error checking.
+> 
+> Signed-off-by: Pavithra Gurushankar <gpavithrasha@gmail.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/Build   |   1 +
+>  tools/perf/util/mutex.c | 117 ++++++++++++++++++++++++++++++++++++++++
+>  tools/perf/util/mutex.h |  47 ++++++++++++++++
+>  3 files changed, 165 insertions(+)
+>  create mode 100644 tools/perf/util/mutex.c
+>  create mode 100644 tools/perf/util/mutex.h
+> 
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 9dfae1bda9cc..8fd6dc8de521 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -143,6 +143,7 @@ perf-y += branch.o
+>  perf-y += mem2node.o
+>  perf-y += clockid.o
+>  perf-y += list_sort.o
+> +perf-y += mutex.o
+>  
+>  perf-$(CONFIG_LIBBPF) += bpf-loader.o
+>  perf-$(CONFIG_LIBBPF) += bpf_map.o
+> diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
+> new file mode 100644
+> index 000000000000..892294ac1769
+> --- /dev/null
+> +++ b/tools/perf/util/mutex.c
+> @@ -0,0 +1,117 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "mutex.h"
+> +
+> +#include "debug.h"
+> +#include <linux/string.h>
+> +#include <errno.h>
+> +
+> +static void check_err(const char *fn, int err)
+> +{
+> +	char sbuf[STRERR_BUFSIZE];
+> +
+> +	if (err == 0)
+> +		return;
+> +
+> +	pr_err("%s error: '%s'", fn, str_error_r(err, sbuf, sizeof(sbuf)));
+                              ^
+Still needs \n here >---------^
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-> commit: 57f6190a60ecc19f1ddddac0d7ea6524229271a9 drm/panel: ws2401: Add driver for WideChips WS2401
-> date:   1 year, 1 month ago
-> config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221506.0Lo051G4-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f6190a60ecc19f1ddddac0d7ea6524229271a9
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 57f6190a60ecc19f1ddddac0d7ea6524229271a9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: drm_gem_fb_get_obj
->    >>> referenced by drm_mipi_dbi.c:203 (drivers/gpu/drm/drm_mipi_dbi.c:203)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
->    >>> referenced by drm_mipi_dbi.c:258 (drivers/gpu/drm/drm_mipi_dbi.c:258)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_fb_swab
->    >>> referenced by drm_mipi_dbi.c:219 (drivers/gpu/drm/drm_mipi_dbi.c:219)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_destroy_state
->    >>> referenced by drm_mipi_dbi.c
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_gem_fb_create_with_dirty
->    >>> referenced by drm_mipi_dbi.c
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_atomic_helper_check
->    >>> referenced by drm_mipi_dbi.c
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_atomic_helper_commit
->    >>> referenced by drm_mipi_dbi.c
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
->    >>> referenced by drm_mipi_dbi.c:224 (drivers/gpu/drm/drm_mipi_dbi.c:224)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_fb_memcpy
->    >>> referenced by drm_mipi_dbi.c:221 (drivers/gpu/drm/drm_mipi_dbi.c:221)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_atomic_helper_damage_merged
->    >>> referenced by drm_mipi_dbi.c:318 (drivers/gpu/drm/drm_mipi_dbi.c:318)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_pipe_update) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_simple_display_pipe_init
->    >>> referenced by drm_mipi_dbi.c:529 (drivers/gpu/drm/drm_mipi_dbi.c:529)
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_dev_init_with_formats) in archive drivers/built-in.a
-> --
-> >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_reset
->    >>> referenced by drm_mipi_dbi.c
->    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
+> +}
+> +
+> +#define CHECK_ERR(err) check_err(__func__, err)
+> +
+> +static void __mutex_init(struct mutex *mtx, bool pshared)
+> +{
+> +	pthread_mutexattr_t attr;
+> +
+> +	CHECK_ERR(pthread_mutexattr_init(&attr));
+> +
+> +#ifndef NDEBUG
+> +	/* In normal builds enable error checking, such as recursive usage. */
+> +	CHECK_ERR(pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK));
+> +#endif
+> +	if (pshared)
+> +		CHECK_ERR(pthread_mutexattr_setpshared(&attr, PTHREAD_PROCESS_SHARED));
+> +
+> +	CHECK_ERR(pthread_mutex_init(&mtx->lock, &attr));
+> +	CHECK_ERR(pthread_mutexattr_destroy(&attr));
+> +}
+> +
+> +void mutex_init(struct mutex *mtx)
+> +{
+> +	__mutex_init(mtx, /*pshared=*/false);
+> +}
+> +
+> +void mutex_init_pshared(struct mutex *mtx)
+> +{
+> +	__mutex_init(mtx, /*pshared=*/true);
+> +}
+> +
+> +void mutex_destroy(struct mutex *mtx)
+> +{
+> +	CHECK_ERR(pthread_mutex_destroy(&mtx->lock));
+> +}
+> +
+> +void mutex_lock(struct mutex *mtx)
+> +{
+> +	CHECK_ERR(pthread_mutex_lock(&mtx->lock));
+> +}
+> +
+> +void mutex_unlock(struct mutex *mtx)
+> +{
+> +	CHECK_ERR(pthread_mutex_unlock(&mtx->lock));
+> +}
+> +
+> +bool mutex_trylock(struct mutex *mtx)
+> +{
+> +	int ret = pthread_mutex_trylock(&mtx->lock);
+> +
+> +	if (ret == 0)
+> +		return true; /* Lock acquired. */
+> +
+> +	if (ret == EBUSY)
+> +		return false; /* Lock busy. */
+> +
+> +	/* Print error. */
+> +	CHECK_ERR(ret);
+> +	return false;
+> +}
+> +
+> +static void __cond_init(struct cond *cnd, bool pshared)
+> +{
+> +	pthread_condattr_t attr;
+> +
+> +	CHECK_ERR(pthread_condattr_init(&attr));
+> +	if (pshared)
+> +		CHECK_ERR(pthread_condattr_setpshared(&attr, PTHREAD_PROCESS_SHARED));
+> +
+> +	CHECK_ERR(pthread_cond_init(&cnd->cond, &attr));
+> +	CHECK_ERR(pthread_condattr_destroy(&attr));
+> +}
+> +
+> +void cond_init(struct cond *cnd)
+> +{
+> +	__cond_init(cnd, /*pshared=*/false);
+> +}
+> +
+> +void cond_init_pshared(struct cond *cnd)
+> +{
+> +	__cond_init(cnd, /*pshared=*/true);
+> +}
+> +
+> +void cond_destroy(struct cond *cnd)
+> +{
+> +	CHECK_ERR(pthread_cond_destroy(&cnd->cond));
+> +}
+> +
+> +void cond_wait(struct cond *cnd, struct mutex *mtx)
+> +{
+> +	CHECK_ERR(pthread_cond_wait(&cnd->cond, &mtx->lock));
+> +}
+> +
+> +void cond_signal(struct cond *cnd)
+> +{
+> +	CHECK_ERR(pthread_cond_signal(&cnd->cond));
+> +}
+> +
+> +void cond_broadcast(struct cond *cnd)
+> +{
+> +	CHECK_ERR(pthread_cond_broadcast(&cnd->cond));
+> +}
+> diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
+> new file mode 100644
+> index 000000000000..c9e110a2b55e
+> --- /dev/null
+> +++ b/tools/perf/util/mutex.h
+> @@ -0,0 +1,47 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __PERF_MUTEX_H
+> +#define __PERF_MUTEX_H
+> +
+> +#include <pthread.h>
+> +#include <stdbool.h>
+> +
+> +/*
+> + * A wrapper around the mutex implementation that allows perf to error check
+> + * usage, etc.
+> + */
+> +struct mutex {
+> +	pthread_mutex_t lock;
+> +};
+> +
+> +/* A wrapper around the condition variable implementation. */
+> +struct cond {
+> +	pthread_cond_t cond;
+> +};
+> +
+> +/* Default initialize the mtx struct. */
+> +void mutex_init(struct mutex *mtx);
+> +/*
+> + * Initialize the mtx struct and set the process-shared rather than default
+> + * process-private attribute.
+> + */
+> +void mutex_init_pshared(struct mutex *mtx);
+> +void mutex_destroy(struct mutex *mtx);
+> +
+> +void mutex_lock(struct mutex *mtx);
+> +void mutex_unlock(struct mutex *mtx);
+> +bool mutex_trylock(struct mutex *mtx);
 
-I don't understand this error report, please robot, analyze further and come
-back with details on what needs to be fixed.
+Might be worth noting that mutex_trylock() returns true if the
+lock is acquired, inverting the logic from pthread_mutex_trylock()
+but consistent with the kernel's mutex_trylock().
 
-Yours,
-Linus Walleij
+> +
+> +/* Default initialize the cond struct. */
+> +void cond_init(struct cond *cnd);
+> +/*
+> + * Initialize the cond struct and specify the process-shared rather than default
+> + * process-private attribute.
+> + */
+> +void cond_init_pshared(struct cond *cnd);
+> +void cond_destroy(struct cond *cnd);
+> +
+> +void cond_wait(struct cond *cnd, struct mutex *mtx);
+> +void cond_signal(struct cond *cnd);
+> +void cond_broadcast(struct cond *cnd);
+> +
+> +#endif /* __PERF_MUTEX_H */
+
