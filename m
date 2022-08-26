@@ -1,85 +1,128 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE8E4C94
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 21:32:44 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id d23so3544253lfl.13
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 14:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fGX1OPYHOyAdnf6z71dmW2DwOr7H4Y5wRyKl79aJ7R0=;
-        b=ZC1efQqpG/Yl12c9Sf0lbSneIvuydmkz6lD+4KwRibO24kQUatXopq6xrBTE+YeeyR
-         q7A0vfCIleUquEfbTOnSyFHAwePTyBPeqv2/ma8GgFea/Ixx3aLVwoY9Fes1qIrjLDr1
-         Nd6jCOOn88THmF7GLR+a8EWPAuq3Zz3zn1PzhUigNoDANZ/JbADf29mivcvkYSmlIyPY
-         Mljmir8oMpLOPvbS8ez1m+7uKdlmCp6LGxmF12PPwjzauVS8cA/Z9xWvqjCO8f0T0wuz
-         kyy+4B1CYpyEZxjTV7uWkKZFEeBcp8NRBYb+60p59rhCoYViV4f4TSJ6kjl/TbfqRvpL
-         g1TA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80AF3D62
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 22:51:27 +0000 (UTC)
+Received: by mail-io1-f72.google.com with SMTP id w7-20020a5d9607000000b0067c6030dfb8so1690529iol.10
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 15:51:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fGX1OPYHOyAdnf6z71dmW2DwOr7H4Y5wRyKl79aJ7R0=;
-        b=TnX0WT6/iJtLrFRS32POgVYdMOQXsIpiCOd+UI9KFlRD6dAXugA4JG3Iyne6Zwl2Dm
-         c6/yfC1G7Z5oVouN+CVjPH/9Uc0V/GU8kVRof+slzN3QPffGcNDaebnlX96WgekFUBcj
-         c0F7BMITL5CfOqxszvmvfma0geqIXpuI0vna3K637RGRK6B2zOeQCxThwzS9ZGa6FoXL
-         OHvQtnPjtIRvvNba1ApBmOjc2XCwSAAC8kS5yM6p8b/17RmiblxWKmvvq2L3WX2qUyzI
-         6wBgcEw4ElEKyILIC2Q5rSzmL2AgbqOfwE5pXPHR8JJJZTnEviV3YiS5Hkdm9sOYsBeW
-         x7bg==
-X-Gm-Message-State: ACgBeo3TaCJpHWueIbBDSHBP5LuMhKI2+p4cc/qL8vinH6Q3tDwgjEF3
-	oKrfMGcoYmylmzJzx0KgSEovPSXpEofXS89AfKqPZg==
-X-Google-Smtp-Source: AA6agR4p8yZHknOzoft/51CAneJ1hrsnJGIMJ3qvD2H+dBtk7IsckDNc/Agfws5rxxUjM+VYCG98DW+qqx4b3NOZuyc=
-X-Received: by 2002:ac2:4e15:0:b0:48b:3ad2:42c8 with SMTP id
- e21-20020ac24e15000000b0048b3ad242c8mr3415436lfr.391.1661549562159; Fri, 26
- Aug 2022 14:32:42 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=WAlmKPmwBSHe82ADHwGi4F01afwpPrJl8TMZLAnNCjE=;
+        b=DDPMW2NL2CADjHamvNbDTQYpgJ/zJNPxdx1uBIh1yyOYmnZUYmxEAIxl/VpC3+Nnkv
+         G2MADnmZo9wkP6wXLVkG5YKV/RCS4AJisnr0j5IsxlXCFToF7mHKxHxBD4ACGvG3s546
+         f5p8wWNn7y26ttYWit6cZq3zD//bCzXUBAYHbaL7V8qG56lqg6xh8/DbgaUchTo5o2hY
+         NypQDYv5qcbxQfbZvzxUG3evC2GAdUtyVXDbnrQSlo88m4yGGoar9GWuQpmH/sb7adGk
+         TSgJ5QUIR15N7UBVmENkhtt41pod1KCWph46ORC4hZvn+NtoJumTCNXPS4Ps0nk20cbv
+         IYHw==
+X-Gm-Message-State: ACgBeo0iEHXN2Lx3YB3SLxbkv0aumGiJVhoPM+XgJIW06x7b7bpOWk/H
+	RqR/x2vuWUoh+imhckBkkX4FI8tKEhzIpwP5K5nwTKmv/H4Z
+X-Google-Smtp-Source: AA6agR7gU41h4nNP8i0WnG2uQjguVj0Foa0LIGHbIVShq4fB2hgys5yrqi2HGSm2xspqBFF+AtgXW3Ovdop4vUjyqG5Me+DG5Ndq
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220825232522.3997340-1-seanjc@google.com>
-In-Reply-To: <20220825232522.3997340-1-seanjc@google.com>
-From: Peter Gonda <pgonda@google.com>
-Date: Fri, 26 Aug 2022 15:32:30 -0600
-Message-ID: <CAMkAt6ryLh-gQYvmUYfxS3+CRwCLfK3Fby1W5NxxFLSK7M_v0w@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] KVM: selftests: Implement ucall "pool" (for SEV)
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, James Morse <james.morse@arm.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, Atish Patra <atishp@atishpatra.org>, 
-	David Hildenbrand <david@redhat.com>, Tom Rix <trix@redhat.com>, kvm list <kvm@vger.kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>, 
-	Colton Lewis <coltonlewis@google.com>, Andrew Jones <andrew.jones@linux.dev>
+X-Received: by 2002:a05:6638:1914:b0:346:c2f5:632f with SMTP id
+ p20-20020a056638191400b00346c2f5632fmr5180273jal.296.1661554286947; Fri, 26
+ Aug 2022 15:51:26 -0700 (PDT)
+Date: Fri, 26 Aug 2022 15:51:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000c73e105e72cc106@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in log_replay
+From: syzbot <syzbot+8379f446e2ac4365e343@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Aug 25, 2022 at 5:25 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Non-KVM folks, y'all got pulled in because of the atomic_test_and_set_bit()
-> patch.
->
-> Rework the ucall infrastructure to use a pool of ucall structs to pass
-> memory instead of using the guest's stack.  For confidential VMs with
-> encrypted memory, e.g. SEV, the guest's stack "needs" to be private memory
-> and so can't be used to communicate with the host.
->
-> Convert all implementations to the pool as all of the complexity is hidden
-> in common code, and supporting multiple interfaces adds its own kind of
-> complexity.
->
-> Tested on x86 and ARM, compile tested on s390 and RISC-V.
->
+Hello,
 
-Thanks for the help on the ucall-pool Sean!
+syzbot found the following issue on:
 
-I rebased the SEV selftests on these and everything works as before
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15eebce7080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=8379f446e2ac4365e343
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-TESTED-BY: Peter Gonda <pgonda@google.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8379f446e2ac4365e343@syzkaller.appspotmail.com
+
+ntfs3: loop4: ino=2, "/" ntfs_iget5
+ntfs3: loop4: Mark volume as dirty due to NTFS errors
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000013af0c000
+[0000000000000000] pgd=080000013af11003, p4d=080000013af11003, pud=0800000138a68003, pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 17646 Comm: syz-executor.4 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : log_replay+0x4c/0x3024 fs/ntfs3/fslog.c:3774
+lr : log_replay+0x3c/0x3024 fs/ntfs3/fslog.c:3736
+sp : ffff80002180b970
+x29: ffff80002180ba80 x28: ffff0000f8a8e000 x27: ffff0000dac28000
+x26: 0000000000000018 x25: 0000000000000024 x24: ffff80002180baf4
+x23: 0000000000000030 x22: ffff00010acaff40 x21: ffff0000f8a8c000
+x20: 0000000000000000 x19: ffff0000f8a8e000 x18: 00000000000000c0
+x17: ffff80000dd7a698 x16: ffff80000dbb8658 x15: ffff0000f666cf80
+x14: 0000000000000120 x13: 00000000ffffffff x12: ffff0000f666cf80
+x11: ff80800008bf6e60 x10: 0000000000000000 x9 : ffff800008bf6e60
+x8 : ffff0000f666cf80 x7 : ffff8000085f0604 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : ffff80002180baf4 x0 : ffff00010acaff40
+Call trace:
+ log_replay+0x4c/0x3024 fs/ntfs3/fslog.c:3762
+ ntfs_loadlog_and_replay+0x114/0x1ec fs/ntfs3/fsntfs.c:299
+ ntfs_fill_super+0xc10/0x14a4 fs/ntfs/super.c:2904
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: f9400ed4 a93b7fbf f90047ff b942a2d7 (f9400288) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f9400ed4 	ldr	x20, [x22, #24]
+   4:	a93b7fbf 	stp	xzr, xzr, [x29, #-80]
+   8:	f90047ff 	str	xzr, [sp, #136]
+   c:	b942a2d7 	ldr	w23, [x22, #672]
+* 10:	f9400288 	ldr	x8, [x20] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
