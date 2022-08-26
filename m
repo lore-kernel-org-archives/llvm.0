@@ -1,213 +1,92 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD85E4401
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 17:48:14 +0000 (UTC)
-Received: by mail-wr1-f41.google.com with SMTP id bq11so2612289wrb.12
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 10:48:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1312E4401
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:10:49 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-340a4dcb403so15423277b3.22
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 11:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
-        b=YeShUHZAjaMfVm4ZJoT0KtWHtHVQF69k9j5LM9cpMqgaMBQIQk8RISAZ3c9Tqdk1K3
-         +u9YAnO+b7e0rlD9Hwu0FZ8cxVnXQkNbxbgHITNxqiu6DnykqjCEQzRAu1VWZ3pWMwXO
-         qV8dmBSMKtVzj95smb3JbC4Qxz6oW0AAHo4U4mvjUaCX+F/oNdn28VcnJqXUvoYxsHeL
-         LDVP5o6aCWrz15+TGMnlnF5B9lUezo3kaYrDNBfi+zhipDC3vY6zC/AYRaBblBKFZwCA
-         JCYLynPHBYuVw2A7/hRiyX8i8tRylbPycdSMmfMib/nALqD33gt64nTQzJDHFay+hhCo
-         fdEQ==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=rDKGbIWlt5Gc791EqDZPKPzTTSlSMP6vk6lOe6XzVfU=;
+        b=lGjRGty+ST9TMLxhTjOyI4ogWlDEC9tFmGQYjFZ8KYQHVB1PfLyudgypP8U6DG0qtO
+         JOWs0y0EMC/Tt+JMX/cCVbfGHj/VP6NfwlxTp5qypJ3g63H26wUd3vmVF0Viom3ajf1/
+         pnOqywB1S4A3h9hvZE8UpfNfV7qBMeEuUyp9VzCkFsmq+SEql3OtIJ4H14Xk7LIVliEt
+         nNVrQum6NJXPJAYR2LPevGIPiQMVJ3LliJ6MzdFdrBocCWZpZUu+y+u/Zwtmgc2yZ2PK
+         QFPjd4afx+6HpDaa7WdWfZqMie36ti93DFu6pcm+AfNVePa/YZZ5rZlbYnKYx7GQEo06
+         EjHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9JHPKBEhnzj2Xmii0IJwAZm9bDxPzFxlEKG6x6ug6zk=;
-        b=LSuM7sLYmzrgWEdZfKg8Im907xhoJvesAGZ7JWKXElQgevWu+8yLzuRwDnPCArm6RX
-         iTX7Rq7dfaT8rMdcDeMzHtG0rjXyLpP4gP2SfydSlemDy4YWu3mIKC34pKi05BBDtH05
-         ivfXpIcsA7jmeuLyEA+Yo6gDPZ6JagPUFfO7YApRTnh7zNsLy8W2SBjYqCCDDeMCx1LY
-         QxnfH3hdYqdoEM6WO/jORvkAJAykoJhKOUrjdi+wSvA+pBx2swlZ2LMgeSwl0tRpkJxY
-         9Gs2sGkbWcMqQ0ud+hVisjzdG9HFqFSIUohU6fclJCn5hX85LxW7S0lhqGKgIwmwCN4M
-         iugQ==
-X-Gm-Message-State: ACgBeo0P4Ev2D8yVMhnKBIgnYALuWwNU/21TeKUC9OhqPC5uvNJjavb+
-	dG1naAktTpNvHj/WdSo5WGdt73mjW8IWFEDC1VcEJw==
-X-Google-Smtp-Source: AA6agR5YTArV0z60f6fmYVbsoslFeZS5EcVg43N45kefsQs86vvqkoP4opnpC/decH7TsBShY7VKfEFc8XYLy4nqC/U=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr431200wri.300.1661536092846; Fri, 26
- Aug 2022 10:48:12 -0700 (PDT)
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=rDKGbIWlt5Gc791EqDZPKPzTTSlSMP6vk6lOe6XzVfU=;
+        b=esXWnDauprYjNws6dXYrdihqCCL6dMPH/33d4kzrQfKkcUyr5s4JqWEj3QOzc5ocaD
+         GJqYmd3CDfUsmBNEUXSBHSvkLQMf7JZbG+N+Fy0xJrDkUCId1OUuznAZqBGqqLYRuXfs
+         uteWfIAOUSrtkCxbDHs/b9OVqP03oxs8+syV2F9FhvAL2TjX39wcAu1e9vr39xSBqCyY
+         bAYztNmPq5eE0mohuvYpuvHszBc5VQEdrKIz1NPSiQIjduHcWL75ZiFGN9im5OFBYzoc
+         kODUzKpeDR1XPiX0vqFjolak2ZVz/eT8NHapSR2219PnG7GaLj7C/msgAP5wsQexJO8C
+         pI3A==
+X-Gm-Message-State: ACgBeo3dR9t60d7/P3nWpurSY9w+71K6B0Xt7NcC0Pto+t2HjjDvbtv0
+	IUotJUME9pjbb2FOYY8+iBaos4U5tpQOcGzZHHw=
+X-Google-Smtp-Source: AA6agR6x0aJapVWHTSUcy9KCD+JVq6gqRyP8iRgPybJCOX2vqDnifbhfOScFPu0XB8NRUFez9maUVkidASzMhfpRMuY=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:8d7b:b933:5438:2a88])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6902:72a:b0:694:d1a9:612f with
+ SMTP id l10-20020a056902072a00b00694d1a9612fmr877316ybt.505.1661537448129;
+ Fri, 26 Aug 2022 11:10:48 -0700 (PDT)
+Date: Fri, 26 Aug 2022 11:10:32 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
- <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
- <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
-In-Reply-To: <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 26 Aug 2022 10:48:00 -0700
-Message-ID: <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
-	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
-	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
-	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
-	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
-	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661537434; l=1299;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=vbnUKTrzZYx5zvY9/fWp8T7D0Mw2VG0BTmrBgetfzUY=;
+ b=DA2AX+YJeEATy8NJW5byVKUVKyvrA31rEO6Ns1T+FOWnbSxMkE39xP8vPKtZdtI3+wcK3MsBwnbB
+ cSgZdC9sAVMAK4LQTe3IJFsjyyZ2arpya/gc5nDmbGwOqKck96SG
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220826181035.859042-1-ndesaulniers@google.com>
+Subject: [PATCH 0/3] fix debug info for asm and DEBUG_INFO_SPLIT
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
+	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
+	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 26/08/22 19:06, Ian Rogers wrote:
-> > On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>
-> >> On 24/08/22 18:38, Ian Rogers wrote:
-> >>> Add annotations to describe lock behavior. Add unlocks so that mutexes
-> >>> aren't conditionally held on exit from perf_sched__replay. Add an exit
-> >>> variable so that thread_func can terminate, rather than leaving the
-> >>> threads blocked on mutexes.
-> >>>
-> >>> Signed-off-by: Ian Rogers <irogers@google.com>
-> >>> ---
-> >>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
-> >>>  1 file changed, 29 insertions(+), 17 deletions(-)
-> >>>
-> >>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> >>> index 7e4006d6b8bc..b483ff0d432e 100644
-> >>> --- a/tools/perf/builtin-sched.c
-> >>> +++ b/tools/perf/builtin-sched.c
-> >>> @@ -246,6 +246,7 @@ struct perf_sched {
-> >>>       const char      *time_str;
-> >>>       struct perf_time_interval ptime;
-> >>>       struct perf_time_interval hist_time;
-> >>> +     volatile bool   thread_funcs_exit;
-> >>>  };
-> >>>
-> >>>  /* per thread run time data */
-> >>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
-> >>>       prctl(PR_SET_NAME, comm2);
-> >>>       if (fd < 0)
-> >>>               return NULL;
-> >>> -again:
-> >>> -     ret = sem_post(&this_task->ready_for_work);
-> >>> -     BUG_ON(ret);
-> >>> -     mutex_lock(&sched->start_work_mutex);
-> >>> -     mutex_unlock(&sched->start_work_mutex);
-> >>>
-> >>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> >>> +     while (!sched->thread_funcs_exit) {
-> >>> +             ret = sem_post(&this_task->ready_for_work);
-> >>> +             BUG_ON(ret);
-> >>> +             mutex_lock(&sched->start_work_mutex);
-> >>> +             mutex_unlock(&sched->start_work_mutex);
-> >>>
-> >>> -     for (i = 0; i < this_task->nr_events; i++) {
-> >>> -             this_task->curr_event = i;
-> >>> -             perf_sched__process_event(sched, this_task->atoms[i]);
-> >>> -     }
-> >>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> >>>
-> >>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> >>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> >>> -     ret = sem_post(&this_task->work_done_sem);
-> >>> -     BUG_ON(ret);
-> >>> +             for (i = 0; i < this_task->nr_events; i++) {
-> >>> +                     this_task->curr_event = i;
-> >>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
-> >>> +             }
-> >>>
-> >>> -     mutex_lock(&sched->work_done_wait_mutex);
-> >>> -     mutex_unlock(&sched->work_done_wait_mutex);
-> >>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> >>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> >>> +             ret = sem_post(&this_task->work_done_sem);
-> >>> +             BUG_ON(ret);
-> >>>
-> >>> -     goto again;
-> >>> +             mutex_lock(&sched->work_done_wait_mutex);
-> >>> +             mutex_unlock(&sched->work_done_wait_mutex);
-> >>> +     }
-> >>> +     return NULL;
-> >>>  }
-> >>>
-> >>>  static void create_tasks(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> >>>  {
-> >>>       struct task_desc *task;
-> >>>       pthread_attr_t attr;
-> >>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
-> >>>  }
-> >>>
-> >>>  static void wait_for_tasks(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >>>  {
-> >>>       u64 cpu_usage_0, cpu_usage_1;
-> >>>       struct task_desc *task;
-> >>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> >>>  }
-> >>>
-> >>>  static void run_one_test(struct perf_sched *sched)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >>>  {
-> >>>       u64 T0, T1, delta, avg_delta, fluct;
-> >>>
-> >>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
-> >>>       print_task_traces(sched);
-> >>>       add_cross_task_wakeups(sched);
-> >>>
-> >>> +     sched->thread_funcs_exit = false;
-> >>>       create_tasks(sched);
-> >>>       printf("------------------------------------------------------------\n");
-> >>>       for (i = 0; i < sched->replay_repeat; i++)
-> >>>               run_one_test(sched);
-> >>>
-> >>> +     sched->thread_funcs_exit = true;
-> >>> +     mutex_unlock(&sched->start_work_mutex);
-> >>> +     mutex_unlock(&sched->work_done_wait_mutex);
-> >>
-> >> I think you still need to wait for the threads to exit before
-> >> destroying the mutexes.
-> >
-> > This is a pre-existing issue and beyond the scope of this patch set.
->
-> You added the mutex_destroy functions in patch 8, so it is still
-> fallout from that.
+Alexey reported that the fraction of unknown filename instances in
+kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+to assembler defined symbols, which regressed as a result of:
 
-In the previous code the threads were blocked on mutexes that were
-stack allocated and the stack memory went away. You are correct to say
-that to those locks I added an init and destroy call. The lifetime of
-the mutex was wrong previously and remains wrong in this change.
+commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
 
-Thanks,
-Ian
+In that commit, I allude to restoring debug info for assembler defined
+symbols in a follow up patch, but it seems I forgot to do so in
 
-> >
-> > Thanks,
-> > Ian
-> >
-> >>>       return 0;
-> >>>  }
-> >>>
-> >>
->
+commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
+
+Do so requires a fixup for as-option, which seems to be failing when
+used in scripts/Makefile.debug.
+
+Also includes a fix for DEBUG_INFO_SPLIT while I'm here.  Dmitrii
+reports that this has been broken since gcc-11+ & clang-12+. I'm
+guessing no one uses this .config option...since no one else has
+reported it being broken yet...
+
+Nick Desaulniers (3):
+  Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/ for as-option
+  Makefile.debug: re-enable debug info for .S files
+  Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
+
+ arch/x86/boot/compressed/Makefile |  5 +++--
+ scripts/Makefile.compiler         |  6 +++---
+ scripts/Makefile.debug            | 26 +++++++++++++++++++-------
+ 3 files changed, 25 insertions(+), 12 deletions(-)
+
+-- 
+2.37.2.672.g94769d06f0-goog
+
