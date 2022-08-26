@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E509D4401
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:43:58 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3328a211611so33501947b3.5
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:43:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5934401
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:44:09 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33daeaa6b8eso33359407b3.7
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=ACInBWBwNvRh9+ZIkz7xZW+D59fAbxI1HNUoQj5EwTw=;
-        b=A0ERzChba5qfQmN7t7ZnM+aWwRGaH2/CrJK4ga0h0ake/rNiQ1IkyR3JmXhJrMT9a2
-         KnHqRjX6PAnDpWoIkW8DOomTPRLzc1TyRbC3t+/4APWQ++yOkmcb7vZpIh864xKc8YkK
-         TXueOMvwyqUW3p/H3jsDEaZeJ+ManaFKIw162zxrEZglv7KFe53adPbLvLotwONtq3m/
-         VkC4OmR/ajX51K4DFiENSlLRlXTjnnPJs3yS3cx54uVvE0IWijCmALy9ppEdFbi335dQ
-         oYkX423X1tMjhhM+hPZBMshXdSCABfYwEL8duHu/C0YW0phgba8d6AjJngM2mSDJoJtU
-         Qqcg==
+        bh=KW1wjZhQOylJAM8dFCUuUgsNn9wynC6cGB5CBRkTkjU=;
+        b=DLT7CNCPFxgWp4tw+x/BQspqZDpc1UMezv684sA8Gl8TsHyYXrhbYfV0Qr+PfXH6sE
+         WyZe8OnzJaU/1Ef8NA1auGJ2hDrBVFrWmQe6C1c75RmFWI5JgK2QkInaC0PFH357sUBK
+         iccm1taYoFpVQWHE0/CEbyO9NCebkdSo/fQeYsuY6lmfBq5fUmtl3rMLeYJ8QGma+I+K
+         RnmZ6nmyKMDdXUQmHGCIdUIKetMz8UzgX1QFuI8iXW62hCKyDldFPgyV+eyEhCw0AA+N
+         ocvsSYMFTlAfmg7rbbu/rnHYvg+mfLX25WZwKcDLZgrttSfeE/17xTn3w2Z+r4BptWl2
+         C1EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=ACInBWBwNvRh9+ZIkz7xZW+D59fAbxI1HNUoQj5EwTw=;
-        b=qBoYaQsYrQQ1eK2gygs9zG505/H+ZkNOj0xUao6j3g51cUaMX5VArsjc5wMAgmE+K8
-         XEV16dC27JTTnOrp7ozbdA7/uvYQx/abPTutDG0weMTbfAFMjNx8ODZiCImu6DA2KJj9
-         oVtJrqW0qAw6zgjS9dZr2BntFEsUBmEZ8pvO8g3ZyKYlQetWgPYdMZF6it60KpEno6HZ
-         DcinhLo5QwjVOYhnPDoK/4Nvsi9hOH7MoJyaGTkyNQG0+PAMcAaTCcUYcur9sSLLmsih
-         bbPH+IywSghQ27wFeQdTNo84zWu8/DieB9KX0Asl8Jzexq7/JhLuG1fkkWK71yMnWrxS
-         mvlQ==
-X-Gm-Message-State: ACgBeo3bonDS6H8UcUzKXNamFHgfO3K/BlpVmh+MRe3KN4ZuOG5eJzNd
-	ze2f3RLjnUsnHPGRA0A8ORz1KicOOfvl
-X-Google-Smtp-Source: AA6agR674nFvhyZ8kZZpDZ9P2qEjEXJiLqOtFWE4EU1fMUMemGrNgewnTe7bwqftGS+iFizSaZUFrMd6XEEw
+        bh=KW1wjZhQOylJAM8dFCUuUgsNn9wynC6cGB5CBRkTkjU=;
+        b=vAuSEISVFytfbirsGRVWEVg1DB66sFu2xzoNiwMNmLwjAEY+uHoU/sRpIL3+RWfwlc
+         fqp8afOiix3KBGF8iirGvx65GRedqdZFvGRogGm9Zs//sBh7M46PoQ3byNnZ/z11cLcb
+         abdeXI+bXIeNB2Zysb4smWil8eQEvsQV6RToQCs0j/xbmc1sA5mtXm2Dl4G2nuKw0MxU
+         yrBoDoeNt1uJeOLzoMcTrBks1ODreT3sHq5MT2TwqWUCVVhfG3hxzk3yr8LghE+LcZoX
+         3zxLoDkUOA8JIKAHvZctrD+UMxJiKKOHaOtfA5tYH0Ef/I3I32FNuj6GUfmX8HrdcKee
+         lf0g==
+X-Gm-Message-State: ACgBeo3jIYXSUl7eAUGCsXmJ/CGbYGhLSqY+zuUDWLIXHyYq4uXFT+tJ
+	eZKEj46FU4soU+Ye7yR5kJzK3eCECWvb
+X-Google-Smtp-Source: AA6agR5ECIO+GHRI3XC9wpQWiTgzeGBhIlpvn15OMBLt2Eu4HKggVRe/TElALFWz/W+OT2LnRb3f7F9dYoKl
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ccb1:c46b:7044:2508])
- (user=irogers job=sendgmr) by 2002:a5b:6c7:0:b0:66e:3713:9929 with SMTP id
- r7-20020a5b06c7000000b0066e37139929mr535950ybq.34.1661532237966; Fri, 26 Aug
- 2022 09:43:57 -0700 (PDT)
-Date: Fri, 26 Aug 2022 09:42:30 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:110d:b0:670:b10b:d16e with SMTP
+ id o13-20020a056902110d00b00670b10bd16emr494541ybu.259.1661532248866; Fri, 26
+ Aug 2022 09:44:08 -0700 (PDT)
+Date: Fri, 26 Aug 2022 09:42:31 -0700
 In-Reply-To: <20220826164242.43412-1-irogers@google.com>
-Message-Id: <20220826164242.43412-7-irogers@google.com>
+Message-Id: <20220826164242.43412-8-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220826164242.43412-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v4 06/18] perf lock: Remove unused pthread.h include
+Subject: [PATCH v4 07/18] perf record: Update use of pthread mutex
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -75,25 +75,68 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-No pthread usage in builtin-lock.c.
+Switch to the use of mutex wrappers that provide better error checking
+for synth_lock.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-lock.c | 1 -
- 1 file changed, 1 deletion(-)
+ tools/perf/builtin-record.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index dd11d3471baf..70197c0593b1 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -28,7 +28,6 @@
- #include <sys/types.h>
- #include <sys/prctl.h>
- #include <semaphore.h>
--#include <pthread.h>
- #include <math.h>
- #include <limits.h>
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 4713f0f3a6cf..a7b7a317d81b 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -21,6 +21,7 @@
+ #include "util/evsel.h"
+ #include "util/debug.h"
+ #include "util/mmap.h"
++#include "util/mutex.h"
+ #include "util/target.h"
+ #include "util/session.h"
+ #include "util/tool.h"
+@@ -608,17 +609,18 @@ static int process_synthesized_event(struct perf_tool *tool,
+ 	return record__write(rec, NULL, event, event->header.size);
+ }
  
++static struct mutex synth_lock;
++
+ static int process_locked_synthesized_event(struct perf_tool *tool,
+ 				     union perf_event *event,
+ 				     struct perf_sample *sample __maybe_unused,
+ 				     struct machine *machine __maybe_unused)
+ {
+-	static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
+ 	int ret;
+ 
+-	pthread_mutex_lock(&synth_lock);
++	mutex_lock(&synth_lock);
+ 	ret = process_synthesized_event(tool, event, sample, machine);
+-	pthread_mutex_unlock(&synth_lock);
++	mutex_unlock(&synth_lock);
+ 	return ret;
+ }
+ 
+@@ -1917,6 +1919,7 @@ static int record__synthesize(struct record *rec, bool tail)
+ 	}
+ 
+ 	if (rec->opts.nr_threads_synthesize > 1) {
++		mutex_init(&synth_lock);
+ 		perf_set_multithreaded();
+ 		f = process_locked_synthesized_event;
+ 	}
+@@ -1930,8 +1933,10 @@ static int record__synthesize(struct record *rec, bool tail)
+ 						    rec->opts.nr_threads_synthesize);
+ 	}
+ 
+-	if (rec->opts.nr_threads_synthesize > 1)
++	if (rec->opts.nr_threads_synthesize > 1) {
+ 		perf_set_singlethreaded();
++		mutex_destroy(&synth_lock);
++	}
+ 
+ out:
+ 	return err;
 -- 
 2.37.2.672.g94769d06f0-goog
 
