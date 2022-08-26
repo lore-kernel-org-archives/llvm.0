@@ -1,136 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7F04C74
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C381FC433C1;
-	Fri, 26 Aug 2022 19:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661541667;
-	bh=QvGGfd4u3ZgGNQzPE8cvR++tbeSXUZdTtSLRfphuRE0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hpZWFIk7lRrtsGJa4ByLTO07Az2diNblNKXw38vxSFZWOD5B5cddPYiKIDDRz4a//
-	 9z+u4etBw19PB9BzhBsiLLLgBx4B4Rnxz+QfB3YAMd476DOnri7C5lM19u5jIlagix
-	 oyLfXFn7SoKxxcABMjSlmAHd3zMGL7jkuBIlDS3Mcy7ARZF68/7kuiTDVuFYFyO1FP
-	 c/1LWUsqCALw5vcgk/UF6mHPL8w0GyN87zfyXVQf4r1XtzTLVJkh6yCcy/brxEi5Hx
-	 lZCD8w78PS5G2+p4ExhYnVdXG3fOZfd25Gpr4SPH8C0qPG1Ctj+sXhTeORATjWmyxq
-	 JTDkKV//4dBzg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 9B00B404A1; Fri, 26 Aug 2022 16:21:04 -0300 (-03)
-Date: Fri, 26 Aug 2022 16:21:04 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Dario Petrillo <dario.pk1@gmail.com>,
-	Hewenliang <hewenliang4@huawei.com>,
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>,
-	Song Liu <songliubraving@fb.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
-	Leo Yan <leo.yan@linaro.org>, Kim Phillips <kim.phillips@amd.com>,
-	Pavithra Gurushankar <gpavithrasha@gmail.com>,
-	Alexandre Truong <alexandre.truong@arm.com>,
-	Quentin Monnet <quentin@isovalent.com>,
-	William Cohen <wcohen@redhat.com>,
-	Andres Freund <andres@anarazel.de>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-	Colin Ian King <colin.king@intel.com>,
-	James Clark <james.clark@arm.com>,
-	Fangrui Song <maskray@google.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-	Riccardo Mancini <rickyman7@gmail.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Zechuan Chen <chenzechuan1@huawei.com>,
-	Jason Wang <wangborong@cdjrlc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Remi Bernon <rbernon@codeweavers.com>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-perf-users <linux-perf-users@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
-Message-ID: <YwkdIBsQEKXG3/rE@kernel.org>
-References: <20220826164242.43412-1-irogers@google.com>
- <CAM9d7cgQZsbwWSdRNQqUE+GsSgPVqFmKs9LJ5b6ta2-dax5T2Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074104C74
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661542208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QSBTgAkm0SaYb8DW7gR+dgkZTqYU/q+rNDOIFkFmPGA=;
+	b=BabThPrSb7hjBI12z0g8J5tAqihniInCwSDwkooiZTaNKH88wPII/0x6iFWzNlVGEEiOji
+	JoeAz5nRNXN44FXlApGERt3NBPdrkWzYWYrHwIrKI0Z4h3kYSb19hE55Y4Mo8savYcgqxF
+	mlmy1kceoER2Rwu5zMjS5q16ssuYAYc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-grgQo5AWP5qmPYzhMZ1kSg-1; Fri, 26 Aug 2022 15:30:07 -0400
+X-MC-Unique: grgQo5AWP5qmPYzhMZ1kSg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71BC2101A56D
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:30:07 +0000 (UTC)
+Received: from [172.64.3.119] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63C5E40C141D;
+	Fri, 26 Aug 2022 19:30:07 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
+ mainline.kernel.org-clang, 3e5c673f)
+Date: Fri, 26 Aug 2022 19:30:05 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cgQZsbwWSdRNQqUE+GsSgPVqFmKs9LJ5b6ta2-dax5T2Q@mail.gmail.com>
-X-Url: http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Message-Id: <68745.122082615300701817@us-mta-616.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Em Fri, Aug 26, 2022 at 12:08:06PM -0700, Namhyung Kim escreveu:
-> On Fri, Aug 26, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > When fixing a locking race and memory leak in:
-> > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> >
-> > It was requested that debug mutex code be separated out into its own
-> > files. This was, in part, done by Pavithra Gurushankar in:
-> > https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
-> >
-> > These patches fix issues with the previous patches, add in the
-> > original dso->nsinfo fix and then build on our mutex wrapper with
-> > clang's -Wthread-safety analysis. The analysis found missing unlocks
-> > in builtin-sched.c which are fixed and -Wthread-safety is enabled by
-> > default when building with clang.
-> >
-> > v4. Adds a comment for the trylock result, fixes the new line (missed
-> >     in v3) and removes two blank lines as suggested by Adrian Hunter.
-> > v3. Adds a missing new line to the error messages and removes the
-> >     pshared argument to mutex_init by having two functions, mutex_init
-> >     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> > v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
-> >     annotations as requested by Arnaldo and Namhyung. A boolean is
-> >     added to builtin-sched.c to terminate thread funcs rather than
-> >     leaving them blocked on delted mutexes.
-> >
-> > Ian Rogers (17):
-> >   perf bench: Update use of pthread mutex/cond
-> >   perf tests: Avoid pthread.h inclusion
-> >   perf hist: Update use of pthread mutex
-> >   perf bpf: Remove unused pthread.h include
-> >   perf lock: Remove unused pthread.h include
-> >   perf record: Update use of pthread mutex
-> >   perf sched: Update use of pthread mutex
-> >   perf ui: Update use of pthread mutex
-> >   perf mmap: Remove unnecessary pthread.h include
-> >   perf dso: Update use of pthread mutex
-> >   perf annotate: Update use of pthread mutex
-> >   perf top: Update use of pthread mutex
-> >   perf dso: Hold lock when accessing nsinfo
-> >   perf mutex: Add thread safety annotations
-> >   perf sched: Fixes for thread safety analysis
-> >   perf top: Fixes for thread safety analysis
-> >   perf build: Enable -Wthread-safety with clang
-> >
-> > Pavithra Gurushankar (1):
-> >   perf mutex: Wrapped usage of mutex and cond
-> 
-> For the patches 1-7 and 10-13
-> 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-Thanks added it, will try to get what is done so far merged and then we
-can go on addressing the other issues brought up in this thread.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: FAILED
 
-- Arnaldo
+
+Kernel information:
+    Commit message: Merge tag 'block-6.0-2022-08-26' of git://git.kernel.dk=
+/linux-block
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51844
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/25453=
+2
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4961666
+
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
