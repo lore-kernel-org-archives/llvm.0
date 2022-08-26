@@ -1,196 +1,77 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0994400
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:06:34 +0000 (UTC)
-Received: by mail-wr1-f48.google.com with SMTP id e13so1423758wrm.1
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:06:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=L0H2b2GPKZYIuMR6iWTYOgB5/UtrkJG2fxwjDyQeFtE=;
-        b=ntlSXkWi8J2ryefHCTq55BPnbPb2Tas1Jil+sp/Cx9DrtNvaySXbCSUKAFZ1+1uSXJ
-         g8aVWdh4PfNRBWp6P/clzaRfOi8H1idIkp7YVevW1l4LbLHBgZntSjkJthdEwQHUiswo
-         xQOEuPgF9GzCZ2/4A4/kr9nwOIlkk90esnB0tOCt9Kq806CqKx0F5uB7WMSAQxMpEDkQ
-         Tvs4+3fV4fry9twJESAgmRw7qMrZ9Bh/isM+rGLIEt+i0rJn//YBNlQkqTt9c3CpTBKD
-         tomYLfnOJ8HJD8zWgtOV9P9d4WH/L+6bUb9+YWkdZYYRCkKJL+IZRFJsajsi8aO+BDg1
-         Tkew==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552864400
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:29:40 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso8569676pjl.1
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:29:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=L0H2b2GPKZYIuMR6iWTYOgB5/UtrkJG2fxwjDyQeFtE=;
-        b=5QyOmeO8H0owug25Dr78O5ni/E8RfE2HR0PYHcWvYtgOdNg1FNtb6cWO4BZDWPnxip
-         PSVpsVDIDnbshlYRrjFrxejRJbplxgrQFRNXz8f7HSMSACNWiBA+D4gL1zAPgyj5SSb/
-         1PLeB2PLC15iC5mxZejQwwZjMxuSGweVPZnPEFoE5SrDhpoZvzeJ9uTVI3yzmUJ9n93P
-         j5Tilh1Qd/7RFPgams2Uidla/LFN/sehBwGQNfdE72owNSPlZN0ig/dcoxjtgOzBhRUT
-         lPW06nB3gVyWLVt/wrD3sAtCqXts/F6g07niXfuqG4Z6TXel3WwlT2r3ctqIeyQjr4YB
-         0O9A==
-X-Gm-Message-State: ACgBeo0a9fRLk+JTD3v+rgPwE3uiWQlf5r92hLl7A/qxdexmwme2qQek
-	EM1SPNABtQDor1xaj61csfw251P+wrRWpwunI1KyoA==
-X-Google-Smtp-Source: AA6agR7GbATeJG4gjXTUnx740JnOkntF0bsh5wXXtuvzI4dmU+OBcbKvRbwC4vpMbhWY0TyQoXad/xg1iOGWvXK8XXA=
-X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
- i9-20020a0560001ac900b002207f4049e3mr219844wry.40.1661529992826; Fri, 26 Aug
- 2022 09:06:32 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=lBvvh8CMBUZ2sjFkD26Cqoc4+9rLr06nz33vMiatlKg=;
+        b=ryYpBjDwNxfxOBFtLjd3AdIO/kOW2kWcb+2pKWhn80Pe1op1mxwSp8CnITVdWJGt74
+         AWmWNwDRMPmtMhrrKzQ9B+Nn0XttzRBXgkP0wifL2WQ9E7uHGomjTnFWFYJWvk3U7ubd
+         XPUPV8VczITtcXntc4aIgnqWVSgttAI0YPo5NLhyXYPK+JC1SzJK9IGRwXEn/MYIJXnE
+         U1gOkozuTys4MqFUqrW8FR3FinnNKG5k/69INT6LbiyQMBhBx/Z1/LnOwgBY3yvKH/TD
+         oQ8rrX7D5kXlrqqjjljBNGIT8U03QL5AyKxxtWgh2wye6WsTvMaWPVWUyHbkv/KROuMH
+         Pwrw==
+X-Gm-Message-State: ACgBeo1ubu1oQ8iZkKQcjXIHALDt6KtDxasne0lCLo80BTZWaJEO3Pye
+	JSTvs+Oyvgcpz9QmTfMpl1E=
+X-Google-Smtp-Source: AA6agR7vd7jE0Y5Ib+TqvdaFovHQP0nydl+a10cj01d60/tG2Hj7/bbclaJKgdJa5dhuJjDKvnN5RQ==
+X-Received: by 2002:a17:902:f650:b0:172:8ee1:7f40 with SMTP id m16-20020a170902f65000b001728ee17f40mr4444648plg.101.1661531379674;
+        Fri, 26 Aug 2022 09:29:39 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a12:b4b9:f1b3:ec63? ([2620:15c:211:201:a12:b4b9:f1b3:ec63])
+        by smtp.gmail.com with ESMTPSA id x36-20020a17090a6c2700b001fa867105a3sm1939818pjj.4.2022.08.26.09.29.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 09:29:38 -0700 (PDT)
+Message-ID: <5ffb520f-d86f-be3e-4239-2f31c681ede2@acm.org>
+Date: Fri, 26 Aug 2022 09:29:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
- <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
-In-Reply-To: <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 26 Aug 2022 09:06:20 -0700
-Message-ID: <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
-	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
-	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
-	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
-	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
-	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
-	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
-	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
-	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
+ request in blk_mq_map_swqueue
+Content-Language: en-US
+To: Aleksandr Nogikh <nogikh@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+ syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>,
+ Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ 'Aleksandr Nogikh' via syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <0000000000004c3b1405e6b7de26@google.com>
+ <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
+ <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 24/08/22 18:38, Ian Rogers wrote:
-> > Add annotations to describe lock behavior. Add unlocks so that mutexes
-> > aren't conditionally held on exit from perf_sched__replay. Add an exit
-> > variable so that thread_func can terminate, rather than leaving the
-> > threads blocked on mutexes.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
-> >  1 file changed, 29 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> > index 7e4006d6b8bc..b483ff0d432e 100644
-> > --- a/tools/perf/builtin-sched.c
-> > +++ b/tools/perf/builtin-sched.c
-> > @@ -246,6 +246,7 @@ struct perf_sched {
-> >       const char      *time_str;
-> >       struct perf_time_interval ptime;
-> >       struct perf_time_interval hist_time;
-> > +     volatile bool   thread_funcs_exit;
-> >  };
-> >
-> >  /* per thread run time data */
-> > @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
-> >       prctl(PR_SET_NAME, comm2);
-> >       if (fd < 0)
-> >               return NULL;
-> > -again:
-> > -     ret = sem_post(&this_task->ready_for_work);
-> > -     BUG_ON(ret);
-> > -     mutex_lock(&sched->start_work_mutex);
-> > -     mutex_unlock(&sched->start_work_mutex);
-> >
-> > -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> > +     while (!sched->thread_funcs_exit) {
-> > +             ret = sem_post(&this_task->ready_for_work);
-> > +             BUG_ON(ret);
-> > +             mutex_lock(&sched->start_work_mutex);
-> > +             mutex_unlock(&sched->start_work_mutex);
-> >
-> > -     for (i = 0; i < this_task->nr_events; i++) {
-> > -             this_task->curr_event = i;
-> > -             perf_sched__process_event(sched, this_task->atoms[i]);
-> > -     }
-> > +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
-> >
-> > -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> > -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> > -     ret = sem_post(&this_task->work_done_sem);
-> > -     BUG_ON(ret);
-> > +             for (i = 0; i < this_task->nr_events; i++) {
-> > +                     this_task->curr_event = i;
-> > +                     perf_sched__process_event(sched, this_task->atoms[i]);
-> > +             }
-> >
-> > -     mutex_lock(&sched->work_done_wait_mutex);
-> > -     mutex_unlock(&sched->work_done_wait_mutex);
-> > +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
-> > +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
-> > +             ret = sem_post(&this_task->work_done_sem);
-> > +             BUG_ON(ret);
-> >
-> > -     goto again;
-> > +             mutex_lock(&sched->work_done_wait_mutex);
-> > +             mutex_unlock(&sched->work_done_wait_mutex);
-> > +     }
-> > +     return NULL;
-> >  }
-> >
-> >  static void create_tasks(struct perf_sched *sched)
-> > +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> > +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> >  {
-> >       struct task_desc *task;
-> >       pthread_attr_t attr;
-> > @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void wait_for_tasks(struct perf_sched *sched)
-> > +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >       u64 cpu_usage_0, cpu_usage_1;
-> >       struct task_desc *task;
-> > @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void run_one_test(struct perf_sched *sched)
-> > +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >       u64 T0, T1, delta, avg_delta, fluct;
-> >
-> > @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
-> >       print_task_traces(sched);
-> >       add_cross_task_wakeups(sched);
-> >
-> > +     sched->thread_funcs_exit = false;
-> >       create_tasks(sched);
-> >       printf("------------------------------------------------------------\n");
-> >       for (i = 0; i < sched->replay_repeat; i++)
-> >               run_one_test(sched);
-> >
-> > +     sched->thread_funcs_exit = true;
-> > +     mutex_unlock(&sched->start_work_mutex);
-> > +     mutex_unlock(&sched->work_done_wait_mutex);
->
-> I think you still need to wait for the threads to exit before
-> destroying the mutexes.
+On 8/26/22 06:15, Aleksandr Nogikh wrote:
+> Syzbot would have included the USB mailing list and the USB
+> maintainers if it saw that the bug might be related to this subsystem.
+> The bot's guess was that it was the BLOCK LAYER subsystem, so it Cc'd
+> only the general lists and linux-block@vger.kernel.org
+> 
+> Is there anything in this bug report that can reliably indicate that
+> the bug has to do with USB? If there is, we can definitely adjust our
+> guilty subsystem recognition logic.
 
-This is a pre-existing issue and beyond the scope of this patch set.
+Hi Aleksandr,
+  I may have been to fast with my conclusion that the root cause is in 
+the USB subsystem.
+
+Regarding your question, can syzbot inspect the console log and scan for 
+"scsi host%d: %s" strings? The text next to the colon comes from the 
+SCSI host template "name" member and hence indicates which SCSI LLD 
+driver is involved.
 
 Thanks,
-Ian
 
-> >       return 0;
-> >  }
-> >
->
+Bart.
