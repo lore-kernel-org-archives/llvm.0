@@ -1,44 +1,56 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F1F4C94
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:48:21 +0000 (UTC)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11cb3c811d9so3563725fac.1
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:48:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700E84C94
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:52:22 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id bq11so3088280wrb.12
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/FKV8NfeABOB5rtbgWYmbTPwp8Mt3Wy5s1mzFHehzCI=;
+        b=iGdU9mei9DSZLuS7uHMIilQd2lkoyJdSwxMI0mReZhtN5gkUjZ/wrXKT6lcyVWfI9/
+         tSFEDjKo7eNzCSM30CeVaMzrZNaxDUnrPRphbe/K9PkwnBBazL4zX7PI3/+oGgwh5Q7L
+         3AKr1t8J/rXzDnfuOfT7+4CTJJ1LAPtw04XEl6tR5l3+D4KBpg52ot7ATUaTg8NZUb3k
+         or4JQYq+nMk1Gs+Q2/BmuTpabwasj/n4rO+JuYwI5336KrkHtYygVkgHP5DTbK8WQ4/N
+         d1tPQHY3ycYE50AtVpwKar6L2Df6EgDYGz2wDtXA7euueSCPx5CC1D0PpALlrwPPqOhh
+         ysmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=+sFY7D0l2mnCR+yBDf+opIgpmAA2WEbHZKwcSvQkuz0=;
-        b=0nCuo7qPL/8Sz3uoG565gwZU69wHi3V4navaQ8+PdDX2Oahq+dS2QFVQtt7S0rv6IF
-         FlXV9Es1tnITisubzoOyTDrtl4ejZ4Mrg20r0GWgFX7HhzdQBib1QyjhRhT85LQOvglO
-         x+GoAdVlBy6VN6V0IOdoG5fE0+gIzvqY/M0pL0etuw3G1Ia88RPBzBvKWMYGCjg86tYV
-         acdd8s1XPwz955+g/4rAN3ZRn+AWDgF2h2Jf/RFRv+hx9Ny1gCrXiDHu/cjljHFgyJXJ
-         9Qr0yjnq1DHaVEy5e4ptSgm6y7QhFCczuZOKjhy6IaitIe0mH93bI3qdvSxTlqvJuL/Y
-         FtXw==
-X-Gm-Message-State: ACgBeo32d36VzIBPVibqmpK8kspz/rP7dagMTQej9PJuWd+I/I8kLv/E
-	qaec2L6qAeRmGBc3vRzz8g6jC8AgiTcd6CAg+D0=
-X-Google-Smtp-Source: AA6agR5zjotJNa9cZNMRCVklNAcj4vN3wXvrE7llGej28AXg2L/RwCW7jMpT+qihLPXgoIk9036xBPWFpfl3w2jC2PQ=
-X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
- em4-20020a0568705b8400b0010cd1fa2f52mr2736185oab.92.1661546900488; Fri, 26
- Aug 2022 13:48:20 -0700 (PDT)
+        bh=/FKV8NfeABOB5rtbgWYmbTPwp8Mt3Wy5s1mzFHehzCI=;
+        b=OsJUyoKL0+LX47KqOfPZ4OxBakpnCd00HKgAjoE+Wr3wFxhK1KT8jKtbeArjiqfyKj
+         lYXSy9XyTu6m59+13TBDz/jIvACUO0FNCsJoA+wfbevRCf8Q3JHBI93wlGROa0KBen9K
+         3rJky5jSG8+whfZut6fFHkkULIjzXTYdDKi92SsC/QDDtWs7YmZenT09l+PIdcgCTbOA
+         qSVBOjwb8KNTfaCInLelJs5nxVN6AKd9Al4+KbvBw9nNVcv4bnUPyZ15zcXLFStlQr7X
+         jVn4WY1qAu1YteDEjcbHuYdlIDSEWgtBDqi0aLk1ihwOaELWCeZNsSMKC4ADasQMR5lP
+         TKsw==
+X-Gm-Message-State: ACgBeo3rtCayNKrzbRRIHF59WFp02QNyk85lm0TVrKAZ0+BRPUeMpGyr
+	+/6gj+TyoR4NUF2Ne9Gza2cFpNq6znFZvkYt6C0vdw==
+X-Google-Smtp-Source: AA6agR6ZX12RvsXCpQ9Cff+4vP0t6K9e1t4KciZ/ugNMY7xpQnsmru7piccWOa5mOvIGJPe4W+8t0gQU5sT8viOyTYU=
+X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
+ i9-20020a0560001ac900b002207f4049e3mr738777wry.40.1661547139826; Fri, 26 Aug
+ 2022 13:52:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
- <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
- <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com> <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
- <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com> <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
-In-Reply-To: <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Fri, 26 Aug 2022 13:48:09 -0700
-Message-ID: <CAM9d7chNUhmULYUfkEuBC3LcD08y7hLGmFn0qeX83KqoPksvCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+ <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com> <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+ <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com> <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
+In-Reply-To: <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 26 Aug 2022 13:52:07 -0700
+Message-ID: <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
@@ -64,42 +76,37 @@ Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 12:36 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Fri, Aug 26, 2022 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> On 26/08/22 21:26, Namhyung Kim wrote:
-> > On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
-
-> >> In the previous code the threads were blocked on mutexes that were
-> >> stack allocated and the stack memory went away. You are correct to say
-> >> that to those locks I added an init and destroy call. The lifetime of
-> >> the mutex was wrong previously and remains wrong in this change.
+> On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
 > >
-> > I think you fixed the lifetime issue with sched->thread_funcs_exit here.
-> > All you need to do is calling pthread_join() after the mutex_unlock, no?
+> > On 26/08/22 22:00, Namhyung Kim wrote:
+> > > On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> > >> Below seems adequate for now, at least logically, but maybe it
+> > >> would confuse clang thread-safety analysis?
+> > >
+> > > I think it's not just about locks, the exit_browser should bail out early
+> > > if the setup code was not called.
+> >
+> > In those cases, use_browser is 0 or -1 unless someone has inserted
+> > an invalid perf config like "tui.script=on" or "gtk.script=on".
+> > So currently, in cases where exit_browser() is called without
+> > setup_browser(), it does nothing.  Which means it is only the
+> > unconditional mutex_destroy() that needs to be conditional.
 >
-> Like this maybe:
+> Yeah there's a possibility that it can be called with > 0 use_browser
+> on some broken config or something.  So I think it's safer and better
+> for future changes.
 
-Yeah, but at this point we might want to factor it out as a function like
-destroy_tasks().
+I'd thought about a:
+static bool ui__lock_initialized;
+but the issue is shouldn't it be atomic? Maybe we should guard it with
+a lock? Then we are back where we started. Having a clean init/exit
+invariant would be best but such a change has the potential to be
+large and out of scope here.
 
 Thanks,
-Namhyung
+Ian
 
->
-> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> index b483ff0d432e..8090c1218855 100644
-> --- a/tools/perf/builtin-sched.c
-> +++ b/tools/perf/builtin-sched.c
-> @@ -3326,6 +3326,13 @@ static int perf_sched__replay(struct perf_sched *sched)
->         sched->thread_funcs_exit = true;
->         mutex_unlock(&sched->start_work_mutex);
->         mutex_unlock(&sched->work_done_wait_mutex);
-> +       /* Get rid of threads so they won't be upset by mutex destruction */
-> +       for (i = 0; i < sched->nr_tasks; i++) {
-> +               int err = pthread_join(sched->tasks[i]->thread, NULL);
-> +
-> +               if (err)
-> +                       pr_err("pthread_join() failed for task nr %lu, error %d\n", i, err);
-> +       }
->         return 0;
->  }
+> Thanks,
+> Namhyung
