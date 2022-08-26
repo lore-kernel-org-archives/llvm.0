@@ -1,45 +1,42 @@
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE94B441B
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:00:55 +0000 (UTC)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so3164693fac.12
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 12:00:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEB9441B
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:08:18 +0000 (UTC)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so2378433fac.4
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 12:08:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=0KBifXuEASh6HGcgH149nanGpV1JiDt7DyDBHIsc/vU=;
-        b=ZX7+F5m95xE/rrAKXLexap2HHMagWKtRp9sA+BJo+xlq6pLCJ6ZtK0J81u/6K7chsB
-         KLlv1gIkOrA/cL2ZtcQSud9wyogSsm0WvFzohG2UYfn1/QwhAAWBM5uPs2JzzLdZj9op
-         vHxX8uSinmhnU+l+64j4jGz2/ZyU54K/PoA5AM7tWAqhWpdNC85vIgQXVk6RLYI+9pw7
-         efteTDcywWnrHjSZ/ruQ1SrKvuWfps/6BfI487br6gwufw9koClCeo53Sk96HN/M3Cnd
-         TrAtY5CxLTLs7MIg50UZxOSjOIHd61EuNj7yInI7ICERzQp5smNIE6rLpBDmc5r2EIUU
-         2vBw==
-X-Gm-Message-State: ACgBeo18LwFtpSlii4szkZnMt0IQsYVbxqG8dDZD+k4TSji0d3vEBhcs
-	ZN/kfQ0jeppfKnXWRNwviptXJakHwgDm6XK2Mvg=
-X-Google-Smtp-Source: AA6agR6xC2kKRjF0UcRxB7gFaYxM1KXLm8OEIF0oTIJbOW+ut9BYRZXoYrKGvWMQJZt27A24Nij44wvtUz4u8g4yTkg=
+        bh=squGQK7T4fhu/A2+puelG7xJpkvvOARv9nk4HKG56Rg=;
+        b=DF+3cm5rrVCppuWJ+bvsHQF/hj0jryiOHCBlnQp84LC1IWgCVT37X9K5YK6cU4RiRQ
+         Hk8GVAB/i19KVt3gSjFH76sh1BGNSCQj8FCgrsVNvhEP3z1x2y4GFwpYjqy0HUu4gL4a
+         hxf2y96Kx6HG6C61IeZ4vWwddorGvHm0aEY8Z0lYuE68/vkOVxwgnLtH+X+gw3L4Rn8Q
+         e/UEipS9XEvoSn/81WgNvJ0VJKgH/hoMcY9EFml05r3vcPMh4sq0XVjD0JZ3Fq3xR814
+         VQSqIoV/X//QU9BZsdQio78TQ5FhCK+fu+QU20QeL/TvVvG4eqtlJVk015aiN4EFgZz5
+         x2wg==
+X-Gm-Message-State: ACgBeo1jPG3+sLOIxi6AyeI3uuCRC61d8cPrq7fMytsj7Zt7NTJ+xKnJ
+	TSs97Hw7pP8oQcmahCSOrwIq5SCM2pbI1ukm1A4=
+X-Google-Smtp-Source: AA6agR58gxvkRi0KncHAt6chs7qM7Vpd1++erLoRCXwUTB64LZQ+R+YGyhU1eRiWnbszMjVWh1LNiVpB+ROvHpVBb9E=
 X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
- a4-20020a056870a18400b00116bd397f94mr2563648oaf.5.1661540454852; Fri, 26 Aug
- 2022 12:00:54 -0700 (PDT)
+ a4-20020a056870a18400b00116bd397f94mr2582144oaf.5.1661540897768; Fri, 26 Aug
+ 2022 12:08:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
- <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com> <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
- <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com> <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
- <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
-In-Reply-To: <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+References: <20220826164242.43412-1-irogers@google.com>
+In-Reply-To: <20220826164242.43412-1-irogers@google.com>
 From: Namhyung Kim <namhyung@kernel.org>
-Date: Fri, 26 Aug 2022 12:00:43 -0700
-Message-ID: <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+Date: Fri, 26 Aug 2022 12:08:06 -0700
+Message-ID: <CAM9d7cgQZsbwWSdRNQqUE+GsSgPVqFmKs9LJ5b6ta2-dax5T2Q@mail.gmail.com>
+Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
 	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
@@ -52,7 +49,8 @@ Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
 	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
 	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
-	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, 
+	Adrian Hunter <adrian.hunter@intel.com>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
 	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
 	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
 	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
@@ -64,46 +62,107 @@ Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> Below seems adequate for now, at least logically, but maybe it
-> would confuse clang thread-safety analysis?
+On Fri, Aug 26, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
+>
+> When fixing a locking race and memory leak in:
+> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+>
+> It was requested that debug mutex code be separated out into its own
+> files. This was, in part, done by Pavithra Gurushankar in:
+> https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
+>
+> These patches fix issues with the previous patches, add in the
+> original dso->nsinfo fix and then build on our mutex wrapper with
+> clang's -Wthread-safety analysis. The analysis found missing unlocks
+> in builtin-sched.c which are fixed and -Wthread-safety is enabled by
+> default when building with clang.
+>
+> v4. Adds a comment for the trylock result, fixes the new line (missed
+>     in v3) and removes two blank lines as suggested by Adrian Hunter.
+> v3. Adds a missing new line to the error messages and removes the
+>     pshared argument to mutex_init by having two functions, mutex_init
+>     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
+> v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
+>     annotations as requested by Arnaldo and Namhyung. A boolean is
+>     added to builtin-sched.c to terminate thread funcs rather than
+>     leaving them blocked on delted mutexes.
+>
+> Ian Rogers (17):
+>   perf bench: Update use of pthread mutex/cond
+>   perf tests: Avoid pthread.h inclusion
+>   perf hist: Update use of pthread mutex
+>   perf bpf: Remove unused pthread.h include
+>   perf lock: Remove unused pthread.h include
+>   perf record: Update use of pthread mutex
+>   perf sched: Update use of pthread mutex
+>   perf ui: Update use of pthread mutex
+>   perf mmap: Remove unnecessary pthread.h include
+>   perf dso: Update use of pthread mutex
+>   perf annotate: Update use of pthread mutex
+>   perf top: Update use of pthread mutex
+>   perf dso: Hold lock when accessing nsinfo
+>   perf mutex: Add thread safety annotations
+>   perf sched: Fixes for thread safety analysis
+>   perf top: Fixes for thread safety analysis
+>   perf build: Enable -Wthread-safety with clang
+>
+> Pavithra Gurushankar (1):
+>   perf mutex: Wrapped usage of mutex and cond
 
-I think it's not just about locks, the exit_browser should bail out early
-if the setup code was not called.
+For the patches 1-7 and 10-13
+
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
 Thanks,
 Namhyung
 
 
 >
-> diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
-> index 25ded88801a3..6d81be6a349e 100644
-> --- a/tools/perf/ui/setup.c
-> +++ b/tools/perf/ui/setup.c
-> @@ -73,9 +73,17 @@ int stdio__config_color(const struct option *opt __maybe_unused,
->         return 0;
->  }
+>  tools/perf/Makefile.config                 |   5 +
+>  tools/perf/bench/epoll-ctl.c               |  33 +++---
+>  tools/perf/bench/epoll-wait.c              |  33 +++---
+>  tools/perf/bench/futex-hash.c              |  33 +++---
+>  tools/perf/bench/futex-lock-pi.c           |  33 +++---
+>  tools/perf/bench/futex-requeue.c           |  33 +++---
+>  tools/perf/bench/futex-wake-parallel.c     |  33 +++---
+>  tools/perf/bench/futex-wake.c              |  33 +++---
+>  tools/perf/bench/numa.c                    |  93 ++++++----------
+>  tools/perf/builtin-inject.c                |   4 +
+>  tools/perf/builtin-lock.c                  |   1 -
+>  tools/perf/builtin-record.c                |  13 ++-
+>  tools/perf/builtin-sched.c                 | 105 +++++++++---------
+>  tools/perf/builtin-top.c                   |  45 ++++----
+>  tools/perf/tests/mmap-basic.c              |   2 -
+>  tools/perf/tests/openat-syscall-all-cpus.c |   2 +-
+>  tools/perf/tests/perf-record.c             |   2 -
+>  tools/perf/ui/browser.c                    |  20 ++--
+>  tools/perf/ui/browsers/annotate.c          |  12 +--
+>  tools/perf/ui/setup.c                      |   5 +-
+>  tools/perf/ui/tui/helpline.c               |   5 +-
+>  tools/perf/ui/tui/progress.c               |   8 +-
+>  tools/perf/ui/tui/setup.c                  |   8 +-
+>  tools/perf/ui/tui/util.c                   |  18 ++--
+>  tools/perf/ui/ui.h                         |   4 +-
+>  tools/perf/util/Build                      |   1 +
+>  tools/perf/util/annotate.c                 |  15 +--
+>  tools/perf/util/annotate.h                 |   4 +-
+>  tools/perf/util/bpf-event.h                |   1 -
+>  tools/perf/util/build-id.c                 |  12 ++-
+>  tools/perf/util/dso.c                      |  19 ++--
+>  tools/perf/util/dso.h                      |   4 +-
+>  tools/perf/util/hist.c                     |   6 +-
+>  tools/perf/util/hist.h                     |   4 +-
+>  tools/perf/util/map.c                      |   3 +
+>  tools/perf/util/mmap.h                     |   1 -
+>  tools/perf/util/mutex.c                    | 119 +++++++++++++++++++++
+>  tools/perf/util/mutex.h                    | 108 +++++++++++++++++++
+>  tools/perf/util/probe-event.c              |   3 +
+>  tools/perf/util/symbol.c                   |   4 +-
+>  tools/perf/util/top.h                      |   5 +-
+>  41 files changed, 569 insertions(+), 323 deletions(-)
+>  create mode 100644 tools/perf/util/mutex.c
+>  create mode 100644 tools/perf/util/mutex.h
 >
-> +/*
-> + * exit_browser() can get called without setup_browser() having been called
-> + * first, so it is necessary to keep track of whether ui__lock has been
-> + * initialized.
-> + */
-> +static bool ui__lock_initialized;
-> +
->  void setup_browser(bool fallback_to_pager)
->  {
->         mutex_init(&ui__lock);
-> +       ui__lock_initialized = true;
->         if (use_browser < 2 && (!isatty(1) || dump_trace))
->                 use_browser = 0;
->
-> @@ -118,5 +126,6 @@ void exit_browser(bool wait_for_ok)
->         default:
->                 break;
->         }
-> -       mutex_destroy(&ui__lock);
-> +       if (ui__lock_initialized)
-> +               mutex_destroy(&ui__lock);
->  }
+> --
+> 2.37.2.672.g94769d06f0-goog
 >
