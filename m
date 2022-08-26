@@ -1,118 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29CF4401
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9888C433C1;
-	Fri, 26 Aug 2022 18:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661538105;
-	bh=P+hcLIrD/F79al7x8aLPgb1+lPQ8gMRGke9HgDVnG/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z3yHxCqi3J/rAwrRsJLFeT4icMMpxhb3OpvWJ9DJWaYvDvGzOL+TCnbC6/PgoVUUR
-	 XNdnqO731drISisd0y80CmEDHwyJVand2PAe3oPWitY9mWShrepAIMgWIWhJXXgNbR
-	 kKKlkizBFCHMEjaZGg8HuPrylFmSMtJM0ce+ORSfrUpoqjbDxevVp9TebNHvX/AKv9
-	 DQcmWDKBGCK144wO/AvrTXOLl1C5+rgX6/OzH7j2Sdc8y1t5zCewgTCWvae/9imSU6
-	 zov6lclxSgDpvuhAKX5LJgBCEIXC3ILbKJ7kbLCfCEjrfwFipx1L1Tcb7tyVZ7UOKx
-	 FCfN7vdTOPObg==
-Date: Fri, 26 Aug 2022 11:21:43 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, x86@kernel.org,
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-	Fangrui Song <maskray@google.com>,
-	Alexey Alexandrov <aalexand@google.com>,
-	Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/
- for as-option
-Message-ID: <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-2-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32CB4401
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:26:54 +0000 (UTC)
+Received: by mail-ot1-f46.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so1542082oti.9
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 11:26:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Nn+QtQucyfx6hcyPZtuaj6djQCVOs1Ze3pe5mHGUDSg=;
+        b=kvUCeL+J3LpLnHj+gQ+6aHZySl6+u520Gw+T4pbYelmnmL/VhLfnMFT5tD4/fXeeL0
+         vmbkSPQ47wd+bt1PpG8Z3HUwzDUU+sMJ0EHgXyHCfc6tD/gxeWyNWpU3FXettZvHiPF5
+         xuawxVigeDrdZ58ZibgbUU80G03AWuA5gQaLL3NflVG2P+1/Dik7xd7Q75z3rwAztXOV
+         TtmXrSTwAAhmIgbAy7Os0q34sWead1TIJLknbRT+uJHpYmrdHvUsxDAKGBYoLZtFG2/k
+         mGM3QqbUOn1CC9fTAbrLTQlIZpyrbMB1sHan4eRfS/50d/kX+slXvp0oDd5chXu245y7
+         6jgg==
+X-Gm-Message-State: ACgBeo2UnmL+sE+hw1UGmuwYaxCjdDK83gFq1VU+7Zhc8W9uP0N2dnie
+	C6B9kP4qLWpAN7hhC/kr6FsVXNx41axb13URI6k=
+X-Google-Smtp-Source: AA6agR4N0hqbt734SQVaauOAORRXZ1pYaDIcvUCo7verqNVGgH5aMY/FntbjVqmez72p0/J2Ly8puUOMKyj9MyjthsQ=
+X-Received: by 2002:a9d:6f18:0:b0:638:b4aa:a546 with SMTP id
+ n24-20020a9d6f18000000b00638b4aaa546mr1811694otq.124.1661538413803; Fri, 26
+ Aug 2022 11:26:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826181035.859042-2-ndesaulniers@google.com>
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-17-irogers@google.com>
+ <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com> <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
+ <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com> <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+In-Reply-To: <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Fri, 26 Aug 2022 11:26:42 -0700
+Message-ID: <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
+Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
+To: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
+	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
+	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
+	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
+	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
+	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
+	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Remi Bernon <rbernon@codeweavers.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nick,
+On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >
+> > On 26/08/22 19:06, Ian Rogers wrote:
+> > > On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> > >>
+> > >> On 24/08/22 18:38, Ian Rogers wrote:
+> > >>> Add annotations to describe lock behavior. Add unlocks so that mutexes
+> > >>> aren't conditionally held on exit from perf_sched__replay. Add an exit
+> > >>> variable so that thread_func can terminate, rather than leaving the
+> > >>> threads blocked on mutexes.
+> > >>>
+> > >>> Signed-off-by: Ian Rogers <irogers@google.com>
+> > >>> ---
+> > >>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
+> > >>>  1 file changed, 29 insertions(+), 17 deletions(-)
+> > >>>
+> > >>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> > >>> index 7e4006d6b8bc..b483ff0d432e 100644
+> > >>> --- a/tools/perf/builtin-sched.c
+> > >>> +++ b/tools/perf/builtin-sched.c
+> > >>> @@ -246,6 +246,7 @@ struct perf_sched {
+> > >>>       const char      *time_str;
+> > >>>       struct perf_time_interval ptime;
+> > >>>       struct perf_time_interval hist_time;
+> > >>> +     volatile bool   thread_funcs_exit;
+> > >>>  };
+> > >>>
+> > >>>  /* per thread run time data */
+> > >>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
+> > >>>       prctl(PR_SET_NAME, comm2);
+> > >>>       if (fd < 0)
+> > >>>               return NULL;
+> > >>> -again:
+> > >>> -     ret = sem_post(&this_task->ready_for_work);
+> > >>> -     BUG_ON(ret);
+> > >>> -     mutex_lock(&sched->start_work_mutex);
+> > >>> -     mutex_unlock(&sched->start_work_mutex);
+> > >>>
+> > >>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+> > >>> +     while (!sched->thread_funcs_exit) {
+> > >>> +             ret = sem_post(&this_task->ready_for_work);
+> > >>> +             BUG_ON(ret);
+> > >>> +             mutex_lock(&sched->start_work_mutex);
+> > >>> +             mutex_unlock(&sched->start_work_mutex);
+> > >>>
+> > >>> -     for (i = 0; i < this_task->nr_events; i++) {
+> > >>> -             this_task->curr_event = i;
+> > >>> -             perf_sched__process_event(sched, this_task->atoms[i]);
+> > >>> -     }
+> > >>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
+> > >>>
+> > >>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> > >>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> > >>> -     ret = sem_post(&this_task->work_done_sem);
+> > >>> -     BUG_ON(ret);
+> > >>> +             for (i = 0; i < this_task->nr_events; i++) {
+> > >>> +                     this_task->curr_event = i;
+> > >>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
+> > >>> +             }
+> > >>>
+> > >>> -     mutex_lock(&sched->work_done_wait_mutex);
+> > >>> -     mutex_unlock(&sched->work_done_wait_mutex);
+> > >>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
+> > >>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
+> > >>> +             ret = sem_post(&this_task->work_done_sem);
+> > >>> +             BUG_ON(ret);
+> > >>>
+> > >>> -     goto again;
+> > >>> +             mutex_lock(&sched->work_done_wait_mutex);
+> > >>> +             mutex_unlock(&sched->work_done_wait_mutex);
+> > >>> +     }
+> > >>> +     return NULL;
+> > >>>  }
+> > >>>
+> > >>>  static void create_tasks(struct perf_sched *sched)
+> > >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
+> > >>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
+> > >>>  {
+> > >>>       struct task_desc *task;
+> > >>>       pthread_attr_t attr;
+> > >>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
+> > >>>  }
+> > >>>
+> > >>>  static void wait_for_tasks(struct perf_sched *sched)
+> > >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> > >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> > >>>  {
+> > >>>       u64 cpu_usage_0, cpu_usage_1;
+> > >>>       struct task_desc *task;
+> > >>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
+> > >>>  }
+> > >>>
+> > >>>  static void run_one_test(struct perf_sched *sched)
+> > >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
+> > >>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
+> > >>>  {
+> > >>>       u64 T0, T1, delta, avg_delta, fluct;
+> > >>>
+> > >>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
+> > >>>       print_task_traces(sched);
+> > >>>       add_cross_task_wakeups(sched);
+> > >>>
+> > >>> +     sched->thread_funcs_exit = false;
+> > >>>       create_tasks(sched);
+> > >>>       printf("------------------------------------------------------------\n");
+> > >>>       for (i = 0; i < sched->replay_repeat; i++)
+> > >>>               run_one_test(sched);
+> > >>>
+> > >>> +     sched->thread_funcs_exit = true;
+> > >>> +     mutex_unlock(&sched->start_work_mutex);
+> > >>> +     mutex_unlock(&sched->work_done_wait_mutex);
+> > >>
+> > >> I think you still need to wait for the threads to exit before
+> > >> destroying the mutexes.
+> > >
+> > > This is a pre-existing issue and beyond the scope of this patch set.
+> >
+> > You added the mutex_destroy functions in patch 8, so it is still
+> > fallout from that.
+>
+> In the previous code the threads were blocked on mutexes that were
+> stack allocated and the stack memory went away. You are correct to say
+> that to those locks I added an init and destroy call. The lifetime of
+> the mutex was wrong previously and remains wrong in this change.
 
-I think the title would be a little more readable if it was:
+I think you fixed the lifetime issue with sched->thread_funcs_exit here.
+All you need to do is calling pthread_join() after the mutex_unlock, no?
 
-Makefile.compiler: Use KBUILD_AFLAGS for as-option
-
-On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
-> as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-> cause as-option to fail unexpectedly because clang will emit
-> -Werror,-Wunused-command-line-argument for various -m and -f flags for
-> assembler sources.
-> 
-> Callers of as-option (and as-instr) likely want to be adding flags to
-> KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  arch/x86/boot/compressed/Makefile | 5 +++--
->  scripts/Makefile.compiler         | 6 +++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 35ce1a64068b..fb3db714a028 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
->  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
->  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
->  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
-> -# Disable relocation relaxation in case the link is not PIE.
-> -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
->  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
->  
->  # sev.c indirectly inludes inat-table.h which is generated during
-> @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
->  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
->  
->  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> +# Disable relocation relaxation in case the link is not PIE.
-> +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> +
-
-Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
-relaxation") added this to address
-https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
-move it to only being used for the .S files in arch/x86/boot/compressed?
-
->  GCOV_PROFILE := n
->  UBSAN_SANITIZE :=n
->  
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index 94d0d40cddb3..d1739f0d3ce3 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -29,13 +29,13 @@ try-run = $(shell set -e;		\
->  	fi)
->  
->  # as-option
-> -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-> +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
->  
->  as-option = $(call try-run,\
-> -	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-> +	$(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
->  
->  # as-instr
-> -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-> +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
->  
->  as-instr = $(call try-run,\
->  	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+Thanks,
+Namhyung
