@@ -1,38 +1,38 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D333FFE
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:01:39 +0000 (UTC)
-Received: by mail-wm1-f52.google.com with SMTP id ay12so1120958wmb.1
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:01:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DEA4400
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:03:07 +0000 (UTC)
+Received: by mail-wr1-f47.google.com with SMTP id e20so2300128wri.13
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=WMh/N9i6ShI11x5i5Ap5lQ7NbFEh/0/DfXEib5aOdCY=;
-        b=VDo6cjzdWsZBHnzIXKYknGzjCgkrWwZProqnWPZ8SxjsD/gM8En6b7rp3waaPbdon1
-         +LnjeDX4CSII5h6slHdqG+/arAkTvvTXvg6HNwnFFL0XWAhMYRF89Wb/zCDNkLzhqd2Q
-         DE+EAITXLiPzgEb841MSFdX3BHMaGiQf59JVLpm/yn6ZB9BmlyjyKTXUqzWceM/BSRk+
-         PtEL5BeGD3ISC1/7HIeGL2uBbMveJVyqAtc7eUJ6k2+Cp3pCUpuOcCAyyy+QQeopy5LK
-         ea2aafxcIVjj7b1WwTixoRNw5Q3ztokQgwoCYtU+dG/Z3NeUEiYoGI+Qg3n2tLigSVA6
-         q2mQ==
+        bh=8vAGKoF9jgn/tUNVyO8o1ITGDSm2GHRMu0jTib9BiWo=;
+        b=VQfpSKZ5DqVyujy15/8n3f/cLMyp8jjtuDNyiEAs3Ry0RotbMvHdE46jBPSAngsrhX
+         aVJTvw3JXdRJHc5HYOZvA+/heOEFvDdXy1LQItozsbcUKAPRNQn0C7l5fUxOPAf1gJ6v
+         2kun9wRTa8eVI85x9T+Um1Zr+QgFBkZuiefUZSrfH/XZI8XLGOt9G0VSM6B7sc+n/2Av
+         i9xJL6EG24UVlQc3Ii1k43nD4yzm0QcYTnwpZ8JSzENMcQf8JXKbFcRx1ijioz/HwXzt
+         tiB8dsAcGHWzjVDtHjFsJytRfd7oUw8K/YeSz65DdNNE3t4zsa9k00rqk5UZS7aH4CYI
+         sWMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=WMh/N9i6ShI11x5i5Ap5lQ7NbFEh/0/DfXEib5aOdCY=;
-        b=zjcLnoDygOa28/RxytTV5i53roaP0Ef+35Lt9NBnjQx/eK+5e5MLZ77nrZHOV7zPa1
-         MAIa5gAQ+dktgGtiwX3AF/viUBMH7WFgHQF/wtmNWMzKPCNvZj17zcxN95XviLwGlGfi
-         dQC1lSjcDPcKo5SB/XOzKifZVjgkhff5Jbb1fp8A9CZT7WpQgL25Ey+yfkQiM90RIppv
-         iQ+WPCsmmF6miR6VLsw+jRS115HAbeETZxjYR/JkC/3md144w8BahkS5M/vu/bSpoNwO
-         mji0LhVFyEM6dWv0YuZWx/R3Palpwe/y//1yF/5XRkwVWgm8Yyk6rO0I6rRuSDPdwFxH
-         owjQ==
-X-Gm-Message-State: ACgBeo18zlG1OWWrjxTWJtxJLhw/kC3zrsBNoTde2T3uR0/0aEjs0ZJ5
-	hTXi3ukR8db84p9pSC4bUkHiIq9cIzjWAPX/JdJuCQ==
-X-Google-Smtp-Source: AA6agR7E561D8LFsQk4ma8saD3qEm8XGgnRYFQcpKB6y9EhIc7hh55daiPnl77HzuaSBB5Z5DEDhpU7tVi2gK62P8wE=
-X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id
- u8-20020a05600c19c800b003a5ec6a8d16mr159498wmq.182.1661529697614; Fri, 26 Aug
- 2022 09:01:37 -0700 (PDT)
+        bh=8vAGKoF9jgn/tUNVyO8o1ITGDSm2GHRMu0jTib9BiWo=;
+        b=77iHx6ydblVqHK4XTlENMD0Eu73yM0mZbehDZhYmpc9LuvMLWZmIC3ZKE010H5YEeK
+         fwzJ8ICm0qnKl6Ua5q5gmnRTJ7mghtSIXGomwKFhG8zJrH8SJniTxjlST/rMHlE94jBq
+         KQt6+1PFy2R9NUyFTBjX220+p8WVO1fpcpznUTeyGtKxvbxMJwNpxA7hZMfGrkTApqKS
+         UZvY0Y91pdKVRh4wEXj/z8UXwM/EJaj2K/I+nnfRLRxZMiBh1fcHG/eBOLeJUaNzBFvf
+         0d+hdjQ/qYqg31BT0TheWtmAxYN5pGYoXWlqXj7TXWder77uO5WS7QQzy59fMIhwfwvh
+         6Xzw==
+X-Gm-Message-State: ACgBeo0mUR1qKJNl5ztbKkVPjeRvSxFSuTMLMdSaImj0jGjY7cbHyV4n
+	p5AywAIt++AESaiLqmMH6VU5iDSM1HKScFwulv1HEg==
+X-Google-Smtp-Source: AA6agR56LLPgPczHv26VdIBrzy2WI/OHspNLB8HYyLFBpDOrNasYWwIi3kVfMeLR/npl9IPAfjp6/xYQ1KxA/nnEkNI=
+X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id
+ f7-20020a0560001a8700b002222c852f5bmr194383wry.654.1661529785843; Fri, 26 Aug
+ 2022 09:03:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,11 +40,11 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
- <0004776a-8c39-9515-fd4e-01bfe1c4a3eb@intel.com>
-In-Reply-To: <0004776a-8c39-9515-fd4e-01bfe1c4a3eb@intel.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+In-Reply-To: <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 26 Aug 2022 09:01:25 -0700
-Message-ID: <CAP-5=fVxyDEmis7=jV5TPoLPbBR9vVZ6Diug+Zsdirjjxxt8gA@mail.gmail.com>
+Date: Fri, 26 Aug 2022 09:02:53 -0700
+Message-ID: <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
 Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
 To: Adrian Hunter <adrian.hunter@intel.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -73,7 +73,7 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 3:11 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Fri, Aug 26, 2022 at 3:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
 > On 24/08/22 18:38, Ian Rogers wrote:
 > > Switch to the use of mutex wrappers that provide better error checking.
@@ -82,16 +82,6 @@ On Fri, Aug 26, 2022 at 3:11 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 > > ---
 > >  tools/perf/ui/browser.c           | 20 ++++++++++----------
 > >  tools/perf/ui/browsers/annotate.c |  2 +-
->
-> Other changes to tools/perf/ui/browsers/annotate.c are in patch 12
-
-Yes, these changes relate to the ui__lock and the patch 12 changes
-relate to annotation lock. The grouping was done in this way so that
-the patches would build independently.
-
-Thanks,
-Ian
-
 > >  tools/perf/ui/setup.c             |  5 +++--
 > >  tools/perf/ui/tui/helpline.c      |  5 ++---
 > >  tools/perf/ui/tui/progress.c      |  8 ++++----
@@ -219,6 +209,19 @@ Ian
 > >               break;
 > >       }
 > > +     mutex_destroy(&ui__lock);
+>
+> Looks like exit_browser() can be called even when setup_browser()
+> was never called.
+>
+> Note, it also looks like PTHREAD_MUTEX_INITIALIZER is all zeros so
+> pthread won't notice.
+
+Memory sanitizer will notice some cases of this and so I didn't want
+to code defensively around exit being called ahead of setup.
+
+Thanks,
+Ian
+
 > >  }
 > > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
 > > index 298d6af82fdd..db4952f5990b 100644
