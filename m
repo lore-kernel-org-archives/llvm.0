@@ -1,240 +1,193 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536E94C74
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661542588; x=1693078588;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iSj/SuZhPON+rDmdOdwBzP5dOtaScuuVxlTIXwYMKPE=;
-  b=a4fgU3AJzmxacOFpONCJRGB38EsaGTWhMvZVcs5lgDgT4soEL/PEa2iC
-   my35ED6n42gUwaRLp2jf11/EDr9MSnojvVNXNFT6OrQPXygbwTaHnk60Q
-   YXCBax7v2T5MD98oV1RqkvQ8aqRuyhnpmh40CB3rmCN52taaKhkJCk7QO
-   zcg8LKJZpBu+0l33ltaJot4zUh6+csUwJYSnUHaO0Zoj5LN3s2ZsywT52
-   bZdK9kA9QmbaArv4Z036FOYABTB2G35O2uhfpoLYxNZm/b88kQSedSeLI
-   WJj/UT4bsjLQWngCpECrutdUnVA8AgQ54YL2BHOFI8P2cnFzFpHxisySo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294586222"
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="294586222"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,266,1654585200"; 
-   d="scan'208";a="671592528"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.50.209])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 12:36:00 -0700
-Message-ID: <5a0b4083-084a-56b3-a6a1-0fad1100a316@intel.com>
-Date: Fri, 26 Aug 2022 22:35:53 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA3E4C74
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 19:52:17 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id p5so143461lfc.6
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 12:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=mvyJ+Tn0W7GOVforLC2vhB6VbcqK7WY1nq8zsz0n0LY=;
+        b=acyPP/v/CPMGXSHhKa6MmW/eKD8bHJzOuWacVrMhTJmj4IkKzCwNRO9R8tMvzL6J1o
+         pcUi0HEh2C0dSBDXnN3ZkbaoXawDbZsSpZeUmqDQj9TDjEFH51zrMiDSY743SUfMOnkC
+         EIEScB5exyDkMVx63RdbRWnZ1yRDk7+Q6NobjScH9upNrPCDNmUQMQobtxLsJmZ2fZAV
+         GHNfqsAPcUcoUC6mnjno57aB33NnlvPllmG8loT9D/ejrXI8hIUSoqfpaMd74Joz85x8
+         VRUKXpLFgX0Tki+RZm66Qwbd23TQH/+WWD+eCir4By3Puj/syOCumQmpJKcnPH3WkjVs
+         c0oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=mvyJ+Tn0W7GOVforLC2vhB6VbcqK7WY1nq8zsz0n0LY=;
+        b=CfvlXndyf9kNHRRucMBILKpLeV4qOTqYNtasjA1+SF1dHkD0zAIxopjz1BC6R9UPVS
+         lju+Jd0a3Owyl+Ct/l7Klfee4ISwBFJ35zL1bnOOiP7VW3/V0T0GpcuBHHPVshFyJNNU
+         ay9UVvzWHZB/OwPP+AfOd9i/9NdlV7uF/TdeukKhc98v+rjjMrEt/rTWU6OWE1gfcBDq
+         mfmuXPXNJoc9hXaFBQCXdfwE+F84vZY4m41Qupbe44RDJmP7obxi27jNxmeGAwjIqhiq
+         LLnamFK3lEjSsT2nMraXGke/rRNrQC7tLomUpU3VxRmkCRcXTYYnMNQNRQ2xwpNdNf7f
+         nqSA==
+X-Gm-Message-State: ACgBeo2S83Mjc769MVnzyK4bSzzSUTjBzQeFXwI0+9M2p6ovac44TaZw
+	wthQaCTsbACO9afgyd3vHFAStX5KOwr0YyYWuqdFaw==
+X-Google-Smtp-Source: AA6agR7J5J9WO3vFUXX3Xvuw9h7ybz8Uve3m5bhR9VCxiCybF8zHic6IcjhVGvCazKPZQqOXidsCQ5VZ1DIygR3J95c=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr3308421lfr.647.1661543535378; Fri, 26
+ Aug 2022 12:52:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 16/18] perf sched: Fixes for thread safety analysis
-Content-Language: en-US
-To: Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
- =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
- Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
- Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
- <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
- Kim Phillips <kim.phillips@amd.com>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Alexandre Truong <alexandre.truong@arm.com>,
- Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
- Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
- <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
- James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
- Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
- Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
- Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-perf-users <linux-perf-users@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-17-irogers@google.com>
- <a7176263-7dc8-6cbd-af2d-5338c4c4b546@intel.com>
- <CAP-5=fXk+mLv=C0CTrvnBeuhCTAtJ=x2O8D2YqvmVZSMHqcLvQ@mail.gmail.com>
- <b9ffea78-48c4-e2cd-20c2-dc0c9c2c69f7@intel.com>
- <CAP-5=fVXuwxP-REryDShX0RZQjkdy2YJKJ5M+zczUqDE2=59Bg@mail.gmail.com>
- <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7cgcLHYded1w4h22F_KWcHUpuxqak7Ny02Awj1WDFLynDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220826181035.859042-1-ndesaulniers@google.com>
+ <20220826181035.859042-3-ndesaulniers@google.com> <CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com>
+In-Reply-To: <CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 26 Aug 2022 12:52:04 -0700
+Message-ID: <CAKwvOdnPjYNFy3r01TBohrZbRGFafGuWaPa8u6b2JdgH=0tKKg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Makefile.debug: re-enable debug info for .S files
+To: Bill Wendling <morbo@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, 
+	Fangrui Song <maskray@google.com>, Alexey Alexandrov <aalexand@google.com>, 
+	Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 26/08/22 21:26, Namhyung Kim wrote:
-> On Fri, Aug 26, 2022 at 10:48 AM Ian Rogers <irogers@google.com> wrote:
->>
->> On Fri, Aug 26, 2022 at 10:41 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>
->>> On 26/08/22 19:06, Ian Rogers wrote:
->>>> On Fri, Aug 26, 2022 at 5:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>>
->>>>> On 24/08/22 18:38, Ian Rogers wrote:
->>>>>> Add annotations to describe lock behavior. Add unlocks so that mutexes
->>>>>> aren't conditionally held on exit from perf_sched__replay. Add an exit
->>>>>> variable so that thread_func can terminate, rather than leaving the
->>>>>> threads blocked on mutexes.
->>>>>>
->>>>>> Signed-off-by: Ian Rogers <irogers@google.com>
->>>>>> ---
->>>>>>  tools/perf/builtin-sched.c | 46 ++++++++++++++++++++++++--------------
->>>>>>  1 file changed, 29 insertions(+), 17 deletions(-)
->>>>>>
->>>>>> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
->>>>>> index 7e4006d6b8bc..b483ff0d432e 100644
->>>>>> --- a/tools/perf/builtin-sched.c
->>>>>> +++ b/tools/perf/builtin-sched.c
->>>>>> @@ -246,6 +246,7 @@ struct perf_sched {
->>>>>>       const char      *time_str;
->>>>>>       struct perf_time_interval ptime;
->>>>>>       struct perf_time_interval hist_time;
->>>>>> +     volatile bool   thread_funcs_exit;
->>>>>>  };
->>>>>>
->>>>>>  /* per thread run time data */
->>>>>> @@ -633,31 +634,34 @@ static void *thread_func(void *ctx)
->>>>>>       prctl(PR_SET_NAME, comm2);
->>>>>>       if (fd < 0)
->>>>>>               return NULL;
->>>>>> -again:
->>>>>> -     ret = sem_post(&this_task->ready_for_work);
->>>>>> -     BUG_ON(ret);
->>>>>> -     mutex_lock(&sched->start_work_mutex);
->>>>>> -     mutex_unlock(&sched->start_work_mutex);
->>>>>>
->>>>>> -     cpu_usage_0 = get_cpu_usage_nsec_self(fd);
->>>>>> +     while (!sched->thread_funcs_exit) {
->>>>>> +             ret = sem_post(&this_task->ready_for_work);
->>>>>> +             BUG_ON(ret);
->>>>>> +             mutex_lock(&sched->start_work_mutex);
->>>>>> +             mutex_unlock(&sched->start_work_mutex);
->>>>>>
->>>>>> -     for (i = 0; i < this_task->nr_events; i++) {
->>>>>> -             this_task->curr_event = i;
->>>>>> -             perf_sched__process_event(sched, this_task->atoms[i]);
->>>>>> -     }
->>>>>> +             cpu_usage_0 = get_cpu_usage_nsec_self(fd);
->>>>>>
->>>>>> -     cpu_usage_1 = get_cpu_usage_nsec_self(fd);
->>>>>> -     this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
->>>>>> -     ret = sem_post(&this_task->work_done_sem);
->>>>>> -     BUG_ON(ret);
->>>>>> +             for (i = 0; i < this_task->nr_events; i++) {
->>>>>> +                     this_task->curr_event = i;
->>>>>> +                     perf_sched__process_event(sched, this_task->atoms[i]);
->>>>>> +             }
->>>>>>
->>>>>> -     mutex_lock(&sched->work_done_wait_mutex);
->>>>>> -     mutex_unlock(&sched->work_done_wait_mutex);
->>>>>> +             cpu_usage_1 = get_cpu_usage_nsec_self(fd);
->>>>>> +             this_task->cpu_usage = cpu_usage_1 - cpu_usage_0;
->>>>>> +             ret = sem_post(&this_task->work_done_sem);
->>>>>> +             BUG_ON(ret);
->>>>>>
->>>>>> -     goto again;
->>>>>> +             mutex_lock(&sched->work_done_wait_mutex);
->>>>>> +             mutex_unlock(&sched->work_done_wait_mutex);
->>>>>> +     }
->>>>>> +     return NULL;
->>>>>>  }
->>>>>>
->>>>>>  static void create_tasks(struct perf_sched *sched)
->>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
->>>>>> +     EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
->>>>>>  {
->>>>>>       struct task_desc *task;
->>>>>>       pthread_attr_t attr;
->>>>>> @@ -687,6 +691,8 @@ static void create_tasks(struct perf_sched *sched)
->>>>>>  }
->>>>>>
->>>>>>  static void wait_for_tasks(struct perf_sched *sched)
->>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
->>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
->>>>>>  {
->>>>>>       u64 cpu_usage_0, cpu_usage_1;
->>>>>>       struct task_desc *task;
->>>>>> @@ -738,6 +744,8 @@ static void wait_for_tasks(struct perf_sched *sched)
->>>>>>  }
->>>>>>
->>>>>>  static void run_one_test(struct perf_sched *sched)
->>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
->>>>>> +     EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
->>>>>>  {
->>>>>>       u64 T0, T1, delta, avg_delta, fluct;
->>>>>>
->>>>>> @@ -3309,11 +3317,15 @@ static int perf_sched__replay(struct perf_sched *sched)
->>>>>>       print_task_traces(sched);
->>>>>>       add_cross_task_wakeups(sched);
->>>>>>
->>>>>> +     sched->thread_funcs_exit = false;
->>>>>>       create_tasks(sched);
->>>>>>       printf("------------------------------------------------------------\n");
->>>>>>       for (i = 0; i < sched->replay_repeat; i++)
->>>>>>               run_one_test(sched);
->>>>>>
->>>>>> +     sched->thread_funcs_exit = true;
->>>>>> +     mutex_unlock(&sched->start_work_mutex);
->>>>>> +     mutex_unlock(&sched->work_done_wait_mutex);
->>>>>
->>>>> I think you still need to wait for the threads to exit before
->>>>> destroying the mutexes.
->>>>
->>>> This is a pre-existing issue and beyond the scope of this patch set.
->>>
->>> You added the mutex_destroy functions in patch 8, so it is still
->>> fallout from that.
->>
->> In the previous code the threads were blocked on mutexes that were
->> stack allocated and the stack memory went away. You are correct to say
->> that to those locks I added an init and destroy call. The lifetime of
->> the mutex was wrong previously and remains wrong in this change.
-> 
-> I think you fixed the lifetime issue with sched->thread_funcs_exit here.
-> All you need to do is calling pthread_join() after the mutex_unlock, no?
+On Fri, Aug 26, 2022 at 11:41 AM Bill Wendling <morbo@google.com> wrote:
+>
+> On Fri, Aug 26, 2022 at 11:10 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Alexey reported that the fraction of unknown filename instances in
+> > kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+> > to assembler defined symbols, which regressed as a result of:
+> >
+> > commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+> >
+> > In that commit, I allude to restoring debug info for assembler defined
+> > symbols in a follow up patch, but it seems I forgot to do so in
+> >
+> > commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
+> >
+> > This patch does a few things:
+> > 1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
+> >    the assembler to emit debug info. But this can cause an issue for
+> >    folks using a newer compiler but older assembler, because the
+> >    implicit default DWARF version changed from v4 to v5 in gcc-11 and
+> >    clang-14.
+> > 2. If the user is using CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, use a
+> >    version check to explicitly set -Wa,-gdwarf-<version> for the
+> >    assembler. There's another problem with this; GAS only gained support
+> >    for explicit DWARF versions 3-5 in the 2.36 GNU binutils release.
+> > 3. Wrap -Wa,-gdwarf-<version> in as-option call to test whether the
+> >    assembler supports that explicit DWARF version.
+> >
+> > Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
+> > Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+> > Reported-by: Alexey Alexandrov <aalexand@google.com>
+> > Reported-by: Bill Wendling <morbo@google.com>
+> > Reported-by: Greg Thelen <gthelen@google.com>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> >  scripts/Makefile.debug | 22 ++++++++++++++++++----
+> >  1 file changed, 18 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> > index 9f39b0130551..a7a6da7f6e7d 100644
+> > --- a/scripts/Makefile.debug
+> > +++ b/scripts/Makefile.debug
+> > @@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
+> >  DEBUG_CFLAGS   += -gsplit-dwarf
+> >  else
+> >  DEBUG_CFLAGS   += -g
+> > +KBUILD_AFLAGS  += -g
+> >  endif
+> >
+> > -ifndef CONFIG_AS_IS_LLVM
+> > -KBUILD_AFLAGS  += -Wa,-gdwarf-2
+> > +ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> > +# gcc-11+, clang-14+
+> > +ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o $(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
+>
+> Do you think this would be better as a macro? Maybe something like:
+>
+> if $(call cc-min-version,110000,140000)
+>
+> where the first argument is GCC's min version and second Clang's min
+> version. It would be more readable and reusable.
 
-Like this maybe:
+Yeah!
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index b483ff0d432e..8090c1218855 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -3326,6 +3326,13 @@ static int perf_sched__replay(struct perf_sched *sched)
- 	sched->thread_funcs_exit = true;
- 	mutex_unlock(&sched->start_work_mutex);
- 	mutex_unlock(&sched->work_done_wait_mutex);
-+	/* Get rid of threads so they won't be upset by mutex destruction */
-+	for (i = 0; i < sched->nr_tasks; i++) {
-+		int err = pthread_join(sched->tasks[i]->thread, NULL);
-+
-+		if (err)
-+			pr_err("pthread_join() failed for task nr %lu, error %d\n", i, err);
-+	}
- 	return 0;
- }
- 
+I was looking at cc-ifversion, which has a bug in that it specifically
+uses CONFIG_GCC_VERSION.  I think I sent a series maybe a year or two
+ago trying to remove all users of that macro; I think most landed but
+not all and I never pursued it to completion.  Also, I think there's
+one user remaining in the AMDGPU drivers; looks like they're been
+reducing their dependency on that SIMD hack I wrote for them years ago
+after propagating it to parts of their tree, but one user remains.
+Perhaps I can just open code it there, or replace it with something
+new like you suggest.
+
+Such a macro would need to consider whether CC_IS_GCC vs CC_IS_CLANG;
+I could imagine we might need a version check for both, or just one of
+the two compilers.
+
+Ugh, logical OR in GNU make is supported by use of the filter macro...yuck.
+
+ifneq ($(filter y, $(call gcc-min-version, 110000), $(call
+clang-min-version, 140000),)
+# add gcc-11+, clang-14+ flag
+endif
+
+or maybe as you suggest:
+
+ifneq ($(call cc-min-version,110000,140000),)
+# add gcc-11+, clang-14+ flag
+endif
+
+where the newly minted cc-min-version is implemented in terms of the
+newly minted gcc-min-version and clang-min-version.  Then I can use
+cc-min-version in this series, and replace cc-ifversion in AMDGPU with
+gcc-min-version.  That way, we create composable wrappers that are
+readable and reusable.
+
+>
+> -bw
+>
+> > +dwarf-version-y := 5
+> > +else
+> > +dwarf-version-y := 4
+> >  endif
+> > -
+> > -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> > +else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
+> >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
+> >  DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
+> >  endif
+> >
+> > +# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
+> > +# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
+> > +ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
+> > +KBUILD_AFLAGS  += -Wa,-gdwarf-$(dwarf-version-y)
+> > +else
+> > +ifndef CONFIG_AS_IS_LLVM
+> > +KBUILD_AFLAGS  += -Wa,-gdwarf-2
+> > +endif
+> > +endif
+> > +
+> >  ifdef CONFIG_DEBUG_INFO_REDUCED
+> >  DEBUG_CFLAGS   += -fno-var-tracking
+> >  ifdef CONFIG_CC_IS_GCC
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >
 
 
+
+-- 
+Thanks,
+~Nick Desaulniers
