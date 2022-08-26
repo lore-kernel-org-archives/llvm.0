@@ -1,102 +1,118 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204454401
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:10:56 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-337ed9110c2so36981267b3.15
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 11:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc;
-        bh=CWU/c+Z/T3afmWH8jUSRUPrlGa0DK6zNkVSVmthE7JY=;
-        b=J+AQGYjSJRFoIHL2qT5xdAZvDrv7rB5xy/XhHbqmf4gaE97fgjZ/gsV7Bj3BJxJ6C+
-         FPRauz+dGA3SM+kwveIWXCZxJ7Lo09AWQQ48FIY0hXIPvqLTUVr2mNyYvf0+hQLa5dRB
-         p8jEAl2BGy5VXM7O9Hc7ChpszUItzykwB158shIdBODNy334KmOa7Wmpm6E3iQQ83TJt
-         32XwyG0fmLqJ039OynjBFyJqv8N2DKehM8g7IugjxRi7bq5yo9SZ8Eas2ju1LuPB7ou7
-         0OJ42v4NsHKPhivZjHIYd0OnMbrCqPgaGPj8gsCuamCPEeSNl4fyigNCj8s3DLHyhH42
-         ztVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=CWU/c+Z/T3afmWH8jUSRUPrlGa0DK6zNkVSVmthE7JY=;
-        b=cmWe2n2kuAqLhshLBI9ALg5vKv2u+vUNZ3J6cbyioGTbOBotIAIXMtJGh9jOuMM0qn
-         lAheCaMgQFdipMawlNLWxgZ3eHWVHNou0ShGbAe0Y28FqRK5a3s1JgY1NY+J1v7T2at6
-         BuyNOmimLkRo1jm19qqTQOOQnwg0C6ArBbgCR+taWREE4o8yibHPNtOweEOsRU+EDUu/
-         2tgEkKquEf/Fbs4VgdueJOqjR70U+xjdyC80qGpe0FSxtFMLUYOkAI8S6GqjpufwA6dm
-         r2OgmxHLVx6ZdIla8HvIYmwa3HG/dzbnnf/y/5JoIktETYh2yNDN2rNzRoz6PTeg6S1Y
-         EAbA==
-X-Gm-Message-State: ACgBeo3WMtLcTGgiT/VUAX7ztC882CAxrH3VxoVBZA6mjCz0vsxQTNw7
-	oE9XrWq8ir3L0HtR2GkFWEfzTJTW8dHE3ed+WK4=
-X-Google-Smtp-Source: AA6agR5zI4BE0SfjNUKDcGZ6Xb4IGuI7GBSJB6t0ufhMUW2iZNyRbbuavTdHsFVco3HP2hlWhORE8Awb5dEsiQIyeEs=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:8d7b:b933:5438:2a88])
- (user=ndesaulniers job=sendgmr) by 2002:a25:8e84:0:b0:696:466c:baa with SMTP
- id q4-20020a258e84000000b00696466c0baamr798614ybl.604.1661537455239; Fri, 26
- Aug 2022 11:10:55 -0700 (PDT)
-Date: Fri, 26 Aug 2022 11:10:35 -0700
-In-Reply-To: <20220826181035.859042-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29CF4401
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:21:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9888C433C1;
+	Fri, 26 Aug 2022 18:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661538105;
+	bh=P+hcLIrD/F79al7x8aLPgb1+lPQ8gMRGke9HgDVnG/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z3yHxCqi3J/rAwrRsJLFeT4icMMpxhb3OpvWJ9DJWaYvDvGzOL+TCnbC6/PgoVUUR
+	 XNdnqO731drISisd0y80CmEDHwyJVand2PAe3oPWitY9mWShrepAIMgWIWhJXXgNbR
+	 kKKlkizBFCHMEjaZGg8HuPrylFmSMtJM0ce+ORSfrUpoqjbDxevVp9TebNHvX/AKv9
+	 DQcmWDKBGCK144wO/AvrTXOLl1C5+rgX6/OzH7j2Sdc8y1t5zCewgTCWvae/9imSU6
+	 zov6lclxSgDpvuhAKX5LJgBCEIXC3ILbKJ7kbLCfCEjrfwFipx1L1Tcb7tyVZ7UOKx
+	 FCfN7vdTOPObg==
+Date: Fri, 26 Aug 2022 11:21:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, x86@kernel.org,
+	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+	Fangrui Song <maskray@google.com>,
+	Alexey Alexandrov <aalexand@google.com>,
+	Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/
+ for as-option
+Message-ID: <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
+References: <20220826181035.859042-1-ndesaulniers@google.com>
+ <20220826181035.859042-2-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1661537435; l=1289;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=KFmDrL6BvTknKQovEEq6T3GFbpZs3ibjX3HcMW2RbEw=;
- b=HAVmPHDoSpY2S9bAFO1KTHzp0jMYkmspk0Y0zWNA/klCy1NkTBTvFdbFEPvTjqH5HFwy7nCPzrDJ
- 2mGy2RsICFikIgnIL9rPA36Q4SDd51mgrcFdoNpQ/CPxtlHcT01h
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826181035.859042-4-ndesaulniers@google.com>
-Subject: [PATCH 3/3] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
-	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826181035.859042-2-ndesaulniers@google.com>
 
-Dmitrii, Fangrui, and Mashahiro note:
+Hi Nick,
 
-  Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
+I think the title would be a little more readable if it was:
 
-Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
-specified in order for -gsplit-dwarf to work at all.
+Makefile.compiler: Use KBUILD_AFLAGS for as-option
 
-Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
-Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
-Link: https://reviews.llvm.org/D80391
-Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Reported-by: Fangrui Song <maskray@google.com>
-Reported-by: Masahiro Yamada <masahiroy@kernel.org>
-Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- scripts/Makefile.debug | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
+> as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> cause as-option to fail unexpectedly because clang will emit
+> -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> assembler sources.
+> 
+> Callers of as-option (and as-instr) likely want to be adding flags to
+> KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1699
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/x86/boot/compressed/Makefile | 5 +++--
+>  scripts/Makefile.compiler         | 6 +++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 35ce1a64068b..fb3db714a028 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
+>  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+>  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+>  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+> -# Disable relocation relaxation in case the link is not PIE.
+> -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+>  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+>  
+>  # sev.c indirectly inludes inat-table.h which is generated during
+> @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+>  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
+>  
+>  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+> +# Disable relocation relaxation in case the link is not PIE.
+> +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+> +
 
-diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index a7a6da7f6e7d..0f9912f7bd4c 100644
---- a/scripts/Makefile.debug
-+++ b/scripts/Makefile.debug
-@@ -1,10 +1,8 @@
--DEBUG_CFLAGS	:=
-+DEBUG_CFLAGS	:= -g
-+KBUILD_AFLAGS	+= -g
- 
- ifdef CONFIG_DEBUG_INFO_SPLIT
- DEBUG_CFLAGS	+= -gsplit-dwarf
--else
--DEBUG_CFLAGS	+= -g
--KBUILD_AFLAGS	+= -g
- endif
- 
- ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
--- 
-2.37.2.672.g94769d06f0-goog
+Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
+relaxation") added this to address
+https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
+move it to only being used for the .S files in arch/x86/boot/compressed?
 
+>  GCOV_PROFILE := n
+>  UBSAN_SANITIZE :=n
+>  
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 94d0d40cddb3..d1739f0d3ce3 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -29,13 +29,13 @@ try-run = $(shell set -e;		\
+>  	fi)
+>  
+>  # as-option
+> -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+> +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+>  
+>  as-option = $(call try-run,\
+> -	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+> +	$(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+>  
+>  # as-instr
+> -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
+> +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
+>  
+>  as-instr = $(call try-run,\
+>  	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 
