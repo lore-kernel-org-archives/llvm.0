@@ -1,150 +1,405 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A613FFE
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 15:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B9BC433D6;
-	Fri, 26 Aug 2022 15:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661529549;
-	bh=SAd6ICXTA5HHfY/TYT/+LfvaroL3DCccw5EEXd7inzc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qhrm21KbpsoZ/3r8EStOQwho+ISnuKhiw6UOdmDf+y43MgEQ267BK7GFQgqIKizUS
-	 qPmwS1aGad4SaiU1RmW7TrH+mlhxjUxwq7IVi2UoohH6Bo8HC+R7g4SdIw9V+dwM/C
-	 5LslMqIk/FsAkzsX+YjHBOJ5mER9XwwxNWFJ3/+WG5QcQV6nGyP/3xtz3kN5HqPCyI
-	 PcgGIMy5QVJYWuIIAcNS6w2LmqiFM2GZjTAx3rlvtsCENapC2G75/XLvHNHBPEokZC
-	 /n6bgva4+10LWj5pyNUu++GENX72yb+RMUoYSbNjBkH7Dobfqxg0i7W1i5ABbbVT7S
-	 lhYuik83gqqvA==
-Date: Fri, 26 Aug 2022 08:59:07 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-	Douglas Anderson <dianders@chromium.org>
-Subject: Re: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
-Message-ID: <Ywjty2iSyer5FDS7@dev-arch.thelio-3990X>
-References: <202208221506.0Lo051G4-lkp@intel.com>
- <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D333FFE
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 16:01:39 +0000 (UTC)
+Received: by mail-wm1-f52.google.com with SMTP id ay12so1120958wmb.1
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 09:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WMh/N9i6ShI11x5i5Ap5lQ7NbFEh/0/DfXEib5aOdCY=;
+        b=VDo6cjzdWsZBHnzIXKYknGzjCgkrWwZProqnWPZ8SxjsD/gM8En6b7rp3waaPbdon1
+         +LnjeDX4CSII5h6slHdqG+/arAkTvvTXvg6HNwnFFL0XWAhMYRF89Wb/zCDNkLzhqd2Q
+         DE+EAITXLiPzgEb841MSFdX3BHMaGiQf59JVLpm/yn6ZB9BmlyjyKTXUqzWceM/BSRk+
+         PtEL5BeGD3ISC1/7HIeGL2uBbMveJVyqAtc7eUJ6k2+Cp3pCUpuOcCAyyy+QQeopy5LK
+         ea2aafxcIVjj7b1WwTixoRNw5Q3ztokQgwoCYtU+dG/Z3NeUEiYoGI+Qg3n2tLigSVA6
+         q2mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WMh/N9i6ShI11x5i5Ap5lQ7NbFEh/0/DfXEib5aOdCY=;
+        b=zjcLnoDygOa28/RxytTV5i53roaP0Ef+35Lt9NBnjQx/eK+5e5MLZ77nrZHOV7zPa1
+         MAIa5gAQ+dktgGtiwX3AF/viUBMH7WFgHQF/wtmNWMzKPCNvZj17zcxN95XviLwGlGfi
+         dQC1lSjcDPcKo5SB/XOzKifZVjgkhff5Jbb1fp8A9CZT7WpQgL25Ey+yfkQiM90RIppv
+         iQ+WPCsmmF6miR6VLsw+jRS115HAbeETZxjYR/JkC/3md144w8BahkS5M/vu/bSpoNwO
+         mji0LhVFyEM6dWv0YuZWx/R3Palpwe/y//1yF/5XRkwVWgm8Yyk6rO0I6rRuSDPdwFxH
+         owjQ==
+X-Gm-Message-State: ACgBeo18zlG1OWWrjxTWJtxJLhw/kC3zrsBNoTde2T3uR0/0aEjs0ZJ5
+	hTXi3ukR8db84p9pSC4bUkHiIq9cIzjWAPX/JdJuCQ==
+X-Google-Smtp-Source: AA6agR7E561D8LFsQk4ma8saD3qEm8XGgnRYFQcpKB6y9EhIc7hh55daiPnl77HzuaSBB5Z5DEDhpU7tVi2gK62P8wE=
+X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id
+ u8-20020a05600c19c800b003a5ec6a8d16mr159498wmq.182.1661529697614; Fri, 26 Aug
+ 2022 09:01:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYoesPenQizTc6_MRZ14THBSFwyHb7oWJdR+CYYiJYYpQ@mail.gmail.com>
+References: <20220824153901.488576-1-irogers@google.com> <20220824153901.488576-10-irogers@google.com>
+ <0004776a-8c39-9515-fd4e-01bfe1c4a3eb@intel.com>
+In-Reply-To: <0004776a-8c39-9515-fd4e-01bfe1c4a3eb@intel.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 26 Aug 2022 09:01:25 -0700
+Message-ID: <CAP-5=fVxyDEmis7=jV5TPoLPbBR9vVZ6Diug+Zsdirjjxxt8gA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Dario Petrillo <dario.pk1@gmail.com>, Hewenliang <hewenliang4@huawei.com>, 
+	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>, 
+	Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>, 
+	Kim Phillips <kim.phillips@amd.com>, Pavithra Gurushankar <gpavithrasha@gmail.com>, 
+	Alexandre Truong <alexandre.truong@arm.com>, Quentin Monnet <quentin@isovalent.com>, 
+	William Cohen <wcohen@redhat.com>, Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, 
+	Colin Ian King <colin.king@intel.com>, James Clark <james.clark@arm.com>, 
+	Fangrui Song <maskray@google.com>, Stephane Eranian <eranian@google.com>, 
+	Kajol Jain <kjain@linux.ibm.com>, Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>, 
+	Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Zechuan Chen <chenzechuan1@huawei.com>, 
+	Jason Wang <wangborong@cdjrlc.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 10:26:43AM +0200, Linus Walleij wrote:
-> On Mon, Aug 22, 2022 at 9:27 AM kernel test robot <lkp@intel.com> wrote:
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-> > commit: 57f6190a60ecc19f1ddddac0d7ea6524229271a9 drm/panel: ws2401: Add driver for WideChips WS2401
-> > date:   1 year, 1 month ago
-> > config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221506.0Lo051G4-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f6190a60ecc19f1ddddac0d7ea6524229271a9
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 57f6190a60ecc19f1ddddac0d7ea6524229271a9
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, Aug 26, 2022 at 3:11 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 24/08/22 18:38, Ian Rogers wrote:
+> > Switch to the use of mutex wrappers that provide better error checking.
 > >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/ui/browser.c           | 20 ++++++++++----------
+> >  tools/perf/ui/browsers/annotate.c |  2 +-
+>
+> Other changes to tools/perf/ui/browsers/annotate.c are in patch 12
+
+Yes, these changes relate to the ui__lock and the patch 12 changes
+relate to annotation lock. The grouping was done in this way so that
+the patches would build independently.
+
+Thanks,
+Ian
+
+> >  tools/perf/ui/setup.c             |  5 +++--
+> >  tools/perf/ui/tui/helpline.c      |  5 ++---
+> >  tools/perf/ui/tui/progress.c      |  8 ++++----
+> >  tools/perf/ui/tui/setup.c         |  8 ++++----
+> >  tools/perf/ui/tui/util.c          | 18 +++++++++---------
+> >  tools/perf/ui/ui.h                |  4 ++--
+> >  8 files changed, 35 insertions(+), 35 deletions(-)
 > >
-> > All errors (new ones prefixed by >>):
+> > diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+> > index fa5bd5c20e96..78fb01d6ad63 100644
+> > --- a/tools/perf/ui/browser.c
+> > +++ b/tools/perf/ui/browser.c
+> > @@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
 > >
-> > >> ld.lld: error: undefined symbol: drm_gem_fb_get_obj
-> >    >>> referenced by drm_mipi_dbi.c:203 (drivers/gpu/drm/drm_mipi_dbi.c:203)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> >    >>> referenced by drm_mipi_dbi.c:258 (drivers/gpu/drm/drm_mipi_dbi.c:258)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_fb_swab
-> >    >>> referenced by drm_mipi_dbi.c:219 (drivers/gpu/drm/drm_mipi_dbi.c:219)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_destroy_state
-> >    >>> referenced by drm_mipi_dbi.c
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_gem_fb_create_with_dirty
-> >    >>> referenced by drm_mipi_dbi.c
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_atomic_helper_check
-> >    >>> referenced by drm_mipi_dbi.c
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_atomic_helper_commit
-> >    >>> referenced by drm_mipi_dbi.c
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
-> >    >>> referenced by drm_mipi_dbi.c:224 (drivers/gpu/drm/drm_mipi_dbi.c:224)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_fb_memcpy
-> >    >>> referenced by drm_mipi_dbi.c:221 (drivers/gpu/drm/drm_mipi_dbi.c:221)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_atomic_helper_damage_merged
-> >    >>> referenced by drm_mipi_dbi.c:318 (drivers/gpu/drm/drm_mipi_dbi.c:318)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_pipe_update) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_simple_display_pipe_init
-> >    >>> referenced by drm_mipi_dbi.c:529 (drivers/gpu/drm/drm_mipi_dbi.c:529)
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_dev_init_with_formats) in archive drivers/built-in.a
-> > --
-> > >> ld.lld: error: undefined symbol: drm_atomic_helper_connector_reset
-> >    >>> referenced by drm_mipi_dbi.c
-> >    >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
-> 
-> I don't understand this error report, please robot, analyze further and come
-> back with details on what needs to be fixed.
-
-Seems like this might be the fix?
-
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 6c2256e8474b..679ad054ea4b 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -31,6 +31,7 @@ menuconfig DRM
- config DRM_MIPI_DBI
- 	tristate
- 	depends on DRM
-+	select DRM_KMS_HELPER
- 
- config DRM_MIPI_DSI
- 	bool
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index a9043eacce97..c68b433c8241 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -165,7 +165,6 @@ config DRM_PANEL_ILITEK_IL9322
- config DRM_PANEL_ILITEK_ILI9341
- 	tristate "Ilitek ILI9341 240x320 QVGA panels"
- 	depends on OF && SPI
--	depends on DRM_KMS_HELPER
- 	depends on DRM_GEM_CMA_HELPER
- 	depends on BACKLIGHT_CLASS_DEVICE
- 	select DRM_MIPI_DBI
-
-drm_mipi_dbi.c uses several functions from the drm_kms_helper-y files
-(drivers/gpu/drm/Makefile) but there is nothing to guarantee that
-CONFIG_DRM_KMS_HELPER gets selected with CONFIG_DRM_MIPI_DBI. The
-'depends on' drop is to remove a circular dependency failure.
-
-For what it's worth, this error is not clang or ld.lld specific, you
-would see the same problem with GCC + GNU binutils.
-
-Cheers,
-Nathan
-
+> >  void ui_browser__show_title(struct ui_browser *browser, const char *title)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui_browser__show(struct ui_browser *browser, const char *title,
+> > @@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >
+> >       browser->refresh_dimensions(browser);
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__show_title(browser, title);
+> >
+> >       browser->title = title;
+> > @@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+> >       va_end(ap);
+> >       if (err > 0)
+> >               ui_helpline__push(browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return err ? 0 : -1;
+> >  }
+> >
+> >  void ui_browser__hide(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ui_helpline__pop();
+> >       zfree(&browser->helpline);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void ui_browser__scrollbar_set(struct ui_browser *browser)
+> > @@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+> >
+> >  int ui_browser__refresh(struct ui_browser *browser)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui_browser__refresh(browser);
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return 0;
+> >  }
+> > @@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+> >       while (1) {
+> >               off_t offset;
+> >
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               err = __ui_browser__refresh(browser);
+> >               SLsmg_refresh();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >               if (err < 0)
+> >                       break;
+> >
+> > diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+> > index 44ba900828f6..b8747e8dd9ea 100644
+> > --- a/tools/perf/ui/browsers/annotate.c
+> > +++ b/tools/perf/ui/browsers/annotate.c
+> > @@ -8,11 +8,11 @@
+> >  #include "../../util/hist.h"
+> >  #include "../../util/sort.h"
+> >  #include "../../util/map.h"
+> > +#include "../../util/mutex.h"
+> >  #include "../../util/symbol.h"
+> >  #include "../../util/evsel.h"
+> >  #include "../../util/evlist.h"
+> >  #include <inttypes.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >  #include <linux/zalloc.h>
+> > diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+> > index 700335cde618..25ded88801a3 100644
+> > --- a/tools/perf/ui/setup.c
+> > +++ b/tools/perf/ui/setup.c
+> > @@ -1,5 +1,4 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> > -#include <pthread.h>
+> >  #include <dlfcn.h>
+> >  #include <unistd.h>
+> >
+> > @@ -8,7 +7,7 @@
+> >  #include "../util/hist.h"
+> >  #include "ui.h"
+> >
+> > -pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
+> > +struct mutex ui__lock;
+> >  void *perf_gtk_handle;
+> >  int use_browser = -1;
+> >
+> > @@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+> >
+> >  void setup_browser(bool fallback_to_pager)
+> >  {
+> > +     mutex_init(&ui__lock);
+> >       if (use_browser < 2 && (!isatty(1) || dump_trace))
+> >               use_browser = 0;
+> >
+> > @@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+> >       default:
+> >               break;
+> >       }
+> > +     mutex_destroy(&ui__lock);
+> >  }
+> > diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+> > index 298d6af82fdd..db4952f5990b 100644
+> > --- a/tools/perf/ui/tui/helpline.c
+> > +++ b/tools/perf/ui/tui/helpline.c
+> > @@ -2,7 +2,6 @@
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/string.h>
+> >
+> > @@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >       int ret;
+> >       static int backlog;
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       ret = vscnprintf(ui_helpline__last_msg + backlog,
+> >                       sizeof(ui_helpline__last_msg) - backlog, format, ap);
+> >       backlog += ret;
+> > @@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+> >               SLsmg_refresh();
+> >               backlog = 0;
+> >       }
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       return ret;
+> >  }
+> > diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+> > index 3d74af5a7ece..71b6c8d9474f 100644
+> > --- a/tools/perf/ui/tui/progress.c
+> > +++ b/tools/perf/ui/tui/progress.c
+> > @@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       }
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+> > @@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+> >       bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+> >       SLsmg_fill_region(y, 1, 1, bar, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static void tui_progress__finish(void)
+> > @@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+> >               return;
+> >
+> >       ui__refresh_dimensions(false);
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       y = SLtt_Screen_Rows / 2 - 2;
+> >       SLsmg_set_color(0);
+> >       SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  static struct ui_progress_ops tui_progress__ops = {
+> > diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+> > index b1be59b4e2a4..a3b8c397c24d 100644
+> > --- a/tools/perf/ui/tui/setup.c
+> > +++ b/tools/perf/ui/tui/setup.c
+> > @@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+> >  {
+> >       if (force || ui__need_resize) {
+> >               ui__need_resize = 0;
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >               SLtt_get_screen_size();
+> >               SLsmg_reinit_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >  }
+> >
+> > @@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+> >                                   "Press any key...", 0);
+> >
+> >       SLtt_set_cursor_visibility(1);
+> > -     if (!pthread_mutex_trylock(&ui__lock)) {
+> > +     if (mutex_trylock(&ui__lock)) {
+> >               SLsmg_refresh();
+> >               SLsmg_reset_smg();
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >       }
+> >       SLang_reset_tty();
+> >       perf_error__unregister(&perf_tui_eops);
+> > diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+> > index 0f562e2cb1e8..3c5174854ac8 100644
+> > --- a/tools/perf/ui/tui/util.c
+> > +++ b/tools/perf/ui/tui/util.c
+> > @@ -95,7 +95,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               t = sep + 1;
+> >       }
+> >
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >
+> >       max_len += 2;
+> >       nr_lines += 8;
+> > @@ -125,17 +125,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >       SLsmg_write_nstring((char *)exit_msg, max_len);
+> >       SLsmg_refresh();
+> >
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >
+> >       x += 2;
+> >       len = 0;
+> >       key = ui__getch(delay_secs);
+> >       while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+> > -             pthread_mutex_lock(&ui__lock);
+> > +             mutex_lock(&ui__lock);
+> >
+> >               if (key == K_BKSPC) {
+> >                       if (len == 0) {
+> > -                             pthread_mutex_unlock(&ui__lock);
+> > +                             mutex_unlock(&ui__lock);
+> >                               goto next_key;
+> >                       }
+> >                       SLsmg_gotorc(y, x + --len);
+> > @@ -147,7 +147,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+> >               }
+> >               SLsmg_refresh();
+> >
+> > -             pthread_mutex_unlock(&ui__lock);
+> > +             mutex_unlock(&ui__lock);
+> >
+> >               /* XXX more graceful overflow handling needed */
+> >               if (len == sizeof(buf) - 1) {
+> > @@ -215,19 +215,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+> >
+> >  void ui__info_window(const char *title, const char *text)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, NULL);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >  }
+> >
+> >  int ui__question_window(const char *title, const char *text,
+> >                       const char *exit_msg, int delay_secs)
+> >  {
+> > -     pthread_mutex_lock(&ui__lock);
+> > +     mutex_lock(&ui__lock);
+> >       __ui__info_window(title, text, exit_msg);
+> >       SLsmg_refresh();
+> > -     pthread_mutex_unlock(&ui__lock);
+> > +     mutex_unlock(&ui__lock);
+> >       return ui__getch(delay_secs);
+> >  }
+> >
+> > diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+> > index 9b6fdf06e1d2..99f8d2fe9bc5 100644
+> > --- a/tools/perf/ui/ui.h
+> > +++ b/tools/perf/ui/ui.h
+> > @@ -2,11 +2,11 @@
+> >  #ifndef _PERF_UI_H_
+> >  #define _PERF_UI_H_ 1
+> >
+> > -#include <pthread.h>
+> > +#include "../util/mutex.h"
+> >  #include <stdbool.h>
+> >  #include <linux/compiler.h>
+> >
+> > -extern pthread_mutex_t ui__lock;
+> > +extern struct mutex ui__lock;
+> >  extern void *perf_gtk_handle;
+> >
+> >  extern int use_browser;
+>
