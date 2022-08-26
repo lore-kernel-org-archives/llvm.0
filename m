@@ -1,155 +1,148 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14814C71
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:35:03 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id z25so3075096lfr.2
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 11:35:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C915441B
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 18:41:29 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-333a4a5d495so57148147b3.10
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 11:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=4aLkJX7cunHtM95EA9sb2bQZzhjKdoxn0b8NHuPsFR0=;
-        b=L0/i8Wip3YLAM3uYJCwNd1DWXNAdOUnJwUT2dG612DDLpJ+3YZhuHltz7xznpTH9U2
-         GWC8IwUPt+IApjCrjxi2jZNwH98Lvma8HMhMNrc4H+dCpbsZpvutNVa79X9n2Gjx0LT0
-         b9WD+ih6oaaJiQnXQs2aB0H0fqGnIxPuvpdhlqQR3pevS9RC0wnHyoo85R5qWNg2v7NY
-         zC88PKdPO+k2QY668NzdEmAt3F+bnrn+UXJQpL/GYHjMFMxw/uiy0TXVflSclJagtiq8
-         ir16es+xHOWCet/uE2FskJ34y0RKe+jT78jbM8rU0o4AZCc7AdmblmHv196v25iKCG2K
-         /Btg==
+        bh=lPP8ZIOLS6D+TcMlycR/OR+lDE15x2XXqZgNT5DKzz4=;
+        b=BVoMBeOyrKSnw5NxEVstnntoqejvil646ntiJcHVzelMDsUyoG4srhTizGO05tCtK+
+         CE0IZGiImHFzl1kLyh714dY5gNVaPOf8nQmzWq/if8zDPgdu9BprwDZ4WLIk6zLefVMJ
+         6RRoxnlM2kFggt+ANGnUVzLD9OzLvjQXb+hW9jKKiWjkJ8qM7f9lA3Re7Lw++7VKuZdB
+         EF8/CHvz/TrzEl/T6gsE1yHmkY90PncBgphWcS1QLuAj0+P4F6Tsr74swhuEiaVvBNfX
+         lcQL/sPlxOc+t/BvST3O6GOemuTzNMLWae3vts46vCKVZqdN/9Wg/sx1lYQDGI0j6MNK
+         xF+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=4aLkJX7cunHtM95EA9sb2bQZzhjKdoxn0b8NHuPsFR0=;
-        b=vBot6kqZBmR8Pihp3SOCn1cnuNhE85Njj4jM4AETTiAhl2rQ2riZ8K8bwaPtq3VYjp
-         2q5cFoWVZXxDfQALdR4CgNvlNaDnt4SXEsNo0Epf2g/YzhDUZ3ThIZfaynainD0YG6Ax
-         EyS0R6Wr5VKJ1MG3sy9KtdHdNNlOFRleZXO/15qYLfaNtffEjCmYzmRSF6ofMlOVWJcj
-         6pX1ZyozOkYEpeB3WQCGHaw35YSMyAd213zgVOk8zxs9PBj3b8ZvbgOhWlDyVXWPRVsR
-         seEGkg998jQmsmh2eK00HZhECNcajnAYjdVEciDcpms1t+C8rcd6j31tfJAZ223Lc6uS
-         lOhw==
-X-Gm-Message-State: ACgBeo1XQKkCAzEasdFxIrsf+/Lt2rwFvdl+/GkPNRO+HHKdbB6G95/d
-	VL1keyOy5bMVtYdGrH5gj/EGQYv8gmDla43l/jVbhQ==
-X-Google-Smtp-Source: AA6agR6GjUnk9Fc+Xi2855vHSGp0Lm/1DilayQZsJQlEygL9lQ7uIA7Heq8q4/hGmgyGNbztLUDhV1Oeyd2FboyaH+w=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr3230009lfr.647.1661538901687; Fri, 26
- Aug 2022 11:35:01 -0700 (PDT)
+        bh=lPP8ZIOLS6D+TcMlycR/OR+lDE15x2XXqZgNT5DKzz4=;
+        b=hTMCP0cQav+pLLbyZCSpsJobGD9rb965ZIvpEDNaBr4hrcoKmbRo8myGUt2FK/Rwfv
+         oWne+KBb76wCiLEAFAdCmP+bAu39yw+qeeZhxtMclGFUWadf633lD7wafYyobC4fbU5c
+         4d6emPb+7KAr+klRfHrtvyja+OzLiKj5BPoqSaDHzoXvGlUFyJl8hxIO8wsD9T0a5Zhs
+         2TZOomDHVC7J+K/l+Ypy+I8rcb+ClFVc8ZDIuV3izKKaa9x1w33d1VcJzgpBxHHFz1Ih
+         RtVeE4Ed8KEkOQRGdOWR0myseahGaZTBeoydVXUrD5kzBAHiqgjJ5pxwdIXTOeZAzE8v
+         tKZg==
+X-Gm-Message-State: ACgBeo07YNwKSRJtFItx0dsPabRpQ8jfSQRhsbGLJ5nZUHTc62OQtwqi
+	hctlrqM+n2s3t4wytOLo21TAXfH9V01RmXeLrnXZ
+X-Google-Smtp-Source: AA6agR5MtS59v09QYLLx6jYr4V9/pL3zI66lHd0PcVCw+PDNHvxhf3OxtN3YY9xkS3yHZTo8pd69rqgZk8naUfex53Y=
+X-Received: by 2002:a25:6ec5:0:b0:676:d7ec:65c5 with SMTP id
+ j188-20020a256ec5000000b00676d7ec65c5mr982536ybc.610.1661539288470; Fri, 26
+ Aug 2022 11:41:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-2-ndesaulniers@google.com> <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
-In-Reply-To: <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 26 Aug 2022 11:34:50 -0700
-Message-ID: <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/ for as-option
-To: Nathan Chancellor <nathan@kernel.org>
+References: <20220826181035.859042-1-ndesaulniers@google.com> <20220826181035.859042-3-ndesaulniers@google.com>
+In-Reply-To: <20220826181035.859042-3-ndesaulniers@google.com>
+From: Bill Wendling <morbo@google.com>
+Date: Fri, 26 Aug 2022 11:41:17 -0700
+Message-ID: <CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Makefile.debug: re-enable debug info for .S files
+To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
-	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
-	Arvind Sankar <nivedita@alum.mit.edu>
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, 
+	Fangrui Song <maskray@google.com>, Alexey Alexandrov <aalexand@google.com>, 
+	Greg Thelen <gthelen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 26, 2022 at 11:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Fri, Aug 26, 2022 at 11:10 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> Hi Nick,
+> Alexey reported that the fraction of unknown filename instances in
+> kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+> to assembler defined symbols, which regressed as a result of:
 >
-> I think the title would be a little more readable if it was:
+> commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
 >
-> Makefile.compiler: Use KBUILD_AFLAGS for as-option
-
-Thanks, yeah that looks better; I expect a v2 of this series will be necessary.
-
+> In that commit, I allude to restoring debug info for assembler defined
+> symbols in a follow up patch, but it seems I forgot to do so in
 >
-> On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
-> > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-> > cause as-option to fail unexpectedly because clang will emit
-> > -Werror,-Wunused-command-line-argument for various -m and -f flags for
-> > assembler sources.
-> >
-> > Callers of as-option (and as-instr) likely want to be adding flags to
-> > KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> >  arch/x86/boot/compressed/Makefile | 5 +++--
-> >  scripts/Makefile.compiler         | 6 +++---
-> >  2 files changed, 6 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> > index 35ce1a64068b..fb3db714a028 100644
-> > --- a/arch/x86/boot/compressed/Makefile
-> > +++ b/arch/x86/boot/compressed/Makefile
-> > @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
-> >  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
-> >  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-> >  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
-> > -# Disable relocation relaxation in case the link is not PIE.
-> > -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> >  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> >
-> >  # sev.c indirectly inludes inat-table.h which is generated during
-> > @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
-> >
-> >  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > +# Disable relocation relaxation in case the link is not PIE.
-> > +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> > +
+> commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
 >
-> Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
-> relaxation") added this to address
-> https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
-> move it to only being used for the .S files in arch/x86/boot/compressed?
-
-+ Arvind
-
-Hmm...that makes me think we might need two different as-option flags;
-one that does use KBUILD_CFLAGS, and whose result is meant to be added
-to cflags-y, then another that uses KBUILD_AFLAGS and is added to
-aflagsy-y.
-
-(My patch 2/3 in the series would use the latter)
-
-Let's see what thoughts Masahiro has.
-
+> This patch does a few things:
+> 1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
+>    the assembler to emit debug info. But this can cause an issue for
+>    folks using a newer compiler but older assembler, because the
+>    implicit default DWARF version changed from v4 to v5 in gcc-11 and
+>    clang-14.
+> 2. If the user is using CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, use a
+>    version check to explicitly set -Wa,-gdwarf-<version> for the
+>    assembler. There's another problem with this; GAS only gained support
+>    for explicit DWARF versions 3-5 in the 2.36 GNU binutils release.
+> 3. Wrap -Wa,-gdwarf-<version> in as-option call to test whether the
+>    assembler supports that explicit DWARF version.
 >
-> >  GCOV_PROFILE := n
-> >  UBSAN_SANITIZE :=n
-> >
-> > diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> > index 94d0d40cddb3..d1739f0d3ce3 100644
-> > --- a/scripts/Makefile.compiler
-> > +++ b/scripts/Makefile.compiler
-> > @@ -29,13 +29,13 @@ try-run = $(shell set -e;         \
-> >       fi)
-> >
-> >  # as-option
-> > -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-> > +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-> >
-> >  as-option = $(call try-run,\
-> > -     $(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-> > +     $(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-> >
-> >  # as-instr
-> > -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-> > +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
-> >
-> >  as-instr = $(call try-run,\
-> >       printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-> > --
-> > 2.37.2.672.g94769d06f0-goog
-> >
+> Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
+> Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+> Reported-by: Alexey Alexandrov <aalexand@google.com>
+> Reported-by: Bill Wendling <morbo@google.com>
+> Reported-by: Greg Thelen <gthelen@google.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  scripts/Makefile.debug | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> index 9f39b0130551..a7a6da7f6e7d 100644
+> --- a/scripts/Makefile.debug
+> +++ b/scripts/Makefile.debug
+> @@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
+>  DEBUG_CFLAGS   += -gsplit-dwarf
+>  else
+>  DEBUG_CFLAGS   += -g
+> +KBUILD_AFLAGS  += -g
+>  endif
+>
+> -ifndef CONFIG_AS_IS_LLVM
+> -KBUILD_AFLAGS  += -Wa,-gdwarf-2
+> +ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> +# gcc-11+, clang-14+
+> +ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o $(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
 
+Do you think this would be better as a macro? Maybe something like:
 
+if $(call cc-min-version,110000,140000)
 
--- 
-Thanks,
-~Nick Desaulniers
+where the first argument is GCC's min version and second Clang's min
+version. It would be more readable and reusable.
+
+-bw
+
+> +dwarf-version-y := 5
+> +else
+> +dwarf-version-y := 4
+>  endif
+> -
+> -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> +else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
+>  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
+>  DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
+>  endif
+>
+> +# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
+> +# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
+> +ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
+> +KBUILD_AFLAGS  += -Wa,-gdwarf-$(dwarf-version-y)
+> +else
+> +ifndef CONFIG_AS_IS_LLVM
+> +KBUILD_AFLAGS  += -Wa,-gdwarf-2
+> +endif
+> +endif
+> +
+>  ifdef CONFIG_DEBUG_INFO_REDUCED
+>  DEBUG_CFLAGS   += -fno-var-tracking
+>  ifdef CONFIG_CC_IS_GCC
+> --
+> 2.37.2.672.g94769d06f0-goog
+>
