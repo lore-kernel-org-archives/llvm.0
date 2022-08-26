@@ -1,280 +1,95 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB694C91
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:16:38 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id bq23so3360477lfb.7
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Nj41FZn/HeuUilKWWNGdjk3qZm3Fr6VLjb/CZe9KEgg=;
-        b=Yzl/y++kSDviv3YYF1yaM0Wz2KOLt3g0hbRSfHxDGNJ3dff4giwVjca/fnC+XDGFip
-         9KPDZgAD/mlYDSwGbjpJsfUstmt7eN7FvRdAu40cNTZE2rYYVdGPlTBFsFwTEPF6DUu3
-         1m3Ig+lKGGapYGDVgoc7q034GurPXcVIcgWVvod58U/5hAR2jHaSi3/1s988Q/439PAm
-         i0+q/fMJSuu2tcrQ1b/m/ckus0Pf0vIpg7GYAUIXt80BJIMdH4dFtDlGj5SDnaSmiU+1
-         1P7t9lM3aiR5yFE1ikOR6TxM4ekVDyZF4UTb0sEdVR3XXwFMinivMvfJrbTO63ij4Htc
-         U6gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Nj41FZn/HeuUilKWWNGdjk3qZm3Fr6VLjb/CZe9KEgg=;
-        b=6IiNIbVgaKxpWyTXtY/6NfqC+3AMsSn0yhWKC3AuqF3ZtWNzV/VpsO7GdXywhesZV+
-         z+0fe2RY1nLgWSD96RjM2c9Mf3xBBPpbO+Fj1M3NvfKfcuHlj8P2Tj05mcXt4kigSPYI
-         /Ax+pAgb1BDBk+jDBg4quw89DVUWX3EApaB7rryVPhz/rlYYx/VUaf/+P/568zo2TZLq
-         6diSYdF2xnYjn6PibifNQ7aK30QyrtbMID6JWJgXgPa/AaGI5K8dmIqJzBKEer0vfBz0
-         o5OtUIz2fHhXYaC3B0keQSZVThZZWidcYQHxASmKeRnzMoiAw/mg8cO5vbCZMZs8NQUT
-         ncTg==
-X-Gm-Message-State: ACgBeo3WR9aKbGlgGLiRzqyQBv1fakzLeqC1oziJ6guGQ4oZ0LD/diBm
-	pDyVUUAjCsGfi8KvKKTkMmJDkzQmqdNOo27xRfURZg==
-X-Google-Smtp-Source: AA6agR6OtqTzt1oK/2z8+uVWjVCaO4VHCdOrHYZNm109cGFpufyGxOrShRllkA8WB92SwCsXkIJ4fOk2tSVkJsp0SZs=
-X-Received: by 2002:a05:6512:2356:b0:492:e06d:7530 with SMTP id
- p22-20020a056512235600b00492e06d7530mr2743566lfu.103.1661544996522; Fri, 26
- Aug 2022 13:16:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F634C74
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661545209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=snbLjsM9SL+bXcKVwQUk4slc50eR+uDJr1UyFhd4f1M=;
+	b=In8+rTjIES10ExR3Ew3Cng6i35hy6oIu/CrNRXa8MoQbXT1ft1XCM9YjTnmHEASvSeAzo9
+	D7We4tqs+20bXEQEixy6TyLk7HG2HhIy2eedBUroYFfv92KVc34i/BUhKWsr4PpfroLdZe
+	h5sC1SU4aBPdamrKWdcRuhDBUd+QQZU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-Z1rigm8qPcO2Uba3PILvSg-1; Fri, 26 Aug 2022 16:20:08 -0400
+X-MC-Unique: Z1rigm8qPcO2Uba3PILvSg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFA4085A58C
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 20:20:07 +0000 (UTC)
+Received: from [172.64.3.119] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BED5C18EA8;
+	Fri, 26 Aug 2022 20:20:07 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
+ mainline.kernel.org-clang, e022620b)
+Date: Fri, 26 Aug 2022 20:20:03 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-3-ndesaulniers@google.com> <CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com>
- <CAKwvOdnPjYNFy3r01TBohrZbRGFafGuWaPa8u6b2JdgH=0tKKg@mail.gmail.com>
-In-Reply-To: <CAKwvOdnPjYNFy3r01TBohrZbRGFafGuWaPa8u6b2JdgH=0tKKg@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 26 Aug 2022 13:16:25 -0700
-Message-ID: <CAKwvOd=4VgsEjL6hYMTH2ufCZjDTiJWv_u48VY4YPGYXW3MR=A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Makefile.debug: re-enable debug info for .S files
-To: Bill Wendling <morbo@google.com>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, 
-	Fangrui Song <maskray@google.com>, Alexey Alexandrov <aalexand@google.com>, 
-	Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Message-Id: <18103.122082616200801219@us-mta-231.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 26, 2022 at 12:52 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Aug 26, 2022 at 11:41 AM Bill Wendling <morbo@google.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 11:10 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > Alexey reported that the fraction of unknown filename instances in
-> > > kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-> > > to assembler defined symbols, which regressed as a result of:
-> > >
-> > > commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-> > >
-> > > In that commit, I allude to restoring debug info for assembler defined
-> > > symbols in a follow up patch, but it seems I forgot to do so in
-> > >
-> > > commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
-> > >
-> > > This patch does a few things:
-> > > 1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
-> > >    the assembler to emit debug info. But this can cause an issue for
-> > >    folks using a newer compiler but older assembler, because the
-> > >    implicit default DWARF version changed from v4 to v5 in gcc-11 and
-> > >    clang-14.
-> > > 2. If the user is using CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, use a
-> > >    version check to explicitly set -Wa,-gdwarf-<version> for the
-> > >    assembler. There's another problem with this; GAS only gained support
-> > >    for explicit DWARF versions 3-5 in the 2.36 GNU binutils release.
-> > > 3. Wrap -Wa,-gdwarf-<version> in as-option call to test whether the
-> > >    assembler supports that explicit DWARF version.
-> > >
-> > > Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> > > Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-> > > Reported-by: Alexey Alexandrov <aalexand@google.com>
-> > > Reported-by: Bill Wendling <morbo@google.com>
-> > > Reported-by: Greg Thelen <gthelen@google.com>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > >  scripts/Makefile.debug | 22 ++++++++++++++++++----
-> > >  1 file changed, 18 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> > > index 9f39b0130551..a7a6da7f6e7d 100644
-> > > --- a/scripts/Makefile.debug
-> > > +++ b/scripts/Makefile.debug
-> > > @@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
-> > >  DEBUG_CFLAGS   += -gsplit-dwarf
-> > >  else
-> > >  DEBUG_CFLAGS   += -g
-> > > +KBUILD_AFLAGS  += -g
-> > >  endif
-> > >
-> > > -ifndef CONFIG_AS_IS_LLVM
-> > > -KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> > > +ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > +# gcc-11+, clang-14+
-> > > +ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o $(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
-> >
-> > Do you think this would be better as a macro? Maybe something like:
-> >
-> > if $(call cc-min-version,110000,140000)
-> >
-> > where the first argument is GCC's min version and second Clang's min
-> > version. It would be more readable and reusable.
->
-> Yeah!
->
-> I was looking at cc-ifversion, which has a bug in that it specifically
-> uses CONFIG_GCC_VERSION.  I think I sent a series maybe a year or two
-> ago trying to remove all users of that macro; I think most landed but
-> not all and I never pursued it to completion.  Also, I think there's
-> one user remaining in the AMDGPU drivers; looks like they're been
-> reducing their dependency on that SIMD hack I wrote for them years ago
-> after propagating it to parts of their tree, but one user remains.
-> Perhaps I can just open code it there, or replace it with something
-> new like you suggest.
->
-> Such a macro would need to consider whether CC_IS_GCC vs CC_IS_CLANG;
-> I could imagine we might need a version check for both, or just one of
-> the two compilers.
->
-> Ugh, logical OR in GNU make is supported by use of the filter macro...yuck.
->
-> ifneq ($(filter y, $(call gcc-min-version, 110000), $(call
-> clang-min-version, 140000),)
-> # add gcc-11+, clang-14+ flag
-> endif
->
-> or maybe as you suggest:
->
-> ifneq ($(call cc-min-version,110000,140000),)
-> # add gcc-11+, clang-14+ flag
-> endif
->
-> where the newly minted cc-min-version is implemented in terms of the
-> newly minted gcc-min-version and clang-min-version.  Then I can use
-> cc-min-version in this series, and replace cc-ifversion in AMDGPU with
-> gcc-min-version.  That way, we create composable wrappers that are
-> readable and reusable.
+Hi, we tested your kernel and here are the results:
 
-RFC:
-```
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index d1739f0d3ce3..4809a4c9e5f2 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -65,6 +65,19 @@ cc-disable-warning = $(call try-run,\
- # Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
- cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] &&
-echo $(3) || echo $(4))
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: FAILED
 
-+# gcc-min-version
-+# Usage: cflags-$(call gcc-min-version, 70100) += -foo
-+gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
-+
-+# clang-min-version
-+# Usage: cflags-$(call clang-min-version, 110000) += -foo
-+clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-+
-+# cc-min-version
-+# Usage: cflags-$(call cc-min-version, 701000, 110000)
-+#                                      ^ GCC   ^ Clang
-+cc-min-version = $(filter y, $(call gcc-min-version, $(1)), $(call
-clang-min-version, $(2)))
-+
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
- ld-option = $(call try-run, $(LD) $(KBUILD_LDFLAGS) $(1) -v,$(1),$(2),$(3))
-diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index 0f9912f7bd4c..80c84f746219 100644
---- a/scripts/Makefile.debug
-+++ b/scripts/Makefile.debug
-@@ -7,7 +7,7 @@ endif
 
- ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- # gcc-11+, clang-14+
--ifeq ($(shell [ $(CONFIG_GCC_VERSION) -ge 110000 -o
-$(CONFIG_CLANG_VERSION) -ge 140000 ] && echo y),y)
-+ifeq ($(call cc-min-version, 110000, 140000), y)
- dwarf-version-y := 5
- else
- dwarf-version-y := 4
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
 
-```
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51848
 
-I'd keep the replacement of cc-ifversion with gcc-min-version as a
-distinct child patch, since I don't care about backports for that (and
-there's probably more cc-ifversion users the further back you go) but
-I think we might want cc-min-version in stable.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/25454=
+5
 
-Technically, the above should also update
-Documentation/kbuild/makefiles.rst; but I'm just testing this works;
-it seems to.
+One or more kernel tests failed:
 
-Oh, it looks like cc-ifversion both permits checking max-version and
-min version. But we can implement -ge and -lt with just one or the
-other:
-
-```
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-index 86a3b5bfd699..17e8fd42d0a5 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-@@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
- endif
-
- ifdef CONFIG_CC_IS_GCC
--ifeq ($(call cc-ifversion, -lt, 0701, y), y)
-+ifeq ($(call gcc-min-version, 70100),)
- IS_OLD_GCC = 1
- endif
- endif
-```
-
-Thoughts?
-
->
-> >
-> > -bw
-> >
-> > > +dwarf-version-y := 5
-> > > +else
-> > > +dwarf-version-y := 4
-> > >  endif
-> > > -
-> > > -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > +else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> > >  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
-> > >  DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
-> > >  endif
-> > >
-> > > +# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
-> > > +# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> > > +ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
-> > > +KBUILD_AFLAGS  += -Wa,-gdwarf-$(dwarf-version-y)
-> > > +else
-> > > +ifndef CONFIG_AS_IS_LLVM
-> > > +KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> > > +endif
-> > > +endif
-> > > +
-> > >  ifdef CONFIG_DEBUG_INFO_REDUCED
-> > >  DEBUG_CFLAGS   += -fno-var-tracking
-> > >  ifdef CONFIG_CC_IS_GCC
-> > > --
-> > > 2.37.2.672.g94769d06f0-goog
-> > >
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4961933
 
 
 
--- 
-Thanks,
-~Nick Desaulniers
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
