@@ -1,305 +1,222 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419C73D6D
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:17:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661519873; x=1693055873;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NPn1EtiMFKGHcPdCC0f3ib5zE5rs81qHeE7iBw/tRMQ=;
-  b=LllOdcTzpedKxVw04Pd/GgFN+ICWIfG1eEnOyy7/KAGsGXNuVqnHjafV
-   7DAm1gps0Zsp+yiYrUUAsIIZqjg53dUPDQrYyOQy6Lq7fp76mt50biT7C
-   wjc01y4+9lZtEZcDdFyZBIfdfUFAtwMNlmWVZv4Nm4vQXWimrVqnL0YrU
-   e5RWJV/LPey93+yjkIgcBj8c1+pAY2o8I+BVhG1jOEouxlgDEoh2VzkMa
-   0K+uSkt8xl4TtycW44FJz4b5SfhcbqRbe84zdv0N+saMj/pzA7uOcIyXY
-   XjKlkhlBilo0lAS9XcAAjZCx7NMZlazRoJoMjNZekC8yi+TLr1vQPqw8F
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295281577"
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="295281577"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 06:17:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
-   d="scan'208";a="643655098"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 06:17:42 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oRZDR-00049c-2h;
-	Fri, 26 Aug 2022 13:17:41 +0000
-Date: Fri, 26 Aug 2022 21:17:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [alobakin:ip_tunnel 4/12] include/net/netlink.h:1907:1: warning:
- excess elements in array initializer
-Message-ID: <202208262105.qPWnx5Kw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E66F187F
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 14:31:46 +0000 (UTC)
+Received: by mail-oo1-f51.google.com with SMTP id u5-20020a4a5705000000b0044b34c2c89cso303147ooa.9
+        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 07:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ozDTceTfUzqIFpyT0YcSUK9TplSXxX9G3oavml2m3j4=;
+        b=MlmxpO+iBvw0GkojD3IajC7FwAea3Z4+dChqSX7MMC1gPHSTDD3uDn2GDhz4XmISOK
+         3z0cXkAX0N93LG91xvrnQMJAug891CRdWbwFEeQi/1R3fBtAMfbd5GH05QdURjj9ZGrH
+         K3QivdQF9NBwEwus7jQmYS2KUjl97h6BJfQ9U8GCydz5QD1LQC+l6tAtc24HB0QK9bq6
+         1XkDfj81aa80ybSjCdaajXwr6gPgNpEwCGy81wJg8FiBkQq5PO6KhjFGEvHZmFQpeTvI
+         M71BdGp0dqtziYGJVlzEwDYQR30M61M598G6QhX4GwYhYsSQbxsHbOv8cuy0S/lk+Yqq
+         Farg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ozDTceTfUzqIFpyT0YcSUK9TplSXxX9G3oavml2m3j4=;
+        b=5/PhBks5I81hLmP5Wxt9g78ODeXVIeifMju/FapVAQB+4+dRTct3w5egcBsQrmEs0x
+         aAz4yvUcj+vR0XAb6CpmfTHQJJ/L8HZ7EsOZY9d6CdWQQAzQMgtqIgQQtJlS+zgKWOTZ
+         NDhr1LDuxs/4lYsve/r53a2sjaZy9plAZRxEVOtQQtUyccedIJ+bbwnFyXZzRApzgHkN
+         faOqOjFdgeTcySe2lQW2xSRp5lQ4VgtLTr+y97GhFGHvM8IThvIYPwwkQE2PK5Ut18j5
+         DQ6cmg/NZK1Bv+VdQLaA6+Cnwd6Onm20VfHaiIJmYVBDQrasmRa2b98jcKSLubctswC4
+         6O5w==
+X-Gm-Message-State: ACgBeo1pM/grCeSmxDcl7tehM76hXD0vGLVyfgZFoG4WYMO+yeFL0M7Z
+	jTOsc+kiwX9sSlV2q8hkgoHCv/GxjoqHsp+5xME=
+X-Google-Smtp-Source: AA6agR6OTc8Q6hLSMcU85KNwKBqdNmESy8A+oSktMGR+afdi+apNZb18+AtL2ToJQ6vJJnhB63SgwQBw3XBFL3bEgNE=
+X-Received: by 2002:a4a:aa81:0:b0:44a:da30:274e with SMTP id
+ d1-20020a4aaa81000000b0044ada30274emr1330760oon.97.1661524305634; Fri, 26 Aug
+ 2022 07:31:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+ <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+ <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+ <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X> <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
+ <Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X> <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
+In-Reply-To: <Ywf5ATPG7a/I0SLu@dev-arch.thelio-3990X>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Fri, 26 Aug 2022 10:31:34 -0400
+Message-ID: <CADnq5_NmsnsoJqB8HZ-JQ9B4B+5ZBQ0hM+T-NDSu8xyp5tUVcw@mail.gmail.com>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Harry Wentland <harry.wentland@amd.com>, "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, Arnd Bergmann <arnd@kernel.org>, 
+	David Airlie <airlied@linux.ie>, clang-built-linux <llvm@lists.linux.dev>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, dri-devel <dri-devel@lists.freedesktop.org>, 
+	amd-gfx list <amd-gfx@lists.freedesktop.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/alobakin/linux ip_tunnel
-head:   161f62c9d5cafdbc3216f026a7b7ca32d004b46b
-commit: f5876d635ecb78e9ab3bcf7a73e0e08638524fc8 [4/12] netlink: add 'bitmap' attribute type (%NL_ATTR_TYPE_BITMAP / %NLA_BITMAP)
-config: arm-randconfig-r003-20220823 (https://download.01.org/0day-ci/archive/20220826/202208262105.qPWnx5Kw-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/alobakin/linux/commit/f5876d635ecb78e9ab3bcf7a73e0e08638524fc8
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin ip_tunnel
-        git checkout f5876d635ecb78e9ab3bcf7a73e0e08638524fc8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Thu, Aug 25, 2022 at 6:34 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi AMD folks,
+>
+> Top posting because it might not have been obvious but I was looking for
+> your feedback on this message (which can be viewed on lore.kernel.org if
+> you do not have the original [1]) so that we can try to get this fixed
+> in some way for 6.0/6.1. If my approach is not welcome, please consider
+> suggesting another one or looking to see if this is something you all
+> could look into.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The patch looks good to me.  I was hoping Harry or Rodrigo could
+comment more since they are more familiar with this code and trying to
+keep it in sync with what we get from the hardware teams.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
-   In file included from include/net/dst.h:19:
-   In file included from include/net/neighbour.h:31:
-   In file included from include/net/rtnetlink.h:6:
->> include/net/netlink.h:1907:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_TYPE(s8);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
-   In file included from include/net/dst.h:19:
-   In file included from include/net/neighbour.h:31:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1908:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_TYPE(u8);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
-   In file included from include/net/dst.h:19:
-   In file included from include/net/neighbour.h:31:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(s);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##16);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
-   In file included from include/net/dst.h:19:
-   In file included from include/net/neighbour.h:31:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(s);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##32);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
-   In file included from include/net/dst.h:19:
-   In file included from include/net/neighbour.h:31:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(u);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##16);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from init/do_mounts.c:22:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
---
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
->> include/net/netlink.h:1907:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_TYPE(s8);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1908:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_TYPE(u8);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(s);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##16);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(s);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##32);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(u);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##16);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(u);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##32);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kallsyms.c:25:
-   In file included from include/linux/filter.h:26:
-   In file included from include/net/sch_generic.h:20:
-   In file included from include/net/rtnetlink.h:6:
-   include/net/netlink.h:1912:1: warning: excess elements in array initializer [-Wexcess-initializers]
-   NLA_BUILD_BIGINT_ORDER(be);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
-           NLA_BUILD_BIGINT_TYPE(order##16);                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
-                   BITMAP_FROM_U64((u64)value),                             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
-                                   ((unsigned long) ((u64)(n) >> 32))
+Alex
 
 
-vim +1907 include/net/netlink.h
-
-  1901	
-  1902	#define NLA_BUILD_BIGINT_ORDER(order)					 \
-  1903		NLA_BUILD_BIGINT_TYPE(order##16);				 \
-  1904		NLA_BUILD_BIGINT_TYPE(order##32);				 \
-  1905		NLA_BUILD_BIGINT_TYPE(order##64)
-  1906	
-> 1907	NLA_BUILD_BIGINT_TYPE(s8);
-  1908	NLA_BUILD_BIGINT_TYPE(u8);
-  1909	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> [1]: https://lore.kernel.org/Yv5h0rb3AgTZLVJv@dev-arch.thelio-3990X/
+>
+> Cheers,
+> Nathan
+>
+> On Thu, Aug 18, 2022 at 08:59:14AM -0700, Nathan Chancellor wrote:
+> > Hi Arnd,
+> >
+> > Doubling back around to this now since I think this is the only thing
+> > breaking x86_64 allmodconfig with clang 11 through 15.
+> >
+> > On Fri, Aug 05, 2022 at 09:32:13PM +0200, Arnd Bergmann wrote:
+> > > On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
+> > > > > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
+> > > > > While splitting out sub-functions can help reduce the maximum stack
+> > > > > usage, it seems that in this case it makes the actual problem worse:
+> > > > > I see 2168 bytes for the combined
+> > > > > dml32_ModeSupportAndSystemConfigurationFull(), but marking
+> > > > > mode_support_configuration() as noinline gives me 1992 bytes
+> > > > > for the outer function plus 384 bytes for the inner one. So it does
+> > > > > avoid the warning (barely), but not the problem that the warning tries
+> > > > > to point out.
+> > > >
+> > > > I haven't had a chance to take a look at splitting things up yet, would
+> > > > you recommend a different approach?
+> > >
+> > > Splitting up large functions can help when you have large local variables
+> > > that are used in different parts of the function, and the split gets the
+> > > compiler to reuse stack locations.
+> > >
+> > > I think in this particular function, the problem isn't actually local variables
+> > > but either pushing variables on the stack for argument passing,
+> > > or something that causes the compiler to run out of registers so it
+> > > has to spill registers to the stack.
+> > >
+> > > In either case, one has to actually look at the generated output
+> > > and then try to rearrange the codes so this does not happen.
+> > >
+> > > One thing to try would be to condense a function call like
+> > >
+> > >                 dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
+> > >
+> > > &v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
+> > >                         mode_lib->vba.USRRetrainingRequiredFinal,
+> > >                         mode_lib->vba.UsesMALLForPStateChange,
+> > >
+> > > mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
+> > >                         mode_lib->vba.NumberOfActiveSurfaces,
+> > >                         mode_lib->vba.MaxLineBufferLines,
+> > >                         mode_lib->vba.LineBufferSizeFinal,
+> > >                         mode_lib->vba.WritebackInterfaceBufferSize,
+> > >                         mode_lib->vba.DCFCLK,
+> > >                         mode_lib->vba.ReturnBW,
+> > >                         mode_lib->vba.SynchronizeTimingsFinal,
+> > >
+> > > mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+> > >                         mode_lib->vba.DRRDisplay,
+> > >                         v->dpte_group_bytes,
+> > >                         v->meta_row_height,
+> > >                         v->meta_row_height_chroma,
+> > >
+> > > v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
+> > >                         mode_lib->vba.WritebackChunkSize,
+> > >                         mode_lib->vba.SOCCLK,
+> > >                         v->DCFCLKDeepSleep,
+> > >                         mode_lib->vba.DETBufferSizeY,
+> > >                         mode_lib->vba.DETBufferSizeC,
+> > >                         mode_lib->vba.SwathHeightY,
+> > >                         mode_lib->vba.SwathHeightC,
+> > >                         mode_lib->vba.LBBitPerPixel,
+> > >                         v->SwathWidthY,
+> > >                         v->SwathWidthC,
+> > >                         mode_lib->vba.HRatio,
+> > >                         mode_lib->vba.HRatioChroma,
+> > >                         mode_lib->vba.vtaps,
+> > >                         mode_lib->vba.VTAPsChroma,
+> > >                         mode_lib->vba.VRatio,
+> > >                         mode_lib->vba.VRatioChroma,
+> > >                         mode_lib->vba.HTotal,
+> > >                         mode_lib->vba.VTotal,
+> > >                         mode_lib->vba.VActive,
+> > >                         mode_lib->vba.PixelClock,
+> > >                         mode_lib->vba.BlendingAndTiming,
+> > >                         .... /* more arguments */);
+> > >
+> > > into calling conventions that take a pointer to 'mode_lib->vba' and another
+> > > one to 'v', so these are no longer passed on the stack individually.
+> >
+> > So I took a whack at reducing this function's number of parameters and
+> > ended up with the attached patch. I basically just removed any
+> > parameters that were identical between the two call sites and access them
+> > through the vba pointer, as you suggested.
+> >
+> > AMD folks, is this an acceptable approach? It didn't take a trivial
+> > amount of time so I want to make sure this is okay before I do it to
+> > more functions/files.
+> >
+> > Due to the potential size of these changes, I am a little weary of them
+> > going into 6.0; even though they should be a simple search and replace
+> > for the most part, it might be nice for them to have some decent soak
+> > time in -next. One solution would be to raise the warning limit for
+> > these files on 6.0 so that allmodconfig does not ship broken then reduce
+> > the limit for 6.1 once these patches have been applied.
+> >
+> > Additionally, I took a look at the stack usage across all compilers that
+> > the kernel supports and I thought it was kind of interesting that the
+> > usage really jumps from GCC 7 to 8, which I am guessing is a result of
+> > commit e8a170ff9a35 ("drm/amdgpu: enable -msse2 for GCC 7.1+ users").
+> > GCC 8 allmodconfig actually errors now too:
+> >
+> > https://lore.kernel.org/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
+> >
+> >           |-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> >           | dml30_ModeSupportAndSystemConfigurationFull() | dml31_ModeSupportAndSystemConfigurationFull() | dml32_ModeSupportAndSystemConfigurationFull() |
+> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> > | GCC 5   |                  1056 bytes                   |                   656 bytes                   |                  1040 bytes                   |
+> > | GCC 6   |                  1024 bytes                   |                   672 bytes                   |                  1056 bytes                   |
+> > | GCC 7   |                  1040 bytes                   |                   664 bytes                   |                  1056 bytes                   |
+> > | GCC 8   |                  1760 bytes                   |                  1608 bytes                   |                  2144 bytes                   |
+> > | GCC 9   |                  1664 bytes                   |                  1392 bytes                   |                  1960 bytes                   |
+> > | GCC 10  |                  1648 bytes                   |                  1368 bytes                   |                  1952 bytes                   |
+> > | GCC 11  |                  1680 bytes                   |                  1400 bytes                   |                  1952 bytes                   |
+> > | GCC 12  |                  1680 bytes                   |                  1400 bytes                   |                  1984 bytes                   |
+> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> > | LLVM 11 |                  2104 bytes                   |                  2056 bytes                   |                  2120 bytes                   |
+> > | LLVM 12 |                  2152 bytes                   |                  2200 bytes                   |                  2152 bytes                   |
+> > | LLVM 13 |                  2216 bytes                   |                  2248 bytes                   |                  2168 bytes                   |
+> > | LLVM 14 |                  2168 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> > | LLVM 15 |                  2216 bytes                   |                  2184 bytes                   |                  2160 bytes                   |
+> > | LLVM 16 |                  2232 bytes                   |                  2216 bytes                   |                  2176 bytes                   |
+> > |---------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+> >
+> > With the patch I have attached,
+> > dml32_ModeSupportAndSystemConfigurationFull() drops from 2176 to 1944
+> > for LLVM 16, which is obviously still not great but it at least avoids
+> > the warning.
+> >
+> > Cheers,
+> > Nathan
