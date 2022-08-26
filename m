@@ -1,179 +1,305 @@
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20403D6D
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:15:49 +0000 (UTC)
-Received: by mail-vs1-f49.google.com with SMTP id 190so1603770vsz.7
-        for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 06:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=59n2uy6bMEwTPlHrLsIoQ5BkYFCiua3TbUF1n0ZR9DU=;
-        b=sfPFXHYL7jV0UIzY3/KsSjEWT9yyeK3p5Rpqe8jJVcARI5WGAIzGTt/2yxKZSLVjVX
-         Q+0RzoD9n4L0jjfOqIWpjm2GdKdjbNzVPmOhPFIpAQKJoyV+PH7L1vJaa/cno3peCdss
-         wh4/vFmRhgVHhl2ce0Tbx3UXmq2kyFrAigUwQd877n/uKQffc9vuGWQ72augd3lfoBda
-         CDDOnn7MXSmIgj/qYt/+SYfR2miAlH1xZLfhClF4ZTOo7QQvaYRqTPNteyvkn2JGHw61
-         awzIBLy1IfrVQKlDikieqjlgLUXeYEJrEBopXpdAfs1cAit9LvT2zomNrJ+6GiWx4Lvy
-         ZFTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=59n2uy6bMEwTPlHrLsIoQ5BkYFCiua3TbUF1n0ZR9DU=;
-        b=rKlThspQWjwDLy2xsd+W9Etk2kTVVvxK408CnRuVvP8rppMSpkLeYXI/QYM+BtxZNO
-         Ca/M/DsJZX5iXULdPrLw7rnJGr0F5FSD/g6v1rnjHuiIS/vgMQxvLwLoHZM0QH3K+Gl1
-         2DPbZw24yBvQXaCuM5rrS601CDvrtbLt9SYmZXW3U0RkDS27eiylb0E4J9cNosGmcz5G
-         la3gyKi+9JIZm8wQ+odpr0WxEZPdOmXkwmeXumeR7zL5SqjWyZcWyS/jJ7tXa+CWJp4u
-         GvsoILMcx6PwbCD/8OHbsbIZgslx40Vq8qODtDwmqRsMfzkVoKTAD7Z1neZ93U9zaqdh
-         x3YA==
-X-Gm-Message-State: ACgBeo0QZli8SihSa8wyybReNKJwuqzD7d/u8dWwVJAhdZtgF6OMBBCM
-	DaNwjutcu0EZoQtIvGjNFzQjs1994GxwZHKHcskM/A==
-X-Google-Smtp-Source: AA6agR6PlDujz+oXUVecvczTK/svEkHdtMJ4EBTSmLSES/3EDjMO7G84YLviv2jT2w9h1v5ElNQH1l3nlLy4nr3zxVo=
-X-Received: by 2002:a05:6102:5348:b0:390:8a9c:5376 with SMTP id
- bq8-20020a056102534800b003908a9c5376mr3074445vsb.53.1661519748475; Fri, 26
- Aug 2022 06:15:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419C73D6D
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 13:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661519873; x=1693055873;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NPn1EtiMFKGHcPdCC0f3ib5zE5rs81qHeE7iBw/tRMQ=;
+  b=LllOdcTzpedKxVw04Pd/GgFN+ICWIfG1eEnOyy7/KAGsGXNuVqnHjafV
+   7DAm1gps0Zsp+yiYrUUAsIIZqjg53dUPDQrYyOQy6Lq7fp76mt50biT7C
+   wjc01y4+9lZtEZcDdFyZBIfdfUFAtwMNlmWVZv4Nm4vQXWimrVqnL0YrU
+   e5RWJV/LPey93+yjkIgcBj8c1+pAY2o8I+BVhG1jOEouxlgDEoh2VzkMa
+   0K+uSkt8xl4TtycW44FJz4b5SfhcbqRbe84zdv0N+saMj/pzA7uOcIyXY
+   XjKlkhlBilo0lAS9XcAAjZCx7NMZlazRoJoMjNZekC8yi+TLr1vQPqw8F
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295281577"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="295281577"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 06:17:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="643655098"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 06:17:42 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oRZDR-00049c-2h;
+	Fri, 26 Aug 2022 13:17:41 +0000
+Date: Fri, 26 Aug 2022 21:17:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [alobakin:ip_tunnel 4/12] include/net/netlink.h:1907:1: warning:
+ excess elements in array initializer
+Message-ID: <202208262105.qPWnx5Kw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0000000000004c3b1405e6b7de26@google.com> <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
-In-Reply-To: <f70b1cf7-0291-6ebc-68f8-db9c68963255@acm.org>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Fri, 26 Aug 2022 15:15:37 +0200
-Message-ID: <CANp29Y7bgwDzd47E6h8gseYuu5YXF-ABRrhVXFXS-HF7PhF-Dw@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in blk_mq_map_swqueue
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Dmitry Vyukov <dvyukov@google.com>, 
-	syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>, 
-	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	"'Aleksandr Nogikh' via syzkaller-bugs" <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Aug 25, 2022 at 7:48 PM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 8/20/22 20:24, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13cf3c7b080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=ea55456e1ff28ef7f9ff
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com
-> >
-> > scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-> > BUG: unable to handle page fault for address: ffffdc0000000000
-> > #PF: supervisor read access in kernel mode
-> > #PF: error_code(0x0000) - not-present page
-> > PGD 12026067
-> > P4D 12026067 PUD 0
-> > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > Workqueue: events_unbound async_run_entry_fn
-> > RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> > Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> > RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> > RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> > RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> > R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> > R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> > FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >   <TASK>
-> >   blk_mq_init_allocated_queue+0x1a31/0x1c20 block/blk-mq.c:4119
-> >   blk_mq_init_queue_data block/blk-mq.c:3908 [inline]
-> >   blk_mq_init_queue+0x9f/0x120 block/blk-mq.c:3918
-> >   scsi_alloc_sdev+0x697/0x9d0 drivers/scsi/scsi_scan.c:335
-> >   scsi_probe_and_add_lun+0x1d1/0x4ab0 drivers/scsi/scsi_scan.c:1191
-> >   __scsi_scan_target+0x1fb/0x10e0 drivers/scsi/scsi_scan.c:1673
-> >   scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
-> >   scsi_scan_host_selected+0x394/0x6c0 drivers/scsi/scsi_scan.c:1790
-> >   do_scsi_scan_host drivers/scsi/scsi_scan.c:1929 [inline]
-> >   do_scan_async+0x12e/0x7b0 drivers/scsi/scsi_scan.c:1939
-> >   async_run_entry_fn+0xa6/0x400 kernel/async.c:127
-> >   process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
-> >   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
-> >   kthread+0x266/0x300 kernel/kthread.c:376
-> >   ret_from_fork+0x1f/0x30
-> >   </TASK>
-> > Modules linked in:
-> > CR2: ffffdc0000000000
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-> > Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-> > RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-> > RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> > RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-> > R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-> > R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-> > FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > ----------------
-> > Code disassembly (best guess), 5 bytes skipped:
-> >     0:        43 0f b6 04 37          movzbl (%r15,%r14,1),%eax
-> >     5:        84 c0                   test   %al,%al
-> >     7:        0f 85 49 02 00 00       jne    0x256
-> >     d:        41 0f b7 45 00          movzwl 0x0(%r13),%eax
-> >    12:        8d 48 01                lea    0x1(%rax),%ecx
-> >    15:        66 41 89 4d 00          mov    %cx,0x0(%r13)
-> >    1a:        48 8d 1c c3             lea    (%rbx,%rax,8),%rbx
-> >    1e:        48 89 d8                mov    %rbx,%rax
-> >    21:        48 c1 e8 03             shr    $0x3,%rax
-> > * 25: 42 80 3c 30 00          cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-> >    2a:        4c 8b 7c 24 68          mov    0x68(%rsp),%r15
-> >    2f:        74 08                   je     0x39
-> >    31:        48 89 df                mov    %rbx,%rdi
-> >    34:        e8 36 7b c1 fd          callq  0xfdc17b6f
-> >    39:        48                      rex.W
-> >    3a:        8b                      .byte 0x8b
->
-> Hi Dmitry,
->
-> This issue and also another report that has been shared recently on the
-> linux-scsi mailing list look like USB issues to me. Who is the right person
-> to make sure that the USB mailing list is included for USB related issues?
->
-> Thanks,
->
-> Bart.
+tree:   https://github.com/alobakin/linux ip_tunnel
+head:   161f62c9d5cafdbc3216f026a7b7ca32d004b46b
+commit: f5876d635ecb78e9ab3bcf7a73e0e08638524fc8 [4/12] netlink: add 'bitmap' attribute type (%NL_ATTR_TYPE_BITMAP / %NLA_BITMAP)
+config: arm-randconfig-r003-20220823 (https://download.01.org/0day-ci/archive/20220826/202208262105.qPWnx5Kw-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/alobakin/linux/commit/f5876d635ecb78e9ab3bcf7a73e0e08638524fc8
+        git remote add alobakin https://github.com/alobakin/linux
+        git fetch --no-tags alobakin ip_tunnel
+        git checkout f5876d635ecb78e9ab3bcf7a73e0e08638524fc8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Hi Bart,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Syzbot would have included the USB mailing list and the USB
-maintainers if it saw that the bug might be related to this subsystem.
-The bot's guess was that it was the BLOCK LAYER subsystem, so it Cc'd
-only the general lists and linux-block@vger.kernel.org
+All warnings (new ones prefixed by >>):
 
-Is there anything in this bug report that can reliably indicate that
-the bug has to do with USB? If there is, we can definitely adjust our
-guilty subsystem recognition logic.
-
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:19:
+   In file included from include/net/neighbour.h:31:
+   In file included from include/net/rtnetlink.h:6:
+>> include/net/netlink.h:1907:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_TYPE(s8);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:19:
+   In file included from include/net/neighbour.h:31:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1908:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_TYPE(u8);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:19:
+   In file included from include/net/neighbour.h:31:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(s);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##16);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:19:
+   In file included from include/net/neighbour.h:31:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(s);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##32);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:19:
+   In file included from include/net/neighbour.h:31:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(u);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##16);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from init/do_mounts.c:22:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
 --
-Best Regards
-Aleksandr
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+>> include/net/netlink.h:1907:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_TYPE(s8);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1908:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_TYPE(u8);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(s);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##16);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1910:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(s);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##32);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(u);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##16);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1911:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(u);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1904:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##32);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:26:
+   In file included from include/net/sch_generic.h:20:
+   In file included from include/net/rtnetlink.h:6:
+   include/net/netlink.h:1912:1: warning: excess elements in array initializer [-Wexcess-initializers]
+   NLA_BUILD_BIGINT_ORDER(be);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1903:2: note: expanded from macro 'NLA_BUILD_BIGINT_ORDER'
+           NLA_BUILD_BIGINT_TYPE(order##16);                                \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/netlink.h:1869:3: note: expanded from macro 'NLA_BUILD_BIGINT_TYPE'
+                   BITMAP_FROM_U64((u64)value),                             \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitmap.h:581:5: note: expanded from macro 'BITMAP_FROM_U64'
+                                   ((unsigned long) ((u64)(n) >> 32))
 
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/f70b1cf7-0291-6ebc-68f8-db9c68963255%40acm.org.
+
+vim +1907 include/net/netlink.h
+
+  1901	
+  1902	#define NLA_BUILD_BIGINT_ORDER(order)					 \
+  1903		NLA_BUILD_BIGINT_TYPE(order##16);				 \
+  1904		NLA_BUILD_BIGINT_TYPE(order##32);				 \
+  1905		NLA_BUILD_BIGINT_TYPE(order##64)
+  1906	
+> 1907	NLA_BUILD_BIGINT_TYPE(s8);
+  1908	NLA_BUILD_BIGINT_TYPE(u8);
+  1909	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
