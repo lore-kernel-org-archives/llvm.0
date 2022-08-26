@@ -1,124 +1,153 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653DF1FB2
-	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 01:45:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661478352; x=1693014352;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XZJSY4cbgrebLKKDnAQdX4owkNLnig3mFMmrZiJU8ks=;
-  b=A6i0E32GMlRUR3xN4htixexH86KGwMQLAYVT+A3KoY5MBdSqudkUpjHL
-   64Lesl27hzBSovm+XcW3Hqa4DVl8P8m6p3XVmivRxgVK4Ey1WBXLSzdFI
-   WjxqxgTY1/CGGSet1V1QMlrezLqp4AtZuGKzIeCo0f+BXsCTFqvym53Kp
-   nnVSXooqy5CUDp3YuK9e3q/Ff6StGixM7QKAVbCRKehLUCzD7oLKIrupe
-   O19wzINUx7GcUtm7pL3QyQuwVhYycF+j8h50Ny4xN6UAaG6a3uo0UcHcP
-   V7ocHgn2ijZzBXyj6GDc3HWi3ygAOTvowLCXv6DlXcuHeBCY1ApOKRIZW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="274150712"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="274150712"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 18:45:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="587120615"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Aug 2022 18:45:42 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oROPl-0003EI-2q;
-	Fri, 26 Aug 2022 01:45:41 +0000
-Date: Fri, 26 Aug 2022 09:44:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tom Zanussi <zanussi@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [zanussi-trace:ftrace/masami-hitcount-v0 1/3]
- kernel/trace/trace_events_hist.c:4354:9: warning: variable 'n_hitcount' is
- uninitialized when used here
-Message-ID: <202208260943.kWLI2lN6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE023A5
+	for <llvm@lists.linux.dev>; Fri, 26 Aug 2022 05:39:04 +0000 (UTC)
+X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cxEgDl4+jLLmXItOb4ZpoNKLX8XnInSqhwiq/zHFf9U=;
+	b=rJqhTTcyzFTXdy5oL9LA683w4UluYE0//uU0PLz5aZqU6qhAgkswC6jut9ilTE50jh4Mnql+JApSyt2UZBAtOoAH1YLiJ1MpU5yo0LegVNludEZkz3EefCQkW699WUR46b/tntxPdut/qHTPf+5qHrOPXT1hs05VfNayEdts11I=;
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,L
+	OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Releas
+	e_Ham,ACTION:release,TS:49
+X-CID-INFO: VERSION:1.1.10,REQID:027c1268-b6e0-4c60-814a-03a1e0785a6e,OB:0,LOB
+	:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_
+	HamU,ACTION:release,TS:49
+X-CID-META: VersionHash:84eae18,CLOUDID:0a5e2c20-1c20-48a5-82a0-25f9c331906d,C
+	OID:58d5f93ec29e,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: de99f75515ae4d33a488e423986c5be0-20220826
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
+	(envelope-from <roger.lu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1514045262; Fri, 26 Aug 2022 13:38:51 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 26 Aug 2022 13:38:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 26 Aug 2022 13:38:50 +0800
+Message-ID: <57b31acfc4f5bcff3c73c35bc30805b84af3bfbd.camel@mediatek.com>
+Subject: Re: drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused
+ variable 'svs_of_match'
+From: Roger Lu <roger.lu@mediatek.com>
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-kernel@vger.kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Kevin
+ Hilman <khilman@baylibre.com>
+Date: Fri, 26 Aug 2022 13:38:50 +0800
+In-Reply-To: <202208210442.ZL8oxHze-lkp@intel.com>
+References: <202208210442.ZL8oxHze-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/masami-hitcount-v0
-head:   886fe9b6098eddb9d298e8a3f07bbea61acdac16
-commit: 2b0a73549f8fb4115c06639c75a4b7abd7825aaa [1/3] tracing: Allow multiple hitcount values in histograms
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220826/202208260943.kWLI2lN6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git/commit/?id=2b0a73549f8fb4115c06639c75a4b7abd7825aaa
-        git remote add zanussi-trace https://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git
-        git fetch --no-tags zanussi-trace ftrace/masami-hitcount-v0
-        git checkout 2b0a73549f8fb4115c06639c75a4b7abd7825aaa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+Dear all,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry for late reply. These issues are fixed by below patches. Thanks for the
+heads-up.
 
-All warnings (new ones prefixed by >>):
+  drivers/soc/mediatek/mtk-svs.c:1481:12: error: unused function 'svs_suspend'
+[-Werror,-Wunused-function]
+  static int svs_suspend(struct device *dev)
+             ^
+  drivers/soc/mediatek/mtk-svs.c:1515:12: error: unused function 'svs_resume' [-
+Werror,-Wunused-function]
+  static int svs_resume(struct device *dev)
 
->> kernel/trace/trace_events_hist.c:4354:9: warning: variable 'n_hitcount' is uninitialized when used here [-Wuninitialized]
-                           if (!n_hitcount++)
-                                ^~~~~~~~~~
-   kernel/trace/trace_events_hist.c:4335:35: note: initialize the variable 'n_hitcount' to silence this warning
-           unsigned int i, j = 1, n_hitcount;
-                                            ^
-                                             = 0
-   1 warning generated.
+=> fixed by 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220622175649.1856337-1-nathan@kernel.org/
 
+>> drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
+'svs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id svs_of_match[] = {
 
-vim +/n_hitcount +4354 kernel/trace/trace_events_hist.c
+=> fixed by 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220726141653.177948-5-angelogioacchino.delregno@collabora.com/
 
-  4331	
-  4332	static int create_val_fields(struct hist_trigger_data *hist_data,
-  4333				     struct trace_event_file *file)
-  4334	{
-  4335		unsigned int i, j = 1, n_hitcount;
-  4336		char *fields_str, *field_str;
-  4337		int ret;
-  4338	
-  4339		ret = create_hitcount_val(hist_data);
-  4340		if (ret)
-  4341			goto out;
-  4342	
-  4343		fields_str = hist_data->attrs->vals_str;
-  4344		if (!fields_str)
-  4345			goto out;
-  4346	
-  4347		for (i = 0, j = 1; i < TRACING_MAP_VALS_MAX &&
-  4348			     j < TRACING_MAP_VALS_MAX; i++) {
-  4349			field_str = strsep(&fields_str, ",");
-  4350			if (!field_str)
-  4351				break;
-  4352	
-  4353			if (strcmp(field_str, "hitcount") == 0) {
-> 4354				if (!n_hitcount++)
-  4355					continue;
-  4356			}
-  4357	
-  4358			ret = create_val_field(hist_data, j++, file, field_str);
-  4359			if (ret)
-  4360				goto out;
-  4361		}
-  4362	
-  4363		if (fields_str && (strcmp(fields_str, "hitcount") != 0))
-  4364			ret = -EINVAL;
-  4365	 out:
-  4366		return ret;
-  4367	}
-  4368	
+Sincerely,
+Roger Lu.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Sun, 2022-08-21 at 04:38 +0800, kernel test robot wrote:
+> Hi Roger,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
+>   master
+> head:   cc1807b9158a909ffe829a5e222be756c57c9a90
+> commit: 681a02e9500073cd8b9c25a04f06166254b5a879 soc: mediatek: SVS: introduce
+> MTK SVS engine
+> date:   9 weeks ago
+> config: hexagon-randconfig-r022-20220821 (
+> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220821/202208210442.ZL8oxHze-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRKmS3VSy$
+>  )
+> compiler: clang version 16.0.0 (
+> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIUR1DJG$
+> $  c9a41fe60ab62f7a40049c100adcc8087a47669b)
+> reproduce (this is a W=1 build):
+>         wget 
+> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRF4kJosK$
+>   -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # 
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=681a02e9500073cd8b9c25a04f06166254b5a879__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRNjbQMgG$
+>  
+>         git remote add linus 
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git__;!!CTRNKA9wMg0ARbw!0KbjAYXXstyhJQ4NbExdZ1NlNqc0lVccMpejf3AQ2614pGuQkpDXre1pRIYXvgh9$
+>  
+>         git fetch --no-tags linus master
+>         git checkout 681a02e9500073cd8b9c25a04f06166254b5a879
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
+> O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/soc/mediatek/mtk-svs.c:853:12: warning: unused function
+> 'svs_suspend' [-Wunused-function]
+>    static int svs_suspend(struct device *dev)
+>               ^
+>    drivers/soc/mediatek/mtk-svs.c:880:12: warning: unused function
+> 'svs_resume' [-Wunused-function]
+>    static int svs_resume(struct device *dev)
+>               ^
+> > > drivers/soc/mediatek/mtk-svs.c:1287:34: warning: unused variable
+> > > 'svs_of_match' [-Wunused-const-variable]
+> 
+>    static const struct of_device_id svs_of_match[] = {
+>                                     ^
+>    3 warnings generated.
+> 
+> 
+> vim +/svs_of_match +1287 drivers/soc/mediatek/mtk-svs.c
+> 
+>   1286	
+> > 1287	static const struct of_device_id svs_of_match[] = {
+> 
+>   1288		{
+>   1289			.compatible = "mediatek,mt8183-svs",
+>   1290			.data = &svs_mt8183_platform_data,
+>   1291		}, {
+>   1292			/* Sentinel */
+>   1293		},
+>   1294	};
+>   1295	
+> 
+
