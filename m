@@ -1,44 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC0D3D6E
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 12:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F5E3D6E
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 12:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661602257; x=1693138257;
+  t=1661602909; x=1693138909;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E30TlKHyMpVq2+ft4kq1Ob+zQ2NSiPpWjFxEeiQQiiI=;
-  b=NEMqNv0BXakeDz0Adu9zXl7bBro99sHapJ2cM+FqRK04rMgumm9ST0gm
-   4Rqf+ycKxphbJ72ibr3CgjsGMD7K3nnkdV76ZJhA2ftdMIbczBaAnhkWA
-   B4+dynf0onELAVngklum2+zlu7ahaN1NpkpDD9rHXu6TMqcAtjk9q0YRN
-   53lyRcp449NdkvesBuZu/r2yoQHau/uvAtvX8/UD3cFGDCE0GWN769A+U
-   ikdJsl3MMOzsCNkigb50Cd0omE7GRO+9+arD7mVzuegDw+UObVLwR4UEY
-   v8QprpDnFyw+RAWRlwTuszVSB7mYAQycuBu5+cIxfZg6Yp0XJKauPJcTI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="293403037"
+  bh=eUZxz/z522sUn+AGvgw51Mail8p638/sMS8PlT+g7gg=;
+  b=Ici92rqbhS2ZojXif6mMzSqPCbmZ1QhFLOQA1r6gHiSloWxm8ofqrMWP
+   yqGUY6rDI/z2vpI5BYejh5Fx6FNZHIEf/Vp8TiDx1997Cwn2TQUnPuGZ1
+   CW+Pjy+i8TgVReE4K5vqDg838VNnBA9DA08vAQHGhqDAkiNigKHtN5QSq
+   GiFAZcS/DgYPvMImx6ZqhUWLGFzdEClgVGINgsUmsMWMMHwdJofmNhEEx
+   9xe0ROd4EPZE5yYK68bzJsqL5mCHoaPGJXYrgya8Gffzlntlhy0jUxoXu
+   +6qBhKinqtH/+XpAB7lGBWuNzT3QyxobBRqVsP2by+qnldi8JdjMwLHdw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="295434509"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="293403037"
+   d="scan'208";a="295434509"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 05:10:49 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 05:21:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="587617855"
+   d="scan'208";a="587619622"
 Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 05:10:47 -0700
+  by orsmga006.jf.intel.com with ESMTP; 27 Aug 2022 05:21:47 -0700
 Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oRueE-000099-2n;
-	Sat, 27 Aug 2022 12:10:46 +0000
-Date: Sat, 27 Aug 2022 20:10:38 +0800
+	id 1oRuot-00009X-0d;
+	Sat, 27 Aug 2022 12:21:47 +0000
+Date: Sat, 27 Aug 2022 20:21:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [avpatel:riscv_pmem_v1 37/38] arch/riscv/mm/cacheflush.c:100:2:
- error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202208272028.IwrNZ0Ur-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [ardb:efi-decompressor-v4 6/10]
+ drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype
+ for function 'efi_zboot_entry'
+Message-ID: <202208272044.kV41yO8J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,74 +47,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/avpatel/linux.git riscv_pmem_v1
-head:   cfb27bb3561d70cd5e00b71c5f817b7c4452ae71
-commit: 2590647b8e45549f88977f6c2d87b9740e3df722 [37/38] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
-config: riscv-randconfig-r042-20220825 (https://download.01.org/0day-ci/archive/20220827/202208272028.IwrNZ0Ur-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
+head:   efcc03a013f2ddbed0ee782e5049b39432dc9db2
+commit: d2c8eb1ea770556c25e2b5d884bf6bba32940bf2 [6/10] efi/libstub: implement generic EFI zboot
+config: riscv-randconfig-r042-20220825 (https://download.01.org/0day-ci/archive/20220827/202208272044.kV41yO8J-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/2590647b8e45549f88977f6c2d87b9740e3df722
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_pmem_v1
-        git checkout 2590647b8e45549f88977f6c2d87b9740e3df722
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-decompressor-v4
+        git checkout d2c8eb1ea770556c25e2b5d884bf6bba32940bf2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/riscv/mm/cacheflush.c:100:2: error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           for_each_of_cpu_node(node) {
-           ^
->> arch/riscv/mm/cacheflush.c:100:28: error: expected ';' after expression
-           for_each_of_cpu_node(node) {
-                                     ^
-                                     ;
->> arch/riscv/mm/cacheflush.c:106:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
-   arch/riscv/mm/cacheflush.c:109:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
->> arch/riscv/mm/cacheflush.c:112:9: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+>> drivers/firmware/efi/libstub/zboot.c:161:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
                          ^
-   arch/riscv/mm/cacheflush.c:114:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
-   6 errors generated.
+   drivers/firmware/efi/libstub/zboot.c:161:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/for_each_of_cpu_node +100 arch/riscv/mm/cacheflush.c
+vim +/efi_zboot_entry +161 drivers/firmware/efi/libstub/zboot.c
 
-    92	
-    93	#ifdef CONFIG_RISCV_ISA_ZICBOM
-    94	void riscv_init_cbom_blocksize(void)
-    95	{
-    96		struct device_node *node;
-    97		int ret;
-    98		u32 val;
-    99	
- > 100		for_each_of_cpu_node(node) {
-   101			unsigned long hartid;
-   102			int cbom_hartid;
-   103	
-   104			ret = riscv_of_processor_hartid(node, &hartid);
-   105			if (ret)
- > 106				continue;
-   107	
-   108			if (hartid < 0)
-   109				continue;
-   110	
-   111			/* set block-size for cbom extension if available */
- > 112			ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+   160	
+ > 161	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
 
 -- 
 0-DAY CI Kernel Test Service
