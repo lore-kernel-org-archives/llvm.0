@@ -1,44 +1,71 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63B84400
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 14:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661610173; x=1693146173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AOHxLxUk9NFUeIesNB/++Jlk72cIfEUj9j1ZXEfSf3Y=;
-  b=CJ55GsFD7fQaT6MCWH8xo8Kz/hr9T3hqD1R49owF48Yx4CZwujv38e/B
-   IFaGGD2e/qcTg5kf3PSeA7VCAhjFkmGMMqhLy0sP4BQQuoLNcCo949KaR
-   NOWqPmG0Vm0F3+oMW5IOkiirdoxJhaJPbDb5Yy+lLmVh/3Tmc08H8aGZq
-   EfwtDD18VfuvIK67YGbYYDyMDOWel6uQDq1Cs2gr8JLqYnkTjFLuSKfjO
-   YxUNEJtcSeIiowNepRPAkLJFaJ/QFRMqFUMDRy8q1S7jNr6p71vPZ6akY
-   Mxpiv0yr5C6vJr8SxowtYeve7am8WWwsaiQ/Gs33Xmyq9VKQz8+gx1ynQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="356381433"
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="356381433"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 07:22:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="643963093"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Aug 2022 07:22:51 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oRwi2-0000Dn-2u;
-	Sat, 27 Aug 2022 14:22:50 +0000
-Date: Sat, 27 Aug 2022 22:22:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Peng <chao.p.peng@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 142/314]
- arch/x86/kvm/../../../virt/kvm/kvm_main.c:4971:1: error: unused label
- 'arch_vm_ioctl'
-Message-ID: <202208272207.cVUMfKAC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2DD290A
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 15:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133A0C433C1;
+	Sat, 27 Aug 2022 15:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661613517;
+	bh=R/FPlgh+i14+wvCo3ye35JKDBc9ySPLXlmivzP/hCn0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dzCuGaUc9VTghk2gQjzIr5ca2JYaVqPKhs5InSyKAUWLn6G34sldIYA9Bm8aGsyzY
+	 sBMhnrfQRz0j8wOM2KUcn8QN5HUEPyDyy6TgLbqbRAXr2BU++Z/rzQLKp4Uc+WH9jW
+	 aRVf3Xok72JKal9Wbw+Jkq0bw40HNdZ78v3IOVDd+PahpwdcogBh3Le2zKBtcpay6C
+	 cS/jGJAZt5YQD9+blS+03LYa2wqowTeC/bv6fQUA8qgGWiMhlVhw85IEM0hTjydhMM
+	 IkUrcHOY2WsFYsBeHQ5q7VN8YvIHgOJ4l+LNH7R2y1J7D/GA3JLiW6MWSlAewWKzVZ
+	 sSXKNw0KvlSAw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 58330404A1; Sat, 27 Aug 2022 12:18:34 -0300 (-03)
+Date: Sat, 27 Aug 2022 12:18:34 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Dario Petrillo <dario.pk1@gmail.com>,
+	Hewenliang <hewenliang4@huawei.com>,
+	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>,
+	Song Liu <songliubraving@fb.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	Leo Yan <leo.yan@linaro.org>, Kim Phillips <kim.phillips@amd.com>,
+	Pavithra Gurushankar <gpavithrasha@gmail.com>,
+	Alexandre Truong <alexandre.truong@arm.com>,
+	Quentin Monnet <quentin@isovalent.com>,
+	William Cohen <wcohen@redhat.com>,
+	Andres Freund <andres@anarazel.de>,
+	Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+	Colin Ian King <colin.king@intel.com>,
+	James Clark <james.clark@arm.com>,
+	Fangrui Song <maskray@google.com>,
+	Stephane Eranian <eranian@google.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+	Riccardo Mancini <rickyman7@gmail.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Zechuan Chen <chenzechuan1@huawei.com>,
+	Jason Wang <wangborong@cdjrlc.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
+Message-ID: <Ywo1yt/2liQwDQot@kernel.org>
+References: <20220826164027.42929-1-irogers@google.com>
+ <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,268 +74,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
+X-Url: http://acmel.wordpress.com
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   552dd80c48f67ca01bcdd10667e0c11efd375177
-commit: 303b911206dd2a12b1a4fdee94044dc5a6fa36a3 [142/314] KVM: Register/unregister the guest private memory regions
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220827/202208272207.cVUMfKAC-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/303b911206dd2a12b1a4fdee94044dc5a6fa36a3
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 303b911206dd2a12b1a4fdee94044dc5a6fa36a3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Em Sat, Aug 27, 2022 at 10:04:44AM +0300, Adrian Hunter escreveu:
+> On 26/08/22 19:40, Ian Rogers wrote:
+> > When fixing a locking race and memory leak in:
+> > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+> > 
+> > It was requested that debug mutex code be separated out into its own
+> > files. This was, in part, done by Pavithra Gurushankar in:
+> > https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
+> > 
+> > These patches fix issues with the previous patches, add in the
+> > original dso->nsinfo fix and then build on our mutex wrapper with
+> > clang's -Wthread-safety analysis. The analysis found missing unlocks
+> > in builtin-sched.c which are fixed and -Wthread-safety is enabled by
+> > default when building with clang.
+> > 
+> > v4. Adds a comment for the trylock result, fixes the new line (missed
+> >     in v3) and removes two blank lines as suggested by Adrian Hunter.
+> > v3. Adds a missing new line to the error messages and removes the
+> >     pshared argument to mutex_init by having two functions, mutex_init
+> >     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
+> > v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
+> >     annotations as requested by Arnaldo and Namhyung. A boolean is
+> >     added to builtin-sched.c to terminate thread funcs rather than
+> >     leaving them blocked on delted mutexes.
+> > 
+> > Ian Rogers (17):
+> >   perf bench: Update use of pthread mutex/cond
+> >   perf tests: Avoid pthread.h inclusion
+> >   perf hist: Update use of pthread mutex
+> >   perf bpf: Remove unused pthread.h include
+> >   perf lock: Remove unused pthread.h include
+> >   perf record: Update use of pthread mutex
+> >   perf sched: Update use of pthread mutex
+> >   perf ui: Update use of pthread mutex
+> >   perf mmap: Remove unnecessary pthread.h include
+> >   perf dso: Update use of pthread mutex
+> >   perf annotate: Update use of pthread mutex
+> >   perf top: Update use of pthread mutex
+> >   perf dso: Hold lock when accessing nsinfo
+> >   perf mutex: Add thread safety annotations
+> >   perf sched: Fixes for thread safety analysis
+> >   perf top: Fixes for thread safety analysis
+> >   perf build: Enable -Wthread-safety with clang
+> > 
+> > Pavithra Gurushankar (1):
+> >   perf mutex: Wrapped usage of mutex and cond
+> 
+> For all patches except 9 and 16
+> 
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Added it, did the usual round of tests and pushed out perf/core, we can
+continue from there.
 
-All errors (new ones prefixed by >>):
+It also contains Adrian's "multiple recording time ranges" series.
 
->> arch/x86/kvm/../../../virt/kvm/kvm_main.c:4971:1: error: unused label 'arch_vm_ioctl' [-Werror,-Wunused-label]
-   arch_vm_ioctl:
-   ^~~~~~~~~~~~~~
-   1 error generated.
+Thanks!
 
-
-vim +/arch_vm_ioctl +4971 arch/x86/kvm/../../../virt/kvm/kvm_main.c
-
-  4747	
-  4748	static long kvm_vm_ioctl(struct file *filp,
-  4749				   unsigned int ioctl, unsigned long arg)
-  4750	{
-  4751		struct kvm *kvm = filp->private_data;
-  4752		void __user *argp = (void __user *)arg;
-  4753		int r;
-  4754	
-  4755		if (kvm->mm != current->mm || kvm->vm_dead)
-  4756			return -EIO;
-  4757		switch (ioctl) {
-  4758		case KVM_CREATE_VCPU:
-  4759			r = kvm_vm_ioctl_create_vcpu(kvm, arg);
-  4760			break;
-  4761		case KVM_ENABLE_CAP: {
-  4762			struct kvm_enable_cap cap;
-  4763	
-  4764			r = -EFAULT;
-  4765			if (copy_from_user(&cap, argp, sizeof(cap)))
-  4766				goto out;
-  4767			r = kvm_vm_ioctl_enable_cap_generic(kvm, &cap);
-  4768			break;
-  4769		}
-  4770		case KVM_SET_USER_MEMORY_REGION: {
-  4771			struct kvm_user_mem_region mem;
-  4772			unsigned long size;
-  4773			u32 flags;
-  4774	
-  4775			kvm_sanity_check_user_mem_region_alias();
-  4776	
-  4777			memset(&mem, 0, sizeof(mem));
-  4778	
-  4779			r = -EFAULT;
-  4780	
-  4781			if (get_user(flags,
-  4782				(u32 __user *)(argp + offsetof(typeof(mem), flags))))
-  4783				goto out;
-  4784	
-  4785			if (flags & KVM_MEM_PRIVATE) {
-  4786				r = -EINVAL;
-  4787				goto out;
-  4788			}
-  4789	
-  4790			size = sizeof(struct kvm_userspace_memory_region);
-  4791	
-  4792			if (copy_from_user(&mem, argp, size))
-  4793				goto out;
-  4794	
-  4795			r = -EINVAL;
-  4796			if ((flags ^ mem.flags) & KVM_MEM_PRIVATE)
-  4797				goto out;
-  4798	
-  4799			r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-  4800			break;
-  4801		}
-  4802	#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-  4803		case KVM_MEMORY_ENCRYPT_REG_REGION:
-  4804		case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-  4805			struct kvm_enc_region region;
-  4806	
-  4807			if (!kvm_arch_private_mem_supported(kvm))
-  4808				goto arch_vm_ioctl;
-  4809	
-  4810			r = -EFAULT;
-  4811			if (copy_from_user(&region, argp, sizeof(region)))
-  4812				goto out;
-  4813	
-  4814			r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
-  4815			break;
-  4816		}
-  4817	#endif
-  4818		case KVM_GET_DIRTY_LOG: {
-  4819			struct kvm_dirty_log log;
-  4820	
-  4821			r = -EFAULT;
-  4822			if (copy_from_user(&log, argp, sizeof(log)))
-  4823				goto out;
-  4824			r = kvm_vm_ioctl_get_dirty_log(kvm, &log);
-  4825			break;
-  4826		}
-  4827	#ifdef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
-  4828		case KVM_CLEAR_DIRTY_LOG: {
-  4829			struct kvm_clear_dirty_log log;
-  4830	
-  4831			r = -EFAULT;
-  4832			if (copy_from_user(&log, argp, sizeof(log)))
-  4833				goto out;
-  4834			r = kvm_vm_ioctl_clear_dirty_log(kvm, &log);
-  4835			break;
-  4836		}
-  4837	#endif
-  4838	#ifdef CONFIG_KVM_MMIO
-  4839		case KVM_REGISTER_COALESCED_MMIO: {
-  4840			struct kvm_coalesced_mmio_zone zone;
-  4841	
-  4842			r = -EFAULT;
-  4843			if (copy_from_user(&zone, argp, sizeof(zone)))
-  4844				goto out;
-  4845			r = kvm_vm_ioctl_register_coalesced_mmio(kvm, &zone);
-  4846			break;
-  4847		}
-  4848		case KVM_UNREGISTER_COALESCED_MMIO: {
-  4849			struct kvm_coalesced_mmio_zone zone;
-  4850	
-  4851			r = -EFAULT;
-  4852			if (copy_from_user(&zone, argp, sizeof(zone)))
-  4853				goto out;
-  4854			r = kvm_vm_ioctl_unregister_coalesced_mmio(kvm, &zone);
-  4855			break;
-  4856		}
-  4857	#endif
-  4858		case KVM_IRQFD: {
-  4859			struct kvm_irqfd data;
-  4860	
-  4861			r = -EFAULT;
-  4862			if (copy_from_user(&data, argp, sizeof(data)))
-  4863				goto out;
-  4864			r = kvm_irqfd(kvm, &data);
-  4865			break;
-  4866		}
-  4867		case KVM_IOEVENTFD: {
-  4868			struct kvm_ioeventfd data;
-  4869	
-  4870			r = -EFAULT;
-  4871			if (copy_from_user(&data, argp, sizeof(data)))
-  4872				goto out;
-  4873			r = kvm_ioeventfd(kvm, &data);
-  4874			break;
-  4875		}
-  4876	#ifdef CONFIG_HAVE_KVM_MSI
-  4877		case KVM_SIGNAL_MSI: {
-  4878			struct kvm_msi msi;
-  4879	
-  4880			r = -EFAULT;
-  4881			if (copy_from_user(&msi, argp, sizeof(msi)))
-  4882				goto out;
-  4883			r = kvm_send_userspace_msi(kvm, &msi);
-  4884			break;
-  4885		}
-  4886	#endif
-  4887	#ifdef __KVM_HAVE_IRQ_LINE
-  4888		case KVM_IRQ_LINE_STATUS:
-  4889		case KVM_IRQ_LINE: {
-  4890			struct kvm_irq_level irq_event;
-  4891	
-  4892			r = -EFAULT;
-  4893			if (copy_from_user(&irq_event, argp, sizeof(irq_event)))
-  4894				goto out;
-  4895	
-  4896			r = kvm_vm_ioctl_irq_line(kvm, &irq_event,
-  4897						ioctl == KVM_IRQ_LINE_STATUS);
-  4898			if (r)
-  4899				goto out;
-  4900	
-  4901			r = -EFAULT;
-  4902			if (ioctl == KVM_IRQ_LINE_STATUS) {
-  4903				if (copy_to_user(argp, &irq_event, sizeof(irq_event)))
-  4904					goto out;
-  4905			}
-  4906	
-  4907			r = 0;
-  4908			break;
-  4909		}
-  4910	#endif
-  4911	#ifdef CONFIG_HAVE_KVM_IRQ_ROUTING
-  4912		case KVM_SET_GSI_ROUTING: {
-  4913			struct kvm_irq_routing routing;
-  4914			struct kvm_irq_routing __user *urouting;
-  4915			struct kvm_irq_routing_entry *entries = NULL;
-  4916	
-  4917			r = -EFAULT;
-  4918			if (copy_from_user(&routing, argp, sizeof(routing)))
-  4919				goto out;
-  4920			r = -EINVAL;
-  4921			if (!kvm_arch_can_set_irq_routing(kvm))
-  4922				goto out;
-  4923			if (routing.nr > KVM_MAX_IRQ_ROUTES)
-  4924				goto out;
-  4925			if (routing.flags)
-  4926				goto out;
-  4927			if (routing.nr) {
-  4928				urouting = argp;
-  4929				entries = vmemdup_user(urouting->entries,
-  4930						       array_size(sizeof(*entries),
-  4931								  routing.nr));
-  4932				if (IS_ERR(entries)) {
-  4933					r = PTR_ERR(entries);
-  4934					goto out;
-  4935				}
-  4936			}
-  4937			r = kvm_set_irq_routing(kvm, entries, routing.nr,
-  4938						routing.flags);
-  4939			kvfree(entries);
-  4940			break;
-  4941		}
-  4942	#endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
-  4943		case KVM_CREATE_DEVICE: {
-  4944			struct kvm_create_device cd;
-  4945	
-  4946			r = -EFAULT;
-  4947			if (copy_from_user(&cd, argp, sizeof(cd)))
-  4948				goto out;
-  4949	
-  4950			r = kvm_ioctl_create_device(kvm, &cd);
-  4951			if (r)
-  4952				goto out;
-  4953	
-  4954			r = -EFAULT;
-  4955			if (copy_to_user(argp, &cd, sizeof(cd)))
-  4956				goto out;
-  4957	
-  4958			r = 0;
-  4959			break;
-  4960		}
-  4961		case KVM_CHECK_EXTENSION:
-  4962			r = kvm_vm_ioctl_check_extension_generic(kvm, arg);
-  4963			break;
-  4964		case KVM_RESET_DIRTY_RINGS:
-  4965			r = kvm_vm_ioctl_reset_dirty_pages(kvm);
-  4966			break;
-  4967		case KVM_GET_STATS_FD:
-  4968			r = kvm_vm_ioctl_get_stats_fd(kvm);
-  4969			break;
-  4970		default:
-> 4971	arch_vm_ioctl:
-  4972			r = kvm_arch_vm_ioctl(filp, ioctl, arg);
-  4973		}
-  4974	out:
-  4975		return r;
-  4976	}
-  4977	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+- Arnaldo
