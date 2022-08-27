@@ -1,32 +1,32 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC097C
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 07:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801657C
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 07:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661583909; x=1693119909;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=MeyfiG1WV/G+fVqDdCE4FjaLpNOunPp15e4AIulnecM=;
-  b=HVygoC3m4uhg1emZBoALA+pa/DoOuPfDVgx4dltTpiHjD3XFdUF6aXPu
-   R/JuOwQghgUX1R6lvfDowZfhrYQ/PuDmkpzjBIgTTAg5+5d1JNXCQYJEr
-   ZsVJmvUYUCOZ73MKUbRwhz5BxFVbgTW8Hzru9zZc0WK2FdEf2HKob23z9
-   nZwrfKJcKzySvFv8ecs8Wxvjk+hZ3zeFhvrPFroOOHfUIRW1ULM2vX/5w
-   pIQKsaOPuBJUKKr6J1ODeZ5hPZLZodB9PK+hSmZDIwgGTcGHPiS0wSeFB
-   jgdIHoC6soK1b+zcoZDj1OJS3rOcbLPPhdDAT3QAAZM6ozxWCP1xrtVl7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="380946311"
+  t=1661584307; x=1693120307;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5//vesnR6q4a/EAJehddmLIvKMXBYIPt2MNCh84f7z8=;
+  b=lx2S/vrRkvcqCLhAVcK4d5LEfaMtSGKWUjBQIJABJ9nBpOHOytwEfp7C
+   WCUlTVUD4b7BEnc08T0BBYBOwv08NmV1nxJF9lGwKu3+oGIqWx23x4Ybc
+   dNPxcRh3WeCHdOGQS2IsUDXYlLVkqhtrXoNTusKP9i3wdlr1hg0DE7F5s
+   eBsHZSFG7gjiYuCAkRuVv9OkL0KNCotEk+h02wwpJzXVccLs4gj65rBe4
+   jCuRsBHVWkovKLgEe9ldkfP19Uny6OoY7YXfmZw+ylAibH1nELIdu+QeU
+   7DOI2GHtWedR7LEJM8ZhLuugrpTWuVic4fFQHBsFpczmugDSowN9/3skz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358609546"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="380946311"
+   d="scan'208";a="358609546"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:05:03 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:11:35 -0700
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="671745348"
+   d="scan'208";a="671747248"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.233])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:04:48 -0700
-Message-ID: <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
-Date: Sat, 27 Aug 2022 10:04:44 +0300
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:11:23 -0700
+Message-ID: <bdbd520a-b1c4-01c4-18bb-f1c2b553371d@intel.com>
+Date: Sat, 27 Aug 2022 10:11:19 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,16 +35,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
+Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
 Content-Language: en-US
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+To: Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
  Mark Rutland <mark.rutland@arm.com>,
  Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
- <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
+ =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
  Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
  Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
@@ -66,63 +67,53 @@ To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
  Masami Hiramatsu <mhiramat@kernel.org>,
  Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
  Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220826164027.42929-1-irogers@google.com>
+ Remi Bernon <rbernon@codeweavers.com>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-perf-users <linux-perf-users@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220824153901.488576-1-irogers@google.com>
+ <20220824153901.488576-10-irogers@google.com>
+ <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
+ <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
+ <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com>
+ <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
+ <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
+ <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
+ <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
+ <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
+ <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
 From: Adrian Hunter <adrian.hunter@intel.com>
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
  Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220826164027.42929-1-irogers@google.com>
+In-Reply-To: <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/08/22 19:40, Ian Rogers wrote:
-> When fixing a locking race and memory leak in:
-> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+On 26/08/22 23:52, Ian Rogers wrote:
+> On Fri, Aug 26, 2022 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>>
+>> On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 26/08/22 22:00, Namhyung Kim wrote:
+>>>> On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>> Below seems adequate for now, at least logically, but maybe it
+>>>>> would confuse clang thread-safety analysis?
+>>>>
+>>>> I think it's not just about locks, the exit_browser should bail out early
+>>>> if the setup code was not called.
+>>>
+>>> In those cases, use_browser is 0 or -1 unless someone has inserted
+>>> an invalid perf config like "tui.script=on" or "gtk.script=on".
+>>> So currently, in cases where exit_browser() is called without
+>>> setup_browser(), it does nothing.  Which means it is only the
+>>> unconditional mutex_destroy() that needs to be conditional.
+>>
+>> Yeah there's a possibility that it can be called with > 0 use_browser
+>> on some broken config or something.  So I think it's safer and better
+>> for future changes.
 > 
-> It was requested that debug mutex code be separated out into its own
-> files. This was, in part, done by Pavithra Gurushankar in:
-> https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
-> 
-> These patches fix issues with the previous patches, add in the
-> original dso->nsinfo fix and then build on our mutex wrapper with
-> clang's -Wthread-safety analysis. The analysis found missing unlocks
-> in builtin-sched.c which are fixed and -Wthread-safety is enabled by
-> default when building with clang.
-> 
-> v4. Adds a comment for the trylock result, fixes the new line (missed
->     in v3) and removes two blank lines as suggested by Adrian Hunter.
-> v3. Adds a missing new line to the error messages and removes the
->     pshared argument to mutex_init by having two functions, mutex_init
->     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
->     annotations as requested by Arnaldo and Namhyung. A boolean is
->     added to builtin-sched.c to terminate thread funcs rather than
->     leaving them blocked on delted mutexes.
-> 
-> Ian Rogers (17):
->   perf bench: Update use of pthread mutex/cond
->   perf tests: Avoid pthread.h inclusion
->   perf hist: Update use of pthread mutex
->   perf bpf: Remove unused pthread.h include
->   perf lock: Remove unused pthread.h include
->   perf record: Update use of pthread mutex
->   perf sched: Update use of pthread mutex
->   perf ui: Update use of pthread mutex
->   perf mmap: Remove unnecessary pthread.h include
->   perf dso: Update use of pthread mutex
->   perf annotate: Update use of pthread mutex
->   perf top: Update use of pthread mutex
->   perf dso: Hold lock when accessing nsinfo
->   perf mutex: Add thread safety annotations
->   perf sched: Fixes for thread safety analysis
->   perf top: Fixes for thread safety analysis
->   perf build: Enable -Wthread-safety with clang
-> 
-> Pavithra Gurushankar (1):
->   perf mutex: Wrapped usage of mutex and cond
+> I'd thought about a:
+> static bool ui__lock_initialized;
+> but the issue is shouldn't it be atomic?
 
-For all patches except 9 and 16
-
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-
+No, it is only accessed from the main thread.
