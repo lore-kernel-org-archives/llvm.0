@@ -1,119 +1,380 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801657C
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 07:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15AE7C
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 07:42:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661584307; x=1693120307;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5//vesnR6q4a/EAJehddmLIvKMXBYIPt2MNCh84f7z8=;
-  b=lx2S/vrRkvcqCLhAVcK4d5LEfaMtSGKWUjBQIJABJ9nBpOHOytwEfp7C
-   WCUlTVUD4b7BEnc08T0BBYBOwv08NmV1nxJF9lGwKu3+oGIqWx23x4Ybc
-   dNPxcRh3WeCHdOGQS2IsUDXYlLVkqhtrXoNTusKP9i3wdlr1hg0DE7F5s
-   eBsHZSFG7gjiYuCAkRuVv9OkL0KNCotEk+h02wwpJzXVccLs4gj65rBe4
-   jCuRsBHVWkovKLgEe9ldkfP19Uny6OoY7YXfmZw+ylAibH1nELIdu+QeU
-   7DOI2GHtWedR7LEJM8ZhLuugrpTWuVic4fFQHBsFpczmugDSowN9/3skz
+  t=1661586179; x=1693122179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TPeE7O5eSMiUUD8HCLa+uWxVy+EUXvNIFR+Z5jgl9Oc=;
+  b=DyV2+ZHmqYiFHpCoqi6cZd+oQV6/zV86mERm8/w/pHzWUpG3hMsC8UYS
+   ukkMQIgxoBPJcr4PvDQ0HlfXwnvghasgMMtnC7Y0ZwekwM+X8M6c75Y8p
+   ETheaAvww94/gIAV07wsNCVQ4Nv6uKUSaawJJCkEKPqb85cbWzLgO438Z
+   omevSivXVHfKMNc6YhnJW26N4SXXfUTcjYmjuIwWym2uUV9sJGhzGwOKc
+   WQ73RM+GQhKnkt3nkTFDUjUgNjw0FdGyouuFOsnIO0aRmnlcyVgos/cf1
+   g4SXtr2Wi5Iow7MCTMqjc0zuooVa8MpQAth0FJExt8zu2NDg/rEJv+MHZ
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358609546"
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="281612366"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="358609546"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:11:35 -0700
+   d="scan'208";a="281612366"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:42:50 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="671747248"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.233])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:11:23 -0700
-Message-ID: <bdbd520a-b1c4-01c4-18bb-f1c2b553371d@intel.com>
-Date: Sat, 27 Aug 2022 10:11:19 +0300
+   d="scan'208";a="640332537"
+Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 27 Aug 2022 00:42:42 -0700
+Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oRqSn-00016R-1S;
+	Sat, 27 Aug 2022 07:42:41 +0000
+Date: Sat, 27 Aug 2022 15:42:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_for_vladimir6 33/46]
+ drivers/net/ethernet/mellanox/mlxsw/spectrum.c:1651:46: warning: variable
+ 'mlxsw_sp_port' is uninitialized when used here
+Message-ID: <202208271536.DZv8cLOR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 09/18] perf ui: Update use of pthread mutex
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
- =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
- Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
- Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
- <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
- Kim Phillips <kim.phillips@amd.com>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Alexandre Truong <alexandre.truong@arm.com>,
- Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
- Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
- <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
- James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
- Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
- Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
- Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Remi Bernon <rbernon@codeweavers.com>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-perf-users <linux-perf-users@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220824153901.488576-1-irogers@google.com>
- <20220824153901.488576-10-irogers@google.com>
- <2cf6edac-6e41-b43c-2bc1-f49cb739201a@intel.com>
- <CAP-5=fVVWx=LZAzXsxfuktPHwki1gYbV4mcmvJp_9GTDS6KJcQ@mail.gmail.com>
- <a9b4f79d-cdea-821e-0e57-cd4854de6cf4@intel.com>
- <CAP-5=fW7t9tcJpyUbv8JAo-BFna-KS6FC+HkbuGx6S=h+nBMqw@mail.gmail.com>
- <43540a3d-e64e-ec08-e12e-aebb236a2efe@intel.com>
- <CAM9d7chBnZtrKe6b8k+VYk1Nmz8YnNWSMmyLydH6+Otvw4xGeA@mail.gmail.com>
- <b0f86189-be17-d1e7-d23c-692eeee2b5ec@intel.com>
- <CAM9d7ciroc1XzRL+W34D5G7kCp4KCzRxjyRqnO2OXj=-ZaMTLQ@mail.gmail.com>
- <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fWvf66snfmUfaTQ6BZ9EmsmBs0PUT8PAfehW74bnEE5nQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 26/08/22 23:52, Ian Rogers wrote:
-> On Fri, Aug 26, 2022 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
->>
->> On Fri, Aug 26, 2022 at 12:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>
->>> On 26/08/22 22:00, Namhyung Kim wrote:
->>>> On Fri, Aug 26, 2022 at 11:53 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>> Below seems adequate for now, at least logically, but maybe it
->>>>> would confuse clang thread-safety analysis?
->>>>
->>>> I think it's not just about locks, the exit_browser should bail out early
->>>> if the setup code was not called.
->>>
->>> In those cases, use_browser is 0 or -1 unless someone has inserted
->>> an invalid perf config like "tui.script=on" or "gtk.script=on".
->>> So currently, in cases where exit_browser() is called without
->>> setup_browser(), it does nothing.  Which means it is only the
->>> unconditional mutex_destroy() that needs to be conditional.
->>
->> Yeah there's a possibility that it can be called with > 0 use_browser
->> on some broken config or something.  So I think it's safer and better
->> for future changes.
-> 
-> I'd thought about a:
-> static bool ui__lock_initialized;
-> but the issue is shouldn't it be atomic?
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_for_vladimir6
+head:   f39d6f294ee45799dcd1d8208cc4017f483862fc
+commit: 95b77ce1b5edc51f0075f3c0307b72d6ff27ec91 [33/46] net: make drivers to use SET_NETDEV_DEVLINK_PORT to set devlink_port
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271536.DZv8cLOR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/95b77ce1b5edc51f0075f3c0307b72d6ff27ec91
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_for_vladimir6
+        git checkout 95b77ce1b5edc51f0075f3c0307b72d6ff27ec91
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
 
-No, it is only accessed from the main thread.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/mellanox/mlxsw/spectrum.c:1651:46: warning: variable 'mlxsw_sp_port' is uninitialized when used here [-Wuninitialized]
+           mlxsw_core_port_netdev_link(mlxsw_sp->core, mlxsw_sp_port->local_port,
+                                                       ^~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/spectrum.c:1604:37: note: initialize the variable 'mlxsw_sp_port' to silence this warning
+           struct mlxsw_sp_port *mlxsw_sp_port;
+                                              ^
+                                               = NULL
+   1 warning generated.
+
+
+vim +/mlxsw_sp_port +1651 drivers/net/ethernet/mellanox/mlxsw/spectrum.c
+
+  1598	
+  1599	static int mlxsw_sp_port_create(struct mlxsw_sp *mlxsw_sp, u16 local_port,
+  1600					bool split,
+  1601					struct mlxsw_sp_port_mapping *port_mapping)
+  1602	{
+  1603		struct mlxsw_sp_port_vlan *mlxsw_sp_port_vlan;
+  1604		struct mlxsw_sp_port *mlxsw_sp_port;
+  1605		u32 lanes = port_mapping->width;
+  1606		u8 split_port_subnumber;
+  1607		struct net_device *dev;
+  1608		u8 port_number;
+  1609		u8 slot_index;
+  1610		bool splittable;
+  1611		int err;
+  1612	
+  1613		err = mlxsw_sp_port_module_map(mlxsw_sp, local_port, port_mapping);
+  1614		if (err) {
+  1615			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to map module\n",
+  1616				local_port);
+  1617			return err;
+  1618		}
+  1619	
+  1620		err = mlxsw_sp_port_swid_set(mlxsw_sp, local_port, 0);
+  1621		if (err) {
+  1622			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set SWID\n",
+  1623				local_port);
+  1624			goto err_port_swid_set;
+  1625		}
+  1626	
+  1627		err = mlxsw_sp_port_label_info_get(mlxsw_sp, local_port, &port_number,
+  1628						   &split_port_subnumber, &slot_index);
+  1629		if (err) {
+  1630			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to get port label information\n",
+  1631				local_port);
+  1632			goto err_port_label_info_get;
+  1633		}
+  1634	
+  1635		splittable = lanes > 1 && !split;
+  1636		err = mlxsw_core_port_init(mlxsw_sp->core, local_port, slot_index,
+  1637					   port_number, split, split_port_subnumber,
+  1638					   splittable, lanes, mlxsw_sp->base_mac,
+  1639					   sizeof(mlxsw_sp->base_mac));
+  1640		if (err) {
+  1641			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to init core port\n",
+  1642				local_port);
+  1643			goto err_core_port_init;
+  1644		}
+  1645	
+  1646		dev = alloc_etherdev(sizeof(struct mlxsw_sp_port));
+  1647		if (!dev) {
+  1648			err = -ENOMEM;
+  1649			goto err_alloc_etherdev;
+  1650		}
+> 1651		mlxsw_core_port_netdev_link(mlxsw_sp->core, mlxsw_sp_port->local_port,
+  1652					    mlxsw_sp_port, dev);
+  1653		SET_NETDEV_DEV(dev, mlxsw_sp->bus_info->dev);
+  1654		dev_net_set(dev, mlxsw_sp_net(mlxsw_sp));
+  1655		mlxsw_sp_port = netdev_priv(dev);
+  1656		mlxsw_sp_port->dev = dev;
+  1657		mlxsw_sp_port->mlxsw_sp = mlxsw_sp;
+  1658		mlxsw_sp_port->local_port = local_port;
+  1659		mlxsw_sp_port->pvid = MLXSW_SP_DEFAULT_VID;
+  1660		mlxsw_sp_port->split = split;
+  1661		mlxsw_sp_port->mapping = *port_mapping;
+  1662		mlxsw_sp_port->link.autoneg = 1;
+  1663		INIT_LIST_HEAD(&mlxsw_sp_port->vlans_list);
+  1664	
+  1665		mlxsw_sp_port->pcpu_stats =
+  1666			netdev_alloc_pcpu_stats(struct mlxsw_sp_port_pcpu_stats);
+  1667		if (!mlxsw_sp_port->pcpu_stats) {
+  1668			err = -ENOMEM;
+  1669			goto err_alloc_stats;
+  1670		}
+  1671	
+  1672		INIT_DELAYED_WORK(&mlxsw_sp_port->periodic_hw_stats.update_dw,
+  1673				  &update_stats_cache);
+  1674	
+  1675		dev->netdev_ops = &mlxsw_sp_port_netdev_ops;
+  1676		dev->ethtool_ops = &mlxsw_sp_port_ethtool_ops;
+  1677	
+  1678		err = mlxsw_sp_port_dev_addr_init(mlxsw_sp_port);
+  1679		if (err) {
+  1680			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Unable to init port mac address\n",
+  1681				mlxsw_sp_port->local_port);
+  1682			goto err_dev_addr_init;
+  1683		}
+  1684	
+  1685		netif_carrier_off(dev);
+  1686	
+  1687		dev->features |= NETIF_F_NETNS_LOCAL | NETIF_F_LLTX | NETIF_F_SG |
+  1688				 NETIF_F_HW_VLAN_CTAG_FILTER | NETIF_F_HW_TC;
+  1689		dev->hw_features |= NETIF_F_HW_TC | NETIF_F_LOOPBACK;
+  1690	
+  1691		dev->min_mtu = 0;
+  1692		dev->max_mtu = ETH_MAX_MTU;
+  1693	
+  1694		/* Each packet needs to have a Tx header (metadata) on top all other
+  1695		 * headers.
+  1696		 */
+  1697		dev->needed_headroom = MLXSW_TXHDR_LEN;
+  1698	
+  1699		err = mlxsw_sp_port_system_port_mapping_set(mlxsw_sp_port);
+  1700		if (err) {
+  1701			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set system port mapping\n",
+  1702				mlxsw_sp_port->local_port);
+  1703			goto err_port_system_port_mapping_set;
+  1704		}
+  1705	
+  1706		err = mlxsw_sp_port_speed_by_width_set(mlxsw_sp_port);
+  1707		if (err) {
+  1708			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to enable speeds\n",
+  1709				mlxsw_sp_port->local_port);
+  1710			goto err_port_speed_by_width_set;
+  1711		}
+  1712	
+  1713		err = mlxsw_sp->port_type_speed_ops->ptys_max_speed(mlxsw_sp_port,
+  1714								    &mlxsw_sp_port->max_speed);
+  1715		if (err) {
+  1716			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to get maximum speed\n",
+  1717				mlxsw_sp_port->local_port);
+  1718			goto err_max_speed_get;
+  1719		}
+  1720	
+  1721		err = mlxsw_sp_port_max_mtu_get(mlxsw_sp_port, &mlxsw_sp_port->max_mtu);
+  1722		if (err) {
+  1723			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to get maximum MTU\n",
+  1724				mlxsw_sp_port->local_port);
+  1725			goto err_port_max_mtu_get;
+  1726		}
+  1727	
+  1728		err = mlxsw_sp_port_mtu_set(mlxsw_sp_port, ETH_DATA_LEN);
+  1729		if (err) {
+  1730			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set MTU\n",
+  1731				mlxsw_sp_port->local_port);
+  1732			goto err_port_mtu_set;
+  1733		}
+  1734	
+  1735		err = mlxsw_sp_port_admin_status_set(mlxsw_sp_port, false);
+  1736		if (err)
+  1737			goto err_port_admin_status_set;
+  1738	
+  1739		err = mlxsw_sp_port_buffers_init(mlxsw_sp_port);
+  1740		if (err) {
+  1741			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize buffers\n",
+  1742				mlxsw_sp_port->local_port);
+  1743			goto err_port_buffers_init;
+  1744		}
+  1745	
+  1746		err = mlxsw_sp_port_ets_init(mlxsw_sp_port);
+  1747		if (err) {
+  1748			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize ETS\n",
+  1749				mlxsw_sp_port->local_port);
+  1750			goto err_port_ets_init;
+  1751		}
+  1752	
+  1753		err = mlxsw_sp_port_tc_mc_mode_set(mlxsw_sp_port, true);
+  1754		if (err) {
+  1755			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize TC MC mode\n",
+  1756				mlxsw_sp_port->local_port);
+  1757			goto err_port_tc_mc_mode;
+  1758		}
+  1759	
+  1760		/* ETS and buffers must be initialized before DCB. */
+  1761		err = mlxsw_sp_port_dcb_init(mlxsw_sp_port);
+  1762		if (err) {
+  1763			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize DCB\n",
+  1764				mlxsw_sp_port->local_port);
+  1765			goto err_port_dcb_init;
+  1766		}
+  1767	
+  1768		err = mlxsw_sp_port_fids_init(mlxsw_sp_port);
+  1769		if (err) {
+  1770			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize FIDs\n",
+  1771				mlxsw_sp_port->local_port);
+  1772			goto err_port_fids_init;
+  1773		}
+  1774	
+  1775		err = mlxsw_sp_tc_qdisc_init(mlxsw_sp_port);
+  1776		if (err) {
+  1777			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize TC qdiscs\n",
+  1778				mlxsw_sp_port->local_port);
+  1779			goto err_port_qdiscs_init;
+  1780		}
+  1781	
+  1782		err = mlxsw_sp_port_vlan_set(mlxsw_sp_port, 0, VLAN_N_VID - 1, false,
+  1783					     false);
+  1784		if (err) {
+  1785			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to clear VLAN filter\n",
+  1786				mlxsw_sp_port->local_port);
+  1787			goto err_port_vlan_clear;
+  1788		}
+  1789	
+  1790		err = mlxsw_sp_port_nve_init(mlxsw_sp_port);
+  1791		if (err) {
+  1792			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to initialize NVE\n",
+  1793				mlxsw_sp_port->local_port);
+  1794			goto err_port_nve_init;
+  1795		}
+  1796	
+  1797		err = mlxsw_sp_port_pvid_set(mlxsw_sp_port, MLXSW_SP_DEFAULT_VID,
+  1798					     ETH_P_8021Q);
+  1799		if (err) {
+  1800			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set PVID\n",
+  1801				mlxsw_sp_port->local_port);
+  1802			goto err_port_pvid_set;
+  1803		}
+  1804	
+  1805		mlxsw_sp_port_vlan = mlxsw_sp_port_vlan_create(mlxsw_sp_port,
+  1806							       MLXSW_SP_DEFAULT_VID);
+  1807		if (IS_ERR(mlxsw_sp_port_vlan)) {
+  1808			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to create VID 1\n",
+  1809				mlxsw_sp_port->local_port);
+  1810			err = PTR_ERR(mlxsw_sp_port_vlan);
+  1811			goto err_port_vlan_create;
+  1812		}
+  1813		mlxsw_sp_port->default_vlan = mlxsw_sp_port_vlan;
+  1814	
+  1815		/* Set SPVC.et0=true and SPVC.et1=false to make the local port to treat
+  1816		 * only packets with 802.1q header as tagged packets.
+  1817		 */
+  1818		err = mlxsw_sp_port_vlan_classification_set(mlxsw_sp_port, false, true);
+  1819		if (err) {
+  1820			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set default VLAN classification\n",
+  1821				local_port);
+  1822			goto err_port_vlan_classification_set;
+  1823		}
+  1824	
+  1825		INIT_DELAYED_WORK(&mlxsw_sp_port->ptp.shaper_dw,
+  1826				  mlxsw_sp->ptp_ops->shaper_work);
+  1827	
+  1828		mlxsw_sp->ports[local_port] = mlxsw_sp_port;
+  1829	
+  1830		err = mlxsw_sp_port_overheat_init_val_set(mlxsw_sp_port);
+  1831		if (err) {
+  1832			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to set overheat initial value\n",
+  1833				mlxsw_sp_port->local_port);
+  1834			goto err_port_overheat_init_val_set;
+  1835		}
+  1836	
+  1837		err = register_netdev(dev);
+  1838		if (err) {
+  1839			dev_err(mlxsw_sp->bus_info->dev, "Port %d: Failed to register netdev\n",
+  1840				mlxsw_sp_port->local_port);
+  1841			goto err_register_netdev;
+  1842		}
+  1843	
+  1844		mlxsw_core_schedule_dw(&mlxsw_sp_port->periodic_hw_stats.update_dw, 0);
+  1845		return 0;
+  1846	
+  1847	err_register_netdev:
+  1848	err_port_overheat_init_val_set:
+  1849		mlxsw_sp_port_vlan_classification_set(mlxsw_sp_port, true, true);
+  1850	err_port_vlan_classification_set:
+  1851		mlxsw_sp->ports[local_port] = NULL;
+  1852		mlxsw_sp_port_vlan_destroy(mlxsw_sp_port_vlan);
+  1853	err_port_vlan_create:
+  1854	err_port_pvid_set:
+  1855		mlxsw_sp_port_nve_fini(mlxsw_sp_port);
+  1856	err_port_nve_init:
+  1857	err_port_vlan_clear:
+  1858		mlxsw_sp_tc_qdisc_fini(mlxsw_sp_port);
+  1859	err_port_qdiscs_init:
+  1860		mlxsw_sp_port_fids_fini(mlxsw_sp_port);
+  1861	err_port_fids_init:
+  1862		mlxsw_sp_port_dcb_fini(mlxsw_sp_port);
+  1863	err_port_dcb_init:
+  1864		mlxsw_sp_port_tc_mc_mode_set(mlxsw_sp_port, false);
+  1865	err_port_tc_mc_mode:
+  1866	err_port_ets_init:
+  1867		mlxsw_sp_port_buffers_fini(mlxsw_sp_port);
+  1868	err_port_buffers_init:
+  1869	err_port_admin_status_set:
+  1870	err_port_mtu_set:
+  1871	err_port_max_mtu_get:
+  1872	err_max_speed_get:
+  1873	err_port_speed_by_width_set:
+  1874	err_port_system_port_mapping_set:
+  1875	err_dev_addr_init:
+  1876		free_percpu(mlxsw_sp_port->pcpu_stats);
+  1877	err_alloc_stats:
+  1878		free_netdev(dev);
+  1879	err_alloc_etherdev:
+  1880		mlxsw_core_port_fini(mlxsw_sp->core, local_port);
+  1881	err_core_port_init:
+  1882	err_port_label_info_get:
+  1883		mlxsw_sp_port_swid_set(mlxsw_sp, local_port,
+  1884				       MLXSW_PORT_SWID_DISABLED_PORT);
+  1885	err_port_swid_set:
+  1886		mlxsw_sp_port_module_unmap(mlxsw_sp, local_port,
+  1887					   port_mapping->slot_index,
+  1888					   port_mapping->module);
+  1889		return err;
+  1890	}
+  1891	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
