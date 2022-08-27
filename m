@@ -1,45 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E78D17C5
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 05:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B2E17C5
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 06:21:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661579458; x=1693115458;
+  t=1661581305; x=1693117305;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iTIDnPUVNynQy5bkUrHHmocR0AYMrXJJvvAZPIRVHbM=;
-  b=MU/sUCDAFa3oSyqkDF4xKi2c6PJKYmTr+ftr14igFiEqoiGa/7xBM0bY
-   fZ/1zATolw81Yxe+gEWcv5I5rs9Cz2faQPqbLTr4P/t7l0J13nAtccuHA
-   At8BzelNFQzS7bH4cUbDCra0fsJ+4Gu10ENxDzOoLf5icdQOEtJ87JEW1
-   FyAlnwy9agnWrCqOvuRxuQ30l6TDqkuzmxU7UUnWtQnFmyW4plz55D+XT
-   pBf28xx13cLuYDAOU5i7H/kpEN+oaUGw4DzCexeCLa77+5P9hkyPvi+S5
-   C+QhA2qnsObmLE+ValK6MdZwvO/c5yBgTDOWpKCfZVYc7M5PiTkd/3fFS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="358605267"
+  bh=aXJC/E7x5q+usZCo0oNBegtsCOu6gFfwtcdSpeMxdpI=;
+  b=bE15zcgQR+yW6NzGGt1juftZVuC7BbuTDz8196dFrECIwVDhMlI1oEqz
+   kx5pYsrd6Isvp4HLJVQBYTxwR+9s2kXzX95glLNg1NCxuHAjJF6lJt8e9
+   PHZwzN5g0WDVp/+h9CNAbwyiIrPyX437bOypZf7FhqH74jM/Lsd967ccz
+   crAgDFiicUGQ3VM2aoJDyn5VfBt36hvUovAz6rkAVKTlqmrGJPm9fgSWe
+   /+d89qkgkNkZATNPbCWsC92hnzwj8mWlJ2haoNgSS7zN1/AiY0tY52PcW
+   tOeKkZ2VrHHgIk8DgLEMfNKHylVD3gRFlrGtqB447E67mwPRQEgYXIx+/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="320753173"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="358605267"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 22:50:41 -0700
+   d="scan'208";a="320753173"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:21:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="753097141"
+   d="scan'208";a="938991188"
 Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Aug 2022 22:50:39 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 23:21:40 -0700
 Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oRoiN-00012p-0e;
-	Sat, 27 Aug 2022 05:50:39 +0000
-Date: Sat, 27 Aug 2022 13:50:32 +0800
+	id 1oRpCN-000147-2w;
+	Sat, 27 Aug 2022 06:21:39 +0000
+Date: Sat, 27 Aug 2022 14:21:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roi Dayan <roid@nvidia.com>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Saeed Mahameed <saeedm@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Maor Dickman <maord@nvidia.com>
-Subject: [linux-next:master 2212/3682]
- drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: warning: variable
- 'err' is used uninitialized whenever 'if' condition is false
-Message-ID: <202208271304.MimlzZvl-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [ardb:efi-decompressor-v4 4/9]
+ drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin
+ function '__builtin_memcpy'
+Message-ID: <202208271446.2z1VzPD0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,72 +47,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   8d0c42c9e80791e8baba2932d2cbd2dcead50d47
-commit: 430e2d5e2a982e6f86866762e6d6eb78191f9677 [2212/3682] net/mlx5: E-Switch, Move send to vport meta rule creation
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271304.MimlzZvl-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
+head:   2943178d7555c331c19e9cce9a83e47f9513f3b1
+commit: 74f59f87ddbcbacc7232ac6800916260a0632126 [4/9] efi/libstub: use EFI provided memcpy/memset routines
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271446.2z1VzPD0-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=430e2d5e2a982e6f86866762e6d6eb78191f9677
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 430e2d5e2a982e6f86866762e6d6eb78191f9677
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=74f59f87ddbcbacc7232ac6800916260a0632126
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-decompressor-v4
+        git checkout 74f59f87ddbcbacc7232ac6800916260a0632126
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/ drivers/net/ethernet/mellanox/mlxsw/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (IS_ERR(flow_rule)) {
-               ^~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
-           if (IS_ERR(flow_rule)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
+>> drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin function '__builtin_memcpy'
+   void *memcpy(void *dst, const void *src, size_t len)
+         ^
+   arch/x86/include/asm/string_32.h:150:25: note: expanded from macro 'memcpy'
+   #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+                           ^
+>> drivers/firmware/efi/libstub/intrinsics.c:26:7: error: definition of builtin function '__builtin_memset'
+   void *memset(void *dst, int c, size_t len)
+         ^
+   arch/x86/include/asm/string_32.h:195:29: note: expanded from macro 'memset'
+   #define memset(s, c, count) __builtin_memset(s, c, count)
+                               ^
+   2 errors generated.
 
 
-vim +481 drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+vim +/__builtin_memcpy +18 drivers/firmware/efi/libstub/intrinsics.c
 
-   465	
-   466	static int
-   467	mlx5e_rep_add_meta_tunnel_rule(struct mlx5e_priv *priv)
-   468	{
-   469		struct mlx5_eswitch *esw = priv->mdev->priv.eswitch;
-   470		struct mlx5e_rep_priv *rpriv = priv->ppriv;
-   471		struct mlx5_eswitch_rep *rep = rpriv->rep;
-   472		struct mlx5_flow_handle *flow_rule;
-   473		struct mlx5_flow_group *g;
-   474		int err;
-   475	
-   476		g = esw->fdb_table.offloads.send_to_vport_meta_grp;
-   477		if (!g)
-   478			return 0;
-   479	
-   480		flow_rule = mlx5_eswitch_add_send_to_vport_meta_rule(esw, rep->vport);
- > 481		if (IS_ERR(flow_rule)) {
-   482			err = PTR_ERR(flow_rule);
-   483			goto out;
-   484		}
-   485	
-   486		rpriv->send_to_vport_meta_rule = flow_rule;
-   487	
-   488	out:
-   489		return err;
-   490	}
-   491	
+    17	
+  > 18	void *memcpy(void *dst, const void *src, size_t len)
+    19	{
+    20		efi_bs_call(copy_mem, dst, src, len);
+    21		return dst;
+    22	}
+    23	
+    24	extern void *memmove(void *dst, const void *src, size_t len) __alias(memcpy);
+    25	
+  > 26	void *memset(void *dst, int c, size_t len)
 
 -- 
 0-DAY CI Kernel Test Service
