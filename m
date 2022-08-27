@@ -1,71 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2DD290A
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 15:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133A0C433C1;
-	Sat, 27 Aug 2022 15:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661613517;
-	bh=R/FPlgh+i14+wvCo3ye35JKDBc9ySPLXlmivzP/hCn0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dzCuGaUc9VTghk2gQjzIr5ca2JYaVqPKhs5InSyKAUWLn6G34sldIYA9Bm8aGsyzY
-	 sBMhnrfQRz0j8wOM2KUcn8QN5HUEPyDyy6TgLbqbRAXr2BU++Z/rzQLKp4Uc+WH9jW
-	 aRVf3Xok72JKal9Wbw+Jkq0bw40HNdZ78v3IOVDd+PahpwdcogBh3Le2zKBtcpay6C
-	 cS/jGJAZt5YQD9+blS+03LYa2wqowTeC/bv6fQUA8qgGWiMhlVhw85IEM0hTjydhMM
-	 IkUrcHOY2WsFYsBeHQ5q7VN8YvIHgOJ4l+LNH7R2y1J7D/GA3JLiW6MWSlAewWKzVZ
-	 sSXKNw0KvlSAw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 58330404A1; Sat, 27 Aug 2022 12:18:34 -0300 (-03)
-Date: Sat, 27 Aug 2022 12:18:34 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Dario Petrillo <dario.pk1@gmail.com>,
-	Hewenliang <hewenliang4@huawei.com>,
-	yaowenbin <yaowenbin1@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>,
-	Song Liu <songliubraving@fb.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
-	Leo Yan <leo.yan@linaro.org>, Kim Phillips <kim.phillips@amd.com>,
-	Pavithra Gurushankar <gpavithrasha@gmail.com>,
-	Alexandre Truong <alexandre.truong@arm.com>,
-	Quentin Monnet <quentin@isovalent.com>,
-	William Cohen <wcohen@redhat.com>,
-	Andres Freund <andres@anarazel.de>,
-	Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-	Colin Ian King <colin.king@intel.com>,
-	James Clark <james.clark@arm.com>,
-	Fangrui Song <maskray@google.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-	Riccardo Mancini <rickyman7@gmail.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Zechuan Chen <chenzechuan1@huawei.com>,
-	Jason Wang <wangborong@cdjrlc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
-Message-ID: <Ywo1yt/2liQwDQot@kernel.org>
-References: <20220826164027.42929-1-irogers@google.com>
- <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B56442A
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 19:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661629635; x=1693165635;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yNB0l+bW56hu/+fUvmGz/Xwj9wXUK6Ds+0g+l6YnadE=;
+  b=fnERP6HwWk1nrjUvYzTTk/EB36EIzY9f+mp5EwhmveqEEcEdxCGkexDt
+   hu/OxATNVUYrzi6uvelLl6oH8YReCTgn9g24iIzyqfk7LFPa0h0avBnax
+   o0bEy2ToxRl9Igpeqf/xxYUS+DTvQsgtzeuZcioYZPo5OecDhB/HqUB9x
+   Fhu3dhyD9YRsoKqULhMKNj5bVP+rEbumJ998e05T1mvp7YSn+5l/xhBji
+   W4YsFh8WmUo70yEnne0f2pXR1Ltlc6wpdTBDaPlywNS24XE/CgHUtbkgE
+   NmfpbH+lmIpN9RjDBY3SkUyHfSqkLLM0knxNSnYYwcsdRQ/cOTYm13Z16
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="275089828"
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="275089828"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 12:47:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
+   d="scan'208";a="561789386"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 Aug 2022 12:47:12 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oS1lv-0000QT-18;
+	Sat, 27 Aug 2022 19:47:11 +0000
+Date: Sun, 28 Aug 2022 03:46:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shaomin Deng <dengshaomin@cdjrlc.com>, agk@redhat.com,
+	snitzer@kernel.org, dm-devel@redhat.com,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: Re: [PATCH] dm: Remove the unneeeded variable
+Message-ID: <202208280313.Avg378Ql-lkp@intel.com>
+References: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,65 +48,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
 
-Em Sat, Aug 27, 2022 at 10:04:44AM +0300, Adrian Hunter escreveu:
-> On 26/08/22 19:40, Ian Rogers wrote:
-> > When fixing a locking race and memory leak in:
-> > https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> > 
-> > It was requested that debug mutex code be separated out into its own
-> > files. This was, in part, done by Pavithra Gurushankar in:
-> > https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
-> > 
-> > These patches fix issues with the previous patches, add in the
-> > original dso->nsinfo fix and then build on our mutex wrapper with
-> > clang's -Wthread-safety analysis. The analysis found missing unlocks
-> > in builtin-sched.c which are fixed and -Wthread-safety is enabled by
-> > default when building with clang.
-> > 
-> > v4. Adds a comment for the trylock result, fixes the new line (missed
-> >     in v3) and removes two blank lines as suggested by Adrian Hunter.
-> > v3. Adds a missing new line to the error messages and removes the
-> >     pshared argument to mutex_init by having two functions, mutex_init
-> >     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
-> > v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
-> >     annotations as requested by Arnaldo and Namhyung. A boolean is
-> >     added to builtin-sched.c to terminate thread funcs rather than
-> >     leaving them blocked on delted mutexes.
-> > 
-> > Ian Rogers (17):
-> >   perf bench: Update use of pthread mutex/cond
-> >   perf tests: Avoid pthread.h inclusion
-> >   perf hist: Update use of pthread mutex
-> >   perf bpf: Remove unused pthread.h include
-> >   perf lock: Remove unused pthread.h include
-> >   perf record: Update use of pthread mutex
-> >   perf sched: Update use of pthread mutex
-> >   perf ui: Update use of pthread mutex
-> >   perf mmap: Remove unnecessary pthread.h include
-> >   perf dso: Update use of pthread mutex
-> >   perf annotate: Update use of pthread mutex
-> >   perf top: Update use of pthread mutex
-> >   perf dso: Hold lock when accessing nsinfo
-> >   perf mutex: Add thread safety annotations
-> >   perf sched: Fixes for thread safety analysis
-> >   perf top: Fixes for thread safety analysis
-> >   perf build: Enable -Wthread-safety with clang
-> > 
-> > Pavithra Gurushankar (1):
-> >   perf mutex: Wrapped usage of mutex and cond
-> 
-> For all patches except 9 and 16
-> 
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi Shaomin,
 
-Added it, did the usual round of tests and pushed out perf/core, we can
-continue from there.
+Thank you for the patch! Yet something to improve:
 
-It also contains Adrian's "multiple recording time ranges" series.
+[auto build test ERROR on v6.0-rc2]
+[also build test ERROR on linus/master next-20220826]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
+base:    1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: riscv-randconfig-r003-20220828 (https://download.01.org/0day-ci/archive/20220828/202208280313.Avg378Ql-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/fd20974ffc753b102401c766eb62117c276a1527
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
+        git checkout fd20974ffc753b102401c766eb62117c276a1527
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/md/
 
-- Arnaldo
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
+                   DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
+                   ^
+   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                        ^
+>> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                                ^
+>> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                    ^
+>> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                                 ^
+   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
+                   DMEMIT("%s %u %s %u ", log->type->name,
+                   ^
+   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                        ^
+   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                                ^
+   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                    ^
+   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
+   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                                 ^
+   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
+                   DMEMIT_SYNC;
+                   ^
+   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
+                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
+                   ^
+   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                        ^
+   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
+   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
+                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
+                   ^
+   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
+   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
+                                ^
+   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
+   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
+                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
+                   ^
+   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                    ^
+   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
+   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
+                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
+                   ^
+   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
+                             0 : scnprintf(result + sz, maxlen - sz, x))
+                                                                 ^
+   12 errors generated.
+
+
+vim +/sz +810 drivers/md/dm-log.c
+
+^1da177e4c3f41 Linus Torvalds     2005-04-16  802  
+416cd17b198221 Heinz Mauelshagen  2008-04-24  803  static int disk_status(struct dm_dirty_log *log, status_type_t status,
+^1da177e4c3f41 Linus Torvalds     2005-04-16  804  		       char *result, unsigned int maxlen)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  805  {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  806  	struct log_c *lc = log->context;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  807  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  808  	switch(status) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  809  	case STATUSTYPE_INFO:
+315dcc226f066c Jonathan E Brassow 2007-05-09 @810  		DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
+64b30c46e866bb Mikulas Patocka    2009-12-10  811  		       lc->log_dev_flush_failed ? 'F' :
+64b30c46e866bb Mikulas Patocka    2009-12-10  812  		       lc->log_dev_failed ? 'D' :
+64b30c46e866bb Mikulas Patocka    2009-12-10  813  		       'A');
+^1da177e4c3f41 Linus Torvalds     2005-04-16  814  		break;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  815  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  816  	case STATUSTYPE_TABLE:
+^1da177e4c3f41 Linus Torvalds     2005-04-16  817  		DMEMIT("%s %u %s %u ", log->type->name,
+315dcc226f066c Jonathan E Brassow 2007-05-09  818  		       lc->sync == DEFAULTSYNC ? 2 : 3, lc->log_dev->name,
+^1da177e4c3f41 Linus Torvalds     2005-04-16  819  		       lc->region_size);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  820  		DMEMIT_SYNC;
+8ec456629d0bf0 Tushar Sugandhi    2021-07-12  821  		break;
+8ec456629d0bf0 Tushar Sugandhi    2021-07-12  822  
+8ec456629d0bf0 Tushar Sugandhi    2021-07-12  823  	case STATUSTYPE_IMA:
+8ec456629d0bf0 Tushar Sugandhi    2021-07-12  824  		*result = '\0';
+8ec456629d0bf0 Tushar Sugandhi    2021-07-12  825  		break;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  826  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  827  
+fd20974ffc753b Shaomin Deng       2022-08-27  828  	return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  829  }
+^1da177e4c3f41 Linus Torvalds     2005-04-16  830  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
