@@ -1,154 +1,128 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863177C
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 06:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC097C
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 07:05:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661581904; x=1693117904;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AHApHPXEU7s+9bfLBV5PgrKBP2tv1XVmisi7/hNIHeo=;
-  b=HehfAL0EZc37f6NjNZoZjziyCX14MUIAxezTBGuOahs4RrpcrhrIWSwY
-   ykl+oggWQU7Cu+KKJG6PX00n/gSmfgNcvYTBu5GTWBJXAvJarh1hdiGWA
-   L+oy+Yn5Y7LlEJ7SjR8WMWYRQdxNPKAUatevYL0tU4kapiG/Q+c9P00RT
-   prDyTf3dg+ti1VkahqjJ7sOMDQVXLzZyt3ngbdGxVYwUag1dOezWq5s5g
-   4GSMVaAEajLQ/u9I21YGM0/yJyfHtShPWesEJftST+Xiu8r717AqP1dsk
-   RvObpHowaI1gP60ZnlPos9j3r59ihHu3RJ9psSiBpqD1hEKrEz0mLYocw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294649834"
+  t=1661583909; x=1693119909;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=MeyfiG1WV/G+fVqDdCE4FjaLpNOunPp15e4AIulnecM=;
+  b=HVygoC3m4uhg1emZBoALA+pa/DoOuPfDVgx4dltTpiHjD3XFdUF6aXPu
+   R/JuOwQghgUX1R6lvfDowZfhrYQ/PuDmkpzjBIgTTAg5+5d1JNXCQYJEr
+   ZsVJmvUYUCOZ73MKUbRwhz5BxFVbgTW8Hzru9zZc0WK2FdEf2HKob23z9
+   nZwrfKJcKzySvFv8ecs8Wxvjk+hZ3zeFhvrPFroOOHfUIRW1ULM2vX/5w
+   pIQKsaOPuBJUKKr6J1ODeZ5hPZLZodB9PK+hSmZDIwgGTcGHPiS0wSeFB
+   jgdIHoC6soK1b+zcoZDj1OJS3rOcbLPPhdDAT3QAAZM6ozxWCP1xrtVl7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="380946311"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="294649834"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:31:43 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="380946311"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:05:03 -0700
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="610786934"
-Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Aug 2022 23:31:40 -0700
-Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oRpM4-00014P-0D;
-	Sat, 27 Aug 2022 06:31:40 +0000
-Date: Sat, 27 Aug 2022 14:31:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dai Ngo <dai.ngo@oracle.com>, chuck.lever@oracle.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 2/2] NFSD: add shrinker to reap courtesy clients on low
- memory condition
-Message-ID: <202208271403.SinCnRF0-lkp@intel.com>
-References: <1661554886-26025-3-git-send-email-dai.ngo@oracle.com>
+   d="scan'208";a="671745348"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.233])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 00:04:48 -0700
+Message-ID: <0026becb-4e17-9e5f-0f59-9796d689c238@intel.com>
+Date: Sat, 27 Aug 2022 10:04:44 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1661554886-26025-3-git-send-email-dai.ngo@oracle.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v4 00/18] Mutex wrapper, locking and memory leak fixes
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=c3=a9_Almeida?=
+ <andrealmeid@igalia.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Weiguo Li <liwg06@foxmail.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Thomas Richter <tmricht@linux.ibm.com>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Dario Petrillo <dario.pk1@gmail.com>,
+ Hewenliang <hewenliang4@huawei.com>, yaowenbin <yaowenbin1@huawei.com>,
+ Wenyu Liu <liuwenyu7@huawei.com>, Song Liu <songliubraving@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Dave Marchevsky
+ <davemarchevsky@fb.com>, Leo Yan <leo.yan@linaro.org>,
+ Kim Phillips <kim.phillips@amd.com>,
+ Pavithra Gurushankar <gpavithrasha@gmail.com>,
+ Alexandre Truong <alexandre.truong@arm.com>,
+ Quentin Monnet <quentin@isovalent.com>, William Cohen <wcohen@redhat.com>,
+ Andres Freund <andres@anarazel.de>, =?UTF-8?Q?Martin_Li=c5=a1ka?=
+ <mliska@suse.cz>, Colin Ian King <colin.king@intel.com>,
+ James Clark <james.clark@arm.com>, Fangrui Song <maskray@google.com>,
+ Stephane Eranian <eranian@google.com>, Kajol Jain <kjain@linux.ibm.com>,
+ Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+ Riccardo Mancini <rickyman7@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Zechuan Chen <chenzechuan1@huawei.com>, Jason Wang <wangborong@cdjrlc.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Remi Bernon <rbernon@codeweavers.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220826164027.42929-1-irogers@google.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220826164027.42929-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Dai,
+On 26/08/22 19:40, Ian Rogers wrote:
+> When fixing a locking race and memory leak in:
+> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+> 
+> It was requested that debug mutex code be separated out into its own
+> files. This was, in part, done by Pavithra Gurushankar in:
+> https://lore.kernel.org/lkml/20220727111954.105118-1-gpavithrasha@gmail.com/
+> 
+> These patches fix issues with the previous patches, add in the
+> original dso->nsinfo fix and then build on our mutex wrapper with
+> clang's -Wthread-safety analysis. The analysis found missing unlocks
+> in builtin-sched.c which are fixed and -Wthread-safety is enabled by
+> default when building with clang.
+> 
+> v4. Adds a comment for the trylock result, fixes the new line (missed
+>     in v3) and removes two blank lines as suggested by Adrian Hunter.
+> v3. Adds a missing new line to the error messages and removes the
+>     pshared argument to mutex_init by having two functions, mutex_init
+>     and mutex_init_pshared. These changes were suggested by Adrian Hunter.
+> v2. Breaks apart changes that s/pthread_mutex/mutex/g and the lock
+>     annotations as requested by Arnaldo and Namhyung. A boolean is
+>     added to builtin-sched.c to terminate thread funcs rather than
+>     leaving them blocked on delted mutexes.
+> 
+> Ian Rogers (17):
+>   perf bench: Update use of pthread mutex/cond
+>   perf tests: Avoid pthread.h inclusion
+>   perf hist: Update use of pthread mutex
+>   perf bpf: Remove unused pthread.h include
+>   perf lock: Remove unused pthread.h include
+>   perf record: Update use of pthread mutex
+>   perf sched: Update use of pthread mutex
+>   perf ui: Update use of pthread mutex
+>   perf mmap: Remove unnecessary pthread.h include
+>   perf dso: Update use of pthread mutex
+>   perf annotate: Update use of pthread mutex
+>   perf top: Update use of pthread mutex
+>   perf dso: Hold lock when accessing nsinfo
+>   perf mutex: Add thread safety annotations
+>   perf sched: Fixes for thread safety analysis
+>   perf top: Fixes for thread safety analysis
+>   perf build: Enable -Wthread-safety with clang
+> 
+> Pavithra Gurushankar (1):
+>   perf mutex: Wrapped usage of mutex and cond
 
-Thank you for the patch! Yet something to improve:
+For all patches except 9 and 16
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc2 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dai-Ngo/NFSD-memory-shrinker-for-NFSv4-clients/20220827-070241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e022620b5d056e822e42eb9bc0f24fcb97389d86
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220827/202208271403.SinCnRF0-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8430e1a9491e9b4470a68f989a004b579e37fb73
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dai-Ngo/NFSD-memory-shrinker-for-NFSv4-clients/20220827-070241
-        git checkout 8430e1a9491e9b4470a68f989a004b579e37fb73
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:488:
-   In file included from fs/nfsd/state.h:42:
->> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
-   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
-                                                                          ^
-                                                                          ;
-   1 error generated.
---
-   In file included from fs/nfsd/nfsctl.c:23:
->> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
-   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
-                                                                          ^
-                                                                          ;
->> fs/nfsd/nfsctl.c:1511:2: error: implicit declaration of function 'nfsd4_leases_net_shutdown' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           nfsd4_leases_net_shutdown(nn);
-           ^
-   fs/nfsd/nfsctl.c:1511:2: note: did you mean 'nfsd4_leases_shutdown'?
-   fs/nfsd/nfsd.h:514:20: note: 'nfsd4_leases_shutdown' declared here
-   static inline void nfsd4_leases_shutdown(struct nfsd_net *nn) { };
-                      ^
-   2 errors generated.
---
-   In file included from fs/nfsd/export.c:21:
->> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
-   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
-                                                                          ^
-                                                                          ;
-   fs/nfsd/export.c:979:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode            *inode;
-                                    ^
-   1 warning and 1 error generated.
---
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:488:
-   In file included from fs/nfsd/state.h:42:
->> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
-   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
-                                                                          ^
-                                                                          ;
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:1407:
-   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
-   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
-   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
-   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-   #define __stringify(x...)       __stringify_1(x)
-                                   ^~~~~~~~~~~~~~~~
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-   #define __stringify_1(x...)     #x
-                                   ^~
-   <scratch space>:56:1: note: expanded from here
-   "./trace.h"
-   ^~~~~~~~~~~
-   2 errors generated.
-
-
-vim +513 fs/nfsd/nfsd.h
-
-   512	
- > 513	static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
-   514	static inline void nfsd4_leases_shutdown(struct nfsd_net *nn) { };
-   515	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
