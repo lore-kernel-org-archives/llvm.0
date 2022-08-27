@@ -1,45 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA9615A3
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 03:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F7315A0
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 05:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661570318; x=1693106318;
+  t=1661578849; x=1693114849;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wqnRrLNSTs3utIl7n2PhUSCEi0sLrfMrZL+3x/QLNYw=;
-  b=YWQ/yYxpH0Yp+3cyo/HQiljK1hS3qmlG6zu2wZBU6ChcZf2+q+FUF5cA
-   e1t+S+KGIiB9oYOWbrEg6N1q/MvuvtgU4uXjH9JXhyZ7sjVRweJydFbNF
-   QZs6oRlZmyYJFahMGDqDcmrTcEWlmEOFRxkgh9pstsnuo8GwdGnZwBjY4
-   8BDwoQ0PtrIjfhSvkKW/wWWXR2MG9LKClRO2G2/di71tvXoJBrWwT7nHi
-   A3VYOLq7Qt7S/ufI5NbBaUbXiCqDrNZjCCyzzLFVQHHPND8cDIXCWWGkB
-   zDx3ejK+zRA1v/Fp3YKPBftpoi5BOlTC8lKWKwtg/NxTBAR9XlkqqAyqq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="281599383"
+  bh=9gvwU2Wc8IZIuL+Hb1wvCcF7TnO45VRYh+LXrJQLktc=;
+  b=TMDEGFvuxjZIfu6SYUYEMElrWiBkLBei5lgLaVwyHNExpqgKEBllQjPN
+   sYq620qWY0hV5bK8FmLBbbI2qzL6vIH9fXJLBcopxzQ9cjuYg/R5uLQZ/
+   k9IscnLm8IbVe8oPiwnL8DlYuK979slhVSo2hti6RAKliFUQ0h4q41s1U
+   ZoZftVzKT5wWllwMlioA0w3wQnAHOv8xm/KDanVhNugmfUtfVc0T56eOJ
+   JBnB/EsElsZgEDaFzIhpk6PV2KHsKk+bN9Zx6rxkp7Z/ny15uOn4o/Gr4
+   ZnLM4RE2yz5IEEmmL7/tf4gCk/27ZmoL5f7zNsxkESIC+gfKLVLE6NN9E
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294647198"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="281599383"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 20:18:37 -0700
+   d="scan'208";a="294647198"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 22:40:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="643873704"
+   d="scan'208";a="938984418"
 Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2022 20:18:35 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 22:40:39 -0700
 Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oRmLC-0000vP-2x;
-	Sat, 27 Aug 2022 03:18:34 +0000
-Date: Sat, 27 Aug 2022 11:18:01 +0800
+	id 1oRoYh-00012V-04;
+	Sat, 27 Aug 2022 05:40:39 +0000
+Date: Sat, 27 Aug 2022 13:40:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Subject: [matthias-bgg:v6.0-next/soc 11/11]
- drivers/soc/mediatek/mtk-svs.c:887:26: error: call to undeclared function
- 'FIELD_GET'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202208271156.r27CHg8A-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:for-v6.1f 8/15]
+ drivers/staging/media/deprecated/cpia2/cpia2_usb.c:80:13: warning: variable
+ 'frame_count' set but not used
+Message-ID: <202208271332.DDtsB2NI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,280 +47,124 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi AngeloGioacchino,
+Hi Hans,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+First bad commit (maybe != root cause):
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git v6.0-next/soc
-head:   a92438c5a30a27b6791da025306a45478a6ac7a4
-commit: a92438c5a30a27b6791da025306a45478a6ac7a4 [11/11] soc: mediatek: mtk-svs: Use bitfield access macros where possible
-config: hexagon-randconfig-r041-20220827 (https://download.01.org/0day-ci/archive/20220827/202208271156.r27CHg8A-lkp@intel.com/config)
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v6.1f
+head:   0a83e0cc43ddcd926277777a0a13c299d05595d0
+commit: 24357c7aeb361b58f92fbed0b204bff166d98361 [8/15] cpia2: deprecate this driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220827/202208271332.DDtsB2NI-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?id=a92438c5a30a27b6791da025306a45478a6ac7a4
-        git remote add matthias-bgg https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git
-        git fetch --no-tags matthias-bgg v6.0-next/soc
-        git checkout a92438c5a30a27b6791da025306a45478a6ac7a4
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v6.1f
+        git checkout 24357c7aeb361b58f92fbed0b204bff166d98361
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/mediatek/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/media/deprecated/cpia2/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/soc/mediatek/mtk-svs.c:887:26: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-                                                 ^
-   drivers/soc/mediatek/mtk-svs.c:909:20: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-                                           ^
-   drivers/soc/mediatek/mtk-svs.c:1040:19: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-                            ^
->> drivers/soc/mediatek/mtk-svs.c:1073:18: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
-                           ^
-   drivers/soc/mediatek/mtk-svs.c:1095:13: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           des_char = FIELD_PREP(SVSB_DESCHAR_FLD_BDES, svsb->bdes) |
+>> drivers/staging/media/deprecated/cpia2/cpia2_usb.c:80:13: warning: variable 'frame_count' set but not used [-Wunused-but-set-variable]
+           static int frame_count;
                       ^
-   5 errors generated.
+   1 warning generated.
 
 
-vim +/FIELD_GET +887 drivers/soc/mediatek/mtk-svs.c
+vim +/frame_count +80 drivers/staging/media/deprecated/cpia2/cpia2_usb.c
 
-   858	
-   859	static void svs_get_bank_volts_v3(struct svs_platform *svsp)
-   860	{
-   861		struct svs_bank *svsb = svsp->pbank;
-   862		u32 i, j, *vop, vop74, vop30, turn_pt = svsb->turn_pt;
-   863		u32 b_sft, shift_byte = 0, opp_start = 0, opp_stop = 0;
-   864		u32 middle_index = (svsb->opp_count / 2);
-   865	
-   866		if (svsb->phase == SVSB_PHASE_MON &&
-   867		    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
-   868			return;
-   869	
-   870		vop74 = svs_readl_relaxed(svsp, VOP74);
-   871		vop30 = svs_readl_relaxed(svsp, VOP30);
-   872	
-   873		/* Target is to set svsb->volt[] by algorithm */
-   874		if (turn_pt < middle_index) {
-   875			if (svsb->type == SVSB_HIGH) {
-   876				/* volt[0] ~ volt[turn_pt - 1] */
-   877				for (i = 0; i < turn_pt; i++) {
-   878					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   879					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   880									 &vop74;
-   881					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   882					shift_byte++;
-   883				}
-   884			} else if (svsb->type == SVSB_LOW) {
-   885				/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
-   886				j = svsb->opp_count - 7;
- > 887				svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-   888				shift_byte++;
-   889				for (i = j; i < svsb->opp_count; i++) {
-   890					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   891					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   892									 &vop74;
-   893					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   894					shift_byte++;
-   895				}
-   896	
-   897				/* volt[turn_pt + 1] ~ volt[j - 1] by interpolate */
-   898				for (i = turn_pt + 1; i < j; i++)
-   899					svsb->volt[i] = interpolate(svsb->freq_pct[turn_pt],
-   900								    svsb->freq_pct[j],
-   901								    svsb->volt[turn_pt],
-   902								    svsb->volt[j],
-   903								    svsb->freq_pct[i]);
-   904			}
-   905		} else {
-   906			if (svsb->type == SVSB_HIGH) {
-   907				/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
-   908				j = turn_pt - 7;
-   909				svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
-   910				shift_byte++;
-   911				for (i = j; i < turn_pt; i++) {
-   912					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   913					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   914									 &vop74;
-   915					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   916					shift_byte++;
-   917				}
-   918	
-   919				/* volt[1] ~ volt[j - 1] by interpolate */
-   920				for (i = 1; i < j; i++)
-   921					svsb->volt[i] = interpolate(svsb->freq_pct[0],
-   922								    svsb->freq_pct[j],
-   923								    svsb->volt[0],
-   924								    svsb->volt[j],
-   925								    svsb->freq_pct[i]);
-   926			} else if (svsb->type == SVSB_LOW) {
-   927				/* volt[turn_pt] ~ volt[opp_count - 1] */
-   928				for (i = turn_pt; i < svsb->opp_count; i++) {
-   929					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   930					vop = (shift_byte < REG_BYTES) ? &vop30 :
-   931									 &vop74;
-   932					svsb->volt[i] = (*vop >> b_sft) & GENMASK(7, 0);
-   933					shift_byte++;
-   934				}
-   935			}
-   936		}
-   937	
-   938		if (svsb->type == SVSB_HIGH) {
-   939			opp_start = 0;
-   940			opp_stop = svsb->turn_pt;
-   941		} else if (svsb->type == SVSB_LOW) {
-   942			opp_start = svsb->turn_pt;
-   943			opp_stop = svsb->opp_count;
-   944		}
-   945	
-   946		for (i = opp_start; i < opp_stop; i++)
-   947			if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
-   948				svsb->volt[i] -= svsb->dvt_fixed;
-   949	}
-   950	
-   951	static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
-   952	{
-   953		struct svs_bank *svsb = svsp->pbank;
-   954		u32 i, j, *freq_pct, freq_pct74 = 0, freq_pct30 = 0;
-   955		u32 b_sft, shift_byte = 0, turn_pt;
-   956		u32 middle_index = (svsb->opp_count / 2);
-   957	
-   958		for (i = 0; i < svsb->opp_count; i++) {
-   959			if (svsb->opp_dfreq[i] <= svsb->turn_freq_base) {
-   960				svsb->turn_pt = i;
-   961				break;
-   962			}
-   963		}
-   964	
-   965		turn_pt = svsb->turn_pt;
-   966	
-   967		/* Target is to fill out freq_pct74 / freq_pct30 by algorithm */
-   968		if (turn_pt < middle_index) {
-   969			if (svsb->type == SVSB_HIGH) {
-   970				/*
-   971				 * If we don't handle this situation,
-   972				 * SVSB_HIGH's FREQPCT74 / FREQPCT30 would keep "0"
-   973				 * and this leads SVSB_LOW to work abnormally.
-   974				 */
-   975				if (turn_pt == 0)
-   976					freq_pct30 = svsb->freq_pct[0];
-   977	
-   978				/* freq_pct[0] ~ freq_pct[turn_pt - 1] */
-   979				for (i = 0; i < turn_pt; i++) {
-   980					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   981					freq_pct = (shift_byte < REG_BYTES) ?
-   982						   &freq_pct30 : &freq_pct74;
-   983					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-   984					shift_byte++;
-   985				}
-   986			} else if (svsb->type == SVSB_LOW) {
-   987				/*
-   988				 * freq_pct[turn_pt] +
-   989				 * freq_pct[opp_count - 7] ~ freq_pct[opp_count -1]
-   990				 */
-   991				freq_pct30 = svsb->freq_pct[turn_pt];
-   992				shift_byte++;
-   993				j = svsb->opp_count - 7;
-   994				for (i = j; i < svsb->opp_count; i++) {
-   995					b_sft = BITS8 * (shift_byte % REG_BYTES);
-   996					freq_pct = (shift_byte < REG_BYTES) ?
-   997						   &freq_pct30 : &freq_pct74;
-   998					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-   999					shift_byte++;
-  1000				}
-  1001			}
-  1002		} else {
-  1003			if (svsb->type == SVSB_HIGH) {
-  1004				/*
-  1005				 * freq_pct[0] +
-  1006				 * freq_pct[turn_pt - 7] ~ freq_pct[turn_pt - 1]
-  1007				 */
-  1008				freq_pct30 = svsb->freq_pct[0];
-  1009				shift_byte++;
-  1010				j = turn_pt - 7;
-  1011				for (i = j; i < turn_pt; i++) {
-  1012					b_sft = BITS8 * (shift_byte % REG_BYTES);
-  1013					freq_pct = (shift_byte < REG_BYTES) ?
-  1014						   &freq_pct30 : &freq_pct74;
-  1015					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-  1016					shift_byte++;
-  1017				}
-  1018			} else if (svsb->type == SVSB_LOW) {
-  1019				/* freq_pct[turn_pt] ~ freq_pct[opp_count - 1] */
-  1020				for (i = turn_pt; i < svsb->opp_count; i++) {
-  1021					b_sft = BITS8 * (shift_byte % REG_BYTES);
-  1022					freq_pct = (shift_byte < REG_BYTES) ?
-  1023						   &freq_pct30 : &freq_pct74;
-  1024					*freq_pct |= (svsb->freq_pct[i] << b_sft);
-  1025					shift_byte++;
-  1026				}
-  1027			}
-  1028		}
-  1029	
-  1030		svs_writel_relaxed(svsp, freq_pct74, FREQPCT74);
-  1031		svs_writel_relaxed(svsp, freq_pct30, FREQPCT30);
-  1032	}
-  1033	
-  1034	static void svs_get_bank_volts_v2(struct svs_platform *svsp)
-  1035	{
-  1036		struct svs_bank *svsb = svsp->pbank;
-  1037		u32 temp, i;
-  1038	
-  1039		temp = svs_readl_relaxed(svsp, VOP74);
-  1040		svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-  1041		svsb->volt[12] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-  1042		svsb->volt[10] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-  1043		svsb->volt[8] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
-  1044	
-  1045		temp = svs_readl_relaxed(svsp, VOP30);
-  1046		svsb->volt[6] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-  1047		svsb->volt[4] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-  1048		svsb->volt[2] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-  1049		svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
-  1050	
-  1051		for (i = 0; i <= 12; i += 2)
-  1052			svsb->volt[i + 1] = interpolate(svsb->freq_pct[i],
-  1053							svsb->freq_pct[i + 2],
-  1054							svsb->volt[i],
-  1055							svsb->volt[i + 2],
-  1056							svsb->freq_pct[i + 1]);
-  1057	
-  1058		svsb->volt[15] = interpolate(svsb->freq_pct[12],
-  1059					     svsb->freq_pct[14],
-  1060					     svsb->volt[12],
-  1061					     svsb->volt[14],
-  1062					     svsb->freq_pct[15]);
-  1063	
-  1064		for (i = 0; i < svsb->opp_count; i++)
-  1065			svsb->volt[i] += svsb->volt_od;
-  1066	}
-  1067	
-  1068	static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
-  1069	{
-  1070		struct svs_bank *svsb = svsp->pbank;
-  1071		u32 freqpct74_val, freqpct30_val;
-  1072	
-> 1073		freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
-  1074				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[10]) |
-  1075				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[12]) |
-  1076				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[14]);
-  1077	
-  1078		freqpct30_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[0]) |
-  1079				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[2]) |
-  1080				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[4]) |
-  1081				FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[6]);
-  1082	
-  1083		svs_writel_relaxed(svsp, freqpct74_val, FREQPCT74);
-  1084		svs_writel_relaxed(svsp, freqpct30_val, FREQPCT30);
-  1085	}
-  1086	
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   71  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   72  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   73  /******************************************************************************
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   74   *
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   75   *  process_frame
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   76   *
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   77   *****************************************************************************/
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   78  static void process_frame(struct camera_data *cam)
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   79  {
+ff699e6bd02eb1 drivers/media/video/cpia2/cpia2_usb.c Douglas Schilling Landgraf 2008-04-22  @80  	static int frame_count;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   81  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   82  	unsigned char *inbuff = cam->workbuff->data;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   83  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   84  	DBG("Processing frame #%d, current:%d\n",
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   85  	    cam->workbuff->num, cam->curbuff->num);
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   86  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   87  	if(cam->workbuff->length > cam->workbuff->max_length)
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   88  		cam->workbuff->max_length = cam->workbuff->length;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   89  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   90  	if ((inbuff[0] == 0xFF) && (inbuff[1] == 0xD8)) {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   91  		frame_count++;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   92  	} else {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   93  		cam->workbuff->status = FRAME_ERROR;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   94  		DBG("Start of frame not found\n");
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   95  		return;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   96  	}
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   97  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   98  	/***
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   99  	 * Now the output buffer should have a JPEG image in it.
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  100  	 ***/
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  101  	if(!cam->first_image_seen) {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  102  		/* Always skip the first image after streaming
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  103  		 * starts. It is almost certainly corrupt. */
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  104  		cam->first_image_seen = 1;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  105  		cam->workbuff->status = FRAME_EMPTY;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  106  		return;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  107  	}
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  108  	if (cam->workbuff->length > 3) {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  109  		if(cam->mmapped &&
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  110  		   cam->workbuff->length < cam->workbuff->max_length) {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  111  			/* No junk in the buffers */
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  112  			memset(cam->workbuff->data+cam->workbuff->length,
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  113  			       0, cam->workbuff->max_length-
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  114  				  cam->workbuff->length);
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  115  		}
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  116  		cam->workbuff->max_length = cam->workbuff->length;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  117  		cam->workbuff->status = FRAME_READY;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  118  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  119  		if(!cam->mmapped && cam->num_frames > 2) {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  120  			/* During normal reading, the most recent
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  121  			 * frame will be read.  If the current frame
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  122  			 * hasn't started reading yet, it will never
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  123  			 * be read, so mark it empty.  If the buffer is
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  124  			 * mmapped, or we have few buffers, we need to
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  125  			 * wait for the user to free the buffer.
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  126  			 *
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  127  			 * NOTE: This is not entirely foolproof with 3
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  128  			 * buffers, but it would take an EXTREMELY
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  129  			 * overloaded system to cause problems (possible
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  130  			 * image data corruption).  Basically, it would
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  131  			 * need to take more time to execute cpia2_read
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  132  			 * than it would for the camera to send
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  133  			 * cam->num_frames-2 frames before problems
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  134  			 * could occur.
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  135  			 */
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  136  			cam->curbuff->status = FRAME_EMPTY;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  137  		}
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  138  		cam->curbuff = cam->workbuff;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  139  		cam->workbuff = cam->workbuff->next;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  140  		DBG("Changed buffers, work:%d, current:%d\n",
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  141  		    cam->workbuff->num, cam->curbuff->num);
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  142  		return;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  143  	} else {
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  144  		DBG("Not enough data for an image.\n");
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  145  	}
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  146  
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  147  	cam->workbuff->status = FRAME_ERROR;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  148  	return;
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  149  }
+ab33d5071de7a3 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  150  
+
+:::::: The code at line 80 was first introduced by commit
+:::::: ff699e6bd02eb1c6d02c7c2b576c2ee6caab201c V4L/DVB (7094):  static memory
+
+:::::: TO: Douglas Schilling Landgraf <dougsland@gmail.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
