@@ -1,43 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B2E17C5
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 06:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863177C
+	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 06:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661581305; x=1693117305;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aXJC/E7x5q+usZCo0oNBegtsCOu6gFfwtcdSpeMxdpI=;
-  b=bE15zcgQR+yW6NzGGt1juftZVuC7BbuTDz8196dFrECIwVDhMlI1oEqz
-   kx5pYsrd6Isvp4HLJVQBYTxwR+9s2kXzX95glLNg1NCxuHAjJF6lJt8e9
-   PHZwzN5g0WDVp/+h9CNAbwyiIrPyX437bOypZf7FhqH74jM/Lsd967ccz
-   crAgDFiicUGQ3VM2aoJDyn5VfBt36hvUovAz6rkAVKTlqmrGJPm9fgSWe
-   /+d89qkgkNkZATNPbCWsC92hnzwj8mWlJ2haoNgSS7zN1/AiY0tY52PcW
-   tOeKkZ2VrHHgIk8DgLEMfNKHylVD3gRFlrGtqB447E67mwPRQEgYXIx+/
+  t=1661581904; x=1693117904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AHApHPXEU7s+9bfLBV5PgrKBP2tv1XVmisi7/hNIHeo=;
+  b=HehfAL0EZc37f6NjNZoZjziyCX14MUIAxezTBGuOahs4RrpcrhrIWSwY
+   ykl+oggWQU7Cu+KKJG6PX00n/gSmfgNcvYTBu5GTWBJXAvJarh1hdiGWA
+   L+oy+Yn5Y7LlEJ7SjR8WMWYRQdxNPKAUatevYL0tU4kapiG/Q+c9P00RT
+   prDyTf3dg+ti1VkahqjJ7sOMDQVXLzZyt3ngbdGxVYwUag1dOezWq5s5g
+   4GSMVaAEajLQ/u9I21YGM0/yJyfHtShPWesEJftST+Xiu8r717AqP1dsk
+   RvObpHowaI1gP60ZnlPos9j3r59ihHu3RJ9psSiBpqD1hEKrEz0mLYocw
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="320753173"
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="294649834"
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="320753173"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:21:41 -0700
+   d="scan'208";a="294649834"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 23:31:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,267,1654585200"; 
-   d="scan'208";a="938991188"
+   d="scan'208";a="610786934"
 Received: from lkp-server01.sh.intel.com (HELO 71b0d3b5b1bc) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 23:21:40 -0700
+  by orsmga002.jf.intel.com with ESMTP; 26 Aug 2022 23:31:40 -0700
 Received: from kbuild by 71b0d3b5b1bc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oRpCN-000147-2w;
-	Sat, 27 Aug 2022 06:21:39 +0000
-Date: Sat, 27 Aug 2022 14:21:01 +0800
+	id 1oRpM4-00014P-0D;
+	Sat, 27 Aug 2022 06:31:40 +0000
+Date: Sat, 27 Aug 2022 14:31:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Dai Ngo <dai.ngo@oracle.com>, chuck.lever@oracle.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ardb:efi-decompressor-v4 4/9]
- drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin
- function '__builtin_memcpy'
-Message-ID: <202208271446.2z1VzPD0-lkp@intel.com>
+	linux-nfs@vger.kernel.org
+Subject: Re: [PATCH 2/2] NFSD: add shrinker to reap courtesy clients on low
+ memory condition
+Message-ID: <202208271403.SinCnRF0-lkp@intel.com>
+References: <1661554886-26025-3-git-send-email-dai.ngo@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +47,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1661554886-26025-3-git-send-email-dai.ngo@oracle.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-decompressor-v4
-head:   2943178d7555c331c19e9cce9a83e47f9513f3b1
-commit: 74f59f87ddbcbacc7232ac6800916260a0632126 [4/9] efi/libstub: use EFI provided memcpy/memset routines
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220827/202208271446.2z1VzPD0-lkp@intel.com/config)
+Hi Dai,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc2 next-20220826]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dai-Ngo/NFSD-memory-shrinker-for-NFSv4-clients/20220827-070241
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e022620b5d056e822e42eb9bc0f24fcb97389d86
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220827/202208271403.SinCnRF0-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=74f59f87ddbcbacc7232ac6800916260a0632126
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb efi-decompressor-v4
-        git checkout 74f59f87ddbcbacc7232ac6800916260a0632126
+        # https://github.com/intel-lab-lkp/linux/commit/8430e1a9491e9b4470a68f989a004b579e37fb73
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dai-Ngo/NFSD-memory-shrinker-for-NFSv4-clients/20220827-070241
+        git checkout 8430e1a9491e9b4470a68f989a004b579e37fb73
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/intrinsics.c:18:7: error: definition of builtin function '__builtin_memcpy'
-   void *memcpy(void *dst, const void *src, size_t len)
-         ^
-   arch/x86/include/asm/string_32.h:150:25: note: expanded from macro 'memcpy'
-   #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
-                           ^
->> drivers/firmware/efi/libstub/intrinsics.c:26:7: error: definition of builtin function '__builtin_memset'
-   void *memset(void *dst, int c, size_t len)
-         ^
-   arch/x86/include/asm/string_32.h:195:29: note: expanded from macro 'memset'
-   #define memset(s, c, count) __builtin_memset(s, c, count)
-                               ^
+   In file included from fs/nfsd/trace.c:4:
+   In file included from fs/nfsd/trace.h:488:
+   In file included from fs/nfsd/state.h:42:
+>> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
+   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
+                                                                          ^
+                                                                          ;
+   1 error generated.
+--
+   In file included from fs/nfsd/nfsctl.c:23:
+>> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
+   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
+                                                                          ^
+                                                                          ;
+>> fs/nfsd/nfsctl.c:1511:2: error: implicit declaration of function 'nfsd4_leases_net_shutdown' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           nfsd4_leases_net_shutdown(nn);
+           ^
+   fs/nfsd/nfsctl.c:1511:2: note: did you mean 'nfsd4_leases_shutdown'?
+   fs/nfsd/nfsd.h:514:20: note: 'nfsd4_leases_shutdown' declared here
+   static inline void nfsd4_leases_shutdown(struct nfsd_net *nn) { };
+                      ^
+   2 errors generated.
+--
+   In file included from fs/nfsd/export.c:21:
+>> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
+   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
+                                                                          ^
+                                                                          ;
+   fs/nfsd/export.c:979:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
+           struct inode            *inode;
+                                    ^
+   1 warning and 1 error generated.
+--
+   In file included from fs/nfsd/trace.c:4:
+   In file included from fs/nfsd/trace.h:488:
+   In file included from fs/nfsd/state.h:42:
+>> fs/nfsd/nfsd.h:513:72: error: expected ';' after return statement
+   static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
+                                                                          ^
+                                                                          ;
+   In file included from fs/nfsd/trace.c:4:
+   In file included from fs/nfsd/trace.h:1407:
+   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
+   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
+   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
+   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
+   #define __stringify(x...)       __stringify_1(x)
+                                   ^~~~~~~~~~~~~~~~
+   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
+   #define __stringify_1(x...)     #x
+                                   ^~
+   <scratch space>:56:1: note: expanded from here
+   "./trace.h"
+   ^~~~~~~~~~~
    2 errors generated.
 
 
-vim +/__builtin_memcpy +18 drivers/firmware/efi/libstub/intrinsics.c
+vim +513 fs/nfsd/nfsd.h
 
-    17	
-  > 18	void *memcpy(void *dst, const void *src, size_t len)
-    19	{
-    20		efi_bs_call(copy_mem, dst, src, len);
-    21		return dst;
-    22	}
-    23	
-    24	extern void *memmove(void *dst, const void *src, size_t len) __alias(memcpy);
-    25	
-  > 26	void *memset(void *dst, int c, size_t len)
+   512	
+ > 513	static inline int nfsd4_init_leases_net(struct nfsd_net *nn) { return 0 };
+   514	static inline void nfsd4_leases_shutdown(struct nfsd_net *nn) { };
+   515	
 
 -- 
 0-DAY CI Kernel Test Service
