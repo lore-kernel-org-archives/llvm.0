@@ -1,35 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAC723CD;
-	Sun, 28 Aug 2022 09:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A978C433C1;
-	Sun, 28 Aug 2022 09:55:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661680546;
-	bh=TcwxDWZtQS6kMjN2jg9yz87Lt7T5qZ8ftJVQLc8rmrI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rxq1frQ4Y7jG/7PA4ZNlJ7bYY/4+1Ihaz96hMvhmyswpnbYQ9NfPX9HShQ2ybT6pW
-	 It1NQhz+dlZPJe19lcZ+FwtAT1QC0wS7J1y0qZMHoD7pMwPnwLHGMNDo4YxxCJxpdg
-	 nDMHMiQE91NuwChoGUW2JC84wJEQOE5uSBM8uP79WzpX9vAq5FH5bhXnTFAkrLlLjx
-	 v3OlNw401ZIXH6LvhActC8mcqhOjRwjzPO+wygYnRinPMZaebAgt7yWX4EZAMZiQcM
-	 Lgz0AKaIZMWaXfsiePeR9j5QbrhaGtdZhnfw6+8k071rcdP/AOYfBpyBuuee1BNVGS
-	 bQmnUOm6KjyYg==
-Date: Sun, 28 Aug 2022 12:55:41 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Saeed Mahameed <saeedm@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
- mlx5e_rep_add_meta_tunnel_rule()
-Message-ID: <Yws7nQsU8hIf7gZT@unreal>
-References: <20220825180607.2707947-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F8828E7
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 10:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661681994; x=1693217994;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aH3rdrlnfu6yHPTlDNyVCLLXX0V0IGLJm62+sxeXb/I=;
+  b=MGbofsdFuLGkM1e6icFttEIdTP5Mr3DHIahB+3jn9YuNvnRHarK07b3O
+   ztxQpKxIRpZfKhEy+F8xiHW0lzn1Sxtfi9ROy//tz1D6YxPLbD6PD1RLn
+   YextuGoPxT2FDjnbAJZtEatSoDwo070m2JiEkkCf8myfk+cBB5xbku3/e
+   ItQwRKqXVxytJXgz7aAFXRl5J23GRWFz4XOuaZ5jn/DKM2hbbBuJ/b3Mq
+   cwXEtZTTqLFQv5nXWVNcyKdcwzmzPx9R3b07gSXiALY2iYMj23WeF4RVN
+   7sS3Jm4aN2gITw81Pqt7im7F5WTvvKI+er/rb12nN3DjtCNRO4O5AgZiC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="356443712"
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="356443712"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 03:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
+   d="scan'208";a="587828127"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 03:19:52 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oSFOR-0000zz-2k;
+	Sun, 28 Aug 2022 10:19:51 +0000
+Date: Sun, 28 Aug 2022 18:19:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [ardb:for-kernelci 9/26]
+ drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype
+ for function 'efi_zboot_entry'
+Message-ID: <202208281813.FLX7bLix-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,37 +46,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
 
-On Thu, Aug 25, 2022 at 11:06:07AM -0700, Nathan Chancellor wrote:
-> Clang warns:
-> 
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (IS_ERR(flow_rule)) {
->               ^~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
->           return err;
->                 ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
->           if (IS_ERR(flow_rule)) {
->           ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
->           int err;
->                 ^
->                   = 0
->   1 error generated.
-> 
-> There is little reason to have the 'goto + error variable' construct in
-> this function. Get rid of it and just return the PTR_ERR value in the if
-> statement and 0 at the end.
-> 
-> Fixes: 430e2d5e2a98 ("net/mlx5: E-Switch, Move send to vport meta rule creation")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1695
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+head:   f73ff3c33fc5ad785682e0892d9fb664616cd9c0
+commit: 3d0326fd09d1289fb3b1504e65381cae574ea9dc [9/26] efi/libstub: implement generic EFI zboot
+config: riscv-randconfig-c006-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281813.FLX7bLix-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=3d0326fd09d1289fb3b1504e65381cae574ea9dc
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb for-kernelci
+        git checkout 3d0326fd09d1289fb3b1504e65381cae574ea9dc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/ drivers/gpu/drm/bridge/imx/ drivers/gpu/drm/rcar-du/
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/firmware/efi/libstub/zboot.c:90:22: error: call to undeclared function 'get_unaligned_le32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           size = decompress ? get_unaligned_le32(_gzdata_end - 4)
+                               ^
+   drivers/firmware/efi/libstub/zboot.c:90:22: note: did you mean 'get_unaligned16'?
+   drivers/firmware/efi/libstub/../../../../lib/zlib_inflate/inffast.c:20:1: note: 'get_unaligned16' declared here
+   get_unaligned16(const unsigned short *p)
+   ^
+>> drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+                         ^
+   drivers/firmware/efi/libstub/zboot.c:160:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+   ^
+   static 
+   1 warning and 1 error generated.
+
+
+vim +/efi_zboot_entry +160 drivers/firmware/efi/libstub/zboot.c
+
+    57	
+    58	static efi_status_t __efiapi
+    59	load_file(efi_load_file_protocol_t *this, efi_device_path_protocol_t *rem,
+    60		  bool boot_policy, unsigned long *bufsize, void *buffer)
+    61	{
+    62		struct efi_vendor_dev_path *vendor_dp;
+    63		bool decompress = false;
+    64		unsigned long size;
+    65		int ret;
+    66	
+    67		if (rem == NULL || bufsize == NULL)
+    68			return EFI_INVALID_PARAMETER;
+    69	
+    70		if (boot_policy)
+    71			return EFI_UNSUPPORTED;
+    72	
+    73		// Look for our vendor media device node in the remaining file path
+    74		if (rem->type == EFI_DEV_MEDIA &&
+    75		    rem->sub_type == EFI_DEV_MEDIA_VENDOR) {
+    76			vendor_dp = container_of(rem, struct efi_vendor_dev_path, header);
+    77			if (!guids_eq(&vendor_dp->vendorguid, &LINUX_EFI_ZBOOT_MEDIA_GUID))
+    78				return EFI_NOT_FOUND;
+    79	
+    80			decompress = true;
+    81			rem = (void *)(vendor_dp + 1);
+    82		}
+    83	
+    84		if (rem->type != EFI_DEV_END_PATH ||
+    85		    rem->sub_type != EFI_DEV_END_ENTIRE)
+    86			return EFI_NOT_FOUND;
+    87	
+    88		// The uncompressed size of the payload is appended to the raw bit
+    89		// stream, and may therefore appear misaligned in memory
+  > 90		size = decompress ? get_unaligned_le32(_gzdata_end - 4)
+    91				  : (_gzdata_end - _gzdata_start);
+    92		if (buffer == NULL || *bufsize < size) {
+    93			*bufsize = size;
+    94			return EFI_BUFFER_TOO_SMALL;
+    95		}
+    96	
+    97		if (decompress) {
+    98			ret = __decompress(_gzdata_start, _gzdata_end - _gzdata_start,
+    99					   NULL, NULL, buffer, 0, NULL, error);
+   100			if (ret	< 0) {
+   101				log(L"Decompression failed");
+   102				return EFI_DEVICE_ERROR;
+   103			}
+   104		} else {
+   105			memcpy(buffer, _gzdata_start, size);
+   106		}
+   107	
+   108		return EFI_SUCCESS;
+   109	}
+   110	
+   111	// Return the length in bytes of the device path up to the first end node.
+   112	static int device_path_length(const efi_device_path_protocol_t *dp)
+   113	{
+   114		int len = 0;
+   115	
+   116		while (dp->type != EFI_DEV_END_PATH) {
+   117			len += dp->length;
+   118			dp = (void *)((u8 *)dp + dp->length);
+   119		}
+   120		return len;
+   121	}
+   122	
+   123	static void append_rel_offset_node(efi_device_path_protocol_t **dp,
+   124					   unsigned long start, unsigned long end)
+   125	{
+   126		struct efi_rel_offset_dev_path *rodp = (void *)*dp;
+   127	
+   128		rodp->header.type	= EFI_DEV_MEDIA;
+   129		rodp->header.sub_type	= EFI_DEV_MEDIA_REL_OFFSET;
+   130		rodp->header.length	= sizeof(struct efi_rel_offset_dev_path);
+   131		rodp->reserved		= 0;
+   132		rodp->starting_offset	= start;
+   133		rodp->ending_offset	= end;
+   134	
+   135		*dp = (void *)(rodp + 1);
+   136	}
+   137	
+   138	static void append_ven_media_node(efi_device_path_protocol_t **dp,
+   139					  efi_guid_t *guid)
+   140	{
+   141		struct efi_vendor_dev_path *vmdp = (void *)*dp;
+   142	
+   143		vmdp->header.type	= EFI_DEV_MEDIA;
+   144		vmdp->header.sub_type	= EFI_DEV_MEDIA_VENDOR;
+   145		vmdp->header.length	= sizeof(struct efi_vendor_dev_path);
+   146		vmdp->vendorguid	= *guid;
+   147	
+   148		*dp = (void *)(vmdp + 1);
+   149	}
+   150	
+   151	static void append_end_node(efi_device_path_protocol_t **dp)
+   152	{
+   153		(*dp)->type		= EFI_DEV_END_PATH;
+   154		(*dp)->sub_type		= EFI_DEV_END_ENTIRE;
+   155		(*dp)->length		= sizeof(struct efi_generic_dev_path);
+   156	
+   157		++*dp;
+   158	}
+   159	
+ > 160	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
