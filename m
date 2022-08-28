@@ -1,170 +1,115 @@
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7DB4699
-	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 17:26:45 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-09.nifty.com with ESMTP id 27SHLoaf031375
-	for <llvm@lists.linux.dev>; Mon, 29 Aug 2022 02:21:50 +0900
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 27SHLMu6030478
-	for <llvm@lists.linux.dev>; Mon, 29 Aug 2022 02:21:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27SHLMu6030478
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1661707283;
-	bh=/wxBK7m8lAXZFpL9USnpvkitak2d1egNjzQJgsP+0AI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nF0fZbOjdn6s7I5wZJo6mjT43EuIf/CCthIsgwiVAePFc7gqW8ZvMXhJIr7GqnR9z
-	 c3PZBwjmMGjoIshkb1xoI/rVTDv9j0isAYCYLnccK4k/19Xr5p5YZCAFQFzeqyeK0B
-	 nywh6tGVayn+jv4zBpcj0+qmtKjfGPmw2OvFXBJfO5K2iZJLkV25TdjGvVeUzN12iC
-	 vAnyE741BQeWM8gvHWn62yTtZZzX4y9h10MlAf257TElmSbOpl+lIMRIblhNrZRlCA
-	 DniJxpGs98UjvqXiQZy2/zC1HW/tEHtdupNQ46ZB/rkDqNMwcVgiVHOVAc2dCIBIsr
-	 ClA9ABUL4EDqw==
-X-Nifty-SrcIP: [209.85.210.44]
-Received: by mail-ot1-f44.google.com with SMTP id t11-20020a05683014cb00b0063734a2a786so4470790otq.11
-        for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 10:21:22 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2CZ3sKL4rtvds85JZEEMSUb5kcdTnLlr8HBATlKkeR/u83C670
-	4ZbBp/JsVi2f5ttJk50OAKAcZ9gUFT/K2M9J0IU=
-X-Google-Smtp-Source: AA6agR68BX+UgxMBvfbvnw8JIecIq4RkerD74kWTFUvD19k9KrVWyW402aX0SzT1wD2UifkGw8qhmHOws4cncnOU4uk=
-X-Received: by 2002:a05:6830:2985:b0:61c:c1bb:206a with SMTP id
- t5-20020a056830298500b0061cc1bb206amr5061631otu.343.1661707281453; Sun, 28
- Aug 2022 10:21:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4377C
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 22:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661724998; x=1693260998;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CocVa54v2hio1a8ErBXXDR0NegYDmrQDvFgX9fY3UsA=;
+  b=hUDX4EMIgKC5Yxps7qUtUJ9+Po1U+l++xz8i2AgFnm70QGB7xWpsmLiU
+   1Qk2dzabjaenoY/qN8A4ptndrQUqzqP7f8+37IME9Rr1f7WOqI84p/Wu9
+   21dUl4hRnE0e3+Ugh0CsbxrQbsUMXMyYIRXKtxreqOvbd22m4ka6TxkZJ
+   phlJdX7r/+uxHDfkqyGTrAnNJOgePIW2qLMMSlp4pV3eMp/qHOYfoqtP2
+   vNGm6J8p0oX22fkyizWU94V/AD7ltehSnrIb7WWzIkDzObnJ7AVXL0E8w
+   7hfu9eTkLJ+STZNgKF87ts0CXwwLczYRuPSw9Trx4Zt2WYsyYGCd/tY1h
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="356486999"
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="356486999"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 15:16:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="679431204"
+Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Aug 2022 15:16:35 -0700
+Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oSQa3-0001ff-0L;
+	Sun, 28 Aug 2022 22:16:35 +0000
+Date: Mon, 29 Aug 2022 06:15:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arvid Norlander <lkml@vorpal.se>, platform-driver-x86@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Sebastian Reichel <sre@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Azael Avalos <coproscefalo@gmail.com>,
+	Arvid Norlander <lkml@vorpal.se>
+Subject: Re: [PATCH 2/3] platform/x86: Battery charge mode in toshiba_acpi
+ (sysfs)
+Message-ID: <202208290605.gE9IGbxE-lkp@intel.com>
+References: <20220828192920.805253-3-lkml@vorpal.se>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com>
- <20220826181035.859042-2-ndesaulniers@google.com> <YwkPNyHvxR2dM+CQ@dev-arch.thelio-3990X>
- <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
-In-Reply-To: <CAKwvOdmR8D_GTM=ZhnhLzR3d9Ra46WpcO1W_CujGjMb+QR-_3w@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 29 Aug 2022 02:20:45 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com>
-Message-ID: <CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Makefile.compiler: s/KBUILD_CFLAGS/KBUILD_AFLAGS/ for as-option
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220828192920.805253-3-lkml@vorpal.se>
 
-On Sat, Aug 27, 2022 at 3:35 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Aug 26, 2022 at 11:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Nick,
-> >
-> > I think the title would be a little more readable if it was:
-> >
-> > Makefile.compiler: Use KBUILD_AFLAGS for as-option
->
-> Thanks, yeah that looks better; I expect a v2 of this series will be necessary.
->
-> >
-> > On Fri, Aug 26, 2022 at 11:10:33AM -0700, Nick Desaulniers wrote:
-> > > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-> > > cause as-option to fail unexpectedly because clang will emit
-> > > -Werror,-Wunused-command-line-argument for various -m and -f flags for
-> > > assembler sources.
-> > >
-> > > Callers of as-option (and as-instr) likely want to be adding flags to
-> > > KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
+Hi Arvid,
 
-Indeed, it has been weird since the day-1 of as-option.
+Thank you for the patch! Perhaps something to improve:
 
-commit cad8244840d1a148f638925758afd1cdf81fc839
-Author: Paul Mundt <lethal@linux-sh.org>
-Date:   Mon Jan 16 22:14:19 2006 -0800
+[auto build test WARNING on 1c23f9e627a7b412978b4e852793c5e3c3efc555]
 
-    [PATCH] sh: Move CPU subtype configuration to its own Kconfig
+url:    https://github.com/intel-lab-lkp/linux/commits/Arvid-Norlander/platform-x86-Battery-charge-mode-in-toshiba_acpi/20220829-033110
+base:   1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: x86_64-randconfig-a014-20220829 (https://download.01.org/0day-ci/archive/20220829/202208290605.gE9IGbxE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a85fa4a6b19ae082f6018a07da93db965fb5ba11
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arvid-Norlander/platform-x86-Battery-charge-mode-in-toshiba_acpi/20220829-033110
+        git checkout a85fa4a6b19ae082f6018a07da93db965fb5ba11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/toshiba_acpi.c:2992:6: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+           int status;
+               ^
+   1 warning generated.
 
 
+vim +/status +2992 drivers/platform/x86/toshiba_acpi.c
 
+  2984	
+  2985	
+  2986	/* ACPI battery hooking */
+  2987	static ssize_t charge_control_end_threshold_show(struct device *device,
+  2988							 struct device_attribute *attr,
+  2989							 char *buf)
+  2990	{
+  2991		int state;
+> 2992		int status;
+  2993	
+  2994		if (toshiba_acpi == NULL) {
+  2995			pr_err("Toshiba ACPI object invalid\n");
+  2996			return -ENODEV;
+  2997		}
+  2998	
+  2999		status = toshiba_battery_charge_mode_get(toshiba_acpi, &state);
+  3000		if (state == 1)
+  3001			return sprintf(buf, "80\n");
+  3002		else
+  3003			return sprintf(buf, "100\n");
+  3004	}
+  3005	
 
-
-
-
-
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > >  arch/x86/boot/compressed/Makefile | 5 +++--
-> > >  scripts/Makefile.compiler         | 6 +++---
-> > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> > > index 35ce1a64068b..fb3db714a028 100644
-> > > --- a/arch/x86/boot/compressed/Makefile
-> > > +++ b/arch/x86/boot/compressed/Makefile
-> > > @@ -48,8 +48,6 @@ KBUILD_CFLAGS += -Wno-pointer-sign
-> > >  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
-> > >  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-> > >  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
-> > > -# Disable relocation relaxation in case the link is not PIE.
-> > > -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> > >  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> > >
-> > >  # sev.c indirectly inludes inat-table.h which is generated during
-> > > @@ -58,6 +56,9 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-> > >  CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
-> > >
-> > >  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-> > > +# Disable relocation relaxation in case the link is not PIE.
-> > > +KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> > > +
-> >
-> > Commit 09e43968db40 ("x86/boot/compressed: Disable relocation
-> > relaxation") added this to address
-> > https://github.com/ClangBuiltLinux/linux/issues/1121, is it correct to
-> > move it to only being used for the .S files in arch/x86/boot/compressed?
-
-Good catch!
-
-
->
-> + Arvind
->
-> Hmm...that makes me think we might need two different as-option flags;
-> one that does use KBUILD_CFLAGS, and whose result is meant to be added
-> to cflags-y, then another that uses KBUILD_AFLAGS and is added to
-> aflagsy-y.
->
-> (My patch 2/3 in the series would use the latter)
->
-> Let's see what thoughts Masahiro has.
-
-
-How about this?
-
-KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-
-    to
-
-KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-
-
-You can insert this one-liner before this patch.
-
-
-
-
-In Kconfig, -Wa,<as-option> is tested by cc-option.
-(See commit 4d0831e8a029c03f49f434f28b8faef9f0bd403f)
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
