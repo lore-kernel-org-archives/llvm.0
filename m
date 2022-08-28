@@ -1,188 +1,221 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B56442A
-	for <llvm@lists.linux.dev>; Sat, 27 Aug 2022 19:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661629635; x=1693165635;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yNB0l+bW56hu/+fUvmGz/Xwj9wXUK6Ds+0g+l6YnadE=;
-  b=fnERP6HwWk1nrjUvYzTTk/EB36EIzY9f+mp5EwhmveqEEcEdxCGkexDt
-   hu/OxATNVUYrzi6uvelLl6oH8YReCTgn9g24iIzyqfk7LFPa0h0avBnax
-   o0bEy2ToxRl9Igpeqf/xxYUS+DTvQsgtzeuZcioYZPo5OecDhB/HqUB9x
-   Fhu3dhyD9YRsoKqULhMKNj5bVP+rEbumJ998e05T1mvp7YSn+5l/xhBji
-   W4YsFh8WmUo70yEnne0f2pXR1Ltlc6wpdTBDaPlywNS24XE/CgHUtbkgE
-   NmfpbH+lmIpN9RjDBY3SkUyHfSqkLLM0knxNSnYYwcsdRQ/cOTYm13Z16
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="275089828"
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="275089828"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2022 12:47:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,269,1654585200"; 
-   d="scan'208";a="561789386"
-Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Aug 2022 12:47:12 -0700
-Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oS1lv-0000QT-18;
-	Sat, 27 Aug 2022 19:47:11 +0000
-Date: Sun, 28 Aug 2022 03:46:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shaomin Deng <dengshaomin@cdjrlc.com>, agk@redhat.com,
-	snitzer@kernel.org, dm-devel@redhat.com,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: Re: [PATCH] dm: Remove the unneeeded variable
-Message-ID: <202208280313.Avg378Ql-lkp@intel.com>
-References: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C646117E5
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 07:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661671903;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SL0BnYHFtCFUKgCO/I0P1ue+2doloYZd+XaO4QzTVDw=;
+	b=MN4WJGBjaoKOkfRMkIkqQgCzg+VRok00RBrldSRCUrhyY+XlO1ZB83aUzFpAG6eZIpXfO+
+	uL+eLYmTNyLyED5pSCxtnNuRMivE0m3Ai4C012FMlmBmzDjlVJpKwY+csFrW4kc7D5opOp
+	Thii6EO8qlfrU01wjVAG2sQdgwJHiy4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-fPn3-7byMEWxUzl49jlhGw-1; Sun, 28 Aug 2022 03:31:42 -0400
+X-MC-Unique: fPn3-7byMEWxUzl49jlhGw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B77EF185A7BA
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 07:31:41 +0000 (UTC)
+Received: from [172.64.3.119] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A5C3EC15BB3;
+	Sun, 28 Aug 2022 07:31:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
+ mainline.kernel.org-clang, 89b749d8)
+Date: Sun, 28 Aug 2022 07:31:41 -0000
+CC: jbastian@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220827163848.24296-1-dengshaomin@cdjrlc.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <92020.122082803314200162@us-mta-411.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shaomin,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on v6.0-rc2]
-[also build test ERROR on linus/master next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
-base:    1c23f9e627a7b412978b4e852793c5e3c3efc555
-config: riscv-randconfig-r003-20220828 (https://download.01.org/0day-ci/archive/20220828/202208280313.Avg378Ql-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/fd20974ffc753b102401c766eb62117c276a1527
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shaomin-Deng/dm-Remove-the-unneeeded-variable/20220828-004044
-        git checkout fd20974ffc753b102401c766eb62117c276a1527
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/md/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
-                   DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
-                   ^
-   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                        ^
->> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                                ^
->> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                    ^
->> drivers/md/dm-log.c:810:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                                 ^
-   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
-                   DMEMIT("%s %u %s %u ", log->type->name,
-                   ^
-   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                        ^
-   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                                ^
-   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                    ^
-   drivers/md/dm-log.c:817:3: error: use of undeclared identifier 'sz'
-   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                                 ^
-   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
-                   DMEMIT_SYNC;
-                   ^
-   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
-                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
-                   ^
-   include/linux/device-mapper.h:615:22: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                        ^
-   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
-   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
-                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
-                   ^
-   include/linux/device-mapper.h:615:30: note: expanded from macro 'DMEMIT'
-   #define DMEMIT(x...) sz += ((sz >= maxlen) ? \
-                                ^
-   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
-   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
-                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
-                   ^
-   include/linux/device-mapper.h:616:29: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                    ^
-   drivers/md/dm-log.c:820:3: error: use of undeclared identifier 'sz'
-   drivers/md/dm-log.c:776:3: note: expanded from macro 'DMEMIT_SYNC'
-                   DMEMIT("%ssync ", lc->sync == NOSYNC ? "no" : "")
-                   ^
-   include/linux/device-mapper.h:616:42: note: expanded from macro 'DMEMIT'
-                             0 : scnprintf(result + sz, maxlen - sz, x))
-                                                                 ^
-   12 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/sz +810 drivers/md/dm-log.c
+Kernel information:
+    Commit message: Merge tag 'fbdev-for-6.0-rc3' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/deller/linux-fbdev
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16  802  
-416cd17b198221 Heinz Mauelshagen  2008-04-24  803  static int disk_status(struct dm_dirty_log *log, status_type_t status,
-^1da177e4c3f41 Linus Torvalds     2005-04-16  804  		       char *result, unsigned int maxlen)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  805  {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  806  	struct log_c *lc = log->context;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  807  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  808  	switch(status) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  809  	case STATUSTYPE_INFO:
-315dcc226f066c Jonathan E Brassow 2007-05-09 @810  		DMEMIT("3 %s %s %c", log->type->name, lc->log_dev->name,
-64b30c46e866bb Mikulas Patocka    2009-12-10  811  		       lc->log_dev_flush_failed ? 'F' :
-64b30c46e866bb Mikulas Patocka    2009-12-10  812  		       lc->log_dev_failed ? 'D' :
-64b30c46e866bb Mikulas Patocka    2009-12-10  813  		       'A');
-^1da177e4c3f41 Linus Torvalds     2005-04-16  814  		break;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  815  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  816  	case STATUSTYPE_TABLE:
-^1da177e4c3f41 Linus Torvalds     2005-04-16  817  		DMEMIT("%s %u %s %u ", log->type->name,
-315dcc226f066c Jonathan E Brassow 2007-05-09  818  		       lc->sync == DEFAULTSYNC ? 2 : 3, lc->log_dev->name,
-^1da177e4c3f41 Linus Torvalds     2005-04-16  819  		       lc->region_size);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  820  		DMEMIT_SYNC;
-8ec456629d0bf0 Tushar Sugandhi    2021-07-12  821  		break;
-8ec456629d0bf0 Tushar Sugandhi    2021-07-12  822  
-8ec456629d0bf0 Tushar Sugandhi    2021-07-12  823  	case STATUSTYPE_IMA:
-8ec456629d0bf0 Tushar Sugandhi    2021-07-12  824  		*result = '\0';
-8ec456629d0bf0 Tushar Sugandhi    2021-07-12  825  		break;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  826  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  827  
-fd20974ffc753b Shaomin Deng       2022-08-27  828  	return 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  829  }
-^1da177e4c3f41 Linus Torvalds     2005-04-16  830  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/51885
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - ACPI enabled test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4968223
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4967970
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1345
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1327
+            Affected tests:
+                 aarch64 - selinux-policy: serge-testsuite
+                  x86_64 - selinux-policy: serge-testsuite
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
+gument
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1352
+            Affected tests:
+                   s390x - selinux-policy: serge-testsuite
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
