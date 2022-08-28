@@ -1,44 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67E3290C
-	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 12:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490D92F45
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 16:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661691177; x=1693227177;
+  t=1661704879; x=1693240879;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xp+5BzUTF9P0CTodjio/nblQ6c5nPyLGf7iX2a4ZwWU=;
-  b=YisQ0F+Fmb1/Xa0V+egN9ERzLBQshu5qIFd9op3ZeoDZ+BvsX3u128ai
-   NqnTEAtxu2ncaCx8m/EEuD4qyS+scLmgkrVjKaIBhz7C5aWSMrevTRhug
-   PTvXf0bIyoYLCCtZwK2Zcw1ZNN1MIxLE+xX43y5cqk2LyBPbd+1EHj2ef
-   sjbozgVuYjCaa/NELgT85ZztVOtoQN1nN42CLMI3Pb6NPhv+SDjVAhkgY
-   UUuDxAg/cZgy98JBwgLNLB+7AlzdpXStnJEwxs9vBXjGCWjEybh3/i09H
-   ScblBeYRUjnxoSXVIR9oDco51FsssCPtXUfyxTnHptvlFL+z5l2y0fA3L
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="381041019"
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="381041019"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 05:52:57 -0700
+  bh=D0+b84t6qYqe3FUlO+rgHIqc30b6xNJ3SidrT5LDMok=;
+  b=HTWJDDz9R5bcgAjV+cZF3rJBBwwFCVACNc8lcMzNcpq33vxFk1OZFLYc
+   cdif8f/jbAL7Cvel06BEmH8oK2hIx833NV3nhNFvl5I4gk4IgGkDjixY2
+   rPQxd5Uk72eQt/qjJgFydqJjRsP0uV757EBwAeUsoSZx/9M8Y1rcQXsBh
+   Pl5t/uO+ktaHLdu6HoSRujDXzKltD//zaDathdh5XT/XV7udJJY2W1t+/
+   ItdTT0r8x/W7tm+RT8trxWt7fwZQO3KthvN4tbH49D8wI/XZ1XENHWJuQ
+   m5jW7p7Bgv6aRlLIcbnHK/V+LaRd+T6d1am/rtAxvHa/EbFjnLGAp9wtC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="358718393"
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="358718393"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 09:41:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="587851995"
+X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
+   d="scan'208";a="786858198"
 Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 05:52:55 -0700
+  by orsmga005.jf.intel.com with ESMTP; 28 Aug 2022 09:41:17 -0700
 Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oSHmY-00015P-30;
-	Sun, 28 Aug 2022 12:52:54 +0000
-Date: Sun, 28 Aug 2022 20:52:39 +0800
+	id 1oSLLY-0001Lk-1a;
+	Sun, 28 Aug 2022 16:41:16 +0000
+Date: Mon, 29 Aug 2022 00:40:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+To: Andy Yan <andy.yan@rock-chips.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [pinchartl-media:drm/du/next 13/14]
- drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:614:6: warning: no previous
- prototype for function 'rcar_mipi_dsi_pclk_enable'
-Message-ID: <202208282000.MtTNOyOx-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused
+ variable 'vop2_dt_match'
+Message-ID: <202208290011.B9XSvrwi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,96 +47,121 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://linuxtv.org/pinchartl/media.git drm/du/next
-head:   1a1ef49313becc3127e3bd2b6cdb27e5fc54f761
-commit: 81c238208c6accde5592851b101986b8b91ec859 [13/14] drm: rcar-du: Fix DSI enable & disable sequence
-config: riscv-randconfig-c006-20220828 (https://download.01.org/0day-ci/archive/20220828/202208282000.MtTNOyOx-lkp@intel.com/config)
+Hi Andy,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   10d4879f9ef01cc6190fafe4257d06f375bab92c
+commit: 604be85547ce4d61b89292d2f9a78c721b778c16 drm/rockchip: Add VOP2 driver
+date:   4 months ago
+config: s390-randconfig-r002-20220828 (https://download.01.org/0day-ci/archive/20220829/202208290011.B9XSvrwi-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
-        git fetch --no-tags pinchartl-media drm/du/next
-        git checkout 81c238208c6accde5592851b101986b8b91ec859
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=604be85547ce4d61b89292d2f9a78c721b778c16
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 604be85547ce4d61b89292d2f9a78c721b778c16
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/rcar-du/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/rockchip/ lib/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:614:6: warning: no previous prototype for function 'rcar_mipi_dsi_pclk_enable' [-Wmissing-prototypes]
-   void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
-        ^
-   drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:614:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
-   ^
-   static 
->> drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:653:6: warning: no previous prototype for function 'rcar_mipi_dsi_pclk_disable' [-Wmissing-prototypes]
-   void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
-        ^
-   drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c:653:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
-   ^
-   static 
-   2 warnings generated.
+   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
+   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
+   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
+   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused variable 'vop2_dt_match' [-Wunused-const-variable]
+   static const struct of_device_id vop2_dt_match[] = {
+                                    ^
+   13 warnings generated.
 
 
-vim +/rcar_mipi_dsi_pclk_enable +614 drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+vim +/vop2_dt_match +248 drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
 
-   613	
- > 614	void rcar_mipi_dsi_pclk_enable(struct drm_bridge *bridge,
-   615				       struct drm_atomic_state *state)
-   616	{
-   617		struct rcar_mipi_dsi *dsi = bridge_to_rcar_mipi_dsi(bridge);
-   618		const struct drm_display_mode *mode;
-   619		struct drm_connector *connector;
-   620		struct drm_crtc *crtc;
-   621		int ret;
-   622	
-   623		connector = drm_atomic_get_new_connector_for_encoder(state,
-   624								     bridge->encoder);
-   625		crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
-   626		mode = &drm_atomic_get_new_crtc_state(state, crtc)->adjusted_mode;
-   627	
-   628		ret = rcar_mipi_dsi_clk_enable(dsi);
-   629		if (ret < 0) {
-   630			dev_err(dsi->dev, "failed to enable DSI clocks\n");
-   631			return;
-   632		}
-   633	
-   634		ret = rcar_mipi_dsi_startup(dsi, mode);
-   635		if (ret < 0)
-   636			goto err_dsi_startup;
-   637	
-   638		rcar_mipi_dsi_set_display_timing(dsi, mode);
-   639	
-   640		ret = rcar_mipi_dsi_start_hs_clock(dsi);
-   641		if (ret < 0)
-   642			goto err_dsi_start_hs;
-   643	
-   644		return;
-   645	
-   646	err_dsi_start_hs:
-   647		rcar_mipi_dsi_shutdown(dsi);
-   648	err_dsi_startup:
-   649		rcar_mipi_dsi_clk_disable(dsi);
-   650	}
-   651	EXPORT_SYMBOL_GPL(rcar_mipi_dsi_pclk_enable);
-   652	
- > 653	void rcar_mipi_dsi_pclk_disable(struct drm_bridge *bridge)
-   654	{
-   655		struct rcar_mipi_dsi *dsi = bridge_to_rcar_mipi_dsi(bridge);
-   656	
-   657		rcar_mipi_dsi_shutdown(dsi);
-   658		rcar_mipi_dsi_clk_disable(dsi);
-   659	}
-   660	EXPORT_SYMBOL_GPL(rcar_mipi_dsi_pclk_disable);
-   661	
+   247	
+ > 248	static const struct of_device_id vop2_dt_match[] = {
+   249		{
+   250			.compatible = "rockchip,rk3566-vop",
+   251			.data = &rk3566_vop,
+   252		}, {
+   253			.compatible = "rockchip,rk3568-vop",
+   254			.data = &rk3568_vop,
+   255		}, {
+   256		},
+   257	};
+   258	MODULE_DEVICE_TABLE(of, vop2_dt_match);
+   259	
 
 -- 
 0-DAY CI Kernel Test Service
