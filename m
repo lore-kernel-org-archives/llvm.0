@@ -1,222 +1,74 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9006A190
-	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 09:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661679647;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8x1Z2mGH32SbNGQ4FI12Su2KVSe/nxfWFHjDtV8QoE8=;
-	b=UYrEOyAZU33N25qJtV3VbXNkm4AdF7slnbiXv/LwObmvE8HASxzTXm/mIwnRsAs9O2h5yQ
-	kEuuwSqbrZkmY7B5nDrCHlQOYhviEEhut1jFCv/CL4DFZX/lmLbJzZ0XP2C9xDkB4wfTfC
-	/djK58809N6IFewHVOa7RNozVBztkjw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-ou5Spn8qP86__tItI1IPPg-1; Sun, 28 Aug 2022 05:40:45 -0400
-X-MC-Unique: ou5Spn8qP86__tItI1IPPg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6595F381078B
-	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 09:40:45 +0000 (UTC)
-Received: from [172.64.3.119] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4EBFE1121314;
-	Sun, 28 Aug 2022 09:40:45 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc2,
- mainline.kernel.org-clang, 10d4879f)
-Date: Sun, 28 Aug 2022 09:40:45 -0000
-CC: xzhou@redhat.com, jbastian@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAC723CD;
+	Sun, 28 Aug 2022 09:55:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A978C433C1;
+	Sun, 28 Aug 2022 09:55:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661680546;
+	bh=TcwxDWZtQS6kMjN2jg9yz87Lt7T5qZ8ftJVQLc8rmrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rxq1frQ4Y7jG/7PA4ZNlJ7bYY/4+1Ihaz96hMvhmyswpnbYQ9NfPX9HShQ2ybT6pW
+	 It1NQhz+dlZPJe19lcZ+FwtAT1QC0wS7J1y0qZMHoD7pMwPnwLHGMNDo4YxxCJxpdg
+	 nDMHMiQE91NuwChoGUW2JC84wJEQOE5uSBM8uP79WzpX9vAq5FH5bhXnTFAkrLlLjx
+	 v3OlNw401ZIXH6LvhActC8mcqhOjRwjzPO+wygYnRinPMZaebAgt7yWX4EZAMZiQcM
+	 Lgz0AKaIZMWaXfsiePeR9j5QbrhaGtdZhnfw6+8k071rcdP/AOYfBpyBuuee1BNVGS
+	 bQmnUOm6KjyYg==
+Date: Sun, 28 Aug 2022 12:55:41 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Saeed Mahameed <saeedm@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
+ mlx5e_rep_add_meta_tunnel_rule()
+Message-ID: <Yws7nQsU8hIf7gZT@unreal>
+References: <20220825180607.2707947-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <69906.122082805404500459@us-mta-591.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Aug 25, 2022 at 11:06:07AM -0700, Nathan Chancellor wrote:
+> Clang warns:
+> 
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>           if (IS_ERR(flow_rule)) {
+>               ^~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
+>           return err;
+>                 ^~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
+>           if (IS_ERR(flow_rule)) {
+>           ^~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
+>           int err;
+>                 ^
+>                   = 0
+>   1 error generated.
+> 
+> There is little reason to have the 'goto + error variable' construct in
+> this function. Get rid of it and just return the PTR_ERR value in the if
+> statement and 0 at the end.
+> 
+> Fixes: 430e2d5e2a98 ("net/mlx5: E-Switch, Move send to vport meta rule creation")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1695
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'thermal-6.0-rc3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/51888
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         aarch64 - ACPI enabled test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4968668
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4968351
-          x86_64 (debug) - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4968637
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: selinux-policy: serge-testsuite: binder/test: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1345
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: selinux-policy: serge-testsuite: RIP: 0010:find_vma+0x6d/0xc=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1327
-            Affected tests:
-                 aarch64 - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-                  x86_64 (debug) - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: selinux-policy: serge-testsuite: Failed mount(2): Invalid ar=
-gument
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1352
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
