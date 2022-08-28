@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F8828E7
-	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 10:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8F87C
+	for <llvm@lists.linux.dev>; Sun, 28 Aug 2022 11:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661681994; x=1693217994;
+  t=1661684455; x=1693220455;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aH3rdrlnfu6yHPTlDNyVCLLXX0V0IGLJm62+sxeXb/I=;
-  b=MGbofsdFuLGkM1e6icFttEIdTP5Mr3DHIahB+3jn9YuNvnRHarK07b3O
-   ztxQpKxIRpZfKhEy+F8xiHW0lzn1Sxtfi9ROy//tz1D6YxPLbD6PD1RLn
-   YextuGoPxT2FDjnbAJZtEatSoDwo070m2JiEkkCf8myfk+cBB5xbku3/e
-   ItQwRKqXVxytJXgz7aAFXRl5J23GRWFz4XOuaZ5jn/DKM2hbbBuJ/b3Mq
-   cwXEtZTTqLFQv5nXWVNcyKdcwzmzPx9R3b07gSXiALY2iYMj23WeF4RVN
-   7sS3Jm4aN2gITw81Pqt7im7F5WTvvKI+er/rb12nN3DjtCNRO4O5AgZiC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="356443712"
+  bh=3QMOGfAwO7KKt+7Y4COox4GPZcARmtJ7OxKIjgLzzBM=;
+  b=GDysy03MfnQKcpd1n+nBHWtp/r7TdZ1+LxOh8qLu0zvVE0az+ZlYWthQ
+   npMzjeg4l0sf3GJ6nvIoROkdgVJg1Kbxk2twur21C103frXugR8bYArWj
+   ZTIZyQuFTzzGzrl7okrEvSeQzcrZmNk9XBrj2vhNi5/hvVpa/adrMwgu8
+   KgXe51OC0CVrYyoqACoX85Q94Aw8cXRwql0nuIYKsy9XlXtHLijtp+ihT
+   cdwjgr0yQX0Am6oojK9Lr2hvPj6uxVLyPYt6mXsphIjLPlHqHMmtNBdll
+   EQRd/1U5xZxrblpOWDvo2ZueGPwnDNjibbfCKOIQMrkwk07U4K7t92A6F
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10452"; a="296003981"
 X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="356443712"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 03:19:53 -0700
+   d="scan'208";a="296003981"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 04:00:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,270,1654585200"; 
-   d="scan'208";a="587828127"
+   d="scan'208";a="753331353"
 Received: from lkp-server01.sh.intel.com (HELO fc16deae1c42) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 03:19:52 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 28 Aug 2022 04:00:53 -0700
 Received: from kbuild by fc16deae1c42 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oSFOR-0000zz-2k;
-	Sun, 28 Aug 2022 10:19:51 +0000
-Date: Sun, 28 Aug 2022 18:19:37 +0800
+	id 1oSG28-00011T-1p;
+	Sun, 28 Aug 2022 11:00:52 +0000
+Date: Sun, 28 Aug 2022 19:00:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Chen Lin <chen45464546@163.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ardb:for-kernelci 9/26]
- drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype
- for function 'efi_zboot_entry'
-Message-ID: <202208281813.FLX7bLix-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
+ of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned
+ short') is always true
+Message-ID: <202208281846.Q1eZHBM8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,152 +47,199 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   f73ff3c33fc5ad785682e0892d9fb664616cd9c0
-commit: 3d0326fd09d1289fb3b1504e65381cae574ea9dc [9/26] efi/libstub: implement generic EFI zboot
-config: riscv-randconfig-c006-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281813.FLX7bLix-lkp@intel.com/config)
+Hi Chen,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   10d4879f9ef01cc6190fafe4257d06f375bab92c
+commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+date:   3 months ago
+config: arm64-buildonly-randconfig-r003-20220828 (https://download.01.org/0day-ci/archive/20220828/202208281846.Q1eZHBM8-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=3d0326fd09d1289fb3b1504e65381cae574ea9dc
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 3d0326fd09d1289fb3b1504e65381cae574ea9dc
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/ drivers/gpu/drm/bridge/imx/ drivers/gpu/drm/rcar-du/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/mediatek/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/firmware/efi/libstub/zboot.c:90:22: error: call to undeclared function 'get_unaligned_le32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           size = decompress ? get_unaligned_le32(_gzdata_end - 4)
-                               ^
-   drivers/firmware/efi/libstub/zboot.c:90:22: note: did you mean 'get_unaligned16'?
-   drivers/firmware/efi/libstub/../../../../lib/zlib_inflate/inffast.c:20:1: note: 'get_unaligned16' declared here
-   get_unaligned16(const unsigned short *p)
-   ^
->> drivers/firmware/efi/libstub/zboot.c:160:23: warning: no previous prototype for function 'efi_zboot_entry' [-Wmissing-prototypes]
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-                         ^
-   drivers/firmware/efi/libstub/zboot.c:160:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
-   ^
-   static 
-   1 warning and 1 error generated.
+>> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/efi_zboot_entry +160 drivers/firmware/efi/libstub/zboot.c
+vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
 
-    57	
-    58	static efi_status_t __efiapi
-    59	load_file(efi_load_file_protocol_t *this, efi_device_path_protocol_t *rem,
-    60		  bool boot_policy, unsigned long *bufsize, void *buffer)
-    61	{
-    62		struct efi_vendor_dev_path *vendor_dp;
-    63		bool decompress = false;
-    64		unsigned long size;
-    65		int ret;
-    66	
-    67		if (rem == NULL || bufsize == NULL)
-    68			return EFI_INVALID_PARAMETER;
-    69	
-    70		if (boot_policy)
-    71			return EFI_UNSUPPORTED;
-    72	
-    73		// Look for our vendor media device node in the remaining file path
-    74		if (rem->type == EFI_DEV_MEDIA &&
-    75		    rem->sub_type == EFI_DEV_MEDIA_VENDOR) {
-    76			vendor_dp = container_of(rem, struct efi_vendor_dev_path, header);
-    77			if (!guids_eq(&vendor_dp->vendorguid, &LINUX_EFI_ZBOOT_MEDIA_GUID))
-    78				return EFI_NOT_FOUND;
-    79	
-    80			decompress = true;
-    81			rem = (void *)(vendor_dp + 1);
-    82		}
-    83	
-    84		if (rem->type != EFI_DEV_END_PATH ||
-    85		    rem->sub_type != EFI_DEV_END_ENTIRE)
-    86			return EFI_NOT_FOUND;
-    87	
-    88		// The uncompressed size of the payload is appended to the raw bit
-    89		// stream, and may therefore appear misaligned in memory
-  > 90		size = decompress ? get_unaligned_le32(_gzdata_end - 4)
-    91				  : (_gzdata_end - _gzdata_start);
-    92		if (buffer == NULL || *bufsize < size) {
-    93			*bufsize = size;
-    94			return EFI_BUFFER_TOO_SMALL;
-    95		}
-    96	
-    97		if (decompress) {
-    98			ret = __decompress(_gzdata_start, _gzdata_end - _gzdata_start,
-    99					   NULL, NULL, buffer, 0, NULL, error);
-   100			if (ret	< 0) {
-   101				log(L"Decompression failed");
-   102				return EFI_DEVICE_ERROR;
-   103			}
-   104		} else {
-   105			memcpy(buffer, _gzdata_start, size);
-   106		}
-   107	
-   108		return EFI_SUCCESS;
-   109	}
-   110	
-   111	// Return the length in bytes of the device path up to the first end node.
-   112	static int device_path_length(const efi_device_path_protocol_t *dp)
-   113	{
-   114		int len = 0;
-   115	
-   116		while (dp->type != EFI_DEV_END_PATH) {
-   117			len += dp->length;
-   118			dp = (void *)((u8 *)dp + dp->length);
-   119		}
-   120		return len;
-   121	}
-   122	
-   123	static void append_rel_offset_node(efi_device_path_protocol_t **dp,
-   124					   unsigned long start, unsigned long end)
-   125	{
-   126		struct efi_rel_offset_dev_path *rodp = (void *)*dp;
-   127	
-   128		rodp->header.type	= EFI_DEV_MEDIA;
-   129		rodp->header.sub_type	= EFI_DEV_MEDIA_REL_OFFSET;
-   130		rodp->header.length	= sizeof(struct efi_rel_offset_dev_path);
-   131		rodp->reserved		= 0;
-   132		rodp->starting_offset	= start;
-   133		rodp->ending_offset	= end;
-   134	
-   135		*dp = (void *)(rodp + 1);
-   136	}
-   137	
-   138	static void append_ven_media_node(efi_device_path_protocol_t **dp,
-   139					  efi_guid_t *guid)
-   140	{
-   141		struct efi_vendor_dev_path *vmdp = (void *)*dp;
-   142	
-   143		vmdp->header.type	= EFI_DEV_MEDIA;
-   144		vmdp->header.sub_type	= EFI_DEV_MEDIA_VENDOR;
-   145		vmdp->header.length	= sizeof(struct efi_vendor_dev_path);
-   146		vmdp->vendorguid	= *guid;
-   147	
-   148		*dp = (void *)(vmdp + 1);
-   149	}
-   150	
-   151	static void append_end_node(efi_device_path_protocol_t **dp)
-   152	{
-   153		(*dp)->type		= EFI_DEV_END_PATH;
-   154		(*dp)->sub_type		= EFI_DEV_END_ENTIRE;
-   155		(*dp)->length		= sizeof(struct efi_generic_dev_path);
-   156	
-   157		++*dp;
-   158	}
-   159	
- > 160	efi_status_t __efiapi efi_zboot_entry(efi_handle_t handle,
+  1434	
+  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
+  1436			       struct mtk_eth *eth)
+  1437	{
+  1438		struct dim_sample dim_sample = {};
+  1439		struct mtk_rx_ring *ring;
+  1440		int idx;
+  1441		struct sk_buff *skb;
+  1442		u8 *data, *new_data;
+  1443		struct mtk_rx_dma_v2 *rxd, trxd;
+  1444		int done = 0, bytes = 0;
+  1445	
+  1446		while (done < budget) {
+  1447			struct net_device *netdev;
+  1448			unsigned int pktlen;
+  1449			dma_addr_t dma_addr;
+  1450			u32 hash, reason;
+  1451			int mac = 0;
+  1452	
+  1453			ring = mtk_get_rx_ring(eth);
+  1454			if (unlikely(!ring))
+  1455				goto rx_done;
+  1456	
+  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
+  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
+  1459			data = ring->data[idx];
+  1460	
+  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
+  1462				break;
+  1463	
+  1464			/* find out which mac the packet come from. values start at 1 */
+  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
+  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
+  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
+  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
+  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
+  1470	
+  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
+  1472				     !eth->netdev[mac]))
+  1473				goto release_desc;
+  1474	
+  1475			netdev = eth->netdev[mac];
+  1476	
+  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
+  1478				goto release_desc;
+  1479	
+  1480			/* alloc new buffer */
+> 1481			if (ring->frag_size <= PAGE_SIZE)
+  1482				new_data = napi_alloc_frag(ring->frag_size);
+  1483			else
+  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
+  1485			if (unlikely(!new_data)) {
+  1486				netdev->stats.rx_dropped++;
+  1487				goto release_desc;
+  1488			}
+  1489			dma_addr = dma_map_single(eth->dma_dev,
+  1490						  new_data + NET_SKB_PAD +
+  1491						  eth->ip_align,
+  1492						  ring->buf_size,
+  1493						  DMA_FROM_DEVICE);
+  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
+  1495				skb_free_frag(new_data);
+  1496				netdev->stats.rx_dropped++;
+  1497				goto release_desc;
+  1498			}
+  1499	
+  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
+  1501					 ring->buf_size, DMA_FROM_DEVICE);
+  1502	
+  1503			/* receive data */
+  1504			skb = build_skb(data, ring->frag_size);
+  1505			if (unlikely(!skb)) {
+  1506				skb_free_frag(data);
+  1507				netdev->stats.rx_dropped++;
+  1508				goto skip_rx;
+  1509			}
+  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+  1511	
+  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
+  1513			skb->dev = netdev;
+  1514			skb_put(skb, pktlen);
+  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
+  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
+  1517			else
+  1518				skb_checksum_none_assert(skb);
+  1519			skb->protocol = eth_type_trans(skb, netdev);
+  1520			bytes += pktlen;
+  1521	
+  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
+  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
+  1524				hash = jhash_1word(hash, 0);
+  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
+  1526			}
+  1527	
+  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
+  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
+  1530				mtk_ppe_check_skb(eth->ppe, skb,
+  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
+  1532	
+  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
+  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
+  1536						__vlan_hwaccel_put_tag(skb,
+  1537							htons(RX_DMA_VPID(trxd.rxd4)),
+  1538							RX_DMA_VID(trxd.rxd4));
+  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
+  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
+  1541							       RX_DMA_VID(trxd.rxd3));
+  1542				}
+  1543	
+  1544				/* If the device is attached to a dsa switch, the special
+  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
+  1546				 * by RX HW VLAN offload. Clear vlan info.
+  1547				 */
+  1548				if (netdev_uses_dsa(netdev))
+  1549					__vlan_hwaccel_clear_tag(skb);
+  1550			}
+  1551	
+  1552			skb_record_rx_queue(skb, 0);
+  1553			napi_gro_receive(napi, skb);
+  1554	
+  1555	skip_rx:
+  1556			ring->data[idx] = new_data;
+  1557			rxd->rxd1 = (unsigned int)dma_addr;
+  1558	
+  1559	release_desc:
+  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
+  1561				rxd->rxd2 = RX_DMA_LSO;
+  1562			else
+  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
+  1564	
+  1565			ring->calc_idx = idx;
+  1566	
+  1567			done++;
+  1568		}
+  1569	
+  1570	rx_done:
+  1571		if (done) {
+  1572			/* make sure that all changes to the dma ring are flushed before
+  1573			 * we continue
+  1574			 */
+  1575			wmb();
+  1576			mtk_update_rx_cpu_idx(eth);
+  1577		}
+  1578	
+  1579		eth->rx_packets += done;
+  1580		eth->rx_bytes += bytes;
+  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
+  1582				  &dim_sample);
+  1583		net_dim(&eth->rx_dim, dim_sample);
+  1584	
+  1585		return done;
+  1586	}
+  1587	
 
 -- 
 0-DAY CI Kernel Test Service
