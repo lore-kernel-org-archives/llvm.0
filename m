@@ -1,381 +1,144 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C0F612E
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:32:31 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33dc888dc62so190496237b3.4
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date;
-        bh=muitaXVvYj1YXYeJfyrYZvippOQN3ekQHC+LkfXxbLc=;
-        b=qZpclqQ6MsBQZUyMbRHl5nEFHLKVNuncCaq+7Pxg2KT6XNS9xA08pBlGHG3JYut1v1
-         TRvpdM8IY5fuCJoqsdbv+sWXvtCe0pTC8mj6QL8JS54ZIaAga8BWb6ikSMZwyF8wo1Mp
-         1IzskPITy3h8+PbYnC19RDCtSEjS9+naLaqxPL38hvyOcW+Wjjnkp5Vu6l4DRpZa2MVw
-         /qLkeHfR5fxAiGbQ3ASQz7tXDU/Ojm5437GZxvJMzZGw2uZgFS6bO7kXNuCOzB8SUj8u
-         ve7L7kOPTIzBNV8TWMg8uLMQMD4aJ+E2OFqj7Rzu0cUj+dVwgYL7lld5b1V4BmU78331
-         S9yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=muitaXVvYj1YXYeJfyrYZvippOQN3ekQHC+LkfXxbLc=;
-        b=6LECv5K4sBQCAjItBeVLI5pLR/3XMs3KhjLKb8H2x+EMahyNjU4kb1cbgCtxIcG9uC
-         ry6cy9gYKBed7R2cl/mS1wA5yF9iJQPqGiI1e6ZvAC/g1X5PL/KCNS09GTWwtOwJgWFG
-         uGDDvL5U2xloZiUkBV+Npzic5PBlYetZ1EosA9dKykzcC/3hOnk44p2h4ImABRbGXTqb
-         PgEaeZ/4ngyxtu/YM9cRqD9T0eZVbc/w4+RuhbPZOUlcNOk5iiJz/gw9U6pViRk8COB6
-         lIAkdz4NSINu2kQtBem/ZmIyCOOKM0HreaJIozu7jAHTfXupanVAP8nhVghb0sAS4ptW
-         XqeA==
-X-Gm-Message-State: ACgBeo1/BADlaISEdP4+I8Cr4Yy/YYS7YjJVKyrktf+7hEVHs48ycRYQ
-	zL2s+6OvtNtAOp/H2AwWnIsDYvc5uqy0yyt0TYU=
-X-Google-Smtp-Source: AA6agR5mmw1lyTMjEbXO+bj0XMfoKQXjrA7x+3+LfFFUJRrRakcxIdBjBJC8pQKjP8yP5Cacc+4B59TMcKFo3CTBMQ8=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:54d9:7143:6a7d:91d])
- (user=samitolvanen job=sendgmr) by 2002:a25:2c8:0:b0:695:feaa:871f with SMTP
- id 191-20020a2502c8000000b00695feaa871fmr14222519ybc.471.1661902350818; Tue,
- 30 Aug 2022 16:32:30 -0700 (PDT)
-Date: Tue, 30 Aug 2022 16:31:29 -0700
-In-Reply-To: <20220830233129.30610-1-samitolvanen@google.com>
-Message-Id: <20220830233129.30610-22-samitolvanen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130C0612E
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661902900; x=1693438900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u0tEyu1NWfIZb3Cp/gaCITzKqgIluxeLwJhrpaEzMLc=;
+  b=NjDu1uN04t2OnnvBQ9nNdNUqA0El6XDuJBXCC7sZy9RYFyYwXhnxbvp7
+   4E9Gk33vquwiDtGB1iHcK1JvB7pU36C8f9LJPMwsPF4QnxssNRplNRQcH
+   TMP48TavWtjEa1ldrHY5KShwpLyDn++G608/zxHypzJMjYJvDt3US+xXD
+   2mN11c/KlYR0g6BATCybPDOunDVJ1/7P+t6KE9roMdvR2Qa72NqIcqFIx
+   70HqZaBLZdFThcxOyDtfYLlMqNyZmlQOlgBjllMlz8TUROI1H9/Jtp/ca
+   F8KWdHZr4VwlJqQ3LfMQPQQkLXYBSbmnoCgRilaNZmPOUgAArp4HvccGI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292908285"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="292908285"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 16:41:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="641616319"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2022 16:41:37 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oTArQ-0000jz-2E;
+	Tue, 30 Aug 2022 23:41:36 +0000
+Date: Wed, 31 Aug 2022 07:41:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5]
+ net/rxrpc/peer_event.c:416:6: warning: variable 'peer' is used uninitialized
+ whenever 'if' condition is false
+Message-ID: <202208310714.iEB29eJf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20220830233129.30610-1-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10374; i=samitolvanen@google.com;
- h=from:subject; bh=xx8wjcYE8Du0racyo2HoO5M6w+PYgPKqDWnfLGl3DjU=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3PPFzSBxPnL1McANFd1sNHrlLrdWSxt2cbevI6
- OTWO0UqJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dzwAKCRBMtfaEi7xW7uukC/
- 9uM+7HvXyQ67VflXgAsC/YncRdBoq4yhl8rYfT2i05OWqPjoWHJG8Ya/UI5iY6oAeiaG49tfhTVdrJ
- pUyR3viQo7OIVPeVuzfeHP0eguun9EReYSQcKQGYAV4XfwQ4hFEKT254SvMUfU/M/3EWaS7HN4mNz4
- QJK4XkW4SPhA7RBnDLN3EQJPwljXDQ7+t5wNksrguQOfmbffYUJPcP/HC8oNr1lIRstWm3BrwbIJaD
- MAsUDvpax1bIHiYl6DHoiFijKWm88sHuPFQFFnxGE0U4g/pm+dzy+wirAFnCNNK/RGdmP3fdBqzLSI
- Ul3ndBsIwZACrYvIZ37KXR82etUCnuTGSvqwWPAnY4rizeCV8SEBvqmVV2EWIAClYLSj6ICZQJRyeX
- rzdvbADWzQdLSvLP7rGWgi5MQSYwwYbc15tpgtuhFe0HwpsWbo8jxfrJUVzM4T5CXHBy3OqY/UZZrp
- 0/EHk1+pMYKAO0vzlUhH3g28B4J9GI5syiuW13VGIgv/E=
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v4 21/21] x86: Add support for CONFIG_CFI_CLANG
-From: Sami Tolvanen <samitolvanen@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-With CONFIG_CFI_CLANG, the compiler injects a type preamble immediately
-before each function and a check to validate the target function type
-before indirect calls:
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
+head:   5ba1502ed90c38548d56a41156440fa70aed70ed
+commit: b445daa0f2ca96635e9620cef26a72619ce3644a [1/5] rxrpc: Fix ICMP/ICMP6 error handling
+config: hexagon-buildonly-randconfig-r006-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310714.iEB29eJf-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b445daa0f2ca96635e9620cef26a72619ce3644a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
+        git checkout b445daa0f2ca96635e9620cef26a72619ce3644a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
 
-  ; type preamble
-  __cfi_function:
-    mov <id>, %eax
-  function:
-    ...
-  ; indirect call check
-    mov     -<id>,%r10d
-    add     -0x4(%r11),%r10d
-    je      .Ltmp1
-    ud2
-  .Ltmp1:
-    call    __x86_indirect_thunk_r11
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Define the __CFI_TYPE helper macro for manually annotating indirectly
-called assembly function with the identical premable, add error handling
-code for the ud2 traps emitted for indirect call checks, and allow
-CONFIG_CFI_CLANG to be selected on x86_64.
+All warnings (new ones prefixed by >>):
 
-This produces the following oops on CFI failure (generated using lkdtm):
+>> net/rxrpc/peer_event.c:416:6: warning: variable 'peer' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/peer_event.c:428:17: note: uninitialized use occurs here
+           rxrpc_put_peer(peer);
+                          ^~~~
+   net/rxrpc/peer_event.c:416:2: note: remove the 'if' if its condition is always true
+           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/peer_event.c:391:25: note: initialize the variable 'peer' to silence this warning
+           struct rxrpc_peer *peer;
+                                  ^
+                                   = NULL
+   1 warning generated.
 
-[   21.441706] CFI failure at lkdtm_indirect_call+0x16/0x20 [lkdtm]
-(target: lkdtm_increment_int+0x0/0x10 [lkdtm]; expected type: 0x7e0c52a)
-[   21.444579] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[   21.445296] CPU: 0 PID: 132 Comm: sh Not tainted
-5.19.0-rc8-00020-g9f27360e674c #1
-[   21.445296] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   21.445296] RIP: 0010:lkdtm_indirect_call+0x16/0x20 [lkdtm]
-[   21.445296] Code: 52 1c c0 48 c7 c1 c5 50 1c c0 e9 25 48 2a cc 0f 1f
-44 00 00 49 89 fb 48 c7 c7 50 b4 1c c0 41 ba 5b ad f3 81 45 03 53 f8
-[   21.445296] RSP: 0018:ffffa9f9c02ffdc0 EFLAGS: 00000292
-[   21.445296] RAX: 0000000000000027 RBX: ffffffffc01cb300 RCX: 385cbbd2e07=
-0a700
-[   21.445296] RDX: 0000000000000000 RSI: c0000000ffffdfff RDI: ffffffffc01=
-cb450
-[   21.445296] RBP: 0000000000000006 R08: 0000000000000000 R09: ffffffff8d0=
-81610
-[   21.445296] R10: 00000000bcc90825 R11: ffffffffc01c2fc0 R12: 00000000000=
-00000
-[   21.445296] R13: ffffa31b827a6000 R14: 0000000000000000 R15: 00000000000=
-00002
-[   21.445296] FS:  00007f08b42216a0(0000) GS:ffffa31b9f400000(0000)
-knlGS:0000000000000000
-[   21.445296] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   21.445296] CR2: 0000000000c76678 CR3: 0000000001940000 CR4: 00000000000=
-006f0
-[   21.445296] Call Trace:
-[   21.445296]  <TASK>
-[   21.445296]  lkdtm_CFI_FORWARD_PROTO+0x30/0x50 [lkdtm]
-[   21.445296]  direct_entry+0x12d/0x140 [lkdtm]
-[   21.445296]  full_proxy_write+0x5d/0xb0
-[   21.445296]  vfs_write+0x144/0x460
-[   21.445296]  ? __x64_sys_wait4+0x5a/0xc0
-[   21.445296]  ksys_write+0x69/0xd0
-[   21.445296]  do_syscall_64+0x51/0xa0
-[   21.445296]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   21.445296] RIP: 0033:0x7f08b41a6fe1
-[   21.445296] Code: be 07 00 00 00 41 89 c0 e8 7e ff ff ff 44 89 c7 89
-04 24 e8 91 c6 02 00 8b 04 24 48 83 c4 68 c3 48 63 ff b8 01 00 00 03
-[   21.445296] RSP: 002b:00007ffcdf65c2e8 EFLAGS: 00000246 ORIG_RAX: 000000=
-0000000001
-[   21.445296] RAX: ffffffffffffffda RBX: 00007f08b4221690 RCX: 00007f08b41=
-a6fe1
-[   21.445296] RDX: 0000000000000012 RSI: 0000000000c738f0 RDI: 00000000000=
-00001
-[   21.445296] RBP: 0000000000000001 R08: fefefefefefefeff R09: fefefefeffc=
-5ff4e
-[   21.445296] R10: 00007f08b42222b0 R11: 0000000000000246 R12: 0000000000c=
-738f0
-[   21.445296] R13: 0000000000000012 R14: 00007ffcdf65c401 R15: 0000000000c=
-70450
-[   21.445296]  </TASK>
-[   21.445296] Modules linked in: lkdtm
-[   21.445296] Dumping ftrace buffer:
-[   21.445296]    (ftrace buffer empty)
-[   21.471442] ---[ end trace 0000000000000000 ]---
-[   21.471811] RIP: 0010:lkdtm_indirect_call+0x16/0x20 [lkdtm]
-[   21.472467] Code: 52 1c c0 48 c7 c1 c5 50 1c c0 e9 25 48 2a cc 0f 1f
-44 00 00 49 89 fb 48 c7 c7 50 b4 1c c0 41 ba 5b ad f3 81 45 03 53 f8
-[   21.474400] RSP: 0018:ffffa9f9c02ffdc0 EFLAGS: 00000292
-[   21.474735] RAX: 0000000000000027 RBX: ffffffffc01cb300 RCX: 385cbbd2e07=
-0a700
-[   21.475664] RDX: 0000000000000000 RSI: c0000000ffffdfff RDI: ffffffffc01=
-cb450
-[   21.476471] RBP: 0000000000000006 R08: 0000000000000000 R09: ffffffff8d0=
-81610
-[   21.477127] R10: 00000000bcc90825 R11: ffffffffc01c2fc0 R12: 00000000000=
-00000
-[   21.477959] R13: ffffa31b827a6000 R14: 0000000000000000 R15: 00000000000=
-00002
-[   21.478657] FS:  00007f08b42216a0(0000) GS:ffffa31b9f400000(0000)
-knlGS:0000000000000000
-[   21.479577] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   21.480307] CR2: 0000000000c76678 CR3: 0000000001940000 CR4: 00000000000=
-006f0
-[   21.481460] Kernel panic - not syncing: Fatal exception
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- arch/x86/Kconfig               |  2 +
- arch/x86/include/asm/cfi.h     | 22 +++++++++
- arch/x86/include/asm/linkage.h |  9 ++++
- arch/x86/kernel/Makefile       |  2 +
- arch/x86/kernel/cfi.c          | 85 ++++++++++++++++++++++++++++++++++
- arch/x86/kernel/traps.c        |  4 +-
- 6 files changed, 123 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/include/asm/cfi.h
- create mode 100644 arch/x86/kernel/cfi.c
+vim +416 net/rxrpc/peer_event.c
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..1fe6a83dac05 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -107,6 +107,8 @@ config X86
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <=3D 4096
-+	select ARCH_SUPPORTS_CFI_CLANG		if X86_64
-+	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
- 	select ARCH_USE_BUILTIN_BSWAP
-diff --git a/arch/x86/include/asm/cfi.h b/arch/x86/include/asm/cfi.h
-new file mode 100644
-index 000000000000..58dacd90daef
---- /dev/null
-+++ b/arch/x86/include/asm/cfi.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_CFI_H
-+#define _ASM_X86_CFI_H
-+
-+/*
-+ * Clang Control Flow Integrity (CFI) support.
-+ *
-+ * Copyright (C) 2022 Google LLC
-+ */
-+
-+#include <linux/cfi.h>
-+
-+#ifdef CONFIG_CFI_CLANG
-+enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
-+#else
-+static inline enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
-+{
-+	return BUG_TRAP_TYPE_NONE;
-+}
-+#endif /* CONFIG_CFI_CLANG */
-+
-+#endif /* _ASM_X86_CFI_H */
-diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.=
-h
-index 73ca20049835..ebfa05973312 100644
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -29,6 +29,15 @@
- #endif
- #endif /* CONFIG_RETPOLINE */
-=20
-+#ifdef CONFIG_CFI_CLANG
-+#define __CFI_TYPE(name)					\
-+	SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)	\
-+	.fill 11, 1, 0x90 ASM_NL				\
-+	.byte 0xb8 ASM_NL					\
-+	.long __kcfi_typeid_##name ASM_NL			\
-+	SYM_FUNC_END(__cfi_##name)
-+#endif
-+
- #else /* __ASSEMBLY__ */
-=20
- #if defined(CONFIG_RETHUNK) && !defined(__DISABLE_EXPORTS) && !defined(BUI=
-LD_VDSO)
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index a20a5ebfacd7..1286a73ebdbc 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -139,6 +139,8 @@ obj-$(CONFIG_UNWINDER_GUESS)		+=3D unwind_guess.o
-=20
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+=3D sev.o
-=20
-+obj-$(CONFIG_CFI_CLANG)			+=3D cfi.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/cfi.c b/arch/x86/kernel/cfi.c
-new file mode 100644
-index 000000000000..e642c1af2678
---- /dev/null
-+++ b/arch/x86/kernel/cfi.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Clang Control Flow Integrity (CFI) support.
-+ *
-+ * Copyright (C) 2022 Google LLC
-+ */
-+#include <asm/cfi.h>
-+#include <asm/insn.h>
-+#include <asm/insn-eval.h>
-+
-+/*
-+ * Returns the target address and the expected type when regs->ip points
-+ * to a compiler-generated CFI trap.
-+ */
-+static bool decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
-+			    u32 *type)
-+{
-+	char buffer[MAX_INSN_SIZE];
-+	struct insn insn;
-+	int offset =3D 0;
-+
-+	*target =3D *type =3D 0;
-+
-+	/*
-+	 * The compiler generates the following instruction sequence
-+	 * for indirect call checks:
-+	 *
-+	 * =C2=A0 movl    -<id>, %r10d       ; 6 bytes
-+	 *   addl    -4(%reg), %r10d    ; 4 bytes
-+	 *   je      .Ltmp1             ; 2 bytes
-+	 *   ud2                        ; <- regs->ip
-+	 *   .Ltmp1:
-+	 *
-+	 * We can decode the expected type and the target address from the
-+	 * movl/addl instructions.
-+	 */
-+	if (copy_from_kernel_nofault(buffer, (void *)regs->ip - 12, MAX_INSN_SIZE=
-))
-+		return false;
-+	if (insn_decode_kernel(&insn, &buffer[offset]))
-+		return false;
-+	if (insn.opcode.value !=3D 0xBA)
-+		return false;
-+
-+	*type =3D -(u32)insn.immediate.value;
-+
-+	if (copy_from_kernel_nofault(buffer, (void *)regs->ip - 6, MAX_INSN_SIZE)=
-)
-+		return false;
-+	if (insn_decode_kernel(&insn, &buffer[offset]))
-+		return false;
-+	if (insn.opcode.value !=3D 0x3)
-+		return false;
-+
-+	/* Read the target address from the register. */
-+	offset =3D insn_get_modrm_rm_off(&insn, regs);
-+	if (offset < 0)
-+		return false;
-+
-+	*target =3D *(unsigned long *)((void *)regs + offset);
-+
-+	return true;
-+}
-+
-+/*
-+ * Checks if a ud2 trap is because of a CFI failure, and handles the trap
-+ * if needed. Returns a bug_trap_type value similarly to report_bug.
-+ */
-+enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
-+{
-+	unsigned long target;
-+	u32 type;
-+
-+	if (!is_cfi_trap(regs->ip))
-+		return BUG_TRAP_TYPE_NONE;
-+
-+	if (!decode_cfi_insn(regs, &target, &type))
-+		return report_cfi_failure_noaddr(regs, regs->ip);
-+
-+	return report_cfi_failure(regs, regs->ip, &target, type);
-+}
-+
-+/*
-+ * Ensure that __kcfi_typeid_ symbols are emitted for functions that may
-+ * not be indirectly called with all configurations.
-+ */
-+__ADDRESSABLE(memcpy)
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index d62b2cb85cea..178015a820f0 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -63,6 +63,7 @@
- #include <asm/insn-eval.h>
- #include <asm/vdso.h>
- #include <asm/tdx.h>
-+#include <asm/cfi.h>
-=20
- #ifdef CONFIG_X86_64
- #include <asm/x86_init.h>
-@@ -313,7 +314,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
- 	 */
- 	if (regs->flags & X86_EFLAGS_IF)
- 		raw_local_irq_enable();
--	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN) {
-+	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN ||
-+	    handle_cfi_failure(regs) =3D=3D BUG_TRAP_TYPE_WARN) {
- 		regs->ip +=3D LEN_UD2;
- 		handled =3D true;
- 	}
---=20
-2.37.2.672.g94769d06f0-goog
+   382	
+   383	/*
+   384	 * Handle an error received on the local endpoint.
+   385	 */
+   386	void rxrpc_error_report(struct sock *sk)
+   387	{
+   388		struct sock_exterr_skb *serr;
+   389		struct sockaddr_rxrpc srx;
+   390		struct rxrpc_local *local;
+   391		struct rxrpc_peer *peer;
+   392		struct sk_buff *skb;
+   393	
+   394		rcu_read_lock();
+   395		local = rcu_dereference_sk_user_data(sk);
+   396		if (unlikely(!local)) {
+   397			rcu_read_unlock();
+   398			return;
+   399		}
+   400		_enter("%p{%d}", sk, local->debug_id);
+   401	
+   402		/* Clear the outstanding error value on the socket so that it doesn't
+   403		 * cause kernel_sendmsg() to return it later.
+   404		 */
+   405		sock_error(sk);
+   406	
+   407		skb = sock_dequeue_err_skb(sk);
+   408		if (!skb) {
+   409			rcu_read_unlock();
+   410			_leave("UDP socket errqueue empty");
+   411			return;
+   412		}
+   413		rxrpc_new_skb(skb, rxrpc_skb_received);
+   414		serr = SKB_EXT_ERR(skb);
+   415	
+ > 416		if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+   417			peer = rxrpc_lookup_peer_local_rcu(local, skb, &srx);
+   418			if (peer && !rxrpc_get_peer_maybe(peer))
+   419				peer = NULL;
+   420			if (peer) {
+   421				trace_rxrpc_rx_icmp(peer, &serr->ee, &srx);
+   422				rxrpc_store_error(peer, serr);
+   423			}
+   424		}
+   425	
+   426		rcu_read_unlock();
+   427		rxrpc_free_skb(skb, rxrpc_skb_freed);
+   428		rxrpc_put_peer(peer);
+   429		_leave("");
+   430	}
+   431	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
