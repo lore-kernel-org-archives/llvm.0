@@ -1,301 +1,106 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C40B5CA8
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 20:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661889993; x=1693425993;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5h5OkfyyaQDSLiO9DSe2ijAQ62uS2mNc9esVM7UOfL0=;
-  b=PCuyh8dF7eY1XEHR4ftKyn1kESnPRLPdnlHRvqTDmERk+CRi/P56YHyc
-   faFSwMNfGxvT2lurdeif/dUbDi/kg4ECv/Q+2Nwr2XbU5O/zI5ocF1OQt
-   FAIdH4mn9Lm8Y1LkMoLpHoCFV2x8V11uKDN3Hk0QzFaWz688M0FDuTSnV
-   Klqagoy/housufhDQHECX8aNIzAkUTmyT7v06V30WVRPGPbJPqkoh4IMD
-   WTWe9ufErW32yG+6HnLNPB54UlCLzB8dMCUuZOTrj567KpDfX59BVN5TS
-   HFk2i77otMmVBo8u9CFlP32X3mA2+N6cEMzH6BErQNi1Yn5bVlL/6Z/ar
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296074419"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="296074419"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 13:06:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="701125834"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Aug 2022 13:06:30 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oT7VF-0000Yh-1d;
-	Tue, 30 Aug 2022 20:06:29 +0000
-Date: Wed, 31 Aug 2022 04:06:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: powerpc-linux-objdump: Warning: Unable to load dwo file: <no
- .debug_str_offsets section>/<no .debug_str_offsets section>
-Message-ID: <202208310414.72kOz1OM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8E9633;
+	Tue, 30 Aug 2022 20:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2F2C433C1;
+	Tue, 30 Aug 2022 20:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661891676;
+	bh=DfR/G5R+/i4IGeP9oz9qCc8ZMrsJlvx/ukbT3FiHPoI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mnaMWCzbbcfeyiupmZgbLCEoUy8vyWotQN8moBXa8saLp2aEBIF6uKUwF9NHocwmw
+	 4Uk+yN+ZY/Y0xCHq1uFl1UoOrJPxBx18zzNBkw5EHjgnBo8q6e8Cne/8p4KzGJePnc
+	 QQhUAkdfQ6JvCPO3VG2OhnucfVuWVZqPORvHqaUK+l7ZNpW5QypBysB8Ps2OpHEchA
+	 D0l3T+lI7a3hyvgTiMqZE+VPdi+Ct8+Q6MvG4ETq/mJU3MCB+0ALf93DeAd0ojtwLK
+	 0l2Gxs2AkI1zftGzXBcHNjby7CTVrsttepidLpDkN6iU2Db4JNs5uSC9sG5ZEn+ZV3
+	 CRv1IX5A0UM4g==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/5] drm/amd/display: Reduce stack usage for clang
+Date: Tue, 30 Aug 2022 13:34:04 -0700
+Message-Id: <20220830203409.3491379-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   5 months ago
-config: powerpc-randconfig-r024-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310414.72kOz1OM-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Hi all,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This series aims to address the following warnings, which are visible
+when building x86_64 allmodconfig with clang after commit 3876a8b5e241
+("drm/amd/display: Enable building new display engine with KCOV
+enabled").
 
-All warnings (new ones prefixed by >>):
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        ^
+    1 error generated.
 
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
->> powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
-   powerpc-linux-objdump: Warning: Unable to load dwo file: <no .debug_str_offsets section>/<no .debug_str_offsets section>
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        ^
+    1 error generated.
 
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1721:6: error: stack frame size (2152) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        ^
+    1 error generated.
+
+This series is based on commit b3235e8635e1 ("drm/amd/display: clean up
+some inconsistent indentings"). These warnings are fatal for
+allmodconfig due to CONFIG_WERROR so ideally, I would like to see these
+patches cherry-picked to a branch targeting mainline to allow our builds
+to go back to green. However, since this series is not exactly trivial
+in size, I can understand not wanting to apply these to mainline during
+the -rc cycle. If they cannot be cherry-picked to mainline, I can add a
+patch raising the value of -Wframe-larger-than for these files that can
+be cherry-picked to 6.0/mainline then add a revert of that change as the
+last patch in the stack so everything goes back to normal for -next/6.1.
+I am open to other options though!
+
+I have built this series against clang 16.0.0 (ToT) and GCC 12.2.0 for
+x86_64. It has seen no runtime testing, as my only test system with AMD
+graphics is a Renoir one, which as far as I understand it uses DCN 2.1.
+
+Nathan Chancellor (5):
+  drm/amd/display: Reduce number of arguments of
+    dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
+  drm/amd/display: Reduce number of arguments of
+    dml32_CalculatePrefetchSchedule()
+  drm/amd/display: Reduce number of arguments of dml31's
+    CalculateWatermarksAndDRAMSpeedChangeSupport()
+  drm/amd/display: Reduce number of arguments of dml31's
+    CalculateFlipSchedule()
+  drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack
+    usage
+
+ .../dc/dml/dcn30/display_mode_vba_30.c        |   2 +-
+ .../dc/dml/dcn31/display_mode_vba_31.c        | 420 +++++-------------
+ .../dc/dml/dcn32/display_mode_vba_32.c        | 236 +++-------
+ .../dc/dml/dcn32/display_mode_vba_util_32.c   | 323 ++++++--------
+ .../dc/dml/dcn32/display_mode_vba_util_32.h   |  51 +--
+ 5 files changed, 318 insertions(+), 714 deletions(-)
+
+
+base-commit: b3235e8635e1dd7ac1a27a73330e9880dfe05154
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
