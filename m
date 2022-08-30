@@ -1,55 +1,45 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEFF625
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:18:47 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so501012wms.0
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 02:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
-        b=OkWDZIa6FOObDPg4K064OvXgsu/npv0Y459BFnvrGpjZtayryIOXm//bV7VtE+O6Ku
-         Z6wd2miesiJN/ppW2YMSP9cBRqmBKexlGpHQAjEv+y2Eu6lkXXKdYMdSo3EKWztpsW5n
-         LDeMJBGtmITWQY6Ini2sc9A4VU7633IBYInTPbSFNVnazdFOhBgmWg49tISF8q2xXT3L
-         zZhoSBvCa4634fkQJ++bWj41wbFXDwaxLDCo1mbSHQSoFPQTMB9SDOth0gHv/HUV/AWQ
-         VsZZGRgDrYBEB/ip4uuvUBsJkrOnk9bvsp/Dtd8p6BMdIvup4DP62ymW9/8+WGIDGIxX
-         zRzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
-        b=VaCy32zm/tB4dvErxZ+Zh4qbywlf4oFC6dWXaU+vHeS1bkDKRUt1D+trRLAyE2sW9h
-         T5jzmJujG7I0JIKz3Qwte4rzRMMx7xnPyJiEwK46pIXq00asfdkzN8NvXPQeLPdpbaqR
-         dpgQ6MasFYL93yZGRvx+YVpL31A+YOkUxr2O1c+0N3jZCPA87GRUYX/L57jUamGSF+TH
-         C2CZU77MPDzbvenzaha9jQc/VLqoNSeA3nyyCnbEXNmKFO9aEW3cKFEBumJTMThgsYn1
-         MJf2y+Vma399bpknqiqHzXUfgtVv8kpjVvVgBxnjAIiqmJ3D/moHTj/jf7WVd0xSxUA/
-         ekkQ==
-X-Gm-Message-State: ACgBeo106UkPYbNKQJQZ8oo8QVv4++a0ggr0iwBMj2qZ/DDcdQuxUmRg
-	ePoRzMkajM4YRqB4lp6jdiY=
-X-Google-Smtp-Source: AA6agR5QPnPnzmdDQ8z8WSYvFsJyyoFZG9CQ43BYjg2K03qhgWNqHPOigcjYhoX/TqbT6IEa4NyRmQ==
-X-Received: by 2002:a05:600c:1f05:b0:3a5:c789:1d9c with SMTP id bd5-20020a05600c1f0500b003a5c7891d9cmr9138971wmb.26.1661851125988;
-        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id h15-20020a5d548f000000b0020e6ce4dabdsm9040737wrv.103.2022.08.30.02.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
-Date: Tue, 30 Aug 2022 10:18:43 +0100
-From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: build failure of next-20220830 due to 5f8cdece42ff ("drm/msm/dsi:
- switch to DRM_PANEL_BRIDGE")
-Message-ID: <Yw3V8yJgAnPD8o6P@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99126625
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661851927; x=1693387927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gccZn9I0+N8z97syHj0uFijkRdJnRbnaf9VVahNbVog=;
+  b=hrOWrE3ptmnhEnh37/VLRyk0hSPUsb1JcniTVDjwy3mXuvBIQE0tKPQT
+   6vad7/tCrMbaQDlIEg0VPeFupJEurLUZaW4a8ZJDmVoyuwwzRUfmMxGK9
+   vNHKuG/qYUcvPM+/5Kk8MerwmSu+0w3k/1stPTntjb70BTAF9ierzvMBa
+   q9rUFlYNDm5euGIhhhLMR9oMoVcEtpT23W5TrzULLWcZjemQerF5FjMFK
+   YF3fPAgXnWTKA5bkf2Z32kmXpCpAasb7GzQd/zGgDismGCqCpLWzZtnYv
+   mIK+dxej1AVpTUKLDOsf9EKSFvEjzEL67hTbUcOKx0QSX5MZzAZzKrXOb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="278148058"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="278148058"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 02:32:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="641302532"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2022 02:32:01 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oSxbE-00008Y-1I;
+	Tue, 30 Aug 2022 09:32:00 +0000
+Date: Tue, 30 Aug 2022 17:31:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kieran Frewen <kieran.frewen@morsemicro.com>, johannes@sipsolutions.net
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-wireless@vger.kernel.org, quic_jjohnson@quicinc.com,
+	Kieran Frewen <kieran.frewen@morsemicro.com>
+Subject: Re: [PATCH v2 01/12] cfg80211: regulatory: extend regulatory support
+ for S1G
+Message-ID: <202208301755.3ARl5XbS-lkp@intel.com>
+References: <20220830022017.51017-2-kieran.frewen@morsemicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,25 +48,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220830022017.51017-2-kieran.frewen@morsemicro.com>
 
-Hi All,
+Hi Kieran,
 
-The builds of arm64 allmodconfig with clang have failed to build
-next-20220830 with the error:
+Thank you for the patch! Perhaps something to improve:
 
-drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
-        of_node_put(device_node);
-                    ^~~~~~~~~~~
-drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
-        struct device_node *endpoint, *device_node;
-                                                  ^
-                                                   = NULL
+[auto build test WARNING on wireless/main]
+[also build test WARNING on linus/master v6.0-rc3 next-20220830]
+[cannot apply to wireless-next/main]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-git bisect pointed to 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
+url:    https://github.com/intel-lab-lkp/linux/commits/Kieran-Frewen/Additional-Support-for-802-11ah-S1G/20220830-102217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git main
+config: arm-colibri_pxa270_defconfig (https://download.01.org/0day-ci/archive/20220830/202208301755.3ARl5XbS-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/7c0e7a45e22911c6e1b16ecdce1a4d6022fd66ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kieran-Frewen/Additional-Support-for-802-11ah-S1G/20220830-102217
+        git checkout 7c0e7a45e22911c6e1b16ecdce1a4d6022fd66ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/wireless/
 
-I will be happy to test any patch or provide any extra log if needed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> net/wireless/util.c:137:5: warning: no previous prototype for function 'ieee80211_s1g_channel_to_freq_khz' [-Wmissing-prototypes]
+   u32 ieee80211_s1g_channel_to_freq_khz(int chan)
+       ^
+   net/wireless/util.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 ieee80211_s1g_channel_to_freq_khz(int chan)
+   ^
+   static 
+   1 warning generated.
+--
+>> net/wireless/reg.c:2597:33: warning: variable 'center_freq_khz' is uninitialized when used here [-Wuninitialized]
+                   reg_rule = freq_reg_info_regd(center_freq_khz, regd, bw);
+                                                 ^~~~~~~~~~~~~~~
+   net/wireless/reg.c:2586:25: note: initialize the variable 'center_freq_khz' to silence this warning
+           u32 bw, center_freq_khz;
+                                  ^
+                                   = 0
+   1 warning generated.
+
+
+vim +/ieee80211_s1g_channel_to_freq_khz +137 net/wireless/util.c
+
+   136	
+ > 137	u32 ieee80211_s1g_channel_to_freq_khz(int chan)
+   138	{
+   139		u32 base = ieee80211_s1g_base_freq(chan);
+   140	
+   141		if (!base)
+   142			return 0;
+   143	
+   144		return (base + chan * 500);
+   145	}
+   146	EXPORT_SYMBOL(ieee80211_s1g_channel_to_freq_khz);
+   147	
 
 -- 
-Regards
-Sudip
+0-DAY CI Kernel Test Service
+https://01.org/lkp
