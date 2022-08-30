@@ -1,42 +1,42 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFD8612E
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:32:17 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id n18-20020a25d612000000b0069661a1dc48so887049ybg.20
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:32:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C9A612E
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:32:20 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-33dbfb6d2a3so190480517b3.11
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=QaAhiBNrHu6GYkLFA3B7rG1GS8UtnkRvQfTpKHPiaFU=;
-        b=Uzu0hS7fYpQn9SuqY6pJYAs0mwU+Cbcm7VfqttztC5Y7vvGMMQbw4wbd/rsgMajhX8
-         hCYkTHXcE5WgpL526ftRFAS1iaJreodEJpABN25rLzozJPt3fTcwLmVcYcs0vcC1nhlH
-         yp59OC26/dM0xfLKycIeelmnMx/ctiemiWAngqrglcx45erw27Nl2sLJAj1c3kLUftM8
-         0iSFHBjA1GYjEC6cZmd4UeYpgAKFk2VTxcYmGZKFX6zgfodGL620Sb3emlMY85C3OcAo
-         bE5fs06VNU0/03FLltVrwNWpMmfeDGopu8w2Crj1CckQW60JmF6IEikz1fcox97zq9e0
-         FlXA==
+        bh=nLLyHDlqzsc75HWG24SP3SGpvgxZ9V3UrO9VtB9+qSI=;
+        b=en0MzguAxkGbIecpah/2+Xtucf1JeujXbvoM8sjRtirhhrivHvxhOjjc8XjIzzeau8
+         iqt1tYXFNwhoWt5JWeB4Qw2qlLDvMb/FnG5C3eS8G491X1vHXz0fHYMZX1mCaWmfqEYE
+         agDpOC3DvDklQ/bhO9Poq/QtFeuzNG3cbZCXHMxiTbMs7SG2qxg6Kbqnwl9dno9zUMG2
+         5VzNwoxM8xnkUvu34R3iEDgv5EmULHaDWzsDMefk0MmRNFil+hz5Zq7BNEzV9pCGj39X
+         e1LMfsrVWFIodkOV3rtExT4NeR8FXBpwSdqVScplR/PL2lzHJurkhJNRjTTB2IFcWpJ3
+         EKkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QaAhiBNrHu6GYkLFA3B7rG1GS8UtnkRvQfTpKHPiaFU=;
-        b=A0REpLl7zKR9Gvf1XtT/UNyYGTet43WACzOIZW06AZcyCIeL6pPpKP3SXoQgXd0Iht
-         hTncQ/uKAoZkBB7loL/3V7t/yxSV+fxUOGFWxmviniOAbHNaoAow23BDk86/ilQxPiMQ
-         QOAsO5KR9H6omsA1/w0caF7WnEHSsakFLAEuc2g7bC27FqrCWwPHTNdA12RH3sHEu4wr
-         DxAO5KofdQCyB/KpnUgSUbq5k/oIhnTkM5/Q/R/s71hadnEMppzR7/ddCzIGQVjLpY9I
-         xine4wjd8xWhBzZpfe1baL4W4mAhYuOVccOfdcvCc3DhpvJ+s+HYIcLy92ksV9NQ9Xlh
-         yMuw==
-X-Gm-Message-State: ACgBeo2lMPI4ARTc87rTvYbxvfAaPLKYpHIFfsE0XH3ITlHF188WV/fC
-	YG9BSaK714QL9YeENiFD3JbE8AvWGHdRFfKLfqQ=
-X-Google-Smtp-Source: AA6agR4FDK+ca8ExoQOJuxzStWcPg0UmoHQzTdwmwi9npQMvWgOYplZw4nRfd6yLznTzYg9mNTUtUOCVf41ZKmBVqKc=
+        bh=nLLyHDlqzsc75HWG24SP3SGpvgxZ9V3UrO9VtB9+qSI=;
+        b=csx4ImppXlk4pJ/788CfRpiKUeB0jCO93DcjvV8FepOnQdhoy7eYREa8xVr/QTGMyS
+         IlAadrRoxJ1WtBId25FhF4pizd8UDOLFWNV8+lBS0NSth8cfYcfm356JFVsNS/04AnKl
+         vw9NMYnX/5jUjaqp82i74QY1mGSIfOxWUCZvfkxkuqjqudkQct8Aq9Oo9wLbRXKHVVBU
+         DI2umvgcbGKaR6BHVoVvMOJ+hQ7rRHK50g9pLfl4ivfXB8yJrFagNF/CMHuFWEM2w3sW
+         kdfArU5M+iReCCexeLrQ9fp8n7PQb1aQLZDY+8Gzx0su3pGw6FNFpJF3bQ7/l5PbQAGi
+         ye9g==
+X-Gm-Message-State: ACgBeo3Yfqhydp7GfV/Shmp7Ci+CzT0R02WcyTuNFABRmu6fj/kzDg9D
+	XfVT6v3rMN6Ox9oeXZvrKwybVunIbrffu8rOzZg=
+X-Google-Smtp-Source: AA6agR5h5efzqOVxmYbBIWgxJ1MECNbgPa7xGsG/CYzCNefyQ5w5lz2oa6+rUdM0FZqOdRsfe2EIRX/Bqx3hGl+nnMQ=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:54d9:7143:6a7d:91d])
- (user=samitolvanen job=sendgmr) by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP
- id a77-20020a0dd850000000b00340d2c0b022mr13497429ywe.469.1661902336610; Tue,
- 30 Aug 2022 16:32:16 -0700 (PDT)
-Date: Tue, 30 Aug 2022 16:31:24 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:be87:0:b0:67a:7054:c7bc with SMTP
+ id i7-20020a25be87000000b0067a7054c7bcmr12511319ybk.601.1661902339549; Tue,
+ 30 Aug 2022 16:32:19 -0700 (PDT)
+Date: Tue, 30 Aug 2022 16:31:25 -0700
 In-Reply-To: <20220830233129.30610-1-samitolvanen@google.com>
-Message-Id: <20220830233129.30610-17-samitolvanen@google.com>
+Message-Id: <20220830233129.30610-18-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,19 +45,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220830233129.30610-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1745; i=samitolvanen@google.com;
- h=from:subject; bh=jQm92I9xQfCJPH6jkHCDpzvvJGb/s+FwIZvLF3ZcxmA=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3OLXWXp4dv7z7QEAEH5wDVXEoy6vQwE4MAgTih
- TKcGqJ2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dzgAKCRBMtfaEi7xW7uhuC/
- 4mLD2OTFFRM6dzC+U3G8nSByx2EP7YNHOfYlhOKl0Gv/CfgBF/GmPU6h3gd2FYTdIVAmx+Jt5i7jod
- yHHS4gZDl8y9ik+cOIJfaq9PCplP1qzBI5UZveW67TQSOg6aWHjQltgyelJnFQOdFAyzVFhcjo1ZT4
- RasjgLDZdDZaCQZXWXBTkwjmqg7yGU6nx6FTkZor6xheRDX2kEOcxc/tAIWc/F3tCwLKZO3b2OacxU
- kLhRFXfTjDHGI8CEMPaaAiF2HgUeJEAfx8o4vhL4zMeTDaKFmRQlmf7F9COJc6E7kag2I6rBVTMLaT
- FWl2SlSRnYF0zOFsCumLTWzpoCgAijPhDKp/uWc4Bl+x2WAveRz8IYR1rkvZSXXc/Y0/ys9658hItd
- QLTUDCSGboZ0fd2TFzIbCfImlNrGKDomVDfTKP6XcarqWEI1dc/zyJKjcz0KqduDH2E4Ieu9sxhkpl
- Xw4LrtrfDpSWz1SEU4GR+7wRiD1adQkP+R3N0lIVY4BnU=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1274; i=samitolvanen@google.com;
+ h=from:subject; bh=qCBEQ292K21rpauKv4Q9PKWzetqPm8IIUDXN8zVxiiU=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3OneDI8EsrD6700CYZ72DWnEF3yumMXVukuUYd
+ 6cc6WzSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dzgAKCRBMtfaEi7xW7v1gDA
+ CrSV1Wwh1iRkXrTLzRUVixDQymyEMNfAV5Asek7kdMhsjE05imH4BPAYNwaeaYeCR/FdZowXX2/dg9
+ uEvPso2aCMbdLJGMwK6HCPU0doxBN9bJ1Aghq8QSlLsvALuOYSHp204OxDb0UgUSCEoR6QxsQjww7p
+ CkqIcDUIxxhgbZeB9GMuN90ATOpI5Tt/TjewRuGkDuiU2wX05LdVmyaR7uBC86YUkzrjzuNFycLxXE
+ NjRh/eHVQPO6JRX5WHJFfMPJe3lTKuueweypQevFID/GR98VcRSjCttni916V11TYs8EbLYPoFNKYq
+ jZtDfTIy1xRp4DhVWxfZub7EQi+dScfRbD+lUUzdGEqL/LUxdBDfS1TfIn69wnuD5X7wcDu4gLAcZw
+ I2kDiw8qMGqDQd2spFj2dU2XCRZPX7T1HOjUU3U34FxzhEpjzO/hNzpNcB1ZBgTU8btt4TEoN7mMlK
+ Y3FIWCZ7I5c0LXttu3a5FcrhHHCxcpdQKHjz89NVuaF0Q=
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v4 16/21] objtool: Disable CFI warnings
+Subject: [PATCH v4 17/21] kallsyms: Drop CONFIG_CFI_CLANG workarounds
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -70,53 +70,51 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-The __cfi_ preambles contain a mov instruction that embeds the KCFI
-type identifier in the following format:
-
-  ; type preamble
-  __cfi_function:
-    mov <id>, %eax
-  function:
-    ...
-
-While the preamble symbols are STT_FUNC and contain valid
-instructions, they are never executed and always fall through. Skip
-the warning for them.
-
-.kcfi_traps sections point to CFI traps in text sections. Also skip
-the warning about them referencing !ENDBR instructions.
+With -fsanitize=kcfi, the compiler no longer renames static
+functions with CONFIG_CFI_CLANG + ThinLTO. Drop the code that cleans
+up the ThinLTO hash from the function names.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- tools/objtool/check.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/kallsyms.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e55fdf952a3a..48e18737a2d1 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3316,6 +3316,10 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 		next_insn = next_insn_to_validate(file, insn);
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 3e7e2c2ad2f7..b27e6ea31f8b 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -159,7 +159,6 @@ static bool cleanup_symbol_name(char *s)
+ 	 * character in an identifier in C. Suffixes observed:
+ 	 * - foo.llvm.[0-9a-f]+
+ 	 * - foo.[0-9a-f]+
+-	 * - foo.[0-9a-f]+.cfi_jt
+ 	 */
+ 	res = strchr(s, '.');
+ 	if (res) {
+@@ -167,22 +166,6 @@ static bool cleanup_symbol_name(char *s)
+ 		return true;
+ 	}
  
- 		if (func && insn->func && func != insn->func->pfunc) {
-+			/* Ignore KCFI type preambles, which always fall through */
-+			if (!strncmp(func->name, "__cfi_", 6))
-+				return 0;
-+
- 			WARN("%s() falls through to next function %s()",
- 			     func->name, insn->func->name);
- 			return 1;
-@@ -4113,7 +4117,8 @@ static int validate_ibt(struct objtool_file *file)
- 		    !strcmp(sec->name, "__bug_table")			||
- 		    !strcmp(sec->name, "__ex_table")			||
- 		    !strcmp(sec->name, "__jump_table")			||
--		    !strcmp(sec->name, "__mcount_loc"))
-+		    !strcmp(sec->name, "__mcount_loc")			||
-+		    !strcmp(sec->name, ".kcfi_traps"))
- 			continue;
+-	if (!IS_ENABLED(CONFIG_CFI_CLANG) ||
+-	    !IS_ENABLED(CONFIG_LTO_CLANG_THIN) ||
+-	    CONFIG_CLANG_VERSION >= 130000)
+-		return false;
+-
+-	/*
+-	 * Prior to LLVM 13, the following suffixes were observed when thinLTO
+-	 * and CFI are both enabled:
+-	 * - foo$[0-9]+
+-	 */
+-	res = strrchr(s, '$');
+-	if (res) {
+-		*res = '\0';
+-		return true;
+-	}
+-
+ 	return false;
+ }
  
- 		list_for_each_entry(reloc, &sec->reloc->reloc_list, list)
 -- 
 2.37.2.672.g94769d06f0-goog
 
