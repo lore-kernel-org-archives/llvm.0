@@ -1,99 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2063.outbound.protection.outlook.com [40.107.96.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267AD3D7F
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661877809;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sYkEcIEcYJVPnhVJ5B4453HGLPxDPLa2+9KAMnSSp18=;
-	b=K/hfQEuDHF+nY1aqJIkSpqI7lAZbkT0E2lv/l43tQP4ZZ2wRaZ3MRLpr3Iv/pP10DOr0Rr
-	yabiGR6RUfYdYcaI4XolegSdQ0mYIDpWwYev4Ku8ZEFZzaAfOTfOgbA6KAuxNnw6XD6379
-	80j+RCsx6l3p+M+nNo1OsSK5pCfpXRQ=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-581-MHVQN0TNNbibA2h-FSrx3Q-1; Tue, 30 Aug 2022 12:43:26 -0400
-X-MC-Unique: MHVQN0TNNbibA2h-FSrx3Q-1
-Received: by mail-io1-f69.google.com with SMTP id c2-20020a6bec02000000b00689b26e92f0so6924961ioh.6
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:43:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=sYkEcIEcYJVPnhVJ5B4453HGLPxDPLa2+9KAMnSSp18=;
-        b=3PHG9cerW9vbooT23rxwVSotZjTHUGVlB9JQed+8XsUOdqwrFKzrsDMhH3edYAEMgH
-         eJ/vnKYa8nj/aOMTZvM7HIshXzzV7ZshTI5BS9JY27XVRlwHfHpGKJn91+olRt0/bQd1
-         9LQkSAelHwD7ioX2G04D/QZzinymtmdiNRQiOtfbwALFgOE2ftI5K7xSbicI/OtZZhqT
-         B1MBMUQcZBlyK2kJ2O8Ul1HGS/VcVjRg78WVVhHQXmxhHzmVY+cAkm9yb5f0iD2wqAHT
-         XHYx9tBzcjOFz/dl8m4fPqUhcNaAiRR9GX/LUIC2w0pmUt2LR6jtk5OFq4NbUp4aRTMh
-         CFEw==
-X-Gm-Message-State: ACgBeo2R27iwXde6auxHs4gdZkNAkG+3UwgRM/S/pc4/sqURO0iUeLKK
-	OjLSkMsToJkaBmzms8Gjc9jU6Gfd/v3EQ8AI8fm/HJdwiwT7oHr5XvGLhWtDIAWQ3oCQy5C930U
-	uZbr9sphil3MJtA==
-X-Received: by 2002:a6b:580e:0:b0:689:af21:6f3f with SMTP id m14-20020a6b580e000000b00689af216f3fmr11840463iob.116.1661877805305;
-        Tue, 30 Aug 2022 09:43:25 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR74qq+ShMV0B7MOD9pLRKsUex3QAMRhvAeMKdRCeHWVY7Q4aWani6aoYi2AyG2iCWoRh0iOVg==
-X-Received: by 2002:a6b:580e:0:b0:689:af21:6f3f with SMTP id m14-20020a6b580e000000b00689af216f3fmr11840450iob.116.1661877805128;
-        Tue, 30 Aug 2022 09:43:25 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id f30-20020a02a11e000000b0034a0275ae76sm5682440jag.139.2022.08.30.09.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 09:43:24 -0700 (PDT)
-Date: Tue, 30 Aug 2022 10:43:23 -0600
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH 8/8] vfio: Split VFIO_GROUP_GET_STATUS into a function
-Message-ID: <20220830104323.14b6d460.alex.williamson@redhat.com>
-In-Reply-To: <Ywlai0AR7RuF9FlI@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E843D7F
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:51:21 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jWaZKGRsgki2RhO9t2bkz/kipehZD2kiX2TosCrVTtzMyjV+1rR036f4g6IXvT351NkP2I6hjPwynM2zh4q164WGHJ3LFX/mHnafxfilHgX9m13wmgmgoyxgol6W5T9cJ5WyZXq6Ene3TGxAYJ3AzXu3a/t5a+z8H1KEbRZ2gK8mZqfdYyMf9oO5ey++J/i+Bu3VVIR5fl+zGC28S3WXP04f7LQti7dEv09Nm07TcfhFRTRnokt9OPlWXLKrm+SmsDW89PGmRgykgW7ILQZkQUI1d+BykeqNcLlXHEFU6BMP1SZjWCtpZUdTqrfHXXG4m8Y51HP0Dm0XjrrctUT02g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w8Ha3CgC/+nMeChqxR7ZupMH4IlD9/Y7GhqbLNcwH4g=;
+ b=S2Q9+K/Gxvdf8i44DWLM4nrv/HzUjWbZstR5xoAutL5yubESmCtr1jLIWeQ/0GZclhW+en5jk2LOW/3YyaXclru8BtIHF5pxGIvE2INDY8twOupSRTK/xq20+UlzMAqhhUErUHbFknLpcvgy1I8KOih7t3wJ5gexWyWW+RqSP/i+wxs3ykU6npA3qxXLHj9WfNWx65HV1O0RCeFZnZ19Scj5YXOp/CuCIkkYhr+NjcByNU6H0AZ0lSG+JvnAfvB2mxACZ6gNfNhDq80KBglu712Yw6zLYWlfXTMjTcCjwrmWUZFKakMH0slbRS2Yy78pKCbbXw+PzlcLWFRCslIIjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w8Ha3CgC/+nMeChqxR7ZupMH4IlD9/Y7GhqbLNcwH4g=;
+ b=kjrmxz7MoRpAJjmOFf9clhkaYquXE81CIDcnDWuWyS1xn7ZOsnyGIyoPA7FrWgeXndWl7RzVSm1Exkcyn/NIPfY6SYXob7m2T4SUGn7qxcF2eRgd7mWc29NQWR9TNyfXam1hbBpaFVdwEPLdFKXgDgk0O4RE3YW7UA/6dZrK2S9H71f2NVhTOcSyDulpGEeZfMdTOhv3FFiEMoi58nQESOL15ApOgq/tb15hYkJxWSNWjJPo/V+3yy3VzDddptL0Rz6LHR8vdMn7VxDcSeoPinuVSCYZZY4GxnJyLH3WV3HKFeayudo+qs8ofo3gC0Z3FXcmxVPk2jl9NYMMQykMXw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB2809.namprd12.prod.outlook.com (2603:10b6:5:4a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19; Tue, 30 Aug
+ 2022 16:51:19 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
+ 16:51:19 +0000
+Date: Tue, 30 Aug 2022 13:51:18 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: "Tian, Kevin" <kevin.tian@intel.com>, Cornelia Huck <cohuck@redhat.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH 7/8] vfio: Follow the naming pattern for
+ vfio_group_ioctl_unset_container()
+Message-ID: <Yw5ABqI20sMyNiG9@nvidia.com>
 References: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
-	<8-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
-	<Ywlai0AR7RuF9FlI@nvidia.com>
-Organization: Red Hat
+ <7-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+ <BN9PR11MB5276B0A8F6DD36C6482F37038C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <YwzbB5NZGOqOsOVK@nvidia.com>
+ <20220830104231.0bbb7c89.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830104231.0bbb7c89.alex.williamson@redhat.com>
+X-ClientProxiedBy: MN2PR15CA0034.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::47) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d373087f-30fa-4b8f-b011-08da8aa7dc8c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2809:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	ksqWtH6o1iFRh4QVIP2yD76rLygUIjsmGNosqD5+8ZOfBYIPqBPR1Ikw7ibQjU/UOAco/18hK9Tv0HNpV4wzyRMYn4il1LjSNj7Ud9We0DHTwQamPH+4COol/AmQeI/48AO7Z2STNz27sZjoQcBR15JqsOlzLcrGAepZRL8duyeuou7hbtky1biGaxQwOzcczRNhz6s1/8GfbEIenz+435EGnJldZZWBfk0YuW7aO0zft2l2Co8flL0IqLD6zRScoI2rYKS7ahFKE8D7UNku/nNoKK2bkeWQa1sZV0WoVM53b9h6KYlK5VA0rpRqTj7W9pgsckW2/B/bfxuA0UbOgNPLVDqzxTXAGAlgO6rDlrLWshlLx8SUpx6Ja/mwYCLccAQPhgC3sii8FYZkPBaXI0erEzDQ774lLrwws66rtth3ADav0Kodcawu2/nsr1aSYSFvVN/7WC/jo3dY3PWO/gM/5jeMHmLt5X2OB6mWU12/5aCMNPtkAIUS9YOAA4o4gEEPZzCA3IG0Tj/JmIF1+0/fzX0aM4sGYHFsC8BwH38SgBnYZmB1TRk7/kQ9x5p6MkwoR5HsiHcKgVFhPj2LIEfwkgGxuS9dy98DHKae49OWTlrGfXct5h6YqNsjfZkCWLFrHN3UmBskzsdQV9G5GUamodTfZjwv/tFHkmJMAbAFZESMJwHOgCtp6OOQBdvBtacRh/1tlF0suD571tNI+g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(8936002)(8676002)(66946007)(316002)(66476007)(66556008)(4326008)(54906003)(6486002)(86362001)(6916009)(478600001)(5660300002)(36756003)(41300700001)(6506007)(2616005)(6512007)(26005)(2906002)(38100700002)(83380400001)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?uBWfayDElf8W+ia2vifpW/teVSeDKBdpmvGxaaOqtAwvwmL8xTJMLDE2TiJt?=
+ =?us-ascii?Q?8ILz2KT8ivMEOcdZff05yllrK5A02JTS6Rnod264hzW4mSOliQ+72vKLMAzn?=
+ =?us-ascii?Q?ZB6HtiTWlsmUhjQTkxuU3p/Xgcq+beCiHVhAgUD4Z02UYX6jhQqtRskDWcl8?=
+ =?us-ascii?Q?6uTQI+jcpUpMDDWJiS8HrS8D/lWmv1MT6TVHwf8KSh/K3pfBzAN0JHLkHtLf?=
+ =?us-ascii?Q?QGXNETh8J//BZM3eFVo9cJn52eIXgITdsV7eXWK26YULNcVCDPNxiV97T2iL?=
+ =?us-ascii?Q?rCub10UhO0dN6BIwKJc8kx/YFrQmvtlocwE7354ndJZglm76Bs4m5nDGMprd?=
+ =?us-ascii?Q?ayadH/yNyC8wg2uH/v5Mv1JrPCD2tHx8++rlew2ziHIbo1uvH1xpwft2vBZ/?=
+ =?us-ascii?Q?aqoOap9zblToSWSHohPSMVSM0FO2Poc/n+MreVG2n/Kcau9Ud7f4ybuaT4/W?=
+ =?us-ascii?Q?wdN5CzitgKiPdp2alkVrxJwhBEYkD+Hli2eQTij4pEYEJ2TtYgQFnve9M7g9?=
+ =?us-ascii?Q?ETxNIR9Z5a0bsjamJVwXbpxgkop+s00QEKQLtCVMpYmtWshpCVs/5u4yp76Q?=
+ =?us-ascii?Q?e9+Nbe7X1rn5KSxAIMC8rTHUPlvTIUmYbN9TaPw9E2IWeAorbOSU7o06IdaT?=
+ =?us-ascii?Q?Rr4lYY4JjSNmpZSEMTo70zRu7mzklGsRfzKe86Xe1qlQh55NozQGsIqpmqt7?=
+ =?us-ascii?Q?JmzNOqQrej4ArJvvKIjRwmmUqHdDLlbc5VBusF+ekSqpv9QErqWxqELswsm8?=
+ =?us-ascii?Q?RgKEU8sC1RoBeoF96mST4ud/Y9Z0fG+U5dIOci0O2ys8Ezd9wh6JOM3gfNgg?=
+ =?us-ascii?Q?rkYB8SVWpn7IlWhR+gac4ZE49yI1vCYU0iMLtbM7pTz38W/Rcj9FFTYSuOWc?=
+ =?us-ascii?Q?2ZsKUKRY1uS4/hnjf8LYexvHczbdGkkIj5/XRrFXAcGi2/WBg2tlVPFVgYpW?=
+ =?us-ascii?Q?V7z0foenLiGidt1Q252+aW5KP6Xb92dZyE2HiYT6rg8/BG5P//ra+Du9qKhv?=
+ =?us-ascii?Q?EdfEk0J1VLsxL5w6ZLzgf9Qj+ueZaU5LIQsrLonJlunz1l1MHiGPSGR6uf9/?=
+ =?us-ascii?Q?ftYoF93v63xpK4m1IdPCpR12lDzm+t72ahQKWNUVJvJMV3BbqvJB6J49Ijs1?=
+ =?us-ascii?Q?I2XI3agFO/p0eyBjyqQnTR/L9d0Y1v3wfJYFzrkhG+npG2zYiW0g6HPNWXDo?=
+ =?us-ascii?Q?bIA1ozRONvyNQrNefjaKZEDTrI2ZF6xfIm5mZSs7l49S6P0OIx+1gaJTIkYl?=
+ =?us-ascii?Q?sPv7Fb/ehHIDlwbFgXrCebttAHWP/DKwnTwWjr0YXTdYyP8de1IzJgzqrHOu?=
+ =?us-ascii?Q?24VEJRoUCC0/LCN3Winm/y69qoRFKib9wCcW9PH04pwMB7GrYWVXC91sXY0e?=
+ =?us-ascii?Q?g7d2qGkLSdOPaINhm2Cym9EMee91cIG09sFBTSldwFP2EmE4uDewHWOa3GWV?=
+ =?us-ascii?Q?3DdRzHzdTt5EoHEccYCUGRThKnKwKfSojVuixj6lPWQbQAPT5yojSZ4SUgGi?=
+ =?us-ascii?Q?b2+O43nRiM56BJhdSnicSuUEk5JoNpNZnn6igeWfIPMtoiYtIfvZ3PQo56RS?=
+ =?us-ascii?Q?N1CJiMajKWbL/WD9d6gSV9ndG+I3UMaQKY+tqlIL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d373087f-30fa-4b8f-b011-08da8aa7dc8c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2022 16:51:19.2756
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kBs9bQLHfJJtArJt5Y6NTDu52TKlKQJcYZm3ChP00y1x9Xt4CG/7O6WlavHIrPWG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2809
 
-On Fri, 26 Aug 2022 20:43:07 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Wed, Aug 17, 2022 at 01:07:25PM -0300, Jason Gunthorpe wrote:
-> > This is the last sizable implementation in vfio_group_fops_unl_ioctl(),
-> > move it to a function so vfio_group_fops_unl_ioctl() is emptied out.
-> > 
-> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> > ---
-> >  drivers/vfio/vfio_main.c | 55 ++++++++++++++++++++--------------------
-> >  1 file changed, 27 insertions(+), 28 deletions(-)
-> > 
-> > diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> > index 78957f45c37a34..6f96e6d07a5e98 100644
-> > --- a/drivers/vfio/vfio_main.c
-> > +++ b/drivers/vfio/vfio_main.c
-> > @@ -1227,6 +1227,32 @@ static int vfio_group_ioctl_get_device_fd(struct vfio_group *group,
-> >  	vfio_device_put(device);
-> >  	return ret;
-> >  }
-> > +static int vfio_group_ioctl_get_status(struct vfio_group *group,
-> > +				       struct vfio_group_status __user *arg)  
+On Tue, Aug 30, 2022 at 10:42:31AM -0600, Alex Williamson wrote:
+> On Mon, 29 Aug 2022 12:28:07 -0300
+> Jason Gunthorpe <jgg@nvidia.com> wrote:
 > 
-> There is a missing blank line after the } here
+> > On Mon, Aug 29, 2022 at 12:41:30AM +0000, Tian, Kevin wrote:
+> > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Sent: Thursday, August 18, 2022 12:07 AM
+> > > > 
+> > > > Make it clear that this is the body of the ioctl - keep the mutex outside
+> > > > the function since this function doesn't have and wouldn't benefit from
+> > > > error unwind.  
+> > > 
+> > > but doing so make unset_container() unpair with set_container() and
+> > > be the only one doing additional things in main ioctl body.
+> > > 
+> > > I'd prefer to moving mutex inside unset_container() for better readability.  
+> > 
+> > Yes, I tried both ways and ended up here since adding the goto unwind
+> > was kind of ungainly for this function. Don't mind either way
+> > 
+> > The functions are not intended as strict pairs, they are ioctl
+> > dispatch functions.
+> 
+> The lockdep annotation seems sufficient, but what about simply
+> prefixing the unset ioctl function with underscores to reinforce the
+> locking requirement, as done by the called function
+> __vfio_group_unset_container()?  Thanks,
 
-Fixed locally if there's no other need for a respin.  Thanks,
+Could do, but IMHO, that is not a popular convention in VFIO
+(anymore?).
 
-Alex
+I've been adding lockdep annotations, not adding __ to indicate
+the function is called with some kind of lock.
 
+In my tree __vfio_group_get_from_iommu() is the only one left using
+that style. uset_container was turned into
+vfio_container_detatch_group() in aother series
+
+Conversly we have __vfio_register_dev() which I guess __ indicates is
+internal or wrappered, not some statement about locking. I think this
+has become the more popular usage of the __ generally in the kernel
+
+So I will do a v2 with the extra goto unwind then
+
+Are there any other remarks before I do it?
+
+Thanks,
+Jason
