@@ -1,313 +1,102 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DF53C2E
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:20:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661876457; x=1693412457;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kcY8QzwCjMOuM4pU32QkMTmdxwa9mfmSIyR2QWNSgqQ=;
-  b=MGfBsYUH9TdFoz3p4xfGJ5bHgtEzUAHjnfm6SAxBahxPlagChQAbze4e
-   s50Qh/1nKp2vwMeo7NgnVaACe0ySnRfRag8iEJ20DIFz7JnXBhCk02kOV
-   we4pSr2vrB5bfkqIudcoeRLj8Vma3ZLOz6Or74EnEUDxmxlDnCo2VAFwY
-   xMoUOFXUPG6O4hMbUtd33RerwUnNnqlV3WeIGUJCxl3heRdOS3rpRn/zd
-   /3W1wu3H3WMWkuU5PFbUR0U2IgVD4yq9QmjDhUWuUDJqbfI/26GiHyjMi
-   UWmy1qBcadO+tkHwVkWNWcZiDhiwqWrS9ja2vK7ARSO1qmMOIHT9wQncp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275624302"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="275624302"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:11:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="611757769"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Aug 2022 09:11:28 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oT3pj-0000OP-0x;
-	Tue, 30 Aug 2022 16:11:23 +0000
-Date: Wed, 31 Aug 2022 00:10:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: liuyacan@corp.netease.com, kgraul@linux.ibm.com, davem@davemloft.net,
-	wenjia@linux.ibm.com, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>
-Subject: Re: [PATCH net] net/smc: Fix possible access to freed memory in link
- clear
-Message-ID: <202208310048.0GtZuOsl-lkp@intel.com>
-References: <20220829145435.2756430-1-liuyacan@corp.netease.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FED2399
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661877755;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uPZ0ww9vg3e5wba1jpMWDOMwxa9Ldy+iPGjIGTE5slw=;
+	b=Xu+LE3gvraNijWToZ6/DSA8CPHgl3qucrxx7Zf6wuy2sj2r7fcWznwtSLJUOLj0oE1cuHx
+	5hA32i4pAvht0itRGQ5xc1E12Tr4KVILyrRLL8bGCCsYSjntoBee21vixN6DvPAKGngjm/
+	jqb961Bgz5Cg8QezGr7AumV+8lxf3ao=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-383-ia_mKYn2Nnit6BhabnW-Xg-1; Tue, 30 Aug 2022 12:42:33 -0400
+X-MC-Unique: ia_mKYn2Nnit6BhabnW-Xg-1
+Received: by mail-io1-f70.google.com with SMTP id z30-20020a05660217de00b00688bd42dc1dso6993523iox.15
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=uPZ0ww9vg3e5wba1jpMWDOMwxa9Ldy+iPGjIGTE5slw=;
+        b=VtXZG88f9KQ0zCgTgbz5nvs5nedbjc3aVchhkBCEgFWIzj7qixcX28yBENod7XeEQN
+         9rY3YCMkIdBFgBpFje5BOsYtV4HiDoHvr53j4o+zvpjWQEsicijdb5o1Pt4c8vt8glDu
+         0EAHOhvKAW2XFBLe5egh895EKgs6bziyPTuGWR81OfH+OO3Q5vgTT2CyoCezJy9ZYfJc
+         BfmZ3F9qoPNFq5i+6J6jLzXir1/XUGFUkZekOAlAD9nh+NkO9HMgkRvWWOUIUJLdkpho
+         sjQpBcmlrP852v4UZgJWEsB0tRgcW31p6eJRg0CkfbdQ88048wJmUh5LccNabLKysyRW
+         rbsQ==
+X-Gm-Message-State: ACgBeo3JP0YmJPSlgmESKGw72CDeYlPhjcQ5gReKVTRk2p7AsPOz/EsE
+	x3jD3XOOC1H02fS2DN1krtEPn9YWpNQgsgoXDaqiIOrFYiZyiPVTfmhXGnIsE1oK0ehdjfcgltm
+	27Cq2TZkb+xN3gg==
+X-Received: by 2002:a05:6602:27c1:b0:688:6a81:8d91 with SMTP id l1-20020a05660227c100b006886a818d91mr11618136ios.189.1661877753306;
+        Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6i3F6bgTizb0kdbW2f//YvjaU2wFi/oE+HdztyPkBjmAd9hjsyqXqwCRNS3hWZFU5Akgcxeg==
+X-Received: by 2002:a05:6602:27c1:b0:688:6a81:8d91 with SMTP id l1-20020a05660227c100b006886a818d91mr11618129ios.189.1661877753077;
+        Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id n15-20020a02c78f000000b003434a4acb8fsm5650072jao.117.2022.08.30.09.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 09:42:32 -0700 (PDT)
+Date: Tue, 30 Aug 2022 10:42:31 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: "Tian, Kevin" <kevin.tian@intel.com>, Cornelia Huck <cohuck@redhat.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH 7/8] vfio: Follow the naming pattern for
+ vfio_group_ioctl_unset_container()
+Message-ID: <20220830104231.0bbb7c89.alex.williamson@redhat.com>
+In-Reply-To: <YwzbB5NZGOqOsOVK@nvidia.com>
+References: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+	<7-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+	<BN9PR11MB5276B0A8F6DD36C6482F37038C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+	<YwzbB5NZGOqOsOVK@nvidia.com>
+Organization: Red Hat
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829145435.2756430-1-liuyacan@corp.netease.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Mon, 29 Aug 2022 12:28:07 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+> On Mon, Aug 29, 2022 at 12:41:30AM +0000, Tian, Kevin wrote:
+> > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > Sent: Thursday, August 18, 2022 12:07 AM
+> > > 
+> > > Make it clear that this is the body of the ioctl - keep the mutex outside
+> > > the function since this function doesn't have and wouldn't benefit from
+> > > error unwind.  
+> > 
+> > but doing so make unset_container() unpair with set_container() and
+> > be the only one doing additional things in main ioctl body.
+> > 
+> > I'd prefer to moving mutex inside unset_container() for better readability.  
+> 
+> Yes, I tried both ways and ended up here since adding the goto unwind
+> was kind of ungainly for this function. Don't mind either way
+> 
+> The functions are not intended as strict pairs, they are ioctl
+> dispatch functions.
 
-[auto build test ERROR on net/master]
+The lockdep annotation seems sufficient, but what about simply
+prefixing the unset ioctl function with underscores to reinforce the
+locking requirement, as done by the called function
+__vfio_group_unset_container()?  Thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/liuyacan-corp-netease-com/net-smc-Fix-possible-access-to-freed-memory-in-link-clear/20220829-231821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git cb10b0f91c5f76de981ef927e7dadec60c5a5d96
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220831/202208310048.0GtZuOsl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8be00c954c559c7ae24f34abade4faebc350ec9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review liuyacan-corp-netease-com/net-smc-Fix-possible-access-to-freed-memory-in-link-clear/20220829-231821
-        git checkout f8be00c954c559c7ae24f34abade4faebc350ec9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/smc/
+Alex
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/smc/smc_wr.c:468:32: error: member reference type 'struct ib_wc' is not a pointer; did you mean to use '.'?
-                                   if (link->clearing && wc[i]->wr_id == link->wr_rx_id) {
-                                                         ~~~~~^~
-                                                              .
->> net/smc/smc_wr.c:641:13: error: no member named 'drained' in 'struct smc_link'
-                                            (lnk->drained == 1),
-                                             ~~~  ^
-   include/linux/wait.h:534:28: note: expanded from macro 'wait_event_interruptible_timeout'
-           if (!___wait_cond_timeout(condition))                                   \
-                                     ^~~~~~~~~
-   include/linux/wait.h:276:17: note: expanded from macro '___wait_cond_timeout'
-           bool __cond = (condition);                                              \
-                          ^~~~~~~~~
->> net/smc/smc_wr.c:641:13: error: no member named 'drained' in 'struct smc_link'
-                                            (lnk->drained == 1),
-                                             ~~~  ^
-   include/linux/wait.h:536:7: note: expanded from macro 'wait_event_interruptible_timeout'
-                                                   condition, timeout);            \
-                                                   ^~~~~~~~~
-   include/linux/wait.h:506:46: note: expanded from macro '__wait_event_interruptible_timeout'
-           ___wait_event(wq_head, ___wait_cond_timeout(condition),                 \
-                                                       ^~~~~~~~~
-   include/linux/wait.h:276:17: note: expanded from macro '___wait_cond_timeout'
-           bool __cond = (condition);                                              \
-                          ^~~~~~~~~
-   include/linux/wait.h:310:7: note: expanded from macro '___wait_event'
-                   if (condition)                                                  \
-                       ^~~~~~~~~
-   3 errors generated.
-
-
-vim +468 net/smc/smc_wr.c
-
-   449	
-   450	static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
-   451	{
-   452		struct smc_link *link;
-   453		int i;
-   454	
-   455		for (i = 0; i < num; i++) {
-   456			link = wc[i].qp->qp_context;
-   457			if (wc[i].status == IB_WC_SUCCESS) {
-   458				link->wr_rx_tstamp = jiffies;
-   459				smc_wr_rx_demultiplex(&wc[i]);
-   460				smc_wr_rx_post(link); /* refill WR RX */
-   461			} else {
-   462				/* handle status errors */
-   463				switch (wc[i].status) {
-   464				case IB_WC_RETRY_EXC_ERR:
-   465				case IB_WC_RNR_RETRY_EXC_ERR:
-   466				case IB_WC_WR_FLUSH_ERR:
-   467					smcr_link_down_cond_sched(link);
- > 468					if (link->clearing && wc[i]->wr_id == link->wr_rx_id) {
-   469						link->rx_drained = 1;
-   470						wake_up(&link->wr_rx_drain_wait);
-   471					}
-   472					break;
-   473				default:
-   474					smc_wr_rx_post(link); /* refill WR RX */
-   475					break;
-   476				}
-   477			}
-   478		}
-   479	}
-   480	
-   481	static void smc_wr_rx_tasklet_fn(struct tasklet_struct *t)
-   482	{
-   483		struct smc_ib_device *dev = from_tasklet(dev, t, recv_tasklet);
-   484		struct ib_wc wc[SMC_WR_MAX_POLL_CQE];
-   485		int polled = 0;
-   486		int rc;
-   487	
-   488	again:
-   489		polled++;
-   490		do {
-   491			memset(&wc, 0, sizeof(wc));
-   492			rc = ib_poll_cq(dev->roce_cq_recv, SMC_WR_MAX_POLL_CQE, wc);
-   493			if (polled == 1) {
-   494				ib_req_notify_cq(dev->roce_cq_recv,
-   495						 IB_CQ_SOLICITED_MASK
-   496						 | IB_CQ_REPORT_MISSED_EVENTS);
-   497			}
-   498			if (!rc)
-   499				break;
-   500			smc_wr_rx_process_cqes(&wc[0], rc);
-   501		} while (rc > 0);
-   502		if (polled == 1)
-   503			goto again;
-   504	}
-   505	
-   506	void smc_wr_rx_cq_handler(struct ib_cq *ib_cq, void *cq_context)
-   507	{
-   508		struct smc_ib_device *dev = (struct smc_ib_device *)cq_context;
-   509	
-   510		tasklet_schedule(&dev->recv_tasklet);
-   511	}
-   512	
-   513	int smc_wr_rx_post_init(struct smc_link *link)
-   514	{
-   515		u32 i;
-   516		int rc = 0;
-   517	
-   518		for (i = 0; i < link->wr_rx_cnt; i++)
-   519			rc = smc_wr_rx_post(link);
-   520		return rc;
-   521	}
-   522	
-   523	/***************************** init, exit, misc ******************************/
-   524	
-   525	void smc_wr_remember_qp_attr(struct smc_link *lnk)
-   526	{
-   527		struct ib_qp_attr *attr = &lnk->qp_attr;
-   528		struct ib_qp_init_attr init_attr;
-   529	
-   530		memset(attr, 0, sizeof(*attr));
-   531		memset(&init_attr, 0, sizeof(init_attr));
-   532		ib_query_qp(lnk->roce_qp, attr,
-   533			    IB_QP_STATE |
-   534			    IB_QP_CUR_STATE |
-   535			    IB_QP_PKEY_INDEX |
-   536			    IB_QP_PORT |
-   537			    IB_QP_QKEY |
-   538			    IB_QP_AV |
-   539			    IB_QP_PATH_MTU |
-   540			    IB_QP_TIMEOUT |
-   541			    IB_QP_RETRY_CNT |
-   542			    IB_QP_RNR_RETRY |
-   543			    IB_QP_RQ_PSN |
-   544			    IB_QP_ALT_PATH |
-   545			    IB_QP_MIN_RNR_TIMER |
-   546			    IB_QP_SQ_PSN |
-   547			    IB_QP_PATH_MIG_STATE |
-   548			    IB_QP_CAP |
-   549			    IB_QP_DEST_QPN,
-   550			    &init_attr);
-   551	
-   552		lnk->wr_tx_cnt = min_t(size_t, SMC_WR_BUF_CNT,
-   553				       lnk->qp_attr.cap.max_send_wr);
-   554		lnk->wr_rx_cnt = min_t(size_t, SMC_WR_BUF_CNT * 3,
-   555				       lnk->qp_attr.cap.max_recv_wr);
-   556	}
-   557	
-   558	static void smc_wr_init_sge(struct smc_link *lnk)
-   559	{
-   560		int sges_per_buf = (lnk->lgr->smc_version == SMC_V2) ? 2 : 1;
-   561		bool send_inline = (lnk->qp_attr.cap.max_inline_data > SMC_WR_TX_SIZE);
-   562		u32 i;
-   563	
-   564		for (i = 0; i < lnk->wr_tx_cnt; i++) {
-   565			lnk->wr_tx_sges[i].addr = send_inline ? (uintptr_t)(&lnk->wr_tx_bufs[i]) :
-   566				lnk->wr_tx_dma_addr + i * SMC_WR_BUF_SIZE;
-   567			lnk->wr_tx_sges[i].length = SMC_WR_TX_SIZE;
-   568			lnk->wr_tx_sges[i].lkey = lnk->roce_pd->local_dma_lkey;
-   569			lnk->wr_tx_rdma_sges[i].tx_rdma_sge[0].wr_tx_rdma_sge[0].lkey =
-   570				lnk->roce_pd->local_dma_lkey;
-   571			lnk->wr_tx_rdma_sges[i].tx_rdma_sge[0].wr_tx_rdma_sge[1].lkey =
-   572				lnk->roce_pd->local_dma_lkey;
-   573			lnk->wr_tx_rdma_sges[i].tx_rdma_sge[1].wr_tx_rdma_sge[0].lkey =
-   574				lnk->roce_pd->local_dma_lkey;
-   575			lnk->wr_tx_rdma_sges[i].tx_rdma_sge[1].wr_tx_rdma_sge[1].lkey =
-   576				lnk->roce_pd->local_dma_lkey;
-   577			lnk->wr_tx_ibs[i].next = NULL;
-   578			lnk->wr_tx_ibs[i].sg_list = &lnk->wr_tx_sges[i];
-   579			lnk->wr_tx_ibs[i].num_sge = 1;
-   580			lnk->wr_tx_ibs[i].opcode = IB_WR_SEND;
-   581			lnk->wr_tx_ibs[i].send_flags =
-   582				IB_SEND_SIGNALED | IB_SEND_SOLICITED;
-   583			if (send_inline)
-   584				lnk->wr_tx_ibs[i].send_flags |= IB_SEND_INLINE;
-   585			lnk->wr_tx_rdmas[i].wr_tx_rdma[0].wr.opcode = IB_WR_RDMA_WRITE;
-   586			lnk->wr_tx_rdmas[i].wr_tx_rdma[1].wr.opcode = IB_WR_RDMA_WRITE;
-   587			lnk->wr_tx_rdmas[i].wr_tx_rdma[0].wr.sg_list =
-   588				lnk->wr_tx_rdma_sges[i].tx_rdma_sge[0].wr_tx_rdma_sge;
-   589			lnk->wr_tx_rdmas[i].wr_tx_rdma[1].wr.sg_list =
-   590				lnk->wr_tx_rdma_sges[i].tx_rdma_sge[1].wr_tx_rdma_sge;
-   591		}
-   592	
-   593		if (lnk->lgr->smc_version == SMC_V2) {
-   594			lnk->wr_tx_v2_sge->addr = lnk->wr_tx_v2_dma_addr;
-   595			lnk->wr_tx_v2_sge->length = SMC_WR_BUF_V2_SIZE;
-   596			lnk->wr_tx_v2_sge->lkey = lnk->roce_pd->local_dma_lkey;
-   597	
-   598			lnk->wr_tx_v2_ib->next = NULL;
-   599			lnk->wr_tx_v2_ib->sg_list = lnk->wr_tx_v2_sge;
-   600			lnk->wr_tx_v2_ib->num_sge = 1;
-   601			lnk->wr_tx_v2_ib->opcode = IB_WR_SEND;
-   602			lnk->wr_tx_v2_ib->send_flags =
-   603				IB_SEND_SIGNALED | IB_SEND_SOLICITED;
-   604		}
-   605	
-   606		/* With SMC-Rv2 there can be messages larger than SMC_WR_TX_SIZE.
-   607		 * Each ib_recv_wr gets 2 sges, the second one is a spillover buffer
-   608		 * and the same buffer for all sges. When a larger message arrived then
-   609		 * the content of the first small sge is copied to the beginning of
-   610		 * the larger spillover buffer, allowing easy data mapping.
-   611		 */
-   612		for (i = 0; i < lnk->wr_rx_cnt; i++) {
-   613			int x = i * sges_per_buf;
-   614	
-   615			lnk->wr_rx_sges[x].addr =
-   616				lnk->wr_rx_dma_addr + i * SMC_WR_BUF_SIZE;
-   617			lnk->wr_rx_sges[x].length = SMC_WR_TX_SIZE;
-   618			lnk->wr_rx_sges[x].lkey = lnk->roce_pd->local_dma_lkey;
-   619			if (lnk->lgr->smc_version == SMC_V2) {
-   620				lnk->wr_rx_sges[x + 1].addr =
-   621						lnk->wr_rx_v2_dma_addr + SMC_WR_TX_SIZE;
-   622				lnk->wr_rx_sges[x + 1].length =
-   623						SMC_WR_BUF_V2_SIZE - SMC_WR_TX_SIZE;
-   624				lnk->wr_rx_sges[x + 1].lkey =
-   625						lnk->roce_pd->local_dma_lkey;
-   626			}
-   627			lnk->wr_rx_ibs[i].next = NULL;
-   628			lnk->wr_rx_ibs[i].sg_list = &lnk->wr_rx_sges[x];
-   629			lnk->wr_rx_ibs[i].num_sge = sges_per_buf;
-   630		}
-   631		lnk->wr_reg.wr.next = NULL;
-   632		lnk->wr_reg.wr.num_sge = 0;
-   633		lnk->wr_reg.wr.send_flags = IB_SEND_SIGNALED;
-   634		lnk->wr_reg.wr.opcode = IB_WR_REG_MR;
-   635		lnk->wr_reg.access = IB_ACCESS_LOCAL_WRITE | IB_ACCESS_REMOTE_WRITE;
-   636	}
-   637	
-   638	void smc_wr_drain_cq(struct smc_link *lnk)
-   639	{
-   640		wait_event_interruptible_timeout(lnk->wr_rx_drain_wait,
- > 641						 (lnk->drained == 1),
-   642						 SMC_WR_RX_WAIT_DRAIN_TIME);
-   643	}
-   644	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
