@@ -1,43 +1,50 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B49C2F21
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 22:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9850A6131
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 22:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661899237; x=1693435237;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ssOen9gMwWszYXe8Aqt0EdnvPZbxdbBLQnTCjQyphh8=;
-  b=c/o/wCYx1Gr5CL/mLGPKRIAirwDbOO2pHnIHrE0L/9CejEh2H6Dtqf6J
-   VVb+P21I/M51HyZTRmCP/ZBJld9rVgzMcnvTQUYhnaUulMq9WX0RGZACm
-   uFfb2Xjq6G9IAHoKmMCq+7nSoBQ8gV7689EiwFr1kQUS+nkQvFMCrv8dh
-   GFbOoo+hnyL7m1/ZlujWG1nnzLl9Z+pR65qKbGLf9+WGKms9SQDcyafxq
-   WIKazRxyogEQkT4p1POopQ1njVircrzt+s4rB2lFgwNi0RzbS82NeREpu
-   kG5AarS+pP9FQLrE+QyL0mM97UQO/jrpszR/CsxUOG7BTlayS2MliI2xW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282295724"
+  t=1661899842; x=1693435842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lkEb1S9O0cY1S5Nc3U5QQ2ryw9NN9aiDiTt1Riy+deM=;
+  b=jQEjeEvWtTWnzUNRnOXWOhLR3mjoglcUhRyPwopTzkJBphuJeL+XgJV9
+   GlDqt9bDmcTt2fBR7XwcM/wRL5v7ua9/IqaQ8vrwINv/y1O3COCpfilrS
+   7W2g1n+Qqvrd7AH4PUxpbxgUjvKM6KY4WIBVWUgRM+HjWRsgS0Rgkl89O
+   W4lepcrMSEG/K6TGMDCAn2qEydudrwew5PcJzccE6K7zKZfGHrI0zUU9G
+   t7UIP+NvmjHwoD9nDys5s5eaPahIoAOBdYZu4JZdGh3onUD9Y9qgvAtQ3
+   Cnryso6k/9d0wPPRh+sBhhSElp+98aEHwAiGEsf69UdvJbbgaTVYLU3QM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="321459512"
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="282295724"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:40:37 -0700
+   d="scan'208";a="321459512"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:50:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="754223688"
+   d="scan'208";a="645024235"
 Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Aug 2022 15:40:35 -0700
+  by orsmga001.jf.intel.com with ESMTP; 30 Aug 2022 15:50:35 -0700
 Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oT9uM-0000hR-33;
-	Tue, 30 Aug 2022 22:40:34 +0000
-Date: Wed, 31 Aug 2022 06:39:39 +0800
+	id 1oTA43-0000hi-0r;
+	Tue, 30 Aug 2022 22:50:35 +0000
+Date: Wed, 31 Aug 2022 06:50:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Jianqun Xu <jay.xu@rock-chips.com>, linux-gpio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [rmk-arm:for-next 5/7] ld.lld: error: undefined symbol:
- phys_initrd_start
-Message-ID: <202208310617.FHNEaNba-lkp@intel.com>
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] gpio: rockchip: Switch to use fwnode instead of
+ of_node
+Message-ID: <202208310629.1JjkyeRu-lkp@intel.com>
+References: <20220830191939.56436-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,32 +53,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220830191939.56436-1-andriy.shevchenko@linux.intel.com>
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm for-next
-head:   a72b4b3ba681398a3ac1c1384efb949bef3ac846
-commit: b35b2736b43d7124e7da6a8050b8fd9e02f9f734 [5/7] ARM: 9230/1: Support initrd with address in boot alias region
-config: arm-pcm027_defconfig (https://download.01.org/0day-ci/archive/20220831/202208310617.FHNEaNba-lkp@intel.com/config)
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-rockchip-Switch-to-use-fwnode-instead-of-of_node/20220831-032131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: hexagon-randconfig-r032-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310629.1JjkyeRu-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm for-next
-        git checkout b35b2736b43d7124e7da6a8050b8fd9e02f9f734
+        # https://github.com/intel-lab-lkp/linux/commit/678cf6450de6a016c041c3cd2ce58d1383d070e6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/gpio-rockchip-Switch-to-use-fwnode-instead-of-of_node/20220831-032131
+        git checkout 678cf6450de6a016c041c3cd2ce58d1383d070e6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: phys_initrd_start
-   >>> referenced by init.c
-   >>>               mm/init.o:(arm_memblock_init) in archive arch/arm/built-in.a
+>> drivers/gpio/gpio-rockchip.c:614:8: error: use of undeclared identifier 'pctlnp'
+                   if (!pctlnp)
+                        ^
+   1 error generated.
+
+
+vim +/pctlnp +614 drivers/gpio/gpio-rockchip.c
+
+936ee2675eee1f Jianqun Xu      2021-08-16  579  
+936ee2675eee1f Jianqun Xu      2021-08-16  580  static int rockchip_gpiolib_register(struct rockchip_pin_bank *bank)
+936ee2675eee1f Jianqun Xu      2021-08-16  581  {
+936ee2675eee1f Jianqun Xu      2021-08-16  582  	struct gpio_chip *gc;
+936ee2675eee1f Jianqun Xu      2021-08-16  583  	int ret;
+936ee2675eee1f Jianqun Xu      2021-08-16  584  
+936ee2675eee1f Jianqun Xu      2021-08-16  585  	bank->gpio_chip = rockchip_gpiolib_chip;
+936ee2675eee1f Jianqun Xu      2021-08-16  586  
+936ee2675eee1f Jianqun Xu      2021-08-16  587  	gc = &bank->gpio_chip;
+936ee2675eee1f Jianqun Xu      2021-08-16  588  	gc->base = bank->pin_base;
+936ee2675eee1f Jianqun Xu      2021-08-16  589  	gc->ngpio = bank->nr_pins;
+936ee2675eee1f Jianqun Xu      2021-08-16  590  	gc->label = bank->name;
+936ee2675eee1f Jianqun Xu      2021-08-16  591  	gc->parent = bank->dev;
+936ee2675eee1f Jianqun Xu      2021-08-16  592  
+936ee2675eee1f Jianqun Xu      2021-08-16  593  	ret = gpiochip_add_data(gc, bank);
+936ee2675eee1f Jianqun Xu      2021-08-16  594  	if (ret) {
+936ee2675eee1f Jianqun Xu      2021-08-16  595  		dev_err(bank->dev, "failed to add gpiochip %s, %d\n",
+936ee2675eee1f Jianqun Xu      2021-08-16  596  			gc->label, ret);
+936ee2675eee1f Jianqun Xu      2021-08-16  597  		return ret;
+936ee2675eee1f Jianqun Xu      2021-08-16  598  	}
+936ee2675eee1f Jianqun Xu      2021-08-16  599  
+936ee2675eee1f Jianqun Xu      2021-08-16  600  	/*
+936ee2675eee1f Jianqun Xu      2021-08-16  601  	 * For DeviceTree-supported systems, the gpio core checks the
+936ee2675eee1f Jianqun Xu      2021-08-16  602  	 * pinctrl's device node for the "gpio-ranges" property.
+936ee2675eee1f Jianqun Xu      2021-08-16  603  	 * If it is present, it takes care of adding the pin ranges
+936ee2675eee1f Jianqun Xu      2021-08-16  604  	 * for the driver. In this case the driver can skip ahead.
+936ee2675eee1f Jianqun Xu      2021-08-16  605  	 *
+936ee2675eee1f Jianqun Xu      2021-08-16  606  	 * In order to remain compatible with older, existing DeviceTree
+936ee2675eee1f Jianqun Xu      2021-08-16  607  	 * files which don't set the "gpio-ranges" property or systems that
+936ee2675eee1f Jianqun Xu      2021-08-16  608  	 * utilize ACPI the driver has to call gpiochip_add_pin_range().
+936ee2675eee1f Jianqun Xu      2021-08-16  609  	 */
+678cf6450de6a0 Andy Shevchenko 2022-08-30  610  	if (!fwnode_property_read_bool(bank->fwnode, "gpio-ranges")) {
+678cf6450de6a0 Andy Shevchenko 2022-08-30  611  		struct fwnode_handle *parent = fwnode_get_parent(bank->fwnode);
+936ee2675eee1f Jianqun Xu      2021-08-16  612  		struct pinctrl_dev *pctldev = NULL;
+936ee2675eee1f Jianqun Xu      2021-08-16  613  
+936ee2675eee1f Jianqun Xu      2021-08-16 @614  		if (!pctlnp)
+936ee2675eee1f Jianqun Xu      2021-08-16  615  			return -ENODATA;
+936ee2675eee1f Jianqun Xu      2021-08-16  616  
+678cf6450de6a0 Andy Shevchenko 2022-08-30  617  		pctldev = of_pinctrl_get(to_of_node(parent));
+936ee2675eee1f Jianqun Xu      2021-08-16  618  		if (!pctldev)
+936ee2675eee1f Jianqun Xu      2021-08-16  619  			return -ENODEV;
+936ee2675eee1f Jianqun Xu      2021-08-16  620  
+936ee2675eee1f Jianqun Xu      2021-08-16  621  		ret = gpiochip_add_pin_range(gc, dev_name(pctldev->dev), 0,
+936ee2675eee1f Jianqun Xu      2021-08-16  622  					     gc->base, gc->ngpio);
+936ee2675eee1f Jianqun Xu      2021-08-16  623  		if (ret) {
+936ee2675eee1f Jianqun Xu      2021-08-16  624  			dev_err(bank->dev, "Failed to add pin range\n");
+936ee2675eee1f Jianqun Xu      2021-08-16  625  			goto fail;
+936ee2675eee1f Jianqun Xu      2021-08-16  626  		}
+936ee2675eee1f Jianqun Xu      2021-08-16  627  	}
+936ee2675eee1f Jianqun Xu      2021-08-16  628  
+936ee2675eee1f Jianqun Xu      2021-08-16  629  	ret = rockchip_interrupts_register(bank);
+936ee2675eee1f Jianqun Xu      2021-08-16  630  	if (ret) {
+936ee2675eee1f Jianqun Xu      2021-08-16  631  		dev_err(bank->dev, "failed to register interrupt, %d\n", ret);
+936ee2675eee1f Jianqun Xu      2021-08-16  632  		goto fail;
+936ee2675eee1f Jianqun Xu      2021-08-16  633  	}
+936ee2675eee1f Jianqun Xu      2021-08-16  634  
+936ee2675eee1f Jianqun Xu      2021-08-16  635  	return 0;
+936ee2675eee1f Jianqun Xu      2021-08-16  636  
+936ee2675eee1f Jianqun Xu      2021-08-16  637  fail:
+936ee2675eee1f Jianqun Xu      2021-08-16  638  	gpiochip_remove(&bank->gpio_chip);
+936ee2675eee1f Jianqun Xu      2021-08-16  639  
+936ee2675eee1f Jianqun Xu      2021-08-16  640  	return ret;
+936ee2675eee1f Jianqun Xu      2021-08-16  641  }
+936ee2675eee1f Jianqun Xu      2021-08-16  642  
 
 -- 
 0-DAY CI Kernel Test Service
