@@ -1,42 +1,71 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2519836A
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 04:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661833381; x=1693369381;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d8soticUUMoqXs7bFgW/Kmk8cX0h0v8aVPHERjc5+/Q=;
-  b=bXflSttB8uIsfdCWMCanKHmz/9Ga2LR0new8KOBTiT9KYGCyZJtrKkNH
-   mOeEdRzKUJdopHe4SrNF6oXR1RERM2lT528p+upXnQNS0pp5bSHGHIhBN
-   SBz7y0cK2SFY3yCeMUUd89xStUihhpwUmH8UVEtyLf6Ai4Or7Jxv0TlR/
-   SXUQnJVF4OxkeBJd462qN5g0k5b50r6jfH4iX4aKjgfOHPyi1ajk7FlLe
-   vuhIf2NWzD14HEWOo+dxAvBUOqIYhbcAGCSXBL12pNJS5uqGI48EF7Sca
-   1lGormS+PjEoGOeafayPSEIwGg4558veVpmjXf+EPS9QrZgqFmQ/sak1u
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295856218"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="295856218"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 21:23:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="641206469"
-Received: from lkp-server02.sh.intel.com (HELO e45bc14ccf4d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 29 Aug 2022 21:22:59 -0700
-Received: from kbuild by e45bc14ccf4d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oSsmB-0000Wh-05;
-	Tue, 30 Aug 2022 04:22:59 +0000
-Date: Tue, 30 Aug 2022 12:22:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lizhi Hou <lizhi.hou@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC 2/2] pci: create device tree node for selected devices
-Message-ID: <202208301225.GaqbZVki-lkp@intel.com>
-References: <1661809417-11370-3-git-send-email-lizhi.hou@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8630836A
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 04:27:09 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id n8-20020a17090a73c800b001fd832b54f6so8013988pjk.0
+        for <llvm@lists.linux.dev>; Mon, 29 Aug 2022 21:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=tveQCNdrcl8zzZ90FYJSAQp/xoPHwNHO3f5B145IGDY=;
+        b=jz5ryMUneNPtN7GgAbdob+y42sDrVxRuBlqA3QA9oeD1pieZtFXjP021CLo/r+B8bv
+         MYbJ7ecSXA82j8N0LGSRSWGBEUhc3gl753fZP/eq9G6cgLilZiGUBe9U0WkOOEPuzjZF
+         1K3HPtO4P5guX5tEHivGDwt+5tsoSrBpSv2YMAohOLencXK9GT5KAEjxZPzgLhtXs8hu
+         gQg912iU7/NlDTQXrg/CEmP/aR5c+40JbNsB0FzAY+4nR+pg565IYviyzm5c/PrLrHLt
+         42P316IO38WW173exoDa9F/uBYTC0uVc+zDhMVmIYiRyS2CFUFzmi4Iwz9ul83sq02Yi
+         qJsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=tveQCNdrcl8zzZ90FYJSAQp/xoPHwNHO3f5B145IGDY=;
+        b=IgSt3F6wF1SAoTn3C73Qi+W5PESkTzAPpuqTxGtlJNciiUijrFrbE2sY9PeHFryY6S
+         QN7Fpsl75rAlKb4/asIr/zOxFJDEKx/N+tdz1f/kjXqZGVNGltLD+va4jkjYjQwwlIHY
+         0ZKk+jBTIDqNevKbFWunFfDk7F4IUEYIF7toWrmX9fXfUJyXC/LPzWdXLnurRKsZwBJF
+         AbX5eMrbEzraqdB3XOUtv03jfAtlyCCyEEHNOy+9PBCUFD83W92uX5ZfwuED4NDJ0vQw
+         rAafdUyYxuJmsE9MHn0w23E7MDP1a077voV7SXAcDEcEYVWjUdRDmLoG6nFjWygapJvE
+         hAtQ==
+X-Gm-Message-State: ACgBeo0n/xYveYYJs4h5/f1FoTt5IL8ez8Db8zOXJ7YVutcHBs5QIsgO
+	XYl15l7FW5rDhMHv5i+JRRSZyg==
+X-Google-Smtp-Source: AA6agR6j3CrMGk4TPMCPwBvaE51o8QHOWIUKsxAkxuonGlXOsZKabqIh/v6aYfhgn/tTEr+AwX2Jlw==
+X-Received: by 2002:a17:902:efca:b0:174:c901:aa8d with SMTP id ja10-20020a170902efca00b00174c901aa8dmr7736459plb.164.1661833628777;
+        Mon, 29 Aug 2022 21:27:08 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nm21-20020a17090b19d500b001eee8998f2esm7541792pjb.17.2022.08.29.21.27.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 21:27:08 -0700 (PDT)
+Date: Tue, 30 Aug 2022 04:27:04 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Andrew Jones <andrew.jones@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Atish Patra <atishp@atishpatra.org>,
+	David Hildenbrand <david@redhat.com>, Tom Rix <trix@redhat.com>,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.cs.columbia.edu, kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Colton Lewis <coltonlewis@google.com>,
+	Peter Gonda <pgonda@google.com>
+Subject: Re: [PATCH v5 7/7] KVM: selftests: Add ucall pool based
+ implementation
+Message-ID: <Yw2RmCujuaOczFTY@google.com>
+References: <20220825232522.3997340-1-seanjc@google.com>
+ <20220825232522.3997340-8-seanjc@google.com>
+ <20220829163627.qbafyl4qz5cxxue5@kamzik>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +74,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1661809417-11370-3-git-send-email-lizhi.hou@amd.com>
+In-Reply-To: <20220829163627.qbafyl4qz5cxxue5@kamzik>
 
-Hi Lizhi,
+On Mon, Aug 29, 2022, Andrew Jones wrote:
+> On Thu, Aug 25, 2022 at 11:25:22PM +0000, Sean Christopherson wrote:
+> > +static struct ucall *ucall_alloc(void)
+> > +{
+> > +	struct ucall *uc;
+> > +	int i;
+> > +
+> > +	GUEST_ASSERT(ucall_pool && ucall_pool->in_use);
+> 
+> ucall_pool->in_use will never be null.
+> 
+> > +
+> > +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> > +		if (!atomic_test_and_set_bit(i, ucall_pool->in_use)) {
+> > +			uc = &ucall_pool->ucalls[i];
+> > +			memset(uc->args, 0, sizeof(uc->args));
+> > +			return uc;
+> > +		}
+> > +	}
+> 
+> nit: blank line
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc3 next-20220829]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/Generate-device-tree-node-for-pci-devices/20220830-054614
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: hexagon-randconfig-r041-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301225.GaqbZVki-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4c106463674a6f6de085d9a91510c385be4a620d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f78f02388fd4e94a2ce74278c2af4c983b3ed98d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lizhi-Hou/Generate-device-tree-node-for-pci-devices/20220830-054614
-        git checkout f78f02388fd4e94a2ce74278c2af4c983b3ed98d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/pci/of.c:16:
->> drivers/pci/pci.h:693:1: error: expected identifier or '('
-   {
-   ^
-   1 error generated.
-
-
-vim +693 drivers/pci/pci.h
-
-   690	
-   691	static inline void
-   692	of_pci_remove_node(struct pci_dev *pdev);
- > 693	{
-   694	}
-   695	#endif /* CONFIG_OF_DYNAMIC */
-   696	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Got 'em.  Thanks for the reviews, much appreciated!
