@@ -1,69 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F29038D
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 12:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820DCC433D6;
-	Tue, 30 Aug 2022 12:40:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661863237;
-	bh=t8U5J96q76hll8fwIHsLi3w7JfANN/JKd9/p9ZRTFoM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MXUXVmUJqlXbVkVBL9QUxwUBEBL0sXZGetfWReG71xVpIAKzVRGheFwjB0wuCzA08
-	 gr/o4o4/l2rjvdri/WPPyCAZPluJpi5FAWlg024WkJx8VH67IRkbTxJESvqD7raWey
-	 ctASO0JBeqQOTyOM0NQQzAiA4ehDEyg4JaOoNJliqHSeTV6d1ZGcfyW6cmU/XVW63L
-	 NaWrQKJAF61xCfzBXCFIfQH8rYKGCo0b+K8KvXs6e/gdnZxbcp6BZ5297Ew1FA6nmq
-	 5f1ZtYOGO1QGQDNnKZPYB5kLXgrS9fncE4/wjsYoN4Q/o/9FKFCny7z9Fl/MUTcRW5
-	 J5cXH3EZHTnxw==
-Date: Tue, 30 Aug 2022 05:40:34 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: build failure of next-20220830 due to 5f8cdece42ff
- ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
-Message-ID: <Yw4FQm6V7d3MuMKG@dev-arch.thelio-3990X>
-References: <Yw3V8yJgAnPD8o6P@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A932F30
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 12:45:49 +0000 (UTC)
+Received: by mail-qt1-f179.google.com with SMTP id c20so8354185qtw.8
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 05:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=mjE/xAmjy9vxfmw5GBlVvKmhsej8si9kPE9vjVE12v8=;
+        b=DLo46a2iWTmz9Ets1bGcCAD0mrOEcC3NEJG7PesZjfN6m4Ku0cYMRaA28/5h/R2R+c
+         5OlY6oSY/ASo0bc+Mp1iPM6KhfIOdgWjfXEx5PH+RHCQoLU3L809fpMWffuQcOroLjwG
+         Y18nLfOFlAs65bHo7sDqkZNYFZ6cZBoVMKUD7CJqXR9ch3ioVIwa1lnuIrAlEkCPM4LV
+         fHQ6x3rbrPp4c9mSV9ocxh9ykB+a+UzRZ09FuVr6vsyzSJmZYv4O+ju3HlscgLer6HqG
+         29nJxIAduBJURu6mts76NHhooSBTXoogwnWWYg9ICodZaFf6dHy2nCzKHjG9hZ4q+oar
+         y0IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=mjE/xAmjy9vxfmw5GBlVvKmhsej8si9kPE9vjVE12v8=;
+        b=qCNb+O7nPoc/ejIdlzRZzbYzcC7aFClzYTAl4UkG2J0XEGvsnQ1thmZLLBJYJ9koSu
+         MbNLLY5m7rXLNKPcn5NLEazyMliBZufTzX2H4qYYQvOb5L8guaaqn67qfYNvTuogyoCf
+         Z75CzvvE5nP7lLHO8Vrax0znCe7/Fu3dfxRZScBTQArm9XcRfkztVo/jdRh35i0XnGxY
+         MHxtm1/AkIpay2cKtfAPxoYMlgpbe+gRfAow8XRi4sUMWh+LwGu0Hz5i/ei0Lc67XoOL
+         yQRGnHqZMGMLEXV/uURpLXDfNneqrgTpknsdonEgu3uxBOe7+gasZ9YvJOdXlmL7lxik
+         zt0g==
+X-Gm-Message-State: ACgBeo27ddqKM6IaKTTKScMa/1zzV3yZI7v+dIMDGL3XRkf42NxR9RqW
+	Uc2rKJrlUQtu76ThHWuQTFEkn9FVMzHo9+jS0qk=
+X-Google-Smtp-Source: AA6agR4OjmhM5kcJ5ADJGPx2SAbWHITyh+GFtjTEqgs86DnKRnVWMtDTIf5HPe/hUUF7QEwmllQx/EqVKJ/D6GhCUP8=
+X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
+ n10-20020a05622a040a00b0034377ba727fmr14455485qtx.481.1661863548012; Tue, 30
+ Aug 2022 05:45:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw3V8yJgAnPD8o6P@debian>
+References: <202208290618.wU7mHfOp-lkp@intel.com> <20220830110329.00000d18@huawei.com>
+In-Reply-To: <20220830110329.00000d18@huawei.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 30 Aug 2022 15:45:12 +0300
+Message-ID: <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
+Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
+ warning: format specifies type 'unsigned char' but the argument has type
+ 'unsigned int'
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: kernel test robot <lkp@intel.com>, Dmitry Rokosov <DDRokosov@sberdevices.ru>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sudip,
+On Tue, Aug 30, 2022 at 1:03 PM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+> On Mon, 29 Aug 2022 06:25:53 +0800
+> kernel test robot <lkp@intel.com> wrote:
 
-On Tue, Aug 30, 2022 at 10:18:43AM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
-> 
-> The builds of arm64 allmodconfig with clang have failed to build
-> next-20220830 with the error:
-> 
-> drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
->         of_node_put(device_node);
->                     ^~~~~~~~~~~
-> drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
->         struct device_node *endpoint, *device_node;
->                                                   ^
->                                                    = NULL
-> 
-> git bisect pointed to 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
-> 
-> I will be happy to test any patch or provide any extra log if needed.
+...
 
-Thanks for the report. I noticed this yesterday and sent a patch:
+> > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]
+> >                                               "msa311-%hhx", partid);
+> >                                                       ~~~~   ^~~~~~
+> >                                                       %x
+> >    1 warning generated.
 
-https://lore.kernel.org/20220829165450.217628-1-nathan@kernel.org/
-https://github.com/ClangBuiltLinux/linux/issues/1700
+> >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,
+> >  > 993                                                   "msa311-%hhx", partid);
 
-Cheers,
-Nathan
+> I'm thinking intent here was to limit range of what was printed. Maybe better to use
+> local u8 variable or cast?
+>
+> I can fix it up if that's fine with you - or even better send me a patch that fixes
+> it however you prefer!
+
+Looking back at what Linus said about those specifiers, I would rather
+go with simple %x or %02x.
+
+P.S. Surprisingly many C developers don't know the difference between
+%hhx and %02x, which is easy to check by
+
+  char a = -1;
+  printf("%hhx <==> %02x\n", a, a);
+  a = 217;
+  printf("%hhx <==> %02x\n", a, a);
+
+-- 
+With Best Regards,
+Andy Shevchenko
