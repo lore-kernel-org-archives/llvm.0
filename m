@@ -1,42 +1,43 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EF06137
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:32:28 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id p12-20020a259e8c000000b006958480b858so877485ybq.12
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:32:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C0F612E
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:32:31 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33dc888dc62so190496237b3.4
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=JGJThSQrG14h993s8rjwM8jNb3CuBSnZl7zjhnevu+g=;
-        b=DOh9amPi8sdlIOf+BiQAcIL4C8dBW/B9BWrb3DDZwGjZRuBGPkwG8kg8wpUGEynqN4
-         HbwlJ211/vN250153b8eTEEz+hJGiHPIdyx8Zz5WSB/eRxv4x+R8c6xaiPurZnqHBUe3
-         7eUibXAR1rL0QJGQFURQEgHMRLr+JSZOLcNBOIXbJOXcNuGf4he8R/RcghJuPZwG87Gp
-         L+pDTBkMbM7mIefPA4Unu/iXF4eeVd9tDHBc5q6aRSwecfYH2copC/6dCggsaXuVuvUw
-         fzuv78FCYDYsach0a90W8IsCcCNCzrOKyw5GIQzwfi8hwWvxOfgq6EoJfTjPWYbOy/X8
-         OGkQ==
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date;
+        bh=muitaXVvYj1YXYeJfyrYZvippOQN3ekQHC+LkfXxbLc=;
+        b=qZpclqQ6MsBQZUyMbRHl5nEFHLKVNuncCaq+7Pxg2KT6XNS9xA08pBlGHG3JYut1v1
+         TRvpdM8IY5fuCJoqsdbv+sWXvtCe0pTC8mj6QL8JS54ZIaAga8BWb6ikSMZwyF8wo1Mp
+         1IzskPITy3h8+PbYnC19RDCtSEjS9+naLaqxPL38hvyOcW+Wjjnkp5Vu6l4DRpZa2MVw
+         /qLkeHfR5fxAiGbQ3ASQz7tXDU/Ojm5437GZxvJMzZGw2uZgFS6bO7kXNuCOzB8SUj8u
+         ve7L7kOPTIzBNV8TWMg8uLMQMD4aJ+E2OFqj7Rzu0cUj+dVwgYL7lld5b1V4BmU78331
+         S9yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JGJThSQrG14h993s8rjwM8jNb3CuBSnZl7zjhnevu+g=;
-        b=zDePXaC//MZyB+LY3QKyDKas1UEdeP5eji3UV9zORCF/c3C1NKfpVlR3cLRd/OiNEe
-         4LSLrZgju+97uMarucFZIaKBo/p0EZo4oIiNgIYAuAuA1hZ6jvw2iRDzQXY7UhctU+V0
-         p0qwDNK3/6lzvQzTvgTWFQbzdsimFnO8+xvnLOeQsDqN6ej12hLAmona/8f2Zo1npvBQ
-         6TkywUL58r+JhYvPj5Jphd0MCn+sA8MwMRcPM4lPqjn4kE2DSzdYTY7ioeoMSbPHdwyu
-         0HI/aW+91CO7P9x+HKPFmxUupienLNQp8RvG5b4vdjoIkBPtf+3onGScLkjDCnfpBHxO
-         65gg==
-X-Gm-Message-State: ACgBeo1jbDcNNd0OoUzBf4Tk57WsKxLE9nBhnuysFihWQnzBZDJXRpbU
-	XYqJ1QhjEfkSeC7tInnnTzQHM6zp9vN0EWrMiu4=
-X-Google-Smtp-Source: AA6agR4PyO0IKBEZVO/AvffiR0akECN3URvghZTslxK3C371SGy+urp8y7XT0ytOb7JDjFdBCeYbfFF5vHW2XgdhiqQ=
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=muitaXVvYj1YXYeJfyrYZvippOQN3ekQHC+LkfXxbLc=;
+        b=6LECv5K4sBQCAjItBeVLI5pLR/3XMs3KhjLKb8H2x+EMahyNjU4kb1cbgCtxIcG9uC
+         ry6cy9gYKBed7R2cl/mS1wA5yF9iJQPqGiI1e6ZvAC/g1X5PL/KCNS09GTWwtOwJgWFG
+         uGDDvL5U2xloZiUkBV+Npzic5PBlYetZ1EosA9dKykzcC/3hOnk44p2h4ImABRbGXTqb
+         PgEaeZ/4ngyxtu/YM9cRqD9T0eZVbc/w4+RuhbPZOUlcNOk5iiJz/gw9U6pViRk8COB6
+         lIAkdz4NSINu2kQtBem/ZmIyCOOKM0HreaJIozu7jAHTfXupanVAP8nhVghb0sAS4ptW
+         XqeA==
+X-Gm-Message-State: ACgBeo1/BADlaISEdP4+I8Cr4Yy/YYS7YjJVKyrktf+7hEVHs48ycRYQ
+	zL2s+6OvtNtAOp/H2AwWnIsDYvc5uqy0yyt0TYU=
+X-Google-Smtp-Source: AA6agR5mmw1lyTMjEbXO+bj0XMfoKQXjrA7x+3+LfFFUJRrRakcxIdBjBJC8pQKjP8yP5Cacc+4B59TMcKFo3CTBMQ8=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:54d9:7143:6a7d:91d])
- (user=samitolvanen job=sendgmr) by 2002:a81:d34a:0:b0:31f:4467:4ae0 with SMTP
- id d10-20020a81d34a000000b0031f44674ae0mr15725365ywl.477.1661902348134; Tue,
- 30 Aug 2022 16:32:28 -0700 (PDT)
-Date: Tue, 30 Aug 2022 16:31:28 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:2c8:0:b0:695:feaa:871f with SMTP
+ id 191-20020a2502c8000000b00695feaa871fmr14222519ybc.471.1661902350818; Tue,
+ 30 Aug 2022 16:32:30 -0700 (PDT)
+Date: Tue, 30 Aug 2022 16:31:29 -0700
 In-Reply-To: <20220830233129.30610-1-samitolvanen@google.com>
-Message-Id: <20220830233129.30610-21-samitolvanen@google.com>
+Message-Id: <20220830233129.30610-22-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,19 +46,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220830233129.30610-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=915; i=samitolvanen@google.com;
- h=from:subject; bh=m63Aw2OCZubNDlnS2Bm9+IxQqtHz35eVVBHmUgLi/wI=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3PBebzwTJ+52Sw6ogCU/KIG0JsWDvzXb2RlSP7
- p3Tx7bKJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dzwAKCRBMtfaEi7xW7gtjC/
- 46Gj3n4xq2s5nOkzOlhRg6U2y6bfUnt9ieyOLUS5LwZTt+4P1YtZ1bAy7fXQjlY5N5Jru8Wxiou2NQ
- XkZHG3/eLGFq67shCldfkkdKJuw3zTrocl0l0U3bI95JISYisD70CC/v6rHsGqKjP/uSRXNRP30aAm
- 8suLZ5bim00kqnPRf6F4sy1mk6/W6hXGgUi6oz2niBNwvb3cYpY3LEd4WZl8pIbELZtdYdrW7jGWrG
- jGzA1gDMc6M1m0iQyrWFLfMS8Z/Ox52XdhaR+isbHp7AtJxqO0qbN9Fh/L6E3lJiJiGcQgwAhgGfYw
- OElKjGI/zYiSnKS1XqBhHYQ44Sy0ZrW3vzzzSSERj0TNDSVk87P9KWRlJ2zsEDrD4S3t8So/m9NEcP
- 4nl6pCyebjHvO7PMvnuJ5Ds/WxR8rqm5SuxbPGbmdyvl6F+LZ7o+EKzgevJrNFIW3c7+8RRcbkr+OL
- PaYZxJCu03C4/PK10hnG4Dww9r1ervjssX1vNaeEtQoUw=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10374; i=samitolvanen@google.com;
+ h=from:subject; bh=xx8wjcYE8Du0racyo2HoO5M6w+PYgPKqDWnfLGl3DjU=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3PPFzSBxPnL1McANFd1sNHrlLrdWSxt2cbevI6
+ OTWO0UqJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dzwAKCRBMtfaEi7xW7uukC/
+ 9uM+7HvXyQ67VflXgAsC/YncRdBoq4yhl8rYfT2i05OWqPjoWHJG8Ya/UI5iY6oAeiaG49tfhTVdrJ
+ pUyR3viQo7OIVPeVuzfeHP0eguun9EReYSQcKQGYAV4XfwQ4hFEKT254SvMUfU/M/3EWaS7HN4mNz4
+ QJK4XkW4SPhA7RBnDLN3EQJPwljXDQ7+t5wNksrguQOfmbffYUJPcP/HC8oNr1lIRstWm3BrwbIJaD
+ MAsUDvpax1bIHiYl6DHoiFijKWm88sHuPFQFFnxGE0U4g/pm+dzy+wirAFnCNNK/RGdmP3fdBqzLSI
+ Ul3ndBsIwZACrYvIZ37KXR82etUCnuTGSvqwWPAnY4rizeCV8SEBvqmVV2EWIAClYLSj6ICZQJRyeX
+ rzdvbADWzQdLSvLP7rGWgi5MQSYwwYbc15tpgtuhFe0HwpsWbo8jxfrJUVzM4T5CXHBy3OqY/UZZrp
+ 0/EHk1+pMYKAO0vzlUhH3g28B4J9GI5syiuW13VGIgv/E=
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v4 20/21] x86/purgatory: Disable CFI
+Subject: [PATCH v4 21/21] x86: Add support for CONFIG_CFI_CLANG
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -69,33 +70,312 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Disable CONFIG_CFI_CLANG for the stand-alone purgatory.ro.
+With CONFIG_CFI_CLANG, the compiler injects a type preamble immediately
+before each function and a check to validate the target function type
+before indirect calls:
+
+  ; type preamble
+  __cfi_function:
+    mov <id>, %eax
+  function:
+    ...
+  ; indirect call check
+    mov     -<id>,%r10d
+    add     -0x4(%r11),%r10d
+    je      .Ltmp1
+    ud2
+  .Ltmp1:
+    call    __x86_indirect_thunk_r11
+
+Define the __CFI_TYPE helper macro for manually annotating indirectly
+called assembly function with the identical premable, add error handling
+code for the ud2 traps emitted for indirect call checks, and allow
+CONFIG_CFI_CLANG to be selected on x86_64.
+
+This produces the following oops on CFI failure (generated using lkdtm):
+
+[   21.441706] CFI failure at lkdtm_indirect_call+0x16/0x20 [lkdtm]
+(target: lkdtm_increment_int+0x0/0x10 [lkdtm]; expected type: 0x7e0c52a)
+[   21.444579] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[   21.445296] CPU: 0 PID: 132 Comm: sh Not tainted
+5.19.0-rc8-00020-g9f27360e674c #1
+[   21.445296] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[   21.445296] RIP: 0010:lkdtm_indirect_call+0x16/0x20 [lkdtm]
+[   21.445296] Code: 52 1c c0 48 c7 c1 c5 50 1c c0 e9 25 48 2a cc 0f 1f
+44 00 00 49 89 fb 48 c7 c7 50 b4 1c c0 41 ba 5b ad f3 81 45 03 53 f8
+[   21.445296] RSP: 0018:ffffa9f9c02ffdc0 EFLAGS: 00000292
+[   21.445296] RAX: 0000000000000027 RBX: ffffffffc01cb300 RCX: 385cbbd2e07=
+0a700
+[   21.445296] RDX: 0000000000000000 RSI: c0000000ffffdfff RDI: ffffffffc01=
+cb450
+[   21.445296] RBP: 0000000000000006 R08: 0000000000000000 R09: ffffffff8d0=
+81610
+[   21.445296] R10: 00000000bcc90825 R11: ffffffffc01c2fc0 R12: 00000000000=
+00000
+[   21.445296] R13: ffffa31b827a6000 R14: 0000000000000000 R15: 00000000000=
+00002
+[   21.445296] FS:  00007f08b42216a0(0000) GS:ffffa31b9f400000(0000)
+knlGS:0000000000000000
+[   21.445296] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   21.445296] CR2: 0000000000c76678 CR3: 0000000001940000 CR4: 00000000000=
+006f0
+[   21.445296] Call Trace:
+[   21.445296]  <TASK>
+[   21.445296]  lkdtm_CFI_FORWARD_PROTO+0x30/0x50 [lkdtm]
+[   21.445296]  direct_entry+0x12d/0x140 [lkdtm]
+[   21.445296]  full_proxy_write+0x5d/0xb0
+[   21.445296]  vfs_write+0x144/0x460
+[   21.445296]  ? __x64_sys_wait4+0x5a/0xc0
+[   21.445296]  ksys_write+0x69/0xd0
+[   21.445296]  do_syscall_64+0x51/0xa0
+[   21.445296]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   21.445296] RIP: 0033:0x7f08b41a6fe1
+[   21.445296] Code: be 07 00 00 00 41 89 c0 e8 7e ff ff ff 44 89 c7 89
+04 24 e8 91 c6 02 00 8b 04 24 48 83 c4 68 c3 48 63 ff b8 01 00 00 03
+[   21.445296] RSP: 002b:00007ffcdf65c2e8 EFLAGS: 00000246 ORIG_RAX: 000000=
+0000000001
+[   21.445296] RAX: ffffffffffffffda RBX: 00007f08b4221690 RCX: 00007f08b41=
+a6fe1
+[   21.445296] RDX: 0000000000000012 RSI: 0000000000c738f0 RDI: 00000000000=
+00001
+[   21.445296] RBP: 0000000000000001 R08: fefefefefefefeff R09: fefefefeffc=
+5ff4e
+[   21.445296] R10: 00007f08b42222b0 R11: 0000000000000246 R12: 0000000000c=
+738f0
+[   21.445296] R13: 0000000000000012 R14: 00007ffcdf65c401 R15: 0000000000c=
+70450
+[   21.445296]  </TASK>
+[   21.445296] Modules linked in: lkdtm
+[   21.445296] Dumping ftrace buffer:
+[   21.445296]    (ftrace buffer empty)
+[   21.471442] ---[ end trace 0000000000000000 ]---
+[   21.471811] RIP: 0010:lkdtm_indirect_call+0x16/0x20 [lkdtm]
+[   21.472467] Code: 52 1c c0 48 c7 c1 c5 50 1c c0 e9 25 48 2a cc 0f 1f
+44 00 00 49 89 fb 48 c7 c7 50 b4 1c c0 41 ba 5b ad f3 81 45 03 53 f8
+[   21.474400] RSP: 0018:ffffa9f9c02ffdc0 EFLAGS: 00000292
+[   21.474735] RAX: 0000000000000027 RBX: ffffffffc01cb300 RCX: 385cbbd2e07=
+0a700
+[   21.475664] RDX: 0000000000000000 RSI: c0000000ffffdfff RDI: ffffffffc01=
+cb450
+[   21.476471] RBP: 0000000000000006 R08: 0000000000000000 R09: ffffffff8d0=
+81610
+[   21.477127] R10: 00000000bcc90825 R11: ffffffffc01c2fc0 R12: 00000000000=
+00000
+[   21.477959] R13: ffffa31b827a6000 R14: 0000000000000000 R15: 00000000000=
+00002
+[   21.478657] FS:  00007f08b42216a0(0000) GS:ffffa31b9f400000(0000)
+knlGS:0000000000000000
+[   21.479577] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   21.480307] CR2: 0000000000c76678 CR3: 0000000001940000 CR4: 00000000000=
+006f0
+[   21.481460] Kernel panic - not syncing: Fatal exception
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- arch/x86/purgatory/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/Kconfig               |  2 +
+ arch/x86/include/asm/cfi.h     | 22 +++++++++
+ arch/x86/include/asm/linkage.h |  9 ++++
+ arch/x86/kernel/Makefile       |  2 +
+ arch/x86/kernel/cfi.c          | 85 ++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/traps.c        |  4 +-
+ 6 files changed, 123 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/include/asm/cfi.h
+ create mode 100644 arch/x86/kernel/cfi.c
 
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 31c634a22818..58a200dc762d 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -55,6 +55,10 @@ ifdef CONFIG_RETPOLINE
- PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
- endif
- 
-+ifdef CONFIG_CFI_CLANG
-+PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
-+endif
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..1fe6a83dac05 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -107,6 +107,8 @@ config X86
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+ 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <=3D 4096
++	select ARCH_SUPPORTS_CFI_CLANG		if X86_64
++	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI_CLANG
+ 	select ARCH_SUPPORTS_LTO_CLANG
+ 	select ARCH_SUPPORTS_LTO_CLANG_THIN
+ 	select ARCH_USE_BUILTIN_BSWAP
+diff --git a/arch/x86/include/asm/cfi.h b/arch/x86/include/asm/cfi.h
+new file mode 100644
+index 000000000000..58dacd90daef
+--- /dev/null
++++ b/arch/x86/include/asm/cfi.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_CFI_H
++#define _ASM_X86_CFI_H
 +
- CFLAGS_REMOVE_purgatory.o	+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_purgatory.o		+= $(PURGATORY_CFLAGS)
- 
--- 
++/*
++ * Clang Control Flow Integrity (CFI) support.
++ *
++ * Copyright (C) 2022 Google LLC
++ */
++
++#include <linux/cfi.h>
++
++#ifdef CONFIG_CFI_CLANG
++enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
++#else
++static inline enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
++{
++	return BUG_TRAP_TYPE_NONE;
++}
++#endif /* CONFIG_CFI_CLANG */
++
++#endif /* _ASM_X86_CFI_H */
+diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.=
+h
+index 73ca20049835..ebfa05973312 100644
+--- a/arch/x86/include/asm/linkage.h
++++ b/arch/x86/include/asm/linkage.h
+@@ -29,6 +29,15 @@
+ #endif
+ #endif /* CONFIG_RETPOLINE */
+=20
++#ifdef CONFIG_CFI_CLANG
++#define __CFI_TYPE(name)					\
++	SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)	\
++	.fill 11, 1, 0x90 ASM_NL				\
++	.byte 0xb8 ASM_NL					\
++	.long __kcfi_typeid_##name ASM_NL			\
++	SYM_FUNC_END(__cfi_##name)
++#endif
++
+ #else /* __ASSEMBLY__ */
+=20
+ #if defined(CONFIG_RETHUNK) && !defined(__DISABLE_EXPORTS) && !defined(BUI=
+LD_VDSO)
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index a20a5ebfacd7..1286a73ebdbc 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -139,6 +139,8 @@ obj-$(CONFIG_UNWINDER_GUESS)		+=3D unwind_guess.o
+=20
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+=3D sev.o
+=20
++obj-$(CONFIG_CFI_CLANG)			+=3D cfi.o
++
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/cfi.c b/arch/x86/kernel/cfi.c
+new file mode 100644
+index 000000000000..e642c1af2678
+--- /dev/null
++++ b/arch/x86/kernel/cfi.c
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Clang Control Flow Integrity (CFI) support.
++ *
++ * Copyright (C) 2022 Google LLC
++ */
++#include <asm/cfi.h>
++#include <asm/insn.h>
++#include <asm/insn-eval.h>
++
++/*
++ * Returns the target address and the expected type when regs->ip points
++ * to a compiler-generated CFI trap.
++ */
++static bool decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
++			    u32 *type)
++{
++	char buffer[MAX_INSN_SIZE];
++	struct insn insn;
++	int offset =3D 0;
++
++	*target =3D *type =3D 0;
++
++	/*
++	 * The compiler generates the following instruction sequence
++	 * for indirect call checks:
++	 *
++	 * =C2=A0 movl    -<id>, %r10d       ; 6 bytes
++	 *   addl    -4(%reg), %r10d    ; 4 bytes
++	 *   je      .Ltmp1             ; 2 bytes
++	 *   ud2                        ; <- regs->ip
++	 *   .Ltmp1:
++	 *
++	 * We can decode the expected type and the target address from the
++	 * movl/addl instructions.
++	 */
++	if (copy_from_kernel_nofault(buffer, (void *)regs->ip - 12, MAX_INSN_SIZE=
+))
++		return false;
++	if (insn_decode_kernel(&insn, &buffer[offset]))
++		return false;
++	if (insn.opcode.value !=3D 0xBA)
++		return false;
++
++	*type =3D -(u32)insn.immediate.value;
++
++	if (copy_from_kernel_nofault(buffer, (void *)regs->ip - 6, MAX_INSN_SIZE)=
+)
++		return false;
++	if (insn_decode_kernel(&insn, &buffer[offset]))
++		return false;
++	if (insn.opcode.value !=3D 0x3)
++		return false;
++
++	/* Read the target address from the register. */
++	offset =3D insn_get_modrm_rm_off(&insn, regs);
++	if (offset < 0)
++		return false;
++
++	*target =3D *(unsigned long *)((void *)regs + offset);
++
++	return true;
++}
++
++/*
++ * Checks if a ud2 trap is because of a CFI failure, and handles the trap
++ * if needed. Returns a bug_trap_type value similarly to report_bug.
++ */
++enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
++{
++	unsigned long target;
++	u32 type;
++
++	if (!is_cfi_trap(regs->ip))
++		return BUG_TRAP_TYPE_NONE;
++
++	if (!decode_cfi_insn(regs, &target, &type))
++		return report_cfi_failure_noaddr(regs, regs->ip);
++
++	return report_cfi_failure(regs, regs->ip, &target, type);
++}
++
++/*
++ * Ensure that __kcfi_typeid_ symbols are emitted for functions that may
++ * not be indirectly called with all configurations.
++ */
++__ADDRESSABLE(memcpy)
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index d62b2cb85cea..178015a820f0 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -63,6 +63,7 @@
+ #include <asm/insn-eval.h>
+ #include <asm/vdso.h>
+ #include <asm/tdx.h>
++#include <asm/cfi.h>
+=20
+ #ifdef CONFIG_X86_64
+ #include <asm/x86_init.h>
+@@ -313,7 +314,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+ 	 */
+ 	if (regs->flags & X86_EFLAGS_IF)
+ 		raw_local_irq_enable();
+-	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN) {
++	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN ||
++	    handle_cfi_failure(regs) =3D=3D BUG_TRAP_TYPE_WARN) {
+ 		regs->ip +=3D LEN_UD2;
+ 		handled =3D true;
+ 	}
+--=20
 2.37.2.672.g94769d06f0-goog
 
