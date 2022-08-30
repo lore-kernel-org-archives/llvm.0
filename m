@@ -1,64 +1,61 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FED2399
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267AD3D7F
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:43:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1661877755;
+	s=mimecast20190719; t=1661877809;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uPZ0ww9vg3e5wba1jpMWDOMwxa9Ldy+iPGjIGTE5slw=;
-	b=Xu+LE3gvraNijWToZ6/DSA8CPHgl3qucrxx7Zf6wuy2sj2r7fcWznwtSLJUOLj0oE1cuHx
-	5hA32i4pAvht0itRGQ5xc1E12Tr4KVILyrRLL8bGCCsYSjntoBee21vixN6DvPAKGngjm/
-	jqb961Bgz5Cg8QezGr7AumV+8lxf3ao=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=sYkEcIEcYJVPnhVJ5B4453HGLPxDPLa2+9KAMnSSp18=;
+	b=K/hfQEuDHF+nY1aqJIkSpqI7lAZbkT0E2lv/l43tQP4ZZ2wRaZ3MRLpr3Iv/pP10DOr0Rr
+	yabiGR6RUfYdYcaI4XolegSdQ0mYIDpWwYev4Ku8ZEFZzaAfOTfOgbA6KAuxNnw6XD6379
+	80j+RCsx6l3p+M+nNo1OsSK5pCfpXRQ=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-383-ia_mKYn2Nnit6BhabnW-Xg-1; Tue, 30 Aug 2022 12:42:33 -0400
-X-MC-Unique: ia_mKYn2Nnit6BhabnW-Xg-1
-Received: by mail-io1-f70.google.com with SMTP id z30-20020a05660217de00b00688bd42dc1dso6993523iox.15
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
+ us-mta-581-MHVQN0TNNbibA2h-FSrx3Q-1; Tue, 30 Aug 2022 12:43:26 -0400
+X-MC-Unique: MHVQN0TNNbibA2h-FSrx3Q-1
+Received: by mail-io1-f69.google.com with SMTP id c2-20020a6bec02000000b00689b26e92f0so6924961ioh.6
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 09:43:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:organization:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc;
-        bh=uPZ0ww9vg3e5wba1jpMWDOMwxa9Ldy+iPGjIGTE5slw=;
-        b=VtXZG88f9KQ0zCgTgbz5nvs5nedbjc3aVchhkBCEgFWIzj7qixcX28yBENod7XeEQN
-         9rY3YCMkIdBFgBpFje5BOsYtV4HiDoHvr53j4o+zvpjWQEsicijdb5o1Pt4c8vt8glDu
-         0EAHOhvKAW2XFBLe5egh895EKgs6bziyPTuGWR81OfH+OO3Q5vgTT2CyoCezJy9ZYfJc
-         BfmZ3F9qoPNFq5i+6J6jLzXir1/XUGFUkZekOAlAD9nh+NkO9HMgkRvWWOUIUJLdkpho
-         sjQpBcmlrP852v4UZgJWEsB0tRgcW31p6eJRg0CkfbdQ88048wJmUh5LccNabLKysyRW
-         rbsQ==
-X-Gm-Message-State: ACgBeo3JP0YmJPSlgmESKGw72CDeYlPhjcQ5gReKVTRk2p7AsPOz/EsE
-	x3jD3XOOC1H02fS2DN1krtEPn9YWpNQgsgoXDaqiIOrFYiZyiPVTfmhXGnIsE1oK0ehdjfcgltm
-	27Cq2TZkb+xN3gg==
-X-Received: by 2002:a05:6602:27c1:b0:688:6a81:8d91 with SMTP id l1-20020a05660227c100b006886a818d91mr11618136ios.189.1661877753306;
-        Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6i3F6bgTizb0kdbW2f//YvjaU2wFi/oE+HdztyPkBjmAd9hjsyqXqwCRNS3hWZFU5Akgcxeg==
-X-Received: by 2002:a05:6602:27c1:b0:688:6a81:8d91 with SMTP id l1-20020a05660227c100b006886a818d91mr11618129ios.189.1661877753077;
-        Tue, 30 Aug 2022 09:42:33 -0700 (PDT)
+        bh=sYkEcIEcYJVPnhVJ5B4453HGLPxDPLa2+9KAMnSSp18=;
+        b=3PHG9cerW9vbooT23rxwVSotZjTHUGVlB9JQed+8XsUOdqwrFKzrsDMhH3edYAEMgH
+         eJ/vnKYa8nj/aOMTZvM7HIshXzzV7ZshTI5BS9JY27XVRlwHfHpGKJn91+olRt0/bQd1
+         9LQkSAelHwD7ioX2G04D/QZzinymtmdiNRQiOtfbwALFgOE2ftI5K7xSbicI/OtZZhqT
+         B1MBMUQcZBlyK2kJ2O8Ul1HGS/VcVjRg78WVVhHQXmxhHzmVY+cAkm9yb5f0iD2wqAHT
+         XHYx9tBzcjOFz/dl8m4fPqUhcNaAiRR9GX/LUIC2w0pmUt2LR6jtk5OFq4NbUp4aRTMh
+         CFEw==
+X-Gm-Message-State: ACgBeo2R27iwXde6auxHs4gdZkNAkG+3UwgRM/S/pc4/sqURO0iUeLKK
+	OjLSkMsToJkaBmzms8Gjc9jU6Gfd/v3EQ8AI8fm/HJdwiwT7oHr5XvGLhWtDIAWQ3oCQy5C930U
+	uZbr9sphil3MJtA==
+X-Received: by 2002:a6b:580e:0:b0:689:af21:6f3f with SMTP id m14-20020a6b580e000000b00689af216f3fmr11840463iob.116.1661877805305;
+        Tue, 30 Aug 2022 09:43:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR74qq+ShMV0B7MOD9pLRKsUex3QAMRhvAeMKdRCeHWVY7Q4aWani6aoYi2AyG2iCWoRh0iOVg==
+X-Received: by 2002:a6b:580e:0:b0:689:af21:6f3f with SMTP id m14-20020a6b580e000000b00689af216f3fmr11840450iob.116.1661877805128;
+        Tue, 30 Aug 2022 09:43:25 -0700 (PDT)
 Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id n15-20020a02c78f000000b003434a4acb8fsm5650072jao.117.2022.08.30.09.42.32
+        by smtp.gmail.com with ESMTPSA id f30-20020a02a11e000000b0034a0275ae76sm5682440jag.139.2022.08.30.09.43.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 09:42:32 -0700 (PDT)
-Date: Tue, 30 Aug 2022 10:42:31 -0600
+        Tue, 30 Aug 2022 09:43:24 -0700 (PDT)
+Date: Tue, 30 Aug 2022 10:43:23 -0600
 From: Alex Williamson <alex.williamson@redhat.com>
 To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: "Tian, Kevin" <kevin.tian@intel.com>, Cornelia Huck <cohuck@redhat.com>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "llvm@lists.linux.dev"
- <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+Cc: Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick
  Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH 7/8] vfio: Follow the naming pattern for
- vfio_group_ioctl_unset_container()
-Message-ID: <20220830104231.0bbb7c89.alex.williamson@redhat.com>
-In-Reply-To: <YwzbB5NZGOqOsOVK@nvidia.com>
+Subject: Re: [PATCH 8/8] vfio: Split VFIO_GROUP_GET_STATUS into a function
+Message-ID: <20220830104323.14b6d460.alex.williamson@redhat.com>
+In-Reply-To: <Ywlai0AR7RuF9FlI@nvidia.com>
 References: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
-	<7-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
-	<BN9PR11MB5276B0A8F6DD36C6482F37038C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-	<YwzbB5NZGOqOsOVK@nvidia.com>
+	<8-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+	<Ywlai0AR7RuF9FlI@nvidia.com>
 Organization: Red Hat
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -71,32 +68,32 @@ X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Aug 2022 12:28:07 -0300
+On Fri, 26 Aug 2022 20:43:07 -0300
 Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> On Mon, Aug 29, 2022 at 12:41:30AM +0000, Tian, Kevin wrote:
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > Sent: Thursday, August 18, 2022 12:07 AM
-> > > 
-> > > Make it clear that this is the body of the ioctl - keep the mutex outside
-> > > the function since this function doesn't have and wouldn't benefit from
-> > > error unwind.  
+> On Wed, Aug 17, 2022 at 01:07:25PM -0300, Jason Gunthorpe wrote:
+> > This is the last sizable implementation in vfio_group_fops_unl_ioctl(),
+> > move it to a function so vfio_group_fops_unl_ioctl() is emptied out.
 > > 
-> > but doing so make unset_container() unpair with set_container() and
-> > be the only one doing additional things in main ioctl body.
+> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> > ---
+> >  drivers/vfio/vfio_main.c | 55 ++++++++++++++++++++--------------------
+> >  1 file changed, 27 insertions(+), 28 deletions(-)
 > > 
-> > I'd prefer to moving mutex inside unset_container() for better readability.  
+> > diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> > index 78957f45c37a34..6f96e6d07a5e98 100644
+> > --- a/drivers/vfio/vfio_main.c
+> > +++ b/drivers/vfio/vfio_main.c
+> > @@ -1227,6 +1227,32 @@ static int vfio_group_ioctl_get_device_fd(struct vfio_group *group,
+> >  	vfio_device_put(device);
+> >  	return ret;
+> >  }
+> > +static int vfio_group_ioctl_get_status(struct vfio_group *group,
+> > +				       struct vfio_group_status __user *arg)  
 > 
-> Yes, I tried both ways and ended up here since adding the goto unwind
-> was kind of ungainly for this function. Don't mind either way
-> 
-> The functions are not intended as strict pairs, they are ioctl
-> dispatch functions.
+> There is a missing blank line after the } here
 
-The lockdep annotation seems sufficient, but what about simply
-prefixing the unset ioctl function with underscores to reinforce the
-locking requirement, as done by the called function
-__vfio_group_unset_container()?  Thanks,
+Fixed locally if there's no other need for a respin.  Thanks,
 
 Alex
 
