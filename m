@@ -1,114 +1,98 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D5B374
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 14:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661869943; x=1693405943;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YM/tgbGk0khYfw4Cc4yOLQSvzl0VbOtmzYV4IRIQ0Fs=;
-  b=bcPzrofJvhUZNqZR2VhyR2n78fBGB4EoFPizpXFJU2aPxtdhCTFkn7th
-   YS+7AylEOaQCyu0yc4jzcp0V8qxQjcq+zz4t3yDqEFY50wyN3b2NnY/16
-   7uguhTlN01FzZINZ6/tCpUv1YlyTyinfj2hhoiwfc/vSP7Tq0BsFZMUzl
-   9fKXqet4ggmwjJOcM7kG+TxqpndLZ1UbtBQa/J80kTcMlsSXWAYdbbtp/
-   OqKOaqdG6jtcnQCEFlPXbA/3vpDrbu6AVKvgBgBLmDDklZNe/AzlwqYxE
-   B0KWQjknpbEUfC95Vq/h2JWTltDsrDYa6EUWtnJjWIGXcPwuxWlZAoKef
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="293931828"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="293931828"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 07:32:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="562665153"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 07:32:20 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oT2Hs-0000KJ-0c;
-	Tue, 30 Aug 2022 14:32:20 +0000
-Date: Tue, 30 Aug 2022 22:31:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [bvanassche:scsi-proc 3/4] drivers/scsi/esas2r/esas2r_main.c:643:12:
- warning: incompatible integer to pointer conversion assigning to 'struct
- proc_dir_entry *' from 'int'
-Message-ID: <202208302248.WGHox2Rb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BDE374;
+	Tue, 30 Aug 2022 15:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F28E1C433D6;
+	Tue, 30 Aug 2022 15:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661872389;
+	bh=Pgu0YF4oBMGHXYWgr2TFEwahMVgu94xHlgw22WwIyBU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fK9cBnGKjoVCbzqeVmKWBzw9/2/Tladl+REU5tEVU0MW5DMA2JK+EICuWAEaD3Ekg
+	 jOLXpOo3PRDVzImqYVz0IC6i5iGXps49kYZ+sSoTo9lzF0ySMEw6Ort7P4x+fk2TeP
+	 EXDJF1zCuBd6ZdEogQGN/ld1wXA34gYZTaaqC7H/klPGdivESDnFv6zcd8R8cRFCSG
+	 Jqe4FYD/xS3/r9s+1jM+ayvQVEj+jJH5Rx0PAqF/d/wVls4vorBfXzepWbs0s52tAP
+	 n4Xk+N96K8Ob/VnVgGAlbRG3ttWXFEdAUzD+8JV81vx2d92wBxemEnhckcFN3v4HBv
+	 3mFu13UZGu/PA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Vaibhav Jain <vaibhav@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] powerpc/papr_scm: Ensure rc is always initialized in papr_scm_pmu_register()
+Date: Tue, 30 Aug 2022 08:12:56 -0700
+Message-Id: <20220830151256.1473169-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/bvanassche/linux scsi-proc
-head:   9f3429c2524eb69771ca4dc34354b429324bcf9d
-commit: 9bc087eaf74989496ad8827feb0a755389b1a440 [3/4] scsi: esas2r: Introduce scsi_template_proc_dir()
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220830/202208302248.WGHox2Rb-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/9bc087eaf74989496ad8827feb0a755389b1a440
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-proc
-        git checkout 9bc087eaf74989496ad8827feb0a755389b1a440
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/esas2r/
+Clang warns:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  arch/powerpc/platforms/pseries/papr_scm.c:492:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+          if (!p->stat_buffer_len)
+              ^~~~~~~~~~~~~~~~~~~
+  arch/powerpc/platforms/pseries/papr_scm.c:523:64: note: uninitialized use occurs here
+          dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=%d\n", rc);
+                                                                        ^~
+  include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+          dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+  include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                  _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                      ^~~~~~~~~~~
+  arch/powerpc/platforms/pseries/papr_scm.c:492:2: note: remove the 'if' if its condition is always false
+          if (!p->stat_buffer_len)
+          ^~~~~~~~~~~~~~~~~~~~~~~~
+  arch/powerpc/platforms/pseries/papr_scm.c:484:8: note: initialize the variable 'rc' to silence this warning
+          int rc, nodeid;
+                ^
+                = 0
+  1 warning generated.
 
-All warnings (new ones prefixed by >>):
+The call to papr_scm_pmu_check_events() was eliminated but a return code
+was not added to the if statement. Add the same return code from
+papr_scm_pmu_check_events() for this condition so there is no more
+warning.
 
-   drivers/scsi/esas2r/esas2r_main.c:643:14: error: implicit declaration of function 'scsi_template_proc_dir' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   proc_dir = scsi_template_proc_dir(esas2r_proc_host->hostt);
-                              ^
->> drivers/scsi/esas2r/esas2r_main.c:643:12: warning: incompatible integer to pointer conversion assigning to 'struct proc_dir_entry *' from 'int' [-Wint-conversion]
-                   proc_dir = scsi_template_proc_dir(esas2r_proc_host->hostt);
-                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/esas2r/esas2r_main.c:738:15: error: implicit declaration of function 'scsi_template_proc_dir' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           proc_dir = scsi_template_proc_dir(sh->hostt);
-                                      ^
-   drivers/scsi/esas2r/esas2r_main.c:738:13: warning: incompatible integer to pointer conversion assigning to 'struct proc_dir_entry *' from 'int' [-Wint-conversion]
-                           proc_dir = scsi_template_proc_dir(sh->hostt);
-                                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 2 errors generated.
+Fixes: 9b1ac04698a4 ("powerpc/papr_scm: Fix nvdimm event mappings")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1701
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/powerpc/platforms/pseries/papr_scm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
+index 54740af21557..2f8385523a13 100644
+--- a/arch/powerpc/platforms/pseries/papr_scm.c
++++ b/arch/powerpc/platforms/pseries/papr_scm.c
+@@ -489,8 +489,10 @@ static void papr_scm_pmu_register(struct papr_scm_priv *p)
+ 		goto pmu_err_print;
+ 	}
+ 
+-	if (!p->stat_buffer_len)
++	if (!p->stat_buffer_len) {
++		rc = -ENOENT;
+ 		goto pmu_check_events_err;
++	}
+ 
+ 	nd_pmu->pmu.task_ctx_nr = perf_invalid_context;
+ 	nd_pmu->pmu.name = nvdimm_name(p->nvdimm);
 
-vim +643 drivers/scsi/esas2r/esas2r_main.c
-
-   633	
-   634	static void __exit esas2r_exit(void)
-   635	{
-   636		esas2r_log(ESAS2R_LOG_INFO, "%s called", __func__);
-   637	
-   638		if (esas2r_proc_major > 0) {
-   639			struct proc_dir_entry *proc_dir;
-   640	
-   641			esas2r_log(ESAS2R_LOG_INFO, "unregister proc");
-   642	
- > 643			proc_dir = scsi_template_proc_dir(esas2r_proc_host->hostt);
-   644			if (proc_dir)
-   645				remove_proc_entry(ATTONODE_NAME, proc_dir);
-   646			unregister_chrdev(esas2r_proc_major, ESAS2R_DRVR_NAME);
-   647	
-   648			esas2r_proc_major = 0;
-   649		}
-   650	
-   651		esas2r_log(ESAS2R_LOG_INFO, "pci_unregister_driver() called");
-   652	
-   653		pci_unregister_driver(&esas2r_pci_driver);
-   654	}
-   655	
-
+base-commit: 91926d8b7e71aaf5f84f0cf208fc5a8b7a761050
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
