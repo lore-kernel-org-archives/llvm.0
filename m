@@ -1,42 +1,42 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64102612E
-	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:31:36 +0000 (UTC)
-Received: by mail-pf1-f201.google.com with SMTP id s129-20020a625e87000000b005383388a6bcso3052109pfb.2
-        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:31:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D42612E
+	for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 23:31:39 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-335420c7bfeso190439867b3.16
+        for <llvm@lists.linux.dev>; Tue, 30 Aug 2022 16:31:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=L25uLgv5hznFOW8C65x6whtc7Tn9BJysM2Vvz8HWyDE=;
-        b=GlyX/udszzm3ETI6dGBsinPgbb2zH2Sx7UXYz/1vjC/nGY+/X7ZLW46uqN3etLOPT0
-         gV1SaWu+mT9dOl7PKHrdCe9i+XWpddw8gn1LLlyKiAiZDyL18nKBWphU62pG+hJKxRmM
-         u+uoRGf2SWIvXTlojSYkQR+2T7yMZdfaE77HWRA76cmFOBZRkZN023sEPCVRGdvc5u7V
-         WBxTSYiDyS+PUfPxQvu0l+seugBhnhEOip5lzg5qUgw3A6gDkzqA0gqRlSgn+YUgNTBq
-         ekG0EJpcTzqD+Y4jhU0JnnShqvo1JQRejynQVVRjwAZ9ll4kYjRhz7z/Zm+n5si+aKge
-         f35w==
+        bh=V3t6t7JIbAvSA8Tk+dwJ0EP+zKfoVcWxCLBhZzDbf1s=;
+        b=BJZRO63b+6qTZ95mYkmggV5gs8KD4EmwXqxKHDYQCmIwLDm3YgniZ/250yz/gIN1o1
+         UDhgouP28HoSfLMlxUzyUrie3RqWCd1jAJOvkD9cnYfXcC653F8P+perCbezg0NqrJNk
+         fMkszVMmG821mLizP9xbJci3/UVQzvsFSAjQusVLzxh/dfx2EtyYJL4EkRKZB8oJo5BX
+         YIgzdRMqwTd/pdX/aPujuGXBfS+1cow9p06p/eOjzy5gj+RcIfTa6TkVDGBQaIaT8OMp
+         TFBlAR0jRBgRhyDixp6R7SlS1vciR3OouPWVAX03TeXSLEtbzJZVJS5goMVzv3JfQDBu
+         ZFqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=L25uLgv5hznFOW8C65x6whtc7Tn9BJysM2Vvz8HWyDE=;
-        b=LuPGWyeP1WHbNU6K1A8nu0Ah6pii065lcSjLw6NH2c4RaXPTOvb8F+Du25QRtuLA6K
-         4sdJ9YKcygCFFBKjxDO38mZswP5IDW1eQ+awkWByGKDmJCmNdiOApAfaW4txA0WeLKRJ
-         4Y5KIYcTowzGg4csgCkBAaWLhuUBqt3N+6OwQ97R2v/7amwAJv6lxsrmIgKAhtDvAYPV
-         DDiRVozptAgQNcnVggqkT2AfgkBmJu0Xswwa2e6LX/tG8kJjj7uUI2mIohFOrd6zGHxL
-         /k7DeQDxWYXWuJRibcPQuJsLJXvRaQ47DbLt8/Vo/7+OKGNYhEJyQRU/yNYgsX6lVbhg
-         8o1w==
-X-Gm-Message-State: ACgBeo1/eegxlS6BX87Oiyudw1oTCsh7CH+hZ7hAr4Mkr9J0bf//uqI+
-	acCtZaS2pZqn7h3qA2DwhlhssSOQREVF8KA1DaE=
-X-Google-Smtp-Source: AA6agR6t6+RmUgXGfCDMkXtgpmsLFiEpc19Ih8//1Ts8Vdoix/62fuolHALxDz5NswEPkfsF2/qhJD8nw7h8pAHo2gs=
+        bh=V3t6t7JIbAvSA8Tk+dwJ0EP+zKfoVcWxCLBhZzDbf1s=;
+        b=fc2CrEoZYPeVZCVgA8DmUD7y1OclKm1Y78q8tI7g7D9Khyzpw3JY6tDnVkFxdDEBTQ
+         CuzDIGOFb5bZHe93WgYGrKOTij4An20zKDXu+xt2+2tX/15br86e9+xNUaKulc9GKtHi
+         9DjeZUlRlRhVhtNzEPcxxZi7ayf+FE6Sv1gBwngli0U5rI8M64AysNpCTl2HeJZnyP9f
+         pWK3pwn6K8XFGKvVEa6Dl2/27VU291JIbXeZwtpfJ0/jzxwfjIY8AAhJG9zFvmxdJV48
+         dXKuBtcr+PjY+emno9LR5GjZXXSPhgLBj93n/tor6XjiBMDF7mfRLFDv71kKXOLamcwt
+         Pfxw==
+X-Gm-Message-State: ACgBeo397ORXOOwdczggUFL1hQHXa4dD5B9jU1o0Nc56rXIU8h3wjFEc
+	2gWjTiGHelIcOduiRFUobxqaifEbJMqpdVxqj/s=
+X-Google-Smtp-Source: AA6agR6LXRk/vsm3io9GudAaANlg3qlqmbPfZYO/5+9wavftY3qTlNqavlUs2mptfr8JHyP3G7J0i2tYgLtM61K8Nyw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:54d9:7143:6a7d:91d])
- (user=samitolvanen job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with
- SMTP id t9-20020a17090a024900b001e0a8a33c6cmr14044pje.0.1661902295271; Tue,
- 30 Aug 2022 16:31:35 -0700 (PDT)
-Date: Tue, 30 Aug 2022 16:31:09 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a5b:3ca:0:b0:676:e468:2879 with SMTP
+ id t10-20020a5b03ca000000b00676e4682879mr14158623ybp.239.1661902298407; Tue,
+ 30 Aug 2022 16:31:38 -0700 (PDT)
+Date: Tue, 30 Aug 2022 16:31:10 -0700
 In-Reply-To: <20220830233129.30610-1-samitolvanen@google.com>
-Message-Id: <20220830233129.30610-2-samitolvanen@google.com>
+Message-Id: <20220830233129.30610-3-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,19 +45,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220830233129.30610-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2946; i=samitolvanen@google.com;
- h=from:subject; bh=Y2KllNLLe5W3ojqZsH1L8RGIJ3+vQcqt1B34SGCIoIw=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3LFZnyR8Aq9IX9f3NCTQfZ9PLKXxM9T7+t9pe6
- XCRRtGeJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dywAKCRBMtfaEi7xW7vF8C/
- 0Q2tFR9IU/s09oK/aPYzy2OnR4Fl7grWpQwG8dbDwI9bQFdE58qu5aKvOkH1n5LoPMnx1oiPeKAua8
- Xbr93KRYEltkTaD58AlXyUTQVb8W/+WK4z5r0qhm6P2JWbCqvDwg4StkJRSB7vDn+lmR/PA0lfUQob
- tOp1QJGiNuDLFc0TbTSfqkK/xMXR6a0+FdfMXg20QKWShLiYE7bYKvgl6pguSour1sba5xcznBLxV3
- M+9Ri4Nnvzd0QnR7bku4sNbS59EpdZ9c5D6eJjbsmZwIrBklT2i9BvcfHx4n6HCM+M0pWiFtQTUUXK
- ZDwfY8tjUVanTK7afJi3m5XLWkUlmJhaxk1YjwGK1wpbf+kcj9ykRivZnnU/eqNPtW/jP1Tk3ixLUv
- ceQHLD74GD+/xpPl9+6/1b0LWdDFc2ephQ2+kiVVS5zMGX+bRduupKomCFdvdHgAf1GrFAJb7iKA9R
- JE6m9yMp4f9no/FyLoJGQiPKz1klAidmbOixNOnCretWc=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=815; i=samitolvanen@google.com;
+ h=from:subject; bh=ZsdbFV1rDPVMEEnz8gpkcJ4SEVi2nPPUZtGW8C9VlOE=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjDp3LuiRNOIXF6iWJdViGqd3zv5mS4LojAiJ+2zw1
+ RBe4TiiJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYw6dywAKCRBMtfaEi7xW7hbdC/
+ 9dH+eF9FLRfbAZmIKkZfKGLDEV4GpzyFt3DC0T+XPYawpv8d4hIHcmWOewSokNp8/RlQxEqhucG9Zn
+ axIaqhwCi2QhLKvRZcwmhKgvB25LWwrp6pMh94YrnGXvlD4ZGovDQk7afANRYpvaJuBWvNDjJMfcM9
+ IMHPn/dIoby0cmKnGFT9OKty5s0M6RvrxxqzZZEVxwms885iZiHHnH1gSB2c5RlKNgSxrpvfzr6gB5
+ VgzIUn3LcrpQ9eYEcaYRquZJotPXSZwdymKNF+l7zsSqZZzMkyXcLEY8JSPcDyhYBdFlHyA9oq+hqf
+ FOCm74Um/Gr8A1LV7ognHe7JEPGjOh7sx3AJcXUtyPCn7FtdZU2V/f+thDRCL7FfgnF9UDZs0DMpqq
+ PT0C1GB58hHVS0/Y/twOGM7f//NBSc140Y0yOTXRWtQuwHvAzfA6mSE55KlboU2m6pMC8JKeSW7PsL
+ +uWT5s6GcBEfGDclqFu6GC1EpRCfJ/6w0iOUYXTCADGSE=
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v4 01/21] treewide: Filter out CC_FLAGS_CFI
+Subject: [PATCH v4 02/21] scripts/kallsyms: Ignore __kcfi_typeid_
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -70,65 +70,28 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In preparation for removing CC_FLAGS_CFI from CC_FLAGS_LTO, explicitly
-filter out CC_FLAGS_CFI in all the makefiles where we currently filter
-out CC_FLAGS_LTO.
+The compiler generates __kcfi_typeid_ symbols for annotating assembly
+functions with type information. These are constants that can be
+referenced in assembly code and are resolved by the linker. Ignore
+them in kallsyms.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm64/kernel/vdso/Makefile       | 3 ++-
- arch/x86/entry/vdso/Makefile          | 3 ++-
- drivers/firmware/efi/libstub/Makefile | 2 ++
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ scripts/kallsyms.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index bafbf78fab77..619e2dc7ee14 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -40,7 +40,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- # kernel with CONFIG_WERROR enabled.
- CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
- 				$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
--				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
-+				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
-+				-Wmissing-prototypes -Wmissing-declarations
- KASAN_SANITIZE			:= n
- KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 12f6c4d714cd..381d3333b996 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -91,7 +91,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
- endif
- endif
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
- 
- #
-@@ -153,6 +153,7 @@ KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_CFI),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 += -m32 -msoft-float -mregparm=0 -fpic
- KBUILD_CFLAGS_32 += -fno-stack-protector
- KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index d0537573501e..234fb2910622 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -39,6 +39,8 @@ KBUILD_CFLAGS			:= $(cflags-y) -Os -DDISABLE_BRANCH_PROFILING \
- 
- # remove SCS flags from all objects in this directory
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
-+# disable CFI
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
- # disable LTO
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index f18e6dfc68c5..ccdf0c897f31 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -119,6 +119,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		"__ThumbV7PILongThunk_",
+ 		"__LA25Thunk_",		/* mips lld */
+ 		"__microLA25Thunk_",
++		"__kcfi_typeid_",	/* CFI type identifiers */
+ 		NULL
+ 	};
  
 -- 
 2.37.2.672.g94769d06f0-goog
