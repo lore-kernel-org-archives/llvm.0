@@ -1,42 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBD3369
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 02:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013B4635
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 03:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661914041; x=1693450041;
+  t=1661916472; x=1693452472;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ht5B9ekbboe/7VOB1RjUCJ2PQ112/BvA7EJ9QDcm+rM=;
-  b=Iqo/jqYVsP7vwA7P9T4q97prlxZFGyE203QykB4QI7+Alb72iIoMxTIY
-   h14a1BPfhGE2gSF3/7qek0yQsU6DNa4+jeRXy3tQffzQwtGx0HFR2Bbz/
-   SXi/cGdYjr+nHd4vxN4iFhfBzs2/q31xlMjT86LH2UOyjLe4yHGij8tT/
-   iIk9d5GJOUiXbfpVc8kulMyNtyK0GS04MHNuIlrP/Pp3ETvQJ+nf9O/pO
-   fm815DzjYCkWE9TC1pGQFdN9gMCB7NmzA3TTvkQkqYIuJmP5yPplFk0p0
-   Bwj6V6vLD6FV2y5b4e7G5XhjCyNVEYpDXvuM8Vt4zCUCpRtNEHTNk/7/p
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="278373858"
+  bh=mkKVLN1FVgy7KEGj++OA1lU9Vke7gXhaiVMcLeNz+f8=;
+  b=kSX0ZTrpqIXB5zlX+XC6ANOtRxSLul1BYXy28HbL3ZCbejYTcDpoWhIg
+   JDexw9USp0aF+syW+hKZpWouwsrZJyZv35jQYhtRw+o/JBkE7iBkA1Bfi
+   6yIZ8rU3gYr3u4HtKBzFDGFw/AKg9S48Tu0Mcs1BDKw3SJqHNTLmcra8I
+   XuqdnS4kvseVtjDH8DZ76CumK13wc5YoO2wcuCWBm8yPbEItEAOMcZRrg
+   Jo/b4qXtc+Xa6hSFqpGyYeCqqn7kw6bqjpLcVE6qcVxmjR0ByIs4rZ9xc
+   NqGqEGkUkx7ElEJg+0KranIg2M5o0sXKgiaNLFmiDKMW0D9DBSLJ/Oavm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="357079866"
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="278373858"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:46:50 -0700
+   d="scan'208";a="357079866"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 20:27:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="680273529"
+   d="scan'208";a="562901092"
 Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Aug 2022 19:46:49 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 20:27:50 -0700
 Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oTDke-0000uN-1O;
-	Wed, 31 Aug 2022 02:46:48 +0000
-Date: Wed, 31 Aug 2022 10:46:17 +0800
+	id 1oTEOL-0000wK-2X;
+	Wed, 31 Aug 2022 03:27:49 +0000
+Date: Wed, 31 Aug 2022 11:26:53 +0800
 From: kernel test robot <lkp@intel.com>
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 28/30] Improved symbolic error names
-Message-ID: <202208311028.RMa7Foh1-lkp@intel.com>
-References: <20220830214919.53220-29-surenb@google.com>
+Subject: Re: [RFC PATCH 29/30] dyndbg: Convert to code tagging
+Message-ID: <202208311143.j4frhpVO-lkp@intel.com>
+References: <20220830214919.53220-30-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830214919.53220-29-surenb@google.com>
+In-Reply-To: <20220830214919.53220-30-surenb@google.com>
 
 Hi Suren,
 
@@ -59,47 +59,56 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/Code-tagging-framework-and-applications/20220831-055155
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dcf8e5633e2e69ad60b730ab5905608b756a032f
-config: s390-randconfig-r044-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311028.RMa7Foh1-lkp@intel.com/config)
+config: hexagon-randconfig-r041-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311143.j4frhpVO-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1c66bacd6cde1f37d6ac96c45b389666a1334ec0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/8b71efada47e1ca3e6cb45ef71f3421ecff787df
+        # https://github.com/intel-lab-lkp/linux/commit/9a1f562c47c288adda951dac5342df8d6c8f20f5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Suren-Baghdasaryan/Code-tagging-framework-and-applications/20220831-055155
-        git checkout 8b71efada47e1ca3e6cb45ef71f3421ecff787df
+        git checkout 9a1f562c47c288adda951dac5342df8d6c8f20f5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   s390x-linux-ld: DWARF error: invalid or unhandled FORM value: 0x23
-   lib/errname.o: in function `errname_init':
->> errname.c:(.init.text+0x26): undefined reference to `codetag_register_type'
-   s390x-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0x82): undefined reference to `iounmap'
-   s390x-linux-ld: drivers/pcmcia/cistpl.o: in function `pcmcia_read_cis_mem':
-   cistpl.c:(.text+0x19a): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x21c): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x22e): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x2ee): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x37a): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x3ec): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x3fe): undefined reference to `ioremap'
-   s390x-linux-ld: drivers/pcmcia/cistpl.o: in function `pcmcia_write_cis_mem':
-   cistpl.c:(.text+0x546): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x5c2): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x5d4): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x692): undefined reference to `ioremap'
-   s390x-linux-ld: cistpl.c:(.text+0x728): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x758): undefined reference to `iounmap'
-   s390x-linux-ld: cistpl.c:(.text+0x76a): undefined reference to `ioremap'
+>> ld.lld: error: undefined symbol: codetag_lock_module_list
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced 9 more times
+--
+>> ld.lld: error: undefined symbol: codetag_init_iter
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_proc_open) in archive lib/built-in.a
+   >>> referenced 1 more times
+--
+>> ld.lld: error: undefined symbol: codetag_next_ct
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(ddebug_exec_queries) in archive lib/built-in.a
+   >>> referenced 3 more times
+--
+>> ld.lld: error: undefined symbol: codetag_register_type
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(dynamic_debug_init) in archive lib/built-in.a
+   >>> referenced by dynamic_debug.c
+   >>>               dynamic_debug.o:(dynamic_debug_init) in archive lib/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service
