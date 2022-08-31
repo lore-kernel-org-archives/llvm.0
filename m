@@ -1,43 +1,40 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D45163D
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 03:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661916472; x=1693452472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3JaKm/au0OXQLDWdCkosFEL/ZEv2MJ7D3Gzq5va63AI=;
-  b=fXw0kmTQ0QK7ZKztSXK17YULHiP/qbj4hlx6pgAXVRB+92DVAsafVD4j
-   pZc4WJu+149wlq7DA7bdpbaE1QsTrZWB1uGVy2giBRVPy3DkUy7oE2swu
-   YT6CSd9gd807pah99wYNLdTnpxonFonT+3wVldHaS55t3I65iwjKajmtB
-   3+ZOdIaUqTvMgs/R6SSaN/1di8dmHVvmDzohrhHRktnlz0b7Hjv2FNosP
-   yeXoediIUWE7tR5o15k0DSosRhVJ+ak/EmGWeUsDaMVI2RTB7OE8M66wV
-   7iQatI17UP26qUwT2MNKA0K5dxW00Uxa74DZhpxwVwlffh6oO3nfBb+Bs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292939052"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="292939052"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 20:27:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="588887017"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Aug 2022 20:27:50 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oTEOL-0000wI-2Q;
-	Wed, 31 Aug 2022 03:27:49 +0000
-Date: Wed, 31 Aug 2022 11:26:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 16/30] mm: enable slab allocation tagging for kmalloc
- and friends
-Message-ID: <202208311155.oCFXzcZ0-lkp@intel.com>
-References: <20220830214919.53220-17-surenb@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E625C367
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 04:32:58 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id fa2so5348246pjb.2;
+        Tue, 30 Aug 2022 21:32:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=2wlBh69S5T/T9iHDDZDeIpM5ED2QS1+ze35Ex3GUlR0=;
+        b=2UmQl6I6TMXU0tfbT3Fa1ORQeO9UFQMpp1TPePpsYAAqnRBj2AuQpSL3ywMFjQqThw
+         hpkLJNH7TW8+NT+N1L75+vp97lvcevWjOYrN2qOdu4CueHAfQosazuIdW9twV4PEkIHF
+         MWLqhI+h/VFSV/Xwnxk9G+qqKJg8SxDvT+5thHWzV8WI0+2M+49w4ktNDnaQr9jrEN1R
+         jbvQ3MObFUpMd55scWEYWVYmStAYmeRIuozAQEn7VWOwddW4NoFrfsCA1UGEKnFB0XZG
+         qkIgCUz+7YyyUVIEzwZ/qwWEkkQ8qWbLFQGRT1L+2cuRM0secTgOYcS8+pYgvBoIBEeZ
+         ZURA==
+X-Gm-Message-State: ACgBeo1E6Qj0adkrVe8R9sLc2ca3RRnFW+2+T3Ac1PnbPzpKsfZ3mafp
+	NBZWc+MLykPBgWp2R7P7sIo=
+X-Google-Smtp-Source: AA6agR6GYEh50FxwD7XiaLAuWExdR2R2U+/5DGkH1XMXjpl7KZVFqoEFwzIayr/3o6De0oNi4lzmTA==
+X-Received: by 2002:a17:90a:6b0d:b0:1fa:c6fe:db6 with SMTP id v13-20020a17090a6b0d00b001fac6fe0db6mr1382049pjj.99.1661920378185;
+        Tue, 30 Aug 2022 21:32:58 -0700 (PDT)
+Received: from karthik-strix-linux.karthek.com ([117.241.13.19])
+        by smtp.gmail.com with ESMTPSA id d11-20020a62f80b000000b0053624c50d74sm10208149pfh.126.2022.08.30.21.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 21:32:57 -0700 (PDT)
+Date: Wed, 31 Aug 2022 10:02:51 +0530
+From: Karthik Alapati <mail@karthek.com>
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: =ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] fs/ntfs3: fix memory leak in put_ntfs()
+Message-ID: <Yw7kc+eNDImk7+w+@karthik-strix-linux.karthek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,75 +43,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830214919.53220-17-surenb@google.com>
 
-Hi Suren,
+free options in put_ntfs() rather than in ntfs_put_super()
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc3]
-[cannot apply to vbabka-slab/for-next tip/sched/core xen-tip/linux-next next-20220830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BUG: memory leak
+unreferenced object 0xffff8881104f3720 (size 32):
+  comm "syz-executor634", pid 3605, jiffies 4294945517 (age 12.630s)
+  hex dump (first 32 bytes):
+    e0 36 4f 10 81 88 ff ff 80 57 e1 85 ff ff ff ff  .6O......W......
+    00 00 00 00 00 00 00 00 c0 ff c0 ff 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81b23ef2>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff81b23ef2>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff81b23ef2>] ntfs_init_fs_context+0x22/0x1e0 fs/ntfs3/super.c:1397
+    [<ffffffff81650045>] alloc_fs_context+0x225/0x3b0 fs/fs_context.c:290
+    [<ffffffff8162bed3>] do_new_mount fs/namespace.c:3025 [inline]
+    [<ffffffff8162bed3>] path_mount+0x6f3/0x10d0 fs/namespace.c:3370
+    [<ffffffff8162cffe>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8162cffe>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8162cffe>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8162cffe>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845e4855>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845e4855>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/Code-tagging-framework-and-applications/20220831-055155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dcf8e5633e2e69ad60b730ab5905608b756a032f
-config: hexagon-randconfig-r045-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311155.oCFXzcZ0-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1c66bacd6cde1f37d6ac96c45b389666a1334ec0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b57e9620f17e9b625c9d01733bd6d125758bd8e7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Suren-Baghdasaryan/Code-tagging-framework-and-applications/20220831-055155
-        git checkout b57e9620f17e9b625c9d01733bd6d125758bd8e7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+BUG: memory leak
+unreferenced object 0xffff8881104f36e0 (size 32):
+  comm "syz-executor634", pid 3605, jiffies 4294945517 (age 12.630s)
+  hex dump (first 32 bytes):
+    6d 61 63 63 79 72 69 6c 6c 69 63 00 00 00 00 00  maccyrillic.....
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814c5b1d>] kmemdup_nul+0x2d/0x70 mm/util.c:152
+    [<ffffffff8164f66e>] vfs_parse_fs_string+0x6e/0xd0 fs/fs_context.c:178
+    [<ffffffff8164f7b0>] generic_parse_monolithic+0xe0/0x130 fs/fs_context.c:224
+    [<ffffffff8162c374>] do_new_mount fs/namespace.c:3036 [inline]
+    [<ffffffff8162c374>] path_mount+0xb94/0x10d0 fs/namespace.c:3370
+    [<ffffffff8162cffe>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8162cffe>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8162cffe>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8162cffe>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845e4855>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845e4855>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Link: https://syzkaller.appspot.com/bug?id=332ba47915d0e39e94b42a622f195f0804ecb67f
+Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
+Signed-off-by: Karthik Alapati <mail@karthek.com>
+---
+ fs/ntfs3/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> mm/slab_common.c:1215: warning: expecting prototype for krealloc(). Prototype was for _krealloc() instead
-
-
-vim +1215 mm/slab_common.c
-
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1200  
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1201  /**
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1202   * krealloc - reallocate memory. The contents will remain unchanged.
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1203   * @p: object to reallocate memory for.
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1204   * @new_size: how many bytes of memory are required.
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1205   * @flags: the type of memory to allocate.
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1206   *
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1207   * The contents of the object pointed to are preserved up to the
-15d5de496bebfd Bartosz Golaszewski 2020-12-14  1208   * lesser of the new and old sizes (__GFP_ZERO flag is effectively ignored).
-15d5de496bebfd Bartosz Golaszewski 2020-12-14  1209   * If @p is %NULL, krealloc() behaves exactly like kmalloc().  If @new_size
-15d5de496bebfd Bartosz Golaszewski 2020-12-14  1210   * is 0 and @p is not a %NULL pointer, the object pointed to is freed.
-a862f68a8b3600 Mike Rapoport       2019-03-05  1211   *
-a862f68a8b3600 Mike Rapoport       2019-03-05  1212   * Return: pointer to the allocated memory or %NULL in case of error
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1213   */
-b57e9620f17e9b Suren Baghdasaryan  2022-08-30  1214  void *_krealloc(const void *p, size_t new_size, gfp_t flags)
-928cec9cd6db53 Andrey Ryabinin     2014-08-06 @1215  {
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1216  	void *ret;
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1217  
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1218  	if (unlikely(!new_size)) {
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1219  		kfree(p);
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1220  		return ZERO_SIZE_PTR;
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1221  	}
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1222  
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1223  	ret = __do_krealloc(p, new_size, flags);
-772a2fa50ffb2f Andrey Konovalov    2018-12-28  1224  	if (ret && kasan_reset_tag(p) != kasan_reset_tag(ret))
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1225  		kfree(p);
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1226  
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1227  	return ret;
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1228  }
-b57e9620f17e9b Suren Baghdasaryan  2022-08-30  1229  EXPORT_SYMBOL(_krealloc);
-928cec9cd6db53 Andrey Ryabinin     2014-08-06  1230  
-
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 47012c9bf505..ffb76a5bfd4f 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -439,6 +439,7 @@ static void init_once(void *foo)
+  */
+ static noinline void put_ntfs(struct ntfs_sb_info *sbi)
+ {
++	put_mount_options(sbi->options);
+ 	kfree(sbi->new_rec);
+ 	kvfree(ntfs_put_shared(sbi->upcase));
+ 	kfree(sbi->def_table);
+@@ -482,7 +483,6 @@ static void ntfs_put_super(struct super_block *sb)
+ 	/* Mark rw ntfs as clear, if possible. */
+ 	ntfs_set_state(sbi, NTFS_DIRTY_CLEAR);
+ 
+-	put_mount_options(sbi->options);
+ 	put_ntfs(sbi);
+ 	sb->s_fs_info = NULL;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
