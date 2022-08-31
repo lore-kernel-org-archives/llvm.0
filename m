@@ -1,81 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5591C652
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 06:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517AEC433C1;
-	Wed, 31 Aug 2022 06:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1661925914;
-	bh=SGYtE+p3Dtu7fXMJkMnYtZQdjKI8+lz4apBzmE24BwU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Leas9ssnKXdkrL04JMj7MN3/F8Ky+L1na54faAV9IGDg7hCXKUJZGk3Vb+tBt2dKN
-	 LGrhWBJ97gERfM/oo4YvDmIiUM7KGaC+m02IHuXg5TVtgSYRIQu8z8ql+E9FRX75ZV
-	 A+J5D+7S942nrwBEKrpqkjb4/cnFp/9VMJ+KSIwo=
-Date: Wed, 31 Aug 2022 08:05:28 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 3/3] HID: avoid runtime call to strlen
-Message-ID: <Yw76KBJ2+uulyC/Q@kroah.com>
-References: <20220830205309.312864-1-ndesaulniers@google.com>
- <20220830205309.312864-4-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72882361;
+	Wed, 31 Aug 2022 06:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E863C43142;
+	Wed, 31 Aug 2022 06:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661927418;
+	bh=htLQg79mi3SvkoKP5SEjIUC3OCtpqE0sPOEq4nLXHS0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=QtCR3Y5RYuUnBjmhDyX8LRveCXYFTG/m9Bk6ARazxCBxysIVT09VZIBrSX8H0JI8i
+	 ORaU74Q9xDjZ/B/2TCwVetW2tGYy4JCYrr67jLYH3YE1kIGZoDA2fczA9kVj5NZDIo
+	 XOBP84aQcScsaHqTxEgJ8Za7clV9hTJaFZZBGK02hsfMa7bgCTCEVmSequx9QbxJQu
+	 noC/KTh5PFdZbAus4JbX+1hAUwWJY6Pdq8XQe/09FWk315mZ9hxEYUfRrDux6xz9NQ
+	 aSVeOUJA/m20a84WUvKmEaI3NKcpsr7ofraI+3P/myq9XLx2EbQ1SZpsYh4dTOpxzd
+	 aqFQImSZqSqzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8E53C4166F;
+	Wed, 31 Aug 2022 06:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830205309.312864-4-ndesaulniers@google.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
+ mlx5e_rep_add_meta_tunnel_rule()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <166192741795.4297.2723160789044266807.git-patchwork-notify@kernel.org>
+Date: Wed, 31 Aug 2022 06:30:17 +0000
+References: <20220825180607.2707947-1-nathan@kernel.org>
+In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
 
-On Tue, Aug 30, 2022 at 01:53:09PM -0700, Nick Desaulniers wrote:
-> While looking into a CONFIG_FORTIFY=y related bug, I noticed that
-> hid_allocate calls strlen() on a local C string variable. This variable
-> can only have literal string values. There is no benefit to having
-> FORTIFY have this be a checked strlen call, because these are literal
-> values.  By calling strlen() explicitly in the branches of a switch, the
-> compiler can evaluate strlen("literal value") at compile time, rather
-> than at runtime.
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 25 Aug 2022 11:06:07 -0700 you wrote:
+> Clang warns:
 > 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  drivers/hid/hid-input.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>           if (IS_ERR(flow_rule)) {
+>               ^~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
+>           return err;
+>                 ^~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
+>           if (IS_ERR(flow_rule)) {
+>           ^~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
+>           int err;
+>                 ^
+>                   = 0
+>   1 error generated.
 > 
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index 48c1c02c69f4..9ad3cc88c26b 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -1922,12 +1922,15 @@ static struct hid_input *hidinput_allocate(struct hid_device *hid,
->  		switch (application) {
->  		case HID_GD_KEYBOARD:
->  			suffix = "Keyboard";
-> +			suffix_len = strlen(suffix);
->  			break;
->  		case HID_GD_KEYPAD:
->  			suffix = "Keypad";
-> +			suffix_len = strlen(suffix);
->  			break;
->  		case HID_GD_MOUSE:
->  			suffix = "Mouse";
-> +			suffix_len = strlen(suffix);
+> [...]
 
-<snip>
+Here is the summary with links:
+  - [net-next] net/mlx5e: Do not use err uninitialized in mlx5e_rep_add_meta_tunnel_rule()
+    https://git.kernel.org/netdev/net-next/c/92f97c00f0ca
 
-This seems ripe for someone to come along and go "look at this cleanup
-patch where I move all of this duplicated code to below it in one line!"
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-As this is a compiler bug, why not fix the compiler?  Or at least put a
-comment in here saying why this looks so odd to prevent it from being
-changed in the future.
 
-thanks,
-
-greg k-h
