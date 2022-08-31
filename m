@@ -1,39 +1,39 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11866468A
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:22:56 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id 78so698849pgb.13
-        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:22:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A508468A
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:23:36 +0000 (UTC)
+Received: by mail-pj1-f49.google.com with SMTP id mj6so9883843pjb.1
+        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=I/i5jIe0pyAtTiwLTepRVRpt6gmHv8ChBfodrmmozEo=;
-        b=eSmUjyzYgre0PZ1K00Cfc8tvsDugBnadfNSIUOuoe+VuxkBIDN4sFvali/8YxpY2Yy
-         JIo1eombL289lhqWvm4w90+7iwbQTGS8DQI4bTYvXQ2UGf4oRT2v6ha0ViH5ugWvQM94
-         yweXGcDiRcyk17EsCOuWNdrpHURxwoyHfpaC8=
+        bh=fS7xlk8exOPxYXHFLdn8iabPIslSYjRlhaKGdRBrbZw=;
+        b=MNJusS+5Xh80LA5c1pprHLLub+S28s+9/p/b/OOz7IAJSptPqkqQlXfv5FO9nna7My
+         MOnGz7gea2rJeQf4IClBH2ymUQoF910kZAFSn4Op4vV9G0z3m5++AuppB6fHkfzGO741
+         uZaElfhQRXmG5iRG0vhJY3t97cmpA8p041qGk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=I/i5jIe0pyAtTiwLTepRVRpt6gmHv8ChBfodrmmozEo=;
-        b=zz8CLVWfYy4r4O6fT0r6AeXYk8KlfbTl+gjcoiBKZ4HqYB70fgZxidspFDXnaTZPmR
-         /MhYtoQkVA73ZIyWZvi1xo/5VFN8L+mkjMUWHacMxggZf3b0QwRSmvvu6sr+Oohm8h17
-         4WJcl9EN5gEwWUoIxeW1DzXKyfLGGmxFeCn7+kFyVr1WVBteNRrJBBOJ0mHEOrXlkwvN
-         STfkuIdh4+SuG4XWmHQznGs+XCStNlTYhh4iFAR5G6uBdPq6tjM7rvqdcunFuDbbCWIP
-         +UbgxQxMhnUhwGpUfuD/rxjVe2nCkbQpKTmdbL/hD3b7ltMA1rw8eCgTSCP9/wOoQRN0
-         Odpw==
-X-Gm-Message-State: ACgBeo3Jo6zVqT2icU5szAsfq43pmMvT4YPfmVpqsDKJWCOFU24Xota8
-	o800k8XderoHsucOW5l+DRgECA==
-X-Google-Smtp-Source: AA6agR4SBpLEuXeN8GNzl9PJ01BUjf3qaampgOd1NHZi1cFWVwtFCQRkYKzxOrJcywDgmWTUMxK8Ag==
-X-Received: by 2002:a63:91ca:0:b0:42b:4847:90dd with SMTP id l193-20020a6391ca000000b0042b484790ddmr22369351pge.28.1661970176454;
-        Wed, 31 Aug 2022 11:22:56 -0700 (PDT)
+        bh=fS7xlk8exOPxYXHFLdn8iabPIslSYjRlhaKGdRBrbZw=;
+        b=u7GexgSUWxEvsU9WxPwnXNfTHr36IcGhEcAqavRg/2ZTAspgkKE2w2h9SVULvpAD8i
+         /4m8yj3gcXVjDjGHj22kJJnf64WcmSZ9nbhJe0bL7tcRo+35zRyYlTmbpbv2fio1hdUx
+         X9IIEZZ0N7XLzd3yw6VhiT77T0SVULXc1lxvVmXYMuuXvrJgeWJ9TJocTc+m/y2Leda9
+         rzJTL1bV/HSoUE1ZGuz5tOfr6rccwsZr6t+t6dIQ38iQUK68Hc/hiGPHq380RE6Jga6o
+         iYPxwix9P9tdWpxHpDtFNCENFyS7pkdBhKGThBU3EJSrircr+g3GnFXXunJ5nG2BkM1v
+         0YpA==
+X-Gm-Message-State: ACgBeo2NQoVYVMf435V7Vv4RuYmkMryDCOrsfoFqc6SCsPoUxwwjbAtL
+	2/+ZBBt+CzFN+ziVTwP6iqNwDQ==
+X-Google-Smtp-Source: AA6agR6p0pm5G+0tEg3FHLipUz0PBlM7zrfbRO94La2RKxHAydUxfZxpVV8PdPYV5O1NMEFkLbhxJA==
+X-Received: by 2002:a17:90b:3803:b0:1fa:ebea:e90e with SMTP id mq3-20020a17090b380300b001faebeae90emr4544973pjb.111.1661970215991;
+        Wed, 31 Aug 2022 11:23:35 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa7990f000000b0052c849d0886sm11627704pff.86.2022.08.31.11.22.55
+        by smtp.gmail.com with ESMTPSA id z9-20020a17090a170900b001fe136b4930sm1590311pjd.50.2022.08.31.11.23.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:22:55 -0700 (PDT)
-Date: Wed, 31 Aug 2022 11:22:55 -0700
+        Wed, 31 Aug 2022 11:23:35 -0700 (PDT)
+Date: Wed, 31 Aug 2022 11:23:34 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -47,10 +47,10 @@ Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 08/21] psci: Fix the function type for psci_initcall_t
-Message-ID: <202208311122.FA0ECD5782@keescook>
+Subject: Re: [PATCH v4 16/21] objtool: Disable CFI warnings
+Message-ID: <202208311123.CFD2B1B9@keescook>
 References: <20220830233129.30610-1-samitolvanen@google.com>
- <20220830233129.30610-9-samitolvanen@google.com>
+ <20220830233129.30610-17-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,14 +59,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830233129.30610-9-samitolvanen@google.com>
+In-Reply-To: <20220830233129.30610-17-samitolvanen@google.com>
 
-On Tue, Aug 30, 2022 at 04:31:16PM -0700, Sami Tolvanen wrote:
-> Functions called through a psci_initcall_t pointer all have
-> non-const arguments. Fix the type definition to avoid tripping
-> indirect call checks with CFI_CLANG.
+On Tue, Aug 30, 2022 at 04:31:24PM -0700, Sami Tolvanen wrote:
+> The __cfi_ preambles contain a mov instruction that embeds the KCFI
+> type identifier in the following format:
 > 
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+>   ; type preamble
+>   __cfi_function:
+>     mov <id>, %eax
+>   function:
+>     ...
+> 
+> While the preamble symbols are STT_FUNC and contain valid
+> instructions, they are never executed and always fall through. Skip
+> the warning for them.
+> 
+> .kcfi_traps sections point to CFI traps in text sections. Also skip
+> the warning about them referencing !ENDBR instructions.
+> 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
