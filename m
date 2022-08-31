@@ -1,129 +1,129 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205304A2B
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 17:40:38 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id bu22so18885934wrb.3
-        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 10:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=n/oAIIbQC6X9/4TYjpXgoCLnqch074NpwWXcWhpGZUU=;
-        b=kzWNO0R5mowae1zsB33fojPTZwHoiimNytdIdEM9pAl9vTa3Km02k8esak+mL45vSJ
-         XHlpH5qoILPtWK/pDKEvlh4xe4S3bsXvLbxG8xZ34ERouN2lElUkWXkQQ0wZD1QdCEvE
-         pYp2eFyBg0AModntqsO5EUP3Aoyc4RsDQngD4NVmVROQAEN4+Q6/feAv1WDh+z6PTH8Q
-         W0I9equd8n5PcsPy2cdsjGxjBafA0r5/CGliM6dOBkSkSXJAiBytlaR1eTNhV1RGBJ9v
-         bW7CANGbl7HCnIGKz483Z92xH1mfXxhkdEB4HHWLc59xZI2abJ4UQW+xDEnzDwlZ32jp
-         ZW7g==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA274A2B
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 17:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1661968097;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MFM8G20h2y86tadKGRfdgvSUOpPfLBfziDAHYvDVzjw=;
+	b=UXWfiLxOH7p6CrJyKWs+7eVVVdnhASCBK7cAkCSKTwBZHBxapWLbSJmZ9pEpjCWcqOlnx0
+	IEZsP11z1ArPQKWTckJX9Rayt+ZlWpJxNl1H0GZKL4tr/UyiSl1E0O80VD44nqEgNJvKTF
+	3RHOfdxx6k9FbxYCGpgYpf/shKlvyGE=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-446-l6_97q3OOJu_TfcruURe6Q-1; Wed, 31 Aug 2022 13:48:15 -0400
+X-MC-Unique: l6_97q3OOJu_TfcruURe6Q-1
+Received: by mail-io1-f69.google.com with SMTP id l205-20020a6b3ed6000000b0068b49dd0a61so7209966ioa.14
+        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 10:48:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=n/oAIIbQC6X9/4TYjpXgoCLnqch074NpwWXcWhpGZUU=;
-        b=1UazgMEwqxb7KYoM+Xhf7QZuGnS82rprfxbDW1oXKLx7X6ENEC9+vGRf1zQpihOvI/
-         0kuP89McpTz16m9+5/XAH74mBwpKYJDNti51YLB81nElTCppfwswxhsIJYiyJBD8kI4z
-         iXPn5OxdwLymNzensia6wJI5AdVym2pFoc4FWS2UW3iAG9/Z+n0AV6n/Hp+1UALYqJmM
-         t08afcpA+UPPYOeRo4Id30l5i8PV5Za7A/DMJ58GMwkz0bQ6Fg/IuzNwSOunV9Mrjo3Z
-         rxG15pr1qguauAKfHzYE+rG47MxGIE8MbIGkGvlJMTrIQisueQkCBj03HFjKnChR8Y3T
-         AZKw==
-X-Gm-Message-State: ACgBeo3b7tg3E7x+2jysabMwdnK8hvgdfTr/8Wzbr+DrBDl16OkG7lgU
-	6O8bAgSZLtc5v2jhuFFxqwwFRTWl/IKcKKgAse+KhQ==
-X-Google-Smtp-Source: AA6agR7jf/5wN9tWi2BmC7xA0UtJf55pCgzE1Qm3Wv4DAx6hUBuxcAAXc5Ctfg8gLto5EW/U5x+6kyyr2Z80D+5uwSI=
-X-Received: by 2002:a05:6000:813:b0:226:da5a:84a9 with SMTP id
- bt19-20020a056000081300b00226da5a84a9mr9049383wrb.309.1661967636251; Wed, 31
- Aug 2022 10:40:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=MFM8G20h2y86tadKGRfdgvSUOpPfLBfziDAHYvDVzjw=;
+        b=nEvH9+jaeTXs6jqd0mmQDVy7qkKwUszrR7ElbQCBJo79FQ5TU80/LP2kdNQwh7gi63
+         VYySMOgRj/eUP4LzUlCknaVrYUJGyQnTxB7hfkIuYrp3vg2x2rtMxxDHe/661J5lbPZN
+         EIKSzupFmVwpUGzTwmMiRh4h6/S3fXfvQRDAQ7UD53eBBiQLMVIZwOWI661flqbhNFT1
+         iNwJCKew6EY1Ld9zuI4RE15GWEo4NZeUo2wqhXrB+geEB6Y/MKhNMBhR3u0j1+P40uNO
+         qwIFVj7nb+Q/2mELmBurt+V0NHaR5h/YrOiMvEs8ShudrmzCeMY/kqjT8T2knS+yznhA
+         ou+w==
+X-Gm-Message-State: ACgBeo0rKlVswePUZ70QhwjTuq5Xg3mRqGgA8ffwR8jEIactcSgE3/+O
+	RVvQCbMOplvEaO7p4UFCUX0eGoslu+7x5GdVk2kGKwpPNyoONu6AOnRliWZ+rpaG7Wah+YyBXdq
+	87c9tNO4J58LcBA==
+X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id u3-20020a056638304300b00341d8a473e8mr15430053jak.239.1661968094896;
+        Wed, 31 Aug 2022 10:48:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6+CfcvzPBONN2iPT2RRzjHiaxFZVzBVT87w2WH85kZRbul/NpX2oCrEUi/sPZ8Y4GRBDekjw==
+X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id u3-20020a056638304300b00341d8a473e8mr15430044jak.239.1661968094717;
+        Wed, 31 Aug 2022 10:48:14 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id d7-20020a02a487000000b003428c21ed12sm6911808jam.167.2022.08.31.10.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 10:48:14 -0700 (PDT)
+Date: Wed, 31 Aug 2022 11:48:12 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: "Tian, Kevin" <kevin.tian@intel.com>, Cornelia Huck <cohuck@redhat.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH 7/8] vfio: Follow the naming pattern for
+ vfio_group_ioctl_unset_container()
+Message-ID: <20220831114812.4a8a0e95.alex.williamson@redhat.com>
+In-Reply-To: <Yw5ABqI20sMyNiG9@nvidia.com>
+References: <0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+	<7-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com>
+	<BN9PR11MB5276B0A8F6DD36C6482F37038C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+	<YwzbB5NZGOqOsOVK@nvidia.com>
+	<20220830104231.0bbb7c89.alex.williamson@redhat.com>
+	<Yw5ABqI20sMyNiG9@nvidia.com>
+Organization: Red Hat
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220826181035.859042-1-ndesaulniers@google.com> <20220826181035.859042-4-ndesaulniers@google.com>
-In-Reply-To: <20220826181035.859042-4-ndesaulniers@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 31 Aug 2022 10:40:24 -0700
-Message-ID: <CAKwvOdnOz_iH2x1a_CSBqPSbjbXcv7b3ojYa2TahWArAFjqj9A@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
-To: Andi Kleen <ak@linux.intel.com>, Arnd Bergmann <arnd@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
-	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 26, 2022 at 11:10 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Dmitrii, Fangrui, and Mashahiro note:
->
->   Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
->
-> Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
-> specified in order for -gsplit-dwarf to work at all.
+On Tue, 30 Aug 2022 13:51:18 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Looking at
-commit 866ced950bcd ("kbuild: Support split debug info v4")
-I'm curious whether -gsplit-dwarf needed to be mutually exclusive with
--g, possibly for older compilers? Andi, do you recall?
-I have gcc-9 handy; that doesn't seem to be the case. I get the same
-size binary with `-gsplit-dwarf` as I do with `-g -gsplit-dwarf`.  So
-it does seem like mutual exclusion between the two is not necessary.
+> On Tue, Aug 30, 2022 at 10:42:31AM -0600, Alex Williamson wrote:
+> > On Mon, 29 Aug 2022 12:28:07 -0300
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >   
+> > > On Mon, Aug 29, 2022 at 12:41:30AM +0000, Tian, Kevin wrote:  
+> > > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > > Sent: Thursday, August 18, 2022 12:07 AM
+> > > > > 
+> > > > > Make it clear that this is the body of the ioctl - keep the mutex outside
+> > > > > the function since this function doesn't have and wouldn't benefit from
+> > > > > error unwind.    
+> > > > 
+> > > > but doing so make unset_container() unpair with set_container() and
+> > > > be the only one doing additional things in main ioctl body.
+> > > > 
+> > > > I'd prefer to moving mutex inside unset_container() for better readability.    
+> > > 
+> > > Yes, I tried both ways and ended up here since adding the goto unwind
+> > > was kind of ungainly for this function. Don't mind either way
+> > > 
+> > > The functions are not intended as strict pairs, they are ioctl
+> > > dispatch functions.  
+> > 
+> > The lockdep annotation seems sufficient, but what about simply
+> > prefixing the unset ioctl function with underscores to reinforce the
+> > locking requirement, as done by the called function
+> > __vfio_group_unset_container()?  Thanks,  
+> 
+> Could do, but IMHO, that is not a popular convention in VFIO
+> (anymore?).
+> 
+> I've been adding lockdep annotations, not adding __ to indicate
+> the function is called with some kind of lock.
+> 
+> In my tree __vfio_group_get_from_iommu() is the only one left using
+> that style. uset_container was turned into
+> vfio_container_detatch_group() in aother series
+> 
+> Conversly we have __vfio_register_dev() which I guess __ indicates is
+> internal or wrappered, not some statement about locking. I think this
+> has become the more popular usage of the __ generally in the kernel
+> 
+> So I will do a v2 with the extra goto unwind then
+> 
+> Are there any other remarks before I do it?
 
-x86_64-gcc-5.5.0-nolibc-x86_64-linux.tar.gz from
-https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/5.5.0/
-seems to really need libisl.so.15...
-$ cd /tmp
-$ wget https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/5.5.0/x86_64-gcc-5.5.0-nolibc-x86_64-linux.tar.gz
-$ echo "void foo(void) {}" > x.c
-$ ./gcc-5.5.0-nolibc/x86_64-linux/bin/x86_64-linux-gcc-5.5.0
--gsplit-dwarf x.c -c
-/tmp/gcc-5.5.0-nolibc/x86_64-linux/bin/../libexec/gcc/x86_64-linux/5.5.0/cc1:
-error while loading shared libraries: libisl.so.15: cannot open shared
-object file: No such file or directory
-$ find /usr/lib -name libisl\*
-/usr/lib/x86_64-linux-gnu/libisl.so.23.2.0
-/usr/lib/x86_64-linux-gnu/libisl.so.23
-/usr/lib/x86_64-linux-gnu/libisl.a
-/usr/lib/x86_64-linux-gnu/libisl.so
+None from me.  The pile of things relying on this series is growing, so
+it looks like time to push v2.  Thanks,
 
->
-> Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
-> Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
-> Link: https://reviews.llvm.org/D80391
-> Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-> Reported-by: Fangrui Song <maskray@google.com>
-> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  scripts/Makefile.debug | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> index a7a6da7f6e7d..0f9912f7bd4c 100644
-> --- a/scripts/Makefile.debug
-> +++ b/scripts/Makefile.debug
-> @@ -1,10 +1,8 @@
-> -DEBUG_CFLAGS   :=
-> +DEBUG_CFLAGS   := -g
-> +KBUILD_AFLAGS  += -g
->
->  ifdef CONFIG_DEBUG_INFO_SPLIT
->  DEBUG_CFLAGS   += -gsplit-dwarf
-> -else
-> -DEBUG_CFLAGS   += -g
-> -KBUILD_AFLAGS  += -g
->  endif
->
->  ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> --
-> 2.37.2.672.g94769d06f0-goog
->
+Alex
 
-
--- 
-Thanks,
-~Nick Desaulniers
