@@ -1,44 +1,52 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D253F7E7
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 09:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2508D7E7
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 09:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661938143; x=1693474143;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GBJ1KL0AS+/TPkB2lGtEyWWMhZQldDqNk+PrCAI4uQs=;
-  b=h0M6UOesleKXJb5miF51bl60qQDXFpoQ8qDQEXKIYhRAWH+i9XdeBmhf
-   s5mQk/j6/j9jdfZz6AUQLvx6Brw3wBBsot+3neV5Zsk1V1z8P1DIe4T7a
-   0b5W7Kkr6HJ08sR+x7Nnk5JpzjLhfi1QnSZdw5ftYaj1Mp1Ajkc8u5RUy
-   NhQdXzmpAEzuV/q7SjH2J0VFbRakTdU6NBZe7PQBa/7m++H2o57cLPgjR
-   +fApcGpslgWGiQfkwed+87viepHYJUG8c9yRfSNbtMGa6HkP2M4Qm2+G2
-   PdTgS/35+U4j695uJkeT8FnEEp47v+3Ah2x+FIFFsHfX23IWCjSpAg5Cn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="359370152"
+  t=1661939406; x=1693475406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w8dohBsUnNgNN5IHL66P9ft9i1qrWZxpzUPmgsUyMx4=;
+  b=AxuD2o3jER0cNKyCdZg6dRpjPX6ragzmECxiB5wPA6S905oav/U2fE7H
+   ZFCWCAHbDjBiIUXtWa2l5xOH4gaOC6Df4YhXt1BQRnLgvJH5Mu38RYBe/
+   7dsmsnRkYgU6CDS7UjtzJJjnfHHOVCNrZUVw5J4zjM8JNqsSFOQOfVrmO
+   /FrwZRnlMSbNgo4nH42wv9HwtlYJRltUKdE8HFqaF6nBIdvK9s5wai05H
+   o7oJH7IqpCfQfcix3Qh8S5xobAn+NQEGfZPChbe86YgdbVfruJoVM6CtG
+   9VdGOMIgBBxSAbfYwsWnBWYOo/0FugU13MzJtE42UcmjcBWvw9DUuIAUx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="357131009"
 X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="359370152"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:29:03 -0700
+   d="scan'208";a="357131009"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:50:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="680369182"
+   d="scan'208";a="645177250"
 Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Aug 2022 02:29:01 -0700
+  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 02:50:02 -0700
 Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oTK1t-0000AD-0N;
-	Wed, 31 Aug 2022 09:29:01 +0000
-Date: Wed, 31 Aug 2022 17:28:32 +0800
+	id 1oTKMD-0000BB-1x;
+	Wed, 31 Aug 2022 09:50:01 +0000
+Date: Wed, 31 Aug 2022 17:49:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [avpatel:riscv_pmem_v1 9/11] arch/riscv/mm/cacheflush.c:99:2: error:
- call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202208311748.kkZGf9sX-lkp@intel.com>
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH v3 3/3] KVM: VMX: Advertise PMU LBRs if and only if perf
+ supports LBRs
+Message-ID: <202208311746.VAzmtgNx-lkp@intel.com>
+References: <20220831000051.4015031-4-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,75 +55,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220831000051.4015031-4-seanjc@google.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_pmem_v1
-head:   3d8ca09f6ee6f53dd03a1eeda6a68ef73056601e
-commit: 1cb8ad397aba3a012059dacd724ac7772bf6ea54 [9/11] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
-config: riscv-randconfig-r042-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311748.kkZGf9sX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+Hi Sean,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 372d07084593dc7a399bf9bee815711b1fb1bcf2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
+base:   372d07084593dc7a399bf9bee815711b1fb1bcf2
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220831/202208311746.VAzmtgNx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/1cb8ad397aba3a012059dacd724ac7772bf6ea54
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_pmem_v1
-        git checkout 1cb8ad397aba3a012059dacd724ac7772bf6ea54
+        # https://github.com/intel-lab-lkp/linux/commit/094f42374997562fff3f9f9637ec9aa8257490a0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
+        git checkout 094f42374997562fff3f9f9637ec9aa8257490a0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/mm/cacheflush.c:99:2: error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           for_each_of_cpu_node(node) {
+   In file included from arch/x86/kernel/asm-offsets.c:22:
+   In file included from arch/x86/kernel/../kvm/vmx/vmx.h:11:
+>> arch/x86/kernel/../kvm/vmx/capabilities.h:416:2: error: implicit declaration of function 'x86_perf_get_lbr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           x86_perf_get_lbr(&lbr);
            ^
->> arch/riscv/mm/cacheflush.c:99:28: error: expected ';' after expression
-           for_each_of_cpu_node(node) {
-                                     ^
-                                     ;
->> arch/riscv/mm/cacheflush.c:105:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
-   arch/riscv/mm/cacheflush.c:108:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
->> arch/riscv/mm/cacheflush.c:111:9: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-                         ^
-   arch/riscv/mm/cacheflush.c:113:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
-   6 errors generated.
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1207: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:222: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/for_each_of_cpu_node +99 arch/riscv/mm/cacheflush.c
+vim +/x86_perf_get_lbr +416 arch/x86/kernel/../kvm/vmx/capabilities.h
 
-    91	
-    92	#ifdef CONFIG_RISCV_ISA_ZICBOM
-    93	void riscv_init_cbom_blocksize(void)
-    94	{
-    95		struct device_node *node;
-    96		int ret;
-    97		u32 val;
-    98	
-  > 99		for_each_of_cpu_node(node) {
-   100			unsigned long hartid;
-   101			int cbom_hartid;
-   102	
-   103			ret = riscv_of_processor_hartid(node, &hartid);
-   104			if (ret)
- > 105				continue;
-   106	
-   107			if (hartid < 0)
-   108				continue;
-   109	
-   110			/* set block-size for cbom extension if available */
- > 111			ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+   403	
+   404	static inline u64 vmx_get_perf_capabilities(void)
+   405	{
+   406		u64 perf_cap = PMU_CAP_FW_WRITES;
+   407		struct x86_pmu_lbr lbr;
+   408		u64 host_perf_cap = 0;
+   409	
+   410		if (!enable_pmu)
+   411			return 0;
+   412	
+   413		if (boot_cpu_has(X86_FEATURE_PDCM))
+   414			rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+   415	
+ > 416		x86_perf_get_lbr(&lbr);
+   417		if (lbr.nr)
+   418			perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+   419	
+   420		if (vmx_pebs_supported()) {
+   421			perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
+   422			if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
+   423				perf_cap &= ~PERF_CAP_PEBS_BASELINE;
+   424		}
+   425	
+   426		return perf_cap;
+   427	}
+   428	
 
 -- 
 0-DAY CI Kernel Test Service
