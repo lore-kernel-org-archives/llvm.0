@@ -1,144 +1,151 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2089.outbound.protection.outlook.com [40.107.101.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A1F4C61
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 20:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661976748; x=1693512748;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vn/WIXt6p2KiwXZee2jPKaJHrFuZK0viV3WvtlWXyqQ=;
-  b=djwqUrxmenXuD6Bm6uguHUn8ppWmT7rUdDbh4NReU9vZ5Q0UwUIxMGS4
-   wBaB0V9XqhajreUEN3Cn+z+Mlmth0N5gcDPZduFUXCEwc/35Fq4yDu1yp
-   OWLWRDHPCZDIUz5x7nj/ud7tVSTFKV0g4q0xQtqAO6A9GZNd2EW1QlaRw
-   HBvOa56MoOyxuo51nkDJMWLNuRRsIiZkvWr7vUPnynHqkDTvSx9nXvGiX
-   8T66MtWmgRdX+JAyxsc4t48SQgRre8XstBKV/++GFCzMzl/QdIEDqC8j3
-   cW74sRKzUTxQ0sDraPdAgDEwVxc4lbXYDVIfH2UjJ6db29zXYqnEnC0SI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296816049"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="296816049"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:12:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="645355358"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 13:12:26 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oTU4X-0000fW-1U;
-	Wed, 31 Aug 2022 20:12:25 +0000
-Date: Thu, 1 Sep 2022 04:12:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
-Message-ID: <202209010444.n3YAkNP1-lkp@intel.com>
-References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF2A4C6F
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 20:16:07 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ljmE6kR47Uw+pbAkxWXXArob0jnNGjrtJUDDTGiUAyNDyQru5Vb9VaKYzm1OJ0zLQORyVAjMI3jhVBanK/1GVE8WH5nb7lGnHc/Zo8r1F6Yix7pPQS83ndxgSapftM+ZxWgTzfdjvhpJ/wTn9ChUlaql8Zt/Y4slmfBu2cKvr2YzRiOsOh1EAwNh8wC0oxGd7iTIJMB/zA/DxGxSu0vfhVaPjMcwF2kSwthmS1c7JNjIa1LUOU/b4nT/Ck8W/6GYAYJPKY3iDNGA75UgGKYtU8dj+ocCNqc6RrYopBe9pYJ3XBuxx9IbT6i69kfnwVnlF+93nJFctZ8Te3qQxGSnSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4sBWJTncenHIFCWjtvCy/umFZmvPIEypu2yEcYlniq8=;
+ b=g2GtKPkANTbAzbrGuS9/xlCoGRio8FvTExnVpCfTarfZvKjtKYAZN6L1oJx9EwESXoGl1KKWly9jw40EH5aThtSTiG8qxbuo98UMTd+uMvIAxcLo4xjbtFWp73Gb/sjLTCxickwGEc0Qwju2+E+cTBL5WQdKldj2TsaQaLMIq031CH2pJcMy+XuUj1wfAzs8DUJOycldi01RHznF1enkBOlhgq+meTaaQeG5XXfnj86xC4nK/gK20mcFrDfjfq6dvcrFn2g66OpfdAAE4xvSkVrLLwDE9GvmFZv5xd8X/OQVq/ccVwI43KohZI9IB/GLeqv6NOzxwuz7r2yHc+GcsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4sBWJTncenHIFCWjtvCy/umFZmvPIEypu2yEcYlniq8=;
+ b=cpZ+ZJ5IWiK7bfs25TLZVxo5VwuRZiFaNTxrqzYY67CIxJ04f+fenP/0qhZ4av13zUdjkAv3oaJk7/mtycGynFcit/7J4wOiLUeRytQ7blWW3+gIJCPBMIqBPO4i06vkZPoV/loD9lpbQCPqJ9ia/Yye49ZfLvjfQ8LDCFvB1fKOYQW/+L0MnJqc6xRoOVqQeQEFeeSA599UVcpxeYO0DfBs8Fa8HszjqYOp/17g5X4g9qmSj2k6gHN2/HKFAHkWXWkH7KBiSbJrRFdoXnZ4pQFQli8U8Pc9MnESNFLxJ2VrnHzbTbYvu2qEWp7prpSZUNuYsVkMz0Lgag2a69a25w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com (2603:10b6:610:a8::16)
+ by SJ1PR12MB6316.namprd12.prod.outlook.com (2603:10b6:a03:455::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Wed, 31 Aug
+ 2022 20:16:05 +0000
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::3d9f:c18a:7310:ae46]) by CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::3d9f:c18a:7310:ae46%8]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 20:16:05 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex.williamson@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	kvm@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Kevin Tian <kevin.tian@intel.com>
+Subject: [PATCH v2 0/8] Break up ioctl dispatch functions to one function per ioctl
+Date: Wed, 31 Aug 2022 17:15:55 -0300
+Message-Id: <0-v2-0f9e632d54fb+d6-vfio_ioctl_split_jgg@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR03CA0066.namprd03.prod.outlook.com
+ (2603:10b6:5:100::43) To CH2PR12MB4181.namprd12.prod.outlook.com
+ (2603:10b6:610:a8::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d0d8546d-c8ca-4d52-1bd0-08da8b8da1f1
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6316:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	L+UEk0D79n5vGUyPAx/mUvE4qZZyffCpL3cg6ZR+1j1ggM9DHqmrRC9UUz8ZeNJSfYzY4OSKe92iya3sdlGvs9geyvaMCHM1VYgY93v0PhlTn18Q1GDbP96WwlbsFrmM8c/MS2pjW/L7riq71lTmzirx4EKcRg1PSSNHRXc8Xc0zS/el3dDfWpZ4sw9CDFxiD1+tOblRo0F8lSoe8ClZOkekqUYPdkwDXd1ULsZLAnPK93eaLyUFcZdtoa9XSHxC38syLjW7C/6INrTnKxcKqFKBmNLdUnwhwxpsXRolxDrQdVu7QvNX0knaOn9Qik0wuhECYH0bjdvPoAzU+073+l8rkq66fJSiMEvDlFD7ZaJ7oPy7skIIwNVXFOf9nk4R3x438mgxAGQME9Yc8+ACckolLzscfiO/Pj06i3i89sL2UivnOebAPx2COBSZ0zYQd7mAIb5dQ54VhdvVpz80BCHgDvyfRzaz5uyEgRdNVAth3p+qgqGdv1VL8Glxv70bg32kUw5B8Vo71zIo9cxlJK6cYNtPAg8awBEXFV8omDxeaaQEA6I/xdtcCPr1L800BortsJkkcmaKsFdvO0eNj4urVAiNFmUrmnk7m61o/8OK19RUjGiXM6ZRoE2Ee6AaT5lV12XLmnvvQDIkWsIh49gKe9zyZkMBGY0ltm683g54kY4z2pRR8BGc97XdNoRuCivGri7+X6D7HQiMN0nProQg1gdoo9Pl2Bs6wbrAypUhIdBJDO5T8JZmffGCNyEX9iX3dSUVJs2fqG9w5X9xIlGg0eMRzuPqyFwfFRbkEzyZdiSeawBvpP25F/SuRIx5E/zn+c3W1sODRmlF4OT7ow==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(186003)(5660300002)(110136005)(478600001)(966005)(66946007)(66556008)(4326008)(66476007)(8676002)(316002)(6486002)(86362001)(36756003)(8936002)(41300700001)(2616005)(6666004)(38100700002)(2906002)(6506007)(83380400001)(6512007)(26005)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nXCZIqrMMg3FgJLcdeAwoH1PXzgTND2QZhS7aEJ/jPDX3+IlGjVkSC12MtrD?=
+ =?us-ascii?Q?YRbqXry+9Lfue+5nUSQwR+lbQMrD9ecZVvwVtCJ5ogspAL7pv5Wb1TLTnuHC?=
+ =?us-ascii?Q?7YXpCnq2wMucqdL04RInxZle3MpMbsB2ZgoxxxO5hR8WE7rA7uB01OgVkNk6?=
+ =?us-ascii?Q?f8FFKw2Sb6RM8tbgd56oP2EF/BWG2JW60bVBI6BQNnUhDQVbm9eCKNLWU9SM?=
+ =?us-ascii?Q?e6P+ZTYh9cSeEJWdF++yQrUQ6/BI7wiq9jdNATpnFVkazLLYW2ryHk1MQgUs?=
+ =?us-ascii?Q?WVSRN5UCdWv+1GShCxBlWGvLs0Z5idbe2EWwF5OaiB5ij3/5RaRFWaR50fCQ?=
+ =?us-ascii?Q?8jx3Qoc4Gg2glwOI6C4x3w099e4ZRWMB2GnnZ1/2PiLXStWVATeg8/yx+8lX?=
+ =?us-ascii?Q?bnRb/KKAEBZs0G0ONG1nf3CDL4D4MMZrAfdqNH+ryTsa3rDuZS6xQJtxLjS4?=
+ =?us-ascii?Q?a5nR6kY2V8A+EP8/taoSWcuXCBrU/BBXmv/Qb7CveEWrXMqFWNgkfcD2h802?=
+ =?us-ascii?Q?uaQmO14qXTpVA5BSByTlaHEkgyqw4RddWIP+5xhKyYcG2G3Gpms/mbxS1fPZ?=
+ =?us-ascii?Q?isriP/wQG1S9pOkbk8VOfwp2pHiiBfcqcj39xV2YT34U6XDN2tF4sz4ydzLG?=
+ =?us-ascii?Q?4Q6JMrQj2uCpOS6pHP9FKfZP/uRetRlluqNjYTx8P+NZQui1DfskIxZTyHhk?=
+ =?us-ascii?Q?PBHPxfObmw05ENsa1+/+oxr9GhieoYJ3rh2AOvZ5JZ541LGEMl31sM8hHhS/?=
+ =?us-ascii?Q?IgpXNxTvcaqn9b/lUyVa5T+fNwf7ykwZWzKkaRbP8rtS6xgLGFZ5MjlT5qru?=
+ =?us-ascii?Q?TiLD8Ztyz2KTAKOHhxVCA68TNHqiE/GGu1RLzsXyn8dphP5EyG4xmlKF76kZ?=
+ =?us-ascii?Q?RDsFo1aTTXQ3ehwuKEl85bT3R+SNmz3eWn/5SjRlwxXqTDxrxwfkd6HY/RfP?=
+ =?us-ascii?Q?/1kkOU1uBwz7IzRLUye3UL6lYip7IZY/BBlOH4X0g0XFx0i0a3zaHN18Yfes?=
+ =?us-ascii?Q?I1ySisVqJjl/mgf/856/bx/get1aDP9zON75PnqQFV53LJdkA6pF4YOiqWax?=
+ =?us-ascii?Q?QPBRBb0CJqgGf26cbCG7a2fDKygVAjMvSY9TU0CSmI567vsoUNZ2cPUeoN4m?=
+ =?us-ascii?Q?BsweVdHNe5t7VPwnIoD9az6egnbdfn/fEcT8IKglOjth02IawLYvgpR5Bz1C?=
+ =?us-ascii?Q?+ODTnjcZv7qOtnvwCW4BUCPvLGcGmlbpZ7TRSdQX6BepLu6UBQZ3hQdM9kq6?=
+ =?us-ascii?Q?L1dS9WaVP6JnD1/OYf0eMd/GlLt9rarhLpmfWwmQTiuqaYUEpPvWBW0l1J4a?=
+ =?us-ascii?Q?POIH0QJCTBrX/bQBvMXYqfGDqM58DQEfSNkve187A/8jX/siPZvXnweUP9SF?=
+ =?us-ascii?Q?g8p0olb6PcxHLAtvX8kR4wvskA+nJgKY/NUx2AYW6fBuJxaoMWRJLP80sMvX?=
+ =?us-ascii?Q?zyb3GuL4S0kIsP4z+lC0n2b3nrLdNHMtKqHqfjsDxVFj3v7Wo3W74xXD9sBR?=
+ =?us-ascii?Q?5b7sFGt/DbGuwzyiBip9vQNGYGWo8eGKni2Cfz4m1weCpjDBShJgAs9gXS0r?=
+ =?us-ascii?Q?Eu6Z5e7bKH7D79ZNAXxb6ynzE2opE+AUupzsQ/hb?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0d8546d-c8ca-4d52-1bd0-08da8b8da1f1
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4181.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 20:16:05.1022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q3+3og0sbQ6KBm/4EsohlKdzSkP0Wrx6WiYcdWHh+aTNtQGM1c/g6nWqn3RHObUE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6316
 
-Hi Andy,
+Move ioctl dispatch functions for the group FD and PCI to follow a common
+pattern:
 
-I love your patch! Yet something to improve:
+ - One function per ioctl
+ - Function name has 'ioctl' in it
+ - Function takes in a __user pointer of the correct type
 
-[auto build test ERROR on broonie-regmap/for-next]
-[also build test ERROR on next-20220831]
-[cannot apply to linus/master v6.0-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+At least PCI has grown its single ioctl function to over 500 lines and
+needs splitting. Group is split up in the same style to make some coming
+patches more understandable.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
-config: hexagon-randconfig-r045-20220831 (https://download.01.org/0day-ci/archive/20220901/202209010444.n3YAkNP1-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1c66bacd6cde1f37d6ac96c45b389666a1334ec0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/783618682b27b5d06605086a386d64d355914b38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-        git checkout 783618682b27b5d06605086a386d64d355914b38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
+This is based on the "Remove private items from linux/vfio_pci_core.h"
+series as it has a minor conflict with it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+v2:
+ - Rebase onto the v2 "Remove private items" series with
+   vfio_pci_core_register_dev_region()
+ - Pull the locking into vfio_group_ioctl_unset_container()
+ - Add missing blank line before vfio_group_ioctl_get_status()
+ - Remove stray whitespace in 'return vfio_group_ioctl_set_container'
+ - Remove the 'ret' variable in vfio_group_fops_unl_ioctl() since
+   everything just returns directly
+v1: https://lore.kernel.org/r/0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com
 
-All errors (new ones prefixed by >>):
+Jason Gunthorpe (8):
+  vfio-pci: Fix vfio_pci_ioeventfd() to return int
+  vfio-pci: Break up vfio_pci_core_ioctl() into one function per ioctl
+  vfio-pci: Re-indent what was vfio_pci_core_ioctl()
+  vfio-pci: Replace 'void __user *' with proper types in the ioctl
+    functions
+  vfio: Fold VFIO_GROUP_GET_DEVICE_FD into vfio_group_get_device_fd()
+  vfio: Fold VFIO_GROUP_SET_CONTAINER into vfio_group_set_container()
+  vfio: Follow the naming pattern for vfio_group_ioctl_unset_container()
+  vfio: Split VFIO_GROUP_GET_STATUS into a function
 
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/base/regmap/regmap-spi-avmm.c:171:15: error: incompatible pointer types passing 'char *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-           swab32_array(buf, len / 4);
-                        ^~~
-   include/linux/swab.h:32:38: note: passing argument to parameter 'buf' here
-   static inline void swab32_array(u32 *buf, unsigned int words)
-                                        ^
-   6 warnings and 1 error generated.
+ drivers/vfio/pci/vfio_pci_core.c | 800 ++++++++++++++++---------------
+ drivers/vfio/pci/vfio_pci_priv.h |   4 +-
+ drivers/vfio/pci/vfio_pci_rdwr.c |   4 +-
+ drivers/vfio/vfio_main.c         | 161 ++++---
+ 4 files changed, 496 insertions(+), 473 deletions(-)
 
 
-vim +171 drivers/base/regmap/regmap-spi-avmm.c
-
-   168	
-   169	static void br_swap_words_32(char *buf, unsigned int len)
-   170	{
- > 171		swab32_array(buf, len / 4);
-   172	}
-   173	
-
+base-commit: c444ddba00ccce817f6e1ca6b71b041dd1007a17
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
