@@ -1,38 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394354C61
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 20:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5457C433D6;
-	Wed, 31 Aug 2022 20:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661976492;
-	bh=zKMHNZ+XLBme4WkFy77n13v6pA/KXZ5Eql5mbdiwYIY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cLb7sXLuNwOZot0OZeBWG/0+l7IPTuYWZ3wBEg+BzhOwAA/0ZICj41rSVegYddNjv
-	 n42Mn2JRIyMPbLKqj3N4uO8pOqZJbV3ChRs+/dqGgs4KxenXScsNYhypbcVFj+rGE8
-	 AoBGY878hEQZwCF8o7USVP1MpLA5PI2UicNRTNbu3LsFwv2FozWXsRIyR1DhDuFPgW
-	 Hfwrl1TCvoWA68ZwccdQzWkXWv5l2dTksjFtdzHiWCDTmnN6Jd/M94lkIpbtbNxorI
-	 x6xXurY5CWW64KBR/AzYLLFgpPDUR7fMESwNCWjqTlmJwlVDfQpgllHJRWlXF/Veup
-	 BzsPHoHJjhXPQ==
-Date: Wed, 31 Aug 2022 13:08:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, x86@kernel.org,
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-	Fangrui Song <maskray@google.com>,
-	Alexey Alexandrov <aalexand@google.com>,
-	Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 3/5] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Message-ID: <Yw+/qjgveoN0q89t@dev-arch.thelio-3990X>
-References: <20220831184408.2778264-1-ndesaulniers@google.com>
- <20220831184408.2778264-4-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A1F4C61
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 20:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661976748; x=1693512748;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vn/WIXt6p2KiwXZee2jPKaJHrFuZK0viV3WvtlWXyqQ=;
+  b=djwqUrxmenXuD6Bm6uguHUn8ppWmT7rUdDbh4NReU9vZ5Q0UwUIxMGS4
+   wBaB0V9XqhajreUEN3Cn+z+Mlmth0N5gcDPZduFUXCEwc/35Fq4yDu1yp
+   OWLWRDHPCZDIUz5x7nj/ud7tVSTFKV0g4q0xQtqAO6A9GZNd2EW1QlaRw
+   HBvOa56MoOyxuo51nkDJMWLNuRRsIiZkvWr7vUPnynHqkDTvSx9nXvGiX
+   8T66MtWmgRdX+JAyxsc4t48SQgRre8XstBKV/++GFCzMzl/QdIEDqC8j3
+   cW74sRKzUTxQ0sDraPdAgDEwVxc4lbXYDVIfH2UjJ6db29zXYqnEnC0SI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296816049"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="296816049"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:12:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="645355358"
+Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 13:12:26 -0700
+Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oTU4X-0000fW-1U;
+	Wed, 31 Aug 2022 20:12:25 +0000
+Date: Thu, 1 Sep 2022 04:12:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
+Message-ID: <202209010444.n3YAkNP1-lkp@intel.com>
+References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,204 +49,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831184408.2778264-4-ndesaulniers@google.com>
+In-Reply-To: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
 
-On Wed, Aug 31, 2022 at 11:44:06AM -0700, Nick Desaulniers wrote:
-> cc-ifversion is GCC specific. Replace it with compiler specific
-> variants. Update the users of cc-ifversion to use these new macros.
-> Provide a helper for checking compiler versions for GCC and Clang
-> simultaneously, that will be used in a follow up patch.
-> 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Link: https://github.com/ClangBuiltLinux/linux/issues/350
-> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-> Suggested-by: Bill Wendling <morbo@google.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Hi Andy,
 
-These are so much nicer. I find the name kind of awkward but the only
-thing I could come up with that sounded better was 'gcc-is-at-least' or
-'clang-is-at-least' and I don't really feel like painting sheds today,
-it's hot outside :)
+I love your patch! Yet something to improve:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+[auto build test ERROR on broonie-regmap/for-next]
+[also build test ERROR on next-20220831]
+[cannot apply to linus/master v6.0-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Some comments below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/swab-Add-array-operations/20220831-225514
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+config: hexagon-randconfig-r045-20220831 (https://download.01.org/0day-ci/archive/20220901/202209010444.n3YAkNP1-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1c66bacd6cde1f37d6ac96c45b389666a1334ec0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/783618682b27b5d06605086a386d64d355914b38
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/swab-Add-array-operations/20220831-225514
+        git checkout 783618682b27b5d06605086a386d64d355914b38
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
 
-> ---
-> Changes v1 -> v2:
-> * New patch.
-> 
->  Documentation/kbuild/makefiles.rst          | 44 +++++++++++++++------
->  Makefile                                    |  4 +-
->  drivers/gpu/drm/amd/display/dc/dml/Makefile | 12 ++----
->  scripts/Makefile.compiler                   | 15 +++++--
->  4 files changed, 49 insertions(+), 26 deletions(-)
-> 
-> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-> index 11a296e52d68..e46f5b45c422 100644
-> --- a/Documentation/kbuild/makefiles.rst
-> +++ b/Documentation/kbuild/makefiles.rst
-> @@ -682,22 +682,42 @@ more details, with real examples.
->  	In the above example, -Wno-unused-but-set-variable will be added to
->  	KBUILD_CFLAGS only if gcc really accepts it.
->  
-> -    cc-ifversion
-> -	cc-ifversion tests the version of $(CC) and equals the fourth parameter
-> -	if version expression is true, or the fifth (if given) if the version
-> -	expression is false.
-> +    gcc-min-version
-> +	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
-> +	or equal to the provided value and evaluates to y if so.
->  
->  	Example::
->  
-> -		#fs/reiserfs/Makefile
-> -		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
-> +		cflags-$(call gcc-min-version, 70100) := -foo
->  
-> -	In this example, ccflags-y will be assigned the value -O1 if the
-> -	$(CC) version is less than 4.2.
-> -	cc-ifversion takes all the shell operators:
-> -	-eq, -ne, -lt, -le, -gt, and -ge
-> -	The third parameter may be a text as in this example, but it may also
-> -	be an expanded variable or a macro.
-> +	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
-> +	$(CONFIG_GCC_VERSION) is >= 7.1.
-> +
-> +    clang-min-version
-> +	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
-> +	than or equal to the provided value and evaluates to y if so.
-> +
-> +	Example::
-> +
-> +		cflags-$(call clang-min-version, 110000) := -foo
-> +
-> +	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
-> +	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
-> +
-> +    cc-min-version
-> +	cc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater
-> +	than or equal to the first value provided, or if the value of
-> +	$(CONFIG_CLANG_VERSION) is greater than or equal to the second value
-> +	provided, and evaluates
-> +	to y if so.
-> +
-> +	Example::
-> +
-> +		cflags-$(call cc-min-version, 70100, 110000) := -foo
-> +
-> +	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
-> +	$(CONFIG_GCC_VERSION) is >= 7.1, or if $(CC) is clang and
-> +	$(CONFIG_CLANG_VERSION) is >= 11.0.0.
->  
->      cc-cross-prefix
->  	cc-cross-prefix is used to check if there exists a $(CC) in path with
-> diff --git a/Makefile b/Makefile
-> index 952d354069a4..caa39ecb1136 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -972,7 +972,7 @@ ifdef CONFIG_CC_IS_GCC
->  KBUILD_CFLAGS += -Wno-maybe-uninitialized
->  endif
->  
-> -ifdef CONFIG_CC_IS_GCC
-> +ifeq ($(call gcc-min-version, 90100),y)
->  # The allocators already balk at large sizes, so silence the compiler
->  # warnings for bounds checks involving those possible values. While
->  # -Wno-alloc-size-larger-than would normally be used here, earlier versions
-> @@ -984,7 +984,7 @@ ifdef CONFIG_CC_IS_GCC
->  # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
->  # choice, we must perform a versioned check to disable this warning.
->  # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
-> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
-> +KBUILD_CFLAGS += -Wno-alloc-size-larger-than
->  endif
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-It might be interesting to move this up to where KBUILD_CFLAGS-y is used
-to make it:
+All errors (new ones prefixed by >>):
 
-  KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
+   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/base/regmap/regmap-spi-avmm.c:171:15: error: incompatible pointer types passing 'char *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+           swab32_array(buf, len / 4);
+                        ^~~
+   include/linux/swab.h:32:38: note: passing argument to parameter 'buf' here
+   static inline void swab32_array(u32 *buf, unsigned int words)
+                                        ^
+   6 warnings and 1 error generated.
 
-But the comment would have to come with so it probably isn't worth
-doing. Just throwing it out as an observation.
 
->  
->  # disable invalid "can't wrap" optimizations for signed / pointers
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> index 86a3b5bfd699..d8ee4743b2e3 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> @@ -33,20 +33,14 @@ ifdef CONFIG_PPC64
->  dml_ccflags := -mhard-float -maltivec
->  endif
->  
-> -ifdef CONFIG_CC_IS_GCC
-> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
-> -IS_OLD_GCC = 1
-> -endif
-> -endif
-> -
->  ifdef CONFIG_X86
-> -ifdef IS_OLD_GCC
-> +ifeq ($(call gcc-min-version, 70100),y)
-> +dml_ccflags += -msse2
+vim +171 drivers/base/regmap/regmap-spi-avmm.c
 
-I think you just dropped '-msse2' for clang.
+   168	
+   169	static void br_swap_words_32(char *buf, unsigned int len)
+   170	{
+ > 171		swab32_array(buf, len / 4);
+   172	}
+   173	
 
-I guess this wants to be:
-
-  ifeq ($(call cc-min-version, 70100, 110000),y)
-
-but it kind of feels bad to hardcode the kernel's minimum supported
-version of clang somewhere that is not super easy to grep for when we
-upgrade it (I guess I'll add cc-min-version to my list of things to look
-for, in addition to the Kconfig variables). Perhaps we should codify it
-in a place that can be used within make (using
-'scripts/min-tool-version.sh' even) so that we could do something like:
-
-  ifeq ($(call cc-min-version, 70100, $(MIN_CLANG_VERSION)),y)
-
-Up to you though.
-
-> +else
->  # Stack alignment mismatch, proceed with caution.
->  # GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
->  # (8B stack alignment).
->  dml_ccflags += -mpreferred-stack-boundary=4
-> -else
-> -dml_ccflags += -msse2
->  endif
->  endif
->  
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index d1739f0d3ce3..13dade724fa3 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -61,9 +61,18 @@ cc-option-yn = $(call try-run,\
->  cc-disable-warning = $(call try-run,\
->  	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
->  
-> -# cc-ifversion
-> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
-> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
-> +# gcc-min-version
-> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
-> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
-> +
-> +# clang-min-version
-> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
-> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-> +
-> +# cc-min-version
-> +# Usage: cflags-$(call cc-min-version, 701000, 110000)
-> +#                                      ^ GCC   ^ Clang
-> +cc-min-version = $(filter y, $(call gcc-min-version, $(1)), $(call clang-min-version, $(2)))
->  
->  # ld-option
->  # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
