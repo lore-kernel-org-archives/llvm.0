@@ -1,147 +1,108 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CB8320A
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:35:00 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id 202so14217100pgc.8
-        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:35:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8967A320A
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:44:13 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id y81-20020a253254000000b0069339437485so2733421yby.5
+        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=BF6HZWh0lIO6JP7Iahnyp/DPpNq7NYWD0O6mpa00wm0=;
-        b=WMT7IblMUP6IbINyxYOTTk3/5C/SsZwEz/PStR1GnxNGEiTOBTx0H0bcoX7mtTZOFs
-         vW/nmQVoxpVJGmhXtPihBudI7bs7hFhQ7NNkMHCNvfgh40a1jYEzzES0ocdqAzWF06W6
-         ereG8wftpqUi6FJJpbNpjoGm7QbHY6Odaz8Fw=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=HMnrAce4vWD3UCA7lMg2iTbiqidDXP3N3F6sBkVh6kA=;
+        b=eptYYARpDhhvHfa2enq2HomA+8RjHyMXfGJJl4oe6djSqcQFOPAig8gbLpsABe8yXq
+         OMj3SA6IAcf8NwGVsmCaYZoD+UeorfMMNsPm2D6WY/4GLSKJJIvKA1/FcLwWAm+V1Aio
+         PEJXbg9147fZoOx7Pl6cvWv7DsSwszHIB7luuRgoBx9GbmFDZ2nhdumltWAXfzuACtRv
+         M8mi+hGEjyYRJCvvK8V+6BJAqqBTxJU1N9PoDVo1lCiWf8AbFPD7CWy4za+a5EWn80u9
+         1p7YbxOLD0Rpt0VDiFAHThf2RFnzotJYi8ki8bK57JW6p+3csDgYVZrQTTvszf0V7WU/
+         Catw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=BF6HZWh0lIO6JP7Iahnyp/DPpNq7NYWD0O6mpa00wm0=;
-        b=U2kxcFoaVg0Hk5WEwMAnYCgKKskkpFWo89rHRvTSh4EqPINN2eDjsiMQFPmc9u9L6x
-         vVK+YEx1Q8GlrDUqmCYAP0p96Gvn3+Ryq9sn46CDkdC8ekOhYc/QxxYYWYKLKeULriEa
-         7GlyiTnhf/taUb+MipKvw6j7yqkpM9AjR+bUSWiwjd/lgDDBHm8TwSt0sAcF2mJNzN8n
-         omv0qzZ7ZXzauMb3qFYvRbSPTY9/hLl0LnbYW/h2IpJM9UG1Tzb8YYLju8M+XRsNwi9n
-         Bw7mc6EkovFLY/aC4kjeDQ4BiaLPXJ05shT6VPzuRZEiRGbKkL+SbHx6Cv8sX+A4pbV+
-         1eBA==
-X-Gm-Message-State: ACgBeo3kWarbNZc7xd1+PcXih4V2no4TwnTmgT6OeM+PpUervrOSEmU6
-	zd0hvatCLhXTfwuu73t9bf9Uvg==
-X-Google-Smtp-Source: AA6agR7fo6VejIBMks/yQH9zBQhqvzOQ/jVgBeELe620QEE3MIqxdQctdFNdrpDaTK8wEGiOq4adhA==
-X-Received: by 2002:a05:6a00:a90:b0:530:2f3c:da43 with SMTP id b16-20020a056a000a9000b005302f3cda43mr27374922pfl.50.1661970899675;
-        Wed, 31 Aug 2022 11:34:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bm26-20020a656e9a000000b0042bd73400b6sm3642659pgb.87.2022.08.31.11.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:34:59 -0700 (PDT)
-Date: Wed, 31 Aug 2022 11:34:58 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 1/3] fortify: use __builtin_dynamic_object_size in
- __compiletime_strlen
-Message-ID: <202208311132.27EE59B@keescook>
-References: <20220830205309.312864-1-ndesaulniers@google.com>
- <20220830205309.312864-2-ndesaulniers@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=HMnrAce4vWD3UCA7lMg2iTbiqidDXP3N3F6sBkVh6kA=;
+        b=OSkVvFDe545d2gh8DYLfETCsEilOUcs5ynngIUfIKGGWAiG7uuyre4mA3D0oGDcuWn
+         5B2WIOfrrua+LDZAtNN5Pw2i6TrJgDM+JQatKGR5ZnBLak/4vWGCTThW3c/4+ChNoKqL
+         wBRqEJaIdz5sdv/LigFSodyG6MO75otJXahROmEBGo1d6CrLMTfbIGtn9b0fLmVTIgyM
+         di+/45rWThms/ZF0SryXUF568qMoYIAo2GTlE5Wh1lqSaz0bgZK5ZUkqC/5pP8zUMXW6
+         ZLof6ICCvUuLYIt4/wDOL/A41JL36tAu9dVPiYoWy9ZgUir/g3cpw8pHh7PmgaVl0F5a
+         8lTw==
+X-Gm-Message-State: ACgBeo3MGvIfoqjwUvswduzUZY3sMY95rvBu4IKBolXF5yDmQSo+P3kY
+	6IS+BtS//+kXQcDZgAfCy025dmgYR8y67XaohW0=
+X-Google-Smtp-Source: AA6agR4HPXKyje7xDSih23ECowddXTnlM8omhB/HfshCPDzUrBPoRUAAnBwmr6M7l4LvcGfkA2OwfmoMhigVBQ0feKs=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:5f5d:95d5:9a3:d41])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:1243:0:b0:337:7a6e:9984 with SMTP
+ id 64-20020a811243000000b003377a6e9984mr20145246yws.64.1661971452512; Wed, 31
+ Aug 2022 11:44:12 -0700 (PDT)
+Date: Wed, 31 Aug 2022 11:44:03 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830205309.312864-2-ndesaulniers@google.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661971447; l=2027;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=MJ8zIIzbHDfP7Z3iWSiaUiv1c1n3/TDVg9Pl6Q1NkNc=;
+ b=SLBxGFb8Uf8kJ3PXOwa6d70wUc9fm9s1Y8AVDT56OZAq30m5l4vm2Bm0fO5aCLmnwPjH1GzhwYdl
+ mZtY1qPvB13iqhak8C0rk03P3rz7kYlC514lL/fGzXXEDli2SjpI
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220831184408.2778264-1-ndesaulniers@google.com>
+Subject: [PATCH v2 0/5] fix debug info for asm and DEBUG_INFO_SPLIT
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
+	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
+	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Aug 30, 2022 at 01:53:07PM -0700, Nick Desaulniers wrote:
-> With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we
-> observe a runtime panic while running Android's Compatibility Test
-> Suite's (CTS) android.hardware.input.cts.tests.  This is stemming from a
-> strlen() call in hidinput_allocate().
-> 
-> __compiletime_strlen is implemented in terms of __builtin_object_size(),
-> then does an array access to check for NUL-termination. A quirk of
-> __builtin_object_size() is that for strings whose values are runtime
-> dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
-> of possible values when those sizes are determinable at compile time.
-> Example:
-> 
->   static const char *v = "FOO BAR";
->   static const char *y = "FOO BA";
->   unsigned long x (int z) {
->       // Returns 8, which is:
->       // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
->       return __builtin_object_size(z ? v : y, 1);
->   }
-> 
-> So when FORTIFY is enabled, the current implementation of
-> __compiletime_strlen will try to access beyond the end of y at runtime
-> using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
-> 
-> hidinput_allocate() has a local C string whose value is control flow
-> dependent on a switch statement, so __builtin_object_size(str, 1)
-> evaluates to the maximum string length, making all other cases fault on
-> the last character check. hidinput_allocate() could be cleaned up to
-> avoid runtime calls to strlen() since the local variable can only have
-> literal values, so there's no benefit to trying to fortify the strlen
-> call site there.
-> 
-> Add a Kconfig check for __builtin_dynamic_object_size(), then use that
-> when available (gcc-12+, all supported versions of clang) which avoids
-> this surprising behavior.
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  include/linux/fortify-string.h | 8 +++++++-
->  init/Kconfig                   | 3 +++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> index 3b401fa0f374..c5adad596a3f 100644
-> --- a/include/linux/fortify-string.h
-> +++ b/include/linux/fortify-string.h
-> @@ -14,11 +14,17 @@ void __read_overflow2_field(size_t avail, size_t wanted) __compiletime_warning("
->  void __write_overflow(void) __compiletime_error("detected write beyond size of object (1st parameter)");
->  void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("detected write beyond size of field (1st parameter); maybe use struct_group()?");
->  
-> +#ifdef CONFIG_CC_HAS_BUILTIN_DYNAMIC_OBJECT_SIZE
-> +#define __object_size __builtin_dynamic_object_size
-> +#else
-> +#define __object_size __builtin_object_size
-> +#endif
+Alexey reported that the fraction of unknown filename instances in
+kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+to assembler defined symbols, which regressed as a result of:
 
-Instead of a Kconfig, how about just:
+commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
 
-#if __has_builtin(__builtin_dynamic_object_size)
-# define __object_size __builtin_dynamic_object_size
-#else
-# define __object_size __builtin_object_size
-#endif
+In that commit, I allude to restoring debug info for assembler defined
+symbols in a follow up patch, but it seems I forgot to do so in
 
-?
+commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
 
-> +
->  #define __compiletime_strlen(p)					\
->  ({								\
->  	unsigned char *__p = (unsigned char *)(p);		\
->  	size_t __ret = (size_t)-1;				\
-> -	size_t __p_size = __builtin_object_size(p, 1);		\
-> +	size_t __p_size = __object_size(p, 1);			\
->  	if (__p_size != (size_t)-1) {				\
->  		size_t __p_len = __p_size - 1;			\
->  		if (__builtin_constant_p(__p[__p_len]) &&	\
+Do so requires a fixup for as-option, which seems to be failing when
+used in scripts/Makefile.debug.
 
-The fact that __builtin_object_size() will actually span control flow,
-and produce a size-inclusive result on the possible inputs is ...
-surprising and potentially quite problematic. But I'm satisfied that
-bdos appears to fix it here (since the "compiletime"ness will still get
-filtered by the __builtin_constant_p() check).
+Also includes a fix for DEBUG_INFO_SPLIT while I'm here.  Dmitrii
+reports that this has been broken since gcc-11+ & clang-12+. I'm
+guessing no one uses this .config option...since no one else has
+reported it being broken yet...
 
--Kees
+Changes from v1 -> v2:
+* 5 patches now, rather than 3.
+* Split change to arch/x86/boot/compressed/Makefile off of first patch,
+  as per Masahiro.
+* Introduce compiler specific macros, as per Bill, and eradicate
+  cc-ifversion while I'm at it.
+* Update commit message of final patch to refer to 866ced950bcd.
+
+v1: https://lore.kernel.org/llvm/20220826181035.859042-1-ndesaulniers@google.com/
+
+
+Nick Desaulniers (5):
+  x86/boot/compressed: prefer cc-option for CFLAGS additions
+  Makefile.compiler: Use KBUILD_AFLAGS for as-option
+  Makefile.compiler: replace cc-ifversion with compiler-specific macros
+  Makefile.debug: re-enable debug info for .S files
+  Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
+
+ Documentation/kbuild/makefiles.rst          | 44 +++++++++++++++------
+ Makefile                                    |  4 +-
+ arch/x86/boot/compressed/Makefile           |  2 +-
+ drivers/gpu/drm/amd/display/dc/dml/Makefile | 12 ++----
+ scripts/Makefile.compiler                   | 21 +++++++---
+ scripts/Makefile.debug                      | 26 ++++++++----
+ 6 files changed, 72 insertions(+), 37 deletions(-)
 
 -- 
-Kees Cook
+2.37.2.672.g94769d06f0-goog
+
