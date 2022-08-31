@@ -1,87 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DE72F5D;
-	Wed, 31 Aug 2022 15:21:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89678C433C1;
-	Wed, 31 Aug 2022 15:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEB646AC
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 15:22:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8951C433C1;
+	Wed, 31 Aug 2022 15:22:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661959298;
-	bh=DTL+LV2yF2EH+15dxhJXJ7zmzomlghacq3fufP//T8g=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uXMTB1pzQhVDzse2eYe/8fReXNqRMnQhKSVL2CIhKlqloRVvQDRTOewBE7hor/JOx
-	 d/aUvJZzk9oOiwH1rnRAuSiZxyCYYnjYaAT5jGThcsse21w1aulO8aykX5M27CyXQd
-	 mGY1POf0PmgNFhpHCnYtEdDXjim59m3G4gHxRyPn0Nj7eOHZNHFVGeETdKnw5rlXDp
-	 rCz4IsOUdTy235EpZoMo88pmu2v66QVenNSHBrOmOXoeGz4T59FkekGj6XoTNlK7v+
-	 y6NCuqG5j114iAEwU0jGIHlOuoDQlW0EDyRoZtTncI9XQwb+Adh+R+ck7m15a1Wrzc
-	 AC7kEk7O3SbwA==
+	s=k20201202; t=1661959351;
+	bh=UUV4vyceD/4fkQRfY+VTKvh+YKjgTH1+99icf+D7VkY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VBT0WXEsGnhXjac2NaN8BpBswK4wiw/tBVQqrXjG3zfx1Hq+Ni96+UMRPmLtA+sms
+	 agS7a7naAO4sxcDDMm+aLV8gg57LSICO1XyAz0EdAYq12BZroMqaxXEXkBJ9xWWGl6
+	 UESCZ3qQ8DiOcdbO4D56hBtywPEfdbdY4trbtWSQYubow0bd4WYz/fylqoJwGyRQG0
+	 IeNOTLD68ug592FDSZHP6x837FcFXOoKdArXDzIZ322dJJVLcfbS2mkmjPhLeb8/Ys
+	 02QzeGvk2Q6XQ9ZLZqp2CFJ7SiR4AG8xYbz4GNhzGX8v3oqYW5nZQqDDFiKbeQmiY0
+	 v+zGylo06no8g==
+Date: Wed, 31 Aug 2022 08:22:29 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
+To: kernel test robot <lkp@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] powerpc/math_emu/efp: Include module.h
-Date: Wed, 31 Aug 2022 08:20:15 -0700
-Message-Id: <20220831152014.3501664-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+	Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier
+ missing, defaults to 'int'; ISO C99 and later do not support implicit int
+Message-ID: <Yw98tcXEu0kgbrKE@dev-arch.thelio-3990X>
+References: <202208310702.3iydJVg0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208310702.3iydJVg0-lkp@intel.com>
 
-When building with a recent version of clang, there are a couple of
-errors around the call to module_init():
+On Wed, Aug 31, 2022 at 07:10:39AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+> commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+> date:   6 months ago
+> config: powerpc-tqm8560_defconfig (https://download.01.org/0day-ci/archive/20220831/202208310702.3iydJVg0-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/math-emu/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+>    module_init(spe_mathemu_init);
+>    ^
+>    int
+>    arch/powerpc/math-emu/math_efp.c:927:13: error: a parameter list without types is only allowed in a function definition
+>    module_init(spe_mathemu_init);
+>                ^
+>    2 errors generated.
 
-  arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-  module_init(spe_mathemu_init);
-  ^
-  int
-  arch/powerpc/math-emu/math_efp.c:927:13: error: a parameter list without types is only allowed in a function definition
-  module_init(spe_mathemu_init);
-              ^
-  2 errors generated.
+Thanks for the report, I've sent a fix:
 
-module_init() is a macro, which is not getting expanded because module.h
-is not included in this file. Add the include so that the macro can
-expand properly, clearing up the build failure.
+https://lore.kernel.org/20220831152014.3501664-1-nathan@kernel.org/
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-No Fixes tag because it seems likely that this is a transient include
-issue (the code builds with GCC). The robot blamed commit e8c07082a810
-("Kbuild: move to -std=gnu11") but I think that just exposed these
-errors, not caused them.
-
- arch/powerpc/math-emu/math_efp.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/powerpc/math-emu/math_efp.c b/arch/powerpc/math-emu/math_efp.c
-index 39b84e7452e1..aa3bb8da1cb9 100644
---- a/arch/powerpc/math-emu/math_efp.c
-+++ b/arch/powerpc/math-emu/math_efp.c
-@@ -17,6 +17,7 @@
- 
- #include <linux/types.h>
- #include <linux/prctl.h>
-+#include <linux/module.h>
- 
- #include <linux/uaccess.h>
- #include <asm/reg.h>
-
-base-commit: dcf8e5633e2e69ad60b730ab5905608b756a032f
--- 
-2.37.3
-
+Cheers,
+Nathan
