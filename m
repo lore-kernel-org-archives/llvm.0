@@ -1,157 +1,116 @@
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC9C7E1
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 08:28:39 +0000 (UTC)
-Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
-	by smtp.orange.fr with ESMTPA
-	id TIbgoo5DzXFXxTIc9ogpNL; Wed, 31 Aug 2022 09:58:26 +0200
-X-ME-Helo: YC20090004.ad.ts.tri-ad.global
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 31 Aug 2022 09:58:26 +0200
-X-ME-IP: 103.175.111.222
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v6 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date: Wed, 31 Aug 2022 16:57:42 +0900
-Message-Id: <20220831075742.295-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A0B372
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 08:38:15 +0000 (UTC)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHcsw1khDz67mY4;
+	Wed, 31 Aug 2022 16:34:28 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 10:38:12 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
+ 2022 09:38:11 +0100
+Date: Wed, 31 Aug 2022 09:38:10 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+CC: Andy Shevchenko <andy.shevchenko@gmail.com>, kernel test robot
+	<lkp@intel.com>, <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux
+ Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
+ warning: format specifies type 'unsigned char' but the argument has type
+ 'unsigned int'
+Message-ID: <20220831093810.00006112@huawei.com>
+In-Reply-To: <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
+References: <202208290618.wU7mHfOp-lkp@intel.com>
+	<20220830110329.00000d18@huawei.com>
+	<CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
+	<20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+On Wed, 31 Aug 2022 03:24:05 +0300
+Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() folds into a single instruction.
+> Hello Jonathan and Andy,
+> 
+> Sorry for such a late response, a couple of days ago my daughter was born.
+> So I couldn't reach my laptop :)
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
+Congratulations and good luck! :)
 
-Use __builtin_constant_p() to select between the kernel's
-__ffs()/ffz() and the __builtin_ctzl() depending on whether the
-argument is constant or not.
+> 
+> Please find my thoughts below.
+> 
+> > > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]  
+> > > >                                               "msa311-%hhx", partid);
+> > > >                                                       ~~~~   ^~~~~~
+> > > >                                                       %x
+> > > >    1 warning generated.  
+> >   
+> > > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,  
+> > > >  > 993                                                   "msa311-%hhx", partid);  
+> >   
+> > > I'm thinking intent here was to limit range of what was printed. Maybe better to use
+> > > local u8 variable or cast?
+> > >
+> > > I can fix it up if that's fine with you - or even better send me a patch that fixes
+> > > it however you prefer!  
+> > 
+> > Looking back at what Linus said about those specifiers, I would rather
+> > go with simple %x or %02x.
+> > 
+> > P.S. Surprisingly many C developers don't know the difference between
+> > %hhx and %02x, which is easy to check by
+> > 
+> >   char a = -1;
+> >   printf("%hhx <==> %02x\n", a, a);
+> >   a = 217;
+> >   printf("%hhx <==> %02x\n", a, a);  
+> 
+> Thank you for pointing to Linus answer. I have explored it at the link:
+> 
+> https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
+> 
+> Actually, Linus described one exception to this rule, which I have
+> in my patch. I have an integer which I want to print as a char.
+> I see that Linus mentions it's a bad idea. I agree with that. But
+> currently %hhx => %02x replacement breaks the requested behavior, %02x
+> will not shrink integer value to char. I want to say, maybe it's better
+> just cast the value to u8 type and print as %x. What do you think? I can
+> prepare such a patch.
+> 
+> P.S. Andy's example to show the difference between %hhx and %02x makes
+> more clear why such a replacement is not acceptable here.
+> 
+> Output:
+> ff <==> ffffffff
+> d9 <==> ffffffd9
+> 
+In this case the storage is an unsigned int, not an unsigned char.
+Hence the value will be small and positive.  So I'm fairly sure you
+won't hit the above because it's
 
-** Statistics **
+0x000000ff --> ff
+0x000000d9 --> d9
 
-On a allyesconfig, before...:
+The range is limited to 8 bits because that's all the underlying register
+holds.
 
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  3607
+Jonathan
 
-...and after:
-
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  2600
-
-So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-constant expressions and could be optimized out.
-
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-
-Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-the ret prefix (which explain the use of `grep tzcnt' instead of `grep
-bsf' in above benchmark). c.f. [1]
-
-[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-Link: http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 6ed979547086..bd49aef87ab6 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long variable__ffs(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
- 	return word;
- }
- 
--/**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 variable__ffs(word))
-+
-+static __always_inline unsigned long variable_ffz(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 variable_ffz(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
--- 
-2.35.1
 
