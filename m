@@ -1,116 +1,104 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A0B372
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 08:38:15 +0000 (UTC)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHcsw1khDz67mY4;
-	Wed, 31 Aug 2022 16:34:28 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 31 Aug 2022 10:38:12 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 09:38:11 +0100
-Date: Wed, 31 Aug 2022 09:38:10 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-CC: Andy Shevchenko <andy.shevchenko@gmail.com>, kernel test robot
-	<lkp@intel.com>, <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux
- Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
- warning: format specifies type 'unsigned char' but the argument has type
- 'unsigned int'
-Message-ID: <20220831093810.00006112@huawei.com>
-In-Reply-To: <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
-References: <202208290618.wU7mHfOp-lkp@intel.com>
-	<20220830110329.00000d18@huawei.com>
-	<CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
-	<20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A09B7E7
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 08:54:02 +0000 (UTC)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-12243fcaa67so3582fac.8
+        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 01:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=kbwQHOUbQlR2/mm4JOyIlKOeCQ9N4lWFC645O8AgNso=;
+        b=gWIE9RhdeOCDBJtLJCy1XVNrbAt1QEQNcT07eNtDEH8QP7EiVD9C/KlBVzImYNkXP/
+         5NbpegxB/4gnzxWoXRiltGyRH/9CSvUP8yYjYXUodceWmVAgCThud9abMMSJmEStzRPd
+         wMSIDWWD35TY8VCadpb9/pARVc7nl+t+jbv7o4Adysz/L4L5HWQaVsdasosTf2KxaSOd
+         P54BAtUPm8mSHhim/ZT8JLitAkfZ0gPLjWTw+qU3ygdkz/xaYgAHP1ElLmDe/iw5HViM
+         RluvYeTSYb/flZUMNyjn7jwlwUPcAJR5lwC72rMBUoJw8X4de87t8xe3T7IfKR3Ivg0A
+         ZepA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=kbwQHOUbQlR2/mm4JOyIlKOeCQ9N4lWFC645O8AgNso=;
+        b=KmwbyUvw68hq/tKNuUpfZHm1qY89ulkuSk7f+OYXEgDqLqhLCzeTAG1faduJHZkxo3
+         X4qDOEJBP6zHu1mwEd0FZVUteTG7VjVNCFPb0NZB7MdUZVFY1h3KC00CktTDft3q+Ja4
+         QLPHwtojO39KIFk5bLgeANUlA9g4rEFTkXSVHDJjbnG6lrNTp68o5DTZC8rBMRzViIkM
+         YDxvKJwpDEDXLjqZQFCs9u7woAxbaJcN+zN8CSUNpUirMtONt/XBxOO7n98NX2yZwFcW
+         iIOWgfZl1xgqrUCN/A5h8N9FX2UGyRCt/Gn8rzQN6412uSWnM0jUNqsCMOpivRCR+Ark
+         yH1g==
+X-Gm-Message-State: ACgBeo04Q4oUWKAjRHFQkA0CBm5xR9bUMK5w3ZoQAClK4rnwwrwhKLCR
+	PhlSxktnYdaghj2AX8aRh3A=
+X-Google-Smtp-Source: AA6agR5a1ByJW1wvGG66gF57NFjg4g2yXXwvd903j2PM6zbyv5lIeFnwvL+0yibjTq7ehcwtYfUQ1g==
+X-Received: by 2002:a05:6808:d4d:b0:344:863a:36fb with SMTP id w13-20020a0568080d4d00b00344863a36fbmr793701oik.235.1661936041628;
+        Wed, 31 Aug 2022 01:54:01 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id r7-20020acac107000000b003352223a14asm7201510oif.15.2022.08.31.01.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 01:54:01 -0700 (PDT)
+Date: Wed, 31 Aug 2022 01:51:49 -0700
+From: Yury Norov <yury.norov@gmail.com>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Borislav Petkov <bp@alien8.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+Message-ID: <Yw8hJS9f6SofG4/6@yury-laptop>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
 
-On Wed, 31 Aug 2022 03:24:05 +0300
-Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
+> The compilers provide some builtin expression equivalent to the ffs(),
+> __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> assembly which produces better code than the builtin
+> functions. However, such assembly code can not be folded when used
+> with constant expressions.
+> 
+> This series relies on __builtin_constant_p to select the optimal solution:
+> 
+>   * use kernel assembly for non constant expressions
+> 
+>   * use compiler's __builtin function for constant expressions.
+> 
+> 
+> ** Statistics **
+> 
+> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> of __ffs() and ffz() calls (details of the calculation in each patch).
 
-> Hello Jonathan and Andy,
-> 
-> Sorry for such a late response, a couple of days ago my daughter was born.
-> So I couldn't reach my laptop :)
+Hi Vincent,
 
-Congratulations and good luck! :)
+Can you please add a test for this? We've recently added a very similar
+test_bitmap_const_eval() in lib/test_bitmap.c.
 
-> 
-> Please find my thoughts below.
-> 
-> > > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]  
-> > > >                                               "msa311-%hhx", partid);
-> > > >                                                       ~~~~   ^~~~~~
-> > > >                                                       %x
-> > > >    1 warning generated.  
-> >   
-> > > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,  
-> > > >  > 993                                                   "msa311-%hhx", partid);  
-> >   
-> > > I'm thinking intent here was to limit range of what was printed. Maybe better to use
-> > > local u8 variable or cast?
-> > >
-> > > I can fix it up if that's fine with you - or even better send me a patch that fixes
-> > > it however you prefer!  
-> > 
-> > Looking back at what Linus said about those specifiers, I would rather
-> > go with simple %x or %02x.
-> > 
-> > P.S. Surprisingly many C developers don't know the difference between
-> > %hhx and %02x, which is easy to check by
-> > 
-> >   char a = -1;
-> >   printf("%hhx <==> %02x\n", a, a);
-> >   a = 217;
-> >   printf("%hhx <==> %02x\n", a, a);  
-> 
-> Thank you for pointing to Linus answer. I have explored it at the link:
-> 
-> https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
-> 
-> Actually, Linus described one exception to this rule, which I have
-> in my patch. I have an integer which I want to print as a char.
-> I see that Linus mentions it's a bad idea. I agree with that. But
-> currently %hhx => %02x replacement breaks the requested behavior, %02x
-> will not shrink integer value to char. I want to say, maybe it's better
-> just cast the value to u8 type and print as %x. What do you think? I can
-> prepare such a patch.
-> 
-> P.S. Andy's example to show the difference between %hhx and %02x makes
-> more clear why such a replacement is not acceptable here.
-> 
-> Output:
-> ff <==> ffffffff
-> d9 <==> ffffffd9
-> 
-In this case the storage is an unsigned int, not an unsigned char.
-Hence the value will be small and positive.  So I'm fairly sure you
-won't hit the above because it's
+dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
+assertions")
 
-0x000000ff --> ff
-0x000000d9 --> d9
+Would be nice to have something like this for ffs() and ffz() in
+lib/test_bitops.c.
 
-The range is limited to 8 bits because that's all the underlying register
-holds.
+Please keep me in loop in case of new versions.
 
-Jonathan
-
+Thanks,
+Yury
 
