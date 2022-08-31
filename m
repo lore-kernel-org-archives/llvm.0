@@ -1,53 +1,56 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8967A320A
-	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:44:13 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id y81-20020a253254000000b0069339437485so2733421yby.5
-        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:44:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22C8320A
+	for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 18:44:15 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33dd097f993so212224927b3.10
+        for <llvm@lists.linux.dev>; Wed, 31 Aug 2022 11:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
-        bh=HMnrAce4vWD3UCA7lMg2iTbiqidDXP3N3F6sBkVh6kA=;
-        b=eptYYARpDhhvHfa2enq2HomA+8RjHyMXfGJJl4oe6djSqcQFOPAig8gbLpsABe8yXq
-         OMj3SA6IAcf8NwGVsmCaYZoD+UeorfMMNsPm2D6WY/4GLSKJJIvKA1/FcLwWAm+V1Aio
-         PEJXbg9147fZoOx7Pl6cvWv7DsSwszHIB7luuRgoBx9GbmFDZ2nhdumltWAXfzuACtRv
-         M8mi+hGEjyYRJCvvK8V+6BJAqqBTxJU1N9PoDVo1lCiWf8AbFPD7CWy4za+a5EWn80u9
-         1p7YbxOLD0Rpt0VDiFAHThf2RFnzotJYi8ki8bK57JW6p+3csDgYVZrQTTvszf0V7WU/
-         Catw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc;
+        bh=6le8oKuVgvil+VEktUjcgmMbP4uznetVRcbKqcwmc9g=;
+        b=hOSBJ0dhMM/gcYrV4pHQaaLJizqGUf7PQqU9HmaLDYXQMBvqqV8eJtVT2xij1ey8fW
+         xA18V4atnIwDoGam9xmx8sC/ETkDGJyKaYMZYOodeaXCVISFSeBXTag+sHDiVL5IEtjN
+         baY8Wv7c3EYa3B1s2Dvd/wKmwFB2IXABSbOJcq3vBKYB+6EGYHPZ61tcveP91ULX47vj
+         BOiD3cYEKzcI1t+aKx9dC3cDkyFy09WVOhFbOjdDg/QdShRYru0Ht0/nBSb6vmySyqon
+         9QQvFO4hj1Bn976gID72FEHd78xT5FiynWo8dKXnH7T4P78M/PiMV0dAHUF4wQ34ndCY
+         HzWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc;
-        bh=HMnrAce4vWD3UCA7lMg2iTbiqidDXP3N3F6sBkVh6kA=;
-        b=OSkVvFDe545d2gh8DYLfETCsEilOUcs5ynngIUfIKGGWAiG7uuyre4mA3D0oGDcuWn
-         5B2WIOfrrua+LDZAtNN5Pw2i6TrJgDM+JQatKGR5ZnBLak/4vWGCTThW3c/4+ChNoKqL
-         wBRqEJaIdz5sdv/LigFSodyG6MO75otJXahROmEBGo1d6CrLMTfbIGtn9b0fLmVTIgyM
-         di+/45rWThms/ZF0SryXUF568qMoYIAo2GTlE5Wh1lqSaz0bgZK5ZUkqC/5pP8zUMXW6
-         ZLof6ICCvUuLYIt4/wDOL/A41JL36tAu9dVPiYoWy9ZgUir/g3cpw8pHh7PmgaVl0F5a
-         8lTw==
-X-Gm-Message-State: ACgBeo3MGvIfoqjwUvswduzUZY3sMY95rvBu4IKBolXF5yDmQSo+P3kY
-	6IS+BtS//+kXQcDZgAfCy025dmgYR8y67XaohW0=
-X-Google-Smtp-Source: AA6agR4HPXKyje7xDSih23ECowddXTnlM8omhB/HfshCPDzUrBPoRUAAnBwmr6M7l4LvcGfkA2OwfmoMhigVBQ0feKs=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=6le8oKuVgvil+VEktUjcgmMbP4uznetVRcbKqcwmc9g=;
+        b=iMqDUwNITqcprXw820DzO70DFO4G9ux7XL6eNdwnlzni8iPKxj8RZOWwrUgubDJuqn
+         wLxO0V0Ry6cNMG99HRuJTVMcRlNb/OSfYFvT9icQ+H/jRrFV5w4Oye13TJ366jroAvD0
+         u8/x/W3VjAZLecFwksiqc6CF5AcIgQO97uN88iouwTM0BG4WaVEGvoH1Viag/Xd9PG50
+         InlEOI4FiRsEros/o/T8uI+uucse1xx7EgTS/K2/0D1tAyyb5e4OC5gDmEDJQ+oSX/1Z
+         PqwfeMVgXNlSDx4NFSKfmBLPAjVYRo4WzxWEfotbbHk8QSlzIyA+dw/ZCPHk9T4cn8Ua
+         B4kQ==
+X-Gm-Message-State: ACgBeo0qKuZJEynFDJt0/xOhCesR4jM0MbD9Z5+wcxtCd3U2CzEhMhgc
+	4yAsKey/gn8zThlHxj8kNl31CqihyXWbeTmQEuY=
+X-Google-Smtp-Source: AA6agR45wDOUkCh/L2HDnf9K1endI406O6j9IzYUDsAfQICWpUAgKXoC+Rp0ECqLGm7Um6L/2tphQDrnjlqrAKim+p0=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:5f5d:95d5:9a3:d41])
- (user=ndesaulniers job=sendgmr) by 2002:a81:1243:0:b0:337:7a6e:9984 with SMTP
- id 64-20020a811243000000b003377a6e9984mr20145246yws.64.1661971452512; Wed, 31
- Aug 2022 11:44:12 -0700 (PDT)
-Date: Wed, 31 Aug 2022 11:44:03 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a0d:f045:0:b0:324:55ec:6595 with SMTP
+ id z66-20020a0df045000000b0032455ec6595mr19520284ywe.255.1661971454809; Wed,
+ 31 Aug 2022 11:44:14 -0700 (PDT)
+Date: Wed, 31 Aug 2022 11:44:04 -0700
+In-Reply-To: <20220831184408.2778264-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20220831184408.2778264-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1661971447; l=2027;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=MJ8zIIzbHDfP7Z3iWSiaUiv1c1n3/TDVg9Pl6Q1NkNc=;
- b=SLBxGFb8Uf8kJ3PXOwa6d70wUc9fm9s1Y8AVDT56OZAq30m5l4vm2Bm0fO5aCLmnwPjH1GzhwYdl
- mZtY1qPvB13iqhak8C0rk03P3rz7kYlC514lL/fGzXXEDli2SjpI
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661971448; l=1613;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=SUQQIb6Y+sTgOkn8ylHM+uEVIsOT1dvilITBQ2Hta9o=;
+ b=nLKSJd3L/Tgv6SsitOrCoIehfWuY3K87K27T3Hn17A3aSaePVrNvQiC6Dlex7MqpilBpzEIeUbf9
+ F8/QrNuIA98h1PJISpPwZ7+m08r3OLYFGMEeVu5PDfeUL7B2Kwdb
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220831184408.2778264-1-ndesaulniers@google.com>
-Subject: [PATCH v2 0/5] fix debug info for asm and DEBUG_INFO_SPLIT
+Message-ID: <20220831184408.2778264-2-ndesaulniers@google.com>
+Subject: [PATCH v2 1/5] x86/boot/compressed: prefer cc-option for CFLAGS additions
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
@@ -55,54 +58,42 @@ Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
 	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
 	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
+	Nick Desaulniers <ndesaulniers@google.com>, Arvind Sankar <nivedita@alum.mit.edu>
 Content-Type: text/plain; charset="UTF-8"
 
-Alexey reported that the fraction of unknown filename instances in
-kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-to assembler defined symbols, which regressed as a result of:
+We have an issue where as-option is testing new options with accumulated
+CFLAGS. This makes it so that we can't use as-option to update AFLAGS
+since many CFLAGS aren't valid AFLAGS. This is being fixed in a follow
+up patch. Before doing so, move the assembler test for
+-Wa,-mrelax-relocations=no from using as-option to cc-option.
 
-commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+Cc: Arvind Sankar <nivedita@alum.mit.edu>
+Cc: x86@kernel.org
+Link: https://lore.kernel.org/llvm/CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com/
+Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Changes v1 -> v2:
+* Split off of v1 [1/3].
+* Use cc-option to update CFLAGS, as per Masahiro.
+* Add Masahiro's Suggested-by, Cc Arvind.
 
-In that commit, I allude to restoring debug info for assembler defined
-symbols in a follow up patch, but it seems I forgot to do so in
+ arch/x86/boot/compressed/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
-
-Do so requires a fixup for as-option, which seems to be failing when
-used in scripts/Makefile.debug.
-
-Also includes a fix for DEBUG_INFO_SPLIT while I'm here.  Dmitrii
-reports that this has been broken since gcc-11+ & clang-12+. I'm
-guessing no one uses this .config option...since no one else has
-reported it being broken yet...
-
-Changes from v1 -> v2:
-* 5 patches now, rather than 3.
-* Split change to arch/x86/boot/compressed/Makefile off of first patch,
-  as per Masahiro.
-* Introduce compiler specific macros, as per Bill, and eradicate
-  cc-ifversion while I'm at it.
-* Update commit message of final patch to refer to 866ced950bcd.
-
-v1: https://lore.kernel.org/llvm/20220826181035.859042-1-ndesaulniers@google.com/
-
-
-Nick Desaulniers (5):
-  x86/boot/compressed: prefer cc-option for CFLAGS additions
-  Makefile.compiler: Use KBUILD_AFLAGS for as-option
-  Makefile.compiler: replace cc-ifversion with compiler-specific macros
-  Makefile.debug: re-enable debug info for .S files
-  Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
-
- Documentation/kbuild/makefiles.rst          | 44 +++++++++++++++------
- Makefile                                    |  4 +-
- arch/x86/boot/compressed/Makefile           |  2 +-
- drivers/gpu/drm/amd/display/dc/dml/Makefile | 12 ++----
- scripts/Makefile.compiler                   | 21 +++++++---
- scripts/Makefile.debug                      | 26 ++++++++----
- 6 files changed, 72 insertions(+), 37 deletions(-)
-
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 35ce1a64068b..85934204d905 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -49,7 +49,7 @@ KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+-KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
++KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+ 
+ # sev.c indirectly inludes inat-table.h which is generated during
 -- 
 2.37.2.672.g94769d06f0-goog
 
