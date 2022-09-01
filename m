@@ -1,45 +1,46 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E11746C
-	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 20:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870F57472
+	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 20:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662063056; x=1693599056;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j+ynEftF8w9TqUwtQOh56/Xlk2Y68ZgIoOpeQK9nxMg=;
-  b=hLiTbSrquvNzKmQb6UFaDQH5EsRXyY3oZc79rK4VZOAu+ZLUIddRm1KY
-   dpqv2f9zYrnHFBR9k7LR7gTvXKRvKZ6llXuRrJpUCJVot+w4YgLlhocXf
-   pbrVEpaDmyM6lJh92w3xfaFHF/ZrZ+s6cfnIZcdXcspo233psCWuVkN9c
-   LDAsvBoyZZL4fuaVMKx5k6aCiGq/Us8NDjeGGmFpho0kb5DL/hPzrwJfw
-   Jm33q7zbOuPrLM6NGiM+/gl8br0oGDalUYCzb0yFdwgwHXhXgaQQ3eGSM
-   vbwQQC25VOSHbmrlidqmqK1YGmWo7UqyJJoo8r/prJGgurXhv/SJGucWv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="275564540"
+  t=1662063057; x=1693599057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yh2FNOyc0UXHkef9LUAUICcRZEZhVKgffrZApOd/DcY=;
+  b=RPQBc0RgwmPUGD5Bw2y1m2YBSlAyLvwB0aBrS8GhB9zgKKHSWzMeIrF/
+   J4LrUYZ+y2FnB1EKLUXuRc1p1QSLaTjbg/QTwlIeYWrCBnwApUyHyGz9d
+   yuxq3llC0/NK/6O3MfbQDAdTHrYxUFruuLomFEKAFZYoi8W/3CIjl3m0U
+   F1KGySRCfuk1ql2+0LzudJqYUQOS7wEtKi+OvV1Z+1ueH4Oc8aaCQlB6l
+   Emm6ELmYDeCCh1p1h2qmGFj0ifJ0wcLDx4p7uSE7phDs1PB9kvmDE8RTU
+   y/j1RuAY1LHZJvOxvBMdfCnpdIaX7mGEGGYishBb1y4Hm8PYkRusI4Ru8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295826863"
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="275564540"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:10:56 -0700
+   d="scan'208";a="295826863"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:10:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="940992607"
+   d="scan'208";a="645828086"
 Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Sep 2022 13:10:54 -0700
+  by orsmga001.jf.intel.com with ESMTP; 01 Sep 2022 13:10:54 -0700
 Received: from kbuild by b138c9e8658c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oTqWb-0000jH-2j;
+	id 1oTqWb-0000jN-36;
 	Thu, 01 Sep 2022 20:10:53 +0000
-Date: Fri, 2 Sep 2022 04:10:24 +0800
+Date: Fri, 2 Sep 2022 04:10:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
+To: Ciprian Regus <ciprian.regus@analog.com>, jic23@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: [linux-next:master 3176/4736]
- drivers/staging/media/deprecated/cpia2/cpia2_usb.c:80:13: warning: variable
- 'frame_count' set but not used
-Message-ID: <202209020437.eXEOdmfe-lkp@intel.com>
+	Ciprian Regus <ciprian.regus@analog.com>
+Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
+Message-ID: <202209020413.akDnDcLc-lkp@intel.com>
+References: <20220901121700.1325733-4-ciprian.regus@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,128 +49,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220901121700.1325733-4-ciprian.regus@analog.com>
 
-Hi Hans,
+Hi Ciprian,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
-commit: be8cebc46d9d38166a1b3fda22a018ae52b0928e [3176/4736] media: cpia2: deprecate this driver
-config: riscv-randconfig-r026-20220901 (https://download.01.org/0day-ci/archive/20220902/202209020437.eXEOdmfe-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220902/202209020413.akDnDcLc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=be8cebc46d9d38166a1b3fda22a018ae52b0928e
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout be8cebc46d9d38166a1b3fda22a018ae52b0928e
+        # https://github.com/intel-lab-lkp/linux/commit/08ff9ae09bfde86fc512e13a4ea2af894e4aa442
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+        git checkout 08ff9ae09bfde86fc512e13a4ea2af894e4aa442
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/staging/media/deprecated/cpia2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/adc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/staging/media/deprecated/cpia2/cpia2_usb.c:80:13: warning: variable 'frame_count' set but not used [-Wunused-but-set-variable]
-           static int frame_count;
-                      ^
-   1 warning generated.
+>> drivers/iio/adc/ltc2497.c:60:12: error: implicit declaration of function 'get_unaligned_be24' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           *val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+                                   ^
+   drivers/iio/adc/ltc2497.c:122:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+                   .name = NULL,
+                    ^
+   drivers/iio/adc/ltc2497.c:126:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+                   .name = "ltc2499",
+                    ^
+   3 errors generated.
 
 
-vim +/frame_count +80 drivers/staging/media/deprecated/cpia2/cpia2_usb.c
+vim +/get_unaligned_be24 +60 drivers/iio/adc/ltc2497.c
 
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   71  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   72  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   73  /******************************************************************************
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   74   *
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   75   *  process_frame
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   76   *
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   77   *****************************************************************************/
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   78  static void process_frame(struct camera_data *cam)
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   79  {
-ff699e6bd02eb1c drivers/media/video/cpia2/cpia2_usb.c Douglas Schilling Landgraf 2008-04-22  @80  	static int frame_count;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   81  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   82  	unsigned char *inbuff = cam->workbuff->data;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   83  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   84  	DBG("Processing frame #%d, current:%d\n",
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   85  	    cam->workbuff->num, cam->curbuff->num);
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   86  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   87  	if(cam->workbuff->length > cam->workbuff->max_length)
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   88  		cam->workbuff->max_length = cam->workbuff->length;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   89  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   90  	if ((inbuff[0] == 0xFF) && (inbuff[1] == 0xD8)) {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   91  		frame_count++;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   92  	} else {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   93  		cam->workbuff->status = FRAME_ERROR;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   94  		DBG("Start of frame not found\n");
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   95  		return;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   96  	}
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   97  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   98  	/***
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27   99  	 * Now the output buffer should have a JPEG image in it.
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  100  	 ***/
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  101  	if(!cam->first_image_seen) {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  102  		/* Always skip the first image after streaming
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  103  		 * starts. It is almost certainly corrupt. */
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  104  		cam->first_image_seen = 1;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  105  		cam->workbuff->status = FRAME_EMPTY;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  106  		return;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  107  	}
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  108  	if (cam->workbuff->length > 3) {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  109  		if(cam->mmapped &&
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  110  		   cam->workbuff->length < cam->workbuff->max_length) {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  111  			/* No junk in the buffers */
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  112  			memset(cam->workbuff->data+cam->workbuff->length,
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  113  			       0, cam->workbuff->max_length-
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  114  				  cam->workbuff->length);
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  115  		}
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  116  		cam->workbuff->max_length = cam->workbuff->length;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  117  		cam->workbuff->status = FRAME_READY;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  118  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  119  		if(!cam->mmapped && cam->num_frames > 2) {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  120  			/* During normal reading, the most recent
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  121  			 * frame will be read.  If the current frame
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  122  			 * hasn't started reading yet, it will never
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  123  			 * be read, so mark it empty.  If the buffer is
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  124  			 * mmapped, or we have few buffers, we need to
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  125  			 * wait for the user to free the buffer.
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  126  			 *
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  127  			 * NOTE: This is not entirely foolproof with 3
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  128  			 * buffers, but it would take an EXTREMELY
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  129  			 * overloaded system to cause problems (possible
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  130  			 * image data corruption).  Basically, it would
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  131  			 * need to take more time to execute cpia2_read
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  132  			 * than it would for the camera to send
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  133  			 * cam->num_frames-2 frames before problems
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  134  			 * could occur.
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  135  			 */
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  136  			cam->curbuff->status = FRAME_EMPTY;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  137  		}
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  138  		cam->curbuff = cam->workbuff;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  139  		cam->workbuff = cam->workbuff->next;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  140  		DBG("Changed buffers, work:%d, current:%d\n",
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  141  		    cam->workbuff->num, cam->curbuff->num);
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  142  		return;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  143  	} else {
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  144  		DBG("Not enough data for an image.\n");
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  145  	}
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  146  
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  147  	cam->workbuff->status = FRAME_ERROR;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  148  	return;
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  149  }
-ab33d5071de7a33 drivers/media/video/cpia2/cpia2_usb.c Alan Cox                   2006-02-27  150  
-
-:::::: The code at line 80 was first introduced by commit
-:::::: ff699e6bd02eb1c6d02c7c2b576c2ee6caab201c V4L/DVB (7094):  static memory
-
-:::::: TO: Douglas Schilling Landgraf <dougsland@gmail.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@infradead.org>
+    34	
+    35	static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+    36					      u8 address, int *val)
+    37	{
+    38		struct ltc2497_driverdata *st =
+    39			container_of(ddata, struct ltc2497_driverdata, common_ddata);
+    40		int ret;
+    41	
+    42		if (val) {
+    43			if (st->recv_size == 3)
+    44				ret = i2c_master_recv(st->client, (char *)&st->data.d8, st->recv_size);
+    45			else
+    46				ret = i2c_master_recv(st->client, (char *)&st->data.d32, st->recv_size);
+    47	
+    48			if (ret < 0) {
+    49				dev_err(&st->client->dev, "i2c_master_recv failed\n");
+    50				return ret;
+    51			}
+    52	
+    53			/*
+    54			 * The data format is 16/24 bit 2s complement, but with an upper sign bit on the
+    55			 * resolution + 1 position, which is set for positive values only. Given this
+    56			 * bit's value, subtracting BIT(resolution + 1) from the ADC's result is
+    57			 * equivalent to a sign extension.
+    58			 */
+    59			if (st->recv_size == 3) {
+  > 60				*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+    61					- BIT(ddata->chip_info->resolution + 1);
+    62			} else {
+    63				*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
+    64					- BIT(ddata->chip_info->resolution + 1);
+    65			}
+    66		}
+    67	
+    68		ret = i2c_smbus_write_byte(st->client,
+    69					   LTC2497_ENABLE | address);
+    70		if (ret)
+    71			dev_err(&st->client->dev, "i2c transfer failed: %pe\n",
+    72				ERR_PTR(ret));
+    73		return ret;
+    74	}
+    75	
 
 -- 
 0-DAY CI Kernel Test Service
