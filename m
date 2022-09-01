@@ -1,45 +1,36 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907D07FA
-	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 01:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661997506; x=1693533506;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+QJK0DcrsKTyJk//SveBQx5j6h4eSCkpl5k0nQvH7do=;
-  b=dk+dl+xaFp5I3/LwogJ0PS17aVJZKi/gnDDeYEwAd3KGZChTKNzMbEen
-   fHQrZk0vyIMSLykme3qe4mfglX1NHc1DtJjzUkLaTFHSh5w0/ZN+IMOsU
-   vXqm0le00ql7GOqbLNvWxPjQirkqBUK1h8lHr/PMokGeQaCTu33oQY8LM
-   PUARKzKVtMEdim+twV4+rjL11daDeto4c+lhzi1J2uxYJYC8vmfljVbZc
-   OeTuR1WMGpvot4nClj2fUG7ujcgLjZX0hIWQHMEklHWSnccIWb7eF96On
-   v/PGMkWX9Eqpaz44Us+KjBT8F6GoC89ZGwa41DnfGyKhlbGso+jrUIPyX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="295599389"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="295599389"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 18:58:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="563259127"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 31 Aug 2022 18:58:22 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oTZTK-0000yC-0M;
-	Thu, 01 Sep 2022 01:58:22 +0000
-Date: Thu, 1 Sep 2022 09:58:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joanne Koong <joannelkoong@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, andrii@kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, kafai@fb.com,
-	memxor@gmail.com, toke@redhat.com, kuba@kernel.org,
-	netdev@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add skb dynptrs
-Message-ID: <202209010925.Du4GHGW9-lkp@intel.com>
-References: <20220831183224.3754305-2-joannelkoong@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88F7FA
+	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 02:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DC4C433D6;
+	Thu,  1 Sep 2022 02:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1661997814;
+	bh=hn26I+Z+QEEc80Mv6ZH9XPtHpiybQqe5cT3oqlrSiM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J5RLfnN0Wf7tzizr4PkxiOfpeC9jX2yyzDrifB16+PNiN1bqRy4+XKLULHA29u4xU
+	 BSPTY+fs7K0SyO4s26nzLffav8nRpWPRDfK051McVRF8gyKj8dQjiIKTlrrsfMfvJz
+	 rOZiItRVsGMyWUKyY38lB6Or8/8+UunCgfTRaTpm4I9XhbHQ6Yt942sww/q3pxXpoR
+	 ghEyxhnApEzRhx1oUne2bEViw7bXk2H6tMXN2cMhScMtQx07KT/6Fg3Hbz2RqfGUbm
+	 Dtn74HJrz5bVFo006oC6LxZZtll4X4Uam6ijgvEIp2BkMEHAvSrRH0xTfytwCVTv3Z
+	 lvUlScOu+SRAA==
+Date: Wed, 31 Aug 2022 19:03:32 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Kees Cook <keescook@chromium.org>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+Message-ID: <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,99 +39,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831183224.3754305-2-joannelkoong@gmail.com>
+In-Reply-To: <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
 
-Hi Joanne,
+Hi Rong,
 
-Thank you for the patch! Yet something to improve:
+On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+> 
+> 
+> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+> > On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+> > > commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+> > > date:   5 months ago
+> > > config: powerpc-buildonly-randconfig-r003-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+> > > reproduce (this is a W=1 build):
+> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >          chmod +x ~/bin/make.cross
+> > >          # install powerpc cross compiling tool for clang build
+> > >          # apt-get install binutils-powerpc-linux-gnu
+> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+> > >          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > >          git fetch --no-tags linus master
+> > >          git checkout f9b3cd24578401e7a392974b3353277286e49cee
+> > >          # save the config file
+> > >          mkdir build_dir && cp config build_dir/.config
+> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > > > powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+> > 
+> > Given this is clang 16.0.0 with
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+> > default instead of DWARF4, it looks like older binutils not
+> > understanding DWARF5. What version of binutils is being used by the bot?
+> 
+> Hi Nathan,
+> 
+> We're using binutils v2.38.90.20220713-2
+> 
+> ||/ Name           Version            Architecture Description
+> +++-==============-==================-============-==========================================
+> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler, linker and binary utilities
 
-[auto build test ERROR on bpf-next/master]
+Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
+noticed on second glance that the tuple for the objdump warning above is
+'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+(or a self compiled one) is being used. I would expect the tuple to be
+'powerpc-linux-gnu-' if Debian's package was being used. Is that
+possible?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/Add-skb-xdp-dynptrs/20220901-024122
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: hexagon-randconfig-r045-20220831 (https://download.01.org/0day-ci/archive/20220901/202209010925.Du4GHGW9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/273adaa44c063c460e9a23123957a1864c5cc26c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Joanne-Koong/Add-skb-xdp-dynptrs/20220901-024122
-        git checkout 273adaa44c063c460e9a23123957a1864c5cc26c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Cheers,
+Nathan
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from kernel/sysctl.c:35:
->> include/linux/filter.h:1540:5: warning: no previous prototype for function '__bpf_skb_load_bytes' [-Wmissing-prototypes]
-   int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
-       ^
-   include/linux/filter.h:1540:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
-   ^
-   static 
->> include/linux/filter.h:1545:5: warning: no previous prototype for function '__bpf_skb_store_bytes' [-Wmissing-prototypes]
-   int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
-       ^
-   include/linux/filter.h:1545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
-   ^
-   static 
-   2 warnings generated.
---
-   In file included from kernel/kallsyms.c:25:
->> include/linux/filter.h:1540:5: warning: no previous prototype for function '__bpf_skb_load_bytes' [-Wmissing-prototypes]
-   int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
-       ^
-   include/linux/filter.h:1540:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
-   ^
-   static 
->> include/linux/filter.h:1545:5: warning: no previous prototype for function '__bpf_skb_store_bytes' [-Wmissing-prototypes]
-   int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
-       ^
-   include/linux/filter.h:1545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *from,
-   ^
-   static 
-   kernel/kallsyms.c:570:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-              ^
-   kernel/kallsyms.c:570:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-   ^
-   static 
-   3 warnings generated.
---
->> ld.lld: error: duplicate symbol: __bpf_skb_load_bytes
-   >>> defined at filter.h:1542 (include/linux/filter.h:1542)
-   >>>            sysctl.o:(__bpf_skb_load_bytes) in archive kernel/built-in.a
-   >>> defined at filter.h:1542 (include/linux/filter.h:1542)
-   >>>            extable.o:(.text+0x0) in archive kernel/built-in.a
---
->> ld.lld: error: duplicate symbol: __bpf_skb_store_bytes
-   >>> defined at filter.h:1548 (include/linux/filter.h:1548)
-   >>>            sysctl.o:(__bpf_skb_store_bytes) in archive kernel/built-in.a
-   >>> defined at filter.h:1548 (include/linux/filter.h:1548)
-   >>>            extable.o:(.text+0x8) in archive kernel/built-in.a
---
->> ld.lld: error: duplicate symbol: __bpf_skb_load_bytes
-   >>> defined at filter.h:1542 (include/linux/filter.h:1542)
-   >>>            sysctl.o:(__bpf_skb_load_bytes) in archive kernel/built-in.a
-   >>> defined at filter.h:1542 (include/linux/filter.h:1542)
-   >>>            kallsyms.o:(.text+0x0) in archive kernel/built-in.a
---
->> ld.lld: error: duplicate symbol: __bpf_skb_store_bytes
-   >>> defined at filter.h:1548 (include/linux/filter.h:1548)
-   >>>            sysctl.o:(__bpf_skb_store_bytes) in archive kernel/built-in.a
-   >>> defined at filter.h:1548 (include/linux/filter.h:1548)
-   >>>            kallsyms.o:(.text+0x8) in archive kernel/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
