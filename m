@@ -1,117 +1,136 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB8C6AD6
-	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 17:07:01 +0000 (UTC)
-Received: by mail-wr1-f52.google.com with SMTP id c7so16546784wrp.11
-        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 10:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fA4MAzocVYnZA2PNv0a79ePFGBimCCBV9TwhybPc+1g=;
-        b=gaNyFVJIAWi6NladXb1I0D9sKA1wYJuqwzT3vMPSeWijxpfGD7ju8E/Y3qpCZH+5z5
-         I5clrbyXneyIbY7yxT2NhXaPYKkI8zIbnuijIbHVkg1GygW6FAX3jkEs46hrEWyloeD6
-         NH+rPwNIi+1P/9amACHfAZSkG+wBIYJpRqYb9fJbKc75Jk/B0VuiZgRH08uClKGcmEDK
-         yiN/O23Z1sZqKpASU54QXDdZx8fOkg1GrSYPxx29wANWc/x1uDFbSOc/aaxSQ4fUb53m
-         uB/IGAAF3ZJVI0EUsjQJV71kT+kkLX9QRBd1LlSPY44Ry6Ege4IDk4UMvIQeu5Vl9wPl
-         LiSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fA4MAzocVYnZA2PNv0a79ePFGBimCCBV9TwhybPc+1g=;
-        b=txJyW2kBRKbefMoXy/gs9iKkdOWDTEHGjGMRZ/5vRuEFBD3cWAVf5fcCv/YFC63QSm
-         Iab2LeCmAcO+IaUkxbzugPy4nN5XE3bVcI9MsyowEvruGlP4du+6L54H2g8QsKl5vvV6
-         Xyghzhb8tbv7bS6g3GTYM7YfhrHSPp7xL3GX2mRr6dA3w1eR0bMRUtD1Ha8ekBsP7kas
-         g2jTkrlYFTwN3XcZowTAJfqBsQwuocEhW4f4bOfaTN/abhpK9vPKnrD1gsFIfXHT6mmy
-         mT9UW4oUdk7OSA/Xe7f6TqlzJXaa8JExzLnZ6qwmwXNsPdNX9kZNlnBZlPMSt9q/3R3X
-         Dqgg==
-X-Gm-Message-State: ACgBeo3Ekvg3BUuHaZ+lp45RHn6qBOxIJxIfigHiv9cFJ67oKKbV9Fjq
-	KewHPk0BDPGKBXnmiboXYgkYmerg/r6i1iFFQ8Q0Fg==
-X-Google-Smtp-Source: AA6agR73Y35/orZRP6OW0fmTCoK9dzubdjVPKax1N9hX81ihv1EYXPfbC2vCtqRIuINb3pbTgiJ55+g4kDpcHcCpQb0=
-X-Received: by 2002:a5d:47ac:0:b0:226:df12:412f with SMTP id
- 12-20020a5d47ac000000b00226df12412fmr10609969wrb.675.1662052020147; Thu, 01
- Sep 2022 10:07:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553006AD9
+	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 17:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662053872; x=1693589872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a/Qjlh39P1tnozWJ725EZVIZiCymOHE5RglHfQIT8KI=;
+  b=L6vGkQjPMJk+ZaFGuVUqFvx8INfrHGW+sAPTf7lBTEAswGW208e6VVad
+   Ou1TgtsUckiL6gsQvF2ZNCjR+vZ6ZUnzMUYfQNdiakImf53NsjydgSMvD
+   63NBo9n3MSenFKty7zih5gFTAdcVdf/zMz1rnmuQrbE8ruhaj+8drWhBF
+   FlFqrXsRFQG3+gtu8JUlAhqQRyT/auenlpcLUiwSD1EsPuenbP3m70Zpd
+   bTQPT7O5pPl8YvjUcRe7eqFECIVu4cx/mdMlj1rVM3dEmt7w/gb6tEB3U
+   pxp3VoOb6oc0T0HLekD33/xDameFLFjRDglEbKYSiMGjiA7yWiQW3NDer
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294523042"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="294523042"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:37:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="645755479"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Sep 2022 10:37:49 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oTo8S-0000Zj-1j;
+	Thu, 01 Sep 2022 17:37:48 +0000
+Date: Fri, 2 Sep 2022 01:37:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Lukasz Majewski <lukma@denx.de>
+Subject: Re: [PATCH] ARM: ep93xx: Convert to use descriptors for GPIO LEDs
+Message-ID: <202209020143.4bgj9GIh-lkp@intel.com>
+References: <20220830204327.368284-1-linus.walleij@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
- <YxArx4UGoSQXljQd@yury-laptop> <CAMZ6Rq+XVWGEEHr9t5dkXN0E36hkpMb5kNEZJmMFgtJxyQntsg@mail.gmail.com>
- <YxC+eShQLDor0B9D@yury-laptop>
-In-Reply-To: <YxC+eShQLDor0B9D@yury-laptop>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 1 Sep 2022 10:06:48 -0700
-Message-ID: <CAKwvOd=xWEc9T=RQcZDuHNMtng+pODa2SXs9iOmPWdJ5coPBaA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>, Borislav Petkov <bp@alien8.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830204327.368284-1-linus.walleij@linaro.org>
 
-On Thu, Sep 1, 2022 at 7:19 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> On Thu, Sep 01, 2022 at 07:30:10PM +0900, Vincent MAILHOL wrote:
-> > On Tue. 1 sept. 2022 at 12:49, Yury Norov <yury.norov@gmail.com> wrote:
-> > > On Wed, Aug 31, 2022 at 01:54:01AM -0700, Yury Norov wrote:
-> > > > On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
-> > > > > The compilers provide some builtin expression equivalent to the ffs(),
-> > > > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
-> > > > > assembly which produces better code than the builtin
-> > > > > functions. However, such assembly code can not be folded when used
-> > > > > with constant expressions.
-> > > > >
-> > > > > This series relies on __builtin_constant_p to select the optimal solution:
-> > > > >
-> > > > >   * use kernel assembly for non constant expressions
-> > > > >
-> > > > >   * use compiler's __builtin function for constant expressions.
-> > > > >
-> > > > >
-> > > > > ** Statistics **
-> > > > >
-> > > > > Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> > > > > of __ffs() and ffz() calls (details of the calculation in each patch).
-> > > >
-> > > > Hi Vincent,
-> > > >
-> > > > Can you please add a test for this? We've recently added a very similar
-> > > > test_bitmap_const_eval() in lib/test_bitmap.c.
-> > > >
-> > > > dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
-> > > > assertions")
-> > > >
-> > > > Would be nice to have something like this for ffs() and ffz() in
-> > > > lib/test_bitops.c.
-> > > >
-> > > > Please keep me in loop in case of new versions.
-> >
-> > Hi Yury,
-> >
-> > My patch only takes care of the x86 architecture.
->
-> OK, I just realized that you started submitting this at least back in May.
->
-> For me, v6 is good enough and well-described. So, for the series:
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
->
-> How are you going to merge it? If you haven't a specific tree in mind
-> already, I can take it in my bitmap tree because  ffs and ffz are closely
-> related to find_bit() functions.
+Hi Linus,
 
-Unless Boris feels strong enough to nack the series, I think Yury
-accepting the series is the way to go.
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/ARM-ep93xx-Convert-to-use-descriptors-for-GPIO-LEDs/20220831-044651
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm-ep93xx_defconfig (https://download.01.org/0day-ci/archive/20220902/202209020143.4bgj9GIh-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/198889a7fb8ce93e00c3b801161bca6f76efdf3d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linus-Walleij/ARM-ep93xx-Convert-to-use-descriptors-for-GPIO-LEDs/20220831-044651
+        git checkout 198889a7fb8ce93e00c3b801161bca6f76efdf3d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm/mach-ep93xx/core.c:1000:50: error: expected ')'
+           gpiod_add_lookup_table((&ep93xx_leds_gpio_table);
+                                                           ^
+   arch/arm/mach-ep93xx/core.c:1000:24: note: to match this '('
+           gpiod_add_lookup_table((&ep93xx_leds_gpio_table);
+                                 ^
+   1 error generated.
+
+
+vim +1000 arch/arm/mach-ep93xx/core.c
+
+   972	
+   973	struct device __init *ep93xx_init_devices(void)
+   974	{
+   975		struct device *parent;
+   976	
+   977		/* Disallow access to MaverickCrunch initially */
+   978		ep93xx_devcfg_clear_bits(EP93XX_SYSCON_DEVCFG_CPENA);
+   979	
+   980		/* Default all ports to GPIO */
+   981		ep93xx_devcfg_set_bits(EP93XX_SYSCON_DEVCFG_KEYS |
+   982				       EP93XX_SYSCON_DEVCFG_GONK |
+   983				       EP93XX_SYSCON_DEVCFG_EONIDE |
+   984				       EP93XX_SYSCON_DEVCFG_GONIDE |
+   985				       EP93XX_SYSCON_DEVCFG_HONIDE);
+   986	
+   987		parent = ep93xx_init_soc();
+   988	
+   989		/* Get the GPIO working early, other devices need it */
+   990		platform_device_register(&ep93xx_gpio_device);
+   991	
+   992		amba_device_register(&uart1_device, &iomem_resource);
+   993		amba_device_register(&uart2_device, &iomem_resource);
+   994		amba_device_register(&uart3_device, &iomem_resource);
+   995	
+   996		platform_device_register(&ep93xx_rtc_device);
+   997		platform_device_register(&ep93xx_ohci_device);
+   998		platform_device_register(&ep93xx_wdt_device);
+   999	
+> 1000		gpiod_add_lookup_table((&ep93xx_leds_gpio_table);
+  1001		gpio_led_register_device(-1, &ep93xx_led_data);
+  1002	
+  1003		return parent;
+  1004	}
+  1005	
+
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
