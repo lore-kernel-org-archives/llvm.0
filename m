@@ -1,203 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99421110D
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 09:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662109297;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KAArzZXtz4APoMlcN94CBZr7sZmhz4L66bRuMBaKglM=;
-	b=IrAkRJW8JNk6R0TaI3ozR0zZWJh9zjdEX8YYAshdL2dBjt/UnvthaNEJqLIWt3h+exkdAT
-	giTyUbp1TnVOrXhthFDq72YmjEYNCErPV03m+9iPlxCo9cFG/771ngFbzIgjl/tX89BaFB
-	zpJ53cpHKArNDa/d/nMBhRkXo/cZpbU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-375-7RBhn-YyNaivxajKp3qC9Q-1; Fri, 02 Sep 2022 05:01:36 -0400
-X-MC-Unique: 7RBhn-YyNaivxajKp3qC9Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5176B2A2AD64
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 09:01:36 +0000 (UTC)
-Received: from [172.64.3.82] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 44BF740D296D;
-	Fri,  2 Sep 2022 09:01:36 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (55/376 SKIPPED): Test report for master
- (6.0.0-rc3, mainline.kernel.org-clang, 2880e1a1)
-Date: Fri, 02 Sep 2022 09:01:35 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC04F139C
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 11:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662117826; x=1693653826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dnK7mM2TLm6TyHNXJhK4C8fpUzMRmiO65JWefCxXIvI=;
+  b=IxafE6lzo8MrvnyEJPDkpquj+w8xCnNQRQbrC6PDma4+1gKUrauzdiuK
+   cLZuDMK+MzAoW2HsegaeMGVnaA27FHFcBFUXdbVEzOKfturF5VsmFrTsP
+   7c34TsWEqf4iE04WPNabwkvrLo/oW50fqtKpLMtrT7uoYIq8BRiwHIF3T
+   1Y0Tc7TN8LLkb2becPA1ZBpIntRfHlJKqTf6xrYLJMBnIjmjKsrSRaVkk
+   iqWMGkyRvXH6fmGLMFOlUfat7oRhfijcR8iqb0oRLRxbD7+VsD2tDNaDs
+   RS6SI1Xewj1mdyFd7VzMU5DDpElPPG3d1EgKNrIWqLOf4ze7DfJYRqyzT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276361462"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="276361462"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 04:23:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674321022"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Sep 2022 04:23:44 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oU4lw-0000YB-0T;
+	Fri, 02 Sep 2022 11:23:40 +0000
+Date: Fri, 2 Sep 2022 19:22:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhakrishna Sripada <radhakrishna.sripada@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v4 02/11] drm/i915: Read graphics/media/display arch
+ version from hw
+Message-ID: <202209021916.tSrqNgUq-lkp@intel.com>
+References: <20220902060342.151824-3-radhakrishna.sripada@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <21159.122090205013600370@us-mta-375.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902060342.151824-3-radhakrishna.sripada@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Radhakrishna,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on next-20220901]
+[cannot apply to drm-intel/for-linux-next drm/drm-next drm-misc/drm-misc-next linus/master v6.0-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'sound-6.0-rc4' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/tiwai/sound
+url:    https://github.com/intel-lab-lkp/linux/commits/Radhakrishna-Sripada/Initial-Meteorlake-Support/20220902-140730
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220902/202209021916.tSrqNgUq-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/59999fd809c2d1e77bdd9f02a79322602bc7ef3d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Radhakrishna-Sripada/Initial-Meteorlake-Support/20220902-140730
+        git checkout 59999fd809c2d1e77bdd9f02a79322602bc7ef3d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52339
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                  x86_64 - Storage - swraid simple_reshape
-        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
-ree+0x53/0x80
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1359
-            Affected tests:
-                  x86_64 - Storage - swraid simple_reshape
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+>> drivers/gpu/drm/i915/intel_device_info.c:319: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Setup the graphics version for the current device.  This must be done before
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +319 drivers/gpu/drm/i915/intel_device_info.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   317	
+   318	/**
+ > 319	 * Setup the graphics version for the current device.  This must be done before
+   320	 * any code that performs checks on GRAPHICS_VER or DISPLAY_VER, so this
+   321	 * function should be called very early in the driver initialization sequence.
+   322	 *
+   323	 * Regular MMIO access is not yet setup at the point this function is called so
+   324	 * we peek at the appropriate MMIO offset directly.  The GMD_ID register is
+   325	 * part of an 'always on' power well by design, so we don't need to worry about
+   326	 * forcewake while reading it.
+   327	 */
+   328	static void intel_ipver_early_init(struct drm_i915_private *i915)
+   329	{
+   330		struct intel_runtime_info *runtime = RUNTIME_INFO(i915);
+   331	
+   332		if (!HAS_GMD_ID(i915))
+   333			return;
+   334	
+   335		ip_ver_read(i915, i915_mmio_reg_offset(GMD_ID_GRAPHICS),
+   336			    &runtime->graphics.version);
+   337		ip_ver_read(i915, i915_mmio_reg_offset(GMD_ID_DISPLAY),
+   338			    &runtime->display.version);
+   339		ip_ver_read(i915, MTL_MEDIA_GSI_BASE + i915_mmio_reg_offset(GMD_ID_GRAPHICS),
+   340			    &runtime->media.version);
+   341	}
+   342	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
