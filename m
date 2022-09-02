@@ -1,73 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEC1186F
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 15:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8105AC433D6;
-	Fri,  2 Sep 2022 15:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1662133455;
-	bh=yfXNLWwklr+vfZiv505dQVxWhaA1YdtdN+HFsT0EppY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KMPn+k5ATlFDVCVcQyU5cx79W4OsuKY+4q6IlKf48cXq5XkXDr/F9DL2rZgzoHyXQ
-	 e2rPEHxzxA82DHl3l4vleTHpZKk+s1KQ3R5DN+z9WMvSySXJFen60tn4hYX1thFVoD
-	 dnI3c6nLaVn1oOG90LXgea8MF0Eu9ug9OE7xJfeGV2Ezo0gwIzCEU4yEneKGS15ekE
-	 ptZwIGIvPh/eUKY3qB3qP+0CCYLvoiFK8WsD64mCknjYu2qsDb7FGlcrjnR8d7pdXD
-	 UJEk7/efxsXRrGDSnnPhhIeNODW8zeOhs3WBnV5LJBgPT3BLnETZTvSN8wUZlANhvW
-	 qSmL2A9u2FATg==
-Date: Fri, 2 Sep 2022 08:44:13 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [jpoimboe:s390 2/2] Unsupported relocation type: 26
-Message-ID: <20220902154413.ambn4qvy7a4hudjs@treble>
-References: <202209021319.l7dwyum7-lkp@intel.com>
- <YxIdXugKymRtV9zW@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1437D186F
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 15:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662133683; x=1693669683;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F4Fakjhd+ZOAe94994E9Pm8XSTFIaUB+EYRAUfZFuok=;
+  b=TPOTR4vOh5Auc7Iwmecqd6x/yipwzV509AoXr0C+/TS636ickzTH4C//
+   fRaWMfpuhYK+V+iF/QZLrOoA8Kp/D6k80nfc7Ikauz0H0ct+VYdjO1mrC
+   ddZ5+CwvErKARS84NTw0Ubq5eAhI6ZR5iSjIxiU7aPhmdSUF7wNDc7kEq
+   vYYFkTRzA8HvgfHSSbv0m2U17UEw8MJ75rZSZwNIpqiC/jxS6xs24I0N3
+   g3uc7nu02f/hCdZ8BjtC4hJzfVaA8uZFNEy5glIwajCjbRvM42l/TX6gE
+   Wa2cAaG9XPuQWjVn8sj/K84wd4QQG7zej8kc7JF0PGZSI5BTo+PPyephv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="279022167"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="279022167"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 08:48:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="755295073"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Sep 2022 08:48:00 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oU8tj-0000Fs-2G;
+	Fri, 02 Sep 2022 15:47:59 +0000
+Date: Fri, 2 Sep 2022 23:47:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Harsh Modi <harshmodi@google.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, harshmodi@google.com,
+	sdf@google.com, ast@kernel.org, haoluo@google.com,
+	joannelkoong@gmail.com, quentin@isovalent.com, joe@cilium.io
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_[skb|xdp]_packet_hash.
+Message-ID: <202209022355.SbJhZF5b-lkp@intel.com>
+References: <20220831233615.2288256-1-harshmodi@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxIdXugKymRtV9zW@dev-arch.thelio-3990X>
+In-Reply-To: <20220831233615.2288256-1-harshmodi@google.com>
 
-On Fri, Sep 02, 2022 at 08:12:30AM -0700, Nathan Chancellor wrote:
-> On Fri, Sep 02, 2022 at 01:51:11PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git s390
-> > head:   fa09ffb73e4d64424faef5988a1e993317db77c5
-> > commit: fa09ffb73e4d64424faef5988a1e993317db77c5 [2/2] s390: Compile relocatable kernel without -fPIE
-> > config: s390-randconfig-r044-20220901
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install s390 cross compiling tool for clang build
-> >         # apt-get install binutils-s390x-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=fa09ffb73e4d64424faef5988a1e993317db77c5
-> >         git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-> >         git fetch --no-tags jpoimboe s390
-> >         git checkout fa09ffb73e4d64424faef5988a1e993317db77c5
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> Unsupported relocation type: 26
-> 
-> Looks like 26 is R_390_GOTENT according to
-> https://github.com/llvm/llvm-project/blob/ee761374f797a47919ec8f9f49f9b8b1b20573e8/llvm/include/llvm/BinaryFormat/ELFRelocs/SystemZ.def.
+Hi Harsh,
 
-Indeed.  BTW, that define can also be found in /usr/include/elf.h.
+Thank you for the patch! Yet something to improve:
 
-I guess I need to test this feature with clang ;-)  Without -fPIE, I'm
-not sure why it would be using a GOT relocation for vmlinux.
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Harsh-Modi/bpf-Add-bpf_-skb-xdp-_packet_hash/20220901-073646
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220902/202209022355.SbJhZF5b-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/078b031d06a73f3fc17333d808db554ec4753a90
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Harsh-Modi/bpf-Add-bpf_-skb-xdp-_packet_hash/20220901-073646
+        git checkout 078b031d06a73f3fc17333d808db554ec4753a90
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: crc32c
+   >>> referenced by filter.c
+   >>>               core/filter.o:(crc32c_csum_update) in archive net/built-in.a
 
 -- 
-Josh
+0-DAY CI Kernel Test Service
+https://01.org/lkp
