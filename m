@@ -1,141 +1,203 @@
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90073.outbound.protection.outlook.com [40.107.9.73])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8486EA8;
-	Fri,  2 Sep 2022 08:43:52 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aFQuqtHRIJnW4L+i2QKCrYsrtkgBf6acFNEpZn3GabNLKnr81TeRvRgzKS2Ppnpnh86YQSFjSC1jin3IMtNlPZi/TBeUsH05M9kbJuf7ws2rfgKg9zbYNyXthnE8gHKD5Sfd5PPyUfQ6uB+k/51DbMafOeVFfOXqtcrsqdMdOLkp7vgh1TCMMF0Gor3GCI6ipQhxQrE5qp/xsB/VjNMhW4pqVDDZ91E94i+Chi0Nr8xnZwbkxsR1L0QlNnri2/eQCFe3GlKZdDAB0whO7elf22rvVRvxzObxpFV84ccUNuXwsDt1/cXgZCfKNqmwNnarIEfFVrrrQbnCB4dyIwrffw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XuogpeKNtwJkC0S2BSKGZQ97Aah9bmH4w9hHO0n+tm8=;
- b=l5/KhWeqNvoAqSol0un3UYnQBNLJZCR/AJ8fhyJGUqdCMXnhyMW08r5Ztrj58KZhG9abdHgrx/FfNj6CMgiJHOgrVzexMY9ejEWDkJ7+2g5gp6naMEIHeX9vFeeIxg8RUzmoFuGSqO1Zk5Ep7L53GbWKqI6ykqINVyqGGI3gu/tF1aOzzG48SE1Mfo2eAtRP+O0fjc/Da7kbLHJPR5EhUwKeRQv11+TxXTCYSUXM9pBPMVp5oFFbgA+qEEUcubiMNLsYoRREDh398bbKcIg7dS7Sj0pi2n0ctpM2fbJ9p0ktA2tVn0zdgkweigDS+l5yU/uBZzk5MLaANE5Y7NuvQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XuogpeKNtwJkC0S2BSKGZQ97Aah9bmH4w9hHO0n+tm8=;
- b=pqmGe5EPSjVYYVqVIRyicac5uMD5+h2apya4LdYaEljsoFXPSm8Q/QuZXZSrH+KawYc55mxXufjQfmXIfuVZTnTqYF44epufgbU+6TrDHMfREwgUudbXyeCXNA/ZR73e5jKU5EXJQFhnSFO3rGNhssQae2RnrtR3AF8jor2ZcxXNJBBI0YItsWeVV7zluO1+3pMk7pmrgMhm0rGWe+qtySoxq+Ysk+HY0LWegCyOn0hD/PuzHV6xAn+NvYGyqj1FGxGYCN72Ub37Vm05PZVqG/7yMw3T8AJPgRDRgM4z6UkPKbBKO2U5lnINpOpOb5Z0+7YlnkqS5CgOLMF3VU3/sQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3060.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Fri, 2 Sep
- 2022 08:43:49 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5588.014; Fri, 2 Sep 2022
- 08:43:49 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-CC: Nathan Chancellor <nathan@kernel.org>, Michael Ellerman
-	<mpe@ellerman.id.au>, kernel test robot <lkp@intel.com>, Arnd Bergmann
-	<arnd@arndb.de>, Tom Rix <trix@redhat.com>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Nicholas
- Piggin <npiggin@gmail.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, "linuxppc-dev@lists.ozlabs.org"
-	<linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc/math_emu/efp: Include module.h
-Thread-Topic: [PATCH] powerpc/math_emu/efp: Include module.h
-Thread-Index: AQHYvU1fVuBGpeT/bUClAFoMJyinta3KEF+AgADsP4CAANkDAA==
-Date: Fri, 2 Sep 2022 08:43:49 +0000
-Message-ID: <ae2ee2d8-ec0a-d0ab-2c5a-b9a8c7579093@csgroup.eu>
-References: <20220831152014.3501664-1-nathan@kernel.org>
- <efd56f3e-bc8c-5da5-559d-e0bc6b21fa5b@csgroup.eu>
- <20220901194705.GI25951@gate.crashing.org>
-In-Reply-To: <20220901194705.GI25951@gate.crashing.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ffa52bb3-b808-4ad7-f87b-08da8cbf41b1
-x-ms-traffictypediagnostic: MR1P264MB3060:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- Bx6BzAMTof6DktWvjH7yyImJIu2XRs2ddIKjtk5BRVjAr3D+t57USaTFXDckGaPbu8vYYchIOdbOzZY5v/vBEigQ0yY9TSeLOYXCyFaVe+feB8S9ehCekCHRb5vOT+yS9kJHrRfVRgxKMqxiGLRJGPw7kj25yy5HvS5kI8u+0XBvlfoQIG0wJN/4ghq3x7scO0p3N3Mm4aStUbqKydx7fMrZ9xQ3O7dOJLidrfOJ+Qq1q3qPPibsi5oJOUqp9O2UNXDO9iym3L8x0kZuPpf0mEGc49Enf7Y8fCvvOEBsVed9RWkS+Z4PxGTbPiQ4/w1Z/Aqtl29T3GLPUpDytJR8qsvpdmHRxzU5lJqmS+MsIEoKwbxiTJ/okzXGdIEiH9Z4eRBraTLOm4kqd2sDf28JvqbSBDuwlcgYXsNh0TV3gM/vbuWjJiY0oq1toVrBC4COl5azMKvuKn2GBX5qTUNfN/0p0ezjvDmJ53FubC5f/mqHwjXOy7JwTWEug/SVnQAw8jO7FXsk2pMhGxLyI1f8d8ARE12fg090L+GF4083oKsHMGKUkPLTIg24S9ggd9bYmM2V4PhXtbt2aqo/xNCxkiMEEYdFi9aOkEls6n3jaOt17zWEEZ4JsVX1PRei9RMf29Cay629XUdhDSkp8+7j2RwAxJ5rCSDL0oQ+wJXemHg4vMKXY2nFR2zmONA54hqws7yP7Tu3PxKYY4po7LmFhflU6d3mGpEZBriQQEvYFqNB154ZWzL+BQBY7E8ZeA9pd8uYBEeYPM7a8ZUP6UrCGDFrFmW57HpIvMW4iteoo1dHr6e7FPiwKzvTW464kNODcEQPkRTIpUTbNm7X7TMrbPRn7lgYF+pXbp/DQ3FxE9A=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(136003)(346002)(376002)(366004)(31686004)(38100700002)(6916009)(122000001)(71200400001)(36756003)(83380400001)(38070700005)(316002)(7416002)(54906003)(5660300002)(41300700001)(4744005)(8936002)(186003)(2616005)(66574015)(44832011)(6486002)(6506007)(31696002)(86362001)(6512007)(2906002)(26005)(478600001)(64756008)(91956017)(66556008)(8676002)(66476007)(76116006)(66946007)(4326008)(66446008)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?cmFuZm1wR0Fta3ZLSW05ZlVtQnppS3dNQS9DaVJKU3I0aW9kbU5yUnA1VERP?=
- =?utf-8?B?bTBXRVNUSjhZOW5Ta0l3Y2h4UUp2UEJ0QW1lVGJQR3dxTXBRcnhoTTlHN1lL?=
- =?utf-8?B?aUVEUzZkY1ZLakVkZ0tjNzdsbE9pQmZMeGxWRm1KQ1FPUGZHUHlMZzFPNHdh?=
- =?utf-8?B?Vm9lNW9JczZuZUFIMFhEZjJRaWcxK0VqcjZ0Zi96VXFkUDJLM3orTW9oYWlZ?=
- =?utf-8?B?c29EUHdOUXYvUEw3SW9rNWxqTTJqWUN6d2Zxa3BuMGM4VHFIVkpFa1hKM3ZQ?=
- =?utf-8?B?QkV4bE5JdmVBamVMZkc5OWdIN1c5c1R4OG9qeTZER3RVZFVYTStiQW5RUjJv?=
- =?utf-8?B?b2R2OVl2RlRUa3RGUExOQko2SUJxdkFtZ2pkWE53cmx0c0tXQWIwakorVEZS?=
- =?utf-8?B?ZTlnampManRUZEZ1SzJoSEx2blcrVXRUNmROa3R2SHl4S1VEckI0WmU0SGNW?=
- =?utf-8?B?cStaVStRa2VyZjF2a2IrejlNQVYrUGhyMTcyb2FLS0tGWWw1b3RwQmoreEtp?=
- =?utf-8?B?V2xVQ3NmK0N5T25pQXUxNUV1VUZwQUlpdFpDUVNOeUpPY0ZuZzYzbk1JSS9k?=
- =?utf-8?B?RWJhSUhHOWxOMGpsb0JYTmZ6UGFQWkFhNE9Ha2lRV0V3alRqbEJtRE9ORFRj?=
- =?utf-8?B?UFF1bW8xQ0Zsano0Y0NuclFTbGdwYS9qb3IwcWRoZ0JCYmR4bElnNHordEx3?=
- =?utf-8?B?SWdDRDBySG9NUHJzQ0syVlNHczhXTUphN3pwUmZpWTNyZ0YwWWxtWDExR1Rw?=
- =?utf-8?B?c3ZIbEwwdFZsa0doL1JsN05lM3BuWlRyV1dvMUJ1dVEwUkhVV0ZMOE01K3JF?=
- =?utf-8?B?b05IL0l2ZXFjVHBJdHptM01hRUVoOVM4SG1yV0liSzUxQXZvSXI4cm5RTVlv?=
- =?utf-8?B?OUV1cGRzUzdFV1NUOG9aL2ZIV2lDUFpDY3M0YVpoSFFFamUvSUp3OUtQQm5m?=
- =?utf-8?B?bmxiN3RpM2cyeWhGcGRIaEZhbzZKRGRlQnp1ZEovY2EwRElDTkd0UDk3OUZs?=
- =?utf-8?B?bm43SnRJbFZITU92OWF2VVNZVHdQK2JjYnp1dnBrd2NKS1ZaYTN4eHhUTzNJ?=
- =?utf-8?B?NGNwZWVURmJPU3ZZbllnRlZJQTBmZWJJRGRrSE1iTjdCSTZWWFQ4OGxDSHE4?=
- =?utf-8?B?R2xQRjFoWjBFVXE4V3lybWg3d0ZZSXJQdGNMR1lUZC9VdHR3WmswMVBkTTlM?=
- =?utf-8?B?Y05UdlMweXVkWE9OREV4N213cHZGc2ZMWDl5elVpcVdZWU1Sc2o2a2UzRmdn?=
- =?utf-8?B?aE5jZ1dsS1hmRSswb3d0RHRxSEFjUEoyRWxjMEZpUVhrYWJUeUppTC8xRmlF?=
- =?utf-8?B?bWtGTHFBSDNySVlvdHVUV1hKRXFlR0M4TC9YeXVBSXNzenBhVDRrQU84NFZW?=
- =?utf-8?B?UkFBc2VTcVFWYTliYzRyUEs5OHhSVWRvRkEzMXg4UTVMVHh3T0V2Und0RGl2?=
- =?utf-8?B?RHNONlM2OGp5VnJMbG5DR1hDQTFmcDB3NldpTWluVUM3VXkvLzVhZkhURkRp?=
- =?utf-8?B?djVMU294QVRSWi82SENZd0ZoUk1yQWpJYkQ1Q2h3c2JhUjNZMXA0azE5NzVZ?=
- =?utf-8?B?ZTBKdDhmUTFlSm81RHdQMVYrbHNia2t3TWdFNlBjUkRLMXE2NmhCcTZyU1pO?=
- =?utf-8?B?bVhkL05kbDJlYXlMTmxkeVFFekJQODdzME4zaitBcFVIRFZMSkpyNE93WWcz?=
- =?utf-8?B?d2l4ZzFzZGgzMFpmeWZGZmZhM0ZBcVVURDRkZUYrNTBoT2FGSVVsc2ZFdzI1?=
- =?utf-8?B?M1MveTNjK3VhVnVOWWJscCtDbjNkeWdBTXM2SlVtQnlOMXU5azZvNHVYRFpK?=
- =?utf-8?B?dStXU2kzMyticklYeDdHTHA3UWtLMzNiSkhUem1WdkE4bHRKYjFJWXJYdHVr?=
- =?utf-8?B?K3RsOGtjNm1NNENJRlhuRk92ZDdkWFFzK20rMW5YY0pSZnZXYzY5eGp4VnQ1?=
- =?utf-8?B?MGdvOW5nUnJia3pLd01YSUVDc1ZJYVVaLzBXS3hRKzVaVThGK1ZKT2dwWE14?=
- =?utf-8?B?Z3IxK3lvNW1teExhMEJmRWtHOWNoZWk5MFBIK0MzNkgyRXpybXUzbzRWdTcz?=
- =?utf-8?B?STlUNFlEOE1Pa3o1SGc5QmR0K2lQNXNvQkdOSkl6S01TM3FuUDFNSjFxN000?=
- =?utf-8?B?NXdkeXNkTGMvdTIxaDdLR2JzQW9mUHA3am5lNU1OQXIwc3pnM0tKaGVlVzM3?=
- =?utf-8?B?aXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AF55D5A8E394804A99E225A262959DEA@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99421110D
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 09:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662109297;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KAArzZXtz4APoMlcN94CBZr7sZmhz4L66bRuMBaKglM=;
+	b=IrAkRJW8JNk6R0TaI3ozR0zZWJh9zjdEX8YYAshdL2dBjt/UnvthaNEJqLIWt3h+exkdAT
+	giTyUbp1TnVOrXhthFDq72YmjEYNCErPV03m+9iPlxCo9cFG/771ngFbzIgjl/tX89BaFB
+	zpJ53cpHKArNDa/d/nMBhRkXo/cZpbU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-375-7RBhn-YyNaivxajKp3qC9Q-1; Fri, 02 Sep 2022 05:01:36 -0400
+X-MC-Unique: 7RBhn-YyNaivxajKp3qC9Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5176B2A2AD64
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 09:01:36 +0000 (UTC)
+Received: from [172.64.3.82] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 44BF740D296D;
+	Fri,  2 Sep 2022 09:01:36 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (55/376 SKIPPED): Test report for master
+ (6.0.0-rc3, mainline.kernel.org-clang, 2880e1a1)
+Date: Fri, 02 Sep 2022 09:01:35 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffa52bb3-b808-4ad7-f87b-08da8cbf41b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2022 08:43:49.4702
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xvTjGBA7Igc8akI+P2gOwWzk2maFwISvqOTgCNnQVq/oOQ/Jz5XyEDVYTM+uN3aKqdjveOVDyepZ0jxAZgApP5u9BPBCE4eiiRC1wC1VMDI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3060
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Message-Id: <21159.122090205013600370@us-mta-375.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-DQoNCkxlIDAxLzA5LzIwMjIgw6AgMjE6NDcsIFNlZ2hlciBCb2Vzc2Vua29vbCBhIMOpY3JpdMKg
-Og0KPiBPbiBUaHUsIFNlcCAwMSwgMjAyMiBhdCAwNTo0MTozM0FNICswMDAwLCBDaHJpc3RvcGhl
-IExlcm95IHdyb3RlOg0KPj4gSSB0aGluayBpdCB3b3VsZCBiZSB3b3J0aCBhIEdDQyBidWcgcmVw
-b3J0Lg0KPiANCj4gV2UgbmVlZCBhIHN0YW5kLWFsb25lIHRlc3RjYXNlIGZvciB0aGlzLiAgV2hl
-biB5b3UgaGF2ZSBjcmVhdGVkIG9uZSwgYXQNCj4gbGVhc3QgOTglIG9mIHRoZSB0aW1lIHlvdSBk
-aXNjb3ZlciB0aGUgYnVnIGlzIGluIHVzZXIgY29kZSBhZnRlciBhbGwuDQo+IA0KPiBXaGljaCBp
-cyBhIHZlcnkgZ29vZCB0aGluZywgaXQgbWVhbnMgdGhlIHByb2JsZW0gY2FuIGJlIGZpeGVkIHNp
-bXBsZXIsDQo+IGNoZWFwZXIsIGFuZCBhIGxvdCBmYXN0ZXIgOi0pDQoNCkVhc3kgdG8gcmVwcm9k
-dWNlIHdpdGggYSAuYyBmaWxlIHRoYXQgaGFzIGEgc2luZ2xlIGxpbmU6DQoNCm5vbl9leGlzdGlu
-Z19tYWNybyh4eHgpOw0KDQoNCkFwcGFyZW50bHkgdGhhdCdzIGR1ZSB0byB0aGUgLXcgb3B0aW9u
-IGluIGFyY2gvcG93ZXJwYy9tYXRoX2VtdS9NYWtlZmlsZToNCg0KCWNjZmxhZ3MteSA9IC13DQoN
-CldhcyBpbnRyb2R1Y2VkIGJ5IGNvbW1pdCBkMmIxOTRlZDgyMDggKCJwb3dlcnBjL21hdGgtZW11
-OiBVc2Uga2VybmVsIA0KZ2VuZXJpYyBtYXRoLWVtdSBjb2RlIikNCg0KSWYgSSB1bmRlcnN0YW5k
-IGNvcnJlY3RseSBpdCBtZWFucyAnaWdub3JlIGFsbCB3YXJuaW5ncycuIFRoZW4gaXQgc2VlbXMg
-DQpDTEFORyBkb2Vzbid0IGhvbm9yIHRoYXQgcmVxdWVzdC4NCg0KQ2hyaXN0b3BoZQ==
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'sound-6.0-rc4' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/tiwai/sound
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52339
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
+to resize filesystem
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1325
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
+vg/snap1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1349
+            Affected tests:
+                 aarch64 - Storage - lvm thinp stqe test
+                 ppc64le - Storage - lvm thinp stqe test
+                   s390x - Storage - lvm thinp stqe test
+                  x86_64 - Storage - lvm thinp stqe test
+                  x86_64 (debug) - Storage - lvm thinp stqe test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
