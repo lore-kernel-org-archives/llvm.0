@@ -1,193 +1,155 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6C5EA0
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 00:41:46 +0000 (UTC)
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-04.nifty.com with ESMTP id 2820bdRj016847
-	for <llvm@lists.linux.dev>; Fri, 2 Sep 2022 09:37:40 +0900
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 2820bAj5017817
-	for <llvm@lists.linux.dev>; Fri, 2 Sep 2022 09:37:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2820bAj5017817
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662079031;
-	bh=VL1ksr7a5Sl3ERy4FVPxcqrYIg8n/ru3EfBCKVgbkN4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=2jLyK933mlHNEVcoLqNB+tWIpLkUaZapy9+RziBEu7BksaGUaEBTeBoVcVEwWxSn7
-	 +EfAylVuM/dZjO70sOtjgq5Yu+FAwmdvuzdid81sXHLbZvZkjOaMfUKNiIIlrA+byV
-	 Zh1N/pYgSSKep3xbGpQo2S9EtXg3VF1U1jd5rrsft1jX3VvswSOiFPgNLUbG3NLdLe
-	 32p3OI5D1dszHMyMn/1GC4B8PDzMxbobWjY4ZUR2SUAeuuldLhmedrv6SYPeyZZ2xG
-	 nEv3N/54Ijpb7xrTBhn2Az6BjoN9OpJOyAAEIfhHU3ePH22d/9yFEhPnhwSqQDdQC1
-	 t4RNYa879e8EQ==
-X-Nifty-SrcIP: [209.85.160.42]
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11e9a7135easo1304233fac.6
-        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 17:37:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2s4tde/H7gJl6kXP2yNytpYvdCCsRbc8mPRefZ0B217YjJg9zu
-	dJ8mhyiZk0IiaPt9yBL90Fa/lBrQanGkVQRYVts=
-X-Google-Smtp-Source: AA6agR7oVTlrgwvCx4WHylDpq5DKuANRVqP1gYR9r3V8zsV3Wk9ZkqqEEaq9yuDlhmU6MqcOqniYH6vaa63dkipCyHU=
-X-Received: by 2002:a05:6808:2099:b0:343:49f5:5300 with SMTP id
- s25-20020a056808209900b0034349f55300mr799407oiw.287.1662079029862; Thu, 01
- Sep 2022 17:37:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5E1EA0
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 00:42:04 +0000 (UTC)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3321c2a8d4cso3203107b3.5
+        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 17:42:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8fC2rZWTgCYBntka/As3bCqt2A+cDoDbQGtV1oAG1Rc=;
+        b=5yqb8RzsM5NuR9R8lOniUyNC13QLjMlAVnKaC4GBaZAJurvydY6ENTU7dvWvZ552xn
+         YGRV4CTpw4Xl2wB9HTu1XndRjREWe9x7fQJIsS8rCS5EJOQ9ur20E/ZIemAH15UM14R7
+         kC5wto9n8brYv/1hQhe6fziVkWDk5J8yZ6fF0LW5dQz3aGsAosFLvlHFcM7eoUiOd6Ab
+         lcLgTrQtQZjgnL3p+AHv8iPZ/8G6A2QAiMxQHNuPTovam3rc6wlO4N9gshgbsS6hCJDO
+         41xBMXZ623DE05wl5VVdZkFlW2VgqWhQ/daudFyS6v7bKOpCfuvPH5d/YoXzcolR6fn9
+         SjSQ==
+X-Gm-Message-State: ACgBeo2swdfFPxlRVaPbG39Qubaz0t4E7NCxKur6yK7IdAZUoWgrtQqZ
+	EhUZJTqvKscjERvraYI2ur0TN9Psxonm3e+JyyQ=
+X-Google-Smtp-Source: AA6agR4qmd4h+RQhX/5BiuXjh/WdzAhWTCrnHQLr66XukbfP+zqT2pWK5eS96aPP7+tD4XVdijaxbYnRq1d49FV1B34=
+X-Received: by 2002:a81:4ccf:0:b0:32f:cccf:cef7 with SMTP id
+ z198-20020a814ccf000000b0032fcccfcef7mr25416327ywa.191.1662079323488; Thu, 01
+ Sep 2022 17:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202209020450.jH1ovepP-lkp@intel.com> <YxEoo8M++9tyaLOO@thelio-3990X>
-In-Reply-To: <YxEoo8M++9tyaLOO@thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 2 Sep 2022 09:36:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS9BtiQ8oSX+oOZ8Wewaed+p7Kj8kaObpVddBuR308Nww@mail.gmail.com>
-Message-ID: <CAK7LNAS9BtiQ8oSX+oOZ8Wewaed+p7Kj8kaObpVddBuR308Nww@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:kbuild 18/19] ld.lld: error:
- vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation
- R_HEX_B22_PCREL out of range: 2313184 is not in [-2097152, 2097151];
- references __vmnewmap
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        clang-built-linux <llvm@lists.linux.dev>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
+ <YxArx4UGoSQXljQd@yury-laptop> <CAMZ6Rq+XVWGEEHr9t5dkXN0E36hkpMb5kNEZJmMFgtJxyQntsg@mail.gmail.com>
+ <YxC+eShQLDor0B9D@yury-laptop>
+In-Reply-To: <YxC+eShQLDor0B9D@yury-laptop>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Fri, 2 Sep 2022 09:41:52 +0900
+Message-ID: <CAMZ6RqJs0Ujg3hTSURbtueynhAh_-pqwyzemytLeq1i0Kq2ufg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Borislav Petkov <bp@alien8.de>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 2, 2022 at 6:48 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu. 1 Sep. 2022 at 23:19, Yury Norov <yury.norov@gmail.com> wrote:
+> On Thu, Sep 01, 2022 at 07:30:10PM +0900, Vincent MAILHOL wrote:
+> > On Tue. 1 sept. 2022 at 12:49, Yury Norov <yury.norov@gmail.com> wrote:
+> > > On Wed, Aug 31, 2022 at 01:54:01AM -0700, Yury Norov wrote:
+> > > > On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
+> > > > > The compilers provide some builtin expression equivalent to the ffs(),
+> > > > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> > > > > assembly which produces better code than the builtin
+> > > > > functions. However, such assembly code can not be folded when used
+> > > > > with constant expressions.
+> > > > >
+> > > > > This series relies on __builtin_constant_p to select the optimal solution:
+> > > > >
+> > > > >   * use kernel assembly for non constant expressions
+> > > > >
+> > > > >   * use compiler's __builtin function for constant expressions.
+> > > > >
+> > > > >
+> > > > > ** Statistics **
+> > > > >
+> > > > > Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> > > > > of __ffs() and ffz() calls (details of the calculation in each patch).
+> > > >
+> > > > Hi Vincent,
+> > > >
+> > > > Can you please add a test for this? We've recently added a very similar
+> > > > test_bitmap_const_eval() in lib/test_bitmap.c.
+> > > >
+> > > > dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
+> > > > assertions")
+> > > >
+> > > > Would be nice to have something like this for ffs() and ffz() in
+> > > > lib/test_bitops.c.
+> > > >
+> > > > Please keep me in loop in case of new versions.
+> >
+> > Hi Yury,
+> >
+> > My patch only takes care of the x86 architecture.
 >
-> + Masahiro
+> OK, I just realized that you started submitting this at least back in May.
 >
-> On Fri, Sep 02, 2022 at 04:41:09AM +0800, kernel test robot wrote:
-> > CC: linux-kbuild@vger.kernel.org
-> > TO: Masahiro Yamada <masahiroy@kernel.org>
+> For me, v6 is good enough and well-described. So, for the series:
+> Reviewed-by: Yury Norov <yury.norov@gmail.com>
+
+Thanks for the review!
+
+> How are you going to merge it? If you haven't a specific tree in mind
+> already, I can take it in my bitmap tree because  ffs and ffz are closely
+> related to find_bit() functions.
+
+I never thought of a specific tree. I just CCed the x86 architecture
+maintainers according to get_maintainer.pl and was expecting it to go
+through the x86/asm branch of the tip tree. But I am perfectly fine if
+it goes through your tree.
+
+So same as Nick's comment below, unless Borislav still has concern on
+the v6, please take it in your tree.
+
+> > Assuming some other
+> > architectures are not optimized yet, adding such a test might break
+> > some builds. I am fine with adding the test, however, I will not write
+> > patches for the other architecture because I do not have the
+> > environment to compile and test it.
 > >
-> > Hi Masahiro,
+> > Does it still make sense to add the test before fixing all the architectures?
+>
+> All-arches fix should begin with changing the ffs design. Namely, there
+> should be a generic ffs() in include/linux/bitops.h,
+
+Currently, the generic ffl, ffs, flz are under:
+/include/asm-generic/bitops
+
+especially, here is the generic ffs():
+https://elixir.bootlin.com/linux/latest/source/include/asm-generic/bitops/ffs.h
+
+Isn't this sufficient?
+
+> and arch-specific
+> arch__ffs() in arch/xxx/include/asm/bitops.h; like we do for the set_bit()
+> family. I have a feeling that it's far beyond the scope of your series.
+>
+> The test is a different story. Good tests are always welcome, even if
+> they don't cover all the arches.
+
+ACK. I will add the test in a different patch *after* this series gets
+accepted. But to be clear, I will not fix other architectures.
+
+> > > Also, what about fls? Is there any difference with ffs/ffz wrt compile
+> > > time optimizations? If not, would be great if the series will take
+> > > care of it too.
 > >
-> > First bad commit (maybe != root cause):
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git kbuild
-> > head:   67c0e0cf21cd5065fba45a6a00dd252ae4b9417a
-> > commit: 0b1de512cba77e11bdf0305264c56ab61b23b3e1 [18/19] kbuild: use obj-y instead extra-y for objects placed at the head
-> > config: hexagon-randconfig-r041-20220831 (https://download.01.org/0day-ci/archive/20220902/202209020450.jH1ovepP-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=0b1de512cba77e11bdf0305264c56ab61b23b3e1
-> >         git remote add masahiroy-kbuild https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> >         git fetch --no-tags masahiroy-kbuild kbuild
-> >         git checkout 0b1de512cba77e11bdf0305264c56ab61b23b3e1
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2313184 is not in [-2097152, 2097151]; references __vmnewmap
-> >    >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-> > --
-> > >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x12c): relocation R_HEX_B22_PCREL out of range: 2313056 is not in [-2097152, 2097151]; references __vmsetvec
-> >    >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-> > --
-> > >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2326848 is not in [-2097152, 2097151]; references memset
-> >    >>> defined in vmlinux.a(arch/hexagon/lib/memset.o)
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> >
+> > Agree. The fls() and fls64() can use __builtin_ctz() and
+> > __builtin_ctzll(). However, those two functions are a bit less
+> > trivial. I wanted to have this first series approved first before
+> > working on *fls*().
+>
+> OK, the test and fls() can be a matter of a follow-up series, taking
+> into account how long are these 2 patches moving.
 
+ACK.
 
-Thanks for the forwarding.
-
-This is not a regression.
-
-The hexagon was already broken.
-
-It is just that it was deemed to be a new breakage
-due to slightly different error messages.
-
-
-Compare the before/after.
-
-
-
-
-[Before]
-
-
-  LD      .tmp_vmlinux.kallsyms1
-ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0xd4):
-relocation R_HEX_B22_PCREL out of range: 2313200 is not in [-2097152,
-2097151]; references __vmnewmap
->>> defined in ./built-in.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x120):
-relocation R_HEX_B22_PCREL out of range: 2313124 is not in [-2097152,
-2097151]; references __vmnewmap
->>> defined in ./built-in.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x12c):
-relocation R_HEX_B22_PCREL out of range: 2313072 is not in [-2097152,
-2097151]; references __vmsetvec
->>> defined in ./built-in.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: arch/hexagon/kernel/head.o:(.init.text+0x160):
-relocation R_HEX_B22_PCREL out of range: 2326848 is not in [-2097152,
-2097151]; references memset
->>> defined in ./built-in.a(arch/hexagon/lib/memset.o)
-make: *** [Makefile:1170: vmlinux] Error 1
-make: Target '__all' not remade because of errors.
-
-
-
-
-[After]
-
-  LD      .tmp_vmlinux.kallsyms1
-ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4):
-relocation R_HEX_B22_PCREL out of range: 2313200 is not in [-2097152,
-2097151]; references __vmnewmap
->>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x120):
-relocation R_HEX_B22_PCREL out of range: 2313124 is not in [-2097152,
-2097151]; references __vmnewmap
->>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x12c):
-relocation R_HEX_B22_PCREL out of range: 2313072 is not in [-2097152,
-2097151]; references __vmsetvec
->>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-
-ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x160):
-relocation R_HEX_B22_PCREL out of range: 2326848 is not in [-2097152,
-2097151]; references memset
->>> defined in vmlinux.a(arch/hexagon/lib/memset.o)
-make: *** [Makefile:1180: vmlinux] Error 1
-make: Target '__all' not remade because of errors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+> Thanks,
+> Yury
