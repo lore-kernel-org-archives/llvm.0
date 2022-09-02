@@ -1,49 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F2610E5
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 03:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5046E10E5
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 03:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662088613; x=1693624613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PzY+4y2w6s54YP2t8HhQriB1UCF30mNKpCM7R/JOZcQ=;
-  b=C1YZiHadyclTwIt3nQDGN7K18q6GMx834M0+912vrMBBxJcfGIKc66Ru
-   Gk/FI3iFiW8mBa0m707bSaCZPFDYwreRpVJuyMs6SXGVEzCmTwGa44VGK
-   tUKkNUOP6CSG4NDpUoRBj1RipqcCxpQsfwRORAH95FLXEv4h5pdmCxdRb
-   eckyH6qmqjXOpXSlIjLSC3cX/Mp6/06biv+pFwwurbHXEKqLVDrcgvg8J
-   8NC+uaQ0Gbz8XCZIa8NDYRHIm8AQ/Uvsvw+h0gCarqA6p3CyCkR2UjS9n
-   BDRVLQpGqW6hdnNodn34uwy3bRMMASnNwzpSTqfOpSeZJXkcnU263Zru4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294623279"
+  t=1662089212; x=1693625212;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=74GATzlt1pPW3yBjcdGa+59iz7hUdaaBHdAbgFNCHPo=;
+  b=HgLbQuI9UmEJRUXo0TqU6i7AlfnKvfrvTVz4quSAU4cU8y5FVOvyD5uf
+   EA6oCa2mBHLt0V1vlsjxgKKKJhB7hPA+eIkq7UwbKNQE6b6lJ+Q1+OKF9
+   CZYpQoAk2wCzHLt+gBId+R42gDApZaSmhr1pM6RnUJHqkphbWqZWJhj/T
+   gHjW0quaBItInuduahKibPTMpc19zB2htRtppZsQ429X+K3aU+HtdvsRw
+   iRVDavRkS2QIXtvhoFzDNXSnWJ9HVH8GJUL6widU9mJO5JWIS8Sw4mlQu
+   REbGOblwM77uyhLkgBsYqLpKAj/nMUrURR5H4EMlSO9TEk0W6iPCdoOGW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382183745"
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="294623279"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:16:53 -0700
+   d="scan'208";a="382183745"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:26:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="563808928"
+   d="scan'208";a="642710551"
 Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 01 Sep 2022 20:16:50 -0700
+  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2022 20:26:50 -0700
 Received: from kbuild by fccc941c3034 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oTxAn-00004B-1F;
-	Fri, 02 Sep 2022 03:16:49 +0000
-Date: Fri, 2 Sep 2022 11:16:05 +0800
+	id 1oTxKT-00004d-31;
+	Fri, 02 Sep 2022 03:26:49 +0000
+Date: Fri, 2 Sep 2022 11:26:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christian Brauner <brauner@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, linux-kernel@vger.kernel.org,
-	syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com,
-	Ayushman Dutta <ayudutta@amazon.com>
-Subject: Re: [PATCH v1] seccomp: Release filter when copy_process() fails.
-Message-ID: <202209021045.YbjuMbic-lkp@intel.com>
-References: <20220822204436.26631-1-kuniyu@amazon.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 4627/4736] ld.lld: error:
+ vmlinux.o:(.debug_info+0x2096020d): relocation R_AARCH64_ABS32 out of range:
+ 4295813883 is not in
+Message-ID: <202209021113.imFYddaU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,132 +44,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822204436.26631-1-kuniyu@amazon.com>
 
-Hi Kuniyuki,
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on linus/master v6.0-rc3]
-[cannot apply to kees/for-next/seccomp next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/seccomp-Release-filter-when-copy_process-fails/20220823-044710
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-config: s390-buildonly-randconfig-r006-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021045.YbjuMbic-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+commit: 12c674aa7e797864f36a4e9dbc2cf20930c1f6fe [4627/4736] kbuild: add debug level and macro defs options
+config: arm64-randconfig-r021-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021113.imFYddaU-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ea0fdd2f2e9a09bd5428bd59e81bac66e949f578
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuniyuki-Iwashima/seccomp-Release-filter-when-copy_process-fails/20220823-044710
-        git checkout ea0fdd2f2e9a09bd5428bd59e81bac66e949f578
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=12c674aa7e797864f36a4e9dbc2cf20930c1f6fe
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 12c674aa7e797864f36a4e9dbc2cf20930c1f6fe
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/fork.c:540:28: error: no member named 'filter' in 'struct seccomp'
-           WARN_ON_ONCE(tsk->seccomp.filter);
-                        ~~~~~~~~~~~~ ^
-   include/asm-generic/bug.h:104:25: note: expanded from macro 'WARN_ON_ONCE'
-           int __ret_warn_on = !!(condition);                      \
-                                  ^~~~~~~~~
-   kernel/fork.c:854:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:854:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
-   13 warnings and 1 error generated.
-
-
-vim +540 kernel/fork.c
-
-   537	
-   538	void free_task(struct task_struct *tsk)
-   539	{
- > 540		WARN_ON_ONCE(tsk->seccomp.filter);
-   541		release_user_cpus_ptr(tsk);
-   542		scs_release(tsk);
-   543	
+>> ld.lld: error: vmlinux.o:(.debug_info+0x2096020d): relocation R_AARCH64_ABS32 out of range: 4295813883 is not in [-2147483648, 4294967295]
+   >>> referenced by xarray.c; consider recompiling with -fdebug-types-section to reduce size of debug sections
 
 -- 
 0-DAY CI Kernel Test Service
