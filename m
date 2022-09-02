@@ -1,45 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEB17D61
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 23:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172367D61
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 23:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662160951; x=1693696951;
+  t=1662162153; x=1693698153;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ti+hTeS5vwIkU0g320lQTsshMRB94G9yS+tAZK5+xTk=;
-  b=RZh566pTCnHJhb7HQuf/zWpL+pPy7tlUY9GjSYjH2bsvBECWV5LHY9Jr
-   UJWWXrM9Uawdw7bFMrBOa0kMURD5MipuHcuQ+MDk9o1ljB0MfSCUfuM78
-   paOOTh7ZTDSqq9xG6l2wk/l5TECQLXowAFLiUzTXmTefOTgomrhNUyOTG
-   T50t/av0rtszQKJPeckfubV1uGIhSjCW4iebY7tETIz/vQcYW4qH5kY/x
-   84y9tPMnK2Ta+PWjuURbSsC1Jb2r40888fCneV7vSh23qQmrpj1R//sKS
-   m7WoLqGd5Zao17P0JHzLQ9Ow1yV8TDMW546YJJTWQLR86+/ODXuvnLei8
+  bh=/efY59gkiZTSJsslrvg6cTfqOJ/AgFh7wmsPP3MseGU=;
+  b=lZeEPompXWmKP/IqXbXgA9U581LD1puPCH3jDp5dkmsLBNvWJffhbwKB
+   7ECg1AuUn/g/s6nQko8gOur8u61E4B4ZkKovFWvfTC7wT3BBL22IelyfN
+   7Pco2Og18XxpKCDkKRRhKxJyGaeEuZ4n8SexSaS+IJAYZDA3Hik3TkPjL
+   JWQWkkmqhnELuoKqyKlrbEPEhL4vadZGL8UPTQxFw8taIjQt0thT2zkq+
+   7+luPLsjgOcLYH8TxNItO1jS1uQBpZ1EhFPh9NcOskVEFD9dVttIjQUio
+   Pq8sb1FI4AEHi+7ltEDvXaJfaC6JGXlyKS5ucAefOZ8zw97+n/BlHrJeg
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="283095219"
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296891978"
 X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="283095219"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:22:31 -0700
+   d="scan'208";a="296891978"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:42:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="564129744"
+   d="scan'208";a="646286064"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 16:22:29 -0700
+  by orsmga001.jf.intel.com with ESMTP; 02 Sep 2022 16:42:31 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oUFzY-0000jG-2r;
-	Fri, 02 Sep 2022 23:22:28 +0000
-Date: Sat, 3 Sep 2022 07:21:34 +0800
+	id 1oUGIw-0000k7-1X;
+	Fri, 02 Sep 2022 23:42:30 +0000
+Date: Sat, 3 Sep 2022 07:42:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marex@denx.de>
+To: Peter Xu <peterx@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Linux Memory Management List <linux-mm@kvack.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Subject: [linux-next:master 2262/4736]
- drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting prototype for
- drivers/extcon/extcon-tusb320.c(). Prototype was for TUSB320_REG8() instead
-Message-ID: <202209030755.eB4SkwGE-lkp@intel.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Huang, Ying" <ying.huang@intel.com>
+Subject: [linux-next:master 4318/4736] arch/x86/mm/init.c:1057:15: warning:
+ no previous prototype for function 'arch_max_swapfile_size'
+Message-ID: <202209030733.wJOuJq5j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,48 +50,40 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
-commit: 822a6200734c94ccbfc9ae7acc5da5505b991515 [2262/4736] extcon: usbc-tusb320: Add USB TYPE-C support
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220903/202209030755.eB4SkwGE-lkp@intel.com/config)
+commit: c21e4d92cbb920b50a809409bc56c6ca4f09e7bf [4318/4736] mm/swap: cache maximum swapfile size when init swap
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220903/202209030733.wJOuJq5j-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=822a6200734c94ccbfc9ae7acc5da5505b991515
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c21e4d92cbb920b50a809409bc56c6ca4f09e7bf
         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
         git fetch --no-tags linux-next master
-        git checkout 822a6200734c94ccbfc9ae7acc5da5505b991515
+        git checkout c21e4d92cbb920b50a809409bc56c6ca4f09e7bf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/extcon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting prototype for drivers/extcon/extcon-tusb320.c(). Prototype was for TUSB320_REG8() instead
+>> arch/x86/mm/init.c:1057:15: warning: no previous prototype for function 'arch_max_swapfile_size' [-Wmissing-prototypes]
+   unsigned long arch_max_swapfile_size(void)
+                 ^
+   arch/x86/mm/init.c:1057:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long arch_max_swapfile_size(void)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +19 drivers/extcon/extcon-usbc-tusb320.c
+vim +/arch_max_swapfile_size +1057 arch/x86/mm/init.c
 
-    18	
-  > 19	#define TUSB320_REG8				0x8
-    20	#define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
-    21	#define TUSB320_REG8_CURRENT_MODE_ADVERTISE_USB	0x0
-    22	#define TUSB320_REG8_CURRENT_MODE_ADVERTISE_15A	0x1
-    23	#define TUSB320_REG8_CURRENT_MODE_ADVERTISE_30A	0x2
-    24	#define TUSB320_REG8_CURRENT_MODE_DETECT	GENMASK(5, 4)
-    25	#define TUSB320_REG8_CURRENT_MODE_DETECT_DEF	0x0
-    26	#define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
-    27	#define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
-    28	#define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
-    29	#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
-    30	#define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
-    31	#define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
-    32	#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
-    33	#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
-    34	#define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
-    35	
+  1055	
+  1056	#ifdef CONFIG_SWAP
+> 1057	unsigned long arch_max_swapfile_size(void)
 
 -- 
 0-DAY CI Kernel Test Service
