@@ -1,155 +1,216 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5E1EA0
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 00:42:04 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3321c2a8d4cso3203107b3.5
-        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 17:42:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8fC2rZWTgCYBntka/As3bCqt2A+cDoDbQGtV1oAG1Rc=;
-        b=5yqb8RzsM5NuR9R8lOniUyNC13QLjMlAVnKaC4GBaZAJurvydY6ENTU7dvWvZ552xn
-         YGRV4CTpw4Xl2wB9HTu1XndRjREWe9x7fQJIsS8rCS5EJOQ9ur20E/ZIemAH15UM14R7
-         kC5wto9n8brYv/1hQhe6fziVkWDk5J8yZ6fF0LW5dQz3aGsAosFLvlHFcM7eoUiOd6Ab
-         lcLgTrQtQZjgnL3p+AHv8iPZ/8G6A2QAiMxQHNuPTovam3rc6wlO4N9gshgbsS6hCJDO
-         41xBMXZ623DE05wl5VVdZkFlW2VgqWhQ/daudFyS6v7bKOpCfuvPH5d/YoXzcolR6fn9
-         SjSQ==
-X-Gm-Message-State: ACgBeo2swdfFPxlRVaPbG39Qubaz0t4E7NCxKur6yK7IdAZUoWgrtQqZ
-	EhUZJTqvKscjERvraYI2ur0TN9Psxonm3e+JyyQ=
-X-Google-Smtp-Source: AA6agR4qmd4h+RQhX/5BiuXjh/WdzAhWTCrnHQLr66XukbfP+zqT2pWK5eS96aPP7+tD4XVdijaxbYnRq1d49FV1B34=
-X-Received: by 2002:a81:4ccf:0:b0:32f:cccf:cef7 with SMTP id
- z198-20020a814ccf000000b0032fcccfcef7mr25416327ywa.191.1662079323488; Thu, 01
- Sep 2022 17:42:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7079EA0
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 00:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662080064; x=1693616064;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=L3mRRBK1ngAjAxHn3yh88wqZwNaBV7sRHz6khPlLV7w=;
+  b=SprtNtK8UGf2q0NETnRyu2rwlDCnVd0nw9k+DKIdBHqHlaqQIXEXk8H8
+   Qxyvae/ZTLrugc7l5t0D5mEjKnHfIK/BtA2SDjJJ4xF8G6I8IsrncLfLh
+   WYo5UfNbtNFlze3ihQc1uzv+DZ4aM1nCjslgQQPE5hotY1ASY56UYpJPM
+   laJk4j9RONfCr64ZQFKDFaPH5lzAvFTINRAtaMTsgdMggvUEuDy+luNuo
+   DNNVB5MpuehbvWJlZOt7lW3/Xh9bsH6NpVim5QN9Im85L0n9Dp6+3VKk9
+   lUUnTt3nZW1coLEYteVK8J35GKXIeVJAOQfRoTz+QOUfFuHD7oOaXlxpn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="297147270"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="297147270"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="642650565"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.211.18]) ([10.254.211.18])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:16 -0700
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ kernel test robot <lkp@intel.com>, Kees Cook <keescook@chromium.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+ "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
+ <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+ <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
+ <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
+ <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
+ <YxDj6v5p+wHop0Wm@dev-arch.thelio-3990X>
+ <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
+From: "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <4c6da74c-4dc1-796c-5f22-bdd075b23c2b@intel.com>
+Date: Fri, 2 Sep 2022 08:54:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
- <YxArx4UGoSQXljQd@yury-laptop> <CAMZ6Rq+XVWGEEHr9t5dkXN0E36hkpMb5kNEZJmMFgtJxyQntsg@mail.gmail.com>
- <YxC+eShQLDor0B9D@yury-laptop>
-In-Reply-To: <YxC+eShQLDor0B9D@yury-laptop>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Fri, 2 Sep 2022 09:41:52 +0900
-Message-ID: <CAMZ6RqJs0Ujg3hTSURbtueynhAh_-pqwyzemytLeq1i0Kq2ufg@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Borislav Petkov <bp@alien8.de>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 
-On Thu. 1 Sep. 2022 at 23:19, Yury Norov <yury.norov@gmail.com> wrote:
-> On Thu, Sep 01, 2022 at 07:30:10PM +0900, Vincent MAILHOL wrote:
-> > On Tue. 1 sept. 2022 at 12:49, Yury Norov <yury.norov@gmail.com> wrote:
-> > > On Wed, Aug 31, 2022 at 01:54:01AM -0700, Yury Norov wrote:
-> > > > On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
-> > > > > The compilers provide some builtin expression equivalent to the ffs(),
-> > > > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
-> > > > > assembly which produces better code than the builtin
-> > > > > functions. However, such assembly code can not be folded when used
-> > > > > with constant expressions.
-> > > > >
-> > > > > This series relies on __builtin_constant_p to select the optimal solution:
-> > > > >
-> > > > >   * use kernel assembly for non constant expressions
-> > > > >
-> > > > >   * use compiler's __builtin function for constant expressions.
-> > > > >
-> > > > >
-> > > > > ** Statistics **
-> > > > >
-> > > > > Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> > > > > of __ffs() and ffz() calls (details of the calculation in each patch).
-> > > >
-> > > > Hi Vincent,
-> > > >
-> > > > Can you please add a test for this? We've recently added a very similar
-> > > > test_bitmap_const_eval() in lib/test_bitmap.c.
-> > > >
-> > > > dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
-> > > > assertions")
-> > > >
-> > > > Would be nice to have something like this for ffs() and ffz() in
-> > > > lib/test_bitops.c.
-> > > >
-> > > > Please keep me in loop in case of new versions.
-> >
-> > Hi Yury,
-> >
-> > My patch only takes care of the x86 architecture.
->
-> OK, I just realized that you started submitting this at least back in May.
->
-> For me, v6 is good enough and well-described. So, for the series:
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
 
-Thanks for the review!
 
-> How are you going to merge it? If you haven't a specific tree in mind
-> already, I can take it in my bitmap tree because  ffs and ffz are closely
-> related to find_bit() functions.
+On 9/2/2022 1:04 AM, Nick Desaulniers wrote:
+> On Thu, Sep 1, 2022 at 9:55 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Thu, Sep 01, 2022 at 01:52:42PM +0800, Chen, Rong A wrote:
+>>>
+>>>
+>>> On 9/1/2022 1:45 PM, Christophe Leroy wrote:
+>>>>
+>>>>
+>>>> Le 01/09/2022 à 06:59, Chen, Rong A a écrit :
+>>>>>
+>>>>>
+>>>>> On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
+>>>>>> Hi Rong,
+>>>>>>
+>>>>>> On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+>>>>>>>> On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+>>>>>>>>> tree:
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>>>> master
+>>>>>>>>> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+>>>>>>>>> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug:
+>>>>>>>>> make DEBUG_INFO selectable from a choice
+>>>>>>>>> date:   5 months ago
+>>>>>>>>> config: powerpc-buildonly-randconfig-r003-20220830
+>>>>>>>>> (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+>>>>>>>>> compiler: clang version 16.0.0
+>>>>>>>>> (https://github.com/llvm/llvm-project
+>>>>>>>>> c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+>>>>>>>>> reproduce (this is a W=1 build):
+>>>>>>>>>             wget
+>>>>>>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>>>>>>             chmod +x ~/bin/make.cross
+>>>>>>>>>             # install powerpc cross compiling tool for clang build
+>>>>>>>>>             # apt-get install binutils-powerpc-linux-gnu
+>>>>>>>>>             #
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>>>>             git remote add linus
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>>>>             git fetch --no-tags linus master
+>>>>>>>>>             git checkout f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>>>>             # save the config file
+>>>>>>>>>             mkdir build_dir && cp config build_dir/.config
+>>>>>>>>>             COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+>>>>>>>>> make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>>>>>>>>>
+>>>>>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>>>>>
+>>>>>>>>> All warnings (new ones prefixed by >>):
+>>>>>>>>>
+>>>>>>>>>>> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+>>>>>>>>
+>>>>>>>> Given this is clang 16.0.0 with
+>>>>>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+>>>>>>>> default instead of DWARF4, it looks like older binutils not
+>>>>>>>> understanding DWARF5. What version of binutils is being used by the
+>>>>>>>> bot?
+>>>>>>>
+>>>>>>> Hi Nathan,
+>>>>>>>
+>>>>>>> We're using binutils v2.38.90.20220713-2
+>>>>>>>
+>>>>>>> ||/ Name           Version            Architecture Description
+>>>>>>> +++-==============-==================-============-==========================================
+>>>>>>> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler,
+>>>>>>> linker and binary utilities
+>>>>>>
+>>>>>> Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
+>>>>>
+>>>>> Hi Nathan,
+>>>>>
+>>>>> oh, yes, I misunderstood, it's not related to this package.
+>>>>>
+>>>>>> noticed on second glance that the tuple for the objdump warning above is
+>>>>>> 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+>>>>>> (or a self compiled one) is being used. I would expect the tuple to be
+>>>>>> 'powerpc-linux-gnu-' if Debian's package was being used. Is that
+>>>>>> possible?
+>>>>>
+>>>>> you are right, we used a self-compiled toolchain, we'll try the binutils
+>>>>> from debian package.
+>>>>
+>>>> Can you first tell us the version you are using ?
+>>>>
+>>>>      powerpc-linux-objdump -v
+>>>>
+>>>> That will tell you the version.
+>>>
+>>> Hi Christophe,
+>>>
+>>> the version is v2.38:
+>>>
+>>> $ ./powerpc-linux-objdump -v
+>>> GNU objdump (GNU Binutils) 2.38
+>>> Copyright (C) 2022 Free Software Foundation, Inc.
+>>> This program is free software; you may redistribute it under the terms of
+>>> the GNU General Public License version 3 or (at your option) any later
+>>> version.
+>>> This program has absolutely no warranty.
+>>
+>> Thanks! I did some research and it seems like this warning is expected
+>> with binutils older than 2.39. The warning appears to come from
+>> read_and_display_attr_value() in binutils/dwarf.c. 0x22 and 0x23 are
+>> DW_FORM_loclistx and DW_FORM_rnglistx, which were only recently
+>> supported in that function.
+>>
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=28981
+>> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=19c26da69d68d5d863f37c06ad73ab6292d02ffa
+>>
+>> That change shipped in binutils 2.39. I am not really sure how we should
+>> work around this in the kernel, other than maybe requiring binutils
+>> 2.39+ for CONFIG_DEBUG_INFO_DWARF5. Unfortunately, that will not fix
+>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT when DWARF5 is the default
+>> version...
+> 
+> I've been working on a series that will encode the default implicit
+> dwarf version based on compiler version check. Maybe that can be
+> extended/reused here once that lands?
+> https://lore.kernel.org/llvm/20220831184408.2778264-1-ndesaulniers@google.com/
+> Series needs revision, but it's on the right track.
+> 
+>> Alternatively, switching to llvm-objdump for clang builds
+>> would help :) I am not aware of any issues that would affect that switch
+>> for PowerPC:
+>>
+>> https://github.com/ClangBuiltLinux/linux/labels/%5BTOOL%5D%20llvm-objdump
+> 
+> Oh, is 0day doing `make CC=clang` rather than `make LLVM=1`?  Rong,
+> any chance we get 0day folks to test LLVM=1 for more architectures?
+> Ideally we'd test both, preferably LLVM=1 if we had to choose.
 
-I never thought of a specific tree. I just CCed the x86 architecture
-maintainers according to get_maintainer.pl and was expecting it to go
-through the x86/asm branch of the tip tree. But I am perfectly fine if
-it goes through your tree.
+Hi Nick,
 
-So same as Nick's comment below, unless Borislav still has concern on
-the v6, please take it in your tree.
+Thanks for your advice, yes, we are doing `make CC=clang`, we'll plan it 
+recently.
 
-> > Assuming some other
-> > architectures are not optimized yet, adding such a test might break
-> > some builds. I am fine with adding the test, however, I will not write
-> > patches for the other architecture because I do not have the
-> > environment to compile and test it.
-> >
-> > Does it still make sense to add the test before fixing all the architectures?
->
-> All-arches fix should begin with changing the ffs design. Namely, there
-> should be a generic ffs() in include/linux/bitops.h,
+Best Regards,
+Rong Chen
 
-Currently, the generic ffl, ffs, flz are under:
-/include/asm-generic/bitops
-
-especially, here is the generic ffs():
-https://elixir.bootlin.com/linux/latest/source/include/asm-generic/bitops/ffs.h
-
-Isn't this sufficient?
-
-> and arch-specific
-> arch__ffs() in arch/xxx/include/asm/bitops.h; like we do for the set_bit()
-> family. I have a feeling that it's far beyond the scope of your series.
->
-> The test is a different story. Good tests are always welcome, even if
-> they don't cover all the arches.
-
-ACK. I will add the test in a different patch *after* this series gets
-accepted. But to be clear, I will not fix other architectures.
-
-> > > Also, what about fls? Is there any difference with ffs/ffz wrt compile
-> > > time optimizations? If not, would be great if the series will take
-> > > care of it too.
-> >
-> > Agree. The fls() and fls64() can use __builtin_ctz() and
-> > __builtin_ctzll(). However, those two functions are a bit less
-> > trivial. I wanted to have this first series approved first before
-> > working on *fls*().
->
-> OK, the test and fls() can be a matter of a follow-up series, taking
-> into account how long are these 2 patches moving.
-
-ACK.
-
-> Thanks,
-> Yury
+> 
+>>
+>> Cheers,
+>> Nathan
+> 
+> 
+> 
