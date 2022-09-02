@@ -1,82 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861937480
-	for <llvm@lists.linux.dev>; Thu,  1 Sep 2022 21:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7687C433C1;
-	Thu,  1 Sep 2022 21:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1662068902;
-	bh=AgaBXEIpBBFQ/ZE0Isjng2Wc1nL21eGQ8i4n5nIJjq8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PJaePjrI9x6zMby4A9gt+zlJ/VhqubPs/Dy/LXPZ20fav1fz+3RTbP7aHRK/N0JYD
-	 TdNnX7bDS522/UAVNcrPl9CBzdRLFdu/4rprlosYtmFN99SN0/O85YBFvcgDtbH/d1
-	 mFZ5addvRNR5KZ5W+rkOiR+gALNvLtvJ023Huf9FHEGO5efATJc8IgDdCn3VPH4EOR
-	 FdyW78NWqQ4XOjsovpVz0P3BSBOw5ZwDXHA+DjIwJ8G/wpYmi5pkKBFyUCM2cqbjPC
-	 H30gLMOw5F7IQiq3ky43hQClAaA2amJossODFHR4XKKNEH5+1fyPMqK2gP7YYki5NT
-	 0wBYa/oHZj2tA==
-Date: Thu, 1 Sep 2022 14:48:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [masahiroy-kbuild:kbuild 18/19] ld.lld: error:
- vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation
- R_HEX_B22_PCREL out of range: 2313184 is not in [-2097152, 2097151];
- references __vmnewmap
-Message-ID: <YxEoo8M++9tyaLOO@thelio-3990X>
-References: <202209020450.jH1ovepP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8417EA0
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 00:34:07 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id z8so756500edb.6
+        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 17:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=g0W4XosBFsOU9OJyk6RCXP1Ph74BaHmTWPXYbDZyi0E=;
+        b=g7NAxXDM5jwt2ZQIuC23zS+Gj6bX7gmaIfqxEAECYQiGWpEAFQa1f2CsL5nh5ft/Y9
+         AIr2al38oLiJRpzGtrGgnk4w9IfIMWUonkE+9DZ6k2P21Kl0EvuSxr29PbDA1+1em1cd
+         dYTEjCtfgKnZWDVIJDxxMjQp1lOCGSGhpovijuO0b3qiav5w11KiSdLi8IeR1Geo5r/F
+         b3Rjza8J92KowwOKuk21IB4N0MxylAQhqeD2/xpXuUb7S+NMLxhQTDWf08GnJke1P5zt
+         6uPpCh2NkLp/0pddJFPMNAMbbgzJsAElawX2udhNU0JRHIMRapcX8PefW1fFTfaGdcet
+         aB2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=g0W4XosBFsOU9OJyk6RCXP1Ph74BaHmTWPXYbDZyi0E=;
+        b=Qp4XnCNvik4RkZbpUBnBM1IFgtOsBsSqUpZNR+TfWtFfyMVITozCkTnz5cazxm4QrS
+         JhcCWOa+bWXlmGFmZDBbwG6j8J7VxMSb4lwjcRpM1y0kog8iJDo7VEZgZ9BcNFwAM6oK
+         wt9FOU+RxgEXRqh1g0+546cY5uxFxci3JYyl3M4igbWFb7MpPPJZu8FUd2vUfZwXPcEh
+         WTX3ypM5tz9XiSEYfb6fIWeBy+Mtw5vKh8J1Sw5LO1rl3TwUXkAsPDNRE3Q4hAgYhIc6
+         XK3CgfAn1QXXrZeNx43qtfUji9FMxbkz9bjgheAh0byt2o1ImdWZODf8Attv3DSgklwB
+         4DRw==
+X-Gm-Message-State: ACgBeo2ZfmTFJIo4njWeH0M1COxeLzchdnlwZEa+zFquIyPzbg+5YUEB
+	+VJEFvgW2R1qfL5CUirODvrmENsU8NPkqxxR9RS9HA==
+X-Google-Smtp-Source: AA6agR7L1g+GrifIuIL2RvuO0MF4C2Vtm6LL1S4dqJ/PngqADbOmXg04ta+aDasVtIdRN9a8Nlvw5KjebtJPyg0x6M0=
+X-Received: by 2002:a05:6402:3227:b0:448:706c:185d with SMTP id
+ g39-20020a056402322700b00448706c185dmr18264220eda.357.1662078845879; Thu, 01
+ Sep 2022 17:34:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209020450.jH1ovepP-lkp@intel.com>
+References: <20220830233129.30610-1-samitolvanen@google.com> <YxEh+pLyOyPalW1u@dev-arch.thelio-3990X>
+In-Reply-To: <YxEh+pLyOyPalW1u@dev-arch.thelio-3990X>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 1 Sep 2022 17:33:29 -0700
+Message-ID: <CABCJKucP5nXGiCTTCEPUGYo5Z9A9qaQkJ6_kXTOfw-o-=TYH0g@mail.gmail.com>
+Subject: Re: [PATCH v4 00/21] KCFI support
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-+ Masahiro
+Hi Nathan,
 
-On Fri, Sep 02, 2022 at 04:41:09AM +0800, kernel test robot wrote:
-> CC: linux-kbuild@vger.kernel.org
-> TO: Masahiro Yamada <masahiroy@kernel.org>
-> 
-> Hi Masahiro,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git kbuild
-> head:   67c0e0cf21cd5065fba45a6a00dd252ae4b9417a
-> commit: 0b1de512cba77e11bdf0305264c56ab61b23b3e1 [18/19] kbuild: use obj-y instead extra-y for objects placed at the head
-> config: hexagon-randconfig-r041-20220831 (https://download.01.org/0day-ci/archive/20220902/202209020450.jH1ovepP-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=0b1de512cba77e11bdf0305264c56ab61b23b3e1
->         git remote add masahiroy-kbuild https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
->         git fetch --no-tags masahiroy-kbuild kbuild
->         git checkout 0b1de512cba77e11bdf0305264c56ab61b23b3e1
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2313184 is not in [-2097152, 2097151]; references __vmnewmap
->    >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-> --
-> >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x12c): relocation R_HEX_B22_PCREL out of range: 2313056 is not in [-2097152, 2097151]; references __vmsetvec
->    >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
-> --
-> >> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2326848 is not in [-2097152, 2097151]; references memset
->    >>> defined in vmlinux.a(arch/hexagon/lib/memset.o)
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-> 
+On Thu, Sep 1, 2022 at 2:19 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> I took this series for a spin on arm64 and x86_64.
+
+Thanks for testing!
+
+> I did not see any runtime issues on my arm64 or AMD test machines but I
+> do see a set of failures on my two Intel test machines when accessing
+> the files in /sys/devices/pci0000:00/0000:00:02.0/drm/card0/gt/gt0:
+
+Yes, I suspect there are a few sysfs type mismatches left to fix
+still. I believe Kees was looking into these earlier.
+
+> The source of those is drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c. I
+> have not looked too closely yet but the fix should be something along
+> the lines of commit 58606220a2f1 ("drm/i915: Fix CFI violation with
+> show_dynamic_id()").
+
+I don't have hardware for testing this driver, but that looks like a
+typical kobj_attribute / device_attribute mismatch, which happens to
+work because struct device starts with a kobject and the attribute
+structure is identical. I can take a look at this next week.
+
+> Interestingly, I do not see the KVM failure [1] that I reported anymore.
+> I do not see an obvious fix for it in this series or -next though, could
+> it have been an issue with an earlier revision of kCFI on the compiler
+> side?
+
+Most likely the compiler either converted it into a direct call, or
+inlined it. There are a few type mismatches in the kernel still that
+don't trip KCFI because they're optimized into direct calls.
+
+> I do see a few new objtool warnings as well:
+>
+> vmlinux.o: warning: objtool: apply_relocate_add+0x34: relocation to !ENDBR: memcpy+0x0
+> vmlinux.o: warning: objtool: ___ksymtab+__memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+> vmlinux.o: warning: objtool: ___ksymtab+memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+
+That's interesting. I can only reproduce this warning with
+allmodconfig+LTO, even though the relocation exists in all builds (the
+code makes an indirect call to memcpy) and memcpy (aliased to
+__memcpy) doesn't start with endbr. I'll have to take a closer look at
+why this warning only appears with LTO.
+
+Sami
