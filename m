@@ -1,44 +1,32 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1437D186F
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 15:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662133683; x=1693669683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F4Fakjhd+ZOAe94994E9Pm8XSTFIaUB+EYRAUfZFuok=;
-  b=TPOTR4vOh5Auc7Iwmecqd6x/yipwzV509AoXr0C+/TS636ickzTH4C//
-   fRaWMfpuhYK+V+iF/QZLrOoA8Kp/D6k80nfc7Ikauz0H0ct+VYdjO1mrC
-   ddZ5+CwvErKARS84NTw0Ubq5eAhI6ZR5iSjIxiU7aPhmdSUF7wNDc7kEq
-   vYYFkTRzA8HvgfHSSbv0m2U17UEw8MJ75rZSZwNIpqiC/jxS6xs24I0N3
-   g3uc7nu02f/hCdZ8BjtC4hJzfVaA8uZFNEy5glIwajCjbRvM42l/TX6gE
-   Wa2cAaG9XPuQWjVn8sj/K84wd4QQG7zej8kc7JF0PGZSI5BTo+PPyephv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="279022167"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="279022167"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 08:48:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="755295073"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Sep 2022 08:48:00 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oU8tj-0000Fs-2G;
-	Fri, 02 Sep 2022 15:47:59 +0000
-Date: Fri, 2 Sep 2022 23:47:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Harsh Modi <harshmodi@google.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, harshmodi@google.com,
-	sdf@google.com, ast@kernel.org, haoluo@google.com,
-	joannelkoong@gmail.com, quentin@isovalent.com, joe@cilium.io
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_[skb|xdp]_packet_hash.
-Message-ID: <202209022355.SbJhZF5b-lkp@intel.com>
-References: <20220831233615.2288256-1-harshmodi@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294136713
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 16:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4B1C433C1;
+	Fri,  2 Sep 2022 16:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1662136152;
+	bh=EJSuKIdA6Kl9vAbkgwbqUPmQeQi48xSUtx/YrpyZeVw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VySbP786tIIlHzoJHKsAGA+EXRZJ7zxPsG1gWbQpgabStWZTeuqmv2zdYF/6vEWx/
+	 7rLcZ/r8D3QUM6ONZY3YRiVPHcjFEh8W48OdI+E4NFO50XljQjCmyTZEs94zMzcCGk
+	 2DFwgPVjE0ulPLL27RaUqE2k9OHHiX83eMB9IKtoFl6XfLxpKlvQxBpkd96DrolURg
+	 qoT9QlCtpae1XjSjYnVaUGOsQKjxSddnneu/BRzWXDvM7Tqt9AxzCcqvVx3AQMHhLo
+	 HopSlwy1I6Y9kqmlAm/WQMbnLZtMsILNc6FrvVmZChVCPWKBZXBLv4muSkX1Q/2hnj
+	 L5seHaFAAIcmw==
+Date: Fri, 2 Sep 2022 09:29:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [linux-next:master 4627/4736] ld.lld: error:
+ vmlinux.o:(.debug_info+0x2096020d): relocation R_AARCH64_ABS32 out of range:
+ 4295813883 is not in
+Message-ID: <YxIvVmJcKzJrIRzD@dev-arch.thelio-3990X>
+References: <202209021113.imFYddaU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,38 +35,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831233615.2288256-1-harshmodi@google.com>
+In-Reply-To: <202209021113.imFYddaU-lkp@intel.com>
 
-Hi Harsh,
++ Andrew, Dmitrii, and Nick
 
-Thank you for the patch! Yet something to improve:
+On Fri, Sep 02, 2022 at 11:26:27AM +0800, kernel test robot wrote:
+> CC: Linux Memory Management List <linux-mm@kvack.org>
+> TO: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> CC: Andrew Morton <akpm@linux-foundation.org>
+> CC: Linux Memory Management List <linux-mm@kvack.org>
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+> commit: 12c674aa7e797864f36a4e9dbc2cf20930c1f6fe [4627/4736] kbuild: add debug level and macro defs options
+> config: arm64-randconfig-r021-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021113.imFYddaU-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=12c674aa7e797864f36a4e9dbc2cf20930c1f6fe
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 12c674aa7e797864f36a4e9dbc2cf20930c1f6fe
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: vmlinux.o:(.debug_info+0x2096020d): relocation R_AARCH64_ABS32 out of range: 4295813883 is not in [-2147483648, 4294967295]
+>    >>> referenced by xarray.c; consider recompiling with -fdebug-types-section to reduce size of debug sections
 
-[auto build test ERROR on bpf-next/master]
+It seems like CONFIG_DEBUG_MACRO_DEFINITIONS can blow up the size of the
+kernel image significantly. Perhaps it should be marked with a
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Harsh-Modi/bpf-Add-bpf_-skb-xdp-_packet_hash/20220901-073646
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220902/202209022355.SbJhZF5b-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/078b031d06a73f3fc17333d808db554ec4753a90
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Harsh-Modi/bpf-Add-bpf_-skb-xdp-_packet_hash/20220901-073646
-        git checkout 078b031d06a73f3fc17333d808db554ec4753a90
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+    depends on !COMPILE_TEST
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+to avoid having all{mod,yes}config and randconfigs trip over it?
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: crc32c
-   >>> referenced by filter.c
-   >>>               core/filter.o:(crc32c_csum_update) in archive net/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
