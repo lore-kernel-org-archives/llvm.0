@@ -1,193 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5735A10F0
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 05:00:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662094849;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MWgnZfX6QgHSL7nhS52V3/L88B51hDUJZikned0P/Z4=;
-	b=DLkABpvoJqBXK77kWstV+I1sckVPrYJO3MlZJvvon4zAPJ/CUCZLMCSdC3GpJiAq1wLU6w
-	S/rBYyxTVIPpDaCESjcFudX1VVYUGrWhSckb758D5Qm7AGq5e9dzNHFCGVluXy2eIAmN9m
-	JrkEpsxrqr7qdXdtEDsk7j36faS8p6s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-Aw8E3T6ZMhyVBdliQJLkog-1; Fri, 02 Sep 2022 01:00:46 -0400
-X-MC-Unique: Aw8E3T6ZMhyVBdliQJLkog-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53B1180A0AE
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 05:00:46 +0000 (UTC)
-Received: from [172.64.3.82] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 44F401415125;
-	Fri,  2 Sep 2022 05:00:46 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (90/376 SKIPPED): Test report for master
- (6.0.0-rc3, mainline.kernel.org-clang, 42e66b1c)
-Date: Fri, 02 Sep 2022 05:00:45 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C6C10F0
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 05:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662096664; x=1693632664;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZP16yHySMl8eG2EwQ8pPKQTQf9pSFzjCjniCmbqnYHY=;
+  b=mXS0GojwET1pWG3ae/NKsiZ1lPLygvbynjwkVG0M9ylmWAiXV92PL0dM
+   JHa1zOb0o86uIvGD/jXiD5tHFgWbLYhPwqQYoPQDx+u6nwx1eYq2POXJQ
+   HNxusZb4pj9XMBe5+bZlUS/iFS8d1uZ3/Xks6hj5z95IwflIN179KCYOK
+   BXZHZkTCimTaNpUagfNhVKaY4Re3zhVDLZgkrWXKLH+RFCzJK+8BJi6xK
+   mplS+IHnO3aDJh3i95RSeX+RFZ7LW+grb/rcGVB7/Sx7B8mR1bn8l0pj3
+   9nfO4L7Yszuv0Ar2Z7EMqgaDxiPKMrvF+qPAJNDN/wlqGsrDWAxD81L8q
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="359856938"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="359856938"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 22:31:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="642767538"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2022 22:31:02 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oTzGg-0000CN-0Z;
+	Fri, 02 Sep 2022 05:31:02 +0000
+Date: Fri, 2 Sep 2022 13:30:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yishai Hadas <yishaih@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH V5 vfio 04/10] vfio: Add an IOVA bitmap support
+Message-ID: <202209021338.Yf1CDIZe-lkp@intel.com>
+References: <20220901093853.60194-5-yishaih@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-Message-Id: <15278.122090201004606323@us-mta-354.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901093853.60194-5-yishaih@nvidia.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yishai,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'net-6.0-rc4' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Yishai-Hadas/Add-device-DMA-logging-support-for-mlx5-driver/20220901-174304
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5e4d5e99162ba8025d58a3af7ad103f155d2df7
+config: hexagon-buildonly-randconfig-r004-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021338.Yf1CDIZe-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/84e183bf41bda194be7b88bfeddddc93202bd550
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yishai-Hadas/Add-device-DMA-logging-support-for-mlx5-driver/20220901-174304
+        git checkout 84e183bf41bda194be7b88bfeddddc93202bd550
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/vfio/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52364
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - lvm thinp stqe test: resize2fs: Permission denied =
-to resize filesystem
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1325
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: Storage - lvm thinp stqe test: ERROR: lvextend -L48 -rf test=
-vg/snap1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1349
-            Affected tests:
-                 aarch64 - Storage - lvm thinp stqe test
-                 ppc64le - Storage - lvm thinp stqe test
-                   s390x - Storage - lvm thinp stqe test
-                  x86_64 - Storage - lvm thinp stqe test
-                  x86_64 (debug) - Storage - lvm thinp stqe test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [upstream] [aarch64] [ampere] [altramax] 5.19.0-rc8 - panic =
-__efi_rt_asm_wrapper+0x2c/0x4c efi_call_rts+0x260/0x3d4
-            URL: https://lore.kernel.org/all/CA+QYu4r50dDuTyWbAqjjbvniW6O6N=
-r4V+1A_G2f37EVHJtM3_Q@mail.gmail.com/T/#t
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+>> drivers/vfio/iova_bitmap.c:405:24: warning: comparison of distinct pointer types ('typeof (1UL) *' (aka 'unsigned long *') and 'typeof (length >> mapped->pgshift) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           unsigned long nbits = max(1UL, length >> mapped->pgshift), set = nbits;
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +405 drivers/vfio/iova_bitmap.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   389	
+   390	/**
+   391	 * iova_bitmap_set() - Records an IOVA range in bitmap
+   392	 * @bitmap: IOVA bitmap
+   393	 * @iova: IOVA to start
+   394	 * @length: IOVA range length
+   395	 *
+   396	 * Set the bits corresponding to the range [iova .. iova+length-1] in
+   397	 * the user bitmap.
+   398	 *
+   399	 * Return: The number of bits set.
+   400	 */
+   401	unsigned long iova_bitmap_set(struct iova_bitmap *bitmap,
+   402				      unsigned long iova, size_t length)
+   403	{
+   404		struct iova_bitmap_map *mapped = &bitmap->mapped;
+ > 405		unsigned long nbits = max(1UL, length >> mapped->pgshift), set = nbits;
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
