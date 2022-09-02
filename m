@@ -1,74 +1,115 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157DDEA0
-	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 01:19:12 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id 11so1261202ybu.0
-        for <llvm@lists.linux.dev>; Thu, 01 Sep 2022 18:19:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ueaMAy0ULQXZkazcTVS3d2242HyoqlSUdmi5cz1KhEY=;
-        b=2Mt6yNsnrZPEinKH6mHqXZdU5KYXoTdY895oKYgluxpESE5KP391NHW9GzhSZ+nbFG
-         yuhpyV+mqaqU06Kdw6do/x3hE4vYyQSo3+L2Cu2Paz//BvtMcnkfxBCZ/OdtQTMbIeH8
-         galPZQ5POfRRE7XvQW1l4BoORMxPlnVbM+Xjo/6dNCaUfkMc866vuJfqB0+Ap0aCDIso
-         LCwA10v+vLipNuiyoWGZlQo0rggBaB3nQ7l7g3SRXaVQnOVP6pc/J2WoWGW9lWagW4EV
-         CC8MKpI40/MMEyDaOe7BAJ0KCYRbnttac6B2TdD+wAWEXPh/i1R5Uep/xJYOmsdkF3a9
-         53uw==
-X-Gm-Message-State: ACgBeo300HNXUqmqRF2U1xKBg6g1l+yvg2smWROfd3pqSLt3Fop+ECKR
-	+R+jNWJfOk98NFJ+MDvyccxKhID4mV518VMYeEg=
-X-Google-Smtp-Source: AA6agR56eWPZZgZXhHE8+UymN7vbahfHkIj+3WZnQbGp9SGVdxxxFcRy7/EqFd2T34smijqy8pq+bc3zPUahaBRooBk=
-X-Received: by 2002:a25:6a56:0:b0:694:52ad:aab6 with SMTP id
- f83-20020a256a56000000b0069452adaab6mr7186184ybc.151.1662081552016; Thu, 01
- Sep 2022 18:19:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E957CA55
+	for <llvm@lists.linux.dev>; Fri,  2 Sep 2022 02:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662086449; x=1693622449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rbQmJEo55j2XqsxEN/mx4l3iLojlYeK95mtxXgPj61k=;
+  b=dyhY5MyUJ+Flqu57BLis9/LMdJjXIdzs5toqlTRXmDhtIu3Nx5o7RjDY
+   sENoviSoOFKSCtBsJxQLc6qUHE+26uQBJiYAkxfszH0+wvWjsiQzMTP/p
+   m2OaWEy9RY02YVL71jqn6dFDTNPth8oyoh69ZsOoblHfBGhATeQzVVJnT
+   lwq3pa3AMpnL6o2cm0Uj0Io9MypUBBl8UMiOcniwf/J5wZC1xZyCzD2oz
+   VC2jrb3fPCngBcWXjqi1C0LBNpflqRQ+lnlZS8s/7duHxcYj19JQi0/PH
+   vTfP0ozF6DCM8ZOBrFj9388fWF6g0MuaMbXU+52kZTg7PU6t/NZ+efUjR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296660008"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="296660008"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 19:40:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="589841531"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Sep 2022 19:40:47 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oTwbv-00001f-0X;
+	Fri, 02 Sep 2022 02:40:47 +0000
+Date: Fri, 2 Sep 2022 10:39:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ashutosh Dixit <ashutosh.dixit@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [Intel-gfx] [RFC PATCH v2 2/2] Fix per client busyness locking
+Message-ID: <202209021008.CdocRSC0-lkp@intel.com>
+References: <20220901235452.1004146-2-ashutosh.dixit@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
-In-Reply-To: <Yw8hJS9f6SofG4/6@yury-laptop>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Fri, 2 Sep 2022 10:19:00 +0900
-Message-ID: <CAMZ6RqJJZSsnd8e=WATDVN2S2gFq1h-iCNstaakUXSubWP+img@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Borislav Petkov <bp@alien8.de>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901235452.1004146-2-ashutosh.dixit@intel.com>
 
-On Tue. 31 Aug 2022 at 17:51, Yury Norov <yury.norov@gmail.com> wrote:
-> On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
-(...)
-> Please keep me in loop in case of new versions.
+Hi Ashutosh,
 
-A side comment, but if you want not to miss such discussion again in
-the future, why not do this?
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on drm-tip/drm-tip]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 56af0182a93b..f6caf4252799 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3602,6 +3602,7 @@ M:        Yury Norov <yury.norov@gmail.com>
- R:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- R:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
- S:     Maintained
-+F:     arch/*/include/asm/bitops.h
- F:     include/linux/bitmap.h
- F:     include/linux/cpumask.h
- F:     include/linux/find.h
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashutosh-Dixit/i915-pmu-Wire-GuC-backend-to-per-client-busyness/20220902-075534
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220902/202209021008.CdocRSC0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b1db15edb2416229fdde749425de6a6ae7a4b94a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ashutosh-Dixit/i915-pmu-Wire-GuC-backend-to-per-client-busyness/20220902-075534
+        git checkout b1db15edb2416229fdde749425de6a6ae7a4b94a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-N.B. this is just a suggestion, please feel free to discard it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Thanks,
-> Yury
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1512:5: warning: no previous prototype for function 'guc_context_update_stats' [-Wmissing-prototypes]
+   u64 guc_context_update_stats(struct intel_context *ce, bool pin)
+       ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1512:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u64 guc_context_update_stats(struct intel_context *ce, bool pin)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/guc_context_update_stats +1512 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+
+  1511	
+> 1512	u64 guc_context_update_stats(struct intel_context *ce, bool pin)
+  1513	{
+  1514		struct intel_guc *guc = ce_to_guc(ce);
+  1515		unsigned long flags;
+  1516		u64 ret;
+  1517	
+  1518		if (pin) {
+  1519			intel_context_pin(ce);
+  1520		} else {
+  1521			/* Return previously computed value */
+  1522			spin_lock_irqsave(&guc->timestamp.lock, flags);
+  1523			ret = ce->stats.runtime.total + ce->stats.active;
+  1524			spin_unlock_irqrestore(&guc->timestamp.lock, flags);
+  1525			return ret;
+  1526		}
+  1527	
+  1528		spin_lock_irqsave(&guc->timestamp.lock, flags);
+  1529		ret = __guc_context_update_stats(ce);
+  1530		spin_unlock_irqrestore(&guc->timestamp.lock, flags);
+  1531	
+  1532		intel_context_unpin(ce);
+  1533		return ret;
+  1534	}
+  1535	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
