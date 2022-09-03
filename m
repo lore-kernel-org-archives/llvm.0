@@ -1,141 +1,231 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265AF1363
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 00:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662165880; x=1693701880;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NFcv7Vx6HChnL9I6Lmc1p/zB/CwUdD+L/dNAU9k7QO8=;
-  b=hit0I9BAdN7iuOTsj9r2iTzY3j8Jxn0fSScqKw63pfKPRQ0DHy1ChPJd
-   8nH6Q+uoeSfdcuT+hSQ1Q9emQRzB4fKY7LnC1mkE/2Xv+XzrNnjdLX1Wz
-   XvwT7ZW9TSpcCPjdNNy4Te/eTo4xb7kUoDpzjUea9IDF8HRZnTsv8eCcg
-   l8TTcysQ5dWXOdBbXvf+c7u8blwU0irMV7XSh/VMtmYHRvpZu+6P1Anty
-   hSYycDc9td07SnzCSD/GUTynEkbM0YGXvnsBRIbIaH02dBB2iPEQDdukV
-   7foEe3YhKRhPOL2T80lxoIW7qMQCOP4OvU5zdaPWEU/PzBqoZHa/Y3+6b
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296898187"
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="296898187"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 17:44:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="739043297"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 02 Sep 2022 17:44:33 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oUHGy-0000nD-2M;
-	Sat, 03 Sep 2022 00:44:32 +0000
-Date: Sat, 3 Sep 2022 08:43:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Evan Quan <evan.quan@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Lijo Lazar <lijo.lazar@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
- warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
- aligned than 'PPTable_t' and is usually due to 'struct
- smu_11_0_powerplay_table' being packed, which can lea...
-Message-ID: <202209030820.9ePw59GE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCDB7D6A
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 02:59:37 +0000 (UTC)
+Received: by mail-ua1-f46.google.com with SMTP id d14so1455495ual.9
+        for <llvm@lists.linux.dev>; Fri, 02 Sep 2022 19:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=CKHvTi4YwJXZJRGwVfRL/R88FULwtUdHKdHzSiNxiUI=;
+        b=bxp0HgYTcP7xWd+2+ngcf/N+fj5uqCx1pqSdm2Hxx/eCl96Ydvt3uxLvIsGstcz7/1
+         HMcQ7NEzww2XOZV4zsflNCY7eP3eBONkdo0UGFcuiNrTWs4ytrdfRqSmPT2a3r7GEWrq
+         pHt+E+JQqOTJiuaBgW02qyPMw4kvn1DMWi3aApYLRw3noVN71QkCqdcFkzKlICxBF7G1
+         5TSFOOm1SMGnCTaIVGtOko8QVt9QtPwcCYQwQtfLbG93o7J81+x88sFX0EM5NDJOEPAI
+         tKlsbEerlaQhhPOVUOe2amRtykWPxG/4NIDyxueIyawhRz0MN4FLrQtxFHzZ/iFUQGBH
+         Oe6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CKHvTi4YwJXZJRGwVfRL/R88FULwtUdHKdHzSiNxiUI=;
+        b=Zm70G4+3NEj3KFmoW9/uyGz3k93vckMgogKdppIq3dMUwLs9hjAUkjLLLChITA7KEg
+         T1aduV0jDwLP97W88gcAyU2SCJkWzSl4Wf47gmTCwUiqeHNa79KMMAUEF1mSvbhxq84V
+         cN1gHqcFDOROWRD31P/LJnwXOSo19TcqUQ9zB42VgawcUrDdcPF7e8asUWg79Jnrim8D
+         NQLhwxfZFCEbRyQyM3mANz/NZpTYCjH55nPw/9ROOaxpk4NQLh3WOZdtnJvJAwfT9aQ6
+         jR4EGA58xkrRXHMEoxFHfEoaRt26S130Lu3eR4ghaWUWKDR5CubCx72UmDEneMsKtrpo
+         vQiQ==
+X-Gm-Message-State: ACgBeo01QaecTxKcUcbZolG8Y4DySF0V0o8Kjiwm2EAJtWzp95620v/K
+	Kl1QUG7aku7QhsVET0fv0H16XPeZrXzcgtN7f7wuMw==
+X-Google-Smtp-Source: AA6agR4vrKugMncNQTjKe9Uv+geBOGHnKMSIYbmveMarldKIsOEUnMPeyJ7VXT9c3Y/iopeUkD6lKEEMjk6YAOAvaKM=
+X-Received: by 2002:a05:6130:1102:b0:38c:49b4:bbc3 with SMTP id
+ ce2-20020a056130110200b0038c49b4bbc3mr12440605uab.107.1662173976584; Fri, 02
+ Sep 2022 19:59:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220902204351.2521805-1-keescook@chromium.org> <20220902204351.2521805-3-keescook@chromium.org>
+In-Reply-To: <20220902204351.2521805-3-keescook@chromium.org>
+From: David Gow <davidgow@google.com>
+Date: Sat, 3 Sep 2022 10:59:24 +0800
+Message-ID: <CABVgOS=Ru4Eu03T71svLA=j9jizGro44n3h59pQYw33QYPfLaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] fortify: Add KUnit test for FORTIFY_SOURCE internals
+To: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, Yury Norov <yury.norov@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Sander Vanheule <sander@svanheule.net>, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Dan Williams <dan.j.williams@intel.com>, Isabella Basso <isabbasso@riseup.net>, 
+	Eric Dumazet <edumazet@google.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Eric Biggers <ebiggers@google.com>, Hannes Reinecke <hare@suse.de>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Evan,
+On Sat, Sep 3, 2022 at 4:43 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add lib/fortify_kunit.c KUnit test for checking the expected behavioral
+> characteristics of FORTIFY_SOURCE internals.
+>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Sander Vanheule <sander@svanheule.net>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-FYI, the error/warning still remains.
+Overall, this looks good. It's a bit of a shame FORTIFY_SOURCE doesn't
+work under UML, but I tested it on everything else I had to hand and
+it looked good.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d895ec7938c431fe61a731939da76a6461bc6133
-commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
-date:   8 months ago
-config: arm-randconfig-r011-20220831 (https://download.01.org/0day-ci/archive/20220903/202209030820.9ePw59GE-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+One tiny typo in a comment below, but otherwise this is:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
 
-All warnings (new ones prefixed by >>):
+Cheers,
+-- David
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
-                     ^
-   1 warning generated.
+>  MAINTAINERS         |  1 +
+>  lib/Kconfig.debug   |  9 ++++++
+>  lib/Makefile        |  1 +
+>  lib/fortify_kunit.c | 77 +++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+)
+>  create mode 100644 lib/fortify_kunit.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9d7f64dc0efe..640115472199 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8002,6 +8002,7 @@ L:        linux-hardening@vger.kernel.org
+>  S:     Supported
+>  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:     include/linux/fortify-string.h
+> +F:     lib/fortify_kunit.c
+>  F:     lib/test_fortify/*
+>  F:     scripts/test_fortify.sh
+>  K:     \b__NO_FORTIFY\b
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 36455953d306..1f267c0ddffd 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2542,6 +2542,15 @@ config STACKINIT_KUNIT_TEST
+>           CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+>           or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+>
+> +config FORTIFY_KUNIT_TEST
+> +       tristate "Test fortified str*() and mem*() function internals at runtime" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT && FORTIFY_SOURCE
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Builds unit tests for checking internals of FORTIFY_SOURCE as used
+> +         by the str*() and mem*() family of functions. For testing runtime
+> +         traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
+> +
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index f545140ed9e7..4ee1ceae945a 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -381,6 +381,7 @@ obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
+>  obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+>  CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+>  obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+> +obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
+>
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+>
+> diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+> new file mode 100644
+> index 000000000000..4d7930b65107
+> --- /dev/null
+> +++ b/lib/fortify_kunit.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Runtime test cases for CONFIG_FORTIFY_SOURCE that aren't expected to
+> + * Oops th kernel on success. (For those, see drivers/misc/lkdtm/fortify.c)
 
+Nit: Oops _the_ kernel
 
-vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
-
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
-4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
-2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
-
-:::::: The code at line 163 was first introduced by commit
-:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
-
-:::::: TO: Huang Rui <ray.huang@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> + *
+> + * For corner cases with UBSAN, try testing with:
+> + *
+> + * ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+> + *     --kconfig_add CONFIG_FORTIFY_SOURCE=y \
+> + *     --kconfig_add CONFIG_UBSAN=y \
+> + *     --kconfig_add CONFIG_UBSAN_TRAP=y \
+> + *     --kconfig_add CONFIG_UBSAN_BOUNDS=y \
+> + *     --kconfig_add CONFIG_UBSAN_LOCAL_BOUNDS=y \
+> + *     --make_options LLVM=1 fortify
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <kunit/test.h>
+> +#include <linux/string.h>
+> +#include <linux/init.h>
+> +
+> +static const char array_of_10[] = "this is 10";
+> +static const char *ptr_of_11 = "this is 11!";
+> +static char array_unknown[] = "compiler thinks I might change";
+> +
+> +static void known_sizes_test(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_of_10), 10);
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(ptr_of_11), 11);
+> +
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
+> +       /* Externally defined and dynamically sized string pointer: */
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
+> +}
+> +
+> +/* This is volatile so the optimizer can't perform DCE below. */
+> +static volatile int pick;
+> +
+> +/* Not inline to keep optimizer from figuring out which string we want. */
+> +static noinline size_t want_minus_one(int pick)
+> +{
+> +       const char *str;
+> +
+> +       switch (pick) {
+> +       case 1:
+> +               str = "4444";
+> +               break;
+> +       case 2:
+> +               str = "333";
+> +               break;
+> +       default:
+> +               str = "1";
+> +               break;
+> +       }
+> +       return __compiletime_strlen(str);
+> +}
+> +
+> +static void control_flow_split_test(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_EQ(test, want_minus_one(pick), SIZE_MAX);
+> +}
+> +
+> +static struct kunit_case fortify_test_cases[] = {
+> +       KUNIT_CASE(known_sizes_test),
+> +       KUNIT_CASE(control_flow_split_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite fortify_test_suite = {
+> +       .name = "fortify",
+> +       .test_cases = fortify_test_cases,
+> +};
+> +
+> +kunit_test_suite(fortify_test_suite);
+> +
+> +MODULE_LICENSE("GPL");
+> --
+> 2.34.1
+>
