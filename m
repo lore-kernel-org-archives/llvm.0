@@ -1,45 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351F87D90
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 10:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A3C7D97
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 11:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662199756; x=1693735756;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zTUGhqqxgxF2c4uo4GHXgDiG1F8nmhSj2WWm6yy0qvQ=;
-  b=CT3Jt/OLBsMlD8gll5RYhJQF1dtROl4ADihdSeH1tQW77r5Bimp5IYz7
-   o5CqlGeGafbKIzT0FkhtmysLkJpbaMitKSVG9QqzCFY9fJ8dkGVIC8LT6
-   pfK6LXK3yL+HpYYQtg+nJFLFNpbO52QGg8y8tOGaGwg/8RVMm4hoKjjdy
-   9e+H7WUPYS/quAxdgYvkp+z4BGZVpUudZd/e5RaPMSdJtm/EdtSyYXTVe
-   hDR43lsaWyh8Wxm34J6WME6rb2NuLx/6gbWbO+ncijz1Doj3DtgX+zmk6
-   jjpqBKtpE3QNXMFw+B25B7NLe0+Vh5Z5dxRExhhkJ3CnVZnKeBzo/mx8M
+  t=1662204147; x=1693740147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rh95A/TICuY0+rk3SH895uc1qVtQXetp7SXdDKTPP+g=;
+  b=I3ESd5XyegWyY+aIsWup57H/iKX60OfL15fkmaBsJU6VnCPm9DBHY0uQ
+   Gn6pbKkgEbB1kPAT+kGZ9Fms8fEpicQe/dWvnaRia9dAlNIjahmnzpvcB
+   K/MXlcKG3f+/1jSoFtrayZHYQXj3fKXpxqbzYY+VjYpLcwvJ2pXYrUu1r
+   eMQLqphA/MUbhm7+EtENNIyoBEAmHasZlGDJHZcFz56jsx440/YatpFAY
+   Hnl+RQnnnkizRxfXd/nOXsQfFHsIM6kfF1f2eTsO6JfLwewTuTBMCVY5c
+   NIa03tmro1KrqZFZshYlfN0k9d78eEQBLxgG5PkXQLN/Iw4wkhwlgP+PV
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="297441237"
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="275895697"
 X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="297441237"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 03:09:15 -0700
+   d="scan'208";a="275895697"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 04:22:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="643233934"
+   d="scan'208";a="788928076"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 03:09:14 -0700
+  by orsmga005.jf.intel.com with ESMTP; 03 Sep 2022 04:22:25 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oUQ5R-0001Ri-1r;
-	Sat, 03 Sep 2022 10:09:13 +0000
-Date: Sat, 3 Sep 2022 18:08:27 +0800
+	id 1oUREG-0001YW-2Z;
+	Sat, 03 Sep 2022 11:22:24 +0000
+Date: Sat, 3 Sep 2022 19:22:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
- 'struct htt_tx_fetch_ind' is less aligned than 'union
- htt_tx_fetch_ind::(anonymous at
- drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
- htt_tx_fetch_ind' being...
-Message-ID: <202209031855.LVCj2Q6u-lkp@intel.com>
+To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH PoC 9/9] btrfs: scrub: implement recoverable sectors
+ report for scrub_fs
+Message-ID: <202209031950.mB6jb2hL-lkp@intel.com>
+References: <06e4f67a9e50c2b6dfc49a086ee62053cbdcc0ae.1662191784.git.wqu@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,114 +46,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <06e4f67a9e50c2b6dfc49a086ee62053cbdcc0ae.1662191784.git.wqu@suse.com>
 
-Hi Kees,
+Hi Qu,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d895ec7938c431fe61a731939da76a6461bc6133
-commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
-date:   11 months ago
-config: arm-randconfig-r031-20220903 (https://download.01.org/0day-ci/archive/20220903/202209031855.LVCj2Q6u-lkp@intel.com/config)
+[auto build test WARNING on kdave/for-next]
+[also build test WARNING on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-scrub-introduce-a-new-family-of-ioctl-scrub_fs/20220903-162128
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+config: arm-randconfig-r032-20220903 (https://download.01.org/0day-ci/archive/20220903/202209031950.mB6jb2hL-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
+        # https://github.com/intel-lab-lkp/linux/commit/e6387ecfd7e78ac47fca972ef76f3286e6cd3900
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qu-Wenruo/btrfs-scrub-introduce-a-new-family-of-ioctl-scrub_fs/20220903-162128
+        git checkout e6387ecfd7e78ac47fca972ef76f3286e6cd3900
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
-                                       unsigned int changed_flags,
-                                                    ^
-   5 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   4 warnings generated.
---
-   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
-   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
-   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
-   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
-   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct htt_rx_indication_prefix prefix;
-                                           ^
->> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
-   ath10k_get_ring_byte(unsigned int offset,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
-   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
-   ^
-   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
-   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
-                      ^
-   7 warnings generated.
+>> fs/btrfs/scrub.c:5382:6: warning: variable 'nr_good' set but not used [-Wunused-but-set-variable]
+           int nr_good = 0;
+               ^
+   1 warning generated.
 
 
-vim +1677 drivers/net/wireless/ath/ath10k/htt.h
+vim +/nr_good +5382 fs/btrfs/scrub.c
 
-  1670	
-  1671	struct htt_tx_fetch_ind {
-  1672		u8 pad0;
-  1673		__le16 fetch_seq_num;
-  1674		__le32 token;
-  1675		__le16 num_resp_ids;
-  1676		__le16 num_records;
-> 1677		union {
-  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
-  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
-  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
-  1681		};
-  1682	} __packed;
-  1683	
+  5376	
+  5377	static void scrub_fs_recover_data(struct scrub_fs_ctx *sfctx, int sector_nr)
+  5378	{
+  5379		struct btrfs_fs_info *fs_info = sfctx->fs_info;
+  5380		const bool has_csum = !!sfctx->sectors[sector_nr].csum;
+  5381		bool mismatch_found = false;
+> 5382		int nr_good = 0;
+  5383		int io_fail = 0;
+  5384		int mirror_nr;
+  5385	
+  5386		for (mirror_nr = 0; mirror_nr < sfctx->nr_copies; mirror_nr++) {
+  5387			struct scrub_fs_sector *sector =
+  5388				scrub_fs_get_sector(sfctx, sector_nr, mirror_nr);
+  5389	
+  5390			if (sector->flags & SCRUB_FS_SECTOR_FLAG_GOOD)
+  5391				nr_good++;
+  5392			if (!(sector->flags & SCRUB_FS_SECTOR_FLAG_IO_DONE))
+  5393				io_fail++;
+  5394		}
+  5395	
+  5396		if (has_csum) {
+  5397			/*
+  5398			 * There is at least one good copy, thus all the other
+  5399			 * corrupted sectors can also be recovered.
+  5400			 */
+  5401			for (mirror_nr = 0; mirror_nr < sfctx->nr_copies; mirror_nr++) {
+  5402				struct scrub_fs_sector *sector =
+  5403					scrub_fs_get_sector(sfctx, sector_nr, mirror_nr);
+  5404	
+  5405				if (sector->flags & SCRUB_FS_SECTOR_FLAG_GOOD)
+  5406					continue;
+  5407				sector->flags |= SCRUB_FS_SECTOR_FLAG_RECOVERABLE;
+  5408				sfctx->stat.data_recoverable += fs_info->sectorsize;
+  5409			}
+  5410	
+  5411			/* Place holder for writeback */
+  5412			return;
+  5413		}
+  5414	
+  5415		/*
+  5416		 * No datasum case, it's much harder.
+  5417		 *
+  5418		 * The idea is, we have to compare all the sectors to determine if they
+  5419		 * match.
+  5420		 *
+  5421		 * Firstly rule out sectors which don't have extra working copies.
+  5422		 */
+  5423		if (sfctx->nr_copies - io_fail <= 1) {
+  5424			sfctx->stat.data_nocsum_uncertain += fs_info->sectorsize;
+  5425			return;
+  5426		}
+  5427	
+  5428		/*
+  5429		 * For now, we can only support one case, all data read matches with each
+  5430		 * other, or we consider them all uncertain.
+  5431		 */
+  5432		for (mirror_nr = 0; mirror_nr < sfctx->nr_copies - 1; mirror_nr++) {
+  5433			struct scrub_fs_sector *sector =
+  5434				scrub_fs_get_sector(sfctx, sector_nr, mirror_nr);
+  5435			struct scrub_fs_sector *next_sector;
+  5436			int ret;
+  5437	
+  5438			/* The first sector has IO error, skip to the next run. */
+  5439			if (!(sector->flags & SCRUB_FS_SECTOR_FLAG_IO_DONE))
+  5440				continue;
+  5441	
+  5442			next_sector = scrub_fs_find_next_working_mirror(sfctx,
+  5443					sector_nr, mirror_nr);
+  5444			/* We're already the last working copy, can break now. */
+  5445			if (!next_sector)
+  5446				break;
+  5447	
+  5448			ret = scrub_fs_memcmp_sectors(sfctx, sector, next_sector);
+  5449			if (ret)
+  5450				mismatch_found = true;
+  5451		}
+  5452	
+  5453		/*
+  5454		 * We have found mismatched contents, mark all those sectors
+  5455		 * which doesn't have IO error as uncertain.
+  5456		 */
+  5457		if (mismatch_found)
+  5458			sfctx->stat.data_nocsum_uncertain +=
+  5459				(sfctx->nr_copies - io_fail) << fs_info->sectorsize_bits;
+  5460	}
+  5461	
 
 -- 
 0-DAY CI Kernel Test Service
