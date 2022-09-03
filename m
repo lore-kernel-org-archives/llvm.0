@@ -1,308 +1,167 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40260184C
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 06:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662186598; x=1693722598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J69HhJXWk459Ez703eX3EtSDdKHP1wMJ+Q9eE95qWUY=;
-  b=QDwDWV609Fnol3IRvncjwl2v3uCZF3JqQeYVWsega7fphlQglFsJWNd7
-   aegPp56l2NM1zPMIo3MbEGBNjumO/w6MQEM/wdCL7kh4r73iG1DIpGEYy
-   AbeTtDYT+2mK2Pqz5ESosMNfB097004kdbE4RCWoGmL671IWkQpenwEuZ
-   DINVdJs7pdjrk6/AJIcqgCEN0GyXUaGOuxIn0HeIBb48N0TyIlim6DEvC
-   DlVkynYPSkTHB7tmoh/GJbetQ4FpUq1m/VQI5Ty9Nghgi7B0GdHYt6F9c
-   K1KvSqh+vb49pqeipuvEQQ5whlcSfiW5vfeRenb4AlGn+qe3MDv5BM3BM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="322299135"
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="322299135"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 23:29:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="564195677"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 23:29:54 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oUMfB-0001B2-24;
-	Sat, 03 Sep 2022 06:29:53 +0000
-Date: Sat, 3 Sep 2022 14:29:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jianqun Xu <jay.xu@rock-chips.com>, heiko@sntech.de,
-	linus.walleij@linaro.org, brgl@bgdev.pl
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.or,
-	huangtao@rock-chips.com, Jianqun Xu <jay.xu@rock-chips.com>
-Subject: Re: [PATCH] gpio: rockchip: support acpi
-Message-ID: <202209031405.ZyrtnKpS-lkp@intel.com>
-References: <20220903033800.3266723-1-jay.xu@rock-chips.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E117B
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 06:45:32 +0000 (UTC)
+Received: by mail-vk1-f169.google.com with SMTP id o12so1927134vkn.7
+        for <llvm@lists.linux.dev>; Fri, 02 Sep 2022 23:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TIdUaIE9yD+5UCvf+QeOEmAM8YZj0pGyCs5cGC4JBXI=;
+        b=O2eVmiAYQblOkyUjWZMSY4yGn64KSEtqE2KDQVuAMytLuFcXnl9Hctsj3zxPIuYhk7
+         aB3tmqghZjVFHFduwDqgB4VcTjJrBnc4fn15oTp2p7iwHFWsLkArs+M5jte6weaNxnl/
+         ++HrJTCI1OpOzCFqTcfM6JEIfQ44tW5tS0buCX2HzFmDPnVKT4f5X/1eu8V0s6DMtue8
+         Hupdj+/SQQAje+q7yBmyKiFRQHe8doES/IoXhWBP8ApRG8uKUbL4NP360CVltPIPvtCi
+         xN8bn6KsK4O6Wi/eylRhfPYoZlDYKzf1wcUMH6ZCsMsZ7JSow2mQo4piQaHrSaDdF8IB
+         4phg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TIdUaIE9yD+5UCvf+QeOEmAM8YZj0pGyCs5cGC4JBXI=;
+        b=NmJ4ODOt3a9XrYouWP1cWZMQzg9c+j0uthdvXUUbVlpMpX9sU8dRTVhbyO74e0IVIO
+         PssQ1oQ3zLQ16eYTmwclERzBTKax1zZzjFRRa5qDFbCFOm0fgL2EnqwSiaGiPchCpLW8
+         wldPP6Cx+ZdzHy/kyhNvkWKE2iim8nV2uoR+BTWjsfRXt0/nX+cjDEqsW/4cGHYJqjD4
+         qlH29pfyTvwi+5dls3zbOHFhK0C0IKKBxUjEaP0/MVCQPNvp1Ab3gUqvPhvhDr9vsxos
+         C/8GvlmYuatlWdow9k3PtIi3vYQSCI/AzG0iwtDZ+6oTDXMLSuUD/sZA229umIR9o36z
+         8xYA==
+X-Gm-Message-State: ACgBeo0rK6xzpIOpwmLxdOdiItwxyg/sTkhsOWMMuoLb6DRQcTyFstq/
+	bOjIaQX96AO0iAb5HQCJle62cdawAAlNDeB/If+l4Q==
+X-Google-Smtp-Source: AA6agR6CAfqE4RrQk1cScGKT05CKlb+5KOzQ6Z32P3+2WVQTYigOoQDgHHb0s8wxB3Lyd0eh62kd10P/Jkpl2CFLfwM=
+X-Received: by 2002:a05:6122:856:b0:399:ab13:5de7 with SMTP id
+ 22-20020a056122085600b00399ab135de7mr280872vkk.7.1662187531643; Fri, 02 Sep
+ 2022 23:45:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903033800.3266723-1-jay.xu@rock-chips.com>
+References: <20220902204351.2521805-1-keescook@chromium.org>
+ <20220902204351.2521805-3-keescook@chromium.org> <CABVgOS=Ru4Eu03T71svLA=j9jizGro44n3h59pQYw33QYPfLaQ@mail.gmail.com>
+ <202209022215.FA016FA6@keescook>
+In-Reply-To: <202209022215.FA016FA6@keescook>
+From: David Gow <davidgow@google.com>
+Date: Sat, 3 Sep 2022 14:45:20 +0800
+Message-ID: <CABVgOSm76QgfbwZ63cSb58=K5EqK+MuLs=-siwUgg7JMNFkQ2g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] fortify: Add KUnit test for FORTIFY_SOURCE internals
+To: Kees Cook <keescook@chromium.org>
+Cc: Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Yury Norov <yury.norov@gmail.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Sander Vanheule <sander@svanheule.net>, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Dan Williams <dan.j.williams@intel.com>, Isabella Basso <isabbasso@riseup.net>, 
+	Eric Dumazet <edumazet@google.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Eric Biggers <ebiggers@google.com>, Hannes Reinecke <hare@suse.de>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000637cc305e7c03131"
 
-Hi Jianqun,
+--000000000000637cc305e7c03131
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for the patch! Yet something to improve:
+On Sat, Sep 3, 2022 at 1:17 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sat, Sep 03, 2022 at 10:59:24AM +0800, David Gow wrote:
+> > On Sat, Sep 3, 2022 at 4:43 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Add lib/fortify_kunit.c KUnit test for checking the expected behavioral
+> > > characteristics of FORTIFY_SOURCE internals.
+> > > [...]
+> >
+> > Overall, this looks good. It's a bit of a shame FORTIFY_SOURCE doesn't
+> > work under UML, but I tested it on everything else I had to hand and
+> > it looked good.
+>
+> It looks like this was never picked up:
+> https://lore.kernel.org/lkml/20220210003224.773957-1-keescook@chromium.org/
 
-[auto build test ERROR on rockchip/for-next]
-[also build test ERROR on linus/master v6.0-rc3 next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ah: I'd forgotten about that. Can confirm this test works under UML
+with that patch applied.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianqun-Xu/gpio-rockchip-support-acpi/20220903-113834
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-config: hexagon-randconfig-r041-20220901 (https://download.01.org/0day-ci/archive/20220903/202209031405.ZyrtnKpS-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3d241d2c3b640720fc6a056b26db1ada6fefb15b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianqun-Xu/gpio-rockchip-support-acpi/20220903-113834
-        git checkout 3d241d2c3b640720fc6a056b26db1ada6fefb15b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
+Cheers,
+-- David
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--000000000000637cc305e7c03131
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpio-rockchip.c:797:7: error: incompatible pointer types assigning to 'struct rockchip_pin_output_deferred *' from 'struct rockchip_pin_deferred *' [-Werror,-Wincompatible-pointer-types]
-                   cfg = list_first_entry(&bank->deferred_pins,
-                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpio/gpio-rockchip.c:802:16: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                   list_del(&cfg->head);
-                             ~~~^
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:804:14: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                   switch (cfg->param) {
-                           ~~~^
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:806:62: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                           ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
-                                                                                  ~~~^
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:806:72: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                           ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
-                                                                                            ~~~^
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:808:62: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                                   dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin,
-                                                                                         ~~~^
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:809:10: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                                            cfg->arg);
-                                            ~~~^
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:812:61: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                           ret = rockchip_gpio_direction_input(&bank->gpio_chip, cfg->pin);
-                                                                                 ~~~^
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:814:55: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                                   dev_warn(dev, "setting input pin %u failed\n", cfg->pin);
-                                                                                  ~~~^
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   drivers/gpio/gpio-rockchip.c:817:59: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
-                           dev_warn(dev, "unknown deferred config param %d\n", cfg->param);
-                                                                               ~~~^
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
-           struct rockchip_pin_output_deferred *cfg;
-                  ^
-   10 errors generated.
-
-
-vim +797 drivers/gpio/gpio-rockchip.c
-
-3d241d2c3b6407 Jianqun Xu     2022-09-03  702  
-936ee2675eee1f Jianqun Xu     2021-08-16  703  static int rockchip_gpio_probe(struct platform_device *pdev)
-936ee2675eee1f Jianqun Xu     2021-08-16  704  {
-936ee2675eee1f Jianqun Xu     2021-08-16  705  	struct device *dev = &pdev->dev;
-936ee2675eee1f Jianqun Xu     2021-08-16  706  	struct pinctrl_dev *pctldev = NULL;
-936ee2675eee1f Jianqun Xu     2021-08-16  707  	struct rockchip_pin_bank *bank = NULL;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  708  	struct rockchip_pin_output_deferred *cfg;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  709  	int bank_id = 0;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  710  	int ret;
-936ee2675eee1f Jianqun Xu     2021-08-16  711  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  712  	bank_id = rockchip_gpio_acpi_get_bank_id(dev);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  713  	if (bank_id < 0) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  714  		bank_id = rockchip_gpio_of_get_bank_id(dev);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  715  		if (bank_id < 0)
-3d241d2c3b6407 Jianqun Xu     2022-09-03  716  			return bank_id;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  717  	}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  718  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  719  	if (!ACPI_COMPANION(dev)) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  720  		struct device_node *pctlnp = of_get_parent(dev->of_node);
-936ee2675eee1f Jianqun Xu     2021-08-16  721  
-936ee2675eee1f Jianqun Xu     2021-08-16  722  		pctldev = of_pinctrl_get(pctlnp);
-936ee2675eee1f Jianqun Xu     2021-08-16  723  		if (!pctldev)
-936ee2675eee1f Jianqun Xu     2021-08-16  724  			return -EPROBE_DEFER;
-936ee2675eee1f Jianqun Xu     2021-08-16  725  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  726  		bank = rockchip_gpio_find_bank(pctldev, bank_id);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  727  		if (!bank)
-3d241d2c3b6407 Jianqun Xu     2022-09-03  728  			return -ENODEV;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  729  	}
-936ee2675eee1f Jianqun Xu     2021-08-16  730  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  731  	if (!bank) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  732  		bank = devm_kzalloc(dev, sizeof(*bank), GFP_KERNEL);
-936ee2675eee1f Jianqun Xu     2021-08-16  733  		if (!bank)
-3d241d2c3b6407 Jianqun Xu     2022-09-03  734  			return -ENOMEM;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  735  	}
-936ee2675eee1f Jianqun Xu     2021-08-16  736  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  737  	bank->bank_num = bank_id;
-936ee2675eee1f Jianqun Xu     2021-08-16  738  	bank->dev = dev;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  739  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  740  	bank->reg_base = devm_platform_ioremap_resource(pdev, 0);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  741  	if (IS_ERR(bank->reg_base))
-3d241d2c3b6407 Jianqun Xu     2022-09-03  742  		return PTR_ERR(bank->reg_base);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  743  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  744  	bank->irq = platform_get_irq(pdev, 0);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  745  	if (bank->irq < 0)
-3d241d2c3b6407 Jianqun Xu     2022-09-03  746  		return bank->irq;
-936ee2675eee1f Jianqun Xu     2021-08-16  747  
-936ee2675eee1f Jianqun Xu     2021-08-16  748  	raw_spin_lock_init(&bank->slock);
-936ee2675eee1f Jianqun Xu     2021-08-16  749  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  750  	if (!ACPI_COMPANION(dev)) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  751  		bank->clk = devm_clk_get(dev, "bus");
-3d241d2c3b6407 Jianqun Xu     2022-09-03  752  		if (IS_ERR(bank->clk)) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  753  			bank->clk = of_clk_get(dev->of_node, 0);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  754  			if (IS_ERR(bank->clk)) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  755  				dev_err(dev, "fail to get apb clock\n");
-3d241d2c3b6407 Jianqun Xu     2022-09-03  756  				return PTR_ERR(bank->clk);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  757  			}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  758  		}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  759  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  760  		bank->db_clk = devm_clk_get(dev, "db");
-3d241d2c3b6407 Jianqun Xu     2022-09-03  761  		if (IS_ERR(bank->db_clk)) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  762  			bank->db_clk = of_clk_get(dev->of_node, 1);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  763  			if (IS_ERR(bank->db_clk))
-3d241d2c3b6407 Jianqun Xu     2022-09-03  764  				bank->db_clk = NULL;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  765  		}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  766  	}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  767  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  768  	clk_prepare_enable(bank->clk);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  769  	clk_prepare_enable(bank->db_clk);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  770  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  771  	rockchip_gpio_get_ver(bank);
-936ee2675eee1f Jianqun Xu     2021-08-16  772  
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  773  	/*
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  774  	 * Prevent clashes with a deferred output setting
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  775  	 * being added right at this moment.
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  776  	 */
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  777  	mutex_lock(&bank->deferred_lock);
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  778  
-936ee2675eee1f Jianqun Xu     2021-08-16  779  	ret = rockchip_gpiolib_register(bank);
-936ee2675eee1f Jianqun Xu     2021-08-16  780  	if (ret) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  781  		dev_err(bank->dev, "Failed to register gpio %d\n", ret);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  782  		goto err_unlock;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  783  	}
-3d241d2c3b6407 Jianqun Xu     2022-09-03  784  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  785  	if (!device_property_read_bool(bank->dev, "gpio-ranges") && pctldev) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  786  		struct gpio_chip *gc = &bank->gpio_chip;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  787  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  788  		ret = gpiochip_add_pin_range(gc, dev_name(pctldev->dev), 0,
-3d241d2c3b6407 Jianqun Xu     2022-09-03  789  					     gc->base, gc->ngpio);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  790  		if (ret) {
-3d241d2c3b6407 Jianqun Xu     2022-09-03  791  			dev_err(bank->dev, "Failed to add pin range\n");
-3d241d2c3b6407 Jianqun Xu     2022-09-03  792  			goto err_unlock;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  793  		}
-936ee2675eee1f Jianqun Xu     2021-08-16  794  	}
-936ee2675eee1f Jianqun Xu     2021-08-16  795  
-8ce5ef64546850 Caleb Connolly 2022-03-28  796  	while (!list_empty(&bank->deferred_pins)) {
-8ce5ef64546850 Caleb Connolly 2022-03-28 @797  		cfg = list_first_entry(&bank->deferred_pins,
-8ce5ef64546850 Caleb Connolly 2022-03-28  798  				       struct rockchip_pin_deferred, head);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  799  		if (!cfg)
-3d241d2c3b6407 Jianqun Xu     2022-09-03  800  			break;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  801  
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14 @802  		list_del(&cfg->head);
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  803  
-8ce5ef64546850 Caleb Connolly 2022-03-28  804  		switch (cfg->param) {
-8ce5ef64546850 Caleb Connolly 2022-03-28  805  		case PIN_CONFIG_OUTPUT:
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  806  			ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  807  			if (ret)
-8ce5ef64546850 Caleb Connolly 2022-03-28  808  				dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin,
-8ce5ef64546850 Caleb Connolly 2022-03-28  809  					 cfg->arg);
-8ce5ef64546850 Caleb Connolly 2022-03-28  810  			break;
-7ff11357810fd1 Caleb Connolly 2022-03-28  811  		case PIN_CONFIG_INPUT_ENABLE:
-7ff11357810fd1 Caleb Connolly 2022-03-28  812  			ret = rockchip_gpio_direction_input(&bank->gpio_chip, cfg->pin);
-7ff11357810fd1 Caleb Connolly 2022-03-28  813  			if (ret)
-7ff11357810fd1 Caleb Connolly 2022-03-28  814  				dev_warn(dev, "setting input pin %u failed\n", cfg->pin);
-7ff11357810fd1 Caleb Connolly 2022-03-28  815  			break;
-8ce5ef64546850 Caleb Connolly 2022-03-28  816  		default:
-8ce5ef64546850 Caleb Connolly 2022-03-28  817  			dev_warn(dev, "unknown deferred config param %d\n", cfg->param);
-8ce5ef64546850 Caleb Connolly 2022-03-28  818  			break;
-8ce5ef64546850 Caleb Connolly 2022-03-28  819  		}
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  820  		kfree(cfg);
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  821  	}
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  822  
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  823  	mutex_unlock(&bank->deferred_lock);
-59dd178e1d7cb6 Heiko Stuebner 2021-09-14  824  
-936ee2675eee1f Jianqun Xu     2021-08-16  825  	platform_set_drvdata(pdev, bank);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  826  	dev_info(dev, "probed %pfw\n", dev_fwnode(dev));
-936ee2675eee1f Jianqun Xu     2021-08-16  827  
-936ee2675eee1f Jianqun Xu     2021-08-16  828  	return 0;
-3d241d2c3b6407 Jianqun Xu     2022-09-03  829  err_unlock:
-3d241d2c3b6407 Jianqun Xu     2022-09-03  830  	mutex_unlock(&bank->deferred_lock);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  831  	clk_disable_unprepare(bank->clk);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  832  	clk_disable_unprepare(bank->db_clk);
-3d241d2c3b6407 Jianqun Xu     2022-09-03  833  
-3d241d2c3b6407 Jianqun Xu     2022-09-03  834  	return ret;
-936ee2675eee1f Jianqun Xu     2021-08-16  835  }
-936ee2675eee1f Jianqun Xu     2021-08-16  836  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA4
+vJlRhCn/eRNC9CO2QPK+UWfc1qWkFVS70yh/rqlhIDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA5MDMwNjQ1MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAwpfbo/cYShe26SclTS2
+k3aNWFPXngC4AiWrTJTOi/1kY6PQz2Uqc1g+yj2qmqqz46XDcpCjDo7X62CVxMdpVg1TwSNILCfi
+sApUDDKljWj+OHgRyZiUJXq5p16xHfoSyLQ6Ttyw2D6GV/PTOycgFv02ClxUBbJhO46/zG6IurNs
+vo1i/RD+2uU0JJu1Mr8SSNg2HXEACISIbqH2otyiOAH7UoIRivgc+kQGZdEFOIM3f1yGe63MP9Ay
+jRHLXG3X2EIJsVUtbfI+SlizgiUs/644dfnybruDA53q9cf1wzn/GtYDGrqnW7e4aYbAb7rGOP2v
+kIKvci6oLwZYVlzQ/g==
+--000000000000637cc305e7c03131--
