@@ -1,167 +1,242 @@
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E117B
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 06:45:32 +0000 (UTC)
-Received: by mail-vk1-f169.google.com with SMTP id o12so1927134vkn.7
-        for <llvm@lists.linux.dev>; Fri, 02 Sep 2022 23:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TIdUaIE9yD+5UCvf+QeOEmAM8YZj0pGyCs5cGC4JBXI=;
-        b=O2eVmiAYQblOkyUjWZMSY4yGn64KSEtqE2KDQVuAMytLuFcXnl9Hctsj3zxPIuYhk7
-         aB3tmqghZjVFHFduwDqgB4VcTjJrBnc4fn15oTp2p7iwHFWsLkArs+M5jte6weaNxnl/
-         ++HrJTCI1OpOzCFqTcfM6JEIfQ44tW5tS0buCX2HzFmDPnVKT4f5X/1eu8V0s6DMtue8
-         Hupdj+/SQQAje+q7yBmyKiFRQHe8doES/IoXhWBP8ApRG8uKUbL4NP360CVltPIPvtCi
-         xN8bn6KsK4O6Wi/eylRhfPYoZlDYKzf1wcUMH6ZCsMsZ7JSow2mQo4piQaHrSaDdF8IB
-         4phg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TIdUaIE9yD+5UCvf+QeOEmAM8YZj0pGyCs5cGC4JBXI=;
-        b=NmJ4ODOt3a9XrYouWP1cWZMQzg9c+j0uthdvXUUbVlpMpX9sU8dRTVhbyO74e0IVIO
-         PssQ1oQ3zLQ16eYTmwclERzBTKax1zZzjFRRa5qDFbCFOm0fgL2EnqwSiaGiPchCpLW8
-         wldPP6Cx+ZdzHy/kyhNvkWKE2iim8nV2uoR+BTWjsfRXt0/nX+cjDEqsW/4cGHYJqjD4
-         qlH29pfyTvwi+5dls3zbOHFhK0C0IKKBxUjEaP0/MVCQPNvp1Ab3gUqvPhvhDr9vsxos
-         C/8GvlmYuatlWdow9k3PtIi3vYQSCI/AzG0iwtDZ+6oTDXMLSuUD/sZA229umIR9o36z
-         8xYA==
-X-Gm-Message-State: ACgBeo0rK6xzpIOpwmLxdOdiItwxyg/sTkhsOWMMuoLb6DRQcTyFstq/
-	bOjIaQX96AO0iAb5HQCJle62cdawAAlNDeB/If+l4Q==
-X-Google-Smtp-Source: AA6agR6CAfqE4RrQk1cScGKT05CKlb+5KOzQ6Z32P3+2WVQTYigOoQDgHHb0s8wxB3Lyd0eh62kd10P/Jkpl2CFLfwM=
-X-Received: by 2002:a05:6122:856:b0:399:ab13:5de7 with SMTP id
- 22-20020a056122085600b00399ab135de7mr280872vkk.7.1662187531643; Fri, 02 Sep
- 2022 23:45:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28C47B
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 07:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662189360; x=1693725360;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZPrVnASu88cCMtGFNXg+Y8s2TjuNyPsviRzBTbDLTvs=;
+  b=g9kvzzVwR3TUCs6KCwWKjD5bvgenbRWH5w8jG2JE1RgU/b+42eU/lFmS
+   DmoCCnQp+sCX6HcqIYkmQ/3+qhQNEb07Qeofo9WgRDyGaZT1+w7rOwiIz
+   HCgSQuOZAH8bi9BlRXXz82wF+qBWFeSJ9tvcrz16oihxAcbOw+hETyzLL
+   HA46bWpAa4MiHGm2GQkMnNQSjvCCFc7fo50g/0U8gugNr4v8aBK2aMBF8
+   JQTPaGaZVIhAYQtTSYxxhKHkAtLigXZGpxa1d4mjUOM/fCG8HFG4MlhEr
+   0QqgqTCJA2BTTleQucVQzKe9y2omiJuW8Q6UtW0Qg6tI4/3xrRiUb/HUB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="322301199"
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="322301199"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 00:16:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="564201828"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2022 00:15:58 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oUNNl-0001EY-1J;
+	Sat, 03 Sep 2022 07:15:57 +0000
+Date: Sat, 3 Sep 2022 15:15:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 4598/4736] mm/khugepaged.c:2056:38: error:
+ incompatible pointer types passing 'struct khugepaged_mm_slot *' to
+ parameter of type 'struct mm_slot *'
+Message-ID: <202209031510.aqFb4p9V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220902204351.2521805-1-keescook@chromium.org>
- <20220902204351.2521805-3-keescook@chromium.org> <CABVgOS=Ru4Eu03T71svLA=j9jizGro44n3h59pQYw33QYPfLaQ@mail.gmail.com>
- <202209022215.FA016FA6@keescook>
-In-Reply-To: <202209022215.FA016FA6@keescook>
-From: David Gow <davidgow@google.com>
-Date: Sat, 3 Sep 2022 14:45:20 +0800
-Message-ID: <CABVgOSm76QgfbwZ63cSb58=K5EqK+MuLs=-siwUgg7JMNFkQ2g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] fortify: Add KUnit test for FORTIFY_SOURCE internals
-To: Kees Cook <keescook@chromium.org>
-Cc: Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Yury Norov <yury.norov@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Sander Vanheule <sander@svanheule.net>, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Dan Williams <dan.j.williams@intel.com>, Isabella Basso <isabbasso@riseup.net>, 
-	Eric Dumazet <edumazet@google.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Eric Biggers <ebiggers@google.com>, Hannes Reinecke <hare@suse.de>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000637cc305e7c03131"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---000000000000637cc305e7c03131
-Content-Type: text/plain; charset="UTF-8"
+Hi Qi,
 
-On Sat, Sep 3, 2022 at 1:17 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Sat, Sep 03, 2022 at 10:59:24AM +0800, David Gow wrote:
-> > On Sat, Sep 3, 2022 at 4:43 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Add lib/fortify_kunit.c KUnit test for checking the expected behavioral
-> > > characteristics of FORTIFY_SOURCE internals.
-> > > [...]
-> >
-> > Overall, this looks good. It's a bit of a shame FORTIFY_SOURCE doesn't
-> > work under UML, but I tested it on everything else I had to hand and
-> > it looked good.
->
-> It looks like this was never picked up:
-> https://lore.kernel.org/lkml/20220210003224.773957-1-keescook@chromium.org/
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Ah: I'd forgotten about that. Can confirm this test works under UML
-with that patch applied.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+commit: 36362cd669dfbb6f8c640f5c7dfdd7269660362c [4598/4736] mm: thp: convert to use common struct mm_slot
+config: s390-buildonly-randconfig-r002-20220901 (https://download.01.org/0day-ci/archive/20220903/202209031510.aqFb4p9V-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=36362cd669dfbb6f8c640f5c7dfdd7269660362c
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 36362cd669dfbb6f8c640f5c7dfdd7269660362c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Cheers,
--- David
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---000000000000637cc305e7c03131
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+All errors (new ones prefixed by >>):
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA4
-vJlRhCn/eRNC9CO2QPK+UWfc1qWkFVS70yh/rqlhIDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA5MDMwNjQ1MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAwpfbo/cYShe26SclTS2
-k3aNWFPXngC4AiWrTJTOi/1kY6PQz2Uqc1g+yj2qmqqz46XDcpCjDo7X62CVxMdpVg1TwSNILCfi
-sApUDDKljWj+OHgRyZiUJXq5p16xHfoSyLQ6Ttyw2D6GV/PTOycgFv02ClxUBbJhO46/zG6IurNs
-vo1i/RD+2uU0JJu1Mr8SSNg2HXEACISIbqH2otyiOAH7UoIRivgc+kQGZdEFOIM3f1yGe63MP9Ay
-jRHLXG3X2EIJsVUtbfI+SlizgiUs/644dfnybruDA53q9cf1wzn/GtYDGrqnW7e4aYbAb7rGOP2v
-kIKvci6oLwZYVlzQ/g==
---000000000000637cc305e7c03131--
+>> mm/khugepaged.c:2056:38: error: incompatible pointer types passing 'struct khugepaged_mm_slot *' to parameter of type 'struct mm_slot *' [-Werror,-Wincompatible-pointer-types]
+           khugepaged_collapse_pte_mapped_thps(mm_slot);
+                                               ^~~~~~~
+   mm/khugepaged.c:2023:65: note: passing argument to parameter 'mm_slot' here
+   static void khugepaged_collapse_pte_mapped_thps(struct mm_slot *mm_slot)
+                                                                   ^
+   1 error generated.
+
+
+vim +2056 mm/khugepaged.c
+
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2027  
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2028  static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
+61f9da0fad933f Zach O'Keefe            2022-07-06  2029  					    struct collapse_control *cc)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2030  	__releases(&khugepaged_mm_lock)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2031  	__acquires(&khugepaged_mm_lock)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2032  {
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2033) 	struct vma_iterator vmi;
+36362cd669dfbb Qi Zheng                2022-08-31  2034  	struct khugepaged_mm_slot *mm_slot;
+36362cd669dfbb Qi Zheng                2022-08-31  2035  	struct mm_slot *slot;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2036  	struct mm_struct *mm;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2037  	struct vm_area_struct *vma;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2038  	int progress = 0;
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2039) 	unsigned long address;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2040  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2041  	VM_BUG_ON(!pages);
+35f3aa39f243e8 Lance Roy               2018-10-04  2042  	lockdep_assert_held(&khugepaged_mm_lock);
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2043  	*result = SCAN_FAIL;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2044  
+36362cd669dfbb Qi Zheng                2022-08-31  2045  	if (khugepaged_scan.mm_slot) {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2046  		mm_slot = khugepaged_scan.mm_slot;
+36362cd669dfbb Qi Zheng                2022-08-31  2047  		slot = &mm_slot->slot;
+36362cd669dfbb Qi Zheng                2022-08-31  2048  	} else {
+36362cd669dfbb Qi Zheng                2022-08-31  2049  		slot = list_entry(khugepaged_scan.mm_head.next,
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2050  				     struct mm_slot, mm_node);
+36362cd669dfbb Qi Zheng                2022-08-31  2051  		mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2052  		khugepaged_scan.address = 0;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2053  		khugepaged_scan.mm_slot = mm_slot;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2054  	}
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2055  	spin_unlock(&khugepaged_mm_lock);
+27e1f8273113ad Song Liu                2019-09-23 @2056  	khugepaged_collapse_pte_mapped_thps(mm_slot);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2057  
+36362cd669dfbb Qi Zheng                2022-08-31  2058  	mm = slot->mm;
+3b454ad35043df Yang Shi                2018-01-31  2059  	/*
+3b454ad35043df Yang Shi                2018-01-31  2060  	 * Don't wait for semaphore (to avoid long wait times).  Just move to
+3b454ad35043df Yang Shi                2018-01-31  2061  	 * the next mm on the list.
+3b454ad35043df Yang Shi                2018-01-31  2062  	 */
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2063  	vma = NULL;
+d8ed45c5dcd455 Michel Lespinasse       2020-06-08  2064  	if (unlikely(!mmap_read_trylock(mm)))
+c1e8d7c6a7a682 Michel Lespinasse       2020-06-08  2065  		goto breakouterloop_mmap_lock;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2066  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2067  	progress++;
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2068) 	if (unlikely(hpage_collapse_test_exit(mm)))
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2069) 		goto breakouterloop;
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2070) 
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2071) 	address = khugepaged_scan.address;
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2072) 	vma_iter_init(&vmi, mm, address);
+2ae6a2ed2d4ca1 Matthew Wilcox (Oracle  2022-08-22  2073) 	for_each_vma(vmi, vma) {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2074  		unsigned long hstart, hend;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2075  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2076  		cond_resched();
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2077  		if (unlikely(hpage_collapse_test_exit(mm))) {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2078  			progress++;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2079  			break;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2080  		}
+e79e8095d317dd Zach O'Keefe            2022-07-06  2081  		if (!hugepage_vma_check(vma, vma->vm_flags, false, false, true)) {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2082  skip:
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2083  			progress++;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2084  			continue;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2085  		}
+4fa6893faeaaea Yang Shi                2022-06-16  2086  		hstart = round_up(vma->vm_start, HPAGE_PMD_SIZE);
+4fa6893faeaaea Yang Shi                2022-06-16  2087  		hend = round_down(vma->vm_end, HPAGE_PMD_SIZE);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2088  		if (khugepaged_scan.address > hend)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2089  			goto skip;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2090  		if (khugepaged_scan.address < hstart)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2091  			khugepaged_scan.address = hstart;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2092  		VM_BUG_ON(khugepaged_scan.address & ~HPAGE_PMD_MASK);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2093  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2094  		while (khugepaged_scan.address < hend) {
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2095  			bool mmap_locked = true;
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2096  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2097  			cond_resched();
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2098  			if (unlikely(hpage_collapse_test_exit(mm)))
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2099  				goto breakouterloop;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2100  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2101  			VM_BUG_ON(khugepaged_scan.address < hstart ||
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2102  				  khugepaged_scan.address + HPAGE_PMD_SIZE >
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2103  				  hend);
+99cb0dbd47a15d Song Liu                2019-09-23  2104  			if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
+396bcc5299c281 Matthew Wilcox (Oracle  2020-04-06  2105) 				struct file *file = get_file(vma->vm_file);
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2106  				pgoff_t pgoff = linear_page_index(vma,
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2107  						khugepaged_scan.address);
+99cb0dbd47a15d Song Liu                2019-09-23  2108  
+d8ed45c5dcd455 Michel Lespinasse       2020-06-08  2109  				mmap_read_unlock(mm);
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2110  				*result = khugepaged_scan_file(mm, file, pgoff,
+61f9da0fad933f Zach O'Keefe            2022-07-06  2111  							       cc);
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2112  				mmap_locked = false;
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2113  				fput(file);
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2114  			} else {
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2115  				*result = hpage_collapse_scan_pmd(mm, vma,
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2116  								  khugepaged_scan.address,
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2117  								  &mmap_locked,
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2118  								  cc);
+f3f0e1d2150b2b Kirill A. Shutemov      2016-07-26  2119  			}
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2120  			if (*result == SCAN_SUCCEED)
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2121  				++khugepaged_pages_collapsed;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2122  			/* move to next address */
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2123  			khugepaged_scan.address += HPAGE_PMD_SIZE;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2124  			progress += HPAGE_PMD_NR;
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2125  			if (!mmap_locked)
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2126  				/*
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2127  				 * We released mmap_lock so break loop.  Note
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2128  				 * that we drop mmap_lock before all hugepage
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2129  				 * allocations, so if allocation fails, we are
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2130  				 * guaranteed to break here and report the
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2131  				 * correct result back to caller.
+47c73ca9cc0b20 Zach O'Keefe            2022-07-06  2132  				 */
+c1e8d7c6a7a682 Michel Lespinasse       2020-06-08  2133  				goto breakouterloop_mmap_lock;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2134  			if (progress >= pages)
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2135  				goto breakouterloop;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2136  		}
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2137  	}
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2138  breakouterloop:
+d8ed45c5dcd455 Michel Lespinasse       2020-06-08  2139  	mmap_read_unlock(mm); /* exit_mmap will destroy ptes after this */
+c1e8d7c6a7a682 Michel Lespinasse       2020-06-08  2140  breakouterloop_mmap_lock:
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2141  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2142  	spin_lock(&khugepaged_mm_lock);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2143  	VM_BUG_ON(khugepaged_scan.mm_slot != mm_slot);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2144  	/*
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2145  	 * Release the current mm_slot if this mm is about to die, or
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2146  	 * if we scanned all vmas of this mm.
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2147  	 */
+2b792d84bf5a38 Zach O'Keefe            2022-07-06  2148  	if (hpage_collapse_test_exit(mm) || !vma) {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2149  		/*
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2150  		 * Make sure that if mm_users is reaching zero while
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2151  		 * khugepaged runs here, khugepaged_exit will find
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2152  		 * mm_slot not pointing to the exiting mm.
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2153  		 */
+36362cd669dfbb Qi Zheng                2022-08-31  2154  		if (slot->mm_node.next != &khugepaged_scan.mm_head) {
+36362cd669dfbb Qi Zheng                2022-08-31  2155  			slot = list_entry(slot->mm_node.next,
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2156  					  struct mm_slot, mm_node);
+36362cd669dfbb Qi Zheng                2022-08-31  2157  			khugepaged_scan.mm_slot =
+36362cd669dfbb Qi Zheng                2022-08-31  2158  				mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2159  			khugepaged_scan.address = 0;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2160  		} else {
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2161  			khugepaged_scan.mm_slot = NULL;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2162  			khugepaged_full_scans++;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2163  		}
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2164  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2165  		collect_mm_slot(mm_slot);
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2166  	}
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2167  
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2168  	return progress;
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2169  }
+b46e756f5e4703 Kirill A. Shutemov      2016-07-26  2170  
+
+:::::: The code at line 2056 was first introduced by commit
+:::::: 27e1f8273113adec0e98bf513e4091636b27cc2a khugepaged: enable collapse pmd for pte-mapped THP
+
+:::::: TO: Song Liu <songliubraving@fb.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
