@@ -1,47 +1,46 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C317D7F
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 06:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40260184C
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 06:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662186596; x=1693722596;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mkl196/saNTuDxx3QucDAn6dgNFeifJ1m4pVF+7WdoQ=;
-  b=AByj9F0UBiSaBw1WTban2Q+tx3R/N22SIYeC8Vkplsb57ji9cHiZq5C2
-   VmAsOJTP0fJmv+xdo7tFA70r6IZzBBOOaA3kmvbMH9ukNHTupuZIp7HKH
-   oxQtz92Lmsj4M+JqTaY+DCJaYjSSU5hKQs5/tBvKzJTsjCLtXwo/ky6NG
-   a8ly1l17yM5nwuYXeCBSfmrREkev3ssk4TH5SbU/EtCSLrgfsRVoAnBdL
-   ijWWfm0U2lSaBgKCWPAN+QhsyEJ7guL7tdUCLJQBnJfirvBaHFmc1x6iH
-   gzE1s5ksToDyA8ITag7/nnEvNxbrx6L5cQMdZJNITEAwyjiPjWGvYtiif
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="360091955"
+  t=1662186598; x=1693722598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J69HhJXWk459Ez703eX3EtSDdKHP1wMJ+Q9eE95qWUY=;
+  b=QDwDWV609Fnol3IRvncjwl2v3uCZF3JqQeYVWsega7fphlQglFsJWNd7
+   aegPp56l2NM1zPMIo3MbEGBNjumO/w6MQEM/wdCL7kh4r73iG1DIpGEYy
+   AbeTtDYT+2mK2Pqz5ESosMNfB097004kdbE4RCWoGmL671IWkQpenwEuZ
+   DINVdJs7pdjrk6/AJIcqgCEN0GyXUaGOuxIn0HeIBb48N0TyIlim6DEvC
+   DlVkynYPSkTHB7tmoh/GJbetQ4FpUq1m/VQI5Ty9Nghgi7B0GdHYt6F9c
+   K1KvSqh+vb49pqeipuvEQQ5whlcSfiW5vfeRenb4AlGn+qe3MDv5BM3BM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="322299135"
 X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="360091955"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 23:29:56 -0700
+   d="scan'208";a="322299135"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 23:29:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="646354560"
+   d="scan'208";a="564195677"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 02 Sep 2022 23:29:54 -0700
+  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 23:29:54 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oUMfB-0001Ax-1r;
+	id 1oUMfB-0001B2-24;
 	Sat, 03 Sep 2022 06:29:53 +0000
-Date: Sat, 3 Sep 2022 14:28:53 +0800
+Date: Sat, 3 Sep 2022 14:29:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To: Jianqun Xu <jay.xu@rock-chips.com>, heiko@sntech.de,
+	linus.walleij@linaro.org, brgl@bgdev.pl
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 402/439] mm/shmem.c:1738:10:
- error: implicit declaration of function 'swap_cache_get_folio' is invalid in
- C99
-Message-ID: <202209031437.da4oMdee-lkp@intel.com>
+	andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.or,
+	huangtao@rock-chips.com, Jianqun Xu <jay.xu@rock-chips.com>
+Subject: Re: [PATCH] gpio: rockchip: support acpi
+Message-ID: <202209031405.ZyrtnKpS-lkp@intel.com>
+References: <20220903033800.3266723-1-jay.xu@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,142 +49,259 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220903033800.3266723-1-jay.xu@rock-chips.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   1e6b789996e7b8b0d382a144a6dccde7b824b510
-commit: 91a46452f641672b82f8a01c9f114f85cdfe0d76 [402/439] shmem: eliminate struct page from shmem_swapin_folio()
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220903/202209031437.da4oMdee-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Jianqun,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianqun-Xu/gpio-rockchip-support-acpi/20220903-113834
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: hexagon-randconfig-r041-20220901 (https://download.01.org/0day-ci/archive/20220903/202209031405.ZyrtnKpS-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/91a46452f641672b82f8a01c9f114f85cdfe0d76
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout 91a46452f641672b82f8a01c9f114f85cdfe0d76
+        # https://github.com/intel-lab-lkp/linux/commit/3d241d2c3b640720fc6a056b26db1ada6fefb15b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianqun-Xu/gpio-rockchip-support-acpi/20220903-113834
+        git checkout 3d241d2c3b640720fc6a056b26db1ada6fefb15b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/shmem.c:1738:10: error: implicit declaration of function 'swap_cache_get_folio' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           folio = swap_cache_get_folio(swap, NULL, 0);
-                   ^
->> mm/shmem.c:1738:8: warning: incompatible integer to pointer conversion assigning to 'struct folio *' from 'int' [-Wint-conversion]
-           folio = swap_cache_get_folio(swap, NULL, 0);
-                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> drivers/gpio/gpio-rockchip.c:797:7: error: incompatible pointer types assigning to 'struct rockchip_pin_output_deferred *' from 'struct rockchip_pin_deferred *' [-Werror,-Wincompatible-pointer-types]
+                   cfg = list_first_entry(&bank->deferred_pins,
+                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpio/gpio-rockchip.c:802:16: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                   list_del(&cfg->head);
+                             ~~~^
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:804:14: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                   switch (cfg->param) {
+                           ~~~^
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:806:62: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                           ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
+                                                                                  ~~~^
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:806:72: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                           ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
+                                                                                            ~~~^
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:808:62: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                                   dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin,
+                                                                                         ~~~^
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                               ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:809:10: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                                            cfg->arg);
+                                            ~~~^
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                               ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:812:61: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                           ret = rockchip_gpio_direction_input(&bank->gpio_chip, cfg->pin);
+                                                                                 ~~~^
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:814:55: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                                   dev_warn(dev, "setting input pin %u failed\n", cfg->pin);
+                                                                                  ~~~^
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                               ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   drivers/gpio/gpio-rockchip.c:817:59: error: incomplete definition of type 'struct rockchip_pin_output_deferred'
+                           dev_warn(dev, "unknown deferred config param %d\n", cfg->param);
+                                                                               ~~~^
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                               ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpio/gpio-rockchip.c:708:9: note: forward declaration of 'struct rockchip_pin_output_deferred'
+           struct rockchip_pin_output_deferred *cfg;
+                  ^
+   10 errors generated.
 
 
-vim +/swap_cache_get_folio +1738 mm/shmem.c
+vim +797 drivers/gpio/gpio-rockchip.c
 
-  1711	
-  1712	/*
-  1713	 * Swap in the folio pointed to by *foliop.
-  1714	 * Caller has to make sure that *foliop contains a valid swapped folio.
-  1715	 * Returns 0 and the folio in foliop if success. On failure, returns the
-  1716	 * error code and NULL in *foliop.
-  1717	 */
-  1718	static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
-  1719				     struct folio **foliop, enum sgp_type sgp,
-  1720				     gfp_t gfp, struct vm_area_struct *vma,
-  1721				     vm_fault_t *fault_type)
-  1722	{
-  1723		struct address_space *mapping = inode->i_mapping;
-  1724		struct shmem_inode_info *info = SHMEM_I(inode);
-  1725		struct mm_struct *charge_mm = vma ? vma->vm_mm : NULL;
-  1726		struct folio *folio = NULL;
-  1727		swp_entry_t swap;
-  1728		int error;
-  1729	
-  1730		VM_BUG_ON(!*foliop || !xa_is_value(*foliop));
-  1731		swap = radix_to_swp_entry(*foliop);
-  1732		*foliop = NULL;
-  1733	
-  1734		if (is_swapin_error_entry(swap))
-  1735			return -EIO;
-  1736	
-  1737		/* Look it up and read it in.. */
-> 1738		folio = swap_cache_get_folio(swap, NULL, 0);
-  1739		if (!folio) {
-  1740			/* Or update major stats only when swapin succeeds?? */
-  1741			if (fault_type) {
-  1742				*fault_type |= VM_FAULT_MAJOR;
-  1743				count_vm_event(PGMAJFAULT);
-  1744				count_memcg_event_mm(charge_mm, PGMAJFAULT);
-  1745			}
-  1746			/* Here we actually start the io */
-  1747			folio = shmem_swapin(swap, gfp, info, index);
-  1748			if (!folio) {
-  1749				error = -ENOMEM;
-  1750				goto failed;
-  1751			}
-  1752		}
-  1753	
-  1754		/* We have to do this with folio locked to prevent races */
-  1755		folio_lock(folio);
-  1756		if (!folio_test_swapcache(folio) ||
-  1757		    folio_swap_entry(folio).val != swap.val ||
-  1758		    !shmem_confirm_swap(mapping, index, swap)) {
-  1759			error = -EEXIST;
-  1760			goto unlock;
-  1761		}
-  1762		if (!folio_test_uptodate(folio)) {
-  1763			error = -EIO;
-  1764			goto failed;
-  1765		}
-  1766		folio_wait_writeback(folio);
-  1767	
-  1768		/*
-  1769		 * Some architectures may have to restore extra metadata to the
-  1770		 * folio after reading from swap.
-  1771		 */
-  1772		arch_swap_restore(swap, folio);
-  1773	
-  1774		if (shmem_should_replace_folio(folio, gfp)) {
-  1775			error = shmem_replace_folio(&folio, gfp, info, index);
-  1776			if (error)
-  1777				goto failed;
-  1778		}
-  1779	
-  1780		error = shmem_add_to_page_cache(folio, mapping, index,
-  1781						swp_to_radix_entry(swap), gfp,
-  1782						charge_mm);
-  1783		if (error)
-  1784			goto failed;
-  1785	
-  1786		spin_lock_irq(&info->lock);
-  1787		info->swapped--;
-  1788		shmem_recalc_inode(inode);
-  1789		spin_unlock_irq(&info->lock);
-  1790	
-  1791		if (sgp == SGP_WRITE)
-  1792			folio_mark_accessed(folio);
-  1793	
-  1794		delete_from_swap_cache(folio);
-  1795		folio_mark_dirty(folio);
-  1796		swap_free(swap);
-  1797	
-  1798		*foliop = folio;
-  1799		return 0;
-  1800	failed:
-  1801		if (!shmem_confirm_swap(mapping, index, swap))
-  1802			error = -EEXIST;
-  1803		if (error == -EIO)
-  1804			shmem_set_folio_swapin_error(inode, index, folio, swap);
-  1805	unlock:
-  1806		if (folio) {
-  1807			folio_unlock(folio);
-  1808			folio_put(folio);
-  1809		}
-  1810	
-  1811		return error;
-  1812	}
-  1813	
+3d241d2c3b6407 Jianqun Xu     2022-09-03  702  
+936ee2675eee1f Jianqun Xu     2021-08-16  703  static int rockchip_gpio_probe(struct platform_device *pdev)
+936ee2675eee1f Jianqun Xu     2021-08-16  704  {
+936ee2675eee1f Jianqun Xu     2021-08-16  705  	struct device *dev = &pdev->dev;
+936ee2675eee1f Jianqun Xu     2021-08-16  706  	struct pinctrl_dev *pctldev = NULL;
+936ee2675eee1f Jianqun Xu     2021-08-16  707  	struct rockchip_pin_bank *bank = NULL;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  708  	struct rockchip_pin_output_deferred *cfg;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  709  	int bank_id = 0;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  710  	int ret;
+936ee2675eee1f Jianqun Xu     2021-08-16  711  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  712  	bank_id = rockchip_gpio_acpi_get_bank_id(dev);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  713  	if (bank_id < 0) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  714  		bank_id = rockchip_gpio_of_get_bank_id(dev);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  715  		if (bank_id < 0)
+3d241d2c3b6407 Jianqun Xu     2022-09-03  716  			return bank_id;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  717  	}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  718  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  719  	if (!ACPI_COMPANION(dev)) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  720  		struct device_node *pctlnp = of_get_parent(dev->of_node);
+936ee2675eee1f Jianqun Xu     2021-08-16  721  
+936ee2675eee1f Jianqun Xu     2021-08-16  722  		pctldev = of_pinctrl_get(pctlnp);
+936ee2675eee1f Jianqun Xu     2021-08-16  723  		if (!pctldev)
+936ee2675eee1f Jianqun Xu     2021-08-16  724  			return -EPROBE_DEFER;
+936ee2675eee1f Jianqun Xu     2021-08-16  725  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  726  		bank = rockchip_gpio_find_bank(pctldev, bank_id);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  727  		if (!bank)
+3d241d2c3b6407 Jianqun Xu     2022-09-03  728  			return -ENODEV;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  729  	}
+936ee2675eee1f Jianqun Xu     2021-08-16  730  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  731  	if (!bank) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  732  		bank = devm_kzalloc(dev, sizeof(*bank), GFP_KERNEL);
+936ee2675eee1f Jianqun Xu     2021-08-16  733  		if (!bank)
+3d241d2c3b6407 Jianqun Xu     2022-09-03  734  			return -ENOMEM;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  735  	}
+936ee2675eee1f Jianqun Xu     2021-08-16  736  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  737  	bank->bank_num = bank_id;
+936ee2675eee1f Jianqun Xu     2021-08-16  738  	bank->dev = dev;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  739  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  740  	bank->reg_base = devm_platform_ioremap_resource(pdev, 0);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  741  	if (IS_ERR(bank->reg_base))
+3d241d2c3b6407 Jianqun Xu     2022-09-03  742  		return PTR_ERR(bank->reg_base);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  743  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  744  	bank->irq = platform_get_irq(pdev, 0);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  745  	if (bank->irq < 0)
+3d241d2c3b6407 Jianqun Xu     2022-09-03  746  		return bank->irq;
+936ee2675eee1f Jianqun Xu     2021-08-16  747  
+936ee2675eee1f Jianqun Xu     2021-08-16  748  	raw_spin_lock_init(&bank->slock);
+936ee2675eee1f Jianqun Xu     2021-08-16  749  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  750  	if (!ACPI_COMPANION(dev)) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  751  		bank->clk = devm_clk_get(dev, "bus");
+3d241d2c3b6407 Jianqun Xu     2022-09-03  752  		if (IS_ERR(bank->clk)) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  753  			bank->clk = of_clk_get(dev->of_node, 0);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  754  			if (IS_ERR(bank->clk)) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  755  				dev_err(dev, "fail to get apb clock\n");
+3d241d2c3b6407 Jianqun Xu     2022-09-03  756  				return PTR_ERR(bank->clk);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  757  			}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  758  		}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  759  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  760  		bank->db_clk = devm_clk_get(dev, "db");
+3d241d2c3b6407 Jianqun Xu     2022-09-03  761  		if (IS_ERR(bank->db_clk)) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  762  			bank->db_clk = of_clk_get(dev->of_node, 1);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  763  			if (IS_ERR(bank->db_clk))
+3d241d2c3b6407 Jianqun Xu     2022-09-03  764  				bank->db_clk = NULL;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  765  		}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  766  	}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  767  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  768  	clk_prepare_enable(bank->clk);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  769  	clk_prepare_enable(bank->db_clk);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  770  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  771  	rockchip_gpio_get_ver(bank);
+936ee2675eee1f Jianqun Xu     2021-08-16  772  
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  773  	/*
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  774  	 * Prevent clashes with a deferred output setting
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  775  	 * being added right at this moment.
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  776  	 */
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  777  	mutex_lock(&bank->deferred_lock);
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  778  
+936ee2675eee1f Jianqun Xu     2021-08-16  779  	ret = rockchip_gpiolib_register(bank);
+936ee2675eee1f Jianqun Xu     2021-08-16  780  	if (ret) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  781  		dev_err(bank->dev, "Failed to register gpio %d\n", ret);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  782  		goto err_unlock;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  783  	}
+3d241d2c3b6407 Jianqun Xu     2022-09-03  784  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  785  	if (!device_property_read_bool(bank->dev, "gpio-ranges") && pctldev) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  786  		struct gpio_chip *gc = &bank->gpio_chip;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  787  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  788  		ret = gpiochip_add_pin_range(gc, dev_name(pctldev->dev), 0,
+3d241d2c3b6407 Jianqun Xu     2022-09-03  789  					     gc->base, gc->ngpio);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  790  		if (ret) {
+3d241d2c3b6407 Jianqun Xu     2022-09-03  791  			dev_err(bank->dev, "Failed to add pin range\n");
+3d241d2c3b6407 Jianqun Xu     2022-09-03  792  			goto err_unlock;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  793  		}
+936ee2675eee1f Jianqun Xu     2021-08-16  794  	}
+936ee2675eee1f Jianqun Xu     2021-08-16  795  
+8ce5ef64546850 Caleb Connolly 2022-03-28  796  	while (!list_empty(&bank->deferred_pins)) {
+8ce5ef64546850 Caleb Connolly 2022-03-28 @797  		cfg = list_first_entry(&bank->deferred_pins,
+8ce5ef64546850 Caleb Connolly 2022-03-28  798  				       struct rockchip_pin_deferred, head);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  799  		if (!cfg)
+3d241d2c3b6407 Jianqun Xu     2022-09-03  800  			break;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  801  
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14 @802  		list_del(&cfg->head);
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  803  
+8ce5ef64546850 Caleb Connolly 2022-03-28  804  		switch (cfg->param) {
+8ce5ef64546850 Caleb Connolly 2022-03-28  805  		case PIN_CONFIG_OUTPUT:
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  806  			ret = rockchip_gpio_direction_output(&bank->gpio_chip, cfg->pin, cfg->arg);
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  807  			if (ret)
+8ce5ef64546850 Caleb Connolly 2022-03-28  808  				dev_warn(dev, "setting output pin %u to %u failed\n", cfg->pin,
+8ce5ef64546850 Caleb Connolly 2022-03-28  809  					 cfg->arg);
+8ce5ef64546850 Caleb Connolly 2022-03-28  810  			break;
+7ff11357810fd1 Caleb Connolly 2022-03-28  811  		case PIN_CONFIG_INPUT_ENABLE:
+7ff11357810fd1 Caleb Connolly 2022-03-28  812  			ret = rockchip_gpio_direction_input(&bank->gpio_chip, cfg->pin);
+7ff11357810fd1 Caleb Connolly 2022-03-28  813  			if (ret)
+7ff11357810fd1 Caleb Connolly 2022-03-28  814  				dev_warn(dev, "setting input pin %u failed\n", cfg->pin);
+7ff11357810fd1 Caleb Connolly 2022-03-28  815  			break;
+8ce5ef64546850 Caleb Connolly 2022-03-28  816  		default:
+8ce5ef64546850 Caleb Connolly 2022-03-28  817  			dev_warn(dev, "unknown deferred config param %d\n", cfg->param);
+8ce5ef64546850 Caleb Connolly 2022-03-28  818  			break;
+8ce5ef64546850 Caleb Connolly 2022-03-28  819  		}
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  820  		kfree(cfg);
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  821  	}
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  822  
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  823  	mutex_unlock(&bank->deferred_lock);
+59dd178e1d7cb6 Heiko Stuebner 2021-09-14  824  
+936ee2675eee1f Jianqun Xu     2021-08-16  825  	platform_set_drvdata(pdev, bank);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  826  	dev_info(dev, "probed %pfw\n", dev_fwnode(dev));
+936ee2675eee1f Jianqun Xu     2021-08-16  827  
+936ee2675eee1f Jianqun Xu     2021-08-16  828  	return 0;
+3d241d2c3b6407 Jianqun Xu     2022-09-03  829  err_unlock:
+3d241d2c3b6407 Jianqun Xu     2022-09-03  830  	mutex_unlock(&bank->deferred_lock);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  831  	clk_disable_unprepare(bank->clk);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  832  	clk_disable_unprepare(bank->db_clk);
+3d241d2c3b6407 Jianqun Xu     2022-09-03  833  
+3d241d2c3b6407 Jianqun Xu     2022-09-03  834  	return ret;
+936ee2675eee1f Jianqun Xu     2021-08-16  835  }
+936ee2675eee1f Jianqun Xu     2021-08-16  836  
 
 -- 
 0-DAY CI Kernel Test Service
