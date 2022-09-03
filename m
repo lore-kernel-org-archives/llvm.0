@@ -1,159 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233061102
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 08:50:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662195049;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jSAtpVxOdz4mgSUx7RurY/WH5yw6rcHoEeCe+5qMC64=;
-	b=DSd3KnH2USmQEkGzF6jzeUL4nEAdHUu9uZJ2p+I5e/Utkh88t3VY7Sj7yTRYC9rmpqsopa
-	oPs6Yn80zftDKZFvhPQznC2cPKK5aA6GUw0JhGxR9hZ2bwfjrP62xtM3cmhZyT4kd45Kf/
-	51Sr0/ZquxKMGW5+vRYBYoEY2bEpJZA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-h9CXUnsqOo2SdH409QWTYQ-1; Sat, 03 Sep 2022 04:50:48 -0400
-X-MC-Unique: h9CXUnsqOo2SdH409QWTYQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F012185A794
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 08:50:48 +0000 (UTC)
-Received: from [172.64.3.82] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C779B492C3B;
-	Sat,  3 Sep 2022 08:50:47 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc3,
- mainline.kernel.org-clang, d895ec79)
-Date: Sat, 03 Sep 2022 08:50:47 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351F87D90
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 10:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662199756; x=1693735756;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zTUGhqqxgxF2c4uo4GHXgDiG1F8nmhSj2WWm6yy0qvQ=;
+  b=CT3Jt/OLBsMlD8gll5RYhJQF1dtROl4ADihdSeH1tQW77r5Bimp5IYz7
+   o5CqlGeGafbKIzT0FkhtmysLkJpbaMitKSVG9QqzCFY9fJ8dkGVIC8LT6
+   pfK6LXK3yL+HpYYQtg+nJFLFNpbO52QGg8y8tOGaGwg/8RVMm4hoKjjdy
+   9e+H7WUPYS/quAxdgYvkp+z4BGZVpUudZd/e5RaPMSdJtm/EdtSyYXTVe
+   hDR43lsaWyh8Wxm34J6WME6rb2NuLx/6gbWbO+ncijz1Doj3DtgX+zmk6
+   jjpqBKtpE3QNXMFw+B25B7NLe0+Vh5Z5dxRExhhkJ3CnVZnKeBzo/mx8M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="297441237"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="297441237"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 03:09:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="643233934"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 03:09:14 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oUQ5R-0001Ri-1r;
+	Sat, 03 Sep 2022 10:09:13 +0000
+Date: Sat, 3 Sep 2022 18:08:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
+ 'struct htt_tx_fetch_ind' is less aligned than 'union
+ htt_tx_fetch_ind::(anonymous at
+ drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
+ htt_tx_fetch_ind' being...
+Message-ID: <202209031855.LVCj2Q6u-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-Message-Id: <91194.122090304504800137@us-mta-530.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Kees,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d895ec7938c431fe61a731939da76a6461bc6133
+commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
+date:   11 months ago
+config: arm-randconfig-r031-20220903 (https://download.01.org/0day-ci/archive/20220903/202209031855.LVCj2Q6u-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
 
-Kernel information:
-    Commit message: Merge tag 'block-6.0-2022-09-02' of git://git.kernel.dk=
-/linux-block
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52516
+All warnings (new ones prefixed by >>):
 
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5040681
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
-            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
-NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
+                                       unsigned int changed_flags,
+                                                    ^
+   5 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   4 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
+   ath10k_get_ring_byte(unsigned int offset,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
+   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
+   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+                      ^
+   7 warnings generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +1677 drivers/net/wireless/ath/ath10k/htt.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  1670	
+  1671	struct htt_tx_fetch_ind {
+  1672		u8 pad0;
+  1673		__le16 fetch_seq_num;
+  1674		__le32 token;
+  1675		__le16 num_resp_ids;
+  1676		__le16 num_records;
+> 1677		union {
+  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
+  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
+  1681		};
+  1682	} __packed;
+  1683	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
