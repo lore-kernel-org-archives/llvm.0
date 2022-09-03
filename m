@@ -1,43 +1,52 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9671184C
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 03:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809807D70
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 04:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662175784; x=1693711784;
+  t=1662178075; x=1693714075;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lu7uqy3BIdVbnqSZInPRA6M1umJkF2qJpSRRzmoip7Y=;
-  b=SO+JqLcFHpB1ubbXLGMgmo5OJPxxVVm8IWhk4aYZH/WVhPUHrYoI6uGe
-   dExe2qspDDqSg7Dbijuii9+7ubCiwTKR9o5FAwxP/SDdpNORTPa2mhSp7
-   Y7QpWJw1f7OAVwReKnBGaIhaW/naBPbaYRguCpaMT3imsKXIQMDq4Y/ca
-   q0Q1kLldx3gN8sPobAJJ9rF01s5r46N4e1/lmA53EaiXu6iL6U2o1i34D
-   obAL5PXCDRydEfmINQ0FLbvJxgXUFXJzT6S4BKoDi+rssCqueO0lsEo/w
-   k8GvNHBWisbY0bCur6wf9qxyQ+I0dmOKb9qZRuJEt3r4UeOFO0HEhTxPC
+  bh=T+fPZphr6c6IlXiy2pembOOg+9Rn7WUe3VZoUGJMCJI=;
+  b=YKbY0jvhUZ3o6RY+JGbd/3L/BhvlPAjYhZAOFRqo6UBYN+gMlyOjNpW0
+   B78mK5BniWwm14cEYuDWDJX0Fk1sJyBqNhXgmcsU0v0Ji0R8UeAGY/BH8
+   H8ebnIONwN27WmrC2jr1aGCF3ZSvT5mVcupoxcl5oia7eGs5a9Jg5hvNK
+   kDmzDwhRio3UOrzXxTqPk4XPzBhZne623l/wtR/Fizli3RmRY8az3bS6L
+   6LVdkG+1GBH9R8ZvSWQRy+MfxkWzHmm5oORAHREQrY2eQ+mwbk6sAHllH
+   b7nZb4/aATK49NVjRn2y0iJ7dmsAd+NoAPIw1mNW5EUwQAjCpRqo9Rmpz
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="322289836"
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="276527340"
 X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="322289836"
+   d="scan'208";a="276527340"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 20:29:43 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 21:07:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="590299414"
+   d="scan'208";a="590305618"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 02 Sep 2022 20:29:42 -0700
+  by orsmga006.jf.intel.com with ESMTP; 02 Sep 2022 21:07:47 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oUJqn-0000xy-2V;
-	Sat, 03 Sep 2022 03:29:41 +0000
-Date: Sat, 3 Sep 2022 11:29:37 +0800
+	id 1oUKRe-000123-1b;
+	Sat, 03 Sep 2022 04:07:46 +0000
+Date: Sat, 3 Sep 2022 12:07:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matt Roper <matthew.d.roper@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 11/12] drm/i915/mtl: Use primary GT's irq lock for
- media GT
-Message-ID: <202209031159.LqrZ3DkE-lkp@intel.com>
-References: <20220902233257.3088492-12-matthew.d.roper@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Koba Ko <koba.ko@canonical.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	"David E . Box" <david.e.box@linux.intel.com>,
+	Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH v2 3/3] PCI/PM: Always disable PTM for all devices during
+ suspend
+Message-ID: <202209031120.PkNnRSt8-lkp@intel.com>
+References: <20220902233543.390890-4-helgaas@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,72 +55,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902233257.3088492-12-matthew.d.roper@intel.com>
+In-Reply-To: <20220902233543.390890-4-helgaas@kernel.org>
 
-Hi Matt,
+Hi Bjorn,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on drm-tip/drm-tip]
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Roper/i915-Add-standalone-media-support-for-MTL/20220903-073602
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220903/202209031159.LqrZ3DkE-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Helgaas/PCI-PM-Always-disable-PTM-for-all-devices-during-suspend/20220903-073808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: riscv-randconfig-r042-20220901 (https://download.01.org/0day-ci/archive/20220903/202209031120.PkNnRSt8-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0c50809816566e24ec98f3d90fcc3acb502f58df
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/809e1c954b459ee37193c4ab9fa843243fbd7fa9
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matt-Roper/i915-Add-standalone-media-support-for-MTL/20220903-073602
-        git checkout 0c50809816566e24ec98f3d90fcc3acb502f58df
+        git fetch --no-tags linux-review Bjorn-Helgaas/PCI-PM-Always-disable-PTM-for-all-devices-during-suspend/20220903-073808
+        git checkout 809e1c954b459ee37193c4ab9fa843243fbd7fa9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:50:16: error: incompatible pointer types passing 'spinlock_t **' (aka 'struct spinlock **') to parameter of type 'spinlock_t *' (aka 'struct spinlock *'); remove & [-Werror,-Wincompatible-pointer-types]
-           spin_lock_irq(&gt->irq_lock);
-                         ^~~~~~~~~~~~~
-   include/linux/spinlock.h:372:55: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_lock_irq(spinlock_t *lock)
-                                                         ^
-   drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:52:18: error: incompatible pointer types passing 'spinlock_t **' (aka 'struct spinlock **') to parameter of type 'spinlock_t *' (aka 'struct spinlock *'); remove & [-Werror,-Wincompatible-pointer-types]
-           spin_unlock_irq(&gt->irq_lock);
-                           ^~~~~~~~~~~~~
-   include/linux/spinlock.h:397:57: note: passing argument to parameter 'lock' here
-   static __always_inline void spin_unlock_irq(spinlock_t *lock)
-                                                           ^
-   2 errors generated.
+>> drivers/pci/pci-driver.c:1350:15: error: no member named 'ptm_enabled' in 'struct pci_dev'
+           if (pci_dev->ptm_enabled)
+               ~~~~~~~  ^
+   1 error generated.
 
 
-vim +50 drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c
+vim +1350 drivers/pci/pci-driver.c
 
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  40  
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  41  static int pxp_terminate_set(void *data, u64 val)
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  42  {
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  43  	struct intel_pxp *pxp = data;
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  44  	struct intel_gt *gt = pxp_to_gt(pxp);
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  45  
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  46  	if (!intel_pxp_is_active(pxp))
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  47  		return -ENODEV;
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  48  
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  49  	/* simulate a termination interrupt */
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24 @50  	spin_lock_irq(&gt->irq_lock);
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  51  	intel_pxp_irq_handler(pxp, GEN12_DISPLAY_PXP_STATE_TERMINATED_INTERRUPT);
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  52  	spin_unlock_irq(&gt->irq_lock);
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  53  
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  54  	if (!wait_for_completion_timeout(&pxp->termination,
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  55  					 msecs_to_jiffies(100)))
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  56  		return -ETIMEDOUT;
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  57  
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  58  	return 0;
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  59  }
-390cf1b28b1119 Daniele Ceraolo Spurio 2021-09-24  60  
+  1335	
+  1336	static int pci_pm_runtime_resume(struct device *dev)
+  1337	{
+  1338		struct pci_dev *pci_dev = to_pci_dev(dev);
+  1339		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+  1340		pci_power_t prev_state = pci_dev->current_state;
+  1341		int error = 0;
+  1342	
+  1343		/*
+  1344		 * Restoring config space is necessary even if the device is not bound
+  1345		 * to a driver because although we left it in D0, it may have gone to
+  1346		 * D3cold when the bridge above it runtime suspended.
+  1347		 */
+  1348		pci_pm_default_resume_early(pci_dev);
+  1349	
+> 1350		if (pci_dev->ptm_enabled)
+  1351			pci_enable_ptm(pci_dev, NULL);
+  1352	
+  1353		if (!pci_dev->driver)
+  1354			return 0;
+  1355	
+  1356		pci_fixup_device(pci_fixup_resume_early, pci_dev);
+  1357		pci_pm_default_resume(pci_dev);
+  1358	
+  1359		if (prev_state == PCI_D3cold)
+  1360			pci_pm_bridge_power_up_actions(pci_dev);
+  1361	
+  1362		if (pm && pm->runtime_resume)
+  1363			error = pm->runtime_resume(dev);
+  1364	
+  1365		return error;
+  1366	}
+  1367	
 
 -- 
 0-DAY CI Kernel Test Service
