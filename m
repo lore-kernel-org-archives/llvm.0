@@ -1,162 +1,182 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6D77B
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 07:18:48 +0000 (UTC)
-Received: by mail-pg1-f179.google.com with SMTP id r22so3796084pgm.5
-        for <llvm@lists.linux.dev>; Sat, 03 Sep 2022 00:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=SHiiav/UTzP3n773mJagoVt2o/t4dOU1H79RijaCaHU=;
-        b=AskGi2axoxsEY7KBMXI29CjNbAw+cxBhimz+Uws86axHbnwkRzVkZm0D1J5APPX1zH
-         RE63qqDfrdaIRKvGYkOK9sQyFnbW82CNfeKcNNVKRsuR6HwoHzDihm8NXT8SAX1B+tKM
-         ROhbgkgg/KN32vOURtYpeFrRIqnmAQkrQ4fYI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SHiiav/UTzP3n773mJagoVt2o/t4dOU1H79RijaCaHU=;
-        b=pXnPIGfiWL14TcFBkgYuYhv4Fz8LNecaDLQQo2lebXiiDisrpx/Xvu+riczCPTTVEh
-         rWtX337IIGioR/+/ytzENe03SDytVwPW5+xBfAiOoP3t9t9h6aJTXQG8Gwy/qTWBcsun
-         6gR3WFCXmz7AbVFvSAocWcekm/iDjiGArhk6Gof4lhV0BVRTABiXd+fsjkRafMb18ily
-         xiwBmjk6cwN45PfcHI2bZvIwmjR5uQawFUp2QTVc/tnLXfgaNk9jRQZk6pMoKmSYDXbd
-         0vnBBql3cw/3beJk6JqU62FNRUpFrEhKDN8inMkRCuJ5LmoUI6wORiGUvWq2QKOLvDEJ
-         gu8Q==
-X-Gm-Message-State: ACgBeo1uJua/ljrQisvg/WMAG5Mce3ZogzeWgeWGZCMXwHeJmN4PlBgx
-	9YleOVksOaqLn7XzVl5UAbcQIA==
-X-Google-Smtp-Source: AA6agR7is3qPx2jzNtjCUYC08MYC3I8gIVe9jpfazv4o1qlzZaJVGogtiDukY6sKPz49eksygDlzsg==
-X-Received: by 2002:a63:8bc3:0:b0:42b:1bd2:9a6d with SMTP id j186-20020a638bc3000000b0042b1bd29a6dmr31887720pge.503.1662189528295;
-        Sat, 03 Sep 2022 00:18:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e24-20020a63f558000000b0042c5a1715d7sm2519864pgk.83.2022.09.03.00.18.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 00:18:47 -0700 (PDT)
-Date: Sat, 3 Sep 2022 00:18:46 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Bill Wendling <morbo@google.com>
-Cc: Juergen Gross <jgross@suse.com>,
-	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-	Alexey Makhalov <amakhalov@vmware.com>,
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-Message-ID: <202209022251.B14BD50B29@keescook>
-References: <20220902213750.1124421-1-morbo@google.com>
- <20220902213750.1124421-3-morbo@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084D97B
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 07:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662189647;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vhUrn/7bYQJPOKutcOhWMQNK5v3e4bdpLb+ASpXbU1I=;
+	b=OZbOlJXGXPIxdV3GO5t0Xy0G6f7/ImiVHrTFl7EGdsL13e3VvmxuKvStIIvkAF4NBzTSsw
+	ZTyUFEVufD0gTRmEi5D+GjkwU9Yh87+UybrKi8xz36AuHa4REuxV1v1TUUCb0QWXZEEyou
+	Lup5YgJqlJzrLucJGlNW+tN68dgtOM8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-M-cYFQjtP5qIpHJjdYPRNg-1; Sat, 03 Sep 2022 03:20:46 -0400
+X-MC-Unique: M-cYFQjtP5qIpHJjdYPRNg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17DB7811E76
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 07:20:46 +0000 (UTC)
+Received: from [172.64.3.82] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 09CD5492C3B;
+	Sat,  3 Sep 2022 07:20:46 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc3,
+ mainline.kernel.org-clang, 0b3acd1c)
+Date: Sat, 03 Sep 2022 07:20:45 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902213750.1124421-3-morbo@google.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Message-Id: <56598.122090303204600257@us-mta-637.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> [...]
->         callq   *pv_ops+536(%rip)
+Hi, we tested your kernel and here are the results:
 
-Do you know which pv_ops function is this? I can't figure out where
-pte_offset_kernel() gets converted into a pv_ops call....
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> [...]
-> --- a/arch/x86/include/asm/paravirt_types.h
-> +++ b/arch/x86/include/asm/paravirt_types.h
-> @@ -414,8 +414,17 @@ int paravirt_disable_iospace(void);
->  				"=c" (__ecx)
->  #define PVOP_CALL_CLOBBERS	PVOP_VCALL_CLOBBERS, "=a" (__eax)
->  
-> -/* void functions are still allowed [re]ax for scratch */
-> +/*
-> + * void functions are still allowed [re]ax for scratch.
-> + *
-> + * The ZERO_CALL_USED REGS feature may end up zeroing out callee-saved
-> + * registers. Make sure we model this with the appropriate clobbers.
-> + */
-> +#ifdef CONFIG_ZERO_CALL_USED_REGS
-> +#define PVOP_VCALLEE_CLOBBERS	"=a" (__eax), PVOP_VCALL_CLOBBERS
-> +#else
->  #define PVOP_VCALLEE_CLOBBERS	"=a" (__eax)
-> +#endif
->  #define PVOP_CALLEE_CLOBBERS	PVOP_VCALLEE_CLOBBERS
 
-I don't think this should depend on CONFIG_ZERO_CALL_USED_REGS; it should
-always be present.
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.0-rc4' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/gregkh/driver-core
 
-I've only been looking at this just now, so many I'm missing
-something. The callee clobbers are for functions with return values,
-yes?
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52498
 
-For example, 32-bit has to manually deal with doing a 64-bit value return,
-and even got it wrong originally, fixing it in commit 0eb592dbba40
-("x86/paravirt: return full 64-bit result"), with:
+One or more kernel tests failed:
 
--#define PVOP_VCALLEE_CLOBBERS          "=a" (__eax)
-+#define PVOP_VCALLEE_CLOBBERS          "=a" (__eax), "=d" (__edx)
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5037435
 
-But the naming is confusing, since these aren't actually clobbers,
-they're input constraints marked as clobbers (the "=" modifier).
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-Regardless, the note in the comments ...
 
- ...
- * However, x86_64 also have to clobber all caller saved registers, which
- * unfortunately, are quite a bit (r8 - r11)
- ...
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-... would indicate that ALL the function argument registers need to be
-marked as clobbers (i.e. the compiler can't figure this out on its own).
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-I was going to say it seems like they're missing from EXTRA_CLOBBERS,
-but it's not used with any of the macros using PVOP_VCALLEE_CLOBBERS,
-and then I saw the weird alternatives patching that encodes the clobbers
-a second time (CLBR_ANY vs CLBR_RET_REG) via:
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-#define _paravirt_alt(insn_string, type, clobber)       \
-        "771:\n\t" insn_string "\n" "772:\n"            \
-        ".pushsection .parainstructions,\"a\"\n"        \
-        _ASM_ALIGN "\n"                                 \
-        _ASM_PTR " 771b\n"                              \
-        "  .byte " type "\n"                            \
-        "  .byte 772b-771b\n"                           \
-        "  .short " clobber "\n"                        \
-        ".popsection\n"
-
-And after reading the alternatives patching code which parses this via
-the following struct:
-
-/* These all sit in the .parainstructions section to tell us what to patch. */
-struct paravirt_patch_site {
-        u8 *instr;              /* original instructions */
-        u8 type;                /* type of this instruction */
-        u8 len;                 /* length of original instruction */
-};
-
-... I see it _doesn't use the clobbers_ at all! *head explode* I found
-that removal in commit 27876f3882fd ("x86/paravirt: Remove clobbers from
-struct paravirt_patch_site")
-
-So, I guess the CLBR_* can all be entirely removed. But back to my other
-train of thought...
-
-It seems like all the input registers need to be explicitly listed in
-the PVOP_VCALLEE_CLOBBERS list (as you have), but likely should be done
-unconditionally and for 32-bit as well.
-
--Kees
-
-(Also, please CC linux-hardening@vger.kernel.org.)
-
--- 
-Kees Cook
