@@ -1,101 +1,134 @@
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBEF1FC9
-	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 18:28:29 +0000 (UTC)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-03.nifty.com with ESMTP id 283INMiD005546
-	for <llvm@lists.linux.dev>; Sun, 4 Sep 2022 03:23:22 +0900
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 283IMsWl011246
-	for <llvm@lists.linux.dev>; Sun, 4 Sep 2022 03:22:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 283IMsWl011246
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662229375;
-	bh=Dxm2wQdJj73TakmQEfY+6pG1g4ZOeoTk/i+CCWeCWRE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g6ANVaL2IxQaEKpn8bW3eCUgMp4EGJuzH1wHH0A+ZmxW/4caNZflWADJibwYud3F2
-	 ophhKsX2aTL5gWJZs4kG5pDpXHNnPoF39sQ1qe7fpTbEKICMEZkfM3Ke9BpD4ScpIC
-	 7vcvftdQEXqiEKY/qG4SgmQAsuMf2EJ4LljkPaWIukixeqZW3lB0D+SfIBKfpHLAsj
-	 P1/JCk3t5oS4lgl2S6W7UoLKaPHXxOueK+SqMq1Faiv7i3IhlnhGbe8B5tv2LOy6C+
-	 ogBDucroXrBs4V1Dr7RIBQkl/yneAgVHiB4LLPnIQJP375TetytrkEl5eIJJ65Owjt
-	 GxM1H3qqH/kwQ==
-X-Nifty-SrcIP: [209.85.160.46]
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-11eb44f520dso12580254fac.10
-        for <llvm@lists.linux.dev>; Sat, 03 Sep 2022 11:22:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0OIclzFYMUIivJMxGwcvm/bRYSJPRitbQfHBWbo9IbNkP1J8uP
-	a03aJN3gCRWJBBJDwFfRYrzJDWoAI/Zlsgm7YHg=
-X-Google-Smtp-Source: AA6agR5XKsnppjDXu4BD9qugd41qLgY6/rMzviOWkZiuaL6QjvVlXtseU4fcnp90Ju6SmXMiKkvZPUbk0DFIfHubSNc=
-X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
- ek38-20020a056870f62600b0010da798f3aamr5119106oab.194.1662229373859; Sat, 03
- Sep 2022 11:22:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F0528F5
+	for <llvm@lists.linux.dev>; Sat,  3 Sep 2022 19:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662233465; x=1693769465;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/ZpWWn9bhFroyOUx3+Apl1nhkOMU4SaDz+sTMnRtgyw=;
+  b=mtq4rmPPwNKUD7Hv4yAJAMZiaWh9r0md1JGFu5tadVMQhkZvau7ivTMZ
+   savsm198hGCzfoj99PSYV1yuRa6X0yUY1p/diHJ3nAxTVm9OU7tPFTwdw
+   FADJpzYtlf7ut/hJ0NoyHnV9ueOmaT+4La/aT2Qxuvvqlc53rrzT/cfzz
+   ifyKRL3+Ly9fMZANFSqpLm5c63O3iT6FDdBy+KEwxLYq28egvCIkT9ELw
+   eUX5WMUuU5xZVy/mUWOcoAFcEV64OW1TORyBA7HZBB+e0EQKk1DVtMZKV
+   LpYjdqazA1rBS5OvvrzVA0+BdrKq3J+lLQs/PTZVvLxIbqyLJG4OGe3E4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="382482905"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="382482905"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 12:31:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="643323584"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 12:31:02 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oUYr7-00025f-29;
+	Sat, 03 Sep 2022 19:31:01 +0000
+Date: Sun, 4 Sep 2022 03:30:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/22]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
+ prototype for function 'spihid_get_data'
+Message-ID: <202209040357.Xt9ih8dg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=wiW_LjFRE9wFMj-j2gp9=u8jqrMVZtT3n4-oJWtQ6E0iQ@mail.gmail.com>
- <20220901175913.2183047-1-ndesaulniers@google.com>
-In-Reply-To: <20220901175913.2183047-1-ndesaulniers@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 4 Sep 2022 03:22:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmhEE8Fxas5_VRKCzGYb9gMH-iDiKGo9yZaYSCzB0KsA@mail.gmail.com>
-Message-ID: <CAK7LNARmhEE8Fxas5_VRKCzGYb9gMH-iDiKGo9yZaYSCzB0KsA@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang; take 2
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>, Nathan Chancellor <nathan@kernel.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <jstitt007@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Sep 2, 2022 at 2:59 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> -Wformat was recently re-enabled for builds with clang, then quickly
-> re-disabled, due to concerns stemming from the frequency of default
-> argument promotion related warning instances.
->
-> commit 258fafcd0683 ("Makefile.extrawarn: re-enable -Wformat for clang")
-> commit 21f9c8a13bb2 ("Revert "Makefile.extrawarn: re-enable -Wformat for clang"")
->
-> ISO WG14 has ratified N2562 to address default argument promotion
-> explicitly for printf, as part of the upcoming ISO C2X standard.
->
-> The behavior of clang was changed in clang-16 to not warn for the cited
-> cases in all language modes.
->
-> Add a version check, so that users of clang-16 now get the full effect
-> of -Wformat. For older clang versions, re-enable flags under the
-> -Wformat group that way users still get some useful checks related to
-> format strings, without noisy default argument promotion warnings. I
-> intentionally omitted -Wformat-y2k and -Wformat-security from being
-> re-enabled, which are also part of -Wformat in clang-16.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Link: https://github.com/llvm/llvm-project/issues/57102
-> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2562.pdf
-> Suggested-by: Justin Stitt <jstitt007@gmail.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Youngmin Nam <youngmin.nam@samsung.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Linus, I figured I'd send this to you to see whether you'd prefer to
-> apply it, or let it "ride the trains" up through the kbuild tree? I do
-> have another series I'm working on to improve the compiler version
-> checks
-> <https://lore.kernel.org/llvm/20220831184408.2778264-4-ndesaulniers@google.com/>
-> where I can/will improve the checks used here, but I'm also interested in
-> having something that might backport cleanly to stable.
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
+commit: ab84f7572c5928c7412539ab0e51a581ecafe4f1 [11/22] WIP: HID: transport: spi: add Apple SPI transport
+config: riscv-randconfig-r032-20220904 (https://download.01.org/0day-ci/archive/20220904/202209040357.Xt9ih8dg-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/ab84f7572c5928c7412539ab0e51a581ecafe4f1
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout ab84f7572c5928c7412539ab0e51a581ecafe4f1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/spi-hid/ drivers/platform/
 
-Linus was addressed, so I just reviewed it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+All warnings (new ones prefixed by >>):
 
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+                        ^
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   ^
+   static 
+   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
+                   ^
+   2 warnings generated.
+--
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+
+   258	
+ > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   260	{
+   261		switch (idev->id) {
+   262		case SPIHID_DEVICE_ID_KBD:
+   263			return container_of(idev, struct spihid_apple, kbd);
+   264		case SPIHID_DEVICE_ID_TP:
+   265			return container_of(idev, struct spihid_apple, tp);
+   266		default:
+   267			return NULL;
+   268		}
+   269	}
+   270	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
