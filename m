@@ -1,119 +1,138 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED09C1FC4
-	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 12:45:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662295556; x=1693831556;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zyDO9Kg2hUr/SwaRqtrMHX6s+VQDPstk18Xzu72PjI0=;
-  b=hsIfaHP6vBidhTiUAQrM03LVZEwLMLvtXFG2fAWOJRvbX0XVaZ/eSA65
-   j8klA4lcf7566AfzZwAkyFpUAZK5OMATJVghyndePxb13ytg4hWt2Ox4i
-   knwkE0uGgAbS25/ObvqyAHp5ozDOCxEl36PfJZSisSQwloI6UJwMuRtxJ
-   sHTctTFiNWahD0OPX/8qNQVaBHjWPkhg89mWFsITO/1+XpYJ4GSQDhIXR
-   /OZmNoXxgBjnFvV/tqfVLiIQeLNO4IYfKqxxRxl5w/tB1xRz2GUpGb9Tl
-   KXmE6NcUaUmvJ0vy5YlUqsU9Y9mzaKW1756VgZ2yG6DKoQj2yP1r4vTyo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="360193549"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="360193549"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 05:45:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="941803675"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Sep 2022 05:45:54 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oUp0b-00033H-25;
-	Sun, 04 Sep 2022 12:45:53 +0000
-Date: Sun, 4 Sep 2022 20:45:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly
- requires more registers than available
-Message-ID: <202209042007.sjb2ZKIv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4942F33
+	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 15:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872A9C433C1;
+	Sun,  4 Sep 2022 15:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1662306178;
+	bh=NM+SzPbOtMpkvbk6twCAFTrJ5rbvFfL1WeUFuXU8Y7Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YTgso/jIdnzQNtQ3dgOGnNUpObkWej2Ho5P3z3QsEBBGzDINx6lmjY0pzBoPgU0FJ
+	 AwFXudWTRRY8CNXcoo3STqaDVzIM6cZL7zs7xs43KKDmVa0MacbWctzjvSc2jsuyXQ
+	 J8MzF25q6zLA76UP6Sgs1SfInsYcJb41jy1a/FI9OEUNCALXDbyWdf38dGSpubHxBQ
+	 M3RmIKVfktvyfXIxKAN5PHyz4HXLYqKgGxwH4raGX9T5inpVDGG426XjvUsiqwRAKs
+	 cKvNtY9utdUvVCw8AJs5TJ1cfqD9il9T1oCa3nAq9D/zwDiCrKvKAyej4gYfxcgkKm
+	 o6YrPZeeRswQg==
+Date: Sun, 4 Sep 2022 16:08:50 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Ciprian Regus <ciprian.regus@analog.com>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
+Message-ID: <20220904160850.77ad99e9@jic23-huawei>
+In-Reply-To: <202209020359.vCYzjn4X-lkp@intel.com>
+References: <20220901121700.1325733-4-ciprian.regus@analog.com>
+	<202209020359.vCYzjn4X-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7726d4c3e60bfe206738894267414a5f10510f1a
-commit: 69d0db01e210e07fe915e5da91b54a867cda040f ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-date:   8 months ago
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209042007.sjb2ZKIv-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d0db01e210e07fe915e5da91b54a867cda040f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 69d0db01e210e07fe915e5da91b54a867cda040f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Fri, 2 Sep 2022 04:00:05 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Hi Ciprian,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on jic23-iio/togreg]
+> [also build test ERROR on robh/for-next linus/master v6.0-rc3 next-20220901]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> config: hexagon-randconfig-r003-20220901 (https://download.01.org/0day-ci/archive/20220902/202209020359.vCYzjn4X-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/08ff9ae09bfde86fc512e13a4ea2af894e4aa442
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+>         git checkout 08ff9ae09bfde86fc512e13a4ea2af894e4aa442
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/adc/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/iio/adc/ltc2497.c:60:12: error: call to undeclared function 'get_unaligned_be24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
+>                            *val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+>                                    ^
+>    drivers/iio/adc/ltc2497.c:122:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+>                    .name = NULL,
+>                     ^
+>    drivers/iio/adc/ltc2497.c:126:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+>                    .name = "ltc2499",
+>                     ^
+>    3 errors generated.
+> 
+Ah. The power of automation proves itself again.  I missed that you'd
+not added 
 
-All errors (new ones prefixed by >>):
+#include <asm/unaligned.h>
+and that the .name field is introduced in a later patch.
 
-   In file included from net/netfilter/nf_synproxy_core.c:7:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/net/checksum.h:22:
-   In file included from arch/x86/include/asm/checksum.h:6:
->> arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requires more registers than available
-           asm("addl 0(%1), %0     ;\n"
-               ^
-   1 error generated.
+Jonathan
 
+> 
+> vim +/get_unaligned_be24 +60 drivers/iio/adc/ltc2497.c
+> 
+>     34	
+>     35	static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+>     36					      u8 address, int *val)
+>     37	{
+>     38		struct ltc2497_driverdata *st =
+>     39			container_of(ddata, struct ltc2497_driverdata, common_ddata);
+>     40		int ret;
+>     41	
+>     42		if (val) {
+>     43			if (st->recv_size == 3)
+>     44				ret = i2c_master_recv(st->client, (char *)&st->data.d8, st->recv_size);
+>     45			else
+>     46				ret = i2c_master_recv(st->client, (char *)&st->data.d32, st->recv_size);
+>     47	
+>     48			if (ret < 0) {
+>     49				dev_err(&st->client->dev, "i2c_master_recv failed\n");
+>     50				return ret;
+>     51			}
+>     52	
+>     53			/*
+>     54			 * The data format is 16/24 bit 2s complement, but with an upper sign bit on the
+>     55			 * resolution + 1 position, which is set for positive values only. Given this
+>     56			 * bit's value, subtracting BIT(resolution + 1) from the ADC's result is
+>     57			 * equivalent to a sign extension.
+>     58			 */
+>     59			if (st->recv_size == 3) {
+>   > 60				*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)  
+>     61					- BIT(ddata->chip_info->resolution + 1);
+>     62			} else {
+>     63				*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
+>     64					- BIT(ddata->chip_info->resolution + 1);
+>     65			}
+>     66		}
+>     67	
+>     68		ret = i2c_smbus_write_byte(st->client,
+>     69					   LTC2497_ENABLE | address);
+>     70		if (ret)
+>     71			dev_err(&st->client->dev, "i2c transfer failed: %pe\n",
+>     72				ERR_PTR(ret));
+>     73		return ret;
+>     74	}
+>     75	
+> 
 
-vim +149 arch/x86/include/asm/checksum_32.h
-
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  143  
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  144  #define _HAVE_ARCH_IPV6_CSUM
-0883e91ae209f4 include/asm-x86/checksum_32.h      Joe Perches     2008-03-23  145  static inline __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-72685fcd286e94 include/asm-i386/checksum.h        Al Viro         2006-11-14  146  				      const struct in6_addr *daddr,
-1e94082963747b arch/x86/include/asm/checksum_32.h Alexander Duyck 2016-03-11  147  				      __u32 len, __u8 proto, __wsum sum)
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  148  {
-0883e91ae209f4 include/asm-x86/checksum_32.h      Joe Perches     2008-03-23 @149  	asm("addl 0(%1), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  150  	    "adcl 4(%1), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  151  	    "adcl 8(%1), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  152  	    "adcl 12(%1), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  153  	    "adcl 0(%2), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  154  	    "adcl 4(%2), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  155  	    "adcl 8(%2), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  156  	    "adcl 12(%2), %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  157  	    "adcl %3, %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  158  	    "adcl %4, %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  159  	    "adcl $0, %0	;\n"
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  160  	    : "=&r" (sum)
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  161  	    : "r" (saddr), "r" (daddr),
-392d814daf460a arch/x86/include/asm/checksum_32.h Samuel Thibault 2009-10-01  162  	      "r" (htonl(len)), "r" (htonl(proto)), "0" (sum)
-392d814daf460a arch/x86/include/asm/checksum_32.h Samuel Thibault 2009-10-01  163  	    : "memory");
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  164  
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  165  	return csum_fold(sum);
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  166  }
-^1da177e4c3f41 include/asm-i386/checksum.h        Linus Torvalds  2005-04-16  167  
-
-:::::: The code at line 149 was first introduced by commit
-:::::: 0883e91ae209f4ada4db9b383026df77351c1320 include/asm-x86/checksum_32.h: checkpatch cleanups - formatting only
-
-:::::: TO: Joe Perches <joe@perches.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
