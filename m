@@ -1,188 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60C1FDD
-	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 05:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662268245;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Kp1PYtqGmQsRXR7cAeYiC86lc06gIsRVFLABjl7+Ri4=;
-	b=MiPzw+eUgUND31IX3xfDIMyQpmh3tHpn0Wkb/nZXmyXjc98sloxvlsJyGusi3KJkkD/Fod
-	2akSlmVLepKWdJAAuaHiqN199sbqApqX/K5R/Do4dE0VIp6TiAyeaVlH35DFwW55YAWLor
-	+7FaT4ctIkddxCOq0rvByuLESf0OkAg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-70G6erFWO1ayXKOjOnqLaA-1; Sun, 04 Sep 2022 01:10:44 -0400
-X-MC-Unique: 70G6erFWO1ayXKOjOnqLaA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7803A380664E
-	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 05:10:44 +0000 (UTC)
-Received: from [172.64.3.82] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 64403945D7;
-	Sun,  4 Sep 2022 05:10:44 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc3,
- mainline.kernel.org-clang, 42cf58c2)
-Date: Sun, 04 Sep 2022 05:10:44 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8731FDD
+	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 05:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662270875; x=1693806875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=75WupVR83lbCUwR5/BaxxZtgCEwIO+bXG/+J7JMlQ88=;
+  b=iJSYZ+iGOhIc54SOsifvJH4uIze7V9CD74rNAkjR5cgW61Hvy6uhUbYw
+   ExlJiycd+mucGrOEvv0lvpKQLP2bXSZwwyv8NWFuPi8idbPvWobleR5hZ
+   UdYafoktGecuSwVWTREX7VFIzsDjrjw+eAqICH3wvBxiJMEe49/5zHSyV
+   8LJcBySD0+HIkL5NziReA/ZATgnpy49ltpAIFuepJmS6h7THyh3kAKsY6
+   WewCsNZ2Zots9TiZIsGejL/hQLUV6Gl3TMR+avNiok262i52j7BZ2K61i
+   hD/BXeQPbDm/D0KHsOqkABe16j1Nxq81r1Pan2U0fJuzBcHSAb0LK6ktL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="276609208"
+X-IronPort-AV: E=Sophos;i="5.93,288,1654585200"; 
+   d="scan'208";a="276609208"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 22:54:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,288,1654585200"; 
+   d="scan'208";a="674863697"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Sep 2022 22:54:33 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oUiaW-0002dJ-39;
+	Sun, 04 Sep 2022 05:54:32 +0000
+Date: Sun, 4 Sep 2022 13:53:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 09/13] devdax: Move address_space helpers to the DAX core
+Message-ID: <202209041331.SpF1e88q-lkp@intel.com>
+References: <166225781235.2351842.9238883139775499926.stgit@dwillia2-xfh.jf.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <15555.122090401104400329@us-mta-298.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166225781235.2351842.9238883139775499926.stgit@dwillia2-xfh.jf.intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Dan,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I love your patch! Yet something to improve:
 
+[auto build test ERROR on 1c23f9e627a7b412978b4e852793c5e3c3efc555]
 
-Kernel information:
-    Commit message: Merge tag 'tty-6.0-rc4' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/gregkh/tty
+url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Williams/Fix-the-DAX-gup-mistake/20220904-101909
+base:   1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: arm-randconfig-r026-20220904 (https://download.01.org/0day-ci/archive/20220904/202209041331.SpF1e88q-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/fad43bd381f272faee26ae09d0741c48a4dbaa14
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dan-Williams/Fix-the-DAX-gup-mistake/20220904-101909
+        git checkout fad43bd381f272faee26ae09d0741c48a4dbaa14
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52533
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All errors (new ones prefixed by >>):
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5044356
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage blktests - nvmeof-mp: FAIL: Configured NVMe target d=
-river
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1168
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+   In file included from mm/filemap.c:15:
+>> include/linux/dax.h:312:10: error: use of undeclared identifier 'PMD_SHIFT'
+                   return PMD_SHIFT - PAGE_SHIFT;
+                          ^
+   In file included from mm/filemap.c:25:
+   include/linux/mman.h:154:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:132:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from mm/readahead.c:118:
+>> include/linux/dax.h:312:10: error: use of undeclared identifier 'PMD_SHIFT'
+                   return PMD_SHIFT - PAGE_SHIFT;
+                          ^
+   1 error generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/PMD_SHIFT +312 include/linux/dax.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   306	
+   307	static inline unsigned int pe_order(enum page_entry_size pe_size)
+   308	{
+   309		if (pe_size == PE_SIZE_PTE)
+   310			return PAGE_SHIFT - PAGE_SHIFT;
+   311		if (pe_size == PE_SIZE_PMD)
+ > 312			return PMD_SHIFT - PAGE_SHIFT;
+   313		if (pe_size == PE_SIZE_PUD)
+   314			return PUD_SHIFT - PAGE_SHIFT;
+   315		return ~0;
+   316	}
+   317	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
