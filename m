@@ -1,137 +1,69 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D198E3D82
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 10:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662374892; x=1693910892;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZJQiYw3bQrc4/+dvLKFmUeDrSnc2G4Jtg9vxg1wuj78=;
-  b=kCBjLJnzuJnA1vyVRcIxdSg1WXQQUGS2l/UXaMMmhmMhx4xtB/a5x2PK
-   a35J1YdStuXxYyvu2+IHFFRMf4kCYLyWHBzdVNYRNVTEVhQ0id5lM3oj+
-   A5eA9onIxGwritozRrQxsKZc8/873rsKosIFBGMCpuZoGluOxqbPk1Hpz
-   2YB/ZT10jnCzyjiNFYeB5jZam8TDBlcjpS73bC/pRErQtvZNwzSt9Nwc4
-   GtJzVFnbQDaJKGVywlIp7P4AZuAJQn5wQU6UbU93ZD55MrWQi/Tu/AdEz
-   5yx6H/l9S+gwbf+JiWuj/vtFTBPFP1w2vuZRRYRlHM/hkt3fL0cUxq46S
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297150230"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="297150230"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:48:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="682021391"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 03:48:11 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oV9eE-00043b-1i;
-	Mon, 05 Sep 2022 10:48:10 +0000
-Date: Mon, 5 Sep 2022 18:47:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
- for function 'mpc52xx_psc_spi_transfer_one_message'
-Message-ID: <202209051823.XJdrEu9F-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57E27E
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 12:36:33 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id e17so3584738edc.5
+        for <llvm@lists.linux.dev>; Mon, 05 Sep 2022 05:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=900qLev0HP2fBH7rq575LnJFZP9jyPqICwWUhKfzk+U=;
+        b=y1JfjI3xJ3OCyS31b8gIKIU19z+rKq7VQH1FHcnAULKSopUIS4K9cwKzPg8qtXMyml
+         qsXU/5UoBTYbc6ZoPeodmzhT1zCnJkv9V8R/33XqmE6eXG9SxAeuXiyU8NuJQVymb1GL
+         COKJL+9MPKIN2pknhJMad3dPzYbp4DEYsu503JfjNdE1FZd5cGRakisitFmdPsWTjrHb
+         JrO8uE4zj9JreLLNneTSzuuuD0OM3ojs8udWihb1BvbDs9uTsIjJnu1UMAWRiwSV+lwB
+         WahO29XKp16EC676NMqm0iqWYlqk86lGVS6ckV/MQWLncJLqvIVI/yyS1+e7pXOHfa13
+         RZ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=900qLev0HP2fBH7rq575LnJFZP9jyPqICwWUhKfzk+U=;
+        b=ch/vop8kgkJn2pgI7D93PrFnJOAJ6i/z9KzRuC/roAuaWg4yCxA9wyRxJDBR0cWY9j
+         gaw1JdtwHdoKiEqgXYBWnNZOQ1HAOF4gjXfCos36grvprZWMC8mzOjqPp4J5cyqAJkMR
+         zw3EV/bc4zdzh1FbQuecJRUbJjgvynTI6typJ809jimhvr6fej8AokKRdFXa8n60YmDs
+         aSXQFzpUgTRATIr/ebTkTPuMFJ8/076Stx7dk28ee73uyYgPKVPENGj+nYrQ5UzKkxAY
+         cIF3l8du0JtN+0TznON3hq7J0n++cjcW5fGD8v4J4TYHkVXWV9Gp/wdnKgAsEKfxalmd
+         a3FA==
+X-Gm-Message-State: ACgBeo2GMeaCJONGC18WDiFNkZgRUCkAbFw8OIKWAuQ944cPkDgIQukg
+	BzEvFg5ftUWuPUabYt6PzSQB9aJ/xIDR1ScblDfXrw==
+X-Google-Smtp-Source: AA6agR5cCLDRgOKuhd4hgd5RaH7+P8RYaBOTkQOYqiCq+Ki7426Pt4njNv60Bl748xkUzYSiDI20q8VRfWs7AkPoZm8=
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
+ ew4-20020a056402538400b004316d84b451mr42938602edb.46.1662381392019; Mon, 05
+ Sep 2022 05:36:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202209050605.fezJUgFH-lkp@intel.com>
+In-Reply-To: <202209050605.fezJUgFH-lkp@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 5 Sep 2022 14:36:21 +0200
+Message-ID: <CACRpkdbfHG3r1wtN3Gne-XX0Zg2qyFSgH4yR3ctauABY4u-XJw@mail.gmail.com>
+Subject: Re: [linusw-pinctrl:devel 26/32] drivers/pinctrl/freescale/pinctrl-imx.c:260:9:
+ error: call to undeclared function 'pinmux_generic_get_function'; ISO C99 and
+ later do not support implicit function declarations
+To: kernel test robot <lkp@intel.com>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, linux-gpio@vger.kernel.org, 
+	Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mark,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7e18e42e4b280c85b76967a9106a13ca61c16179
-commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
-date:   2 months ago
-config: powerpc-randconfig-r026-20220905 (https://download.01.org/0day-ci/archive/20220905/202209051823.XJdrEu9F-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145cfc3840e5931a789a8e2e76af841ab4cad44b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 145cfc3840e5931a789a8e2e76af841ab4cad44b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for function 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
-   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-       ^
-   drivers/spi/spi-mpc52xx-psc.c:195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   ^
-   static 
-   1 warning generated.
+On Mon, Sep 5, 2022 at 12:25 AM kernel test robot <lkp@intel.com> wrote:
 
 
-vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+> >> drivers/pinctrl/freescale/pinctrl-imx.c:288:23: error: use of undeclared identifier 'pinmux_generic_get_function_name'; did you mean 'pinmux_generic_free_functions'?
+>            .get_function_name = pinmux_generic_get_function_name,
+>                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                 pinmux_generic_free_functions
 
-   194	
- > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   196						 struct spi_message *m)
-   197	{
-   198		struct spi_device *spi;
-   199		struct spi_transfer *t = NULL;
-   200		unsigned cs_change;
-   201		int status;
-   202	
-   203		spi = m->spi;
-   204		cs_change = 1;
-   205		status = 0;
-   206		list_for_each_entry (t, &m->transfers, transfer_list) {
-   207			if (t->bits_per_word || t->speed_hz) {
-   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
-   209				if (status < 0)
-   210					break;
-   211			}
-   212	
-   213			if (cs_change)
-   214				mpc52xx_psc_spi_activate_cs(spi);
-   215			cs_change = t->cs_change;
-   216	
-   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
-   218			if (status)
-   219				break;
-   220			m->actual_length += t->len;
-   221	
-   222			spi_transfer_delay_exec(t);
-   223	
-   224			if (cs_change)
-   225				mpc52xx_psc_spi_deactivate_cs(spi);
-   226		}
-   227	
-   228		m->status = status;
-   229		if (status || !cs_change)
-   230			mpc52xx_psc_spi_deactivate_cs(spi);
-   231	
-   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
-   233	
-   234		spi_finalize_current_message(ctlr);
-   235	
-   236		return 0;
-   237	}
-   238	
+I don't understand this at all, tried to look at it.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Francesco, do you have ideas?
+
+Yours,
+Linus Walleij
