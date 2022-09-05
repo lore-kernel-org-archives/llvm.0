@@ -1,127 +1,132 @@
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC09E4416
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 16:05:53 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-03.nifty.com with ESMTP id 285G2ZOE027999
-	for <llvm@lists.linux.dev>; Tue, 6 Sep 2022 01:02:35 +0900
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 285G2GAN023438
-	for <llvm@lists.linux.dev>; Tue, 6 Sep 2022 01:02:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 285G2GAN023438
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662393737;
-	bh=AXX+q4cSSF44b3H1EkqtDdmN+QPCNlmjjiXXce2p9MQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QWotCvp8/JtSYftB+faoLCc7Kgv04UtuH/wn+Z7r1Y4lQysb6fzzlSMLVWuAQaSGt
-	 LhN7SQDxMPtvZ3V4TgMmcHkMi8hvyXGYBshsVfS6DA5Ykf8i1wOMvWUMCASVahYC4r
-	 F7U7QgY9m4eWSeEV55eh30aoEG3KsELPORHRcgoNOT84CjVtKVSKzteen16YalcAA9
-	 COE6mWvCX7DlWYP4HRvtIITNqEXRzcm+Q9Oqf2MDGOClbDUN4IiYB2hXLBqifm9sW4
-	 Qw2ohB+GTyZHfcncJblV2+QX9T7lTZZp59zDyXECTmmglGIOxZN3r8Lfcq6Lgkdu71
-	 2RwXSmQ6ZEl7g==
-X-Nifty-SrcIP: [209.85.160.52]
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-127a0d798bdso1859817fac.4
-        for <llvm@lists.linux.dev>; Mon, 05 Sep 2022 09:02:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo28FVljqwx7nigeiQv1MxbtBCZv1CWHzpoHnoqyjC5B09//qVFu
-	HFlrOfX77FaLnBVQlyHF+Ewoe+Rx7t3PNhKN6gg=
-X-Google-Smtp-Source: AA6agR65jnyCeKkMdJOxL7lqKg65Nmc1Fk9Jacn1YzGFOihFta0f01is88Mb4DWZDkEyFMPeSgDZ7yIpdlbP+jGA+FY=
-X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
- ek38-20020a056870f62600b0010da798f3aamr9453327oab.194.1662393736259; Mon, 05
- Sep 2022 09:02:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101C13C02
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 16:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662395563; x=1693931563;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1wvwsRe1oK6DGxnPpO6P7bCm1Oj7YYrvrDBldpkw57Y=;
+  b=iMWI7Y2kP7UaMLHG/999aD6+wYvG54ciqRuRvWCVVBvSXr1Oi87UfRYd
+   0I00guIYXUktSD/S4T2M0AxefwB10h/rHP33/NYQb8cFH82VAPGl2CzZ/
+   Yx9wfN5pAr2maLh6zrhUvraWDUuNEuz2he3RVtrpzBVUh3phFovN+jQ/1
+   MLSWdQW955bcWcpDSHhGRFDY1yJvwCwDKu7meiC0QIWaEnps3W7l7OBaK
+   xNJBbOPW69XSg0LIxSirwxNvJSFUrQVRM2QHqZuoCm+OdakNMWap4FVpq
+   puL6soBivCF0mapLVFnQH+HLdX984rcNTHefIdjBVPXPY15XQEE+zlxYe
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297733342"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="297733342"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 09:32:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="942159714"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Sep 2022 09:32:39 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVF1a-0004Ll-32;
+	Mon, 05 Sep 2022 16:32:38 +0000
+Date: Tue, 6 Sep 2022 00:31:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, rafael.j.wysocki@intel.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	tangmeng <tangmeng@uniontech.com>,
+	YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: ACPI: reboot: Reinstate S5 for reboot
+Message-ID: <202209060009.J18tERPi-lkp@intel.com>
+References: <20220905071559.1576801-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220905083619.672091-2-masahiroy@kernel.org> <202209052329.sY4Fx2fi-lkp@intel.com>
-In-Reply-To: <202209052329.sY4Fx2fi-lkp@intel.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 6 Sep 2022 01:01:40 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASF62o3iRq+tFr=j88dsWxo6YjJ3_mYiAP4pX3DcQpP9A@mail.gmail.com>
-Message-ID: <CAK7LNASF62o3iRq+tFr=j88dsWxo6YjJ3_mYiAP4pX3DcQpP9A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kbuild: move -Wundef from KBUILD_CFLAGS to KBUILD_CPPFLAGS
-To: kernel test robot <lkp@intel.com>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905071559.1576801-1-kai.heng.feng@canonical.com>
 
-On Tue, Sep 6, 2022 at 12:49 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Masahiro,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on masahiroy-kbuild/for-next]
-> [also build test WARNING on linus/master v6.0-rc4]
-> [cannot apply to next-20220901]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kb=
-uild-move-Werror-from-KBUILD_CFLAGS-to-KBUILD_CPPFLAGS/20220905-164209
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-k=
-build.git for-next
-> config: riscv-randconfig-r042-20220905 (https://download.01.org/0day-ci/a=
-rchive/20220905/202209052329.sY4Fx2fi-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b=
-41d5199d2394dd6cdb8f52180d8b81d809d4)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/2f8ee1865d7d00ad2=
-7460d94056c7752cad8481f
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Masahiro-Yamada/kbuild-move-Werr=
-or-from-KBUILD_CFLAGS-to-KBUILD_CPPFLAGS/20220905-164209
->         git checkout 2f8ee1865d7d00ad27460d94056c7752cad8481f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash arch/riscv/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> arch/riscv/kernel/head.S:329:5: warning: 'CONFIG_RISCV_BOOT_SPINWAIT' =
-is not defined, evaluates to 0 [-Wundef]
->    #if CONFIG_RISCV_BOOT_SPINWAIT
->        ^
->    1 warning generated.
->
+Hi Kai-Heng,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.0-rc4 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/PM-ACPI-reboot-Reinstate-S5-for-reboot/20220905-152323
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: mips-randconfig-r034-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060009.J18tERPi-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b2191fe14b5426dcef80f2935fdfa47af98b0ee2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kai-Heng-Feng/PM-ACPI-reboot-Reinstate-S5-for-reboot/20220905-152323
+        git checkout b2191fe14b5426dcef80f2935fdfa47af98b0ee2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/reboot.c:257:6: error: use of undeclared identifier 'pm_power_off_prepare'; did you mean 'pm_generic_prepare'?
+           if (pm_power_off_prepare)
+               ^~~~~~~~~~~~~~~~~~~~
+               pm_generic_prepare
+   include/linux/pm.h:795:12: note: 'pm_generic_prepare' declared here
+   extern int pm_generic_prepare(struct device *dev);
+              ^
+>> kernel/reboot.c:258:3: error: call to undeclared function 'pm_power_off_prepare'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pm_power_off_prepare();
+                   ^
+   2 errors generated.
 
 
+vim +257 kernel/reboot.c
 
-Hmm, it looks like my patch started to uncover a couple of coding mistakes.
+   245	
+   246	/**
+   247	 *	kernel_restart - reboot the system
+   248	 *	@cmd: pointer to buffer containing command to execute for restart
+   249	 *		or %NULL
+   250	 *
+   251	 *	Shutdown everything and perform a clean reboot.
+   252	 *	This is not safe to call in interrupt context.
+   253	 */
+   254	void kernel_restart(char *cmd)
+   255	{
+   256		kernel_restart_prepare(cmd);
+ > 257		if (pm_power_off_prepare)
+ > 258			pm_power_off_prepare();
+   259		migrate_to_reboot_cpu();
+   260		syscore_shutdown();
+   261		if (!cmd)
+   262			pr_emerg("Restarting system\n");
+   263		else
+   264			pr_emerg("Restarting system with command '%s'\n", cmd);
+   265		kmsg_dump(KMSG_DUMP_SHUTDOWN);
+   266		machine_restart(cmd);
+   267	}
+   268	EXPORT_SYMBOL_GPL(kernel_restart);
+   269	
 
-
-
-
-
-
-=E3=80=80#if CONFIG_RISCV_BOOT_SPINWAIT
-          -->
-
-  #ifdef CONFIG_RISCV_BOOT_SPINWAIT
-
-
-(CONFIG_RISCV_BOOT_SPINWAIT is a bool option)
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
