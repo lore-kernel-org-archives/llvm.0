@@ -1,227 +1,178 @@
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE392F3D
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 07:50:05 +0000 (UTC)
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 2857nkFS004950
-	for <llvm@lists.linux.dev>; Mon, 5 Sep 2022 16:49:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2857nkFS004950
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662364187;
-	bh=A8H2tIWtmysI6q42/vGdpy/wkxM6S+6qAW0XkzspLV4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cgY5u3eTZ88UYDSwr2fLxgjDmMYY6/Srnx7DPWM0pHwo/SpIqLi1lpR3F28bLtfQ6
-	 nXkBTHcFl6Asuvu98Ij4laU6ipVtPxPmjycUInjJFG+9U/7nNVRsEUNVBZPH6Wkwxb
-	 6uee0LIknkwdMgujAFnsxmuD6p5EMz4NmK2Hn07f2PCUKAnQfXk7hRHR9PbIqyWwZ5
-	 l4Da+gt0zwzo72RQLYbRsYabAdoGj38TIRftCpKNpHr7pZTU6QboWOrC8DIA2OoFSL
-	 sTW5RdvolAgklHeRW02nsq0VqckJHDTUHw7i6R/4zHKtXMZaFiZJTZ1knXnDZHBtqa
-	 fZZoUyshCHF4A==
-X-Nifty-SrcIP: [209.85.160.53]
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1273a47cdb6so5762303fac.13
-        for <llvm@lists.linux.dev>; Mon, 05 Sep 2022 00:49:46 -0700 (PDT)
-X-Gm-Message-State: ACgBeo33OlCrtL8dyP5NL2H4fC0UREHwbdYvTrczA6eaWQKcIIJdZWOQ
-	cm6KgsCYm0j3uMSqlqNXvTC7on8pkFVLpEekWTo=
-X-Google-Smtp-Source: AA6agR5j+W5p32b183YlmWIQL5NJzotW59WLEVaC5pMJZpzjNhHnJEyt2/Q6mCFyT3bydKKIN2nplHczDAE3ppMEGDA=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr8041384oab.287.1662364185752; Mon, 05
- Sep 2022 00:49:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAFD3C02
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 08:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662366048;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mtlOCDs/E5qiTaHJ2OqqrNC2xLAtc1p3lZcr4D7mt7k=;
+	b=jQG91vuX9Ku8upSeMkg2Tt0HZPFgYnTDPfQtqPjZKKGBKNI1ZPBOc7hJCzwTmVO69lsR51
+	2LfP4duWGB2Ebqkhd1MKAe+ViDvKbi3TCHd8vPgeGGNxhSnD1PJgWie8PCKpcnHGX7egxh
+	Cm5j9tf5tjsh9CjuitRMAj1yLe6ghl0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-wpYWWuzQPFaGh42qseAbtA-1; Mon, 05 Sep 2022 04:20:47 -0400
+X-MC-Unique: wpYWWuzQPFaGh42qseAbtA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 434118037AA
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 08:20:47 +0000 (UTC)
+Received: from [172.64.3.82] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 167231121314;
+	Mon,  5 Sep 2022 08:20:47 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (53/371 SKIPPED): Test report for master
+ (6.0.0-rc4, mainline.kernel.org-clang, 7e18e42e)
+Date: Mon, 05 Sep 2022 08:20:46 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220831184408.2778264-1-ndesaulniers@google.com> <20220831184408.2778264-5-ndesaulniers@google.com>
-In-Reply-To: <20220831184408.2778264-5-ndesaulniers@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 5 Sep 2022 16:49:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATWDH01=ZKLnsxc0vcib1zGDbEq8jLQwhWP7HkkmSb_Mw@mail.gmail.com>
-Message-ID: <CAK7LNATWDH01=ZKLnsxc0vcib1zGDbEq8jLQwhWP7HkkmSb_Mw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] Makefile.debug: re-enable debug info for .S files
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
-Content-Type: multipart/mixed; boundary="000000000000c7ca9a05e7e95216"
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Message-Id: <89978.122090504204715848@us-mta-564.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
---000000000000c7ca9a05e7e95216
-Content-Type: text/plain; charset="UTF-8"
+Hi, we tested your kernel and here are the results:
 
-On Thu, Sep 1, 2022 at 3:44 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> Alexey reported that the fraction of unknown filename instances in
-> kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-> to assembler defined symbols, which regressed as a result of:
->
-> commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
->
-> In that commit, I allude to restoring debug info for assembler defined
-> symbols in a follow up patch, but it seems I forgot to do so in
->
-> commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
->
-> This patch does a few things:
-> 1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
->    the assembler to emit debug info. But this can cause an issue for
->    folks using a newer compiler but older assembler, because the
->    implicit default DWARF version changed from v4 to v5 in gcc-11 and
->    clang-14.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
+Tested-by: CKI Project <cki-project@redhat.com>
 
+Kernel information:
+    Commit message: Linux 6.0-rc4
 
-What kind of bad things happen for "KBUILD_AFLAGS += -g"?
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52550
 
+One or more kernel tests failed:
 
-I think 'gcc -g -c -o foo.o foo.S' will invoke 'as --gdwarf-2' as the backend
-if gcc is configured to work with old binutils.
-
-
-
-
-> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> index 9f39b0130551..46e88f0ca998 100644
-> --- a/scripts/Makefile.debug
-> +++ b/scripts/Makefile.debug
-> @@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
->  DEBUG_CFLAGS   += -gsplit-dwarf
->  else
->  DEBUG_CFLAGS   += -g
-> +KBUILD_AFLAGS  += -g
->  endif
->
-> -ifndef CONFIG_AS_IS_LLVM
-> -KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> +ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> +# gcc-11+, clang-14+
-> +ifeq ($(call cc-min-version, 110000, 140000),y)
-> +dwarf-version-y := 5
-> +else
-> +dwarf-version-y := 4
-
-
-
-If you explicitly specify the DWARF version
-for CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT,
-what is the point of CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT?
-
-
-When CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y,
-I believe the right thing to do is to pass only -g,
-and let the tool do whatever it thinks is appropriate.
-
-
-
-
-
-
->  endif
-> -
-> -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> +else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
->  DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
->  endif
->
-> +# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
-> +# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> +ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
-
-
-
-When is this as-option supposed to fail?
-
-
-Binutils <= 2.34 always accepts whatever -gdwarf-* option.
-Surprisingly or not, it accepts -gdwarf-6, -gdwarf-7, ...
-
-No matter what DWARF version you specify, GAS silently downgrades
-it to DWARF-2.
-
-
-masahiro@zoe:~/tools/binutils-2.34/bin$ ./as --version | head -n 1
-GNU assembler (GNU Binutils) 2.34
-masahiro@zoe:~/tools/binutils-2.34/bin$ cat /dev/null | ./as -gdwarf-5
--o /dev/null -
-masahiro@zoe:~/tools/binutils-2.34/bin$ echo $?
-0
-masahiro@zoe:~/tools/binutils-2.34/bin$ cat /dev/null | ./as
--gdwarf-100 -o /dev/null -
-masahiro@zoe:~/tools/binutils-2.34/bin$ echo $?
-0
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Overall, I am not convinced with this patch.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-
-
-Please see the attached patch.
-Is there any problem with writing this more simply?
-
-
-
-
-
-> +KBUILD_AFLAGS  += -Wa,-gdwarf-$(dwarf-version-y)
-> +else
-> +ifndef CONFIG_AS_IS_LLVM
-> +KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> +endif
-> +endif
-> +
->  ifdef CONFIG_DEBUG_INFO_REDUCED
->  DEBUG_CFLAGS   += -fno-var-tracking
->  ifdef CONFIG_CC_IS_GCC
-> --
-> 2.37.2.672.g94769d06f0-goog
->
-
-
---
-Best Regards
-Masahiro Yamada
-
---000000000000c7ca9a05e7e95216
-Content-Type: text/x-patch; charset="US-ASCII"; name="dwarf.diff"
-Content-Disposition: attachment; filename="dwarf.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l7ogoa5i0>
-X-Attachment-Id: f_l7ogoa5i0
-
-ZGlmZiAtLWdpdCBhL2xpYi9LY29uZmlnLmRlYnVnIGIvbGliL0tjb25maWcuZGVidWcKaW5kZXgg
-YmNiZTYwZDZjODBjLi4zN2FhMTlmMGY3YjAgMTAwNjQ0Ci0tLSBhL2xpYi9LY29uZmlnLmRlYnVn
-CisrKyBiL2xpYi9LY29uZmlnLmRlYnVnCkBAIC0yNjQsNiArMjY0LDcgQEAgY29uZmlnIERFQlVH
-X0lORk9fRFdBUkZfVE9PTENIQUlOX0RFRkFVTFQKIGNvbmZpZyBERUJVR19JTkZPX0RXQVJGNAog
-CWJvb2wgIkdlbmVyYXRlIERXQVJGIFZlcnNpb24gNCBkZWJ1Z2luZm8iCiAJc2VsZWN0IERFQlVH
-X0lORk8KKwlkZXBlbmRzIG9uICFDQ19JU19DTEFORyB8fCAoQ0NfSVNfQ0xBTkcgJiYgKEFTX0lT
-X0xMVk0gfHwgKEFTX0lTX0dOVSAmJiBBU19WRVJTSU9OID49IDIzNTAwKSkpCiAJaGVscAogCSAg
-R2VuZXJhdGUgRFdBUkYgdjQgZGVidWcgaW5mby4gVGhpcyByZXF1aXJlcyBnY2MgNC41KyBhbmQg
-Z2RiIDcuMCsuCiAKZGlmZiAtLWdpdCBhL3NjcmlwdHMvTWFrZWZpbGUuZGVidWcgYi9zY3JpcHRz
-L01ha2VmaWxlLmRlYnVnCmluZGV4IDlmMzliMDEzMDU1MS4uYzVlY2I4ODJhNjM4IDEwMDY0NAot
-LS0gYS9zY3JpcHRzL01ha2VmaWxlLmRlYnVnCisrKyBiL3NjcmlwdHMvTWFrZWZpbGUuZGVidWcK
-QEAgLTMsMTcgKzMsMjAgQEAgREVCVUdfQ0ZMQUdTCTo9CiBpZmRlZiBDT05GSUdfREVCVUdfSU5G
-T19TUExJVAogREVCVUdfQ0ZMQUdTCSs9IC1nc3BsaXQtZHdhcmYKIGVsc2UKLURFQlVHX0NGTEFH
-UwkrPSAtZworZGVidWctZmxhZ3MteQkrPSAtZwogZW5kaWYKIAotaWZuZGVmIENPTkZJR19BU19J
-U19MTFZNCi1LQlVJTERfQUZMQUdTCSs9IC1XYSwtZ2R3YXJmLTIKLWVuZGlmCitkZWJ1Zy1mbGFn
-cy0kKENPTkZJR19ERUJVR19JTkZPX0RXQVJGNCkgKz0gLWdkd2FyZi00CitkZWJ1Zy1mbGFncy0k
-KENPTkZJR19ERUJVR19JTkZPX0RXQVJGNSkgKz0gLWdkd2FyZi01CisKK0RFQlVHX0NGTEFHUwkr
-PSAkKGRlYnVnLWZsYWdzLXkpCiAKLWlmbmRlZiBDT05GSUdfREVCVUdfSU5GT19EV0FSRl9UT09M
-Q0hBSU5fREVGQVVMVAotZHdhcmYtdmVyc2lvbi0kKENPTkZJR19ERUJVR19JTkZPX0RXQVJGNCkg
-Oj0gNAotZHdhcmYtdmVyc2lvbi0kKENPTkZJR19ERUJVR19JTkZPX0RXQVJGNSkgOj0gNQotREVC
-VUdfQ0ZMQUdTCSs9IC1nZHdhcmYtJChkd2FyZi12ZXJzaW9uLXkpCitpZmVxICgkKENPTkZJR19D
-Q19JU19DTEFORykkKENPTkZJR19BU19JU19HTlUpLHl5KQorIyBDbGFuZyBkb2VzIG5vdCBwYXNz
-IC1nIG9yIC1nZHdhcmYtKiBvcHRpb24gZG93biB0byBHQVMuCisjIEFkZCAtV2EsIHByZWZpeCB0
-byBleHBsaWNpdGx5IHNwZWNpZnkgdGhlIGZsYWdzLgorS0JVSUxEX0FGTEFHUwkrPSAkKGFkZHBy
-ZWZpeCAtV2EkKGNvbW1hKSwgJChkZWJ1Zy1mbGFncy15KSkKK2Vsc2UKK0tCVUlMRF9BRkxBR1MJ
-Kz0gJChkZWJ1Zy1mbGFncy15KQogZW5kaWYKIAogaWZkZWYgQ09ORklHX0RFQlVHX0lORk9fUkVE
-VUNFRAo=
---000000000000c7ca9a05e7e95216--
