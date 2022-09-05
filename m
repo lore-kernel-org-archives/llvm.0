@@ -1,99 +1,155 @@
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173F84C7E
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 21:40:26 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id C17272B05AFF;
-	Mon,  5 Sep 2022 17:40:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 05 Sep 2022 17:40:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1662414025; x=1662417625; bh=Vgo0AtXrQ8
-	j8CwRv9hCXFvG4cPRHv9K1Ip+Kzzkibik=; b=B2flso5YbibdySPYZ20z8jWqJu
-	Wy1U19c80n3tL4M0yo/fm7QphbzzVFpUSgSN19BUG8f8qvypY/fLMIr8UQjpgy4V
-	/tAXwxSjguCWLjGr8z8hBOZNvtihy/DF7sC3Cdv1s+tEtXiJskQ3KNmXt2oeVSG5
-	sYzcuozQXiAuCBaMJtbTLd0tft/l0twJFN43whqW0c4dfbtoLnrJdtWzAer+OCit
-	XW/2SUSR161Q3oEbqnUKTjk4i4dtbA2AOGLwV3yyuKU8FN0eRB1OfGzTLOd6RtfC
-	L2DrnB8bB2tYWJ+sQ0DiB7Htc0vvNx+mIjBM8k44AbUyluO7yUk5JYsx0gNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1662414025; x=1662417625; bh=Vgo0AtXrQ8j8CwRv9hCXFvG4cPRH
-	v9K1Ip+Kzzkibik=; b=c/WDrRpMvfg5XSyVhZNTXKioBMYq2eIJC2j2EomWseOo
-	DQXUpzCbcw/cLGVj3h3lbIKc3XwGhHryasZmpnY1zj7GTrBGFxuR+gvreIBa5ut4
-	UyGQw8c41Orsixq0zywMg3iLYMif6CAhujVUptVvIThOWXQmFKFn9IFLYhqGhqEB
-	l/bxGvxNdMSM4XMH4mBgXYKjp2JH1TCc0Mn2OjsaLYKVBI0Aea7qBXVzM2kU2GLo
-	fQQDjZheOKbqruDg8fq6xTdkQHdXhV8UEEhPOJd0C17AtlKjCNWNmIavj2Bs5dHU
-	kI7sWzO37ddV2PB+sLBSRJCWAsUCanflrIt+GBn08Q==
-X-ME-Sender: <xms:yGwWY1rXBk2K54dup7RbAu-S9f4IzHlCfphCsvoZo8CJK6DwqRCDdQ>
-    <xme:yGwWY3qpUswQjhjSb3BuLesPCOw1541-qP3arnMRGtCbxRKrME9n46qDMjnwPoRlb
-    AgS1Zv54qdqxE3ntdg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeljecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yGwWYyMdTkOonkMxDsZ1ovqpAKJEantIvH-vMo1qV-rhe1MeXOVkPA>
-    <xmx:yGwWYw5Gl1EWGdpoYInT8OuUvn-vqwG-LrEX2A4KZITlhb7GK0uDjQ>
-    <xmx:yGwWY04shZvTBEfbIt_NZy-pEXNMfLKvBYG6q18b8s2WWdIXOy5chQ>
-    <xmx:yWwWY_1ySjkctc83QLbuiJmW6NTBfbTmmaFB-iISfGt67UpFgKkSFWPjtkA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3391FB60083; Mon,  5 Sep 2022 17:40:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE9A4C7E
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 22:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662416638; x=1693952638;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9WHEDLEn2qT0OC6p9LQemxRiFViekrQAQVRDrvUJEi0=;
+  b=fnrG7BSYwD6i1bSNtByVZ6mqQErLYPF75orIbukunPzIs7ip4PqhbjAl
+   eoLzg3I97R8Oyxk/yVS6yXtFibMZCSOxJ3avZGW7mROrKhV7xPuXu7kpf
+   W7dNLZxnbb33rF2D12MqcP8U2i5O+z9UUY4oTGGv81+2qF1Y5UgV8Z2yS
+   k93LiXUrxW1K7+JbApFCCvwryPLCzZwsSNhdIFzd9HDHl96jo/WJW394N
+   8SwDbQq+7XGJBv8wTSgaIO1x3boaFGdiWh9cSNf0+eX60nF5rkFhdwyWB
+   HJffQd/ReukKjbnto2vm7TSOHEy8SNHjwEMZVNhRjZaXUgMLPTA5lF3r3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283452902"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="283452902"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 15:23:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="643925354"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 15:23:56 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVKVY-0004a5-0X;
+	Mon, 05 Sep 2022 22:23:56 +0000
+Date: Tue, 6 Sep 2022 06:23:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 38/41] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202209060634.EweHFdGr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <4f5ca7a1-b472-4bc6-aab9-58fae036db5c@www.fastmail.com>
-In-Reply-To: 
- <CACRpkdYGHMMD5ti0m9nyk6VV_sNsyptgpULPDzQcV3A9aRd5Jg@mail.gmail.com>
-References: <202209050605.fezJUgFH-lkp@intel.com>
- <CACRpkdbfHG3r1wtN3Gne-XX0Zg2qyFSgH4yR3ctauABY4u-XJw@mail.gmail.com>
- <20220905133040.GB6496@francesco-nb.int.toradex.com>
- <CACRpkdYKQt8fJ5FaTQgoNgGH73xnC877pQhek5Df1zdSE_c3=w@mail.gmail.com>
- <9be88d9b-8531-46f4-8cca-c276b4a741e1@www.fastmail.com>
- <CACRpkdYGHMMD5ti0m9nyk6VV_sNsyptgpULPDzQcV3A9aRd5Jg@mail.gmail.com>
-Date: Mon, 05 Sep 2022 23:40:01 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Walleij" <linus.walleij@linaro.org>
-Cc: "Francesco Dolcini" <francesco.dolcini@toradex.com>,
- "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- "Fabio Estevam" <festevam@gmail.com>
-Subject: Re: [linusw-pinctrl:devel 26/32]
- drivers/pinctrl/freescale/pinctrl-imx.c:260:9: error: call to undeclared
- function 'pinmux_generic_get_function'; ISO C99 and later do not support
- implicit function declarations
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   98a7169ff2516ac22eecb21f2267097400d67ea9
+commit: fabb171eee1d233d70a60f54acf5327d3682d964 [38/41] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-r021-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060634.EweHFdGr-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/fabb171eee1d233d70a60f54acf5327d3682d964
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout fabb171eee1d233d70a60f54acf5327d3682d964
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
 
 
-On Mon, Sep 5, 2022, at 11:20 PM, Linus Walleij wrote:
-> On Mon, Sep 5, 2022 at 3:53 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> I have a kismet warning that sometimes this selecting PINCTRL_IMX
-> is inconsistens since it depends on OF and apparently there are
-> now non-OF configs compiling it. So could the real problem be
-> that everything selecting PINCTRL_IMX should depend on OF
-> too?
+vim +264 arch/riscv/kvm/aia_aplic.c
 
-Ah right, that sounds the like the root cause. Yes, you either
-have to make sure it's possible to build PINCTRL_IMX without
-CONFIG_OF, or have everything that selects it have an OF dependency.
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
 
-If a select statement in Kconfig hits a missing dependency, it
-does not follow the indirect 'select' statements from that.
-
-      Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
