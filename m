@@ -1,44 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7A33C35
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 10:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D198E3D82
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 10:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662372434; x=1693908434;
+  t=1662374892; x=1693910892;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HPt3jPuMljFnT1HwUVeRYiZPN24kNujUVy3j7fR1Br8=;
-  b=WRtRc3L9IrkeAo+Vgg8Ej1zs63yqF2crFknjS0mx5097/3C8jzIPw7Lg
-   L6TDxQMSm+k0xNV0AUy72G+RxM5l8bDe/QQWTl0iSR76SOcpp49yc6VPg
-   E0F6cu9n5Yj7gSw8DMJtF2TYXsV+23q6B7dYlCle5g2Fzsq9MrgewAV+l
-   ZlPsJK0KV2KpUFuUpypXZq8hXdakJ01nRNln2MtbXG1Wz2hev/EYFzvXw
-   wca0KEVZ3Iuj3VTvHyG7A9e8+pePZpOP7UfTSuqgy/SrFolkuFOAbi405
-   zRt6d4ErHxsiSbFnBg9Mc3yNSJVLnnN1nqGPbsCwrIpPioJwv2DPr2v3S
+  bh=ZJQiYw3bQrc4/+dvLKFmUeDrSnc2G4Jtg9vxg1wuj78=;
+  b=kCBjLJnzuJnA1vyVRcIxdSg1WXQQUGS2l/UXaMMmhmMhx4xtB/a5x2PK
+   a35J1YdStuXxYyvu2+IHFFRMf4kCYLyWHBzdVNYRNVTEVhQ0id5lM3oj+
+   A5eA9onIxGwritozRrQxsKZc8/873rsKosIFBGMCpuZoGluOxqbPk1Hpz
+   2YB/ZT10jnCzyjiNFYeB5jZam8TDBlcjpS73bC/pRErQtvZNwzSt9Nwc4
+   GtJzVFnbQDaJKGVywlIp7P4AZuAJQn5wQU6UbU93ZD55MrWQi/Tu/AdEz
+   5yx6H/l9S+gwbf+JiWuj/vtFTBPFP1w2vuZRRYRlHM/hkt3fL0cUxq46S
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="293939334"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="293939334"
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297150230"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="297150230"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:07:11 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:48:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="682010011"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="682021391"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 03:07:10 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 03:48:11 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oV90X-000425-10;
-	Mon, 05 Sep 2022 10:07:09 +0000
-Date: Mon, 5 Sep 2022 18:06:14 +0800
+	id 1oV9eE-00043b-1i;
+	Mon, 05 Sep 2022 10:48:10 +0000
+Date: Mon, 5 Sep 2022 18:47:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tiwai/sound/master 42/45]
- sound/pci/hda/patch_sigmatel.c:4450:24: warning: unused variable 'spec'
-Message-ID: <202209051729.qu4hSOAb-lkp@intel.com>
+Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
+ for function 'mpc52xx_psc_spi_transfer_one_message'
+Message-ID: <202209051823.XJdrEu9F-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,41 +46,91 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block tiwai/sound/master
-head:   a6c91e26b44722382fb45d782d25d9ed77bbb184
-commit: 414d38ba871092aeac4ed097ac4ced89486646f7 [42/45] ALSA: hda/sigmatel: Keep power up while beep is enabled
-config: x86_64-randconfig-a014-20220905 (https://download.01.org/0day-ci/archive/20220905/202209051729.qu4hSOAb-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Mark,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7e18e42e4b280c85b76967a9106a13ca61c16179
+commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
+date:   2 months ago
+config: powerpc-randconfig-r026-20220905 (https://download.01.org/0day-ci/archive/20220905/202209051823.XJdrEu9F-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/414d38ba871092aeac4ed097ac4ced89486646f7
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tiwai/sound/master
-        git checkout 414d38ba871092aeac4ed097ac4ced89486646f7
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145cfc3840e5931a789a8e2e76af841ab4cad44b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 145cfc3840e5931a789a8e2e76af841ab4cad44b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/pci/hda/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> sound/pci/hda/patch_sigmatel.c:4450:24: warning: unused variable 'spec' [-Wunused-variable]
-           struct sigmatel_spec *spec = codec->spec;
-                                 ^
+>> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for function 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+       ^
+   drivers/spi/spi-mpc52xx-psc.c:195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   ^
+   static 
    1 warning generated.
 
 
-vim +/spec +4450 sound/pci/hda/patch_sigmatel.c
+vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
 
-  4447	
-  4448	static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
-  4449	{
-> 4450		struct sigmatel_spec *spec = codec->spec;
-  4451		int ret = snd_hda_gen_check_power_status(codec, nid);
-  4452	
+   194	
+ > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   196						 struct spi_message *m)
+   197	{
+   198		struct spi_device *spi;
+   199		struct spi_transfer *t = NULL;
+   200		unsigned cs_change;
+   201		int status;
+   202	
+   203		spi = m->spi;
+   204		cs_change = 1;
+   205		status = 0;
+   206		list_for_each_entry (t, &m->transfers, transfer_list) {
+   207			if (t->bits_per_word || t->speed_hz) {
+   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
+   209				if (status < 0)
+   210					break;
+   211			}
+   212	
+   213			if (cs_change)
+   214				mpc52xx_psc_spi_activate_cs(spi);
+   215			cs_change = t->cs_change;
+   216	
+   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
+   218			if (status)
+   219				break;
+   220			m->actual_length += t->len;
+   221	
+   222			spi_transfer_delay_exec(t);
+   223	
+   224			if (cs_change)
+   225				mpc52xx_psc_spi_deactivate_cs(spi);
+   226		}
+   227	
+   228		m->status = status;
+   229		if (status || !cs_change)
+   230			mpc52xx_psc_spi_deactivate_cs(spi);
+   231	
+   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
+   233	
+   234		spi_finalize_current_message(ctlr);
+   235	
+   236		return 0;
+   237	}
+   238	
 
 -- 
 0-DAY CI Kernel Test Service
