@@ -1,12 +1,12 @@
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB36615A7
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:45:37 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC31E15A7
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:45:56 +0000 (UTC)
 Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
 	by smtp.orange.fr with ESMTPA
-	id V07SoNhIZJ83FV07bovION; Mon, 05 Sep 2022 02:37:59 +0200
+	id V07SoNhIZJ83FV07qovIPN; Mon, 05 Sep 2022 02:38:12 +0200
 X-ME-Helo: YC20090004.ad.ts.tri-ad.global
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 05 Sep 2022 02:37:59 +0200
+X-ME-Date: Mon, 05 Sep 2022 02:38:12 +0200
 X-ME-IP: 103.175.111.222
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: Borislav Petkov <bp@alien8.de>
@@ -28,12 +28,13 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Yury Norov <yury.norov@gmail.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
-Date: Mon,  5 Sep 2022 09:37:30 +0900
-Message-Id: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v7 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
+Date: Mon,  5 Sep 2022 09:37:32 +0900
+Message-Id: <20220905003732.752-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
 References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,92 +43,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The compilers provide some builtin expression equivalent to the ffs(),
-__ffs() and ffz() functions of the kernel. The kernel uses optimized
-assembly which produces better code than the builtin
-functions. However, such assembly code can not be folded when used
-with constant expressions.
+__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+is equivalent to (unsigned long)__builtin_ctzl(~x). Because
+__builting_ctzl() returns an int, a cast to (unsigned long) is
+necessary to avoid potential warnings on implicit casts.
 
-This series relies on __builtin_constant_p to select the optimal solution:
+For x86_64, the current __ffs() and ffz() implementations do not
+produce optimized code when called with a constant expression. On the
+contrary, the __builtin_ctzl() folds into a single instruction.
 
-  * use kernel assembly for non constant expressions
+However, for non constant expressions, the __ffs() and ffz() asm
+versions of the kernel remains slightly better than the code produced
+by GCC (it produces a useless instruction to clear eax).
 
-  * use compiler's __builtin function for constant expressions.
-
+Use __builtin_constant_p() to select between the kernel's
+__ffs()/ffz() and the __builtin_ctzl() depending on whether the
+argument is constant or not.
 
 ** Statistics **
 
-Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-of __ffs() and ffz() calls (details of the calculation in each patch).
+On a allyesconfig, before...:
 
+  $ objdump -d vmlinux.o | grep tzcnt | wc -l
+  3607
 
-** Changelog **
+...and after:
 
-v6 -> v7:
+  $ objdump -d vmlinux.o | grep tzcnt | wc -l
+  2600
 
-  * (no changes on code, only commit tag was modified)
+So, roughly 27.9% of the calls to either __ffs() or ffz() were using
+constant expressions and could be optimized out.
 
-  * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
+(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
 
+Note: on x86_64, the asm bsf instruction produces tzcnt when used with
+the ret prefix (which explain the use of `grep tzcnt' instead of `grep
+bsf' in above benchmark). c.f. [1]
 
-v5 -> v6:
-  * Rename variable___ffs() into variable__ffs() (two underscores
-    instead of three)
+[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
+Link: http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
 
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
 
-v4 -> v5:
-
-  * (no changes on code, only commit comment was modified)
-
-  * Rewrite the commit log:
-    - Use two spaces instead of `| ' to indent code snippets.
-    - Do not use `we'.
-    - Do not use `this patch' in the commit description. Instead,
-      use imperative tone.
-  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
-
-
-v3 -> v4:
-
-  * (no changes on code, only commit comment was modified)
-
-  * Remove note and link to Nick's message in patch 1/2, c.f.:
-  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
-
-  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
-    patch 2/2.
-
-
-v2 -> v3:
-
-  * Redacted out the instructions after ret and before next function
-    in the assembly output.
-
-  * Added a note and a link to Nick's message on the constant
-    propagation missed-optimization in clang:
-    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
-
-  * Fix copy/paste typo in statistics of patch 1/2. Number of
-    occurences before patches are 1081 and not 3607 (percentage
-    reduction of 26.7% remains correct)
-
-  * Rename the functions as follow:
-    - __varible_ffs() -> variable___ffs()
-    - __variable_ffz() -> variable_ffz()
-
-  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
-    patch 1/2.
-
-
-Vincent Mailhol (2):
-  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
-    expressions
-  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
-    expressions
-
- arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
- 1 file changed, 38 insertions(+), 26 deletions(-)
-
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index 879238e5a6a0..08eca2938f27 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -247,13 +247,7 @@ arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
+ 					  variable_test_bit(nr, addr);
+ }
+ 
+-/**
+- * __ffs - find first set bit in word
+- * @word: The word to search
+- *
+- * Undefined if no bit exists, so code should check against 0 first.
+- */
+-static __always_inline unsigned long __ffs(unsigned long word)
++static __always_inline unsigned long variable__ffs(unsigned long word)
+ {
+ 	asm("rep; bsf %1,%0"
+ 		: "=r" (word)
+@@ -261,13 +255,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
+ 	return word;
+ }
+ 
+-/**
+- * ffz - find first zero bit in word
+- * @word: The word to search
+- *
+- * Undefined if no zero exists, so code should check against ~0UL first.
+- */
+-static __always_inline unsigned long ffz(unsigned long word)
++/**
++ * __ffs - find first set bit in word
++ * @word: The word to search
++ *
++ * Undefined if no bit exists, so code should check against 0 first.
++ */
++#define __ffs(word)				\
++	(__builtin_constant_p(word) ?		\
++	 (unsigned long)__builtin_ctzl(word) :	\
++	 variable__ffs(word))
++
++static __always_inline unsigned long variable_ffz(unsigned long word)
+ {
+ 	asm("rep; bsf %1,%0"
+ 		: "=r" (word)
+@@ -275,6 +274,17 @@ static __always_inline unsigned long ffz(unsigned long word)
+ 	return word;
+ }
+ 
++/**
++ * ffz - find first zero bit in word
++ * @word: The word to search
++ *
++ * Undefined if no zero exists, so code should check against ~0UL first.
++ */
++#define ffz(word)				\
++	(__builtin_constant_p(word) ?		\
++	 (unsigned long)__builtin_ctzl(~word) :	\
++	 variable_ffz(word))
++
+ /*
+  * __fls: find last set bit in word
+  * @word: The word to search
 -- 
 2.35.1
 
