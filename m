@@ -1,81 +1,187 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BDC3C00
-	for <llvm@lists.linux.dev>; Sun,  4 Sep 2022 23:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662335096; x=1693871096;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=4eycWTCn7QnRoWrh0i2fI7iV6XtPfu26qzlrFBEus4Q=;
-  b=C3HDV9UO2ayq4dR1Gn9+RQ8zDqVV4fp6Wn7o9vPrNb6LsY9lnHQwy1pv
-   jSBEqrlBTCSUaQ4Kn1eFaYojSwOmFaIET6nLUuW7NuOjEPmphNfvq/JLa
-   Vk1cOvTh4ZB0wp2Zbv3Ph7UcPwKTbfufWYG5jjQZDdtvQr2yUr7LEg755
-   jGQPZ6C/tTLwCkqkW9ycwxwYKrnzCWLwWuj0VOGtPeFKFOeZRzx2sg1VW
-   4wICB6Ife2iuRmZ1Gnx9+1EJLJqqbe/IIEZhdk9D262uV4hG8x4VHQAk4
-   OgBIAK3d8NsZVp3qBhdxTsFoP9+ho06kyfkSUPPCYRAvgMZxTvMus8TX0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="296280412"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="296280412"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 16:44:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="590710998"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Sep 2022 16:44:55 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oUzIM-0003WT-1D;
-	Sun, 04 Sep 2022 23:44:54 +0000
-Date: Mon, 5 Sep 2022 07:44:16 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: jffs2_erase_pending_blocks() falls
- through to next function jffs2_free_jeb_node_refs()
-Message-ID: <202209050703.qCmWM37o-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF6415A7
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:38:13 +0000 (UTC)
+Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
+	by smtp.orange.fr with ESMTPA
+	id V07SoNhIZJ83FV07kovIOt; Mon, 05 Sep 2022 02:38:06 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 05 Sep 2022 02:38:06 +0200
+X-ME-IP: 103.175.111.222
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v7 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
+Date: Mon,  5 Sep 2022 09:37:31 +0900
+Message-Id: <20220905003732.752-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Josh Poimboeuf <jpoimboe@redhat.com>
-CC: Peter Zijlstra <peterz@infradead.org>
+For x86_64, the current ffs() implementation does not produce
+optimized code when called with a constant expression. On the
+contrary, the __builtin_ffs() function of both GCC and clang is able
+to fold the expression into a single instruction.
 
-Hi Josh,
+** Example **
 
-FYI, the error/warning still remains.
+Let's consider two dummy functions foo() and bar() as below:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7e18e42e4b280c85b76967a9106a13ca61c16179
-commit: 08feafe8d1958febf3a9733a3d1564d8fc23340e objtool: Fix function fallthrough detection for vmlinux
-date:   5 months ago
-config: x86_64-randconfig-a016-20220905 (https://download.01.org/0day-ci/archive/20220905/202209050703.qCmWM37o-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08feafe8d1958febf3a9733a3d1564d8fc23340e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 08feafe8d1958febf3a9733a3d1564d8fc23340e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+  #include <linux/bitops.h>
+  #define CONST 0x01000000
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  unsigned int foo(void)
+  {
+  	return ffs(CONST);
+  }
 
-All warnings (new ones prefixed by >>):
+  unsigned int bar(void)
+  {
+  	return __builtin_ffs(CONST);
+  }
 
->> vmlinux.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function jffs2_free_jeb_node_refs()
+GCC would produce below assembly code:
 
+  0000000000000000 <foo>:
+     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
+     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     a:	0f bc c2             	bsf    %edx,%eax
+     d:	83 c0 01             	add    $0x1,%eax
+    10:	c3                   	ret
+  <Instructions after ret and before next function were redacted>
+
+  0000000000000020 <bar>:
+    20:	b8 19 00 00 00       	mov    $0x19,%eax
+    25:	c3                   	ret
+
+And clang would produce:
+
+  0000000000000000 <foo>:
+     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
+     c:	83 c0 01             	add    $0x1,%eax
+     f:	c3                   	ret
+
+  0000000000000010 <bar>:
+    10:	b8 19 00 00 00       	mov    $0x19,%eax
+    15:	c3                   	ret
+
+Both examples clearly demonstrate the benefit of using __builtin_ffs()
+instead of the kernel's asm implementation for constant expressions.
+
+However, for non constant expressions, the ffs() asm version of the
+kernel remains better for x86_64 because, contrary to GCC, it doesn't
+emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+able optimize out the CMOV call).
+
+Use __builtin_constant_p() to select between the kernel's ffs() and
+the __builtin_ffs() depending on whether the argument is constant or
+not.
+
+As a side benefit, replacing the ffs() function declaration by a macro
+also removes below -Wshadow warning:
+
+  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+    283 | static __always_inline int ffs(int x)
+
+** Statistics **
+
+On a allyesconfig, before...:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  1081
+
+...and after:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  792
+
+So, roughly 26.7% of the calls to ffs() were using constant
+expressions and could be optimized out.
+
+(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+
+[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
+Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index 0fe9de58af31..879238e5a6a0 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -292,18 +292,7 @@ static __always_inline unsigned long __fls(unsigned long word)
+ #undef ADDR
+ 
+ #ifdef __KERNEL__
+-/**
+- * ffs - find first set bit in word
+- * @x: the word to search
+- *
+- * This is defined the same way as the libc and compiler builtin ffs
+- * routines, therefore differs in spirit from the other bitops.
+- *
+- * ffs(value) returns 0 if value is 0 or the position of the first
+- * set bit if value is nonzero. The first (least significant) bit
+- * is at position 1.
+- */
+-static __always_inline int ffs(int x)
++static __always_inline int variable_ffs(int x)
+ {
+ 	int r;
+ 
+@@ -333,6 +322,19 @@ static __always_inline int ffs(int x)
+ 	return r + 1;
+ }
+ 
++/**
++ * ffs - find first set bit in word
++ * @x: the word to search
++ *
++ * This is defined the same way as the libc and compiler builtin ffs
++ * routines, therefore differs in spirit from the other bitops.
++ *
++ * ffs(value) returns 0 if value is 0 or the position of the first
++ * set bit if value is nonzero. The first (least significant) bit
++ * is at position 1.
++ */
++#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
++
+ /**
+  * fls - find last set bit in word
+  * @x: the word to search
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
