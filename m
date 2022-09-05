@@ -1,14 +1,12 @@
 Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF6415A7
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB36615A7
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:45:37 +0000 (UTC)
 Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
 	by smtp.orange.fr with ESMTPA
-	id V07SoNhIZJ83FV07kovIOt; Mon, 05 Sep 2022 02:38:06 +0200
+	id V07SoNhIZJ83FV07bovION; Mon, 05 Sep 2022 02:37:59 +0200
 X-ME-Helo: YC20090004.ad.ts.tri-ad.global
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 05 Sep 2022 02:38:06 +0200
+X-ME-Date: Mon, 05 Sep 2022 02:37:59 +0200
 X-ME-IP: 103.175.111.222
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: Borislav Petkov <bp@alien8.de>
@@ -30,13 +28,12 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Yury Norov <yury.norov@gmail.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v7 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
-Date: Mon,  5 Sep 2022 09:37:31 +0900
-Message-Id: <20220905003732.752-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date: Mon,  5 Sep 2022 09:37:30 +0900
+Message-Id: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,143 +42,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For x86_64, the current ffs() implementation does not produce
-optimized code when called with a constant expression. On the
-contrary, the __builtin_ffs() function of both GCC and clang is able
-to fold the expression into a single instruction.
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() functions of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be folded when used
+with constant expressions.
 
-** Example **
+This series relies on __builtin_constant_p to select the optimal solution:
 
-Let's consider two dummy functions foo() and bar() as below:
+  * use kernel assembly for non constant expressions
 
-  #include <linux/bitops.h>
-  #define CONST 0x01000000
+  * use compiler's __builtin function for constant expressions.
 
-  unsigned int foo(void)
-  {
-  	return ffs(CONST);
-  }
-
-  unsigned int bar(void)
-  {
-  	return __builtin_ffs(CONST);
-  }
-
-GCC would produce below assembly code:
-
-  0000000000000000 <foo>:
-     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
-     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     a:	0f bc c2             	bsf    %edx,%eax
-     d:	83 c0 01             	add    $0x1,%eax
-    10:	c3                   	ret
-  <Instructions after ret and before next function were redacted>
-
-  0000000000000020 <bar>:
-    20:	b8 19 00 00 00       	mov    $0x19,%eax
-    25:	c3                   	ret
-
-And clang would produce:
-
-  0000000000000000 <foo>:
-     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
-     c:	83 c0 01             	add    $0x1,%eax
-     f:	c3                   	ret
-
-  0000000000000010 <bar>:
-    10:	b8 19 00 00 00       	mov    $0x19,%eax
-    15:	c3                   	ret
-
-Both examples clearly demonstrate the benefit of using __builtin_ffs()
-instead of the kernel's asm implementation for constant expressions.
-
-However, for non constant expressions, the ffs() asm version of the
-kernel remains better for x86_64 because, contrary to GCC, it doesn't
-emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-able optimize out the CMOV call).
-
-Use __builtin_constant_p() to select between the kernel's ffs() and
-the __builtin_ffs() depending on whether the argument is constant or
-not.
-
-As a side benefit, replacing the ffs() function declaration by a macro
-also removes below -Wshadow warning:
-
-  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-    283 | static __always_inline int ffs(int x)
 
 ** Statistics **
 
-On a allyesconfig, before...:
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
 
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  1081
 
-...and after:
+** Changelog **
 
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  792
+v6 -> v7:
 
-So, roughly 26.7% of the calls to ffs() were using constant
-expressions and could be optimized out.
+  * (no changes on code, only commit tag was modified)
 
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+  * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
 
-[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
-Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+v5 -> v6:
+  * Rename variable___ffs() into variable__ffs() (two underscores
+    instead of three)
 
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 0fe9de58af31..879238e5a6a0 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -292,18 +292,7 @@ static __always_inline unsigned long __fls(unsigned long word)
- #undef ADDR
- 
- #ifdef __KERNEL__
--/**
-- * ffs - find first set bit in word
-- * @x: the word to search
-- *
-- * This is defined the same way as the libc and compiler builtin ffs
-- * routines, therefore differs in spirit from the other bitops.
-- *
-- * ffs(value) returns 0 if value is 0 or the position of the first
-- * set bit if value is nonzero. The first (least significant) bit
-- * is at position 1.
-- */
--static __always_inline int ffs(int x)
-+static __always_inline int variable_ffs(int x)
- {
- 	int r;
- 
-@@ -333,6 +322,19 @@ static __always_inline int ffs(int x)
- 	return r + 1;
- }
- 
-+/**
-+ * ffs - find first set bit in word
-+ * @x: the word to search
-+ *
-+ * This is defined the same way as the libc and compiler builtin ffs
-+ * routines, therefore differs in spirit from the other bitops.
-+ *
-+ * ffs(value) returns 0 if value is 0 or the position of the first
-+ * set bit if value is nonzero. The first (least significant) bit
-+ * is at position 1.
-+ */
-+#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
-+
- /**
-  * fls - find last set bit in word
-  * @x: the word to search
+
+v4 -> v5:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite the commit log:
+    - Use two spaces instead of `| ' to indent code snippets.
+    - Do not use `we'.
+    - Do not use `this patch' in the commit description. Instead,
+      use imperative tone.
+  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 1/2.
+
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
+
 -- 
 2.35.1
 
