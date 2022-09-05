@@ -1,159 +1,124 @@
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC31E15A7
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 00:45:56 +0000 (UTC)
-Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
-	by smtp.orange.fr with ESMTPA
-	id V07SoNhIZJ83FV07qovIPN; Mon, 05 Sep 2022 02:38:12 +0200
-X-ME-Helo: YC20090004.ad.ts.tri-ad.global
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 05 Sep 2022 02:38:12 +0200
-X-ME-IP: 103.175.111.222
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v7 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date: Mon,  5 Sep 2022 09:37:32 +0900
-Message-Id: <20220905003732.752-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7384115A7
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 01:19:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662340748; x=1693876748;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ll9tO925T9xsodBipO9e3UrxjRbk99kbcxC/Fg87W2A=;
+  b=EsoTzrfevMiJfZLZRJBAP56/SkBgbKa3wOA/jRLOLsDuFM+uEVKrCgFk
+   mIAmsKzqYI/iC+ZaAfwqBbmHaySaGWsGYoUfSnt1KfCNmASHGuK9Z25pT
+   Ey4iJ2YQaQVZbEDMUpTdEQKA4TlV3Ova+7u0PTXUhAvrRZymhurMlNKCR
+   BjIuBDgfgipatc06IUMuuiCcYHJpmKkl2yehtmLxhW/UR7PsiS9bp6Th/
+   +PjD6pJb25fy9fMPFnUrgo/HD4X/jVhmy6CUXT6YQRhDCneibJNKWTANy
+   6hxLVhFCFBijGL3JhZ3OIH6rte5vyAIIxqgkovYzu6Xdk523TIhRZhocV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="382584495"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="382584495"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 18:19:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="702719901"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Sep 2022 18:19:05 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oV0lV-0003ex-0R;
+	Mon, 05 Sep 2022 01:19:05 +0000
+Date: Mon, 5 Sep 2022 09:18:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Olliver Schinagl <oliver@schinagl.nl>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew@lunn.ch>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	inux-kernel@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Olliver Schinagl <oliver@schinagl.nl>
+Subject: Re: [PATCH] phy: Add helpers for setting/clearing bits in paged
+ registers
+Message-ID: <202209050910.t87wLY38-lkp@intel.com>
+References: <20220904225555.1994290-1-oliver@schinagl.nl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904225555.1994290-1-oliver@schinagl.nl>
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+Hi Olliver,
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() folds into a single instruction.
+Thank you for the patch! Yet something to improve:
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc4 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Use __builtin_constant_p() to select between the kernel's
-__ffs()/ffz() and the __builtin_ctzl() depending on whether the
-argument is constant or not.
+url:    https://github.com/intel-lab-lkp/linux/commits/Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7e18e42e4b280c85b76967a9106a13ca61c16179
+config: hexagon-randconfig-r045-20220905 (https://download.01.org/0day-ci/archive/20220905/202209050910.t87wLY38-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/342260cb7603ad567f4799836ad4ed390ccedf2a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
+        git checkout 342260cb7603ad567f4799836ad4ed390ccedf2a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/phy/microchip/
 
-** Statistics **
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On a allyesconfig, before...:
+All errors (new ones prefixed by >>):
 
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  3607
+   In file included from drivers/phy/microchip/lan966x_serdes.c:7:
+>> include/linux/phy.h:1275:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+   include/linux/phy.h:1275:9: note: did you mean 'phy_modify_changed'?
+   include/linux/phy.h:1142:5: note: 'phy_modify_changed' declared here
+   int phy_modify_changed(struct phy_device *phydev, u32 regnum, u16 mask,
+       ^
+   include/linux/phy.h:1288:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, val, 0);
+                  ^
+   include/linux/phy.h:1447:5: error: conflicting types for 'phy_modify_paged'
+   int phy_modify_paged(struct phy_device *phydev, int page, u32 regnum,
+       ^
+   include/linux/phy.h:1275:9: note: previous implicit declaration is here
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+   3 errors generated.
 
-...and after:
 
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  2600
+vim +/phy_modify_paged +1275 include/linux/phy.h
 
-So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-constant expressions and could be optimized out.
+  1264	
+  1265	/**
+  1266	 * phy_set_bits_paged - Convenience function for setting bits in a paged register
+  1267	 * @phydev: the phy_device struct
+  1268	 * @page: the page for the phy
+  1269	 * @regnum: register number to write
+  1270	 * @val: bits to set
+  1271	 */
+  1272	static inline int phy_set_bits_paged(struct phy_device *phydev, int page,
+  1273					     u32 regnum, u16 val)
+  1274	{
+> 1275		return phy_modify_paged(phydev, page, regnum, 0, val);
+  1276	}
+  1277	
 
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-
-Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-the ret prefix (which explain the use of `grep tzcnt' instead of `grep
-bsf' in above benchmark). c.f. [1]
-
-[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-Link: http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 879238e5a6a0..08eca2938f27 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -247,13 +247,7 @@ arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
- 					  variable_test_bit(nr, addr);
- }
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long variable__ffs(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -261,13 +255,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
- 	return word;
- }
- 
--/**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 variable__ffs(word))
-+
-+static __always_inline unsigned long variable_ffz(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -275,6 +274,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 variable_ffz(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
