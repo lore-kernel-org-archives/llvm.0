@@ -1,178 +1,204 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAFD3C02
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 08:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662366048;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mtlOCDs/E5qiTaHJ2OqqrNC2xLAtc1p3lZcr4D7mt7k=;
-	b=jQG91vuX9Ku8upSeMkg2Tt0HZPFgYnTDPfQtqPjZKKGBKNI1ZPBOc7hJCzwTmVO69lsR51
-	2LfP4duWGB2Ebqkhd1MKAe+ViDvKbi3TCHd8vPgeGGNxhSnD1PJgWie8PCKpcnHGX7egxh
-	Cm5j9tf5tjsh9CjuitRMAj1yLe6ghl0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-wpYWWuzQPFaGh42qseAbtA-1; Mon, 05 Sep 2022 04:20:47 -0400
-X-MC-Unique: wpYWWuzQPFaGh42qseAbtA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 434118037AA
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 08:20:47 +0000 (UTC)
-Received: from [172.64.3.82] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 167231121314;
-	Mon,  5 Sep 2022 08:20:47 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (53/371 SKIPPED): Test report for master
- (6.0.0-rc4, mainline.kernel.org-clang, 7e18e42e)
-Date: Mon, 05 Sep 2022 08:20:46 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9314A3C35
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 09:16:48 +0000 (UTC)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-06.nifty.com with ESMTP id 2859AOI9006973
+	for <llvm@lists.linux.dev>; Mon, 5 Sep 2022 18:10:24 +0900
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 2859A5Mq023251
+	for <llvm@lists.linux.dev>; Mon, 5 Sep 2022 18:10:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2859A5Mq023251
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1662369006;
+	bh=4BbPbSzeFLnJFI+hMdkPwj9aQwOKx7JySs0IWqZPQ0E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=K/mdEeMRVWUJ43uBAY659SEzldpJrYqmzDMddLj0aB0c56GoecW80PmlDDWYOBpfL
+	 9bHh6vsGCFA/d53NC+q3BwVLoFvzDrUKtMgyA3z5iGlNJBpLEaIcyQ0Of/foUdMafK
+	 zUOic0nRiESCOt98VhDySaaAXwmn4LntcT8541AJv/6pNJrCT6OZinJjDcgbCVlaNR
+	 okCu1UQFRXhzxW4aTnxWqabtQZrmYjiMBpjnShwT8s7LKypx4NZE24sUBg2m2v+Ip7
+	 IDLxZ4oZmMkjpIUx3qQ9CZsDLW2VJES/duDlV3G+bE/05uV9/obzK5bLWM5Uuq4Mxx
+	 A1L8Hj+SAmV0w==
+X-Nifty-SrcIP: [209.85.161.50]
+Received: by mail-oo1-f50.google.com with SMTP id x10-20020a4a410a000000b004456a27110fso1391259ooa.7
+        for <llvm@lists.linux.dev>; Mon, 05 Sep 2022 02:10:06 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0tv4S8Q/aZaeNXHi5y5Ao6v1ONcu3QH2mQ8sKYw1DeGFGZq5kb
+	y1lmolka5mwqU0SBFIBtryUGM7Fz2FxGHeooXYw=
+X-Google-Smtp-Source: AA6agR762y627dWmUGyX6sAQX7gCT5K0+/66Ge89+EYNKHtueHA4CGyB7PqUnbc1v/EXYM/a2gYwd3gnsxX4Rw7avhg=
+X-Received: by 2002:a4a:9789:0:b0:451:437b:cc58 with SMTP id
+ w9-20020a4a9789000000b00451437bcc58mr6570173ooi.96.1662369004999; Mon, 05 Sep
+ 2022 02:10:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-Message-Id: <89978.122090504204715848@us-mta-564.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220831184408.2778264-1-ndesaulniers@google.com>
+ <20220831184408.2778264-3-ndesaulniers@google.com> <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
+In-Reply-To: <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 5 Sep 2022 18:09:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com>
+Message-ID: <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Linux 6.0-rc4
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52550
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+On Thu, Sep 1, 2022 at 4:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Wed, Aug 31, 2022 at 11:44:05AM -0700, Nick Desaulniers wrote:
+> > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> > cause as-option to fail unexpectedly because clang will emit
+> > -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> > assembler sources.
+>
+> Now that I am looking closer at it, where does that '-Werror' come from?
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+The related commit is
+c3f0d0bc5b01ad90c45276952802455750444b4f
 
+The previous discussion with Arnd is
+https://lore.kernel.org/linux-kbuild/20170314213724.3836900-1-arnd@arndb.de/
+
+
+
+
+
+> For cc-option, we add it to elevate clang's warnings about unused '-f',
+> '-m', and '-W' flags to errors so that we do not add those flags.
+> However, I do not see '-Werror' in as-option. I am going to assume it
+> came from CONFIG_WERROR, as I believe Android has that turned on by
+> default.
+
+
+CONFIG_WERROR is added to CFLAGS.
+But, I guess it is more correct to do likewise for others.
+(https://patchwork.kernel.org/project/linux-kbuild/patch/20220905083619.672091-1-masahiroy@kernel.org/)
+
+
+
+> I think that is the real problem: without '-Werror', the only
+> error that should come from as-option is when an option isn't supported
+> by the assembler, as clang will still warn but those will not be fatal
+> but with '-Werror', those warnings turn fatal, causing all subsequent
+> as-option calls to fail.
+
+
+
+Presumably, it is correct to add -Werror to as-option as well.
+We have no reason to add it to cc-option, but not to as-option.
+
+
+
+
+I also believe '-x assembler' should be changed to
+'-x assembler-with-cpp'.
+
+
+As I mentioned somewhere before, our assembly code (*.S) is always
+preprocessed. There is no *.s file in the kernel source tree.
+
+
+So, '-x assembler-with-cpp' matches the real situation.
+
+
+One interesting thing is, clang does not warn
+[-Wunused-command-line-argument] for *.S files.
+
+
+
+
+$ clang -fomit-frame-pointer -c -x assembler /dev/null -o /dev/null
+clang: warning: argument unused during compilation:
+'-fomit-frame-pointer' [-Wunused-command-line-argument]
+
+$ clang -fomit-frame-pointer -c -x assembler-with-cpp /dev/null -o /dev/null
+
+
+
+The root cause is we are using '-x assembler', which
+never happens in the kernel tree.
+
+
+
+
+To sum up, the code I think correct is:
+
+
+as-option = $(call try-run,\
+   $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp
+/dev/null -o "$$TMP",$(1),$(2))
+
+
+
+
+
+
+> Do not get me wrong, I still believe this is the correct fix but I think
+> it would be good to describe exactly under which conditions this is a
+> real issue in case we ever have to revisit this.
+>
+> > Callers of as-option (and as-instr) likely want to be adding flags to
+> > KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1699
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Regardless of changes to the commit message:
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> > Changes v1 -> v2:
+> > * Split off changes to arch/x86/boot/compressed/Makefile into parent
+> >   patch, as per Masahiro.
+> >
+> >  scripts/Makefile.compiler | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> > index 94d0d40cddb3..d1739f0d3ce3 100644
+> > --- a/scripts/Makefile.compiler
+> > +++ b/scripts/Makefile.compiler
+> > @@ -29,13 +29,13 @@ try-run = $(shell set -e;         \
+> >       fi)
+> >
+> >  # as-option
+> > -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+> > +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+> >
+> >  as-option = $(call try-run,\
+> > -     $(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+> > +     $(CC) $(KBUILD_AFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+> >
+> >  # as-instr
+> > -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
+> > +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
+> >
+> >  as-instr = $(call try-run,\
+> >       printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >
+
+
+
+--
+Best Regards
+
+
+
+Masahiro Yamada
