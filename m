@@ -1,138 +1,131 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575867E
-	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 02:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5BF7E
+	for <llvm@lists.linux.dev>; Mon,  5 Sep 2022 03:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662346483; x=1693882483;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=i85N6sloW8LS+xHic5Eug2egGQTHgjjirik6HG65/zI=;
-  b=HFJfIClRMrEyfdqpRrKJxYCKpBJFY9z0B6l5+IBBL5slBeoJl1zPDeRB
-   Dp9yVj4GtMRx2Tj40uA7BTiRFMLgEdr520ukDmyFhP/ls/W6igvi3YA70
-   aZrkIYPe5HrI88InHQZZzYWJpmgUYEDx36fptvE3MvTNCCEO3VYcXj1tP
-   PcjVy6be53kK4qcDtg316JuDCd3OO1KknEiEje+jPBov47OpLob0FkOw+
-   lbIByPm//FQHI3m7K4W/U1a10bZMEXGYVPT5i6kcNjcwInt2lFtMTFb28
-   ifC8gav0jRpnCnjPgtwyOhWizF1cLTV9VszBJrurBYHTpc/KHvHkmdiP4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="295033204"
+  t=1662347416; x=1693883416;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+pWEk4rY6xlC1Kq+N6uT1/KgGQz+2KW6sD2sIkWVS7c=;
+  b=Ce5yvkXvKiZly1DFO9xyXzfW/OOjmOgfKV6dLi/6qEgMEVbxXAkanISc
+   t9ekInqDKjh8B8TPqeBZTkfe8Oa7j5tPihrjVGjkiXMuesvjNHgW/oDlG
+   chPqutBGy46pWi1Zkjqrc1/cCy8p5dowv87jQv5XiYyxDJzhGqZAAntVb
+   cV4tFHh6UdWJYzH/YfMGL4OBYaVPvMpBiyo1ltT7+XNQchM7sFVnbYHWq
+   XE4LmpMasdPhlvrh37D+jSDmkSdv7vuUO/UaE0nfcDIRQfcVCu5w/Oii2
+   iVApz2EKfO4nSQJOEazUEC7tO8h5lK0vch5eFFyeZx9mf2ILZT27T2+6q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="360250543"
 X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="295033204"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 19:54:42 -0700
+   d="scan'208";a="360250543"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 20:10:16 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="643633527"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.208.118]) ([10.254.208.118])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 19:54:40 -0700
-Subject: Re: [kbuild-all] Re: [linux-next:master 2262/4736]
- drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting prototype for
- drivers/extcon/extcon-tusb320.c(). Prototype was for TUSB320_REG8() instead
-To: Marek Vasut <marex@denx.de>, kernel test robot <lkp@intel.com>
+   d="scan'208";a="941946866"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Sep 2022 20:10:13 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oV2V3-0003lF-0R;
+	Mon, 05 Sep 2022 03:10:13 +0000
+Date: Mon, 5 Sep 2022 11:09:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Memory Management List <linux-mm@kvack.org>,
- Chanwoo Choi <cw00.choi@samsung.com>, =?UTF-8?Q?Alvin_=c5=a0ipraga?=
- <alsi@bang-olufsen.dk>
-References: <202209030755.eB4SkwGE-lkp@intel.com>
- <92d78ac2-c32a-cd19-891c-7bac77725b84@denx.de>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <494af0d7-b07a-3d50-7539-09c300b79dd8@intel.com>
-Date: Mon, 5 Sep 2022 10:54:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/lazy.2022.09.03b 38/40]
+ include/net/dst.h:230:2: error: call to __compiletime_assert_401 declared
+ with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct dst_entry,
+ __refcnt) & 63
+Message-ID: <202209051011.pAmcAnkK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <92d78ac2-c32a-cd19-891c-7bac77725b84@denx.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/lazy.2022.09.03b
+head:   485ca0ab99b3e10ff521fff226c3c8fe48fad488
+commit: c944944108dcac62942ab154ce09e96afcd190c5 [38/40] rcu: Add per-CB tracing for queuing, flush and invocation.
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220905/202209051011.pAmcAnkK-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/c944944108dcac62942ab154ce09e96afcd190c5
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/lazy.2022.09.03b
+        git checkout c944944108dcac62942ab154ce09e96afcd190c5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash net/sched/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from net/sched/act_tunnel_key.c:12:
+   In file included from include/net/geneve.h:5:
+   In file included from include/net/udp_tunnel.h:5:
+   In file included from include/net/ip_tunnels.h:13:
+   In file included from include/net/dsfield.h:12:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:66:
+>> include/net/dst.h:230:2: error: call to __compiletime_assert_401 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct dst_entry, __refcnt) & 63
+           BUILD_BUG_ON(offsetof(struct dst_entry, __refcnt) & 63);
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:354:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:342:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:335:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:218:1: note: expanded from here
+   __compiletime_assert_401
+   ^
+   1 error generated.
 
 
+vim +/error +230 include/net/dst.h
 
-On 9/3/2022 10:31 PM, Marek Vasut wrote:
-> On 9/3/22 01:21, kernel test robot wrote:
->> tree:   
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
->> master
->> head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
->> commit: 822a6200734c94ccbfc9ae7acc5da5505b991515 [2262/4736] extcon: 
->> usbc-tusb320: Add USB TYPE-C support
->> config: x86_64-randconfig-a003 
->> (https://download.01.org/0day-ci/archive/20220903/202209030755.eB4SkwGE-lkp@intel.com/config) 
->>
->> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project 
->> f28c006a5895fc0e329fe15fead81e37457cb1d1)
->> reproduce (this is a W=1 build):
->>          wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->> -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # 
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=822a6200734c94ccbfc9ae7acc5da5505b991515 
->>
->>          git remote add linux-next 
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>          git fetch --no-tags linux-next master
->>          git checkout 822a6200734c94ccbfc9ae7acc5da5505b991515
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
->> W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/extcon/
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting 
->>>> prototype for drivers/extcon/extcon-tusb320.c(). Prototype was for 
->>>> TUSB320_REG8() instead
->>
->>
->> vim +19 drivers/extcon/extcon-usbc-tusb320.c
->>
->>      18
->>    > 19    #define TUSB320_REG8                0x8
->>      20    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE    GENMASK(7, 6)
->>      21    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_USB    0x0
->>      22    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_15A    0x1
->>      23    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_30A    0x2
->>      24    #define TUSB320_REG8_CURRENT_MODE_DETECT    GENMASK(5, 4)
->>      25    #define TUSB320_REG8_CURRENT_MODE_DETECT_DEF    0x0
->>      26    #define TUSB320_REG8_CURRENT_MODE_DETECT_MED    0x1
->>      27    #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC    0x2
->>      28    #define TUSB320_REG8_CURRENT_MODE_DETECT_HI    0x3
->>      29    #define TUSB320_REG8_ACCESSORY_CONNECTED    GENMASK(3, 2)
->>      30    #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE    0x0
->>      31    #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO    0x4
->>      32    #define TUSB320_REG8_ACCESSORY_CONNECTED_ACC    0x5
->>      33    #define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG    0x6
->>      34    #define TUSB320_REG8_ACTIVE_CABLE_DETECTION    BIT(0)
->>      35
-> 
-> I still believe this is a false positive, is it not ?
+^1da177e4c3f41 Linus Torvalds 2005-04-16  223  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  224  static inline void dst_hold(struct dst_entry *dst)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  225  {
+5635c10d976716 Eric Dumazet   2008-11-16  226  	/*
+5635c10d976716 Eric Dumazet   2008-11-16  227  	 * If your kernel compilation stops here, please check
+8b207e7374c244 David Miller   2017-11-28  228  	 * the placement of __refcnt in struct dst_entry
+5635c10d976716 Eric Dumazet   2008-11-16  229  	 */
+5635c10d976716 Eric Dumazet   2008-11-16 @230  	BUILD_BUG_ON(offsetof(struct dst_entry, __refcnt) & 63);
+44ebe79149ff41 Wei Wang       2017-06-17  231  	WARN_ON(atomic_inc_not_zero(&dst->__refcnt) == 0);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  232  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  233  
 
-Hi Marek,
+:::::: The code at line 230 was first introduced by commit
+:::::: 5635c10d976716ef47ae441998aeae144c7e7387 net: make sure struct dst_entry refcount is aligned on 64 bytes
 
-Thanks for your reply, the issue is not introduced by this commit, it
-should be related to '/**' in the head of this file:
+:::::: TO: Eric Dumazet <dada1@cosmosbay.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c 
-b/drivers/extcon/extcon-usbc-tusb320.c
-index edb8c3f997c9..41041ff0fadb 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -1,5 +1,5 @@
-  // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-   * drivers/extcon/extcon-tusb320.c - TUSB320 extcon driver
-   *
-   * Copyright (C) 2020 National Instruments Corporation
-
-Best Regards,
-Rong Chen
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
