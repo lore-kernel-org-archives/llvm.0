@@ -1,43 +1,48 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525224431
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 12:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCB62F24
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 12:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662467003; x=1694003003;
+  t=1662468205; x=1694004205;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+4ytQKXb9wrXuriZ/KL3y9KZZR7sPj+DMW/Fh3kClS4=;
-  b=IryZD/OAoKsMWzM0HjPbVbFeohH6NI/4AKtc4fnJ57NNRK7pxLa0RZkU
-   7KdO3s/BNKUNkiszScFNzLamJziCObeEFLazlAp1KKVvEQsaoqZS4wHFl
-   S2na/RDrqVT04r9pUSEa77umeSYXq0l7T9xQdlvwmg//GcG6+QKUK2A5i
-   hIuSNwyvmrfghDKob0m50tnPAXF8SQoiQHcOge6UwwWVEJWZPHQwcon5c
-   S56F5+W+O791tl176EiuBbeGL0Hs3qZSxhcUyc4fnmkaVP3fclXLxBrpK
-   C2O6lvzcAPbjxEFl21G3lTAHuPFWfO/DOzPj2TMgd0/G7J+oneEyArDbL
+  bh=SKVSACxEGKvzhV1mjnOCMkraBJm5utM2asRpqotl1lc=;
+  b=aR7XQ/HFPeNA7ci8o8n5ntxswJN7JTG4q+7gV8T2W0KNbSPe6+mLkY8r
+   SIQ45x0xJ/TPQBHObQDSKjROYvh+EpzHS/10AYlNt6tfxYMWZi3WXLt0J
+   rZASqPd7ClKhURR0Wc8nMNbTQP3eiSNoqEZIR+8V3c8YodMSeDlhY3SV7
+   EhoiHMFXCmWgTD3RQ271JD51xiPe6iiqZKEjLovp8HZaurFulxHXN9Qq2
+   HZeiItVephRQXwhY3btTIEUt5NiphstYMKNveB8u+fhwiBTDMb4MFwaDq
+   rEi190ivPakwRXgBMZxEKo+yxgWFmoLg2wYbNSORdYqGZka+LHLDo31Po
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360526965"
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322756047"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="360526965"
+   d="scan'208";a="322756047"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:23:22 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:43:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="647211590"
+   d="scan'208";a="647216326"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 05:23:21 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 05:43:21 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oVXbs-00055t-1w;
-	Tue, 06 Sep 2022 12:23:20 +0000
-Date: Tue, 6 Sep 2022 20:22:40 +0800
+	id 1oVXvF-00056f-03;
+	Tue, 06 Sep 2022 12:43:21 +0000
+Date: Tue, 6 Sep 2022 20:43:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mengyuan Lou <mengyuanlou@net-swift.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jiawenwu@net-swift.com,
-	Mengyuan Lou <mengyuanlou@net-swift.com>
-Subject: Re: [PATCH net-next 2] net: ngbe: sw init and hw init
-Message-ID: <202209062015.jlZLOfpQ-lkp@intel.com>
-References: <20220905125224.2279-1-mengyuanlou@net-swift.com>
+To: Muchun Song <songmuchun@bytedance.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, mike.kravetz@oracle.com,
+	akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
+	ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
+	rientjes@google.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	muchun.song@linux.dev
+Subject: Re: [PATCH v2] mm: hugetlb: eliminate memory-less nodes handling
+Message-ID: <202209062036.1eQ3lYsX-lkp@intel.com>
+References: <20220906034239.69436-1-songmuchun@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,112 +51,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905125224.2279-1-mengyuanlou@net-swift.com>
+In-Reply-To: <20220906034239.69436-1-songmuchun@bytedance.com>
 
-Hi Mengyuan,
+Hi Muchun,
 
 I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on net-next/master]
+[auto build test WARNING on next-20220901]
+[cannot apply to akpm-mm/mm-everything driver-core/driver-core-testing linus/master v6.0-rc4 v6.0-rc3 v6.0-rc2 v6.0-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mengyuan-Lou/net-ngbe-sw-init-and-hw-init/20220905-210027
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 6630edabd80823cc6f7c874d52a4cac6381b9051
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220906/202209062015.jlZLOfpQ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220906-114538
+base:    e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+config: arm-randconfig-r023-20220906 (https://download.01.org/0day-ci/archive/20220906/202209062036.1eQ3lYsX-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/683e3287b25349b7844b53577086124b2bdf3cb6
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ec1575c86ce4904a7134d2fef8e231ecd50ffc75
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mengyuan-Lou/net-ngbe-sw-init-and-hw-init/20220905-210027
-        git checkout 683e3287b25349b7844b53577086124b2bdf3cb6
+        git fetch --no-tags linux-review Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220906-114538
+        git checkout ec1575c86ce4904a7134d2fef8e231ecd50ffc75
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/ kernel/power/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/wangxun/ngbe/ngbe_main.c:107:30: warning: result of comparison of constant 16384 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-           hw->wol_enabled = (wol_mask == NGBE_WOL_SUP) ? 1 : 0;
-                              ~~~~~~~~ ^  ~~~~~~~~~~~~
-   drivers/net/ethernet/wangxun/ngbe/ngbe_main.c:108:32: warning: result of comparison of constant 32768 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-           hw->ncsi_enabled = (ncsi_mask == NGBE_NCSI_MASK ||
-                               ~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   In file included from mm/folio-compat.c:7:
+   In file included from include/linux/migrate.h:8:
+>> include/linux/hugetlb.h:1150:49: warning: declaration of 'struct node' will not be visible outside of this function [-Wvisibility]
+   static inline void hugetlb_register_node(struct node *node)
+                                                   ^
+   include/linux/hugetlb.h:1154:51: warning: declaration of 'struct node' will not be visible outside of this function [-Wvisibility]
+   static inline void hugetlb_unregister_node(struct node *node)
+                                                     ^
    2 warnings generated.
 
 
-vim +107 drivers/net/ethernet/wangxun/ngbe/ngbe_main.c
+vim +1150 include/linux/hugetlb.h
 
-    59	
-    60	/**
-    61	 *  ngbe_init_type_code - Initialize the shared code
-    62	 *  @hw: pointer to hardware structure
-    63	 **/
-    64	static void ngbe_init_type_code(struct ngbe_hw *hw)
-    65	{
-    66		u8 wol_mask = 0, ncsi_mask = 0;
-    67		u16 type_mask = 0;
-    68	
-    69		type_mask = (u16)(hw->subsystem_device_id & NGBE_OEM_MASK);
-    70		ncsi_mask = (u8)(hw->subsystem_device_id & NGBE_NCSI_MASK);
-    71		wol_mask = (u8)(hw->subsystem_device_id & NGBE_WOL_MASK);
-    72	
-    73		switch (type_mask) {
-    74		case NGBE_SUBID_M88E1512_SFP:
-    75		case NGBE_SUBID_LY_M88E1512_SFP:
-    76			hw->phy.type = ngbe_phy_m88e1512_sfi;
-    77			break;
-    78		case NGBE_SUBID_M88E1512_RJ45:
-    79			hw->phy.type = ngbe_phy_m88e1512;
-    80			break;
-    81		case NGBE_SUBID_M88E1512_MIX:
-    82			hw->phy.type = ngbe_phy_m88e1512_unknown;
-    83			break;
-    84		case NGBE_SUBID_YT8521S_SFP:
-    85		case NGBE_SUBID_YT8521S_SFP_GPIO:
-    86		case NGBE_SUBID_LY_YT8521S_SFP:
-    87			hw->phy.type = ngbe_phy_yt8521s_sfi;
-    88			break;
-    89		case NGBE_SUBID_INTERNAL_YT8521S_SFP:
-    90		case NGBE_SUBID_INTERNAL_YT8521S_SFP_GPIO:
-    91			hw->phy.type = ngbe_phy_internal_yt8521s_sfi;
-    92			break;
-    93		case NGBE_SUBID_RGMII_FPGA:
-    94		case NGBE_SUBID_OCP_CARD:
-    95			fallthrough;
-    96		default:
-    97			hw->phy.type = ngbe_phy_internal;
-    98			break;
-    99		}
-   100	
-   101		if (hw->phy.type == ngbe_phy_internal ||
-   102		    hw->phy.type == ngbe_phy_internal_yt8521s_sfi)
-   103			hw->mac.type = ngbe_mac_type_mdi;
-   104		else
-   105			hw->mac.type = ngbe_mac_type_rgmii;
-   106	
- > 107		hw->wol_enabled = (wol_mask == NGBE_WOL_SUP) ? 1 : 0;
-   108		hw->ncsi_enabled = (ncsi_mask == NGBE_NCSI_MASK ||
-   109				   type_mask == NGBE_SUBID_OCP_CARD) ? 1 : 0;
-   110	
-   111		switch (type_mask) {
-   112		case NGBE_SUBID_LY_YT8521S_SFP:
-   113		case NGBE_SUBID_LY_M88E1512_SFP:
-   114		case NGBE_SUBID_YT8521S_SFP_GPIO:
-   115		case NGBE_SUBID_INTERNAL_YT8521S_SFP_GPIO:
-   116			hw->gpio_ctrl = 1;
-   117			break;
-   118		default:
-   119			hw->gpio_ctrl = 0;
-   120			break;
-   121		}
-   122	}
-   123	
+  1149	
+> 1150	static inline void hugetlb_register_node(struct node *node)
+  1151	{
+  1152	}
+  1153	
 
 -- 
 0-DAY CI Kernel Test Service
