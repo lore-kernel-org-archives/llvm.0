@@ -1,43 +1,50 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE1E160
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 04:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662439211; x=1693975211;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i6pviLp47wGKYv2ksbQeKhlS6DOKuqKfVvzrpAUU+F4=;
-  b=cYvSeIbc9k93KJjQUAHyqtY24F2WomMJeVB4h0kyL/GHbA9OaUl6BERd
-   9cR+mnMtcQOW8707CJYooeytDG7EM5AF9Tq1XSDJ1sjykCVqxpgkcmUbH
-   Y3S52KiKQOZgnMkUB/XzQbhIN1AbYDeJoNyW4uvkReVk10rGO4E/CDw3r
-   oywql1YcCGeoVUzQOJ4gMwvHulKE5msIoZ+hYagg5lYDdo9oQvw1oTyct
-   KhK7NMQz7lRE7ofqAYoE18q+uhAOwftoElVX0ovkhX6TPujfIWMBUWUBc
-   KLe1sqlCluV9vr9XJgObISHHRZ49GstyyBuzOoVf+nM82wN9Pb4+v9acX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382796755"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="382796755"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:40:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="682258984"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 21:40:09 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oVQNc-0004o5-2L;
-	Tue, 06 Sep 2022 04:40:08 +0000
-Date: Tue, 6 Sep 2022 12:39:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD137E
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 06:39:05 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BAD363375A;
+	Tue,  6 Sep 2022 06:39:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1662446343; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mq96mh0X1mkrRZ8hx6qwVVNZzLjA5B6LWMrAZRWCMpo=;
+	b=c1/6Xn3KlYNBmt3jltoyjpaflfyI6okF1vofqmYUvfo0AQF/8iEt7InIcneqLwlSLSL+tk
+	ZM9CFz9Fcj8eri+mSFNn7e28HTEX6ZhhPcD8WOuAQmG0QVnsHWz8xviGkBEPWyCa/IPmqo
+	5MgJc4pUc+G7/q6Y6y60BlXfo7JT8c0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1662446343;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mq96mh0X1mkrRZ8hx6qwVVNZzLjA5B6LWMrAZRWCMpo=;
+	b=Su4XGXofyKuUBLBNC9plW/WnBM1FGPVmaLH5AIUO3yvFT4POoysUQs13w7stQx/q96Cttm
+	S3TPVDsr17SFzRBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA63213A19;
+	Tue,  6 Sep 2022 06:39:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id 5XBvKQfrFmM5JAAAMHmgww
+	(envelope-from <dwagner@suse.de>); Tue, 06 Sep 2022 06:39:03 +0000
+Date: Tue, 6 Sep 2022 08:39:03 +0200
+From: Daniel Wagner <dwagner@suse.de>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning:
- unannotated fall-through between switch labels
-Message-ID: <202209061224.KxORRGVg-lkp@intel.com>
+	linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>, Hannes Reinecke <hare@suse.de>
+Subject: Re: [linux-nvme:nvme-6.1 9/10] drivers/nvme/host/rdma.c:989:50:
+ error: use of undeclared identifier 'nctrl'
+Message-ID: <20220906063903.snht3lkixtdt2tkq@carbon.lan>
+References: <202209060308.61PnxPmE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,99 +53,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202209060308.61PnxPmE-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
-commit: dee2b702bcf067d7b6b62c18bdd060ff0810a800 kconfig: Add support for -Wimplicit-fallthrough
-date:   10 months ago
-config: powerpc-randconfig-r004-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061224.KxORRGVg-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dee2b702bcf067d7b6b62c18bdd060ff0810a800
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dee2b702bcf067d7b6b62c18bdd060ff0810a800
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/85xx/
+On Tue, Sep 06, 2022 at 03:05:51AM +0800, kernel test robot wrote:
+> tree:   git://git.infradead.org/nvme.git nvme-6.1
+> head:   9951e3d984c9bf324bb7d486f42ec82727e3d777
+> commit: 1de8b481a31490d6b0217ac78b87f54bc9bfb65a [9/10] nvme-rdma: Handle number of queue changes
+> config: i386-randconfig-a015-20220905
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add linux-nvme git://git.infradead.org/nvme.git
+>         git fetch --no-tags linux-nvme nvme-6.1
+>         git checkout 1de8b481a31490d6b0217ac78b87f54bc9bfb65a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/host/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/nvme/host/rdma.c:989:50: error: use of undeclared identifier 'nctrl'
+>            nr_queues = min(ctrl->tag_set.nr_hw_queues + 1, nctrl->queue_count);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Argh, my devel setup(*) obviously didn't compile the rdma bits. Do you
+want me to send an fix on top of this or do you want a new version of
+the patch?
 
-All warnings (new ones prefixed by >>):
-
->> arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                   default:
-                   ^
-   arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: note: insert 'break;' to avoid fall-through
-                   default:
-                   ^
-                   break; 
-   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:6: warning: no previous prototype for function 'mpc85xx_cds_fixup_bus' [-Wmissing-prototypes]
-   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
-        ^
-   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +161 arch/powerpc/platforms/85xx/mpc85xx_cds.c
-
-7120438e5d82f4 Andrey Smirnov 2016-07-28  125  
-7120438e5d82f4 Andrey Smirnov 2016-07-28  126  
-749e80810d26c8 Roy Zang       2007-06-01  127  static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
-591f0a4287d0de Andy Fleming   2006-04-02  128  {
-591f0a4287d0de Andy Fleming   2006-04-02  129  	u_char c;
-749e80810d26c8 Roy Zang       2007-06-01  130  	if (dev->vendor == PCI_VENDOR_ID_VIA) {
-749e80810d26c8 Roy Zang       2007-06-01  131  		switch (dev->device) {
-749e80810d26c8 Roy Zang       2007-06-01  132  		case PCI_DEVICE_ID_VIA_82C586_1:
-591f0a4287d0de Andy Fleming   2006-04-02  133  			/*
-591f0a4287d0de Andy Fleming   2006-04-02  134  			 * U-Boot does not set the enable bits
-591f0a4287d0de Andy Fleming   2006-04-02  135  			 * for the IDE device. Force them on here.
-591f0a4287d0de Andy Fleming   2006-04-02  136  			 */
-591f0a4287d0de Andy Fleming   2006-04-02  137  			pci_read_config_byte(dev, 0x40, &c);
-591f0a4287d0de Andy Fleming   2006-04-02  138  			c |= 0x03; /* IDE: Chip Enable Bits */
-591f0a4287d0de Andy Fleming   2006-04-02  139  			pci_write_config_byte(dev, 0x40, c);
-591f0a4287d0de Andy Fleming   2006-04-02  140  
-591f0a4287d0de Andy Fleming   2006-04-02  141  			/*
-591f0a4287d0de Andy Fleming   2006-04-02  142  			 * Since only primary interface works, force the
-591f0a4287d0de Andy Fleming   2006-04-02  143  			 * IDE function to standard primary IDE interrupt
-591f0a4287d0de Andy Fleming   2006-04-02  144  			 * w/ 8259 offset
-591f0a4287d0de Andy Fleming   2006-04-02  145  			 */
-591f0a4287d0de Andy Fleming   2006-04-02  146  			dev->irq = 14;
-591f0a4287d0de Andy Fleming   2006-04-02  147  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
-749e80810d26c8 Roy Zang       2007-06-01  148  			break;
-591f0a4287d0de Andy Fleming   2006-04-02  149  		/*
-591f0a4287d0de Andy Fleming   2006-04-02  150  		 * Force legacy USB interrupt routing
-591f0a4287d0de Andy Fleming   2006-04-02  151  		 */
-749e80810d26c8 Roy Zang       2007-06-01  152  		case PCI_DEVICE_ID_VIA_82C586_2:
-749e80810d26c8 Roy Zang       2007-06-01  153  		/* There are two USB controllers.
-749e80810d26c8 Roy Zang       2007-06-01  154  		 * Identify them by functon number
-749e80810d26c8 Roy Zang       2007-06-01  155  		 */
-8d7bc8f9d1c23f Randy Vinson   2007-07-19  156  			if (PCI_FUNC(dev->devfn) == 3)
-749e80810d26c8 Roy Zang       2007-06-01  157  				dev->irq = 11;
-749e80810d26c8 Roy Zang       2007-06-01  158  			else
-591f0a4287d0de Andy Fleming   2006-04-02  159  				dev->irq = 10;
-749e80810d26c8 Roy Zang       2007-06-01  160  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
-749e80810d26c8 Roy Zang       2007-06-01 @161  		default:
-749e80810d26c8 Roy Zang       2007-06-01  162  			break;
-591f0a4287d0de Andy Fleming   2006-04-02  163  		}
-591f0a4287d0de Andy Fleming   2006-04-02  164  	}
-591f0a4287d0de Andy Fleming   2006-04-02  165  }
-ddd64159eb0d09 Andy Fleming   2006-08-17  166  
-
-:::::: The code at line 161 was first introduced by commit
-:::::: 749e80810d26c8d522b089718f22bb92d7834a37 [POWERPC] Remove redundant pci_read_irq_line() function for 85xx platform
-
-:::::: TO: Roy Zang <tie-fei.zang@freescale.com>
-:::::: CC: Kumar Gala <galak@kernel.crashing.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+(*) my main devel machine was out and I had to re-setup it and forgot
+to update the config file accordingly.
