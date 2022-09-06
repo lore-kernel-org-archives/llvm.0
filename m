@@ -1,204 +1,113 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610F3671A
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 16:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662481679; x=1694017679;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qDWsHsFCQwjDSp4dBPjWmhuv5UCqtq/XWd+72ovAE9U=;
-  b=fdWuzpKAO9oaHyn20cm831jeqtUbFzWEmPkqpRwPnRzD+dcaJtgAYkoQ
-   6HGgO8x0shPfvJuwYwmvTYjuOGXZWJeM8hBPx6vOas0yPDSn6cx8F0QL5
-   xBwe2xtFT4JmaK8s4GfjeSVYxY5g04Fk3jZpCsglXTnJppFzqrHP4/kNm
-   hOmzMq2XPraULSZcTzCW8edhDrpydKJ5cn/bOWTCAO0ye1Tz98GNtLm5t
-   95P5rDAsoSDiR723GRG82aD17Fo2fZYH+PVVDR9ywXk+Sm5GDZjISM7MP
-   AZxvPj4i8Je0HQ1vMchN8Ms5HMdIzuzbrOOZJcUduqeV6etYvusUmgVMe
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296640431"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="296640431"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 09:27:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="591325786"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2022 09:27:30 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oVbQA-0005KH-0w;
-	Tue, 06 Sep 2022 16:27:30 +0000
-Date: Wed, 7 Sep 2022 00:26:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v3 3/4] PCI/CMA: Initial support for Component
- Measurement and Authentication ECN
-Message-ID: <202209070030.EZSXqm6L-lkp@intel.com>
-References: <20220906111556.1544-4-Jonathan.Cameron@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD5D7E
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 16:37:57 +0000 (UTC)
+Received: by mail-wr1-f42.google.com with SMTP id bq9so3406353wrb.4
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 09:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=WRgBEaIROkHsbqiLlLVtVzNIxvB4btETvriIqS02JBs=;
+        b=c/WmjlCUYq1ys/R+jL2BkRWKajrLG75nP/QpHOGP/F4RUOE9Wro0OHtQGszgM9qRxe
+         z7XZNr8bx59b/9CA4wyaEyOR2YINjDjJxNcB65KBmMKvBqXCPXTW2L9cx6bciaZuCJri
+         7ZYUGedlXxcUD+9LCca5qPIwJS8eUr2Quor7dnjqsHIhngJkjIO9teu9XnGxAFjMNjbK
+         /ZMzcEeE5ugVdU+JjJ28ESULuPjj22Xzb7YrNyZ9y9In2MQ8VXyv2RYAqZfIGCyu506W
+         xz+B9vLCZP2DbatepAHSUKYw2j5Quxt4TcQP8xGb1BK6rwX7U1b6N+r2qMEnMQ9Ugjj3
+         xfhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=WRgBEaIROkHsbqiLlLVtVzNIxvB4btETvriIqS02JBs=;
+        b=rl+7JaKygb3vLUkTuPLYLtSSMq8fNfuM1xymf1mty1EaxPtBPfqG5Lq1uY8X3ymN0P
+         7vSxAssWx0HivAPu0rW7jHsm/MN8eXZ3cLIGLpNrqfYN1BQqKEIJ53x0XYKAl3wmS0rz
+         gwYUYz0qawV51NKe8O+RpOjANDssOoGMgJfeJn0qC7ilD1ixcUzUm1cbnFiIQWe5nyXo
+         wuR2MSt1zrcjOmlYceoJMGkjAaPmBBFRqallPoNE9XX7+hqVpvo211+Eg9EJTxDOSxr3
+         u8o0s5Q0aQg+CO3cHyvZ5vMhHyfJqFp3llx97/yAiFrQJP4lvN5Moyf9ng0w16Edx7Hp
+         GgDQ==
+X-Gm-Message-State: ACgBeo3wydzVwdaktHJY2P0NmGE0cC1gdGEPOfVMOvq4hhKUPsxGf9WI
+	TO1zVZLkb0xfaLPlHUmQdoc/keQyctIj3y+QbLy7Eg==
+X-Google-Smtp-Source: AA6agR67CPRfwhYa2E4op20iW4ujRDkrian2fe9S1zq0GPYV1G/fFR7+F7OSOdLlRVeqDFPy8n8ljAbn8oGE6inT9C8=
+X-Received: by 2002:a05:6000:10cf:b0:228:df93:a9b1 with SMTP id
+ b15-20020a05600010cf00b00228df93a9b1mr18470wrx.4.1662482275344; Tue, 06 Sep
+ 2022 09:37:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906111556.1544-4-Jonathan.Cameron@huawei.com>
+References: <20220902204351.2521805-1-keescook@chromium.org>
+In-Reply-To: <20220902204351.2521805-1-keescook@chromium.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 6 Sep 2022 09:37:44 -0700
+Message-ID: <CAKwvOdmMhTdkpA5pOrkDkyRB6O6Y8mw_s2JbqvBS3r12BCMQyg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Fix FORTIFY=y UBSAN_LOCAL_BOUNDS=y
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, David Gow <davidgow@google.com>, 
+	Yury Norov <yury.norov@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Sander Vanheule <sander@svanheule.net>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Dan Williams <dan.j.williams@intel.com>, 
+	Isabella Basso <isabbasso@riseup.net>, Eric Dumazet <edumazet@google.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Eric Biggers <ebiggers@google.com>, 
+	Hannes Reinecke <hare@suse.de>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jonathan,
+On Fri, Sep 2, 2022 at 1:43 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we
+> observe a runtime panic while running Android's Compatibility Test
+> Suite's (CTS) android.hardware.input.cts.tests. This is stemming from a
+> strlen() call in hidinput_allocate().
+>
+> __builtin_object_size(str, 0 or 1) has interesting behavior for C
+> strings when str is runtime dependent, and all possible values are known
+> at compile time; it evaluates to the maximum of those sizes. This causes
+> UBSAN_LOCAL_BOUNDS to insert faults for the smaller values, which we
+> trip at runtime.
+>
+> Patch 1 is the actual fix, using a 0-index __builtin_constant_p() check
+> to short-circuit the runtime check.
+> Patch 2 is a KUnit test to validate this behavior going forward.
+> Patch 3 is is a cosmetic cleanup to use SIZE_MAX instead of (size_t)-1
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on linus/master v6.0-rc4 next-20220906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Testing out patch 1/3 against Android's CTS:
+https://android-review.googlesource.com/c/kernel/common/+/2206839,
+will give formal signoffs/review after a completed test run.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/PCI-CMA-and-SPDM-Library-Device-attestation-etc/20220906-191943
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: mips-randconfig-r023-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070030.EZSXqm6L-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://github.com/intel-lab-lkp/linux/commit/694b6e0651764f4a2abe85dba7577d69d6daaba7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jonathan-Cameron/PCI-CMA-and-SPDM-Library-Device-attestation-etc/20220906-191943
-        git checkout 694b6e0651764f4a2abe85dba7577d69d6daaba7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/ lib/
+>
+> -Kees
+>
+> v2:
+>  - different solution
+>  - add KUnit test
+>  - expand scope of cosmetic cleanup
+> v1: https://lore.kernel.org/lkml/20220830205309.312864-1-ndesaulniers@google.com
+>
+> Kees Cook (3):
+>   fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
+>   fortify: Add KUnit test for FORTIFY_SOURCE internals
+>   fortify: Use SIZE_MAX instead of (size_t)-1
+>
+>  MAINTAINERS                    |  1 +
+>  include/linux/fortify-string.h | 29 ++++++-------
+>  lib/Kconfig.debug              |  9 ++++
+>  lib/Makefile                   |  1 +
+>  lib/fortify_kunit.c            | 77 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 103 insertions(+), 14 deletions(-)
+>  create mode 100644 lib/fortify_kunit.c
+>
+> --
+> 2.34.1
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/pci/cma.c:105:16: error: call to undeclared function 'keyring_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           cma_keyring = keyring_alloc("_cma",
-                         ^
->> drivers/pci/cma.c:108:10: error: use of undeclared identifier 'KEY_POS_ALL'
-                                       (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                        ^
->> drivers/pci/cma.c:108:25: error: use of undeclared identifier 'KEY_POS_SETATTR'
-                                       (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                                       ^
->> drivers/pci/cma.c:109:9: error: use of undeclared identifier 'KEY_USR_VIEW'
-                                       KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE | KEY_USR_SEARCH,
-                                       ^
->> drivers/pci/cma.c:109:24: error: use of undeclared identifier 'KEY_USR_READ'
-                                       KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE | KEY_USR_SEARCH,
-                                                      ^
->> drivers/pci/cma.c:109:39: error: use of undeclared identifier 'KEY_USR_WRITE'
-                                       KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE | KEY_USR_SEARCH,
-                                                                     ^
->> drivers/pci/cma.c:109:55: error: use of undeclared identifier 'KEY_USR_SEARCH'
-                                       KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE | KEY_USR_SEARCH,
-                                                                                     ^
->> drivers/pci/cma.c:110:9: error: use of undeclared identifier 'KEY_ALLOC_NOT_IN_QUOTA'
-                                       KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_SET_KEEP, NULL, NULL);
-                                       ^
->> drivers/pci/cma.c:110:34: error: use of undeclared identifier 'KEY_ALLOC_SET_KEEP'
-                                       KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_SET_KEEP, NULL, NULL);
-                                                                ^
-   9 errors generated.
---
-   In file included from lib/spdm.c:25:
->> include/keys/asymmetric-type.h:72:12: error: incomplete definition of type 'struct key'
-           return key->payload.data[asym_key_ids];
-                  ~~~^
-   include/linux/key.h:33:8: note: forward declaration of 'struct key'
-   struct key;
-          ^
-   In file included from lib/spdm.c:25:
-   include/keys/asymmetric-type.h:78:12: error: incomplete definition of type 'struct key'
-           return key->payload.data[asym_crypto];
-                  ~~~^
-   include/linux/key.h:33:8: note: forward declaration of 'struct key'
-   struct key;
-          ^
->> lib/spdm.c:974:24: error: call to undeclared function 'keyring_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           spdm_state->keyring = keyring_alloc(keyring_name,
-                                 ^
->> lib/spdm.c:977:11: error: use of undeclared identifier 'KEY_POS_ALL'
-                                               (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                                ^
->> lib/spdm.c:977:26: error: use of undeclared identifier 'KEY_POS_SETATTR'
-                                               (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                                               ^
->> lib/spdm.c:978:10: error: use of undeclared identifier 'KEY_USR_VIEW'
-                                               KEY_USR_VIEW | KEY_USR_READ,
-                                               ^
->> lib/spdm.c:978:25: error: use of undeclared identifier 'KEY_USR_READ'
-                                               KEY_USR_VIEW | KEY_USR_READ,
-                                                              ^
->> lib/spdm.c:979:10: error: use of undeclared identifier 'KEY_ALLOC_NOT_IN_QUOTA'
-                                               KEY_ALLOC_NOT_IN_QUOTA |
-                                               ^
->> lib/spdm.c:980:10: error: use of undeclared identifier 'KEY_ALLOC_SET_KEEP'
-                                               KEY_ALLOC_SET_KEEP,
-                                               ^
->> lib/spdm.c:998:3: error: unknown type name 'key_ref_t'; did you mean 'key_perm_t'?
-                   key_ref_t key2;
-                   ^~~~~~~~~
-                   key_perm_t
-   include/linux/key.h:31:18: note: 'key_perm_t' declared here
-   typedef uint32_t key_perm_t;
-                    ^
->> lib/spdm.c:1000:10: error: call to undeclared function 'key_create_or_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   key2 = key_create_or_update(make_key_ref(spdm_state->keyring, 1),
-                          ^
-   lib/spdm.c:1003:11: error: use of undeclared identifier 'KEY_POS_ALL'
-                                               (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                                ^
-   lib/spdm.c:1003:26: error: use of undeclared identifier 'KEY_POS_SETATTR'
-                                               (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-                                                               ^
-   lib/spdm.c:1004:10: error: use of undeclared identifier 'KEY_USR_VIEW'
-                                               KEY_USR_VIEW | KEY_USR_READ,
-                                               ^
-   lib/spdm.c:1004:25: error: use of undeclared identifier 'KEY_USR_READ'
-                                               KEY_USR_VIEW | KEY_USR_READ,
-                                                              ^
-   lib/spdm.c:1005:10: error: use of undeclared identifier 'KEY_ALLOC_NOT_IN_QUOTA'
-                                               KEY_ALLOC_NOT_IN_QUOTA);
-                                               ^
->> lib/spdm.c:1007:14: error: incompatible integer to pointer conversion passing 'key_perm_t' (aka 'unsigned int') to parameter of type 'const void *' [-Wint-conversion]
-                   if (IS_ERR(key2)) {
-                              ^~~~
-   include/linux/err.h:34:60: note: passing argument to parameter 'ptr' here
-   static inline bool __must_check IS_ERR(__force const void *ptr)
-                                                              ^
-   lib/spdm.c:1009:17: error: incompatible integer to pointer conversion passing 'key_perm_t' (aka 'unsigned int') to parameter of type 'const void *' [-Wint-conversion]
-                           rc = PTR_ERR(key2);
-                                        ^~~~
-   include/linux/err.h:29:61: note: passing argument to parameter 'ptr' here
-   static inline long __must_check PTR_ERR(__force const void *ptr)
-                                                               ^
->> lib/spdm.c:1016:25: error: member reference base type 'void' is not a structure or union
-                                   key_ref_to_ptr(key2)->payload.data[asym_auth];
-                                   ~~~~~~~~~~~~~~~~~~~~^ ~~~~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-
-vim +/keyring_alloc +105 drivers/pci/cma.c
-
-   102	
-   103	__init static int cma_keyring_init(void)
-   104	{
- > 105		cma_keyring = keyring_alloc("_cma",
-   106					    KUIDT_INIT(0), KGIDT_INIT(0),
-   107					    current_cred(),
- > 108					    (KEY_POS_ALL & ~KEY_POS_SETATTR) |
- > 109					    KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE | KEY_USR_SEARCH,
- > 110					    KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_SET_KEEP, NULL, NULL);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
