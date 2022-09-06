@@ -1,136 +1,120 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9A0173
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 00:54:05 +0000 (UTC)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id E03CB840AE;
-	Tue,  6 Sep 2022 02:53:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1662425637;
-	bh=OQRfBNGlI5tgqzGu/+LeerqO+BWTietPlsgYYaJl4R0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WgqgT3O8+hCGyCYyGNVUXk9n2PoiKHWqddClM+Rku5+BgmnxfohLda8xOoltvQqPS
-	 elppYUGLy9Aj97HBhViz8aSE3OV6/T6UeT4BfQSTCYwb6zI3TnEwlQ8CZCddYUZuCa
-	 nr+weAFjAc7OHBTQ9+2+lO16UP/QxEKQ0gKYNHAOJvEqwxp1zIgupAMEB4N5ccNys1
-	 efY0nO3TCgPM/WxfhxEqe6x5SvOtfuSkhnmbI9Kn1s04RESGmhNZ0qSHCkDftrPeDw
-	 izjrdL0v+amFFl2XVW/sTxVk5wiT0qMYJrlZa80ASDkev8fBu3v/SqPg1L/eL7f3cO
-	 3v0pSenB10o3g==
-Message-ID: <7f661266-757d-3913-851c-96559229e553@denx.de>
-Date: Tue, 6 Sep 2022 02:53:56 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57939173
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 01:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662426331; x=1693962331;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6E9vEXGnWSLw8272iZYzcSnfvmq3epErU3w1jy4p1xc=;
+  b=Ows8CK9ep9Cc7dkfTWVu3djHftIXmlMPwCM+pBPbbq2wscoUmwyjJcad
+   oz0hGg1U5nYCNfCbsHfvJ4gstCJBiszYWEuTK/BF3egG27RqAg6Je3BJ5
+   tNT9Zc+gX4iKzwPUfS1oYdUjR51KzmQuV5/2w+ABoj/6CnsAf0QLDmjDC
+   ZI3xg3IItoQuKkTD59lvOlS8oLHknCB1i9HeuGCqE1rig8lRt41o1ILPN
+   cRjsMIXZeVPCL25bYyCEZj8LculEPDqlsLxCrEEaO6pMCUnBduDOf9qKL
+   KjhTN+YMQsMS992OYUJG30sAPTqzeGpQi3aJghQxYpyVIVExIhBo00nfF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283468962"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="283468962"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 18:05:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="643964143"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 18:05:05 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVN1U-0004hI-1t;
+	Tue, 06 Sep 2022 01:05:04 +0000
+Date: Tue, 6 Sep 2022 09:04:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Igor Torrente <igormtorrente@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	dri-devel@lists.freedesktop.org,
+	Melissa Wen <melissa.srw@gmail.com>
+Subject: [drm-misc:for-linux-next 3/9]
+ drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for
+ drm_atomic_helper_check_wb_connector_state(). Prototype was for
+ drm_atomic_helper_check_wb_encoder_state() instead
+Message-ID: <202209060828.2Q6b2EhU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [kbuild-all] Re: [linux-next:master 2262/4736]
- drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting prototype for
- drivers/extcon/extcon-tusb320.c(). Prototype was for TUSB320_REG8() instead
-Content-Language: en-US
-To: "Chen, Rong A" <rong.a.chen@intel.com>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Memory Management List <linux-mm@kvack.org>,
- Chanwoo Choi <cw00.choi@samsung.com>, =?UTF-8?Q?Alvin_=c5=a0ipraga?=
- <alsi@bang-olufsen.dk>
-References: <202209030755.eB4SkwGE-lkp@intel.com>
- <92d78ac2-c32a-cd19-891c-7bac77725b84@denx.de>
- <494af0d7-b07a-3d50-7539-09c300b79dd8@intel.com>
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <494af0d7-b07a-3d50-7539-09c300b79dd8@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 9/5/22 04:54, Chen, Rong A wrote:
-> 
-> 
-> On 9/3/2022 10:31 PM, Marek Vasut wrote:
->> On 9/3/22 01:21, kernel test robot wrote:
->>> tree: 
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
->>> master
->>> head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
->>> commit: 822a6200734c94ccbfc9ae7acc5da5505b991515 [2262/4736] extcon: 
->>> usbc-tusb320: Add USB TYPE-C support
->>> config: x86_64-randconfig-a003 
->>> (https://download.01.org/0day-ci/archive/20220903/202209030755.eB4SkwGE-lkp@intel.com/config)
->>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project 
->>> f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>> reproduce (this is a W=1 build):
->>>          wget 
->>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          # 
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=822a6200734c94ccbfc9ae7acc5da5505b991515
->>>          git remote add linux-next 
->>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>>          git fetch --no-tags linux-next master
->>>          git checkout 822a6200734c94ccbfc9ae7acc5da5505b991515
->>>          # save the config file
->>>          mkdir build_dir && cp config build_dir/.config
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
->>> W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/extcon/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>>> drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting 
->>>>> prototype for drivers/extcon/extcon-tusb320.c(). Prototype was for 
->>>>> TUSB320_REG8() instead
->>>
->>>
->>> vim +19 drivers/extcon/extcon-usbc-tusb320.c
->>>
->>>      18
->>>    > 19    #define TUSB320_REG8                0x8
->>>      20    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE    GENMASK(7, 6)
->>>      21    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_USB    0x0
->>>      22    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_15A    0x1
->>>      23    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_30A    0x2
->>>      24    #define TUSB320_REG8_CURRENT_MODE_DETECT    GENMASK(5, 4)
->>>      25    #define TUSB320_REG8_CURRENT_MODE_DETECT_DEF    0x0
->>>      26    #define TUSB320_REG8_CURRENT_MODE_DETECT_MED    0x1
->>>      27    #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC    0x2
->>>      28    #define TUSB320_REG8_CURRENT_MODE_DETECT_HI    0x3
->>>      29    #define TUSB320_REG8_ACCESSORY_CONNECTED    GENMASK(3, 2)
->>>      30    #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE    0x0
->>>      31    #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO    0x4
->>>      32    #define TUSB320_REG8_ACCESSORY_CONNECTED_ACC    0x5
->>>      33    #define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG    0x6
->>>      34    #define TUSB320_REG8_ACTIVE_CABLE_DETECTION    BIT(0)
->>>      35
->>
->> I still believe this is a false positive, is it not ?
-> 
-> Hi Marek,
-> 
-> Thanks for your reply, the issue is not introduced by this commit, it
-> should be related to '/**' in the head of this file:
-> 
-> diff --git a/drivers/extcon/extcon-usbc-tusb320.c 
-> b/drivers/extcon/extcon-usbc-tusb320.c
-> index edb8c3f997c9..41041ff0fadb 100644
-> --- a/drivers/extcon/extcon-usbc-tusb320.c
-> +++ b/drivers/extcon/extcon-usbc-tusb320.c
-> @@ -1,5 +1,5 @@
->   // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->    * drivers/extcon/extcon-tusb320.c - TUSB320 extcon driver
->    *
->    * Copyright (C) 2020 National Instruments Corporation
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   396369d6754993e40f1c84b2e22e40e92dfa4c49
+commit: 254fe9c106ed69245fbe0beac582054c98a91482 [3/9] drm: drm_atomic_helper: Add a new helper to deal with the writeback connector validation
+config: i386-randconfig-a011-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060828.2Q6b2EhU-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc for-linux-next
+        git checkout 254fe9c106ed69245fbe0beac582054c98a91482
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Uh, OK, I wouldn't have thought of that based on the output above.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The change above is obviously correct, can you submit a patch ?
+All warnings (new ones prefixed by >>):
 
-Thanks !
+>> drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
+
+
+vim +802 drivers/gpu/drm/drm_atomic_helper.c
+
+   787	
+   788	/**
+   789	 * drm_atomic_helper_check_wb_connector_state() - Check writeback encoder state
+   790	 * @encoder: encoder state to check
+   791	 * @conn_state: connector state to check
+   792	 *
+   793	 * Checks if the writeback connector state is valid, and returns an error if it
+   794	 * isn't.
+   795	 *
+   796	 * RETURNS:
+   797	 * Zero for success or -errno
+   798	 */
+   799	int
+   800	drm_atomic_helper_check_wb_encoder_state(struct drm_encoder *encoder,
+   801						 struct drm_connector_state *conn_state)
+ > 802	{
+   803		struct drm_writeback_job *wb_job = conn_state->writeback_job;
+   804		struct drm_property_blob *pixel_format_blob;
+   805		struct drm_framebuffer *fb;
+   806		size_t i, nformats;
+   807		u32 *formats;
+   808	
+   809		if (!wb_job || !wb_job->fb)
+   810			return 0;
+   811	
+   812		pixel_format_blob = wb_job->connector->pixel_formats_blob_ptr;
+   813		nformats = pixel_format_blob->length / sizeof(u32);
+   814		formats = pixel_format_blob->data;
+   815		fb = wb_job->fb;
+   816	
+   817		for (i = 0; i < nformats; i++)
+   818			if (fb->format->format == formats[i])
+   819				return 0;
+   820	
+   821		drm_dbg_kms(encoder->dev, "Invalid pixel format %p4cc\n", &fb->format->format);
+   822	
+   823		return -EINVAL;
+   824	}
+   825	EXPORT_SYMBOL(drm_atomic_helper_check_wb_encoder_state);
+   826	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
