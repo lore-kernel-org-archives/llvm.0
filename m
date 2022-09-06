@@ -1,268 +1,198 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07992173
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 08:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881852F2F
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 10:11:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662453617; x=1693989617;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sRKSTR1K6UOYnYivqVyERRWDjIEE6+RqEXtIIhKOJ+w=;
-  b=Xrp+aOPnGBHvQgYeBjUe9xCsjo77bpWe4qi0ZG9pN2cQH7cwU643riRA
-   c7t+fCcNqi1y7ExshaFi6AtLTdaiWbtYy1y/3GmU4wfLEmQMEeu460YuF
-   sNl2mywVkG1n25srtVKDr0hOO7AMeSI+MgHW1GxsUjaeGMQo+uocY5Rde
-   rRllrijR8UKfJg+OvjwEdgJYX0GdF88NHimqsUa5UDNBY5+zzvR8X5fTl
-   5eLqkKhrWQPypXdN/3mmk1YxJg2YfWfTvhi2VMXyGIDccD9akuQZp9K4J
-   nDedAG9Y9lsnQ4mGX0XGaudPb5dqvA7cO5AsrY7H4bcAx0svdBPktYPhK
+  t=1662459088; x=1693995088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oB1TtPVVHc8wxkEfbkl6xSPnmmpiaRnJ3fakqY2gLXM=;
+  b=LCJEJ2pCKAVSop9tO/yqXBxIAmZUVqoR86fTewmJ/Dyznf7McwA+v/xE
+   wWvtTiNFGLEV50tVK1KhIhQ7JzBOfQkxfoUZkfNHami83dqOtQmEi7NpA
+   33sx3dsdJepEp82DHdxSxi5dPpmoUgwrUfudLMddNnN+/UlN2VWHNTkt3
+   Rl92cj417lbFGQOXWdeqB77pcPM6D71C/4EW0Kl0j4yaY9kcem5StCsuh
+   26WPxA3tzJ2no5Vw5EuqRmyBqqHUsedY/B9YEk9dDO/J4hpoBXeZA+Kng
+   XQ8hyEvpDPI8FsNGXicS2TKyJ3+3xDwZGBNUWbzl4FPObI365tS8SpwNv
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276278456"
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297340953"
 X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="276278456"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 01:40:16 -0700
+   d="scan'208";a="297340953"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 03:11:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="644077411"
+   d="scan'208";a="565041316"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 01:40:14 -0700
+  by orsmga003.jf.intel.com with ESMTP; 06 Sep 2022 03:11:17 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oVU7x-0004wD-2Y;
-	Tue, 06 Sep 2022 08:40:13 +0000
-Date: Tue, 6 Sep 2022 16:39:58 +0800
+	id 1oVVY4-0004zl-2N;
+	Tue, 06 Sep 2022 10:11:16 +0000
+Date: Tue, 6 Sep 2022 18:10:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arun R Murthy <arun.r.murthy@intel.com>
+To: Deming Wang <wangdeming@inspur.com>, vgoyal@redhat.com,
+	stefanha@redhat.com, miklos@szeredi.hu
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/gpu/drm/i915/display/intel_display.c:7539:3: warning:
- unannotated fall-through between switch labels
-Message-ID: <202209061655.5flHyiMX-lkp@intel.com>
+	virtualization@lists.linux-foundation.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deming Wang <wangdeming@inspur.com>
+Subject: Re: [PATCH] virtiofs: Drop unnecessary initialization in
+ send_forget_request and virtio_fs_get_tree
+Message-ID: <202209061738.Epufa2eF-lkp@intel.com>
+References: <20220906053848.2503-1-wangdeming@inspur.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220906053848.2503-1-wangdeming@inspur.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220906-115038/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
-head:   e4646e5c11a518351c084eb626b09fec41231945
-commit: e4646e5c11a518351c084eb626b09fec41231945 drm/i915: Support Async Flip on Linear buffers
-date:   5 hours ago
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220906/202209061655.5flHyiMX-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Deming,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on v6.0-rc4]
+[also build test WARNING on linus/master next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
+base:    7e18e42e4b280c85b76967a9106a13ca61c16179
+config: hexagon-randconfig-r035-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061738.Epufa2eF-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e4646e5c11a518351c084eb626b09fec41231945
+        # https://github.com/intel-lab-lkp/linux/commit/a61f879fdb56490afddb6ddea4a9d57226f339f3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220906-115038/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
-        git checkout e4646e5c11a518351c084eb626b09fec41231945
+        git fetch --no-tags linux-review Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
+        git checkout a61f879fdb56490afddb6ddea4a9d57226f339f3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/fuse/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_display.c:7539:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                   case I915_FORMAT_MOD_X_TILED:
-                   ^
-   drivers/gpu/drm/i915/display/intel_display.c:7539:3: note: insert 'break;' to avoid fall-through
-                   case I915_FORMAT_MOD_X_TILED:
-                   ^
-                   break; 
-   1 warning generated.
+>> fs/fuse/virtio_fs.c:422:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!fsvq->connected) {
+           ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fuse/virtio_fs.c:465:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   fs/fuse/virtio_fs.c:422:2: note: remove the 'if' if its condition is always false
+           if (!fsvq->connected) {
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   fs/fuse/virtio_fs.c:417:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> fs/fuse/virtio_fs.c:1433:2: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fuse/virtio_fs.c:1481:9: note: uninitialized use occurs here
+           return err;
+                  ^~~
+   fs/fuse/virtio_fs.c:1433:2: note: remove the 'if' if its condition is always false
+           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   fs/fuse/virtio_fs.c:1420:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
-vim +7539 drivers/gpu/drm/i915/display/intel_display.c
+vim +422 fs/fuse/virtio_fs.c
 
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7458  
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7459  static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct intel_crtc *crtc)
-30ff93af9e19db Karthik B S           2020-09-21  7460  {
-30ff93af9e19db Karthik B S           2020-09-21  7461  	struct drm_i915_private *i915 = to_i915(state->base.dev);
-30ff93af9e19db Karthik B S           2020-09-21  7462  	const struct intel_crtc_state *old_crtc_state, *new_crtc_state;
-30ff93af9e19db Karthik B S           2020-09-21  7463  	const struct intel_plane_state *new_plane_state, *old_plane_state;
-30ff93af9e19db Karthik B S           2020-09-21  7464  	struct intel_plane *plane;
-30ff93af9e19db Karthik B S           2020-09-21  7465  	int i;
-30ff93af9e19db Karthik B S           2020-09-21  7466  
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7467  	old_crtc_state = intel_atomic_get_old_crtc_state(state, crtc);
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7468  	new_crtc_state = intel_atomic_get_new_crtc_state(state, crtc);
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7469  
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7470  	if (!new_crtc_state->uapi.async_flip)
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7471  		return 0;
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7472  
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7473  	if (!new_crtc_state->hw.active) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7474  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7475  			    "[CRTC:%d:%s] not active\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7476  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7477  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7478  	}
-30ff93af9e19db Karthik B S           2020-09-21  7479  
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7480  	if (intel_crtc_needs_modeset(new_crtc_state)) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7481  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7482  			    "[CRTC:%d:%s] modeset required\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7483  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7484  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7485  	}
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7486  
-30ff93af9e19db Karthik B S           2020-09-21  7487  	if (old_crtc_state->active_planes != new_crtc_state->active_planes) {
-30ff93af9e19db Karthik B S           2020-09-21  7488  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7489  			    "[CRTC:%d:%s] Active planes cannot be in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7490  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7491  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7492  	}
-30ff93af9e19db Karthik B S           2020-09-21  7493  
-30ff93af9e19db Karthik B S           2020-09-21  7494  	for_each_oldnew_intel_plane_in_state(state, plane, old_plane_state,
-30ff93af9e19db Karthik B S           2020-09-21  7495  					     new_plane_state, i) {
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7496  		if (plane->pipe != crtc->pipe)
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7497  			continue;
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7498  
-30ff93af9e19db Karthik B S           2020-09-21  7499  		/*
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7500  		 * Only async flip capable planes should be in the state
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7501  		 * if we're really about to ask the hardware to perform
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7502  		 * an async flip. We should never get this far otherwise.
-30ff93af9e19db Karthik B S           2020-09-21  7503  		 */
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7504  		if (drm_WARN_ON(&i915->drm,
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7505  				new_crtc_state->do_async_flip && !plane->async_flip))
-30ff93af9e19db Karthik B S           2020-09-21  7506  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7507  
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7508  		/*
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7509  		 * Only check async flip capable planes other planes
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7510  		 * may be involved in the initial commit due to
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7511  		 * the wm0/ddb optimization.
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7512  		 *
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7513  		 * TODO maybe should track which planes actually
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7514  		 * were requested to do the async flip...
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7515  		 */
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7516  		if (!plane->async_flip)
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7517  			continue;
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7518  
-30ff93af9e19db Karthik B S           2020-09-21  7519  		/*
-30ff93af9e19db Karthik B S           2020-09-21  7520  		 * FIXME: This check is kept generic for all platforms.
-244dba4cb59637 Lucas De Marchi       2021-07-28  7521  		 * Need to verify this for all gen9 platforms to enable
-30ff93af9e19db Karthik B S           2020-09-21  7522  		 * this selectively if required.
-30ff93af9e19db Karthik B S           2020-09-21  7523  		 */
-30ff93af9e19db Karthik B S           2020-09-21  7524  		switch (new_plane_state->hw.fb->modifier) {
-e4646e5c11a518 Arun R Murthy         2022-09-06  7525  		case DRM_FORMAT_MOD_LINEAR:
-e4646e5c11a518 Arun R Murthy         2022-09-06  7526  			/*
-e4646e5c11a518 Arun R Murthy         2022-09-06  7527  			 * FIXME: Async on Linear buffer is supported on ICL as
-e4646e5c11a518 Arun R Murthy         2022-09-06  7528  			 * but with additional alignment and fbc restrictions
-e4646e5c11a518 Arun R Murthy         2022-09-06  7529  			 * need to be taken care of. These aren't applicable for
-e4646e5c11a518 Arun R Murthy         2022-09-06  7530  			 * gen12+.
-e4646e5c11a518 Arun R Murthy         2022-09-06  7531  			 */
-e4646e5c11a518 Arun R Murthy         2022-09-06  7532  			if (DISPLAY_VER(i915) < 12) {
-e4646e5c11a518 Arun R Murthy         2022-09-06  7533  				drm_dbg_kms(&i915->drm,
-e4646e5c11a518 Arun R Murthy         2022-09-06  7534  					"[PLANE:%d:%s] Modifier does not support async flips\n",
-e4646e5c11a518 Arun R Murthy         2022-09-06  7535  					plane->base.base.id, plane->base.name);
-e4646e5c11a518 Arun R Murthy         2022-09-06  7536  				return -EINVAL;
-e4646e5c11a518 Arun R Murthy         2022-09-06  7537  			}
-e4646e5c11a518 Arun R Murthy         2022-09-06  7538  
-30ff93af9e19db Karthik B S           2020-09-21 @7539  		case I915_FORMAT_MOD_X_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7540  		case I915_FORMAT_MOD_Y_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7541  		case I915_FORMAT_MOD_Yf_TILED:
-072ce4164f973b Stanislav Lisovskiy   2022-01-18  7542  		case I915_FORMAT_MOD_4_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7543  			break;
-30ff93af9e19db Karthik B S           2020-09-21  7544  		default:
-30ff93af9e19db Karthik B S           2020-09-21  7545  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7546  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7547  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7548  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7549  		}
-30ff93af9e19db Karthik B S           2020-09-21  7550  
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7551  		if (new_plane_state->hw.fb->format->num_planes > 1) {
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7552  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7553  				    "[PLANE:%d:%s] Planar formats do not support async flips\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7554  				    plane->base.base.id, plane->base.name);
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7555  			return -EINVAL;
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7556  		}
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7557  
-be6c1dd5ac074d Imre Deak             2021-10-27  7558  		if (old_plane_state->view.color_plane[0].mapping_stride !=
-be6c1dd5ac074d Imre Deak             2021-10-27  7559  		    new_plane_state->view.color_plane[0].mapping_stride) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7560  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7561  				    "[PLANE:%d:%s] Stride cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7562  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7563  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7564  		}
-30ff93af9e19db Karthik B S           2020-09-21  7565  
-30ff93af9e19db Karthik B S           2020-09-21  7566  		if (old_plane_state->hw.fb->modifier !=
-30ff93af9e19db Karthik B S           2020-09-21  7567  		    new_plane_state->hw.fb->modifier) {
-30ff93af9e19db Karthik B S           2020-09-21  7568  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7569  				    "[PLANE:%d:%s] Modifier cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7570  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7571  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7572  		}
-30ff93af9e19db Karthik B S           2020-09-21  7573  
-30ff93af9e19db Karthik B S           2020-09-21  7574  		if (old_plane_state->hw.fb->format !=
-30ff93af9e19db Karthik B S           2020-09-21  7575  		    new_plane_state->hw.fb->format) {
-30ff93af9e19db Karthik B S           2020-09-21  7576  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7577  				    "[PLANE:%d:%s] Pixel format cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7578  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7579  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7580  		}
-30ff93af9e19db Karthik B S           2020-09-21  7581  
-30ff93af9e19db Karthik B S           2020-09-21  7582  		if (old_plane_state->hw.rotation !=
-30ff93af9e19db Karthik B S           2020-09-21  7583  		    new_plane_state->hw.rotation) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7584  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7585  				    "[PLANE:%d:%s] Rotation cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7586  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7587  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7588  		}
-30ff93af9e19db Karthik B S           2020-09-21  7589  
-30ff93af9e19db Karthik B S           2020-09-21  7590  		if (!drm_rect_equals(&old_plane_state->uapi.src, &new_plane_state->uapi.src) ||
-30ff93af9e19db Karthik B S           2020-09-21  7591  		    !drm_rect_equals(&old_plane_state->uapi.dst, &new_plane_state->uapi.dst)) {
-30ff93af9e19db Karthik B S           2020-09-21  7592  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7593  				    "[PLANE:%d:%s] Size/co-ordinates cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7594  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7595  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7596  		}
-30ff93af9e19db Karthik B S           2020-09-21  7597  
-30ff93af9e19db Karthik B S           2020-09-21  7598  		if (old_plane_state->hw.alpha != new_plane_state->hw.alpha) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7599  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7600  				    "[PLANES:%d:%s] Alpha value cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7601  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7602  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7603  		}
-30ff93af9e19db Karthik B S           2020-09-21  7604  
-30ff93af9e19db Karthik B S           2020-09-21  7605  		if (old_plane_state->hw.pixel_blend_mode !=
-30ff93af9e19db Karthik B S           2020-09-21  7606  		    new_plane_state->hw.pixel_blend_mode) {
-30ff93af9e19db Karthik B S           2020-09-21  7607  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7608  				    "[PLANE:%d:%s] Pixel blend mode cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7609  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7610  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7611  		}
-30ff93af9e19db Karthik B S           2020-09-21  7612  
-30ff93af9e19db Karthik B S           2020-09-21  7613  		if (old_plane_state->hw.color_encoding != new_plane_state->hw.color_encoding) {
-30ff93af9e19db Karthik B S           2020-09-21  7614  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7615  				    "[PLANE:%d:%s] Color encoding cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7616  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7617  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7618  		}
-30ff93af9e19db Karthik B S           2020-09-21  7619  
-30ff93af9e19db Karthik B S           2020-09-21  7620  		if (old_plane_state->hw.color_range != new_plane_state->hw.color_range) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7621  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7622  				    "[PLANE:%d:%s] Color range cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7623  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7624  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7625  		}
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7626  
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7627  		/* plane decryption is allow to change only in synchronous flips */
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7628  		if (old_plane_state->decrypt != new_plane_state->decrypt) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7629  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7630  				    "[PLANE:%d:%s] Decryption cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7631  				    plane->base.base.id, plane->base.name);
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7632  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7633  		}
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7634  	}
-30ff93af9e19db Karthik B S           2020-09-21  7635  
-30ff93af9e19db Karthik B S           2020-09-21  7636  	return 0;
-30ff93af9e19db Karthik B S           2020-09-21  7637  }
-30ff93af9e19db Karthik B S           2020-09-21  7638  
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  406  
+58ada94f95f71d Vivek Goyal     2019-10-30  407  /*
+58ada94f95f71d Vivek Goyal     2019-10-30  408   * Returns 1 if queue is full and sender should wait a bit before sending
+58ada94f95f71d Vivek Goyal     2019-10-30  409   * next request, 0 otherwise.
+58ada94f95f71d Vivek Goyal     2019-10-30  410   */
+58ada94f95f71d Vivek Goyal     2019-10-30  411  static int send_forget_request(struct virtio_fs_vq *fsvq,
+58ada94f95f71d Vivek Goyal     2019-10-30  412  			       struct virtio_fs_forget *forget,
+58ada94f95f71d Vivek Goyal     2019-10-30  413  			       bool in_flight)
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  414  {
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  415  	struct scatterlist sg;
+58ada94f95f71d Vivek Goyal     2019-10-30  416  	struct virtqueue *vq;
+a61f879fdb5649 Deming Wang     2022-09-06  417  	int ret;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  418  	bool notify;
+1efcf39eb62757 Vivek Goyal     2019-10-30  419  	struct virtio_fs_forget_req *req = &forget->req;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  420  
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  421  	spin_lock(&fsvq->lock);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12 @422  	if (!fsvq->connected) {
+58ada94f95f71d Vivek Goyal     2019-10-30  423  		if (in_flight)
+c17ea009610366 Vivek Goyal     2019-10-15  424  			dec_in_flight_req(fsvq);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  425  		kfree(forget);
+58ada94f95f71d Vivek Goyal     2019-10-30  426  		goto out;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  427  	}
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  428  
+1efcf39eb62757 Vivek Goyal     2019-10-30  429  	sg_init_one(&sg, req, sizeof(*req));
+58ada94f95f71d Vivek Goyal     2019-10-30  430  	vq = fsvq->vq;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  431  	dev_dbg(&vq->vdev->dev, "%s\n", __func__);
+58ada94f95f71d Vivek Goyal     2019-10-30  432  
+58ada94f95f71d Vivek Goyal     2019-10-30  433  	ret = virtqueue_add_outbuf(vq, &sg, 1, forget, GFP_ATOMIC);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  434  	if (ret < 0) {
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  435  		if (ret == -ENOMEM || ret == -ENOSPC) {
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  436  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Will try later\n",
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  437  				 ret);
+58ada94f95f71d Vivek Goyal     2019-10-30  438  			list_add_tail(&forget->list, &fsvq->queued_reqs);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  439  			schedule_delayed_work(&fsvq->dispatch_work,
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  440  					      msecs_to_jiffies(1));
+58ada94f95f71d Vivek Goyal     2019-10-30  441  			if (!in_flight)
+58ada94f95f71d Vivek Goyal     2019-10-30  442  				inc_in_flight_req(fsvq);
+58ada94f95f71d Vivek Goyal     2019-10-30  443  			/* Queue is full */
+58ada94f95f71d Vivek Goyal     2019-10-30  444  			ret = 1;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  445  		} else {
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  446  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Dropping it.\n",
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  447  				 ret);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  448  			kfree(forget);
+58ada94f95f71d Vivek Goyal     2019-10-30  449  			if (in_flight)
+58ada94f95f71d Vivek Goyal     2019-10-30  450  				dec_in_flight_req(fsvq);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  451  		}
+58ada94f95f71d Vivek Goyal     2019-10-30  452  		goto out;
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  453  	}
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  454  
+58ada94f95f71d Vivek Goyal     2019-10-30  455  	if (!in_flight)
+58ada94f95f71d Vivek Goyal     2019-10-30  456  		inc_in_flight_req(fsvq);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  457  	notify = virtqueue_kick_prepare(vq);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  458  	spin_unlock(&fsvq->lock);
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  459  
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  460  	if (notify)
+a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  461  		virtqueue_notify(vq);
+58ada94f95f71d Vivek Goyal     2019-10-30  462  	return ret;
+58ada94f95f71d Vivek Goyal     2019-10-30  463  out:
+58ada94f95f71d Vivek Goyal     2019-10-30  464  	spin_unlock(&fsvq->lock);
+58ada94f95f71d Vivek Goyal     2019-10-30  465  	return ret;
+58ada94f95f71d Vivek Goyal     2019-10-30  466  }
+58ada94f95f71d Vivek Goyal     2019-10-30  467  
 
 -- 
 0-DAY CI Kernel Test Service
