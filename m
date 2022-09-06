@@ -1,159 +1,144 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18B915CE
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 04:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE1E160
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 04:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662438540; x=1693974540;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=63M0v4rYjUBbSUagId58PoYjjKjHQwRKlZW/9HSGqKw=;
-  b=CLOQ+HQH41AaWrUBMr8/tDkgQK/c5fuN0uJrXs6am6gqwovdVSPxEaWh
-   xIOANqd8r1/0Ood6U8X2SKWn5zIN9GiCs3VddOG+9ymSAuZ17wDaUW9VP
-   EC9gxOF6qOuQGF3P3+/HJsgUPspco2UY6uOE+6yK0VbUA/S5kf2z+BSuw
-   xunHQIky7HL0fUm93FiTESbQZvn7yFCdu1ksgIw67ijX1802PlfcAUOSv
-   NCY7MALMRUxxON3/lbROKsXHny9U24a+sJc335zH4XEMaOeAm4zg3zuE3
-   4C2p5FteRMzkJE3jyOGmlHMkkWdm4ZOQAlxlSOliUaWkcP3dYb8n6rVuz
+  t=1662439211; x=1693975211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i6pviLp47wGKYv2ksbQeKhlS6DOKuqKfVvzrpAUU+F4=;
+  b=cYvSeIbc9k93KJjQUAHyqtY24F2WomMJeVB4h0kyL/GHbA9OaUl6BERd
+   9cR+mnMtcQOW8707CJYooeytDG7EM5AF9Tq1XSDJ1sjykCVqxpgkcmUbH
+   Y3S52KiKQOZgnMkUB/XzQbhIN1AbYDeJoNyW4uvkReVk10rGO4E/CDw3r
+   oywql1YcCGeoVUzQOJ4gMwvHulKE5msIoZ+hYagg5lYDdo9oQvw1oTyct
+   KhK7NMQz7lRE7ofqAYoE18q+uhAOwftoElVX0ovkhX6TPujfIWMBUWUBc
+   KLe1sqlCluV9vr9XJgObISHHRZ49GstyyBuzOoVf+nM82wN9Pb4+v9acX
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279514524"
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382796755"
 X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="279514524"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:29:00 -0700
+   d="scan'208";a="382796755"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:40:11 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="675515848"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.208.188]) ([10.254.208.188])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:28:58 -0700
-Subject: Re: [kbuild-all] Re: [linux-next:master 2262/4736]
- drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting prototype for
- drivers/extcon/extcon-tusb320.c(). Prototype was for TUSB320_REG8() instead
-To: Marek Vasut <marex@denx.de>, kernel test robot <lkp@intel.com>
+   d="scan'208";a="682258984"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 21:40:09 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVQNc-0004o5-2L;
+	Tue, 06 Sep 2022 04:40:08 +0000
+Date: Tue, 6 Sep 2022 12:39:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Memory Management List <linux-mm@kvack.org>,
- Chanwoo Choi <cw00.choi@samsung.com>, =?UTF-8?Q?Alvin_=c5=a0ipraga?=
- <alsi@bang-olufsen.dk>
-References: <202209030755.eB4SkwGE-lkp@intel.com>
- <92d78ac2-c32a-cd19-891c-7bac77725b84@denx.de>
- <494af0d7-b07a-3d50-7539-09c300b79dd8@intel.com>
- <7f661266-757d-3913-851c-96559229e553@denx.de>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <8d181fe6-0f3c-0a5b-4aaf-64d9d2e62943@intel.com>
-Date: Tue, 6 Sep 2022 12:28:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning:
+ unannotated fall-through between switch labels
+Message-ID: <202209061224.KxORRGVg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <7f661266-757d-3913-851c-96559229e553@denx.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: dee2b702bcf067d7b6b62c18bdd060ff0810a800 kconfig: Add support for -Wimplicit-fallthrough
+date:   10 months ago
+config: powerpc-randconfig-r004-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061224.KxORRGVg-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dee2b702bcf067d7b6b62c18bdd060ff0810a800
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dee2b702bcf067d7b6b62c18bdd060ff0810a800
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/85xx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   default:
+                   ^
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: note: insert 'break;' to avoid fall-through
+                   default:
+                   ^
+                   break; 
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:6: warning: no previous prototype for function 'mpc85xx_cds_fixup_bus' [-Wmissing-prototypes]
+   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
+        ^
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +161 arch/powerpc/platforms/85xx/mpc85xx_cds.c
 
-On 9/6/2022 8:53 AM, Marek Vasut wrote:
-> On 9/5/22 04:54, Chen, Rong A wrote:
->>
->>
->> On 9/3/2022 10:31 PM, Marek Vasut wrote:
->>> On 9/3/22 01:21, kernel test robot wrote:
->>>> tree: 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
->>>> master
->>>> head:   e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
->>>> commit: 822a6200734c94ccbfc9ae7acc5da5505b991515 [2262/4736] extcon: 
->>>> usbc-tusb320: Add USB TYPE-C support
->>>> config: x86_64-randconfig-a003 
->>>> (https://download.01.org/0day-ci/archive/20220903/202209030755.eB4SkwGE-lkp@intel.com/config) 
->>>>
->>>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project 
->>>> f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>>> reproduce (this is a W=1 build):
->>>>          wget 
->>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->>>> -O ~/bin/make.cross
->>>>          chmod +x ~/bin/make.cross
->>>>          # 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=822a6200734c94ccbfc9ae7acc5da5505b991515 
->>>>
->>>>          git remote add linux-next 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>>>          git fetch --no-tags linux-next master
->>>>          git checkout 822a6200734c94ccbfc9ae7acc5da5505b991515
->>>>          # save the config file
->>>>          mkdir build_dir && cp config build_dir/.config
->>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
->>>> W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/extcon/
->>>>
->>>> If you fix the issue, kindly add following tag where applicable
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All warnings (new ones prefixed by >>):
->>>>
->>>>>> drivers/extcon/extcon-usbc-tusb320.c:19: warning: expecting 
->>>>>> prototype for drivers/extcon/extcon-tusb320.c(). Prototype was for 
->>>>>> TUSB320_REG8() instead
->>>>
->>>>
->>>> vim +19 drivers/extcon/extcon-usbc-tusb320.c
->>>>
->>>>      18
->>>>    > 19    #define TUSB320_REG8                0x8
->>>>      20    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE    GENMASK(7, 6)
->>>>      21    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_USB    0x0
->>>>      22    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_15A    0x1
->>>>      23    #define TUSB320_REG8_CURRENT_MODE_ADVERTISE_30A    0x2
->>>>      24    #define TUSB320_REG8_CURRENT_MODE_DETECT    GENMASK(5, 4)
->>>>      25    #define TUSB320_REG8_CURRENT_MODE_DETECT_DEF    0x0
->>>>      26    #define TUSB320_REG8_CURRENT_MODE_DETECT_MED    0x1
->>>>      27    #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC    0x2
->>>>      28    #define TUSB320_REG8_CURRENT_MODE_DETECT_HI    0x3
->>>>      29    #define TUSB320_REG8_ACCESSORY_CONNECTED    GENMASK(3, 2)
->>>>      30    #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE    0x0
->>>>      31    #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO    0x4
->>>>      32    #define TUSB320_REG8_ACCESSORY_CONNECTED_ACC    0x5
->>>>      33    #define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG    0x6
->>>>      34    #define TUSB320_REG8_ACTIVE_CABLE_DETECTION    BIT(0)
->>>>      35
->>>
->>> I still believe this is a false positive, is it not ?
->>
->> Hi Marek,
->>
->> Thanks for your reply, the issue is not introduced by this commit, it
->> should be related to '/**' in the head of this file:
->>
->> diff --git a/drivers/extcon/extcon-usbc-tusb320.c 
->> b/drivers/extcon/extcon-usbc-tusb320.c
->> index edb8c3f997c9..41041ff0fadb 100644
->> --- a/drivers/extcon/extcon-usbc-tusb320.c
->> +++ b/drivers/extcon/extcon-usbc-tusb320.c
->> @@ -1,5 +1,5 @@
->>   // SPDX-License-Identifier: GPL-2.0
->> -/**
->> +/*
->>    * drivers/extcon/extcon-tusb320.c - TUSB320 extcon driver
->>    *
->>    * Copyright (C) 2020 National Instruments Corporation
-> 
-> Uh, OK, I wouldn't have thought of that based on the output above.
-> 
-> The change above is obviously correct, can you submit a patch ?
+7120438e5d82f4 Andrey Smirnov 2016-07-28  125  
+7120438e5d82f4 Andrey Smirnov 2016-07-28  126  
+749e80810d26c8 Roy Zang       2007-06-01  127  static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
+591f0a4287d0de Andy Fleming   2006-04-02  128  {
+591f0a4287d0de Andy Fleming   2006-04-02  129  	u_char c;
+749e80810d26c8 Roy Zang       2007-06-01  130  	if (dev->vendor == PCI_VENDOR_ID_VIA) {
+749e80810d26c8 Roy Zang       2007-06-01  131  		switch (dev->device) {
+749e80810d26c8 Roy Zang       2007-06-01  132  		case PCI_DEVICE_ID_VIA_82C586_1:
+591f0a4287d0de Andy Fleming   2006-04-02  133  			/*
+591f0a4287d0de Andy Fleming   2006-04-02  134  			 * U-Boot does not set the enable bits
+591f0a4287d0de Andy Fleming   2006-04-02  135  			 * for the IDE device. Force them on here.
+591f0a4287d0de Andy Fleming   2006-04-02  136  			 */
+591f0a4287d0de Andy Fleming   2006-04-02  137  			pci_read_config_byte(dev, 0x40, &c);
+591f0a4287d0de Andy Fleming   2006-04-02  138  			c |= 0x03; /* IDE: Chip Enable Bits */
+591f0a4287d0de Andy Fleming   2006-04-02  139  			pci_write_config_byte(dev, 0x40, c);
+591f0a4287d0de Andy Fleming   2006-04-02  140  
+591f0a4287d0de Andy Fleming   2006-04-02  141  			/*
+591f0a4287d0de Andy Fleming   2006-04-02  142  			 * Since only primary interface works, force the
+591f0a4287d0de Andy Fleming   2006-04-02  143  			 * IDE function to standard primary IDE interrupt
+591f0a4287d0de Andy Fleming   2006-04-02  144  			 * w/ 8259 offset
+591f0a4287d0de Andy Fleming   2006-04-02  145  			 */
+591f0a4287d0de Andy Fleming   2006-04-02  146  			dev->irq = 14;
+591f0a4287d0de Andy Fleming   2006-04-02  147  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
+749e80810d26c8 Roy Zang       2007-06-01  148  			break;
+591f0a4287d0de Andy Fleming   2006-04-02  149  		/*
+591f0a4287d0de Andy Fleming   2006-04-02  150  		 * Force legacy USB interrupt routing
+591f0a4287d0de Andy Fleming   2006-04-02  151  		 */
+749e80810d26c8 Roy Zang       2007-06-01  152  		case PCI_DEVICE_ID_VIA_82C586_2:
+749e80810d26c8 Roy Zang       2007-06-01  153  		/* There are two USB controllers.
+749e80810d26c8 Roy Zang       2007-06-01  154  		 * Identify them by functon number
+749e80810d26c8 Roy Zang       2007-06-01  155  		 */
+8d7bc8f9d1c23f Randy Vinson   2007-07-19  156  			if (PCI_FUNC(dev->devfn) == 3)
+749e80810d26c8 Roy Zang       2007-06-01  157  				dev->irq = 11;
+749e80810d26c8 Roy Zang       2007-06-01  158  			else
+591f0a4287d0de Andy Fleming   2006-04-02  159  				dev->irq = 10;
+749e80810d26c8 Roy Zang       2007-06-01  160  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
+749e80810d26c8 Roy Zang       2007-06-01 @161  		default:
+749e80810d26c8 Roy Zang       2007-06-01  162  			break;
+591f0a4287d0de Andy Fleming   2006-04-02  163  		}
+591f0a4287d0de Andy Fleming   2006-04-02  164  	}
+591f0a4287d0de Andy Fleming   2006-04-02  165  }
+ddd64159eb0d09 Andy Fleming   2006-08-17  166  
 
-Hi Marek,
+:::::: The code at line 161 was first introduced by commit
+:::::: 749e80810d26c8d522b089718f22bb92d7834a37 [POWERPC] Remove redundant pci_read_irq_line() function for 85xx platform
 
-Thanks for the review, I have submitted it: 
-https://lore.kernel.org/lkml/20220906040430.35896-1-rong.a.chen@intel.com/T/#u
+:::::: TO: Roy Zang <tie-fei.zang@freescale.com>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
 
-Best Regards,
-Rong Chen
-
-> 
-> Thanks !
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
