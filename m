@@ -1,47 +1,48 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881852F2F
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 10:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7661B3D88
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 11:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662459088; x=1693995088;
+  t=1662462742; x=1693998742;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oB1TtPVVHc8wxkEfbkl6xSPnmmpiaRnJ3fakqY2gLXM=;
-  b=LCJEJ2pCKAVSop9tO/yqXBxIAmZUVqoR86fTewmJ/Dyznf7McwA+v/xE
-   wWvtTiNFGLEV50tVK1KhIhQ7JzBOfQkxfoUZkfNHami83dqOtQmEi7NpA
-   33sx3dsdJepEp82DHdxSxi5dPpmoUgwrUfudLMddNnN+/UlN2VWHNTkt3
-   Rl92cj417lbFGQOXWdeqB77pcPM6D71C/4EW0Kl0j4yaY9kcem5StCsuh
-   26WPxA3tzJ2no5Vw5EuqRmyBqqHUsedY/B9YEk9dDO/J4hpoBXeZA+Kng
-   XQ8hyEvpDPI8FsNGXicS2TKyJ3+3xDwZGBNUWbzl4FPObI365tS8SpwNv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297340953"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="297340953"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 03:11:19 -0700
+  bh=Bp/QZXCFTZwQSDShcDQGV6IwRcbjBetyV2jm9TRX0io=;
+  b=VoehulZuL8OokP2qgK6MT6s+3qUcC1ODTaa+VvMjtODkGTb3A9WVmBr9
+   1LJXEdGSvxmQutmE5HwnHpZwqK9L19ZqNaQQVeM1bay0tNkz14LQvjSx0
+   Uu0o/8xlnoVxmosZxAmsALjFmO6qFT40ES/XGBAuTnrvQf+ZbdyhdLmic
+   Z6lLiw3qgMEOE4/VkPAOfzYGel3qD2y/H7hyGXl+3iNt12KTz9Q2SUKsm
+   cCqv2PNFMVAWVB92ZYaI0MhOTPxmdcR+YZ59sGKLag2eGV080SMDKLISr
+   oBxVtZUhgHRoGLRZv85rCfsqj57f7xc+VewRHNd/hntKaFKy3blvQ3FlQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276304725"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="276304725"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:12:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="565041316"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="756332691"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Sep 2022 03:11:17 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 04:12:19 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oVVY4-0004zl-2N;
-	Tue, 06 Sep 2022 10:11:16 +0000
-Date: Tue, 6 Sep 2022 18:10:54 +0800
+	id 1oVWV9-00052h-0S;
+	Tue, 06 Sep 2022 11:12:19 +0000
+Date: Tue, 6 Sep 2022 19:11:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Deming Wang <wangdeming@inspur.com>, vgoyal@redhat.com,
-	stefanha@redhat.com, miklos@szeredi.hu
+To: Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	virtualization@lists.linux-foundation.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deming Wang <wangdeming@inspur.com>
-Subject: Re: [PATCH] virtiofs: Drop unnecessary initialization in
- send_forget_request and virtio_fs_get_tree
-Message-ID: <202209061738.Epufa2eF-lkp@intel.com>
-References: <20220906053848.2503-1-wangdeming@inspur.com>
+	Aleksa Savic <savicaleksa83@gmail.com>, Jack Doan <me@jackdoan.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer High Flow Next
+Message-ID: <202209061853.1eqL4nKA-lkp@intel.com>
+References: <20220905142521.6674-1-savicaleksa83@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,149 +51,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906053848.2503-1-wangdeming@inspur.com>
+In-Reply-To: <20220905142521.6674-1-savicaleksa83@gmail.com>
 
-Hi Deming,
+Hi Aleksa,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on v6.0-rc4]
-[also build test WARNING on linus/master next-20220901]
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on next-20220901]
+[cannot apply to linus/master v6.0-rc4]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
-base:    7e18e42e4b280c85b76967a9106a13ca61c16179
-config: hexagon-randconfig-r035-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061738.Epufa2eF-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220906/202209061853.1eqL4nKA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a61f879fdb56490afddb6ddea4a9d57226f339f3
+        # https://github.com/intel-lab-lkp/linux/commit/0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
-        git checkout a61f879fdb56490afddb6ddea4a9d57226f339f3
+        git fetch --no-tags linux-review Aleksa-Savic/hwmon-aquacomputer_d5next-Add-support-for-Aquacomputer-High-Flow-Next/20220905-222744
+        git checkout 0a43ba8acd8bcd54afd03ea6149d54fc99fe284c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/fuse/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/ drivers/hwmon/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/fuse/virtio_fs.c:422:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!fsvq->connected) {
-           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/virtio_fs.c:465:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   fs/fuse/virtio_fs.c:422:2: note: remove the 'if' if its condition is always false
-           if (!fsvq->connected) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/fuse/virtio_fs.c:417:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> fs/fuse/virtio_fs.c:1433:2: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/virtio_fs.c:1481:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   fs/fuse/virtio_fs.c:1433:2: note: remove the 'if' if its condition is always false
-           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/fuse/virtio_fs.c:1420:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   2 warnings generated.
+>> drivers/hwmon/aquacomputer_d5next.c:38:3: error: use of undeclared identifier 'highflownext'
+           [highflownext] = "highflownext"
+            ^
+   drivers/hwmon/aquacomputer_d5next.c:425:8: error: use of undeclared identifier 'highflownext'
+                   case highflownext:
+                        ^
+   drivers/hwmon/aquacomputer_d5next.c:443:8: error: use of undeclared identifier 'highflownext'
+                   case highflownext:
+                        ^
+   drivers/hwmon/aquacomputer_d5next.c:465:8: error: use of undeclared identifier 'highflownext'
+                   case highflownext:
+                        ^
+   drivers/hwmon/aquacomputer_d5next.c:736:7: error: use of undeclared identifier 'highflownext'
+           case highflownext:
+                ^
+>> drivers/hwmon/aquacomputer_d5next.c:924:7: error: use of undeclared identifier 'USB_PRODUCT_ID_HIGHFLOWNEXT'
+           case USB_PRODUCT_ID_HIGHFLOWNEXT:
+                ^
+   drivers/hwmon/aquacomputer_d5next.c:925:16: error: use of undeclared identifier 'highflownext'
+                   priv->kind = highflownext;
+                                ^
+   drivers/hwmon/aquacomputer_d5next.c:993:47: error: use of undeclared identifier 'USB_PRODUCT_ID_HIGHFLOWNEXT'
+           { HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_HIGHFLOWNEXT) },
+                                                        ^
+>> drivers/hwmon/aquacomputer_d5next.c:997:1: error: definition of variable with array type needs an explicit size or an initializer
+   MODULE_DEVICE_TABLE(hid, aqc_table);
+   ^
+   include/linux/module.h:244:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                       ^
+   <scratch space>:196:1: note: expanded from here
+   __mod_hid__aqc_table_device_table
+   ^
+   9 errors generated.
 
 
-vim +422 fs/fuse/virtio_fs.c
+vim +/highflownext +38 drivers/hwmon/aquacomputer_d5next.c
 
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  406  
-58ada94f95f71d Vivek Goyal     2019-10-30  407  /*
-58ada94f95f71d Vivek Goyal     2019-10-30  408   * Returns 1 if queue is full and sender should wait a bit before sending
-58ada94f95f71d Vivek Goyal     2019-10-30  409   * next request, 0 otherwise.
-58ada94f95f71d Vivek Goyal     2019-10-30  410   */
-58ada94f95f71d Vivek Goyal     2019-10-30  411  static int send_forget_request(struct virtio_fs_vq *fsvq,
-58ada94f95f71d Vivek Goyal     2019-10-30  412  			       struct virtio_fs_forget *forget,
-58ada94f95f71d Vivek Goyal     2019-10-30  413  			       bool in_flight)
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  414  {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  415  	struct scatterlist sg;
-58ada94f95f71d Vivek Goyal     2019-10-30  416  	struct virtqueue *vq;
-a61f879fdb5649 Deming Wang     2022-09-06  417  	int ret;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  418  	bool notify;
-1efcf39eb62757 Vivek Goyal     2019-10-30  419  	struct virtio_fs_forget_req *req = &forget->req;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  420  
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  421  	spin_lock(&fsvq->lock);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12 @422  	if (!fsvq->connected) {
-58ada94f95f71d Vivek Goyal     2019-10-30  423  		if (in_flight)
-c17ea009610366 Vivek Goyal     2019-10-15  424  			dec_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  425  		kfree(forget);
-58ada94f95f71d Vivek Goyal     2019-10-30  426  		goto out;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  427  	}
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  428  
-1efcf39eb62757 Vivek Goyal     2019-10-30  429  	sg_init_one(&sg, req, sizeof(*req));
-58ada94f95f71d Vivek Goyal     2019-10-30  430  	vq = fsvq->vq;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  431  	dev_dbg(&vq->vdev->dev, "%s\n", __func__);
-58ada94f95f71d Vivek Goyal     2019-10-30  432  
-58ada94f95f71d Vivek Goyal     2019-10-30  433  	ret = virtqueue_add_outbuf(vq, &sg, 1, forget, GFP_ATOMIC);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  434  	if (ret < 0) {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  435  		if (ret == -ENOMEM || ret == -ENOSPC) {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  436  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Will try later\n",
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  437  				 ret);
-58ada94f95f71d Vivek Goyal     2019-10-30  438  			list_add_tail(&forget->list, &fsvq->queued_reqs);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  439  			schedule_delayed_work(&fsvq->dispatch_work,
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  440  					      msecs_to_jiffies(1));
-58ada94f95f71d Vivek Goyal     2019-10-30  441  			if (!in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  442  				inc_in_flight_req(fsvq);
-58ada94f95f71d Vivek Goyal     2019-10-30  443  			/* Queue is full */
-58ada94f95f71d Vivek Goyal     2019-10-30  444  			ret = 1;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  445  		} else {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  446  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Dropping it.\n",
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  447  				 ret);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  448  			kfree(forget);
-58ada94f95f71d Vivek Goyal     2019-10-30  449  			if (in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  450  				dec_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  451  		}
-58ada94f95f71d Vivek Goyal     2019-10-30  452  		goto out;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  453  	}
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  454  
-58ada94f95f71d Vivek Goyal     2019-10-30  455  	if (!in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  456  		inc_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  457  	notify = virtqueue_kick_prepare(vq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  458  	spin_unlock(&fsvq->lock);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  459  
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  460  	if (notify)
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  461  		virtqueue_notify(vq);
-58ada94f95f71d Vivek Goyal     2019-10-30  462  	return ret;
-58ada94f95f71d Vivek Goyal     2019-10-30  463  out:
-58ada94f95f71d Vivek Goyal     2019-10-30  464  	spin_unlock(&fsvq->lock);
-58ada94f95f71d Vivek Goyal     2019-10-30  465  	return ret;
-58ada94f95f71d Vivek Goyal     2019-10-30  466  }
-58ada94f95f71d Vivek Goyal     2019-10-30  467  
+    31	
+    32	static const char *const aqc_device_names[] = {
+    33		[d5next] = "d5next",
+    34		[farbwerk] = "farbwerk",
+    35		[farbwerk360] = "farbwerk360",
+    36		[octo] = "octo",
+    37		[quadro] = "quadro",
+  > 38		[highflownext] = "highflownext"
+    39	};
+    40	
 
 -- 
 0-DAY CI Kernel Test Service
