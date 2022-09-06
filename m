@@ -1,48 +1,29 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCB62F24
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 12:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662468205; x=1694004205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SKVSACxEGKvzhV1mjnOCMkraBJm5utM2asRpqotl1lc=;
-  b=aR7XQ/HFPeNA7ci8o8n5ntxswJN7JTG4q+7gV8T2W0KNbSPe6+mLkY8r
-   SIQ45x0xJ/TPQBHObQDSKjROYvh+EpzHS/10AYlNt6tfxYMWZi3WXLt0J
-   rZASqPd7ClKhURR0Wc8nMNbTQP3eiSNoqEZIR+8V3c8YodMSeDlhY3SV7
-   EhoiHMFXCmWgTD3RQ271JD51xiPe6iiqZKEjLovp8HZaurFulxHXN9Qq2
-   HZeiItVephRQXwhY3btTIEUt5NiphstYMKNveB8u+fhwiBTDMb4MFwaDq
-   rEi190ivPakwRXgBMZxEKo+yxgWFmoLg2wYbNSORdYqGZka+LHLDo31Po
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322756047"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="322756047"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:43:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="647216326"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 05:43:21 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oVXvF-00056f-03;
-	Tue, 06 Sep 2022 12:43:21 +0000
-Date: Tue, 6 Sep 2022 20:43:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Muchun Song <songmuchun@bytedance.com>, gregkh@linuxfoundation.org,
-	rafael@kernel.org, mike.kravetz@oracle.com,
-	akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
-	ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
-	rientjes@google.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	muchun.song@linux.dev
-Subject: Re: [PATCH v2] mm: hugetlb: eliminate memory-less nodes handling
-Message-ID: <202209062036.1eQ3lYsX-lkp@intel.com>
-References: <20220906034239.69436-1-songmuchun@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D03317D1
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 14:41:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6DEC433D6;
+	Tue,  6 Sep 2022 14:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1662475298;
+	bh=MUHVkHD3HOWqB3Jg9koGYRAh7DYywb2rrdDAPy7SNss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=guqhERkvwcvAmhG2DkzjXgYTGvFEcMqm0z5skZFohFv/kynuQtA8T+cJKck1URQJF
+	 BV8hNOeE9FyZ7exOg0XjTBJ6pFrdw70SbgtMHQ8Pw4B9Qe89Zd9hhcnHDQFiEBdQC4
+	 i/Dk8QiQSJtaDqOujHyCOtQgwQcLl//p+v+qlFfpSYtRmsl8XTYbqD5Py5x30muZaE
+	 2qsr2cXnRK8M3+YT9zZmn4rUDvX3910POXVbbqF3yqVv7189ELFHE8RjaskjnUQBzH
+	 poHXZ9AHYL2HEgKGEEzuPC2lAZ3PgLu7U/ZOyRWttF9hxw+WPRy5MVwMNlOK8xhoMx
+	 mWKWrgBSeUoMA==
+Date: Tue, 6 Sep 2022 07:41:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: Re: [arm-integrator:virt-to-pfn-v6.0-rc1 21/24] ld.lld: error:
+ arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
+Message-ID: <YxdcIGcQ+fB9G2qN@dev-arch.thelio-3990X>
+References: <202209032354.b0SHaeQe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,59 +32,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906034239.69436-1-songmuchun@bytedance.com>
+In-Reply-To: <202209032354.b0SHaeQe-lkp@intel.com>
 
-Hi Muchun,
++ Linus
 
-I love your patch! Perhaps something to improve:
+This shouldn't be clang/ld.lld specific
 
-[auto build test WARNING on next-20220901]
-[cannot apply to akpm-mm/mm-everything driver-core/driver-core-testing linus/master v6.0-rc4 v6.0-rc3 v6.0-rc2 v6.0-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220906-114538
-base:    e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
-config: arm-randconfig-r023-20220906 (https://download.01.org/0day-ci/archive/20220906/202209062036.1eQ3lYsX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/ec1575c86ce4904a7134d2fef8e231ecd50ffc75
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220906-114538
-        git checkout ec1575c86ce4904a7134d2fef8e231ecd50ffc75
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/folio-compat.c:7:
-   In file included from include/linux/migrate.h:8:
->> include/linux/hugetlb.h:1150:49: warning: declaration of 'struct node' will not be visible outside of this function [-Wvisibility]
-   static inline void hugetlb_register_node(struct node *node)
-                                                   ^
-   include/linux/hugetlb.h:1154:51: warning: declaration of 'struct node' will not be visible outside of this function [-Wvisibility]
-   static inline void hugetlb_unregister_node(struct node *node)
-                                                     ^
-   2 warnings generated.
-
-
-vim +1150 include/linux/hugetlb.h
-
-  1149	
-> 1150	static inline void hugetlb_register_node(struct node *node)
-  1151	{
-  1152	}
-  1153	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Sat, Sep 03, 2022 at 11:23:41PM +0800, kernel test robot wrote:
+> CC: linux-kernel@vger.kernel.org
+> TO: Linus Walleij <linus.walleij@linaro.org>
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.0-rc1
+> head:   fd7709c9f1119794e96665ae423d79d93bfe43fc
+> commit: c815de3dd0f6ccea52b05efa8e1be1043255006a [21/24] powerpc: Make virt_to_pfn() a static inline
+> config: powerpc-powernv_defconfig (https://download.01.org/0day-ci/archive/20220903/202209032354.b0SHaeQe-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=c815de3dd0f6ccea52b05efa8e1be1043255006a
+>         git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+>         git fetch --no-tags arm-integrator virt-to-pfn-v6.0-rc1
+>         git checkout c815de3dd0f6ccea52b05efa8e1be1043255006a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+>    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+>    scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+> >> ld.lld: error: arch/powerpc/kernel/vdso/vdso32.lds:244: unknown directive: static
+>    >>> static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+>    >>> ^
+> >> clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+>    make[2]: *** [arch/powerpc/kernel/vdso/Makefile:66: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+>    make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+>    make[1]: *** [arch/powerpc/Makefile:392: vdso_prepare] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:222: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
