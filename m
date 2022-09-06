@@ -1,156 +1,167 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F657E
-	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 17:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662486217; x=1694022217;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5iF0xvO5+zxC54GD3RNXt8NwwSu92AOXnvD6DAwWT+s=;
-  b=RSqbRBxJTWdrEYOEwW562hQFYBDDoNub+ainWBRCZ2YeKOsrtDthhYOd
-   YU0yxF/MSKul90JNRgioGGhiajfK3+Nb6pKe6/kDE1WoUaLa9MLLabK22
-   ojnH5xPHSMK4O2EGoLURAKpC4lKOYG31y3oGTgtM41Y22VbrwaAXimEfc
-   koj8EuNwsqlfxk6HhIaez6ZXNwiiDTFHQnJzmsLELxRp3Zf6psq9Z+GkG
-   7Al265hZWtXLennTsWFGAvtgkXXoVqr1NUbG8RBrQ9+dSf0pamA8LHLVN
-   wL8vJdqU2e7M3vPv54OiIL3nTstQUF3tOObIUCGNz4E0iK8NP13xkXwH6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="277055400"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="277055400"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 10:43:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="942550394"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2022 10:43:36 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oVcbn-0005PJ-1y;
-	Tue, 06 Sep 2022 17:43:35 +0000
-Date: Wed, 7 Sep 2022 01:42:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:arm64/alternatives/rework 9/9]
- arch/arm64/kernel/alternative.c:144:6: warning: no previous prototype for
- function 'summarize_alternatives'
-Message-ID: <202209070120.Nxra1oGA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3737E
+	for <llvm@lists.linux.dev>; Tue,  6 Sep 2022 18:26:46 +0000 (UTC)
+Received: by mail-wr1-f49.google.com with SMTP id t14so9445499wrx.8
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 11:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ebadhH2uYVNTslR5/261s7BWUnmUPBodlcqT9q7w6G8=;
+        b=ouyb1NFaaJmVw2D5Z+apTQaYtMy1L9tXjdOm3G0+A3X0y9XF6Z2VYp0OClNSy/O94L
+         7IRwykt0SxBx75g95cJWUNNmeHJlMF035UGAe5U/g+d8a1STdXUQRn6Y1309cjoF7CmB
+         Bn+kuxDGBiQugwLb/Yw0VorkrExVBjLj7RfoC/VAgKWM612LHzDJjgPGRLsN4Qei/mMf
+         IFTe7Nn2l5z6lmFV9/aw/s5NDLyuZrQQKSExgxSvzd+xo61HyYiZ1yIFbiEFcVHFDzMc
+         kOv0yt4TgkKIRU/Ant9uTbP+yISj7eLuT28aMqYI86W136Quj3Vg+S7cNIMxcGYb/qih
+         zk5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ebadhH2uYVNTslR5/261s7BWUnmUPBodlcqT9q7w6G8=;
+        b=A6JsliAwcXCnJbDrBiypgOQEGUrlPoUjQmxkIWikDklmc932Ug8w3932NY8fvxPLE8
+         Xp9uBBBJ01ysAJYDB2vmGfPCiIRhh3Vppr988GS6mH6scgwLa9BvhmpbFY/AuwjnBLt4
+         NXLDY0fQVtptv+/yVGVDFeT9C1zqX+IIgPqjhyrSJdw8khEfObQRv8Hkwz0RbmjsOT/p
+         Wmmbqup/xQqVUIFSOrof9YhbOo2ipdD1Ldemaw/PVVD4GS9rrCoMYzMmjYrwbTd4HCGc
+         ziOExEIQ/bH6hF2yBl2UGvr/B6O6XSmlgbWkqlNSbqyY5gLMfL2OjeGldz8scZesxf0H
+         xfAA==
+X-Gm-Message-State: ACgBeo0FXSrU+2cl47bPubX9XbSomzveOQVsR4zbMy9wut0lboQOOjyM
+	b0voazTd4XLA41GWoboWA6vpDHQ0TzNyyjsuqh8Bcg==
+X-Google-Smtp-Source: AA6agR7pNNwn4fhSG+iMJ8bz1+4iqG4YUPuYPcghISM7jq8faXl211XoIDxETeH03HrnYY+egECXTP5/t97C+IGFLik=
+X-Received: by 2002:a05:6000:813:b0:226:da5a:84a9 with SMTP id
+ bt19-20020a056000081300b00226da5a84a9mr24413460wrb.309.1662488804474; Tue, 06
+ Sep 2022 11:26:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 6 Sep 2022 11:26:31 -0700
+Message-ID: <CAKwvOdnr_F9-voPj4cp2HG8=U32a8Hp1aLpynSQiKOrwe4txpQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	x86@kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>, Joe Perches <joe@perches.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Yury Norov <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
-head:   2d5c57125128db8b4934846ad39b00f79cd1637d
-commit: 2d5c57125128db8b4934846ad39b00f79cd1637d [9/9] HACK: arm64: alternatives: dump summary of alternatives
-config: arm64-randconfig-r031-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070120.Nxra1oGA-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=2d5c57125128db8b4934846ad39b00f79cd1637d
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/alternatives/rework
-        git checkout 2d5c57125128db8b4934846ad39b00f79cd1637d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On Sun, Sep 4, 2022 at 5:38 PM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> The compilers provide some builtin expression equivalent to the ffs(),
+> __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> assembly which produces better code than the builtin
+> functions. However, such assembly code can not be folded when used
+> with constant expressions.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Another tact which may help additional sources other than just the
+Linux kernel; it seems that compilers should be able to fold this.
 
-All warnings (new ones prefixed by >>):
+Vincent, if you're interested in making such an optimization in LLVM,
+we'd welcome the contribution, and I'd be happy to show you where to
+make such changes within LLVM; please let me know off thread.
 
->> arch/arm64/kernel/alternative.c:144:6: warning: no previous prototype for function 'summarize_alternatives' [-Wmissing-prototypes]
-   void summarize_alternatives(const struct alt_region *region)
-        ^
-   arch/arm64/kernel/alternative.c:144:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void summarize_alternatives(const struct alt_region *region)
-   ^
-   static 
-   arch/arm64/kernel/alternative.c:330:14: warning: no previous prototype for function 'alt_cb_patch_nops' [-Wmissing-prototypes]
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-                ^
-   arch/arm64/kernel/alternative.c:330:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-           ^
-           static 
-   2 warnings generated.
+If not, at the least, we should file feature requests in both:
+* https://github.com/llvm/llvm-project/issues
+* https://gcc.gnu.org/bugzilla/
 
+>
+> This series relies on __builtin_constant_p to select the optimal solution:
+>
+>   * use kernel assembly for non constant expressions
+>
+>   * use compiler's __builtin function for constant expressions.
+>
+>
+> ** Statistics **
+>
+> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> of __ffs() and ffz() calls (details of the calculation in each patch).
+>
+>
+> ** Changelog **
+>
+> v6 -> v7:
+>
+>   * (no changes on code, only commit tag was modified)
+>
+>   * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
+>
+>
+> v5 -> v6:
+>   * Rename variable___ffs() into variable__ffs() (two underscores
+>     instead of three)
+>
+>
+> v4 -> v5:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Rewrite the commit log:
+>     - Use two spaces instead of `| ' to indent code snippets.
+>     - Do not use `we'.
+>     - Do not use `this patch' in the commit description. Instead,
+>       use imperative tone.
+>   Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+>
+>
+> v3 -> v4:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Remove note and link to Nick's message in patch 1/2, c.f.:
+>   Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+>     patch 2/2.
+>
+>
+> v2 -> v3:
+>
+>   * Redacted out the instructions after ret and before next function
+>     in the assembly output.
+>
+>   * Added a note and a link to Nick's message on the constant
+>     propagation missed-optimization in clang:
+>     Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+>
+>   * Fix copy/paste typo in statistics of patch 1/2. Number of
+>     occurences before patches are 1081 and not 3607 (percentage
+>     reduction of 26.7% remains correct)
+>
+>   * Rename the functions as follow:
+>     - __varible_ffs() -> variable___ffs()
+>     - __variable_ffz() -> variable_ffz()
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+>     patch 1/2.
+>
+>
+> Vincent Mailhol (2):
+>   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+>     expressions
+>   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+>     expressions
+>
+>  arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+>  1 file changed, 38 insertions(+), 26 deletions(-)
+>
+> --
+> 2.35.1
+>
 
-vim +/summarize_alternatives +144 arch/arm64/kernel/alternative.c
-
-   138	
-   139	#define for_each_region_alt(region, alt)		\
-   140		for (struct alt_instr *alt = (region)->begin;	\
-   141		     (alt) < (region)->end;			\
-   142		     (alt)++)
-   143	
- > 144	void summarize_alternatives(const struct alt_region *region)
-   145	{
-   146		unsigned int entries[ARM64_NCAPS] = { 0 };
-   147		unsigned int orig_len[ARM64_NCAPS] = { 0 };
-   148		unsigned int repl_len[ARM64_NCAPS] = { 0 };
-   149		unsigned int callbacks[ARM64_NCAPS] = { 0 };
-   150	
-   151		unsigned int total_entries = 0;
-   152		unsigned int total_orig = 0;
-   153		unsigned int total_repl = 0;
-   154		unsigned int total_callbacks = 0;
-   155	
-   156		for_each_region_alt(region, alt) {
-   157			int cap = ALT_CAP(alt);
-   158	
-   159			entries[cap]++;
-   160			total_entries++;
-   161	
-   162			orig_len[cap] += alt->orig_len;
-   163			total_orig += alt->orig_len;
-   164	
-   165			repl_len[cap] += alt->alt_len;
-   166			total_repl += alt->alt_len;
-   167	
-   168			if (ALT_HAS_CB(alt)) {
-   169				callbacks[cap]++;
-   170				total_callbacks++;
-   171			}
-   172		}
-   173	
-   174		pr_info("Alternatives summary:\n"
-   175			"    entries:      %6u (%6zu bytes)\n"
-   176			"      regular:    %6d\n"
-   177			"      callback:   %6d\n"
-   178			"    instructions: %6u (%6u bytes)\n"
-   179			"    replacements: %6u (%6u bytes)\n",
-   180			total_entries,	total_entries * sizeof (struct alt_instr),
-   181			total_entries - total_callbacks,
-   182			total_callbacks,
-   183			total_orig / AARCH64_INSN_SIZE, total_orig,
-   184			total_repl / AARCH64_INSN_SIZE, total_repl);
-   185	
-   186		for (int i = 0; i < ARM64_NCAPS; i++) {
-   187			if (!entries[i])
-   188				continue;
-   189	
-   190			pr_info("cpucap %2d => entries: %5d orig: %5d, repl: %5d, cb: %5d\n",
-   191				i,
-   192				entries[i],
-   193				orig_len[i] / AARCH64_INSN_SIZE,
-   194				repl_len[i] / AARCH64_INSN_SIZE,
-   195				callbacks[i]);
-   196		}
-   197	}
-   198	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
