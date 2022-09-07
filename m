@@ -1,88 +1,120 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6191A7E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 08:50:45 +0000 (UTC)
-Received: from nazgul.tnic (unknown [84.201.196.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 163A41EC04F0;
-	Wed,  7 Sep 2022 10:50:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1662540638;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=Xp7hEi4p44/YaMgw6I5ghs8SKRBZzu64Qfp4lEGDVUE=;
-	b=rdnbgqVqTpHwwG1pYwF2zHuScR2Z1tHcze6vuIuRCEbTr5UMuW4JmyssZgyMjlWc/uT4lw
-	rBKsLyw3Xhj3Y5hKJqKhjqyj7eRxbGSH3pmSaHEDNGosWXgdYG5zf8cYf1EO45r5pNTO7T
-	ylGrelCoW526O3cMffELufeIKytaqIs=
-Date: Wed, 7 Sep 2022 10:50:47 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0317E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 08:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=M9ffSCcPAJFL/NG3iecTA6XnLuNGeYKgtteM2yRjbw8=; b=RkCkoGesMVEcRNleJvacW27ZN9
+	eY6mqXlLytLmnVTUKkvVx8upYmP36N0nVMK6OGviCGk0MrGxxqvCKFQ2sVRWckFQAB5ga87K5lECr
+	7m0wErxJQXSkUWe0P3Qq31N3F9tBcfUN2tNLtWayNUzwxQGjlG35NgtA8f1SDxw4a6Bx/48ySEszA
+	KPjszB/XFsGfcyya0D92vkgmt8MBtS9AeDfzrSfDWIxuZ8jnpXh+c9RTwBZWtiuuZHUMtPsReO5PX
+	Cud2D6l2SHerN+rFL9hFmy6zneagpc7A2yy9HT/ovVqtGCSOiWRuqX7kFvwVUvfahUbviFXUq9k90
+	gaDEFQVA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oVql3-00APB3-3s; Wed, 07 Sep 2022 08:50:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C72E130013F;
+	Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9DD9B20134FB3; Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
+Date: Wed, 7 Sep 2022 10:50:03 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>,
+	Juergen Gross <jgross@suse.com>,
+	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+	Alexey Makhalov <amakhalov@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-Message-ID: <YxhbXE0lWtyNtRHh@nazgul.tnic>
-References: <YwT+5GGCOKoTjfQZ@zn.tnic>
- <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic>
- <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
- <YwXkuW3rSYY7ZJT+@zn.tnic>
- <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
- <YwYmpK40ju5WUlVZ@zn.tnic>
- <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
- <YxgY2MBmBIkBsdlu@nazgul.tnic>
- <CAMZ6Rq+Uo4r9DXsOTgEhNEv7wWkHjBnU0498+1++qaD+4WCPKw@mail.gmail.com>
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	virtualization@lists.linux-foundation.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook>
+ <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+Uo4r9DXsOTgEhNEv7wWkHjBnU0498+1++qaD+4WCPKw@mail.gmail.com>
+In-Reply-To: <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
 
-On Wed, Sep 07, 2022 at 02:35:41PM +0900, Vincent MAILHOL wrote:
-> I rephrased the beginning of the commit message as below:
+On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> >
+> > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > [...]
+> > > >         callq   *pv_ops+536(%rip)
+> > >
+> > > Do you know which pv_ops function is this? I can't figure out where
+> > > pte_offset_kernel() gets converted into a pv_ops call....
+> > >
+> > This one is _paravirt_ident_64, I believe. I think that the original
+> > issue Nathan was seeing was with another seemingly innocuous function.
 > 
-> 
-> If x is not 0, __ffs(x) is equivalent to:
->   (unsigned long)__builtin_ctzl(x)
-> And if x is not ~0UL, ffz(x) is equivalent to:
->   (unsigned long)__builtin_ctzl(~x)
-> Because __builting_ctzl() returns an int, a cast to (unsigned long) is
-> necessary to avoid potential warnings on implicit casts.
-> 
-> Concerning the edge cases, __builtin_ctzl(0) is always undefined,
-> whereas __ffs(0) and ffz(~0UL) may or may not be defined, depending on
-> the processor. Regardless, for both functions, developers are asked to
-> check against 0 or ~0UL so replacing __ffs() or ffz() by
-> __builting_ctzl() is safe.
-> 
-> 
-> 
-> Does this solve the issue?
+> _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> really needs to not be touched at all by the compiler for
+> these...special features.
 
-Yes, that sounds better.
+My source tree sayeth:
 
-Thx.
+  u64 notrace _paravirt_ident_64(u64 x)
 
--- 
-Regards/Gruss,
-    Boris.
+And that function is only ever called at boot, after alternatives runs
+it's patched with:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  mov %_ASM_ARG1, %_ASM_AX
+
+Anyway, if you want to take it away from the compiler, something like
+so should do.
+
+
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 7ca2d46c08cc..8922e2887779 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+ }
+ 
+ #ifdef CONFIG_PARAVIRT_XXL
+-/* identity function, which can be inlined */
+-u64 notrace _paravirt_ident_64(u64 x)
+-{
+-	return x;
+-}
++extern u64 _paravirt_ident_64(u64 x);
++asm (".pushsection .entry.text, \"ax\"\n"
++     ".global _paravirt_ident_64\n"
++     "_paravirt_ident_64:\n\t"
++     ASM_ENDBR
++     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
++     ASM_RET
++     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
++     ".type _paravirt_ident_64, @function\n\t"
++     ".popsection");
+ #endif
+ 
+ DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
