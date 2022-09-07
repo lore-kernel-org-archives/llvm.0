@@ -1,145 +1,122 @@
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457687E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:28:18 +0000 (UTC)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 2874S5nY030472
-	for <llvm@lists.linux.dev>; Wed, 7 Sep 2022 13:28:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2874S5nY030472
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662524885;
-	bh=1UbbBUkvxSBhRKBM4/+Em4xozDMjh5y0hIq+C6QbsRg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GXJMmUPsQbYrp/qghqYA3gi9b1dY4MjZGQU5m1J9o4DuqFkrTU9WrUdz44bSDmP6s
-	 O1Tnx/oKIu4satumwvM4kzJQvyv+5BkO4AoS+IxSpzXrj/3C2Ll3PNyqBwVvzQSuLN
-	 0q2emN+ml5NpkxVAK6YXKwDwNuo8fxtKg4rRWjEnshtLhwD3ReiutEBeyxF8W4noUc
-	 yVlgbFKD2GkNHdINB58XA/9EWlF01eFCrjKgtaWk6prc/RcMjTRZLSnJ4NM2ah4rAR
-	 yTpuFcFLNOPR2rxEn3b9G6k9vw3qMiJlogrxEeSDmMAEHd/rgJurtYrTrjXwZXxjeW
-	 ZVTYoW8A4w1Jg==
-X-Nifty-SrcIP: [209.85.210.51]
-Received: by mail-ot1-f51.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso9467047otb.6
-        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:28:05 -0700 (PDT)
-X-Gm-Message-State: ACgBeo17YxHz7jM1jwmRA8w1KyNLRl/gCZuj5bCPC36F+8BEdkDZaCic
-	4MmsghdJnmsTBabiy+FlLyA7zyILl+FlYHD+Fdk=
-X-Google-Smtp-Source: AA6agR6XPzafcHosnnYg49i0CuugkbKR2RUGJBerc2LsQm/WmngVgyb900/QA1Ge9aDuo/iNTIqZIGfKey0ezQC47NI=
-X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
- cn11-20020a056830658b00b0063b35017167mr715790otb.343.1662524884592; Tue, 06
- Sep 2022 21:28:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470BD7E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:59:24 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id f12-20020a25b6cc000000b0069a9e36de26so10132596ybm.16
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=5KkuUj+pLuobeBW2hd5taBieJOu5xIF1y/ExdwvwcYQ=;
+        b=jPsWc5iLwVSH8Jex2jZMQg0g+sBWwbkomQw8CS2JtuDLvxbVzVve3vsKUA/MIVj0xq
+         DhRGCtoJV3TkWc/eYwUB2fYGtktwiJob7Z/Ox6Jg+RwTM7/Z8DY4BGOZYO1jF4KBs95W
+         3ac0We94KbB+ruCEMO2X4L95e3ujfUh4WUpYqlGE7couvbyczOsIywa05FVAILdK5pWr
+         z8EUcu/UB/FIGPXzFb2Ooadlr7QJeZbLqJsshexCviPpHCgKcQQcTG5LU7Vf0ix5teGS
+         JMxYIDOKYFj9Tua4v52Os6wYjS1mER3O6On+raKw8ojznumDmsofIfYTgcyQoRx6nm+/
+         JYvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=5KkuUj+pLuobeBW2hd5taBieJOu5xIF1y/ExdwvwcYQ=;
+        b=48TYYrx4nnqZjeH9eccctBvJzFBPssKUpgNnvFvYCfwTjy7IfQW81PcIvvnPliIOEi
+         hqbuMpm/yHi/5ekN92NczYmHAgWt25fcTDBdwxpvpEnXlW72UVH7FBOFGc1gy75wFNyd
+         stSKQQ5PRhvueUm2ZL4Y8TCitaB+sR8xrN/2a1+Uhl3FAzCCM5/ila6Yn42loivPHSnG
+         sbkCfhGyn/wH3o7EffpvaJghXaihfMe7pCgG7oxufP7AKBoNqpEbWc+2V0Mm3dZLO3SQ
+         Tau4j6e0gXGCW58zxRndC1WWF8Ff9/rD3uInM8m2nIixONJ8ll5URoleDhcAUUlnvvYa
+         CTNg==
+X-Gm-Message-State: ACgBeo1cPrwcH65F7i+l12j/XITkEMwA9u+sspN6eG1KHnCTydugXt+4
+	coiFpPiathEZU/vgHWvyfAHTKdxZ95NRabjpS3w=
+X-Google-Smtp-Source: AA6agR7MdDxZiTiXgdzz0N2vozySxVRQWbWIzmMFlwjKBF0W/CgyABVN4YSq/aGy3cFfoGhVsWUCkxn9dpM890qVX+k=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:9755:c523:9dcb:2228])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:808d:0:b0:6a8:f9e8:eba0 with SMTP
+ id n13-20020a25808d000000b006a8f9e8eba0mr1546168ybk.279.1662526763269; Tue,
+ 06 Sep 2022 21:59:23 -0700 (PDT)
+Date: Tue,  6 Sep 2022 21:59:02 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20220831184408.2778264-1-ndesaulniers@google.com>
- <20220831184408.2778264-3-ndesaulniers@google.com> <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
- <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com> <CAKwvOdnU5qBqOroEkjf=n-R_rpXxAVx2NhA2wKfasmOPTf6K6Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdnU5qBqOroEkjf=n-R_rpXxAVx2NhA2wKfasmOPTf6K6Q@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 7 Sep 2022 13:27:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQg=E4DGzfFpvnzNQsYrAhgs4SzQVYxqk-6ZeRvT3+2rw@mail.gmail.com>
-Message-ID: <CAK7LNAQg=E4DGzfFpvnzNQsYrAhgs4SzQVYxqk-6ZeRvT3+2rw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662526746; l=2638;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=cDZUQK3Xlhq6UAisRuFd/LsEsJYlX0H63Fh8sZh2QE8=;
+ b=55Dj3em7g+QowMQgxxfkuhkf/HynAElBxrMYYyiZsmn9Ra7w9F298fs1n09sBYVuSHYreiT52jNj
+ QtstnzTBCB4DpwQmRc0SDV4nYIpF9tkNtpW5katqXX5ksff6MTl0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220907045907.484043-1-ndesaulniers@google.com>
+Subject: [PATCH v3 0/5] fix debug info for asm and DEBUG_INFO_SPLIT
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
+	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
+	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 7, 2022 at 12:12 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> >
-> >
-> >
-> >
-> > I also believe '-x assembler' should be changed to
-> > '-x assembler-with-cpp'.
-> >
-> >
-> > As I mentioned somewhere before, our assembly code (*.S) is always
-> > preprocessed. There is no *.s file in the kernel source tree.
-> >
-> >
-> > So, '-x assembler-with-cpp' matches the real situation.
->
-> Should I do this for as-instr then as well? In the same patch?
+Alexey reported that the fraction of unknown filename instances in
+kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+to assembler defined symbols, which regressed as a result of:
 
+commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
 
-Probably we should fix as-instr in the same way.
+In that commit, I allude to restoring debug info for assembler defined
+symbols in a follow up patch, but it seems I forgot to do so in
 
-You can do it in the same patch, or in a separate one.
-It is up to you.
+commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
 
+Do so requires a fixup for as-option, which seems to be failing when
+used in scripts/Makefile.debug.
 
+Also includes a fix for DEBUG_INFO_SPLIT while I'm here.  Dmitrii
+reports that this has been broken since gcc-11+ & clang-12+. I'm
+guessing no one uses this .config option...since no one else has
+reported it being broken yet...
 
+Changes from v2 -> v3:
+* Pick up Nathan's Reviewed-by and Tested-by tags.
+* Reword commit message 1/5 and 2/5 as per Nathan.
+* Add Masahiro's Suggested-by tag where relevant.
+* Use -x assembler-with-cpp -Werror in as-option and as-instr as per Masahiro.
+* Fix AMDGPU compiler version check as per Nathan.
+* Drop cc-min-version, as per Masahiro.
+* Replace patch 4 with a variant of Masahiro's suggestion.
+* Reword commit message 4/5.
 
+Changes from v1 -> v2:
+* 5 patches now, rather than 3.
+* Split change to arch/x86/boot/compressed/Makefile off of first patch,
+  as per Masahiro.
+* Introduce compiler specific macros, as per Bill, and eradicate
+  cc-ifversion while I'm at it.
+* Update commit message of final patch to refer to 866ced950bcd.
 
+v2: https://lore.kernel.org/llvm/20220831184408.2778264-1-ndesaulniers@google.com/
+v1: https://lore.kernel.org/llvm/20220826181035.859042-1-ndesaulniers@google.com/
 
-> >
-> >
-> > One interesting thing is, clang does not warn
-> > [-Wunused-command-line-argument] for *.S files.
-> >
-> >
-> >
-> >
-> > $ clang -fomit-frame-pointer -c -x assembler /dev/null -o /dev/null
-> > clang: warning: argument unused during compilation:
-> > '-fomit-frame-pointer' [-Wunused-command-line-argument]
-> >
-> > $ clang -fomit-frame-pointer -c -x assembler-with-cpp /dev/null -o /dev/null
-> >
-> >
-> >
-> > The root cause is we are using '-x assembler', which
-> > never happens in the kernel tree.
-> >
-> >
-> >
-> >
-> > To sum up, the code I think correct is:
-> >
-> >
-> > as-option = $(call try-run,\
-> >    $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp
-> > /dev/null -o "$$TMP",$(1),$(2))
->
-> Does your recent patch affect this?
-> https://lore.kernel.org/linux-kbuild/20220905083619.672091-1-masahiroy@kernel.org/
+*** BLURB HERE ***
 
+Nick Desaulniers (5):
+  x86/boot/compressed: prefer cc-option for CFLAGS additions
+  Makefile.compiler: Use KBUILD_AFLAGS for as-option
+  Makefile.compiler: replace cc-ifversion with compiler-specific macros
+  Makefile.debug: re-enable debug info for .S files
+  Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
 
-No, I do not think so.
-
-
-
-> If so, then I should not add -Werror as you suggest above?
-
-
-
-I think we should always add -Werror to as-option.
-
-
-
-as-option checks the command line options with /dev/null
-as the source input (that is, source input is always valid).
-
-
-If as-option results in a warning, that option will sprinkle
-the same warning for all *.S files in the source tree.
-
-So, any warning in as-option should be considered as an error.
-
-
-
-
+ Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+ Makefile                                    |  6 ++---
+ arch/x86/boot/compressed/Makefile           |  2 +-
+ drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+ lib/Kconfig.debug                           |  4 ++-
+ scripts/Makefile.compiler                   | 18 ++++++++-----
+ scripts/Makefile.debug                      | 25 ++++++++----------
+ 7 files changed, 46 insertions(+), 40 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.37.2.789.g6183377224-goog
+
