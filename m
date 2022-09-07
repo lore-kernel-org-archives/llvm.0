@@ -1,158 +1,534 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD97A7E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 03:12:55 +0000 (UTC)
-Received: by mail-wr1-f54.google.com with SMTP id b16so18277955wru.7
-        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 20:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=aUfdL0h8QoOM6NYh1e5obcpE+RfHCz5rvFmppJngHvA=;
-        b=KHQsCzY7yTO3vvx/cyNUaGgEO5PXwRMVx66LyTgH51awzIcZcZZCOTCsDqttKMNV7Q
-         BPSGYKQV/VrU0WTiCKhJgiIKmf0gqYyc0uQk6UjduBR66cv1eHJZ5pnLUWJNLzsvFnOH
-         0nOzTtct9mO9njg2xFJHzO7qsjvHEnzUxCTgscZpuhzzCl2r/19Q8HxilmGnb8u15NDC
-         +73+WRsR8Bxs2b8Vn/C8saNGHD0Q8+msyHaGAtqnuProdEZAx2WCKOpAtm2fE1xyJkvK
-         edFQ7z3EFnP8pzcUF9TJCPjZpo2oj/chmIvKa9rLmFdUGBT/KyBERR0ROmpPVgYaHTBt
-         ceIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aUfdL0h8QoOM6NYh1e5obcpE+RfHCz5rvFmppJngHvA=;
-        b=TmzaKfYDAPNn+o1O4ni9B2XSNvb1ImiOCIB8Os+0v5vBU5YmqIvGiPFKUFsUSb1cLF
-         +5kgkw0CwaHIl/Y17bwRFkmGHQS276VPWFpp0MGVXvtQJ9hCtuygpNSGKBewAXgXEjk7
-         Y0EQtFWYEsg/wf6V84wO2ie1WvlrR+XTASgpbY9VqgSmGVkMM5lJd+E8g3tSDC4d5AEq
-         HaKRQNz7yoHhtNK3LNZJ68mtQqa1IWGSw6hKkj6gAS/I+SgWrylw7QVcAI/dqpXyRz/4
-         jLdjepLdW03Q3AW5COjfUn67Q4dU5K/OiNGJQiLRjv2p6bxqKC/0+f5M9N8G7JqarqPd
-         n0zw==
-X-Gm-Message-State: ACgBeo10TgwlfFCJF0W2b3KkAngZ/aT3+RCZ8eaOUCizn/FAo71RIAJc
-	ZWCPXC5mM/bz4e5KYtpqX2PdfbY+xOQKEjDy48WtQg==
-X-Google-Smtp-Source: AA6agR6+XIck/mw2/xXcXiIMCskPM4UjDy9mMXNg+xODpTBkghjapXqW4g0z+ULl8GeHxGBAlviiQg4azrh96I5pTYk=
-X-Received: by 2002:a05:6000:10cf:b0:228:df93:a9b1 with SMTP id
- b15-20020a05600010cf00b00228df93a9b1mr712220wrx.4.1662520373740; Tue, 06 Sep
- 2022 20:12:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7FB7E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662523336; x=1694059336;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=G8J0HiDO7YB7aafCujtIgtEOotN11GGLzyRyOlrte8U=;
+  b=bMqNt/8RllNy7mqu0MUtYAfEjwmL/ovu05SAKJVgA6ZP0+aa1BkN8dYr
+   HNfb3xAcxgWLMOwOHlKvplAvPt9LvyJ/GDOQM5vVhbzeL4ApbIS6Xi51W
+   q34d6TFYxqCzniGPagfIoBgL5PqCDa38poen8C2kE6P9laEusaXOfFoPx
+   iA+OG54EhP0HtlgUwNHhmZtIy1MiihEPI17WeoN3pLErINzkg6TVuHHvs
+   sWJOrJHBKIxRjambuKmTzSQ5jmq+RZdoNx3KkqnVvTJ24GJDBg+Z2J4oL
+   7XDfYxv3hzbJYsqCTg8Az+YsqpBa11g7ndmuXXaZ27rneVipiGzHHHk3A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="277165681"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="277165681"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 21:02:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="703450715"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Sep 2022 21:02:01 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVmGH-000658-0K;
+	Wed, 07 Sep 2022 04:02:01 +0000
+Date: Wed, 7 Sep 2022 12:01:12 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:linux-5.15.y 1405/9999]
+ drivers/usb/gadget/composite.c:1687:30: warning: taking address of packed
+ member 'wLength' of class or structure 'usb_ctrlrequest' may result in an
+ unaligned pointer value
+Message-ID: <202209071139.gYRIzJIZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220831184408.2778264-1-ndesaulniers@google.com>
- <20220831184408.2778264-3-ndesaulniers@google.com> <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
- <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com>
-In-Reply-To: <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 6 Sep 2022 20:12:42 -0700
-Message-ID: <CAKwvOdnU5qBqOroEkjf=n-R_rpXxAVx2NhA2wKfasmOPTf6K6Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Tom Rix <trix@redhat.com>, Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	X86 ML <x86@kernel.org>, Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, 
-	Fangrui Song <maskray@google.com>, Alexey Alexandrov <aalexand@google.com>, 
-	Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+drivers/usb/gadget/composite.c: 1687:30: warning: taking address of packed
+ member 'wLength' of class or structure 'usb_ctrlrequest' may result in an
+ unaligned pointer value [-Waddress-of-packed-member]
 
-On Mon, Sep 5, 2022 at 2:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Thu, Sep 1, 2022 at 4:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Wed, Aug 31, 2022 at 11:44:05AM -0700, Nick Desaulniers wrote:
-> > > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-> > > cause as-option to fail unexpectedly because clang will emit
-> > > -Werror,-Wunused-command-line-argument for various -m and -f flags for
-> > > assembler sources.
-> >
-> > Now that I am looking closer at it, where does that '-Werror' come from?
->
->
->
->
-> The related commit is
-> c3f0d0bc5b01ad90c45276952802455750444b4f
->
-> The previous discussion with Arnd is
-> https://lore.kernel.org/linux-kbuild/20170314213724.3836900-1-arnd@arndb.de/
->
->
->
->
->
-> > For cc-option, we add it to elevate clang's warnings about unused '-f',
-> > '-m', and '-W' flags to errors so that we do not add those flags.
-> > However, I do not see '-Werror' in as-option. I am going to assume it
-> > came from CONFIG_WERROR, as I believe Android has that turned on by
-> > default.
->
->
-> CONFIG_WERROR is added to CFLAGS.
-> But, I guess it is more correct to do likewise for others.
-> (https://patchwork.kernel.org/project/linux-kbuild/patch/20220905083619.672091-1-masahiroy@kernel.org/)
->
->
->
-> > I think that is the real problem: without '-Werror', the only
-> > error that should come from as-option is when an option isn't supported
-> > by the assembler, as clang will still warn but those will not be fatal
-> > but with '-Werror', those warnings turn fatal, causing all subsequent
-> > as-option calls to fail.
->
->
->
-> Presumably, it is correct to add -Werror to as-option as well.
-> We have no reason to add it to cc-option, but not to as-option.
->
->
->
->
-> I also believe '-x assembler' should be changed to
-> '-x assembler-with-cpp'.
->
->
-> As I mentioned somewhere before, our assembly code (*.S) is always
-> preprocessed. There is no *.s file in the kernel source tree.
->
->
-> So, '-x assembler-with-cpp' matches the real situation.
+CC: linux-kernel@vger.kernel.org
+TO: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 
-Should I do this for as-instr then as well? In the same patch?
+Hi Greg,
 
->
->
-> One interesting thing is, clang does not warn
-> [-Wunused-command-line-argument] for *.S files.
->
->
->
->
-> $ clang -fomit-frame-pointer -c -x assembler /dev/null -o /dev/null
-> clang: warning: argument unused during compilation:
-> '-fomit-frame-pointer' [-Wunused-command-line-argument]
->
-> $ clang -fomit-frame-pointer -c -x assembler-with-cpp /dev/null -o /dev/null
->
->
->
-> The root cause is we are using '-x assembler', which
-> never happens in the kernel tree.
->
->
->
->
-> To sum up, the code I think correct is:
->
->
-> as-option = $(call try-run,\
->    $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp
-> /dev/null -o "$$TMP",$(1),$(2))
+FYI, the error/warning still remains.
 
-Does your recent patch affect this?
-https://lore.kernel.org/linux-kbuild/20220905083619.672091-1-masahiroy@kernel.org/
-If so, then I should not add -Werror as you suggest above?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   78a6337a09dea696f5296f00bf8ae5e5283eef89
+commit: 36dfdf11af49d3c009c711fb16f5c6e7a274505d [1405/9999] USB: gadget: detect too-big endpoint 0 requests
+config: mips-randconfig-r023-20220906 (https://download.01.org/0day-ci/archive/20220907/202209071139.gYRIzJIZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=36dfdf11af49d3c009c711fb16f5c6e7a274505d
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 36dfdf11af49d3c009c711fb16f5c6e7a274505d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/gadget/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/gadget/composite.c:705:16: warning: taking address of packed member 'wTotalLength' of class or structure 'usb_bos_descriptor' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
+                         ^~~~~~~~~~~~~~~~~
+   drivers/usb/gadget/composite.c:721:17: warning: taking address of packed member 'wTotalLength' of class or structure 'usb_bos_descriptor' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SS_CAP_SIZE);
+                                 ^~~~~~~~~~~~~~~~~
+   drivers/usb/gadget/composite.c:754:17: warning: taking address of packed member 'wTotalLength' of class or structure 'usb_bos_descriptor' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(ssac));
+                                 ^~~~~~~~~~~~~~~~~
+>> drivers/usb/gadget/composite.c:1687:30: warning: taking address of packed member 'wLength' of class or structure 'usb_ctrlrequest' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                           __le16 *temp = (__le16 *)&ctrl->wLength;
+                                                     ^~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +1687 drivers/usb/gadget/composite.c
+
+  1660	
+  1661	/*
+  1662	 * The setup() callback implements all the ep0 functionality that's
+  1663	 * not handled lower down, in hardware or the hardware driver(like
+  1664	 * device and endpoint feature flags, and their status).  It's all
+  1665	 * housekeeping for the gadget function we're implementing.  Most of
+  1666	 * the work is in config and function specific setup.
+  1667	 */
+  1668	int
+  1669	composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+  1670	{
+  1671		struct usb_composite_dev	*cdev = get_gadget_data(gadget);
+  1672		struct usb_request		*req = cdev->req;
+  1673		int				value = -EOPNOTSUPP;
+  1674		int				status = 0;
+  1675		u16				w_index = le16_to_cpu(ctrl->wIndex);
+  1676		u8				intf = w_index & 0xFF;
+  1677		u16				w_value = le16_to_cpu(ctrl->wValue);
+  1678		u16				w_length = le16_to_cpu(ctrl->wLength);
+  1679		struct usb_function		*f = NULL;
+  1680		u8				endp;
+  1681	
+  1682		if (w_length > USB_COMP_EP0_BUFSIZ) {
+  1683			if (ctrl->bRequestType == USB_DIR_OUT) {
+  1684				goto done;
+  1685			} else {
+  1686				/* Cast away the const, we are going to overwrite on purpose. */
+> 1687				__le16 *temp = (__le16 *)&ctrl->wLength;
+  1688	
+  1689				*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
+  1690				w_length = USB_COMP_EP0_BUFSIZ;
+  1691			}
+  1692		}
+  1693	
+  1694		/* partial re-init of the response message; the function or the
+  1695		 * gadget might need to intercept e.g. a control-OUT completion
+  1696		 * when we delegate to it.
+  1697		 */
+  1698		req->zero = 0;
+  1699		req->context = cdev;
+  1700		req->complete = composite_setup_complete;
+  1701		req->length = 0;
+  1702		gadget->ep0->driver_data = cdev;
+  1703	
+  1704		/*
+  1705		 * Don't let non-standard requests match any of the cases below
+  1706		 * by accident.
+  1707		 */
+  1708		if ((ctrl->bRequestType & USB_TYPE_MASK) != USB_TYPE_STANDARD)
+  1709			goto unknown;
+  1710	
+  1711		switch (ctrl->bRequest) {
+  1712	
+  1713		/* we handle all standard USB descriptors */
+  1714		case USB_REQ_GET_DESCRIPTOR:
+  1715			if (ctrl->bRequestType != USB_DIR_IN)
+  1716				goto unknown;
+  1717			switch (w_value >> 8) {
+  1718	
+  1719			case USB_DT_DEVICE:
+  1720				cdev->desc.bNumConfigurations =
+  1721					count_configs(cdev, USB_DT_DEVICE);
+  1722				cdev->desc.bMaxPacketSize0 =
+  1723					cdev->gadget->ep0->maxpacket;
+  1724				if (gadget_is_superspeed(gadget)) {
+  1725					if (gadget->speed >= USB_SPEED_SUPER) {
+  1726						cdev->desc.bcdUSB = cpu_to_le16(0x0320);
+  1727						cdev->desc.bMaxPacketSize0 = 9;
+  1728					} else {
+  1729						cdev->desc.bcdUSB = cpu_to_le16(0x0210);
+  1730					}
+  1731				} else {
+  1732					if (gadget->lpm_capable)
+  1733						cdev->desc.bcdUSB = cpu_to_le16(0x0201);
+  1734					else
+  1735						cdev->desc.bcdUSB = cpu_to_le16(0x0200);
+  1736				}
+  1737	
+  1738				value = min(w_length, (u16) sizeof cdev->desc);
+  1739				memcpy(req->buf, &cdev->desc, value);
+  1740				break;
+  1741			case USB_DT_DEVICE_QUALIFIER:
+  1742				if (!gadget_is_dualspeed(gadget) ||
+  1743				    gadget->speed >= USB_SPEED_SUPER)
+  1744					break;
+  1745				device_qual(cdev);
+  1746				value = min_t(int, w_length,
+  1747					sizeof(struct usb_qualifier_descriptor));
+  1748				break;
+  1749			case USB_DT_OTHER_SPEED_CONFIG:
+  1750				if (!gadget_is_dualspeed(gadget) ||
+  1751				    gadget->speed >= USB_SPEED_SUPER)
+  1752					break;
+  1753				fallthrough;
+  1754			case USB_DT_CONFIG:
+  1755				value = config_desc(cdev, w_value);
+  1756				if (value >= 0)
+  1757					value = min(w_length, (u16) value);
+  1758				break;
+  1759			case USB_DT_STRING:
+  1760				value = get_string(cdev, req->buf,
+  1761						w_index, w_value & 0xff);
+  1762				if (value >= 0)
+  1763					value = min(w_length, (u16) value);
+  1764				break;
+  1765			case USB_DT_BOS:
+  1766				if (gadget_is_superspeed(gadget) ||
+  1767				    gadget->lpm_capable) {
+  1768					value = bos_desc(cdev);
+  1769					value = min(w_length, (u16) value);
+  1770				}
+  1771				break;
+  1772			case USB_DT_OTG:
+  1773				if (gadget_is_otg(gadget)) {
+  1774					struct usb_configuration *config;
+  1775					int otg_desc_len = 0;
+  1776	
+  1777					if (cdev->config)
+  1778						config = cdev->config;
+  1779					else
+  1780						config = list_first_entry(
+  1781								&cdev->configs,
+  1782							struct usb_configuration, list);
+  1783					if (!config)
+  1784						goto done;
+  1785	
+  1786					if (gadget->otg_caps &&
+  1787						(gadget->otg_caps->otg_rev >= 0x0200))
+  1788						otg_desc_len += sizeof(
+  1789							struct usb_otg20_descriptor);
+  1790					else
+  1791						otg_desc_len += sizeof(
+  1792							struct usb_otg_descriptor);
+  1793	
+  1794					value = min_t(int, w_length, otg_desc_len);
+  1795					memcpy(req->buf, config->descriptors[0], value);
+  1796				}
+  1797				break;
+  1798			}
+  1799			break;
+  1800	
+  1801		/* any number of configs can work */
+  1802		case USB_REQ_SET_CONFIGURATION:
+  1803			if (ctrl->bRequestType != 0)
+  1804				goto unknown;
+  1805			if (gadget_is_otg(gadget)) {
+  1806				if (gadget->a_hnp_support)
+  1807					DBG(cdev, "HNP available\n");
+  1808				else if (gadget->a_alt_hnp_support)
+  1809					DBG(cdev, "HNP on another port\n");
+  1810				else
+  1811					VDBG(cdev, "HNP inactive\n");
+  1812			}
+  1813			spin_lock(&cdev->lock);
+  1814			value = set_config(cdev, ctrl, w_value);
+  1815			spin_unlock(&cdev->lock);
+  1816			break;
+  1817		case USB_REQ_GET_CONFIGURATION:
+  1818			if (ctrl->bRequestType != USB_DIR_IN)
+  1819				goto unknown;
+  1820			if (cdev->config)
+  1821				*(u8 *)req->buf = cdev->config->bConfigurationValue;
+  1822			else
+  1823				*(u8 *)req->buf = 0;
+  1824			value = min(w_length, (u16) 1);
+  1825			break;
+  1826	
+  1827		/* function drivers must handle get/set altsetting */
+  1828		case USB_REQ_SET_INTERFACE:
+  1829			if (ctrl->bRequestType != USB_RECIP_INTERFACE)
+  1830				goto unknown;
+  1831			if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
+  1832				break;
+  1833			f = cdev->config->interface[intf];
+  1834			if (!f)
+  1835				break;
+  1836	
+  1837			/*
+  1838			 * If there's no get_alt() method, we know only altsetting zero
+  1839			 * works. There is no need to check if set_alt() is not NULL
+  1840			 * as we check this in usb_add_function().
+  1841			 */
+  1842			if (w_value && !f->get_alt)
+  1843				break;
+  1844	
+  1845			spin_lock(&cdev->lock);
+  1846			value = f->set_alt(f, w_index, w_value);
+  1847			if (value == USB_GADGET_DELAYED_STATUS) {
+  1848				DBG(cdev,
+  1849				 "%s: interface %d (%s) requested delayed status\n",
+  1850						__func__, intf, f->name);
+  1851				cdev->delayed_status++;
+  1852				DBG(cdev, "delayed_status count %d\n",
+  1853						cdev->delayed_status);
+  1854			}
+  1855			spin_unlock(&cdev->lock);
+  1856			break;
+  1857		case USB_REQ_GET_INTERFACE:
+  1858			if (ctrl->bRequestType != (USB_DIR_IN|USB_RECIP_INTERFACE))
+  1859				goto unknown;
+  1860			if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
+  1861				break;
+  1862			f = cdev->config->interface[intf];
+  1863			if (!f)
+  1864				break;
+  1865			/* lots of interfaces only need altsetting zero... */
+  1866			value = f->get_alt ? f->get_alt(f, w_index) : 0;
+  1867			if (value < 0)
+  1868				break;
+  1869			*((u8 *)req->buf) = value;
+  1870			value = min(w_length, (u16) 1);
+  1871			break;
+  1872		case USB_REQ_GET_STATUS:
+  1873			if (gadget_is_otg(gadget) && gadget->hnp_polling_support &&
+  1874							(w_index == OTG_STS_SELECTOR)) {
+  1875				if (ctrl->bRequestType != (USB_DIR_IN |
+  1876								USB_RECIP_DEVICE))
+  1877					goto unknown;
+  1878				*((u8 *)req->buf) = gadget->host_request_flag;
+  1879				value = 1;
+  1880				break;
+  1881			}
+  1882	
+  1883			/*
+  1884			 * USB 3.0 additions:
+  1885			 * Function driver should handle get_status request. If such cb
+  1886			 * wasn't supplied we respond with default value = 0
+  1887			 * Note: function driver should supply such cb only for the
+  1888			 * first interface of the function
+  1889			 */
+  1890			if (!gadget_is_superspeed(gadget))
+  1891				goto unknown;
+  1892			if (ctrl->bRequestType != (USB_DIR_IN | USB_RECIP_INTERFACE))
+  1893				goto unknown;
+  1894			value = 2;	/* This is the length of the get_status reply */
+  1895			put_unaligned_le16(0, req->buf);
+  1896			if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
+  1897				break;
+  1898			f = cdev->config->interface[intf];
+  1899			if (!f)
+  1900				break;
+  1901			status = f->get_status ? f->get_status(f) : 0;
+  1902			if (status < 0)
+  1903				break;
+  1904			put_unaligned_le16(status & 0x0000ffff, req->buf);
+  1905			break;
+  1906		/*
+  1907		 * Function drivers should handle SetFeature/ClearFeature
+  1908		 * (FUNCTION_SUSPEND) request. function_suspend cb should be supplied
+  1909		 * only for the first interface of the function
+  1910		 */
+  1911		case USB_REQ_CLEAR_FEATURE:
+  1912		case USB_REQ_SET_FEATURE:
+  1913			if (!gadget_is_superspeed(gadget))
+  1914				goto unknown;
+  1915			if (ctrl->bRequestType != (USB_DIR_OUT | USB_RECIP_INTERFACE))
+  1916				goto unknown;
+  1917			switch (w_value) {
+  1918			case USB_INTRF_FUNC_SUSPEND:
+  1919				if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
+  1920					break;
+  1921				f = cdev->config->interface[intf];
+  1922				if (!f)
+  1923					break;
+  1924				value = 0;
+  1925				if (f->func_suspend)
+  1926					value = f->func_suspend(f, w_index >> 8);
+  1927				if (value < 0) {
+  1928					ERROR(cdev,
+  1929					      "func_suspend() returned error %d\n",
+  1930					      value);
+  1931					value = 0;
+  1932				}
+  1933				break;
+  1934			}
+  1935			break;
+  1936		default:
+  1937	unknown:
+  1938			/*
+  1939			 * OS descriptors handling
+  1940			 */
+  1941			if (cdev->use_os_string && cdev->os_desc_config &&
+  1942			    (ctrl->bRequestType & USB_TYPE_VENDOR) &&
+  1943			    ctrl->bRequest == cdev->b_vendor_code) {
+  1944				struct usb_configuration	*os_desc_cfg;
+  1945				u8				*buf;
+  1946				int				interface;
+  1947				int				count = 0;
+  1948	
+  1949				req = cdev->os_desc_req;
+  1950				req->context = cdev;
+  1951				req->complete = composite_setup_complete;
+  1952				buf = req->buf;
+  1953				os_desc_cfg = cdev->os_desc_config;
+  1954				w_length = min_t(u16, w_length, USB_COMP_EP0_OS_DESC_BUFSIZ);
+  1955				memset(buf, 0, w_length);
+  1956				buf[5] = 0x01;
+  1957				switch (ctrl->bRequestType & USB_RECIP_MASK) {
+  1958				case USB_RECIP_DEVICE:
+  1959					if (w_index != 0x4 || (w_value >> 8))
+  1960						break;
+  1961					buf[6] = w_index;
+  1962					/* Number of ext compat interfaces */
+  1963					count = count_ext_compat(os_desc_cfg);
+  1964					buf[8] = count;
+  1965					count *= 24; /* 24 B/ext compat desc */
+  1966					count += 16; /* header */
+  1967					put_unaligned_le32(count, buf);
+  1968					value = w_length;
+  1969					if (w_length > 0x10) {
+  1970						value = fill_ext_compat(os_desc_cfg, buf);
+  1971						value = min_t(u16, w_length, value);
+  1972					}
+  1973					break;
+  1974				case USB_RECIP_INTERFACE:
+  1975					if (w_index != 0x5 || (w_value >> 8))
+  1976						break;
+  1977					interface = w_value & 0xFF;
+  1978					buf[6] = w_index;
+  1979					count = count_ext_prop(os_desc_cfg,
+  1980						interface);
+  1981					put_unaligned_le16(count, buf + 8);
+  1982					count = len_ext_prop(os_desc_cfg,
+  1983						interface);
+  1984					put_unaligned_le32(count, buf);
+  1985					value = w_length;
+  1986					if (w_length > 0x0A) {
+  1987						value = fill_ext_prop(os_desc_cfg,
+  1988								      interface, buf);
+  1989						if (value >= 0)
+  1990							value = min_t(u16, w_length, value);
+  1991					}
+  1992					break;
+  1993				}
+  1994	
+  1995				goto check_value;
+  1996			}
+  1997	
+  1998			VDBG(cdev,
+  1999				"non-core control req%02x.%02x v%04x i%04x l%d\n",
+  2000				ctrl->bRequestType, ctrl->bRequest,
+  2001				w_value, w_index, w_length);
+  2002	
+  2003			/* functions always handle their interfaces and endpoints...
+  2004			 * punt other recipients (other, WUSB, ...) to the current
+  2005			 * configuration code.
+  2006			 */
+  2007			if (cdev->config) {
+  2008				list_for_each_entry(f, &cdev->config->functions, list)
+  2009					if (f->req_match &&
+  2010					    f->req_match(f, ctrl, false))
+  2011						goto try_fun_setup;
+  2012			} else {
+  2013				struct usb_configuration *c;
+  2014				list_for_each_entry(c, &cdev->configs, list)
+  2015					list_for_each_entry(f, &c->functions, list)
+  2016						if (f->req_match &&
+  2017						    f->req_match(f, ctrl, true))
+  2018							goto try_fun_setup;
+  2019			}
+  2020			f = NULL;
+  2021	
+  2022			switch (ctrl->bRequestType & USB_RECIP_MASK) {
+  2023			case USB_RECIP_INTERFACE:
+  2024				if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
+  2025					break;
+  2026				f = cdev->config->interface[intf];
+  2027				break;
+  2028	
+  2029			case USB_RECIP_ENDPOINT:
+  2030				if (!cdev->config)
+  2031					break;
+  2032				endp = ((w_index & 0x80) >> 3) | (w_index & 0x0f);
+  2033				list_for_each_entry(f, &cdev->config->functions, list) {
+  2034					if (test_bit(endp, f->endpoints))
+  2035						break;
+  2036				}
+  2037				if (&f->list == &cdev->config->functions)
+  2038					f = NULL;
+  2039				break;
+  2040			}
+  2041	try_fun_setup:
+  2042			if (f && f->setup)
+  2043				value = f->setup(f, ctrl);
+  2044			else {
+  2045				struct usb_configuration	*c;
+  2046	
+  2047				c = cdev->config;
+  2048				if (!c)
+  2049					goto done;
+  2050	
+  2051				/* try current config's setup */
+  2052				if (c->setup) {
+  2053					value = c->setup(c, ctrl);
+  2054					goto done;
+  2055				}
+  2056	
+  2057				/* try the only function in the current config */
+  2058				if (!list_is_singular(&c->functions))
+  2059					goto done;
+  2060				f = list_first_entry(&c->functions, struct usb_function,
+  2061						     list);
+  2062				if (f->setup)
+  2063					value = f->setup(f, ctrl);
+  2064			}
+  2065	
+  2066			goto done;
+  2067		}
+  2068	
+  2069	check_value:
+  2070		/* respond with data transfer before status phase? */
+  2071		if (value >= 0 && value != USB_GADGET_DELAYED_STATUS) {
+  2072			req->length = value;
+  2073			req->context = cdev;
+  2074			req->zero = value < w_length;
+  2075			value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
+  2076			if (value < 0) {
+  2077				DBG(cdev, "ep_queue --> %d\n", value);
+  2078				req->status = 0;
+  2079				composite_setup_complete(gadget->ep0, req);
+  2080			}
+  2081		} else if (value == USB_GADGET_DELAYED_STATUS && w_length != 0) {
+  2082			WARN(cdev,
+  2083				"%s: Delayed status not supported for w_length != 0",
+  2084				__func__);
+  2085		}
+  2086	
+  2087	done:
+  2088		/* device either stalls (value < 0) or reports success */
+  2089		return value;
+  2090	}
+  2091	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
