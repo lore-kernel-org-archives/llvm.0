@@ -1,177 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C611E53B5
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 13:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662556613;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=29jtmbEY4HwN/Aq5NElOEXZhvJaaeQOiE/XJLYkqfKc=;
-	b=JT3+Oa43kHY3Hw0BzEEhtKsyoQkLh0JuWGUehxK3HbtIbeSwuXv3fZZH18OlrJW1UqhQxE
-	SAy9zXHfRBGiDcK6v0yF1tyfKJykZqaUSvNBTsCFv5IAam5lFOSxE5c24pnJDmuGOeDYtJ
-	/PZq6U8mMPOQdUcdKU+2rt/z1wVfTh4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-m5Edl5A5OXK0vno3do0lgQ-1; Wed, 07 Sep 2022 09:16:52 -0400
-X-MC-Unique: m5Edl5A5OXK0vno3do0lgQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1C971818808
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 13:16:46 +0000 (UTC)
-Received: from [172.64.5.10] (unknown [10.30.33.227])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B5A1E40B40C9;
-	Wed,  7 Sep 2022 13:16:46 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (20/371 SKIPPED): Test report for master
- (6.0.0-rc4, mainline.kernel.org-clang, d2ec799d)
-Date: Wed, 07 Sep 2022 13:16:43 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456C25C91
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 14:19:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662560364; x=1694096364;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mb8iuybAB+Ow3ntbR/Nt2puuaVdPIstTH2e0zbuav8E=;
+  b=CBNLQ7+wj95L9RjUX/21TY4bobgtI1XIozjPhuAmRTc4UWkoKh94d7OM
+   6Vq9S4kyOAlQh5wh7clX4fgOOMy63h6/NUnr9WcQ4G4G1H56vQNDIogEk
+   XbVUZSmyrFckd/ZpAAEZs9dRoOksp/Bh5JtW8XcjAQl8FI/uWi45CqDKu
+   PFWaPrGPaEWnMMqRY0i6CVyOu5HVHSM9P+EyCy7CyJpnynOXaDN3Paj/c
+   P4J1gVIXpHjaDG/CpjLC9xqg6ruoH4pqPgha6OvbQJFiZp56ZOICzn4VA
+   mfLzVu+AUhCOriAK70n98L9FXtwfRGhNsDN7Z7x7/+L7Dnd3TbI/XJVYG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="383178125"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="383178125"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 07:19:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="682822800"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Sep 2022 07:19:18 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oVvte-0006eH-0A;
+	Wed, 07 Sep 2022 14:19:18 +0000
+Date: Wed, 7 Sep 2022 22:18:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Acayan <mailingradian@gmail.com>, bjorn.andersson@linaro.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, agross@kernel.org,
+	konrad.dybcio@somainline.org, mturquette@baylibre.com,
+	sboyd@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
+	jo@jsfamily.in, Richard Acayan <mailingradian@gmail.com>
+Subject: Re: [PATCH 3/3] clk: qcom: gcc-sdm845: add sdm670 global clock data
+Message-ID: <202209072255.CLVCZ5HY-lkp@intel.com>
+References: <20220907025035.15609-4-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-Message-Id: <97560.122090709165203996@us-mta-668.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907025035.15609-4-mailingradian@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Richard,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linus/master v6.0-rc4]
+[cannot apply to next-20220906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'erofs-for-6.0-rc5-fixes' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/xiang/erofs
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Acayan/SDM670-Global-Clocks/20220907-105158
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: riscv-randconfig-r031-20220906 (https://download.01.org/0day-ci/archive/20220907/202209072255.CLVCZ5HY-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/bfed597346daad9f2f2a30c553c855fbefc1fe7e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Richard-Acayan/SDM670-Global-Clocks/20220907-105158
+        git checkout bfed597346daad9f2f2a30c553c855fbefc1fe7e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/ net/mptcp/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52709
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
-grep -E
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1390
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+   drivers/clk/qcom/gcc-sdm845.c:3619:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk_src.clkr,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/qcom/gcc-sdm845.c:3618:29: note: previous initialization is here
+           [GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk.clkr,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/qcom/gcc-sdm845.c:268:30: warning: unused variable 'ftbl_gcc_sdm670_cpuss_rbcpr_clk_src' [-Wunused-const-variable]
+   static const struct freq_tbl ftbl_gcc_sdm670_cpuss_rbcpr_clk_src[] = {
+                                ^
+   9 warnings generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/ftbl_gcc_sdm670_cpuss_rbcpr_clk_src +268 drivers/clk/qcom/gcc-sdm845.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   267	
+ > 268	static const struct freq_tbl ftbl_gcc_sdm670_cpuss_rbcpr_clk_src[] = {
+   269		F(19200000, P_BI_TCXO, 1, 0, 0),
+   270		F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
+   271		{ }
+   272	};
+   273	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
