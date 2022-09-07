@@ -1,100 +1,103 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C908328E3
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 20:52:51 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id 130so17787576ybz.9
-        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 13:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=eSmjHP3psGeOMr+WEOk0DOTV5ssd7/gZzN1bjJygBoE=;
-        b=W/rcNroN25iYeVvA4FNx54QrYtbADyI5O2H8VEtzNGnvZ9oKm6c48boSOL9AicPayo
-         UGAvE69d7IxuzXAA2/xE8dR3nkb39jB1608tET99ZpLMvjZgf9vM1Bu1MrVUGg7jcURa
-         kN26DNyIQ5oqvDFkQFEH0V5+sVSSHBYL5cONOS4K9Gc82pdferYtOdBvjOEpty8BSuuc
-         gXAtJVbIQ5Zv3wmVklfysoubfyGQBMg16hquIOyw3iqFF8FRjYIyot3QKHBqPLadevHq
-         aiTWvTa6/qh35l94HjQnQtgPtOoKlWP3Lspzkh5wG7pxujSow7KZknk2ye4MKUmhu1r/
-         tGdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eSmjHP3psGeOMr+WEOk0DOTV5ssd7/gZzN1bjJygBoE=;
-        b=Yx0bb7pg04irH35JcLNIRzV2XDDwpAX/FwxsjNfldb7eW6Wu8tVPxYBN3vnvp+i4PI
-         TLAUHx8Bq0ZEWRo3YVBj8XfTYuRsrvt9UrIGGYMFlzqoi2K4DtuusrSE5KfgVxXoeOGD
-         sSVyLvmKmD6+a6L0pasamggIC5Xb47eixcqtveRrvYX0COhWjQ7Or2aUDcqihL2n9Ut/
-         X0MRhmfu8a9sP0u4+g7194Gw7L6aAtMxCvrpecyd2RyaoQgoP+iTIRKBgJ/3mE3HRMfT
-         sRgbXnFiDze9i1lzzz0v5Si2KCWPA6YSqjIdgFUBu/IfnZhubbX+LLhk8GVgOcRpIXov
-         VG8w==
-X-Gm-Message-State: ACgBeo2I+/bLeRK+v5HfBZOzlAE9RrCry+aYNvovaJpFTDHOKnhYg2vU
-	+yvhVlJpyM8BVid9dn9r/rUu4TFxEs+E9oz8bmv3rA==
-X-Google-Smtp-Source: AA6agR5SyII+g6dM3/0IIZUA8tRak0g0gdQnoJxzvJTclg/zaQA2sNycYdnFGvhHcXHM1N7GKELHo2uAWHtVy0ENKKY=
-X-Received: by 2002:a25:1e86:0:b0:68d:549a:e4c2 with SMTP id
- e128-20020a251e86000000b0068d549ae4c2mr4320074ybe.93.1662583970644; Wed, 07
- Sep 2022 13:52:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151F589D0
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 21:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662585333; x=1694121333;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rZZJqsZJrCYlDyHph8xdCoe+iknngZkT0G9cnPOAiBY=;
+  b=k8iWj2v78JNI8QgoRyywDW6TEyUw/7lDN+l3XJPSHgfoGxzuj3lt2qdb
+   WZZB9BFA+4l5/3+FRKW1S1NpSUroxZJR/XM/v3Z9T++icN314ue8mNp2H
+   alkswNWYWSqp1kmWxgYZ2xJo6lLO/pcL7DJT+gjidqKF7uswQ/ZIUOC+M
+   94M1B+6ITQcafqqi1NKR7ghBF5aiWlLhU3jjzSREo9U3fTfAdY81WZCiN
+   x+aHrfVMAaPU6Uyd+Sv1LxQcFXzxZOpytAwAg2pJNvER76ImbplP0ta+p
+   ODznce06Ffv3wp1YPT4bKfZ7KTuQ7hEVlf0yJOuCXOA1hPfk6HlMdD6o2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="295733936"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="295733936"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:15:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="740439955"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 07 Sep 2022 14:15:30 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oW2OP-0006xv-2H;
+	Wed, 07 Sep 2022 21:15:29 +0000
+Date: Thu, 8 Sep 2022 05:15:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [pinchartl-media:streams/v6.0/v11 27/49]
+ drivers/media/v4l2-core/v4l2-subdev.c:156:8: error: call to undeclared
+ function 'v4l2_subdev_state_get_stream_format'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202209080505.7TfHX43B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220907173903.2268161-1-elver@google.com> <Yxjf2GtNbr8Ra5VL@boqun-archlinux>
-In-Reply-To: <Yxjf2GtNbr8Ra5VL@boqun-archlinux>
-From: Marco Elver <elver@google.com>
-Date: Wed, 7 Sep 2022 22:52:13 +0200
-Message-ID: <CANpmjNMNpFUN3mvpAfdgf2NRcrOjMKdnF09UcbPSvAi8+==Byw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer Clang
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 7 Sept 2022 at 20:17, Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> On Wed, Sep 07, 2022 at 07:39:02PM +0200, Marco Elver wrote:
-> > With Clang version 16+, -fsanitize=thread will turn
-> > memcpy/memset/memmove calls in instrumented functions into
-> > __tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
-> >
-> > Add these functions to the core KCSAN runtime, so that we (a) catch data
-> > races with mem* functions, and (b) won't run into linker errors with
-> > such newer compilers.
-> >
-> > Cc: stable@vger.kernel.org # v5.10+
->
-> For (b) I think this is Ok, but for (a), what the atomic guarantee of
-> our mem* functions? Per-byte atomic or something more complicated (for
-> example, providing best effort atomic if a memory location in the range
-> is naturally-aligned to a machine word)?
+tree:   git://linuxtv.org/pinchartl/media.git streams/v6.0/v11
+head:   c8cf58f00bee6d4f43462b3e3f83ef516c594d61
+commit: 46db369d5850a9ac814a5ac236a4d39e390ca217 [27/49] media: subdev: add stream based configuration
+config: arm-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220908/202209080505.7TfHX43B-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
+        git fetch --no-tags pinchartl-media streams/v6.0/v11
+        git checkout 46db369d5850a9ac814a5ac236a4d39e390ca217
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/v4l2-core/
 
-There should be no atomicity guarantee of mem*() functions, anything
-else would never be safe, given compilers love to optimize all of them
-(replacing the calls with inline versions etc.).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> If it's a per-byte atomicity, then maybe another KCSAN_ACCESS_* flags is
-> needed, otherwise memset(0x8, 0, 0x2) is considered as atomic if
-> ASSUME_PLAIN_WRITES_ATOMIC=y. Unless I'm missing something.
->
-> Anyway, this may be worth another patch and some discussion/doc, because
-> it just improve the accuracy of the tool. In other words, this patch and
-> the "stable" tag look good to me.
+All errors (new ones prefixed by >>):
 
-Right, this will treat write accesses done by mem*() functions with a
-size less than or equal to word size as atomic if that option is on.
-However, I feel the more interesting cases will be
-memcpy/memset/memmove with much larger sizes. That being said, note
-that even though we pretend smaller than word size writes might be
-atomic, for no data race to be detected, both accesses need to be
-atomic.
+>> drivers/media/v4l2-core/v4l2-subdev.c:156:8: error: call to undeclared function 'v4l2_subdev_state_get_stream_format'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   if (!v4l2_subdev_state_get_stream_format(state, pad, stream))
+                        ^
+   1 error generated.
 
-If that behaviour should be changed for mem*() functions in the
-default non-strict config is, like you say, something to ponder. In
-general, I find the ASSUME_PLAIN_WRITES_ATOMIC=y a pretty bad default,
-and I'd rather just change that default. But unfortunately, I think
-the kernel isn't ready for that, given opinions on this still diverge.
 
-Thanks,
--- Marco
+vim +/v4l2_subdev_state_get_stream_format +156 drivers/media/v4l2-core/v4l2-subdev.c
+
+   150	
+   151	static int check_state(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+   152			       u32 which, u32 pad, u32 stream)
+   153	{
+   154	#if defined(CONFIG_MEDIA_CONTROLLER)
+   155		if (sd->flags & V4L2_SUBDEV_FL_MULTIPLEXED) {
+ > 156			if (!v4l2_subdev_state_get_stream_format(state, pad, stream))
+   157				return -EINVAL;
+   158			return 0;
+   159		}
+   160	#endif
+   161	
+   162		if (which == V4L2_SUBDEV_FORMAT_TRY && (!state || !state->pads))
+   163			return -EINVAL;
+   164	
+   165		return 0;
+   166	}
+   167	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
