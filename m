@@ -1,86 +1,96 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB2A7E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:06:55 +0000 (UTC)
-Received: from nazgul.tnic (unknown [84.201.196.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6786E1EC068F;
-	Wed,  7 Sep 2022 06:06:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1662523609;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=oF8uyun+ouCeH4rU0Sgny6nXLM0tjw0TQ71zarK9tig=;
-	b=I66wrZ08yscrWobgTr7tjuBmYVub0sMgs1pmnJ2jRbXAi7RAAscCJHcTwJKc5ZcMnGu1VR
-	8+rc3rFQ9+g2ra5WsruBdluAyQ/YcsIGwA9+G89xQZiLoWl3bEZ8vR6O4QFMht8Z1yScjM
-	clZ7EIynTYl84Kq+6QPYN9ZbsnKgW+A=
-Date: Wed, 7 Sep 2022 06:06:58 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Jan Beulich <JBeulich@suse.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Joe Perches <joe@perches.com>, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-Message-ID: <YxgY2MBmBIkBsdlu@nazgul.tnic>
-References: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
- <YwT+5GGCOKoTjfQZ@zn.tnic>
- <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic>
- <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
- <YwXkuW3rSYY7ZJT+@zn.tnic>
- <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
- <YwYmpK40ju5WUlVZ@zn.tnic>
- <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9B07E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:15:07 +0000 (UTC)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 2874EmEn017336
+	for <llvm@lists.linux.dev>; Wed, 7 Sep 2022 13:14:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2874EmEn017336
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1662524089;
+	bh=0hTBLT8N18H/BI5SDUzZKCK5eLhcJNLu+ZRFya2Xhg8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jcefueL0JvqinQJe5NOVxG01SEwbq3bwWY/zq0BoaN7T6h+bC3QJoxNANDud3/YTC
+	 IvLjMt14vtpAhyrU9Ub/nmdn0VjYgg4MTpJxpxY4cXIfo5Uceyrryejza+bl/uyY/Q
+	 vX7qCduKcLcDA6kG3rh9L2+r3z4eqwneZNnP/9sWu6mfP9H29W2GywFC+VlPkxFb/d
+	 8P3Z+6MPXaxviL0KpGT7cwCvRGAEBnlJmYvUyFRIohXcygTo7JiTzeSIAGBkRwIgZi
+	 5xnPoxYk3L9WYXEqzE7yTlU4eIjC+NLEkjJb4SbTNS+0VP+FVzOPfPr6dcFN7+2jCe
+	 ywMd18PANee6A==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127d10b4f19so7427744fac.9
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:14:49 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0ZNPERrFojpxZI7MLKl6KZXE/I4LWOo2ktM6F7ln9t+hloZD0b
+	fhM6p9TZPJforqlLX+rmfuWd3Z4b21ydO1IJb+I=
+X-Google-Smtp-Source: AA6agR4dMRG833gu29zjUBYVXOLf9kiGqLu3V7VD2BEjRI3GOvYDJ2evaD1DM7vJ7ecszrkPYMrJQcXRuxhD4RzH+sU=
+X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
+ w10-20020a056808090a00b0034b826c6116mr5927986oih.194.1662524087917; Tue, 06
+ Sep 2022 21:14:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
+References: <20220831184408.2778264-1-ndesaulniers@google.com>
+ <20220831184408.2778264-3-ndesaulniers@google.com> <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
+ <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com> <YxdwbKA5ThYJcPBP@dev-arch.thelio-3990X>
+In-Reply-To: <YxdwbKA5ThYJcPBP@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 7 Sep 2022 13:14:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASBAMRwGPH1gyt5JeBTVX3UkmC4DGkbjSxrwWFO+4+yEg@mail.gmail.com>
+Message-ID: <CAK7LNASBAMRwGPH1gyt5JeBTVX3UkmC4DGkbjSxrwWFO+4+yEg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Aug 27, 2022 at 06:32:05AM +0900, Vincent MAILHOL wrote:
-> Agree that this is only the surface. But, my patch series is about
-> constant folding, not about the text of *ffs(). Here, I just *move*
-> the existing text, I did not modify anything.
-> Can we agree that this is a separate topic?
+On Wed, Sep 7, 2022 at 1:08 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Sep 05, 2022 at 06:09:28PM +0900, Masahiro Yamada wrote:
+> > On Thu, Sep 1, 2022 at 4:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Wed, Aug 31, 2022 at 11:44:05AM -0700, Nick Desaulniers wrote:
+> > > > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> > > > cause as-option to fail unexpectedly because clang will emit
+> > > > -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> > > > assembler sources.
+> > >
+> > > Now that I am looking closer at it, where does that '-Werror' come from?
+> >
+> > The related commit is
+> > c3f0d0bc5b01ad90c45276952802455750444b4f
+> >
+> > The previous discussion with Arnd is
+> > https://lore.kernel.org/linux-kbuild/20170314213724.3836900-1-arnd@arndb.de/
+>
+> Right, although this is for cc-option, not as-option, no?
 
-Sure we can.
 
-But then you can't start your commit message with:
 
-"__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x)."
+Sorry, I misunderstood your comments.
+My reference is about -Werror in cc-option. It is unrelated to as-option.
 
-which will bring unenlightened readers like me into the very same mess.
 
-So at least mention that there's a difference between the kernel
-implementation using hw insns which are well defined on some machines
-and what the glibc API does. So that at least people are aware that
-there's something dangerous to be cautious about.
 
-Ok?
+You are right.
+Currently, as-option takes KBUILD_CFLAGS instead of KBUILD_AFLAGS.
 
-Thx.
+The '-Werror,' of -Werror,-Wunused-command-line-argument
+presumably came from CONFIG_WERROR.
+
+
+
+
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best Regards
+Masahiro Yamada
