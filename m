@@ -1,328 +1,210 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BEBA5CA6
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 15:21:20 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2702B106F;
-	Wed,  7 Sep 2022 08:21:26 -0700 (PDT)
-Received: from [10.57.77.239] (unknown [10.57.77.239])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D11303F71A;
-	Wed,  7 Sep 2022 08:21:15 -0700 (PDT)
-Message-ID: <d5fdbae3-aaf0-e837-d7e6-05e9d3af7e4c@arm.com>
-Date: Wed, 7 Sep 2022 16:21:14 +0100
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEE85CA6
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 16:18:23 +0000 (UTC)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1oVxP2-000706-B3; Wed, 07 Sep 2022 17:55:48 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
+Subject: Re: kernel/dma/pool.c:105:9: error: call to undeclared function 'pgprot_dmacoherent'; ISO C99 and later do not support implicit function declarations
+Date: Wed, 07 Sep 2022 17:55:47 +0200
+Message-ID: <3064082.22IY78Rhhi@diego>
+In-Reply-To: <202209070536.lIefsBuR-lkp@intel.com>
+References: <202209070536.lIefsBuR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/8] perf arm64: Send pointer auth masks to ring buffer
-Content-Language: en-US
-To: "peterz@infradead.org" <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
- linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Andrew Kilroy <andrew.kilroy@arm.com>
-References: <20220704145333.22557-1-andrew.kilroy@arm.com>
- <20220704145333.22557-2-andrew.kilroy@arm.com> <YvOxOBzsbjX1rMdY@kernel.org>
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <YvOxOBzsbjX1rMdY@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-
-
-On 10/08/2022 14:23, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Jul 04, 2022 at 03:53:25PM +0100, Andrew Kilroy escreveu:
->> Perf report cannot produce callgraphs using dwarf on arm64 where pointer
->> authentication is enabled.  This is because libunwind and libdw cannot
->> unmangle instruction pointers that have a pointer authentication code
->> (PAC) embedded in them.
->>
->> libunwind and libdw need to be given an instruction mask which they can
->> use to arrive at the correct return address that does not contain the
->> PAC.
->>
->> The bits in the return address that contain the PAC can differ by
->> process, so this patch adds a new sample field PERF_SAMPLE_ARCH_1
->> to allow the kernel to send the masks up to userspace perf.
->>
->> This field can be used in a architecture specific fashion, but on
->> aarch64, it contains the ptrauth mask information.
+Am Dienstag, 6. September 2022, 23:21:48 CEST schrieb kernel test robot:
+> Hi Heiko,
 > 
-> I'm not seeing this kernel patch applied to tip/master or
-> torvalds/master, what is the status of that part? Then I can look at the
-> tooling part.
+> First bad commit (maybe != root cause):
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   d2ec799d1c1be847d6a70704fe586ac4d14265c8
+> commit: 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a riscv: Add support for non-coherent devices using zicbom extension
+> date:   6 weeks ago
+> config: riscv-randconfig-r031-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070536.lIefsBuR-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1631ba1259d6d7f49b6028f2a1a0fa02be1c522a
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+
+I've send
+	https://lore.kernel.org/r/20220907154932.2858518-1-heiko@sntech.de
+as a fix just now.
+
+Both the core svpbmt and zicbom already depend on CONFIG_MMU, while the
+t-head variant did not. So it was possible with a non-MMU-build to:
+- enable the T-Head CMO variant, which would
+- select CONFIG_RISCV_DMA_NONCOHERENT pulling in
+- CONFIG_DMA_DIRECT_REMAP 
+and therefore run into that issue.
+
+The above patch just adjust the dependency for the variant implementation
+to match the core extensions.
+
+
+Heiko
+
+
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from kernel/dma/pool.c:8:
+>    In file included from include/linux/dma-map-ops.h:9:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __raw_readb(PCI_IOBASE + addr);
+>                              ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>                                                      ^
+>    In file included from kernel/dma/pool.c:8:
+>    In file included from include/linux/dma-map-ops.h:9:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>                                                      ^
+>    In file included from kernel/dma/pool.c:8:
+>    In file included from include/linux/dma-map-ops.h:9:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writeb(value, PCI_IOBASE + addr);
+>                                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>                                                          ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>                                                          ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+>                                                      ~~~~~~~~~~ ^
+> >> kernel/dma/pool.c:105:9: error: call to undeclared function 'pgprot_dmacoherent'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                                               pgprot_dmacoherent(PAGE_KERNEL),
+>                                               ^
+> >> kernel/dma/pool.c:105:9: error: passing 'int' to parameter of incompatible type 'pgprot_t'
+>                                               pgprot_dmacoherent(PAGE_KERNEL),
+>                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/dma-map-ops.h:235:76: note: passing argument to parameter 'prot' here
+>    void *dma_common_contiguous_remap(struct page *page, size_t size, pgprot_t prot,
+>                                                                               ^
+>    7 warnings and 2 errors generated.
+> 
+> 
+> vim +/pgprot_dmacoherent +105 kernel/dma/pool.c
+> 
+> d7e673ec2c8e0e Nicolas Saenz Julienne 2020-08-14   78  
+> 54adadf9b08571 David Rientjes         2020-04-20   79  static int atomic_pool_expand(struct gen_pool *pool, size_t pool_size,
+> 54adadf9b08571 David Rientjes         2020-04-20   80  			      gfp_t gfp)
+> e860c299ac0d73 David Rientjes         2020-04-14   81  {
+> 54adadf9b08571 David Rientjes         2020-04-20   82  	unsigned int order;
+> 892fc9f6835ecf Dan Carpenter          2020-08-26   83  	struct page *page = NULL;
+> e860c299ac0d73 David Rientjes         2020-04-14   84  	void *addr;
+> 54adadf9b08571 David Rientjes         2020-04-20   85  	int ret = -ENOMEM;
+> 54adadf9b08571 David Rientjes         2020-04-20   86  
+> 54adadf9b08571 David Rientjes         2020-04-20   87  	/* Cannot allocate larger than MAX_ORDER-1 */
+> 54adadf9b08571 David Rientjes         2020-04-20   88  	order = min(get_order(pool_size), MAX_ORDER-1);
+> 54adadf9b08571 David Rientjes         2020-04-20   89  
+> 54adadf9b08571 David Rientjes         2020-04-20   90  	do {
+> 54adadf9b08571 David Rientjes         2020-04-20   91  		pool_size = 1 << (PAGE_SHIFT + order);
+> d7e673ec2c8e0e Nicolas Saenz Julienne 2020-08-14   92  		if (cma_in_zone(gfp))
+> d7e673ec2c8e0e Nicolas Saenz Julienne 2020-08-14   93  			page = dma_alloc_from_contiguous(NULL, 1 << order,
+> d7e673ec2c8e0e Nicolas Saenz Julienne 2020-08-14   94  							 order, false);
+> d7e673ec2c8e0e Nicolas Saenz Julienne 2020-08-14   95  		if (!page)
+> c84dc6e68a1d24 David Rientjes         2020-04-14   96  			page = alloc_pages(gfp, order);
+> 54adadf9b08571 David Rientjes         2020-04-20   97  	} while (!page && order-- > 0);
+> e860c299ac0d73 David Rientjes         2020-04-14   98  	if (!page)
+> e860c299ac0d73 David Rientjes         2020-04-14   99  		goto out;
+> e860c299ac0d73 David Rientjes         2020-04-14  100  
+> c84dc6e68a1d24 David Rientjes         2020-04-14  101  	arch_dma_prep_coherent(page, pool_size);
+> e860c299ac0d73 David Rientjes         2020-04-14  102  
+> 76a19940bd62a8 David Rientjes         2020-04-14  103  #ifdef CONFIG_DMA_DIRECT_REMAP
+> c84dc6e68a1d24 David Rientjes         2020-04-14  104  	addr = dma_common_contiguous_remap(page, pool_size,
+> e860c299ac0d73 David Rientjes         2020-04-14 @105  					   pgprot_dmacoherent(PAGE_KERNEL),
+> e860c299ac0d73 David Rientjes         2020-04-14  106  					   __builtin_return_address(0));
+> e860c299ac0d73 David Rientjes         2020-04-14  107  	if (!addr)
+> 54adadf9b08571 David Rientjes         2020-04-20  108  		goto free_page;
+> 76a19940bd62a8 David Rientjes         2020-04-14  109  #else
+> 76a19940bd62a8 David Rientjes         2020-04-14  110  	addr = page_to_virt(page);
+> 76a19940bd62a8 David Rientjes         2020-04-14  111  #endif
+> 76a19940bd62a8 David Rientjes         2020-04-14  112  	/*
+> 76a19940bd62a8 David Rientjes         2020-04-14  113  	 * Memory in the atomic DMA pools must be unencrypted, the pools do not
+> 2f5388a29be82a Christoph Hellwig      2020-08-17  114  	 * shrink so no re-encryption occurs in dma_direct_free().
+> 76a19940bd62a8 David Rientjes         2020-04-14  115  	 */
+> 76a19940bd62a8 David Rientjes         2020-04-14  116  	ret = set_memory_decrypted((unsigned long)page_to_virt(page),
+> 76a19940bd62a8 David Rientjes         2020-04-14  117  				   1 << order);
+> 76a19940bd62a8 David Rientjes         2020-04-14  118  	if (ret)
+> 76a19940bd62a8 David Rientjes         2020-04-14  119  		goto remove_mapping;
+> 54adadf9b08571 David Rientjes         2020-04-20  120  	ret = gen_pool_add_virt(pool, (unsigned long)addr, page_to_phys(page),
+> 54adadf9b08571 David Rientjes         2020-04-20  121  				pool_size, NUMA_NO_NODE);
+> e860c299ac0d73 David Rientjes         2020-04-14  122  	if (ret)
+> 76a19940bd62a8 David Rientjes         2020-04-14  123  		goto encrypt_mapping;
+> e860c299ac0d73 David Rientjes         2020-04-14  124  
+> 2edc5bb3c5cc42 David Rientjes         2020-04-14  125  	dma_atomic_pool_size_add(gfp, pool_size);
+> e860c299ac0d73 David Rientjes         2020-04-14  126  	return 0;
+> e860c299ac0d73 David Rientjes         2020-04-14  127  
+> 76a19940bd62a8 David Rientjes         2020-04-14  128  encrypt_mapping:
+> 76a19940bd62a8 David Rientjes         2020-04-14  129  	ret = set_memory_encrypted((unsigned long)page_to_virt(page),
+> 76a19940bd62a8 David Rientjes         2020-04-14  130  				   1 << order);
+> 76a19940bd62a8 David Rientjes         2020-04-14  131  	if (WARN_ON_ONCE(ret)) {
+> 76a19940bd62a8 David Rientjes         2020-04-14  132  		/* Decrypt succeeded but encrypt failed, purposely leak */
+> 76a19940bd62a8 David Rientjes         2020-04-14  133  		goto out;
+> 76a19940bd62a8 David Rientjes         2020-04-14  134  	}
+> e860c299ac0d73 David Rientjes         2020-04-14  135  remove_mapping:
+> 76a19940bd62a8 David Rientjes         2020-04-14  136  #ifdef CONFIG_DMA_DIRECT_REMAP
+> c84dc6e68a1d24 David Rientjes         2020-04-14  137  	dma_common_free_remap(addr, pool_size);
+> 76a19940bd62a8 David Rientjes         2020-04-14  138  #endif
+> 76a19940bd62a8 David Rientjes         2020-04-14  139  free_page: __maybe_unused
+> c84dc6e68a1d24 David Rientjes         2020-04-14  140  	__free_pages(page, order);
+> e860c299ac0d73 David Rientjes         2020-04-14  141  out:
+> 54adadf9b08571 David Rientjes         2020-04-20  142  	return ret;
+> 54adadf9b08571 David Rientjes         2020-04-20  143  }
+> 54adadf9b08571 David Rientjes         2020-04-20  144  
+> 
+> :::::: The code at line 105 was first introduced by commit
+> :::::: e860c299ac0d738b44ff91693f11e63080a29698 dma-remap: separate DMA atomic pools from direct remap code
+> 
+> :::::: TO: David Rientjes <rientjes@google.com>
+> :::::: CC: Christoph Hellwig <hch@lst.de>
+> 
 > 
 
-Hi Peter,
 
-I just left my review tag for the whole set, is it ok by you to apply
-the first commit?
 
-I'm not 100% sure of the process because it has some kernel/events
-changes and arch/arm64 in the same commit. And I'm also not sure if
-there is consensus about the new PERF_SAMPLE_ARCH_1 bit. There was a
-comment from Vince Weaver but I don't agree that perf_event_open should
-or can ever be completely generic so it's not a huge issue for me. And
-there weren't any other comments against adding it.
 
-Thanks
-James
-
-> - Arnaldo
->  
->> Signed-off-by: Andrew Kilroy <andrew.kilroy@arm.com>
->> ---
->>  arch/arm64/include/asm/arch_sample_data.h | 38 +++++++++++++++++++++++
->>  arch/arm64/kernel/Makefile                |  2 +-
->>  arch/arm64/kernel/arch_sample_data.c      | 37 ++++++++++++++++++++++
->>  include/linux/perf_event.h                | 24 ++++++++++++++
->>  include/uapi/linux/perf_event.h           |  5 ++-
->>  kernel/events/core.c                      | 35 +++++++++++++++++++++
->>  6 files changed, 139 insertions(+), 2 deletions(-)
->>  create mode 100644 arch/arm64/include/asm/arch_sample_data.h
->>  create mode 100644 arch/arm64/kernel/arch_sample_data.c
->>
->> diff --git a/arch/arm64/include/asm/arch_sample_data.h b/arch/arm64/include/asm/arch_sample_data.h
->> new file mode 100644
->> index 000000000000..83fda293b1fc
->> --- /dev/null
->> +++ b/arch/arm64/include/asm/arch_sample_data.h
->> @@ -0,0 +1,38 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#ifndef _ASM_ARCH_SAMPLE_DATA_H
->> +#define _ASM_ARCH_SAMPLE_DATA_H
->> +
->> +#include <linux/types.h>
->> +
->> +/*
->> + * Structure holding masks to help userspace stack unwinding
->> + * in the presence of arm64 pointer authentication.
->> + */
->> +struct ptrauth_info {
->> +	/*
->> +	 * Bits 0, 1, 2, 3, 4 may be set to on, to indicate which keys are being used
->> +	 * The APIAKEY, APIBKEY, APDAKEY, APDBKEY, or the APGAKEY respectively.
->> +	 * Where all bits are off, pointer authentication is not in use for the
->> +	 * process.
->> +	 */
->> +	u64 enabled_keys;
->> +
->> +	/*
->> +	 * The on bits represent which bits in an instruction pointer
->> +	 * constitute the pointer authentication code.
->> +	 */
->> +	u64 insn_mask;
->> +
->> +	/*
->> +	 * The on bits represent which bits in a data pointer constitute the
->> +	 * pointer authentication code.
->> +	 */
->> +	u64 data_mask;
->> +};
->> +
->> +struct arch_sample_data {
->> +	struct ptrauth_info ptrauth;
->> +};
->> +
->> +#endif
->> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
->> index fa7981d0d917..843c6e0e2393 100644
->> --- a/arch/arm64/kernel/Makefile
->> +++ b/arch/arm64/kernel/Makefile
->> @@ -44,7 +44,7 @@ obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
->>  obj-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o entry-ftrace.o
->>  obj-$(CONFIG_MODULES)			+= module.o
->>  obj-$(CONFIG_ARM64_MODULE_PLTS)		+= module-plts.o
->> -obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o
->> +obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o arch_sample_data.o
->>  obj-$(CONFIG_HW_PERF_EVENTS)		+= perf_event.o
->>  obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
->>  obj-$(CONFIG_CPU_PM)			+= sleep.o suspend.o
->> diff --git a/arch/arm64/kernel/arch_sample_data.c b/arch/arm64/kernel/arch_sample_data.c
->> new file mode 100644
->> index 000000000000..2d47e8db0dbe
->> --- /dev/null
->> +++ b/arch/arm64/kernel/arch_sample_data.c
->> @@ -0,0 +1,37 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <asm/arch_sample_data.h>
->> +#include <linux/perf_event.h>
->> +
->> +inline void perf_output_sample_arch_1(struct perf_output_handle *handle,
->> +				      struct perf_event_header *header,
->> +				      struct perf_sample_data *data,
->> +				      struct perf_event *event)
->> +{
->> +	perf_output_put(handle, data->arch.ptrauth.enabled_keys);
->> +	perf_output_put(handle, data->arch.ptrauth.insn_mask);
->> +	perf_output_put(handle, data->arch.ptrauth.data_mask);
->> +}
->> +
->> +inline void perf_prepare_sample_arch_1(struct perf_event_header *header,
->> +				       struct perf_sample_data *data,
->> +				       struct perf_event *event,
->> +				       struct pt_regs *regs)
->> +{
->> +	struct task_struct *task = current;
->> +	int keys_result = ptrauth_get_enabled_keys(task);
->> +	u64 user_pac_mask = keys_result > 0 ? ptrauth_user_pac_mask() : 0;
->> +
->> +	data->arch.ptrauth.enabled_keys = keys_result > 0 ? keys_result : 0;
->> +	data->arch.ptrauth.insn_mask = user_pac_mask;
->> +	data->arch.ptrauth.data_mask = user_pac_mask;
->> +
->> +	header->size += (3 * sizeof(u64));
->> +}
->> +
->> +inline int perf_event_open_request_arch_1(void)
->> +{
->> +	return 0;
->> +}
->> +
->> +
->> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
->> index da759560eec5..8a99942989ce 100644
->> --- a/include/linux/perf_event.h
->> +++ b/include/linux/perf_event.h
->> @@ -999,6 +999,29 @@ int perf_event_read_local(struct perf_event *event, u64 *value,
->>  extern u64 perf_event_read_value(struct perf_event *event,
->>  				 u64 *enabled, u64 *running);
->>  
->> +void perf_output_sample_arch_1(struct perf_output_handle *handle,
->> +			       struct perf_event_header *header,
->> +			       struct perf_sample_data *data,
->> +			       struct perf_event *event);
->> +
->> +void perf_prepare_sample_arch_1(struct perf_event_header *header,
->> +				struct perf_sample_data *data,
->> +				struct perf_event *event,
->> +				struct pt_regs *regs);
->> +
->> +int perf_event_open_request_arch_1(void);
->> +
->> +#if IS_ENABLED(CONFIG_ARM64)
->> +
->> +#define HAS_ARCH_SAMPLE_DATA
->> +#include <asm/arch_sample_data.h>
->> +
->> +#endif
->> +
->> +#ifndef HAS_ARCH_SAMPLE_DATA
->> +struct arch_sample_data {
->> +};
->> +#endif
->>  
->>  struct perf_sample_data {
->>  	/*
->> @@ -1041,6 +1064,7 @@ struct perf_sample_data {
->>  	u64				cgroup;
->>  	u64				data_page_size;
->>  	u64				code_page_size;
->> +	struct arch_sample_data		arch;
->>  } ____cacheline_aligned;
->>  
->>  /* default value for data source */
->> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
->> index d37629dbad72..821bf5ff6a19 100644
->> --- a/include/uapi/linux/perf_event.h
->> +++ b/include/uapi/linux/perf_event.h
->> @@ -162,12 +162,15 @@ enum perf_event_sample_format {
->>  	PERF_SAMPLE_DATA_PAGE_SIZE		= 1U << 22,
->>  	PERF_SAMPLE_CODE_PAGE_SIZE		= 1U << 23,
->>  	PERF_SAMPLE_WEIGHT_STRUCT		= 1U << 24,
->> +	PERF_SAMPLE_ARCH_1			= 1U << 25,
->>  
->> -	PERF_SAMPLE_MAX = 1U << 25,		/* non-ABI */
->> +	PERF_SAMPLE_MAX = 1U << 26,		/* non-ABI */
->>  
->>  	__PERF_SAMPLE_CALLCHAIN_EARLY		= 1ULL << 63, /* non-ABI; internal use */
->>  };
->>  
->> +#define PERF_SAMPLE_ARM64_PTRAUTH PERF_SAMPLE_ARCH_1
->> +
->>  #define PERF_SAMPLE_WEIGHT_TYPE	(PERF_SAMPLE_WEIGHT | PERF_SAMPLE_WEIGHT_STRUCT)
->>  /*
->>   * values to program into branch_sample_type when PERF_SAMPLE_BRANCH is set
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index 80782cddb1da..89ab8120f4f0 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -6957,6 +6957,29 @@ static inline bool perf_sample_save_hw_index(struct perf_event *event)
->>  	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
->>  }
->>  
->> +#ifndef HAS_ARCH_SAMPLE_DATA
->> +
->> +inline void perf_output_sample_arch_1(struct perf_output_handle *handle __maybe_unused,
->> +				      struct perf_event_header *header __maybe_unused,
->> +				      struct perf_sample_data *data __maybe_unused,
->> +				      struct perf_event *event __maybe_unused)
->> +{
->> +}
->> +
->> +inline void perf_prepare_sample_arch_1(struct perf_event_header *header __maybe_unused,
->> +				       struct perf_sample_data *data __maybe_unused,
->> +				       struct perf_event *event __maybe_unused,
->> +				       struct pt_regs *regs __maybe_unused)
->> +{
->> +}
->> +
->> +inline int perf_event_open_request_arch_1(void)
->> +{
->> +	return -EINVAL;
->> +}
->> +
->> +#endif
->> +
->>  void perf_output_sample(struct perf_output_handle *handle,
->>  			struct perf_event_header *header,
->>  			struct perf_sample_data *data,
->> @@ -7125,6 +7148,9 @@ void perf_output_sample(struct perf_output_handle *handle,
->>  			perf_aux_sample_output(event, handle, data);
->>  	}
->>  
->> +	if (sample_type & PERF_SAMPLE_ARCH_1)
->> +		perf_output_sample_arch_1(handle, header, data, event);
->> +
->>  	if (!event->attr.watermark) {
->>  		int wakeup_events = event->attr.wakeup_events;
->>  
->> @@ -7427,6 +7453,9 @@ void perf_prepare_sample(struct perf_event_header *header,
->>  	if (sample_type & PERF_SAMPLE_CODE_PAGE_SIZE)
->>  		data->code_page_size = perf_get_page_size(data->ip);
->>  
->> +	if (sample_type & PERF_SAMPLE_ARCH_1)
->> +		perf_prepare_sample_arch_1(header, data, event, regs);
->> +
->>  	if (sample_type & PERF_SAMPLE_AUX) {
->>  		u64 size;
->>  
->> @@ -12074,6 +12103,12 @@ SYSCALL_DEFINE5(perf_event_open,
->>  			return err;
->>  	}
->>  
->> +	if (attr.sample_type & PERF_SAMPLE_ARCH_1) {
->> +		err = perf_event_open_request_arch_1();
->> +		if (err)
->> +			return err;
->> +	}
->> +
->>  	/*
->>  	 * In cgroup mode, the pid argument is used to pass the fd
->>  	 * opened to the cgroup directory in cgroupfs. The cpu argument
->> -- 
->> 2.17.1
-> 
