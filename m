@@ -1,61 +1,95 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D313A89A7
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 17:45:20 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id a67so10993429ybb.3
-        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 10:45:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687AB89A7
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 17:45:24 +0000 (UTC)
+Received: by mail-qt1-f170.google.com with SMTP id cr9so10996387qtb.13
+        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 10:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4UnzWTocG2iPpAqMvQabkV9NRhaTMUyHYWRKvOA4oZs=;
-        b=gHOGoE/DwxYALJI33vb4pBn5j3ORXk2cd05bL54ID/21l2b2vQ0106kj6v+/9GglxM
-         pcmHJzYHGHwO9x8Nw6os/zYLAAmKzINCzgmvlNFCI0MI6lcgHhRQLcmS3BnuPnBFdra4
-         Y65udLpippAuS+K591wU4s+ejdivlYbrrnDG7oonBP8Gcmc1AROEiHaCaCSKPq1LhSSG
-         3MKrl/CAu9SquxByAjXIo3qHbCJcJ53YMacpOrey2nTDb9AslfdrjcHvmrsIG7QPBoeK
-         O4eTzn8/6J15sgvrGQ+/uTDNYUEwvz68zREbrWAVB7x1+Iroy8k8Mv7bAzta9Q/z/O3t
-         EeHQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
+        bh=5TF/7Ge8AarupLQS/YY50TBrTd0spxW1v76SnBwcGAo=;
+        b=iRBDHJm0KCq8rGVHywkz8m+OQ5SjDjc8zcsG+O+2wUDPBHACKfsvyuwulMHUjpuOL+
+         rp0sKd7QJDVdB56z16a2ypKlglgjcgaQJ6wVKJF0rmpjRMX2Da68NBCmppi50Eef+OD0
+         gKgb9I1DDsyyOTl0+hsE0q/1N8pN1OKucN9q4PU2K8WaPN5aiejN2+PKvpDpEdfXlFSR
+         uLxKG/dD2IbjT4hyR+lDA+tAF6r5f9rE/CDkkH+WeY5iIVVhMIKewq5MQdgxeAUXt4Le
+         rd3wRvpOJOGklZvrPGEgB52BG32PCj5c0/ckmip2MpOoeFabL0ZzusMLP/EBXFSBBVpR
+         CwOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4UnzWTocG2iPpAqMvQabkV9NRhaTMUyHYWRKvOA4oZs=;
-        b=3A9ZQuI5q/HZmRX6BE7se7hyfsgCtbsobORb9P/P0YMyY/LaYvY6rojHWk8alem2xk
-         0jfniq7J/Umawtkje6/r0YiM0yk/dLmPqY3p5a7LZAdehGmh50VjVEwPFofDlVTqC4Dk
-         9C3U8JQCbjbnJxVerMBcNC2FYanXAWu40aubGzanev/KJ1UBnyamJkJYbndcptBCDacK
-         EHSb4fOpXDRWv5iyjgIfvS7dgfRcQ1JZUqMBhJn0eW7hkQ77lvkOgWPpLDK5Jgf7IuLj
-         XFwbuQUTCgxW4mclxWu4dfYiJY6gsHljVdIzrOaW8nOw4sNsaKPBI3sBtS2FpCjlLsXv
-         aHQA==
-X-Gm-Message-State: ACgBeo3PYFTuW3LpbAvgMUGw3FUeReMfEDOHQP3hPXEdXsgiAEfffgN7
-	h9bU8P/wpjeGEPZ5E9EvTKtgIwLa96uGs7uyEABcaA==
-X-Google-Smtp-Source: AA6agR5EJfDo1S55dZcD3KuTpTr76XKXhF6Z9iRiTzeOauk5dATRDVC8XJn5mqvOcVvcK0gXefud+OOUpE0zokVNZwk=
-X-Received: by 2002:a25:1e86:0:b0:68d:549a:e4c2 with SMTP id
- e128-20020a251e86000000b0068d549ae4c2mr3717220ybe.93.1662572719703; Wed, 07
- Sep 2022 10:45:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=5TF/7Ge8AarupLQS/YY50TBrTd0spxW1v76SnBwcGAo=;
+        b=s+nwmjEeNCoBvkYzSEahmP7j2Hwhw8HrPfGaiJIv7P9FyaZjq5aRw03pbZdNZ4IbdC
+         EQ0lcG/Kn/wVyE9TRehokP7lYv8QUiTivPdeoE8SszVByCvqn+r746n9XW0hmxcqrJNT
+         YRHS2u+8AcCRp/MD9zmcz/6B34o+tfFiRvL2tsHo++FAwVKMqUqTPSWmFDTGXypfQOYC
+         JzlfIQc/49Kgeolyuvizv2HUGiE/f8Z7oNRbw7rOT3TTuW0emZ71DZLrDLDa1WwV75lP
+         mefLKXx1iR6Os2fc60mwkONUPtlJxBF+RjGekIlQbaRGMrmjiIXyj/25KTgogYTtA0k0
+         BzQw==
+X-Gm-Message-State: ACgBeo3cQaZ5iC9Lil24kP3raV/jmaF3VCTRwad1+IznhmVHpKtaio6F
+	bIs2j+MrMgDoGvnA439FqhY=
+X-Google-Smtp-Source: AA6agR6WiqHok6tRliCvnpHXulSKvMevKo+ZGr9+s7qVaub9L4Oen+QHpj3u4cUDpYURHKDuTQs2pg==
+X-Received: by 2002:ac8:594a:0:b0:344:9e0e:cdc1 with SMTP id 10-20020ac8594a000000b003449e0ecdc1mr4411158qtz.144.1662572723386;
+        Wed, 07 Sep 2022 10:45:23 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id 73-20020a370b4c000000b006bb619a6a85sm14075841qkl.48.2022.09.07.10.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 10:45:22 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 8DFC427C0054;
+	Wed,  7 Sep 2022 13:45:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 07 Sep 2022 13:45:22 -0400
+X-ME-Sender: <xms:stgYY3n5uO-BxZxO3jSOmW-0Y2vweT5QpkbrdOGD2oOSfVq64VGHzg>
+    <xme:stgYY60KZ3OYLIWrKVCN5bs8-FFyetB_0AlC6KUYSE7m0Ek9akck5daFwcKAWiqxX
+    6K5kzLoBiyGTPm5Wg>
+X-ME-Received: <xmr:stgYY9pRU4vSM2YTk7D_eux6SftdT8vSQSl-sLf3Tg1BQmlMWhH7RaPYjsY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:stgYY_kh3_N3Ad4NorsIKLTFeyQ4AteU7NOQ67MLPByzOQn49LHM4w>
+    <xmx:stgYY13xVsoeBq_vu0DXKErcV5IKpht9NgV8MW11F9Y0d5nbi6Dxqw>
+    <xmx:stgYY-vugOztKNY58mmD98DcRmfgM_PaTk4cNgWnQKuVfTIt7jAXqw>
+    <xmx:stgYY_yy1Is6mgViGl2LK297ISntb9MZKXlHhhfa1R2GyGDkW2aPSA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 13:45:21 -0400 (EDT)
+Date: Wed, 7 Sep 2022 10:44:03 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/2] objtool, kcsan: Add volatile read/write
+ instrumentation to whitelist
+Message-ID: <YxjYY6SJhp1PtZos@boqun-archlinux>
+References: <20220907173903.2268161-1-elver@google.com>
+ <20220907173903.2268161-2-elver@google.com>
+ <YxjXwBXpejAP6zoy@boqun-archlinux>
+ <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220907173903.2268161-1-elver@google.com> <20220907173903.2268161-2-elver@google.com>
- <YxjXwBXpejAP6zoy@boqun-archlinux> <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Wed, 7 Sep 2022 19:44:43 +0200
-Message-ID: <CANpmjNO6zbVpM2rr7frvE6S9c0PLHi34O5d+9_v5k7fOxNQMHg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] objtool, kcsan: Add volatile read/write
- instrumentation to whitelist
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 7 Sept 2022 at 19:43, Marco Elver <elver@google.com> wrote:
->
+On Wed, Sep 07, 2022 at 07:43:32PM +0200, Marco Elver wrote:
 > On Wed, 7 Sept 2022 at 19:42, Boqun Feng <boqun.feng@gmail.com> wrote:
 > >
 > > On Wed, Sep 07, 2022 at 07:39:03PM +0200, Marco Elver wrote:
@@ -63,13 +97,15 @@ On Wed, 7 Sept 2022 at 19:43, Marco Elver <elver@google.com> wrote:
 > >
 > > Confused. Are things like "__tsan_volatile_read4" considered as
 > > "barrier" for KCSAN?
->
+> 
 > No, it's what's emitted for READ_ONCE() and WRITE_ONCE().
+> 
 
-And you rightly pointed out there's a mistake in the commit message I
-just saw. :-)
+Thanks for clarification, then I guess better to remove the word
+"barrier" in the commit log?
 
-If there's no v2, Paul, kindly perform a s/barrier//.
+Regards,
+Boqun
 
-Thanks,
--- Marco
+> Thanks,
+> -- Marco
