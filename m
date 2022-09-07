@@ -1,40 +1,40 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6297E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:59:29 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-340ae84fb7dso107090137b3.17
-        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:59:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDAD7E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:59:31 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3456e0bcd5aso42305487b3.20
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=OAxiGU2+Zm5TGJDmYfJLZJYOpFooL4QHZIWYZiKDaNI=;
-        b=UzsWkCGsn6TQFhqSZYOpR99wDWCEXyZ5MMKliAg92jQS0AYBHwEF9zjvATBGutup0p
-         NO4wYpNhStcU1J2cjuQ9GbbOxS0zgurgoKVwHDsFvcRp3qp+1FwJWk9aGuyQbd+ASbse
-         iV3thzcFMTbZumH8eFJ/+YP8y1KiQsIPJKUs8IhaiUZOb43fNEAzNxjiZYFDNQPUG37S
-         YBaAhRCr92G4fwx7c3G1Ptk9p0+T0o/DqhaN7oWXfr5m8Ga95DnhZNA9Q15IBNaTbnp2
-         gNSGwfBi+FAib0O60VIP4ATtHiqMscBaDINfd3MnenIeo3QSkPkQcshNYHMvheD3+gFv
-         eKoQ==
+        bh=bcgi8Ou8th2qqJa7CD88vTQQmiUlNdn6G38aIXpHI6Y=;
+        b=ntpiMlsUZbBzGuoDfGrsuzC9Fu9Dngcb4gIzs9vYGwNNGJsAHWhrinnINN7afNa+aa
+         Ju69QRlfFJKW9Y10Cp/2v4E6l4L3HUCFUsswVqibz/opy/3jfd5IGljZ+yDbnBHTGone
+         gLjkZkXmzODkCXP09P6it2IQmKO6vQiVkQCWObUeDZWSQQsyH2CrqhdhCEkLAIvxJ++3
+         Cn1vaDzB3STqCw6p0UOO+5q+vBLH7eUoI8EnXYuDLIxqAjPA0pQIlsetbgBApQo/8knJ
+         9xuXq0izZx+52Ei7v7eLE+alDASuxx+P4GL55l25kj1eL6HIUPJ9xOXLI0sbvJ+5PZko
+         Niqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=OAxiGU2+Zm5TGJDmYfJLZJYOpFooL4QHZIWYZiKDaNI=;
-        b=GQsiy5AXkycjrWDIEBcIh6uosWzJcgwiFHm90KCzEZsBFIwl4CyZ5WGDCyieGiHieO
-         sa6ufKNOG6I3Xc3IGoAYEdt/UKBTKfYs+U+H9zcuptR2VBgZY4RaRZrz74Iufw0HFP/D
-         zxKwC/MLDOVNxn4qjrpz3dPlB0chUQdQRvjgTudz4YMhSoxTgJ9uWr8kmS4mgul+n5Zh
-         bxJd7uAvGEzJXPgkA9L2vw1bIFZr7XErpVlPTXb0WRLsJXkqZk0VF+99ykvkC6ru9HB0
-         oKb+jWdK0EXFU25fulkGe83k88nylfF3wOOy75fsZjnw5JqbN+Sz/Y59Fj6+d1qZq7M8
-         I/9g==
-X-Gm-Message-State: ACgBeo36X0R4tTD4Xivxy9wEGwAee6BDsJPqI4i9ufUyEm+3caAwfofs
-	sVQvXtzDCXFawfOdBqW3R3mG1Chhz8V4tI+Ruf0=
-X-Google-Smtp-Source: AA6agR7THdtxfPlLHDj0ifMy7DcCylYYagRl6nsfCC9Vw9Lgt7j1YooO+zDIu58BxyQMjhmKLfZwaRD9tKprzZQX4dk=
+        bh=bcgi8Ou8th2qqJa7CD88vTQQmiUlNdn6G38aIXpHI6Y=;
+        b=VwJOnDTnmgMgCz+sRWsPluH3KpmuLUDUodrlNFAiSiv0iaxQBSOsI47sof3ejadVFp
+         Bf3K60SMD+FX95NUdJ4uq88idZKbrg3b9iboqqYRgdJT0MXQU61shkBaHmVYmPAzPCj7
+         OiE37+o8XwFrXEjoj1G8RXhZZKdA/8Bflwnjw+Zi4RmXCgYsA1XaWsYrNGxm9FCEvkw3
+         wmfAs0a3803noz3oYz4FCS+RgJ8iF99QnyqrlRkvFGYRtq+09J+DQ4/eRQLw+5U+cpux
+         dH53ypkIIXMJwdp9YV6y+6aoLlnEuf5KllRKv2GQnzJ8/LrZMT2NvO/HLK992BItL144
+         PKJA==
+X-Gm-Message-State: ACgBeo1Jm4F1ZZ/xYPUKGHejHnUbKPkLv+VfEYAxUHZAdApmwvPZS16L
+	JrVKea1ChePvxcM29yp+PypK33RVL+A7XwSFg5M=
+X-Google-Smtp-Source: AA6agR51gs/uUHreq+msqsiaEhkiRFCgMis3Jrd7egz+g3Jty9ES9OQyft1PDZ/MLkfp6N0Nb4aIesch0EUTQLjAZFA=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:9755:c523:9dcb:2228])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:192:b0:695:7e89:ed5b with
- SMTP id t18-20020a056902019200b006957e89ed5bmr1546228ybh.226.1662526768328;
- Tue, 06 Sep 2022 21:59:28 -0700 (PDT)
-Date: Tue,  6 Sep 2022 21:59:04 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:2501:0:b0:6a9:2c63:41df with SMTP
+ id l1-20020a252501000000b006a92c6341dfmr1513377ybl.570.1662526770665; Tue, 06
+ Sep 2022 21:59:30 -0700 (PDT)
+Date: Tue,  6 Sep 2022 21:59:05 -0700
 In-Reply-To: <20220907045907.484043-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,13 +44,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220907045907.484043-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662526746; l=2233;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=M5avwGZxXNJVxI+Cw3zYKb1tkFDlYgC1vraaiWNDNLE=;
- b=PMS5H0clISr6OeQLTZXXnl/Hs9ioLuh2rFA+ahRsD1VUjLrQCJQtmQXeyAUyMdzSLZZtrtXNSCWV
- 8GhYxzD9DiNFAxz0fymoGHRZtV2fWVqD5vlKD/7fvZ87O2xKqe1o
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662526746; l=5523;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=vU2YBqs04SKJi0GQSDvA4poA04ESc702LTI4xVOdImw=;
+ b=ACvgjV4W2Fn0d0OoSsDUnfzLwgzbvkoSX5pWoxmj3OhBeI7wqr6l/Ze+J8eLCVskjea6kj/Y/Vom
+ ccwPJxl5DeIznlJUZRGwr4WOP/rnBszo5UuLLP878hh5x1U5qH57
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220907045907.484043-3-ndesaulniers@google.com>
-Subject: [PATCH v3 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+Message-ID: <20220907045907.484043-4-ndesaulniers@google.com>
+Subject: [PATCH v3 3/5] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
@@ -61,60 +62,138 @@ Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org
 	Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
-cause as-option to fail unexpectedly when CONFIG_WERROR is set, because
-clang will emit -Werror,-Wunused-command-line-argument for various -m
-and -f flags for assembler sources.
+cc-ifversion is GCC specific. Replace it with compiler specific
+variants. Update the users of cc-ifversion to use these new macros.
 
-Callers of as-option (and as-instr) likely want to be adding flags to
-KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
-
-Also, change as-option and as-instr to use -x assembler-with-cpp since
-kernel sources are .S files that use the compiler as the driver. And
-then add -Werror as well.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/350
+Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+Suggested-by: Bill Wendling <morbo@google.com>
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Changes v2 -> v1:
-* Add -x assembler-with-cpp -Werror to both as-option and (new)
-  as-instr, as per Masahiro.
-* Add Masahiro's SB tag.
+Changes v2 -> v3:
+* Fix AMDGPU -msse flag, as per Nathan.
+* Pick up Nathan's RB tag.
+* Drop cc-min-version, as per Masahiro.
 
 Changes v1 -> v2:
-* Split off changes to arch/x86/boot/compressed/Makefile into parent
-  patch, as per Masahiro.
+* New patch.
 
- scripts/Makefile.compiler | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+ Makefile                                    |  6 ++---
+ drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+ scripts/Makefile.compiler                   | 10 ++++---
+ 4 files changed, 27 insertions(+), 20 deletions(-)
 
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index 11a296e52d68..ee7e3ea1fbe1 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -682,22 +682,27 @@ more details, with real examples.
+ 	In the above example, -Wno-unused-but-set-variable will be added to
+ 	KBUILD_CFLAGS only if gcc really accepts it.
+ 
+-    cc-ifversion
+-	cc-ifversion tests the version of $(CC) and equals the fourth parameter
+-	if version expression is true, or the fifth (if given) if the version
+-	expression is false.
++    gcc-min-version
++	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
++	or equal to the provided value and evaluates to y if so.
+ 
+ 	Example::
+ 
+-		#fs/reiserfs/Makefile
+-		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
++		cflags-$(call gcc-min-version, 70100) := -foo
+ 
+-	In this example, ccflags-y will be assigned the value -O1 if the
+-	$(CC) version is less than 4.2.
+-	cc-ifversion takes all the shell operators:
+-	-eq, -ne, -lt, -le, -gt, and -ge
+-	The third parameter may be a text as in this example, but it may also
+-	be an expanded variable or a macro.
++	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
++	$(CONFIG_GCC_VERSION) is >= 7.1.
++
++    clang-min-version
++	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
++	than or equal to the provided value and evaluates to y if so.
++
++	Example::
++
++		cflags-$(call clang-min-version, 110000) := -foo
++
++	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
++	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+ 
+     cc-cross-prefix
+ 	cc-cross-prefix is used to check if there exists a $(CC) in path with
+diff --git a/Makefile b/Makefile
+index a4f71076cacb..cd9919c66b96 100644
+--- a/Makefile
++++ b/Makefile
+@@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+ 
+ KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+ KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+-KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ 
+ ifdef CONFIG_CC_IS_CLANG
+ KBUILD_CPPFLAGS += -Qunused-arguments
+@@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+ KBUILD_CFLAGS += -Wno-maybe-uninitialized
+ endif
+ 
+-ifdef CONFIG_CC_IS_GCC
+ # The allocators already balk at large sizes, so silence the compiler
+ # warnings for bounds checks involving those possible values. While
+ # -Wno-alloc-size-larger-than would normally be used here, earlier versions
+@@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+ # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+ # choice, we must perform a versioned check to disable this warning.
+ # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+-KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
+-endif
++KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
++KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ 
+ # disable invalid "can't wrap" optimizations for signed / pointers
+ KBUILD_CFLAGS	+= -fno-strict-overflow
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+index 86a3b5bfd699..3c64ae0b212c 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+@@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+ endif
+ 
+ ifdef CONFIG_CC_IS_GCC
+-ifeq ($(call cc-ifversion, -lt, 0701, y), y)
++ifneq ($(call gcc-min-version, 70100),y)
+ IS_OLD_GCC = 1
+ endif
+ endif
 diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 94d0d40cddb3..a66638b5f4a5 100644
+index a66638b5f4a5..4b998dadd79d 100644
 --- a/scripts/Makefile.compiler
 +++ b/scripts/Makefile.compiler
-@@ -29,16 +29,16 @@ try-run = $(shell set -e;		\
- 	fi)
+@@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+ cc-disable-warning = $(call try-run,\
+ 	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
  
- # as-option
--# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-+# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+-# cc-ifversion
+-# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+-cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
++# gcc-min-version
++# Usage: cflags-$(call gcc-min-version, 70100) += -foo
++gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
++
++# clang-min-version
++# Usage: cflags-$(call clang-min-version, 110000) += -foo
++clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
  
- as-option = $(call try-run,\
--	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-+	$(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
- 
- # as-instr
--# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-+# Usage: aflags-y += $(call as-instr,instr,option1,option2)
- 
- as-instr = $(call try-run,\
--	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-+	printf "%b\n" "$(1)" | $(CC) -Werror $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
- 
- # __cc-option
- # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
+ # ld-option
+ # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
 -- 
 2.37.2.789.g6183377224-goog
 
