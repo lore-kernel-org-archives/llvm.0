@@ -1,156 +1,388 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456C25C91
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 14:19:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662560364; x=1694096364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mb8iuybAB+Ow3ntbR/Nt2puuaVdPIstTH2e0zbuav8E=;
-  b=CBNLQ7+wj95L9RjUX/21TY4bobgtI1XIozjPhuAmRTc4UWkoKh94d7OM
-   6Vq9S4kyOAlQh5wh7clX4fgOOMy63h6/NUnr9WcQ4G4G1H56vQNDIogEk
-   XbVUZSmyrFckd/ZpAAEZs9dRoOksp/Bh5JtW8XcjAQl8FI/uWi45CqDKu
-   PFWaPrGPaEWnMMqRY0i6CVyOu5HVHSM9P+EyCy7CyJpnynOXaDN3Paj/c
-   P4J1gVIXpHjaDG/CpjLC9xqg6ruoH4pqPgha6OvbQJFiZp56ZOICzn4VA
-   mfLzVu+AUhCOriAK70n98L9FXtwfRGhNsDN7Z7x7/+L7Dnd3TbI/XJVYG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="383178125"
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="383178125"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 07:19:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="682822800"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Sep 2022 07:19:18 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oVvte-0006eH-0A;
-	Wed, 07 Sep 2022 14:19:18 +0000
-Date: Wed, 7 Sep 2022 22:18:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Acayan <mailingradian@gmail.com>, bjorn.andersson@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, agross@kernel.org,
-	konrad.dybcio@somainline.org, mturquette@baylibre.com,
-	sboyd@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
-	jo@jsfamily.in, Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH 3/3] clk: qcom: gcc-sdm845: add sdm670 global clock data
-Message-ID: <202209072255.CLVCZ5HY-lkp@intel.com>
-References: <20220907025035.15609-4-mailingradian@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602A620F8
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 14:38:34 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so11092624pjl.0
+        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 07:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
+        b=7W6EPsiuaS5g/Dgep+05sQtTliG7m0K245tr1gUvQA9JqlgpxSrPvCSwk633PZrFqS
+         L85zFh/v97TPtrDTjlzP5HjbVndXdgruFgWWjA/ip7QzUR2xF34dZszh0c/eEsiDRtgu
+         wIJq4JznPI/5Cs7f8CRY3R0rx7BbPgkT9zLq4vnNlgPHIovKIotq4dFS61BB8GI3tt/U
+         LJl1RowjrBmMFhl8pvd53h7mG+5+eC/H6Kd+Iir9PP4fE8Ws06PjQWSr7yduCK1nAd8O
+         OeeV6BHDbskLxgGGuJ4H3GfutPAG0gXPBpV1zPkZ4d27pKNmJhfzkOXiSxv/YWJ3ZJB1
+         OInw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
+        b=llZt1G8wTapTtoROgCBUkEG88lWjpdsR1nXSdRk9WZJ9OOJUCP+HyfyJUmp3i7Noww
+         ZtW6ke7Qi/BwofN6wQmZSGyi1LgtNSXgsyjH74WZvj1C0ApWJak7K6ImBkoDxK+ncr0+
+         0O1kjtrWqDOclw1UnBytw4alRoFp2jd5HQS3/pxANFAKzP70HfEgi79U7/qxGBexYh/B
+         U0zgSJuBcTs5+frsev/X6ErRrVofnjgZlecKZ6FM0UkPHEdC2XuW1SXYpPZMUlG4hLPh
+         b345daf/k4koRO76PBsF+FY60x3/jVqvNFTkw48pPl0UG029aIbq5gtGbt29CdWti7JD
+         fv0Q==
+X-Gm-Message-State: ACgBeo3OWET/PNlwCIegK54i/IXw65ib0x1lEwaMySj2BOmm8iXPdTVX
+	ZNVQ5wgJUvxNFttEEsGNnNGFDqqWrCZWDYVM6Jc=
+X-Google-Smtp-Source: AA6agR4IcA/LwBg5x4LhqcOvg5ww12YZOwIJyAd+C7qPymitn2v6RjyrwO3jpIlmgdWUguc6VugNbw==
+X-Received: by 2002:a17:90a:c981:b0:1fe:55ef:b60f with SMTP id w1-20020a17090ac98100b001fe55efb60fmr31509915pjt.246.1662561513376;
+        Wed, 07 Sep 2022 07:38:33 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 4-20020a620504000000b00537b1aa9191sm12874029pff.178.2022.09.07.07.38.32
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
+Message-ID: <6318ace8.620a0220.a0562.3c72@mx.google.com>
+Date: Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907025035.15609-4-mailingradian@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220907
+Subject: next/master build: 37 builds: 4 failed, 33 passed, 4 errors,
+ 13 warnings (next-20220907)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Richard,
+next/master build: 37 builds: 4 failed, 33 passed, 4 errors, 13 warnings (n=
+ext-20220907)
 
-Thank you for the patch! Perhaps something to improve:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220907/
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v6.0-rc4]
-[cannot apply to next-20220906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tree: next
+Branch: master
+Git Describe: next-20220907
+Git Commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 6 unique architectures
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Acayan/SDM670-Global-Clocks/20220907-105158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: riscv-randconfig-r031-20220906 (https://download.01.org/0day-ci/archive/20220907/202209072255.CLVCZ5HY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bfed597346daad9f2f2a30c553c855fbefc1fe7e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Richard-Acayan/SDM670-Global-Clocks/20220907-105158
-        git checkout bfed597346daad9f2f2a30c553c855fbefc1fe7e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/ net/mptcp/
+Build Failures Detected:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-All warnings (new ones prefixed by >>):
+riscv:
+    allnoconfig: (clang-16) FAIL
 
-   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/gcc-sdm845.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   drivers/clk/qcom/gcc-sdm845.c:3619:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk_src.clkr,
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/qcom/gcc-sdm845.c:3618:29: note: previous initialization is here
-           [GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk.clkr,
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/qcom/gcc-sdm845.c:268:30: warning: unused variable 'ftbl_gcc_sdm670_cpuss_rbcpr_clk_src' [-Wunused-const-variable]
-   static const struct freq_tbl ftbl_gcc_sdm670_cpuss_rbcpr_clk_src[] = {
-                                ^
-   9 warnings generated.
+x86_64:
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
 
+Errors and Warnings Detected:
 
-vim +/ftbl_gcc_sdm670_cpuss_rbcpr_clk_src +268 drivers/clk/qcom/gcc-sdm845.c
+arc:
 
-   267	
- > 268	static const struct freq_tbl ftbl_gcc_sdm670_cpuss_rbcpr_clk_src[] = {
-   269		F(19200000, P_BI_TCXO, 1, 0, 0),
-   270		F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
-   271		{ }
-   272	};
-   273	
+arm64:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    rpc_defconfig (gcc-10): 2 errors
+
+mips:
+    rb532_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 1 error
+
+Errors summary:
+
+    2    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl'=
+ [-Werror,-Wunused-variable]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatch=
+es
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
