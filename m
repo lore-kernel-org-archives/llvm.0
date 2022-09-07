@@ -1,113 +1,70 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191597E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 06:00:20 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id c131-20020a1c3589000000b003a84b160addso10395159wma.2
-        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 23:00:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6684C7E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 06:03:04 +0000 (UTC)
+Received: by mail-wr1-f53.google.com with SMTP id c11so14439669wrp.11
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 23:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=EVRMZUvSq6xdhiNGVwAMQ7WuOP9ljPbQMnIekWicfSw=;
-        b=N5bYCEfkkrWyuEJPBnbTK/P4VF0qrJCydMxRgw41WsKreSUINlmQeNsJ/YPB5bBIFK
-         SsQpepIKHI/EMjLdctJZb50mtWece3w2MYGIzGroJVKn/KYLRj2sZa7XEFWeOxkWj1bj
-         7Xs/uYI8e4ObXhXJCLOc+IJG14T1N5SQM51tpw6CPYpEmTkd61bi5O06qN49dj0eC1bT
-         IOr8MYSainsRvm7SpOLbsjDYPGs+bIDh4CwMiO9btuTPQzdr+1M6f2h0/BgtlBGwljRL
-         es56etYDfYgVvxz4cr0R370WFJYutF+T50asjfOODsInyZBTG/LasVBGYcqd5mr29Wck
-         eicg==
+        bh=FYczuPxi1SjOxRTyYdaZAVwl03tDQ3quqbW2UiDSc58=;
+        b=bSjza7uUyEFLBzo0vLRVL5O0eppMtSJAjTzKE5hrP/r1zb/jUo+utz5iZvdxtAFl2A
+         jXA2taZd5sxk8ROyfw68D+7XvmM7jP1ZhwEiqnsg+bSS8ocR8ZEIHr+PmlguwLe7l+aq
+         8+23Ma9e6mnYXXw8Vx4ruVN+w+qyfatuwKL6NUvKNs2U6+ZiUIwMSVx8uTN9A/S4iHZo
+         I+jROlIhjFdlsQRqE4Tm7CqPoFlACJs4ZgindMp4/kcu6SgnMMhmR0ULVvwMa1VG/Wvp
+         GZcoaWLLXcRT9fihVbBztEyir9sEoie8vsp8mBBbRvPtG6578Z2P4SONsZFEhrq9i9dw
+         FXQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EVRMZUvSq6xdhiNGVwAMQ7WuOP9ljPbQMnIekWicfSw=;
-        b=Pbg5mVwpHmjsRML/RtyeQXtRy/ux9cDuTIQimtIQift3YWFtkdeuqMoKrYkjN78KIA
-         vRey07kzzP+Bb5BRNkWdg4gOHEZkYVskUTsLZaOZSv7/4nbPL5BUSp4S+NDb+U2Km5OJ
-         yac92/tTQknN2y/wjNeh1CcCsVakdndnLOWHu6L9ZJuPVZtLUnEm4YPtsOql5SfClX9Y
-         ToZ148HQ3o96UkJX/F+yfif1/OnhACyR8INLF91D2SbmSxZp3mRdMvVDig1nr+0SqDMq
-         q/5xtEYud/cXYF9/x16SNgPpn6cIMzYW+OcXbQshvZ7ib/QKnQ1M6N7e8INxC18IDz3Y
-         UNCA==
-X-Gm-Message-State: ACgBeo18fEDRrjFVr+V9TWQm7TQCEavkt278Lh0bQ0ao+FIG0Q5kLyOo
-	LYOX/GE5nPJMkNjUb8nCirnGyl9pPSTOSRphNutZuQ==
-X-Google-Smtp-Source: AA6agR6B3gQeycz+50jNE1EjqvKOK6DVZ6AZkhyR7V48tJgKgBWRV2R4ljnfmvXEtAbxKaCEOo921MMA+cgAFlUvbqE=
-X-Received: by 2002:a05:600c:4ca3:b0:3a6:1616:e591 with SMTP id
- g35-20020a05600c4ca300b003a61616e591mr862526wmp.99.1662530419174; Tue, 06 Sep
- 2022 23:00:19 -0700 (PDT)
+        bh=FYczuPxi1SjOxRTyYdaZAVwl03tDQ3quqbW2UiDSc58=;
+        b=eF3N66l1gzJcZuS7A6Nh+v4NEPSQZNfO8VqBTdtmhdIZayAY1b6XPswa0EV1d6ybaI
+         Xy2RtHaJd3oU3EdJJA1bLgy/O9SFcoM1BXDzWgXmj58MSkgwSIpslTmtuZLsVbIQbBms
+         o13slp3M/NZnlRPMt1JepSgJBsOmkrv6KHjFZurTT8VepRqbLaEjVONslwrWGvJrob2o
+         u5f9bxukt13o9D5aHRzf/3Y95mMSAE/q3lDidHY7qpCqGHjxD/fY0ODG+dzGE3vS0eHq
+         lfx/Q6Kcnt73x/q3ldNOwaDMkWobFkBfxmf/asc3ldlkwnIUYpkeY4klwi2tiOsXyNxW
+         2EEw==
+X-Gm-Message-State: ACgBeo15f+eyVeAC+9FWwQ8UQTDJjGMZQ2HoT19rr442Gv0qskUHPxUF
+	hlF52L4zX/3MlDYoGhaFR2Y66wgxuj5amhfmappdRA==
+X-Google-Smtp-Source: AA6agR4W5ki12nxKxG7SUsvFAJ9Vc06JdpwPpOn7lpjTtVQ1YIwlCDryeTo4ZJMAjr2T4O+Z79WvK4aPUPirmx8Fuow=
+X-Received: by 2002:a05:6000:10cf:b0:228:df93:a9b1 with SMTP id
+ b15-20020a05600010cf00b00228df93a9b1mr989499wrx.4.1662530582482; Tue, 06 Sep
+ 2022 23:03:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220902213750.1124421-1-morbo@google.com> <20220902213750.1124421-3-morbo@google.com>
- <202209022251.B14BD50B29@keescook> <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
-In-Reply-To: <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+References: <20220907021751.GA30945@inn2.lkp.intel.com> <332d9d42-c4ae-47a8-b3d6-32907eddb7ba@intel.com>
+In-Reply-To: <332d9d42-c4ae-47a8-b3d6-32907eddb7ba@intel.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 6 Sep 2022 23:00:07 -0700
-Message-ID: <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-To: Bill Wendling <morbo@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Juergen Gross <jgross@suse.com>, 
-	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>, Alexey Makhalov <amakhalov@vmware.com>, 
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
-	virtualization@lists.linux-foundation.org, 
-	LKML <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
+Date: Tue, 6 Sep 2022 23:02:50 -0700
+Message-ID: <CAKwvOdk8R9HS_aJfFPKyuka8TM9jPpnT21TTvQ8ffv_p+RcGUw@mail.gmail.com>
+Subject: Re: [fortify] ab66e7d1d8: BUG:kernel_failed_in_early-boot_stage,last_printk:Booting_the_kernel
+To: kernel test robot <yujie.liu@intel.com>
+Cc: lkp@lists.01.org, 0day robot <lkp@intel.com>, linux-hardening@vger.kernel.org, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+On Tue, Sep 6, 2022 at 10:54 PM kernel test robot <yujie.liu@intel.com> wrote:
 >
-> On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> > > [...]
-> > >         callq   *pv_ops+536(%rip)
-> >
-> > Do you know which pv_ops function is this? I can't figure out where
-> > pte_offset_kernel() gets converted into a pv_ops call....
-> >
-> This one is _paravirt_ident_64, I believe. I think that the original
-> issue Nathan was seeing was with another seemingly innocuous function.
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: ab66e7d1d8a90f6addac0da9b3ae13d77f095f76 ("[PATCH 2/3] fortify: cosmetic cleanups to __compiletime_strlen")
+> url: https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/Fix-FORTIFY-y-UBSAN_LOCAL_BOUNDS-y/20220831-045536
+> base: https://git.kernel.org/cgit/linux/kernel/git/kees/linux.git for-next/hardening
+> patch link: https://lore.kernel.org/linux-hardening/20220830205309.312864-3-ndesaulniers@google.com
 
-_paravirt_ident_64 is marked noinstr, which makes me suspect that it
-really needs to not be touched at all by the compiler for
-these...special features.
-
-Maybe the definition of noinstr in include/linux/compiler_types.h
-should be adding __attribute__((zero_call_used_regs(skip)))?
-
-Untested:
-
-```
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 4f2a819fd60a..a51ab77e2da8 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -226,10 +226,17 @@ struct ftrace_likely_data {
- #define __no_sanitize_or_inline __always_inline
- #endif
-
-+#ifdef CONFIG_ZERO_CALL_USED_REGS
-+#define __no_zero_call_used_regs __attribute__((__zero_call_used_reg__(skip)))
-+#else
-+#define __no_zero_call_used_regs
-+#endif
-+
- /* Section for code which can't be instrumented at all */
- #define noinstr
-         \
-        noinline notrace __attribute((__section__(".noinstr.text")))    \
--       __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
-+       __no_kcsan __no_sanitize_address __no_profile                   \
-+       __no_sanitize_coverage __no_zero_call_used_regs
-
- #endif /* __KERNEL__ */
-```
-Or use __has_attribute in include/linux/compiler_attributes.h.
+Thanks for the report! Series dropped! Kees sent a v2.
 -- 
 Thanks,
 ~Nick Desaulniers
