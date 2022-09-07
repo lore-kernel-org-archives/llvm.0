@@ -1,120 +1,185 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0317E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 08:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=M9ffSCcPAJFL/NG3iecTA6XnLuNGeYKgtteM2yRjbw8=; b=RkCkoGesMVEcRNleJvacW27ZN9
-	eY6mqXlLytLmnVTUKkvVx8upYmP36N0nVMK6OGviCGk0MrGxxqvCKFQ2sVRWckFQAB5ga87K5lECr
-	7m0wErxJQXSkUWe0P3Qq31N3F9tBcfUN2tNLtWayNUzwxQGjlG35NgtA8f1SDxw4a6Bx/48ySEszA
-	KPjszB/XFsGfcyya0D92vkgmt8MBtS9AeDfzrSfDWIxuZ8jnpXh+c9RTwBZWtiuuZHUMtPsReO5PX
-	Cud2D6l2SHerN+rFL9hFmy6zneagpc7A2yy9HT/ovVqtGCSOiWRuqX7kFvwVUvfahUbviFXUq9k90
-	gaDEFQVA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1oVql3-00APB3-3s; Wed, 07 Sep 2022 08:50:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C72E130013F;
-	Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9DD9B20134FB3; Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
-Date: Wed, 7 Sep 2022 10:50:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>,
-	Juergen Gross <jgross@suse.com>,
-	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-	Alexey Makhalov <amakhalov@vmware.com>,
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEB02CA6
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 09:17:52 +0000 (UTC)
+Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
+	by smtp.orange.fr with ESMTPA
+	id Vr47oZr83tFxAVr4RoSn6q; Wed, 07 Sep 2022 11:10:13 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 07 Sep 2022 11:10:13 +0200
+X-ME-IP: 103.175.111.222
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	virtualization@lists.linux-foundation.org,
-	LKML <linux-kernel@vger.kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-Message-ID: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
-References: <20220902213750.1124421-1-morbo@google.com>
- <20220902213750.1124421-3-morbo@google.com>
- <202209022251.B14BD50B29@keescook>
- <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
- <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v8 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
+Date: Wed,  7 Sep 2022 18:09:34 +0900
+Message-Id: <20220907090935.919-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220907090935.919-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220907090935.919-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
-> On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
-> >
-> > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> > > > [...]
-> > > >         callq   *pv_ops+536(%rip)
-> > >
-> > > Do you know which pv_ops function is this? I can't figure out where
-> > > pte_offset_kernel() gets converted into a pv_ops call....
-> > >
-> > This one is _paravirt_ident_64, I believe. I think that the original
-> > issue Nathan was seeing was with another seemingly innocuous function.
-> 
-> _paravirt_ident_64 is marked noinstr, which makes me suspect that it
-> really needs to not be touched at all by the compiler for
-> these...special features.
+For x86_64, the current ffs() implementation does not produce
+optimized code when called with a constant expression. On the
+contrary, the __builtin_ffs() functions of both GCC and clang are able
+to fold the expression into a single instruction.
 
-My source tree sayeth:
+** Example **
 
-  u64 notrace _paravirt_ident_64(u64 x)
+Let's consider two dummy functions foo() and bar() as below:
 
-And that function is only ever called at boot, after alternatives runs
-it's patched with:
+  #include <linux/bitops.h>
+  #define CONST 0x01000000
 
-  mov %_ASM_ARG1, %_ASM_AX
+  unsigned int foo(void)
+  {
+  	return ffs(CONST);
+  }
 
-Anyway, if you want to take it away from the compiler, something like
-so should do.
+  unsigned int bar(void)
+  {
+  	return __builtin_ffs(CONST);
+  }
 
+GCC would produce below assembly code:
 
-diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
-index 7ca2d46c08cc..8922e2887779 100644
---- a/arch/x86/kernel/paravirt.c
-+++ b/arch/x86/kernel/paravirt.c
-@@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+  0000000000000000 <foo>:
+     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
+     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     a:	0f bc c2             	bsf    %edx,%eax
+     d:	83 c0 01             	add    $0x1,%eax
+    10:	c3                   	ret
+  <Instructions after ret and before next function were redacted>
+
+  0000000000000020 <bar>:
+    20:	b8 19 00 00 00       	mov    $0x19,%eax
+    25:	c3                   	ret
+
+And clang would produce:
+
+  0000000000000000 <foo>:
+     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
+     c:	83 c0 01             	add    $0x1,%eax
+     f:	c3                   	ret
+
+  0000000000000010 <bar>:
+    10:	b8 19 00 00 00       	mov    $0x19,%eax
+    15:	c3                   	ret
+
+Both examples clearly demonstrate the benefit of using __builtin_ffs()
+instead of the kernel's asm implementation for constant expressions.
+
+However, for non constant expressions, the ffs() asm version of the
+kernel remains better for x86_64 because, contrary to GCC, it doesn't
+emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+able optimize out the CMOV call).
+
+Use __builtin_constant_p() to select between the kernel's ffs() and
+the __builtin_ffs() depending on whether the argument is constant or
+not.
+
+As a side benefit, replacing the ffs() function declaration by a macro
+also removes below -Wshadow warning:
+
+  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+    283 | static __always_inline int ffs(int x)
+
+** Statistics **
+
+On a allyesconfig, before...:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  1081
+
+...and after:
+
+  $ objdump -d vmlinux.o | grep bsf | wc -l
+  792
+
+So, roughly 26.7% of the calls to ffs() were using constant
+expressions and could be optimized out.
+
+(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+
+[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
+Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index 0fe9de58af31..879238e5a6a0 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -292,18 +292,7 @@ static __always_inline unsigned long __fls(unsigned long word)
+ #undef ADDR
+ 
+ #ifdef __KERNEL__
+-/**
+- * ffs - find first set bit in word
+- * @x: the word to search
+- *
+- * This is defined the same way as the libc and compiler builtin ffs
+- * routines, therefore differs in spirit from the other bitops.
+- *
+- * ffs(value) returns 0 if value is 0 or the position of the first
+- * set bit if value is nonzero. The first (least significant) bit
+- * is at position 1.
+- */
+-static __always_inline int ffs(int x)
++static __always_inline int variable_ffs(int x)
+ {
+ 	int r;
+ 
+@@ -333,6 +322,19 @@ static __always_inline int ffs(int x)
+ 	return r + 1;
  }
  
- #ifdef CONFIG_PARAVIRT_XXL
--/* identity function, which can be inlined */
--u64 notrace _paravirt_ident_64(u64 x)
--{
--	return x;
--}
-+extern u64 _paravirt_ident_64(u64 x);
-+asm (".pushsection .entry.text, \"ax\"\n"
-+     ".global _paravirt_ident_64\n"
-+     "_paravirt_ident_64:\n\t"
-+     ASM_ENDBR
-+     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
-+     ASM_RET
-+     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
-+     ".type _paravirt_ident_64, @function\n\t"
-+     ".popsection");
- #endif
- 
- DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
++/**
++ * ffs - find first set bit in word
++ * @x: the word to search
++ *
++ * This is defined the same way as the libc and compiler builtin ffs
++ * routines, therefore differs in spirit from the other bitops.
++ *
++ * ffs(value) returns 0 if value is 0 or the position of the first
++ * set bit if value is nonzero. The first (least significant) bit
++ * is at position 1.
++ */
++#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
++
+ /**
+  * fls - find last set bit in word
+  * @x: the word to search
+-- 
+2.35.1
+
