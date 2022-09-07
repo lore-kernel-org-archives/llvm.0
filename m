@@ -1,166 +1,173 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708F189AA
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 18:17:14 +0000 (UTC)
-Received: by mail-qt1-f181.google.com with SMTP id cr9so11067996qtb.13
-        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 11:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
-        bh=dubdDeXQwaEqO1LQ7CfpmQjP3T8FcaEec1BqYW1q66o=;
-        b=DShQGpb3oUd7qxO2mA24zrcoOWVPKqFf/WBFp27xN2UQoALbdfQavwCFOpwDhqAeqv
-         Ig4/KL62iqdFQ3DSmS+IAYzjaduJgoVJHi2bZiLLT39Sw2XJaikdUikTfPNdUvrZfyrw
-         PdtUXZR9ecwl9O6eWihDbRdt/nPsF/SMmr1+RLO53YfZFo19LAh+UswvkRV7sjzBtRMM
-         M9DBikQ7ZGemWpHaXp9c76OetZ/+xE0zoiU0BpgoylYUQCjMVkJU8Cfs4sJb+1YhlIb/
-         AdSgh0TO+PWKMHcr5C5PSa1Sycr8/6moB0VSMHRSnirm0TNiYsTm7xUWd+JRai4J1vNL
-         zqNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=dubdDeXQwaEqO1LQ7CfpmQjP3T8FcaEec1BqYW1q66o=;
-        b=f8mXaMfahAqd+AcThZk51wIz63RHajEHDwqhNI6v4cqwV7UmxG/vMO/Gh1rsFlTq4h
-         6ZO8XBFArEQBTh+EGegOuIaKM/0Gj5/eIuFM68I5fKMspRNjvDFCWOQDhhWGNM8QM2Cz
-         wURQuaIRw2WrVAKsEZUUKTkGZailo18Os4YAintdb9F0SYazcLHXJ9dhJwDXOJBJmeCW
-         kLu4oAROoL4xCjYHNayI/aDY6Q0Kc7xFGKZNY4oFGfVRkCEPBMKCPXRT/tugQShdSFwy
-         LaCQ6TbxJ1bWv0icJnvqHD/Oje0oUvnYyB5r3OtHO7iA0funDU7VS2bHiTBGhp5cXixZ
-         VjWQ==
-X-Gm-Message-State: ACgBeo2dvAV1kZ/gxEuCI9Y0c0GqjnfGoXns1qWjXKSehvts9tLfC4fC
-	IPdK2EwdyHSyd+iLl1SevO4=
-X-Google-Smtp-Source: AA6agR6wZ9UGCJvCgjcfyxOVt06/ZCDNHCPblaKyTKQTMXULiHo5H65J9UQsjI3CDXMhRYTbDzYu7Q==
-X-Received: by 2002:a05:622a:1394:b0:344:648b:575a with SMTP id o20-20020a05622a139400b00344648b575amr4376650qtk.607.1662574633410;
-        Wed, 07 Sep 2022 11:17:13 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id m23-20020ac86897000000b0034355bb11f2sm12538387qtq.10.2022.09.07.11.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 11:17:12 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 3935B27C005A;
-	Wed,  7 Sep 2022 14:17:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 14:17:12 -0400
-X-ME-Sender: <xms:KOAYYz9s-YN3wnusJ2fYdc91vL5Kq4-6hJzTu7MpYQbxAP6-nspqjg>
-    <xme:KOAYY_vMffySFolShRCpI6PTo8XqmS7D65jyGoEyDjuGJJkJWw52_Jd3-_otBycuW
-    qYXSFxyM3dzho-rew>
-X-ME-Received: <xmr:KOAYYxAhfiDg7OfMpN8U0HDz_Pa4vYTrSve3xaCnF8nLP8dVONtJav76rj0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:KOAYY_ffC8cJS0J2z2ud2Drp1GoPHGY4xlnlq9npkgpqQ792dca4xA>
-    <xmx:KOAYY4MKPlHFqA3cGk6eoLa0c3YBD9yK7MNiSJNKV_sXPPkcY37i2Q>
-    <xmx:KOAYYxnIhiCkHSCVLXGHYNaWwNBmxwSPJSlxDQoIGe-_KO7UXdJT3g>
-    <xmx:KOAYY5FDmJAahG7nyhbH6LgSCcv4zdFo2wzTfdDFlVccV9IROooESA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 14:17:11 -0400 (EDT)
-Date: Wed, 7 Sep 2022 11:15:52 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer
- Clang
-Message-ID: <Yxjf2GtNbr8Ra5VL@boqun-archlinux>
-References: <20220907173903.2268161-1-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E714A5CA2
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 19:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662579044;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VOPHp0rCiZV2UaNMjyqSHPK40U2QeL+Filj9/mDtwFE=;
+	b=WRfkEfwNa5DrTlDm/L0ZESbUMHaDTBA3IxVozBFLZiZeZUPxGs6z7HQcUtjC1szn8Kok8p
+	/hemRVoL54LVcul7sX5Q8d7zFwO3ejNNTgseTKDO/F9OOAlTG6842Naok0Fau1bbY9xosm
+	6y+YJqr0W5qpsNPBSOGnaryIaH1CuWQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-Jp3R5cWyOtaWDJ-4DyIOTQ-1; Wed, 07 Sep 2022 15:30:43 -0400
+X-MC-Unique: Jp3R5cWyOtaWDJ-4DyIOTQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 920563C0ED40
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 19:30:43 +0000 (UTC)
+Received: from [172.64.5.10] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7D8DF4050067;
+	Wed,  7 Sep 2022 19:30:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
+ mainline.kernel.org-clang, 0066f1b0)
+Date: Wed, 07 Sep 2022 19:30:43 -0000
+CC: bhe@redhat.com, xiawu@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907173903.2268161-1-elver@google.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Message-Id: <80769.122090715304311727@us-mta-647.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 07, 2022 at 07:39:02PM +0200, Marco Elver wrote:
-> With Clang version 16+, -fsanitize=thread will turn
-> memcpy/memset/memmove calls in instrumented functions into
-> __tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
-> 
-> Add these functions to the core KCSAN runtime, so that we (a) catch data
-> races with mem* functions, and (b) won't run into linker errors with
-> such newer compilers.
-> 
-> Cc: stable@vger.kernel.org # v5.10+
+Hi, we tested your kernel and here are the results:
 
-For (b) I think this is Ok, but for (a), what the atomic guarantee of
-our mem* functions? Per-byte atomic or something more complicated (for
-example, providing best effort atomic if a memory location in the range
-is naturally-aligned to a machine word)?
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-If it's a per-byte atomicity, then maybe another KCSAN_ACCESS_* flags is
-needed, otherwise memset(0x8, 0, 0x2) is considered as atomic if
-ASSUME_PLAIN_WRITES_ATOMIC=y. Unless I'm missing something.
 
-Anyway, this may be worth another patch and some discussion/doc, because
-it just improve the accuracy of the tool. In other words, this patch and
-the "stable" tag look good to me.
+Kernel information:
+    Commit message: afs: Return -EAGAIN, not -EREMOTEIO, when a file alread=
+y locked
 
-Regards,
-Boqun
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52740
 
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  kernel/kcsan/core.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index fe12dfe254ec..66ef48aa86e0 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -18,6 +18,7 @@
->  #include <linux/percpu.h>
->  #include <linux/preempt.h>
->  #include <linux/sched.h>
-> +#include <linux/string.h>
->  #include <linux/uaccess.h>
->  
->  #include "encoding.h"
-> @@ -1308,3 +1309,29 @@ noinline void __tsan_atomic_signal_fence(int memorder)
->  	}
->  }
->  EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-> +
-> +void *__tsan_memset(void *s, int c, size_t count);
-> +noinline void *__tsan_memset(void *s, int c, size_t count)
-> +{
-> +	check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +	return __memset(s, c, count);
-> +}
-> +EXPORT_SYMBOL(__tsan_memset);
-> +
-> +void *__tsan_memmove(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-> +{
-> +	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +	check_access(src, len, 0, _RET_IP_);
-> +	return __memmove(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memmove);
-> +
-> +void *__tsan_memcpy(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-> +{
-> +	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +	check_access(src, len, 0, _RET_IP_);
-> +	return __memcpy(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memcpy);
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         ppc64le - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5069753
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
+grep -E
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1390
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1162
+            Affected tests:
+                 ppc64le - AMTU (Abstract Machine Test Utility)
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
