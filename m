@@ -1,388 +1,161 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602A620F8
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 14:38:34 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so11092624pjl.0
-        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 07:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
-        b=7W6EPsiuaS5g/Dgep+05sQtTliG7m0K245tr1gUvQA9JqlgpxSrPvCSwk633PZrFqS
-         L85zFh/v97TPtrDTjlzP5HjbVndXdgruFgWWjA/ip7QzUR2xF34dZszh0c/eEsiDRtgu
-         wIJq4JznPI/5Cs7f8CRY3R0rx7BbPgkT9zLq4vnNlgPHIovKIotq4dFS61BB8GI3tt/U
-         LJl1RowjrBmMFhl8pvd53h7mG+5+eC/H6Kd+Iir9PP4fE8Ws06PjQWSr7yduCK1nAd8O
-         OeeV6BHDbskLxgGGuJ4H3GfutPAG0gXPBpV1zPkZ4d27pKNmJhfzkOXiSxv/YWJ3ZJB1
-         OInw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
-        b=llZt1G8wTapTtoROgCBUkEG88lWjpdsR1nXSdRk9WZJ9OOJUCP+HyfyJUmp3i7Noww
-         ZtW6ke7Qi/BwofN6wQmZSGyi1LgtNSXgsyjH74WZvj1C0ApWJak7K6ImBkoDxK+ncr0+
-         0O1kjtrWqDOclw1UnBytw4alRoFp2jd5HQS3/pxANFAKzP70HfEgi79U7/qxGBexYh/B
-         U0zgSJuBcTs5+frsev/X6ErRrVofnjgZlecKZ6FM0UkPHEdC2XuW1SXYpPZMUlG4hLPh
-         b345daf/k4koRO76PBsF+FY60x3/jVqvNFTkw48pPl0UG029aIbq5gtGbt29CdWti7JD
-         fv0Q==
-X-Gm-Message-State: ACgBeo3OWET/PNlwCIegK54i/IXw65ib0x1lEwaMySj2BOmm8iXPdTVX
-	ZNVQ5wgJUvxNFttEEsGNnNGFDqqWrCZWDYVM6Jc=
-X-Google-Smtp-Source: AA6agR4IcA/LwBg5x4LhqcOvg5ww12YZOwIJyAd+C7qPymitn2v6RjyrwO3jpIlmgdWUguc6VugNbw==
-X-Received: by 2002:a17:90a:c981:b0:1fe:55ef:b60f with SMTP id w1-20020a17090ac98100b001fe55efb60fmr31509915pjt.246.1662561513376;
-        Wed, 07 Sep 2022 07:38:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 4-20020a620504000000b00537b1aa9191sm12874029pff.178.2022.09.07.07.38.32
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
-Message-ID: <6318ace8.620a0220.a0562.3c72@mx.google.com>
-Date: Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3995CA6
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 15:00:43 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 228E9106F;
+	Wed,  7 Sep 2022 08:00:49 -0700 (PDT)
+Received: from [10.57.77.239] (unknown [10.57.77.239])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E64D33F71A;
+	Wed,  7 Sep 2022 08:00:38 -0700 (PDT)
+Message-ID: <507e18c3-684b-3642-3d8d-27b79e492a47@arm.com>
+Date: Wed, 7 Sep 2022 16:00:36 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220907
-Subject: next/master build: 37 builds: 4 failed, 33 passed, 4 errors,
- 13 warnings (next-20220907)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 37 builds: 4 failed, 33 passed, 4 errors, 13 warnings (n=
-ext-20220907)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220907/
-
-Tree: next
-Branch: master
-Git Describe: next-20220907
-Git Commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 6 unique architectures
-
-Build Failures Detected:
-
-arm:
-    rpc_defconfig: (gcc-10) FAIL
-
-riscv:
-    allnoconfig: (clang-16) FAIL
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
-) FAIL
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
-book: (clang-13) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
-    rpc_defconfig (gcc-10): 2 errors
-
-mips:
-    rb532_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
-: 1 error
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
-book (clang-13): 1 error
-
-Errors summary:
-
-    2    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl'=
- [-Werror,-Wunused-variable]
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    12   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
-
-Errors:
-    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
-rror,-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatch=
-es
-
-Errors:
-    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
-rror,-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/8] Perf stack unwinding with pointer authentication
+Content-Language: en-US
+To: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ acme@kernel.org, "peterz@infradead.org" <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev,
+ Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220704145333.22557-1-andrew.kilroy@arm.com>
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <20220704145333.22557-1-andrew.kilroy@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+
+On 04/07/2022 15:53, Andrew Kilroy wrote:
+> This patch series addresses issues that perf has when attempting to show
+> userspace stacks in the presence of pointer authentication on arm64.
+> 
+> Depending on whether libunwind or libdw is used, perf incorrectly
+> displays the userspace stack in 'perf report --stdio'.  With libunwind,
+> only the leaf function is shown.
+> 
+>             |
+>             ---0x200000004005bf
+>                0x200000004005bf
+>                my_leaf_function
+> 
+> With libdw, only the leaf function is shown even though there are
+> callers in the application.
+> 
+>             |
+>             ---my_leaf_function
+> 
+> 
+> The reason perf cannot show the stack upon a perf report --stdio is
+> because the unwinders are given instruction pointers which contain a
+> pointer authentication code (PAC).  For the libraries to correctly
+> unwind, they need to know which bits of the instruction pointer to turn
+> off.
+> 
+> The kernel exposes the set of PAC bits via the NT_ARM_PAC_MASK regset.
+> It is expected that this may vary per-task in future. The kernel also
+> exposes which pointer authentication keys are enabled via the
+> NT_ARM_PAC_ENABLED_KEYS regset, and this can change dynamically. These
+> are per-task state which perf would need to sample.
+> 
+> It's not always feasible for perf to acquire these regsets via ptrace.
+> When sampling system-wide or with inherited events this may require a
+> large volume of ptrace requests, and by the time the perf tool processes
+> a sample for a task, that task might already have terminated.
+> 
+> Instead, these patches allow this state to be sampled into the perf
+> ringbuffer, where it can be consumed more easily by the perf tool.
+> 
+> The first patch changes the kernel to send the authentication PAC masks
+> to userspace perf via the perf ring buffer.  This is published in the
+> sample, using a new sample field PERF_SAMPLE_ARCH_1.
+> 
+> The subsequent patches are changes to userspace perf to
+> 
+> 1) request the PERF_SAMPLE_ARCH_1
+> 2) supply the instruction mask to libunwind
+> 3) ensure perf can cope with an older kernel that does not know about
+>    the PERF_SAMPLE_ARCH_1 sample field.
+> 4) checks if the version of libunwind has the capability to accept
+>    an instruction mask from perf and if so enable the feature.
+> 
+> These changes depend on a change to libunwind, that is yet to be
+> released, although the patch has been merged.
+> 
+>   https://github.com/libunwind/libunwind/pull/360
+> 
+
+For the whole set:
+
+Reviewed-by: James Clark <james.clark@arm.com>
+
+I checked that the new test passes on an AWS Graviton 3 instance and
+with a build of mainline libunwind. I also checked that the PAC masks on
+the samples look sensible.
+
+The tests also still pass when run on N1SDP which doesn't have pointer
+authentication.
+
+> 
+> Andrew Kilroy (6):
+>   perf arm64: Send pointer auth masks to ring buffer
+>   perf evsel: Do not request ptrauth sample field if not supported
+>   perf tools: arm64: Read ptrauth data from kernel
+>   perf libunwind: Feature check for libunwind ptrauth callback
+>   perf libunwind: arm64 pointer authentication
+>   perf tools: Print ptrauth struct in perf report
+> 
+> German Gomez (2):
+>   perf test: Update arm64 tests to expect ptrauth masks
+>   perf test arm64: Test unwinding with PACs on gcc & clang compilers
+> 
+>  arch/arm64/include/asm/arch_sample_data.h     |  38 ++++++
+>  arch/arm64/kernel/Makefile                    |   2 +-
+>  arch/arm64/kernel/arch_sample_data.c          |  37 ++++++
+>  include/linux/perf_event.h                    |  24 ++++
+>  include/uapi/linux/perf_event.h               |   5 +-
+>  kernel/events/core.c                          |  35 ++++++
+>  tools/build/Makefile.feature                  |   2 +
+>  tools/build/feature/Makefile                  |   4 +
+>  tools/build/feature/test-all.c                |   5 +
+>  .../feature/test-libunwind-arm64-ptrauth.c    |  26 ++++
+>  tools/include/uapi/linux/perf_event.h         |   5 +-
+>  tools/perf/Makefile.config                    |  10 ++
+>  tools/perf/Makefile.perf                      |   1 +
+>  tools/perf/tests/Build                        |   1 +
+>  tools/perf/tests/arm_unwind_pac.c             | 113 ++++++++++++++++++
+>  tools/perf/tests/arm_unwind_pac.sh            |  57 +++++++++
+>  tools/perf/tests/attr/README                  |   1 +
+>  .../attr/test-record-graph-default-aarch64    |   3 +-
+>  tools/perf/tests/attr/test-record-graph-dwarf |   1 +
+>  .../attr/test-record-graph-dwarf-aarch64      |  13 ++
+>  .../tests/attr/test-record-graph-fp-aarch64   |   3 +-
+>  tools/perf/tests/builtin-test.c               |   1 +
+>  tools/perf/tests/sample-parsing.c             |   2 +-
+>  tools/perf/tests/tests.h                      |   1 +
+>  tools/perf/util/event.h                       |   8 ++
+>  tools/perf/util/evsel.c                       |  64 ++++++++++
+>  tools/perf/util/evsel.h                       |   1 +
+>  tools/perf/util/perf_event_attr_fprintf.c     |   2 +-
+>  tools/perf/util/session.c                     |  15 +++
+>  tools/perf/util/unwind-libunwind-local.c      |  12 ++
+>  30 files changed, 485 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/arch_sample_data.h
+>  create mode 100644 arch/arm64/kernel/arch_sample_data.c
+>  create mode 100644 tools/build/feature/test-libunwind-arm64-ptrauth.c
+>  create mode 100644 tools/perf/tests/arm_unwind_pac.c
+>  create mode 100755 tools/perf/tests/arm_unwind_pac.sh
+>  create mode 100644 tools/perf/tests/attr/test-record-graph-dwarf-aarch64
+> 
