@@ -1,40 +1,40 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6737E
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:59:33 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-344f79c2dc9so94882307b3.15
-        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:59:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8CD7E
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 04:59:36 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id b14-20020a056902030e00b006a827d81fd8so7572627ybs.17
+        for <llvm@lists.linux.dev>; Tue, 06 Sep 2022 21:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=1COoEIPBVX2RpaBUk98TcXRSJaNnm6A+DPC71dE8tyA=;
-        b=s3zbhnn4yneYiDRSoLecTRmu6wrM36fumucM96wks5JEOW+winLJxgjTCizxSD0vQQ
-         4LIxu9C5zIHRcDqu2u2lNecbhUbn/2TWEkJJNOnQRGTbP/t+N8tSrjmLqoNZ4Hys/YfY
-         rXjKvD+IaIth1LIDrIKHqgEj2zf3K/v0DQJ1j8rDMz5MwmTvfUGzUOKJa1lVvGPvqf9P
-         +8A42mJo+1FKX2JGEWRbmq1cLWbk1x4A8ndh39gYz9TEaivkCM3GNR8CZxO90PyAaynQ
-         mJT0Ist67AYlzVHi98qIbw0zfJsg4FDWxcQitTzHAY11Ikv4I9i0j4cc7EPR5ECWbtGC
-         CVKw==
+        bh=c0DpBOnZ7fHKw3QNWuDsBHLUoP21ketOwjbqwElOkqs=;
+        b=G3opd2Kk7smjSi01ZxULHYBb3aZEPYHUyBy3/mRzPOA7AoYOgM1AG5Hr7cycpkvp2k
+         7zmIUTwbwGDC2E7T4vT/WYWusN78+R87+am64PQyPlKsAzEmY50QiKUKIAoq02QVC52q
+         AeM1hmMw/deHDfPRbcEMAs2fdxfnRnwQin//MD28AjsSEt8iOmIlErdGoPa9zNXWO15A
+         X4/SX+bm7r1NdOrUdFOy1qu4GZ4TxCTv6HXUl8Hqc7sWxBBNwG8BE1eVwLXfWAwS1aQw
+         +0gDpWtqgpEKjBXTHa3efxgcMH+NWtwBBFv0w/mQISgkan8BA28APqByaEUis7YN7XH1
+         gbPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1COoEIPBVX2RpaBUk98TcXRSJaNnm6A+DPC71dE8tyA=;
-        b=FL1TsqlyWMO8cpE9s94weNPO3CiRDOBzknp3IHV6YME9Z028qGEip+Sy8LFeTsQHCH
-         GrHWk+c9uwpCw9zWYanowHogzZ6wW5fwaUPXJCNMwCsEa1ZscpQhqhPhTeB3/FmEP+K/
-         YExw94BakalR9CWhMPd7D3LKi0G5vipeUJdfLldpp/jDco0oSLIp3q3mGVlM/ZPXzEoz
-         PTmLv5Tky1lU1/KZKEQzrYhh5554UTPYBZSVBlDOJjo6LAA0YuSkiGx+atnjYhV817zA
-         M/LYLnjyldUsvJbdXjDAz2WEb4CiR2c5w0ybWtqz/Ws6SZ+zCZYAfCQUkkGzKZIF1vdx
-         Espg==
-X-Gm-Message-State: ACgBeo2aTfR2gY+cqynylFAi/Wq7//jTn7qP0rzGAcMXdL4DspI8vpPv
-	khbXfIUhyuuoiiMv2HOZO4FLjBBTejVGS5FkSdA=
-X-Google-Smtp-Source: AA6agR4PDE9DXpqaLgbI/t9G91mUki/RmvatymlHezczkZ1UM0qxH+3O/M1DPc+CuckZPxkGq1Gw30BzmtKEQyH16HA=
+        bh=c0DpBOnZ7fHKw3QNWuDsBHLUoP21ketOwjbqwElOkqs=;
+        b=uCsRjxigdO8mMuA+mq8UbbeBZhD8TUY/2Vcm8ghEdO1jc1tH5VtII6VqN67kPeWlnA
+         UAq5YnQJuS4fbDyQl2LESGamke41Qxd5/ApjvUhm0+kBuiWAXuhj/2KGgdZAEIarQy4a
+         kQbZ3yhZlFXFkUQ92QQf69s5Cz3hV3eI2uX7Aa1aDfKIlFiG7Jn0UIDFGyfVKCKTTT4I
+         1FLmIvKMgQ0QeySjWOZ1vQhwDekFOsDWjBG+LjK80iQ80x3lNTQZDgG2q/l3u8S1RAc5
+         PcnDrpVxE+eAZMoB0bg2hzGXbwb+KRfxvdR7bP/HmuL9i2tx34fA+KQXqIZ99UKZnWzy
+         Nk6Q==
+X-Gm-Message-State: ACgBeo0KrchVvVU18pCJEpsFCih3N66MuSQ9YD/FFezgB8Du0Ds1om+s
+	7SPhJY117vOMdiU3qk9Gsv+PsdFbzdpTKqWEH1g=
+X-Google-Smtp-Source: AA6agR4yqG8oXRGrN2c3vGVjKmn+ZXcqxyGd3kFbqy9a7TH8mlfm2goz1npG5dcXN3vR8r+Mk+rzj0/w3aimHdWPBSI=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:9755:c523:9dcb:2228])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:72a:b0:69e:f780:4de1 with
- SMTP id l10-20020a056902072a00b0069ef7804de1mr1597326ybt.53.1662526772788;
- Tue, 06 Sep 2022 21:59:32 -0700 (PDT)
-Date: Tue,  6 Sep 2022 21:59:06 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:26c9:0:b0:6a9:922:4a6d with SMTP
+ id m192-20020a2526c9000000b006a909224a6dmr1571274ybm.239.1662526775388; Tue,
+ 06 Sep 2022 21:59:35 -0700 (PDT)
+Date: Tue,  6 Sep 2022 21:59:07 -0700
 In-Reply-To: <20220907045907.484043-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,13 +44,13 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220907045907.484043-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662526746; l=3571;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=izinVuTPOGuJAOWpMqC3T3tWj1j7qEU602s5D6R33gQ=;
- b=3HKm8e+bXV4z5Vehfj0HJ55Vwjh98Cw8BeO7rIXrOAoTmo0gFo5f7KN8zo1XTJHURY3xrr+qxu8O
- 7wO+MevQBnzuM/Tu/NZEUxCAUC2q1PZIAlDnuHsKyAQG1XPgoYnY
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662526746; l=2043;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=0UUXvo2ECsHljJrCvpyFZ/IOiA9qf1pxH+OXOsjnp1k=;
+ b=EPZloRmrF5sgzyoix1T+c/b0M8kYWBCLqwRogtnVgQh3+LO3Uy4aqeBCu1Thtarw+ZI/xgMsperC
+ QC/5HfWjCEpJsJsOsjwgYmvtS6GTbJlSsOD2ruSzWrRZsqSP2wbm
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220907045907.484043-5-ndesaulniers@google.com>
-Subject: [PATCH v3 4/5] Makefile.debug: re-enable debug info for .S files
+Message-ID: <20220907045907.484043-6-ndesaulniers@google.com>
+Subject: [PATCH v3 5/5] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
@@ -58,97 +58,66 @@ Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, 
 	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>, Fangrui Song <maskray@google.com>, 
 	Alexey Alexandrov <aalexand@google.com>, Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
+	Nick Desaulniers <ndesaulniers@google.com>, Andi Kleen <ak@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Alexey reported that the fraction of unknown filename instances in
-kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-to assembler defined symbols, which regressed as a result of:
+Dmitrii, Fangrui, and Mashahiro note:
 
-commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+  Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
 
-In that commit, I allude to restoring debug info for assembler defined
-symbols in a follow up patch, but it seems I forgot to do so in
+Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
+specified in order for -gsplit-dwarf to work at all.
 
-commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
+-gsplit-dwarf has been mutually exclusive with -g since support for
+CONFIG_DEBUG_INFO_SPLIT was introduced in
+commit 866ced950bcd ("kbuild: Support split debug info v4")
+I don't think it ever needed to be.
 
-Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-Reported-by: Alexey Alexandrov <aalexand@google.com>
-Reported-by: Bill Wendling <morbo@google.com>
-Reported-by: Greg Thelen <gthelen@google.com>
+Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
+Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
+Link: https://reviews.llvm.org/D80391
+Cc: Andi Kleen <ak@linux.intel.com>
+Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Reported-by: Fangrui Song <maskray@google.com>
+Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
 Changes v2 -> v3:
-* Replace diff outright with Masahiro's suggestion in
-  https://lore.kernel.org/llvm/CAK7LNATWDH01=ZKLnsxc0vcib1zGDbEq8jLQwhWP7HkkmSb_Mw@mail.gmail.com/2-dwarf.diff
-  with some modifications, PTAL.
-* Pick up Nathan's RB tag and Masahiro's SB tag.
-* Cut down commit message.
+* Pick up Nathan's RB tag.
 
 Changes v1 -> v2:
-* Use newly added compiler-specific macros, as per Bill.
+* Add reference to 866ced950bcd, cc Andi, in commit message.
 
- lib/Kconfig.debug      |  4 +++-
- scripts/Makefile.debug | 19 ++++++++++---------
- 2 files changed, 13 insertions(+), 10 deletions(-)
+ scripts/Makefile.debug | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index bcbe60d6c80c..d3e5f36bb01e 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -264,8 +264,10 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- config DEBUG_INFO_DWARF4
- 	bool "Generate DWARF Version 4 debuginfo"
- 	select DEBUG_INFO
-+	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
- 	help
--	  Generate DWARF v4 debug info. This requires gcc 4.5+ and gdb 7.0+.
-+	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
-+	  if using clang without clang's integrated assembler, and gdb 7.0+.
- 
- 	  If you have consumers of DWARF debug info that are not ready for
- 	  newer revisions of DWARF, you may wish to choose this or have your
 diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index 9f39b0130551..2845145c1220 100644
+index 2845145c1220..c20f8f2e76bf 100644
 --- a/scripts/Makefile.debug
 +++ b/scripts/Makefile.debug
-@@ -3,17 +3,16 @@ DEBUG_CFLAGS	:=
- ifdef CONFIG_DEBUG_INFO_SPLIT
- DEBUG_CFLAGS	+= -gsplit-dwarf
- else
--DEBUG_CFLAGS	+= -g
-+debug-cflags-y	+= -g
- endif
- 
--ifndef CONFIG_AS_IS_LLVM
--KBUILD_AFLAGS	+= -Wa,-gdwarf-2
+@@ -1,10 +1,4 @@
+-DEBUG_CFLAGS	:=
+-
+-ifdef CONFIG_DEBUG_INFO_SPLIT
+-DEBUG_CFLAGS	+= -gsplit-dwarf
+-else
+-debug-cflags-y	+= -g
 -endif
-+debug-flags-$(CONFIG_DEBUG_INFO_DWARF4)	+= -gdwarf-4
-+debug-flags-$(CONFIG_DEBUG_INFO_DWARF5)	+= -gdwarf-5
++DEBUG_CFLAGS	:= -g
  
--ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
--dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
--dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
--DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
-+ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_AS_IS_GNU),yy)
-+# Clang does not pass -g or -gdwarf-* option down to GAS.
-+# Add -Wa, prefix to explicitly specify the flags.
-+KBUILD_AFLAGS	+= $(addprefix -Wa$(comma), $(debug-flags-y))
+ debug-flags-$(CONFIG_DEBUG_INFO_DWARF4)	+= -gdwarf-4
+ debug-flags-$(CONFIG_DEBUG_INFO_DWARF5)	+= -gdwarf-5
+@@ -15,6 +9,8 @@ ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_AS_IS_GNU),yy)
+ KBUILD_AFLAGS	+= $(addprefix -Wa$(comma), $(debug-flags-y))
  endif
  
++debug-flags-$(CONFIG_DEBUG_INFO_SPLIT)	+= -gsplit-dwarf
++
  ifdef CONFIG_DEBUG_INFO_REDUCED
-@@ -29,5 +28,7 @@ KBUILD_AFLAGS	+= -gz=zlib
- KBUILD_LDFLAGS	+= --compress-debug-sections=zlib
- endif
- 
--KBUILD_CFLAGS += $(DEBUG_CFLAGS)
-+DEBUG_CFLAGS	+= $(debug-flags-y)
-+KBUILD_AFLAGS	+= $(debug-flags-y)
-+KBUILD_CFLAGS	+= $(DEBUG_CFLAGS)
- export DEBUG_CFLAGS
+ DEBUG_CFLAGS	+= -fno-var-tracking
+ ifdef CONFIG_CC_IS_GCC
 -- 
 2.37.2.789.g6183377224-goog
 
