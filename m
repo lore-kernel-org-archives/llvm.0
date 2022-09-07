@@ -1,173 +1,124 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E714A5CA2
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 19:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662579044;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VOPHp0rCiZV2UaNMjyqSHPK40U2QeL+Filj9/mDtwFE=;
-	b=WRfkEfwNa5DrTlDm/L0ZESbUMHaDTBA3IxVozBFLZiZeZUPxGs6z7HQcUtjC1szn8Kok8p
-	/hemRVoL54LVcul7sX5Q8d7zFwO3ejNNTgseTKDO/F9OOAlTG6842Naok0Fau1bbY9xosm
-	6y+YJqr0W5qpsNPBSOGnaryIaH1CuWQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-Jp3R5cWyOtaWDJ-4DyIOTQ-1; Wed, 07 Sep 2022 15:30:43 -0400
-X-MC-Unique: Jp3R5cWyOtaWDJ-4DyIOTQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 920563C0ED40
-	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 19:30:43 +0000 (UTC)
-Received: from [172.64.5.10] (unknown [10.30.33.227])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7D8DF4050067;
-	Wed,  7 Sep 2022 19:30:43 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
- mainline.kernel.org-clang, 0066f1b0)
-Date: Wed, 07 Sep 2022 19:30:43 -0000
-CC: bhe@redhat.com, xiawu@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3459889C2
+	for <llvm@lists.linux.dev>; Wed,  7 Sep 2022 19:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662579149; x=1694115149;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bbr27ZZsqeXv7M+kbngATqDVVDUO8d+b6Aa8czXF0Vs=;
+  b=FmZCGB7N56M1DvIOy2YxItJTIyp+OYJk4079hPxzGtyJ5IjXNyZb8fBg
+   MNr1sjt+EuwuOw8UgT2d6y+LjnsoYYRC7Zy8/XjXcXENOoVRD0ap0MybD
+   423Az9OotRQ28IYz4ujplenKXnDvA/CG5kw+11J9Rxij26cesgSwA2Nsj
+   wnN5X5CTC/ssMh9vdIgzotuRZ23ZxeyRvqG3yAufVMusm8CBFhss9P5R5
+   a6Vjojm2yIkIFvCXtl6bfHZEPDY7iogEL/0M+p88NL1nUHsU5O8Nej+31
+   Nthp57iD1T6eCrTkuat3nVJXcq3SCJau616v/U7CQp4VeGao9PHodXHe9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="280010274"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="280010274"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 12:32:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="591850374"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 07 Sep 2022 12:32:27 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oW0mg-0006tZ-1q;
+	Wed, 07 Sep 2022 19:32:26 +0000
+Date: Thu, 8 Sep 2022 03:32:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chengming Zhou <zhouchengming@bytedance.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:sched/psi 11/11] kernel/cgroup/cgroup.c:3819:4: error:
+ implicit declaration of function 'cgroup_file_show' is invalid in C99
+Message-ID: <202209080327.r83nfBI5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <80769.122090715304311727@us-mta-647.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/psi
+head:   d79e9c758a62dfe7e3472dbf99400c2774ba51f2
+commit: d79e9c758a62dfe7e3472dbf99400c2774ba51f2 [11/11] sched/psi: Per-cgroup PSI accounting disable/re-enable interface
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220908/202209080327.r83nfBI5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=d79e9c758a62dfe7e3472dbf99400c2774ba51f2
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/psi
+        git checkout d79e9c758a62dfe7e3472dbf99400c2774ba51f2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: afs: Return -EAGAIN, not -EREMOTEIO, when a file alread=
-y locked
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/52740
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-         ppc64le - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5069753
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
-grep -E
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1390
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: AMTU (Abstract Machine Test Utility): misc/amtu FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1162
-            Affected tests:
-                 ppc64le - AMTU (Abstract Machine Test Utility)
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> kernel/cgroup/cgroup.c:3819:4: error: implicit declaration of function 'cgroup_file_show' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_file_show(&cgrp->psi_files[i], enable);
+                           ^
+   kernel/cgroup/cgroup.c:3819:4: note: did you mean 'cgroup_type_show'?
+   kernel/cgroup/cgroup.c:3511:12: note: 'cgroup_type_show' declared here
+   static int cgroup_type_show(struct seq_file *seq, void *v)
+              ^
+   1 error generated.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+vim +/cgroup_file_show +3819 kernel/cgroup/cgroup.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  3792	
+  3793	static ssize_t cgroup_pressure_write(struct kernfs_open_file *of,
+  3794					     char *buf, size_t nbytes,
+  3795					     loff_t off)
+  3796	{
+  3797		ssize_t ret;
+  3798		int enable;
+  3799		struct cgroup *cgrp;
+  3800		struct psi_group *psi;
+  3801	
+  3802		ret = kstrtoint(strstrip(buf), 0, &enable);
+  3803		if (ret)
+  3804			return ret;
+  3805	
+  3806		if (enable < 0 || enable > 1)
+  3807			return -ERANGE;
+  3808	
+  3809		cgrp = cgroup_kn_lock_live(of->kn, false);
+  3810		if (!cgrp)
+  3811			return -ENOENT;
+  3812	
+  3813		psi = cgroup_psi(cgrp);
+  3814		if (psi->enabled != enable) {
+  3815			int i;
+  3816	
+  3817			/* show or hide {cpu,memory,io,irq}.pressure files */
+  3818			for (i = 0; i < NR_PSI_RESOURCES; i++)
+> 3819				cgroup_file_show(&cgrp->psi_files[i], enable);
+  3820	
+  3821			psi->enabled = enable;
+  3822			if (enable)
+  3823				psi_cgroup_restart(psi);
+  3824		}
+  3825	
+  3826		cgroup_kn_unlock(of->kn);
+  3827	
+  3828		return nbytes;
+  3829	}
+  3830	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
