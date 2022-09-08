@@ -1,61 +1,63 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A78610E
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:55:08 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-348c4a1e12dso4669397b3.11
-        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:55:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FB9610E
+	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:55:10 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id k126-20020a253d84000000b0068bb342010dso32954yba.1
+        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:from:to:cc:subject:date;
-        bh=PjZoN0zzjSIW43FuU+XJrggTAtHpxYpR0s4G6xQsp2I=;
-        b=C2IeInb5KVLYbFKBLliSgdegP+4juJgwCRO9LH2caulegUYXK+hAEP6NI/Hf0gajYi
-         xQmZl5rLmzgeYji4pbhB4lZ8rFDTC0/i5WnyF615dgJtYzODUVvnpdWQwkJKAIBBKbTs
-         BirsChmdH3tbfPYxdwjJrEy+tyh/cp/CRBC7q6FuWsrFV815zaNgieP8HZENfYl1Ku/s
-         v4+yMoDciwiVg05vkdrzVkqTx2PmtAxJFICGvwW2i5vcVKlU4YugMktGTDxNHAo4doDh
-         AgZDQxi++ZTvSTU+LxlSYM8+aOp3lFc2uoAZjYVTBF14rB11022nNBoUyFn1ittnAvV8
-         cBww==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=++1/qtdOmwUSaxqgiZQTBSEYvAxbI4XHV6GATm9VhUE=;
+        b=DAxdaA/TeHYFNkGxc72IwSwNKQuOykXTJDQORvATjh5oTgcXipGkVmqfycb+PUS8Wp
+         SXGLVEnuzt4Ps6Cp3jiSeQ9/bxkrOwHccGPNwXMZ4cOSpTui8APRzBdyggwyYN3bpUBU
+         csqHhnCeJ1j65G97AeYq/khlWiDGhXIxKGbBc5NpejjSwqU8L1EmcqUWr8+5Rvz54bQa
+         6fjvp8eKwXpdwITxvySX9EurH7B9DSaYc1UZa4+fZqlKfV788bJDzyLxtjPFogWibp84
+         y3PzkRHda3kd1F0KGkBO4FaaSRROQQWwIa2Op7LMzexNluxxyA67slpTBOHo/cuaH5Xk
+         CKkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:mime-version
-         :message-id:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=PjZoN0zzjSIW43FuU+XJrggTAtHpxYpR0s4G6xQsp2I=;
-        b=SuJe+hikoYTVZ9hC7qm/sBi+IIuvbfrTV+vMq5AIpNUNx36Tu110ss7yCI19OvrXYu
-         fMFNC4Ix86z576aAn8W9ZUxdFmJdazilbl4T3WGZhuKRR/JWvpAs8MG2tHmeio2G6a5+
-         Dw57dPzKPMoriAMFNiSt2zYGATQ27T1SuEDbdFFx4ZYqruVVk41LiMADQVytSADEducC
-         uepGodx7tsYv2QtEvBETpa63mY/CYizXS7kVKoFhl3geoO/U/65EDBtd1AnasUXMcVAt
-         +vQAgnfuUIGEGDdR9Y7jFQF0Nqndq7Ml/HuU/pSRbacZEf/78vFl0u2LWgtr0MhjQnj+
-         5p+Q==
-X-Gm-Message-State: ACgBeo3jMeDNSTI1RXV1HmxyNJCej1khb+g5IuHKItiJbP4BGZjd2RUB
-	nITmtHH/K1B91OYWM5KbKOE1PqNoTu06K/p7IuU=
-X-Google-Smtp-Source: AA6agR6WKViRAKX8D6OrP4sbMJ6SXPUOM73Ukc28rexcSIqiE2/BBpmzkRf/7abUu538j464KaDZCMLU8oVoWy+xq1Y=
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=++1/qtdOmwUSaxqgiZQTBSEYvAxbI4XHV6GATm9VhUE=;
+        b=CMC6erO9DnH6nnkRW/5A9aTSBJxB7NuA7pCSztvRnv3AeJQ3ppxZ9Rw9uC7wyhPVxs
+         pOQ5eAnbb89WG1E52cxe/nbNKvJclA+c+HjWl8hV95MNC96wYmGqQpKbgHVs+ilzOeY5
+         +xt8Tas3KUL1lpBX7HmOUBgaJ7iTb8eFCQx9clwiJLPRviE5QMh6Yf0KnVS3qGAv0UGC
+         t+VdqrGz1fNRDcjRyqUcmeGubSJNPich5l6+QF1uFTw9zFVpgeXI1SG/R+2G+EpVUCGl
+         8r2x7V/AghMyoMBoIZGHF/pGk8OuBrtES5g0pynCTjNaHanVFZFdyWtmIOYbVFYfJoKN
+         rbgg==
+X-Gm-Message-State: ACgBeo2B5tzp5V/30dw9XodxWGLDS09lHNzRyACukmmMLn4ldMXXcCwR
+	dJOCyUlH+AZVYFyeWwOlrf+2Pl3pteoWwp2Pcf0=
+X-Google-Smtp-Source: AA6agR7Urz8mEtWhFvoUwvvdWySJPZQ7jqpog2D5kyDc+2eNo1L58ipOybnpuwS7VRcYjJKRoWU3GYlVidDt0EeoNs0=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:a4e4:e6ec:9fdd:1bdd])
- (user=samitolvanen job=sendgmr) by 2002:a25:2d6:0:b0:6a8:f106:4410 with SMTP
- id 205-20020a2502d6000000b006a8f1064410mr9088381ybc.623.1662674107088; Thu,
- 08 Sep 2022 14:55:07 -0700 (PDT)
-Date: Thu,  8 Sep 2022 14:54:42 -0700
-Message-Id: <20220908215504.3686827-1-samitolvanen@google.com>
+ (user=samitolvanen job=sendgmr) by 2002:a0d:f904:0:b0:345:4639:8253 with SMTP
+ id j4-20020a0df904000000b0034546398253mr9771674ywf.438.1662674109557; Thu, 08
+ Sep 2022 14:55:09 -0700 (PDT)
+Date: Thu,  8 Sep 2022 14:54:43 -0700
+In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
+Message-Id: <20220908215504.3686827-2-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20220908215504.3686827-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8135; i=samitolvanen@google.com;
- h=from:subject; bh=YeT75pOWqGcFfk/+R15Lxw9MsGMMMZ6nF27yRoOQ1Fc=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmSyhKNovD8eEU0MWcLuyb+PgKPYMvYYauM7wa16
- RKJ7oBqJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpksgAKCRBMtfaEi7xW7tWODA
- CFx66OK95Ec9B0+NLJPpsup3+p3TsFTQh1PZqhTeXAM/gr6DXVdeblqA5EpvFtkbtHlOvmUXL6h9qX
- oyWEDFl6s3OVtpfGf+E6HG73bERohpK3KW+4/xFKrMlK1aEwDNe2kzCDcmUE+Q3aboNA2gAX31AqQR
- sDMOSXZhXVaJE/8stH6zN+BDCs46tCichw9NtM2TZbRYsbPkyNW9b6GE8fWZ5n38RAY8MnOcwt0Nvd
- RweQ7yd1LvOI6QJaFvC/UsahmVzyenbp9HV0dzdKh7y5EHKnQevXv7KFNZMtuN45p0cdaL2VaBChYW
- 3uGQZnTBOiDz9IMq38O9FBDmxIAJhL5J0QBKKNnFU1X9O6lFoou6AZJ12WEZmu8IoQb6OfXTentvYY
- ffWunmjcCPqfw4r7O3eYMuxWj8U42Ib7uCEQNj7EV6ID4ZuSS0BYgnDo65wnKqIgyKoLTOHkEjLe0N
- boZZMOw9lyt6n8ouEr8AC38jsmUeHS8Y0SjW0x1lLDIiQ=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3048; i=samitolvanen@google.com;
+ h=from:subject; bh=NqOg6IoR6gX09sXAr0B0cPUiAt3ZJYmbQkr2LJPJNus=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmSyAhdY+c0yuGLwUcRxL94Fo3kpoLG9gssQn6xK
+ 0NRN0dKJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpksgAKCRBMtfaEi7xW7snLC/
+ 4kqxfaphRvYnLEvON3wLCWq1o1yoypBX3QcocACz45p22AS2T5hfosvQm9Qoq55kO7fEf6uzqBQuMQ
+ kGIPv/gs/+9O5Id/51exiQCxLR2ReTQngCFQ10xRIwfcsM/z45xAQ4nusTdRGj0bHv2gAdmNAXFZ+R
+ oJkA10VfP80fqUgAUn0+WpEv6rnxzPuorF9bqiXWBrChAAtoLY5p41e3AExfZGMMh7qKArwCJMFqFB
+ y/qs9kY9bk7UdIiNxvzvQmkkzRuNJHtI+Sea40LsKjqkiJ7eQQfMAeEbh2ArJDRu/sBdGkzhU2zhS1
+ Y5SHy5RY9gHiNRwadqeXZhe5TTujjTecKJG/HZPk8XNU1EizECc1s+y10rNiGBUlVhI0MRI1NL24fK
+ qE0JNaiWlsv2WhYZN6SZ32uY130fpB+FjtHg+/0bVXbfmrvraFK+7dE4e8P3E6F3RvBWXa0RdHztpF
+ 730W9Oi74vsIeysCfW1gRdtm+goTa2x0/ontLouoIJkP4=
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Subject: [PATCH v5 00/22] KCFI support
+Subject: [PATCH v5 01/22] treewide: Filter out CC_FLAGS_CFI
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -67,194 +69,69 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-KCFI is a forward-edge control-flow integrity scheme in the upcoming
-Clang 16 release, which is more suitable for kernel use than the
-existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
-LTO, doesn't alter function references to point to a jump table, and
-won't break function address equality.
+In preparation for removing CC_FLAGS_CFI from CC_FLAGS_LTO, explicitly
+filter out CC_FLAGS_CFI in all the makefiles where we currently filter
+out CC_FLAGS_LTO.
 
-This series replaces the current arm64 CFI implementation with KCFI
-and adds support for x86_64.
-
-KCFI requires assembly functions that are indirectly called from C
-code to be annotated with type identifiers. As type information is
-only available in C, the compiler emits expected type identifiers
-into the symbol table, so they can be referenced from assembly
-without having to hardcode type hashes. Patch 6 adds helper macros
-for annotating functions, and patches 9 and 20 add annotations.
-
-In case of a type mismatch, KCFI always traps. To support error
-handling, the compiler generates a .kcfi_traps section for x86_64,
-which contains the locations of each trap, and for arm64, encodes
-the necessary register information to the ESR. Patches 10 and 22 add
-arch-specific error handlers.
-
-To test this series, you'll need a ToT Clang toolchain. The series
-is also available pn GitHub:
-
-  https://github.com/samitolvanen/linux/commits/kcfi-v5
-
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Kees Cook <keescook@chromium.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
-Changes in v5:
-- Cleaned up the manual CFI type annotation macros, and ensured
-  the IBT/BTI landing pads are correctly emitted.
+ arch/arm64/kernel/vdso/Makefile       | 3 ++-
+ arch/x86/entry/vdso/Makefile          | 3 ++-
+ drivers/firmware/efi/libstub/Makefile | 2 ++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-- Added a patch to fix an objtool issue in elf_update_symbol, which
-  could end up marking __kcfi_typeid_ SHN_ABS symbols undefined.
-
-Changes in v4:
-- Dropped the RFC now that Clang support is merged.
-
-- Changed the x86_64 function preamble to match the the preamble
-  generated by the compiler, and fixed a code generation issue,
-  which Peter pointed out.
-
-- Added a patch to fix arm64 psci_initcall_t type mismatch based
-  on Mark's suggestion.
-
-Changes in v3:
-- Merged the patches that split CC_FLAGS_CFI from CC_FLAGS_LTO.
-
-- Dropped the psci_initcall_t patch as Mark volunteered to send a
-  patch for this. Note that this patch is still needed to boot a
-  CFI kernel on certain arm64 systems:
-  https://lore.kernel.org/lkml/YoNhKaTT3EDukxXY@FVFF77S0Q05N/
-
-- Added a patch to remove the now unnecessary workarounds with
-  CFI+ThinLTO in kallsyms.
-
-- Added an lkdtm patch to ensure the test actually generates an
-  indirect call.
-
-- Changed report_cfi_failure to clearly indicate if we failed to
-  decode target address.
-
-- Switched to relative offsets for .kcfi_traps.
-
-- On x86_64, moved CFI error handling from traps.c to cfi.c, and
-  as we only call memcpy indirectly w/ CONFIG_MODULES, ensured that
-  the compiler emits __kcfi_typeid_memcpy also without modules.
-
-- On x86_64, added a check for the cmpl REX prefix to handle the
-  case where the compiler might not use r8-r15 registers for the
-  call target.
-
-- On the compiler side, ensured that on x86_64 calls are emitted
-  immediately after the CFI check, fixed the __cfi_ preamble
-  linkage, and changed the compiler to emit relative offsets in
-  .kcfi_traps.
-
-Changes in v2:
-- Changed the compiler patch to encode arm64 target and type details
-  in the ESR, and updated the kernel error handling patch accordingly.
-
-- Changed the compiler patch to embed the x86_64 type hash in a valid
-  instruction to avoid special casing objtool instruction decoding, and
-  added a __cfi_ symbol for the preamble. Changed the kernel error
-  handling and manual type annotations to match.
-
-- Dropped the .kcfi_types section as that=E2=80=99s no longer needed by
-  objtool, and changed the objtool patch to simply ignore the __cfi_
-  preambles falling through.
-
-- Dropped the .kcfi_traps section on arm64 as it=E2=80=99s no longer needed=
-,
-  and moved the trap look-up code behind CONFIG_ARCH_USES_CFI_TRAPS,
-  which is selected only for x86_64.
-
-- Dropped __nocfi attributes from arm64 code where CFI was disabled
-  due to address space confusion issues, and added type annotations to
-  relevant assembly functions.
-
-- Dropped __nocfi from __init.
-
-
-Sami Tolvanen (22):
-  treewide: Filter out CC_FLAGS_CFI
-  scripts/kallsyms: Ignore __kcfi_typeid_
-  cfi: Remove CONFIG_CFI_CLANG_SHADOW
-  cfi: Drop __CFI_ADDRESSABLE
-  cfi: Switch to -fsanitize=3Dkcfi
-  cfi: Add type helper macros
-  lkdtm: Emit an indirect call for CFI tests
-  psci: Fix the function type for psci_initcall_t
-  arm64: Add types to indirect called assembly functions
-  arm64: Add CFI error handling
-  arm64: Drop unneeded __nocfi attributes
-  init: Drop __nocfi from __init
-  treewide: Drop function_nocfi
-  treewide: Drop WARN_ON_FUNCTION_MISMATCH
-  treewide: Drop __cficanonical
-  objtool: Preserve special st_shndx indexes in elf_update_symbol
-  objtool: Disable CFI warnings
-  kallsyms: Drop CONFIG_CFI_CLANG workarounds
-  x86/tools/relocs: Ignore __kcfi_typeid_ relocations
-  x86: Add types to indirectly called assembly functions
-  x86/purgatory: Disable CFI
-  x86: Add support for CONFIG_CFI_CLANG
-
- Makefile                                  |  13 +-
- arch/Kconfig                              |  18 +-
- arch/arm64/crypto/ghash-ce-core.S         |   5 +-
- arch/arm64/crypto/sm3-ce-core.S           |   3 +-
- arch/arm64/include/asm/brk-imm.h          |   6 +
- arch/arm64/include/asm/ftrace.h           |   2 +-
- arch/arm64/include/asm/linkage.h          |   4 +
- arch/arm64/include/asm/mmu_context.h      |   4 +-
- arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
- arch/arm64/kernel/alternative.c           |   2 +-
- arch/arm64/kernel/cpu-reset.S             |   5 +-
- arch/arm64/kernel/cpufeature.c            |   4 +-
- arch/arm64/kernel/ftrace.c                |   2 +-
- arch/arm64/kernel/machine_kexec.c         |   2 +-
- arch/arm64/kernel/psci.c                  |   2 +-
- arch/arm64/kernel/smp_spin_table.c        |   2 +-
- arch/arm64/kernel/traps.c                 |  47 ++-
- arch/arm64/kernel/vdso/Makefile           |   3 +-
- arch/arm64/mm/proc.S                      |   5 +-
- arch/x86/Kconfig                          |   2 +
- arch/x86/crypto/blowfish-x86_64-asm_64.S  |   5 +-
- arch/x86/entry/vdso/Makefile              |   3 +-
- arch/x86/include/asm/cfi.h                |  22 ++
- arch/x86/include/asm/linkage.h            |  12 +
- arch/x86/kernel/Makefile                  |   2 +
- arch/x86/kernel/cfi.c                     |  86 ++++++
- arch/x86/kernel/traps.c                   |   4 +-
- arch/x86/lib/memcpy_64.S                  |   3 +-
- arch/x86/purgatory/Makefile               |   4 +
- arch/x86/tools/relocs.c                   |   1 +
- drivers/firmware/efi/libstub/Makefile     |   2 +
- drivers/firmware/psci/psci.c              |  12 +-
- drivers/misc/lkdtm/cfi.c                  |  15 +-
- drivers/misc/lkdtm/usercopy.c             |   2 +-
- include/asm-generic/bug.h                 |  16 -
- include/asm-generic/vmlinux.lds.h         |  37 +--
- include/linux/cfi.h                       |  59 ++--
- include/linux/cfi_types.h                 |  45 +++
- include/linux/compiler-clang.h            |  14 +-
- include/linux/compiler.h                  |  16 +-
- include/linux/compiler_types.h            |   4 -
- include/linux/init.h                      |   6 +-
- include/linux/module.h                    |  10 +-
- include/linux/pci.h                       |   4 +-
- kernel/cfi.c                              | 352 ++++------------------
- kernel/kallsyms.c                         |  17 --
- kernel/kthread.c                          |   3 +-
- kernel/module/main.c                      |  50 +--
- kernel/workqueue.c                        |   2 +-
- scripts/kallsyms.c                        |   1 +
- scripts/module.lds.S                      |  23 +-
- tools/objtool/check.c                     |   7 +-
- tools/objtool/elf.c                       |   7 +-
- 53 files changed, 425 insertions(+), 554 deletions(-)
- create mode 100644 arch/x86/include/asm/cfi.h
- create mode 100644 arch/x86/kernel/cfi.c
- create mode 100644 include/linux/cfi_types.h
-
-
-base-commit: 506357871c18e06565840d71c2ef9f818e19f460
---=20
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index bafbf78fab77..619e2dc7ee14 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -40,7 +40,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+ # kernel with CONFIG_WERROR enabled.
+ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
+ 				$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
+-				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
++				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
++				-Wmissing-prototypes -Wmissing-declarations
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
+ UBSAN_SANITIZE			:= n
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 12f6c4d714cd..381d3333b996 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -91,7 +91,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
+ endif
+ endif
+ 
+-$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
++$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+ $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
+ 
+ #
+@@ -153,6 +153,7 @@ KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
++KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_CFI),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 += -m32 -msoft-float -mregparm=0 -fpic
+ KBUILD_CFLAGS_32 += -fno-stack-protector
+ KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index 2c67f71f2375..b43fdb319fd4 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -46,6 +46,8 @@ KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS), $(KBUILD_CFLAGS))
+ 
+ # remove SCS flags from all objects in this directory
+ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
++# disable CFI
++KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
+ # disable LTO
+ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+ 
+-- 
 2.37.2.789.g6183377224-goog
 
