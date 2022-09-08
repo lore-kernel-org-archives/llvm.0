@@ -1,104 +1,121 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829FE610E
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:16:17 +0000 (UTC)
-Received: by mail-ed1-f44.google.com with SMTP id 29so21177277edv.2
-        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Lr8oiy+JZ5JB+d+QkGV7FDirBPOdIiFwxT3YvDwpj8w=;
-        b=LEaHRiXOMVqfETuRtrKDKenARH14qGRl7NuB14aBEgeGMGDbtWkzQVh7KylKuhB81s
-         TxAgAz88H1/wFtBfBFXaJMjn9BqJ3YVRnK2wBWrnAUzzcO+Jcxz/bAKaZfjSBtkDEYaN
-         JrtGiPbJ0nlKQXtYte0RSwd2BUastFp1538FMZRnLjouyAQw7TyOiH939vzUi4PgnPlU
-         1ywc9DWipvNeZaDaO1iTX6M6UH88ZAe8GEoN/8DOuPX30m3kHZpUCsKR0iu87CXHLS2P
-         oM0cYVleAG1luTB1ykljvduO8DDMzt8jbpchT1b/rzsJR9qe2XXu8HxXOVCuG6l1mGBC
-         Y4+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Lr8oiy+JZ5JB+d+QkGV7FDirBPOdIiFwxT3YvDwpj8w=;
-        b=C5xP56HrAQorZR+njzpgoWHL+DeoK/UTDPHEYBf4eh0YMNIBgOKbVDXvbrUXvWNdJ+
-         Z41TIAWrIh0igwqzQjGzSQpnqUwTk7rvqsk/+6Flqu5AQwx1+YvN1IgYthG4cU9NkUTC
-         2Stcf88Y0MhYTbKugtw6AdNEHA9RVFoYG6ezq44HcI75Dyyd0K65NGJKWyvT/MUGteZ1
-         ZwFHhXxfzw3VM+s2sNxPOL7JnjvvT3+Fw7rEoRw0hrSYJ+lc2VSQSKjkuVRTuW1gRYDX
-         XEACcXrwFrPlyq5W42kygkLZPNHi6rRcWAIAeZncPNqlGNQomRRxVFCK15mgW4g3WT7G
-         nAnA==
-X-Gm-Message-State: ACgBeo1TEa9xzpUsKhIXaI5XBS/2J6yA3p+Ri6IGORDLQcwp5vaVlevs
-	ux0CGxC/X22lofZTc/x1MIRi7wWUm1Zy0G5bLiDJ
-X-Google-Smtp-Source: AA6agR5lsRmAOE/0+TTz415bYxQiXfuxn/OW7pA3his5JST/uY+2zxr8lfmlZJuVp7ZpH5p8b5vEhIAXAzK3XUN1mds=
-X-Received: by 2002:a05:6402:274c:b0:44f:334e:1e11 with SMTP id
- z12-20020a056402274c00b0044f334e1e11mr5788349edd.304.1662671775594; Thu, 08
- Sep 2022 14:16:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80606610E
+	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662671974; x=1694207974;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hPK/Pv0LGYyLuxyhio+4Qw0tsqTk3tEa/oIwXYx8sWg=;
+  b=Fr88ZCaabgdRT1N7cs769qFmVdzIiE5wD81oiyBJ/6czBVKp9HxB58tP
+   XQq732ZuCJgdL6mbAeTdtE7+FocHGh18ulPGCw61LAldSgtkDJ4FAiooy
+   hjPXrW+3B8Dae81XdcM79mIMDhM1emdTu4zjzaUQz/f4L2XxZtIORJjoP
+   udi7SpsYVibTmp1VjqiT4E8OJjJyS+xc60idwCBG73iXcErD8y3JC9ZGU
+   JLRz7GvbXEIWztdgNzyWoN2U5OvrLFZOeMjTmAgfiFYxkwBcMZ9o9+7ut
+   5bmFN0wZrAQUisQ0OFGmgNM2SoTH4DdU81qiH7VKEi4FK0bQsWf7f/9XW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="383621832"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="383621832"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 14:19:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="566108806"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Sep 2022 14:19:31 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oWOvq-0000KL-0R;
+	Thu, 08 Sep 2022 21:19:30 +0000
+Date: Fri, 9 Sep 2022 05:18:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jisheng Zhang <jszhang@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vdso: fix NULL deference in vdso_join_timens() when vfork
+Message-ID: <202209090531.SgtAsnCi-lkp@intel.com>
+References: <20220907165831.457-1-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220902213750.1124421-1-morbo@google.com> <20220902213750.1124421-3-morbo@google.com>
- <202209022251.B14BD50B29@keescook> <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
- <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
- <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net> <202209071609.BE5BF18D6@keescook>
-In-Reply-To: <202209071609.BE5BF18D6@keescook>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 8 Sep 2022 22:16:04 +0100
-Message-ID: <CAGG=3QUcQCQXff9Hk+eHrvbAhPT16BmFGNuAGcd-N0d-G8yBKg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-To: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Juergen Gross <jgross@suse.com>, "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>, 
-	Alexey Makhalov <amakhalov@vmware.com>, VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
-	virtualization@lists.linux-foundation.org, 
-	LKML <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907165831.457-1-jszhang@kernel.org>
 
-On Thu, Sep 8, 2022 at 12:10 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
-> > On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
-> > > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
-> > > >
-> > > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
-> > > > >
-> > > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> > > > > > [...]
-> > > > > >         callq   *pv_ops+536(%rip)
-> > > > >
-> > > > > Do you know which pv_ops function is this? I can't figure out where
-> > > > > pte_offset_kernel() gets converted into a pv_ops call....
-> > > > >
-> > > > This one is _paravirt_ident_64, I believe. I think that the original
-> > > > issue Nathan was seeing was with another seemingly innocuous function.
-> > >
-> > > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
-> > > really needs to not be touched at all by the compiler for
-> > > these...special features.
-> >
-> > My source tree sayeth:
-> >
-> >   u64 notrace _paravirt_ident_64(u64 x)
->
-> I don't see noinstr either. But it seems a reasonable thing to do?
->
-> Bill, does fixing up the noinstr macro and adding it here fix the
-> problem?
->
-[sorry for late response]
+Hi Jisheng,
 
-Let me give it a shot. I'll also test out Peter's suggestion, which
-might be a better option in the long run. I suspect that we'll need to
-devise similar patches for other places, but it shouldn't be hard to
-find them all.
+I love your patch! Yet something to improve:
 
--bw
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc4]
+[cannot apply to next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--bw
+url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/vdso-fix-NULL-deference-in-vdso_join_timens-when-vfork/20220908-011001
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 0066f1b0e27556381402db3ff31f85d2a2265858
+config: riscv-randconfig-r012-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090531.SgtAsnCi-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/247635b442c42937dc9f0c0a04711fb3f86df2a9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jisheng-Zhang/vdso-fix-NULL-deference-in-vdso_join_timens-when-vfork/20220908-011001
+        git checkout 247635b442c42937dc9f0c0a04711fb3f86df2a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/vdso.c:158:10: error: use of undeclared identifier 'rv_compat_vdso_maps'
+                   .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+                          ^
+   arch/riscv/kernel/vdso.c:159:10: error: use of undeclared identifier 'rv_compat_vdso_maps'
+                   .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+                          ^
+   2 errors generated.
+
+
+vim +/rv_compat_vdso_maps +158 arch/riscv/kernel/vdso.c
+
+   144	
+   145	static struct __vdso_info vdso_info[] __ro_after_init = {
+   146		[VDSO_ABI_RV64] = {
+   147			.name = "vdso",
+   148			.vdso_code_start = vdso_start,
+   149			.vdso_code_end = vdso_end,
+   150			.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+   151			.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+   152		},
+   153	#ifdef CONFIG_COMPAT
+   154		[VDSO_ABI_RV32] = {
+   155			.name = "compat_vdso",
+   156			.vdso_code_start = compat_vdso_start,
+   157			.vdso_code_end = compat_vdso_end,
+ > 158			.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+   159			.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+   160		},
+   161	#endif
+   162	};
+   163	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
