@@ -1,126 +1,162 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D377C
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 06:05:54 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3321c2a8d4cso152583847b3.5
-        for <llvm@lists.linux.dev>; Wed, 07 Sep 2022 23:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lJYRFzwH4JLePemhbCSx0zq48/URDmByv8p7ogaW1eM=;
-        b=dxgOW659IivH6ld+oycZtkdr3gYSMaf5uDZRsDYUvQ185actGdsTWmmMsrrWLgybri
-         AkY83nwjwwlVNWRdb6P3iQ1jcISGCuuCYVVz8tORRQuLq3P7H30d8+3dUx8chekDvaUX
-         1q/Lv+J0p7TDE5qNJqtLPLTyPlKRaaQ2XoOkT0bbM1dsym6ePdy8yT6jrpVR/ad6kBJI
-         lQIwyjMS1rQb8G2PPW+xSuI8oH532YZCPnArrFpBAV8ZBgin2MSD2kyMxHGMUd9c/+vt
-         iUraNSxXT2Mckc/uF3lJbsywOxUJB3MFM2DelphAU4bEt9wrs7twwgyEglRDr4Be+N4K
-         bAHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lJYRFzwH4JLePemhbCSx0zq48/URDmByv8p7ogaW1eM=;
-        b=pWXUPqq8Y8Hi/lab+gn+013baXGEm1EXvPzxQRF9Hyk3EyhzSf5m5ftrlFbU8X7iuH
-         kI2XBxBVYNhts+OJ0bPSrYslAzKFqb4XwvLSjlf8TqKHgi/4PqRyFIMWhzIbOCYAKYnA
-         38hMRNUJV0ssqXkAVNZ2AmvDv6sof36VX74jFnQqtVDXAsDb5DDQzTTQrbsp9Z1SasNQ
-         ShF4GEQx9y4i0aVQX+o/IVjPmXo0nfWh7gSGKB3a2lrdDR0DB9HtHq1cEvmCbj3zBw/m
-         LDAwyrRtpp1yfzwrJKXMnz/92wvqv24AIqtGFgRzetNMbQtplD5L0zk+QlY7PbixzoUd
-         Z+VQ==
-X-Gm-Message-State: ACgBeo2MdFYDiCfszDfyyva0wTG3NBHKSY+xV1l3hgGeBvxA3QJUpRBD
-	Oo4scwaOw0hCPWpNqXuJESPcT1sg0ILYUZKhQeKuDA==
-X-Google-Smtp-Source: AA6agR7fk9QsTUWXLvr/tdr0+4a/qUd4BukcHMTp6u6ZV71YqzuR6ZHkzBSwnnqHEGFvGdP6PzzI7Orsef6bMbxf/8M=
-X-Received: by 2002:a81:bb41:0:b0:328:fd1b:5713 with SMTP id
- a1-20020a81bb41000000b00328fd1b5713mr6423586ywl.238.1662617153642; Wed, 07
- Sep 2022 23:05:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D80B7C
+	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 07:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662620878; x=1694156878;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g4W7H6QHrpz3Os21HlSEFI7Y9Z66W4/3/Zj9A4FqNyA=;
+  b=eKRMDbGOytZ4an76WYSBCQxXKopGonRa1OhS2ZxZZc5m6dB79/MSpb58
+   GaVi0E3Uc0YIZ6xnaAXXJA00TRGzD9IfAG4i0nFgkP4iQWtfOnFCDz4c/
+   8s1iuaRmNSL4+wHlkIK+RtcsiGlMen/MFBktY/RZOZNVWeisYPaanzCKa
+   TvQjF+kAOkxZBWOiPNVVAcYcHBFQ5RVMzfIpDkhqvOeaa8HqHlaWFl1sP
+   Kt8ElKhHM6YcbE9+oOof27DUFH3ip4e2mUNi2Oke4nzGqjhmiKxyEg0lU
+   GXqlNGWYxnHSvFwR0sEIuj4dYbKExOGWF6gKnDsZocOdc+DdLhrlkAup2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="284108354"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="284108354"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 00:07:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="757085225"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2022 00:07:55 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oWBdi-0007TP-22;
+	Thu, 08 Sep 2022 07:07:54 +0000
+Date: Thu, 8 Sep 2022 15:06:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
+	xuwei5@huawei.com, wsa@kernel.org, robh+dt@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH next v3 1/2] i2c: hisi: Add initial device tree support
+Message-ID: <202209081409.fOmaxkP3-lkp@intel.com>
+References: <20220908025701.330210-1-chenweilong@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220907173903.2268161-1-elver@google.com>
-In-Reply-To: <20220907173903.2268161-1-elver@google.com>
-From: Marco Elver <elver@google.com>
-Date: Thu, 8 Sep 2022 08:05:17 +0200
-Message-ID: <CANpmjNMH4_H75Z_aQ63C52TDma7PnjWWjmyv+MtXt2W522UAQQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer Clang
-To: elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908025701.330210-1-chenweilong@huawei.com>
 
-On Wed, 7 Sept 2022 at 19:39, Marco Elver <elver@google.com> wrote:
->
-> With Clang version 16+, -fsanitize=thread will turn
-> memcpy/memset/memmove calls in instrumented functions into
-> __tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
->
-> Add these functions to the core KCSAN runtime, so that we (a) catch data
-> races with mem* functions, and (b) won't run into linker errors with
-> such newer compilers.
->
-> Cc: stable@vger.kernel.org # v5.10+
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  kernel/kcsan/core.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index fe12dfe254ec..66ef48aa86e0 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -18,6 +18,7 @@
->  #include <linux/percpu.h>
->  #include <linux/preempt.h>
->  #include <linux/sched.h>
-> +#include <linux/string.h>
->  #include <linux/uaccess.h>
->
->  #include "encoding.h"
-> @@ -1308,3 +1309,29 @@ noinline void __tsan_atomic_signal_fence(int memorder)
->         }
->  }
->  EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-> +
-> +void *__tsan_memset(void *s, int c, size_t count);
-> +noinline void *__tsan_memset(void *s, int c, size_t count)
-> +{
-> +       check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       return __memset(s, c, count);
-> +}
-> +EXPORT_SYMBOL(__tsan_memset);
-> +
-> +void *__tsan_memmove(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memmove(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memmove);
-> +
-> +void *__tsan_memcpy(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memcpy(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memcpy);
+Hi Weilong,
 
-I missed that s390 doesn't have arch memcpy variants, so this fails:
+Thank you for the patch! Yet something to improve:
 
->> kernel/kcsan/core.c:1316:16: error: implicit declaration of function '__memset'; did you mean '__memset64'? [-Werror=implicit-function-declaration]
+[auto build test ERROR on next-20220907]
 
-I'll send a v2 where __tsan_mem* is aliased to generic versions if the
-arch doesn't have mem*() functions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Weilong-Chen/i2c-hisi-Add-initial-device-tree-support/20220908-105559
+base:    5957ac6635a1a12d4aa2661bbf04d3085a73372a
+config: hexagon-randconfig-r045-20220907 (https://download.01.org/0day-ci/archive/20220908/202209081409.fOmaxkP3-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/679f6654e170ef08682e0b6f4ef3753b998e0193
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Weilong-Chen/i2c-hisi-Add-initial-device-tree-support/20220908-105559
+        git checkout 679f6654e170ef08682e0b6f4ef3753b998e0193
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash M=drivers/i2c/busses
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/i2c/busses/i2c-hisi.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-hisi.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-hisi.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/i2c/busses/i2c-hisi.c:503:25: error: use of undeclared identifier 'hisi_i2c_dts_ids'
+   MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+                           ^
+   6 warnings and 1 error generated.
 
 
+vim +/hisi_i2c_dts_ids +503 drivers/i2c/busses/i2c-hisi.c
 
+   502	
+ > 503	MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+   504	
 
-> --
-> 2.37.2.789.g6183377224-goog
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
