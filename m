@@ -1,42 +1,42 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FB9610E
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:55:10 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id k126-20020a253d84000000b0068bb342010dso32954yba.1
-        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:55:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B69610E
+	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:55:13 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-34514a7105eso123286247b3.1
+        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=++1/qtdOmwUSaxqgiZQTBSEYvAxbI4XHV6GATm9VhUE=;
-        b=DAxdaA/TeHYFNkGxc72IwSwNKQuOykXTJDQORvATjh5oTgcXipGkVmqfycb+PUS8Wp
-         SXGLVEnuzt4Ps6Cp3jiSeQ9/bxkrOwHccGPNwXMZ4cOSpTui8APRzBdyggwyYN3bpUBU
-         csqHhnCeJ1j65G97AeYq/khlWiDGhXIxKGbBc5NpejjSwqU8L1EmcqUWr8+5Rvz54bQa
-         6fjvp8eKwXpdwITxvySX9EurH7B9DSaYc1UZa4+fZqlKfV788bJDzyLxtjPFogWibp84
-         y3PzkRHda3kd1F0KGkBO4FaaSRROQQWwIa2Op7LMzexNluxxyA67slpTBOHo/cuaH5Xk
-         CKkg==
+        bh=E5MP4taEQT0v3MmrVmyzRF+/DATosXuoXnrYsLQHUt8=;
+        b=L0Iv4WoX7t7oX0WurXOJImKj4FKAQ7re2UnLEhWMqBVV2Fb5NfTnuW2Td8go+/9K6n
+         SkH9GL97wuofrg9xGkIn5kyIhAmBJAxgkLl96Z8R1Hjdeepd7iLXs16r2vNEOmNfB6NN
+         pYrZR4o/znOy912UFas2yKeS6IxtwYS6F8YZh49Y9glgRCjElvb2XKYZ6p18HeHKrID7
+         gF5K1Aj4DpSyZHEytLRiRo0RwLicqziomG+WI7ZrmK+m7giLGz5jMh+TDkwJpV28iRCk
+         HI/6sbkn6jWBGV6ukL1Xo4ySP8vpvjZEZELv9aNq/CpXKxA+cVnME5odPvthvt74Vh8t
+         PlSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=++1/qtdOmwUSaxqgiZQTBSEYvAxbI4XHV6GATm9VhUE=;
-        b=CMC6erO9DnH6nnkRW/5A9aTSBJxB7NuA7pCSztvRnv3AeJQ3ppxZ9Rw9uC7wyhPVxs
-         pOQ5eAnbb89WG1E52cxe/nbNKvJclA+c+HjWl8hV95MNC96wYmGqQpKbgHVs+ilzOeY5
-         +xt8Tas3KUL1lpBX7HmOUBgaJ7iTb8eFCQx9clwiJLPRviE5QMh6Yf0KnVS3qGAv0UGC
-         t+VdqrGz1fNRDcjRyqUcmeGubSJNPich5l6+QF1uFTw9zFVpgeXI1SG/R+2G+EpVUCGl
-         8r2x7V/AghMyoMBoIZGHF/pGk8OuBrtES5g0pynCTjNaHanVFZFdyWtmIOYbVFYfJoKN
-         rbgg==
-X-Gm-Message-State: ACgBeo2B5tzp5V/30dw9XodxWGLDS09lHNzRyACukmmMLn4ldMXXcCwR
-	dJOCyUlH+AZVYFyeWwOlrf+2Pl3pteoWwp2Pcf0=
-X-Google-Smtp-Source: AA6agR7Urz8mEtWhFvoUwvvdWySJPZQ7jqpog2D5kyDc+2eNo1L58ipOybnpuwS7VRcYjJKRoWU3GYlVidDt0EeoNs0=
+        bh=E5MP4taEQT0v3MmrVmyzRF+/DATosXuoXnrYsLQHUt8=;
+        b=P5HdCm+xY2Z7XQcVfDCDyNeUJP5Kd+xePynoX6yhUTkrNuku8cXpD56cZPM0KNqIKC
+         BnQ/P2iSDQoVv8wU2VXZEhY9HxAxlufplxgKkD8xiF2sL86sD2hcFnmeSSQ87MSQX3n6
+         IN+2xOuuVUuqC6ehe2aRIqwtqz4HuzXp+GUvj9GJrbiaRxIdvyS4t7gZbw8iM+3akqay
+         WLt3QCQWwkdAEnHzm4SKidIKB2wOB5PDeziTsDT9kOnDqb0GMQ0wagxB+NAHsth7KENq
+         R1XmkH0dEHsfgdFXTFRyeF8FtlFz1g8JnRNwzviWLcYcsTljoou2EueNYkcRB99+g1w5
+         Xj7g==
+X-Gm-Message-State: ACgBeo3La4/L/sHVTiTUZE30MhIIzSnf7j1DK1v/gOQJTP0rj9T5cKr+
+	srYjLq7dJPeE3S7QfmCCwd0VdB6BNL/J03ezTW0=
+X-Google-Smtp-Source: AA6agR405k5ikQwnvuDn5SVwnN6wLe5SN+NO6wYS+1bv3HntlAG2SOkyPiCtLnlkgBLkiab70NT9z3nfmFmzqG8/h4w=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:a4e4:e6ec:9fdd:1bdd])
- (user=samitolvanen job=sendgmr) by 2002:a0d:f904:0:b0:345:4639:8253 with SMTP
- id j4-20020a0df904000000b0034546398253mr9771674ywf.438.1662674109557; Thu, 08
- Sep 2022 14:55:09 -0700 (PDT)
-Date: Thu,  8 Sep 2022 14:54:43 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:e401:0:b0:66e:280a:98cd with SMTP
+ id b1-20020a25e401000000b0066e280a98cdmr9395449ybh.540.1662674112156; Thu, 08
+ Sep 2022 14:55:12 -0700 (PDT)
+Date: Thu,  8 Sep 2022 14:54:44 -0700
 In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
-Message-Id: <20220908215504.3686827-2-samitolvanen@google.com>
+Message-Id: <20220908215504.3686827-3-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,19 +45,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220908215504.3686827-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3048; i=samitolvanen@google.com;
- h=from:subject; bh=NqOg6IoR6gX09sXAr0B0cPUiAt3ZJYmbQkr2LJPJNus=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmSyAhdY+c0yuGLwUcRxL94Fo3kpoLG9gssQn6xK
- 0NRN0dKJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpksgAKCRBMtfaEi7xW7snLC/
- 4kqxfaphRvYnLEvON3wLCWq1o1yoypBX3QcocACz45p22AS2T5hfosvQm9Qoq55kO7fEf6uzqBQuMQ
- kGIPv/gs/+9O5Id/51exiQCxLR2ReTQngCFQ10xRIwfcsM/z45xAQ4nusTdRGj0bHv2gAdmNAXFZ+R
- oJkA10VfP80fqUgAUn0+WpEv6rnxzPuorF9bqiXWBrChAAtoLY5p41e3AExfZGMMh7qKArwCJMFqFB
- y/qs9kY9bk7UdIiNxvzvQmkkzRuNJHtI+Sea40LsKjqkiJ7eQQfMAeEbh2ArJDRu/sBdGkzhU2zhS1
- Y5SHy5RY9gHiNRwadqeXZhe5TTujjTecKJG/HZPk8XNU1EizECc1s+y10rNiGBUlVhI0MRI1NL24fK
- qE0JNaiWlsv2WhYZN6SZ32uY130fpB+FjtHg+/0bVXbfmrvraFK+7dE4e8P3E6F3RvBWXa0RdHztpF
- 730W9Oi74vsIeysCfW1gRdtm+goTa2x0/ontLouoIJkP4=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=911; i=samitolvanen@google.com;
+ h=from:subject; bh=Lh36Gb4BQjSISqwOnlA1V8paDgitJ+WqG6DvavOOD2s=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmSzrVY+vd10oEbk9xRXIoCFu1ml2ON/ucyrRCLU
+ kFTNLaaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpkswAKCRBMtfaEi7xW7vDdC/
+ 0T+hmkD8EM0RGtayG8NWtUqkvZSj8cNhp4JVPo0ZmXjPbKX0vB4cnrvRNfMCAxxWkXMiyIOjn7rlCU
+ ZT0vqj0O4durfcDKdeoLvdOpmgmdpHgeuGIjsJ6Bqg/jOiZ9BRWRbkeblhhIkdJYQ3zI7S20k1kjFd
+ juV/s45NYG82Qds/KpEHXqoyNySmSHrowOYqaUonQv0u+PklBZpEIup6A5zb3x/lMx79rtigk0VOIY
+ eSXbPLsufZXtaU7R+VIcyMoovGSY+rkYZx87gGozk1NcVMZONyXqiKnH0giKpRZYXyl8w2cnxubMVF
+ SP2csMdnJJfFebE62u8kNREg86O2VLozoKYT9wYD3c0u9hCqJ7R/xjsqrA2wmQ955d27tD0zmjg0Db
+ N+VwhZoKY+QMxOSysQScJ8GNMEv26OEHYdgsVW3ptZoDLv9draG1Lpyu1Hmgscmc0wyrHsn7UMpIDy
+ 18ZZT/0e58vrIeERnxIJd+NH1H+wNp9jN1zHiWOlpKV0s=
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Subject: [PATCH v5 01/22] treewide: Filter out CC_FLAGS_CFI
+Subject: [PATCH v5 02/22] scripts/kallsyms: Ignore __kcfi_typeid_
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -70,67 +70,30 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In preparation for removing CC_FLAGS_CFI from CC_FLAGS_LTO, explicitly
-filter out CC_FLAGS_CFI in all the makefiles where we currently filter
-out CC_FLAGS_LTO.
+The compiler generates __kcfi_typeid_ symbols for annotating assembly
+functions with type information. These are constants that can be
+referenced in assembly code and are resolved by the linker. Ignore
+them in kallsyms.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Tested-by: Kees Cook <keescook@chromium.org>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/arm64/kernel/vdso/Makefile       | 3 ++-
- arch/x86/entry/vdso/Makefile          | 3 ++-
- drivers/firmware/efi/libstub/Makefile | 2 ++
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ scripts/kallsyms.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index bafbf78fab77..619e2dc7ee14 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -40,7 +40,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- # kernel with CONFIG_WERROR enabled.
- CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
- 				$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
--				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
-+				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
-+				-Wmissing-prototypes -Wmissing-declarations
- KASAN_SANITIZE			:= n
- KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 12f6c4d714cd..381d3333b996 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -91,7 +91,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
- endif
- endif
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
- 
- #
-@@ -153,6 +153,7 @@ KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_CFI),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 += -m32 -msoft-float -mregparm=0 -fpic
- KBUILD_CFLAGS_32 += -fno-stack-protector
- KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 2c67f71f2375..b43fdb319fd4 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -46,6 +46,8 @@ KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS), $(KBUILD_CFLAGS))
- 
- # remove SCS flags from all objects in this directory
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
-+# disable CFI
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
- # disable LTO
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index f18e6dfc68c5..ccdf0c897f31 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -119,6 +119,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		"__ThumbV7PILongThunk_",
+ 		"__LA25Thunk_",		/* mips lld */
+ 		"__microLA25Thunk_",
++		"__kcfi_typeid_",	/* CFI type identifiers */
+ 		NULL
+ 	};
  
 -- 
 2.37.2.789.g6183377224-goog
