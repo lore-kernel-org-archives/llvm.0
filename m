@@ -1,118 +1,104 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34713610E
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:09:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662671373; x=1694207373;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GG9iFC999jJiJW+I9TQ5u9rTvIxMVvGTTubzM/8yuMs=;
-  b=HXryZo/07NAliri6QIcWT2xVqrx+5/+A2vmxFNSlTkQMIXt5qtdpmjFU
-   b4mzL+YC07bgbHVk+xX5V1h4fYi1DphN7LGXYBP3DFqUwmDQwKSkKVb5v
-   YNG/0K479ihyaNjI4wtR3Jqm++1UxxtD6wd9fflsn1CeUeRmQRKmWkgKW
-   1KTnVCoPagTQmuRPe1hqpgXGGr+53q6OchKDorKZRpSSI+tj8lJ+A5l8V
-   xhvotiCiqAigl9ePWNqo5G2Q1scckNCSh0EWG85feUHPAMl671HN5oYHU
-   eQKg+mqAAfrXJZSeIu0TeCj9XDNaiXNRM2kBfZ9XoSnXx0EyCbtsh75EM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="297325382"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="297325382"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 14:09:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="943519178"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2022 14:09:30 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oWOmA-0000KD-02;
-	Thu, 08 Sep 2022 21:09:30 +0000
-Date: Fri, 9 Sep 2022 05:08:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-Subject: Re: [PATCH RESEND v6 1/4] drivers: hwmon: Add max31760 fan speed
- controller driver
-Message-ID: <202209090420.yiz6T9uI-lkp@intel.com>
-References: <20220908082358.186268-2-Ibrahim.Tilki@analog.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829FE610E
+	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 21:16:17 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id 29so21177277edv.2
+        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 14:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Lr8oiy+JZ5JB+d+QkGV7FDirBPOdIiFwxT3YvDwpj8w=;
+        b=LEaHRiXOMVqfETuRtrKDKenARH14qGRl7NuB14aBEgeGMGDbtWkzQVh7KylKuhB81s
+         TxAgAz88H1/wFtBfBFXaJMjn9BqJ3YVRnK2wBWrnAUzzcO+Jcxz/bAKaZfjSBtkDEYaN
+         JrtGiPbJ0nlKQXtYte0RSwd2BUastFp1538FMZRnLjouyAQw7TyOiH939vzUi4PgnPlU
+         1ywc9DWipvNeZaDaO1iTX6M6UH88ZAe8GEoN/8DOuPX30m3kHZpUCsKR0iu87CXHLS2P
+         oM0cYVleAG1luTB1ykljvduO8DDMzt8jbpchT1b/rzsJR9qe2XXu8HxXOVCuG6l1mGBC
+         Y4+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Lr8oiy+JZ5JB+d+QkGV7FDirBPOdIiFwxT3YvDwpj8w=;
+        b=C5xP56HrAQorZR+njzpgoWHL+DeoK/UTDPHEYBf4eh0YMNIBgOKbVDXvbrUXvWNdJ+
+         Z41TIAWrIh0igwqzQjGzSQpnqUwTk7rvqsk/+6Flqu5AQwx1+YvN1IgYthG4cU9NkUTC
+         2Stcf88Y0MhYTbKugtw6AdNEHA9RVFoYG6ezq44HcI75Dyyd0K65NGJKWyvT/MUGteZ1
+         ZwFHhXxfzw3VM+s2sNxPOL7JnjvvT3+Fw7rEoRw0hrSYJ+lc2VSQSKjkuVRTuW1gRYDX
+         XEACcXrwFrPlyq5W42kygkLZPNHi6rRcWAIAeZncPNqlGNQomRRxVFCK15mgW4g3WT7G
+         nAnA==
+X-Gm-Message-State: ACgBeo1TEa9xzpUsKhIXaI5XBS/2J6yA3p+Ri6IGORDLQcwp5vaVlevs
+	ux0CGxC/X22lofZTc/x1MIRi7wWUm1Zy0G5bLiDJ
+X-Google-Smtp-Source: AA6agR5lsRmAOE/0+TTz415bYxQiXfuxn/OW7pA3his5JST/uY+2zxr8lfmlZJuVp7ZpH5p8b5vEhIAXAzK3XUN1mds=
+X-Received: by 2002:a05:6402:274c:b0:44f:334e:1e11 with SMTP id
+ z12-20020a056402274c00b0044f334e1e11mr5788349edd.304.1662671775594; Thu, 08
+ Sep 2022 14:16:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908082358.186268-2-Ibrahim.Tilki@analog.com>
+References: <20220902213750.1124421-1-morbo@google.com> <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook> <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+ <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net> <202209071609.BE5BF18D6@keescook>
+In-Reply-To: <202209071609.BE5BF18D6@keescook>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 8 Sep 2022 22:16:04 +0100
+Message-ID: <CAGG=3QUcQCQXff9Hk+eHrvbAhPT16BmFGNuAGcd-N0d-G8yBKg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+To: Kees Cook <keescook@chromium.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Juergen Gross <jgross@suse.com>, "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>, 
+	Alexey Makhalov <amakhalov@vmware.com>, VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
+	virtualization@lists.linux-foundation.org, 
+	LKML <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ibrahim,
+On Thu, Sep 8, 2022 at 12:10 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
+> > On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> > > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> > > >
+> > > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > > > >
+> > > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > > > [...]
+> > > > > >         callq   *pv_ops+536(%rip)
+> > > > >
+> > > > > Do you know which pv_ops function is this? I can't figure out where
+> > > > > pte_offset_kernel() gets converted into a pv_ops call....
+> > > > >
+> > > > This one is _paravirt_ident_64, I believe. I think that the original
+> > > > issue Nathan was seeing was with another seemingly innocuous function.
+> > >
+> > > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> > > really needs to not be touched at all by the compiler for
+> > > these...special features.
+> >
+> > My source tree sayeth:
+> >
+> >   u64 notrace _paravirt_ident_64(u64 x)
+>
+> I don't see noinstr either. But it seems a reasonable thing to do?
+>
+> Bill, does fixing up the noinstr macro and adding it here fix the
+> problem?
+>
+[sorry for late response]
 
-Thank you for the patch! Perhaps something to improve:
+Let me give it a shot. I'll also test out Peter's suggestion, which
+might be a better option in the long run. I suspect that we'll need to
+devise similar patches for other places, but it shouldn't be hard to
+find them all.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.0-rc4 next-20220908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+-bw
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ibrahim-Tilki/hwmon-Add-max31760-fan-speed-controller/20220908-162723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220909/202209090420.yiz6T9uI-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a7a9956fb85372f1d08a355df3af7d64c927a987
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ibrahim-Tilki/hwmon-Add-max31760-fan-speed-controller/20220908-162723
-        git checkout a7a9956fb85372f1d08a355df3af7d64c927a987
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/max31760.c:382:5: warning: no previous prototype for function 'max31760_read_string' [-Wmissing-prototypes]
-   int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-       ^
-   drivers/hwmon/max31760.c:382:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/max31760_read_string +382 drivers/hwmon/max31760.c
-
-   381	
- > 382	int max31760_read_string(struct device *dev, enum hwmon_sensor_types type,
-   383				 u32 attr, int channel, const char **str)
-   384	{
-   385		switch (type) {
-   386		case hwmon_temp:
-   387			if (attr != hwmon_temp_label)
-   388				return -EOPNOTSUPP;
-   389	
-   390			*str = channel ? "local" : "remote";
-   391	
-   392			return 0;
-   393		default:
-   394			return -EOPNOTSUPP;
-   395		}
-   396	}
-   397	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-bw
