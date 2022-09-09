@@ -1,160 +1,147 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DE0612F
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 20:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662756129; x=1694292129;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VjPnROU7ENiGPuwYDR4O7DVUE4Xqvv//S1TeoNDHOHk=;
-  b=FKr4FvfoPFKMil+ioMkUupzI+CRd92JxZL2LnUzNvXwgPCs6mZ3WMnOI
-   EspZN5wKt/DqndN01ZfpfrC28TLcxkxB19ONSlmfN9/hF5yoyAfEAi5x3
-   ouvI1raSUTc3iE50GxfxB25JFKvHfTR5y/lk5QNbG3UMM7JVdb1oA2zed
-   aii8DQjWzNwQf29hrFCZqw5nPX2WANn8matUklug7QgBuCGoLaVRKkzqj
-   hWEkbrUNFRLD8qHy8B4zrBzlDTbyw2pMsRjfcrVr1qFgI0b/VSCaE+m35
-   FefOppxY4X/60pthO+Fm6V3Bksv+7RNl6HZd7QBoXgZS8f7ECqieSTmOh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="280586735"
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="280586735"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:42:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="741174843"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 09 Sep 2022 13:42:07 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oWkpC-0001iZ-2M;
-	Fri, 09 Sep 2022 20:42:06 +0000
-Date: Sat, 10 Sep 2022 04:41:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [vfs-idmapping:fs.posix_acl.vfsuid 24/37] fs/posix_acl.c:111:19:
- warning: no previous prototype for function '__get_acl'
-Message-ID: <202209100432.pAFEMvWb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A75D612F
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 20:57:31 +0000 (UTC)
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 289KvJIg028200
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 05:57:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 289KvJIg028200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1662757040;
+	bh=uqz24ZSjysiHUZlmL5XaHf2ZhL6SzB9+49wyUsEx67Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BweEZeCLjEO3xjp9rjSb1j7Wn1RQaEjuczoyUfGU+LW3RPcEBOZuRacHEHeKVLIOD
+	 cYdZKvbxAohqLXWOsu/wacwUJSG9Rc/c7YI+AH+AcfX22brU/5zSUEhHJIV4xEy/cZ
+	 nr9ZYZn8NmAvVO+kognjgfxz1Q6lt7e+5S89SnKH+SRKW8yVjrYNzzoWeNcWkT0w7H
+	 uJikYJCj1f0hnpnn5kBf7Q1K31fSuIocfIHii/OsyyXvShUxypquucrB4g3xQ3iT1w
+	 Nx6JZtaDyRc5iFxSbM3ZQy7nGSlUNZuJkdlgnsk2phBqgU4MAL+MLjiCicU0KkkQzL
+	 6oTmxQszYInjg==
+X-Nifty-SrcIP: [209.85.160.51]
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1278a61bd57so7045640fac.7
+        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 13:57:20 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0q6q5ioLNfQvjvMTd8nZvZDDBrGqo+cUfxenPTRD6GR1/biuZT
+	42CaPwLp5+ni5ev/JuCJmO2LjlxEs5NFFUoPnbg=
+X-Google-Smtp-Source: AA6agR66+XO9Ke2tjFAZRiZGfx7pHOR7RKRdiA3vlsCmufJS6NDQDpZTXaoqbZ/Ykghz+SYA4kk37sT798vD5adC45g=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr5953724oab.194.1662757038871; Fri, 09
+ Sep 2022 13:57:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220907045907.484043-1-ndesaulniers@google.com> <20220907045907.484043-6-ndesaulniers@google.com>
+In-Reply-To: <20220907045907.484043-6-ndesaulniers@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 10 Sep 2022 05:56:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARhKobLF4Lw0dqSMqW0SPwmrV9HRas=4L8NoahKTeMCgQ@mail.gmail.com>
+Message-ID: <CAK7LNARhKobLF4Lw0dqSMqW0SPwmrV9HRas=4L8NoahKTeMCgQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>, X86 ML <x86@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
+        Andi Kleen <ak@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git fs.posix_acl.vfsuid
-head:   d37e11d9b40fc35810217121aa3205b7975fd4c6
-commit: 95fef95c76885cb97f319e5a5060964eb9e96126 [24/37] acl: add vfs_get_acl()
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220910/202209100432.pAFEMvWb-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/commit/?id=95fef95c76885cb97f319e5a5060964eb9e96126
-        git remote add vfs-idmapping https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
-        git fetch --no-tags vfs-idmapping fs.posix_acl.vfsuid
-        git checkout 95fef95c76885cb97f319e5a5060964eb9e96126
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Sep 7, 2022 at 1:59 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> Dmitrii, Fangrui, and Mashahiro note:
+>
+>   Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
+>
+> Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
+> specified in order for -gsplit-dwarf to work at all.
+>
+> -gsplit-dwarf has been mutually exclusive with -g since support for
+> CONFIG_DEBUG_INFO_SPLIT was introduced in
+> commit 866ced950bcd ("kbuild: Support split debug info v4")
+> I don't think it ever needed to be.
+>
+> Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
+> Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
+> Link: https://reviews.llvm.org/D80391
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> Reported-by: Fangrui Song <maskray@google.com>
+> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+> Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Changes v2 -> v3:
+> * Pick up Nathan's RB tag.
+>
+> Changes v1 -> v2:
+> * Add reference to 866ced950bcd, cc Andi, in commit message.
+>
+>  scripts/Makefile.debug | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+>
+> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> index 2845145c1220..c20f8f2e76bf 100644
+> --- a/scripts/Makefile.debug
+> +++ b/scripts/Makefile.debug
+> @@ -1,10 +1,4 @@
+> -DEBUG_CFLAGS   :=
+> -
+> -ifdef CONFIG_DEBUG_INFO_SPLIT
+> -DEBUG_CFLAGS   += -gsplit-dwarf
+> -else
+> -debug-cflags-y += -g
+> -endif
+> +DEBUG_CFLAGS   := -g
+>
+>  debug-flags-$(CONFIG_DEBUG_INFO_DWARF4)        += -gdwarf-4
+>  debug-flags-$(CONFIG_DEBUG_INFO_DWARF5)        += -gdwarf-5
+> @@ -15,6 +9,8 @@ ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_AS_IS_GNU),yy)
+>  KBUILD_AFLAGS  += $(addprefix -Wa$(comma), $(debug-flags-y))
+>  endif
+>
+> +debug-flags-$(CONFIG_DEBUG_INFO_SPLIT) += -gsplit-dwarf
+> +
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
-
->> fs/posix_acl.c:111:19: warning: no previous prototype for function '__get_acl' [-Wmissing-prototypes]
-   struct posix_acl *__get_acl(struct user_namespace *mnt_userns,
-                     ^
-   fs/posix_acl.c:111:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct posix_acl *__get_acl(struct user_namespace *mnt_userns,
-   ^
-   static 
-   1 warning generated.
+This patch changes the behavior that is not mentioned in the commit log.
 
 
-vim +/__get_acl +111 fs/posix_acl.c
 
-   110	
- > 111	struct posix_acl *__get_acl(struct user_namespace *mnt_userns,
-   112				    struct dentry *dentry, struct inode *inode,
-   113				    int type)
-   114	{
-   115		void *sentinel;
-   116		struct posix_acl **p;
-   117		struct posix_acl *acl;
-   118	
-   119		/*
-   120		 * The sentinel is used to detect when another operation like
-   121		 * set_cached_acl() or forget_cached_acl() races with get_acl().
-   122		 * It is guaranteed that is_uncached_acl(sentinel) is true.
-   123		 */
-   124	
-   125		acl = get_cached_acl(inode, type);
-   126		if (!is_uncached_acl(acl))
-   127			return acl;
-   128	
-   129		if (!IS_POSIXACL(inode))
-   130			return NULL;
-   131	
-   132		sentinel = uncached_acl_sentinel(current);
-   133		p = acl_by_type(inode, type);
-   134	
-   135		/*
-   136		 * If the ACL isn't being read yet, set our sentinel.  Otherwise, the
-   137		 * current value of the ACL will not be ACL_NOT_CACHED and so our own
-   138		 * sentinel will not be set; another task will update the cache.  We
-   139		 * could wait for that other task to complete its job, but it's easier
-   140		 * to just call ->get_acl to fetch the ACL ourself.  (This is going to
-   141		 * be an unlikely race.)
-   142		 */
-   143		cmpxchg(p, ACL_NOT_CACHED, sentinel);
-   144	
-   145		/*
-   146		 * Normally, the ACL returned by ->get_{dentry_}acl will be cached.
-   147		 * A filesystem can prevent that by calling
-   148		 * forget_cached_acl(inode, type) in ->get_{dentry_}acl.
-   149		 *
-   150		 * If the filesystem doesn't have a get_{dentry_}acl() function at all,
-   151		 * we'll just create the negative cache entry.
-   152		 */
-   153		if (dentry) {
-   154			if (!inode->i_op->get_dentry_acl) {
-   155				set_cached_acl(inode, type, NULL);
-   156				return NULL;
-   157			}
-   158			acl = inode->i_op->get_dentry_acl(mnt_userns, dentry, type);
-   159		} else {
-   160			if (!inode->i_op->get_acl) {
-   161				set_cached_acl(inode, type, NULL);
-   162				return NULL;
-   163			}
-   164			acl = inode->i_op->get_acl(inode, type, false);
-   165		}
-   166	
-   167		if (IS_ERR(acl)) {
-   168			/*
-   169			 * Remove our sentinel so that we don't block future attempts
-   170			 * to cache the ACL.
-   171			 */
-   172			cmpxchg(p, sentinel, ACL_NOT_CACHED);
-   173			return acl;
-   174		}
-   175	
-   176		/*
-   177		 * Cache the result, but only if our sentinel is still in place.
-   178		 */
-   179		posix_acl_dup(acl);
-   180		if (unlikely(cmpxchg(p, sentinel, acl) != sentinel))
-   181			posix_acl_release(acl);
-   182		return acl;
-   183	}
-   184	
+
+Previously, -gsplit-dwarf was passed only when compiling *.c files.
+(DEBUG_CFLAGS).
+
+Now it is passed also when compiling *.S files.
+(debug-flags-y is appended to KBUILD_AFLAGS)
+
+
+Please confirm if this makes sense, and if so,
+please mention it in the commit log.
+
+
+
+As far as I tested, I did not see this change was useful.
+
+When *.S is compiled to *.o, *.dwo is also created,
+but it does not contain any debug info.
+
+
+
+>  ifdef CONFIG_DEBUG_INFO_REDUCED
+>  DEBUG_CFLAGS   += -fno-var-tracking
+>  ifdef CONFIG_CC_IS_GCC
+> --
+> 2.37.2.789.g6183377224-goog
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
