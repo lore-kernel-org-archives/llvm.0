@@ -1,44 +1,44 @@
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8F2612F
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 21:06:25 +0000 (UTC)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 289L6MEL001045
-	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 06:06:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 289L6MEL001045
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA94612F
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 21:07:01 +0000 (UTC)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 289L6lTm031332
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 06:06:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 289L6lTm031332
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1662757582;
-	bh=vtdLXG6t3z02oyL9Z4xJ/HoU0JT/liNiaOARtmBE8QQ=;
+	s=dec2015msa; t=1662757607;
+	bh=DvVjZAUBnzPdzYN9rjZzo+TIJCdrmJ3YhUlFxpG7vGI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F32O9vhNDGLyzImoguALcl/Xwxoz5eAH6I/QiRNisY+rcMeHo4mndxsUDXdWFAoc2
-	 h2d4+aV5slspzUodXnTi9R48uUBZ6k1lpQm50SdfrUknb7Fe81YTKQ4ovWb480M2QQ
-	 vU4fk9nPAhLh2RKlxmaGbta0xsRmjJTIE5bT8h18xVEJHwKEvC3rDMGfK3AoPIYbGX
-	 kre3MkBJMNbyLbC6I8IQ1dCniX8vhidgGS8Vr7wZuNISiNyB6M0fMt+Z9MSHEfq9Li
-	 GTu9Vs3mLshBZbWYbnx1Ju5s/unhBjEIaJcxw/DLmrwW4WpqSE0HpQwDB6KWMb0TQm
-	 +s0iJqRcb2z4w==
-X-Nifty-SrcIP: [209.85.210.48]
-Received: by mail-ot1-f48.google.com with SMTP id v2-20020a056830090200b006397457afecso1833033ott.13
-        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 14:06:22 -0700 (PDT)
-X-Gm-Message-State: ACgBeo30swPFSJLMI5HfhGkJzPl0abkU9BSdUYMQrx8xx+j7+jD04gXO
-	+UD0dvRRpufDmyfgPVE2MwUEcBaK30IeDOXDXh4=
-X-Google-Smtp-Source: AA6agR7cZxQ2PtL23Q1mwQ2M7VBr2nkH4CHIxcd+zzfk3Li7Z5jY5tsgHCcaGowLE2oMowZwalEsCiHr29uL5Ciurpk=
-X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
- c6-20020a9d4806000000b00637cdcaf8d3mr6389077otf.225.1662757581581; Fri, 09
- Sep 2022 14:06:21 -0700 (PDT)
+	b=Yfh9jqhI5hsqYe7zKl4XSiasR47N2385i6NT9wpSeGlWrMLvBDoevC0jg127i7k0w
+	 275kRhGoy4B5UGlOlqlMWTjISjafDVWm9TioXEbwO2rbEo3Kvm0+p4Fg2Ig8g1AluT
+	 7xhH315A5EvIYNqaNN4ejBiL1Cci4wI0xlAq2wyjMoXFQWeDZz2ykkYZrddjK3XdAH
+	 XLiqKC4soAF04OU3ozG1kln8L0t7sZoQ5s4TMEDrQwObUZH4CY2ASlHbWcyJcWJ7PV
+	 gYfOGH93nPvrNgF6D/fqDNv4zJ1cRwtNQcNLq5qrZwM1b877wH0ZJpHlWJScJ7yuSf
+	 +Vu6hgjIeQCFQ==
+X-Nifty-SrcIP: [209.85.160.50]
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1274ec87ad5so7227834fac.0
+        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 14:06:47 -0700 (PDT)
+X-Gm-Message-State: ACgBeo08vJKCfXsMvm4d3ynORTW6aLvbP4R06h4JwPfG6U/tjDKqF7vl
+	CDtQp1osDkHyFyi8tvA17hO7WOmN95j3rKn0kRI=
+X-Google-Smtp-Source: AA6agR4y2JcV0EsyjVkDa6p8pvwM4sY7V8jOR09Bz5w0m7vWO0Itq4SKFTWHNC0vbVHJ/VE4SXL8VeOx9uH4eMX5lOo=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr5974490oab.194.1662757606749; Fri, 09
+ Sep 2022 14:06:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220907045907.484043-1-ndesaulniers@google.com> <20220907045907.484043-2-ndesaulniers@google.com>
-In-Reply-To: <20220907045907.484043-2-ndesaulniers@google.com>
+References: <20220907045907.484043-1-ndesaulniers@google.com> <20220907045907.484043-3-ndesaulniers@google.com>
+In-Reply-To: <20220907045907.484043-3-ndesaulniers@google.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 10 Sep 2022 06:05:45 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARqU4246yPxBr75464wbbnoxb-sLL+UO-fYrkhtFzPEqw@mail.gmail.com>
-Message-ID: <CAK7LNARqU4246yPxBr75464wbbnoxb-sLL+UO-fYrkhtFzPEqw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] x86/boot/compressed: prefer cc-option for CFLAGS additions
+Date: Sat, 10 Sep 2022 06:06:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR0e2sA4QMssbMf8B0459_LoB9ykfTmFmFVXOjqBea4-w@mail.gmail.com>
+Message-ID: <CAK7LNAR0e2sA4QMssbMf8B0459_LoB9ykfTmFmFVXOjqBea4-w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Michal Marek <michal.lkml@markovi.net>,
         Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
@@ -48,59 +48,74 @@ Cc: Michal Marek <michal.lkml@markovi.net>,
         Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
         Fangrui Song <maskray@google.com>,
         Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>
+        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, Sep 7, 2022 at 1:59 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
 >
-> as-option tests new options using KBUILD_CFLAGS, which causes problems
-> when using as-option to update KBUILD_AFLAGS because many compiler
-> options are not valid assembler options.
+> as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> cause as-option to fail unexpectedly when CONFIG_WERROR is set, because
+> clang will emit -Werror,-Wunused-command-line-argument for various -m
+> and -f flags for assembler sources.
 >
-> This is being fixed in a follow up patch. Before doing so, move the
-> assembler test for -Wa,-mrelax-relocations=no from using as-option to
-> cc-option.
+> Callers of as-option (and as-instr) likely want to be adding flags to
+> KBUILD_AFLAGS/aflags-y, not KBUILD_CFLAGS/cflags-y.
 >
-> Cc: Arvind Sankar <nivedita@alum.mit.edu>
-> Cc: x86@kernel.org
-> Link: https://lore.kernel.org/llvm/CAK7LNATcHt7GcXZ=jMszyH=+M_LC9Qr6yeAGRCBbE6xriLxtUQ@mail.gmail.com/
+> Also, change as-option and as-instr to use -x assembler-with-cpp since
+> kernel sources are .S files that use the compiler as the driver. And
+> then add -Werror as well.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1699
 > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
 > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
 > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+
 
 
 01 and 02, applied to linux-kbuild/fixes.
 Thanks.
 
 
-> ---
-> Changes v2 -> v3:
-> * Reword commit message as per Nathan.
-> * Pick up Nathan's RB/TB tags.
+
+
+> Changes v2 -> v1:
+> * Add -x assembler-with-cpp -Werror to both as-option and (new)
+>   as-instr, as per Masahiro.
+> * Add Masahiro's SB tag.
 >
 > Changes v1 -> v2:
-> * Split off of v1 [1/3].
-> * Use cc-option to update CFLAGS, as per Masahiro.
-> * Add Masahiro's Suggested-by, Cc Arvind.
+> * Split off changes to arch/x86/boot/compressed/Makefile into parent
+>   patch, as per Masahiro.
 >
->  arch/x86/boot/compressed/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  scripts/Makefile.compiler | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 35ce1a64068b..85934204d905 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -49,7 +49,7 @@ KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
->  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
->  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
->  # Disable relocation relaxation in case the link is not PIE.
-> -KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
-> +KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
->  KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 94d0d40cddb3..a66638b5f4a5 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -29,16 +29,16 @@ try-run = $(shell set -e;           \
+>         fi)
 >
->  # sev.c indirectly inludes inat-table.h which is generated during
+>  # as-option
+> -# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+> +# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+>
+>  as-option = $(call try-run,\
+> -       $(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
+> +       $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
+>
+>  # as-instr
+> -# Usage: cflags-y += $(call as-instr,instr,option1,option2)
+> +# Usage: aflags-y += $(call as-instr,instr,option1,option2)
+>
+>  as-instr = $(call try-run,\
+> -       printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
+> +       printf "%b\n" "$(1)" | $(CC) -Werror $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
+>
+>  # __cc-option
+>  # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
 > --
 > 2.37.2.789.g6183377224-goog
 >
