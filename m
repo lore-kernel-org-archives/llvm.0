@@ -1,15 +1,15 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9669F622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 05:42:16 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MP4Wg1xt3zZcqC;
-	Fri,  9 Sep 2022 13:37:35 +0800 (CST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE09622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 06:06:09 +0000 (UTC)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MP55H1MQtznVFf;
+	Fri,  9 Sep 2022 14:03:15 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 13:42:05 +0800
+ 15.1.2375.24; Fri, 9 Sep 2022 14:05:50 +0800
 From: Wang Yufen <wangyufen@huawei.com>
 To: <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
 	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
@@ -19,12 +19,10 @@ To: <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
 	<ndesaulniers@google.com>, <trix@redhat.com>
 CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [-next v2 2/2] bpftool: Update doc (add auto_attach to prog load)
-Date: Fri, 9 Sep 2022 13:53:27 +0800
-Message-ID: <1662702807-591-2-git-send-email-wangyufen@huawei.com>
+Subject: [bpf-next v3 2/2] bpftool: Update doc (add auto_attach to prog load)
+Date: Fri, 9 Sep 2022 14:17:13 +0800
+Message-ID: <1662704233-8805-1-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1662702807-591-1-git-send-email-wangyufen@huawei.com>
-References: <1662702807-591-1-git-send-email-wangyufen@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,7 +31,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 
