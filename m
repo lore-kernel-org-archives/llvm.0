@@ -1,143 +1,195 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF899622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:07:42 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id jm11so932118plb.13
-        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 00:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5aQOmj4o6dy+y08Ndf5GP3ShJjdt3XzOKjEopk6m/lE=;
-        b=TPbzxpyPzcDS/2Mu6bTugXg7Evw4zdwAU0ETEKmg6oSWWB2dTr0yCd8rRlVpzZTD1l
-         A1JKGtlEa0KKAHnmb+DDf+HKhQB668P2MfErJ6E5wZHnjAIL1mElQWdH5FKfI3W14tdy
-         l9eT1NqeubKDL1nNpHkATVRpnvKrBACw0b5+ALb4uPettYoqHeky9E7npLq2k5gWqO9T
-         qCFcN6LLBYM+d0vhgF6eip5CM28zPLH4E8FAWfobeL7XGAzzvBC6zy8nNm3bH5ef4aHu
-         TJvYlg09bqHC4hAh5HmNT8ubJngGXLekNnWPU7Stnvz7/UNY8A8x4NOke49aPy9HmgqU
-         qbsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5aQOmj4o6dy+y08Ndf5GP3ShJjdt3XzOKjEopk6m/lE=;
-        b=JG9GcT7EGLdOFzPCgGopZZy8Vg6CSaGaPDGTQVP2EWN9eI0LTDazl/LX/jaIXJkKkU
-         yI0vF1CQGi2Ac6QaDxDK6ZSg+0LT4JKaAk5JpCLwQJXQ0FULpJHV0Y16j/nk7DRzNSeA
-         yOircDyYNidBlbkLscd7ocgwqXA99FDfNoSobQJZATKIHcQLEJeHyH9HkoJz1VP8vQd7
-         Eq13Kyw8NTnENN0txXGv6nccXzq+zXcKmt18Z1ZnaOfF/eUe+ul6WKjuIwzo7ZtYXGPY
-         AZ5x1Vupv90MrUCZJ9qb0BN+KTPxwryy9KgnNAGu4Ux3HRT+RUDiXyWbAKyep3aF5QWw
-         caPA==
-X-Gm-Message-State: ACgBeo0lkuLWcJ4KyOI2ej3+KFt80SMcP7KPjJ1WPfBSc/3UQZ6rUXbh
-	G/4z78viQGahzleXi4MAw5GoDg==
-X-Google-Smtp-Source: AA6agR6KbyVvA8JXAeum23FDcoKOigidJa7JqE+5eS/1/Rhp7TmDzQkmZjEuOFLqTQBJiEbYW6ZhDg==
-X-Received: by 2002:a17:90a:c711:b0:202:5cda:765c with SMTP id o17-20020a17090ac71100b002025cda765cmr8330639pjt.35.1662707262018;
-        Fri, 09 Sep 2022 00:07:42 -0700 (PDT)
-Received: from [10.4.108.105] ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id cv8-20020a17090afd0800b001fb53587166sm656041pjb.28.2022.09.09.00.07.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 00:07:41 -0700 (PDT)
-Message-ID: <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
-Date: Fri, 9 Sep 2022 15:07:36 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DE865A
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662707498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fZqDByvZyONETOHiflbdop59EqZBm/flC8Kx7GumYkU=;
+	b=W6YvwJ6TIO+zI3ZjUO7UIsxHdCJF23lAlvpUQvOFdbU0i3kykP6xoMtmibNkbGCrDDJY+o
+	ysXFADioZZIR8nurU6JX+QCprPH0F9esZHaL+bFykTFS1RoeQmY+157j8JTkJGWtafoSn+
+	R0+Kth2/zQOwv066/Dm5w+y7TYOppnw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-548-1hAQeUn7PbmS_mMnzoXWYg-1; Fri, 09 Sep 2022 03:11:36 -0400
+X-MC-Unique: 1hAQeUn7PbmS_mMnzoXWYg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A96C6811E80
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:11:36 +0000 (UTC)
+Received: from [172.64.5.10] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9C932492C3B;
+	Fri,  9 Sep 2022 07:11:36 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
+ mainline.kernel.org-clang, 26b12249)
+Date: Fri, 09 Sep 2022 07:11:34 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [ammarfaizi2-block:arm64/linux/for-next/misc 2/2]
- arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function
- 'do_softirq_own_stack'
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
- Catalin Marinas <catalin.marinas@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Ammar Faizi <ammarfaizi2@gnuweeb.org>,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, linux-kernel@vger.kernel.org
-References: <202209091157.akimiv18-lkp@intel.com>
- <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Message-Id: <08445.122090903113600260@us-mta-548.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'net-6.0-rc5' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-On 2022/9/9 14:30, Arnd Bergmann wrote:
-> On Fri, Sep 9, 2022, at 5:12 AM, kernel test robot wrote:
->> tree:   https://github.com/ammarfaizi2/linux-block
->> arm64/linux/for-next/misc
->> head:   2d2f3bb897a3de4190b1b6b296c3429d01327554
->> commit: 2d2f3bb897a3de4190b1b6b296c3429d01327554 [2/2] arm64: run
->> softirqs on the per-CPU IRQ stack
->> config: arm64-randconfig-r023-20220907
->> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
->> 1546df49f5a6d09df78f569e4137ddb365a3e827)
->> reproduce (this is a W=1 build):
->>          wget
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
->> -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm64 cross compiling tool for clang build
->>          # apt-get install binutils-aarch64-linux-gnu
->>          #
->> https://github.com/ammarfaizi2/linux-block/commit/2d2f3bb897a3de4190b1b6b296c3429d01327554
->>          git remote add ammarfaizi2-block
->> https://github.com/ammarfaizi2/linux-block
->>          git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/misc
->>          git checkout 2d2f3bb897a3de4190b1b6b296c3429d01327554
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
->> O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function 'do_softirq_own_stack' [-Wmissing-prototypes]
->>     void do_softirq_own_stack(void)
->>          ^
->>     arch/arm64/kernel/irq.c:81:1: note: declare 'static' if the function
->> is not intended to be used outside of this translation unit
->>     void do_softirq_own_stack(void)
->>     ^
->>     static
-> 
-> 
-> I think we are missing an "#include <asm/softirq_stack.h>"
-> in arch/arm64/kernel/irq.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52861
 
-Indeed. Hi Catalin, do I need to resend the v4 version? Or can you help
-me to apply the following code change to the for-next/misc directly?
-Both are fine for me, depending on which way is convenient for you. :)
+One or more kernel tests failed:
 
-diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-index c36ad20a52f3..181df57c812b 100644
---- a/arch/arm64/kernel/irq.c
-+++ b/arch/arm64/kernel/irq.c
-@@ -23,6 +23,7 @@
-  #include <asm/daifflags.h>
-  #include <asm/vmap_stack.h>
-  #include <asm/exception.h>
-+#include <asm/softirq_stack.h>
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5081721
 
-  /* Only access this in an NMI enter/exit */
-  DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
+grep -E
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1390
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] [ampere] [altramax] 5.19.0-rc8 - panic =
+__efi_rt_asm_wrapper+0x2c/0x4c efi_call_rts+0x260/0x3d4
+            URL: https://lore.kernel.org/all/CA+QYu4r50dDuTyWbAqjjbvniW6O6N=
+r4V+1A_G2f37EVHJtM3_Q@mail.gmail.com/T/#t
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
-BTW, when I just compiled the kernel with W=1, I found a lot of
-compilation warnings, which is somewhat unexpected.
 
-Thanks,
-Qi
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-> 
->         Arnd
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-Thanks,
-Qi
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
