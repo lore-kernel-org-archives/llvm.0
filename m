@@ -1,59 +1,166 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F6B6120
-	for <llvm@lists.linux.dev>; Thu,  8 Sep 2022 22:47:36 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 288Me86X019587;
-	Thu, 8 Sep 2022 17:40:08 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 288Me5E7019584;
-	Thu, 8 Sep 2022 17:40:05 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Thu, 8 Sep 2022 17:40:05 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mathieu Malaterre <malat@debian.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Mackerras <paulus@samba.org>, llvm@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH] powerpc/lib/xor_vmx: Relax frame size for clang
-Message-ID: <20220908224005.GN25951@gate.crashing.org>
-References: <20190621085822.1527-1-malat@debian.org> <7cb1285a-42e6-2b67-664f-7d206bc9fd80@csgroup.eu> <87v8pyemmw.fsf@mpe.ellerman.id.au> <8afc110f-641e-40f0-9bf9-b7b2ca3df6a1@www.fastmail.com>
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE76622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662686024; x=1694222024;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dtTxRr3rCqwFdZpT9ahFuDM4MIQN+cIf0773uq3XX54=;
+  b=eHwkS4L6hVtlgVAWt68ULRH6DU0dMN4+yMSdhwKs8PHC3kDCv+z+9QFp
+   XJ2OEKObjrimQqWQsFqd61CRQxAID6MkRxxQsHMfMu0LeQ2E99/jreDhu
+   i6Td/+zC1DtvYz0U3kg2YoxYtOwQ6Go+ngiLKZmDL0m/ZpHKnNBkxrdyN
+   7IRXaQlSqVq1n0h9hZ3qzVzAJClm53XmriSsZo/2q874jsRUW3L0Cs2hi
+   0xX65cNdzJzR/8OPw++xKXmQ0jUUSiSuc9oWtfOR8PAFFoROm8GpA2/25
+   sG/YABYaNvs/nNROAyjZN18Ue9w2/ZIgbrSka54sk9/e5eMVlDMCqUAbf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277100410"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="277100410"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:13:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="718787718"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Sep 2022 18:13:39 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oWSaR-0000XB-0D;
+	Fri, 09 Sep 2022 01:13:39 +0000
+Date: Fri, 9 Sep 2022 09:12:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Will Deacon <will@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v8 4/7] sched: Introduce affinity_context structure
+Message-ID: <202209090937.23d2iFjb-lkp@intel.com>
+References: <20220908194121.858462-5-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8afc110f-641e-40f0-9bf9-b7b2ca3df6a1@www.fastmail.com>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <20220908194121.858462-5-longman@redhat.com>
 
-Hi!
+Hi Waiman,
 
-On Thu, Sep 08, 2022 at 05:07:24PM +0200, Arnd Bergmann wrote:
-> - if the XOR code has its frame size explode like this, it's
->   probably an indication of the compiler doing something wrong,
->   not the kernel code.
+I love your patch! Yet something to improve:
 
-On the contrary, it is most likely an indication that the kernel code
-wants something unreasonable.  Like, having 20 variables live at the
-same time, but still wanting nicely scheduled machine code generated.
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master v6.0-rc4]
+[cannot apply to tip/sched/core tip/master next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-But I suspect GCC unrolled the loops here, even?  Best way to prevent
-that here is to put an option in the Makefile, for these files.  We
-don't want any of this unrolled after all?  Or, alternatively, remove
-all the manual unrolling from this code, let GCC do its thing, without
-painting it in a corner.
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/sched-Persistent-user-requested-affinity/20220909-034411
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 506357871c18e06565840d71c2ef9f818e19f460
+config: arm-randconfig-r033-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090937.23d2iFjb-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/039ce835b17cfa35f47f3cb5fd4938e57643cb63
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Waiman-Long/sched-Persistent-user-requested-affinity/20220909-034411
+        git checkout 039ce835b17cfa35f47f3cb5fd4938e57643cb63
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
 
->   The result is likely that the "optimized"
->   XOR implementation is slower than the default version as a
->   result, and the kernel will pick the other one at boot time.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes.  So it's self-healing even, of a sort :-)
+All errors (new ones prefixed by >>):
+
+   kernel/sched/core.c:6602:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
+   asmlinkage __visible void __sched schedule_user(void)
+                                     ^
+   kernel/sched/core.c:6602:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void __sched schedule_user(void)
+                        ^
+                        static 
+>> kernel/sched/core.c:8104:40: error: too few arguments to function call, expected 3, have 2
+           retval = __set_cpus_allowed_ptr(p, ctx);
+                    ~~~~~~~~~~~~~~~~~~~~~~       ^
+   kernel/sched/core.c:3555:19: note: '__set_cpus_allowed_ptr' declared here
+   static inline int __set_cpus_allowed_ptr(struct task_struct *p,
+                     ^
+   kernel/sched/core.c:8972:26: warning: unused variable 'ac' [-Wunused-variable]
+           struct affinity_context ac;
+                                   ^
+   2 warnings and 1 error generated.
 
 
-Segher
+vim +8104 kernel/sched/core.c
+
+  8079	
+  8080	static int
+  8081	__sched_setaffinity(struct task_struct *p, struct affinity_context *ctx)
+  8082	{
+  8083		int retval;
+  8084		cpumask_var_t cpus_allowed, new_mask;
+  8085	
+  8086		if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL))
+  8087			return -ENOMEM;
+  8088	
+  8089		if (!alloc_cpumask_var(&new_mask, GFP_KERNEL)) {
+  8090			retval = -ENOMEM;
+  8091			goto out_free_cpus_allowed;
+  8092		}
+  8093	
+  8094		cpuset_cpus_allowed(p, cpus_allowed);
+  8095		cpumask_and(new_mask, ctx->new_mask, cpus_allowed);
+  8096	
+  8097		ctx->new_mask = new_mask;
+  8098		ctx->flags |= SCA_CHECK;
+  8099	
+  8100		retval = dl_task_check_affinity(p, new_mask);
+  8101		if (retval)
+  8102			goto out_free_new_mask;
+  8103	again:
+> 8104		retval = __set_cpus_allowed_ptr(p, ctx);
+  8105		if (retval)
+  8106			goto out_free_new_mask;
+  8107	
+  8108		cpuset_cpus_allowed(p, cpus_allowed);
+  8109		if (!cpumask_subset(new_mask, cpus_allowed)) {
+  8110			/*
+  8111			 * We must have raced with a concurrent cpuset update.
+  8112			 * Just reset the cpumask to the cpuset's cpus_allowed.
+  8113			 */
+  8114			cpumask_copy(new_mask, cpus_allowed);
+  8115			goto again;
+  8116		}
+  8117	
+  8118	out_free_new_mask:
+  8119		free_cpumask_var(new_mask);
+  8120	out_free_cpus_allowed:
+  8121		free_cpumask_var(cpus_allowed);
+  8122		return retval;
+  8123	}
+  8124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
