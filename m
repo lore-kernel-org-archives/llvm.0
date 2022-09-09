@@ -1,55 +1,52 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AD865A
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:38:58 +0000 (UTC)
-Received: by mail-ed1-f74.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso652965edd.9
-        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 00:38:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A8A7E3
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 08:36:16 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id z25so1520440lfr.2
+        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 01:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=Sukv368ybnyGEDYWzkXqyAnNVv6jo8OLy5FNfbPUdMM=;
-        b=ktFLEBNoqWRWObHClbSd+xRmqYvoRP5s7bLvDdfwvktoIRphaCmNmyKmEO/oMcNTLa
-         WnpnwFGujucx+4vgMOUIJl8O7pvj70JRkdhu7xb2Yvk3xyIBFZKHOiqwbrt/qOA2BkOM
-         Y6S9sO/IHWcAR+cGowS4woP+B7UiiDDUvnJbE7QZJQOcMxabUJRUExiVwVLvQ5g3coI6
-         RXh5mhIqw3nJ7mmt8vNYOb/+hEh6xdo0K0/sSaM9PMFJw7l8RteJK3yBKVmmx7CzX/2i
-         zyXGigoAR6gmoY1w4oayrAGDU8zN4InMJzmqBvI2Lm5y6IIH89960NoG7piKM/fT1Hu4
-         JDlQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=BbZr2IDF5mYuV07dt5XpEzbm+CGWl8GmrLDRuGPtC7E=;
+        b=dy2bPFFGYzvTFhSiBzM0TcvYpvsd486uNttfXoBkYHRYX0ZSvSi6As+Ls9jZmxoWNA
+         +ItLMlT3OLXdDlumTHfrPuBqZuwqpm0OMtRjkHSpumfd60Fxsz107BbLgruvoQnDMUtf
+         jSzlcm4MEjwrxMbIVpUzEYIbfhoiL+LslyTfYLItTAYJEwwHLzwsR/ZUzEzNuyVbMPgf
+         Pi1hHJJXer09s60ILhb3JHjZ7TEOLraL3v4DM1R7eObD6GBv7aUQbIPYXt9Iyqou6ex9
+         x2du5OYCO124XUT0K7y24O2Ycdi6Lk7N1jXH9FQ63qHSQ6Biudqq/qKCyQr2/rU1PIZl
+         bqxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Sukv368ybnyGEDYWzkXqyAnNVv6jo8OLy5FNfbPUdMM=;
-        b=RyR9/RXeuRCoAEo8g5wUDW3jIz9PtiKmkBQhXHhjMSMmkhZSPGnLSMx+wNiHC9y8Be
-         2BSpEnXpiNNRJzApCI8ThaVaXnxJcNuqkNi1DHuDKyPIw8bGA97BwX4AD7Z0u71nS6hn
-         sdyIA9LhVtxyHLCzNnZdicemjJdNri4e1YloKtNHLI/shVAr4Bg3TauLbGNwpOfMrj6W
-         rsGzR/wqKo2nJqTj3srvZNXkahs08dTB9NemxSFH44KT47VXs/yS59+l4/I8XwC/ZzCf
-         ZIB8gsa08f46MSwZ9pC2676HItKApnWQZ1/aNhp1Oy3Q+ZMdvx0vhti+/DkCKF8N22Gq
-         fAvA==
-X-Gm-Message-State: ACgBeo3Z9neYOfAboDr6imbHN42vWvhY+zhlbwhc70eFYdlQBiApGZpG
-	4rlKePsHgod5vFVlKOiMtBaDVLS0sg==
-X-Google-Smtp-Source: AA6agR5rZ0SNiJLzG65aHEI8QPNYNkzDeSiGkJ4eXG6mWebhV8vDZYhMeNLLUHHNjKvwSPd7hEMfMKStTw==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:1d1e:ddcd:2020:36c2])
- (user=elver job=sendgmr) by 2002:a05:6402:c8a:b0:44e:81b3:4b7e with SMTP id
- cm10-20020a0564020c8a00b0044e81b34b7emr10294408edb.181.1662709136924; Fri, 09
- Sep 2022 00:38:56 -0700 (PDT)
-Date: Fri,  9 Sep 2022 09:38:40 +0200
-In-Reply-To: <20220909073840.45349-1-elver@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=BbZr2IDF5mYuV07dt5XpEzbm+CGWl8GmrLDRuGPtC7E=;
+        b=Y0U1x3PK9nSMiU4VxSi2G2Vm0a0mUkt8LkcIOwrBnKbNr11RUA2ZjwdZsc7kiR2/fX
+         fN3WyhIqDiocNtMhSk/UIbq1zrKCTaulxicMtOtcV7Ej08V7y6K2/M6Gxf1Zw78pLWdJ
+         jruKtR8axvoqPCinR1GU/uLVw4FOVZcjxQfBSkUxejAG4Zox2zvuUV8T1hjOLTrcrXU0
+         yLNokcuwtaiYjnksNRQ0VwYdbhlnQfQIz2/Jas5Nha9lOb5ibjNp49Ulh+k6m4McPavr
+         6zCfs4ypcMoFrFXM8XeIp5zMyd3PA0p3LddpFSi5IFXqBzTrkguibx55wZr3WvywCBp6
+         9A6w==
+X-Gm-Message-State: ACgBeo1E5f+30tymlJqtTO8h3w093FxrkBTtZSPM82za6NALgDO/n0Mv
+	mxsQ3PnBMxvdTLmBa/T/mGH0OWOHp3nk2AvMkaX1Wg==
+X-Google-Smtp-Source: AA6agR45b0zHB/0PVCbyFGItE7H2cGmt2X38+vuxkMh+HTrWXlHOtyQNKUH4gGHyC7HuLNUy7Nulf7UAYBr8CNNVQJU=
+X-Received: by 2002:a05:6512:401e:b0:48f:ea0d:1171 with SMTP id
+ br30-20020a056512401e00b0048fea0d1171mr4372971lfb.137.1662712574759; Fri, 09
+ Sep 2022 01:36:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20220909073840.45349-1-elver@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220909073840.45349-3-elver@google.com>
-Subject: [PATCH v2 3/3] objtool, kcsan: Add volatile read/write
- instrumentation to whitelist
-From: Marco Elver <elver@google.com>
-To: elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Dmitry Vyukov <dvyukov@google.com>, 
+In-Reply-To: <20220909073840.45349-1-elver@google.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Fri, 9 Sep 2022 10:36:00 +0200
+Message-ID: <CACT4Y+bY1SkME7343-EZw_C2tORWrJU0MweArrPf2om8R_wfoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] s390: Always declare __mem functions
+To: Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
@@ -58,43 +55,54 @@ Cc: Mark Rutland <mark.rutland@arm.com>, Dmitry Vyukov <dvyukov@google.com>,
 	Sven Schnelle <svens@linux.ibm.com>, Peter Zijlstra <peterz@infradead.org>, linux-s390@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Adds KCSAN's volatile instrumentation to objtool's uaccess whitelist.
+On Fri, 9 Sept 2022 at 09:38, Marco Elver <elver@google.com> wrote:
+>
+> Like other architectures, always declare __mem*() functions if the
+> architecture defines __HAVE_ARCH_MEM*.
+>
+> For example, this is required by sanitizer runtimes to unambiguously
+> refer to the arch versions of the mem-functions, and the compiler not
+> attempting any "optimizations" such as replacing the calls with builtins
+> (which may later be inlined etc.).
+>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Recent kernel change have shown that this was missing from the uaccess
-whitelist (since the first upstreamed version of KCSAN):
+Acked-by: Dmitry Vyukov <dvyukov@google.com>
 
-  mm/gup.o: warning: objtool: fault_in_readable+0x101: call to __tsan_volatile_write1() with UACCESS enabled
-
-Fixes: 75d75b7a4d54 ("kcsan: Support distinguishing volatile accesses")
-Signed-off-by: Marco Elver <elver@google.com>
----
-v2:
-* Fix commit message.
----
- tools/objtool/check.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e55fdf952a3a..67afdce3421f 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -999,6 +999,16 @@ static const char *uaccess_safe_builtin[] = {
- 	"__tsan_read_write4",
- 	"__tsan_read_write8",
- 	"__tsan_read_write16",
-+	"__tsan_volatile_read1",
-+	"__tsan_volatile_read2",
-+	"__tsan_volatile_read4",
-+	"__tsan_volatile_read8",
-+	"__tsan_volatile_read16",
-+	"__tsan_volatile_write1",
-+	"__tsan_volatile_write2",
-+	"__tsan_volatile_write4",
-+	"__tsan_volatile_write8",
-+	"__tsan_volatile_write16",
- 	"__tsan_atomic8_load",
- 	"__tsan_atomic16_load",
- 	"__tsan_atomic32_load",
--- 
-2.37.2.789.g6183377224-goog
-
+> ---
+> v2:
+> * New patch.
+> ---
+>  arch/s390/include/asm/string.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/s390/include/asm/string.h b/arch/s390/include/asm/string.h
+> index 3fae93ddb322..2c3c48d526b9 100644
+> --- a/arch/s390/include/asm/string.h
+> +++ b/arch/s390/include/asm/string.h
+> @@ -20,8 +20,11 @@
+>  #define __HAVE_ARCH_MEMSET64   /* arch function */
+>
+>  void *memcpy(void *dest, const void *src, size_t n);
+> +void *__memcpy(void *dest, const void *src, size_t n);
+>  void *memset(void *s, int c, size_t n);
+> +void *__memset(void *s, int c, size_t n);
+>  void *memmove(void *dest, const void *src, size_t n);
+> +void *__memmove(void *dest, const void *src, size_t n);
+>
+>  #ifndef CONFIG_KASAN
+>  #define __HAVE_ARCH_MEMCHR     /* inline & arch function */
+> @@ -55,10 +58,6 @@ char *strstr(const char *s1, const char *s2);
+>
+>  #if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
+>
+> -extern void *__memcpy(void *dest, const void *src, size_t n);
+> -extern void *__memset(void *s, int c, size_t n);
+> -extern void *__memmove(void *dest, const void *src, size_t n);
+> -
+>  /*
+>   * For files that are not instrumented (e.g. mm/slub.c) we
+>   * should use not instrumented version of mem* functions.
+> --
+> 2.37.2.789.g6183377224-goog
+>
