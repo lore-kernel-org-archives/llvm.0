@@ -1,180 +1,219 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD52622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662687223; x=1694223223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cpfqbiN827DWASpI7Ob7nVNzGtLFeMV+/cQBnW0US6E=;
-  b=lpp+5VsvqJBoZ7Pci3XsOxIUXY3TUsFO/ZFGizDI/ik2jRz2IQABbtKE
-   US+0F8omvKi49/Po0EKjBt8Y8WvKg0DnPbOxn/pxSftpvcOhMnBebFN1i
-   IycV4la2hT9JBZBfrCSgiDnr7N//rJuZ5CDRJnScH8hqOAGc1kU3ouo0Q
-   oaG7pi2EDXe1HFUTTb8KvMwxwhDirusqXd3Zk5A/g+UxAqcpRuhzf9srP
-   m+xdqwkO/AQ6bB5GSJu97HDyKtL4Ox4nr9Iii7ZQ9uW/BkmvzG806jcb8
-   pxcsgy8cg7gDVM4LfLPXUFZJSLmQKxr3uWgUVo5LvnbSur/2dATO3jxkP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284388699"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="284388699"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:33:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="757431079"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2022 18:33:40 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oWStn-0000Y9-1U;
-	Fri, 09 Sep 2022 01:33:39 +0000
-Date: Fri, 9 Sep 2022 09:33:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Olliver Schinagl <oliver@schinagl.nl>, netdev@vger.kernel.org,
-	Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	inux-kernel@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Olliver Schinagl <oliver@schinagl.nl>
-Subject: Re: [PATCH] phy: Add helpers for setting/clearing bits in paged
- registers
-Message-ID: <202209090938.3xBYyNyf-lkp@intel.com>
-References: <20220904225555.1994290-1-oliver@schinagl.nl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF887622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:37:30 +0000 (UTC)
+Received: by mail-io1-f70.google.com with SMTP id l205-20020a6b3ed6000000b0068b49dd0a61so340801ioa.14
+        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 18:37:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=ZtHKZi9er1ZjEMUmn/+LwojDtY9MogZdu8h8D7swnmI=;
+        b=Yfl2ZQVYExyLv31sJQfAvXhp1C30tuiwAD2ZL3Og6A4YYeF9XVjIGc1mSjwguRQXrZ
+         AOy7yu0Pv8YMHA8i0QGHK2x+hOhrR3g0t7S0p8kfDkhJovj+rOrkeZlyViH3QM/v7RaQ
+         BI3FvIqqrGq6ZuK7E8Y+D5SPc8rHKJw3gwtmdMW4SkE9++byACY7tyVx++DAyQmnk77Y
+         tNOMsen+5S9VGWMEDohQgmyNFKb5YVLi+Bzh86rtC7M0N7dn3ufzm7LRWvNmKIl166TZ
+         so/hpyFJb+PGzRhtWUCP8wzeBKL2feHgbv39Z3yPE4+kxmXJenBj8gyTHOh6upmta7Fh
+         4ilQ==
+X-Gm-Message-State: ACgBeo3K058Ms6ZUwVOrWt//oYiaTuawlKc1sLeSGh+KNB8qiJQpccrT
+	41mMMUEfXLPARvhoHZp/RqXG82ITdxnbzPECwsAfMwyqvdgv
+X-Google-Smtp-Source: AA6agR7VqVqXT1uyKMf1Wg9Yx7cyTmPcI9kF+5ONziqWQcOIIKnQuWXhOCjGIgFuz88A8Jhm7aQPXN11KsY30JOzYiQIKOv7YZ6Y
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220904225555.1994290-1-oliver@schinagl.nl>
+X-Received: by 2002:a05:6602:14c2:b0:67d:ae1:1c23 with SMTP id
+ b2-20020a05660214c200b0067d0ae11c23mr5468038iow.212.1662687450094; Thu, 08
+ Sep 2022 18:37:30 -0700 (PDT)
+Date: Thu, 08 Sep 2022 18:37:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d5e00a05e834962e@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in hugetlb_handle_userfault
+From: syzbot <syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Olliver,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
+syzbot found the following issue on:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc4 next-20220908]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    7726d4c3e60b Merge tag 'gpio-fixes-for-v6.0-rc4' of git://..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1106f78b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=892a57667b7af6cf
+dashboard link: https://syzkaller.appspot.com/bug?extid=193f9cee8638750b23cf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16de5bc5080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120307e5080000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7e18e42e4b280c85b76967a9106a13ca61c16179
-config: arm64-randconfig-r016-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090938.3xBYyNyf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/342260cb7603ad567f4799836ad4ed390ccedf2a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
-        git checkout 342260cb7603ad567f4799836ad4ed390ccedf2a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
+Read of size 8 at addr ffff888017a60eb0 by task syz-executor225/3606
 
-All warnings (new ones prefixed by >>):
+CPU: 0 PID: 3606 Comm: syz-executor225 Not tainted 6.0.0-rc3-syzkaller-00363-g7726d4c3e60b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ down_read+0x98/0x450 kernel/locking/rwsem.c:1499
+ i_mmap_lock_read include/linux/fs.h:486 [inline]
+ hugetlb_handle_userfault+0xf5/0x150 mm/hugetlb.c:5505
+ hugetlb_no_page mm/hugetlb.c:5554 [inline]
+ hugetlb_fault+0x14cd/0x1aa0 mm/hugetlb.c:5778
+ handle_mm_fault+0x640/0x780 mm/memory.c:5149
+ do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1397
+ handle_page_fault arch/x86/mm/fault.c:1488 [inline]
+ exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1544
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f2ff2164c3b
+Code: 00 48 89 94 24 ca 03 00 00 f3 0f 6f 9c 24 c0 03 00 00 f3 0f 6f a4 24 d0 03 00 00 48 89 84 24 e2 03 00 00 48 8d 86 00 20 7a 20 <0f> 11 9e 00 20 7a 20 0f 11 a6 10 20 7a 20 48 8b b4 24 e0 03 00 00
+RSP: 002b:00007f2ff2157820 EFLAGS: 00010246
+RAX: 00000000207a5e00 RBX: 0000000000000000 RCX: 00180f8000180f80
+RDX: 0002912000180f80 RSI: 0000000000003e00 RDI: 0000000000000008
+RBP: 0000000000000006 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 00007f2ff2157c80 R12: 00000000207a2000
+R13: 0000000000000000 R14: 0000000000000000 R15: 00007f2ff2157d80
+ </TASK>
 
-   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:11:
-   In file included from include/linux/stmmac.h:16:
-   include/linux/phy.h:1275:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return phy_modify_paged(phydev, page, regnum, 0, val);
-                  ^
-   include/linux/phy.h:1275:9: note: did you mean 'phy_modify_changed'?
-   include/linux/phy.h:1142:5: note: 'phy_modify_changed' declared here
-   int phy_modify_changed(struct phy_device *phydev, u32 regnum, u16 mask,
-       ^
-   include/linux/phy.h:1288:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return phy_modify_paged(phydev, page, regnum, val, 0);
-                  ^
-   include/linux/phy.h:1447:5: error: conflicting types for 'phy_modify_paged'
-   int phy_modify_paged(struct phy_device *phydev, int page, u32 regnum,
-       ^
-   include/linux/phy.h:1275:9: note: previous implicit declaration is here
-           return phy_modify_paged(phydev, page, regnum, 0, val);
-                  ^
-   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:13:
->> drivers/net/ethernet/stmicro/stmmac/descs_com.h:39:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073707454463 to 4292870143 [-Wconstant-conversion]
-                   p->des0 &= cpu_to_le32(~ETDES0_END_RING);
-                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-   #define cpu_to_le32 __cpu_to_le32
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
-                                             ~~~~~~~~~~^~~
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-           ~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:13:
-   drivers/net/ethernet/stmicro/stmmac/descs_com.h:73:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073675997183 to 4261412863 [-Wconstant-conversion]
-                   p->des1 &= cpu_to_le32(~TDES1_END_RING);
-                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-   #define cpu_to_le32 __cpu_to_le32
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
-                                             ~~~~~~~~~~^~~
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-           ~~~~~~~~~ ^
-   2 warnings and 3 errors generated.
---
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:11:
-   In file included from include/linux/stmmac.h:16:
-   include/linux/phy.h:1275:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return phy_modify_paged(phydev, page, regnum, 0, val);
-                  ^
-   include/linux/phy.h:1275:9: note: did you mean 'phy_modify_changed'?
-   include/linux/phy.h:1142:5: note: 'phy_modify_changed' declared here
-   int phy_modify_changed(struct phy_device *phydev, u32 regnum, u16 mask,
-       ^
-   include/linux/phy.h:1288:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return phy_modify_paged(phydev, page, regnum, val, 0);
-                  ^
-   include/linux/phy.h:1447:5: error: conflicting types for 'phy_modify_paged'
-   int phy_modify_paged(struct phy_device *phydev, int page, u32 regnum,
-       ^
-   include/linux/phy.h:1275:9: note: previous implicit declaration is here
-           return phy_modify_paged(phydev, page, regnum, 0, val);
-                  ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:541:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073675997183 to 4261412863 [-Wconstant-conversion]
-                   p->des3 &= cpu_to_le32(~RDES3_BUFFER2_VALID_ADDR);
-                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-   #define cpu_to_le32 __cpu_to_le32
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
-                                             ~~~~~~~~~~^~~
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-           ~~~~~~~~~ ^
-   1 warning and 3 errors generated.
+Allocated by task 3606:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:470
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3243 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+ kmem_cache_alloc_lru+0x255/0x720 mm/slub.c:3275
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ hugetlbfs_alloc_inode+0x88/0x1e0 fs/hugetlbfs/inode.c:1121
+ alloc_inode+0x61/0x230 fs/inode.c:260
+ new_inode_pseudo fs/inode.c:1019 [inline]
+ new_inode+0x27/0x270 fs/inode.c:1047
+ hugetlbfs_get_inode+0x353/0x5f0 fs/hugetlbfs/inode.c:844
+ hugetlb_file_setup+0x13a/0x590 fs/hugetlbfs/inode.c:1486
+ ksys_mmap_pgoff+0x184/0x5a0 mm/mmap.c:1578
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 0:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:367 [inline]
+ ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1754 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
+ slab_free mm/slub.c:3534 [inline]
+ kmem_cache_free+0xeb/0x5b0 mm/slub.c:3551
+ i_callback+0x3f/0x70 fs/inode.c:249
+ rcu_do_batch kernel/rcu/tree.c:2245 [inline]
+ rcu_core+0x7b5/0x1890 kernel/rcu/tree.c:2505
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
+ call_rcu+0x99/0x790 kernel/rcu/tree.c:2793
+ destroy_inode+0x129/0x1b0 fs/inode.c:315
+ iput_final fs/inode.c:1748 [inline]
+ iput.part.0+0x55d/0x810 fs/inode.c:1774
+ iput+0x58/0x70 fs/inode.c:1764
+ dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
+ __dentry_kill+0x3c0/0x640 fs/dcache.c:607
+ dentry_kill fs/dcache.c:733 [inline]
+ dput+0x806/0xdb0 fs/dcache.c:913
+ __fput+0x39c/0x9d0 fs/file_table.c:333
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ ptrace_notify+0x114/0x140 kernel/signal.c:2353
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work kernel/entry/common.c:249 [inline]
+ syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888017a60ac0
+ which belongs to the cache hugetlbfs_inode_cache of size 1248
+The buggy address is located 1008 bytes inside of
+ 1248-byte region [ffff888017a60ac0, ffff888017a60fa0)
+
+The buggy address belongs to the physical page:
+page:ffffea00005e9800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x17a60
+head:ffffea00005e9800 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888145a66640
+raw: 0000000000000000 0000000080170017 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 2981386393, free_ts 0
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2103
+ alloc_pages+0x22f/0x270 mm/mempolicy.c:2265
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+ kmem_cache_alloc_lru+0x528/0x720 mm/slub.c:3275
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ hugetlbfs_alloc_inode+0x88/0x1e0 fs/hugetlbfs/inode.c:1121
+ alloc_inode+0x61/0x230 fs/inode.c:260
+ new_inode_pseudo fs/inode.c:1019 [inline]
+ new_inode+0x27/0x270 fs/inode.c:1047
+ hugetlbfs_get_root fs/hugetlbfs/inode.c:803 [inline]
+ hugetlbfs_fill_super+0x589/0xad0 fs/hugetlbfs/inode.c:1377
+ vfs_get_super fs/super.c:1168 [inline]
+ get_tree_nodev+0xcd/0x1d0 fs/super.c:1198
+ hugetlbfs_get_tree fs/hugetlbfs/inode.c:1392 [inline]
+ hugetlbfs_get_tree+0x1e3/0x2b0 fs/hugetlbfs/inode.c:1387
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ fc_mount+0x13/0xc0 fs/namespace.c:1043
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888017a60d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888017a60e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888017a60e80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                     ^
+ ffff888017a60f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888017a60f80: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-vim +39 drivers/net/ethernet/stmicro/stmmac/descs_com.h
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-286a837217204b Giuseppe CAVALLARO 2011-10-18  33  
-293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  34  static inline void enh_desc_end_tx_desc_on_ring(struct dma_desc *p, int end)
-286a837217204b Giuseppe CAVALLARO 2011-10-18  35  {
-293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  36  	if (end)
-f8be0d78be6e7f Michael Weiser     2016-11-14  37  		p->des0 |= cpu_to_le32(ETDES0_END_RING);
-293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  38  	else
-f8be0d78be6e7f Michael Weiser     2016-11-14 @39  		p->des0 &= cpu_to_le32(~ETDES0_END_RING);
-286a837217204b Giuseppe CAVALLARO 2011-10-18  40  }
-286a837217204b Giuseppe CAVALLARO 2011-10-18  41  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
