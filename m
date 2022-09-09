@@ -1,55 +1,47 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE76622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD52622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662686024; x=1694222024;
+  t=1662687223; x=1694223223;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dtTxRr3rCqwFdZpT9ahFuDM4MIQN+cIf0773uq3XX54=;
-  b=eHwkS4L6hVtlgVAWt68ULRH6DU0dMN4+yMSdhwKs8PHC3kDCv+z+9QFp
-   XJ2OEKObjrimQqWQsFqd61CRQxAID6MkRxxQsHMfMu0LeQ2E99/jreDhu
-   i6Td/+zC1DtvYz0U3kg2YoxYtOwQ6Go+ngiLKZmDL0m/ZpHKnNBkxrdyN
-   7IRXaQlSqVq1n0h9hZ3qzVzAJClm53XmriSsZo/2q874jsRUW3L0Cs2hi
-   0xX65cNdzJzR/8OPw++xKXmQ0jUUSiSuc9oWtfOR8PAFFoROm8GpA2/25
-   sG/YABYaNvs/nNROAyjZN18Ue9w2/ZIgbrSka54sk9/e5eMVlDMCqUAbf
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277100410"
+  bh=cpfqbiN827DWASpI7Ob7nVNzGtLFeMV+/cQBnW0US6E=;
+  b=lpp+5VsvqJBoZ7Pci3XsOxIUXY3TUsFO/ZFGizDI/ik2jRz2IQABbtKE
+   US+0F8omvKi49/Po0EKjBt8Y8WvKg0DnPbOxn/pxSftpvcOhMnBebFN1i
+   IycV4la2hT9JBZBfrCSgiDnr7N//rJuZ5CDRJnScH8hqOAGc1kU3ouo0Q
+   oaG7pi2EDXe1HFUTTb8KvMwxwhDirusqXd3Zk5A/g+UxAqcpRuhzf9srP
+   m+xdqwkO/AQ6bB5GSJu97HDyKtL4Ox4nr9Iii7ZQ9uW/BkmvzG806jcb8
+   pxcsgy8cg7gDVM4LfLPXUFZJSLmQKxr3uWgUVo5LvnbSur/2dATO3jxkP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284388699"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="277100410"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:13:43 -0700
+   d="scan'208";a="284388699"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:33:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="718787718"
+   d="scan'208";a="757431079"
 Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Sep 2022 18:13:39 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2022 18:33:40 -0700
 Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oWSaR-0000XB-0D;
-	Fri, 09 Sep 2022 01:13:39 +0000
-Date: Fri, 9 Sep 2022 09:12:53 +0800
+	id 1oWStn-0000Y9-1U;
+	Fri, 09 Sep 2022 01:33:39 +0000
+Date: Fri, 9 Sep 2022 09:33:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Will Deacon <will@kernel.org>
+To: Olliver Schinagl <oliver@schinagl.nl>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew@lunn.ch>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v8 4/7] sched: Introduce affinity_context structure
-Message-ID: <202209090937.23d2iFjb-lkp@intel.com>
-References: <20220908194121.858462-5-longman@redhat.com>
+	inux-kernel@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Olliver Schinagl <oliver@schinagl.nl>
+Subject: Re: [PATCH] phy: Add helpers for setting/clearing bits in paged
+ registers
+Message-ID: <202209090938.3xBYyNyf-lkp@intel.com>
+References: <20220904225555.1994290-1-oliver@schinagl.nl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,108 +50,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908194121.858462-5-longman@redhat.com>
+In-Reply-To: <20220904225555.1994290-1-oliver@schinagl.nl>
 
-Hi Waiman,
+Hi Olliver,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v6.0-rc4]
-[cannot apply to tip/sched/core tip/master next-20220908]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc4 next-20220908]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/sched-Persistent-user-requested-affinity/20220909-034411
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 506357871c18e06565840d71c2ef9f818e19f460
-config: arm-randconfig-r033-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090937.23d2iFjb-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7e18e42e4b280c85b76967a9106a13ca61c16179
+config: arm64-randconfig-r016-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090938.3xBYyNyf-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/039ce835b17cfa35f47f3cb5fd4938e57643cb63
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/342260cb7603ad567f4799836ad4ed390ccedf2a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Waiman-Long/sched-Persistent-user-requested-affinity/20220909-034411
-        git checkout 039ce835b17cfa35f47f3cb5fd4938e57643cb63
+        git fetch --no-tags linux-review Olliver-Schinagl/phy-Add-helpers-for-setting-clearing-bits-in-paged-registers/20220905-070318
+        git checkout 342260cb7603ad567f4799836ad4ed390ccedf2a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   kernel/sched/core.c:6602:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
-   asmlinkage __visible void __sched schedule_user(void)
-                                     ^
-   kernel/sched/core.c:6602:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void __sched schedule_user(void)
-                        ^
-                        static 
->> kernel/sched/core.c:8104:40: error: too few arguments to function call, expected 3, have 2
-           retval = __set_cpus_allowed_ptr(p, ctx);
-                    ~~~~~~~~~~~~~~~~~~~~~~       ^
-   kernel/sched/core.c:3555:19: note: '__set_cpus_allowed_ptr' declared here
-   static inline int __set_cpus_allowed_ptr(struct task_struct *p,
-                     ^
-   kernel/sched/core.c:8972:26: warning: unused variable 'ac' [-Wunused-variable]
-           struct affinity_context ac;
-                                   ^
-   2 warnings and 1 error generated.
+   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:11:
+   In file included from include/linux/stmmac.h:16:
+   include/linux/phy.h:1275:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+   include/linux/phy.h:1275:9: note: did you mean 'phy_modify_changed'?
+   include/linux/phy.h:1142:5: note: 'phy_modify_changed' declared here
+   int phy_modify_changed(struct phy_device *phydev, u32 regnum, u16 mask,
+       ^
+   include/linux/phy.h:1288:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, val, 0);
+                  ^
+   include/linux/phy.h:1447:5: error: conflicting types for 'phy_modify_paged'
+   int phy_modify_paged(struct phy_device *phydev, int page, u32 regnum,
+       ^
+   include/linux/phy.h:1275:9: note: previous implicit declaration is here
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:13:
+>> drivers/net/ethernet/stmicro/stmmac/descs_com.h:39:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073707454463 to 4292870143 [-Wconstant-conversion]
+                   p->des0 &= cpu_to_le32(~ETDES0_END_RING);
+                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
+                                             ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+           ~~~~~~~~~ ^
+   In file included from drivers/net/ethernet/stmicro/stmmac/enh_desc.c:13:
+   drivers/net/ethernet/stmicro/stmmac/descs_com.h:73:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073675997183 to 4261412863 [-Wconstant-conversion]
+                   p->des1 &= cpu_to_le32(~TDES1_END_RING);
+                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
+                                             ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+           ~~~~~~~~~ ^
+   2 warnings and 3 errors generated.
+--
+   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:11:
+   In file included from include/linux/stmmac.h:16:
+   include/linux/phy.h:1275:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+   include/linux/phy.h:1275:9: note: did you mean 'phy_modify_changed'?
+   include/linux/phy.h:1142:5: note: 'phy_modify_changed' declared here
+   int phy_modify_changed(struct phy_device *phydev, u32 regnum, u16 mask,
+       ^
+   include/linux/phy.h:1288:9: error: call to undeclared function 'phy_modify_paged'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return phy_modify_paged(phydev, page, regnum, val, 0);
+                  ^
+   include/linux/phy.h:1447:5: error: conflicting types for 'phy_modify_paged'
+   int phy_modify_paged(struct phy_device *phydev, int page, u32 regnum,
+       ^
+   include/linux/phy.h:1275:9: note: previous implicit declaration is here
+           return phy_modify_paged(phydev, page, regnum, 0, val);
+                  ^
+>> drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:541:26: warning: implicit conversion from 'unsigned long' to '__u32' (aka 'unsigned int') changes value from 18446744073675997183 to 4261412863 [-Wconstant-conversion]
+                   p->des3 &= cpu_to_le32(~RDES3_BUFFER2_VALID_ADDR);
+                              ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/big_endian.h:34:53: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
+                                             ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+           ~~~~~~~~~ ^
+   1 warning and 3 errors generated.
 
 
-vim +8104 kernel/sched/core.c
+vim +39 drivers/net/ethernet/stmicro/stmmac/descs_com.h
 
-  8079	
-  8080	static int
-  8081	__sched_setaffinity(struct task_struct *p, struct affinity_context *ctx)
-  8082	{
-  8083		int retval;
-  8084		cpumask_var_t cpus_allowed, new_mask;
-  8085	
-  8086		if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL))
-  8087			return -ENOMEM;
-  8088	
-  8089		if (!alloc_cpumask_var(&new_mask, GFP_KERNEL)) {
-  8090			retval = -ENOMEM;
-  8091			goto out_free_cpus_allowed;
-  8092		}
-  8093	
-  8094		cpuset_cpus_allowed(p, cpus_allowed);
-  8095		cpumask_and(new_mask, ctx->new_mask, cpus_allowed);
-  8096	
-  8097		ctx->new_mask = new_mask;
-  8098		ctx->flags |= SCA_CHECK;
-  8099	
-  8100		retval = dl_task_check_affinity(p, new_mask);
-  8101		if (retval)
-  8102			goto out_free_new_mask;
-  8103	again:
-> 8104		retval = __set_cpus_allowed_ptr(p, ctx);
-  8105		if (retval)
-  8106			goto out_free_new_mask;
-  8107	
-  8108		cpuset_cpus_allowed(p, cpus_allowed);
-  8109		if (!cpumask_subset(new_mask, cpus_allowed)) {
-  8110			/*
-  8111			 * We must have raced with a concurrent cpuset update.
-  8112			 * Just reset the cpumask to the cpuset's cpus_allowed.
-  8113			 */
-  8114			cpumask_copy(new_mask, cpus_allowed);
-  8115			goto again;
-  8116		}
-  8117	
-  8118	out_free_new_mask:
-  8119		free_cpumask_var(new_mask);
-  8120	out_free_cpus_allowed:
-  8121		free_cpumask_var(cpus_allowed);
-  8122		return retval;
-  8123	}
-  8124	
+286a837217204b Giuseppe CAVALLARO 2011-10-18  33  
+293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  34  static inline void enh_desc_end_tx_desc_on_ring(struct dma_desc *p, int end)
+286a837217204b Giuseppe CAVALLARO 2011-10-18  35  {
+293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  36  	if (end)
+f8be0d78be6e7f Michael Weiser     2016-11-14  37  		p->des0 |= cpu_to_le32(ETDES0_END_RING);
+293e4365a1adb1 Giuseppe Cavallaro 2016-02-29  38  	else
+f8be0d78be6e7f Michael Weiser     2016-11-14 @39  		p->des0 &= cpu_to_le32(~ETDES0_END_RING);
+286a837217204b Giuseppe CAVALLARO 2011-10-18  40  }
+286a837217204b Giuseppe CAVALLARO 2011-10-18  41  
 
 -- 
 0-DAY CI Kernel Test Service
