@@ -1,120 +1,180 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01721622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 04:19:25 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id be26-20020a056602379a00b0068b50a068baso558823iob.11
-        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 21:19:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=JbsBL1c3AkZtVs4/cSEGc5hTtYMUj0g0hX9Fbt9+yjg=;
-        b=qniASB6FT+HvRfClwvP8aB+xi39D5AABMLMJKzA+p4uldnK97uEIIHTyKxPFgfKOiR
-         5KB8hP2mEQti8d8zLXIgDGGB0iSvTiGUxhxyAZmkL4KDDRm58YwHq1AQ4s5EC6+NW+mE
-         9anLtkI2uy2PxVsvGbTFLgn27ExSp9Xn3XG889Tlh++YimWVB+8DsiTA3fmZ7KFWm9xu
-         pV6nnfIIa6q9baTC1WDpFkOxTwwTbYU6WObhXaBAHc+vJDdRjoz4mJKm5jFHCfGxz1Yp
-         NQYtKglwhaYrgoB0u045GgCiP+bqxkdQpYOemHaJ+FAgNRZzORCyGhqdMUuazsUpb+3a
-         dV8Q==
-X-Gm-Message-State: ACgBeo25XUTdxFiM0gNKsHEHWtGsOFGTPYy7EukkqU/pcJFlbqev9nvN
-	uLm1Fr+1HmqTphlm6aeWSow7/Gg1T4YcsiveczdasUvdgDnh
-X-Google-Smtp-Source: AA6agR479dFZN40nHgHFqZhh2nj8Ibx3ZY9wf4YJrUbXeDaPLOwtxaKkASsbh6S5hVwVKtnImhn9pRjFGROqLGLqB+iHVcVMZOUr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73F2622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 05:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662699642;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=K2/4yBQsNZDrNHjHUTiUXBOo9Gdx9uZ3joKrtpOGKZg=;
+	b=AoFlvUo4JBGErnhZSxhTMHIp5s8r5Gx5Z6kzIWUhCWxMuTxbXMQAGNSo4/TWdGMi5MNsNP
+	CHzHc9A5iv+ahwdOtWSpAfzhjrEhDdxu6clao575vxzYZ1PsRgn741GySqiZWacQYjj6km
+	vy3Zjw1TZk+Fhono8vM5/HClZ56G7Jw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-270-FxC6unZjO8-7vIUVeo6V7A-1; Fri, 09 Sep 2022 01:00:41 -0400
+X-MC-Unique: FxC6unZjO8-7vIUVeo6V7A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 290F7811E80
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 05:00:41 +0000 (UTC)
+Received: from [172.64.5.10] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1AD15C15BB3;
+	Fri,  9 Sep 2022 05:00:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
+ mainline.kernel.org-clang, 50635787)
+Date: Fri, 09 Sep 2022 05:00:41 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b001:0:b0:358:2f68:8a07 with SMTP id
- p1-20020a02b001000000b003582f688a07mr5056754jah.280.1662697165094; Thu, 08
- Sep 2022 21:19:25 -0700 (PDT)
-Date: Thu, 08 Sep 2022 21:19:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e506e905e836d9e7@google.com>
-Subject: [syzbot] WARNING in bpf_verifier_vlog
-From: syzbot <syzbot+8b2a08dfbd25fd933d75@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <65915.122090901004100787@us-mta-270.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-syzbot found the following issue on:
-
-HEAD commit:    7e18e42e4b28 Linux 6.0-rc4
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1551da55080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f4d613baa509128c
-dashboard link: https://syzkaller.appspot.com/bug?extid=8b2a08dfbd25fd933d75
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798cab7080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ccbdc5080000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/da260c675b46/disk-7e18e42e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/58f7bbbaa6ff/vmlinux-7e18e42e.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8b2a08dfbd25fd933d75@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-verifier log line truncated - local buffer too short
-WARNING: CPU: 1 PID: 3604 at kernel/bpf/verifier.c:300 bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
-Modules linked in:
-CPU: 1 PID: 3604 Comm: syz-executor146 Not tainted 6.0.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0010:bpf_verifier_vlog+0x267/0x3c0 kernel/bpf/verifier.c:300
-Code: f5 95 3d 0c 31 ff 89 ee e8 06 07 f0 ff 40 84 ed 75 1a e8 7c 0a f0 ff 48 c7 c7 c0 e7 f3 89 c6 05 d4 95 3d 0c 01 e8 fb 4c ae 07 <0f> 0b e8 62 0a f0 ff 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1
-RSP: 0018:ffffc900039bf8a0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888017a19210 RCX: 0000000000000000
-RDX: ffff888021fb1d80 RSI: ffffffff8161f408 RDI: fffff52000737f06
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff89f5aba0
-R13: 00000000000003ff R14: ffff888017a19214 R15: ffff888012705800
-FS:  0000555555cba300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020100000 CR3: 000000001bf9e000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- __btf_verifier_log+0xbb/0xf0 kernel/bpf/btf.c:1375
- __btf_verifier_log_type+0x451/0x8f0 kernel/bpf/btf.c:1413
- btf_func_proto_check_meta+0x117/0x160 kernel/bpf/btf.c:3905
- btf_check_meta kernel/bpf/btf.c:4588 [inline]
- btf_check_all_metas+0x3c1/0xa70 kernel/bpf/btf.c:4612
- btf_parse_type_sec kernel/bpf/btf.c:4748 [inline]
- btf_parse kernel/bpf/btf.c:5031 [inline]
- btf_new_fd+0x939/0x1e70 kernel/bpf/btf.c:6710
- bpf_btf_load kernel/bpf/syscall.c:4314 [inline]
- __sys_bpf+0x13bd/0x6130 kernel/bpf/syscall.c:4998
- __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5055
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb092221c29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff5b0a6878 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb092221c29
-RDX: 0000000000000020 RSI: 0000000020000240 RDI: 0000000000000012
-RBP: 00007fb0921e5dd0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb0921e5e60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.0-rc4' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/broonie/spi
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/52894
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5085809
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
+grep -E
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1390
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
