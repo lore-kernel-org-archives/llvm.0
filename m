@@ -1,85 +1,87 @@
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE2165A
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:36:14 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id 2230B2B058D2;
-	Fri,  9 Sep 2022 03:36:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 09 Sep 2022 03:36:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1662708972; x=1662712572; bh=DL7ygxzLrl
-	gjFceREV0rSGNkAZXz4IRTULK8AU3epH4=; b=qBlp0P+HvgN677U3dxEP8fPAFV
-	Z7QJ3fgzc1doU5SD0F2v6126ZtZLuVTEAOnPbBuOX3h53p8+X8mx5J1C2C8T7BIl
-	IFmdW0DB1oUD8klTUif25EFgcCNEXZHdM97B8RgMXzikEsWM0kpfcjswi5wC6Ofh
-	K2IwqrYvR083SXx6eNLaFH6+ZnELxTTYbGEuA4yG4LUyatyJTJieSg5yhwjp50yA
-	DZ3wpIVDDGRwumnb1z1cBj6L6ie+3/HJg9fJu5dfigXWElYquJ5M7Vrczo8mZTlq
-	mnhO4mdzxnC4b8ns36vMtZbHPHI2b3eePZY5/fgMThJWoG3OtuIlpmnhOdow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1662708972; x=1662712572; bh=DL7ygxzLrlgjFceREV0rSGNkAZXz
-	4IRTULK8AU3epH4=; b=gQqypgT38k+45jaLTaZUKBp1DeDJadnGaxBr1vtccBne
-	wdJp8fCDUYkf0/6MwVYpgpj7w76IQ6zt2n45rgM0FirPIzCnWDZmWN8reKEugOSc
-	IIWt5rHeNslvXQN/vjTsC6z8jJe7bD+7ko3r3ib2hZu6YGqmJbVOk6QAHsLvYgP2
-	A+z9XfIbcljPAZbXQYGoC5Glq7cDZ1M9+JhjIJfziSmZYgV6XW4oxOnDp3DMZXCW
-	/8GXI8F2e4UY+Y68qEaV/H5oDvYpKtUmnJBwR6vHcaPT2RWr3HWitbQCB+1tH+fN
-	OUllIbGo0bWE/smQhoTOqtKw/7KciMDaBal4QYbRfw==
-X-ME-Sender: <xms:6-waYySxYAv2Gd4YpMZtPw5rf-NRGtvh4X5zUa4tDhxbWdCeFtFIEA>
-    <xme:6-waY3zgd4SDHqLM15FRiO6An5UX58XDLVUi055xS_CD6hXlizuKe2c8l9ZnYsL9i
-    qSOeSd6uqsWRxib-Uk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtgedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6-waY_1Uaoy9HtNU5udztZJcvb0Vs2Q9yXEXcono4WO-rGLzucZk2Q>
-    <xmx:6-waY-DpwFXaFwA1SdfNfBG__4TT6OQzakhHsRU8mGE-vdOs9saZ-A>
-    <xmx:6-waY7iYBuyhPpbSGJbTUs3Hr56bSm-x_pDty2z02JkVt8ogh419Vg>
-    <xmx:7OwaYxY1ikoR5ygGz5cWHvh9MxJ8ypyC2xOdP4GfCbiKPKyyFLVHC434oXI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D0B5EB60086; Fri,  9 Sep 2022 03:36:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A96565A
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 07:38:26 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so4559575pja.5
+        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 00:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ezqTgX5aoFbbwvpb8+qZYeXbiyBI9c/LxzdN5thGYBE=;
+        b=36o10mPT7FUuo1YoAo7NjWWgKGI1JALa6tQB4PGmjQu8/LEQLz3vqdyC27sKqApetx
+         PF1vTDo18oi6kKiNlE1GiqzwKaPZeH4tOu4KavJWHrq0rZTmteHrNLarqezaeWXX5THn
+         mJHjFSwnXgFs8wyPvx1JzQcDK60oeyZCEuTjPW+1TI8t6Z266xVoNgQ9TTUxfHiFuVhb
+         p1SP6ENaW0EJLH0Tmve7+778fLX0KAT+pzZGEZgXCjf10vT62iMX+UpKxOSa2MeGpvIX
+         vw3PX+4LGhdp3im+dV/onIYCZo0cU1r9qd/RmZwc6QdAxec8SYPRW3B8lnCbpPGYURw1
+         my4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ezqTgX5aoFbbwvpb8+qZYeXbiyBI9c/LxzdN5thGYBE=;
+        b=5JFv1CNVd3sGNO8l3waGWPGfxrUy4zMxnPI0h5cPWsW9De/lMLK6/VF1zMbXX0NY9x
+         A/Kn5AoatF7rnJaCz5ALJvwxf7QYYCGCLYjMKZCBsYEVTAfXlTfVd4sWISrulES+7QoW
+         l2rkVufJmBMiTs2wleaA1009HF8FCp2yLfmYBmz76/pHxvKj9lXxRR/FFL5BVF0iFTMx
+         1P/v0Jme6CJsHYLPc+3/k4vM4o0Pmt/ZV8L7LHWgRT56mI+v9wusFl96RMkbOCT5nAR/
+         JO4nSefpFiBLKA2FLZskdrqSdAL9PrPAvZxYVSDYDthYoMTidu3dIqfFalajNJKnI4QO
+         bjzA==
+X-Gm-Message-State: ACgBeo19vx0532SHupxtFO0zTnU4yCqewQ/9ifeHTl0tU/TAlLTWP2zr
+	Mnt1JlDH2Nu4qw3R8CUm40K4Ng==
+X-Google-Smtp-Source: AA6agR7qNrCFjMSZtJX99NaFJwB36AGWp6zJMOQ+DYnsGTLGnxJJr/oMTnL0JwJEv5/AhJc6HAn/sQ==
+X-Received: by 2002:a17:90a:640c:b0:1fe:1763:e169 with SMTP id g12-20020a17090a640c00b001fe1763e169mr8147519pjj.35.1662709106554;
+        Fri, 09 Sep 2022 00:38:26 -0700 (PDT)
+Received: from [10.4.108.105] ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id r17-20020a170902c61100b0017532e01e3fsm708598plr.276.2022.09.09.00.38.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 00:38:25 -0700 (PDT)
+Message-ID: <c7ecca99-696f-220d-7ecd-9be51cc947d9@bytedance.com>
+Date: Fri, 9 Sep 2022 15:38:20 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <23cde275-613b-4895-a05c-48a0ec55ff6a@www.fastmail.com>
-In-Reply-To: <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
-References: <202209091157.akimiv18-lkp@intel.com>
- <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
- <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
-Date: Fri, 09 Sep 2022 09:35:50 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Qi Zheng" <zhengqi.arch@bytedance.com>,
- "kernel test robot" <lkp@intel.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- "Ammar Faizi" <ammarfaizi2@gnuweeb.org>,
- "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
 Subject: Re: [ammarfaizi2-block:arm64/linux/for-next/misc 2/2]
  arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function
  'do_softirq_own_stack'
-Content-Type: text/plain
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, linux-kernel@vger.kernel.org,
+ Catalin Marinas <catalin.marinas@arm.com>, kernel test robot <lkp@intel.com>
+References: <202209091157.akimiv18-lkp@intel.com>
+ <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
+ <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
+ <23cde275-613b-4895-a05c-48a0ec55ff6a@www.fastmail.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <23cde275-613b-4895-a05c-48a0ec55ff6a@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 9, 2022, at 9:07 AM, Qi Zheng wrote:
 
-> BTW, when I just compiled the kernel with W=1, I found a lot of
-> compilation warnings, which is somewhat unexpected.
 
-Correct, the kernel test robot only sends emails for newly introduced
-warnings, but it will keep nagging you about them.
+On 2022/9/9 15:35, Arnd Bergmann wrote:
+> On Fri, Sep 9, 2022, at 9:07 AM, Qi Zheng wrote:
+> 
+>> BTW, when I just compiled the kernel with W=1, I found a lot of
+>> compilation warnings, which is somewhat unexpected.
+> 
+> Correct, the kernel test robot only sends emails for newly introduced
+> warnings, but it will keep nagging you about them.
 
-       Aarn
+Got it. Thanks.
+
+> 
+>         Aarn
+
+-- 
+Thanks,
+Qi
