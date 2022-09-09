@@ -1,219 +1,203 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF887622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 01:37:30 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id l205-20020a6b3ed6000000b0068b49dd0a61so340801ioa.14
-        for <llvm@lists.linux.dev>; Thu, 08 Sep 2022 18:37:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=ZtHKZi9er1ZjEMUmn/+LwojDtY9MogZdu8h8D7swnmI=;
-        b=Yfl2ZQVYExyLv31sJQfAvXhp1C30tuiwAD2ZL3Og6A4YYeF9XVjIGc1mSjwguRQXrZ
-         AOy7yu0Pv8YMHA8i0QGHK2x+hOhrR3g0t7S0p8kfDkhJovj+rOrkeZlyViH3QM/v7RaQ
-         BI3FvIqqrGq6ZuK7E8Y+D5SPc8rHKJw3gwtmdMW4SkE9++byACY7tyVx++DAyQmnk77Y
-         tNOMsen+5S9VGWMEDohQgmyNFKb5YVLi+Bzh86rtC7M0N7dn3ufzm7LRWvNmKIl166TZ
-         so/hpyFJb+PGzRhtWUCP8wzeBKL2feHgbv39Z3yPE4+kxmXJenBj8gyTHOh6upmta7Fh
-         4ilQ==
-X-Gm-Message-State: ACgBeo3K058Ms6ZUwVOrWt//oYiaTuawlKc1sLeSGh+KNB8qiJQpccrT
-	41mMMUEfXLPARvhoHZp/RqXG82ITdxnbzPECwsAfMwyqvdgv
-X-Google-Smtp-Source: AA6agR7VqVqXT1uyKMf1Wg9Yx7cyTmPcI9kF+5ONziqWQcOIIKnQuWXhOCjGIgFuz88A8Jhm7aQPXN11KsY30JOzYiQIKOv7YZ6Y
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D658622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 02:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662689084; x=1694225084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VmMEgv8Mus6S0QL8DMJjiRYOlIDwGAimk3Z5qLBTc7A=;
+  b=Eft+g1eBkrs+7XkTTRSzPMAkGgfK5CsRQdMrjDSeC/EdkqdlWLaeXLac
+   wGDq9NKKbkMcBm2R19XZj77tRQsBO6OdTvh4ZJh6JJf0YULwxw0IUBNwu
+   bTav8mnhZWFa7VnabD9FoOPhWbM1m/VvIfaC4gBIup/Xuaw7reDKzWnWD
+   NXwDlvvEwjMm58C0Hi+zs7+udZkTNExYyAa3arpzTl1KgADL3nZ9nDMC8
+   8GOyyUNt95LMslxsHYYpJdNLpAvfLYtJYvIca+7LmbfzwZiTIagdi/eAz
+   eFyXbFYzAiJaA23DS6ovTk8Yflqfdju8BjzGiR/1bFn/oAukPa04Os387
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="359100796"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="359100796"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:04:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="943598837"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2022 19:04:41 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oWTNp-0000Zx-0S;
+	Fri, 09 Sep 2022 02:04:41 +0000
+Date: Fri, 9 Sep 2022 10:03:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lior Nahmanson <liorna@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Raed Salem <raeds@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
+Subject: [linux-next:master 5241/6188]
+ drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning:
+ variable 'macsec_rule' is used uninitialized whenever 'if' condition is true
+Message-ID: <202209090936.AOqYoiII-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:14c2:b0:67d:ae1:1c23 with SMTP id
- b2-20020a05660214c200b0067d0ae11c23mr5468038iow.212.1662687450094; Thu, 08
- Sep 2022 18:37:30 -0700 (PDT)
-Date: Thu, 08 Sep 2022 18:37:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d5e00a05e834962e@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in hugetlb_handle_userfault
-From: syzbot <syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   47c191411b68a771261be3dc0bd6f68394cef358
+commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 [5241/6188] net/mlx5e: Add MACsec RX steering rules
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220909/202209090936.AOqYoiII-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    7726d4c3e60b Merge tag 'gpio-fixes-for-v6.0-rc4' of git://..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1106f78b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=892a57667b7af6cf
-dashboard link: https://syzkaller.appspot.com/bug?extid=193f9cee8638750b23cf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16de5bc5080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120307e5080000
+All warnings (new ones prefixed by >>):
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
-Read of size 8 at addr ffff888017a60eb0 by task syz-executor225/3606
-
-CPU: 0 PID: 3606 Comm: syz-executor225 Not tainted 6.0.0-rc3-syzkaller-00363-g7726d4c3e60b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- down_read+0x98/0x450 kernel/locking/rwsem.c:1499
- i_mmap_lock_read include/linux/fs.h:486 [inline]
- hugetlb_handle_userfault+0xf5/0x150 mm/hugetlb.c:5505
- hugetlb_no_page mm/hugetlb.c:5554 [inline]
- hugetlb_fault+0x14cd/0x1aa0 mm/hugetlb.c:5778
- handle_mm_fault+0x640/0x780 mm/memory.c:5149
- do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1397
- handle_page_fault arch/x86/mm/fault.c:1488 [inline]
- exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1544
- asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0033:0x7f2ff2164c3b
-Code: 00 48 89 94 24 ca 03 00 00 f3 0f 6f 9c 24 c0 03 00 00 f3 0f 6f a4 24 d0 03 00 00 48 89 84 24 e2 03 00 00 48 8d 86 00 20 7a 20 <0f> 11 9e 00 20 7a 20 0f 11 a6 10 20 7a 20 48 8b b4 24 e0 03 00 00
-RSP: 002b:00007f2ff2157820 EFLAGS: 00010246
-RAX: 00000000207a5e00 RBX: 0000000000000000 RCX: 00180f8000180f80
-RDX: 0002912000180f80 RSI: 0000000000003e00 RDI: 0000000000000008
-RBP: 0000000000000006 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 00007f2ff2157c80 R12: 00000000207a2000
-R13: 0000000000000000 R14: 0000000000000000 R15: 00007f2ff2157d80
- </TASK>
-
-Allocated by task 3606:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:470
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3243 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc_lru+0x255/0x720 mm/slub.c:3275
- alloc_inode_sb include/linux/fs.h:3103 [inline]
- hugetlbfs_alloc_inode+0x88/0x1e0 fs/hugetlbfs/inode.c:1121
- alloc_inode+0x61/0x230 fs/inode.c:260
- new_inode_pseudo fs/inode.c:1019 [inline]
- new_inode+0x27/0x270 fs/inode.c:1047
- hugetlbfs_get_inode+0x353/0x5f0 fs/hugetlbfs/inode.c:844
- hugetlb_file_setup+0x13a/0x590 fs/hugetlbfs/inode.c:1486
- ksys_mmap_pgoff+0x184/0x5a0 mm/mmap.c:1578
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 0:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kmem_cache_free+0xeb/0x5b0 mm/slub.c:3551
- i_callback+0x3f/0x70 fs/inode.c:249
- rcu_do_batch kernel/rcu/tree.c:2245 [inline]
- rcu_core+0x7b5/0x1890 kernel/rcu/tree.c:2505
- __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
-
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
- call_rcu+0x99/0x790 kernel/rcu/tree.c:2793
- destroy_inode+0x129/0x1b0 fs/inode.c:315
- iput_final fs/inode.c:1748 [inline]
- iput.part.0+0x55d/0x810 fs/inode.c:1774
- iput+0x58/0x70 fs/inode.c:1764
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:733 [inline]
- dput+0x806/0xdb0 fs/dcache.c:913
- __fput+0x39c/0x9d0 fs/file_table.c:333
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888017a60ac0
- which belongs to the cache hugetlbfs_inode_cache of size 1248
-The buggy address is located 1008 bytes inside of
- 1248-byte region [ffff888017a60ac0, ffff888017a60fa0)
-
-The buggy address belongs to the physical page:
-page:ffffea00005e9800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x17a60
-head:ffffea00005e9800 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888145a66640
-raw: 0000000000000000 0000000080170017 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 2981386393, free_ts 0
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2103
- alloc_pages+0x22f/0x270 mm/mempolicy.c:2265
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc_lru+0x528/0x720 mm/slub.c:3275
- alloc_inode_sb include/linux/fs.h:3103 [inline]
- hugetlbfs_alloc_inode+0x88/0x1e0 fs/hugetlbfs/inode.c:1121
- alloc_inode+0x61/0x230 fs/inode.c:260
- new_inode_pseudo fs/inode.c:1019 [inline]
- new_inode+0x27/0x270 fs/inode.c:1047
- hugetlbfs_get_root fs/hugetlbfs/inode.c:803 [inline]
- hugetlbfs_fill_super+0x589/0xad0 fs/hugetlbfs/inode.c:1377
- vfs_get_super fs/super.c:1168 [inline]
- get_tree_nodev+0xcd/0x1d0 fs/super.c:1198
- hugetlbfs_get_tree fs/hugetlbfs/inode.c:1392 [inline]
- hugetlbfs_get_tree+0x1e3/0x2b0 fs/hugetlbfs/inode.c:1387
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- fc_mount+0x13/0xc0 fs/namespace.c:1043
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff888017a60d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888017a60e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888017a60e80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                     ^
- ffff888017a60f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888017a60f80: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+>> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (err)
+               ^~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:598:9: note: uninitialized use occurs here
+           return macsec_rule;
+                  ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:2: note: remove the 'if' if its condition is always false
+           if (err)
+           ^~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: note: initialize the variable 'macsec_rule' to silence this warning
+           union mlx5e_macsec_rule *macsec_rule;
+                                               ^
+                                                = NULL
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (err)
+               ^~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1215:9: note: uninitialized use occurs here
+           return macsec_rule;
+                  ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:2: note: remove the 'if' if its condition is always false
+           if (err)
+           ^~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: note: initialize the variable 'macsec_rule' to silence this warning
+           union mlx5e_macsec_rule *macsec_rule;
+                                               ^
+                                                = NULL
+   2 warnings generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +539 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+e467b283ffd50c Lior Nahmanson 2022-09-05  510  
+3b20949cb21bac Lior Nahmanson 2022-09-05  511  static union mlx5e_macsec_rule *
+e467b283ffd50c Lior Nahmanson 2022-09-05  512  macsec_fs_tx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
+e467b283ffd50c Lior Nahmanson 2022-09-05  513  		      const struct macsec_context *macsec_ctx,
+9515978eee0b93 Lior Nahmanson 2022-09-05  514  		      struct mlx5_macsec_rule_attrs *attrs,
+9515978eee0b93 Lior Nahmanson 2022-09-05  515  		      u32 *sa_fs_id)
+e467b283ffd50c Lior Nahmanson 2022-09-05  516  {
+e467b283ffd50c Lior Nahmanson 2022-09-05  517  	char reformatbf[MLX5_MACSEC_TAG_LEN + MACSEC_SCI_LEN];
+e467b283ffd50c Lior Nahmanson 2022-09-05  518  	struct mlx5_pkt_reformat_params reformat_params = {};
+e467b283ffd50c Lior Nahmanson 2022-09-05  519  	struct mlx5e_macsec_tx *tx_fs = macsec_fs->tx_fs;
+e467b283ffd50c Lior Nahmanson 2022-09-05  520  	struct net_device *netdev = macsec_fs->netdev;
+e467b283ffd50c Lior Nahmanson 2022-09-05  521  	struct mlx5_flow_destination dest = {};
+3b20949cb21bac Lior Nahmanson 2022-09-05  522  	struct mlx5e_macsec_tables *tx_tables;
+3b20949cb21bac Lior Nahmanson 2022-09-05  523  	union mlx5e_macsec_rule *macsec_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  524  	struct mlx5e_macsec_tx_rule *tx_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  525  	struct mlx5_flow_act flow_act = {};
+e467b283ffd50c Lior Nahmanson 2022-09-05  526  	struct mlx5_flow_handle *rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  527  	struct mlx5_flow_spec *spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  528  	size_t reformat_size;
+e467b283ffd50c Lior Nahmanson 2022-09-05  529  	int err = 0;
+e467b283ffd50c Lior Nahmanson 2022-09-05  530  	u32 fs_id;
+e467b283ffd50c Lior Nahmanson 2022-09-05  531  
+3b20949cb21bac Lior Nahmanson 2022-09-05  532  	tx_tables = &tx_fs->tables;
+3b20949cb21bac Lior Nahmanson 2022-09-05  533  
+e467b283ffd50c Lior Nahmanson 2022-09-05  534  	spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
+e467b283ffd50c Lior Nahmanson 2022-09-05  535  	if (!spec)
+e467b283ffd50c Lior Nahmanson 2022-09-05  536  		return NULL;
+e467b283ffd50c Lior Nahmanson 2022-09-05  537  
+e467b283ffd50c Lior Nahmanson 2022-09-05  538  	err = macsec_fs_tx_ft_get(macsec_fs);
+e467b283ffd50c Lior Nahmanson 2022-09-05 @539  	if (err)
+e467b283ffd50c Lior Nahmanson 2022-09-05  540  		goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  541  
+3b20949cb21bac Lior Nahmanson 2022-09-05  542  	macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+3b20949cb21bac Lior Nahmanson 2022-09-05  543  	if (!macsec_rule) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  544  		macsec_fs_tx_ft_put(macsec_fs);
+e467b283ffd50c Lior Nahmanson 2022-09-05  545  		goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  546  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  547  
+3b20949cb21bac Lior Nahmanson 2022-09-05  548  	tx_rule = &macsec_rule->tx_rule;
+3b20949cb21bac Lior Nahmanson 2022-09-05  549  
+e467b283ffd50c Lior Nahmanson 2022-09-05  550  	/* Tx crypto table crypto rule */
+e467b283ffd50c Lior Nahmanson 2022-09-05  551  	macsec_fs_tx_create_sectag_header(macsec_ctx, reformatbf, &reformat_size);
+e467b283ffd50c Lior Nahmanson 2022-09-05  552  
+e467b283ffd50c Lior Nahmanson 2022-09-05  553  	reformat_params.type = MLX5_REFORMAT_TYPE_ADD_MACSEC;
+e467b283ffd50c Lior Nahmanson 2022-09-05  554  	reformat_params.size = reformat_size;
+e467b283ffd50c Lior Nahmanson 2022-09-05  555  	reformat_params.data = reformatbf;
+e467b283ffd50c Lior Nahmanson 2022-09-05  556  	flow_act.pkt_reformat = mlx5_packet_reformat_alloc(macsec_fs->mdev,
+e467b283ffd50c Lior Nahmanson 2022-09-05  557  							   &reformat_params,
+e467b283ffd50c Lior Nahmanson 2022-09-05  558  							   MLX5_FLOW_NAMESPACE_EGRESS_MACSEC);
+e467b283ffd50c Lior Nahmanson 2022-09-05  559  	if (IS_ERR(flow_act.pkt_reformat)) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  560  		err = PTR_ERR(flow_act.pkt_reformat);
+e467b283ffd50c Lior Nahmanson 2022-09-05  561  		netdev_err(netdev, "Failed to allocate MACsec Tx reformat context err=%d\n",  err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  562  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  563  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  564  	tx_rule->pkt_reformat = flow_act.pkt_reformat;
+e467b283ffd50c Lior Nahmanson 2022-09-05  565  
+e467b283ffd50c Lior Nahmanson 2022-09-05  566  	err = macsec_fs_tx_setup_fte(macsec_fs, spec, &flow_act, attrs->macsec_obj_id, &fs_id);
+e467b283ffd50c Lior Nahmanson 2022-09-05  567  	if (err) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  568  		netdev_err(netdev,
+e467b283ffd50c Lior Nahmanson 2022-09-05  569  			   "Failed to add packet reformat for MACsec TX crypto rule, err=%d\n",
+e467b283ffd50c Lior Nahmanson 2022-09-05  570  			   err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  571  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  572  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  573  
+e467b283ffd50c Lior Nahmanson 2022-09-05  574  	tx_rule->fs_id = fs_id;
+9515978eee0b93 Lior Nahmanson 2022-09-05  575  	*sa_fs_id = fs_id;
+e467b283ffd50c Lior Nahmanson 2022-09-05  576  
+e467b283ffd50c Lior Nahmanson 2022-09-05  577  	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+e467b283ffd50c Lior Nahmanson 2022-09-05  578  			  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_ENCRYPT |
+e467b283ffd50c Lior Nahmanson 2022-09-05  579  			  MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT;
+e467b283ffd50c Lior Nahmanson 2022-09-05  580  	dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+3b20949cb21bac Lior Nahmanson 2022-09-05  581  	dest.ft = tx_tables->ft_check;
+3b20949cb21bac Lior Nahmanson 2022-09-05  582  	rule = mlx5_add_flow_rules(tx_tables->ft_crypto.t, spec, &flow_act, &dest, 1);
+e467b283ffd50c Lior Nahmanson 2022-09-05  583  	if (IS_ERR(rule)) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  584  		err = PTR_ERR(rule);
+e467b283ffd50c Lior Nahmanson 2022-09-05  585  		netdev_err(netdev, "Failed to add MACsec TX crypto rule, err=%d\n", err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  586  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  587  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  588  	tx_rule->rule = rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  589  
+e467b283ffd50c Lior Nahmanson 2022-09-05  590  	goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  591  
+e467b283ffd50c Lior Nahmanson 2022-09-05  592  err:
+e467b283ffd50c Lior Nahmanson 2022-09-05  593  	macsec_fs_tx_del_rule(macsec_fs, tx_rule);
+3b20949cb21bac Lior Nahmanson 2022-09-05  594  	macsec_rule = NULL;
+e467b283ffd50c Lior Nahmanson 2022-09-05  595  out_spec:
+e467b283ffd50c Lior Nahmanson 2022-09-05  596  	kvfree(spec);
+e467b283ffd50c Lior Nahmanson 2022-09-05  597  
+3b20949cb21bac Lior Nahmanson 2022-09-05  598  	return macsec_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  599  }
+e467b283ffd50c Lior Nahmanson 2022-09-05  600  
+
+:::::: The code at line 539 was first introduced by commit
+:::::: e467b283ffd50cf15b84c73eef68787e257eaed5 net/mlx5e: Add MACsec TX steering rules
+
+:::::: TO: Lior Nahmanson <liorna@nvidia.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
