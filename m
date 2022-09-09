@@ -1,36 +1,36 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3444A2D
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 16:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62D44C62
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 16:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662739723; x=1694275723;
+  t=1662740565; x=1694276565;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=t48Y4NuCTICPzPB3Gr+mp70Vnbm2qKZOUvjVe7mQOkA=;
-  b=JrL4xb2cbi7TpVNLXjPPjSs72Kht3STJBOG13SwVEKAykeCHL8mpxeHl
-   qob7TvNaSmVYdLTSHD1z2iUwhVlCjkxroBY8lHVhBAm6uNz0wSk0uhPlu
-   WH2lOuglg0MLvRMPNuJg9fqNsnAi4vwWUCp4MWEQCJivhcIr1XkX5DnMH
-   lDCxM0yhZRnVBhSpqZJXyZ8Ac0Tml+mTrIlUBNm0PmNUjNX7xvrz8kNrD
-   cl+9/JTLHeZCHC+8VgaT/nvvkOfBxYhedhpRb/F1mEfkAWLsQWL25NovF
-   /JDmdGs1IxGgneBuZHZ42aWEeeS5criy0GU4MNu07ZcBD/skWrfx8fTGe
+  bh=FBg0KbmCiGtL22FzoU8nLq2uuK8/gHmNWNkdzZs+UJU=;
+  b=LUFi7l+VXGFHyui4afeRdsz9bXN4TTkS5OOPY4N6dqX8OsqT4az2X/FI
+   M5+u1QVF02s8MfoQC1QqdCr1JMozpJ/2hcG6aioULdS8EJ3s/Vo2Ogr2X
+   TIWLG542t8nYoY07gK2SiH5WZ0Np/bC0xGbJXgeh2MQZ0w9Cl4zzhyg0B
+   5T2ZHEjk2M0WMi+jyojNulw/Hwr6FQ8hDSsNe5iaVo5PHttQ0gCHwKtaN
+   /mDQxm1fmAIyOj4qO8RW2oCuGOrcObStUUXZOG4M/CGwGX/1flviMb1wE
+   3iP7zkTJK2x8VapKqMB/wCDPYD6BfgwN3hem4L4QQLxENlJCEiHNNUCha
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="323721833"
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="323725444"
 X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="323721833"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:08:41 -0700
+   d="scan'208";a="323725444"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 09:22:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="615316193"
+   d="scan'208";a="741104232"
 Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 09 Sep 2022 09:08:38 -0700
+  by orsmga004.jf.intel.com with ESMTP; 09 Sep 2022 09:22:42 -0700
 Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oWgYX-0001Pd-2s;
-	Fri, 09 Sep 2022 16:08:37 +0000
-Date: Sat, 10 Sep 2022 00:08:06 +0800
+	id 1oWgmA-0001Qn-0B;
+	Fri, 09 Sep 2022 16:22:42 +0000
+Date: Sat, 10 Sep 2022 00:22:37 +0800
 From: kernel test robot <lkp@intel.com>
 To: Anshuman Gupta <anshuman.gupta@intel.com>,
 	intel-gfx@lists.freedesktop.org
@@ -38,7 +38,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, chris@chris-wilson.co.uk,
 	Matthew Auld <matthew.auld@intel.com>, rodrigo.vivi@intel.com
 Subject: Re: [Intel-gfx] [PATCH v3 2/2] drm/i915/dgfx: Release mmap on rpm
  suspend
-Message-ID: <202209100005.i5hNgIqU-lkp@intel.com>
+Message-ID: <202209100051.4Wp6eLZf-lkp@intel.com>
 References: <20220909112419.26901-3-anshuman.gupta@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,7 +58,7 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Gupta/DGFX-mmap-with-rpm/20220909-192609
 base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220910/202209100005.i5hNgIqU-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220910/202209100051.4Wp6eLZf-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
