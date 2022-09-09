@@ -1,44 +1,47 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D658622
-	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 02:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F93A622
+	for <llvm@lists.linux.dev>; Fri,  9 Sep 2022 02:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662689084; x=1694225084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VmMEgv8Mus6S0QL8DMJjiRYOlIDwGAimk3Z5qLBTc7A=;
-  b=Eft+g1eBkrs+7XkTTRSzPMAkGgfK5CsRQdMrjDSeC/EdkqdlWLaeXLac
-   wGDq9NKKbkMcBm2R19XZj77tRQsBO6OdTvh4ZJh6JJf0YULwxw0IUBNwu
-   bTav8mnhZWFa7VnabD9FoOPhWbM1m/VvIfaC4gBIup/Xuaw7reDKzWnWD
-   NXwDlvvEwjMm58C0Hi+zs7+udZkTNExYyAa3arpzTl1KgADL3nZ9nDMC8
-   8GOyyUNt95LMslxsHYYpJdNLpAvfLYtJYvIca+7LmbfzwZiTIagdi/eAz
-   eFyXbFYzAiJaA23DS6ovTk8Yflqfdju8BjzGiR/1bFn/oAukPa04Os387
+  t=1662690946; x=1694226946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U1hSfds/0CHqbUVcqtbT2D1gvOsodINiriQZ+MVT87w=;
+  b=PWtwK3NgcxMg5wjPFucv906UnyEHWX1h+sAMG+eKyk2wUmxYoeunQI77
+   bmxlOspd6gcjQsZIOnqbhX9QyZAbcSu4sfCD4LzIfZlEVNBpTFQNUVVIO
+   69YUUM8JaEkGsfLGwYvNo0t/SjwjtOwj5Q9B7P23KGGGq4Sww0UDEZk6W
+   jaiyhgQbkYz2eSFExRSfnO0wNRSr29Mi/dMZjOus8ft6bVusSrZCUH/KI
+   BHrWRvZ/VZ9xgH6q3v8Tszzewh3qS+KHyxbfePE26CMyJwyx30xFa7D0E
+   BHuVFfKXOaWKpHZFyLH4U+r02NZQ5KSTXZnICY2+fe5THHCcBO9LvjgZx
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="359100796"
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277111458"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="359100796"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:04:43 -0700
+   d="scan'208";a="277111458"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:35:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="943598837"
+   d="scan'208";a="592436885"
 Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2022 19:04:41 -0700
+  by orsmga006.jf.intel.com with ESMTP; 08 Sep 2022 19:35:43 -0700
 Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oWTNp-0000Zx-0S;
-	Fri, 09 Sep 2022 02:04:41 +0000
-Date: Fri, 9 Sep 2022 10:03:41 +0800
+	id 1oWTrq-0000bb-1n;
+	Fri, 09 Sep 2022 02:35:42 +0000
+Date: Fri, 9 Sep 2022 10:35:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lior Nahmanson <liorna@nvidia.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Raed Salem <raeds@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
-Subject: [linux-next:master 5241/6188]
- drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning:
- variable 'macsec_rule' is used uninitialized whenever 'if' condition is true
-Message-ID: <202209090936.AOqYoiII-lkp@intel.com>
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v1 19/19] powerpc: Remove impossible mmu_psize_defs[] on
+ nohash
+Message-ID: <202209091055.Tq3tkK5a-lkp@intel.com>
+References: <304d1442c5caa276c87c2caa615fcb6eed96c30c.1662658653.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,156 +50,180 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <304d1442c5caa276c87c2caa615fcb6eed96c30c.1662658653.git.christophe.leroy@csgroup.eu>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   47c191411b68a771261be3dc0bd6f68394cef358
-commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 [5241/6188] net/mlx5e: Add MACsec RX steering rules
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220909/202209090936.AOqYoiII-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Christophe,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/topic/ppc-kvm linus/master v6.0-rc4 next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-Kconfig-Fix-non-existing-CONFIG_PPC_FSL_BOOKE/20220909-014729
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-fsp2_defconfig (https://download.01.org/0day-ci/archive/20220909/202209091055.Tq3tkK5a-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/452a31e5ede29b8b06cd0db37bf68959ce3d753a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-Kconfig-Fix-non-existing-CONFIG_PPC_FSL_BOOKE/20220909-014729
+        git checkout 452a31e5ede29b8b06cd0db37bf68959ce3d753a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (err)
-               ^~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:598:9: note: uninitialized use occurs here
-           return macsec_rule;
-                  ^~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:2: note: remove the 'if' if its condition is always false
-           if (err)
-           ^~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: note: initialize the variable 'macsec_rule' to silence this warning
-           union mlx5e_macsec_rule *macsec_rule;
-                                               ^
-                                                = NULL
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (err)
-               ^~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1215:9: note: uninitialized use occurs here
-           return macsec_rule;
-                  ^~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:2: note: remove the 'if' if its condition is always false
-           if (err)
-           ^~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: note: initialize the variable 'macsec_rule' to silence this warning
-           union mlx5e_macsec_rule *macsec_rule;
-                                               ^
-                                                = NULL
-   2 warnings generated.
+   __do_insb
+   ^
+   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
+   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:224:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:226:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:228:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:230:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:232:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> arch/powerpc/mm/nohash/tlb.c:104:9: error: use of undeclared identifier 'mmu_psize_defs'
+           return mmu_psize_defs[psize].enc;
+                  ^
+>> arch/powerpc/mm/nohash/tlb.c:106:2: error: #else without #if
+   #else
+    ^
+>> arch/powerpc/mm/nohash/tlb.c:107:19: error: redefinition of 'mmu_get_tsize'
+   static inline int mmu_get_tsize(int psize)
+                     ^
+   arch/powerpc/mm/nohash/tlb.c:102:19: note: previous definition is here
+   static inline int mmu_get_tsize(int psize)
+                     ^
+>> arch/powerpc/mm/nohash/tlb.c:112:2: error: #endif without #if
+   #endif /* CONFIG_PPC_E500 */
+    ^
+   arch/powerpc/mm/nohash/tlb.c:315:13: error: no previous prototype for function 'early_init_mmu_47x' [-Werror,-Wmissing-prototypes]
+   void __init early_init_mmu_47x(void)
+               ^
+   arch/powerpc/mm/nohash/tlb.c:315:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init early_init_mmu_47x(void)
+   ^
+   static 
+   11 errors generated.
 
 
-vim +539 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+vim +/mmu_psize_defs +104 arch/powerpc/mm/nohash/tlb.c
 
-e467b283ffd50c Lior Nahmanson 2022-09-05  510  
-3b20949cb21bac Lior Nahmanson 2022-09-05  511  static union mlx5e_macsec_rule *
-e467b283ffd50c Lior Nahmanson 2022-09-05  512  macsec_fs_tx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
-e467b283ffd50c Lior Nahmanson 2022-09-05  513  		      const struct macsec_context *macsec_ctx,
-9515978eee0b93 Lior Nahmanson 2022-09-05  514  		      struct mlx5_macsec_rule_attrs *attrs,
-9515978eee0b93 Lior Nahmanson 2022-09-05  515  		      u32 *sa_fs_id)
-e467b283ffd50c Lior Nahmanson 2022-09-05  516  {
-e467b283ffd50c Lior Nahmanson 2022-09-05  517  	char reformatbf[MLX5_MACSEC_TAG_LEN + MACSEC_SCI_LEN];
-e467b283ffd50c Lior Nahmanson 2022-09-05  518  	struct mlx5_pkt_reformat_params reformat_params = {};
-e467b283ffd50c Lior Nahmanson 2022-09-05  519  	struct mlx5e_macsec_tx *tx_fs = macsec_fs->tx_fs;
-e467b283ffd50c Lior Nahmanson 2022-09-05  520  	struct net_device *netdev = macsec_fs->netdev;
-e467b283ffd50c Lior Nahmanson 2022-09-05  521  	struct mlx5_flow_destination dest = {};
-3b20949cb21bac Lior Nahmanson 2022-09-05  522  	struct mlx5e_macsec_tables *tx_tables;
-3b20949cb21bac Lior Nahmanson 2022-09-05  523  	union mlx5e_macsec_rule *macsec_rule;
-e467b283ffd50c Lior Nahmanson 2022-09-05  524  	struct mlx5e_macsec_tx_rule *tx_rule;
-e467b283ffd50c Lior Nahmanson 2022-09-05  525  	struct mlx5_flow_act flow_act = {};
-e467b283ffd50c Lior Nahmanson 2022-09-05  526  	struct mlx5_flow_handle *rule;
-e467b283ffd50c Lior Nahmanson 2022-09-05  527  	struct mlx5_flow_spec *spec;
-e467b283ffd50c Lior Nahmanson 2022-09-05  528  	size_t reformat_size;
-e467b283ffd50c Lior Nahmanson 2022-09-05  529  	int err = 0;
-e467b283ffd50c Lior Nahmanson 2022-09-05  530  	u32 fs_id;
-e467b283ffd50c Lior Nahmanson 2022-09-05  531  
-3b20949cb21bac Lior Nahmanson 2022-09-05  532  	tx_tables = &tx_fs->tables;
-3b20949cb21bac Lior Nahmanson 2022-09-05  533  
-e467b283ffd50c Lior Nahmanson 2022-09-05  534  	spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
-e467b283ffd50c Lior Nahmanson 2022-09-05  535  	if (!spec)
-e467b283ffd50c Lior Nahmanson 2022-09-05  536  		return NULL;
-e467b283ffd50c Lior Nahmanson 2022-09-05  537  
-e467b283ffd50c Lior Nahmanson 2022-09-05  538  	err = macsec_fs_tx_ft_get(macsec_fs);
-e467b283ffd50c Lior Nahmanson 2022-09-05 @539  	if (err)
-e467b283ffd50c Lior Nahmanson 2022-09-05  540  		goto out_spec;
-e467b283ffd50c Lior Nahmanson 2022-09-05  541  
-3b20949cb21bac Lior Nahmanson 2022-09-05  542  	macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
-3b20949cb21bac Lior Nahmanson 2022-09-05  543  	if (!macsec_rule) {
-e467b283ffd50c Lior Nahmanson 2022-09-05  544  		macsec_fs_tx_ft_put(macsec_fs);
-e467b283ffd50c Lior Nahmanson 2022-09-05  545  		goto out_spec;
-e467b283ffd50c Lior Nahmanson 2022-09-05  546  	}
-e467b283ffd50c Lior Nahmanson 2022-09-05  547  
-3b20949cb21bac Lior Nahmanson 2022-09-05  548  	tx_rule = &macsec_rule->tx_rule;
-3b20949cb21bac Lior Nahmanson 2022-09-05  549  
-e467b283ffd50c Lior Nahmanson 2022-09-05  550  	/* Tx crypto table crypto rule */
-e467b283ffd50c Lior Nahmanson 2022-09-05  551  	macsec_fs_tx_create_sectag_header(macsec_ctx, reformatbf, &reformat_size);
-e467b283ffd50c Lior Nahmanson 2022-09-05  552  
-e467b283ffd50c Lior Nahmanson 2022-09-05  553  	reformat_params.type = MLX5_REFORMAT_TYPE_ADD_MACSEC;
-e467b283ffd50c Lior Nahmanson 2022-09-05  554  	reformat_params.size = reformat_size;
-e467b283ffd50c Lior Nahmanson 2022-09-05  555  	reformat_params.data = reformatbf;
-e467b283ffd50c Lior Nahmanson 2022-09-05  556  	flow_act.pkt_reformat = mlx5_packet_reformat_alloc(macsec_fs->mdev,
-e467b283ffd50c Lior Nahmanson 2022-09-05  557  							   &reformat_params,
-e467b283ffd50c Lior Nahmanson 2022-09-05  558  							   MLX5_FLOW_NAMESPACE_EGRESS_MACSEC);
-e467b283ffd50c Lior Nahmanson 2022-09-05  559  	if (IS_ERR(flow_act.pkt_reformat)) {
-e467b283ffd50c Lior Nahmanson 2022-09-05  560  		err = PTR_ERR(flow_act.pkt_reformat);
-e467b283ffd50c Lior Nahmanson 2022-09-05  561  		netdev_err(netdev, "Failed to allocate MACsec Tx reformat context err=%d\n",  err);
-e467b283ffd50c Lior Nahmanson 2022-09-05  562  		goto err;
-e467b283ffd50c Lior Nahmanson 2022-09-05  563  	}
-e467b283ffd50c Lior Nahmanson 2022-09-05  564  	tx_rule->pkt_reformat = flow_act.pkt_reformat;
-e467b283ffd50c Lior Nahmanson 2022-09-05  565  
-e467b283ffd50c Lior Nahmanson 2022-09-05  566  	err = macsec_fs_tx_setup_fte(macsec_fs, spec, &flow_act, attrs->macsec_obj_id, &fs_id);
-e467b283ffd50c Lior Nahmanson 2022-09-05  567  	if (err) {
-e467b283ffd50c Lior Nahmanson 2022-09-05  568  		netdev_err(netdev,
-e467b283ffd50c Lior Nahmanson 2022-09-05  569  			   "Failed to add packet reformat for MACsec TX crypto rule, err=%d\n",
-e467b283ffd50c Lior Nahmanson 2022-09-05  570  			   err);
-e467b283ffd50c Lior Nahmanson 2022-09-05  571  		goto err;
-e467b283ffd50c Lior Nahmanson 2022-09-05  572  	}
-e467b283ffd50c Lior Nahmanson 2022-09-05  573  
-e467b283ffd50c Lior Nahmanson 2022-09-05  574  	tx_rule->fs_id = fs_id;
-9515978eee0b93 Lior Nahmanson 2022-09-05  575  	*sa_fs_id = fs_id;
-e467b283ffd50c Lior Nahmanson 2022-09-05  576  
-e467b283ffd50c Lior Nahmanson 2022-09-05  577  	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
-e467b283ffd50c Lior Nahmanson 2022-09-05  578  			  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_ENCRYPT |
-e467b283ffd50c Lior Nahmanson 2022-09-05  579  			  MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT;
-e467b283ffd50c Lior Nahmanson 2022-09-05  580  	dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
-3b20949cb21bac Lior Nahmanson 2022-09-05  581  	dest.ft = tx_tables->ft_check;
-3b20949cb21bac Lior Nahmanson 2022-09-05  582  	rule = mlx5_add_flow_rules(tx_tables->ft_crypto.t, spec, &flow_act, &dest, 1);
-e467b283ffd50c Lior Nahmanson 2022-09-05  583  	if (IS_ERR(rule)) {
-e467b283ffd50c Lior Nahmanson 2022-09-05  584  		err = PTR_ERR(rule);
-e467b283ffd50c Lior Nahmanson 2022-09-05  585  		netdev_err(netdev, "Failed to add MACsec TX crypto rule, err=%d\n", err);
-e467b283ffd50c Lior Nahmanson 2022-09-05  586  		goto err;
-e467b283ffd50c Lior Nahmanson 2022-09-05  587  	}
-e467b283ffd50c Lior Nahmanson 2022-09-05  588  	tx_rule->rule = rule;
-e467b283ffd50c Lior Nahmanson 2022-09-05  589  
-e467b283ffd50c Lior Nahmanson 2022-09-05  590  	goto out_spec;
-e467b283ffd50c Lior Nahmanson 2022-09-05  591  
-e467b283ffd50c Lior Nahmanson 2022-09-05  592  err:
-e467b283ffd50c Lior Nahmanson 2022-09-05  593  	macsec_fs_tx_del_rule(macsec_fs, tx_rule);
-3b20949cb21bac Lior Nahmanson 2022-09-05  594  	macsec_rule = NULL;
-e467b283ffd50c Lior Nahmanson 2022-09-05  595  out_spec:
-e467b283ffd50c Lior Nahmanson 2022-09-05  596  	kvfree(spec);
-e467b283ffd50c Lior Nahmanson 2022-09-05  597  
-3b20949cb21bac Lior Nahmanson 2022-09-05  598  	return macsec_rule;
-e467b283ffd50c Lior Nahmanson 2022-09-05  599  }
-e467b283ffd50c Lior Nahmanson 2022-09-05  600  
-
-:::::: The code at line 539 was first introduced by commit
-:::::: e467b283ffd50cf15b84c73eef68787e257eaed5 net/mlx5e: Add MACsec TX steering rules
-
-:::::: TO: Lior Nahmanson <liorna@nvidia.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+41151e77a4d96e arch/powerpc/mm/tlb_nohash.c Becky Bruce            2011-06-28  101  
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  102  static inline int mmu_get_tsize(int psize)
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  103  {
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @104  	return mmu_psize_defs[psize].enc;
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  105  }
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @106  #else
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @107  static inline int mmu_get_tsize(int psize)
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  108  {
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  109  	/* This isn't used on !Book3E for now */
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  110  	return 0;
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  111  }
+823ee1119f6e4c arch/powerpc/mm/nohash/tlb.c Christophe Leroy       2022-09-08 @112  #endif /* CONFIG_PPC_E500 */
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  113  
 
 -- 
 0-DAY CI Kernel Test Service
