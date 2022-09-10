@@ -1,211 +1,114 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000287FC
-	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 08:31:32 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id e68so3825085pfe.1
-        for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 01:31:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0FAA40
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 08:33:56 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so7480818pja.5
+        for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 01:33:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1gQpQt9P/PRvgYQDj2poIKgpdpCzbzGi10LwLBhdI98=;
-        b=CYuI1/EfkJudsXb9TVEtBgOYmz0Rhy+1YEiTbBitUvaoHm7t4fADYIK8M077JIrTlT
-         R+SgratayUe9Bjfkw2RB9B9VFX2+7dX6ksYZ2AqRM8IfKeezcw+uvIZA1/Pg/CdbV01K
-         bASTBC74FI7E9na1pqcuMrfL3MreuEIc4Uhc2GSpGo4a3BxKD5Cbm1iT37lGVLs1swgW
-         mJt/X9WpPn86OytkatIV+g3ZIO2dhU03LPHxZdZRV6ItRKrgZ94MDcWbKvvFF9YvPq1B
-         8BL92ZDIGqW9FGqY8hXYPKg2k3lwhM+z2N9cpspVkFusDU4tz7gUD2VMs4G+wt0wg5NB
-         NLRg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=G8nRJBytFt4zq3CBxkYjt9E6ufCcg2Kq6cvnSglYkwA=;
+        b=ISuym4HLS42lUKXyE+Ag8QucwAJPGnmPJXjtEYDepCeBuU7MQyysGbXUsnBvM4995R
+         f4wJ7ZvSVwrBGCAvgaBaYAct9haRKc/TdVB4OKbUV1Ia/3/jg7BulSlL8kadiAaXOLQ5
+         OTUHEKIFVvY6iZVyXzdGOtmLBySj6f7hXD2TBGuqTJKBiuk3vP54im4NKqxRedV+VsEe
+         nzszdBWVnK8pSPR/yh8w13f/yXR6E8BF4OH5HDjorFD36yxsv5X4sUhWPL2cWMuqn00H
+         sXHzB4W97DO5PTZjzUeqMogNSOvruyR1CPPhhck62QZYMxXw9ZCygPWWjejit7plcbKE
+         fwgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1gQpQt9P/PRvgYQDj2poIKgpdpCzbzGi10LwLBhdI98=;
-        b=GmU72hikwBjz60elHUUaKnZf8YamwOB38uRoLsNFrBUU/x/4KiDYNcvzFTTJSRgXqG
-         OJn6QJHFFISNY1D4SUdsmpT5SSB6VSJg/2dAA53Lp46Quoc1STyM7mnlvq794/pgHB++
-         elsdegd+LWHDsL81igbix30RW/hjs0OWAnA0PuLJJYbImZ95Obnw0E7nEZDBqOaJWzh1
-         S6kpba6ynTbRBBlNklmkLb5q7UxM6VgyKppnkZl8NJWPYyxWhhYWsTHq1wp4eqwD/PSF
-         /5MQTlrI5I+DxKUsRWxU5rPCAf8kb1EOwMSqh64W8yFvzwstsfqVZP8KYbsemuWThG2b
-         bLHg==
-X-Gm-Message-State: ACgBeo30UAzHNHKfnEWVepECsyduU/GDPjN/2mWQBN1DjPMZj2F5PsSk
-	GNeSW5USn1kEI5fW9YN83JN6WnB48XZVDzetSto=
-X-Google-Smtp-Source: AA6agR4ztIqEPt35ZW0o9ztqH9GvgKn5e6ny0TAz+JeMdFc19D2iJFC1FOnL7wD71X/h9Nee30liXq2/pxPLVFbVg/0=
-X-Received: by 2002:a05:6a00:1390:b0:540:b6b6:e978 with SMTP id
- t16-20020a056a00139000b00540b6b6e978mr10341705pfg.8.1662798692250; Sat, 10
- Sep 2022 01:31:32 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=G8nRJBytFt4zq3CBxkYjt9E6ufCcg2Kq6cvnSglYkwA=;
+        b=XlS0FfxCjJUYYxx19U5hZ6nnx/CZleuhjM6sVNErJaf4LfgNWKwBXoZR8eEsr41zE5
+         QtDKKBDrka6dL5Gl0b+cBLF6VdkZ2bD/y5AERVZQKVJm2E+TMI+gh2jHezDgGAJsQ8gE
+         GfA1zfcc+k3Bt+gcD6/BafJjyHo38PbSeU6hy1e0ZbpecPHCbEBVyZ1bF2yaYVXevKTs
+         DN6sU0KOQ+vDlIXeBYje3Aquq7sNUhTaZf6XBAoODsbf0eAx9nO5VcsNOHRRKSbN4NE/
+         4i6+LwegNbZNkB5KE2rhjPL44eHhP9TGMINj5WODkb8Lyaq+7crBYKQJBBklkwtJe3or
+         p/yg==
+X-Gm-Message-State: ACgBeo0sAEvdY7V0/pXWSoT5ewqaMJwxyqtz6xtS2Dg5AKVBanvntJoJ
+	KFBw+b0cvf4T//MGQMISb+L9mG0BeeQ=
+X-Google-Smtp-Source: AA6agR6RTnp/aCbkkO56cvk7JqVSY05q4WxLf/qhN6d/dOcEP2AaT/edmO5IcB25QPHllGMhMfFcqQ==
+X-Received: by 2002:a17:90a:318a:b0:1fa:c68c:aa03 with SMTP id j10-20020a17090a318a00b001fac68caa03mr13357169pjb.172.1662798836321;
+        Sat, 10 Sep 2022 01:33:56 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id k197-20020a6284ce000000b00540a8074c9dsm1116554pfd.166.2022.09.10.01.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 01:33:55 -0700 (PDT)
+Date: Sat, 10 Sep 2022 17:33:51 +0900
+From: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-mm@kvack.org
+Subject: Re: [vbabka-slab:for-6.1/fit_rcu_head 2/2] mm/slab.h:94:1: error:
+ static_assert failed due to requirement '((__builtin_offsetof(struct slab,
+ counters)) & ((unsigned int)(16) - 1)) == 0' "IS_ALIGNED(offsetof(struct
+ slab, counters), 16)"
+Message-ID: <YxxL7zWWuWnCtXW4@hyeyoo>
+References: <202209101614.lMCcS0Zj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220829210546.755377-1-james.hilliard1@gmail.com>
- <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
- <CADvTj4pF=D7PEBF-LK_sKckRUCq-vd9ZjohpiEgLvORg8UaZyw@mail.gmail.com>
- <CAEf4BzbjMWC50J-mn_aNd2BeJWU=nLJmsJCAVvTqLSYsh4RejA@mail.gmail.com>
- <CADvTj4qLhgQ1K30dKoviw10G6f5XTv7T6SChUPvYnNWZGxw4OA@mail.gmail.com> <871qsjyb41.fsf@oracle.com>
-In-Reply-To: <871qsjyb41.fsf@oracle.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 10 Sep 2022 02:31:20 -0600
-Message-ID: <CADvTj4ov8wnWCGXsKRF5QJn9_+NQ8RspydrGPjE5=9KWZQuNEA@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
-To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>, 
-	David Faust <david.faust@oracle.com>, bpf@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, elena.zannoni@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202209101614.lMCcS0Zj-lkp@intel.com>
 
-On Sat, Sep 10, 2022 at 12:53 AM Jose E. Marchesi
-<jose.marchesi@oracle.com> wrote:
->
->
-> > On Fri, Sep 9, 2022 at 12:56 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >>
-> >> On Fri, Sep 9, 2022 at 11:23 AM James Hilliard
-> >> <james.hilliard1@gmail.com> wrote:
-> >> >
-> >> > On Fri, Sep 9, 2022 at 12:05 PM Andrii Nakryiko
-> >> > <andrii.nakryiko@gmail.com> wrote:
-> >> > >
-> >> > > On Mon, Aug 29, 2022 at 2:05 PM James Hilliard
-> >> > > <james.hilliard1@gmail.com> wrote:
-> >> > > >
-> >> > > > The bpf_tail_call_static function is currently not defined unless
-> >> > > > using clang >= 8.
-> >> > > >
-> >> > > > To support bpf_tail_call_static on GCC we can check if __clang__ is
-> >> > > > not defined to enable bpf_tail_call_static.
-> >> > > >
-> >> > > > We need to use GCC assembly syntax when the compiler does not define
-> >> > > > __clang__ as LLVM inline assembly is not fully compatible with GCC.
-> >> > > >
-> >> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >> > > > ---
-> >> > > > Changes v1 -> v2:
-> >> > > >   - drop __BPF__ check as GCC now defines __bpf__
-> >> > > > ---
-> >> > > >  tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
-> >> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
-> >> > > >
-> >> > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> >> > > > index 7349b16b8e2f..867b734839dd 100644
-> >> > > > --- a/tools/lib/bpf/bpf_helpers.h
-> >> > > > +++ b/tools/lib/bpf/bpf_helpers.h
-> >> > > > @@ -131,7 +131,7 @@
-> >> > > >  /*
-> >> > > >   * Helper function to perform a tail call with a constant/immediate map slot.
-> >> > > >   */
-> >> > > > -#if __clang_major__ >= 8 && defined(__bpf__)
-> >> > > > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
-> >> > > >  static __always_inline void
-> >> > > >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >> > > >  {
-> >> > > > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >> > > >                 __bpf_unreachable();
-> >> > > >
-> >> > > >         /*
-> >> > > > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
-> >> > > > -        * pointer) and r3 (constant map index) from _different paths_ ending
-> >> > > > +        * Provide a hard guarantee that the compiler won't optimize setting r2
-> >> > > > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
-> >> > > >          * up at the _same_ call insn as otherwise we won't be able to use the
-> >> > > >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
-> >> > > >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-> >> > > > @@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-> >> > > >          *
-> >> > > >          * Note on clobber list: we need to stay in-line with BPF calling
-> >> > > >          * convention, so even if we don't end up using r0, r4, r5, we need
-> >> > > > -        * to mark them as clobber so that LLVM doesn't end up using them
-> >> > > > -        * before / after the call.
-> >> > > > +        * to mark them as clobber so that the compiler doesn't end up using
-> >> > > > +        * them before / after the call.
-> >> > > >          */
-> >> > > > -       asm volatile("r1 = %[ctx]\n\t"
-> >> > > > +       asm volatile(
-> >> > > > +#ifdef __clang__
-> >> > > > +                    "r1 = %[ctx]\n\t"
-> >> > > >                      "r2 = %[map]\n\t"
-> >> > > >                      "r3 = %[slot]\n\t"
-> >> > > > +#else
-> >> > > > +                    "mov %%r1,%[ctx]\n\t"
-> >> > > > +                    "mov %%r2,%[map]\n\t"
-> >> > > > +                    "mov %%r3,%[slot]\n\t"
-> >> > > > +#endif
-> >> > >
-> >> > > Hey James,
-> >> > >
-> >> > > I don't think it's a good idea to have a completely different BPF asm
-> >> > > syntax in GCC-BPF vs what Clang is supporting. Note that Clang syntax
-> >> > > is also what BPF users see in BPF verifier log and in llvm-objdump
-> >> > > output, so that's what BPF users are familiar with.
-> >> >
-> >> > Is the difference a BPF specific assembly format deviation or a generic
-> >> > deviation in assembler template syntax between GCC/llvm?
-> >> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
-> >> >
-> >>
-> >> Sorry, I don't understand the question. I'm talking about the above
-> >> snippet with "r1 = %[ctx]" vs "mov %%r1,%[ctx]". Seems like the rest
-> >> stayed the same. So this would be a "BPF specific assembly format"
-> >> case, right? I don't know what else could be different with GCC-BPF
-> >> assembly.
-> >
-> > I mean it's unclear if it's a generic assembly template format difference
-> > that applies to all targets or one that's BPF target specific.
->
-> It is certainly BPF specific.
->
-> I think that when I first wrote the BPF GNU toolchain port the assembly
-> format used by LLVM was different than it is now: I certainly didn't
-> invent the syntax the GNU assembler uses for BPF.
->
-> It seems LLVM settled with that C-like syntax for assembly instead,
-> which is very unconventional.
->
-> > Anyways for now I sent a new patch so that bpf_tail_call_static is defined
-> > on non-clang compilers so that it will work when GCC-BPF supports the
-> > existing asm format.
-> > https://lore.kernel.org/bpf/20220909224544.3702931-1-james.hilliard1@gmail.com/
->
-> I don't think this patch makes much sense: these guards are designed to
-> avoid compilers that do not support the inline assembly (as presumably
-> happen with clang < 8) to choke on the header file.  That's also the
-> case of GCC BPF at the moment.
->
-> With this patch, people won't be currentty able to use bpf_helpers.h
-> with GCC BPF even if they don't use bpf_tail_call_static.
+On Sat, Sep 10, 2022 at 04:05:44PM +0800, kernel test robot wrote:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-6.1/fit_rcu_head
+> head:   2af0ec317dc8f99f0620af23ff6c288bb6f49be5
+> commit: 2af0ec317dc8f99f0620af23ff6c288bb6f49be5 [2/2] mm/sl[au]b: rearrange struct slab fields to allow larger rcu_head
+> config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220910/202209101614.lMCcS0Zj-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?id=2af0ec317dc8f99f0620af23ff6c288bb6f49be5
+>         git remote add vbabka-slab git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
+>         git fetch --no-tags vbabka-slab for-6.1/fit_rcu_head
+>         git checkout 2af0ec317dc8f99f0620af23ff6c288bb6f49be5
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from mm/mempool.c:21:
+> >> mm/slab.h:94:1: error: static_assert failed due to requirement '((__builtin_offsetof(struct slab, counters)) & ((unsigned int)(16) - 1)) == 0' "IS_ALIGNED(offsetof(struct slab, counters), 16)"
+>    static_assert(IS_ALIGNED(offsetof(struct slab, counters), 16));
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
+>    #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
+>    #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>                                            ^              ~~~~
+>    1 error generated.
+> 
+> 
+> vim +94 mm/slab.h
+> 
+>     90	
+>     91	#undef SLAB_MATCH
+>     92	static_assert(sizeof(struct slab) <= sizeof(struct page));
+>     93	#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && defined(CONFIG_SLUB)
+>   > 94	static_assert(IS_ALIGNED(offsetof(struct slab, counters), 16));
+>     95	#endif
+>     96	
 
-That doesn't seem to be an issue here, from what I can tell it's not
-a failure in the compiler but a failure in the assembler, so having
-bpf_tail_call_static unguarded in GCC doesn't break anything
-that isn't already broken.
+Ah, it should be sizeof(void *) * 2, instead of 16.
 
->
-> >> > >
-> >> > > This will cause constant and unavoidable maintenance burden both for
-> >> > > libraries like libbpf and end users and their BPF apps as well.
-> >> > >
-> >> > > Given you are trying to make GCC-BPF part of the BPF ecosystem, please
-> >> > > think about how to help the ecosystem, move it forward and unify it,
-> >> > > not how to branch out and have Clang vs GCC differences everywhere.
-> >> > > There is a lot of embedded BPF asm in production applications, having
-> >> > > to write something as trivial as `r1 = X` in GCC or Clang-specific
-> >> > > ways is a huge burden.
-> >> > >
-> >> > > As such, we've reverted your patch ([0]). Please add de facto BPF asm
-> >> > > syntax support to GCC-BPF and this change won't be necessary.
-> >> > >
-> >> > >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=665f5d3577ef43e929d59cf39683037887c351bf
-> >> > >
-> >> > > >                      "call 12"
-> >> > > >                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
-> >> > > >                      : "r0", "r1", "r2", "r3", "r4", "r5");
-> >> > > > --
-> >> > > > 2.34.1
-> >> > > >
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
+
+-- 
+Thanks,
+Hyeonggon
