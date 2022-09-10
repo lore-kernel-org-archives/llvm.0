@@ -1,131 +1,211 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2E7A40
-	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 08:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662798420; x=1694334420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/8ljAVmxjMrw220kT17XocVDhRfU3GdakOMIPKvIUAc=;
-  b=LfVCcUoXVCwlRedDNKmpIleK9MbG8RSQ5hQ6fPPcsTeqaRhSjOCM6mQS
-   3xVOaQwJbrYR6VYT2DS8hukaawpJkcTvWG2Iohl27/6SPcCXv3YFgMSRj
-   SdILBObltoAWEo6O0FpWta7Lh4FVMXO7aNut+gC38I8fTia4mSjsi2Zzd
-   T5xca5JlTNYe5pLPp2Adslc5uVfbTglyz0bv/2Z4ZYOicObyDeq7kYGi2
-   cm+BQjQutKgKBIy/ZcUHHjJqZ/+6LndJjqmbxwoJJyj6Ir+BRjdwmMQyb
-   8X1h1WBfca0D8sBZst3lmoDF/HrVjxobFbZqhqwvNO59259AVpUHZbwDz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="323845005"
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="323845005"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 01:26:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="677459412"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Sep 2022 01:26:47 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oWvp8-0002JX-1m;
-	Sat, 10 Sep 2022 08:26:46 +0000
-Date: Sat, 10 Sep 2022 16:26:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiebin Sun <jiebin.sun@intel.com>, akpm@linux-foundation.org,
-	vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
-	tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
-	legion@kernel.org, manfred@colorfullife.com,
-	alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tim.c.chen@intel.com,
-	feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
-	wangyang.guo@intel.com, jiebin.sun@intel.com
-Subject: Re: [PATCH v5 1/2] percpu: Add percpu_counter_add_local and
- percpu_counter_sub_local
-Message-ID: <202209101659.cvalTsSU-lkp@intel.com>
-References: <20220909203636.2652466-2-jiebin.sun@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000287FC
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 08:31:32 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id e68so3825085pfe.1
+        for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 01:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=1gQpQt9P/PRvgYQDj2poIKgpdpCzbzGi10LwLBhdI98=;
+        b=CYuI1/EfkJudsXb9TVEtBgOYmz0Rhy+1YEiTbBitUvaoHm7t4fADYIK8M077JIrTlT
+         R+SgratayUe9Bjfkw2RB9B9VFX2+7dX6ksYZ2AqRM8IfKeezcw+uvIZA1/Pg/CdbV01K
+         bASTBC74FI7E9na1pqcuMrfL3MreuEIc4Uhc2GSpGo4a3BxKD5Cbm1iT37lGVLs1swgW
+         mJt/X9WpPn86OytkatIV+g3ZIO2dhU03LPHxZdZRV6ItRKrgZ94MDcWbKvvFF9YvPq1B
+         8BL92ZDIGqW9FGqY8hXYPKg2k3lwhM+z2N9cpspVkFusDU4tz7gUD2VMs4G+wt0wg5NB
+         NLRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1gQpQt9P/PRvgYQDj2poIKgpdpCzbzGi10LwLBhdI98=;
+        b=GmU72hikwBjz60elHUUaKnZf8YamwOB38uRoLsNFrBUU/x/4KiDYNcvzFTTJSRgXqG
+         OJn6QJHFFISNY1D4SUdsmpT5SSB6VSJg/2dAA53Lp46Quoc1STyM7mnlvq794/pgHB++
+         elsdegd+LWHDsL81igbix30RW/hjs0OWAnA0PuLJJYbImZ95Obnw0E7nEZDBqOaJWzh1
+         S6kpba6ynTbRBBlNklmkLb5q7UxM6VgyKppnkZl8NJWPYyxWhhYWsTHq1wp4eqwD/PSF
+         /5MQTlrI5I+DxKUsRWxU5rPCAf8kb1EOwMSqh64W8yFvzwstsfqVZP8KYbsemuWThG2b
+         bLHg==
+X-Gm-Message-State: ACgBeo30UAzHNHKfnEWVepECsyduU/GDPjN/2mWQBN1DjPMZj2F5PsSk
+	GNeSW5USn1kEI5fW9YN83JN6WnB48XZVDzetSto=
+X-Google-Smtp-Source: AA6agR4ztIqEPt35ZW0o9ztqH9GvgKn5e6ny0TAz+JeMdFc19D2iJFC1FOnL7wD71X/h9Nee30liXq2/pxPLVFbVg/0=
+X-Received: by 2002:a05:6a00:1390:b0:540:b6b6:e978 with SMTP id
+ t16-20020a056a00139000b00540b6b6e978mr10341705pfg.8.1662798692250; Sat, 10
+ Sep 2022 01:31:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909203636.2652466-2-jiebin.sun@intel.com>
+References: <20220829210546.755377-1-james.hilliard1@gmail.com>
+ <CAEf4Bza6g4tZDtuKCaBwVVJSHUrLYh=pbUffPBpmWtR-xyXyqQ@mail.gmail.com>
+ <CADvTj4pF=D7PEBF-LK_sKckRUCq-vd9ZjohpiEgLvORg8UaZyw@mail.gmail.com>
+ <CAEf4BzbjMWC50J-mn_aNd2BeJWU=nLJmsJCAVvTqLSYsh4RejA@mail.gmail.com>
+ <CADvTj4qLhgQ1K30dKoviw10G6f5XTv7T6SChUPvYnNWZGxw4OA@mail.gmail.com> <871qsjyb41.fsf@oracle.com>
+In-Reply-To: <871qsjyb41.fsf@oracle.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 10 Sep 2022 02:31:20 -0600
+Message-ID: <CADvTj4ov8wnWCGXsKRF5QJn9_+NQ8RspydrGPjE5=9KWZQuNEA@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: add GCC support for bpf_tail_call_static
+To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>, 
+	David Faust <david.faust@oracle.com>, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, elena.zannoni@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jiebin,
+On Sat, Sep 10, 2022 at 12:53 AM Jose E. Marchesi
+<jose.marchesi@oracle.com> wrote:
+>
+>
+> > On Fri, Sep 9, 2022 at 12:56 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> >>
+> >> On Fri, Sep 9, 2022 at 11:23 AM James Hilliard
+> >> <james.hilliard1@gmail.com> wrote:
+> >> >
+> >> > On Fri, Sep 9, 2022 at 12:05 PM Andrii Nakryiko
+> >> > <andrii.nakryiko@gmail.com> wrote:
+> >> > >
+> >> > > On Mon, Aug 29, 2022 at 2:05 PM James Hilliard
+> >> > > <james.hilliard1@gmail.com> wrote:
+> >> > > >
+> >> > > > The bpf_tail_call_static function is currently not defined unless
+> >> > > > using clang >= 8.
+> >> > > >
+> >> > > > To support bpf_tail_call_static on GCC we can check if __clang__ is
+> >> > > > not defined to enable bpf_tail_call_static.
+> >> > > >
+> >> > > > We need to use GCC assembly syntax when the compiler does not define
+> >> > > > __clang__ as LLVM inline assembly is not fully compatible with GCC.
+> >> > > >
+> >> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >> > > > ---
+> >> > > > Changes v1 -> v2:
+> >> > > >   - drop __BPF__ check as GCC now defines __bpf__
+> >> > > > ---
+> >> > > >  tools/lib/bpf/bpf_helpers.h | 19 +++++++++++++------
+> >> > > >  1 file changed, 13 insertions(+), 6 deletions(-)
+> >> > > >
+> >> > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> >> > > > index 7349b16b8e2f..867b734839dd 100644
+> >> > > > --- a/tools/lib/bpf/bpf_helpers.h
+> >> > > > +++ b/tools/lib/bpf/bpf_helpers.h
+> >> > > > @@ -131,7 +131,7 @@
+> >> > > >  /*
+> >> > > >   * Helper function to perform a tail call with a constant/immediate map slot.
+> >> > > >   */
+> >> > > > -#if __clang_major__ >= 8 && defined(__bpf__)
+> >> > > > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
+> >> > > >  static __always_inline void
+> >> > > >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> > > >  {
+> >> > > > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> > > >                 __bpf_unreachable();
+> >> > > >
+> >> > > >         /*
+> >> > > > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+> >> > > > -        * pointer) and r3 (constant map index) from _different paths_ ending
+> >> > > > +        * Provide a hard guarantee that the compiler won't optimize setting r2
+> >> > > > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
+> >> > > >          * up at the _same_ call insn as otherwise we won't be able to use the
+> >> > > >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+> >> > > >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+> >> > > > @@ -148,12 +148,19 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >> > > >          *
+> >> > > >          * Note on clobber list: we need to stay in-line with BPF calling
+> >> > > >          * convention, so even if we don't end up using r0, r4, r5, we need
+> >> > > > -        * to mark them as clobber so that LLVM doesn't end up using them
+> >> > > > -        * before / after the call.
+> >> > > > +        * to mark them as clobber so that the compiler doesn't end up using
+> >> > > > +        * them before / after the call.
+> >> > > >          */
+> >> > > > -       asm volatile("r1 = %[ctx]\n\t"
+> >> > > > +       asm volatile(
+> >> > > > +#ifdef __clang__
+> >> > > > +                    "r1 = %[ctx]\n\t"
+> >> > > >                      "r2 = %[map]\n\t"
+> >> > > >                      "r3 = %[slot]\n\t"
+> >> > > > +#else
+> >> > > > +                    "mov %%r1,%[ctx]\n\t"
+> >> > > > +                    "mov %%r2,%[map]\n\t"
+> >> > > > +                    "mov %%r3,%[slot]\n\t"
+> >> > > > +#endif
+> >> > >
+> >> > > Hey James,
+> >> > >
+> >> > > I don't think it's a good idea to have a completely different BPF asm
+> >> > > syntax in GCC-BPF vs what Clang is supporting. Note that Clang syntax
+> >> > > is also what BPF users see in BPF verifier log and in llvm-objdump
+> >> > > output, so that's what BPF users are familiar with.
+> >> >
+> >> > Is the difference a BPF specific assembly format deviation or a generic
+> >> > deviation in assembler template syntax between GCC/llvm?
+> >> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#AssemblerTemplate
+> >> >
+> >>
+> >> Sorry, I don't understand the question. I'm talking about the above
+> >> snippet with "r1 = %[ctx]" vs "mov %%r1,%[ctx]". Seems like the rest
+> >> stayed the same. So this would be a "BPF specific assembly format"
+> >> case, right? I don't know what else could be different with GCC-BPF
+> >> assembly.
+> >
+> > I mean it's unclear if it's a generic assembly template format difference
+> > that applies to all targets or one that's BPF target specific.
+>
+> It is certainly BPF specific.
+>
+> I think that when I first wrote the BPF GNU toolchain port the assembly
+> format used by LLVM was different than it is now: I certainly didn't
+> invent the syntax the GNU assembler uses for BPF.
+>
+> It seems LLVM settled with that C-like syntax for assembly instead,
+> which is very unconventional.
+>
+> > Anyways for now I sent a new patch so that bpf_tail_call_static is defined
+> > on non-clang compilers so that it will work when GCC-BPF supports the
+> > existing asm format.
+> > https://lore.kernel.org/bpf/20220909224544.3702931-1-james.hilliard1@gmail.com/
+>
+> I don't think this patch makes much sense: these guards are designed to
+> avoid compilers that do not support the inline assembly (as presumably
+> happen with clang < 8) to choke on the header file.  That's also the
+> case of GCC BPF at the moment.
+>
+> With this patch, people won't be currentty able to use bpf_helpers.h
+> with GCC BPF even if they don't use bpf_tail_call_static.
 
-Thank you for the patch! Yet something to improve:
+That doesn't seem to be an issue here, from what I can tell it's not
+a failure in the compiler but a failure in the assembler, so having
+bpf_tail_call_static unguarded in GCC doesn't break anything
+that isn't already broken.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.0-rc4 next-20220909]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r041-20220909 (https://download.01.org/0day-ci/archive/20220910/202209101659.cvalTsSU-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/44e7288c01b9b125c7a5f97591ca26ffd90e3385
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiebin-Sun/percpu-Add-percpu_counter_add_local-and-percpu_counter_sub_local/20220910-053730
-        git checkout 44e7288c01b9b125c7a5f97591ca26ffd90e3385
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:10:
-   In file included from include/linux/cred.h:17:
-   In file included from include/linux/sched/user.h:7:
->> include/linux/percpu_counter.h:176:2: error: call to undeclared function 'percpu_counter_sub'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           percpu_counter_sub(fbc, amount);
-           ^
-   include/linux/percpu_counter.h:176:2: note: did you mean 'percpu_counter_set'?
-   include/linux/percpu_counter.h:136:20: note: 'percpu_counter_set' declared here
-   static inline void percpu_counter_set(struct percpu_counter *fbc, s64 amount)
-                      ^
-   include/linux/percpu_counter.h:229:20: error: static declaration of 'percpu_counter_sub' follows non-static declaration
-   static inline void percpu_counter_sub(struct percpu_counter *fbc, s64 amount)
-                      ^
-   include/linux/percpu_counter.h:176:2: note: previous implicit declaration is here
-           percpu_counter_sub(fbc, amount);
-           ^
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/hexagon/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1206: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/percpu_counter_sub +176 include/linux/percpu_counter.h
-
-   171	
-   172	/* no smp percpu_counter_sub_local is the same with percpu_counter_sub */
-   173	static inline void
-   174	percpu_counter_sub_local(struct percpu_counter *fbc, s64 amount)
-   175	{
- > 176		percpu_counter_sub(fbc, amount);
-   177	}
-   178	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> >> > >
+> >> > > This will cause constant and unavoidable maintenance burden both for
+> >> > > libraries like libbpf and end users and their BPF apps as well.
+> >> > >
+> >> > > Given you are trying to make GCC-BPF part of the BPF ecosystem, please
+> >> > > think about how to help the ecosystem, move it forward and unify it,
+> >> > > not how to branch out and have Clang vs GCC differences everywhere.
+> >> > > There is a lot of embedded BPF asm in production applications, having
+> >> > > to write something as trivial as `r1 = X` in GCC or Clang-specific
+> >> > > ways is a huge burden.
+> >> > >
+> >> > > As such, we've reverted your patch ([0]). Please add de facto BPF asm
+> >> > > syntax support to GCC-BPF and this change won't be necessary.
+> >> > >
+> >> > >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=665f5d3577ef43e929d59cf39683037887c351bf
+> >> > >
+> >> > > >                      "call 12"
+> >> > > >                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+> >> > > >                      : "r0", "r1", "r2", "r3", "r4", "r5");
+> >> > > > --
+> >> > > > 2.34.1
+> >> > > >
