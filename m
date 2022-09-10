@@ -1,116 +1,133 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6FEA40
-	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 07:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662795954; x=1694331954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=di/QmJTwOxCIfR9NFz4X3qRdKBz/nSnObDZHw/nY4W8=;
-  b=EIkGBmknv43Cufjkcx4fCJu6vcJMIlyHUaMFqcV+efFWM9k9b7MAnDet
-   SCLID/1wLuHktfYPJrO/ogQkuDKm81KfTLc9HOEYtXXI+bB9VqbCOmj3k
-   4yPAwMJLB2Ati5eYJdQpTpDe0pJZhL15pRSP6YZnkbXps8ywq4bdX8bzf
-   kh1WxZp1hMDLJazo/Pl7KDjqXNtKh7irL8YjgVUD093nGc+OuxcAznBjc
-   nW0kX4sWRRW2FV06ss3QJMkMhmA6W2NAkBOcHiGKOMkH0Y3e+VPbB7IYm
-   Oku5/S5oH8KnGtmM5OYHMyJlO7HBrjY5Fj5mR1dOM3ojXMjYjMq9G9UPW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="284639529"
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="284639529"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 00:45:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="566617400"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Sep 2022 00:45:45 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oWvBQ-0002HB-22;
-	Sat, 10 Sep 2022 07:45:44 +0000
-Date: Sat, 10 Sep 2022 15:45:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lucas Stach <l.stach@pengutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 4/5] drm/cma-helper: account memory used by CMA GEM
- objects
-Message-ID: <202209101522.Gwz622bL-lkp@intel.com>
-References: <20220909111640.3789791-5-l.stach@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD529A40
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 07:50:33 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id e5so3761744pfl.2
+        for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 00:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=dt2OAvtuqDumbkn/MrsQ9uanevxL0KkSOfPOC0rhFvA=;
+        b=JHtIiq70aFWQwaChjGYCDAdDui7sJYmQCZgghJ6c6OO/6w1ZiTLwUfLI/0Toa6I5Cq
+         JKoq44S+/axf7YzU3jou6t/MObjG12PoDx+E+k4gbtSwW7WAWY5kjLXPdjslQFxydEkq
+         gzgC7Ykrud5COuHEMj7lLE/Lcp3wStyVwvyC+MsQQRDV/BeUnnhF7ZAloeoWM5WcR8Do
+         guXPvzQANnK1bg2qYJ5uTOypimi5ohiphAQmTYdCK/Ur/YloomOZG8XVi8DHQMxtMhEL
+         Li1T3zsRAuhly0+kyxNn6nvGK+10pqZ/jl6IipsCmZmgAhwoJELnmxUCPj+shyzU+fB9
+         YxYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dt2OAvtuqDumbkn/MrsQ9uanevxL0KkSOfPOC0rhFvA=;
+        b=VxYhIil4uSRYV6MCl0H97/MmHlhbEemiQyxgkO0cabtFmAOAr/TrUsS7MrXE7X0kZj
+         6psZIW/fOHhMmRYtFOZF3HTn8nASvFyiVl+B0pIaicXrDxBAQYIPKZQYtGS4SF8ND9JS
+         E+Lm5tPGKli9xDXjLV9sMeROumEj70wdZrF7s3ddbS/UzeUDZfk/MhwdCS2cXBUcIO5X
+         h6HE933E3WuyGQR9HADrv0lakm7ZdXGRZjJDPl2rXBmEyydBiAS3DmA0YUkY21kH/KvF
+         ey509IPThm7jnfWf1oNLFVrSudA6vb5hr2EV+CziyERRz2k92mMJCz6sk9v6H00Y7pYF
+         V6sw==
+X-Gm-Message-State: ACgBeo07kkg/jOtQu6EoPTvT63BllTeDH4m4YeJN3cM1fCqN2to1zYw/
+	NNplF5SlmGN2t7vAOBrOm/Ij4KrYj68++A==
+X-Google-Smtp-Source: AA6agR4HDi5XYbZZ1HQqACG68+NrdY4RdmXUW55j8pwyIXVZlASdBcrbE2rMZ4Om4jLkH8LXhuH9dg==
+X-Received: by 2002:a65:4609:0:b0:434:8f0b:5d05 with SMTP id v9-20020a654609000000b004348f0b5d05mr15222722pgq.606.1662796233107;
+        Sat, 10 Sep 2022 00:50:33 -0700 (PDT)
+Received: from [10.4.108.105] ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id w14-20020aa7954e000000b00535e950aa28sm1032535pfq.131.2022.09.10.00.50.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Sep 2022 00:50:31 -0700 (PDT)
+Message-ID: <0c594ac2-d775-6424-6850-191c0c30275d@bytedance.com>
+Date: Sat, 10 Sep 2022 15:50:26 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909111640.3789791-5-l.stach@pengutronix.de>
-
-Hi Lucas,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on linus/master v6.0-rc4]
-[cannot apply to drm-misc/drm-misc-next drm-tip/drm-tip next-20220909]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Stach/GEM-buffer-memory-tracking/20220909-191905
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220910/202209101522.Gwz622bL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/64fc0f845f1a46d1e6959261d778b809f30b5a72
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lucas-Stach/GEM-buffer-memory-tracking/20220909-191905
-        git checkout 64fc0f845f1a46d1e6959261d778b809f30b5a72
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_gem.c:1299:36: error: expected ';' after top-level asm block
-   EXPORT_SYMBOL(drm_gem_add_resident)
-                                      ^
-                                      ;
-   drivers/gpu/drm/drm_gem.c:1318:36: error: expected ';' after top-level asm block
-   EXPORT_SYMBOL(drm_gem_dec_resident)
-                                      ^
-                                      ;
-   2 errors generated.
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [ammarfaizi2-block:arm64/linux/for-next/misc 2/2]
+ arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function
+ 'do_softirq_own_stack'
+Content-Language: en-US
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+ llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, linux-kernel@vger.kernel.org
+References: <202209091157.akimiv18-lkp@intel.com>
+ <a37a1b71-e7b4-4b7a-9aec-a9ce64d13d84@www.fastmail.com>
+ <69409ea6-6daa-7973-c950-c6ca9ad96f50@bytedance.com>
+ <Yxt/ICkxAH/+tn08@arm.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Yxt/ICkxAH/+tn08@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +1299 drivers/gpu/drm/drm_gem.c
 
-612ea51433e720 Lucas Stach 2022-09-09  1282  
-612ea51433e720 Lucas Stach 2022-09-09  1283  /**
-612ea51433e720 Lucas Stach 2022-09-09  1284   * drm_gem_add_resident - Account memory used by GEM object to the
-612ea51433e720 Lucas Stach 2022-09-09  1285   * task which called drm_gem_object_init(). Call when the pages are
-612ea51433e720 Lucas Stach 2022-09-09  1286   * made resident in system memory, i.e. pinned for GPU usage.
-612ea51433e720 Lucas Stach 2022-09-09  1287   *
-612ea51433e720 Lucas Stach 2022-09-09  1288   * @obj: GEM buffer object
-612ea51433e720 Lucas Stach 2022-09-09  1289   */
-612ea51433e720 Lucas Stach 2022-09-09  1290  void drm_gem_add_resident(struct drm_gem_object *obj)
-612ea51433e720 Lucas Stach 2022-09-09  1291  {
-612ea51433e720 Lucas Stach 2022-09-09  1292  	if (!mmget_not_zero(obj->mm))
-612ea51433e720 Lucas Stach 2022-09-09  1293  		return;
-612ea51433e720 Lucas Stach 2022-09-09  1294  
-612ea51433e720 Lucas Stach 2022-09-09  1295  	add_mm_counter(obj->mm, MM_DRIVERPAGES, obj->size / PAGE_SIZE);
-612ea51433e720 Lucas Stach 2022-09-09  1296  
-612ea51433e720 Lucas Stach 2022-09-09  1297  	mmput(obj->mm);
-612ea51433e720 Lucas Stach 2022-09-09  1298  }
-612ea51433e720 Lucas Stach 2022-09-09 @1299  EXPORT_SYMBOL(drm_gem_add_resident)
-612ea51433e720 Lucas Stach 2022-09-09  1300  
+On 2022/9/10 02:00, Catalin Marinas wrote:
+> On Fri, Sep 09, 2022 at 03:07:36PM +0800, Qi Zheng wrote:
+>> On 2022/9/9 14:30, Arnd Bergmann wrote:
+>>> On Fri, Sep 9, 2022, at 5:12 AM, kernel test robot wrote:
+>>>> tree:   https://github.com/ammarfaizi2/linux-block
+>>>> arm64/linux/for-next/misc
+>>>> head:   2d2f3bb897a3de4190b1b6b296c3429d01327554
+>>>> commit: 2d2f3bb897a3de4190b1b6b296c3429d01327554 [2/2] arm64: run
+>>>> softirqs on the per-CPU IRQ stack
+>>>> config: arm64-randconfig-r023-20220907
+>>>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
+>>>> 1546df49f5a6d09df78f569e4137ddb365a3e827)
+>>>> reproduce (this is a W=1 build):
+>>>>           wget
+>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>>>> -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           # install arm64 cross compiling tool for clang build
+>>>>           # apt-get install binutils-aarch64-linux-gnu
+>>>>           #
+>>>> https://github.com/ammarfaizi2/linux-block/commit/2d2f3bb897a3de4190b1b6b296c3429d01327554
+>>>>           git remote add ammarfaizi2-block
+>>>> https://github.com/ammarfaizi2/linux-block
+>>>>           git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/misc
+>>>>           git checkout 2d2f3bb897a3de4190b1b6b296c3429d01327554
+>>>>           # save the config file
+>>>>           mkdir build_dir && cp config build_dir/.config
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
+>>>> O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+>>>>
+>>>> If you fix the issue, kindly add following tag where applicable
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>>> arch/arm64/kernel/irq.c:81:6: warning: no previous prototype for function 'do_softirq_own_stack' [-Wmissing-prototypes]
+>>>>      void do_softirq_own_stack(void)
+>>>>           ^
+>>>>      arch/arm64/kernel/irq.c:81:1: note: declare 'static' if the function
+>>>> is not intended to be used outside of this translation unit
+>>>>      void do_softirq_own_stack(void)
+>>>>      ^
+>>>>      static
+>>>
+>>>
+>>> I think we are missing an "#include <asm/softirq_stack.h>"
+>>> in arch/arm64/kernel/irq.c
+>>
+>> Indeed. Hi Catalin, do I need to resend the v4 version? Or can you help
+>> me to apply the following code change to the for-next/misc directly?
+>> Both are fine for me, depending on which way is convenient for you. :)
+> 
+> I'll fold this in, that's the easiest.
+
+Thank you very much! :)
+
+> 
+> Thanks.
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Qi
