@@ -1,117 +1,190 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CB57E5
-	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 00:26:49 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id 29so4862925edv.2
-        for <llvm@lists.linux.dev>; Fri, 09 Sep 2022 17:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=MbAEJbfBHpl5/eUfL7WvdRsqjkaCRj9mnlfWbPXjzK8=;
-        b=iHPFEO7Tl396DvqfM88tOyOzzFEEFGYZzJACKj2gyq3B5EAJMcbDyF2KjIYsvpi80Z
-         2as3vpQ5WS97L1DuU+h0CaH25bWiHYaqQRjnEB12YQu0w0bl0IgPEDoa2slkxpWthl4x
-         ckjOnAzKxyru1y3iQV8K8vTtBnUx49VtkDgRiKa2h5r3/ChGzxmEWrZmb6ysA/i/mJ9L
-         uehYeqRWDsDJobmTh8u0+D1b8kvkzERbdGI9OvWZpN2KF8zVKIkutsuOKffyo3YE8qjM
-         jqg0sdSc2zfG0VVSpXx5RDWE1TJp+yn5Pk2YBhds8f9ibSZLqpGeeKG3qL37jGN7JI5o
-         jiHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MbAEJbfBHpl5/eUfL7WvdRsqjkaCRj9mnlfWbPXjzK8=;
-        b=DJuYd0OUqMraYKPV2tIjBKqFjcsTDolPpfesYIWbvEFDeAzJYAG4/a9UXvSybJF79r
-         Ja8OWQQeI6BwQudJaMDGkUMNPM1F5G72p9Lpue2jqJu6LGbsFFL7nhAyVXfh/zWVfdzx
-         MyBXnOkM1PgVUPivKAl35A23qVZ8k2EPYT9YnF1GUz6PD/CyRtQZe4aAWEs+TMRYp5mT
-         UifnMzX+GWBQKlRAx5yKG7TFTxULMScdE9Jd2r6QAR3m2XgN356N2yP6sj2gAeRrtiyt
-         S6n+KXmsJQ2iCohEGwZjtFYXS4cTvYRK6NOqn7yPKDqoardhjDh4R2gsb2mgAIxw3IYk
-         EN6Q==
-X-Gm-Message-State: ACgBeo1JO7bc87wR0V6P8kI7YwAKuIJRauwptIIdI0LALM8caxnhYJD2
-	RA365Ff6wwalrvJ/I7M4OeJx/R+AN4UpTg7yS6JgNvyw
-X-Google-Smtp-Source: AA6agR4wjwViwrsT6LteTG9R0OtH4aRDEJOtpQ/M8vVlx1QtBQX/6uzmfrIS6DwOn7fhvMA/2mF05E/HaHAyESjsTV4=
-X-Received: by 2002:a05:6402:1946:b0:44e:a406:5ff5 with SMTP id
- f6-20020a056402194600b0044ea4065ff5mr13666104edz.14.1662769607975; Fri, 09
- Sep 2022 17:26:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B58E7E4
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 03:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1662781942;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YwUrOYfU6Drq6g9spGk9lqnC8HFYF8MKjYclF7MeLMk=;
+	b=TBGV/FdjZ2RBt4QTwRkQtTrywhfeUS1YqoINWBqhag99zBGhSw+lvU+jgXDYOoeaX47/Yr
+	x5UvO0FaZnep+TXWYr9qQ3HzYT0P25Je3SgxCvRfJdoTtUPdh3rYC5tsrUqEi7s6x42sG2
+	jhi+C3zT2XjithALlqo9bvZdK5Z169E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-376-WM2iHnqHNFOP7GOC7ZzLWg-1; Fri, 09 Sep 2022 23:52:20 -0400
+X-MC-Unique: WM2iHnqHNFOP7GOC7ZzLWg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9745B85A585
+	for <llvm@lists.linux.dev>; Sat, 10 Sep 2022 03:52:20 +0000 (UTC)
+Received: from [172.64.5.10] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 890A740B40C9;
+	Sat, 10 Sep 2022 03:52:20 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
+ mainline.kernel.org-clang, e35ff25f)
+Date: Sat, 10 Sep 2022 03:52:20 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220909224544.3702931-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220909224544.3702931-1-james.hilliard1@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 9 Sep 2022 17:26:36 -0700
-Message-ID: <CAEf4Bzbm_wq=n8+ve95aBtJkK-WcsUmKM_LT57XU0D9zS9gXuQ@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: define bpf_tail_call_static when __clang__ is not defined
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+Message-Id: <07782.122090923522000223@us-mta-376.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 9, 2022 at 3:46 PM James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> The bpf_tail_call_static function is currently not defined unless
-> using clang >= 8.
->
-> To support bpf_tail_call_static on GCC we can check if __clang__ is
-> not defined to enable bpf_tail_call_static.
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
->  tools/lib/bpf/bpf_helpers.h | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 7349b16b8e2f..30fc95e7cd76 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -131,7 +131,7 @@
->  /*
->   * Helper function to perform a tail call with a constant/immediate map slot.
->   */
-> -#if __clang_major__ >= 8 && defined(__bpf__)
-> +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
->  static __always_inline void
->  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
->  {
-> @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
->                 __bpf_unreachable();
->
->         /*
-> -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
-> -        * pointer) and r3 (constant map index) from _different paths_ ending
-> +        * Provide a hard guarantee that the compiler won't optimize setting r2
-> +        * (map pointer) and r3 (constant map index) from _different paths_ ending
->          * up at the _same_ call insn as otherwise we won't be able to use the
->          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
->          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-> @@ -148,8 +148,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
->          *
->          * Note on clobber list: we need to stay in-line with BPF calling
->          * convention, so even if we don't end up using r0, r4, r5, we need
-> -        * to mark them as clobber so that LLVM doesn't end up using them
-> -        * before / after the call.
-> +        * to mark them as clobber so that the compiler doesn't end up using
-> +        * them before / after the call.
->          */
->         asm volatile("r1 = %[ctx]\n\t"
->                      "r2 = %[map]\n\t"
+Hi, we tested your kernel and here are the results:
 
-will this compile as is on GCC-BPF? I'm trying to understand what's
-the point. Once GCC supports this ASM syntax we can add similar check
-to __clang_major__, instead of allowing it for all GCC versions?
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-We must have done __clang_major__ check for a reason, old Clangs
-probably had some problems compiling this. Maybe Daniel remembers?
 
-> --
-> 2.34.1
->
+Kernel information:
+    Commit message: Merge tag 'linux-kselftest-kunit-fixes-6.0-rc5' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/53044
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5102043
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
+grep -E
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1390
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
