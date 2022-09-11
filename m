@@ -1,134 +1,125 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC657F
-	for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 19:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662925747; x=1694461747;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DPdh+j+RgUpvFm6gClNzqW5bpsIFdqhG/q9wYI9EglE=;
-  b=MiEMTQ21iFEIpmdKgxCohrAYEikH+4DvzaXYhZC+uOIep6+ccQgLrPWI
-   eV6iF2hsGkA0O2iFbZskHPDk57jOlu6qvVm4JgEYoCDASKMy7PhQ7J29K
-   WrBr0Q99/YsQxnnPLhdznGwVDVXKbRGNIgcUoQV8S54wO6RvnS12OPaw+
-   hqv1Q0XkllSlb/gSAQlNe4AURkku3hTZMSLSfH+UGTS1q1DYuByABQot3
-   fVx7/Y3/rUMHJfoj7+ovH0vWjZBodrH4D3zrM69f0bkZ9RJVo1Yj8DInM
-   4bReD/r4yIlBB5QuASL39NRApdkVFgZTCQ//DMTqHRUlZyNCrym7hcnCo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="298548705"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="298548705"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 12:49:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="646205938"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 11 Sep 2022 12:49:05 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oXSwz-0001k3-0v;
-	Sun, 11 Sep 2022 19:49:05 +0000
-Date: Mon, 12 Sep 2022 03:48:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH net-next 05/12] brcmfmac: pcie: Read Apple OTP information
-Message-ID: <202209120321.F2RQtXwO-lkp@intel.com>
-References: <E1oVpn4-005LBk-Pj@rmk-PC.armlinux.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA1F7F;
+	Sun, 11 Sep 2022 21:06:49 +0000 (UTC)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
+	(Client CN "mail.riseup.net", Issuer "R3" (not verified))
+	by mx1.riseup.net (Postfix) with ESMTPS id 4MQht0278fzDsCl;
+	Sun, 11 Sep 2022 20:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+	t=1662929944; bh=1N35O6XhmkneDsnvy/2oWxg1XykGRWHKDLRp0cSqA50=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DC7D6TGbMzcb3dXoMgZs2YErzM9mFa0S/e7w/ymmXpw6YTwGLJAHi96pHKKSJTNj0
+	 H8SvTufd/PY7OLICleSPlsACnBcFaMcH0LhabZ/xsNQy8TCZX8E5VY7rG9ewFSTOB0
+	 0PLzGL1NKjg8JX9QtTL2iqZj5Y7LpArLCFtnX0NY=
+X-Riseup-User-ID: 6F65FF3CA326C820EF73C2DA7271A46B0F2C1755CF664F5B5ED7AFDF43971D89
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	 by fews2.riseup.net (Postfix) with ESMTPSA id 4MQhsw153wz1xx1;
+	Sun, 11 Sep 2022 20:58:59 +0000 (UTC)
+Message-ID: <6ef3abfb-27de-7044-dae1-153284504c05@riseup.net>
+Date: Sun, 11 Sep 2022 17:58:56 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1oVpn4-005LBk-Pj@rmk-PC.armlinux.org.uk>
+Subject: Re: [PATCH 0/5] drm/amd/display: Reduce stack usage for clang
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+ Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+ Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+References: <20220830203409.3491379-1-nathan@kernel.org>
+From: =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220830203409.3491379-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Russell,
+Hi Nathan,
 
-I love your patch! Perhaps something to improve:
+I have built-tested the whole series with clang 14.0.5 (Fedora
+14.0.5-1.fc36), using:
 
-[auto build test WARNING on net-next/master]
+$ make -kj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper allmodconfig
+drivers/gpu/drm/amd/amdgpu/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King/dt-bindings-net-bcm4329-fmac-Add-Apple-properties-chips/20220907-155138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 2786bcff28bd88955fc61adf9cb7370fbc182bad
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220912/202209120321.F2RQtXwO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/aa178c0c54196b50f8b3bf0fbb2a806fbb91f0d7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Russell-King/dt-bindings-net-bcm4329-fmac-Add-Apple-properties-chips/20220907-155138
-        git checkout aa178c0c54196b50f8b3bf0fbb2a806fbb91f0d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/auxdisplay/ drivers/bus/ drivers/gpu/drm/i915/ drivers/net/ethernet/stmicro/stmmac/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/usb/core/ drivers/vdpa/ drivers/vfio/ fs/cifs/ net/mptcp/ net/netfilter/
+Great to see this patchset coming for DML!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+To the whole series:
 
-All warnings (new ones prefixed by >>):
+Tested-by: Maíra Canal <mairacanal@riseup.net>
 
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:42: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-                                           ~~~     ^~~~
-                                           %zu
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:77:14: note: expanded from macro 'brcmf_dbg'
-                       fmt, ##__VA_ARGS__);                        \
-                       ~~~    ^~~~~~~~~~~
-   1 warning generated.
+Best Regards,
+- Maíra Canal
 
-
-vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-
-  1842	
-  1843	static int
-  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
-  1845	{
-  1846		int p = 0;
-  1847		int ret = -EINVAL;
-  1848	
-> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-  1850	
-  1851		while (p < (size - 1)) {
-  1852			u8 type = otp[p];
-  1853			u8 length = otp[p + 1];
-  1854	
-  1855			if (type == 0)
-  1856				break;
-  1857	
-  1858			if ((p + 2 + length) > size)
-  1859				break;
-  1860	
-  1861			switch (type) {
-  1862			case BRCMF_OTP_SYS_VENDOR:
-  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
-  1864					  p, length);
-  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
-  1866								      &otp[p + 2],
-  1867								      length);
-  1868				break;
-  1869			case BRCMF_OTP_BRCM_CIS:
-  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
-  1871					  p, length);
-  1872				break;
-  1873			default:
-  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
-  1875					  p, length, type);
-  1876				break;
-  1877			}
-  1878	
-  1879			p += 2 + length;
-  1880		}
-  1881	
-  1882		return ret;
-  1883	}
-  1884	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 8/30/22 17:34, Nathan Chancellor wrote:
+> Hi all,
+> 
+> This series aims to address the following warnings, which are visible
+> when building x86_64 allmodconfig with clang after commit 3876a8b5e241
+> ("drm/amd/display: Enable building new display engine with KCOV
+> enabled").
+> 
+>     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+>     void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+>         ^
+>     1 error generated.
+> 
+>     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+>     void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+>         ^
+>     1 error generated.
+> 
+>     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1721:6: error: stack frame size (2152) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+>     void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+>         ^
+>     1 error generated.
+> 
+> This series is based on commit b3235e8635e1 ("drm/amd/display: clean up
+> some inconsistent indentings"). These warnings are fatal for
+> allmodconfig due to CONFIG_WERROR so ideally, I would like to see these
+> patches cherry-picked to a branch targeting mainline to allow our builds
+> to go back to green. However, since this series is not exactly trivial
+> in size, I can understand not wanting to apply these to mainline during
+> the -rc cycle. If they cannot be cherry-picked to mainline, I can add a
+> patch raising the value of -Wframe-larger-than for these files that can
+> be cherry-picked to 6.0/mainline then add a revert of that change as the
+> last patch in the stack so everything goes back to normal for -next/6.1.
+> I am open to other options though!
+> 
+> I have built this series against clang 16.0.0 (ToT) and GCC 12.2.0 for
+> x86_64. It has seen no runtime testing, as my only test system with AMD
+> graphics is a Renoir one, which as far as I understand it uses DCN 2.1.
+> 
+> Nathan Chancellor (5):
+>   drm/amd/display: Reduce number of arguments of
+>     dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
+>   drm/amd/display: Reduce number of arguments of
+>     dml32_CalculatePrefetchSchedule()
+>   drm/amd/display: Reduce number of arguments of dml31's
+>     CalculateWatermarksAndDRAMSpeedChangeSupport()
+>   drm/amd/display: Reduce number of arguments of dml31's
+>     CalculateFlipSchedule()
+>   drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack
+>     usage
+> 
+>  .../dc/dml/dcn30/display_mode_vba_30.c        |   2 +-
+>  .../dc/dml/dcn31/display_mode_vba_31.c        | 420 +++++-------------
+>  .../dc/dml/dcn32/display_mode_vba_32.c        | 236 +++-------
+>  .../dc/dml/dcn32/display_mode_vba_util_32.c   | 323 ++++++--------
+>  .../dc/dml/dcn32/display_mode_vba_util_32.h   |  51 +--
+>  5 files changed, 318 insertions(+), 714 deletions(-)
+> 
+> 
+> base-commit: b3235e8635e1dd7ac1a27a73330e9880dfe05154
