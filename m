@@ -1,185 +1,163 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FAB7F
-	for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 07:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1662879694;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xstCGd8GZ93v8xMpIQkM0zED0bxncPtxmd/qzGYSaPU=;
-	b=Z929rxORy7BNU/fQlY6rK5Se+eJU1EMb2d4F/crwx8+7hJVxxSB5PlDxfwVxIkI7/X5Jnk
-	16380FKACwWfuOpGLoT3PpsGTDAcMtetZITA+d/r2xeJEZgybVT+uttsRktE0sH00ggTNW
-	b+5LJ/ARBAgd2QT/OkuWmCmSdvN8yWs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-ghabA-kdOR2qAccwypX3ag-1; Sun, 11 Sep 2022 03:01:33 -0400
-X-MC-Unique: ghabA-kdOR2qAccwypX3ag-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F40061C08DA0
-	for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 07:01:32 +0000 (UTC)
-Received: from [172.64.5.10] (unknown [10.30.33.227])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E2A892026D4C;
-	Sun, 11 Sep 2022 07:01:32 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc4,
- mainline.kernel.org-clang, b96fbd60)
-Date: Sun, 11 Sep 2022 07:01:31 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1B67F;
+	Sun, 11 Sep 2022 08:54:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D41CC433C1;
+	Sun, 11 Sep 2022 08:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1662886447;
+	bh=ujluxeiT3c2OGxu4l/l7j+XTjYxGswqiFskBqi2T4V8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D855hvAIVC3T2H6Or0sdVmyzE1AS25KRlHRflYf9tYBfJ/aBm2RajP5fhs51y5Y+u
+	 YdMKBBfwvNJiSox/cm7oJu3kRutkyCVVJsI9P0AmLhxMOSzFQe+T1zvsWP00VrZtze
+	 yDpVUpqVNlRHVuMwMblYUbdKRIkKXJLHOxzWssa8fFO5z0CO1ysTYNIMZv0FQ/oPeW
+	 +yPNqTr7H2cc4zefc4yDnvTwWmk10hFqFHkdONgdn3ySijjmGKzB011x36G+NOaSpA
+	 piEyP1Q4WPQIpdL55N9QubhbJJLSavKYM26xNJbBEUh2DJ3ig1eDSVd6FkVExlTZNl
+	 WpKF17YdG6COg==
+Date: Sun, 11 Sep 2022 01:54:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Raed Salem <raeds@nvidia.com>
+Cc: Tom Rix <trix@redhat.com>, Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Lior Nahmanson <liorna@nvidia.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH net-next] net/mlx5e: Ensure macsec_rule is always
+ initiailized in macsec_fs_{r,t}x_add_rule()
+Message-ID: <Yx2iLJafMDKYZ0jL@dev-arch.thelio-3990X>
+References: <20220908153207.4048871-1-nathan@kernel.org>
+ <43471538-22b3-b80e-a1c6-7f3e24bc414a@redhat.com>
+ <DM4PR12MB53570DA53F0DA74F132698EAC9459@DM4PR12MB5357.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <27264.122091103013300293@us-mta-605.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB53570DA53F0DA74F132698EAC9459@DM4PR12MB5357.namprd12.prod.outlook.com>
 
-Hi, we tested your kernel and here are the results:
+On Sun, Sep 11, 2022 at 05:37:26AM +0000, Raed Salem wrote:
+> On 9/8/22 8:32 AM, Nathan Chancellor wrote:
+> >> Clang warns:
+> >>
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+> >>            if (err)
+> >>                ^~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:598:9: note: uninitialized use occurs here
+> >>            return macsec_rule;
+> >>                  ^~~~~~~~~~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:2: note: remove the 'if' if its condition is always false
+> >>            if (err)
+> >>            ^~~~~~~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: note: initialize the variable 'macsec_rule' to silence this warning
+> >>            union mlx5e_macsec_rule *macsec_rule;
+> >>                                                ^
+> >>                                                = NULL
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+> >>            if (err)
+> >>                ^~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1215:9: note: uninitialized use occurs here
+> >>            return macsec_rule;
+> >>                  ^~~~~~~~~~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:2: note: remove the 'if' if its condition is always false
+> >>            if (err)
+> >>            ^~~~~~~~
+> >>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: note: initialize the variable 'macsec_rule' to silence this warning
+> >>            union mlx5e_macsec_rule *macsec_rule;
+> >>                                                ^
+> >>                                                = NULL
+> Why not do as suggested and initialize the macsec_rule to NULL (and change placement to comply with reversed Christmas tree parameters order) ?
+> it is cleaner and adhering to similar error paths in the mlx5 driver, thanks for the catch.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+No particular reason. I tend to avoid initializing variables at the top
+when they might be used in error paths because it will hide warnings if
+the variable needs to be set to something different (for example, error
+codes). That is not too relevant here from what I can tell so I can just
+initialize it at the top as you suggested. I will send a v2 shortly.
+Thanks for the input!
 
+Cheers,
+Nathan
 
-Kernel information:
-    Commit message: Merge tag 's390-6.0-4' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/s390/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/53097
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5110961
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
-grep -E
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1390
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
-        Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecting never es=
-tablished after max reconnecting reached
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1895913
-            Affected tests:
-                   s390x - Storage - blktests - nvme-tcp
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> >>    2 errors generated.
+> >>
+> >> If macsec_fs_{r,t}x_ft_get() fail, macsec_rule will be uninitialized.
+> >> Use the existing initialization to NULL in the existing error path to 
+> >> ensure macsec_rule is always initialized.
+> >>
+> >> Fixes: e467b283ffd5 ("net/mlx5e: Add MACsec TX steering rules")
+> >> Fixes: 3b20949cb21b ("net/mlx5e: Add MACsec RX steering rules")
+> >> Link: https://github.com/ClangBuiltLinux/linux/issues/1706
+> >> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >Reviewed-by: Tom Rix <trix@redhat.com>
+> >> ---
+> >>
+> >> The other fix I considered was shuffling the two if statements so that 
+> >> the allocation of macsec_rule came before the call to
+> >> macsec_fs_{r,t}x_ft_get() but I was not sure what the implications of 
+> >> that change were.
+> >>
+> >> Also, I thought netdev was doing testing with clang so that new 
+> >> warnings do not show up. Did something break or stop working since 
+> >> this is the second time in two weeks that new warnings have appeared in -next?
+> >>
+> >>   .../net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c    | 6 ++++--
+> >>   1 file changed, 4 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git 
+> >> a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c 
+> >> b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+> >> index 608fbbaa5a58..4467e88d7e7f 100644
+> >> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+> >> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+> >> @@ -537,7 +537,7 @@ macsec_fs_tx_add_rule(struct mlx5e_macsec_fs 
+> >> *macsec_fs,
+> >>
+> >>      err = macsec_fs_tx_ft_get(macsec_fs);
+> >>       if (err)
+> >> -             goto out_spec;
+> >> +             goto out_spec_no_rule;
+> >>
+> >>       macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+> >>       if (!macsec_rule) {
+> >> @@ -591,6 +591,7 @@ macsec_fs_tx_add_rule(struct mlx5e_macsec_fs 
+> >> *macsec_fs,
+> >>
+> >>   err:
+> >>       macsec_fs_tx_del_rule(macsec_fs, tx_rule);
+> >> +out_spec_no_rule:
+> >>       macsec_rule = NULL;
+> >>   out_spec:
+> >>       kvfree(spec);
+> >> @@ -1129,7 +1130,7 @@ macsec_fs_rx_add_rule(struct mlx5e_macsec_fs 
+> >> *macsec_fs,
+> >>
+> >>       err = macsec_fs_rx_ft_get(macsec_fs);
+> >>       if (err)
+> >> -             goto out_spec;
+> >> +             goto out_spec_no_rule;
+> >>
+> >>       macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+> >>       if (!macsec_rule) {
+> >> @@ -1209,6 +1210,7 @@ macsec_fs_rx_add_rule(struct mlx5e_macsec_fs 
+> >> *macsec_fs,
+> >>
+> >>   err:
+> >>       macsec_fs_rx_del_rule(macsec_fs, rx_rule);
+> >> +out_spec_no_rule:
+> >>       macsec_rule = NULL;
+> >>   out_spec:
+> >>       kvfree(spec);
+> >>
+> >> base-commit: 75554fe00f941c3c3d9344e88708093a14d2b4b8
