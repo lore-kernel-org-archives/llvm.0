@@ -1,125 +1,151 @@
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA1F7F;
-	Sun, 11 Sep 2022 21:06:49 +0000 (UTC)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
-	(Client CN "mail.riseup.net", Issuer "R3" (not verified))
-	by mx1.riseup.net (Postfix) with ESMTPS id 4MQht0278fzDsCl;
-	Sun, 11 Sep 2022 20:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-	t=1662929944; bh=1N35O6XhmkneDsnvy/2oWxg1XykGRWHKDLRp0cSqA50=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DC7D6TGbMzcb3dXoMgZs2YErzM9mFa0S/e7w/ymmXpw6YTwGLJAHi96pHKKSJTNj0
-	 H8SvTufd/PY7OLICleSPlsACnBcFaMcH0LhabZ/xsNQy8TCZX8E5VY7rG9ewFSTOB0
-	 0PLzGL1NKjg8JX9QtTL2iqZj5Y7LpArLCFtnX0NY=
-X-Riseup-User-ID: 6F65FF3CA326C820EF73C2DA7271A46B0F2C1755CF664F5B5ED7AFDF43971D89
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews2.riseup.net (Postfix) with ESMTPSA id 4MQhsw153wz1xx1;
-	Sun, 11 Sep 2022 20:58:59 +0000 (UTC)
-Message-ID: <6ef3abfb-27de-7044-dae1-153284504c05@riseup.net>
-Date: Sun, 11 Sep 2022 17:58:56 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C5A7F
+	for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 21:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662931271; x=1694467271;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0Sf+GBjhkRoF+sqR5wv3WqZ1Cd0NCbnAVLknq9A1cCM=;
+  b=iyH+n9Hb1pLVNBTK0cL40+6KyzuMOCYA30vjEDDEcme987q8CDr4v5M1
+   GFv+C3NBiBKvq8sF/bs3lHqge6waMAci/nxsaWt9SVtHUQ1tqMVO5Iez9
+   4K/X6/B8jr8UPe5catO3mdLb+FkcP03Iqf7Nye7dCfFAEyKJKj5jGReEx
+   M7vkv694x+Cqoy7Y/V4ASd5MdzMEd/6OXUY0gTt+SVIMMFyZChfDrds7n
+   6MJSIoAP3xVMNBa/hkHieCctG3RQ6U0nsbQ2UOSf9USruP7kl1DMMU3qV
+   mdZDhmMw/c2o8uNdTGXizS9BLc4wc7U7xaC67A3KOF3Ow1HN2ybDbDePI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10467"; a="297754330"
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="297754330"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 14:21:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
+   d="scan'208";a="758184900"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2022 14:21:09 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oXUO4-0001qP-2P;
+	Sun, 11 Sep 2022 21:21:08 +0000
+Date: Mon, 12 Sep 2022 05:20:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/5.15 62/102] arch/arm/mach-at91/pm.c:370:38:
+ error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
+Message-ID: <202209120522.AOuxSu1o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/5] drm/amd/display: Reduce stack usage for clang
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
- Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
- dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
- Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-References: <20220830203409.3491379-1-nathan@kernel.org>
-From: =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220830203409.3491379-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   58b6ddd0dfd470c48feef1d58e9151373f59e315
+commit: 4e1102de88e91852e109ab98731f9cd1f0c7286f [62/102] ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20220912/202209120522.AOuxSu1o-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=4e1102de88e91852e109ab98731f9cd1f0c7286f
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout 4e1102de88e91852e109ab98731f9cd1f0c7286f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I have built-tested the whole series with clang 14.0.5 (Fedora
-14.0.5-1.fc36), using:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-$ make -kj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper allmodconfig
-drivers/gpu/drm/amd/amdgpu/
+All errors (new ones prefixed by >>):
 
-Great to see this patchset coming for DML!
+>> arch/arm/mach-at91/pm.c:370:38: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0'
+                   tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
+                                                      ^
+>> arch/arm/mach-at91/pm.c:373:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDO_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:377:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PUO_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:381:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SR0_PDODT_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
+                                   ^
+>> arch/arm/mach-at91/pm.c:385:19: error: use of undeclared identifier 'DDR3PHY_ZQ0SRO_PUODT_OFF'
+                   index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
+                                   ^
+   5 errors generated.
 
-To the whole series:
 
-Tested-by: Maíra Canal <mairacanal@riseup.net>
+vim +/DDR3PHY_ZQ0SR0 +370 arch/arm/mach-at91/pm.c
 
-Best Regards,
-- Maíra Canal
+   350	
+   351	static int at91_suspend_finish(unsigned long val)
+   352	{
+   353		unsigned char modified_gray_code[] = {
+   354			0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
+   355			0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
+   356			0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
+   357			0x10, 0x11,
+   358		};
+   359		unsigned int tmp, index;
+   360		int i;
+   361	
+   362		if (soc_pm.data.mode == AT91_PM_BACKUP && soc_pm.data.ramc_phy) {
+   363			/*
+   364			 * Bootloader will perform DDR recalibration and will try to
+   365			 * restore the ZQ0SR0 with the value saved here. But the
+   366			 * calibration is buggy and restoring some values from ZQ0SR0
+   367			 * is forbidden and risky thus we need to provide processed
+   368			 * values for these (modified gray code values).
+   369			 */
+ > 370			tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
+   371	
+   372			/* Store pull-down output impedance select. */
+ > 373			index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
+   374			soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
+   375	
+   376			/* Store pull-up output impedance select. */
+ > 377			index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
+   378			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   379	
+   380			/* Store pull-down on-die termination impedance select. */
+ > 381			index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
+   382			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   383	
+   384			/* Store pull-up on-die termination impedance select. */
+ > 385			index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
+   386			soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
+   387	
+   388			/*
+   389			 * The 1st 8 words of memory might get corrupted in the process
+   390			 * of DDR PHY recalibration; it is saved here in securam and it
+   391			 * will be restored later, after recalibration, by bootloader
+   392			 */
+   393			for (i = 1; i < BACKUP_DDR_PHY_CALIBRATION; i++)
+   394				soc_pm.bu->ddr_phy_calibration[i] =
+   395					*((unsigned int *)soc_pm.memcs + (i - 1));
+   396		}
+   397	
+   398		flush_cache_all();
+   399		outer_disable();
+   400	
+   401		at91_suspend_sram_fn(&soc_pm.data);
+   402	
+   403		return 0;
+   404	}
+   405	
 
-On 8/30/22 17:34, Nathan Chancellor wrote:
-> Hi all,
-> 
-> This series aims to address the following warnings, which are visible
-> when building x86_64 allmodconfig with clang after commit 3876a8b5e241
-> ("drm/amd/display: Enable building new display engine with KCOV
-> enabled").
-> 
->     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->     void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->         ^
->     1 error generated.
-> 
->     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->     void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->         ^
->     1 error generated.
-> 
->     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1721:6: error: stack frame size (2152) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->     void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->         ^
->     1 error generated.
-> 
-> This series is based on commit b3235e8635e1 ("drm/amd/display: clean up
-> some inconsistent indentings"). These warnings are fatal for
-> allmodconfig due to CONFIG_WERROR so ideally, I would like to see these
-> patches cherry-picked to a branch targeting mainline to allow our builds
-> to go back to green. However, since this series is not exactly trivial
-> in size, I can understand not wanting to apply these to mainline during
-> the -rc cycle. If they cannot be cherry-picked to mainline, I can add a
-> patch raising the value of -Wframe-larger-than for these files that can
-> be cherry-picked to 6.0/mainline then add a revert of that change as the
-> last patch in the stack so everything goes back to normal for -next/6.1.
-> I am open to other options though!
-> 
-> I have built this series against clang 16.0.0 (ToT) and GCC 12.2.0 for
-> x86_64. It has seen no runtime testing, as my only test system with AMD
-> graphics is a Renoir one, which as far as I understand it uses DCN 2.1.
-> 
-> Nathan Chancellor (5):
->   drm/amd/display: Reduce number of arguments of
->     dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
->   drm/amd/display: Reduce number of arguments of
->     dml32_CalculatePrefetchSchedule()
->   drm/amd/display: Reduce number of arguments of dml31's
->     CalculateWatermarksAndDRAMSpeedChangeSupport()
->   drm/amd/display: Reduce number of arguments of dml31's
->     CalculateFlipSchedule()
->   drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack
->     usage
-> 
->  .../dc/dml/dcn30/display_mode_vba_30.c        |   2 +-
->  .../dc/dml/dcn31/display_mode_vba_31.c        | 420 +++++-------------
->  .../dc/dml/dcn32/display_mode_vba_32.c        | 236 +++-------
->  .../dc/dml/dcn32/display_mode_vba_util_32.c   | 323 ++++++--------
->  .../dc/dml/dcn32/display_mode_vba_util_32.h   |  51 +--
->  5 files changed, 318 insertions(+), 714 deletions(-)
-> 
-> 
-> base-commit: b3235e8635e1dd7ac1a27a73330e9880dfe05154
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
