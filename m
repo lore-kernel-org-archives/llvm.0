@@ -1,139 +1,133 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B2D7F
-	for <llvm@lists.linux.dev>; Mon, 12 Sep 2022 06:35:43 +0000 (UTC)
-Received: by mail-io1-f52.google.com with SMTP id b23so6074880iof.2
-        for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 23:35:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA077F
+	for <llvm@lists.linux.dev>; Mon, 12 Sep 2022 06:44:42 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id b21so7670839plz.7
+        for <llvm@lists.linux.dev>; Sun, 11 Sep 2022 23:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=OeMN0o1tfLEw0gxowCE6mEcXVxpZ30LUoP8MCJFavJo=;
-        b=ZtoBn20mbYVKes0mgcPB4tDyqSUs6XQlsMyduznF6RHjsxZUvKs8GA+nSzK76FpKhi
-         3O3+Q/nY1eOea9J6+vYdQ8EyCdGawe3b/gjBjGWfmkeZKAUA8KgXOYxfg4osWwCG8BFz
-         uv4492+SOhc7n8xcZg+W64jug9pemqJX6bxGduWlC+DvyH2F+1m8U+zfmHfPbX+c0GTA
-         1TRf3rKhtNLGUveg88j7mpEOfjfacS3i2rtUAHTkYmH/XLYY3LtRyZWAAckGNWmatzZp
-         0WCl8BLSq+oTtvwewCNJ+wF94s5Qd+H5lRMXX2i2CamBG5N54c7tkdppWy5qlE74NCzh
-         pT+g==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=iMAohkJ88LxPurHRb39tNyriHTx3rqUB1Dm6C5Di/RA=;
+        b=KsJQE4+zfarttwkbFAzYmt7ml/SOEiKUuWOf5ARCFNvOn0IPSNTH99aNooJUlFrOUF
+         dDxOb5LQMyNogfonNrQ22Q1fhwTDkWYvAJ7swpSuaLvTYQIzk/oyOVVG/St0kqu+TXry
+         SqpXG3DMZf/Bg6fcXtjDh2Hm/dY4yUZx2uP6KfeOb62EgkxHpd3qABqK2QUoKoe7Ypvo
+         QTWYUxCjlQvMV40Sh4+nzTgTLLu9gCy1MN4HimvkNFwtyE+F/I5kioq2JsxI1TUNn9kB
+         9Pp1mKYDv3uUBJjbjV7vqlT/PFU3kH9c+L7tDVBt8/EnmRdCVFCZSCRd/8N03atWEH3+
+         91Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=OeMN0o1tfLEw0gxowCE6mEcXVxpZ30LUoP8MCJFavJo=;
-        b=7rz1pWpvQCHeZqx7I9uBn5wuYvdJUiYk+90i7sdFDmY+zGNKNSZpkEAKEQLXQneFi9
-         Lpb+i9pl5jDkJU4leXutRZZwGZytx5A51T08V5tWgnA82fTvDvnBZiZ/KXA8DdC6VptL
-         GhFUXQ3gUmdYeB2yP4OnYiLw8Fz4DoPjQvNkQUNUtoYAlwRGynqUhV9FHNzvLnFyhDky
-         Q8W18GVtB/Tcym8BmTRXMuI0EHz4GD9opMOn4MtWfOLY6AcNhk/rlh6NkedPSnzDgHWX
-         spvr7z8SR5HcN1Ep4jqAx5Dc/O1q1YWK113WhOXE5DidZAK7Xw/Z2ILPm24WZLV5XPCr
-         WlkA==
-X-Gm-Message-State: ACgBeo3Wv2h0qTLYrzCHQRN23QUSxl4Lm4jmwb00G7YemVu4ttKlEDBW
-	p9KsGtAO5vuvWj92WVn3mJM=
-X-Google-Smtp-Source: AA6agR4HLP3lHT2BXIc9pDYr/CPsLU9HeBb2Cd9HkpnfKc3CGdRQqYtBVZB3ou4YmNcqRmavPRJ/Nw==
-X-Received: by 2002:a05:6638:130c:b0:356:5271:c739 with SMTP id r12-20020a056638130c00b003565271c739mr13324875jad.82.1662964541524;
-        Sun, 11 Sep 2022 23:35:41 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id b41-20020a05663838a900b0035a0d844e43sm2160286jav.159.2022.09.11.23.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 23:35:40 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: bpf@vger.kernel.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] libbpf: define bpf_tail_call_static when __clang__ is not defined
-Date: Mon, 12 Sep 2022 00:35:13 -0600
-Message-Id: <20220912063514.2824432-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=iMAohkJ88LxPurHRb39tNyriHTx3rqUB1Dm6C5Di/RA=;
+        b=HZou78dyYpXSlovlEqHvUvUvsbTa8YBC6IwGg/F4WmvkAZj4VQfkLTnMiIID2FUvgN
+         d7gZj8ma66nOPG428I5LB1uaMdy5g+KKnMyZYyC0rHFL15RXHCqA2CsNa8JMo88q/anG
+         dM8uXLQouRuDs6dVSKuDfqn/k3VpD/sCs75PYMjmRdmnDu9DcB71lG0dic0yBXKyABKS
+         vimZf01qS0kfUhUXxb11hRmxMxU/1b9E8G+yFAj0Qg9YjQzmvP+zxyhdb7IHjq6By3TW
+         smQS6s6o3dWC8xR8as7bizs90cWvWOhAdv1cWYnSN9v3n2y61OGB8UsomC69gYAV2R9D
+         4dbw==
+X-Gm-Message-State: ACgBeo3T43CIc4Ef4VYuMsvLX5sACYQM7pYBZkfrJVpmGqKmFqJjJeOb
+	UnzWbk8hUcZEojf9itEMV3J1jf5u8I9vEaCZloI=
+X-Google-Smtp-Source: AA6agR771WKf4PnOUJygezxSfXmS0OkGPyK3n16p+7DKRc70kqw2E01+3HkWhEdpa3WfArHUBGHlMZlOvM6ni+ezm8s=
+X-Received: by 2002:a17:902:f394:b0:176:b7b7:2 with SMTP id
+ f20-20020a170902f39400b00176b7b70002mr25269655ple.57.1662965081460; Sun, 11
+ Sep 2022 23:44:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220909224544.3702931-1-james.hilliard1@gmail.com> <CAEf4Bzbm_wq=n8+ve95aBtJkK-WcsUmKM_LT57XU0D9zS9gXuQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzbm_wq=n8+ve95aBtJkK-WcsUmKM_LT57XU0D9zS9gXuQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 12 Sep 2022 00:44:28 -0600
+Message-ID: <CADvTj4oF7Khci-w8LZPWvOjhKEepd-qG0evZ2_OorU=H2wtpaA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: define bpf_tail_call_static when __clang__ is not defined
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-The bpf_tail_call_static function is currently not defined unless
-using clang >= 8.
+On Fri, Sep 9, 2022 at 6:26 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Sep 9, 2022 at 3:46 PM James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > The bpf_tail_call_static function is currently not defined unless
+> > using clang >= 8.
+> >
+> > To support bpf_tail_call_static on GCC we can check if __clang__ is
+> > not defined to enable bpf_tail_call_static.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> > ---
+> >  tools/lib/bpf/bpf_helpers.h | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> > index 7349b16b8e2f..30fc95e7cd76 100644
+> > --- a/tools/lib/bpf/bpf_helpers.h
+> > +++ b/tools/lib/bpf/bpf_helpers.h
+> > @@ -131,7 +131,7 @@
+> >  /*
+> >   * Helper function to perform a tail call with a constant/immediate map slot.
+> >   */
+> > -#if __clang_major__ >= 8 && defined(__bpf__)
+> > +#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
+> >  static __always_inline void
+> >  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >  {
+> > @@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >                 __bpf_unreachable();
+> >
+> >         /*
+> > -        * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+> > -        * pointer) and r3 (constant map index) from _different paths_ ending
+> > +        * Provide a hard guarantee that the compiler won't optimize setting r2
+> > +        * (map pointer) and r3 (constant map index) from _different paths_ ending
+> >          * up at the _same_ call insn as otherwise we won't be able to use the
+> >          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+> >          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+> > @@ -148,8 +148,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+> >          *
+> >          * Note on clobber list: we need to stay in-line with BPF calling
+> >          * convention, so even if we don't end up using r0, r4, r5, we need
+> > -        * to mark them as clobber so that LLVM doesn't end up using them
+> > -        * before / after the call.
+> > +        * to mark them as clobber so that the compiler doesn't end up using
+> > +        * them before / after the call.
+> >          */
+> >         asm volatile("r1 = %[ctx]\n\t"
+> >                      "r2 = %[map]\n\t"
+>
+> will this compile as is on GCC-BPF? I'm trying to understand what's
+> the point. Once GCC supports this ASM syntax we can add similar check
+> to __clang_major__, instead of allowing it for all GCC versions?
 
-To support bpf_tail_call_static on GAS we can check if __clang__ is
-not defined to enable bpf_tail_call_static.
+So, it's a bit different since the ASM syntax issue is more of an
+issue with GAS,
+we would need a check along these lines I think for a proper migration path:
+https://lore.kernel.org/bpf/20220912063514.2824432-1-james.hilliard1@gmail.com/
 
-We need to use a GAS assembly syntax check so that the assembler
-is provided GAS compatible assembly as well.
+We would set something like once GAS support for the llvm syntax is added:
+.ifdef .gasversion. < 24000
 
-We can use gasversion to provide a migration path to llvm syntax
-for GAS once llvm syntax is natively supported.
+I don't think we can do a compiler version check here like with llvm since GCC
+release cycles are out of sync with GAS(llvm assembler is kept in sync with the
+compiler AFAIU).
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
-Changes v1 -> v2:
-  - use gasversion to detect assembly variant
----
- tools/lib/bpf/bpf_helpers.h | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 7349b16b8e2f..5b98f5506798 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -131,7 +131,7 @@
- /*
-  * Helper function to perform a tail call with a constant/immediate map slot.
-  */
--#if __clang_major__ >= 8 && defined(__bpf__)
-+#if (!defined(__clang__) || __clang_major__ >= 8) && defined(__bpf__)
- static __always_inline void
- bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- {
-@@ -139,8 +139,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- 		__bpf_unreachable();
- 
- 	/*
--	 * Provide a hard guarantee that LLVM won't optimize setting r2 (map
--	 * pointer) and r3 (constant map index) from _different paths_ ending
-+	 * Provide a hard guarantee that the compiler won't optimize setting r2
-+	 * (map pointer) and r3 (constant map index) from _different paths_ ending
- 	 * up at the _same_ call insn as otherwise we won't be able to use the
- 	 * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
- 	 * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-@@ -148,12 +148,18 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
- 	 *
- 	 * Note on clobber list: we need to stay in-line with BPF calling
- 	 * convention, so even if we don't end up using r0, r4, r5, we need
--	 * to mark them as clobber so that LLVM doesn't end up using them
--	 * before / after the call.
-+	 * to mark them as clobber so that the compiler doesn't end up using
-+	 * them before / after the call.
- 	 */
--	asm volatile("r1 = %[ctx]\n\t"
-+	asm volatile(".ifdef .gasversion.\n\t"
-+		     "mov %%r1,%[ctx]\n\t"
-+		     "mov %%r2,%[map]\n\t"
-+		     "mov %%r3,%[slot]\n\t"
-+		     ".else\n\t"
-+		     "r1 = %[ctx]\n\t"
- 		     "r2 = %[map]\n\t"
- 		     "r3 = %[slot]\n\t"
-+		     ".endif\n\t"
- 		     "call 12"
- 		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
- 		     : "r0", "r1", "r2", "r3", "r4", "r5");
--- 
-2.34.1
-
+>
+> We must have done __clang_major__ check for a reason, old Clangs
+> probably had some problems compiling this. Maybe Daniel remembers?
+>
+> > --
+> > 2.34.1
+> >
