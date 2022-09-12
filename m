@@ -1,140 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE195C82;
-	Mon, 12 Sep 2022 22:02:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD757C433D6;
-	Mon, 12 Sep 2022 22:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663020144;
-	bh=5rS0GDQM1LJit2JFh8qRzcwbV07Dpwm7u0iHI8wNtkM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aoElzxAKBCsyfJK6B79EpEdBMyLY/kiy/QAFqqRwq/6F3Hgyby5WuTOBea2nYezZB
-	 +AfOyCrmGITq3l07VLO+3Hji8Zs4SXl92eW6m6TRHj3AAFCU+KQsgw4H/+W02K+WRw
-	 d0YN9o9QVFY7HnZeLMIQRpTESSuaXl+jZ2m1eoxN/CzUugDVktPxPcxOwy3K4YaUHB
-	 04pFPTWaBPuUM0LG8u1Q2Th6fGxVGW3HptIohargnZAn9bkHWi2kiwcVVuZuzNoufm
-	 J71do3AEzj3RrvUAU2gtLIPTgtMHYc9K/F5CqZMhSV+I+eq9Y7PMJMt4N8DJtgt+ze
-	 Vhpx1/rk694IQ==
-Date: Mon, 12 Sep 2022 15:02:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-Cc: Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
-Subject: Re: [PATCH 0/5] drm/amd/display: Reduce stack usage for clang
-Message-ID: <Yx+sbmj94AOGAMCP@dev-arch.thelio-3990X>
-References: <20220830203409.3491379-1-nathan@kernel.org>
- <ddc17b2a-fd9f-2eb6-7cdc-5f17c048b26a@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C577566E0
+	for <llvm@lists.linux.dev>; Mon, 12 Sep 2022 23:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663024777; x=1694560777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q93oBTx3u5LUtVhSCEgNEkmMyo9rEmqCpu5xieHetws=;
+  b=A0fRLrnaPbaLtgh8LbNFMzxFnJTBQtoQIwEe3NFGF5Mzx2x3O2AkGojS
+   VZXmcAa3DQTfjHeKxnuGEFsEC3vOWcVn2VK4GVqhsL993iuuDe4ODoXt+
+   UDRvWhPuiytoxZNc+qIRY6zETPn+4gPzBq0KVUvkYcaAUhGyhjH839Bnh
+   WbtA4xT/5E9+i48xcHRzbX8stJK3vHOzXB6t3TJHYAgxvUTbHuRa8daMK
+   ZTCd/3L0+zECXiL+JLcRY7rdjnfm2Ee1hGquDe7HuTnOdhTQvJ9JrNSB8
+   tP3VHU+8qXNou1EoBWvLqMPsDO2ew6Ju2Z/hEfneGVl9nfCuwYVy799h0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="281009925"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="281009925"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 16:19:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="705329009"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Sep 2022 16:19:34 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oXsiD-0002xx-30;
+	Mon, 12 Sep 2022 23:19:33 +0000
+Date: Tue, 13 Sep 2022 07:18:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: yaliang.wang@windriver.com, tudor.ambarus@microchip.com,
+	pratyush@kernel.org, michael@walle.cc, miquel.raynal@bootlin.com,
+	richard@nod.at, vigneshr@ti.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: spi-nor: gigadevice: gd25q256: replace
+ gd25q256_default_init with gd25q256_post_bfpt
+Message-ID: <202209130732.cQpPG34i-lkp@intel.com>
+References: <20220912142833.1739547-1-yaliang.wang@windriver.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ddc17b2a-fd9f-2eb6-7cdc-5f17c048b26a@amd.com>
+In-Reply-To: <20220912142833.1739547-1-yaliang.wang@windriver.com>
 
-Hi Rodrigo,
+Hi,
 
-On Mon, Sep 12, 2022 at 05:50:31PM -0400, Rodrigo Siqueira Jordao wrote:
-> 
-> 
-> On 2022-08-30 16:34, Nathan Chancellor wrote:
-> > Hi all,
-> > 
-> > This series aims to address the following warnings, which are visible
-> > when building x86_64 allmodconfig with clang after commit 3876a8b5e241
-> > ("drm/amd/display: Enable building new display engine with KCOV
-> > enabled").
-> > 
-> >      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-> >      void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-> >          ^
-> >      1 error generated.
-> > 
-> >      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-> >      void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-> >          ^
-> >      1 error generated.
-> > 
-> >      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1721:6: error: stack frame size (2152) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-> >      void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-> >          ^
-> >      1 error generated.
-> > 
-> > This series is based on commit b3235e8635e1 ("drm/amd/display: clean up
-> > some inconsistent indentings"). These warnings are fatal for
-> > allmodconfig due to CONFIG_WERROR so ideally, I would like to see these
-> > patches cherry-picked to a branch targeting mainline to allow our builds
-> > to go back to green. However, since this series is not exactly trivial
-> > in size, I can understand not wanting to apply these to mainline during
-> > the -rc cycle. If they cannot be cherry-picked to mainline, I can add a
-> > patch raising the value of -Wframe-larger-than for these files that can
-> > be cherry-picked to 6.0/mainline then add a revert of that change as the
-> > last patch in the stack so everything goes back to normal for -next/6.1.
-> > I am open to other options though!
-> > 
-> > I have built this series against clang 16.0.0 (ToT) and GCC 12.2.0 for
-> > x86_64. It has seen no runtime testing, as my only test system with AMD
-> > graphics is a Renoir one, which as far as I understand it uses DCN 2.1.
-> > 
-> > Nathan Chancellor (5):
-> >    drm/amd/display: Reduce number of arguments of
-> >      dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
-> >    drm/amd/display: Reduce number of arguments of
-> >      dml32_CalculatePrefetchSchedule()
-> >    drm/amd/display: Reduce number of arguments of dml31's
-> >      CalculateWatermarksAndDRAMSpeedChangeSupport()
-> >    drm/amd/display: Reduce number of arguments of dml31's
-> >      CalculateFlipSchedule()
-> >    drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack
-> >      usage
-> > 
-> >   .../dc/dml/dcn30/display_mode_vba_30.c        |   2 +-
-> >   .../dc/dml/dcn31/display_mode_vba_31.c        | 420 +++++-------------
-> >   .../dc/dml/dcn32/display_mode_vba_32.c        | 236 +++-------
-> >   .../dc/dml/dcn32/display_mode_vba_util_32.c   | 323 ++++++--------
-> >   .../dc/dml/dcn32/display_mode_vba_util_32.h   |  51 +--
-> >   5 files changed, 318 insertions(+), 714 deletions(-)
-> > 
-> > 
-> > base-commit: b3235e8635e1dd7ac1a27a73330e9880dfe05154
-> 
-> Hi Nathan,
-> 
-> First of all, thanks a lot for your patchset!
-> 
-> Sorry for the delay; it took me more time than I expected to review and run
-> a couple of tests in this patchset (most of them were IGT). Anyway, I'm good
-> with this change; this series is:
-> 
-> Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> 
-> And I applied it to amd-staging-drm-next.
-> 
-> We will run some extra tests this week; if we find some issues, I'll debug
-> them.
-> 
-> Also, thanks, Maíra, for checking this patch as well.
+Thank you for the patch! Yet something to improve:
 
-No worries on the delay, the series is not exactly the smallest one I
-have ever sent :) While the changes were mostly mechanical, I could have
-definitely messed something up and I appreciate you taking the time to
-review it and run it through some tests. Please let me know if I can be
-of further assistance on that front.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc5 next-20220912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If you have any thoughts on the blurb I had in the cover letter around
-how to handle the warnings this series resolves with regards to
-mainline, I would love to hear them.
+url:    https://github.com/intel-lab-lkp/linux/commits/yaliang-wang-windriver-com/mtd-spi-nor-gigadevice-gd25q256-replace-gd25q256_default_init-with-gd25q256_post_bfpt/20220912-223028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 80e78fcce86de0288793a0ef0f6acf37656ee4cf
+config: i386-randconfig-a016-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130732.cQpPG34i-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0238f8172a76ee5a84dda79b45911a2b63d59721
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review yaliang-wang-windriver-com/mtd-spi-nor-gigadevice-gd25q256-replace-gd25q256_default_init-with-gd25q256_post_bfpt/20220912-223028
+        git checkout 0238f8172a76ee5a84dda79b45911a2b63d59721
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/spi-nor/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mtd/spi-nor/gigadevice.c:23:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   1 error generated.
+
+
+vim +23 drivers/mtd/spi-nor/gigadevice.c
+
+acb96ecd59f7fd Boris Brezillon 2020-03-13  10  
+0238f8172a76ee Yaliang Wang    2022-09-12  11  static int
+0238f8172a76ee Yaliang Wang    2022-09-12  12  gd25q256_post_bfpt(struct spi_nor *nor,
+0238f8172a76ee Yaliang Wang    2022-09-12  13  			    const struct sfdp_parameter_header *bfpt_header,
+0238f8172a76ee Yaliang Wang    2022-09-12  14  			    const struct sfdp_bfpt *bfpt)
+acb96ecd59f7fd Boris Brezillon 2020-03-13  15  {
+acb96ecd59f7fd Boris Brezillon 2020-03-13  16  	/*
+acb96ecd59f7fd Boris Brezillon 2020-03-13  17  	 * Some manufacturer like GigaDevice may use different
+acb96ecd59f7fd Boris Brezillon 2020-03-13  18  	 * bit to set QE on different memories, so the MFR can't
+acb96ecd59f7fd Boris Brezillon 2020-03-13  19  	 * indicate the quad_enable method for this case, we need
+0238f8172a76ee Yaliang Wang    2022-09-12  20  	 * to set it in the post_bfpt fixup hook.
+acb96ecd59f7fd Boris Brezillon 2020-03-13  21  	 */
+829ec6408dc58d Tudor Ambarus   2020-03-13  22  	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
+acb96ecd59f7fd Boris Brezillon 2020-03-13 @23  }
+acb96ecd59f7fd Boris Brezillon 2020-03-13  24  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
