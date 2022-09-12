@@ -1,202 +1,129 @@
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2073.outbound.protection.outlook.com [40.107.95.73])
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastus2azon11021015.outbound.protection.outlook.com [52.101.57.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8A15C82;
-	Mon, 12 Sep 2022 21:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D93B5C82
+	for <llvm@lists.linux.dev>; Mon, 12 Sep 2022 21:56:10 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=liGQxH3oWZ1MbEIdQ3GW2anvx5XBOj0akl4vReXhVYerznIG8L6z9HnEEFx5RqZMbcPDiX7RV1tuU9gTZCLi7ZZqOEBFzNc9EfZM0Kgk4Xwq0qyQniVgnVlHk1YmXbslERAoOK+mtimQoJCwXp/yCjEP65/4dtML54CfRlDiRIW/y/s443vtVGqypof0dHUpWisBLqbtivspYuhxpU9VVRsSB1q3pJnXxnReUrcmSklqu3gWXdINlkD3/9mbQQkIrsLxExMJvUWiHMSy9ub3ftbyw9valZ0PJr7lbZTlR+RbkG84Vmq9rUb8uBuxpRps3NLjMVWBZNGMK/Vvkx4uqw==
+ b=aVaRNfJ6mHFPobMU+V5EXvv+k7lrnyt+HPltBVHmkYBAykmDEe/UVt5jkZ6a3JeWbi2kITBssEdDmbs583oDjZFfFBx4Vex2gX/xR1AJd1PWCGq2FSTKubRwFbMFf6QKP7ARWQ87m/QwRdBtA8/jYiD/N5OUtDRwXx91NU1515yqrgBryBGdZeSnl5p4ABrqRgdJxYP9doyaPsXYLBEF3VUhw4/VMBglegPKRYlrgv67xkGp/WMB61a/vWWNCT9kdyZwMI51BEauCv47w4K9oU9wbDq3WtqL9gAd2CU8aL+1LsFWICp1LfRD1DQrYK1otrDFso+Judro+cItDwQxXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GVDuxn3B6IvMR+tq6G+rP819NDlP7aL+jVdGY0BM/h0=;
- b=FVs8cog8rUsM4P03OqBKNQ2l2gczZ37Q35hTuRG4o0PCEIe5cIDbdbXjxrSlj9KHY/rj9b9gEAfuQS/e6mgZCypb5oG4y4n92qlRNIM0Bi/Ws8fAv6+qrT4BcLp4CFLFYI6b1lD8BvhUhZIbdsf+J0XNqc89UsOWHl79amnJYxcjlDZlaFMCfmveIlgmmttFXnRKL5MzMSlyNBld6E7p8HvfyB4IsRzjRfCLIY/ufkYIV8WODX0XTy7ynQI88/BTjSG8XXWD9MgPfdfgLAnrXNhyExeAeiLAmhtQGGoJsXiJtUhmc+OFaxQe6DdzmFQIL3wXd3F6TCD3CAuknQ3q5Q==
+ bh=bglgwPraIJOH0KI3SmoKtjD8K8u9ZIdUm0UsE2LqErM=;
+ b=BWhJHAtOxUvXl2c/z5pjxqJazi7B3Tozy2n/cdKSb/DuBd/CtaX8YxUNVtNP7CLkWuQIidn0OAu1H1AR+Qe6S48UFexAu0mfCzIsCmpDBwHARgxeOGDQEHQC13b649TxAep45RNsYdngYxNKH/6KYUEyy3AMQvMKHFJ+ksyoBRymcWhffijG/hY/SHMoTwxSasrAVF7BbWjKJ4gN+faYYpt6H1OHhEgE75699qczB6j+xdeLcFcujiXM76cMV3I4Zb1LwiL8f3/QbHsdjITEhtG43S0vHw775FseFXI3GCa/nVc/5TorI2yuWlm3dJ462uD7qTj0j6vfoV1wT5Xgsw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GVDuxn3B6IvMR+tq6G+rP819NDlP7aL+jVdGY0BM/h0=;
- b=P/OtnartJZIpx3+usiEeOHNGN2nRJQeCLyGo6yNGAhvPAQV1BkIZcb6TMtK4Z0xeAhmRpMvCaHQqkkElkmTsbhXWQEbAoXvAQeGftD4J8cSvUsFEbJvqHkMXOdavbT3psWVJK4oNiehsZcdBUBCTO/1Ivor40sjvOrib40ZhSZ4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by MN2PR12MB4144.namprd12.prod.outlook.com (2603:10b6:208:15f::16) with
+ bh=bglgwPraIJOH0KI3SmoKtjD8K8u9ZIdUm0UsE2LqErM=;
+ b=DTBys87LF31m8I3ZjOpkeZdD+PuX+M1s7mZmJVlVXbL44JmpadKWdAHhT4k5oHWGBZS3uvG6P9jzvMrLr1scyUqOuW+2qASCiDu0ZdPMmZb5wcCbPCjBQ4er0odyL4DVIGPBErmEl0JkqZX3LzcLJafKLCGqXJJcqrMzT5pZPUw=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by PH0PR21MB1959.namprd21.prod.outlook.com (2603:10b6:510:1a::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Mon, 12 Sep
- 2022 21:50:39 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee%7]) with mapi id 15.20.5612.022; Mon, 12 Sep 2022
- 21:50:39 +0000
-Message-ID: <ddc17b2a-fd9f-2eb6-7cdc-5f17c048b26a@amd.com>
-Date: Mon, 12 Sep 2022 17:50:31 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 0/5] drm/amd/display: Reduce stack usage for clang
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.4; Mon, 12 Sep
+ 2022 21:56:07 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::b113:4857:420a:80e]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::b113:4857:420a:80e%4]) with mapi id 15.20.5654.003; Mon, 12 Sep 2022
+ 21:56:07 +0000
+From: Dexuan Cui <decui@microsoft.com>
+To: Nathan Huckleberry <nhuck@google.com>
+CC: Dan Carpenter <error27@gmail.com>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, KY Srinivasan <kys@microsoft.com>, Haiyang Zhang
+	<haiyangz@microsoft.com>, Stephen Hemminger <sthemmin@microsoft.com>, Wei Liu
+	<wei.liu@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: mana: Fix return type of mana_start_xmit
+Thread-Topic: [PATCH] net: mana: Fix return type of mana_start_xmit
+Thread-Index: AQHYxvDdDef/VwTQN0WYjedftyXI263cVlgg
+Date: Mon, 12 Sep 2022 21:56:06 +0000
+Message-ID:
+ <SA1PR21MB13354FBDC96B7196CE3E46A5BF449@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20220912214357.928947-1-nhuck@google.com>
+In-Reply-To: <20220912214357.928947-1-nhuck@google.com>
+Accept-Language: en-US
 Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Sudip Mukherjee <sudipm.mukherjee@gmail.com>, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-References: <20220830203409.3491379-1-nathan@kernel.org>
-From: Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20220830203409.3491379-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BL1PR13CA0386.namprd13.prod.outlook.com
- (2603:10b6:208:2c0::31) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=cb639ee6-6c79-42d5-aec5-7f2c52ad0f8d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-12T21:53:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH0PR21MB1959:EE_
+x-ms-office365-filtering-correlation-id: dedc0983-958f-43ad-e00d-08da95099862
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Thfb8T14tWp67XCVjpw43PHMQoB2KpR9PqNdCj0yzxhMF1YfCEhepbKIjG0JVJQOH47ZfyWp+e/vpi85D67FlCTpbstU8t1edFxQAfHTBYnMXQkL7vOXxOlUl0vOkxuL7GDIkVtLBnFTEAB+CAEP6+MsZk3l3MNUUXkmLS1RLiLx4ZtJdl1mhIi36rqVedohyrCexLUm1vNKv1qss92Nh8W9hF6wH/6oq8g1+BSuQ8ZgcYmjSuhm+tVid9ZNsuxHqDDcM4w2DIrm+hQ9aGJ7Gg+OokVtV7mOQt3wkqnjMCgMwA9FNbw5OVygZsz39LP3u/rOWqNOEsRLaQqXzcMRHUU9VZoPYl5NHj7pftZA44iWWxEjgjbVlXJQFYCggIt8Bd/fCy/FjRJ6e/chNACJqtzZZEA+sQ6x9i/BXs94jDXeCzDdailS4mgykb9e165Isg9/bHJyCvuAeW7v7RxoZ/+3jfvlwURrIK07Uq9B1vaZJLJ2/nEOoFhr+6YOpjhblRzZ7uEk9WwJ2pKeiQ6tqTSQSe+9mozgKR96DQ735YaPF+XInpQcz2NtiCrbJZC6BbxmuuAUhNvLncDtimbY3LdScFOBYsw8GKdQc6UAUkxIBAThkLmXFwpLnelkcnmDjxN0FXu+eD+I62mUwWcUgplurTKV/GpJg/7MfU7icX7OynOA91SI6lv6u1ijckMmkcPXCZJKSKBmf/09IZGgJ4MDb02Vwv6A1jyIxsGxDCKSs8dxcKsZYjMcJFneI8tRN2u18rgeDAZ4XFae5b3N+uxDoHtuE4pHYp/dlYW7OA2pmiL5+dHkiItw4g+bvyI/
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(451199015)(66556008)(66446008)(8936002)(2906002)(82950400001)(52536014)(478600001)(38070700005)(86362001)(54906003)(66946007)(4326008)(38100700002)(5660300002)(6916009)(186003)(8990500004)(7696005)(6506007)(122000001)(316002)(8676002)(33656002)(4744005)(64756008)(26005)(9686003)(10290500003)(71200400001)(76116006)(55016003)(41300700001)(82960400001)(7416002)(66476007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?ouk4wtNwbkmitqpN8RObRtNx++k7gVCCnY7KAyZHrhKTPw29WSROX0kH3g7V?=
+ =?us-ascii?Q?cSCmn2JkG3kZ/Z5Efw/4ZzwC1T9AnZgfzgsulSu4sPZ5pD+nRAEFgC1EHtJW?=
+ =?us-ascii?Q?KwZLF4BitcnGFUCe3MYgCCT50Jq64O/2cc0GguL+21RNlMT0fn/Nwvm17CUc?=
+ =?us-ascii?Q?rfopoA2OZ6pdM/f9dVx+JymNz+vKrWayWGPqnTi+fS7Nl4eo7Xo8gf0SWonC?=
+ =?us-ascii?Q?5XIwnAtZaG9PeqIX4pXtfmpjMy+K/QZ01EHj6Z89qhpFQLZs8KKLoqvMrPHp?=
+ =?us-ascii?Q?R1RRqdYP8aiBfy3bmAoC0xfg4xxWmBTWiNgTGgFDtdK9V+iAIuRs3hec6mgS?=
+ =?us-ascii?Q?NDJ9xTQO33gsB0BmFmJxk00y36m8rMClST5cnGLgfJ/qyusmI7sqot2c8YEb?=
+ =?us-ascii?Q?VukBcsAeV81OHxy1q+aqhGUpeB/x+nyjWb1btaOEEpUQJmGEE1enxcdJl5a/?=
+ =?us-ascii?Q?Eds+peeu6VAPk/WRzg1PtNQ68JB6IUbZnnkXFuWe+kVN5PPPu6Xpu3jYsDQm?=
+ =?us-ascii?Q?UcAhPRLwxKRxi341POImBAIw8O3ixnOGQKtb/d/XeUQFr0O/nl1/DMLKTOxL?=
+ =?us-ascii?Q?fTLyhSPs17iKwVLON6yuC4e1Pf3+URPEdgH4VIKTqpOP0e3awztwfXumFucX?=
+ =?us-ascii?Q?4+yqKFyYfnQyqv4M91Y+0DG3CQlCyuB+aTY0fJHfqUacxax9phaEcN7fVihm?=
+ =?us-ascii?Q?5EV95IzhN+9/usl10gZIJKbqzGeXbE6GRqChxJKt1YMTVqRFyDHAAZVJMkTB?=
+ =?us-ascii?Q?qylYNshzTecNSydY6Ahj8Y3QkP2ZnLLg13ghj1L36ox+1z/8BP3NopbIzMVL?=
+ =?us-ascii?Q?GS8HtnSufdYgMbvdP2Nf4OygTyz+Agczo9SqpzCCM5jsrknIItj1qPKOh47L?=
+ =?us-ascii?Q?F/Uh2kH7v38nYhNcaFdCKvqKsZh0ev/Igc532ou6INwfF//1ycYNMTvZoEby?=
+ =?us-ascii?Q?+tsDF7xv1hK64piuAAhagU86S8k1jlrE/3Hvj29/y8BsaHyaUyIOOO9xGOxv?=
+ =?us-ascii?Q?z1/ZVblwnOifhbWR/Cqh44saW7SCT9Q91YYuyyfCovNI2Ts909Y3brnf9Lq4?=
+ =?us-ascii?Q?O7jRB9cZ95EMk27RgBgpDljJaXco/E6RvHw0C9HqHknJ5oOxX9KDdtP0EFOi?=
+ =?us-ascii?Q?qy/xzpkFOeIgzsmctqsu9jQZXQwyZJCnk7378cGZlzJ2LGohWkMxfa+uLeim?=
+ =?us-ascii?Q?VdLN6ZJhpS13McL4+K2yB2MW2fX+EzO8U++J1URndyS8iNE5iQf7jKv1lXeX?=
+ =?us-ascii?Q?deQBNm4mlUd87sJr2gCUqeyX/LdHwnJv6Kx4sSNDRnkIG5dnVo4fU5HMmtRW?=
+ =?us-ascii?Q?+SRxKLcT7y816MdMGL8te+QQD8aY0F49TTRG2f3tHYJVog/Sqg3XKqJgDO97?=
+ =?us-ascii?Q?w08PCCEMh8wnFONZprp+hTPkCtPfqU/gCCVMaHMXuyhJgDYWB8zdltSw/nr5?=
+ =?us-ascii?Q?laB/CB47PKalMqI77TnKpEYx309LAZh2zSj41c02uqf/lz9xFLMbiQpSX+iZ?=
+ =?us-ascii?Q?lmNgbcuAC/HpsgJ/z09yC47ODrjuCWAMszTjg7LV8Xe+THMeEP5uavRd1KmZ?=
+ =?us-ascii?Q?kdBRuhUm8yX5QVC1+PeHli6p3yzuZ8ru35pc8H2G?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|MN2PR12MB4144:EE_
-X-MS-Office365-Filtering-Correlation-Id: f318381b-84a8-4bb0-0244-08da9508d4ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	IupeLxD0XpLnd2Vg24eMuIvYSiFzcFxNYgJQblB28jCnO+H4CjO0VW9s45JIPsT2Ihz7OuobvyM3lhWvy7Wt7fxS8AX5DbAOxmJXUWPs88nf/H+Gxm9Yj8yxhOra4NJlPTsylJeaPLmeUQU82dzo+FcN1JrbxO/HtDJkIn1mZKGtTyJuXO0l5TMMBcEqrRQ9BBVL6KPOG9BMAj7GR11fFmPVHu23JIPSrlHWaKKJzCfVnpweKG3RrfMpU+xgriIU3ifWkX1fTmcmeSK0yFIwrRpQYpvFO24cj2u1pUAi5OAVw4y/GoMe/eq7kdf1UgECXeghJHrKRi/ktVu2HAVlbFIdM69uqM6PoB52X58p1XRh+mfRxMwpNVorymHJGZqtInBfQMG/rMEvZE6gCNaiv3wd8z96gGLcBXxloGe6a2WvPZvppC4+yBvSK8iBnli4estgUxlvTCYKSG0QS4QtyRMpNN4PKZxH3mGQ/PAsd4wK+WGmlHmynMQ7RGmZwPHXKyBrMVQ/JdwSEX004kHTSWD4O9RzGL8ni8FTyAOIaM36d1qbsswj99wckmvjeb5qJp62EmGmK2qRWE6mSvdFyMr3WIWSAZ0i/jan6C+vgKe9ODCy9zoLnO2QRskekb5SnI9yUXRWZ3H51vFCv4vdw5u2I2J6xNGxpxHJGBp1ivN2WVqBMZgXyFyWf7dZR8cwbN7LALC21edxlVeEf5SWI95sj7Rx0gv0V81De7GooCLxlSnMcVWc9G4FVbntU6Cu483792p3X6Brd9FlYKgUb9Pm3ZWQl3fAlIOAc7CUc1o=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199015)(316002)(38100700002)(5660300002)(26005)(6636002)(6512007)(31696002)(186003)(478600001)(36756003)(31686004)(6506007)(4326008)(110136005)(66574015)(6486002)(83380400001)(66946007)(8676002)(54906003)(2616005)(66476007)(66556008)(41300700001)(53546011)(2906002)(86362001)(6666004)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZGkyVjAvUUR0VzduYzA5REoxVm9qcG8xeHpTT29LY1BsQzRkWUoxRWN1ajJV?=
- =?utf-8?B?UzZJMDZrMTB0WEFlUDFKTWZHcDVsUDV3MGl4VkJGcWFlWFlBSlhKUzltd0Er?=
- =?utf-8?B?Mk5sU2llSFo5YlFIa1NCZlV6VENMUTJWaEtROGVDN01ITUpZUHZSNkVLajYy?=
- =?utf-8?B?Z2dDa0gyaVhXbThiN1BLa2FQOGlxVDhxTDNGVTZ2eUJBaEdVdnVXTUpiM1pY?=
- =?utf-8?B?azNmL0g2OC9DTWF6emZ4Y3g3Z01meEJDYWlSK0RNSGJScXByNXMyUmVyajlT?=
- =?utf-8?B?bFdOME5VSlh3VzZ3eVhPNjh6aGN3azBTMVo4MFpFSHh5cDdrcks0TU9JUXQw?=
- =?utf-8?B?SFVaWDVCaGZKQkFUb0p6WjFaSTR5ak1vdGMzVVJESHdYeFhxQjE0ZUZjbmYr?=
- =?utf-8?B?dkJXdVN2NkRIdHhmZGJyb0piWHBLTUE1aHdwbUdScjcxSXN6clZzSmsrK2ZT?=
- =?utf-8?B?clJaajRTc2JCSkJGdkd2Z3NMMGRoSURRUGtGWmJjYjFWRlpDbWNBOVJlSkdY?=
- =?utf-8?B?dElsZjBsY1RDS0hhQ010TlVHMHAway91eGZYZndpZEtLdmtpbUxJcEVCQkx1?=
- =?utf-8?B?WXFEbkVtRjhBNEd0RlNsdFE0TityNFRyem5oMGVPT2xocStMZTlFM1V1ekFI?=
- =?utf-8?B?b21ZL3YvWjFVSXNMdU10SzdnenRXZERlRVVKSVpqajFsZTZUN0JuSHNGbXcy?=
- =?utf-8?B?aFc1ZnBQbFRnenFvdXVKbDRiUEFNb0dnczBsbnp0TmxqRnY2bVZuUnR0T2dQ?=
- =?utf-8?B?UU1mL3dkeG5jMklPR2d3TG1rQ3c0MGF2UjV1WkpMczF5b3VzVzNJVUhPWk1l?=
- =?utf-8?B?WTFhUitDd2NQWnRHekZDSG80Q0ZGS29rUHN4UHNldmpLV0NENWNuMmlmbTJS?=
- =?utf-8?B?NDIya1ZIRWJsVFNlNkduN1hqYUVOTDd6RkJISVZ0MXd4UmswWUNwaVRuam1r?=
- =?utf-8?B?ZHI0dnpUVEZnblFQV0lLSDBzb3h5c1AyRSsxdHVzdXN3YmdUSVpXdjVzencx?=
- =?utf-8?B?Y2NxNERRajh3OFZ0ek95QUJWeFc2YUQrRHB3a0RtUXY0d0lwc1BmaDJkUjBW?=
- =?utf-8?B?cGRoWjR3SlpmVGU4M3NWbmVuUEtqUnpoMG85ZEdTK0RZOStaTkdJNk5ScDVh?=
- =?utf-8?B?SjBiK3lJV3lrVjZMbktGWldNYURpckRqT2tVbkUvR0IwNWVJSURsMy9CdEJt?=
- =?utf-8?B?bTE4UStWOXNYZm5FbWFBWERVOWdJZndrYmx3Y0gyWjB4cVhaK1pLSE41MjNh?=
- =?utf-8?B?SnNCT09GRWJjMmJXMGdWczMyRGJUVFVxVUhRZkFTQ1hXSHpyWFFxUEFtblhz?=
- =?utf-8?B?Zzl4R0hPM3p0K2xtRU9teTk5aTJRU1c3WHB2cHZiRFNEdU9SR1d1UDFES2Rz?=
- =?utf-8?B?K3hSaXp0WHEwUS9NRm02UW1ValpEUVg5R1JBMjRGVTQzalQ1T0t0WmFBSGlh?=
- =?utf-8?B?U1FSL0NsaU8yT1ZST3pvcmZpMFpOU2NCQnRpTjBpM3Rqc1NMMnd5RGYzVkt4?=
- =?utf-8?B?V1U3MWR1VDNoQXhqemxNWTd2TXJiM0hYUVlrdW5MS0FpTTBVWHRjVnplaEpx?=
- =?utf-8?B?REpVbm52V215dkc0ZUNDRDFSTnhMeE1GQzdRd000cU96cUpSRUxIbE1LT2tU?=
- =?utf-8?B?Y2VSenJoczQ5U25kMUVNYzVSMnNQQmFVSzdUbzFiTytzVWg1YzRHTHNJTlR3?=
- =?utf-8?B?WTNIRUpBSFk1c2ZZOXlLUDlPbnFJN0xYRS9Td3lvbjdmSWo1MmJWT3g3YmlH?=
- =?utf-8?B?SFByRHNnT3FZdTA5TjBmdWZEM016QmpSbk8vbGJ6bnhLNjNwWTlFdTJXMndy?=
- =?utf-8?B?NVpzN2s4QjNVYXE4VE5Kb2Z6WXNucE56UHVRdFE3T0RNME5VTjFkUUF0MFh4?=
- =?utf-8?B?U3llZFRMaWVUdVJOaWZzQjA0M2R4akx0M3lQWDNUemswdXRLdGlhck80VEx0?=
- =?utf-8?B?bHJ3aDVxb2Rxb1l6TXdEaEJNbEhHbW8vTUVjNWpacTY4Tkt1djZ0ODd3anc1?=
- =?utf-8?B?ajVhazY1WGJIZmhxSmZrZlJ4RlNIZUZXTjRyNDV6bmVLeFM5VnZWekMvWXdx?=
- =?utf-8?B?elg5Kzlob2tCUDM3UmNuWWtwQmszek5jWGdXbnl0V2I2bzd3K3cyUU8xb05N?=
- =?utf-8?Q?EIM7AeB41rjct70Tv58uQ8iMu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f318381b-84a8-4bb0-0244-08da9508d4ce
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2022 21:50:39.1237
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yYDVhqJppIYbXYIkUVsiFpmAbIMnU7CHdCsKqt4fEaaMnfXO3lITmWJMCYkDfYEkVb6zoFD/F00d/g1ahFNfkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4144
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1959
 
+> From: Nathan Huckleberry <nhuck@google.com>
+> Sent: Monday, September 12, 2022 2:44 PM
+>  ...
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev=
+).
+>=20
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+>=20
+> The return type of mana_start_xmit should be changed from int to
+> netdev_tx_t.
+>=20
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: ...
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
 
-On 2022-08-30 16:34, Nathan Chancellor wrote:
-> Hi all,
-> 
-> This series aims to address the following warnings, which are visible
-> when building x86_64 allmodconfig with clang after commit 3876a8b5e241
-> ("drm/amd/display: Enable building new display engine with KCOV
-> enabled").
-> 
->      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->      void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->          ^
->      1 error generated.
-> 
->      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->      void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->          ^
->      1 error generated.
-> 
->      drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1721:6: error: stack frame size (2152) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->      void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->          ^
->      1 error generated.
-> 
-> This series is based on commit b3235e8635e1 ("drm/amd/display: clean up
-> some inconsistent indentings"). These warnings are fatal for
-> allmodconfig due to CONFIG_WERROR so ideally, I would like to see these
-> patches cherry-picked to a branch targeting mainline to allow our builds
-> to go back to green. However, since this series is not exactly trivial
-> in size, I can understand not wanting to apply these to mainline during
-> the -rc cycle. If they cannot be cherry-picked to mainline, I can add a
-> patch raising the value of -Wframe-larger-than for these files that can
-> be cherry-picked to 6.0/mainline then add a revert of that change as the
-> last patch in the stack so everything goes back to normal for -next/6.1.
-> I am open to other options though!
-> 
-> I have built this series against clang 16.0.0 (ToT) and GCC 12.2.0 for
-> x86_64. It has seen no runtime testing, as my only test system with AMD
-> graphics is a Renoir one, which as far as I understand it uses DCN 2.1.
-> 
-> Nathan Chancellor (5):
->    drm/amd/display: Reduce number of arguments of
->      dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
->    drm/amd/display: Reduce number of arguments of
->      dml32_CalculatePrefetchSchedule()
->    drm/amd/display: Reduce number of arguments of dml31's
->      CalculateWatermarksAndDRAMSpeedChangeSupport()
->    drm/amd/display: Reduce number of arguments of dml31's
->      CalculateFlipSchedule()
->    drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack
->      usage
-> 
->   .../dc/dml/dcn30/display_mode_vba_30.c        |   2 +-
->   .../dc/dml/dcn31/display_mode_vba_31.c        | 420 +++++-------------
->   .../dc/dml/dcn32/display_mode_vba_32.c        | 236 +++-------
->   .../dc/dml/dcn32/display_mode_vba_util_32.c   | 323 ++++++--------
->   .../dc/dml/dcn32/display_mode_vba_util_32.h   |  51 +--
->   5 files changed, 318 insertions(+), 714 deletions(-)
-> 
-> 
-> base-commit: b3235e8635e1dd7ac1a27a73330e9880dfe05154
-
-Hi Nathan,
-
-First of all, thanks a lot for your patchset!
-
-Sorry for the delay; it took me more time than I expected to review and 
-run a couple of tests in this patchset (most of them were IGT). Anyway, 
-I'm good with this change; this series is:
-
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-
-And I applied it to amd-staging-drm-next.
-
-We will run some extra tests this week; if we find some issues, I'll 
-debug them.
-
-Also, thanks, Maíra, for checking this patch as well.
-
-Best Regards,
-Siqueira
+Thanks for the fix!
 
