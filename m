@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3776AA5
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD805C433C1;
-	Tue, 13 Sep 2022 23:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CCC6AA5
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D78CC433D6;
+	Tue, 13 Sep 2022 23:19:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663111151;
-	bh=6khS5XPU33uH8kkng189ibUp6LbN758Z6u5O1YtiFGA=;
+	s=k20201202; t=1663111188;
+	bh=b1pLnmMuioHkgk4pVnIfvX2/f7TD1waJQ9v/QDIjOjY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GkBVk6Oj0bb1wf0nvQXq3/tf9PvLhEyyK6fPNyUDl2itwvz1JtSpSvWCdE+T03FbG
-	 ivmD9Hf/JFIp4Ek9eSUvcendL7CvbrBidPmGhUlsQUMP/9U3o6KWXGNLed/XewuQE1
-	 PEnYfLS77abuxruBI5fi3T7/ylzY7NxK+qxch/NRHuoubzOrFALyA7FF1JpgdNIsWd
-	 HMQGT79k4SsA0Ail2gUjxdLi83kTmzkhhupBtQZoGblQrcEM0lti9KkB8K93wLWFwh
-	 e18zCvBnSrBlxNl8l8rAyUSB4AiBnr1z2nMdCdSv9wJxalnPTti55tXmvnz8gyEcMu
-	 EEK5rQrIag/5Q==
-Date: Tue, 13 Sep 2022 16:19:09 -0700
+	b=TkUT19HGca46QnU2aOU1Zp5C2QLtJmMsxr83BGu9yOV1VKUgBB0pRf378XAqds40a
+	 pPGO5iXzOjHPOQtwuVEYXslUcRYN/gtVivAK3YIDBN5JTYSNaqS+6c90EtKLe+uzcr
+	 v/vykjRE+P7UreElkm/j0EUexMdpn7aBKsYNGP//oL905bxSiwMxpoML5YdLAT0uuX
+	 yBSBLQk755/KaPw9VoERzsgvUX+ILiDBM+Aam+gneYHRJgajKkfvZ92bEQ03cAj496
+	 nWAvrlEe+X62dVCPi7n+aOuY3HBI41avAiNW5QdXi7YhacW2An45kwzdx0Nzv9b1c6
+	 /wPjo8IkDG0rA==
+Date: Tue, 13 Sep 2022 16:19:45 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Nathan Huckleberry <nhuck@google.com>
 Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+	Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Matt Roper <matthew.d.roper@intel.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Tom Rix <trix@redhat.com>, linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915: Fix return type of mode_valid function hook
-Message-ID: <YyEP7W/yZAyhNtTX@dev-arch.thelio-3990X>
-References: <20220913205531.155046-1-nhuck@google.com>
+Subject: Re: [PATCH] drm/msm: Fix return type of
+ mdp4_lvds_connector_mode_valid
+Message-ID: <YyEQEdSJLz3MR0/K@dev-arch.thelio-3990X>
+References: <20220913205551.155128-1-nhuck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,18 +40,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913205531.155046-1-nhuck@google.com>
+In-Reply-To: <20220913205551.155128-1-nhuck@google.com>
 
-On Tue, Sep 13, 2022 at 01:55:27PM -0700, Nathan Huckleberry wrote:
-> All of the functions used for intel_dvo_dev_ops.mode_valid have a return
-> type of enum drm_mode_status, but the mode_valid field in the struct
-> definition has a return type of int.
+On Tue, Sep 13, 2022 at 01:55:48PM -0700, Nathan Huckleberry wrote:
+> The mode_valid field in drm_connector_helper_funcs is expected to be of
+> type:
+> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+>                                      struct drm_display_mode *mode);
 > 
 > The mismatched return type breaks forward edge kCFI since the underlying
-> function definitions do not match the function hook definition.
+> function definition does not match the function hook definition.
 > 
-> The return type of the mode_valid field should be changed from int to
-> enum drm_mode_status.
+> The return type of mdp4_lvds_connector_mode_valid should be changed from
+> int to enum drm_mode_status.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
@@ -61,24 +62,25 @@ On Tue, Sep 13, 2022 at 01:55:27PM -0700, Nathan Huckleberry wrote:
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> index d96c3cc46e50..50205f064d93 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> +++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> @@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
->  	 *
->  	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
->  	 */
-> -	int (*mode_valid)(struct intel_dvo_device *dvo,
-> -			  struct drm_display_mode *mode);
-> +	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
-> +					   struct drm_display_mode *mode);
+> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> index 7288041dd86a..7444b75c4215 100644
+> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
+>  	return ret;
+>  }
 >  
->  	/*
->  	 * Callback for preparing mode changes on an output
+> -static int mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+> -				 struct drm_display_mode *mode)
+> +static enum drm_mode_status
+> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+> +			       struct drm_display_mode *mode)
+>  {
+>  	struct mdp4_lvds_connector *mdp4_lvds_connector =
+>  			to_mdp4_lvds_connector(connector);
 > -- 
 > 2.37.2.789.g6183377224-goog
 > 
