@@ -1,43 +1,43 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096271FAA
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 01:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A90C1FAA
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 02:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663032701; x=1694568701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7GcriuGJN8QkCZ6dALbv+nUQS22ajzVge8n1O9gPcMA=;
-  b=gkoMHQx3+g8aTQaoV0mCCPELX4RK/nnc6Z/aeNGzhLq3E/5SBeEyILku
-   xDuUmmMHR8iVSuQTHoak860w7RBVgCYCe0fTd1xcgIMcxO3IslGWXkMku
-   03bPSTH9Hsk7eSuZUkxDpDPgEENEtP4d9GjtA6DeTw4fiuh8PXC38chKJ
-   +ooWv18bkB4s0V6MkNl/WcMJ5BJP98nGNk8HSJJzzo7jdg+cLACqtNPVy
-   6onKZPP0h1pX93JRlhd4suaKsMJFevwKlTHTkWvg+u87syTbEGpIeQ8zY
-   ug5Kzb2lS76P3fJ9WRdIqfQt7iZFiSoFmytJxdFR0EBrWmx9KR5FP/s7S
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359736835"
+  t=1663034621; x=1694570621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CtD+oHpdA2znCVXHnBkX6kSftX1FL2wFFkS5la+6QgE=;
+  b=eyInrGIqcIJ09GaOuUWvIFHX5Jj3OlkT7Nj3UKbsviO5QqthGeoGU5R0
+   PMdJiGWrNgEn8gzNXpIIYuCYe4N/ThsGys4QSVo8xgxAvb/gI/pFlm1Ut
+   5bUmAMjt6BvHxzti8fIx8kNvRzWApZrI3sdwiOWMMQFZ5mYgqZdXofmqZ
+   8IIxf50Q8/zxOlFn9UdNJh8CFk6a+lRbqe1RWW4HVvM3H+rrLdDIQ5+uY
+   ciptxBmdffgi12bK9E1TyxcewaAAa7CDZ02K6unu8EPGGDt5hWgbS0M6m
+   rIEa0c7jkhfrelSDXgoGwtSvr90KF1pQbEgYYpSJAvVuN4oY1zaxLnPds
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="359740487"
 X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="359736835"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 18:31:40 -0700
+   d="scan'208";a="359740487"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 19:03:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
-   d="scan'208";a="944856083"
+   d="scan'208";a="684668638"
 Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Sep 2022 18:31:38 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 12 Sep 2022 19:03:39 -0700
 Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oXum2-00033x-0f;
-	Tue, 13 Sep 2022 01:31:38 +0000
-Date: Tue, 13 Sep 2022 09:30:58 +0800
+	id 1oXvH0-00035T-2W;
+	Tue, 13 Sep 2022 02:03:38 +0000
+Date: Tue, 13 Sep 2022 10:02:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Saleem Abdulrasool <abdulras@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or
- directory
-Message-ID: <202209130916.1lUqRlBJ-lkp@intel.com>
+To: Yuanchu Xie <yuanchu@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 1/2] mm: multi-gen LRU: support page access info
+ harvesting with eBPF
+Message-ID: <202209130915.H2l3Pjtt-lkp@intel.com>
+References: <20220911083418.2818369-2-yuanchu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,39 +46,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220911083418.2818369-2-yuanchu@google.com>
 
-Hi Saleem,
+Hi Yuanchu,
 
-FYI, the error/warning still remains.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e839a756012b6cad7a4eeb67b0598ac3f349f863
-commit: fde9c59aebafb91caeed816cc510b56f14aa63ae riscv: explicitly use symbol offsets for VDSO
-date:   1 year, 1 month ago
-config: riscv-randconfig-r031-20220911 (https://download.01.org/0day-ci/archive/20220913/202209130916.1lUqRlBJ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanchu-Xie/mm-multi-gen-LRU-per-process-heatmaps/20220911-163720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: i386-randconfig-a015-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130915.H2l3Pjtt-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde9c59aebafb91caeed816cc510b56f14aa63ae
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fde9c59aebafb91caeed816cc510b56f14aa63ae
+        # https://github.com/intel-lab-lkp/linux/commit/cf24b7f2ea91083cc7630500059db49811243805
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuanchu-Xie/mm-multi-gen-LRU-per-process-heatmaps/20220911-163720
+        git checkout cf24b7f2ea91083cc7630500059db49811243805
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   ld.lld: error: section .text load address range overlaps with _ftrace_annotated_branch
-   >>> .text range is [0x800, 0x112B]
-   >>> _ftrace_annotated_branch range is [0x840, 0xAAF]
->> llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+   mm/vmscan.c:3416:6: warning: no previous prototype for function 'bpf_set_skip_mm' [-Wmissing-prototypes]
+   void bpf_set_skip_mm(struct bpf_mglru_should_skip_mm_control *ctl)
+        ^
+   mm/vmscan.c:3416:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_set_skip_mm(struct bpf_mglru_should_skip_mm_control *ctl)
+   ^
+   static 
+   mm/vmscan.c:3422:1: warning: no previous prototype for function 'bpf_mglru_should_skip_mm' [-Wmissing-prototypes]
+   bpf_mglru_should_skip_mm(struct bpf_mglru_should_skip_mm_control *ctl)
+   ^
+   mm/vmscan.c:3421:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak noinline void
+                   ^
+                   static 
+   mm/vmscan.c:3906:22: warning: no previous prototype for function 'mglru_pte_probe' [-Wmissing-prototypes]
+   __weak noinline void mglru_pte_probe(pid_t pid, unsigned int nid, unsigned long addr,
+                        ^
+   mm/vmscan.c:3906:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak noinline void mglru_pte_probe(pid_t pid, unsigned int nid, unsigned long addr,
+                   ^
+                   static 
+   mm/vmscan.c:3912:22: warning: no previous prototype for function 'mglru_pmd_probe' [-Wmissing-prototypes]
+   __weak noinline void mglru_pmd_probe(pid_t pid, unsigned int nid, unsigned long addr,
+                        ^
+   mm/vmscan.c:3912:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak noinline void mglru_pmd_probe(pid_t pid, unsigned int nid, unsigned long addr,
+                   ^
+                   static 
+>> mm/vmscan.c:4219:18: error: no member named 'owner' in 'struct mm_struct'
+           walk->pid = mm->owner->pid;
+                       ~~  ^
+   mm/vmscan.c:5706:5: warning: no previous prototype for function 'bpf_run_aging' [-Wmissing-prototypes]
+   int bpf_run_aging(int memcg_id, bool can_swap,
+       ^
+   mm/vmscan.c:5706:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_run_aging(int memcg_id, bool can_swap,
+   ^
+   static 
+   5 warnings and 1 error generated.
+
+
+vim +4219 mm/vmscan.c
+
+  4208	
+  4209	static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
+  4210	{
+  4211		static const struct mm_walk_ops mm_walk_ops = {
+  4212			.test_walk = should_skip_vma,
+  4213			.p4d_entry = walk_pud_range,
+  4214		};
+  4215	
+  4216		int err;
+  4217		struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+  4218	
+> 4219		walk->pid = mm->owner->pid;
+  4220		walk->next_addr = FIRST_USER_ADDRESS;
+  4221	
+  4222		do {
+  4223			err = -EBUSY;
+  4224	
+  4225			/* folio_update_gen() requires stable folio_memcg() */
+  4226			if (!mem_cgroup_trylock_pages(memcg))
+  4227				break;
+  4228	
+  4229			/* the caller might be holding the lock for write */
+  4230			if (mmap_read_trylock(mm)) {
+  4231				err = walk_page_range(mm, walk->next_addr, ULONG_MAX, &mm_walk_ops, walk);
+  4232	
+  4233				mmap_read_unlock(mm);
+  4234			}
+  4235	
+  4236			mem_cgroup_unlock_pages();
+  4237	
+  4238			if (walk->batched) {
+  4239				spin_lock_irq(&lruvec->lru_lock);
+  4240				reset_batch_size(lruvec, walk);
+  4241				spin_unlock_irq(&lruvec->lru_lock);
+  4242			}
+  4243	
+  4244			cond_resched();
+  4245		} while (err == -EAGAIN);
+  4246	}
+  4247	
 
 -- 
 0-DAY CI Kernel Test Service
