@@ -1,269 +1,172 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4BD7B
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 06:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663051192; x=1694587192;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ytkIShHr4Fxqj6m6LeRVB99UP46NfH9IbAM4YtwiGJc=;
-  b=brEngFEDLNW30myPe+Bn163tHIV70FOmvlBUzTVgQ7OR0hyhc55ZJ7h7
-   UQcoouRUdoU/WLm6ZN7sY8UheRq1dcvl0lxsh1l3Hx+9/u7ga8v87DQaK
-   eqK4YVx2qS7K2PlqHXu+9TV3gOHy1aa24YM/2S6D7Zy2q7+C/JeEpcm0T
-   5TwZwOYabC4Uq4EsMb4gOQLwWYe/JdESjdpVd6AmuIEvDQJPYAhEK/CTV
-   5SeIIlomKFEhOmthh8qIGbsskHr8oogxxBiE9hNY3lYYuIotjWgmX8ez9
-   uyNCnPSlVqKl1k/gnlU+mDJE/YctHfpri3btrAes6mZDnaQ/1STvaaLBZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="281072482"
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="281072482"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 23:39:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="758675617"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Sep 2022 23:39:49 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oXzaH-0003Jx-06;
-	Tue, 13 Sep 2022 06:39:49 +0000
-Date: Tue, 13 Sep 2022 14:39:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arun R Murthy <arun.r.murthy@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/gpu/drm/i915/display/intel_display.c:7539:3: error:
- unannotated fall-through between switch labels
-Message-ID: <202209131420.hMv94gaL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A217B
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 07:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1663052441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2i3m9a1TnRQsSBSM01cZDYft6M0sC1S2pKaFreJhK48=;
+	b=dmAtBVApJ8C5Ztik9lJwV4wFAcusPSwICdCLEJJq1rmGpxvYFYjVGYh2/ptrWa+PD5aMeK
+	zRMKnfrLgRFdJbBhOcwWaUaaiczhoJ8tOS4mmgCju28JGMxtIBSnZWtcPQJ1Ci45rQ16+/
+	r9OMdIfkJfHXjgZp+uhZcSaZzxWf9VM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-301-_4Qzk5G4On2rlDBbAM_MRw-1; Tue, 13 Sep 2022 03:00:40 -0400
+X-MC-Unique: _4Qzk5G4On2rlDBbAM_MRw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0819F1C006AA
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 07:00:40 +0000 (UTC)
+Received: from [172.64.3.86] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F08C74B400F;
+	Tue, 13 Sep 2022 07:00:39 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (90/371 SKIPPED): Test report for master
+ (6.0.0-rc5, mainline.kernel.org-clang, 6504d82f)
+Date: Tue, 13 Sep 2022 07:00:39 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <25674.122091303004000183@us-mta-301.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220906-121942/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
-head:   1e44191e6045780c15f33c16961af128c076bd4c
-commit: 1e44191e6045780c15f33c16961af128c076bd4c drm/i915: Support Async Flip on Linear buffers
-date:   7 days ago
-config: i386-randconfig-a011-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131420.hMv94gaL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1e44191e6045780c15f33c16961af128c076bd4c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220906-121942/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
-        git checkout 1e44191e6045780c15f33c16961af128c076bd4c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/gpu/drm/i915/display/intel_display.c:7539:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                   case I915_FORMAT_MOD_X_TILED:
-                   ^
-   drivers/gpu/drm/i915/display/intel_display.c:7539:3: note: insert 'break;' to avoid fall-through
-                   case I915_FORMAT_MOD_X_TILED:
-                   ^
-                   break; 
-   1 error generated.
+Kernel information:
+    Commit message: Merge tag 'nfs-for-5.20-3' of git://git.linux-nfs.org/p=
+rojects/trondmy/linux-nfs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/53181
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
+grep -E
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1390
+            Affected tests:
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/130: output mismatch
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1368
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +7539 drivers/gpu/drm/i915/display/intel_display.c
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7458  
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7459  static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct intel_crtc *crtc)
-30ff93af9e19db Karthik B S           2020-09-21  7460  {
-30ff93af9e19db Karthik B S           2020-09-21  7461  	struct drm_i915_private *i915 = to_i915(state->base.dev);
-30ff93af9e19db Karthik B S           2020-09-21  7462  	const struct intel_crtc_state *old_crtc_state, *new_crtc_state;
-30ff93af9e19db Karthik B S           2020-09-21  7463  	const struct intel_plane_state *new_plane_state, *old_plane_state;
-30ff93af9e19db Karthik B S           2020-09-21  7464  	struct intel_plane *plane;
-30ff93af9e19db Karthik B S           2020-09-21  7465  	int i;
-30ff93af9e19db Karthik B S           2020-09-21  7466  
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7467  	old_crtc_state = intel_atomic_get_old_crtc_state(state, crtc);
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7468  	new_crtc_state = intel_atomic_get_new_crtc_state(state, crtc);
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7469  
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7470  	if (!new_crtc_state->uapi.async_flip)
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7471  		return 0;
-b0b2bed2a1305c Ville Syrjälä         2022-02-14  7472  
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7473  	if (!new_crtc_state->hw.active) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7474  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7475  			    "[CRTC:%d:%s] not active\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7476  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7477  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7478  	}
-30ff93af9e19db Karthik B S           2020-09-21  7479  
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7480  	if (intel_crtc_needs_modeset(new_crtc_state)) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7481  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7482  			    "[CRTC:%d:%s] modeset required\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7483  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7484  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7485  	}
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7486  
-30ff93af9e19db Karthik B S           2020-09-21  7487  	if (old_crtc_state->active_planes != new_crtc_state->active_planes) {
-30ff93af9e19db Karthik B S           2020-09-21  7488  		drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7489  			    "[CRTC:%d:%s] Active planes cannot be in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7490  			    crtc->base.base.id, crtc->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7491  		return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7492  	}
-30ff93af9e19db Karthik B S           2020-09-21  7493  
-30ff93af9e19db Karthik B S           2020-09-21  7494  	for_each_oldnew_intel_plane_in_state(state, plane, old_plane_state,
-30ff93af9e19db Karthik B S           2020-09-21  7495  					     new_plane_state, i) {
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7496  		if (plane->pipe != crtc->pipe)
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7497  			continue;
-0826edb6a5e5b3 José Roberto de Souza 2021-10-29  7498  
-30ff93af9e19db Karthik B S           2020-09-21  7499  		/*
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7500  		 * Only async flip capable planes should be in the state
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7501  		 * if we're really about to ask the hardware to perform
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7502  		 * an async flip. We should never get this far otherwise.
-30ff93af9e19db Karthik B S           2020-09-21  7503  		 */
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7504  		if (drm_WARN_ON(&i915->drm,
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7505  				new_crtc_state->do_async_flip && !plane->async_flip))
-30ff93af9e19db Karthik B S           2020-09-21  7506  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7507  
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7508  		/*
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7509  		 * Only check async flip capable planes other planes
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7510  		 * may be involved in the initial commit due to
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7511  		 * the wm0/ddb optimization.
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7512  		 *
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7513  		 * TODO maybe should track which planes actually
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7514  		 * were requested to do the async flip...
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7515  		 */
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7516  		if (!plane->async_flip)
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7517  			continue;
-2e08437160d1e8 Ville Syrjälä         2022-02-14  7518  
-30ff93af9e19db Karthik B S           2020-09-21  7519  		/*
-30ff93af9e19db Karthik B S           2020-09-21  7520  		 * FIXME: This check is kept generic for all platforms.
-244dba4cb59637 Lucas De Marchi       2021-07-28  7521  		 * Need to verify this for all gen9 platforms to enable
-30ff93af9e19db Karthik B S           2020-09-21  7522  		 * this selectively if required.
-30ff93af9e19db Karthik B S           2020-09-21  7523  		 */
-30ff93af9e19db Karthik B S           2020-09-21  7524  		switch (new_plane_state->hw.fb->modifier) {
-1e44191e604578 Arun R Murthy         2022-09-06  7525  		case DRM_FORMAT_MOD_LINEAR:
-1e44191e604578 Arun R Murthy         2022-09-06  7526  			/*
-1e44191e604578 Arun R Murthy         2022-09-06  7527  			 * FIXME: Async on Linear buffer is supported on ICL as
-1e44191e604578 Arun R Murthy         2022-09-06  7528  			 * but with additional alignment and fbc restrictions
-1e44191e604578 Arun R Murthy         2022-09-06  7529  			 * need to be taken care of. These aren't applicable for
-1e44191e604578 Arun R Murthy         2022-09-06  7530  			 * gen12+.
-1e44191e604578 Arun R Murthy         2022-09-06  7531  			 */
-1e44191e604578 Arun R Murthy         2022-09-06  7532  			if (DISPLAY_VER(i915) < 12) {
-1e44191e604578 Arun R Murthy         2022-09-06  7533  				drm_dbg_kms(&i915->drm,
-1e44191e604578 Arun R Murthy         2022-09-06  7534  					    "[PLANE:%d:%s] Modifier does not support async flips\n",
-1e44191e604578 Arun R Murthy         2022-09-06  7535  					    plane->base.base.id, plane->base.name);
-1e44191e604578 Arun R Murthy         2022-09-06  7536  				return -EINVAL;
-1e44191e604578 Arun R Murthy         2022-09-06  7537  			}
-1e44191e604578 Arun R Murthy         2022-09-06  7538  
-30ff93af9e19db Karthik B S           2020-09-21 @7539  		case I915_FORMAT_MOD_X_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7540  		case I915_FORMAT_MOD_Y_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7541  		case I915_FORMAT_MOD_Yf_TILED:
-072ce4164f973b Stanislav Lisovskiy   2022-01-18  7542  		case I915_FORMAT_MOD_4_TILED:
-30ff93af9e19db Karthik B S           2020-09-21  7543  			break;
-30ff93af9e19db Karthik B S           2020-09-21  7544  		default:
-30ff93af9e19db Karthik B S           2020-09-21  7545  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7546  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7547  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7548  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7549  		}
-30ff93af9e19db Karthik B S           2020-09-21  7550  
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7551  		if (new_plane_state->hw.fb->format->num_planes > 1) {
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7552  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7553  				    "[PLANE:%d:%s] Planar formats do not support async flips\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7554  				    plane->base.base.id, plane->base.name);
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7555  			return -EINVAL;
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7556  		}
-aaec72ee90bccc Ville Syrjälä         2021-10-18  7557  
-be6c1dd5ac074d Imre Deak             2021-10-27  7558  		if (old_plane_state->view.color_plane[0].mapping_stride !=
-be6c1dd5ac074d Imre Deak             2021-10-27  7559  		    new_plane_state->view.color_plane[0].mapping_stride) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7560  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7561  				    "[PLANE:%d:%s] Stride cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7562  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7563  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7564  		}
-30ff93af9e19db Karthik B S           2020-09-21  7565  
-30ff93af9e19db Karthik B S           2020-09-21  7566  		if (old_plane_state->hw.fb->modifier !=
-30ff93af9e19db Karthik B S           2020-09-21  7567  		    new_plane_state->hw.fb->modifier) {
-30ff93af9e19db Karthik B S           2020-09-21  7568  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7569  				    "[PLANE:%d:%s] Modifier cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7570  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7571  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7572  		}
-30ff93af9e19db Karthik B S           2020-09-21  7573  
-30ff93af9e19db Karthik B S           2020-09-21  7574  		if (old_plane_state->hw.fb->format !=
-30ff93af9e19db Karthik B S           2020-09-21  7575  		    new_plane_state->hw.fb->format) {
-30ff93af9e19db Karthik B S           2020-09-21  7576  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7577  				    "[PLANE:%d:%s] Pixel format cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7578  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7579  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7580  		}
-30ff93af9e19db Karthik B S           2020-09-21  7581  
-30ff93af9e19db Karthik B S           2020-09-21  7582  		if (old_plane_state->hw.rotation !=
-30ff93af9e19db Karthik B S           2020-09-21  7583  		    new_plane_state->hw.rotation) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7584  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7585  				    "[PLANE:%d:%s] Rotation cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7586  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7587  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7588  		}
-30ff93af9e19db Karthik B S           2020-09-21  7589  
-30ff93af9e19db Karthik B S           2020-09-21  7590  		if (!drm_rect_equals(&old_plane_state->uapi.src, &new_plane_state->uapi.src) ||
-30ff93af9e19db Karthik B S           2020-09-21  7591  		    !drm_rect_equals(&old_plane_state->uapi.dst, &new_plane_state->uapi.dst)) {
-30ff93af9e19db Karthik B S           2020-09-21  7592  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7593  				    "[PLANE:%d:%s] Size/co-ordinates cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7594  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7595  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7596  		}
-30ff93af9e19db Karthik B S           2020-09-21  7597  
-30ff93af9e19db Karthik B S           2020-09-21  7598  		if (old_plane_state->hw.alpha != new_plane_state->hw.alpha) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7599  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7600  				    "[PLANES:%d:%s] Alpha value cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7601  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7602  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7603  		}
-30ff93af9e19db Karthik B S           2020-09-21  7604  
-30ff93af9e19db Karthik B S           2020-09-21  7605  		if (old_plane_state->hw.pixel_blend_mode !=
-30ff93af9e19db Karthik B S           2020-09-21  7606  		    new_plane_state->hw.pixel_blend_mode) {
-30ff93af9e19db Karthik B S           2020-09-21  7607  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7608  				    "[PLANE:%d:%s] Pixel blend mode cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7609  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7610  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7611  		}
-30ff93af9e19db Karthik B S           2020-09-21  7612  
-30ff93af9e19db Karthik B S           2020-09-21  7613  		if (old_plane_state->hw.color_encoding != new_plane_state->hw.color_encoding) {
-30ff93af9e19db Karthik B S           2020-09-21  7614  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7615  				    "[PLANE:%d:%s] Color encoding cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7616  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7617  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7618  		}
-30ff93af9e19db Karthik B S           2020-09-21  7619  
-30ff93af9e19db Karthik B S           2020-09-21  7620  		if (old_plane_state->hw.color_range != new_plane_state->hw.color_range) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7621  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7622  				    "[PLANE:%d:%s] Color range cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7623  				    plane->base.base.id, plane->base.name);
-30ff93af9e19db Karthik B S           2020-09-21  7624  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7625  		}
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7626  
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7627  		/* plane decryption is allow to change only in synchronous flips */
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7628  		if (old_plane_state->decrypt != new_plane_state->decrypt) {
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7629  			drm_dbg_kms(&i915->drm,
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7630  				    "[PLANE:%d:%s] Decryption cannot be changed in async flip\n",
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7631  				    plane->base.base.id, plane->base.name);
-ef6ba31dd38405 Anshuman Gupta        2021-09-24  7632  			return -EINVAL;
-30ff93af9e19db Karthik B S           2020-09-21  7633  		}
-6b4e414ce8dab7 Ville Syrjälä         2022-02-14  7634  	}
-30ff93af9e19db Karthik B S           2020-09-21  7635  
-30ff93af9e19db Karthik B S           2020-09-21  7636  	return 0;
-30ff93af9e19db Karthik B S           2020-09-21  7637  }
-30ff93af9e19db Karthik B S           2020-09-21  7638  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
