@@ -1,29 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72437F
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 09:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41990C433C1;
-	Tue, 13 Sep 2022 09:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663062658;
-	bh=LFc8VLcHvprYH28gDo1PjrF0ebxy+2UO+x/vOTan0wQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=toW6LVrvof6E3mcs+G1NnzlNd+IXWSRQs1dN0ITSZc7EsSpizN6XMa84z0POGWWt6
-	 JRySY58G6lzpU1n21O8EhKBD1dis8us8urDzbCclbF7ncg9p6lAWZKNNMZLIR+14jQ
-	 hLFE9SH6WE5/cUGsdDXrZlKTEowc50k+GyrZ8dv7xr1FkQ4Tcvfec/iRsFcKrdmJdF
-	 CR54kstM97vCriYq11NtVCqfqBuIzsGxKAd8CalYEkYPwyIkSx4bmrkP1bPhw6MZee
-	 7YSdNwGzhx5PDJWDZG4jlHqoRtBLOpqzbcoziVBMZ2/vgebcV+oByTJ78meXmC82N6
-	 4Q0nfwBZxAR5Q==
-Date: Tue, 13 Sep 2022 02:50:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: yangxingwu <xingwu.yang@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: ndesaulniers@google.com, trix@redhat.com, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] scripts/clang-tools: remove unused module
-Message-ID: <YyBSgNbJGRBNIL5I@dev-arch.thelio-3990X>
-References: <20220913040753.2198-1-xingwu.yang@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289531867
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 10:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663066624; x=1694602624;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BL9ydBtVwfEgQDpu1HgFXSFKo0fJNzYIDkD86bRaHYg=;
+  b=BMcVZ8KKyhEPr7QLRMcf1o5gTLOdK0Iw5KcVQckGmtLZdU2siVOSVkyU
+   AUFgg9y/d9yzL6YkZyFdQZbElplfwJNAd7HcIaBTJn/MJEUfbE4Vz1PsQ
+   ZAnRno0RWxCOeQWgCea0+AHXcM8f1mDG+pbMuWVM27xsgJwoZsFdezXkg
+   lAjvoZdwduRFjK4l+32k6aU6LWM86f21Apji+Td/rDJUzzjRcxn5zx1C9
+   UTnrPVar/UTv+HGvSoA837SRm6jycF1/+amtR1m+nyfbM8/I6o18m+pwW
+   +Oycn1PCAA7iwe+jRCVOopnfbGcimMV4CwLl0N8YHEgbG1LMnUKP8/3kk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="295698231"
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="295698231"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 03:57:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
+   d="scan'208";a="861511473"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Sep 2022 03:57:01 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oY3bB-0003WM-0Y;
+	Tue, 13 Sep 2022 10:57:01 +0000
+Date: Tue, 13 Sep 2022 18:56:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Heiko Stuebner <heiko@sntech.de>, Atish Patra <atishp@rivosinc.com>
+Subject: [palmer:riscv-zicbom_fix 7/7] arch/riscv/mm/dma-noncoherent.c:15:14:
+ error: redefinition of 'riscv_cbom_block_size' with a different type:
+ 'unsigned int' vs 'int'
+Message-ID: <202209131858.0qmW0TEk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,38 +49,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913040753.2198-1-xingwu.yang@gmail.com>
 
-On Tue, Sep 13, 2022 at 04:07:52AM +0000, yangxingwu wrote:
-> remove unused imported 'os' module
-> 
-> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-zicbom_fix
+head:   933c80bff1907722a069a0d8bdce283183e4b203
+commit: 933c80bff1907722a069a0d8bdce283183e4b203 [7/7] RISC-V: Clean up the Zicbom block size probing
+config: riscv-buildonly-randconfig-r005-20220912 (https://download.01.org/0day-ci/archive/20220913/202209131858.0qmW0TEk-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=933c80bff1907722a069a0d8bdce283183e4b203
+        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
+        git fetch --no-tags palmer riscv-zicbom_fix
+        git checkout 933c80bff1907722a069a0d8bdce283183e4b203
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
 
-Sure.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-Masahiro, are you able to pick this up? The original was not cc'd to
-linux-kbuild but it is on lore:
+>> arch/riscv/mm/dma-noncoherent.c:15:14: error: redefinition of 'riscv_cbom_block_size' with a different type: 'unsigned int' vs 'int'
+   unsigned int riscv_cbom_block_size;
+                ^
+   arch/riscv/include/asm/cacheflush.h:46:12: note: previous declaration is here
+   extern int riscv_cbom_block_size;
+              ^
+   1 error generated.
 
-https://lore.kernel.org/20220913040753.2198-1-xingwu.yang@gmail.com/
 
-> ---
->  scripts/clang-tools/run-clang-tools.py | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-> index 1337cedca..bb78c9bde 100755
-> --- a/scripts/clang-tools/run-clang-tools.py
-> +++ b/scripts/clang-tools/run-clang-tools.py
-> @@ -12,7 +12,6 @@ compile_commands.json.
->  import argparse
->  import json
->  import multiprocessing
-> -import os
->  import subprocess
->  import sys
-> 
-> --
-> 2.37.2
-> 
+vim +15 arch/riscv/mm/dma-noncoherent.c
+
+    14	
+  > 15	unsigned int riscv_cbom_block_size;
+    16	static bool noncoherent_supported;
+    17	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
