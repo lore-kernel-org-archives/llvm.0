@@ -1,95 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D2671E
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA731C433D6;
-	Tue, 13 Sep 2022 23:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663111568;
-	bh=MKctTCCNB0zUHFjYAFLnoWEYFaMOJC3oZ8vlBp9GnrQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=En+foSMdKI8Cm8iTxy3UXjB0XEFCrepqECzxWueLigjoRHXBzHkbaVNaKVMpRJTYF
-	 gYiLEZb4sVQLj0BkH3s9jiXTtX/QZjTVnZnABCaW8/4OubH+THJrxKF1Gd9WUnOCMS
-	 Y/sMQ8XW18aKmN52aVxdeoVh2igiNs0bZM5ixvYd5GCP/eUNbwVl2e/hsNTV+uOjYo
-	 u24C4q72ArBYHA+blb6JhpKCZvb8rDjdZxmCEQuRm6wUXn6JlbqA6pVswoxoC4mj1V
-	 7JJS+nXBHr125rUu874rnRQHdVIh+lTZgyNx+17Z4kpDfohOrEol6lj34kfqG4kVDt
-	 49X9IX4ziNShg==
-Date: Tue, 13 Sep 2022 16:26:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nathan Huckleberry <nhuck@google.com>
-Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-	Pravin B Shelar <pshelar@ovn.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	dev@openvswitch.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] openvswitch: Change the return type for vport_ops.send
- function hook to int
-Message-ID: <YyERjpSlz+MVCULd@dev-arch.thelio-3990X>
-References: <20220913230739.228313-1-nhuck@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0C8671B
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:36:54 +0000 (UTC)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DNMRi9016447;
+	Tue, 13 Sep 2022 23:36:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=QDluYs9EIrWXj5kwYq7EJZq+XOtXveaKEk1PTPlIhsk=;
+ b=YcoCMWZS41WvZftzE7mBuQO6ToHgy1Rwn5kg2ijWizmAO2ITAC/CidkSztk4pXS28ZVk
+ bD3PZsOFLt7xtNXLkMmme4Pr1V5YUO/r/AmMzocl79X/z9tWApjrxGHyrUO6SP/JhOgw
+ Af2r7D6nmGY1pnUUawNVuFEnLnF+nSai5mebq+e4dK4bU4Ba9e86XRhH2LQ0v+oLJakL
+ duwLajymcbq++xuULVoQ39z5eeTKKNBl2RhghmwMfDto+K0supA1dp/uwOiDSup8GHJH
+ xDWCJTs0FzTL6r/uD5GMtwYGC9iLH8xAyqw1ri3cTLpwvTzKCG48DPX21Chbsz2p/B+1 +A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymgn79-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Sep 2022 23:36:40 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28DN1Onp000852;
+	Tue, 13 Sep 2022 23:01:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jjqbt2j7n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Sep 2022 23:01:24 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DN0TVc032424;
+	Tue, 13 Sep 2022 23:01:24 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 28DN1OxS000846
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Sep 2022 23:01:24 +0000
+Received: from [10.111.167.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
+ 2022 16:01:21 -0700
+Message-ID: <2ce64f0a-8e31-4019-8d3e-49ca3ddd4766@quicinc.com>
+Date: Tue, 13 Sep 2022 16:01:19 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913230739.228313-1-nhuck@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm: Fix return type of
+ mdp4_lvds_connector_mode_valid
+Content-Language: en-US
+To: Nathan Huckleberry <nhuck@google.com>
+CC: <freedreno@lists.freedesktop.org>, Dan Carpenter <error27@gmail.com>,
+        David Airlie <airlied@linux.ie>, Tom Rix <trix@redhat.com>,
+        <llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+        <dri-devel@lists.freedesktop.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Rob
+ Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <20220913205551.155128-1-nhuck@google.com>
+From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220913205551.155128-1-nhuck@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
+X-Proofpoint-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_10,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209130109
 
-On Tue, Sep 13, 2022 at 04:07:38PM -0700, Nathan Huckleberry wrote:
-> All usages of the vport_ops struct have the .send field set to
-> dev_queue_xmit or internal_dev_recv.  Since most usages are set to
-> dev_queue_xmit, the function hook should match the signature of
-> dev_queue_xmit.
+Hi Nathan
+
+Thanks for the patch.
+
+On 9/13/2022 1:55 PM, Nathan Huckleberry wrote:
+> The mode_valid field in drm_connector_helper_funcs is expected to be of
+> type:
+> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+>                                       struct drm_display_mode *mode);
 > 
-> The only call to vport_ops->send() is in net/openvswitch/vport.c and it
-> throws away the return value.
-> 
-> This mismatched return type breaks forward edge kCFI since the underlying
+> The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
+> 
+> The return type of mdp4_lvds_connector_mode_valid should be changed from
+> int to enum drm_mode_status.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+ From what I can see this one has been this way since lvds support was 
+added. Hence this should have
 
+Fixes: 3e87599b68e7 ("drm/msm/mdp4: add LVDS panel support")
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
->  net/openvswitch/vport-internal_dev.c | 2 +-
->  net/openvswitch/vport.h              | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/net/openvswitch/vport-internal_dev.c b/net/openvswitch/vport-internal_dev.c
-> index 35f42c9821c2..74c88a6baa43 100644
-> --- a/net/openvswitch/vport-internal_dev.c
-> +++ b/net/openvswitch/vport-internal_dev.c
-> @@ -190,7 +190,7 @@ static void internal_dev_destroy(struct vport *vport)
->  	rtnl_unlock();
->  }
->  
-> -static netdev_tx_t internal_dev_recv(struct sk_buff *skb)
-> +static int internal_dev_recv(struct sk_buff *skb)
->  {
->  	struct net_device *netdev = skb->dev;
->  
-> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
-> index 7d276f60c000..6ff45e8a0868 100644
-> --- a/net/openvswitch/vport.h
-> +++ b/net/openvswitch/vport.h
-> @@ -132,7 +132,7 @@ struct vport_ops {
->  	int (*set_options)(struct vport *, struct nlattr *);
->  	int (*get_options)(const struct vport *, struct sk_buff *);
->  
-> -	netdev_tx_t (*send) (struct sk_buff *skb);
-> +	int (*send)(struct sk_buff *skb);
->  	struct module *owner;
->  	struct list_head list;
->  };
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> index 7288041dd86a..7444b75c4215 100644
+> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
+>   	return ret;
+>   }
+>   
+> -static int mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+> -				 struct drm_display_mode *mode)
+> +static enum drm_mode_status
+> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+> +			       struct drm_display_mode *mode)
+>   {
+>   	struct mdp4_lvds_connector *mdp4_lvds_connector =
+>   			to_mdp4_lvds_connector(connector);
