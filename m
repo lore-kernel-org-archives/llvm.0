@@ -1,37 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC1A1FAA
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 22:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCF60C433D6;
-	Tue, 13 Sep 2022 22:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD101FAA
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 22:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C46C433D6;
+	Tue, 13 Sep 2022 22:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663108273;
-	bh=CNNrVQXB5RHuPodp+2y8dbJdbh0v4jEbTVcWCwUBVJc=;
+	s=k20201202; t=1663108330;
+	bh=xQNxJxEcyNL4T14W2RgiHc+osVherdxF9bKhuT2OEJE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EbqSYOgNEkHCFSyUVPMegTUCUfNLiMKR0LTwYTZtN9tc17hwbQ0EGsw86v2JHL/tx
-	 JHERYk/ldz2bA32a5EZWSyDA1O/o/PlTIvWEhrUUwOetpXFuqOf7zFgjzzNLZ0r1eS
-	 iWiKaoRv4gPJUKdQCrvOHNjIGgnvt7GmX4s+eHxlFPc+bgJm3mUx990MxiU2EF0QrU
-	 G/amDn3Tw7t3m50Vo/i8tNUZG5Z95Mr6uf3o+aCnopIjsP6vfGnNZVoltVB06CAY7v
-	 f5kHtG1jv4A/yTM2uQj/bfWc04dKIUhn6KFWTy1DbxF2UYXOZhMyxuFiDao9HIUPkP
-	 3rxQaLLMx/IEQ==
-Date: Tue, 13 Sep 2022 15:31:11 -0700
+	b=RbIRmhpR4/HqeQ8QQ10xdOEksaF5/3/e1DpHaJ39pIQQKAerXx0/yr39srGVnWil0
+	 XT1QnXnz8Cxi0QwdRDQU9Wmkp2OknRn9wOihZ4Jl/V/EQCqu1TeV1N/kDGrIIZLk8h
+	 brC30s9zo+cQS1KxOD7kfhLDmeFwUvkDTwjk1Xj0kSkbnIaFyWKx64i3Rz8iOW/jkv
+	 8yoqfTs6F04c/vkAXUrWDWEPQDIKBCs4KDzzNafuRoFvNa4VBJCJ3XIblEKmTBFaAM
+	 2LqGlIkYHo1HsrJ940uQZjbssp8ycmmdjglSuGuiFRSGz1sAVewvwwTKdpbc8lu2oc
+	 N8nEywX1pUlgw==
+Date: Tue, 13 Sep 2022 15:32:08 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Nathan Huckleberry <nhuck@google.com>
 Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Karol Gugala <kgugala@antmicro.com>,
-	Mateusz Holenko <mholenko@antmicro.com>,
-	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ethernet: litex: Fix return type of
- liteeth_start_xmit
-Message-ID: <YyEErzoi9+8NMRCP@dev-arch.thelio-3990X>
-References: <20220912195307.812229-1-nhuck@google.com>
+Subject: Re: [PATCH] net: korina: Fix return type of korina_send_packet
+Message-ID: <YyEE6MRhVEKnPPpv@dev-arch.thelio-3990X>
+References: <20220912214344.928925-1-nhuck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,16 +36,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912195307.812229-1-nhuck@google.com>
+In-Reply-To: <20220912214344.928925-1-nhuck@google.com>
 
-On Mon, Sep 12, 2022 at 12:53:07PM -0700, Nathan Huckleberry wrote:
+On Mon, Sep 12, 2022 at 02:43:40PM -0700, Nathan Huckleberry wrote:
 > The ndo_start_xmit field in net_device_ops is expected to be of type
 > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 > 
 > The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
 > 
-> The return type of liteeth_start_xmit should be changed from int to
+> The return type of korina_send_packet should be changed from int to
 > netdev_tx_t.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
@@ -60,23 +56,23 @@ On Mon, Sep 12, 2022 at 12:53:07PM -0700, Nathan Huckleberry wrote:
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  drivers/net/ethernet/litex/litex_liteeth.c | 3 ++-
+>  drivers/net/ethernet/korina.c | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/litex/litex_liteeth.c b/drivers/net/ethernet/litex/litex_liteeth.c
-> index fdd99f0de424..35f24e0f0934 100644
-> --- a/drivers/net/ethernet/litex/litex_liteeth.c
-> +++ b/drivers/net/ethernet/litex/litex_liteeth.c
-> @@ -152,7 +152,8 @@ static int liteeth_stop(struct net_device *netdev)
->  	return 0;
+> diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
+> index df9a8eefa007..eec6a9ec528b 100644
+> --- a/drivers/net/ethernet/korina.c
+> +++ b/drivers/net/ethernet/korina.c
+> @@ -416,7 +416,8 @@ static void korina_abort_rx(struct net_device *dev)
 >  }
 >  
-> -static int liteeth_start_xmit(struct sk_buff *skb, struct net_device *netdev)
-> +static netdev_tx_t liteeth_start_xmit(struct sk_buff *skb,
-> +				      struct net_device *netdev)
+>  /* transmit packet */
+> -static int korina_send_packet(struct sk_buff *skb, struct net_device *dev)
+> +static netdev_tx_t korina_send_packet(struct sk_buff *skb,
+> +				      struct net_device *dev)
 >  {
->  	struct liteeth *priv = netdev_priv(netdev);
->  	void __iomem *txbuffer;
+>  	struct korina_private *lp = netdev_priv(dev);
+>  	u32 chain_prev, chain_next;
 > -- 
 > 2.37.2.789.g6183377224-goog
 > 
