@@ -1,40 +1,40 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-ua1-f73.google.com (mail-ua1-f73.google.com [209.85.222.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083283C0C
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 20:55:42 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id d82-20020a25e655000000b006a8fc4506c0so11165834ybh.18
-        for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 13:55:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E2A3C0C
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 20:55:48 +0000 (UTC)
+Received: by mail-ua1-f73.google.com with SMTP id s6-20020a9f2986000000b003b3e759ed1aso3947080uas.14
+        for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 13:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date;
-        bh=s33IIyZmc8+UOGDwcegpipUma0relN3TBfpMpfz2BtE=;
-        b=RjSvDvpURFWYgxGTp+hsMgMlof5mN8kvxLIrfLqX4X89vJU6vIXFtmx0+5iAbRnMOl
-         AmhQI6ePnBrDnOU4psWJxluoIzalZblllUZva2TEr4N95hjhgz8ZGbLOHTFqvjKegQex
-         HWb6RVL597rKKcH75a2RB2G/IRszLtafu+XLKFjl5XN0LrxBPn+c8Q69aA2uJCuI/Pre
-         OXID5G2XefTpi4prdWtlr5n9LEccAWLjjHsNyMBuF2bFZow0uM/4qIe4sCcbuQskeeTU
-         RRC0VCjDJWvklrNi5KxKkgKM/2yq4MoRMOQLvTqdqMcd8Wtu6wIc4NGkOeV8JKsRLtea
-         TIhg==
+        bh=B2mqYDiaNl85Fwjyeejod1j2C23kkV3KpQaZ/IDd3G0=;
+        b=n5/3ZUe5YW7iVEaFTC1C/QTXggGwKQwtjWMw3jPI0BgMfRYYaenAHMYA7hmpH78woh
+         lZrsAverREXV5LS1eNSZiEiLKiM+JXW0zOmxWAdX3LhCwLd9Qf/j9Y5hHtz2sPDqVpOO
+         3LE27kbTv/4DXc2cgdQMCkC3yessqW+eRLrKkgNWQ+Ghdk/GB4Xyotg4WWPaHI8nr0ZJ
+         DFR3Zt4imBoTKoWRLhRctbaodxm4ndTXJF9eHcqbrD4UR0gehFkZtZ22JU5AJxGutNXu
+         2/qLLlTx4A77Jsxp0TXTu22DWntV2xma0eZbyML/CoROivz9n2Cnhwlejron+u+9bLkh
+         E7/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=s33IIyZmc8+UOGDwcegpipUma0relN3TBfpMpfz2BtE=;
-        b=V5qx6i71j9VtWWy6lzl6j3i3w9+c2XmdzYxJx9sROStyNoMBsjQcYnChLRMnrzIzL4
-         lW+oFlKjLRIYkpdSUOHNkvCDDoqpy8p+WPHWmnE79gaCmeAMYampYk8E9T2dlHIPQ9ds
-         R9BT+FWFi8ywxUVuxjf20s0DP5SJ0qAq7ULqordOStR7qBO4Z4M73ypJjbFLmAtIjsmn
-         TTOuXdbv5h86AWeLcXXUPM3YirzcEiaW3NNnx8Xw/hesuNAe1xyClDjHvlEWKOyZ3KJJ
-         gWmwtgO3kyLScA9fVTYf9leD3LuOjELLp28q2sES0PFtry8p08l/sk6nCGlyQZ02Jz1W
-         frmg==
-X-Gm-Message-State: ACgBeo0LynPHFeCgAsPiOPnwXznGj+3csY/1DD4PCKvEtZssTayq3Kxp
-	eI+d7RxjBeMNhjIh5KeoyY+2pIsl5g==
-X-Google-Smtp-Source: AA6agR5dsFGBClGYLD+8MsGw7ygyHU5aaKZYuov7XnCqBY5RuEfzGEGGFNkCWySIkMRmAQ8phfbVgpv1BQ==
+        bh=B2mqYDiaNl85Fwjyeejod1j2C23kkV3KpQaZ/IDd3G0=;
+        b=QIj9alCmnqTkCXfPHSwWOuKgQkGPFm21CP2JRlwCQxjeRj+bBTQAglHNAYXPvLllff
+         jSjsHkYvTE/g4lytqFdWBGYAH6FqY7ERzxDw2PowCH3z4dJ48LwZE1NkycvlJjZDWJJF
+         S+GkGzw1Dy4STKb4JZbBjCnIBS7UDbtmozYQIDVVSSiPr/49omCejcAiUzq4WfeBCBCJ
+         3dYK1EFrZlbyqIxnI3HEyDqA9/Pn7dTt3Kt2B2kNbqf1MrdAXSEYDzIcYHc9saX5Dpap
+         Wp4jxY+7w/g8WTDxLHu1v61lhCMlJG/nP+oibhbtUTEoax75Imxl3XuGJrFXcPl0biaL
+         bt/A==
+X-Gm-Message-State: ACgBeo3UMAPye4EWTXcIQTPuX3hgel5VURveT9B54+sGxokX32CMX0ZK
+	iKetY8MlhxUaFsSOYv3nqxZ1hYw4EA==
+X-Google-Smtp-Source: AA6agR6tnOJoQpNye/EaN3VzNTXwqOI2huVgh67Hj9kUaRNfdC+l6rBv/TSOXU4i5MQmCNQ7VhuyBZdcNQ==
 X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a25:a26a:0:b0:6ae:a723:f721 with SMTP id
- b97-20020a25a26a000000b006aea723f721mr15192009ybi.200.1663102541983; Tue, 13
- Sep 2022 13:55:41 -0700 (PDT)
-Date: Tue, 13 Sep 2022 13:55:27 -0700
+ (user=nhuck job=sendgmr) by 2002:a67:f6d5:0:b0:398:3cdb:3f99 with SMTP id
+ v21-20020a67f6d5000000b003983cdb3f99mr9320922vso.85.1663102547645; Tue, 13
+ Sep 2022 13:55:47 -0700 (PDT)
+Date: Tue, 13 Sep 2022 13:55:44 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,53 +42,54 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220913205531.155046-1-nhuck@google.com>
-Subject: [PATCH] drm/i915: Fix return type of mode_valid function hook
+Message-ID: <20220913205544.155106-1-nhuck@google.com>
+Subject: [PATCH] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
 From: Nathan Huckleberry <nhuck@google.com>
 Cc: Nathan Huckleberry <nhuck@google.com>, Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, David Airlie <airlied@linux.ie>, 
-	Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Matt Roper <matthew.d.roper@intel.com>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@linux.ie>, 
+	Daniel Vetter <daniel@ffwll.ch>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-All of the functions used for intel_dvo_dev_ops.mode_valid have a return
-type of enum drm_mode_status, but the mode_valid field in the struct
-definition has a return type of int.
+The mode_valid field in drm_connector_helper_funcs is expected to be of
+type:
+enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+                                     struct drm_display_mode *mode);
 
 The mismatched return type breaks forward edge kCFI since the underlying
-function definitions do not match the function hook definition.
+function definition does not match the function hook definition.
 
-The return type of the mode_valid field should be changed from int to
-enum drm_mode_status.
+The return type of imx_tve_connector_mode_valid should be changed from
+int to enum drm_mode_status.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
 Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/imx/imx-tve.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-index d96c3cc46e50..50205f064d93 100644
---- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-+++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-@@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
- 	 *
- 	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
- 	 */
--	int (*mode_valid)(struct intel_dvo_device *dvo,
--			  struct drm_display_mode *mode);
-+	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
-+					   struct drm_display_mode *mode);
+diff --git a/drivers/gpu/drm/imx/imx-tve.c b/drivers/gpu/drm/imx/imx-tve.c
+index 6b34fac3f73a..ab4d1c878fda 100644
+--- a/drivers/gpu/drm/imx/imx-tve.c
++++ b/drivers/gpu/drm/imx/imx-tve.c
+@@ -218,8 +218,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
+ 	return ret;
+ }
  
- 	/*
- 	 * Callback for preparing mode changes on an output
+-static int imx_tve_connector_mode_valid(struct drm_connector *connector,
+-					struct drm_display_mode *mode)
++static enum drm_mode_status
++imx_tve_connector_mode_valid(struct drm_connector *connector,
++			     struct drm_display_mode *mode)
+ {
+ 	struct imx_tve *tve = con_to_tve(connector);
+ 	unsigned long rate;
 -- 
 2.37.2.789.g6183377224-goog
 
