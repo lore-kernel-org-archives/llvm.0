@@ -1,31 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF14F6AA5;
-	Tue, 13 Sep 2022 23:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074F8C433D6;
-	Tue, 13 Sep 2022 23:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D2671E
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA731C433D6;
+	Tue, 13 Sep 2022 23:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663111345;
-	bh=2TX1nccSTQ50w1MEvLtJw+7bvB4T+UvLhS92m1Avg5U=;
+	s=k20201202; t=1663111568;
+	bh=MKctTCCNB0zUHFjYAFLnoWEYFaMOJC3oZ8vlBp9GnrQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S2KCtYwGkvv2UwSti7StkyHy5HzpS8R804muUFfMy4d/inhxLA6Yzov4pRkr/NPLZ
-	 gpvx5ym3dNsEpDPvOc01yI/C6TkgpxZYMJ8lNPe+9YDFTwQcGyF0FF3fuQFRzDbSVb
-	 52ZSiOZ2CGWrO13M2rZe1LPnO55M2xT1kam26OdrMl7FMn/UbBzvc006aEMFhslGWo
-	 nlO0qzFB3DXDeguxB9QqDlxHgn/nSvKt9t5NZpnqda+2b5Y+NwwlGmmjfWTFS3MmIv
-	 XM8x3fKfmoC1IOkm6Mlu0SZf8YHnQd1xG0HP+Q8e4zk9lh7IYwjt41Pu/Ot/SAvUW2
-	 HUlq5swggpnow==
-Date: Tue, 13 Sep 2022 16:22:23 -0700
+	b=En+foSMdKI8Cm8iTxy3UXjB0XEFCrepqECzxWueLigjoRHXBzHkbaVNaKVMpRJTYF
+	 gYiLEZb4sVQLj0BkH3s9jiXTtX/QZjTVnZnABCaW8/4OubH+THJrxKF1Gd9WUnOCMS
+	 Y/sMQ8XW18aKmN52aVxdeoVh2igiNs0bZM5ixvYd5GCP/eUNbwVl2e/hsNTV+uOjYo
+	 u24C4q72ArBYHA+blb6JhpKCZvb8rDjdZxmCEQuRm6wUXn6JlbqA6pVswoxoC4mj1V
+	 7JJS+nXBHr125rUu874rnRQHdVIh+lTZgyNx+17Z4kpDfohOrEol6lj34kfqG4kVDt
+	 49X9IX4ziNShg==
+Date: Tue, 13 Sep 2022 16:26:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Nathan Huckleberry <nhuck@google.com>
-Cc: error27@gmail.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-	llvm@lists.linux.dev, ndesaulniers@google.com, trix@redhat.com
-Subject: Re: [PATCH v2] staging: octeon: Fix return type of cvm_oct_xmit and
- cvm_oct_xmit_pow
-Message-ID: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
-References: <YyEFu8uzoxK64p0Y@dev-arch.thelio-3990X>
- <20220913230412.225957-1-nhuck@google.com>
+Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+	dev@openvswitch.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] openvswitch: Change the return type for vport_ops.send
+ function hook to int
+Message-ID: <YyERjpSlz+MVCULd@dev-arch.thelio-3990X>
+References: <20220913230739.228313-1-nhuck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,17 +38,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913230412.225957-1-nhuck@google.com>
+In-Reply-To: <20220913230739.228313-1-nhuck@google.com>
 
-On Tue, Sep 13, 2022 at 04:04:12PM -0700, Nathan Huckleberry wrote:
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+On Tue, Sep 13, 2022 at 04:07:38PM -0700, Nathan Huckleberry wrote:
+> All usages of the vport_ops struct have the .send field set to
+> dev_queue_xmit or internal_dev_recv.  Since most usages are set to
+> dev_queue_xmit, the function hook should match the signature of
+> dev_queue_xmit.
 > 
-> The mismatched return type breaks forward edge kCFI since the underlying
+> The only call to vport_ops->send() is in net/openvswitch/vport.c and it
+> throws away the return value.
+> 
+> This mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
-> 
-> The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
-> from int to netdev_tx_t.
 > 
 > Reported-by: Dan Carpenter <error27@gmail.com>
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
@@ -53,52 +59,37 @@ On Tue, Sep 13, 2022 at 04:04:12PM -0700, Nathan Huckleberry wrote:
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> 
-> Changes v1 -> v2:
->  - Update function signatures in ethernet-tx.h.
-> 
 > ---
->  drivers/staging/octeon/ethernet-tx.c | 4 ++--
->  drivers/staging/octeon/ethernet-tx.h | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  net/openvswitch/vport-internal_dev.c | 2 +-
+>  net/openvswitch/vport.h              | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/staging/octeon/ethernet-tx.c b/drivers/staging/octeon/ethernet-tx.c
-> index 1ad94c5060b5..a36e36701c74 100644
-> --- a/drivers/staging/octeon/ethernet-tx.c
-> +++ b/drivers/staging/octeon/ethernet-tx.c
-> @@ -125,7 +125,7 @@ static void cvm_oct_free_tx_skbs(struct net_device *dev)
->   *
->   * Returns Always returns NETDEV_TX_OK
->   */
-> -int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
-> +netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
->  {
->  	union cvmx_pko_command_word0 pko_command;
->  	union cvmx_buf_ptr hw_buffer;
-> @@ -506,7 +506,7 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
->   * @dev:    Device info structure
->   * Returns Always returns zero
->   */
-> -int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
-> +netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
->  {
->  	struct octeon_ethernet *priv = netdev_priv(dev);
->  	void *packet_buffer;
-> diff --git a/drivers/staging/octeon/ethernet-tx.h b/drivers/staging/octeon/ethernet-tx.h
-> index 78936e9b33b0..6c524668f65a 100644
-> --- a/drivers/staging/octeon/ethernet-tx.h
-> +++ b/drivers/staging/octeon/ethernet-tx.h
-> @@ -5,8 +5,8 @@
->   * Copyright (c) 2003-2007 Cavium Networks
->   */
+> diff --git a/net/openvswitch/vport-internal_dev.c b/net/openvswitch/vport-internal_dev.c
+> index 35f42c9821c2..74c88a6baa43 100644
+> --- a/net/openvswitch/vport-internal_dev.c
+> +++ b/net/openvswitch/vport-internal_dev.c
+> @@ -190,7 +190,7 @@ static void internal_dev_destroy(struct vport *vport)
+>  	rtnl_unlock();
+>  }
 >  
-> -int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-> -int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
-> +netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-> +netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
->  int cvm_oct_transmit_qos(struct net_device *dev, void *work_queue_entry,
->  			 int do_free, int qos);
->  void cvm_oct_tx_initialize(void);
+> -static netdev_tx_t internal_dev_recv(struct sk_buff *skb)
+> +static int internal_dev_recv(struct sk_buff *skb)
+>  {
+>  	struct net_device *netdev = skb->dev;
+>  
+> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+> index 7d276f60c000..6ff45e8a0868 100644
+> --- a/net/openvswitch/vport.h
+> +++ b/net/openvswitch/vport.h
+> @@ -132,7 +132,7 @@ struct vport_ops {
+>  	int (*set_options)(struct vport *, struct nlattr *);
+>  	int (*get_options)(const struct vport *, struct sk_buff *);
+>  
+> -	netdev_tx_t (*send) (struct sk_buff *skb);
+> +	int (*send)(struct sk_buff *skb);
+>  	struct module *owner;
+>  	struct list_head list;
+>  };
 > -- 
 > 2.37.2.789.g6183377224-goog
 > 
