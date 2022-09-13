@@ -1,191 +1,203 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBA8320D
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 12:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1663071699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jeTcCgDKL4tOv5OOrUVP0oO3+U3O6MmzlrrCWORZsq0=;
-	b=XYiDIKJkabwUgnU5hLjETQx/f8nccMXDP4KfvmKgVjN8geuzSk32bSx6/1jYmsrKVu4t1E
-	2ylvboWhftZG8L+2qycMd6JL35Rpr4OTvIeBMP2pR0elChssrBpTda3WAn9TkoBc2bgbxG
-	yjYmEZeKK0DPVOM+Hxd4ka3s7e6sWHs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-30-feoFI5G7M3Cq3VFNLHVbxQ-1; Tue, 13 Sep 2022 08:21:38 -0400
-X-MC-Unique: feoFI5G7M3Cq3VFNLHVbxQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72A2C85A585
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 12:21:38 +0000 (UTC)
-Received: from [172.64.3.86] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 632BA40C6EC3;
-	Tue, 13 Sep 2022 12:21:38 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc5,
- mainline.kernel.org-clang, e839a756)
-Date: Tue, 13 Sep 2022 12:21:38 -0000
-CC: bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C5733DA
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 14:05:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A243C433D6;
+	Tue, 13 Sep 2022 14:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663077919;
+	bh=l+g8X+5c9ZV49QCN0e48clP+/b2LReYleUFUA2MJqk4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u5DQ5p36wAYtlKQPGvG+TFdcomyrLnxf2LurnnNlzmhAS/z9t/qcvL+BFugsDrKb1
+	 vZOKNEElLVvbp3okXuzouJ+cPuCfjYG22bMD49PrXPN04MJpsYyIO2GFMakNQU3IR9
+	 tU7J+Mcu49eZvyRbbLGH1KUjXopp6d5jR/2SAaLrnYrx8Le5TEhHDYUu9CNe0lOjMw
+	 k+doJa/ziXNaGoHJxX0VO/ofzdNEhwCJSP4CZ7RPiLX7Lvk4lByhpe6zN36w9LtbqW
+	 02ilV0Z6cXdkZBo+v4RSA/bGtaxsOelTNYD8IuJQzjEw46ORoJtGjXRSN166/nrrn0
+	 unoFDCbwbPWCg==
+Date: Tue, 13 Sep 2022 07:05:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	David Gow <davidgow@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Sander Vanheule <sander@svanheule.net>,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Isabella Basso <isabbasso@riseup.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Eric Biggers <ebiggers@google.com>, Hannes Reinecke <hare@suse.de>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] fortify: Add KUnit test for FORTIFY_SOURCE
+ internals
+Message-ID: <YyCOHOchVuE/E7vS@dev-arch.thelio-3990X>
+References: <20220902204351.2521805-1-keescook@chromium.org>
+ <20220902204351.2521805-3-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <94107.122091308213801217@us-mta-30.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902204351.2521805-3-keescook@chromium.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Kees,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Fri, Sep 02, 2022 at 01:43:50PM -0700, Kees Cook wrote:
+> Add lib/fortify_kunit.c KUnit test for checking the expected behavioral
+> characteristics of FORTIFY_SOURCE internals.
+> 
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Sander Vanheule <sander@svanheule.net>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  MAINTAINERS         |  1 +
+>  lib/Kconfig.debug   |  9 ++++++
+>  lib/Makefile        |  1 +
+>  lib/fortify_kunit.c | 77 +++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+)
+>  create mode 100644 lib/fortify_kunit.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9d7f64dc0efe..640115472199 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8002,6 +8002,7 @@ L:	linux-hardening@vger.kernel.org
+>  S:	Supported
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/fortify-string.h
+> +F:	lib/fortify_kunit.c
+>  F:	lib/test_fortify/*
+>  F:	scripts/test_fortify.sh
+>  K:	\b__NO_FORTIFY\b
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 36455953d306..1f267c0ddffd 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2542,6 +2542,15 @@ config STACKINIT_KUNIT_TEST
+>  	  CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+>  	  or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+>  
+> +config FORTIFY_KUNIT_TEST
+> +	tristate "Test fortified str*() and mem*() function internals at runtime" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT && FORTIFY_SOURCE
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Builds unit tests for checking internals of FORTIFY_SOURCE as used
+> +	  by the str*() and mem*() family of functions. For testing runtime
+> +	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
+> +
+>  config TEST_UDELAY
+>  	tristate "udelay test driver"
+>  	help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index f545140ed9e7..4ee1ceae945a 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -381,6 +381,7 @@ obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
+>  obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+>  CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+>  obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+> +obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
+>  
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+>  
+> diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+> new file mode 100644
+> index 000000000000..4d7930b65107
+> --- /dev/null
+> +++ b/lib/fortify_kunit.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Runtime test cases for CONFIG_FORTIFY_SOURCE that aren't expected to
+> + * Oops th kernel on success. (For those, see drivers/misc/lkdtm/fortify.c)
+> + *
+> + * For corner cases with UBSAN, try testing with:
+> + *
+> + * ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+> + *	--kconfig_add CONFIG_FORTIFY_SOURCE=y \
+> + *	--kconfig_add CONFIG_UBSAN=y \
+> + *	--kconfig_add CONFIG_UBSAN_TRAP=y \
+> + *	--kconfig_add CONFIG_UBSAN_BOUNDS=y \
+> + *	--kconfig_add CONFIG_UBSAN_LOCAL_BOUNDS=y \
+> + *	--make_options LLVM=1 fortify
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <kunit/test.h>
+> +#include <linux/string.h>
+> +#include <linux/init.h>
+> +
+> +static const char array_of_10[] = "this is 10";
+> +static const char *ptr_of_11 = "this is 11!";
+> +static char array_unknown[] = "compiler thinks I might change";
+> +
+> +static void known_sizes_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_of_10), 10);
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen(ptr_of_11), 11);
+> +
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
+> +	/* Externally defined and dynamically sized string pointer: */
+> +	KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
+> +}
 
+I noticed that my allmodconfig + ThinLTO builds broke with this change:
 
-Kernel information:
-    Commit message: Merge tag 'hyperv-fixes-signed-20220912' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/hyperv/linux
+  $ make -skj"$(nproc)" ARCH=arm64 KCONFIG_ALLCONFIG=<(printf "CONFIG_%s=n\nCONFIG_%s=n\nCONFIG_%s=y\nCONFIG_%s=n\n" GCOV_KERNEL KASAN LTO_CLANG_THIN WERROR) LLVM=1 mrproper allmodconfig all
+  ...
+  ERROR: modpost: "saved_command_line" [lib/fortify_kunit.ko] undefined!
+  ...
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/53191
+saved_command_line is not exported to modules. This appears to be
+related to the fact that CONFIG_KCSAN gets enabled due to the way
+KCONFIG_ALLCONFIG works, as the issue does not show up in our CI, which
+uses merge_config.sh.
 
-One or more kernel tests failed:
+A smaller reproducer on top of defconfig:
 
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5123650
+  $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - xfs: egrep: warning: egrep is obsolescent; using =
-grep -E
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1390
-            Affected tests:
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/130: output mismatch
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1368
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+  $ scripts/config \
+  -d LTO_NONE \
+  -e EXPERT \
+  -e FORTIFY_SOURCE \
+  -e KCSAN \
+  -e LTO_CLANG_THIN \
+  -m FORTIFY_KUNIT_TEST \
+  -m KUNIT
 
+  $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig all
+  ...
+  ERROR: modpost: "saved_command_line" [lib/fortify_kunit.ko] undefined!
+  ...
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+I don't see this without LTO. Is this a compiler problem?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Small note, Marco's patch is needed to avoid a separate linking error
+with ToT LLVM:
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+https://lore.kernel.org/20220912094541.929856-1-elver@google.com/
 
+Cheers,
+Nathan
