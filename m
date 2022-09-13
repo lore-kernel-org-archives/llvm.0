@@ -1,203 +1,216 @@
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7C11FAA
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 02:23:22 +0000 (UTC)
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28D1PEST002645;
-	Tue, 13 Sep 2022 01:43:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=message-id : date
- : subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=PPS06212021;
- bh=frEoeF4FOU2v3QZow3JXwaGV6AH2euc1LPI11obE5Sg=;
- b=MvytNOgehLQtHy5QO83vE2azvMoLpRD84SjTGqRnLkpA1rjtXGy68wTwdMbBrVvbO+H8
- xY1epR6J83cnWkFgey9QOrFIRZyl/pJFfFmCDqPBh6iy9lsUvoR5nteY4Otdtq+R5z8+
- HVxm2M0t1ra5tgxm26HDm6NSa3Wago7FNDLzgmwS0I9UTuysqBdad14oe18cNixSJwII
- PbXEhftAJnmEWTVu0FY1DVdL26EQdkJvw3TEbLy/XSlwe5DRJUVthuPv+4iegueOHzVi
- DkN32sFWZbeo30JgnxOpy7+qaOPahudnTpn28eiYTQ+2L+RKRaRtKSPvX5KJ32vK6cdP bA== 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2044.outbound.protection.outlook.com [104.47.74.44])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3jgft1ts5r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Sep 2022 01:43:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2BQzATW1YTgEWgMSDYxK+fTiSHFtjbfETQI5jeHLaO13Wp5h0gJM8zgjKHhJJKZfTO30tBkg56+mdgWBbj6roIlt7+aVg8G78jL7IWr7gjmQexArRgfhN+b3Q8AidQJ0Zm6zzNgVbILhtxeYmIOM0TyqQqyr7q1t7OtB9VHIRg0ZoDI9egvP8BOacE9gQwQWJq8JdIiaEJ91fpaSKM/LJebGlJFeL2Zzx4EK6JkCHPlyl1N6cisaRGw03s8HO2HUlDc1UavO9uqtly4rwvEC0NrvvSwNKjrW4I4H7yUUDRacPtBy3auHCfzRajLUCqJ2tCpVcpUS60wzJzuBps+0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=frEoeF4FOU2v3QZow3JXwaGV6AH2euc1LPI11obE5Sg=;
- b=ksdtLd3NCSW1cX4Rr/o0/FGbo79ogtJVW4WeWK61ijxwMcVhX/QQxxrjH/tM33koy226iSferrrVylnsONGaZv90NnlKGhDij8hTr7kUFq/rJWkIBAlhkuqDCvp+4oLMuTr579DsJg3iqoiBv7mMKh2r5tSagnSg8kJemp7dewdGRVtFcgsY6yHWB5TfLnoOqKggAjHiWNnASKXLGpv+rmEYaYzXrSjBP5NIS7X3beXDPiosqxGMLkghr+K81LMHEi+KzMB3A2MLNO58FBz25MwhLgCQLRJz31O5HuQRe2MpuNSc0gv/aKUC/RB/0AFPZWeqyHQkqGHudlKewcrUzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from SA0PR11MB4766.namprd11.prod.outlook.com (2603:10b6:806:92::20)
- by CO6PR11MB5668.namprd11.prod.outlook.com (2603:10b6:5:355::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Tue, 13 Sep
- 2022 01:43:27 +0000
-Received: from SA0PR11MB4766.namprd11.prod.outlook.com
- ([fe80::5077:607a:fb5b:9cfd]) by SA0PR11MB4766.namprd11.prod.outlook.com
- ([fe80::5077:607a:fb5b:9cfd%5]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
- 01:43:27 +0000
-Message-ID: <9bbd7ad4-cb46-9fe9-eb32-5bb8321d02a3@windriver.com>
-Date: Tue, 13 Sep 2022 09:43:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mtd: spi-nor: gigadevice: gd25q256: replace
- gd25q256_default_init with gd25q256_post_bfpt
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, tudor.ambarus@microchip.com,
-        pratyush@kernel.org, michael@walle.cc, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220912142833.1739547-1-yaliang.wang@windriver.com>
- <202209130732.cQpPG34i-lkp@intel.com>
-From: Yaliang Wang <Yaliang.Wang@windriver.com>
-In-Reply-To: <202209130732.cQpPG34i-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR06CA0010.apcprd06.prod.outlook.com
- (2603:1096:4:186::6) To SA0PR11MB4766.namprd11.prod.outlook.com
- (2603:10b6:806:92::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399A61874
+	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 02:40:45 +0000 (UTC)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRSLX0vdfznTtN;
+	Tue, 13 Sep 2022 10:37:56 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 13 Sep 2022 10:40:35 +0800
+Message-ID: <cb8f4682-e604-7cfb-09f8-556924215133@huawei.com>
+Date: Tue, 13 Sep 2022 10:40:34 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA0PR11MB4766:EE_|CO6PR11MB5668:EE_
-X-MS-Office365-Filtering-Correlation-Id: 675061af-b132-4b10-bede-08da95295a50
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	3vuqCvMdqTxznFHriJZgb+RuQxpLkaXttY2brr2U2w+PW53Tq9nGD+x/2NOh8v/iILkBjZ3B87fd/H9hvrzH0CLAhu3vGECqgYrvk5daFQGioD4ZkU4LBN1XPwwkWuYYX05HJgS1wjFajpPeBtfvHHN7jez7ePRqV/Tey4yct2fqWvQ9p9T5kcDDw4xs60+LlXmCJJ3Fj5lZPo3u8SyDJ5NLQHeJco1sNke2wLGWkig0fbznvikwQdw4h4cY1d9OLDyDoC8UlvWf8vpeV9LN9ygBa2zLNXSriJlME7VjuoZB22uqlMacDBCD1xRKqOjvnM2cY5lNpdpN7hA/BfVSL/l7qFK0GNTy8m+NAq9ZnxAeXeGMkFPeO01Y2xFcIfWpWjr2EapEabxCr0TOscvhbfw9ufUj9iadB3NgAQXy5BpNmO+StvwrcuULNZMS/lr8OSlnmPCRKLMl8KSdJB7dagBo1pkNI64ha1Ufvl5I5qsn6Pj+WaBGrWPHV/T2eHlgNK2K5hydLoSiK9LT84ujv6j/HjC8+EPsjX0O0w79NyXmYzbGkQdX/mo4Q/aJ1by+dtdXICYyTuKmenMCoYI44QwPO0hRV+XvspmgsDocIca0mqFaROhufMgycFy5B7DPq7nQKqcfjBNBw7uEmy7nXkGmvR/ervsXkpHsMAe+UsR3EIR10M7VpfmIbNs6sBeTWOrX7rwsIqQfsKJ+MPDr4AyvtkKxrsL7EMq1bAcGygPUw2EWzQrZ9pTb+tU3rImweWd5f30GHDE5JWc0PSn9bm1Mj4Us3A/XEw8Ie/nI7FDjJ5GtQyypM1WWojexqVfIbZcpFES9ou4QQfz2DX5yGXGg+I2M//AJZpF01pyDeH0=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR11MB4766.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(366004)(136003)(346002)(376002)(451199015)(6506007)(6666004)(8676002)(7416002)(6486002)(53546011)(31686004)(2906002)(36756003)(86362001)(186003)(6512007)(8936002)(2616005)(31696002)(316002)(83380400001)(5660300002)(38100700002)(66556008)(66476007)(4326008)(66946007)(26005)(41300700001)(478600001)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?UnVMdHBDc1p1V0ZPRWZvNEo5T3VnMWNNSy9IeWVIbHE3anFXbkxOeWZneVN3?=
- =?utf-8?B?c2ZnNy9kVmx1a29nRWQwOGJXZkgyOExoZm0rNjVsbkFwVzdja3Q0Q2M0SlVY?=
- =?utf-8?B?VG5LUFZ4MXcwWWNTbGxLeDFjeFl6cURUQVF3R2RoWWNCN1ZvQXVkNGNTcHRQ?=
- =?utf-8?B?R2tuOUtMLytCNmhKb3EyNEd0d3M5TmgwNEJxZ0Z6UWU5ZUtRbE9pcmNsNllq?=
- =?utf-8?B?TnY2TlFSdkxYbGhBQmJBOHgwQWx1L2Uyblh1SjRDNE9SUFB0Tk5rVGtLWjlG?=
- =?utf-8?B?ZSt4R0VYT2FTbFlyYjdseHZGbFdSc21ZUTY3aFhCdDlpRURRWFArRC8xUmlm?=
- =?utf-8?B?V2w5SlRmUzY1c05mVjBLNmVseTlTUUR4SVVKRGNGeVNSOXlha3B6dGlqcTFm?=
- =?utf-8?B?Q0E3bzNmYWZhYjV0SlQvQ0hBaTNoVFVVUDVQaHRhT0FEd2lTbFdQa1ZyV0hY?=
- =?utf-8?B?T0o3OENKZkQrVFhkSisrRFk5elpIa0pndXpiNDNndUZyV0pSaDc3MzRJaUtX?=
- =?utf-8?B?OVFkdERLYnZpSjROL1luQThPSEhTMFRnQ1p2a1c2TzhweC92ampGWUFsSmpv?=
- =?utf-8?B?Y2w3czJ2dmg2SWpkdUs2eXhITG12QW1zaE9DWmJvVVIvNkZ5SVBPTkZNRUdO?=
- =?utf-8?B?S1p5T2s4Zk9ibjNLbWgxQk0wb0NFaUU1YURwVWl5M3NDTDJxNTE5MFZlMjhu?=
- =?utf-8?B?MHpNTVY3ckd3b0RKOUYwRDcyVUhaYUdmZU5FMXRHRzczYXNqOUZHd0IzMm1k?=
- =?utf-8?B?VU0wOFpXeGUzdWlPb1FBK2tXSERISWVnODcxNWRQY1VZVDdRNlVsTUFNTWI5?=
- =?utf-8?B?amhLV3Q4WEJvblo4UWdCdEFSN2NVNjVWbUk5R0VKSHFpZnY3emJVN0pzOElG?=
- =?utf-8?B?UVNIc2huVDhwcm1FR0NoT2oxSGIvK2owNWVTUTZmOUYwMWQ5NGlERmtuYUpE?=
- =?utf-8?B?VUxxRzJVRy9NZUNISWRPSWd5SVVJWk16d3Z2ZmVjdjdDZXhoWm5CQXpZa01M?=
- =?utf-8?B?b29vMmhhczNtMUdMVzJTK3J3clBtTnQ1aDNIY1o0SE4yTTRWK2dQMjhscmhH?=
- =?utf-8?B?RnlWeGs0MlVsVzVUNm10SnY3eVFHV2ljdHA0ejlyWnl0QnVLQnFkVDNLK25h?=
- =?utf-8?B?N2Ntd3N3YmJ0dEIrcElldGI1SFpyZzd1dzFtQ0lNb1ZPamV5RlVRSGxKbFZZ?=
- =?utf-8?B?S21VVG92K0FTeHRGUTNhVUpFeGs1ek50cVIwSHlIK0tjRk1oZ1U4Y001bU5h?=
- =?utf-8?B?WGtMdXJUMkZVQkFVWXQwUWs3WjNwT3RDZ2ppOWJraHVET1ZlVmZBOUpTTXNQ?=
- =?utf-8?B?WElRUTlYZGJKODBzNk1kclp4QTI1RGQweUFzZGppZlVsbXlKYTUzcDJaTDBI?=
- =?utf-8?B?elhkaHNSWjBVNUt1ajloYUgzYzBkaXlBVzZTTkFrOExkNEU1b05XSURyUWNO?=
- =?utf-8?B?cVpMSitJTUtvSzlTQXM0WFRPOXRJOTRtdDBQV3FPNXRZSDJlRkhocS81OW1p?=
- =?utf-8?B?aDNBSWp1cGtEMTdaREpISmVockhTaU1tMWJhODlxTzh5L3p3aWtKQXF5SWZ3?=
- =?utf-8?B?OEk2MWtoNGN3QkQvOXYvZkZQb1drVmhtZVdFdzdvQ1AwdWlRajN0dkE0N2c0?=
- =?utf-8?B?UER1MU53TTFVb3JHSkp5dlhRYmR6ZjBka0VHTksweG42NjBBckpnTGNXckJ2?=
- =?utf-8?B?ZDJZTmJyZXIxYlcyMkZkcFk2SEhuZjd5NjRSSmFOSm8reXlaZCtJc1V1eXdx?=
- =?utf-8?B?dkl5Y1hZaWZSUFJvZnJPN1BzRmpNN0hieS9ZRmoyRlJDVTFVUDBhcGVscjNx?=
- =?utf-8?B?UHgvdTRBQUdiZWd6T3NSdHFTWG44em1VYTU0RE0zT29FUElLdTloUzcxOTg4?=
- =?utf-8?B?M1d4bjV0ckwySGRTdHcyNVJYbVJLdHh3dDI2ZDJ3dzFuMTBQMTIwOFhqaytN?=
- =?utf-8?B?cHlxNVBvRkRwNE5RaG03N0NTMW1rblo0RmxES0FyMmczL0d1aHM3U0NvQ3pX?=
- =?utf-8?B?QUxwZ0x4aHpMRHoxQTc2akN4ay9HWnV3Nk9LRk9CRndsTnZHMG9SZi9ibHJt?=
- =?utf-8?B?OHpwT2dYc0RPNXlTZ0VJNVhOVXltQXVOdGg5ZWZtMUJKYzFmZGRtVDloV0o3?=
- =?utf-8?B?WDZOOVZxQityYUIzWTNsS1poaUZYK3lDVE5pVCtncEJJTytTSk5yelYvUlNC?=
- =?utf-8?B?Q2c9PQ==?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 675061af-b132-4b10-bede-08da95295a50
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR11MB4766.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2022 01:43:26.9190
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O/yGPcseEQgkoKZi9Pv8HM6KbGAZ3G1VAJGqOWimK3hVtDWf4sOi5o3tb2Kxbist7+EFC0o5Jg9okk9dcnCeRX3f/jdWD6wtIqVWUDBIMHo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5668
-X-Proofpoint-GUID: B-m8IN-39V9S-1iVVBUNNryn3M6LoTI0
-X-Proofpoint-ORIG-GUID: B-m8IN-39V9S-1iVVBUNNryn3M6LoTI0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_16,2022-09-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- adultscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209130006
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [bpf-next v3 1/2] bpftool: Add auto_attach for bpf prog
+ load|loadall
+To: Quentin Monnet <quentin@isovalent.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+	<song@kernel.org>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+	<kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+	<jolsa@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+	<trix@redhat.com>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <1662702807-591-1-git-send-email-wangyufen@huawei.com>
+ <f0d30049-72b1-0f54-8f2f-fd47e75f71c9@isovalent.com>
+From: wangyufen <wangyufen@huawei.com>
+In-Reply-To: <f0d30049-72b1-0f54-8f2f-fd47e75f71c9@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 
-Sorry for the error, I'll make another patch to fix the error.
 
-Regards, Yaliang.
+在 2022/9/9 19:38, Quentin Monnet 写道:
+> On 09/09/2022 06:53, Wang Yufen wrote:
+>> Add auto_attach optional to support one-step load-attach-pin_link.
+>>
+>> For example,
+>>     $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
+>>
+>>     $ bpftool link
+>>     26: tracing  name test1  tag f0da7d0058c00236  gpl
+>>     	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>     	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>>     	btf_id 55
+>>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>>     	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>     	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>>     	btf_id 55
+>>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>>     	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>>     	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>>     	btf_id 82
+>>
+>>     $ bpftool link
+>>     1: tracing  prog 26
+>>     	prog_type tracing  attach_type trace_fentry
+>>     3: perf_event  prog 28
+>>     10: perf_event  prog 57
+>>
+>> The auto_attach optional can support tracepoints, k(ret)probes,
+>> u(ret)probes.
+>>
+>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> Thanks, looks better! I just have some minor comments, please see inline
+> below.
+>
+>> ---
+>> v2 -> v3: switch to extend prog load command instead of extend perf
+>> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+>> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>>   tools/bpf/bpftool/prog.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++--
+>>   1 file changed, 74 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>> index c81362a..853a73e 100644
+>> --- a/tools/bpf/bpftool/prog.c
+>> +++ b/tools/bpf/bpftool/prog.c
+>> @@ -1453,6 +1453,68 @@ static int do_run(int argc, char **argv)
+>>   	return ret;
+>>   }
+>>   
+>> +static int
+>> +do_prog_attach_pin(struct bpf_program *prog, const char *path)
+> Can we rename this function please? The pattern "do_...()" looks like
+> one of the names for the functions we use for the subcommands via the
+> struct cmd. Maybe auto_attach_program()?
+>
+>> +{
+>> +	struct bpf_link *link = NULL;
+> Nit: No need to initialise link
+>
+>> +	int err;
+>> +
+>> +	link = bpf_program__attach(prog);
+>> +	err = libbpf_get_error(link);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = bpf_link__pin(link, path);
+>> +	if (err) {
+>> +		bpf_link__destroy(link);
+>> +		return err;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int pathname_concat(const char *path, const char *name, char *buf)
+>> +{
+>> +	int len;
+>> +
+>> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+>> +	if (len < 0)
+>> +		return -EINVAL;
+>> +	else if (len >= PATH_MAX)
+> Nit: "else" not necessary, you returned if len < 0.
+>
+>> +		return -ENAMETOOLONG;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +do_obj_attach_pin_programs(struct bpf_object *obj, const char *path)
+> Same, can we rename this function please?
+>
+>> +{
+>> +	struct bpf_program *prog;
+>> +	char buf[PATH_MAX];
+>> +	int err;
+>> +
+>> +	bpf_object__for_each_program(prog, obj) {
+>> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+>> +		if (err)
+>> +			goto err_unpin_programs;
+>> +
+>> +		err = do_prog_attach_pin(prog, buf);
+>> +		if (err)
+>> +			goto err_unpin_programs;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_unpin_programs:
+>> +	while ((prog = bpf_object__prev_program(obj, prog))) {
+>> +		if (pathname_concat(path, bpf_program__name(prog), buf))
+>> +			continue;
+>> +
+>> +		bpf_program__unpin(prog, buf);
+>> +	}
+>> +
+>> +	return err;
+>> +}
+>> +
+>>   static int load_with_options(int argc, char **argv, bool first_prog_only)
+>>   {
+>>   	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+>> @@ -1464,6 +1526,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>>   	struct bpf_program *prog = NULL, *pos;
+>>   	unsigned int old_map_fds = 0;
+>>   	const char *pinmaps = NULL;
+>> +	bool auto_attach = false;
+>>   	struct bpf_object *obj;
+>>   	struct bpf_map *map;
+>>   	const char *pinfile;
+>> @@ -1583,6 +1646,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>>   				goto err_free_reuse_maps;
+>>   
+>>   			pinmaps = GET_ARG();
+>> +		} else if (is_prefix(*argv, "auto_attach")) {
+>> +			auto_attach = true;
+>> +			NEXT_ARG();
+>>   		} else {
+>>   			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+>>   			      *argv);
+>> @@ -1692,14 +1758,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>>   			goto err_close_obj;
+>>   		}
+>>   
+>> -		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+>> +		if (auto_attach)
+>> +			err = do_prog_attach_pin(prog, pinfile);
+>> +		else
+>> +			err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+>>   		if (err) {
+>>   			p_err("failed to pin program %s",
+>>   			      bpf_program__section_name(prog));
+>>   			goto err_close_obj;
+>>   		}
+>>   	} else {
+>> -		err = bpf_object__pin_programs(obj, pinfile);
+>> +		if (auto_attach)
+>> +			err = do_obj_attach_pin_programs(obj, pinfile);
+>> +		else
+>> +			err = bpf_object__pin_programs(obj, pinfile);
+>>   		if (err) {
+>>   			p_err("failed to pin all programs");
+>>   			goto err_close_obj;
+> Please update the usage string in do_help() at the end of the file.
 
-On 9/13/22 07:18, kernel test robot wrote:
-> [Please note: This e-mail is from an EXTERNAL e-mail address]
->
-> Hi,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.0-rc5 next-20220912]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/yaliang-wang-windriver-com/mtd-spi-nor-gigadevice-gd25q256-replace-gd25q256_default_init-with-gd25q256_post_bfpt/20220912-223028
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 80e78fcce86de0288793a0ef0f6acf37656ee4cf
-> config: i386-randconfig-a016-20220912 (https://download.01.org/0day-ci/archive/20220913/202209130732.cQpPG34i-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/0238f8172a76ee5a84dda79b45911a2b63d59721
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review yaliang-wang-windriver-com/mtd-spi-nor-gigadevice-gd25q256-replace-gd25q256_default_init-with-gd25q256_post_bfpt/20220912-223028
->          git checkout 0238f8172a76ee5a84dda79b45911a2b63d59721
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/spi-nor/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/mtd/spi-nor/gigadevice.c:23:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
->     }
->     ^
->     1 error generated.
->
->
-> vim +23 drivers/mtd/spi-nor/gigadevice.c
->
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  10
-> 0238f8172a76ee Yaliang Wang    2022-09-12  11  static int
-> 0238f8172a76ee Yaliang Wang    2022-09-12  12  gd25q256_post_bfpt(struct spi_nor *nor,
-> 0238f8172a76ee Yaliang Wang    2022-09-12  13                       const struct sfdp_parameter_header *bfpt_header,
-> 0238f8172a76ee Yaliang Wang    2022-09-12  14                       const struct sfdp_bfpt *bfpt)
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  15  {
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  16   /*
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  17    * Some manufacturer like GigaDevice may use different
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  18    * bit to set QE on different memories, so the MFR can't
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  19    * indicate the quad_enable method for this case, we need
-> 0238f8172a76ee Yaliang Wang    2022-09-12  20    * to set it in the post_bfpt fixup hook.
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  21    */
-> 829ec6408dc58d Tudor Ambarus   2020-03-13  22   nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
-> acb96ecd59f7fd Boris Brezillon 2020-03-13 @23  }
-> acb96ecd59f7fd Boris Brezillon 2020-03-13  24
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Thanks for your comments.
+All will do in v4.
 
