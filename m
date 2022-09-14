@@ -1,77 +1,105 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDE83D7C
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663165390; x=1694701390;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0NUMeSnZcrH2RLjXRHKd+H5cCfslIuvsLHQV1aQYYbs=;
-  b=MrgFL2gP62sy4j3hGt2rFovMCCuI5IU8TQdgNhfW2n5AY7q5cy7WYzED
-   6d7N9B0hTeJlx1eYBfA0iKKcE2OocrD26OpVX0VKIRJfw8DP20OY2nwLo
-   pGZz36aqqF1HklsvTxyl7CeMOEZPb9aCAT4CeMyCN/5aq4k6IfwiZEfgJ
-   Dt6pr6HmDBS2V2APvpLGtjWwOFSxmnYkUXppY+na+IJaYbR2zk5TxBus+
-   eKzGExVbTRKXev+TzjEj4tcF9bK088xV/jb77GKpMavu5NtE6kpiuY8ot
-   fP4zSRhuo6p9TGK70luDjCrPwnbRc2D3wb2PuFCBOfXX0SbwkP+t3u7uc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362403204"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="362403204"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:23:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594401920"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2022 07:23:08 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oYTIB-0000Hg-2k;
-	Wed, 14 Sep 2022 14:23:07 +0000
-Date: Wed, 14 Sep 2022 22:23:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	linux-kernel@vger.kernel.org
-Subject: [cilium:pr/bpf-tc-links 1/10] ld.lld: error: undefined symbol:
- dev_sch_uninstall
-Message-ID: <202209142212.Rm27TU3m-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB153D62
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:38:26 +0000 (UTC)
+Received: from [185.122.133.20] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1oYTWs-0006bn-QY; Wed, 14 Sep 2022 16:38:18 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: lkp@intel.com, palmer@rivosinc.com, Conor.Dooley@microchip.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-mm@kvack.org
+Subject: Re: [linux-next:master 6256/7172] arch/riscv/errata/thead/errata.c:40:2: error: use of undeclared identifier 'riscv_cbom_block_size'
+Date: Wed, 14 Sep 2022 16:38:17 +0200
+Message-ID: <2646330.mvXUDI8C0e@phil>
+In-Reply-To: <2d0d917d-9bc8-a1e4-1569-af3921a18139@microchip.com>
+References: <202209141913.Nxzv3hwM-lkp@intel.com> <2d0d917d-9bc8-a1e4-1569-af3921a18139@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-tree:   https://github.com/cilium/linux.git pr/bpf-tc-links
-head:   f9ab02443a6bd720c616b575437a851435c80c49
-commit: f182834c964343d39688f653f16bfee1f3ff39c2 [1/10] bpf: Add initial fd-based API to attach tc BPF programs
-config: x86_64-randconfig-a015-20220912 (https://download.01.org/0day-ci/archive/20220914/202209142212.Rm27TU3m-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/cilium/linux/commit/f182834c964343d39688f653f16bfee1f3ff39c2
-        git remote add cilium https://github.com/cilium/linux.git
-        git fetch --no-tags cilium pr/bpf-tc-links
-        git checkout f182834c964343d39688f653f16bfee1f3ff39c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Conor,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Am Mittwoch, 14. September 2022, 14:27:19 CEST schrieb Conor.Dooley@microchip.com:
+> @Heiko is this the same issue that LKP previously complained about
+> that you have a fix for, or should I sent a fix for it tonight?
 
-All errors (new ones prefixed by >>):
+this one is new, but the cause is similar (building t-head cache ops but not
+zicbom cache ops).
 
->> ld.lld: error: undefined symbol: dev_sch_uninstall
-   >>> referenced by dev.c
-   >>>               core/dev.o:(unregister_netdevice_many) in archive net/built-in.a
+I've just sent a patch to move the definition to the more generic block in
+cacheflush.h
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+Heiko
+
+> On 14/09/2022 12:37, kernel test robot wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   f117c01187301a087412bd6697fcf5463cb427d8
+> > commit: 8f7e001e0325de63a42f23342ac3b8139150c5cf [6256/7172] RISC-V: Clean up the Zicbom block size probing
+> > config: riscv-randconfig-r042-20220914 (https://download.01.org/0day-ci/archive/20220914/202209141913.Nxzv3hwM-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+> > reproduce (this is a W=1 build):
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          # install riscv cross compiling tool for clang build
+> >          # apt-get install binutils-riscv64-linux-gnu
+> >          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8f7e001e0325de63a42f23342ac3b8139150c5cf
+> >          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >          git fetch --no-tags linux-next master
+> >          git checkout 8f7e001e0325de63a42f23342ac3b8139150c5cf
+> >          # save the config file
+> >          mkdir build_dir && cp config build_dir/.config
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/errata/thead/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >>> arch/riscv/errata/thead/errata.c:40:2: error: use of undeclared identifier 'riscv_cbom_block_size'
+> >             riscv_cbom_block_size = L1_CACHE_BYTES;
+> >             ^
+> >     1 error generated.
+> > 
+> > 
+> > vim +/riscv_cbom_block_size +40 arch/riscv/errata/thead/errata.c
+> > 
+> >      29
+> >      30  static bool errata_probe_cmo(unsigned int stage,
+> >      31                               unsigned long arch_id, unsigned long impid)
+> >      32  {
+> >      33  #ifdef CONFIG_ERRATA_THEAD_CMO
+> >      34          if (arch_id != 0 || impid != 0)
+> >      35                  return false;
+> >      36
+> >      37          if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> >      38                  return false;
+> >      39
+> >    > 40          riscv_cbom_block_size = L1_CACHE_BYTES;
+> >      41          riscv_noncoherent_supported();
+> >      42          return true;
+> >      43  #else
+> >      44          return false;
+> >      45  #endif
+> >      46  }
+> >      47
+> > 
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> 
+> 
+
+
+
+
